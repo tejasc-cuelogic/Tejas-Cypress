@@ -27,6 +27,7 @@ export default class Close extends Component {
             form={CLOSING_CONTITNGENCIES_FRM}
             formName="CLOSING_CONTITNGENCIES_FRM"
             addon={<Actions />}
+            refTab="close"
           />
           <Header as="h4">Offer Closing Details</Header>
           <Form.Group widths={3}>

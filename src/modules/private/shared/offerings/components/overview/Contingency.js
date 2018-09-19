@@ -27,6 +27,8 @@ export default class Contingency extends Component {
     this.props.offeringCreationStore.removeData(confirmModalName);
     Helper.toast('Contingency has been deleted successfully.', 'success');
   }
+  canAddNew = roles => roles && (roles.includes('manager') || roles.includes('admin')) &&
+    this.props.refTab !== 'close';
   render() {
     const { roles } = this.props.userStore.currentUser;
     const {
@@ -40,7 +42,7 @@ export default class Contingency extends Component {
       <Aux>
         <Header as="h4">
           {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
-          {(roles && (roles.includes('manager') || roles.includes('admin'))) ?
+          {this.canAddNew(roles) ?
             <Link onClick={() => this.setContingencyForm()} to={`${match.url}/add-new-contingency`} className="link"><small>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</small></Link>
           :
           null}

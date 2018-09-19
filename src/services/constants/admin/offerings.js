@@ -417,13 +417,6 @@ export const COMPANY_HISTORY = {
 };
 
 export const COMPANY_LAUNCH = {
-  issuerReferralCode: {
-    value: '',
-    label: 'Unique Issuer Referral Code',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'TeamAG',
-  },
   targetDate: {
     value: '',
     label: 'Target Launch Date',
@@ -636,7 +629,7 @@ export const MEDIA = {
 
 export const LEADERSHIP = {
   data: [{
-    includeInOfferingPage: {
+    isPublic: {
       value: [],
       values: [
         {
@@ -661,14 +654,14 @@ export const LEADERSHIP = {
       rule: 'string|required',
       placeHolder: 'e.g. Doe',
     },
-    emailAddress: {
+    email: {
       value: '',
       label: 'E-mail address',
       error: undefined,
       rule: 'email|required',
       placeHolder: 'john.doe@contact.com',
     },
-    phoneNumber: {
+    number: {
       value: '',
       label: 'Phone Number',
       error: undefined,
@@ -689,14 +682,14 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required|maskedSSN',
     },
-    countryOfCitizanship: {
+    citizenship: {
       value: '',
       label: 'Country of Citizenship',
       placeHolder: 'United States',
       error: undefined,
       rule: 'required|string',
     },
-    percentageOwned: {
+    percentOwned: {
       value: '',
       label: 'Percentage Owned',
       placeHolder: '10.0%',
@@ -711,7 +704,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required|string',
     },
-    startDateOfService: {
+    dateOfService: {
       value: '',
       label: 'Start Date of Service',
       error: undefined,
@@ -719,12 +712,13 @@ export const LEADERSHIP = {
       placeHolder: 'MM-DD-YYYY',
       tooltip: 'If you had left the company previously and are returning, enter the start date of your current employment position.',
     },
-    residentialStreet: {
+    street: {
       value: '',
       label: 'Residential Street',
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. Baker Street 221B',
+      objRef: 'leadership.address',
     },
     city: {
       value: '',
@@ -732,6 +726,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. New York',
+      objRef: 'leadership.address',
     },
     state: {
       value: '',
@@ -739,13 +734,15 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. New York',
+      objRef: 'leadership.address',
     },
-    zipCode: {
+    zip: {
       value: '',
       label: 'ZIP Code',
       error: undefined,
       rule: 'numeric|required',
       placeHolder: 'e.g. 10001',
+      objRef: 'leadership.address',
     },
     bio: {
       value: '',
@@ -760,6 +757,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://johndoe.com',
+      objRef: 'leadership.social',
     },
     facebook: {
       value: '',
@@ -767,13 +765,15 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://facebook.com/johndoe',
+      objRef: 'leadership.social',
     },
-    linkedIn: {
+    linkedin: {
       value: '',
       label: 'LinkedIn',
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://linkedin.com/johndoe',
+      objRef: 'leadership.social',
     },
     twitter: {
       value: '',
@@ -781,8 +781,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://twitter.com/johndoe',
+      objRef: 'leadership.social',
     },
-    headShot: {
+    headshot: {
       label: 'Headshot',
       value: '',
       error: undefined,
@@ -800,7 +801,7 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
     },
-    driverLicense: {
+    license: {
       label: 'Driver’s License',
       value: '',
       error: undefined,
@@ -809,14 +810,14 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
     },
-    namesOfOtherEntities: {
+    otherEntities: {
       label: 'Names of other entities over which you have control',
       value: '',
       error: undefined,
       rule: 'required',
       placeHolder: 'Enter here',
     },
-    namesOfPromoters: {
+    promoters: {
       label: 'Names of promoters that have been or will be paid in connection with promoting the Issuer`s securities during offering',
       value: '',
       error: undefined,

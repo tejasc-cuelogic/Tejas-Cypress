@@ -22,18 +22,9 @@ export default class OfferingLaunch extends Component {
     return (
       <Aux>
         <Header as="h4">
-          Launch Confirmation
+          Launch Timeline
         </Header>
         <Form>
-          <FormInput
-            name="issuerReferralCode"
-            fielddata={COMPANY_LAUNCH_FRM.fields.issuerReferralCode}
-            changed={(e, result) => formChange(e, result, formName)}
-          />
-          <Divider section />
-          <Header as="h4">
-            Launch Timeline
-          </Header>
           <Form.Group widths="equal">
             {
               ['targetDate', 'terminationDate', 'expectedOpsDate'].map(field => (

@@ -202,6 +202,49 @@ export const getOfferingDetails = gql`
           otherRisk
         }
       }
+      leadership {
+        firstName
+        lastName
+        email
+        phone {
+          number
+        }
+        dob
+        ssn
+        citizenship
+        percentOwned
+        companyPosition
+        dateOfService
+        address {
+          street
+          city
+          state
+          zip
+        }
+        bio
+        uploads {
+          headshot {
+            fileId
+            fileName
+          }
+          heroImage {
+            fileId
+            fileName
+          }
+          license {
+            fileId
+            fileName
+          }
+        }
+        social {
+          website
+          facebook
+          linkedin
+          twitter
+        }
+        otherEntities
+        promoters
+      }
       closureSummary {
         disbursementDate
         disbursementAmount

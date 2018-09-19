@@ -69,8 +69,8 @@ export default class Leader extends Component {
             </Button.Group>
           </Header>
           <FormCheckbox
-            fielddata={LEADERSHIP_FRM.fields.data[index].includeInOfferingPage}
-            name="includeInOfferingPage"
+            fielddata={LEADERSHIP_FRM.fields.data[index].isPublic}
+            name="isPublic"
             changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
             defaults
             containerclassname="ui relaxed list"
@@ -78,9 +78,9 @@ export default class Leader extends Component {
           <Header as="h4">
             Personal Info
           </Header>
-          <Form.Group widths="equal">
+          <Form.Group widths={2}>
             {
-              ['firstName', 'lastName'].map(field => (
+              ['firstName', 'lastName', 'email'].map(field => (
                 <FormInput
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.data[index][field]}
@@ -88,22 +88,15 @@ export default class Leader extends Component {
                 />
               ))
             }
-          </Form.Group>
-          <Form.Group widths="equal">
-            <FormInput
-              name="emailAddress"
-              fielddata={LEADERSHIP_FRM.fields.data[index].emailAddress}
-              changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
-            />
             <MaskedInput
-              name="phoneNumber"
-              fielddata={LEADERSHIP_FRM.fields.data[index].phoneNumber}
+              name="number"
+              fielddata={LEADERSHIP_FRM.fields.data[index].number}
               format="###-###-####"
               changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
               phoneNumber
             />
           </Form.Group>
-          <Form.Group widths="equal">
+          <Form.Group widths={3}>
             <MaskedInput
               name="dob"
               fielddata={LEADERSHIP_FRM.fields.data[index].dob}
@@ -119,15 +112,13 @@ export default class Leader extends Component {
               changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
             />
             <FormInput
-              name="countryOfCitizanship"
-              fielddata={LEADERSHIP_FRM.fields.data[index].countryOfCitizanship}
+              name="citizenship"
+              fielddata={LEADERSHIP_FRM.fields.data[index].citizenship}
               changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
             />
-          </Form.Group>
-          <Form.Group widths="equal">
             <MaskedInput
-              name="percentageOwned"
-              fielddata={LEADERSHIP_FRM.fields.data[index].percentageOwned}
+              name="percentOwned"
+              fielddata={LEADERSHIP_FRM.fields.data[index].percentOwned}
               percentage
               changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
             />
@@ -137,8 +128,8 @@ export default class Leader extends Component {
               changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
             />
             <MaskedInput
-              name="startDateOfService"
-              fielddata={LEADERSHIP_FRM.fields.data[index].startDateOfService}
+              name="dateOfService"
+              fielddata={LEADERSHIP_FRM.fields.data[index].dateOfService}
               format="##-##-####"
               changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
               dateOfBirth
@@ -148,8 +139,8 @@ export default class Leader extends Component {
             Address
           </Header>
           <AutoComplete
-            name="residentialStreet"
-            fielddata={LEADERSHIP_FRM.fields.data[index].residentialStreet}
+            name="street"
+            fielddata={LEADERSHIP_FRM.fields.data[index].street}
             onplaceselected={place => setAddressFields(place, index)}
             changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
             placeHolder="Street Address, City, State, Zip"
@@ -165,8 +156,8 @@ export default class Leader extends Component {
               ))
             }
             <MaskedInput
-              name="zipCode"
-              fielddata={LEADERSHIP_FRM.fields.data[index].zipCode}
+              name="zip"
+              fielddata={LEADERSHIP_FRM.fields.data[index].zip}
               changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
               zipCode
             />
@@ -182,7 +173,7 @@ export default class Leader extends Component {
           <Divider section />
           <HeaderWithTooltip header="Website and Social Profiles" tooltip="To be used on the public offering page" />
           {
-            ['website', 'facebook', 'linkedIn', 'twitter'].map(field => (
+            ['website', 'facebook', 'linkedin', 'twitter'].map(field => (
               <FormInput
                 name={field}
                 fielddata={LEADERSHIP_FRM.fields.data[index][field]}
@@ -196,14 +187,14 @@ export default class Leader extends Component {
           </Header>
           <Form.Group widths="equal">
             {
-              ['headShot', 'heroImage', 'driverLicense'].map(field => (
+              ['headshot', 'heroImage', 'license'].map(field => (
                 <DropZone
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.data[index][field]}
                   ondrop={(files, name) => this.onFileDrop(files, name, index)}
                   onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                   uploadtitle="Upload a file"
-                  tooltip={field !== 'driverLicense' ? 'To be used on the public offering page' : false}
+                  tooltip={field !== 'license' ? 'To be used on the public offering page' : false}
                   containerclassname="field"
                 />
               ))
@@ -214,7 +205,7 @@ export default class Leader extends Component {
             Other Business Information
           </Header>
           {
-            ['namesOfOtherEntities', 'namesOfPromoters'].map(field => (
+            ['otherEntities', 'promoters'].map(field => (
               <FormTextarea
                 name={field}
                 fielddata={LEADERSHIP_FRM.fields.data[index][field]}
