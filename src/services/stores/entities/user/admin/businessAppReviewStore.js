@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars, no-param-reassign */
 import { observable, action, computed, toJS } from 'mobx';
 import { MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
+import { businessAppStore } from '../../../index';
 
 export class BusinessAppReviewStore {
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
@@ -34,6 +36,39 @@ export class BusinessAppReviewStore {
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
+
+  // getMetaData = (metaData) => {
+  //   const metaDataMapping = {
+  //     OVERVIEW_FRM: OVERVIEW,
+  //     OVERVIEW_MANAGER_FRM: OVERVIEW_MANAGER,
+  //     MANAGERS_FRM: MANAGERS,
+  //     JUSTIFICATIONS_FRM: JUSTIFICATIONS,
+  //     JUSTIFICATIONS_MANAGER_FRM: JUSTIFICATIONS_MANAGER,
+  //     DOCUMENTATION_FRM: DOCUMENTATION,
+  //     DOCUMENTATION_MANAGER_FRM: DOCUMENTATION_MANAGER,
+  //     PROJECTIONS_FRM: PROJECTIONS,
+  //     PROJECTIONS_MANAGER_FRM: PROJECTIONS_MANAGER,
+  //     BUSINESS_PLAN_FRM: BUSINESS_PLAN,
+  //     BUSINESS_PLAN_MANAGER_FRM: BUSINESS_PLAN_MANAGER,
+  //     CONTINGENCY_MANAGER_FRM: CONTINGENCY_MANAGER,
+  //     MISCELLANEOUS_MANAGER_FRM: MISCELLANEOUS_MANAGER,
+  //     OFFER_MANAGER_FRM: OFFER_MANAGER,
+  //     MODEL_MANAGER_FRM: MODEL_MANAGER,
+  //     CONTROL_PERSONS_FRM: CONTROL_PERSONS,
+  //     SOURCES_FRM: SOURCES,
+  //     USES_FRM: USES,
+  //     LAUNCH_FRM: LAUNCH,
+  //     CLOSE_FRM: CLOSE,
+  //     SOCIAL_MEDIA_FRM: SOCIAL_MEDIA,
+  //     OTHER_DOCUMENTATION_FRM: OTHER_DOCUMENTATION_UPLOADS,
+  //     UPLOADED_DOCUMENTS_FRM: UPLOADED_DOCUMENTS,
+  //     OFFERS_FRM: OFFERS,
+  //     MODEL_INPUTS_FRM: MODEL_INPUTS,
+  //     MODEL_VARIABLES_FRM: MODEL_VARIABLES,
+  //     RESULTS_FRM: MODEL_RESULTS,
+  //   };
+  //   return metaDataMapping[metaData];
+  // }
 
   @action
   toggleConfirmModal = (index, formName = null) => {
@@ -68,21 +103,22 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  addMore = (formName) => {
+  addMore = (formName, arrayName = 'data') => {
     this[formName] = {
       ...this[formName],
       fields: {
         ...this[formName].fields,
-        data: [
-          ...this[formName].fields.data,
-          this.getMetaData(formName).data[0],
-        ],
       },
       meta: {
         ...this[formName].meta,
         isValid: false,
       },
     };
+    const arrayData = [
+      ...this[formName].fields[arrayName],
+      this.getMetaData(formName)[arrayName][0],
+    ];
+    this[formName].fields[arrayName] = arrayData;
   }
 
   @action
@@ -187,6 +223,29 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  resetMe = (form, ref) => {
+    this[form] = Validator.prepareFormObject(ref);
+  }
+
+  @action
+  saveForm = (formName) => {
+    switch (formName) {
+      case '':
+        break;
+      default:
+        break;
+    }
+  }
+
+  @action
+  evaluateFormData = (formName) => {
+
+  }
+
+  /*
+  *  Set form data
+  */
+  @action
   setDataForFields = (fields, data, form) => {
     Object.keys(fields).map((key) => {
       try {
@@ -206,12 +265,12 @@ export class BusinessAppReviewStore {
             tempRef = !tempRef ? data[k] : tempRef[k];
             return tempRef;
           });
-          // fields[key].value = tempRef[key];
+          fields[key].value = tempRef[key];
         } else {
-          // fields[key].value = data && typeof data === 'string' ? data : data[key];
+          fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
         if (fields[key].refSelector) {
-          // fields[key].refSelectorValue = fields[key].value !== '';
+          fields[key].refSelectorValue = fields[key].value !== '';
         }
       } catch (e) {
         // do nothing
@@ -219,18 +278,19 @@ export class BusinessAppReviewStore {
       return null;
     });
   }
-
   @action
   setFormData = (form, ref, ref2, ref3) => {
-    const { offer } = this.OVERVIEW_FRM;
-    // const { fields } = this[form];
-    const data = ref ? (ref2 ? (ref3 ? offer[ref][ref2][ref3] : offer[ref][ref2]) : offer[ref]) :
-      offer;
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const appData = businessApplicationDetailsAdmin;
+    const { fields } = this[form];
+    const data = ref && appData[ref] ? (ref2 && appData[ref][ref2] ? (ref3 &&
+      appData[ref][ref2][ref3] ? appData[ref][ref2][ref3] : appData[ref][ref2]) :
+      appData[ref]) : appData;
     if (this[form].fields.data && Array.isArray(toJS(this[form].fields.data))) {
-      this.resetMe(form);
+      this.resetMe(form, this.getMetaData(form));
       if (data && data.length > 0) {
         data.forEach((record, index) => {
-          this.addMore(form);
+          // this.addMore(form);
           this.setDataForFields(this[form].fields.data[index], data[index], form);
         });
       }

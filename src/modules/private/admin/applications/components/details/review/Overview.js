@@ -10,6 +10,9 @@ import ManagerOverview from './ManagerOverview';
 @inject('businessAppReviewStore')
 @observer
 export default class Overview extends Component {
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review', 'overview');
+  }
   addCriticalPoint = (e) => {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('OVERVIEW_FRM');
@@ -32,7 +35,7 @@ export default class Overview extends Component {
       <Aux>
         <Header as="h4">
           Overview
-          <Link to={this.props.match.url} className="link" onClick={e => this.addCriticalPoint(e)}><small>+ Add Critical Point</small></Link>
+          <Link to={this.props.match.url} className="link" onClick={this.addCriticalPoint}><small>+ Add Critical Point</small></Link>
         </Header>
         <Form>
           {
