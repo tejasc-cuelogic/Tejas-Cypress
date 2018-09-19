@@ -254,7 +254,6 @@ class IraAccountStore {
       accountType: 'IRA',
     };
     let actionPerformed = 'submitted';
-    console.log(userDetailsStore.currentUser.data);
     if (userDetailsStore.currentUser.data) {
       const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
       if (accountDetails) {

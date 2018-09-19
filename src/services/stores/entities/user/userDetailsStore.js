@@ -34,7 +34,7 @@ export class UserDetailsStore {
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.accounts, account => account.status === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.details.status === 'FULL');
     }
     return accDetails;
   }
@@ -175,7 +175,7 @@ export class UserDetailsStore {
       } else if (step === 'accounts') {
         if (this.validAccStatus.includes(statusDetails.idVerification)) {
           if (statusDetails.phoneVerification === 'DONE') {
-            if (!isEmpty(statusDetails.accounts)) {
+            if (!isEmpty(statusDetails.roles)) {
               status = 'done';
             } else {
               status = 'enable';
@@ -210,7 +210,7 @@ export class UserDetailsStore {
       routingUrl = 'summary/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = 'summary/establish-profile';
-    } else if (isEmpty(this.signupStatus.accounts)) {
+    } else if (isEmpty(this.signupStatus.roles)) {
       routingUrl = 'summary/account-creation';
     } else if (this.signupStatus.partialAccounts.length > 0) {
       const accValue =
