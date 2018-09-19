@@ -33,10 +33,12 @@ export default class RealEstateDocumentation extends Component {
                 hideFields={hideFields}
                 disabled={formReadOnlyMode}
                 multiple
-                name="dilligenceDocuments"
-                fielddata={fields.dilligenceDocuments}
-                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                name="dueDiligence"
+                fielddata={fields.dueDiligence}
+                ondrop={(files, fieldName) =>
+                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                onremove={(e, fieldName, index) =>
+                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>
@@ -53,10 +55,12 @@ export default class RealEstateDocumentation extends Component {
                 hideFields={hideFields}
                 disabled={formReadOnlyMode}
                 multiple
-                name="legalDocuments"
-                fielddata={fields.legalDocuments}
-                ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                name="legalDocs"
+                fielddata={fields.legalDocs}
+                ondrop={(files, fieldName) =>
+                  businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
+                onremove={(e, fieldName, index) =>
+                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>

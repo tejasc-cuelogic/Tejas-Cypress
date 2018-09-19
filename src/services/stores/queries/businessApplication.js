@@ -130,7 +130,7 @@ mutation helpAndQuestion($question: helpAndQuestionInput!) {
 export const upsertBusinessApplicationInformationBusinessDetails = gql`
 mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum!, $businessDetails: BusinessDetailsInput) {
+  $businessGoal: BusinessGoalEnum, $businessDetails: BusinessDetailsInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
     applicationStep: $applicationStep, applicationType: $applicationType,
@@ -144,7 +144,7 @@ mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID
 export const upsertBusinessApplicationInformationPerformance = gql`
 mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum!, $businessPerformance: businessPerformanceInput) {
+  $businessGoal: BusinessGoalEnum, $businessPerformance: businessPerformanceInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
     applicationStep: $applicationStep, applicationType: $applicationType,
@@ -158,7 +158,7 @@ mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
 export const upsertBusinessApplicationInformationDocumentation = gql`
 mutation _upsertBusinessApplicationInformationDocumentation($applicationId: ID!,
   $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
-  $businessGoal: BusinessGoalEnum!, $businessDocumentation: BusinessDocumentationInput) {
+  $businessGoal: BusinessGoalEnum, $businessDocumentation: BusinessDocumentationInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
     applicationStep: $applicationStep, applicationType: $applicationType,
@@ -285,6 +285,7 @@ query _getBusinessApplicationById ($id: String!) {
         ssn
         companyOwnerShip
         linkedInUrl
+        dateOfService
         title
         resume {
           fileId
@@ -326,6 +327,14 @@ query _getBusinessApplicationById ($id: String!) {
       stepStatus
     }
     businessDocumentation {
+      dueDiligence {
+        fileId
+        fileName
+      }
+      legalDocs {
+        fileId
+        fileName
+      }
       bankStatements {
         fileId
         fileName

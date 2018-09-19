@@ -64,6 +64,8 @@ export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
   leaseAgreementsOrLOIs: 'LEASE',
   bankStatements: 'BANK_STATEMENTS',
   personalGuaranteeForm: 'PERSONAL_GUARANTEE',
+  dueDiligence: 'DUE_DILIGENCE',
+  legalDocs: 'LEGAL',
 };
 
 export const BUSINESS_DETAILS_EDIT_META = {
@@ -373,13 +375,13 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
     rule: 'required',
   },
   investorIRR: {
-    value: '', maxLength: 16, label: 'Targeted Investor IRR (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required|investmentTypeCheck', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'Targeted Investor IRR (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required|investmentTypeCheck', placeHolder: 'e.g. 11%', customErrors: { required: 'required' },
   },
   annualInvestorRoi: {
-    value: '', maxLength: 16, label: 'Targeted Annual Investor ROI Upon Stabilization (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'Targeted Annual Investor ROI Upon Stabilization (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required', placeHolder: 'e.g. 11%', customErrors: { required: 'required' },
   },
   holdTimeInYears: {
-    value: '', maxLength: 16, label: 'Targeted Hold Time (years)', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'Targeted Hold Time (years)', error: undefined, rule: 'required', placeHolder: 'e.g. 3', customErrors: { required: 'required' },
   },
   legalConfirmation: {
     value: [],
@@ -555,10 +557,10 @@ export const BUSINESS_DOC = {
 };
 
 export const BUSINESS_DOC_REAL_ESTATE = {
-  dilligenceDocuments: {
+  dueDiligence: {
     value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
-  legalDocuments: {
+  legalDocs: {
     value: [], label: '', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };
