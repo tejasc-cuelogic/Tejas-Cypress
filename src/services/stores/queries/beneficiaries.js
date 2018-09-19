@@ -18,43 +18,40 @@ export const allBeneficiaries = gql`
 `;
 
 export const getBeneficiaries = gql`
-query getBeneficiaries {
-  beneficiaries {
-    accountId
-    type
-    status
-    updated {
-      id
-      by
-      date
-    }
-    created {
-      id
-      by
-      date
-    }
-    beneficiary {
-      request {
+  query getBeneficiaries {
+    beneficiaries {   
+        accountId   
+        type
         status
-      }
-      recipients {
-        firstName
-        lastName
-        dob
-        relationship
-        shares
-        address {
-          street
-          city
-          state
-          zipCode
-          __typename
+        updated {
+          id
+          by
+          date
         }
-        __typename
-      }
-      __typename
-    }
-    __typename
+        created {
+          id
+          by
+          date
+        }  
+        beneficiary {     
+            request {
+              status
+            }
+            recipients {     
+                firstName    
+                lastName    
+                dob     
+                relationship     
+                shares     
+                address {     
+                    street    
+                    city     
+                    state     
+                    zipCode    
+                }     
+            }    
+        }    
+    }     
   }
 }
 
@@ -66,19 +63,21 @@ mutation _createBeneficiaries($requestId: String!, $verificationCode: String!, $
     userId
     accountId
     beneficiary {
-      requestedDate
-      requestStatus
-      recipients {
-        firstName
-        lastName
-        dob
-        relationship
-        shares
-        address {
-          street
-          city
-          state
-          zipCode
+      request {
+        status
+        date
+        recipients {
+          firstName
+          lastName
+          dob
+          relationship
+          shares
+          address {
+            street
+            city
+            state
+            zipCode
+          }
         }
       }
     }
