@@ -18,31 +18,46 @@ export const allBeneficiaries = gql`
 `;
 
 export const getBeneficiaries = gql`
-  query getBeneficiaries {
-    beneficiaries {   
-        accountId   
-        accountType
+query getBeneficiaries {
+  beneficiaries {
+    accountId
+    type
+    status
+    updated {
+      id
+      by
+      date
+    }
+    created {
+      id
+      by
+      date
+    }
+    beneficiary {
+      request {
         status
-        updatedDate
-        createdDate   
-        beneficiary {     
-            requestStatus    
-            recipients {     
-                firstName    
-                lastName    
-                dob     
-                relationship     
-                shares     
-                address {     
-                    street    
-                    city     
-                    state     
-                    zipCode    
-                }     
-            }    
-        }    
-    }     
+      }
+      recipients {
+        firstName
+        lastName
+        dob
+        relationship
+        shares
+        address {
+          street
+          city
+          state
+          zipCode
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
   }
+}
+
 `;
 
 export const createBeneficiaryMutation = gql`
