@@ -2,31 +2,28 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
-import { FormTextarea, FormInput } from '../../../../../../../theme/form';
+import { FormTextarea } from '../../../../../../../theme/form';
 
 @inject('offeringCreationStore')
 @observer
-export default class AfIssuer extends Component {
+export default class Leader extends Component {
   render() {
-    const { AFFILIATED_ISSUER_FRM, formChangeWithIndex } = this.props.offeringCreationStore;
+    const { LEADER_FRM, formChangeWithIndex } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
-    const formName = 'AFFILIATED_ISSUER_FRM';
+    const formName = 'LEADER_FRM';
     return (
-      <Form >
-        <FormInput
-          name="legalName"
-          fielddata={AFFILIATED_ISSUER_FRM.fields.data[index].legalName}
-          changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
-          containerclassname="secondary"
-        />
+      <Form>
+        <Header as="h4" textAlign="left">
+          Control Person Diligence
+        </Header>
         {
-          ['certificateOfFormation', 'operatingAgreement', 'evidenceOfGoodStanding', 'whoAreThesePeople'].map(field => (
+          ['controlPersonQuestionnaire', 'countriesAndStateForResidence'].map(field => (
             <Aux>
               <FormTextarea
                 key={field}
                 name={field}
-                fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
+                fielddata={LEADER_FRM.fields.data[index][field]}
                 changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
                 containerclassname="secondary"
               />
@@ -43,7 +40,7 @@ export default class AfIssuer extends Component {
             <FormTextarea
               key={field}
               name={field}
-              fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
+              fielddata={LEADER_FRM.fields.data[index][field]}
               changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
               containerclassname="secondary"
             />
@@ -54,25 +51,25 @@ export default class AfIssuer extends Component {
           Additional Disclosure Check
         </Header>
         {
-          ['sanctionsListSearch', 'pendingCivilLawsuits', 'generalOnlineReputationSearch'].map(field => (
+          ['sanctionsListSearch', 'noPendingCivilLawSuit', 'generalOnlineReputationSearch'].map(field => (
             <FormTextarea
               key={field}
               name={field}
-              fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
+              fielddata={LEADER_FRM.fields.data[index][field]}
               changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
               containerclassname="secondary"
             />
           ))
         }
-        <Button secondary className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Submit for Approval</Button>
+        <Button secondary className="relaxed" disabled={!LEADER_FRM.meta.isValid} >Submit for Approval</Button>
         <Button.Group floated="right">
-          <Button inverted color="red" content="Decline" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Decline</Button>
-          <Button secondary className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Generate Report</Button>
-          <Button primary color="green" className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Approve</Button>
+          <Button inverted color="red" content="Decline" disabled={!LEADER_FRM.meta.isValid} >Decline</Button>
+          <Button secondary className="relaxed" disabled={!LEADER_FRM.meta.isValid} >Generate Report</Button>
+          <Button primary color="green" className="relaxed" disabled={!LEADER_FRM.meta.isValid} >Approve</Button>
         </Button.Group>
         <div className="clearfix mb-20">
           <Button.Group floated="right">
-            <Button color="green" className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Generate Report</Button>
+            <Button color="green" className="relaxed" disabled={!LEADER_FRM.meta.isValid} >Generate Report</Button>
           </Button.Group>
           <Button as="span" className="time-stamp">
             <Icon className="ns-check-circle" color="green" />
@@ -83,4 +80,3 @@ export default class AfIssuer extends Component {
     );
   }
 }
-

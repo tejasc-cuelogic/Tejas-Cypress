@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign */
 import { observable, toJS, action } from 'mobx';
-import { MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
+import { AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore } from '../../../index';
@@ -24,6 +24,8 @@ export class OfferingCreationStore {
   @observable LEADERSHIP_FRM = Validator.prepareFormObject(LEADERSHIP);
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
   @observable ISSUER_FRM = Validator.prepareFormObject(ISSUER);
+  @observable AFFILIATED_ISSUER_FRM = Validator.prepareFormObject(AFFILIATED_ISSUER);
+  @observable LEADER_FRM = Validator.prepareFormObject(LEADER);
   @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
@@ -160,6 +162,8 @@ export class OfferingCreationStore {
       CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
       LEADERSHIP_FRM: LEADERSHIP,
       GENERAL_FRM: GENERAL,
+      AFFILIATED_ISSUER_FRM: AFFILIATED_ISSUER,
+      LEADER_FRM: LEADER,
     };
     return metaDataMapping[metaData];
   }
