@@ -261,8 +261,8 @@ export class AuthStore {
             },
           },
         })
-        .then(() => {
-          resolve();
+        .then((data) => {
+          resolve(data.data.portPrequalDataToApplication.id);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));

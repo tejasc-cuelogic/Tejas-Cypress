@@ -17,7 +17,9 @@ class Success extends Component {
   }
   onProceed = (e) => {
     e.preventDefault();
-    const { userExists, currentApplicationType, applicationId } = this.props.businessAppStore;
+    const {
+      userExists, currentApplicationType, applicationId, setFieldvalue,
+    } = this.props.businessAppStore;
     if (this.props.isPublic) {
       if (!userExists) {
         authActions.register()
@@ -27,8 +29,9 @@ class Success extends Component {
             cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
             this.props.authStore.setUserLoginDetails(email.value, password.value);
             this.props.authStore.portPrequalDataToApplication(applicationId)
-              .then(() => {
-                this.proceedLoginIn(currentApplicationType, applicationId);
+              .then((appId) => {
+                setFieldvalue('applicationId', appId);
+                this.proceedLoginIn(currentApplicationType, appId);
               })
               .catch(er => Helper.toast(er.message, 'error'));
           })
@@ -77,11 +80,12 @@ class Success extends Component {
             <Grid>
               <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                 {!userExists ?
-                  ['password', 'verify'].map(field => (
+                  ['email', 'password', 'verify'].map(field => (
                     <FormInput
                       key={field}
-                      type={pwdInputType}
-                      icon={togglePasswordType(field)}
+                      disabled={field === 'email'}
+                      icon={field !== 'email' ? togglePasswordType(field) : null}
+                      type={field !== 'email' ? pwdInputType : 'text'}
                       name={field}
                       fielddata={fields[field]}
                       changed={signupChange}
