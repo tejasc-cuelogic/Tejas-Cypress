@@ -7,7 +7,13 @@ export class CampaignStore {
   @observable data = [];
   @observable details = {};
   @observable option = false;
+  @observable campaignSideBarShow = false;
 
+
+  @action
+  setFieldValue = (field, val) => {
+    this[field] = val;
+  }
 
   @action
   initRequest = () => {

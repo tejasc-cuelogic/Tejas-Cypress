@@ -25,6 +25,14 @@ export default class NavBarMobile extends Component {
           {/* <Logo onClick={onToggle} dataSrc="LogoSmallWhite"
         className="logo hamburger" size="mini" /> */}
           <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
+          <div className="full-logo">
+            <Logo
+              alt="NextSeed.com"
+              dataSrc={getLogo(location.pathname)}
+              as={Link}
+              to="/"
+            />
+          </div>
           <Link to="/" as="h5">
             <Header as="h5">homepage</Header>
           </Link>
@@ -44,13 +52,6 @@ export default class NavBarMobile extends Component {
             <div className="public-mobile-nav">
               <div className="mobile-nav-inner-container">
                 <Icon onClick={onToggle} className="ns-close-light" />
-                <Logo
-                  size="small"
-                  alt="NextSeed.com"
-                  dataSrc={getLogo(location.pathname)}
-                  as={Link}
-                  to="/"
-                />
                 <div className="public-header-nav">
                   <NavItems
                     refLoc="public"

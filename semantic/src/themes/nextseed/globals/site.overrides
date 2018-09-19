@@ -323,15 +323,23 @@ footer{
 .offer-details {
     display: flex;
     flex-direction: row;
-    min-height:~"calc(100vh - 58px)";
+	min-height:~"calc(100vh - 58px)";
+	@media only screen and (max-width : @largestMobileScreen){
+		flex-direction: column;
+	}
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
 		width: 280px;
 		height: ~"calc(100vh - 58px)";
 		position: fixed;
-		z-index: 1;
+		z-index: 3;
 		overflow: auto;
+		@media only screen and (max-width : @largestMobileScreen){
+			width: 100%;
+			height: auto;
+			position: static;
+		}
 		.ui.menu, .ui.vertical.menu {
 			border: none;
 			box-shadow: none;
@@ -350,6 +358,9 @@ footer{
 	}
 	.offering-intro {
 		padding: @32px @20px;
+		@media only screen and (max-width : @largestMobileScreen){
+			padding: 0 @20px @32px;
+		}
 		h4.ui.header {
 			position: relative;
 			> a {
@@ -364,8 +375,14 @@ footer{
 		background-color: @neutral-midwhite;
 		flex-grow: 1;
 		padding-left: 280px;
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-left: 0;
+		}
 		.offering-content-spacer {
 			padding: @17px @50px @50px;
+			@media only screen and (max-width : @largestMobileScreen){
+				padding: @17px 0 @50px;
+			}
 		}
 		.quick-bar {
 			padding: @10px 0;
@@ -1835,11 +1852,16 @@ p.check-extra-info{
 	z-index: 3;
 	.icon.hamburger {
 		font-size: @30px;
+		line-height: 30px;
 		color: @white;
 		position: absolute;
-		top: 20px;
+		top: 14px;
 		left: 18px;
 		z-index: 1;
+
+		// &:hover+.full-logo {
+		// 	width: 240px;
+		// }
 	}
 	.sign-in {
 		font-size: @14px;
@@ -1854,6 +1876,24 @@ p.check-extra-info{
 		}
 		.ui.header {
 			color: @white;
+		}
+	}
+	.full-logo {
+		width: 0;
+		height: 30px;
+		position: absolute;
+		left: 21px;
+		top: 14px;
+		z-index: 0;
+		// background: #31333d;
+		overflow: hidden;
+		transition: width 0.5s ease;
+		.ui.image {
+			height: 100%;
+			img {
+				max-width: none;
+				max-height: 100%;
+			}
 		}
 	}
 }

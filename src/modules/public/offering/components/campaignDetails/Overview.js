@@ -19,7 +19,7 @@ class Overview extends Component {
     const { campaign } = this.props.campaignStore;
     return (
       <div className="offering-content-spacer">
-        <Grid>
+        <Grid stackable doubling>
           <Grid.Row>
             <Grid.Column widescreen={7} computer={8}>
               <Segment padded>
