@@ -9,6 +9,7 @@ import FormElementWrap from './FormElementWrap';
 import PreQualBusiness from './prequlification/PreQualBusiness';
 import PreQualRealEstate from './prequlification/PreQualRealEstate';
 import NotFound from '../../../shared/NotFound';
+import { DataFormatter } from '../../../../helper';
 
 @inject('businessAppStore', 'uiStore')
 @withRouter
@@ -17,6 +18,8 @@ export default class PreQualification extends Component {
   componentWillMount() {
     if (this.props.isPublic) {
       const { params } = this.props.match;
+      const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
+      this.props.businessAppStore.setFieldvalue('urlParameter', urlParameter);
       this.props.businessAppStore.formReset(params.applicationType);
       this.props.businessAppStore.setFieldvalue('currentApplicationType', params.applicationType);
     }

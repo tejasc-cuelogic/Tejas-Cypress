@@ -218,6 +218,7 @@ export class Auth {
             return rej(err);
           }
           this.cognitoUser = result;
+          authStore.setUserId(result.userSub);
           return res();
         },
       );

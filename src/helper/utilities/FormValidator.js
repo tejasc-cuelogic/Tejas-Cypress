@@ -116,6 +116,7 @@ class FormValidator {
         }
       });
     }
+    return currentForm;
   }
 
   onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
