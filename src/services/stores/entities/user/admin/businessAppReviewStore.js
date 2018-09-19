@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
@@ -184,6 +184,59 @@ export class BusinessAppReviewStore {
       return totalAmount;
     });
     return totalAmount;
+  }
+
+  @action
+  setDataForFields = (fields, data, form) => {
+    Object.keys(fields).map((key) => {
+      try {
+        if (fields[key] && Array.isArray(toJS(fields[key]))) {
+          if (data[key] && data[key].length > 0) {
+            const addRec = data[key].length - toJS(fields[key]).length;
+            for (let i = addRec; i > 0; i -= 1) {
+              this.addMore(form, key);
+            }
+            data[key].forEach((record, index) => {
+              this.setDataForFields(fields[key][index], data[key][index]);
+            });
+          }
+        } else if (fields[key].objRef) {
+          let tempRef = false;
+          fields[key].objRef.split('.').map((k) => {
+            tempRef = !tempRef ? data[k] : tempRef[k];
+            return tempRef;
+          });
+          // fields[key].value = tempRef[key];
+        } else {
+          // fields[key].value = data && typeof data === 'string' ? data : data[key];
+        }
+        if (fields[key].refSelector) {
+          // fields[key].refSelectorValue = fields[key].value !== '';
+        }
+      } catch (e) {
+        // do nothing
+      }
+      return null;
+    });
+  }
+
+  @action
+  setFormData = (form, ref, ref2, ref3) => {
+    const { offer } = this.OVERVIEW_FRM;
+    // const { fields } = this[form];
+    const data = ref ? (ref2 ? (ref3 ? offer[ref][ref2][ref3] : offer[ref][ref2]) : offer[ref]) :
+      offer;
+    if (this[form].fields.data && Array.isArray(toJS(this[form].fields.data))) {
+      this.resetMe(form);
+      if (data && data.length > 0) {
+        data.forEach((record, index) => {
+          this.addMore(form);
+          this.setDataForFields(this[form].fields.data[index], data[index], form);
+        });
+      }
+    } else {
+      this.setDataForFields(this[form].fields, data, form);
+    }
   }
 }
 export default new BusinessAppReviewStore();

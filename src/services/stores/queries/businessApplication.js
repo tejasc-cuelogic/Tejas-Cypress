@@ -542,6 +542,186 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
       stepStatus
       submittedDate
     }
+    review {
+      overview {
+        criticalPoint {
+          description
+          updated {
+            id
+            date
+            by
+          }
+          submitted {
+            id
+            date
+            by
+          }
+          approved {
+            id
+            date
+            by
+          }
+        }
+      }
+      preQualification {
+        managerOverview
+        justifications
+        approved {
+          id
+          by
+          date
+        }
+      }
+      businessPlan {
+        locationFeasibility
+        controlPersons {
+          name
+          ownership
+          derogatoryMarks
+          experience
+          creditScore
+          experienceUpload {
+            fileId
+            fileName
+            fileHandle
+          }
+          creditUpload {
+            fileId
+            fileName
+            fileHandle
+          }
+        }
+        timingOfOperation
+        financialToProjection
+        isPlanAdequate
+        sources {
+          name
+          amount
+        }
+        uses {
+          name
+          amount
+        }
+        dateOfIncorporation
+        approved {
+          id
+          by
+          date
+        }
+      }
+      projections {
+        reasonableHistoricals
+        projectionsComplete
+        revenueCheck
+        revenueCheckUpload {
+          fileId
+          fileName
+          fileHandle
+        }
+        opex
+        rent
+        benchmark
+        benchmarkUpload {
+          fileId
+          fileName
+          fileHandle
+        }
+        existingLiabilities
+        approved {
+          id
+          by
+          date
+        }
+      }
+      documentation {
+        negativeInformation
+        matchHistoricals
+        backupProof
+        profitiable {
+          fileId
+          fileName
+          fileHandle
+        }
+        questionableItems
+        negativeTrends
+        consistentBalance
+        unusualMovements {
+          fileId
+          fileName
+          fileHandle
+        }
+        leaseOrMortgage
+        approved {
+          id
+          by
+          date
+        }
+      }
+      miscellaneous {
+        socialMedia {
+          label
+          url
+        }
+        otherDocs {
+          label
+          docDetails {
+            fileId
+            fileName
+            fileHandle
+          }
+        }
+        adminDocs {
+          fileId
+          fileName
+          fileHandle
+        }
+        approved {
+          id
+          by
+          date
+        }
+      }
+      contingencies {
+        launch {
+          contingency
+          acceptance
+        }
+        close {
+          contingency
+          acceptance
+        }
+        approved {
+          id
+          by
+          date
+        }
+      }
+    }
+    offers {
+      offer {
+        structure
+        amount
+        maturity
+        interestRate
+        amortizationAmount
+        personalGuarantee
+        businessBlanket
+        expirationDate
+        multiple
+        totalCapital
+        isAccepted
+      }
+      portalAgreementUpload {
+        fileId
+        fileName
+        fileHandle
+      }
+      approved {
+        id
+        by
+        date
+      }
+    }
   }
 }
 `;
