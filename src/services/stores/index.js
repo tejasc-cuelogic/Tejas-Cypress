@@ -33,7 +33,6 @@ export { default as bankAccountStore } from './entities/shared/bankAccountStore'
 export { default as identityStore } from './entities/user/identityStore';
 export { default as investorProfileStore } from './entities/user/investorProfileStore';
 export { default as helloWorldStore } from './entities/helloWorldStore';
-export { default as businesssStore } from './entities/issuer/businessStore';
 export { default as businessAppAdminStore } from './entities/user/admin/businessAppStore';
 export { default as businessAppReviewStore } from './entities/user/admin/businessAppReviewStore';
 export { default as businessAppLendioStore } from './entities/user/businessAppLendioStore';

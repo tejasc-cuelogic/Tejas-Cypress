@@ -2,7 +2,9 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { allOfferings, deleteOffering, getOfferingDetails } from '../../../queries/offerings/manage';
+import {
+  allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails,
+} from '../../../queries/offerings/manage';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -27,6 +29,7 @@ export class OfferingsStore {
   initRequest = (props) => {
     const stageMap = {
       completed: ['CLOSE', 'COMPLETE', 'FAILED', 'TERMINATED'],
+      active: ['CREATION', 'LIVE', 'ENGAGEMENT'],
     };
     const {
       first, skip, page, stage,
@@ -44,7 +47,7 @@ export class OfferingsStore {
     this.requestState.stage = stage || this.requestState.stage;
     this.data = graphql({
       client,
-      query: allOfferings,
+      query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: {
         stage: stageMap[stage] || [stage.toUpperCase()],
         first: first || this.requestState.perPage,

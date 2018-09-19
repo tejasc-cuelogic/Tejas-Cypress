@@ -1,5 +1,21 @@
 import gql from 'graphql-tag';
 
+export const allOfferingsCompact = gql`
+  query _getOfferings($stage: [OfferingStageEnumType]){
+    getOfferings(filters: { stage: $stage }){
+      id
+      keyTerms {
+        legalBusinessName
+      }
+      stage
+      created{
+        id
+        date
+      }
+    }
+  }
+`;
+
 export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
