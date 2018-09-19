@@ -225,7 +225,7 @@ export class OfferingCreationStore {
           });
           fields[key].value = tempRef[key];
         } else {
-          fields[key].value = data[key];
+          fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';

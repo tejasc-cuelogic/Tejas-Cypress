@@ -9,6 +9,7 @@ import { FormTextarea, FormInput } from '../../../../../../theme/form';
 export default class OfferingOverview extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering', 'overview');
+    this.props.offeringCreationStore.setFormData('OFFERING_HIGHLIGHTS_FRM', 'offering', 'overview', 'highlight');
   }
   addNewBullet = (e) => {
     e.preventDefault();
@@ -49,9 +50,9 @@ export default class OfferingOverview extends Component {
           {
             OFFERING_HIGHLIGHTS_FRM.fields.data.map((highlights, index) => (
               <FormInput
-                name="bullet"
+                name="highlight"
                 label={`Bullet ${index + 1}`}
-                fielddata={highlights.bullet}
+                fielddata={highlights.highlight}
                 changed={(e, result) => formChangeWithIndex(e, result, 'OFFERING_HIGHLIGHTS_FRM', index)}
               />
             ))

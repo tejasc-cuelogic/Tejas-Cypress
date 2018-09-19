@@ -363,7 +363,7 @@ export const OFFERING_OVERVIEW = {
 
 export const OFFERING_HIGHLIGHTS = {
   data: [{
-    bullet: {
+    highlight: {
       value: '',
       label: 'Bullet',
       error: undefined,
