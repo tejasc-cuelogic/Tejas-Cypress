@@ -270,10 +270,7 @@ class IraAccountStore {
         })
         .then(action((result) => {
           userDetailsStore.getUser(userStore.currentUser.sub);
-          if (result.data.createInvestorAccount) {
-            const { linkedBank } = result.data.createInvestorAccount;
-            bankAccountStore.setPlaidAccDetails(linkedBank);
-          } else {
+          if (result.data.updateInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.updateInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }

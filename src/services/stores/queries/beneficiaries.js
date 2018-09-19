@@ -53,8 +53,6 @@ export const getBeneficiaries = gql`
         }    
     }     
   }
-}
-
 `;
 
 export const createBeneficiaryMutation = gql`

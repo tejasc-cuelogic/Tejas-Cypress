@@ -398,10 +398,7 @@ class EntityAccountStore {
           if (result.data.createInvestorAccount || formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
-          if (result.data.createInvestorAccount) {
-            const { linkedBank } = result.data.createInvestorAccount;
-            bankAccountStore.setPlaidAccDetails(linkedBank);
-          } else {
+          if (result.data.updateInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.updateInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }
@@ -456,7 +453,7 @@ class EntityAccountStore {
           this.FIN_INFO_FRM.fields[f].value = accountDetails[f];
         }
       } else if (form === 'GEN_INFO_FRM') {
-        if ((f === 'taxId' || f === 'name') && accountDetails) {
+        if ((f === 'taxId' || f === 'name') && accountDetails && accountDetails[f]) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails[f];
         } else if (accountDetails && accountDetails.address) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails.address[f];
