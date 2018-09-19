@@ -210,11 +210,11 @@ export class BusinessAppStore {
   }
 
   @action
-  updateBusinessDetails = (appId, appUserId, appType) => {
+  updateBusinessDetails = (appId, issuerId, appType) => {
     const payload = Validator.ExtractValues(this.BUSINESS_DETAILS_EDIT_FRM.fields);
     const refetchPayLoad = {
       applicationId: appId,
-      userId: appUserId,
+      userId: issuerId,
       applicationType: appType === 'PRE_QUALIFICATION_FAILED' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED',
     };
     uiStore.setProgress();
@@ -224,7 +224,7 @@ export class BusinessAppStore {
           mutation: updateBusinessApplicationInformation,
           variables: {
             applicationId: appId,
-            applicationUserId: appUserId,
+            issuerId,
             businessName: payload.businessName,
             signupCode: payload.signupCode,
           },

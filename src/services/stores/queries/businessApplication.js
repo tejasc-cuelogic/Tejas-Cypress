@@ -595,13 +595,13 @@ mutation lendioDetails ($lendioApplication: ApplicationInfoInput!) {
 export const updateBusinessApplicationInformation = gql`
 mutation updateBusinessApplicationInformation(
   $applicationId: String!
-  $applicationUserId: String
+  $issuerId: String
   $businessName: String
   $signupCode: String
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
-    applicationUserId: $applicationUserId
+    issuerId: $issuerId
     businessName: $businessName
     signupCode: $signupCode
   ){
