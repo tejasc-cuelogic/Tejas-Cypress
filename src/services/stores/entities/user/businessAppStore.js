@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty } from 'lodash';
+import { forEach, includes, find, isEmpty, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
@@ -65,6 +65,7 @@ export class BusinessAppStore {
   @observable isFileUploading = false;
   @observable isPrequalQulify = false;
   @observable userExists = false;
+  @observable urlParameter = null;
 
   @action
   setFieldvalue = (field, value) => {
@@ -767,6 +768,10 @@ export class BusinessAppStore {
     uiStore.setProgress();
     let payload = Validator.ExtractValues(this.BUSINESS_APP_FRM_BASIC.fields);
     payload = { ...payload, applicationType: this.currentApplicationType === 'business' ? 'BUSINESS' : 'COMMERCIAL_REAL_ESTATE' };
+    if (this.urlParameter) {
+      payload = has(this.urlParameter, 'signupCode') ? { ...payload, signupCode: this.urlParameter.signupCode } : { ...payload };
+      payload = has(this.urlParameter, 'utmSource') ? { ...payload, utmSource: this.urlParameter.utmSource } : { ...payload };
+    }
     return new Promise((resolve, reject) => {
       clientPublic
         .mutate({
