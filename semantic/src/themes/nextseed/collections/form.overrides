@@ -385,6 +385,7 @@
         overflow:hidden;
         text-overflow:ellipsis;
         white-space:nowrap;
+        cursor:default;
         .remove{
             margin:0 0 0 @7px;
             line-height:1;
@@ -397,6 +398,17 @@
             &:hover{
                 color:darken(@link-color, 10%);
             }
+        }
+    }
+    &.downloadable{
+        min-height:auto;
+        padding:@4px 0;
+        line-height:initial;
+        background-color:transparent;
+        >p{
+            color:@neutral-offdark;
+            font-weight:@normal;
+            font-style:italic;
         }
     }
 }

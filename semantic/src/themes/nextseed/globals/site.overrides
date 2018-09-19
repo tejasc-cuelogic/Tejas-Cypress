@@ -151,6 +151,8 @@ a:not(.item), a:not(.ui.button){
 	&:hover{
 		text-decoration:underline !important;
 	}
+}
+a{
 	&.inverted{
 		color:@white;
 	}
@@ -1842,7 +1844,7 @@ p.check-extra-info{
 			color:@neutral-offdark;
 			position:absolute;
 			right:-26px;
-			top:50px;
+			top:50%;
 			transform:translate(0%, -50%);
 		}
 		&:last-of-type{

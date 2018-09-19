@@ -258,6 +258,9 @@
             font-size:@14px;
             font-weight:@fontMedium;
             color:@neutral;
+            a{
+                margin-left:@5px;
+            }
         }
     }
 }
