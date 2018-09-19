@@ -1,8 +1,11 @@
-import { observable, action } from 'mobx';
-import { MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CLOSING_CONTITNGENCIES, CONTINGENCIES, ADD_NEW_CONTINGENCY, LAUNCH_CONTITNGENCIES, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
+/* eslint-disable no-unused-vars, no-param-reassign */
+import { observable, toJS, action } from 'mobx';
+import { MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore } from '../../../index';
+
+const emptyDataSet = { data: [] };
 
 export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
@@ -12,8 +15,8 @@ export class OfferingCreationStore {
   @observable COMPANY_HISTORY_FRM = Validator.prepareFormObject(COMPANY_HISTORY);
   @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
-  @observable LAUNCH_CONTITNGENCIES_FRM = Validator.prepareFormObject(LAUNCH_CONTITNGENCIES);
-  @observable CLOSING_CONTITNGENCIES_FRM = Validator.prepareFormObject(CLOSING_CONTITNGENCIES);
+  @observable LAUNCH_CONTITNGENCIES_FRM = Validator.prepareFormObject(emptyDataSet);
+  @observable CLOSING_CONTITNGENCIES_FRM = Validator.prepareFormObject(emptyDataSet);
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
@@ -180,10 +183,10 @@ export class OfferingCreationStore {
     this[formName].fields[arrayName] = arrayData;
     if (addFieldValues) {
       const dataLength = this[formName].fields.data.length;
-      this[formName].fields.data[dataLength - 1].name.value =
-      this.ADD_NEW_CONTINGENCY_FRM.fields.name.value;
-      this[formName].fields.data[dataLength - 1].acceptanceCriteria.value =
-      this.ADD_NEW_CONTINGENCY_FRM.fields.acceptanceCriteria.value;
+      this[formName].fields.data[dataLength - 1].contingency.value =
+      this.ADD_NEW_CONTINGENCY_FRM.fields.contingency.value;
+      this[formName].fields.data[dataLength - 1].acceptance.value =
+      this.ADD_NEW_CONTINGENCY_FRM.fields.acceptance.value;
     }
     Validator.resetFormData(this.ADD_NEW_CONTINGENCY_FRM);
   }
@@ -193,33 +196,63 @@ export class OfferingCreationStore {
     Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
   }
 
+  @action
+  resetMe = (form, ref) => {
+    this[form] = Validator.prepareFormObject(ref || emptyDataSet);
+  }
   /*
   *  Set form data
   */
   @action
-  setFormData = (form, ref, ref2) => {
-    const { offer } = offeringsStore;
-    Object.keys(this[form].fields).map((key) => {
+  setDataForFields = (fields, data, form) => {
+    Object.keys(fields).map((key) => {
       try {
-        if (this[form].fields[key].objRef) {
+        if (fields[key] && Array.isArray(toJS(fields[key]))) {
+          if (data[key] && data[key].length > 0) {
+            const addRec = data[key].length - toJS(fields[key]).length;
+            for (let i = addRec; i > 0; i -= 1) {
+              this.addMore(form, key);
+            }
+            data[key].forEach((record, index) => {
+              this.setDataForFields(fields[key][index], data[key][index]);
+            });
+          }
+        } else if (fields[key].objRef) {
           let tempRef = false;
-          this[form].fields[key].objRef.split('.').map((k) => {
-            tempRef = !tempRef ? offer[k] : tempRef[k];
+          fields[key].objRef.split('.').map((k) => {
+            tempRef = !tempRef ? data[k] : tempRef[k];
             return tempRef;
           });
-          this[form].fields[key].value = tempRef[key];
+          fields[key].value = tempRef[key];
         } else {
-          this[form].fields[key].value = ref ? (ref2 ? offer[ref][ref2][key] :
-            offer[ref][key]) : offer[key];
+          fields[key].value = data[key];
         }
-        if (this[form].fields[key].refSelector) {
-          this[form].fields[key].refSelectorValue = this[form].fields[key].value !== '';
+        if (fields[key].refSelector) {
+          fields[key].refSelectorValue = fields[key].value !== '';
         }
       } catch (e) {
         // do nothing
       }
       return null;
     });
+  }
+  @action
+  setFormData = (form, ref, ref2, ref3) => {
+    const { offer } = offeringsStore;
+    const { fields } = this[form];
+    const data = ref ? (ref2 ? (ref3 ? offer[ref][ref2][ref3] : offer[ref][ref2]) : offer[ref]) :
+      offer;
+    if (this[form].fields.data && Array.isArray(toJS(this[form].fields.data))) {
+      this.resetMe(form);
+      if (data && data.length > 0) {
+        data.forEach((record, index) => {
+          this.addMore(form);
+          this.setDataForFields(this[form].fields.data[index], data[index], form);
+        });
+      }
+    } else {
+      this.setDataForFields(this[form].fields, data, form);
+    }
   }
 }
 

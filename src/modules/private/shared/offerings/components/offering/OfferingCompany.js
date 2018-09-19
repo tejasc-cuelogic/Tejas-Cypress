@@ -9,6 +9,7 @@ import { FormTextarea, MaskedInput } from '../../../../../../theme/form';
 export default class OfferingCompany extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering', 'about');
+    this.props.offeringCreationStore.setFormData('COMPANY_HISTORY_FRM', 'offering', 'about', 'history');
   }
   addNewMileStone = (e) => {
     e.preventDefault();
