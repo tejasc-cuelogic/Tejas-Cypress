@@ -6,8 +6,9 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail } from '../../queries/profile';
+import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, userStore, navStore } from '../../index';
 
 export class AuthStore {
@@ -15,6 +16,7 @@ export class AuthStore {
   @observable isUserLoggedIn = false;
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
+  @observable userId = null;
   @observable devAuth = {
     required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
@@ -34,6 +36,12 @@ export class AuthStore {
   setDefaultPwdType = () => {
     this.pwdInputType = 'password';
   }
+
+  @action
+  setUserId = (userId) => {
+    this.userId = userId;
+  }
+
   @action
   setPwdVisibilityStatus = () => {
     if (this.pwdInputType === 'password') {
@@ -186,6 +194,12 @@ export class AuthStore {
     this.SIGNUP_FRM.fields.verify.value = '';
   }
 
+  @action
+  setUserLoginDetails = (email, password) => {
+    this.LOGIN_FRM.fields.email.value = email;
+    this.LOGIN_FRM.fields.password.value = password;
+  }
+
   verifyAndUpdateEmail = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -223,6 +237,32 @@ export class AuthStore {
         })
         .then(() => {
           resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  portPrequalDataToApplication = (applicationId) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      clientPublic
+        .mutate({
+          mutation: portPrequalDataToApplication,
+          variables: {
+            prequalApplicationData: {
+              userId: this.userId,
+              applicationId,
+            },
+          },
+        })
+        .then((data) => {
+          resolve(data.data.portPrequalDataToApplication.id);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));

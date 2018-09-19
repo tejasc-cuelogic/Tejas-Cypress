@@ -366,13 +366,13 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
     rule: 'required',
   },
   investorIRR: {
-    value: '', maxLength: 16, label: 'Targeted Investor IRR (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required|investmentTypeCheck', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'Targeted Investor IRR (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required|investmentTypeCheck', placeHolder: 'e.g. 11%', customErrors: { required: 'required' },
   },
   annualInvestorRoi: {
-    value: '', maxLength: 16, label: 'Targeted Annual Investor ROI Upon Stabilization (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'Targeted Annual Investor ROI Upon Stabilization (%)', tooltip: 'Levered, net of all fees.', error: undefined, rule: 'required', placeHolder: 'e.g. 11%', customErrors: { required: 'required' },
   },
   holdTimeInYears: {
-    value: '', maxLength: 16, label: 'Targeted Hold Time (years)', error: undefined, rule: 'required', placeHolder: 'e.g. $100,000', customErrors: { required: 'required' },
+    value: '', maxLength: 16, label: 'Targeted Hold Time (years)', error: undefined, rule: 'required', placeHolder: 'e.g. 3', customErrors: { required: 'required' },
   },
   legalConfirmation: {
     value: [],

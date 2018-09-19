@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Grid, Icon, Header, Divider, Button, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-// import cookie from 'react-cookies';
+import cookie from 'react-cookies';
 import { FormInput } from '../../../../theme/form';
 import { authActions } from '../../../../services/actions';
+import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore', 'authStore', 'userStore', 'uiStore')
 @observer
@@ -16,32 +17,45 @@ class Success extends Component {
   }
   onProceed = (e) => {
     e.preventDefault();
-    const { userExists, currentApplicationType, applicationId } = this.props.businessAppStore;
+    const {
+      userExists, currentApplicationType, applicationId, setFieldvalue,
+    } = this.props.businessAppStore;
     if (this.props.isPublic) {
       if (!userExists) {
-        // authActions.register()
-        //   .then(() => {
-        //     const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-        //     const userCredentials = { email: email.value, password: btoa(password.value) };
-        //     cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-        //     this.props.history.push('/auth/confirm-email');
-        //   })
-        //   .catch(() => {});
-      } else {
-        authActions.login()
+        authActions.register()
           .then(() => {
-            const { roles } = this.props.userStore.currentUser;
-            this.props.authStore.reset();
-            if (roles && roles.includes('issuer')) {
-              const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
-              this.props.history.push(redirectUrl);
-            }
-          });
+            const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+            const userCredentials = { email: email.value, password: btoa(password.value) };
+            cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+            this.props.authStore.setUserLoginDetails(email.value, password.value);
+            this.props.authStore.portPrequalDataToApplication(applicationId)
+              .then((appId) => {
+                setFieldvalue('applicationId', appId);
+                this.proceedLoginIn(currentApplicationType, appId);
+              })
+              .catch(er => Helper.toast(er.message, 'error'));
+          })
+          .catch(er => Helper.toast(er.message, 'error'));
+      } else {
+        this.proceedLoginIn(currentApplicationType, applicationId);
       }
     } else {
       this.props.history.push(`${this.props.refLink}/business-details`);
     }
   }
+
+  proceedLoginIn = (currentApplicationType, applicationId) => {
+    authActions.login()
+      .then(() => {
+        const { roles } = this.props.userStore.currentUser;
+        this.props.authStore.reset();
+        if (roles && roles.includes('issuer')) {
+          const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
+          this.props.history.push(redirectUrl);
+        }
+      });
+  }
+
   render() {
     const {
       signupChange, SIGNUP_FRM, LoginChange, LOGIN_FRM, togglePasswordType, pwdInputType,
@@ -66,11 +80,12 @@ class Success extends Component {
             <Grid>
               <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                 {!userExists ?
-                  ['password', 'verify'].map(field => (
+                  ['email', 'password', 'verify'].map(field => (
                     <FormInput
                       key={field}
-                      type={pwdInputType}
-                      icon={togglePasswordType(field)}
+                      disabled={field === 'email'}
+                      icon={field !== 'email' ? togglePasswordType(field) : null}
+                      type={field !== 'email' ? pwdInputType : 'text'}
                       name={field}
                       fielddata={fields[field]}
                       changed={signupChange}
