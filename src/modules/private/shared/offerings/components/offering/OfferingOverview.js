@@ -66,7 +66,7 @@ export default class OfferingOverview extends Component {
             </Header.Subheader>
           </Header>
           {
-            ['facebookProfile', 'linkedInProfile', 'twitterProfile', 'instagramProfile', 'yelpProfile'].map(field => (
+            ['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -118,8 +118,8 @@ export default class OfferingOverview extends Component {
             </Header.Subheader>
           </Header>
           <FormTextarea
-            name="googleMetadata"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.googleMetadata}
+            name="googleMeta"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.googleMeta}
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />

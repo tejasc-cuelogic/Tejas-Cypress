@@ -106,6 +106,7 @@ export const getOfferingDetails = gql`
           elevatorPitch
           tombstoneDescription
           highlight
+          googleMeta
           social {
             type
             url

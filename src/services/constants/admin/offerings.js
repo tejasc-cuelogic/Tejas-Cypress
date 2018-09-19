@@ -282,40 +282,50 @@ export const OFFERING_OVERVIEW = {
     rule: 'required',
     placeHolder: 'Describe your project and what you`re raising funds to accomplish.',
   },
-  facebookProfile: {
+  facebook_url: {
     value: '',
     label: 'Facebook',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://facebook.com/nextbrewery',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
-  linkedInProfile: {
+  linkedin_url: {
     value: '',
     label: 'LinkedIn',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://linkedin.com/nextbrewery',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
-  twitterProfile: {
+  twitter_url: {
     value: '',
     label: 'LinkedIn',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://twitter.com/nextbrewery',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
-  instagramProfile: {
+  instagram_url: {
     value: '',
     label: 'Instagram',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://instagram.com/nextbrewery',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
-  yelpProfile: {
+  yelp_url: {
     value: '',
     label: 'Yelp',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://yelp.com/nextbrewery',
+    objRef: 'offering.overview.social',
+    find: 'type',
   },
   facebookSharelink: {
     value: '',
@@ -345,7 +355,7 @@ export const OFFERING_OVERVIEW = {
     rule: 'required',
     placeHolder: 'e.g. Company was formed...',
   },
-  googleMetadata: {
+  googleMeta: {
     value: '',
     label: 'Metadata',
     error: undefined,
@@ -667,6 +677,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'numeric|required',
       placeHolder: '555-123-8888',
+      objRef: 'leadership.phone',
     },
     dob: {
       value: '',
@@ -791,6 +802,7 @@ export const LEADERSHIP = {
       preSignedUrl: '',
       fileId: '',
       fileData: '',
+      objRef: 'leadership.uploads',
     },
     heroImage: {
       label: 'Hero Image',
@@ -800,6 +812,7 @@ export const LEADERSHIP = {
       preSignedUrl: '',
       fileId: '',
       fileData: '',
+      objRef: 'leadership.uploads',
     },
     license: {
       label: 'Driver’s License',
@@ -809,6 +822,7 @@ export const LEADERSHIP = {
       preSignedUrl: '',
       fileId: '',
       fileData: '',
+      objRef: 'leadership.uploads',
     },
     otherEntities: {
       label: 'Names of other entities over which you have control',

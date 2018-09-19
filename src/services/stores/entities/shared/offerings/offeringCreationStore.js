@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, no-param-reassign */
+/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
 import { MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
@@ -223,7 +223,15 @@ export class OfferingCreationStore {
             tempRef = !tempRef ? data[k] : tempRef[k];
             return tempRef;
           });
-          fields[key].value = tempRef[key];
+          if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
+            fields[key].value = tempRef[key].fileName;
+            fields[key].fileId = tempRef[key].fileId;
+          } else {
+            const fieldref = key.split('_');
+            fields[key].value = fields[key].find ?
+              tempRef.find(o => o[fields[key].find].toLowerCase() === fieldref[0])[fieldref[1]] :
+              tempRef[key];
+          }
         } else {
           fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
