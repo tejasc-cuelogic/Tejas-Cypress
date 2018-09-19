@@ -24,7 +24,7 @@ section{
 		display: block;
 	}
 }
-//	Helper Classes
+//	Helper Classes Starts
 iframe{
 	border:none;
 }
@@ -145,11 +145,14 @@ h6{
 		margin-bottom:0px;
 	}
 }
+//	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
 	&:hover{
 		text-decoration:underline !important;
 	}
+}
+a{
 	&.inverted{
 		color:@white;
 	}
@@ -178,6 +181,7 @@ a:not(.item), a:not(.ui.button){
 .primary-block {
 	background-color: @primary-two;
 }
+//	Helper Classes Ends
 
 // Footer Styles
 footer{
@@ -1840,7 +1844,7 @@ p.check-extra-info{
 			color:@neutral-offdark;
 			position:absolute;
 			right:-26px;
-			top:50px;
+			top:50%;
 			transform:translate(0%, -50%);
 		}
 		&:last-of-type{

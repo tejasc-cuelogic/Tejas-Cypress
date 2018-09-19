@@ -224,7 +224,7 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <FormDatePicker
-                        disabled={formReadOnlyMode}
+                        isdisabled={formReadOnlyMode}
                         type="text"
                         name="dateOfService"
                         maxDate={moment()}
