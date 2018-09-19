@@ -35,7 +35,7 @@ import {
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, userDetailsStore, businessAppLendioStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -159,6 +159,11 @@ export class BusinessAppStore {
       fetchPolicy: 'network-only',
       onFetch: (data) => {
         this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
+        const {
+          prequalDetails, signupCode,
+        } = data.businessApplicationsDetailsAdmin;
+        businessAppAdminStore
+          .setBusinessDetails(prequalDetails.businessGeneralInfo.businessName, signupCode);
         this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
         uiStore.setAppLoader(false);
         resolve();

@@ -362,6 +362,7 @@ query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: Str
     applicationType: $applicationType
     userId: $userId
   ){
+    userId
     applicationId
     applicationStatus
     applicationType
@@ -587,6 +588,25 @@ mutation lendioDetails ($lendioApplication: ApplicationInfoInput!) {
   submitPartneredWithLendio(applicationDetails:$lendioApplication) {
     status
     url
+  }
+}
+`;
+
+export const updateBusinessApplicationInformation = gql`
+mutation updateBusinessApplicationInformation(
+  $applicationId: String!
+  $applicationUserId: String
+  $businessName: String
+  $signupCode: String
+) {
+  updateBusinessApplicationInformation(
+    applicationId: $applicationId
+    applicationUserId: $applicationUserId
+    businessName: $businessName
+    signupCode: $signupCode
+  ){
+    applicationId
+    signupCode
   }
 }
 `;

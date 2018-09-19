@@ -5,8 +5,9 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FILTER_META } from '../../../../../constants/user';
 import { BUSINESS_DETAILS_EDIT_META } from '../../../../constants/businessApplication';
-import { getBusinessApplicationAdmin, getBusinessApplicationSummary } from '../../../queries/businessApplication';
+import { getBusinessApplicationsDetailsAdmin, getBusinessApplicationAdmin, getBusinessApplicationSummary, updateBusinessApplicationInformation } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
+import { uiStore } from '../../../index';
 
 export class BusinessAppStore {
   @observable businessApplicationsList = [];
@@ -31,6 +32,11 @@ export class BusinessAppStore {
   setFieldvalue = (field, value) => {
     this[field] = value;
   }
+
+  @action
+  inputFieldChnage = (e, res, formName = 'BUSINESS_DETAILS_EDIT_FRM') => {
+    this[formName] = Validator.onChange(this[formName], Validator.pullValues(e, res));
+  };
 
   @action
   setKeyword = (e) => {
@@ -201,6 +207,44 @@ export class BusinessAppStore {
   setBusinessDetails = (businessName, signupCode) => {
     this.BUSINESS_DETAILS_EDIT_FRM.fields.businessName.value = businessName;
     this.BUSINESS_DETAILS_EDIT_FRM.fields.signupCode.value = signupCode;
+  }
+
+  @action
+  updateBusinessDetails = (appId, appUserId, appType) => {
+    const payload = Validator.ExtractValues(this.BUSINESS_DETAILS_EDIT_FRM.fields);
+    const refetchPayLoad = {
+      applicationId: appId,
+      userId: appUserId,
+      applicationType: appType === 'PRE_QUALIFICATION_FAILED' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED',
+    };
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateBusinessApplicationInformation,
+          variables: {
+            applicationId: appId,
+            applicationUserId: appUserId,
+            businessName: payload.businessName,
+            signupCode: payload.signupCode,
+          },
+          refetchQueries: [{
+            query: getBusinessApplicationsDetailsAdmin,
+            variables: refetchPayLoad,
+          }],
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 }
 

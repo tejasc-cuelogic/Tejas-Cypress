@@ -10,13 +10,9 @@ import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
-const navItems = [
+let navItems = [
   { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
   { title: 'Pre-qualification', to: 'pre-qualification' },
-  { title: 'Business Details', to: 'business-details' },
-  { title: 'Performance', to: 'performance' },
-  { title: 'Documentation', to: 'documentation' },
-  { title: 'Review', to: 'review' },
 ];
 
 const getModule = component => Loadable({
@@ -51,12 +47,23 @@ export default class ApplicationDetails extends Component {
     e.preventDefault();
     this.setState({ displaOnly: !this.state.displaOnly });
   }
+  updateBusinessDetails = (e, appId, appUserId) => {
+    e.preventDefault();
+    this.props.businessAppAdminStore.updateBusinessDetails(appId, appUserId).then(() => {
+      this.setState({ displaOnly: !this.state.displaOnly });
+    });
+  }
+  cancelBusinessDetails = (e, businessName, signupCode) => {
+    e.preventDefault();
+    this.setState({ displaOnly: !this.state.displaOnly });
+    this.props.businessAppAdminStore.setBusinessDetails(businessName, signupCode);
+  }
   render() {
     const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
       businessApplicationDetailsAdmin, businessApplicationsDataById,
     } = businessAppStore;
-    const { BUSINESS_DETAILS_EDIT_FRM, setBusinessDetails } = businessAppAdminStore;
+    const { BUSINESS_DETAILS_EDIT_FRM, inputFieldChnage } = businessAppAdminStore;
     const { fields } = BUSINESS_DETAILS_EDIT_FRM;
     if (businessApplicationsDataById && businessApplicationsDataById.loading) {
       return <InlineLoader />;
@@ -65,15 +72,24 @@ export default class ApplicationDetails extends Component {
       return <EmptyDataSet />;
     }
     const {
-      applicationStatus, prequalDetails, primaryPOC, signupCode, rating,
+      applicationId, userId, applicationStatus, prequalDetails, primaryPOC, signupCode, rating,
     } = businessApplicationDetailsAdmin;
-    setBusinessDetails(prequalDetails.businessGeneralInfo.businessName, signupCode);
+    if (applicationStatus !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+      navItems = [
+        ...navItems,
+        { title: 'Business Details', to: 'business-details' },
+        { title: 'Performance', to: 'performance' },
+        { title: 'Documentation', to: 'documentation' },
+        { title: 'Review', to: 'review' },
+      ];
+    }
+    const { businessName, contactDetails } = prequalDetails.businessGeneralInfo;
     const appStepStatus = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <Header as="h3">
-            {prequalDetails.businessGeneralInfo.businessName}
+            {businessName}
             <span className="title-meta">Status: <b>{appStepStatus}</b></span>
             <Label size="small" color="green">Reviewed</Label>
             <span className="title-meta">Rating</span>
@@ -88,7 +104,30 @@ export default class ApplicationDetails extends Component {
                 <Card fluid className="ba-info-card">
                   <Card.Header>
                     Information
-                    <small className="pull-right"><Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link></small>
+                    <small className="pull-right">
+                      {this.state.displaOnly ?
+                        <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
+                      :
+                        <Button.Group>
+                          <Button
+                            size="tiny"
+                            onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}
+                            color="violet"
+                            className="ghost-button additional-field"
+                            content="Cancel"
+                          />
+                          <Button
+                            disabled={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid}
+                            size="tiny"
+                            onClick={e => this
+                              .updateBusinessDetails(e, applicationId, userId, applicationStatus)}
+                            color="violet"
+                            className="ghost-button additional-field"
+                            content="Update"
+                          />
+                        </Button.Group>
+                      }
+                    </small>
                   </Card.Header>
                   <Card.Content>
                     <Form>
@@ -101,27 +140,12 @@ export default class ApplicationDetails extends Component {
                               type="text"
                               name={field}
                               fielddata={fields[field]}
-                              // changed={(e, res) =>
-                              // businessDetailsChange(e, res, 'owners', index)}
+                              changed={inputFieldChnage}
                             />
                           ))
                         }
                       </Form.Group>
                     </Form>
-                    {/* <Grid columns={2}>
-                      <Grid.Column>
-                        <Header as="h6">
-                          <Header.Subheader>Business Name</Header.Subheader>
-                          {prequalDetails.businessGeneralInfo.businessName}
-                        </Header>
-                      </Grid.Column>
-                      <Grid.Column>
-                        <Header as="h6">
-                          <Header.Subheader>Sign-up Code</Header.Subheader>
-                          {signupCode && signupCode !== '' ? signupCode : '-' }
-                        </Header>
-                      </Grid.Column>
-                    </Grid> */}
                   </Card.Content>
                 </Card>
               </Grid.Column>
@@ -145,7 +169,7 @@ export default class ApplicationDetails extends Component {
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Phone</Header.Subheader>
-                          {prequalDetails.businessGeneralInfo.contactDetails && prequalDetails.businessGeneralInfo.contactDetails.phone ? prequalDetails.businessGeneralInfo.contactDetails.phone.number : '-'}
+                          {contactDetails && contactDetails.phone ? contactDetails.phone.number : '-'}
                         </Header>
                       </Grid.Column>
                     </Grid>
