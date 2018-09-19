@@ -68,6 +68,26 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            name
+            taxId
+            address {
+              street
+              city
+              state
+              zipCode
+            }
+            isTrust
+            trustDate
+            legalInfo {
+              legalFirstName
+              legalLastName
+              title
+              legalDocUrl {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
             accountId
             iraAccountType
             fundingType

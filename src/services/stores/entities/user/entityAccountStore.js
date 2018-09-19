@@ -192,39 +192,37 @@ class EntityAccountStore {
         dateOfInvestment: '02281975',
         amount: this.FIN_INFO_FRM.fields.cfInvestment.value,
       },
-      entity: {
-        name: this.GEN_INFO_FRM.fields.name.value,
-        taxId: this.GEN_INFO_FRM.fields.taxId.value,
-        isTrust: this.TRUST_INFO_FRM.fields.isTrust.value,
-        trustDate: this.TRUST_INFO_FRM.fields.trustDate.value,
-        address: {
-          street: this.GEN_INFO_FRM.fields.street.value,
-          city: this.GEN_INFO_FRM.fields.city.value,
-          state: this.GEN_INFO_FRM.fields.state.value,
-          zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+      name: this.GEN_INFO_FRM.fields.name.value,
+      taxId: this.GEN_INFO_FRM.fields.taxId.value,
+      isTrust: this.TRUST_INFO_FRM.fields.isTrust.value,
+      trustDate: this.TRUST_INFO_FRM.fields.trustDate.value,
+      address: {
+        street: this.GEN_INFO_FRM.fields.street.value,
+        city: this.GEN_INFO_FRM.fields.city.value,
+        state: this.GEN_INFO_FRM.fields.state.value,
+        zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+      },
+      legalInfo: {
+        legalFirstName: userStore.currentUser.givenName,
+        legalLastName: userStore.currentUser.familyName,
+        title: this.PERSONAL_INFO_FRM.fields.title.value,
+        legalDocUrl: {
+          fileId: this.PERSONAL_INFO_FRM.fields.legalDocUrl.fileId,
+          fileName: this.PERSONAL_INFO_FRM.fields.legalDocUrl.value,
         },
-        legalInfo: {
-          legalFirstName: userStore.currentUser.givenName,
-          legalLastName: userStore.currentUser.familyName,
-          title: this.PERSONAL_INFO_FRM.fields.title.value,
-          legalDocUrl: {
-            fileId: this.PERSONAL_INFO_FRM.fields.legalDocUrl.fileId,
-            fileName: this.PERSONAL_INFO_FRM.fields.legalDocUrl.value,
-          },
+      },
+      legalDocs: {
+        formationDoc: {
+          fileName: this.FORM_DOCS_FRM.fields.formationDoc.value,
+          fileId: this.FORM_DOCS_FRM.fields.formationDoc.fileId,
         },
-        legalDocs: {
-          formationDoc: {
-            fileName: this.FORM_DOCS_FRM.fields.formationDoc.value,
-            fileId: this.FORM_DOCS_FRM.fields.formationDoc.fileId,
-          },
-          operatingAgreementDoc: {
-            fileName: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.value,
-            fileId: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.fileId,
-          },
-          einVerificationDoc: {
-            fileName: this.FORM_DOCS_FRM.fields.einVerificationDoc.value,
-            fileId: this.FORM_DOCS_FRM.fields.einVerificationDoc.fileId,
-          },
+        operatingAgreementDoc: {
+          fileName: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.value,
+          fileId: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.fileId,
+        },
+        einVerificationDoc: {
+          fileName: this.FORM_DOCS_FRM.fields.einVerificationDoc.value,
+          fileId: this.FORM_DOCS_FRM.fields.einVerificationDoc.fileId,
         },
       },
     };
@@ -324,7 +322,7 @@ class EntityAccountStore {
       }
     } else if (array2.includes(currentStep.name)) {
       if (removeUploadedData) {
-        accountAttributes.entity =
+        accountAttributes =
         this.setEntityAttributes(currentStep.name, removeUploadedData, field);
         this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData)
           .then(() => res()).catch(() => rej());
@@ -332,7 +330,7 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
-          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
+          accountAttributes = this.setEntityAttributes(currentStep.name);
           this.submitForm(currentStep, formStatus, accountAttributes)
             .then(() => res()).catch(() => rej());
         } else {
@@ -458,39 +456,39 @@ class EntityAccountStore {
           this.FIN_INFO_FRM.fields[f].value = accountDetails[f];
         }
       } else if (form === 'GEN_INFO_FRM') {
-        if ((f === 'taxId' || f === 'name') && accountDetails.entity) {
-          this.GEN_INFO_FRM.fields[f].value = accountDetails.entity[f];
-        } else if (accountDetails.entity && accountDetails.entity.address) {
-          this.GEN_INFO_FRM.fields[f].value = accountDetails.entity.address[f];
+        if ((f === 'taxId' || f === 'name') && accountDetails) {
+          this.GEN_INFO_FRM.fields[f].value = accountDetails[f];
+        } else if (accountDetails && accountDetails.address) {
+          this.GEN_INFO_FRM.fields[f].value = accountDetails.address[f];
         }
       } else if (form === 'TRUST_INFO_FRM') {
         if (f === 'isTrust') {
-          if (accountDetails.entity && accountDetails.entity[f]) {
-            this.TRUST_INFO_FRM.fields[f].value = accountDetails.entity[f];
+          if (accountDetails && accountDetails[f]) {
+            this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
           } else {
             this.TRUST_INFO_FRM.fields[f].value = false;
-            if (!accountDetails.entity || (accountDetails.entity && typeof accountDetails.entity[f] === 'undefined')) {
+            if (accountDetails && typeof accountDetails[f] === 'undefined') {
               isDirty = true;
             }
           }
-        } else if (f === 'trustDate' && accountDetails.entity && accountDetails.entity[f]) {
-          this.TRUST_INFO_FRM.fields[f].value = accountDetails.entity[f];
+        } else if (f === 'trustDate' && accountDetails && accountDetails[f]) {
+          this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
         }
       } else if (form === 'PERSONAL_INFO_FRM') {
-        if (accountDetails.entity && accountDetails.entity.legalInfo && f === 'legalDocUrl') {
-          const fileName = accountDetails.entity.legalInfo[f].fileName === null ? '' : accountDetails.entity.legalInfo[f].fileName;
-          const fileId = accountDetails.entity.legalInfo[f].fileId === null ? '' : accountDetails.entity.legalInfo[f].fileId;
+        if (accountDetails && accountDetails.legalInfo && f === 'legalDocUrl') {
+          const fileName = accountDetails.legalInfo[f].fileName === null ? '' : accountDetails.legalInfo[f].fileName;
+          const fileId = accountDetails.legalInfo[f].fileId === null ? '' : accountDetails.legalInfo[f].fileId;
           this.PERSONAL_INFO_FRM.fields[f].value = fileName;
           this.PERSONAL_INFO_FRM.fields[f].fileId = fileId;
-        } else if (accountDetails.entity && accountDetails.entity.legalInfo) {
-          this.PERSONAL_INFO_FRM.fields[f].value = accountDetails.entity.legalInfo[f];
+        } else if (accountDetails && accountDetails.legalInfo) {
+          this.PERSONAL_INFO_FRM.fields[f].value = accountDetails.legalInfo[f];
         }
       } else if (form === 'FORM_DOCS_FRM') {
-        if (accountDetails.entity && accountDetails.entity.legalDocs) {
-          const { entity } = accountDetails;
-          if (entity.legalDocs[f]) {
-            const fileName = entity.legalDocs[f].fileName === null ? '' : entity.legalDocs[f].fileName;
-            const fileId = entity.legalDocs[f].fileId === null ? '' : entity.legalDocs[f].fileId;
+        if (accountDetails && accountDetails.legalDocs) {
+          const { legalDocs } = accountDetails;
+          if (legalDocs[f]) {
+            const fileName = legalDocs[f].fileName === null ? '' : legalDocs[f].fileName;
+            const fileId = legalDocs[f].fileId === null ? '' : legalDocs[f].fileId;
             this.FORM_DOCS_FRM.fields[f].value = fileName;
             this.FORM_DOCS_FRM.fields[f].fileId = fileId;
           }
@@ -508,20 +506,20 @@ class EntityAccountStore {
       if (account) {
         this.setFormData('FIN_INFO_FRM', account.details);
         this.setFormData('GEN_INFO_FRM', account.details);
-        if (account.details.entity && account.details.entity.address) {
+        if (account.details && account.details.address) {
           this.setEntityAttributes('General');
         }
         this.setFormData('TRUST_INFO_FRM', account.details);
-        if (account.details.entity && account.details.entity.isTrust) {
+        if (account.details && account.details.isTrust) {
           this.setEntityAttributes('Entity info');
         }
         this.setFormData('PERSONAL_INFO_FRM', account.details);
-        if (account.details.entity && account.details.entity.legalInfo) {
+        if (account.details && account.details.legalInfo) {
           this.setEntityAttributes('Personal info');
         }
         this.setFormData('FORM_DOCS_FRM', account.details);
 
-        if (account.details.entity && account.details.entity.legalDocs) {
+        if (account.details && account.details.legalDocs) {
           this.setEntityAttributes('Formation doc');
         }
         if (account.details.linkedBank &&
