@@ -1332,42 +1332,7 @@ export const RISK_FACTORS = {
   },
 };
 
-export const ISSUER = {
-  issuerDiligence: {
-    label: 'Issuer Diligence',
-    value: '',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Type your text here...',
-  },
-  certificateOfFormation: {
-    label: 'Certificate of Formation',
-    value: '',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Type your text here...',
-  },
-  operatingAgreement: {
-    label: 'Operating Agreement',
-    value: '',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Type your text here...',
-  },
-  evidenceOfGoodStanding: {
-    label: 'Evidence of good standing',
-    value: '',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Type your text here...',
-  },
-  whoAreThesePeople: {
-    label: 'Who are executive officers, directors, control persons, promoters, beneficial owners of 20 percent or more of the issuer’s outstanding voting equity securities, calculated on the basis of voting power?',
-    value: '',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Type your text here...',
-  },
+export const COMMON = {
   hasTheIssuer: {
     label: '1. Has the issuer, its predecessors or any affiliated issuer been convicted of any felony or misdemeanor in the last 5 years: i) In connection with the purchase or sale of any security; ii) Involving the making of any false filing with the SEC; iii) Arising out of the conduct of the business of an underwriter, broker, dealer, municipal securities dealer, investment adviser, funding portal or paid solicitor of purchasers of securities',
     value: '',
@@ -1424,6 +1389,34 @@ export const ISSUER = {
     rule: 'required',
     placeHolder: 'Type your text here...',
   },
+  certificateOfFormation: {
+    label: 'Certificate of Formation',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  operatingAgreement: {
+    label: 'Operating Agreement',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  evidenceOfGoodStanding: {
+    label: 'Evidence of good standing',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  whoAreThesePeople: {
+    label: 'Who are executive officers, directors, control persons, promoters, beneficial owners of 20 percent or more of the issuer’s outstanding voting equity securities, calculated on the basis of voting power?',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
   sanctionsListSearch: {
     label: 'OFAC sanctions list search',
     value: '',
@@ -1452,4 +1445,115 @@ export const ISSUER = {
     rule: 'required',
     placeHolder: 'Type your text here...',
   },
+};
+
+export const ISSUER = {
+  issuerDiligence: {
+    label: 'Issuer Diligence',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your text here...',
+  },
+  certificateOfFormation: { ...COMMON.certificateOfFormation },
+  operatingAgreement: { ...COMMON.operatingAgreement },
+  evidenceOfGoodStanding: { ...COMMON.evidenceOfGoodStanding },
+  whoAreThesePeople: { ...COMMON.whoAreThesePeople },
+  hasTheIssuer: { ...COMMON.hasTheIssuer },
+  isTheIssuerSubjectTo: { ...COMMON.isTheIssuerSubjectTo },
+  isAnyCoveredPersonSubjectToAnOrderThree: { ...COMMON.isAnyCoveredPersonSubjectToAnOrderThree },
+  isAnyCoveredPersonSubjectToAnOrderFour: { ...COMMON.isAnyCoveredPersonSubjectToAnOrderFour },
+  isAnyCoveredPersonSubjectToOrderFive: { ...COMMON.isAnyCoveredPersonSubjectToOrderFive },
+  isAnyCoveredPersonSubjectToOrderSix: { ...COMMON.isAnyCoveredPersonSubjectToOrderSix },
+  isAnyCoveredPersonSubjectToOrderSeven: { ...COMMON.isAnyCoveredPersonSubjectToOrderSeven },
+  isAnyCoveredPersonSubjectToOrderEight: { ...COMMON.isAnyCoveredPersonSubjectToOrderEight },
+  sanctionsListSearch: { ...COMMON.sanctionsListSearch },
+  pendingCivilLawsuits: { ...COMMON.pendingCivilLawsuits },
+  pendingLiens: { ...COMMON.pendingLiens },
+  generalOnlineReputationSearch: { ...COMMON.generalOnlineReputationSearch },
+  allControlPersonDiligence: {
+    value: [],
+    values: [
+      {
+        label: 'Completed All Control Person Diligence',
+        value: 'COMPLETED',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  allAffiliatedIssuerDiligence: {
+    value: [],
+    values: [
+      {
+        label: 'Completed All Affiliated Issuer Diligence',
+        value: 'COMPLETED',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+};
+
+export const AFFILIATED_ISSUER = {
+  data: [{
+    legalName: {
+      label: 'Legal Name',
+      value: '',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'Type your text here...',
+    },
+    certificateOfFormation: { ...COMMON.certificateOfFormation },
+    operatingAgreement: { ...COMMON.operatingAgreement },
+    evidenceOfGoodStanding: { ...COMMON.evidenceOfGoodStanding },
+    whoAreThesePeople: { ...COMMON.whoAreThesePeople },
+    hasTheIssuer: { ...COMMON.hasTheIssuer },
+    isTheIssuerSubjectTo: { ...COMMON.isTheIssuerSubjectTo },
+    isAnyCoveredPersonSubjectToAnOrderThree: { ...COMMON.isAnyCoveredPersonSubjectToAnOrderThree },
+    isAnyCoveredPersonSubjectToAnOrderFour: { ...COMMON.isAnyCoveredPersonSubjectToAnOrderFour },
+    isAnyCoveredPersonSubjectToOrderFive: { ...COMMON.isAnyCoveredPersonSubjectToOrderFive },
+    isAnyCoveredPersonSubjectToOrderSix: { ...COMMON.isAnyCoveredPersonSubjectToOrderSix },
+    isAnyCoveredPersonSubjectToOrderSeven: { ...COMMON.isAnyCoveredPersonSubjectToOrderSeven },
+    isAnyCoveredPersonSubjectToOrderEight: { ...COMMON.isAnyCoveredPersonSubjectToOrderEight },
+    sanctionsListSearch: { ...COMMON.sanctionsListSearch },
+    pendingCivilLawsuits: { ...COMMON.pendingCivilLawsuits },
+    generalOnlineReputationSearch: { ...COMMON.generalOnlineReputationSearch },
+  }],
+};
+
+export const LEADER = {
+  data: [{
+    controlPersonQuestionnaire: {
+      label: 'Control Person Questionnaire',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Type your text here...',
+    },
+    countriesAndStateForResidence: {
+      label: 'Countries & State of Residence for Past 10 Years',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Type your text here...',
+    },
+    hasTheIssuer: { ...COMMON.hasTheIssuer },
+    isTheIssuerSubjectTo: { ...COMMON.isTheIssuerSubjectTo },
+    isAnyCoveredPersonSubjectToAnOrderThree: { ...COMMON.isAnyCoveredPersonSubjectToAnOrderThree },
+    isAnyCoveredPersonSubjectToAnOrderFour: { ...COMMON.isAnyCoveredPersonSubjectToAnOrderFour },
+    isAnyCoveredPersonSubjectToOrderFive: { ...COMMON.isAnyCoveredPersonSubjectToOrderFive },
+    isAnyCoveredPersonSubjectToOrderSix: { ...COMMON.isAnyCoveredPersonSubjectToOrderSix },
+    isAnyCoveredPersonSubjectToOrderSeven: { ...COMMON.isAnyCoveredPersonSubjectToOrderSeven },
+    isAnyCoveredPersonSubjectToOrderEight: { ...COMMON.isAnyCoveredPersonSubjectToOrderEight },
+    sanctionsListSearch: { ...COMMON.sanctionsListSearch },
+    noPendingCivilLawSuit: {
+      label: 'No Pending Civil Lawsuit.  Otherwise, describe.',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Type your text here...',
+    },
+    generalOnlineReputationSearch: { ...COMMON.generalOnlineReputationSearch },
+  }],
 };
