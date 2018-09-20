@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
+import { Card, Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
@@ -24,7 +24,7 @@ export default class OfferingOverview extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     return (
-      <Aux>
+      <Card fluid className="form-card">
         <Form>
           {
             ['elevatorPitch', 'tombstoneDescription'].map(field => (
@@ -155,7 +155,7 @@ export default class OfferingOverview extends Component {
             </Button.Group>
           </div>
         </Form>
-      </Aux>
+      </Card>
     );
   }
 }
