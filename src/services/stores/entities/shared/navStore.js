@@ -3,7 +3,7 @@ import { matchPath } from 'react-router-dom';
 import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
-import { userStore, userDetailsStore, businesssStore } from '../../index';
+import { userStore, userDetailsStore, offeringsStore } from '../../index';
 
 export class NavStore {
   @observable NAV_ITEMS = [...PRIVATE_NAV];
@@ -44,12 +44,15 @@ export class NavStore {
     const bIndex = navItems.findIndex(r => r.title === 'Offering');
     if (bIndex !== -1) {
       const subNavigations = [...navItems[bIndex].subNavigations];
-      businesssStore.businesses.forEach((b) => {
+      offeringsStore.offerings.forEach((b) => {
         const sNav = this.filterByAccess(subNavigations, b.phase);
         navItems.splice(
           bIndex,
           0,
-          { ...navItems[bIndex], ...{ title: b.name, to: `offering/${b.id}`, subNavigations: sNav } },
+          {
+            ...navItems[bIndex],
+            ...{ title: b.keyTerms.legalBusinessName, to: `offering/${b.id}`, subNavigations: sNav },
+          },
         );
       });
     }

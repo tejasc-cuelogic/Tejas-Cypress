@@ -92,8 +92,14 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
+            <FormInput
+              key="investmentMultiple"
+              name="investmentMultiple"
+              fielddata={KEY_TERMS_FRM.fields.investmentMultiple}
+              changed={(e, result) => formChange(e, result, formName)}
+            />
             {
-              ['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
+              ['revSharePercentage', 'interestRate'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}

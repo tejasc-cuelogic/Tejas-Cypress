@@ -7,13 +7,16 @@ import { Menu, Icon } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 
-@inject('navStore')
+@inject('navStore', 'offeringsStore')
 @withRouter
 @observer
 export class SidebarNav extends Component {
   componentWillMount() {
     this.props.navStore.setAccessParams('roles', this.props.roles);
     this.props.navStore.setAccessParams('currentNav', this.props.match.url);
+    if (this.props.roles.includes('issuer')) {
+      this.props.offeringsStore.initRequest({ stage: 'active' });
+    }
   }
   componentWillReceiveProps(nextProps) {
     this.props.navStore.setAccessParams('currentNav', nextProps.match.url);

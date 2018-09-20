@@ -1,5 +1,21 @@
 import gql from 'graphql-tag';
 
+export const allOfferingsCompact = gql`
+  query _getOfferings($stage: [OfferingStageEnumType]){
+    getOfferings(filters: { stage: $stage }){
+      id
+      keyTerms {
+        legalBusinessName
+      }
+      stage
+      created{
+        id
+        date
+      }
+    }
+  }
+`;
+
 export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
@@ -106,6 +122,7 @@ export const getOfferingDetails = gql`
           elevatorPitch
           tombstoneDescription
           highlight
+          googleMeta
           social {
             type
             url
@@ -201,6 +218,49 @@ export const getOfferingDetails = gql`
           privacyRisk
           otherRisk
         }
+      }
+      leadership {
+        firstName
+        lastName
+        email
+        phone {
+          number
+        }
+        dob
+        ssn
+        citizenship
+        percentOwned
+        companyPosition
+        dateOfService
+        address {
+          street
+          city
+          state
+          zip
+        }
+        bio
+        uploads {
+          headshot {
+            fileId
+            fileName
+          }
+          heroImage {
+            fileId
+            fileName
+          }
+          license {
+            fileId
+            fileName
+          }
+        }
+        social {
+          website
+          facebook
+          linkedin
+          twitter
+        }
+        otherEntities
+        promoters
       }
       closureSummary {
         disbursementDate

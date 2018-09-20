@@ -15,7 +15,7 @@ const FormCheckbox = observer((props) => {
           <List.Item className="ui checkbox">
             {props.defaults ? (
               <Checkbox
-                checked={value.includes(c.value)}
+                checked={value && value.includes(c.value)}
                 value={c.value}
                 {...props}
                 label={

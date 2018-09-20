@@ -9,6 +9,7 @@ import { FormTextarea, FormInput } from '../../../../../../theme/form';
 export default class OfferingOverview extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering', 'overview');
+    this.props.offeringCreationStore.setFormData('OFFERING_HIGHLIGHTS_FRM', 'offering', 'overview', 'highlight');
   }
   addNewBullet = (e) => {
     e.preventDefault();
@@ -49,9 +50,9 @@ export default class OfferingOverview extends Component {
           {
             OFFERING_HIGHLIGHTS_FRM.fields.data.map((highlights, index) => (
               <FormInput
-                name="bullet"
+                name="highlight"
                 label={`Bullet ${index + 1}`}
-                fielddata={highlights.bullet}
+                fielddata={highlights.highlight}
                 changed={(e, result) => formChangeWithIndex(e, result, 'OFFERING_HIGHLIGHTS_FRM', index)}
               />
             ))
@@ -65,7 +66,7 @@ export default class OfferingOverview extends Component {
             </Header.Subheader>
           </Header>
           {
-            ['facebookProfile', 'linkedInProfile', 'twitterProfile', 'instagramProfile', 'yelpProfile'].map(field => (
+            ['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
               <FormInput
                 key={field}
                 name={field}
@@ -85,13 +86,13 @@ export default class OfferingOverview extends Component {
             Facebook
           </Header>
           <FormInput
-            name="facebookSharelink"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.facebookSharelink}
+            name="facebook_shareLink"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
             changed={(e, result) => formChange(e, result, formName)}
           />
           <FormTextarea
-            name="facebookBlurb"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.facebookBlurb}
+            name="facebook_blurb"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_blurb}
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />
@@ -99,13 +100,13 @@ export default class OfferingOverview extends Component {
             Twitter
           </Header>
           <FormInput
-            name="twitterSharelink"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.twitterSharelink}
+            name="twitter_shareLink"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
             changed={(e, result) => formChange(e, result, formName)}
           />
           <FormTextarea
-            name="twitterBlurb"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.twitterBlurb}
+            name="twitter_blurb"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_blurb}
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />
@@ -117,8 +118,8 @@ export default class OfferingOverview extends Component {
             </Header.Subheader>
           </Header>
           <FormTextarea
-            name="googleMetadata"
-            fielddata={OFFERING_OVERVIEW_FRM.fields.googleMetadata}
+            name="googleMeta"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.googleMeta}
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />
