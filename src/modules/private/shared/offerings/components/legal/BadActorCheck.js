@@ -31,7 +31,7 @@ export default class BadActorCheck extends Component {
           />
           {
             badActorCheckInfo.map(item => (
-              <Route exact key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+              <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
             ))
           }
         </Switch>
