@@ -22,7 +22,7 @@ class InvestmentDetails extends Component {
       //     <RevenueShare /> : <TermNote />
       //   }
       // </Aux>
-      <div className="offering-content-spacer">
+      <div className="campaign-content-wrapper">
         <Grid>
           <Grid.Row>
             <Grid.Column widescreen={7} computer={8}>

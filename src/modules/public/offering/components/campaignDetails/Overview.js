@@ -18,7 +18,7 @@ class Overview extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     return (
-      <div className="offering-content-spacer">
+      <div className="campaign-content-wrapper">
         <Grid>
           <Grid.Row>
             <Grid.Column widescreen={7} computer={8}>

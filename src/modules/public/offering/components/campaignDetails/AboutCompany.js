@@ -35,7 +35,7 @@ class AboutCompany extends Component {
       { to: 'meetourteam', component: 'MeetTeamModal' },
     ];
     return (
-      <div className="offering-content-spacer">
+      <div className="campaign-content-wrapper">
         <Grid>
           <Grid.Row>
             <Grid.Column widescreen={7} computer={8}>

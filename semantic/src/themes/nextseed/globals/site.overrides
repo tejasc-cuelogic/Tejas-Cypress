@@ -340,16 +340,16 @@ footer{
 		.progress-bar {
 			height: 210px;
 			width: 210px;
-			margin: auto auto @16px;
 		}
 		p {
 			font-size: @13px;
 			color: @white;
 			text-align: center;
+			margin: @20px 0;
 		}
 	}
 	.offering-intro {
-		padding: @32px @20px;
+		padding: @32px @20px 0;
 		h4.ui.header {
 			position: relative;
 			> a {
@@ -364,9 +364,6 @@ footer{
 		background-color: @neutral-midwhite;
 		flex-grow: 1;
 		padding-left: 280px;
-		.offering-content-spacer {
-			padding: @17px @50px @50px;
-		}
 		.quick-bar {
 			padding: @10px 0;
 		}
@@ -383,8 +380,8 @@ footer{
 		.no-early-bird {
 			margin: @30px auto;
 		}
-		.campaign-about-wrapper {
-			padding: @30px;
+		.campaign-content-wrapper {
+			padding: @40px;
 			// background-color: @white;
 			height: 100%;
 			p {

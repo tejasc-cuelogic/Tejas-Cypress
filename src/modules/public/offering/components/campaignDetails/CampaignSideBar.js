@@ -39,14 +39,15 @@ export default class CampaignSideBar extends Component {
             </Statistic>
           </Statistic.Group>
           <Button as={Link} to="invest-now" secondary>Invest Now</Button>
+          <p>$100 min investment</p>
         </div>
         <Menu vertical fluid>
           <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} />
           <Divider />
-          <Menu.Item as={Link} to="/" className="watch-deal-menu">
+          <Menu.Item as={Link} to="/" className="secondary-item">
             <Icon name="heart outline" /> Watch Deal
           </Menu.Item>
-          <Menu.Item as={Link} to={`${this.props.match.url}/share`} className="watch-deal-menu">
+          <Menu.Item as={Link} to={`${this.props.match.url}/share`} className="secondary-item">
             <Icon name="share alternate" /> Share
           </Menu.Item>
         </Menu>

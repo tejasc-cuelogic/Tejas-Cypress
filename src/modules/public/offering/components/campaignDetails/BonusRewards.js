@@ -9,14 +9,14 @@ import card4 from '../../../../../assets/images/cards/pour_cards_silver.jpg';
 class BonusRewards extends Component {
   render() {
     return (
-      <div className="campaign-about-wrapper">
+      <div className="campaign-content-wrapper">
         <Header as="h3">Bonus Rewards</Header>
         <Grid stackable doubling columns={3}>
           <Grid.Row>
             <Grid.Column>
               <Segment padded className="reward-block">
                 <Header as="h6">Early Bird Reward
-                  <Image circular src={noEarlyBird} floated="right" />
+                  <Image src={noEarlyBird} floated="right" />
                   <Header.Subheader>
                     <Label size="small" color="green" className="text-uppercase">49 remaining</Label>
                   </Header.Subheader>
