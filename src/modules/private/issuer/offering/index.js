@@ -13,7 +13,7 @@ export default class Offering extends Component {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/overview`);
     }
-    this.props.offeringsStore.getOne('963c0950-b80e-11e8-a4aa-87285e168369');
+    this.props.offeringsStore.getOne(this.props.match.params.id);
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
