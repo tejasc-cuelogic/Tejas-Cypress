@@ -7,6 +7,8 @@ import videoPoster from '../../../../../assets/images/636206632.webp';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
 import UpdatesModal from './UpdatesModal';
+import KeyTermsModal from './investmentDetails/KeyTermsModal';
+
 
 const nsvideos = {
   embed: '218642510',
@@ -81,7 +83,7 @@ class Overview extends Component {
             <Grid.Column>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>View Key Terms</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}><b>View Key Terms</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Revenue Sharing Notes</Header>
@@ -201,6 +203,7 @@ class Overview extends Component {
           </Grid.Row>
         </Grid>
         <Route path={`${this.props.match.url}/updates`} component={UpdatesModal} />
+        <Route path={`${this.props.match.url}/keyterms`} component={KeyTermsModal} />
       </div>
     );
   }

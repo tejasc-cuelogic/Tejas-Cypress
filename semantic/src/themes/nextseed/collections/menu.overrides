@@ -234,12 +234,13 @@ footer{
         .ui.vertical.menu {
 			background-color: transparent;
 			.item {
-				color: @white;
+                color: @white;
+                line-height: 20px;
 				border-left: @4px solid transparent;
 				border-radius: 0;
 				padding-left: @27px;
 				&:hover, &.active {
-					background-color: @neutral;
+					background-color: @nav-hover;
 					border-color: @primary-one;
 					color: @primary-one;
 				}
@@ -248,12 +249,12 @@ footer{
 					margin-left: 0;
                     margin-right: @14px;
                     font-size: @20px;
-                    margin-top: -3px;
+                    line-height: 20px;
 				}
 				>.label.circular {
 					margin-top: -5px;
 				}
-				&.watch-deal-menu {
+				&.secondary-item {
 					color: @neutral-middark;
 				}
 			}
@@ -262,24 +263,24 @@ footer{
             }
         }
     }
-    .offering-content-spacer {
-        .ui.secondary.menu .item {
-            font-weight: @bold;
-            color: @neutral;
-            >i.icon {
-                font-size: @20px;
-            }
-            &.span {
-                font-weight: @bold;
-                line-height: @24px;
-                font-size: @13px;
-                color: @neutral-middark;
-            }
-            &:hover {
-                background-color: transparent;
-            }
-        }
-    }
+    // .offering-content-spacer {
+    //     .ui.secondary.menu .item {
+    //         font-weight: @bold;
+    //         color: @neutral;
+    //         >i.icon {
+    //             font-size: @20px;
+    //         }
+    //         &.span {
+    //             font-weight: @bold;
+    //             line-height: @24px;
+    //             font-size: @13px;
+    //             color: @neutral-middark;
+    //         }
+    //         &:hover {
+    //             background-color: transparent;
+    //         }
+    //     }
+    // }
 }
 
 //  Private pages menus

@@ -13,8 +13,13 @@
         }
     }
     &.reward-block {
-        .ui.header .ui.label {
-            margin-left: 0;
+        .ui.header{
+            .ui.label {
+                margin: @5px 0 0;
+            }
+            >img {
+                width: 50px;
+            }
         }
     }
 }

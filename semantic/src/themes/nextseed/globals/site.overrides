@@ -354,16 +354,16 @@ footer{
 		.progress-bar {
 			height: 210px;
 			width: 210px;
-			margin: auto auto @16px;
 		}
 		p {
 			font-size: @13px;
 			color: @white;
 			text-align: center;
+			margin: @20px 0;
 		}
 	}
 	.offering-intro {
-		padding: @32px @20px;
+		padding: @32px @20px 0;
 		@media only screen and (max-width : @largestMobileScreen){
 			padding: 0 @20px @32px;
 		}
@@ -384,12 +384,6 @@ footer{
 		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: 0;
 		}
-		.offering-content-spacer {
-			padding: @17px @50px @50px;
-			@media only screen and (max-width : @largestMobileScreen){
-				padding: @17px 0 @50px;
-			}
-		}
 		.quick-bar {
 			padding: @10px 0;
 		}
@@ -406,8 +400,8 @@ footer{
 		.no-early-bird {
 			margin: @30px auto;
 		}
-		.campaign-about-wrapper {
-			padding: @30px;
+		.campaign-content-wrapper {
+			padding: @40px;
 			// background-color: @white;
 			height: 100%;
 			p {

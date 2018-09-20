@@ -35,13 +35,13 @@ class AboutCompany extends Component {
       { to: 'meetourteam', component: 'MeetTeamModal' },
     ];
     return (
-      <div className="offering-content-spacer">
+      <div className="campaign-content-wrapper">
         <Grid>
           <Grid.Row>
             <Grid.Column widescreen={7} computer={8}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/CompanyDescriptionModal`}><b>Company Description</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/companydescription`}><b>Company Description</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header>
@@ -57,13 +57,13 @@ class AboutCompany extends Component {
                   brewing space, and it has heard the resounding demand for a dedicated taproom
                   and event space.
                 </p>
-                <Link to="/">Read More</Link>
+                <Link to={`${this.props.match.url}/companydescription`}>Read More</Link>
               </Segment>
             </Grid.Column>
             <Grid.Column widescreen={9} computer={8}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/AboutPhotoGallery`}><b>Gallery</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <div className="carousel mt-10 mb-30">
@@ -183,8 +183,8 @@ class AboutCompany extends Component {
             ))
           }
         </Switch>
-        <Route path={`${this.props.match.url}/CompanyDescriptionModal`} component={CompanyDescriptionModal} />
-        <Route path={`${this.props.match.url}/AboutPhotoGallery`} component={AboutPhotoGallery} />
+        <Route path={`${this.props.match.url}/companydescription`} component={CompanyDescriptionModal} />
+        <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
       </div>
     );
   }

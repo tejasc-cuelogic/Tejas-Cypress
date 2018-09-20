@@ -58,6 +58,7 @@ export default class CampaignSideBar extends Component {
               </Statistic>
             </Statistic.Group>
             <Button fluid={isMobile} as={Link} to="invest-now" secondary>Invest Now</Button>
+            <p>$100 min investment</p>
             {isMobile &&
               <Button.Group compact fluid widths="2" className="mt-30">
                 <Button basic color="grey">

@@ -22,7 +22,7 @@ class InvestmentDetails extends Component {
       //     <RevenueShare /> : <TermNote />
       //   }
       // </Aux>
-      <div className="offering-content-spacer">
+      <div className="campaign-content-wrapper">
         <Grid>
           <Grid.Row>
             <Grid.Column widescreen={7} computer={8}>
@@ -51,7 +51,7 @@ class InvestmentDetails extends Component {
             <Grid.Column widescreen={10} computer={10}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/PaymentCalculatorModal`}>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/paymentcalculator`}>
                     <b>Expand Payment Calculator</b>
                   </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
@@ -127,7 +127,7 @@ class InvestmentDetails extends Component {
             <Grid.Column widescreen={6} computer={6}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/KeyTermsModal`}>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}>
                     <b>Expand Key Terms</b>
                   </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
@@ -195,7 +195,7 @@ class InvestmentDetails extends Component {
               </Segment>
               {/* <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/KeyTermsModal`}>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}>
                     <b>View Key Terms</b>
                   </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
@@ -272,8 +272,8 @@ class InvestmentDetails extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Route path={`${this.props.match.url}/PaymentCalculatorModal`} component={PaymentCalculatorModal} />
-        <Route path={`${this.props.match.url}/KeyTermsModal`} component={KeyTermsModal} />
+        <Route path={`${this.props.match.url}/paymentcalculator`} component={PaymentCalculatorModal} />
+        <Route path={`${this.props.match.url}/keyterms`} component={KeyTermsModal} />
       </div>
     );
   }
