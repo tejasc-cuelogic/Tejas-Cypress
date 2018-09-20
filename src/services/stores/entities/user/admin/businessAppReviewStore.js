@@ -1,9 +1,13 @@
-/* eslint-disable no-unused-vars, no-param-reassign */
+/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
+import { map } from 'lodash';
 import { MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
+import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { businessAppStore } from '../../../index';
+import { BUSINESS_APPLICATION_STATUS } from '../../../../constants/businessApplication';
+import { updateApplicationStatusAndReview, updateBusinessApplicationInformationData } from '../../../queries/businessApplication';
+import { businessAppStore, uiStore } from '../../../index';
 
 export class BusinessAppReviewStore {
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
@@ -78,28 +82,28 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  removeData = (formName) => {
-    this[formName].fields.data.splice(this.removeIndex, 1);
+  removeData = (formName, ref = 'data') => {
+    this[formName].fields[ref].splice(this.removeIndex, 1);
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
     this.removeIndex = null;
   }
 
-  getMetaData = (metaData) => {
+  getMetaData = (metaData, getField = 'formData') => {
     const metaDataMapping = {
-      LAUNCH_FRM: LAUNCH,
-      CLOSE_FRM: CLOSE,
-      CONTROL_PERSONS_FRM: CONTROL_PERSONS,
-      JUSTIFICATIONS_FRM: JUSTIFICATIONS,
-      OVERVIEW_FRM: OVERVIEW,
-      SOURCES_FRM: SOURCES,
-      USES_FRM: USES,
-      SOCIAL_MEDIA_FRM: SOCIAL_MEDIA,
-      OTHER_DOCUMENTATION_FRM: OTHER_DOCUMENTATION_UPLOADS,
-      OFFERS_FRM: OFFERS,
+      LAUNCH_FRM: { formData: LAUNCH, actionType: '' },
+      CLOSE_FRM: { formData: CLOSE, actionType: '' },
+      CONTROL_PERSONS_FRM: { formData: CONTROL_PERSONS, actionType: '' },
+      JUSTIFICATIONS_FRM: { formData: JUSTIFICATIONS, actionType: '' },
+      OVERVIEW_FRM: { formData: OVERVIEW, actionType: 'REVIEW_OVERVIEW', objRef: 'overview' },
+      SOURCES_FRM: { formData: SOURCES, actionType: '' },
+      USES_FRM: { formData: USES, actionType: '' },
+      SOCIAL_MEDIA_FRM: { formData: SOCIAL_MEDIA, actionType: '' },
+      OTHER_DOCUMENTATION_FRM: { formData: OTHER_DOCUMENTATION_UPLOADS, actionType: '' },
+      OFFERS_FRM: { formData: OFFERS, actionType: '' },
     };
-    return metaDataMapping[metaData];
+    return metaDataMapping[metaData][getField];
   }
 
   @action
@@ -130,10 +134,10 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  formChangeWithIndex = (e, result, form, index) => {
+  formChangeWithIndex = (e, result, form, ref = 'data', index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],
-      Validator.pullValues(e, result), 'data', index,
+      Validator.pullValues(e, result), ref, index,
     );
   }
 
@@ -228,18 +232,99 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  saveForm = (formName) => {
-    switch (formName) {
-      case '':
-        break;
-      default:
-        break;
-    }
+  saveReviewForms = (formName) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
+    const formInputData = this.evaluateFormData(this[formName].fields);
+    const actionType = this.getMetaData(formName, 'actionType');
+    const objRef = this.getMetaData(formName, 'objRef');
+    const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    uiStore.setProgress();
+    // const payload = {
+    //   review: { [objRef]: formInputData },
+    //   actionType,
+    //   applicationId,
+    //   userId,
+    //   applicationSource,
+    // };
+    const payload = {
+      review: { [objRef]: formInputData },
+      applicationId,
+      issuerId: userId,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateBusinessApplicationInformationData,
+          variables: payload,
+          // refetchQueries: [{ query: getBusinessApplications }],
+        })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 
   @action
-  evaluateFormData = (formName) => {
-
+  evaluateFormData = (fields) => {
+    let inputData = {};
+    map(fields, (ele, key) => {
+      try {
+        const records = toJS(fields[key]);
+        if (fields[key] && Array.isArray(records)) {
+          if (fields[key] && fields[key].length > 0) {
+            inputData = { ...inputData, [key]: [] };
+            let arrayFields = [];
+            records.forEach((field) => {
+              let arrayFieldsKey = {};
+              map(field, (eleV, keyRef1) => {
+                if (eleV.objRef) {
+                  if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
+                    const fileObj =
+                      { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
+                    arrayFields = { ...arrayFields, [eleV.objRef]: { [keyRef1]: fileObj } };
+                  } else {
+                    arrayFields =
+                      { ...arrayFields, [eleV.objRef]: { [keyRef1]: field[keyRef1].value } };
+                  }
+                } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
+                  const fileObj =
+                      { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
+                  arrayFields = { ...arrayFields, [keyRef1]: fileObj };
+                } else {
+                  arrayFields.push(field[keyRef1].value);
+                }
+                arrayFieldsKey = { [keyRef1]: arrayFields };
+              });
+              inputData = { ...inputData, [key]: { ...inputData[key], ...arrayFieldsKey } };
+            });
+          }
+        } else if (fields[key].objRef) {
+          if (fields[key].objType && fields[key].objType === 'FileObjectType') {
+            const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
+            inputData = { ...inputData, [fields[key].objRef]: { [key]: fileObj } };
+          } else {
+            inputData = { ...inputData, [fields[key].objRef]: { [key]: fields[key].value } };
+          }
+        } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
+          const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
+          inputData = { ...inputData, [key]: fileObj };
+        } else {
+          inputData = { ...inputData, [key]: fields[key].value };
+        }
+      } catch (e) {
+        // do nothing
+      }
+    });
+    return inputData;
   }
 
   /*
@@ -250,13 +335,22 @@ export class BusinessAppReviewStore {
     Object.keys(fields).map((key) => {
       try {
         if (fields[key] && Array.isArray(toJS(fields[key]))) {
-          if (data[key] && data[key].length > 0) {
-            const addRec = data[key].length - toJS(fields[key]).length;
+          let tempRef = false;
+          if (toJS(fields[key])[0].objRef) {
+            fields[key][0].objRef.split('.').map((k) => {
+              tempRef = !tempRef ? data[k] : tempRef[k];
+              return tempRef;
+            });
+          }
+          if ((data[key] && data[key].length > 0) || (tempRef[key] && tempRef[key].length > 0)) {
+            const addRec = ((data[key] && data[key].length) ||
+            (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
             for (let i = addRec; i > 0; i -= 1) {
               this.addMore(form, key);
             }
-            data[key].forEach((record, index) => {
-              this.setDataForFields(fields[key][index], data[key][index]);
+            (data[key] || tempRef[key]).forEach((record, index) => {
+              this.setDataForFields(fields[key][index], (data[key] && data[key][index]) ||
+              (tempRef[key] && tempRef[key][index]));
             });
           }
         } else if (fields[key].objRef) {
@@ -265,7 +359,17 @@ export class BusinessAppReviewStore {
             tempRef = !tempRef ? data[k] : tempRef[k];
             return tempRef;
           });
-          fields[key].value = tempRef[key];
+          if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
+            fields[key].value = tempRef[key].fileName;
+            fields[key].fileId = tempRef[key].fileId;
+          } else {
+            const fieldRef = key.split('_');
+            fields[key].value = fields[key].find ?
+              tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]] :
+              tempRef[key];
+          }
+        } else if (key === 'value') {
+          fields[key] = data && typeof data === 'string' ? data : data[key];
         } else {
           fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
@@ -295,7 +399,8 @@ export class BusinessAppReviewStore {
         });
       }
     } else {
-      this.setDataForFields(this[form].fields, data, form);
+      const objRef = this.getMetaData(form, 'objRef');
+      this.setDataForFields(this[form].fields, data[objRef], form);
     }
   }
 }

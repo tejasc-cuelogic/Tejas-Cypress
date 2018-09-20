@@ -799,3 +799,43 @@ mutation updateBusinessApplicationInformation(
   }
 }
 `;
+
+export const updateApplicationStatusAndReview = gql`
+mutation updateApplicationData(
+  $applicationId: String
+  $userId: String
+  $actionType: String
+  $applicationSource: String
+  $review: String
+) {
+  updateApplicationStatusAndReview(
+    applicationId: $applicationId
+    userId: $userId
+    actionType: $actionType
+    applicationSource: $applicationSource
+    review: $review
+  ){
+    updated {
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const updateBusinessApplicationInformationData = gql`
+mutation updateBusinessApplicationInformation(
+  $applicationId: String!
+  $issuerId: String!
+  $review: BusinessApplicationReviewInput
+) {
+  updateBusinessApplicationInformation(
+    applicationId: $applicationId
+    issuerId: $issuerId
+    review: $review
+  ){
+    applicationStatus
+  }
+}
+`;

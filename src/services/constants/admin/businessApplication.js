@@ -9,18 +9,17 @@ export const MANAGERS = {
 };
 
 export const OVERVIEW = {
-  data: [{
-    criticalPoint: {
-      value: '',
-      label: 'Critical Point',
-      error: undefined,
-      rule: 'string|required',
-      placeHolder: 'Enter here...',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
+  description: [{
+    value: '',
+    label: 'Critical Point',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'Enter here...',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
     },
+    objRef: 'criticalPoint',
   }],
 };
 
