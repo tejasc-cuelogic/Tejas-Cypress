@@ -10,6 +10,7 @@ import Investors from './Investors';
 import Transactions from './Transactions';
 import Updates from './Updates';
 import Comments from './Comments';
+import OfferingCreation from './OfferingCreation';
 
 const OfferingModule = (to) => {
   let module = null;
@@ -26,6 +27,7 @@ const OfferingModule = (to) => {
     case 'comments': module = Comments; break;
     case 'transactions': module = Transactions; break;
     case 'updates': module = Updates; break;
+    case 'offering-creation': module = OfferingCreation; break;
     default: module = Overview; break;
   }
   return module;
