@@ -12,12 +12,12 @@ export default class Issuer extends Component {
     const { roles } = this.props.userStore.currentUser;
     const formName = 'ISSUER_FRM';
     return (
-      <Form >
+      <Form>
         {
           ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
             <Aux>
               {field === 'issuerDiligence' &&
-                <Header as="h4" textAlign="left">{ISSUER_FRM.fields[field].label}</Header>
+                <Header as="h4">{ISSUER_FRM.fields[field].label}</Header>
               }
               <FormTextarea
                 hidelabel={field === 'issuerDiligence'}
@@ -31,9 +31,7 @@ export default class Issuer extends Component {
           ))
         }
         <Divider section />
-        <Header as="h4" textAlign="left">
-          Regulatory Bad Actor Check
-        </Header>
+        <Header as="h4">Regulatory Bad Actor Check</Header>
         {
           ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
             <FormTextarea
@@ -46,9 +44,7 @@ export default class Issuer extends Component {
           ))
         }
         <Divider section />
-        <Header as="h4" textAlign="left">
-          Additional Disclosure Check
-        </Header>
+        <Header as="h4">Additional Disclosure Check</Header>
         {
           ['ofac', 'civilLawsuit', 'judgements', 'onlineReputation'].map(field => (
             <FormTextarea
@@ -71,22 +67,26 @@ export default class Issuer extends Component {
             />
           ))
         }
-        <Button secondary content="Submit for Approval" floated="right" disabled={!ISSUER_FRM.meta.isValid} />
-        <Button.Group floated="right">
-          {roles && (roles.includes('admin') || roles.includes('support')) &&
-            <Button color="gray" content="Awaiting Manager Approval" disabled={!ISSUER_FRM.meta.isValid} />
-          }
-          {roles && (roles.includes('admin') || roles.includes('manager')) &&
-          <Aux>
-            <Button inverted color="red" content="Decline" disabled={!ISSUER_FRM.meta.isValid} />
-            <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
-            <Button primary color="green" content="Approve" disabled={!ISSUER_FRM.meta.isValid} />
-          </Aux>
-          }
-        </Button.Group>
+        <div className="clearfix mb-20 right-align">
+          <Button secondary content="Submit for Approval" disabled={!ISSUER_FRM.meta.isValid} />
+        </div>
         <div className="clearfix mb-20">
+          {roles && (roles.includes('admin') || roles.includes('support')) &&
+            <Button content="Awaiting Manager Approval" color="gray" disabled={!ISSUER_FRM.meta.isValid} />
+          }
           <Button.Group floated="right">
-            <Button color="green" content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
+            {roles && (roles.includes('admin') || roles.includes('manager')) &&
+            <Aux>
+              <Button inverted content="Decline" color="red" disabled={!ISSUER_FRM.meta.isValid} />
+              <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
+              <Button primary content="Approve" color="green" disabled={!ISSUER_FRM.meta.isValid} />
+            </Aux>
+            }
+          </Button.Group>
+        </div>
+        <div className="clearfix">
+          <Button.Group floated="right">
+            <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />
               Approved by Manager on 2/3/2018

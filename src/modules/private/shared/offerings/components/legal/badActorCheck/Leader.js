@@ -85,22 +85,26 @@ export default class Leader extends Component {
               />
             ))
           }
-          <Button secondary content="Submit for Approval" floated="right" disabled={!LEADER_FRM.meta.isValid} />
-          <Button.Group floated="right">
+          <div className="clearfix mb-20 right-align">
+            <Button secondary content="Submit for Approval" disabled={!LEADER_FRM.meta.isValid} />
+          </div>
+          <div className="clearfix mb-20">
             {roles && (roles.includes('admin') || roles.includes('support')) &&
               <Button color="gray" content="Awaiting Manager Approval" disabled={!LEADER_FRM.meta.isValid} />
             }
-            {roles && (roles.includes('admin') || roles.includes('manager')) &&
-            <Aux>
-              <Button inverted color="red" content="Decline" disabled={!LEADER_FRM.meta.isValid} />
-              <Button secondary content="Generate Report" disabled={!LEADER_FRM.meta.isValid} />
-              <Button primary color="green" content="Approve" disabled={!LEADER_FRM.meta.isValid} />
-            </Aux>
-            }
-          </Button.Group>
-          <div className="clearfix mb-20">
             <Button.Group floated="right">
-              <Button color="green" disabled={!LEADER_FRM.meta.isValid} >Generate Report</Button>
+              {roles && (roles.includes('admin') || roles.includes('manager')) &&
+              <Aux>
+                <Button inverted content="Decline" color="red" disabled={!LEADER_FRM.meta.isValid} />
+                <Button secondary content="Generate Report" disabled={!LEADER_FRM.meta.isValid} />
+                <Button primary content="Approve" color="green" disabled={!LEADER_FRM.meta.isValid} />
+              </Aux>
+              }
+            </Button.Group>
+          </div>
+          <div className="clearfix">
+            <Button.Group floated="right">
+              <Button secondary content="Generate Report" disabled={!LEADER_FRM.meta.isValid} />
               <Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />
                 Approved by Manager on 2/3/2018
