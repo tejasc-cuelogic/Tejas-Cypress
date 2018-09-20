@@ -4,6 +4,7 @@ import { Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../shared/PrivateLayout';
 import OfferingModule from '../../shared/offerings/components';
 import { DataFormatter } from '../../../../helper';
+import { InlineLoader } from '../../../../theme/shared';
 
 @inject('uiStore', 'navStore', 'offeringsStore')
 @observer
@@ -16,8 +17,12 @@ export default class Offering extends Component {
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
-    const { match } = this.props;
+    const { match, offeringsStore } = this.props;
     const navItems = this.props.navStore.navMeta.subNavigations;
+    const { offer, offerLoading } = offeringsStore;
+    if (offerLoading || (offer && !offer.keyTerms)) {
+      return <InlineLoader />;
+    }
     return (
       <PrivateLayout {...this.props}>
         <Switch>

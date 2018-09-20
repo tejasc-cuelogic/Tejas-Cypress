@@ -12,6 +12,7 @@ export class OfferingsStore {
   @observable filters = false;
   @observable offerData = {};
   @observable offerLoading = false;
+  @observable phases = ['CREATION', 'LIVE', 'ENGAGEMENT', 'CLOSE', 'COMPLETE', 'FAILED', 'TERMINATED'];
   @observable subTabs = {
     creation: 35,
     live: 34,
@@ -92,6 +93,10 @@ export class OfferingsStore {
         this.offerLoading = false;
       },
     });
+  }
+
+  @computed get allPhases() {
+    return this.phases;
   }
 
   @computed get totalRecords() {
