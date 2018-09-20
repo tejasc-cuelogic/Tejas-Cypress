@@ -37,7 +37,7 @@ export default class PreQual extends Component {
                   name="justification"
                   label={`Justification ${index + 1}`}
                   fielddata={justification.justification}
-                  changed={(e, result) => formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', index)}
+                  changed={(e, result) => formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', 'data', index)}
                   removed={e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}
                   linkto={this.props.match.url}
                   containerclassname="secondary"

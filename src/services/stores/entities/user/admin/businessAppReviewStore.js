@@ -371,7 +371,7 @@ export class BusinessAppReviewStore {
         } else if (key === 'value') {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else {
-          fields[key].value = data && typeof data === 'string' ? data : data[key];
+          // fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';

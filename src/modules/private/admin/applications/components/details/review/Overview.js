@@ -15,7 +15,7 @@ export default class Overview extends Component {
   }
   addCriticalPoint = (e) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'description');
+    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'criticalPoint');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -42,13 +42,13 @@ export default class Overview extends Component {
         </Header>
         <Form onSubmit={this.submit}>
           {
-            OVERVIEW_FRM.fields.description.map((description, index) => (
+            OVERVIEW_FRM.fields.criticalPoint.map((description, index) => (
               <FormInput
                 type="text"
                 name="description"
                 label={`Critical Point ${index + 1}`}
                 fielddata={description}
-                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'description', index)}
+                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'criticalPoint', index)}
                 removed={e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM')}
                 linkto={this.props.match.url}
               />
@@ -56,8 +56,8 @@ export default class Overview extends Component {
           }
           <div className="right-align">
             <Button.Group>
-              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.description.length)} secondary className="relaxed">Save</Button>
-              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.description.length)} primary type="button">Submit for Approval</Button>
+              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.criticalPoint.length)} secondary className="relaxed">Save</Button>
+              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.criticalPoint.length)} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
           <ManagerOverview form={OVERVIEW_MANAGER_FRM} formName="OVERVIEW_MANAGER_FRM" />
@@ -67,7 +67,7 @@ export default class Overview extends Component {
           content="Are you sure you want to remove this critical point?"
           open={confirmModal}
           onCancel={toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, 'description')}
+          onConfirm={() => removeData(confirmModalName, 'criticalPoint')}
           size="mini"
           className="deletion"
         />
