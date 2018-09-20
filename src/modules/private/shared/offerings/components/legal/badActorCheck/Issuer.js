@@ -72,27 +72,27 @@ export default class Issuer extends Component {
             />
           ))
         }
-        <Button secondary className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Submit for Approval</Button>
+        <Button secondary content="Submit for Approval" floated="right" disabled={!ISSUER_FRM.meta.isValid} />
         <Button.Group floated="right">
           {roles && (roles.includes('admin') || roles.includes('support')) &&
-            <Button color="gray" disabled={!ISSUER_FRM.meta.isValid} >Awaiting Manager Approval</Button>
+            <Button color="gray" content="Awaiting Manager Approval" disabled={!ISSUER_FRM.meta.isValid} />
           }
           {roles && (roles.includes('admin') || roles.includes('manager')) &&
           <Aux>
-            <Button inverted color="red" content="Decline" disabled={!ISSUER_FRM.meta.isValid} >Decline</Button>
-            <Button secondary className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Generate Report</Button>
-            <Button primary color="green" className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Approve</Button>
+            <Button inverted color="red" content="Decline" disabled={!ISSUER_FRM.meta.isValid} />
+            <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
+            <Button primary color="green" content="Approve" disabled={!ISSUER_FRM.meta.isValid} />
           </Aux>
           }
         </Button.Group>
         <div className="clearfix mb-20">
           <Button.Group floated="right">
-            <Button color="green" className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Generate Report</Button>
+            <Button color="green" content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Approved by Manager on 2/3/2018
+            </Button>
           </Button.Group>
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Approved by Manager on 2/3/2018
-          </Button>
         </div>
       </Form>
     );
