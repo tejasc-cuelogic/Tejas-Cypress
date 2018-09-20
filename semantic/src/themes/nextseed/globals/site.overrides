@@ -336,9 +336,15 @@ footer{
 		z-index: 3;
 		overflow: auto;
 		@media only screen and (max-width : @largestMobileScreen){
-			width: 100%;
-			height: auto;
 			position: static;
+			overflow: hidden;
+			width: 100%;
+			max-height: 800px;
+			height: auto;
+			transition: all 500ms ease-in-out;
+			&.collapse {
+				max-height: 0;
+			}
 		}
 		.ui.menu, .ui.vertical.menu {
 			border: none;
@@ -1859,9 +1865,9 @@ p.check-extra-info{
 		left: 18px;
 		z-index: 1;
 
-		// &:hover+.full-logo {
-		// 	width: 240px;
-		// }
+		&:hover+.full-logo {
+			width: 260px;
+		}
 	}
 	.sign-in {
 		font-size: @14px;
@@ -1882,7 +1888,7 @@ p.check-extra-info{
 		width: 0;
 		height: 30px;
 		position: absolute;
-		left: 21px;
+		left: 0px;
 		top: 14px;
 		z-index: 0;
 		// background: #31333d;
@@ -1890,11 +1896,18 @@ p.check-extra-info{
 		transition: width 0.5s ease;
 		.ui.image {
 			height: 100%;
+			margin-left: 21px;
 			img {
 				max-width: none;
 				max-height: 100%;
 			}
 		}
+	}
+	.fixed-button {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		border-radius: 0 !important;
 	}
 }
 .proven-result-section {

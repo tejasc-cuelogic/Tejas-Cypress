@@ -20,7 +20,6 @@ export default class MobileDropDownNav extends React.Component {
   }
   render() {
     const { navItems, location } = this.props;
-    console.log(location);
     return (
       <Responsive maxWidth={767} as={Menu} inverted className="mobile-dropdown-menu">
         <Dropdown item text={this.activeText()}>

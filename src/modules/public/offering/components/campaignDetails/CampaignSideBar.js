@@ -17,9 +17,10 @@ export default class CampaignSideBar extends Component {
     const {
       needed, collected, title, address,
     } = this.props.details;
+    const { className } = this.props;
     return (
       <Aux>
-        <div className="offering-side-menu">
+        <div className={`${className} offering-side-menu`}>
           <div className="offering-intro center-align">
             {isMobile &&
               <Embed

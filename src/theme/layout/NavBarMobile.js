@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Divider, Sidebar, Menu, Icon, Header } from 'semantic-ui-react';
+import { Divider, Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
@@ -39,6 +39,7 @@ export default class NavBarMobile extends Component {
           <Link to="/auth/login" className="sign-in">
             Sign In
           </Link>
+          <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">Invest Now</Button>
         </div>
         <Sidebar.Pushable>
           <Sidebar
