@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Header, Modal, Grid, Image, Icon } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Header, Modal, Grid, Image, Icon, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import team1 from '../../../../assets/images/team1.jpg';
 import team2 from '../../../../assets/images/team2.jpg';
@@ -43,6 +44,11 @@ class MeetTeamModal extends Component {
                 </Link>
               </div>
             </Grid.Column>
+            <Responsive maxWidth={767} as={Aux}>
+              <Grid.Column>
+                <Image src={team2} />
+              </Grid.Column>
+            </Responsive>
             <Grid.Column className="padded team-details-container">
               <Header as="h3">
                 Alex Grigss
@@ -63,9 +69,11 @@ class MeetTeamModal extends Component {
                 </Link>
               </div>
             </Grid.Column>
-            <Grid.Column>
-              <Image src={team2} />
-            </Grid.Column>
+            <Responsive minWidth={768} as={Aux}>
+              <Grid.Column>
+                <Image src={team2} />
+              </Grid.Column>
+            </Responsive>
           </Grid>
         </Modal.Content>
       </Modal>

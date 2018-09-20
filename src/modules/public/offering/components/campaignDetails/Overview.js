@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Header, Image, Icon, Embed, Grid, Segment, Breadcrumb, Popup, List, Item, Divider, Statistic } from 'semantic-ui-react';
+import { Header, Image, Icon, Embed, Grid, Segment, Breadcrumb, Popup, List, Item, Divider, Statistic, Responsive } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.webp';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
@@ -68,16 +68,18 @@ class Overview extends Component {
                 </div>
               </Segment>
             </Grid.Column>
-            <Grid.Column widescreen={9} computer={8}>
-              <Segment padded>
-                <Embed
-                  id={nsvideos.embed}
-                  placeholder={videoPoster}
-                  source="vimeo"
-                  icon="ns-play"
-                />
-              </Segment>
-            </Grid.Column>
+            <Responsive minWidth={768} as={Aux}>
+              <Grid.Column widescreen={9} computer={8}>
+                <Segment padded>
+                  <Embed
+                    id={nsvideos.embed}
+                    placeholder={videoPoster}
+                    source="vimeo"
+                    icon="ns-play"
+                  />
+                </Segment>
+              </Grid.Column>
+            </Responsive>
           </Grid.Row>
           <Grid.Row columns={3} stackable doubling>
             <Grid.Column>

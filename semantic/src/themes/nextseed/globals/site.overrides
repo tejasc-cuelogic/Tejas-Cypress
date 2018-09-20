@@ -383,6 +383,7 @@ footer{
 		padding-left: 280px;
 		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: 0;
+			padding-bottom: 30px;
 		}
 		.quick-bar {
 			padding: @10px 0;
@@ -404,6 +405,9 @@ footer{
 			padding: @40px;
 			// background-color: @white;
 			height: 100%;
+			@media only screen and (max-width : @largestMobileScreen){
+				padding: @40px 0;
+			}
 			p {
 				line-height: @20px;
 				color:@neutral-middark;

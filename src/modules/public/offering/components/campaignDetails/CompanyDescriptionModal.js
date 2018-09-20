@@ -70,7 +70,11 @@ class CompanyDescriptionModal extends Component {
             state-of-the-art Buffbrew Taproom, with over 40 beers on tap and a full-service
             kitchen serving up an elevated bar food menu.
           </p>
-          <Image src={campainAboutImg} centered className="mt-30 mb-30" />
+          <Image src={campainAboutImg} fluid centered className="mt-30" />
+          <p className="caption-note mb-30">
+            Caption. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
+            dignissim vitae odio nec pellentesque.
+          </p>
           <p>
             The team’s partnership with Method Architecture has been a process in staying true
             to the beloved elements of Buffbrew’s current home on Nolda Street – an immersive,

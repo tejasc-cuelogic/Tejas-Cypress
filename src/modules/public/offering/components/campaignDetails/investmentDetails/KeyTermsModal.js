@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('updatesStore')
 @observer
 class KeyTerms extends Component {
@@ -18,7 +19,7 @@ class KeyTerms extends Component {
       >
         <Modal.Header>Key Terms</Modal.Header>
         <Modal.Content>
-          <Grid columns={3} divided className="investment-terms">
+          <Grid columns={3} divided stackable doubling className="investment-terms">
             <Grid.Row>
               <Grid.Column>
                 <p><b>Issuer</b></p>
@@ -123,7 +124,9 @@ class KeyTerms extends Component {
               </Table.Row>
             </Table.Body>
           </Table>
-          <Divider />
+          {!isMobile &&
+            <Divider />
+          }
           <Header as="h5" className="center-align">
             <Link to="/">
               View the Issuer&apos;s SEC Form C filing

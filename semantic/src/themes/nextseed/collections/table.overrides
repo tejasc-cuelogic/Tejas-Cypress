@@ -161,6 +161,11 @@
             border-top: 0;
         }
     }
+    &:not(.unstackable) tr>td {
+        @media only screen and (max-width : @largestMobileScreen){
+            padding-left: 0 !important;
+        }
+    }
 }
 
 .compare-table {

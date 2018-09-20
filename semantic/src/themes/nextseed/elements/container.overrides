@@ -46,6 +46,10 @@ section{
         &.campaign-list-banner{
             height:535px;
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                height:234px;
+                background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat / contain;
+            }
         }
         &.business-banner{
             background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat / cover;
