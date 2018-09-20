@@ -43,7 +43,7 @@ export default class Leader extends Component {
             Control Person Diligence
           </Header>
           {
-            ['controlPersonQuestionnaire', 'countriesAndStateForResidence'].map(field => (
+            ['controlPersonQuestionaire', 'residenceTenYears'].map(field => (
               <Aux>
                 <FormTextarea
                   key={field}
@@ -60,8 +60,7 @@ export default class Leader extends Component {
             Regulatory Bad Actor Check
           </Header>
           {
-            ['hasTheIssuer', 'isTheIssuerSubjectTo', 'isAnyCoveredPersonSubjectToAnOrderThree', 'isAnyCoveredPersonSubjectToAnOrderFour',
-            'isAnyCoveredPersonSubjectToOrderFive', 'isAnyCoveredPersonSubjectToOrderSix', 'isAnyCoveredPersonSubjectToOrderSeven', 'isAnyCoveredPersonSubjectToOrderEight'].map(field => (
+            ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}
@@ -76,7 +75,7 @@ export default class Leader extends Component {
             Additional Disclosure Check
           </Header>
           {
-            ['sanctionsListSearch', 'noPendingCivilLawSuit', 'generalOnlineReputationSearch'].map(field => (
+            ['ofac', 'civilLawsuit', 'onlineReputation'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}

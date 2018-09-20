@@ -14,7 +14,7 @@ export default class Issuer extends Component {
     return (
       <Form >
         {
-          ['issuerDiligence', 'certificateOfFormation', 'operatingAgreement', 'evidenceOfGoodStanding', 'whoAreThesePeople'].map(field => (
+          ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
             <Aux>
               {field === 'issuerDiligence' &&
                 <Header as="h4" textAlign="left">{ISSUER_FRM.fields[field].label}</Header>
@@ -35,8 +35,7 @@ export default class Issuer extends Component {
           Regulatory Bad Actor Check
         </Header>
         {
-          ['hasTheIssuer', 'isTheIssuerSubjectTo', 'isAnyCoveredPersonSubjectToAnOrderThree', 'isAnyCoveredPersonSubjectToAnOrderFour',
-          'isAnyCoveredPersonSubjectToOrderFive', 'isAnyCoveredPersonSubjectToOrderSix', 'isAnyCoveredPersonSubjectToOrderSeven', 'isAnyCoveredPersonSubjectToOrderEight'].map(field => (
+          ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
             <FormTextarea
               key={field}
               name={field}
@@ -51,7 +50,7 @@ export default class Issuer extends Component {
           Additional Disclosure Check
         </Header>
         {
-          ['sanctionsListSearch', 'pendingCivilLawsuits', 'pendingLiens', 'generalOnlineReputationSearch'].map(field => (
+          ['ofac', 'civilLawsuit', 'judgements', 'onlineReputation'].map(field => (
             <FormTextarea
               key={field}
               name={field}
@@ -62,7 +61,7 @@ export default class Issuer extends Component {
           ))
         }
         {
-          ['allControlPersonDiligence', 'allAffiliatedIssuerDiligence'].map(field => (
+          ['isControlDiligence', 'isAffiliatedDiligence'].map(field => (
             <FormCheckbox
               fielddata={ISSUER_FRM.fields[field]}
               name={field}
