@@ -12,12 +12,12 @@ export default class Issuer extends Component {
     const { roles } = this.props.userStore.currentUser;
     const formName = 'ISSUER_FRM';
     return (
-      <Form >
+      <Form>
         {
-          ['issuerDiligence', 'certificateOfFormation', 'operatingAgreement', 'evidenceOfGoodStanding', 'whoAreThesePeople'].map(field => (
+          ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
             <Aux>
               {field === 'issuerDiligence' &&
-                <Header as="h4" textAlign="left">{ISSUER_FRM.fields[field].label}</Header>
+                <Header as="h4">{ISSUER_FRM.fields[field].label}</Header>
               }
               <FormTextarea
                 hidelabel={field === 'issuerDiligence'}
@@ -31,12 +31,9 @@ export default class Issuer extends Component {
           ))
         }
         <Divider section />
-        <Header as="h4" textAlign="left">
-          Regulatory Bad Actor Check
-        </Header>
+        <Header as="h4">Regulatory Bad Actor Check</Header>
         {
-          ['hasTheIssuer', 'isTheIssuerSubjectTo', 'isAnyCoveredPersonSubjectToAnOrderThree', 'isAnyCoveredPersonSubjectToAnOrderFour',
-          'isAnyCoveredPersonSubjectToOrderFive', 'isAnyCoveredPersonSubjectToOrderSix', 'isAnyCoveredPersonSubjectToOrderSeven', 'isAnyCoveredPersonSubjectToOrderEight'].map(field => (
+          ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
             <FormTextarea
               key={field}
               name={field}
@@ -47,11 +44,9 @@ export default class Issuer extends Component {
           ))
         }
         <Divider section />
-        <Header as="h4" textAlign="left">
-          Additional Disclosure Check
-        </Header>
+        <Header as="h4">Additional Disclosure Check</Header>
         {
-          ['sanctionsListSearch', 'pendingCivilLawsuits', 'pendingLiens', 'generalOnlineReputationSearch'].map(field => (
+          ['ofac', 'civilLawsuit', 'judgements', 'onlineReputation'].map(field => (
             <FormTextarea
               key={field}
               name={field}
@@ -62,7 +57,7 @@ export default class Issuer extends Component {
           ))
         }
         {
-          ['allControlPersonDiligence', 'allAffiliatedIssuerDiligence'].map(field => (
+          ['isControlDiligence', 'isAffiliatedDiligence'].map(field => (
             <FormCheckbox
               fielddata={ISSUER_FRM.fields[field]}
               name={field}
@@ -72,27 +67,31 @@ export default class Issuer extends Component {
             />
           ))
         }
-        <Button secondary className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Submit for Approval</Button>
-        <Button.Group floated="right">
-          {roles && (roles.includes('admin') || roles.includes('support')) &&
-            <Button color="gray" disabled={!ISSUER_FRM.meta.isValid} >Awaiting Manager Approval</Button>
-          }
-          {roles && (roles.includes('admin') || roles.includes('manager')) &&
-          <Aux>
-            <Button inverted color="red" content="Decline" disabled={!ISSUER_FRM.meta.isValid} >Decline</Button>
-            <Button secondary className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Generate Report</Button>
-            <Button primary color="green" className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Approve</Button>
-          </Aux>
-          }
-        </Button.Group>
+        <div className="clearfix mb-20 right-align">
+          <Button secondary content="Submit for Approval" disabled={!ISSUER_FRM.meta.isValid} />
+        </div>
         <div className="clearfix mb-20">
+          {roles && (roles.includes('admin') || roles.includes('support')) &&
+            <Button content="Awaiting Manager Approval" color="gray" disabled={!ISSUER_FRM.meta.isValid} />
+          }
           <Button.Group floated="right">
-            <Button color="green" className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Generate Report</Button>
+            {roles && (roles.includes('admin') || roles.includes('manager')) &&
+            <Aux>
+              <Button inverted content="Decline" color="red" disabled={!ISSUER_FRM.meta.isValid} />
+              <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
+              <Button primary content="Approve" color="green" disabled={!ISSUER_FRM.meta.isValid} />
+            </Aux>
+            }
           </Button.Group>
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Approved by Manager on 2/3/2018
-          </Button>
+        </div>
+        <div className="clearfix">
+          <Button.Group floated="right">
+            <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Approved by Manager on 2/3/2018
+            </Button>
+          </Button.Group>
         </div>
       </Form>
     );
