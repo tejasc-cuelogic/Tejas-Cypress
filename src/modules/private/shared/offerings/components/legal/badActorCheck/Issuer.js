@@ -4,11 +4,12 @@ import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Issuer extends Component {
   render() {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
+    const { roles } = this.props.userStore.currentUser;
     const formName = 'ISSUER_FRM';
     return (
       <Form >
@@ -73,9 +74,16 @@ export default class Issuer extends Component {
         }
         <Button secondary className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Submit for Approval</Button>
         <Button.Group floated="right">
-          <Button inverted color="red" content="Decline" disabled={!ISSUER_FRM.meta.isValid} >Decline</Button>
-          <Button secondary className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Generate Report</Button>
-          <Button primary color="green" className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Approve</Button>
+          {roles && (roles.includes('admin') || roles.includes('support')) &&
+            <Button color="gray" disabled={!ISSUER_FRM.meta.isValid} >Awaiting Manager Approval</Button>
+          }
+          {roles && (roles.includes('admin') || roles.includes('manager')) &&
+          <Aux>
+            <Button inverted color="red" content="Decline" disabled={!ISSUER_FRM.meta.isValid} >Decline</Button>
+            <Button secondary className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Generate Report</Button>
+            <Button primary color="green" className="relaxed" disabled={!ISSUER_FRM.meta.isValid} >Approve</Button>
+          </Aux>
+          }
         </Button.Group>
         <div className="clearfix mb-20">
           <Button.Group floated="right">
