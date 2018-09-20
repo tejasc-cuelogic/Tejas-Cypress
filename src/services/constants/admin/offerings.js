@@ -248,23 +248,32 @@ export const KEY_TERMS = {
 };
 
 export const BUSINESS_INDUSTRIES = [
-  { key: 'CRE', value: 'cre', text: 'CRE' },
-  { key: 'Restaurant & Bar', value: 'restaurantAndBar', text: 'Restaurant & Bar' },
-  { key: 'Brewery & Brewpub', value: 'breweryAndBrewpub', text: 'Brewery & Brewpub' },
-  { key: 'Health & Wellness, Fitness', value: 'healthAndWellnessAndFitness', text: 'Health & Wellness, Fitness' },
-  { key: 'Hospitality', value: 'hospitality', text: 'Hospitality' },
-  { key: 'Other', value: 'other', text: 'Other' },
+  { key: 'CRE', value: 'COMMERCIAL_REAL_ESTATE', text: 'CRE' },
+  { key: 'Food & beverage', value: 'FOOD_AND_BEVERAGE', text: 'Food & beverage' },
+  { key: 'Fashion & merchandising', value: 'FASHION_AND_MERCHANDISING', text: 'Fashion & merchandising' },
+  { key: 'Real estate', value: 'REAL_ESTATE', text: 'Real estate' },
+  { key: 'Beauty & spa', value: 'BEAUTY_AND_SPA', text: 'Beauty & spa' },
+  { key: 'Fitness & wellness', value: 'FITNESS_AND_WELLNESS', text: 'Fitness & wellness' },
+  { key: 'Technology', value: 'TECHNOLOGY', text: 'Technology' },
+  { key: 'Hospitality', value: 'HOSPITALITY', text: 'Hospitality' },
+  { key: 'Restaurant & Bar', value: 'RESTAURANT_AND_BAR', text: 'Restaurant & Bar' },
+  { key: 'Brewery & Brewpub', value: 'BREWERY_AND_BREWPUB', text: 'Brewery & Brewpub' },
+  { key: 'Health & Wellness', value: 'HEALTH_AND_WELLNESS', text: 'Health & Wellness' },
+  { key: 'Fashion & apparel', value: 'FASHION_AND_APPAREL', text: 'Fashion & apparel' },
+  { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
 export const SECURITIES_VALUES = [
-  { key: 'Term Note', value: 'termNote', text: 'Term Note' },
-  { key: 'Revenue Sharing Note', value: 'revenueSharingNote', text: 'Revenue Sharing Note' },
+  { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
+  { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
 ];
 
 export const BUSINESS_TYPE_VALUES = [
-  { key: 'Corporation', value: 'termNote', text: 'Corporation' },
-  { key: 'Limited Liability Company', value: 'limitedLiabilityCompany', text: 'Limited Liability Company' },
-  { key: 'Limited Partnership', value: 'limitedPartnership', text: 'Limited Partnership' },
+  { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'Sole Proprietor' },
+  { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+  { key: 'Limited Liability Company', value: 'LLC', text: 'Limited Liability Company' },
+  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
+  { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
 export const OFFERING_OVERVIEW = {
