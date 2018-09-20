@@ -12,7 +12,7 @@ export default class OfferingCreation extends Component {
   render() {
     const { match, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
-    navItems = navStore.filterByAccess(navItems, 1); // navigation of creation stage
+    navItems = navStore.filterByAccess(navItems, 1, ['overview']); // navigation of creation stage
     return (
       <Aux>
         <SecondaryMenu force2ary match={match} navItems={navItems} />
