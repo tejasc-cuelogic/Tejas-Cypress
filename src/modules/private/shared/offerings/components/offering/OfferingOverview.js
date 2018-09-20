@@ -77,7 +77,7 @@ export default class OfferingOverview extends Component {
               Share links that go on the user’s social media to share the offering
             </Header.Subheader>
           </Header>
-          <Header as="h4">Facebook</Header>
+          <Header as="h6">Facebook</Header>
           <FormInput
             name="facebook_shareLink"
             fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
@@ -89,7 +89,7 @@ export default class OfferingOverview extends Component {
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />
-          <Header as="h4">Twitter</Header>
+          <Header as="h6">Twitter</Header>
           <FormInput
             name="twitter_shareLink"
             fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}

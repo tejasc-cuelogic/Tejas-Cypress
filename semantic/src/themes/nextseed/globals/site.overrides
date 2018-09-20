@@ -960,21 +960,21 @@ a.icon-link:hover {
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
 	}
-	.featured-section{
-		padding: @14px @20px;
-		margin:@20px 0;
-		&:first-child{
-			margin-top:0;
-		}
-		&:last-child{
-			margin-bottom:0;
-		}
-	}
-	.field .ui.label{
-		background: transparent;
-		padding: 0px 0 14px;
-		color: @neutral;
-	}
+	// .featured-section{
+	// 	padding: @14px @20px;
+	// 	margin:@20px 0;
+	// 	&:first-child{
+	// 		margin-top:0;
+	// 	}
+	// 	&:last-child{
+	// 		margin-bottom:0;
+	// 	}
+	// }
+	// .field .ui.label{
+	// 	background: transparent;
+	// 	padding: 0px 0 14px;
+	// 	color: @neutral;
+	// }
 	p b {
 		color: @neutral;
 	}
