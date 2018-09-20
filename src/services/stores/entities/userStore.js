@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
 import { NEW_USER } from '../../../constants/user';
 
