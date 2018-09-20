@@ -37,6 +37,14 @@
                 cursor:default;
             }
         }
+        &.secondary textarea{
+            background-color:@white;
+            padding:@11px @14px;
+            min-height:80px;
+            max-height:80px;
+            border-radius:@4px;
+            border:@neutral-offdark 1px solid;
+        }
     }
     .otp-wrap{
         margin:3rem 0;
@@ -97,6 +105,13 @@
     input[type=url],
     textarea{
         border-bottom:@border-color 1px solid;
+    }
+    textarea{
+        padding-left:0;
+        padding-right:0;
+        border-radius:0;
+        border:none;
+        border-bottom:@borderColor 1px solid;
     }
     .ui.table{
         input:not([type]),
