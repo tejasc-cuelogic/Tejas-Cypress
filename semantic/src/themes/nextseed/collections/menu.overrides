@@ -298,6 +298,10 @@ footer{
         background-color: @neutral-offwhite;
         .item{
             padding:@13px @16px;
+            margin-bottom:@3px;
+            &:last-child{
+                margin-bottom:0;
+            }
         }
         .dropdown{
             .menu>.item{
@@ -333,6 +337,13 @@ footer{
                     color:@tertiary-text !important;
                 }
             }
+        }
+    }
+    &.secondary.inverted{
+        background-color:@neutral-midwhite;
+        .item:before{
+            display:block !important;
+            background-color:@neutral-midwhite !important;
         }
     }
     a.header.item{
