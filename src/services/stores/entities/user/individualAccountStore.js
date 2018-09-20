@@ -9,6 +9,7 @@ import Helper from '../../../../helper/utility';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = '';
+  @observable submited = false;
 
   @action
   setStepToBeRendered(step) {
@@ -39,7 +40,7 @@ class IndividualAccountStore {
           mutation,
           variables,
         })
-        .then((result) => {
+        .then(action((result) => {
           if (result.data.createInvestorAccount || formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
@@ -50,6 +51,7 @@ class IndividualAccountStore {
           }
           if (formStatus === 'submit') {
             Helper.toast('Individual account created successfully.', 'success');
+            this.submited = true;
           } else if (currentStep) {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           } else {
@@ -57,7 +59,7 @@ class IndividualAccountStore {
           }
           uiStore.setErrors(null);
           resolve(result);
-        })
+        }))
         .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject();
@@ -70,7 +72,7 @@ class IndividualAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!isEmpty(userData)) {
+    if (!isEmpty(userData) && !this.formStatus) {
       const account = find(userData.roles, { name: 'individual' });
       if (account) {
         if (account.details.linkedBank.plaidItemId) {

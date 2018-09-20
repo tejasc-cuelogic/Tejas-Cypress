@@ -288,6 +288,7 @@ class IraAccountStore {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
           }
           if (formStatus === 'submit') {
+            bankAccountStore.resetPlaidAccData();
             Helper.toast('IRA account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

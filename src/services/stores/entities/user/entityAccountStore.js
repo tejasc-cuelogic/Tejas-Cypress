@@ -345,6 +345,7 @@ class EntityAccountStore {
         bankAccountStore.isValidLinkBank;
       if (isValidCurrentStep) {
         uiStore.setProgress();
+        console.log(bankAccountStore.plaidAccDetails);
         if (bankAccountStore.plaidAccDetails && !isEmpty(bankAccountStore.plaidAccDetails)) {
           const plaidBankDetails = {};
           plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
