@@ -89,27 +89,27 @@ export default class AfIssuer extends Component {
               />
             ))
           }
-          <Button secondary className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Submit for Approval</Button>
+          <Button secondary content="Submit for Approval" floated="right" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
           <Button.Group floated="right">
             {roles && (roles.includes('admin') || roles.includes('support')) &&
-              <Button color="gray" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Awaiting Manager Approval</Button>
+              <Button color="gray" content="Awaiting Manager Approval" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
             }
             {roles && (roles.includes('admin') || roles.includes('manager')) &&
             <Aux>
-              <Button inverted color="red" content="Decline" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Decline</Button>
-              <Button secondary className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Generate Report</Button>
-              <Button primary color="green" className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Approve</Button>
+              <Button inverted color="red" content="Decline" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+              <Button content="Generate Report" secondary disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+              <Button content="Approve" primary color="green" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
             </Aux>
             }
           </Button.Group>
           <div className="clearfix mb-20">
             <Button.Group floated="right">
-              <Button color="green" className="relaxed" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} >Generate Report</Button>
+              <Button color="green" content="Generate Report" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+              <Button as="span" className="time-stamp">
+                <Icon className="ns-check-circle" color="green" />
+                Approved by Manager on 2/3/2018
+              </Button>
             </Button.Group>
-            <Button as="span" className="time-stamp">
-              <Icon className="ns-check-circle" color="green" />
-              Approved by Manager on 2/3/2018
-            </Button>
           </div>
         </Form>
         <Confirm
