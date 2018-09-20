@@ -43,12 +43,13 @@ export default class OfferingDetails extends Component {
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, offeringsStore, navStore } = this.props;
-    const navItems = navStore.specificNavs.subNavigations;
+    let navItems = navStore.specificNavs.subNavigations;
     const { offer, offerLoading } = offeringsStore;
 
     if (offerLoading || (offer && !offer.keyTerms)) {
       return <InlineLoader />;
     }
+    navItems = navStore.filterByAccess(navItems, offeringsStore.allPhases.indexOf(offer.stage) + 1);
     return (
       <Modal closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
