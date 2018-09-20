@@ -251,6 +251,9 @@ export class OfferingCreationStore {
   @action
   setFormData = (form, ref, ref2, ref3) => {
     const { offer } = offeringsStore;
+    if (!offer) {
+      return false;
+    }
     const { fields } = this[form];
     const data = ref ? (ref2 ? (ref3 ? offer[ref][ref2][ref3] : offer[ref][ref2]) : offer[ref]) :
       offer;
@@ -265,6 +268,7 @@ export class OfferingCreationStore {
     } else {
       this.setDataForFields(this[form].fields, data, form);
     }
+    return false;
   }
 }
 

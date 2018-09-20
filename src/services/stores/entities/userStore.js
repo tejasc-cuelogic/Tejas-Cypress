@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
 import { NEW_USER } from '../../../constants/user';
 
@@ -32,6 +32,11 @@ export class UserStore {
 
   isCurrentUserWithRole(role) {
     return this.currentUser.roles.includes(role);
+  }
+
+  @computed get isIssuer() {
+    const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
+    return roles.includes('issuer');
   }
 }
 

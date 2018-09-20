@@ -45,7 +45,10 @@ export class NavStore {
     if (bIndex !== -1) {
       const subNavigations = [...navItems[bIndex].subNavigations];
       offeringsStore.offerings.forEach((b) => {
-        const sNav = this.filterByAccess(subNavigations, b.phase);
+        const sNav = this.filterByAccess(
+          subNavigations,
+          offeringsStore.allPhases.indexOf(b.stage) + 1,
+        );
         navItems.splice(
           bIndex,
           0,
