@@ -11,6 +11,9 @@ export default class AfIssuer extends Component {
   addMore = (e, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName);
+    const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
+    const issuerCount = AFFILIATED_ISSUER_FRM.fields.data.length;
+    this.props.history.push(`${this.props.refLink}/${issuerCount}`);
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();

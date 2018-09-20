@@ -11,6 +11,9 @@ export default class Leader extends Component {
   addMore = (e, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName);
+    const { LEADER_FRM } = this.props.offeringCreationStore;
+    const leaderCount = LEADER_FRM.fields.data.length;
+    this.props.history.push(`${this.props.refLink}/leader/${leaderCount}`);
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();

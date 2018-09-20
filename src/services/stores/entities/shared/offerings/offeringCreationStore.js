@@ -107,7 +107,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index) => {
-    const fieldValue = (field === 'offeringDeadline' || field === 'maturityDate') ? values.formattedValue : values.floatValue;
+    const fieldValue = field === 'maturityDate' ? values.formattedValue : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,
