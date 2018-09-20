@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Card, Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class OfferingOverview extends Component {
   componentWillMount() {
@@ -22,9 +22,10 @@ export default class OfferingOverview extends Component {
       formChange,
       formChangeWithIndex,
     } = this.props.offeringCreationStore;
+    const { isIssuer } = this.props.userStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     return (
-      <Card fluid className="form-card">
+      <Card as={isIssuer ? Card : Aux} fluid className="form-card">
         <Form>
           {
             ['elevatorPitch', 'tombstoneDescription'].map(field => (
