@@ -35,7 +35,7 @@ class Comments extends Component {
             </section>
             {/* After sign up view - do not remove */}
             <Form reply className="public-form clearfix">
-              <TextArea placeholder="Write a comment..." />
+              <Form.TextArea className="secondary" placeholder="Write a comment..." />
               <Button primary floated="right">Post Comment</Button>
             </Form>
             {/* end */}
@@ -125,7 +125,7 @@ class Comments extends Component {
                     email <Link to="/">support@nextseed.com</Link>.
                   </p>
                   <Form className="public-form" reply>
-                    <TextArea placeholder="Write a reply..." />
+                    <Form.TextArea className="secondary" placeholder="Write a reply..." />
                     <Button>Cancel</Button>
                     <Button primary floated="right">Post Comment</Button>
                   </Form>
