@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Divider, Sidebar, Menu, Icon } from 'semantic-ui-react';
+import { Divider, Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
@@ -22,11 +22,24 @@ export default class NavBarMobile extends Component {
     return (
       <Aux>
         <div className="public-header-section">
-          <Icon name="sidebar" onClick={onToggle} className="hamburger" />
-          <Logo as={Link} to="/" dataSrc="LogoSmallWhite" className="logo" size="mini" />
+          {/* <Logo onClick={onToggle} dataSrc="LogoSmallWhite"
+        className="logo hamburger" size="mini" /> */}
+          <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
+          <div className="full-logo">
+            <Logo
+              alt="NextSeed.com"
+              dataSrc={getLogo(location.pathname)}
+              as={Link}
+              to="/"
+            />
+          </div>
+          <Link to="/">
+            <Header as="h5" inverted>homepage</Header>
+          </Link>
           <Link to="/auth/login" className="sign-in">
             Sign In
           </Link>
+          <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">Invest Now</Button>
         </div>
         <Sidebar.Pushable>
           <Sidebar
@@ -40,13 +53,6 @@ export default class NavBarMobile extends Component {
             <div className="public-mobile-nav">
               <div className="mobile-nav-inner-container">
                 <Icon onClick={onToggle} className="ns-close-light" />
-                <Logo
-                  size="small"
-                  alt="NextSeed.com"
-                  dataSrc={getLogo(location.pathname)}
-                  as={Link}
-                  to="/"
-                />
                 <div className="public-header-nav">
                   <NavItems
                     refLoc="public"

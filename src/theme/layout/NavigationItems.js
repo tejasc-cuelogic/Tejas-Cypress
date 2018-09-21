@@ -6,6 +6,7 @@ import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-reac
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 export class NavItems extends Component {
   state = { active: '' };
@@ -42,7 +43,7 @@ export class NavItems extends Component {
               </Aux>
             }
           >
-            <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
+            <Dropdown.Menu className={this.isActive(item.to, location) || isMobile ? 'visible' : ''}>
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}

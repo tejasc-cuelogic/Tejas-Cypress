@@ -323,15 +323,29 @@ footer{
 .offer-details {
     display: flex;
     flex-direction: row;
-    min-height:~"calc(100vh - 58px)";
+	min-height:~"calc(100vh - 58px)";
+	@media only screen and (max-width : @largestMobileScreen){
+		flex-direction: column;
+	}
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
 		width: 280px;
 		height: ~"calc(100vh - 58px)";
 		position: fixed;
-		z-index: 1;
+		z-index: 3;
 		overflow: auto;
+		@media only screen and (max-width : @largestMobileScreen){
+			position: static;
+			overflow: hidden;
+			width: 100%;
+			max-height: 1000px;
+			height: auto;
+			transition: all 500ms ease-in-out;
+			&.collapse {
+				max-height: 0;
+			}
+		}
 		.ui.menu, .ui.vertical.menu {
 			border: none;
 			box-shadow: none;
@@ -350,6 +364,9 @@ footer{
 	}
 	.offering-intro {
 		padding: @32px @20px 0;
+		@media only screen and (max-width : @largestMobileScreen){
+			padding: 0 @20px @32px;
+		}
 		h4.ui.header {
 			position: relative;
 			> a {
@@ -364,6 +381,9 @@ footer{
 		background-color: @neutral-midwhite;
 		flex-grow: 1;
 		padding-left: 280px;
+		@media only screen and (max-width : @largestMobileScreen){
+			padding-left: 0;
+		}
 		.quick-bar {
 			padding: @10px 0;
 		}
@@ -1834,12 +1854,17 @@ p.check-extra-info{
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
 	z-index: 3;
 	.icon.hamburger {
-		font-size: 1.42857143rem;
-		color: #676a73;
+		font-size: @30px;
+		line-height: 30px;
+		color: @white;
 		position: absolute;
-		top: 20px;
+		top: 14px;
 		left: 18px;
 		z-index: 1;
+
+		&:hover+.full-logo {
+			width: 260px;
+		}
 	}
 	.sign-in {
 		font-size: @14px;
@@ -1847,6 +1872,36 @@ p.check-extra-info{
 		position: absolute;
 		top: 20px;
 		right: 18px;
+	}
+	a {
+		&:hover {
+			text-decoration: none;	
+		}
+	}
+	.full-logo {
+		width: 0;
+		height: 30px;
+		position: absolute;
+		left: 0px;
+		top: 14px;
+		z-index: 0;
+		// background: #31333d;
+		overflow: hidden;
+		transition: width 0.5s ease-in-out;
+		.ui.image {
+			height: 100%;
+			margin-left: 21px;
+			img {
+				max-width: none;
+				max-height: 100%;
+			}
+		}
+	}
+	.fixed-button {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		border-radius: 0 !important;
 	}
 }
 .proven-result-section {
