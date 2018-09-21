@@ -150,15 +150,15 @@
     &.summary-modal.stackable >.row>.column {
         padding: @14px 0 !important;
     }
-    &[class*="three column"]>.column:not(.row){
+    &[class*="three column"].doubling>.column:not(.row){
         margin-bottom: 28px;
         &:nth-child(3n) {
-            @media only screen and (min-width : @tabletBreakpoint){
+            @media only screen and (min-width : @largestTabletScreen){
                 box-shadow: none;
             }
         }
         &:nth-child(2n), &:last-child {
-            @media only screen and (max-width : @largestMobileScreen){
+            @media only screen and (max-width : @largestTabletScreen){
                 box-shadow: none;
             }
         }

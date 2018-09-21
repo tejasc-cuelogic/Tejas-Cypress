@@ -13,7 +13,8 @@ import KeyTermsModal from './investmentDetails/KeyTermsModal';
 const nsvideos = {
   embed: '218642510',
 };
-
+const isTablet = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 992;
 @inject('campaignStore', 'updatesStore')
 @observer
 class Overview extends Component {
@@ -21,9 +22,9 @@ class Overview extends Component {
     const { campaign } = this.props.campaignStore;
     return (
       <div className="campaign-content-wrapper">
-        <Grid stackable doubling>
+        <Grid stackable>
           <Grid.Row>
-            <Grid.Column widescreen={7} computer={8}>
+            <Grid.Column widescreen={7} computer={8} tablet={16}>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section link><b>About the Company</b></Breadcrumb.Section>
@@ -69,7 +70,7 @@ class Overview extends Component {
               </Segment>
             </Grid.Column>
             <Responsive minWidth={768} as={Aux}>
-              <Grid.Column widescreen={9} computer={8}>
+              <Grid.Column widescreen={9} computer={8} tablet={16} className={isTablet && 'mt-30'}>
                 <Segment padded>
                   <Embed
                     id={nsvideos.embed}
@@ -81,124 +82,124 @@ class Overview extends Component {
               </Grid.Column>
             </Responsive>
           </Grid.Row>
-          <Grid.Row columns={3} stackable doubling>
-            <Grid.Column>
-              <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}><b>View Key Terms</b></Breadcrumb.Section>
-                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
-                </Breadcrumb>
-                <Header as="h4">Revenue Sharing Notes</Header>
-                <Grid columns={3} doubling divided className="mt-30">
-                  <Grid.Column>
-                    <Statistic size="mini" className="basic">
-                      <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>1.6x</Statistic.Value>
-                    </Statistic>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Statistic size="mini" className="basic">
-                      <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>4%</Statistic.Value>
-                    </Statistic>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Statistic size="mini" className="basic">
-                      <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>48 months</Statistic.Value>
-                    </Statistic>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Statistic size="mini" className="basic">
-                      <Statistic.Label>Payments{' '}
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content="The Issuer will make monthly payments based on the relevant
-                          revenue sharing percentage."
-                          position="top center"
-                        />
-                      </Statistic.Label>
-                      <Statistic.Value>Monthly</Statistic.Value>
-                    </Statistic>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Statistic size="mini" className="basic">
-                      <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>0%</Statistic.Value>
-                    </Statistic>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Statistic size="mini" className="basic">
-                      <Statistic.Label>Type of Raise&nbsp;
-                        <Popup
-                          trigger={<Icon name="help circle" color="green" />}
-                          content={(
-                            <Aux>
-                              This campaign is raising capital under Regulation CF and
-                              Regulation D. For more information on what this means, check out
-                              our <a href="/">Education Center.</a>
-                            </Aux>
-                          )}
-                          position="top center"
-                          hoverable
-                        />
-                      </Statistic.Label>
-                      <Statistic.Value>Reg CF </Statistic.Value>
-                    </Statistic>
-                  </Grid.Column>
-                </Grid>
-              </Segment>
-            </Grid.Column>
-            <Grid.Column>
-              <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/updates`}><b>Latest Update</b></Breadcrumb.Section>
-                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
-                </Breadcrumb>
-                <Item.Group className="campaign-updates">
-                  <Item>
-                    <Item.Content>
-                      <Item.Image floated="left" size="mini" src={teamMember1} />
-                      <Item.Header>Rassul Zarnifar</Item.Header>
-                      <Item.Meta>March 10, 2018</Item.Meta>
-                      <Divider />
-                      <Item.Description>
-                        <p><b>Closing campaign early!</b></p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-                        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-                        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                        velit esse cillum dolore eu fugiat nulla pariatur....
-                        <Link to="/">View Update</Link>
-                      </Item.Description>
-                    </Item.Content>
-                  </Item>
-                </Item.Group>
-              </Segment>
-            </Grid.Column>
-            <Grid.Column>
-              <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section link><b>Bonus Rewards</b></Breadcrumb.Section>
-                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
-                </Breadcrumb>
-                <Header as="h4">Investor Rewards</Header>
-                <Image src={noEarlyBird} className="no-early-bird" />
-                <p className="center-align"><b>Invest more, recieve more.</b></p>
-                <p className="early-bird-desc center-align">
-                  See the bonus rewards BuffBrew Taproom is offering for higher
-                  levels of investment.
-                </p>
-              </Segment>
-              {/* <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
-                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
-                </Breadcrumb>
-                <Header as="h3">Early Bird Rewards</Header>
-              </Segment> */}
-            </Grid.Column>
-          </Grid.Row>
+        </Grid>
+        <Grid columns={isTablet ? 1 : 3} stackable>
+          <Grid.Column>
+            <Segment padded>
+              <Breadcrumb>
+                <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}><b>View Key Terms</b></Breadcrumb.Section>
+                <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
+              </Breadcrumb>
+              <Header as="h4">Revenue Sharing Notes</Header>
+              <Grid columns={3} doubling divided className="mt-30">
+                <Grid.Column>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                    <Statistic.Value>1.6x</Statistic.Value>
+                  </Statistic>
+                </Grid.Column>
+                <Grid.Column>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                    <Statistic.Value>4%</Statistic.Value>
+                  </Statistic>
+                </Grid.Column>
+                <Grid.Column>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                    <Statistic.Value>48 months</Statistic.Value>
+                  </Statistic>
+                </Grid.Column>
+                <Grid.Column>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Label>Payments{' '}
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content="The Issuer will make monthly payments based on the relevant
+                        revenue sharing percentage."
+                        position="top center"
+                      />
+                    </Statistic.Label>
+                    <Statistic.Value>Monthly</Statistic.Value>
+                  </Statistic>
+                </Grid.Column>
+                <Grid.Column>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                    <Statistic.Value>0%</Statistic.Value>
+                  </Statistic>
+                </Grid.Column>
+                <Grid.Column>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Label>Type of Raise&nbsp;
+                      <Popup
+                        trigger={<Icon name="help circle" color="green" />}
+                        content={(
+                          <Aux>
+                            This campaign is raising capital under Regulation CF and
+                            Regulation D. For more information on what this means, check out
+                            our <a href="/">Education Center.</a>
+                          </Aux>
+                        )}
+                        position="top center"
+                        hoverable
+                      />
+                    </Statistic.Label>
+                    <Statistic.Value>Reg CF </Statistic.Value>
+                  </Statistic>
+                </Grid.Column>
+              </Grid>
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment padded>
+              <Breadcrumb>
+                <Breadcrumb.Section as={Link} to={`${this.props.match.url}/updates`}><b>Latest Update</b></Breadcrumb.Section>
+                <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
+              </Breadcrumb>
+              <Item.Group className="campaign-updates">
+                <Item>
+                  <Item.Content>
+                    <Item.Image floated="left" size="mini" src={teamMember1} />
+                    <Item.Header>Rassul Zarnifar</Item.Header>
+                    <Item.Meta>March 10, 2018</Item.Meta>
+                    <Divider />
+                    <Item.Description>
+                      <p><b>Closing campaign early!</b></p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
+                      veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                      commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
+                      velit esse cillum dolore eu fugiat nulla pariatur....
+                      <Link to="/">View Update</Link>
+                    </Item.Description>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
+            </Segment>
+          </Grid.Column>
+          <Grid.Column>
+            <Segment padded>
+              <Breadcrumb>
+                <Breadcrumb.Section link><b>Bonus Rewards</b></Breadcrumb.Section>
+                <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
+              </Breadcrumb>
+              <Header as="h4">Investor Rewards</Header>
+              <Image src={noEarlyBird} className="no-early-bird" />
+              <p className="center-align"><b>Invest more, recieve more.</b></p>
+              <p className="early-bird-desc center-align">
+                See the bonus rewards BuffBrew Taproom is offering for higher
+                levels of investment.
+              </p>
+            </Segment>
+            {/* <Segment padded>
+              <Breadcrumb>
+                <Breadcrumb.Section>Bonus Rewards</Breadcrumb.Section>
+                <Breadcrumb.Divider icon={{ className: 'ns-chevron-right' }} />
+              </Breadcrumb>
+              <Header as="h3">Early Bird Rewards</Header>
+            </Segment> */}
+          </Grid.Column>
         </Grid>
         <Route path={`${this.props.match.url}/updates`} component={UpdatesModal} />
         <Route path={`${this.props.match.url}/keyterms`} component={KeyTermsModal} />
