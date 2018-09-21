@@ -13,7 +13,6 @@ export default class Leadership extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
-    this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', 'leadership');
   }
   addMore = (e, formName) => {
     e.preventDefault();
