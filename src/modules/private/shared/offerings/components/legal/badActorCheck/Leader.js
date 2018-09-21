@@ -100,7 +100,7 @@ export default class Leader extends Component {
             <Button.Group floated="right">
               {roles && (roles.includes('admin') || roles.includes('manager')) &&
               <Aux>
-                <Button inverted content="Decline" color="red" disabled={!LEADER_FRM.meta.isValid} />
+                <Button inverted content="Send Back" color="red" disabled={!LEADER_FRM.meta.isValid} />
                 <Button secondary content="Generate Report" disabled={!LEADER_FRM.meta.isValid} />
                 <Button primary content="Approve" color="green" disabled={!LEADER_FRM.meta.isValid} />
               </Aux>
