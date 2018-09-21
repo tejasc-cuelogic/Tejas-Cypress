@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Comment, Label, TextArea, Form, Modal, Header } from 'semantic-ui-react';
+import { Button, Comment, Label, Form, Modal, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 class Comments extends Component {
