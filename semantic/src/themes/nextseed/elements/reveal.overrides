@@ -61,12 +61,12 @@
 }
 .campaign-right-sidebar {
     .ui.fade.reveal {
-        width: 75px;
-        height: 75px;
+        max-width: 94px;
+        max-height: 94px;
         border-radius: 50%;
         >.hidden.content {
-            height: 75px;
-            width: 75px;
+            max-height: 94px;
+            max-width: 94px;
             border-radius: 50%;
             p {
                 font-weight: @bold;
@@ -74,7 +74,7 @@
                 white-space: normal;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                width: 70px;
+                width: 100%;
                 line-height: 18px;
             }
         }        
