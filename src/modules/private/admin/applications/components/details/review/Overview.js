@@ -11,11 +11,11 @@ import ManagerOverview from './ManagerOverview';
 @observer
 export default class Overview extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review', 'criticalPoint');
+    this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint.description');
   }
   addCriticalPoint = (e) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'criticalPoint');
+    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'data');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -42,13 +42,13 @@ export default class Overview extends Component {
         </Header>
         <Form onSubmit={this.submit}>
           {
-            OVERVIEW_FRM.fields.criticalPoint.map((description, index) => (
+            OVERVIEW_FRM.fields.data.map((field, index) => (
               <FormInput
                 type="text"
                 name="description"
                 label={`Critical Point ${index + 1}`}
-                fielddata={description}
-                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'criticalPoint', index)}
+                fielddata={field.description}
+                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'data', index)}
                 removed={e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM')}
                 linkto={this.props.match.url}
               />
@@ -56,8 +56,8 @@ export default class Overview extends Component {
           }
           <div className="right-align">
             <Button.Group>
-              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.criticalPoint.length)} secondary className="relaxed">Save</Button>
-              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.criticalPoint.length)} primary type="button">Submit for Approval</Button>
+              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.data.length)} secondary className="relaxed">Save</Button>
+              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.data.length)} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
           <ManagerOverview form={OVERVIEW_MANAGER_FRM} formName="OVERVIEW_MANAGER_FRM" />
@@ -67,7 +67,7 @@ export default class Overview extends Component {
           content="Are you sure you want to remove this critical point?"
           open={confirmModal}
           onCancel={toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, 'criticalPoint')}
+          onConfirm={() => removeData(confirmModalName, 'data')}
           size="mini"
           className="deletion"
         />

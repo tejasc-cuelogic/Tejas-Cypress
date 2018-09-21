@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map } from 'lodash';
-import { MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
+import { map, has } from 'lodash';
+import { SOURCES, USES, CONTROL_PERSONS, MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -25,9 +25,6 @@ export class BusinessAppReviewStore {
   @observable MISCELLANEOUS_MANAGER_FRM = Validator.prepareFormObject(MISCELLANEOUS_MANAGER);
   @observable OFFER_MANAGER_FRM = Validator.prepareFormObject(OFFER_MANAGER);
   @observable MODEL_MANAGER_FRM = Validator.prepareFormObject(MODEL_MANAGER);
-  @observable CONTROL_PERSONS_FRM = Validator.prepareFormObject(CONTROL_PERSONS);
-  @observable SOURCES_FRM = Validator.prepareFormObject(SOURCES);
-  @observable USES_FRM = Validator.prepareFormObject(USES);
   @observable LAUNCH_FRM = Validator.prepareFormObject(LAUNCH);
   @observable CLOSE_FRM = Validator.prepareFormObject(CLOSE);
   @observable SOCIAL_MEDIA_FRM = Validator.prepareFormObject(SOCIAL_MEDIA);
@@ -94,11 +91,18 @@ export class BusinessAppReviewStore {
     const metaDataMapping = {
       LAUNCH_FRM: { formData: LAUNCH, actionType: '' },
       CLOSE_FRM: { formData: CLOSE, actionType: '' },
-      CONTROL_PERSONS_FRM: { formData: CONTROL_PERSONS, actionType: '' },
       JUSTIFICATIONS_FRM: { formData: JUSTIFICATIONS, actionType: '' },
+      BUSINESS_PLAN_FRM: {
+        formData: {
+          BUSINESS_PLAN,
+          control_persons: CONTROL_PERSONS,
+          sources: SOURCES,
+          uses: USES,
+        },
+        actionType: 'BUSINESS_PLAN',
+        objRef: 'businessPlan',
+      },
       OVERVIEW_FRM: { formData: OVERVIEW, actionType: 'REVIEW_OVERVIEW', objRef: 'overview' },
-      SOURCES_FRM: { formData: SOURCES, actionType: '' },
-      USES_FRM: { formData: USES, actionType: '' },
       SOCIAL_MEDIA_FRM: { formData: SOCIAL_MEDIA, actionType: '' },
       OTHER_DOCUMENTATION_FRM: { formData: OTHER_DOCUMENTATION_UPLOADS, actionType: '' },
       OFFERS_FRM: { formData: OFFERS, actionType: '' },
@@ -120,7 +124,7 @@ export class BusinessAppReviewStore {
     };
     const arrayData = [
       ...this[formName].fields[arrayName],
-      this.getMetaData(formName)[arrayName][0],
+      this.getMetaData(formName)[arrayName],
     ];
     this[formName].fields[arrayName] = arrayData;
   }
@@ -134,7 +138,7 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  formChangeWithIndex = (e, result, form, ref = 'data', index) => {
+  formChangeWithIndex = (e, result, form, ref, index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],
       Validator.pullValues(e, result), ref, index,
@@ -151,20 +155,20 @@ export class BusinessAppReviewStore {
 
   @action
   controlPersonMaskChange = (values, index) => {
-    this.CONTROL_PERSONS_FRM = Validator.onArrayFieldChange(
-      this.CONTROL_PERSONS_FRM,
-      { name: 'ownership', value: values.formattedValue }, 'data', index,
+    this.BUSINESS_PLAN_FRM = Validator.onArrayFieldChange(
+      this.BUSINESS_PLAN_FRM,
+      { name: 'ownership', value: values.formattedValue }, 'control_persons', index,
     );
   }
 
   @action
-  setFileUploadData = (form, field, files, index = null) => {
+  setFileUploadData = (form, arrayName, field, files, index = null) => {
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
-        { name: field, value: fileData.fileName }, 'data', index,
+        { name: field, value: fileData.fileName }, arrayName, index,
       );
     } else {
       this[form] = Validator.onChange(
@@ -199,17 +203,17 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  maskChangeWithIndex = (values, form, field, index) => {
+  maskChangeWithIndex = (values, form, arrayName, field, index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],
-      { name: field, value: values.floatValue }, 'data', index,
+      { name: field, value: values.floatValue }, arrayName, index,
     );
   }
 
   @computed
   get totalSourcesAmount() {
     let totalAmount = 0;
-    this.SOURCES_FRM.fields.data.map((source) => {
+    this.BUSINESS_PLAN_FRM.fields.sources.map((source) => {
       totalAmount += source.amount.value;
       return totalAmount;
     });
@@ -219,7 +223,7 @@ export class BusinessAppReviewStore {
   @computed
   get totalUsesAmount() {
     let totalAmount = 0;
-    this.USES_FRM.fields.data.map((use) => {
+    this.BUSINESS_PLAN_FRM.fields.uses.map((use) => {
       totalAmount += use.amount.value;
       return totalAmount;
     });
@@ -282,37 +286,53 @@ export class BusinessAppReviewStore {
         if (fields[key] && Array.isArray(records)) {
           if (fields[key] && fields[key].length > 0) {
             inputData = { ...inputData, [key]: [] };
-            let arrayFields = [];
+            let arrObj = [];
             records.forEach((field) => {
               let arrayFieldsKey = {};
+              let arrayFields = [];
               map(field, (eleV, keyRef1) => {
-                if (eleV.objRef) {
+                if (field[keyRef1].objType !== 'array') {
+                  arrayFields = {};
+                }
+                if (eleV.objRefOutput) {
                   if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                     const fileObj =
                       { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
-                    arrayFields = { ...arrayFields, [eleV.objRef]: { [keyRef1]: fileObj } };
+                    arrayFields = { ...arrayFields, [keyRef1]: fileObj };
                   } else {
                     arrayFields =
-                      { ...arrayFields, [eleV.objRef]: { [keyRef1]: field[keyRef1].value } };
+                      { ...arrayFields, [keyRef1]: field[keyRef1].value };
                   }
                 } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                   const fileObj =
                       { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
                   arrayFields = { ...arrayFields, [keyRef1]: fileObj };
-                } else {
+                } else if (field[keyRef1].objType === 'array') {
                   arrayFields.push(field[keyRef1].value);
+                } else {
+                  arrayFields = { [keyRef1]: field[keyRef1].value };
                 }
-                arrayFieldsKey = { [keyRef1]: arrayFields };
+                if (field[keyRef1].objType === 'array') {
+                  arrayFieldsKey = { ...arrayFieldsKey, [keyRef1]: arrayFields };
+                } else {
+                  arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
+                  // if (eleV.objRefOutput) {
+                  //   arrayFieldsKey = has(arrayFieldsKey, [eleV.objRefOutput]) ?
+                  //     { ...arrayFieldsKey, [eleV.objRefOutput]: arrayFieldsKey } :
+                  //     { [eleV.objRefOutput]: arrayFieldsKey };
+                  // }
+                }
               });
-              inputData = { ...inputData, [key]: { ...inputData[key], ...arrayFieldsKey } };
+              arrObj = [...arrObj, arrayFieldsKey];
+              inputData = { ...inputData, [key]: { ...inputData[key], ...arrObj } };
             });
           }
-        } else if (fields[key].objRef) {
+        } else if (fields[key].objRefOutput) {
           if (fields[key].objType && fields[key].objType === 'FileObjectType') {
             const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
-            inputData = { ...inputData, [fields[key].objRef]: { [key]: fileObj } };
+            inputData = { ...inputData, [fields[key].objRefOutput]: { [key]: fileObj } };
           } else {
-            inputData = { ...inputData, [fields[key].objRef]: { [key]: fields[key].value } };
+            inputData = { ...inputData, [fields[key].objRefOutput]: { [key]: fields[key].value } };
           }
         } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
           const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
@@ -371,7 +391,7 @@ export class BusinessAppReviewStore {
         } else if (key === 'value') {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else {
-          // fields[key].value = data && typeof data === 'string' ? data : data[key];
+          fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';
@@ -387,20 +407,24 @@ export class BusinessAppReviewStore {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const appData = businessApplicationDetailsAdmin;
     const { fields } = this[form];
-    const data = ref && appData[ref] ? (ref2 && appData[ref][ref2] ? (ref3 &&
-      appData[ref][ref2][ref3] ? appData[ref][ref2][ref3] : appData[ref][ref2]) :
-      appData[ref]) : appData;
+    let data = false;
+    ref.split('.').map((k) => {
+      data = !data ? appData[k] : data[k];
+      return data;
+    });
     if (this[form].fields.data && Array.isArray(toJS(this[form].fields.data))) {
       this.resetMe(form, this.getMetaData(form));
       if (data && data.length > 0) {
+        const addRec = data.length - toJS(this[form].fields.data).length;
+        for (let i = addRec; i > 0; i -= 1) {
+          this.addMore(form);
+        }
         data.forEach((record, index) => {
-          // this.addMore(form);
           this.setDataForFields(this[form].fields.data[index], data[index], form);
         });
       }
     } else {
-      const objRef = this.getMetaData(form, 'objRef');
-      this.setDataForFields(this[form].fields, data[objRef], form);
+      this.setDataForFields(this[form].fields, data, form);
     }
   }
 }

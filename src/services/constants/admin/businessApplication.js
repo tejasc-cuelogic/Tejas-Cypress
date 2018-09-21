@@ -9,7 +9,7 @@ export const MANAGERS = {
 };
 
 export const OVERVIEW = {
-  criticalPoint: [{
+  data: [{
     description: {
       value: '',
       label: 'Critical Point',
@@ -20,7 +20,7 @@ export const OVERVIEW = {
         string: 'Allowed string only.',
         required: '* required.',
       },
-      // objRef: 'criticalPoint',
+      objRefOutput: 'criticalPoint',
     },
   }],
 };
@@ -192,13 +192,143 @@ export const PROJECTIONS_MANAGER = {
   managerOverview: { ...MANAGERS.managerOverview },
 };
 
+export const CONTROL_PERSONS = {
+  name: {
+    value: '',
+    label: 'Name',
+    error: undefined,
+    rule: 'required|string',
+    placeHolder: 'John Doe',
+    customErrors: {
+      required: '* required.',
+      string: 'Allowed string only.',
+    },
+  },
+  ownership: {
+    value: '',
+    label: 'Ownership %',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '10.0%',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  derogatoryMarks: {
+    value: '',
+    label: 'Derogatory Marks',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  experience: {
+    value: '',
+    label: 'Experience',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Experience Comment',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  creditScore: {
+    value: '',
+    label: 'Credit Score',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Credit Score Comment',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  experienceFile: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  creditScoreFile: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+};
+
+export const SOURCES = {
+  name: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required|string',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
+    },
+    // objRefOutput: 'test',
+  },
+  amount: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+    // objRefOutput: 'test',
+  },
+};
+
+export const USES = {
+  name: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'string|required',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
+    },
+  },
+  amount: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+};
+
 export const BUSINESS_PLAN = {
+  control_persons: [{ ...CONTROL_PERSONS }],
   locationFeasibility: {
     value: '',
     label: 'Location feasibility',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here...',
+    // objRefOutput: 'test',
   },
   timingOfOperations: {
     value: '',
@@ -228,6 +358,8 @@ export const BUSINESS_PLAN = {
     error: undefined,
     rule: 'required|date',
   },
+  sources: [{ ...SOURCES }],
+  uses: [{ ...USES }],
 };
 
 export const BUSINESS_PLAN_MANAGER = {
@@ -248,137 +380,6 @@ export const OFFER_MANAGER = {
 
 export const MODEL_MANAGER = {
   managerOverview: { ...MANAGERS.managerOverview },
-};
-
-export const CONTROL_PERSONS = {
-  data: [{
-    name: {
-      value: '',
-      label: 'Name',
-      error: undefined,
-      rule: 'required|string',
-      placeHolder: 'John Doe',
-      customErrors: {
-        required: '* required.',
-        string: 'Allowed string only.',
-      },
-    },
-    ownership: {
-      value: '',
-      label: 'Ownership %',
-      error: undefined,
-      rule: 'required',
-      placeHolder: '10.0%',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    derogatoryMarks: {
-      value: '',
-      label: 'Derogatory Marks',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Enter here',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    experience: {
-      value: '',
-      label: 'Experience',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Experience Comment',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    creditScore: {
-      value: '',
-      label: 'Credit Score',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Credit Score Comment',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    experienceFile: {
-      label: '',
-      value: '',
-      error: undefined,
-      rule: 'required',
-      preSignedUrl: '',
-      fileId: '',
-      fileData: '',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    creditScoreFile: {
-      label: '',
-      value: '',
-      error: undefined,
-      rule: 'required',
-      preSignedUrl: '',
-      fileId: '',
-      fileData: '',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-  }],
-};
-
-export const SOURCES = {
-  data: [{
-    name: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'required|string',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
-    },
-
-    amount: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'numeric|required',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required: '* required.',
-      },
-    },
-  }],
-};
-
-export const USES = {
-  data: [{
-    name: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'string|required',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
-    },
-    amount: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'numeric|required',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required: '* required.',
-      },
-    },
-  }],
 };
 
 export const LAUNCH = {

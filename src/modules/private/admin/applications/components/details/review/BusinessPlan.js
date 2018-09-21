@@ -9,20 +9,20 @@ import ManagerOverview from './ManagerOverview';
 import Helper from '../../../../../../../helper/utility';
 
 const AddMore = ({
-  addMore, formName, title,
+  addMore, formName, arrayName, title,
 }) => (
-  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName)} >+ {title}</Button>
+  <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)} >+ {title}</Button>
 );
 
 @inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class BusinessPlan extends Component {
   onFileDrop = (files, name, index) => {
-    this.props.businessAppReviewStore.setFileUploadData('CONTROL_PERSONS_FRM', name, files, index);
+    this.props.businessAppReviewStore.setFileUploadData('BUSINESS_PLAN_FRM', 'control_persons', name, files, index);
   }
-  addMore = (e, formName) => {
+  addMore = (e, formName, arrayName = 'data') => {
     e.preventDefault();
-    this.props.businessAppReviewStore.addMore(formName);
+    this.props.businessAppReviewStore.addMore(formName, arrayName);
   }
   confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
@@ -39,17 +39,16 @@ export default class BusinessPlan extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
+  submit = (e) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.saveReviewForms('BUSINESS_PLAN_FRM');
+  }
   render() {
     const {
-      SOURCES_FRM,
-      USES_FRM,
       BUSINESS_PLAN_FRM,
-      CONTROL_PERSONS_FRM,
-      formChange,
       formChangeWithIndex,
       controlPersonMaskChange,
       totalSourcesAmount,
-      maskChange,
       maskChangeWithIndex,
       totalUsesAmount,
       confirmModal,
@@ -60,26 +59,26 @@ export default class BusinessPlan extends Component {
     const { confirmBox } = this.props.uiStore;
     return (
       <Aux>
-        <Form>
+        <Form onSubmit={this.submit}>
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             name="locationFeasibility"
             fielddata={BUSINESS_PLAN_FRM.fields.locationFeasibility}
-            changed={(e, result) => formChange(e, result, 'BUSINESS_PLAN_FRM')}
+            changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
             containerclassname="secondary"
             hidelabel
           />
           <Divider section />
           <Header as="h4">
             Control Persons
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'CONTROL_PERSONS_FRM')}><small>+ Add Control Person</small></Link>
+            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'BUSINESS_PLAN_FRM', 'control_persons')}><small>+ Add Control Person</small></Link>
           </Header>
           {
-            CONTROL_PERSONS_FRM.fields.data.map((controlPerson, index) => (
+            BUSINESS_PLAN_FRM.fields.control_persons.map((controlPerson, index) => (
               <Aux>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
-                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'CONTROL_PERSONS_FRM')}>
+                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'control_persons')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                 </Header>
@@ -88,7 +87,7 @@ export default class BusinessPlan extends Component {
                     <FormInput
                       name="name"
                       fielddata={controlPerson.name}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
                     />
                     <MaskedInput
                       percentage
@@ -100,19 +99,19 @@ export default class BusinessPlan extends Component {
                     <FormInput
                       name="derogatoryMarks"
                       fielddata={controlPerson.derogatoryMarks}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
                     />
                   </Form.Group>
                   <Form.Group widths={3}>
                     <FormInput
                       name="experience"
                       fielddata={controlPerson.experience}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
                     />
                     <FormInput
                       name="creditScore"
                       fielddata={controlPerson.creditScore}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'CONTROL_PERSONS_FRM', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
                     />
                   </Form.Group>
                   <Form.Group widths={3}>
@@ -147,7 +146,7 @@ export default class BusinessPlan extends Component {
                   key={field}
                   name={field}
                   fielddata={BUSINESS_PLAN_FRM.fields[field]}
-                  changed={(e, result) => formChange(e, result, 'BUSINESS_PLAN_FRM')}
+                  changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
                   containerclassname="secondary"
                 />
                 <Divider section />
@@ -168,14 +167,14 @@ export default class BusinessPlan extends Component {
                 </Table.Header>
                 <Table.Body>
                   {
-                    SOURCES_FRM.fields.data.length ?
-                    SOURCES_FRM.fields.data.map((source, index) => (
+                    BUSINESS_PLAN_FRM.fields.sources.length ?
+                    BUSINESS_PLAN_FRM.fields.sources.map((source, index) => (
                       <Table.Row key={source} verticalAlign="top">
                         <Table.Cell width={8}>
                           <FormInput
                             name="name"
                             fielddata={source.name}
-                            changed={(e, result) => formChangeWithIndex(e, result, 'SOURCES_FRM', index)}
+                            changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'sources', index)}
                             size="small"
                           />
                         </Table.Cell>
@@ -185,13 +184,13 @@ export default class BusinessPlan extends Component {
                             currency
                             name="amount"
                             fielddata={source.amount}
-                            changed={(values, field) => maskChangeWithIndex(values, 'SOURCES_FRM', field, index)}
+                            changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'sources', field, index)}
                             ishidelabel
                             size="small"
                           />
                         </Table.Cell>
                         <Table.Cell collapsing>
-                          <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'SOURCES_FRM')} >
+                          <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'sources')} >
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
                         </Table.Cell>
@@ -200,7 +199,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <AddMore addMore={this.addMore} formName="SOURCES_FRM" title="Add Source" />
+                      <AddMore addMore={this.addMore} arrayName="sources" formName="BUSINESS_PLAN_FRM" title="Add Source" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -224,14 +223,14 @@ export default class BusinessPlan extends Component {
                 </Table.Header>
                 <Table.Body>
                   {
-                  USES_FRM.fields.data.length ?
-                  USES_FRM.fields.data.map((use, index) => (
+                  BUSINESS_PLAN_FRM.fields.uses.length ?
+                  BUSINESS_PLAN_FRM.fields.uses.map((use, index) => (
                     <Table.Row key={use[index]} verticalAlign="top">
                       <Table.Cell width={8}>
                         <FormInput
                           name="name"
                           fielddata={use.name}
-                          changed={(e, result) => formChangeWithIndex(e, result, 'USES_FRM', index)}
+                          changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'uses', index)}
                           size="small"
                         />
                       </Table.Cell>
@@ -241,13 +240,13 @@ export default class BusinessPlan extends Component {
                           currency
                           name="amount"
                           fielddata={use.amount}
-                          changed={(values, field) => maskChangeWithIndex(values, 'USES_FRM', field, index)}
+                          changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'uses', field, index)}
                           ishidelabel
                           size="small"
                         />
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'USES_FRM')} >
+                        <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'uses')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
                       </Table.Cell>
@@ -256,7 +255,7 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      <AddMore addMore={this.addMore} formName="USES_FRM" title="Add Use" />
+                      <AddMore addMore={this.addMore} arrayName="uses" formName="BUSINESS_PLAN_FRM" title="Add Use" />
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -274,7 +273,7 @@ export default class BusinessPlan extends Component {
             name="dateOfIncorporation"
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
             format="##-##-####"
-            changed={(values, field) => maskChange(values, 'BUSINESS_PLAN_FRM', field)}
+            changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', '', field)}
             dateOfBirth
           />
           <div className="right-align">
@@ -296,8 +295,8 @@ export default class BusinessPlan extends Component {
         />
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${confirmModalName === 'USES_FRM' ? 'use' :
-          confirmModalName === 'SOURCES_FRM' ? 'source' : 'control person'}?`}
+          content={`Are you sure you want to remove this ${confirmModalName === 'uses' ? 'use' :
+          confirmModalName === 'sources' ? 'source' : 'control person'}?`}
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => removeData(confirmModalName)}
