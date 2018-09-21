@@ -57,6 +57,7 @@ class SecondaryMenu extends Component {
   render() {
     const {
       navItems, match, vertical, noinvert, attached, className, stepsStatus, addon, heading,
+      force2ary,
     } = this.props;
     const mobNavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
@@ -70,7 +71,7 @@ class SecondaryMenu extends Component {
             celled={!vertical}
             horizontal={!vertical}
             inverted={(!noinvert && !vertical)}
-            secondary={vertical}
+            secondary={force2ary || vertical}
             vertical={vertical}
             attached={attached}
           >

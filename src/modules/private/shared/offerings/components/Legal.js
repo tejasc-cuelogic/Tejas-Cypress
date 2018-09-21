@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Loadable from 'react-loadable';
 import { Grid } from 'semantic-ui-react';
+import { inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -13,6 +14,7 @@ const getModule = component => Loadable({
   },
 });
 
+@inject('userStore')
 @withRouter
 export default class Legal extends Component {
   componentWillMount() {
@@ -42,8 +44,9 @@ export default class Legal extends Component {
       },
     ];
     const { match } = this.props;
+    const { isIssuer } = this.props.userStore;
     return (
-      <div className="inner-content-spacer">
+      <div className={!isIssuer ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />

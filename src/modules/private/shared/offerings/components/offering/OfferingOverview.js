@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Card, Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
+import { Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore', 'userStore')
@@ -25,14 +25,12 @@ export default class OfferingOverview extends Component {
     const { isIssuer } = this.props.userStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     return (
-      <Card as={isIssuer ? Card : Aux} fluid className="form-card">
+      <div className={isIssuer ? 'ui card fluid form-card' : ''}>
         <Form>
           {
             ['elevatorPitch', 'tombstoneDescription'].map(field => (
               <Aux>
-                <Header as="h4">
-                  {OFFERING_OVERVIEW_FRM.fields[field].label}
-                </Header>
+                <Header as="h4">{OFFERING_OVERVIEW_FRM.fields[field].label}</Header>
                 <FormTextarea
                   key={field}
                   name={field}
@@ -45,9 +43,7 @@ export default class OfferingOverview extends Component {
               </Aux>
             ))
           }
-          <Header as="h4">
-            Offering highlights (Top bullet points)
-          </Header>
+          <Header as="h4">Offering highlights (Top bullet points)</Header>
           {
             OFFERING_HIGHLIGHTS_FRM.fields.data.map((highlights, index) => (
               <FormInput
@@ -60,8 +56,7 @@ export default class OfferingOverview extends Component {
           }
           <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
           <Divider section />
-          <Header as="h4">
-            Social Media
+          <Header as="h4">Social Media
             <Header.Subheader>
               Links to social media profiles where investors can learn more about offering
             </Header.Subheader>
@@ -77,15 +72,12 @@ export default class OfferingOverview extends Component {
             ))
           }
           <Divider section />
-          <Header as="h4">
-            Social media share links
+          <Header as="h4">Social media share links
             <Header.Subheader>
               Share links that go on the user’s social media to share the offering
             </Header.Subheader>
           </Header>
-          <Header as="h4">
-            Facebook
-          </Header>
+          <Header as="h6">Facebook</Header>
           <FormInput
             name="facebook_shareLink"
             fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
@@ -97,9 +89,7 @@ export default class OfferingOverview extends Component {
             changed={(e, result) => formChange(e, result, formName)}
             containerclassname="secondary"
           />
-          <Header as="h4">
-            Twitter
-          </Header>
+          <Header as="h6">Twitter</Header>
           <FormInput
             name="twitter_shareLink"
             fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
@@ -112,8 +102,7 @@ export default class OfferingOverview extends Component {
             containerclassname="secondary"
           />
           <Divider section />
-          <Header as="h4">
-            Google
+          <Header as="h4">Google
             <Header.Subheader>
               Google metadata that shows up when people search for the offering
             </Header.Subheader>
@@ -125,11 +114,8 @@ export default class OfferingOverview extends Component {
             containerclassname="secondary"
           />
           <Divider section />
-          <Header as="h4">
-            Issuer Website
-            <Header.Subheader>
-              Links to Issuer’s company website
-            </Header.Subheader>
+          <Header as="h4">Issuer Website
+            <Header.Subheader>Links to Issuer’s company website</Header.Subheader>
           </Header>
           <FormInput
             name="issuerWebsite"
@@ -156,7 +142,7 @@ export default class OfferingOverview extends Component {
             </Button.Group>
           </div>
         </Form>
-      </Card>
+      </div>
     );
   }
 }

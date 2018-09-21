@@ -66,9 +66,6 @@ export default class Contingency extends Component {
               onChange={(e, result) => formChangeWithIndex(e, result, formName, index)}
             />
             <div className="checkbox-description">
-              {/* <p>
-                {contingency.comment.value}
-              </p> */}
               <FormTextarea
                 fielddata={contingency.comment}
                 name="comment"
@@ -82,10 +79,6 @@ export default class Contingency extends Component {
                     <Button type="button" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, formName)} />
                   </Aux>
                 }
-                {/* <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
-                Submited 2/16/18 by Aaron Adams</Button>
-                */}
                 {(roles && (roles.includes('support') || roles.includes('admin'))) &&
                   <Button primary content="Submit" />
                 }
