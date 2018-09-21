@@ -89,6 +89,7 @@ export default class AfIssuer extends Component {
               />
             ))
           }
+          <Divider hidden />
           <div className="clearfix mb-20 right-align">
             <Button secondary content="Submit for Approval" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
           </div>

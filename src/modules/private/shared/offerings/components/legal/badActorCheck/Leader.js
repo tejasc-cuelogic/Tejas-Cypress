@@ -44,9 +44,7 @@ export default class Leader extends Component {
               <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
             </Button.Group>
           </div>
-          <Header as="h4" textAlign="left">
-            Control Person Diligence
-          </Header>
+          <Header as="h4">Control Person Diligence</Header>
           {
             ['controlPersonQuestionaire', 'residenceTenYears'].map(field => (
               <Aux>
@@ -61,9 +59,7 @@ export default class Leader extends Component {
             ))
           }
           <Divider section />
-          <Header as="h4" textAlign="left">
-            Regulatory Bad Actor Check
-          </Header>
+          <Header as="h4">Regulatory Bad Actor Check</Header>
           {
             ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
               <FormTextarea
@@ -76,9 +72,7 @@ export default class Leader extends Component {
             ))
           }
           <Divider section />
-          <Header as="h4" textAlign="left">
-            Additional Disclosure Check
-          </Header>
+          <Header as="h4">Additional Disclosure Check</Header>
           {
             ['ofac', 'civilLawsuit', 'onlineReputation'].map(field => (
               <FormTextarea
@@ -90,6 +84,7 @@ export default class Leader extends Component {
               />
             ))
           }
+          <Divider hidden />
           <div className="clearfix mb-20 right-align">
             <Button secondary content="Submit for Approval" disabled={!LEADER_FRM.meta.isValid} />
           </div>

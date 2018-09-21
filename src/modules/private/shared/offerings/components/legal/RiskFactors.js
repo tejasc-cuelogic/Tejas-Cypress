@@ -1,7 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Checkbox, Form, Button, Icon } from 'semantic-ui-react';
+import { Header, Checkbox, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 
 const FormData = ({
@@ -60,6 +60,7 @@ export default class RiskFactors extends Component {
               />
             ))
           }
+          <Divider hidden />
           <div className="clearfix mb-20">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />

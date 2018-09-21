@@ -69,6 +69,7 @@ export default class Issuer extends Component {
               />
             ))
           }
+          <Divider hidden />
           <div className="clearfix mb-20 right-align">
             <Button secondary content="Submit for Approval" disabled={!ISSUER_FRM.meta.isValid} />
           </div>
