@@ -67,7 +67,7 @@ export const KEY_TERMS = {
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  ownership: {
+  securitiesOwnershipPercentage: {
     value: '',
     label: 'Ownership % Represented by Securities',
     error: undefined,
@@ -78,7 +78,7 @@ export const KEY_TERMS = {
     value: '',
     label: 'Investment Multiple',
     error: undefined,
-    rule: 'numeric|required',
+    rule: 'string|required',
     placeHolder: 'Enter here',
   },
   revSharePercentage: {
@@ -841,6 +841,43 @@ export const LEADERSHIP = {
       fileData: '',
       objRef: 'leadership.uploads',
     },
+    // experience: [{
+    //   name: {
+    //     label: 'Business Name',
+    //     value: '',
+    //     error: undefined,
+    //     rule: 'string|required',
+    //     placeHolder: 'e.g. John Doe',
+    //   },
+    //   type: {
+    //     label: 'Type of Business',
+    //     value: '',
+    //     error: undefined,
+    //     rule: 'string|required',
+    //     placeHolder: 'e.g. bakery',
+    //   },
+    //   description: {
+    //     label: 'Description',
+    //     value: '',
+    //     error: undefined,
+    //     rule: 'required',
+    //     placeHolder: 'Enter here',
+    //   },
+    //   title: {
+    //     label: 'Title',
+    //     value: '',
+    //     error: undefined,
+    //     rule: 'string|required',
+    //     placeHolder: 'Enter here',
+    //   },
+    //   dateOfService: {
+    //     label: 'Dates of Service',
+    //     value: '',
+    //     error: undefined,
+    //     rule: 'date|required',
+    //     placeHolder: 'MM-DD-YYYY',
+    //   },
+    // }],
     otherEntities: {
       label: 'Names of other entities over which you have control',
       value: '',

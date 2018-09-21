@@ -11,6 +11,9 @@ export default class Leadership extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
+    if (!this.props.offeringCreationStore.initLoad.includes('LEADER_FRM')) {
+      this.props.offeringCreationStore.setFormData('LEADER_FRM', 'leadership');
+    }
   }
   render() {
     const { LEADER_FRM } = this.props.offeringCreationStore;

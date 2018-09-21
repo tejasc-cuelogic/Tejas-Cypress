@@ -31,6 +31,7 @@ export class OfferingCreationStore {
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
+  @observable initLoad = [];
 
   @observable requestState = {
     search: {},
@@ -268,6 +269,7 @@ export class OfferingCreationStore {
     } else {
       this.setDataForFields(this[form].fields, data, form);
     }
+    this.initLoad.push(form);
     return false;
   }
 }
