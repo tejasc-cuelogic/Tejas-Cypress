@@ -21,10 +21,8 @@ export default class ProfileData extends Component {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }
   isVerified = (cipStatus) => {
-    let checkStatus = '';
     if (cipStatus !== null) {
-      checkStatus = cipStatus.status;
-      return this.props.userDetailsStore.validAccStatus.includes(checkStatus);
+      return this.props.userDetailsStore.validAccStatus.includes(cipStatus);
     }
     return false;
   }
