@@ -13,11 +13,13 @@ export default class Leadership extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
-    this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', 'leadership');
   }
   addMore = (e, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName);
+    const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
+    const leaderCount = LEADERSHIP_FRM.fields.data.length;
+    this.props.history.push(`${this.props.match.url}/leader/${leaderCount}`);
   }
   render() {
     const { match } = this.props;
@@ -44,7 +46,7 @@ export default class Leadership extends Component {
       <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <SecondaryMenu secondary vertical match={match} navItems={navItems} heading="FAQ" faqs={faqsOfModule} />
+            <SecondaryMenu secondary vertical match={match} navItems={navItems} />
             <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
             <FaqWidget fullHeading="FAQ" faqs={faqsOfModule} />
           </Grid.Column>

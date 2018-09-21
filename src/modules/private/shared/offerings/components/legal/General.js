@@ -39,7 +39,7 @@ export default class General extends Component {
           <Header as="h4">General Information</Header>
           <Form.Group widths={3}>
             {
-              ['websiteUrl', 'monthLaunch'].map(field => (
+              ['websiteUrl', 'monthLaunch', 'offeringDeadline'].map(field => (
                 <FormInput
                   key={field}
                   name={field}
@@ -48,12 +48,6 @@ export default class General extends Component {
                 />
               ))
             }
-            <MaskedInput
-              name="offeringDeadline"
-              fielddata={GENERAL_FRM.fields.offeringDeadline}
-              changed={(values, name) => maskArrayChange(values, formName, name)}
-              dateOfBirth
-            />
             {
               ['employmentIdNumber', 'numOfEmployees'].map(field => (
                 <MaskedInput
@@ -256,8 +250,8 @@ export default class General extends Component {
                           fielddata={terms[field]}
                           changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
                           percentage={field === 'interestRate'}
-                          currency={field === 'amountOutStanding'}
-                          prefix={field === 'amountOutStanding' ? '$' : ''}
+                          currency={field === 'amountOutstanding'}
+                          prefix={field === 'amountOutstanding' ? '$' : ''}
                           dateOfBirth={field === 'maturityDate'}
                         />
                       ))

@@ -5,6 +5,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import {
   allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails,
 } from '../../../queries/offerings/manage';
+import { offeringCreationStore } from '../../../index';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -91,6 +92,8 @@ export class OfferingsStore {
       variables: { id },
       onFetch: (res) => {
         this.offerLoading = false;
+        offeringCreationStore.setFormData('LEADER_FRM', 'leadership');
+        offeringCreationStore.setFormData('LEADERSHIP_FRM', 'leadership');
       },
     });
   }
