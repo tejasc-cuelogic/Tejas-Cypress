@@ -23,6 +23,16 @@ class DataFormatter {
   getCommaSeparatedArrStr = array => [array.slice(0, -1).join(', '), array.slice(-1)[0]].join(array.length < 2 ? '' : ' or ');
 
   getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
+
+  QueryStringToJSON = (search) => {
+    const pairs = search.slice(1).split('&');
+    const result = {};
+    pairs.forEach((pair) => {
+      const pairVal = pair.split('=');
+      result[pairVal[0]] = decodeURIComponent(pairVal[1] || '');
+    });
+    return JSON.parse(JSON.stringify(result));
+  }
 }
 
 export default new DataFormatter();
