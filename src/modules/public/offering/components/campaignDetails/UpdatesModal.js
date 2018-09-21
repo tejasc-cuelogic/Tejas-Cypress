@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import { Header, Modal, Label, Item, Image, Segment } from 'semantic-ui-react';
+import { Header, Modal, Label, Item, Image, List } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
@@ -55,17 +55,15 @@ class MeetTeamModal extends Component {
                       </p>
                       <p>
                         {dataItem.externalArticleLink &&
-                          <a href={`${dataItem.externalArticleLink}`} target="blank">
-                            <Segment>
-                              <Header as="h6">
-                                <Image size="small" src={dataItem.extArticalImage} />
-                                <Header.Content>
-                                  {dataItem.extArticalTitle}
-                                  <Header.Subheader as="p">{dataItem.externalArticleLink}</Header.Subheader>
-                                </Header.Content>
-                              </Header>
-                            </Segment>
-                          </a>
+                          <List as="a" href={`${dataItem.externalArticleLink}`} target="blank" verticalAlign="middle" >
+                            <List.Item>
+                              <Image size="mini" src={dataItem.extArticalImage} />
+                              <List.Content>
+                                <List.Header>{dataItem.extArticalTitle}</List.Header>
+                                <List.Description>{dataItem.externalArticleLink}</List.Description>
+                              </List.Content>
+                            </List.Item>
+                          </List>
                         }
                       </p>
                     </Item.Group>
