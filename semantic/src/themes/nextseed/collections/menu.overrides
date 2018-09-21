@@ -346,6 +346,21 @@ footer{
             background-color:@neutral-midwhite !important;
         }
     }
+    &.tertiary.inverted{
+        background-color:@neutral-darkwhite;
+        .item{
+            align-self:center;
+            padding:@10px !important;
+            margin:0 0 0 @3px;
+            color:@neutral;
+            &:before{
+                display:none;
+            }
+            &:hover, &:active, &.active{
+                background-color:@neutral-offwhite !important;
+            }
+        }
+    }
     a.header.item{
         &:hover, &:active{
             background-color:transparent;

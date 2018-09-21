@@ -23,9 +23,7 @@ export default class Leadership extends Component {
     const { match } = this.props;
     return (
       <Aux>
-        <div>
-          <SecondaryMenu secondary match={match} navItems={navItems} />
-        </div>
+        <SecondaryMenu className="tertiary" match={match} navItems={navItems} />
         <Switch>
           <Route
             exact

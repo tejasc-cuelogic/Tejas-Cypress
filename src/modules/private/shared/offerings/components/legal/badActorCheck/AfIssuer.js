@@ -35,10 +35,12 @@ export default class AfIssuer extends Component {
     return (
       <Aux>
         <Form>
-          <Button.Group floated="right">
-            <Button size="small" color="red" className="link-button mt-20" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete Selected Issuer</Button>
-            <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
-          </Button.Group>
+          <div className="clearfix mt-10 mb-10">
+            <Button.Group floated="right">
+              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete Selected Issuer</Button>
+              <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
+            </Button.Group>
+          </div>
           <FormInput
             name="legalName"
             fielddata={AFFILIATED_ISSUER_FRM.fields.data[index].legalName}
