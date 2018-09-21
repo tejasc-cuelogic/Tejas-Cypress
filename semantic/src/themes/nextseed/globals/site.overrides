@@ -275,7 +275,7 @@ footer{
     height: 100%;
     width: 100%;
     left: 0;
-	top: 100%;
+	top: ~'calc(100% + 1px)';
 	z-index: 1;
 	.offer-filter-container {
 		background-color: @white;
@@ -296,7 +296,7 @@ footer{
 		i {
 			font-size: @16px;
 			line-height: @16px;
-			color:@neutral-middark;
+			color:@neutral-darkwhite;
 			margin-top: @3px;
 		}
 		.checkbox-group {
