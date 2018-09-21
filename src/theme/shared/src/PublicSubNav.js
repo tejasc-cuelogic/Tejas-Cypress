@@ -7,11 +7,6 @@ import { MobileDropDownNav } from '../../../theme/shared';
 import Logo from './Logo';
 @withRouter
 export default class PublicSubNav extends Component {
-  componentWillMount() {
-    if (this.props.match.isExact) {
-      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
-    }
-  }
   render() {
     const {
       moreProps, navStatus, stepInRoute, title, location, navItems, currentUser, match,

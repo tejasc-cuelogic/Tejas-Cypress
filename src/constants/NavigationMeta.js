@@ -426,6 +426,6 @@ export const FOOTER_NAV = [
       { title: 'Press', to: 'press' },
     ],
   },
-  { title: 'Terms of Use', to: 'terms-of-use' },
-  { title: 'Privacy Policy', to: 'privacy-policy' },
+  { title: 'Terms of Use', to: 'agreements/terms-of-use' },
+  { title: 'Privacy Policy', to: 'agreements/privacy-policy' },
 ];
