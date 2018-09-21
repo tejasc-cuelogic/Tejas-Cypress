@@ -321,8 +321,7 @@ export default class General extends Component {
             </Aux>
           ))
           }
-          {/* <Button size="small" color="blue" className="link-button" onClick={e => this.
-          addMore(e, formName, 'affiliatedTransactions')}>+ Add New Affiliated Party</Button> */}
+          <Divider hidden />
           <div className="clearfix mb-20">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Button, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZone } from '../../../../../theme/form';
@@ -214,7 +214,10 @@ export default class KeyTerms extends Component {
             onremove={this.confirmRemoveDoc}
             uploadtitle="Upload a file"
           />
-          <Button color="green" primary disabled={!KEY_TERMS_FRM.meta.isValid} className="pull-right very relaxed">Save</Button>
+          <Divider hidden />
+          <div className="clearfix">
+            <Button primary floated="right" className="very relaxed" content="Save" disabled={!KEY_TERMS_FRM.meta.isValid} />
+          </div>
         </Form>
         <Confirm
           header="Confirm"

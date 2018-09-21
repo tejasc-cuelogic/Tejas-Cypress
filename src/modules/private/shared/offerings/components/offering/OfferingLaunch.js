@@ -69,6 +69,7 @@ export default class OfferingLaunch extends Component {
             fielddata={COMPANY_LAUNCH_FRM.fields.edgarLink}
             changed={(e, result) => formChange(e, result, formName)}
           />
+          <Divider hidden />
           <div className="clearfix mb-20 right-align">
             <Button secondary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Submit for Approval</Button>
           </div>
