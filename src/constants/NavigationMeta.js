@@ -188,6 +188,7 @@ export const PRIVATE_NAV = [
         title: 'Close', to: 'close', accessFor: [2], accessibleTo: ['admin', 'manager', 'support'],
       },
       { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
+      { title: 'Bonus Rewards Creation', to: 'bonus-rewards-creation', accessFor: [1] },
       { title: 'Offering Creation', to: 'offering-creation', accessFor: [2] },
     ],
   },

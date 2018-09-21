@@ -12,8 +12,12 @@ import Helper from '../../../../../../helper/utility';
 @observer
 export default class Contingency extends Component {
   componentWillMount() {
-    this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', 'launch');
-    this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', 'close');
+    if (!this.props.offeringCreationStore.initLoad.includes('LAUNCH_CONTITNGENCIES_FRM')) {
+      this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', 'launch');
+    }
+    if (!this.props.offeringCreationStore.initLoad.includes('CLOSING_CONTITNGENCIES_FRM')) {
+      this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', 'close');
+    }
   }
   setContingencyForm = () => {
     const { formName, offeringCreationStore } = this.props;

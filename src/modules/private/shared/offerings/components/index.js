@@ -11,6 +11,7 @@ import Transactions from './Transactions';
 import Updates from './Updates';
 import Comments from './Comments';
 import OfferingCreation from './OfferingCreation';
+import BonusRewardsCreation from './BonusRewardsCreation';
 
 const OfferingModule = (to) => {
   let module = null;
@@ -21,6 +22,7 @@ const OfferingModule = (to) => {
     case 'offering': module = OfferingSection; break;
     case 'leadership': module = Leadership; break;
     case 'bonus-rewards': module = BonusRewards; break;
+    case 'bonus-rewards-creation': module = BonusRewardsCreation; break;
     case 'media': module = Media; break;
     case 'close': module = Close; break;
     case 'investors': module = Investors; break;
