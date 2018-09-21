@@ -896,7 +896,7 @@ a.icon-link:hover {
 				&:not(.hide-date) {
 					margin-top: @60px;
 					.vertical-timeline-element-date {
-						left: 0;
+						left: -27px;
 						text-align: left;
 					}
 				}
@@ -907,7 +907,7 @@ a.icon-link:hover {
 					right: auto;
 					text-align: center;
 					@media only screen and (max-width : @largestSmallMonitor){
-						left: 0;
+						left: -27px;
 						text-align: left;
 					}
 				}
@@ -946,6 +946,19 @@ a.icon-link:hover {
 				@media only screen and (max-width:@largestMobileScreen){
 					margin-top: 0;
 					flex-direction: row;
+				}
+			}
+			.ui.list .item {
+				border: 1px solid @neutral-darkwhite;
+				>.image+.content {
+					@media only screen and (max-width:@largestMobileScreen) {
+						padding-left: 3px;
+					}
+					>.description {
+						@media only screen and (max-width:@largestMobileScreen) {
+							padding: 0 !important;
+						}
+					}
 				}
 			}
 			p {

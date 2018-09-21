@@ -50,22 +50,18 @@ class MeetTeamModal extends Component {
                       <p>
                         {dataItem.description}
                       </p>
-                      <p>
-                        {dataItem.postImage && <Image src={dataItem.postImage} />}
-                      </p>
-                      <p>
-                        {dataItem.externalArticleLink &&
-                          <List as="a" href={`${dataItem.externalArticleLink}`} target="blank" verticalAlign="middle" >
-                            <List.Item>
-                              <Image size="mini" src={dataItem.extArticalImage} />
-                              <List.Content>
-                                <List.Header>{dataItem.extArticalTitle}</List.Header>
-                                <List.Description>{dataItem.externalArticleLink}</List.Description>
-                              </List.Content>
-                            </List.Item>
-                          </List>
-                        }
-                      </p>
+                      {dataItem.postImage && <Image src={dataItem.postImage} className="mb-20 mt-20" />}
+                      {dataItem.externalArticleLink &&
+                        <List as="a" href={`${dataItem.externalArticleLink}`} target="blank" verticalAlign="middle">
+                          <List.Item>
+                            <Image size="tiny" src={dataItem.extArticalImage} />
+                            <List.Content>
+                              <List.Header>{dataItem.extArticalTitle}</List.Header>
+                              <List.Description>{dataItem.externalArticleLink}</List.Description>
+                            </List.Content>
+                          </List.Item>
+                        </List>
+                      }
                     </Item.Group>
                   </VerticalTimelineElement>
                 ))

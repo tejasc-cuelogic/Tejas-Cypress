@@ -1,6 +1,7 @@
 import { observable, computed } from 'mobx';
 import teammember from '../../../../assets/images/owner-2.jpg';
 import img from '../../../../assets/images/img.jpg';
+import timeline from '../../../../assets/images/timeline.jpg';
 
 export class UpdatesStore {
     generalData = {
@@ -19,7 +20,7 @@ export class UpdatesStore {
         date: '2018-03-19T12:59-0500',
         postImage: img,
         externalArticleLink: 'https://www.articlesource.com/',
-        extArticalImage: teammember,
+        extArticalImage: timeline,
         extArticalTitle: 'External Article Title',
       },
       {
@@ -35,7 +36,7 @@ export class UpdatesStore {
         date: '2018-01-19T12:59-0500',
         postImage: img,
         externalArticleLink: 'https://www.articlesource.com/',
-        extArticalImage: teammember,
+        extArticalImage: timeline,
         extArticalTitle: 'External Article Title',
       },
       {
