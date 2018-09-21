@@ -15,9 +15,7 @@ const FormData = ({
     <Checkbox
       label={
         <label>
-          <Header as="h4">
-            {form.fields[checkboxField].label}
-          </Header>
+          <Header as="h4">{form.fields[checkboxField].label}</Header>
         </label>
       }
       value={form.fields[descriptionField].value}
@@ -25,7 +23,7 @@ const FormData = ({
       onChange={(e, result) => formChange(e, result, formName)}
     />
     <div className="checkbox-description">
-      {form.fields[descriptionField].label}
+      <p>{form.fields[descriptionField].label}</p>
       <FormTextarea
         fielddata={form.fields[descriptionField]}
         name={descriptionField}
@@ -37,7 +35,7 @@ const FormData = ({
   </div>
 );
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class RiskFactors extends Component {
   componentWillMount() {
@@ -46,40 +44,43 @@ export default class RiskFactors extends Component {
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
     const formName = 'RISK_FACTORS_FRM';
+    const { isIssuer } = this.props.userStore;
     return (
-      <Form>
-        {
-          Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
-          .map(field => (
-            <FormData
-              formName={formName}
-              form={RISK_FACTORS_FRM}
-              formChange={formChange}
-              checkboxField={RISK_FACTORS_FRM.fields[field].refSelector}
-              descriptionField={field}
-            />
-          ))
-        }
-        <div className="clearfix mb-20">
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Submitted by ISSUER_NAME on 2/3/2018
-          </Button>
-          <Button.Group floated="right">
-            <Button inverted color="red" content="Decline" disabled={!RISK_FACTORS_FRM.meta.isValid} />
-            <Button color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid} >Approve</Button>
-          </Button.Group>
-        </div>
-        <div className="clearfix">
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Approved by MANAGER_NAME on 2/3/2018
-          </Button>
-          <Button.Group floated="right">
-            <Button primary type="button" className="relaxed pull-right" disabled={!RISK_FACTORS_FRM.meta.isValid} >Save</Button>
-          </Button.Group>
-        </div>
-      </Form>
+      <div className={isIssuer ? 'ui card fluid form-card' : ''}>
+        <Form>
+          {
+            Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
+            .map(field => (
+              <FormData
+                formName={formName}
+                form={RISK_FACTORS_FRM}
+                formChange={formChange}
+                checkboxField={RISK_FACTORS_FRM.fields[field].refSelector}
+                descriptionField={field}
+              />
+            ))
+          }
+          <div className="clearfix mb-20">
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Submitted by ISSUER_NAME on 2/3/2018
+            </Button>
+            <Button.Group floated="right">
+              <Button inverted color="red" content="Decline" disabled={!RISK_FACTORS_FRM.meta.isValid} />
+              <Button color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid} >Approve</Button>
+            </Button.Group>
+          </div>
+          <div className="clearfix">
+            <Button as="span" className="time-stamp">
+              <Icon className="ns-check-circle" color="green" />
+              Approved by MANAGER_NAME on 2/3/2018
+            </Button>
+            <Button.Group floated="right">
+              <Button primary type="button" className="relaxed pull-right" disabled={!RISK_FACTORS_FRM.meta.isValid} >Save</Button>
+            </Button.Group>
+          </div>
+        </Form>
+      </div>
     );
   }
 }

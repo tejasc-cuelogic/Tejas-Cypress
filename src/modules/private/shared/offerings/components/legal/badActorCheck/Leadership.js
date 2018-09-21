@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
@@ -22,7 +21,7 @@ export default class Leadership extends Component {
     });
     const { match } = this.props;
     return (
-      <Aux>
+      <div>
         <SecondaryMenu className="tertiary" match={match} navItems={navItems} />
         <Switch>
           <Route
@@ -37,7 +36,7 @@ export default class Leadership extends Component {
             ))
           }
         </Switch>
-      </Aux>
+      </div>
     );
   }
 }

@@ -40,7 +40,7 @@ export default class AfIssuer extends Component {
         <Form>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
-              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete Selected Issuer</Button>
+              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}>Delete Selected Issuer</Button>
               <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
             </Button.Group>
           </div>
@@ -64,9 +64,7 @@ export default class AfIssuer extends Component {
             ))
           }
           <Divider section />
-          <Header as="h4" textAlign="left">
-            Regulatory Bad Actor Check
-          </Header>
+          <Header as="h4">Regulatory Bad Actor Check</Header>
           {
             ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
               <FormTextarea
@@ -79,9 +77,7 @@ export default class AfIssuer extends Component {
             ))
           }
           <Divider section />
-          <Header as="h4" textAlign="left">
-            Additional Disclosure Check
-          </Header>
+          <Header as="h4">Additional Disclosure Check</Header>
           {
             ['ofac', 'civilLawsuit', 'onlineReputation'].map(field => (
               <FormTextarea
