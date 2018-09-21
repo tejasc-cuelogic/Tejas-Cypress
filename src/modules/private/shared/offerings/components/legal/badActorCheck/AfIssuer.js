@@ -38,10 +38,12 @@ export default class AfIssuer extends Component {
     return (
       <Aux>
         <Form>
-          <Button.Group floated="right">
-            <Button size="small" color="red" className="link-button mt-20" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete Selected Issuer</Button>
-            <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
-          </Button.Group>
+          <div className="clearfix mt-10 mb-10">
+            <Button.Group floated="right">
+              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete Selected Issuer</Button>
+              <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
+            </Button.Group>
+          </div>
           <FormInput
             name="legalName"
             fielddata={AFFILIATED_ISSUER_FRM.fields.data[index].legalName}
@@ -91,22 +93,26 @@ export default class AfIssuer extends Component {
               />
             ))
           }
-          <Button secondary content="Submit for Approval" floated="right" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
-          <Button.Group floated="right">
+          <div className="clearfix mb-20 right-align">
+            <Button secondary content="Submit for Approval" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+          </div>
+          <div className="clearfix mb-20">
             {roles && (roles.includes('admin') || roles.includes('support')) &&
               <Button color="gray" content="Awaiting Manager Approval" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
             }
-            {roles && (roles.includes('admin') || roles.includes('manager')) &&
-            <Aux>
-              <Button inverted color="red" content="Decline" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
-              <Button content="Generate Report" secondary disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
-              <Button content="Approve" primary color="green" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
-            </Aux>
-            }
-          </Button.Group>
-          <div className="clearfix mb-20">
             <Button.Group floated="right">
-              <Button color="green" content="Generate Report" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+              {roles && (roles.includes('admin') || roles.includes('manager')) &&
+              <Aux>
+                <Button inverted content="Send Back" color="red" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+                <Button secondary content="Generate Report" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+                <Button primary content="Approve" color="green" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
+              </Aux>
+              }
+            </Button.Group>
+          </div>
+          <div className="clearfix">
+            <Button.Group floated="right">
+              <Button secondary content="Generate Report" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
               <Button as="span" className="time-stamp">
                 <Icon className="ns-check-circle" color="green" />
                 Approved by Manager on 2/3/2018

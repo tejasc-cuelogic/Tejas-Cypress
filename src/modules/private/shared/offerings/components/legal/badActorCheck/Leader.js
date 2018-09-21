@@ -38,10 +38,12 @@ export default class Leader extends Component {
     return (
       <Aux>
         <Form>
-          <Button.Group floated="right">
-            <Button size="small" color="red" className="link-button mt-20" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete selected leader</Button>
-            <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
-          </Button.Group>
+          <div className="clearfix mt-10 mb-10">
+            <Button.Group floated="right">
+              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete selected leader</Button>
+              <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
+            </Button.Group>
+          </div>
           <Header as="h4" textAlign="left">
             Control Person Diligence
           </Header>
@@ -98,7 +100,7 @@ export default class Leader extends Component {
             <Button.Group floated="right">
               {roles && (roles.includes('admin') || roles.includes('manager')) &&
               <Aux>
-                <Button inverted content="Decline" color="red" disabled={!LEADER_FRM.meta.isValid} />
+                <Button inverted content="Send Back" color="red" disabled={!LEADER_FRM.meta.isValid} />
                 <Button secondary content="Generate Report" disabled={!LEADER_FRM.meta.isValid} />
                 <Button primary content="Approve" color="green" disabled={!LEADER_FRM.meta.isValid} />
               </Aux>
