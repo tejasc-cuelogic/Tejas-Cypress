@@ -867,8 +867,8 @@ a.icon-link:hover {
 		&::before {
 			width: 2px;
 			background: @neutral-middark;
-			top: 45px;
-			height: ~"calc(100% - 45px)";
+			top: 30px;
+			height: ~"calc(100% - 30px)";
 		}
 		.vertical-timeline-element-icon {
 			width: 25px;
@@ -880,6 +880,9 @@ a.icon-link:hover {
 			@media only screen and (max-width : @largestSmallMonitor){
 				left: 21px;
 			}
+			@media only screen and (max-width:@largestMobileScreen){
+                top: 0px;
+            }
 		}
 		.vertical-timeline-element {
 			&.hide-date .vertical-timeline-element-date {
@@ -908,14 +911,32 @@ a.icon-link:hover {
 	.vertical-timeline-element-content {
 		box-shadow: none;
 		padding: 0;
+		&::before {
+			@media only screen and (max-width:@largestMobileScreen){
+				display: none;
+			}
+		}
 		.ui.items {
 			>.item {
 				border-bottom: 1px solid @neutral-darkwhite;
 				padding-bottom: @14px;
 				font-weight: @bold;
 				color: @neutral;
-				.image>img {
-					border-radius: 50%;
+				.image {
+					>img {
+						border-radius: 50%;
+						@media only screen and (max-width:@largestMobileScreen){
+							max-height: 42px !important;
+						}
+					}
+					&+.content {
+						margin-left: 10px;
+						padding-top: 0;	
+					}
+				}
+				@media only screen and (max-width:@largestMobileScreen){
+					margin-top: 0;
+					flex-direction: row;
 				}
 			}
 			p {
