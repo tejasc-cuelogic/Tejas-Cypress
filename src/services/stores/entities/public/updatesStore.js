@@ -18,9 +18,9 @@ export class UpdatesStore {
         ...this.generalData,
         date: '2018-03-19T12:59-0500',
         postImage: img,
-        externalArticleLink: 'https://www.google.co.in/',
+        externalArticleLink: 'https://www.articlesource.com/',
         extArticalImage: teammember,
-        extArticalTitle: 'Search Anything Here',
+        extArticalTitle: 'External Article Title',
       },
       {
         ...this.generalData,
@@ -34,9 +34,9 @@ export class UpdatesStore {
         ...this.generalData,
         date: '2018-01-19T12:59-0500',
         postImage: img,
-        externalArticleLink: 'https://www.google.co.in/',
+        externalArticleLink: 'https://www.articlesource.com/',
         extArticalImage: teammember,
-        extArticalTitle: 'Search Anything Here',
+        extArticalTitle: 'External Article Title',
       },
       {
         ...this.generalData,

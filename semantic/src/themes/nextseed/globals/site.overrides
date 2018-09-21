@@ -867,8 +867,12 @@ a.icon-link:hover {
 		&::before {
 			width: 2px;
 			background: @neutral-middark;
-			top: 30px;
-			height: ~"calc(100% - 30px)";
+			top: 45px;
+			height: ~"calc(100% - 45px)";
+			@media only screen and (max-width:@largestMobileScreen){
+                top: 30px;
+				height: ~"calc(100% - 30px)";
+            }
 		}
 		.vertical-timeline-element-icon {
 			width: 25px;
@@ -893,16 +897,18 @@ a.icon-link:hover {
 					margin-top: @60px;
 					.vertical-timeline-element-date {
 						left: 0;
-						top: -20%;
+						text-align: left;
 					}
 				}
 			}
 			&:nth-child(even):not(.vertical-timeline-element--left) {
 				.vertical-timeline-element-content .vertical-timeline-element-date {
-					right: 74%;
+					left: -155px;
+					right: auto;
 					text-align: center;
 					@media only screen and (max-width : @largestSmallMonitor){
-						right: auto;
+						left: 0;
+						text-align: left;
 					}
 				}
 			}
@@ -911,6 +917,9 @@ a.icon-link:hover {
 	.vertical-timeline-element-content {
 		box-shadow: none;
 		padding: 0;
+		@media only screen and (max-width:@largestMobileScreen){
+			margin-left: 40px;
+		}
 		&::before {
 			@media only screen and (max-width:@largestMobileScreen){
 				display: none;
@@ -951,16 +960,18 @@ a.icon-link:hover {
 		}
 		.vertical-timeline-element-date {
 			position: absolute;
-			top: -18%;
+			top: -60px;
 			background: @white;
 			z-index: 9999;
 			opacity: 1;
-			left: 75%;
+			left: auto;
+			right: -155px;
 			text-align: center;
 			font-size: @13px;
 			color: @neutral-middark;
 			text-transform: uppercase;
 			padding: @5px 0;
+			width: 130px;
 		}
 	}
 }

@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('updatesStore')
 @observer
 class MeetTeamModal extends Component {
@@ -30,8 +31,10 @@ class MeetTeamModal extends Component {
                   <VerticalTimelineElement
                     className={`vertical-timeline-element--work ${(index - 1) > 0 && allData[index - 1].date !== dataItem.date ? '' : 'hide-date'}`}
                     iconStyle={
-                      index === 0 ?
+                      (index === 0) && isMobile ?
                       {
+                        background: '#20C86D', height: 25, width: 25, marginLeft: -14,
+                      } : index === 0 ? {
                         background: '#20C86D', height: 42, width: 42, marginLeft: -22,
                       } : {}}
                     date={(index - 1) > 0 &&
