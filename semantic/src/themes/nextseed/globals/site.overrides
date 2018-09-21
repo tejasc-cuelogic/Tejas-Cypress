@@ -339,7 +339,7 @@ footer{
 			position: static;
 			overflow: hidden;
 			width: 100%;
-			max-height: 800px;
+			max-height: 1000px;
 			height: auto;
 			transition: all 500ms ease-in-out;
 			&.collapse {
@@ -1877,9 +1877,6 @@ p.check-extra-info{
 		&:hover {
 			text-decoration: none;	
 		}
-		.ui.header {
-			color: @white;
-		}
 	}
 	.full-logo {
 		width: 0;
@@ -1890,7 +1887,7 @@ p.check-extra-info{
 		z-index: 0;
 		// background: #31333d;
 		overflow: hidden;
-		transition: width 0.5s ease;
+		transition: width 0.5s ease-in-out;
 		.ui.image {
 			height: 100%;
 			margin-left: 21px;

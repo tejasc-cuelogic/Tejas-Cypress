@@ -33,8 +33,8 @@ export default class NavBarMobile extends Component {
               to="/"
             />
           </div>
-          <Link to="/" as="h5">
-            <Header as="h5">homepage</Header>
+          <Link to="/">
+            <Header as="h5" inverted>homepage</Header>
           </Link>
           <Link to="/auth/login" className="sign-in">
             Sign In
