@@ -90,66 +90,62 @@ class Overview extends Component {
                 </Breadcrumb>
                 <Header as="h4">Revenue Sharing Notes</Header>
                 <Grid columns={3} doubling divided className="mt-30">
-                  <Grid.Row>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>1.6x</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>4%</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>48 months</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Payments
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="The Issuer will make monthly payments based on the relevant
-                            revenue sharing percentage."
-                            position="top center"
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>Monthly</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>0%</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Type of Raise&nbsp;
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content={(
-                              <Aux>
-                                This campaign is raising capital under Regulation CF and
-                                Regulation D. For more information on what this means, check out
-                                our <a href="/">Education Center.</a>
-                              </Aux>
-                            )}
-                            position="top center"
-                            hoverable
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>Reg CF </Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid.Row>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>1.6x</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>4%</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>48 months</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Payments{' '}
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content="The Issuer will make monthly payments based on the relevant
+                          revenue sharing percentage."
+                          position="top center"
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>Monthly</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>0%</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Type of Raise&nbsp;
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={(
+                            <Aux>
+                              This campaign is raising capital under Regulation CF and
+                              Regulation D. For more information on what this means, check out
+                              our <a href="/">Education Center.</a>
+                            </Aux>
+                          )}
+                          position="top center"
+                          hoverable
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>Reg CF </Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
                 </Grid>
               </Segment>
             </Grid.Column>

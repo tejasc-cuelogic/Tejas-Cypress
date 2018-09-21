@@ -143,7 +143,7 @@ class InvestmentDetails extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Key Investment Terms</Header>
-                <Grid doubling className="mt-30">
+                <Grid className="mt-30">
                   <Grid.Row columns={2} divided>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
@@ -158,8 +158,8 @@ class InvestmentDetails extends Component {
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row columns={3} divided doubling>
-                    <Grid.Column>
+                  <Grid.Row columns={isMobile ? 2 : 3} divided>
+                    <Grid.Column className={isMobile && 'mb-30'}>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Min Target&nbsp;
                           <Popup
@@ -173,7 +173,7 @@ class InvestmentDetails extends Component {
                         <Statistic.Value>$200,000</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
-                    <Grid.Column>
+                    <Grid.Column className={isMobile && 'mb-30'}>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Max Target&nbsp;
                           <Popup
@@ -187,7 +187,7 @@ class InvestmentDetails extends Component {
                         <Statistic.Value>$1,000,000</Statistic.Value>
                       </Statistic>
                     </Grid.Column>
-                    <Grid.Column>
+                    <Grid.Column className={isMobile && 'mb-30'}>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Payments&nbsp;
                           <Popup
@@ -211,72 +211,68 @@ class InvestmentDetails extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Revenue Sharing Notes</Header>
-                <Grid columns={3} doubling className="mt-30">
-                  <Grid.Row divided>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Multiple
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="Lorem Ipsum"
-                            position="top center"
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>1.6x</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Revenue Sharing
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="Lorem Ipsum"
-                            position="top center"
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>4%</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Maturity
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="Lorem Ipsum"
-                            position="top center"
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>48 months</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row divided>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Payments&nbsp;
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="The Issuer will make monthly payments based on the relevant
-                            revenue sharing percentage."
-                            position="top center"
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>Monthly</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Ownership
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="Lorem Ipsum"
-                            position="top center"
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>0%</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid.Row>
+                <Grid columns={3} doubling divided className="mt-30">
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Multiple
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content="Lorem Ipsum"
+                          position="top center"
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>1.6x</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Revenue Sharing
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content="Lorem Ipsum"
+                          position="top center"
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>4%</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Maturity
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content="Lorem Ipsum"
+                          position="top center"
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>48 months</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Payments&nbsp;
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content="The Issuer will make monthly payments based on the relevant
+                          revenue sharing percentage."
+                          position="top center"
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>Monthly</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Ownership
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content="Lorem Ipsum"
+                          position="top center"
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>0%</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
                 </Grid>
               </Segment> */}
             </Grid.Column>
