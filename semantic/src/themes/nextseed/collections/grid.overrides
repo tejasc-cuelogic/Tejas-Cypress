@@ -122,6 +122,13 @@
                 -webkit-transform: translate(0,-50%);
                 -ms-transform: translate(0,-50%);
                 transform: translate(0,-50%);
+                @media only screen and (max-width : @largestMobileScreen){
+                    top: -1px;
+                    left: 50%;
+                    border-width: 12px 10px 0px 10px;
+                    border-color: @white transparent;
+                    transform: translate(-50%,0);
+                }
             }
             .ui.statistic {
                 >.label{
@@ -132,10 +139,16 @@
                 }
             }
         }
-        .ui.statistic >.label{
-            padding-bottom: 10px;
-            text-transform: uppercase;
+        .ui.statistic{ 
+            width: 100%;
+            >.label{
+                padding-bottom: 10px;
+                text-transform: uppercase;
+            }
         }
+    }
+    &.summary-modal.stackable >.row>.column {
+        padding: @14px 0 !important;
     }
 }
 .featured-statistic {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Modal, Grid, List, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('updatesStore')
 @observer
 class SummaryModal extends Component {
@@ -41,11 +42,11 @@ class SummaryModal extends Component {
             raised by the offering will determine the Investment Multiple and the monthly
             Revenue Sharing Percentage.
             </p>
-            <Grid stackable doubling columns={2} verticalAlign="top">
+            <Grid stackable doubling columns={2} verticalAlign="top" className="summary-modal">
               <Grid.Row>
                 <Grid.Column>
                   <p><b>Total Raise Amount: $250,000–$400,000</b></p>
-                  <List as="ul" bulleted className="mb-30">
+                  <List as="ul" bulleted className={!isMobile && 'mb-30'}>
                     <List.Item as="li">Investment Multiple: 1.70x</List.Item>
                     <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
                     <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 4.0%</List.Item>
@@ -53,7 +54,7 @@ class SummaryModal extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <p><b>Total Raise Amount: $400,100–$600,000</b></p>
-                  <List as="ul" bulleted className="mb-30">
+                  <List as="ul" bulleted className={!isMobile && 'mb-30'}>
                     <List.Item as="li">Investment Multiple: 1.70x</List.Item>
                     <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
                     <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 7.0%</List.Item>
@@ -63,7 +64,7 @@ class SummaryModal extends Component {
               <Grid.Row>
                 <Grid.Column>
                   <p><b>Total Raise Amount: $600,100–$800,000</b></p>
-                  <List as="ul" bulleted className="mb-30">
+                  <List as="ul" bulleted className={!isMobile && 'mb-30'}>
                     <List.Item as="li">Investment Multiple: 1.80x</List.Item>
                     <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
                     <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 10.25%</List.Item>
@@ -79,7 +80,7 @@ class SummaryModal extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <p>
+            <p className={isMobile && 'mt-20'}>
             Each investor will receive its proportionate share of the monthly payments made
             to the investors as a group.
             </p>
@@ -119,7 +120,7 @@ class SummaryModal extends Component {
             </Accordion.Title>
             <Accordion.Content active={activeIndex === 1} />
           </Accordion>
-          <p className="note">
+          <p className={`${isMobile && 'mt-20'} note`}>
           * The calculations above are mathematical illustration only and may not reflect
           actual performance. They do not take into account NextSeed fees of 1% on each
           payment made to investors... <Link to="/">Read More</Link>

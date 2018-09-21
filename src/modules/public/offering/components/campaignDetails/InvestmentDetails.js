@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-// import Aux from 'react-aux';
+import Aux from 'react-aux';
 import { inject } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Grid, Header, Segment, Image, Breadcrumb, Statistic, Popup, Icon } from 'semantic-ui-react';
+import { Grid, Header, Segment, Image, Breadcrumb, Statistic, Popup, Icon, Responsive } from 'semantic-ui-react';
 // import businessModel from '../../../../../assets/images/investment-1.jpg';
 import businessModel from '../../../../../assets/images/investment-2.jpg';
 // import TermNote from './investmentDetails/TermNote';
@@ -11,6 +11,7 @@ import KeyTermsModal from './investmentDetails/KeyTermsModal';
 // import SummaryModal from './investmentDetails/SummaryModal';
 import PaymentCalculatorModal from './investmentDetails/PaymentCalculatorModal';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 class InvestmentDetails extends Component {
   render() {
@@ -23,8 +24,15 @@ class InvestmentDetails extends Component {
       //   }
       // </Aux>
       <div className="campaign-content-wrapper">
-        <Grid>
+        <Grid stackable doubling>
           <Grid.Row>
+            <Responsive maxWidth={767} as={Aux}>
+              <Grid.Column widescreen={9} computer={8}>
+                <Segment padded>
+                  <Image src={businessModel} fluid />
+                </Segment>
+              </Grid.Column>
+            </Responsive>
             <Grid.Column widescreen={7} computer={8}>
               <Segment padded>
                 <Header as="h3">Use of Proceeds</Header>
@@ -41,11 +49,13 @@ class InvestmentDetails extends Component {
                 </p>
               </Segment>
             </Grid.Column>
-            <Grid.Column widescreen={9} computer={8}>
-              <Segment padded>
-                <Image src={businessModel} fluid />
-              </Segment>
-            </Grid.Column>
+            <Responsive minWidth={768} as={Aux}>
+              <Grid.Column widescreen={9} computer={8}>
+                <Segment padded>
+                  <Image src={businessModel} fluid />
+                </Segment>
+              </Grid.Column>
+            </Responsive>
           </Grid.Row>
           <Grid.Row stackable doubling>
             <Grid.Column widescreen={10} computer={10}>
@@ -57,22 +67,22 @@ class InvestmentDetails extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Total Payment Calculator</Header>
-                <Grid columns={4} divided doubling className="investment-grid mt-30" padded="horizontally">
+                <Grid columns={4} divided doubling stackable className="investment-grid mt-30" padded="horizontally">
                   <Grid.Column>
                     <Statistic className="basic">
-                      <Statistic.Label>Interest Rate*</Statistic.Label>
+                      <Statistic.Label className={isMobile && 'center-align'}>Interest Rate*</Statistic.Label>
                       <Statistic.Value className="center-align">16.00%</Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
                     <Statistic className="basic">
-                      <Statistic.Label>Term</Statistic.Label>
+                      <Statistic.Label className={isMobile && 'center-align'}>Term</Statistic.Label>
                       <Statistic.Value className="center-align">60 months</Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
                     <Statistic className="basic">
-                      <Statistic.Label>Principal</Statistic.Label>
+                      <Statistic.Label className={isMobile && 'center-align'}>Principal</Statistic.Label>
                       <Statistic.Value className="center-align highlight-text">
                       $100
                       </Statistic.Value>
@@ -90,7 +100,7 @@ class InvestmentDetails extends Component {
                   </Grid.Column>
                   <Grid.Column>
                     <Statistic className="basic">
-                      <Statistic.Label>Total Payment*</Statistic.Label>
+                      <Statistic.Label className={isMobile && 'center-align'}>Total Payment*</Statistic.Label>
                       <Statistic.Value className="center-align">$146</Statistic.Value>
                     </Statistic>
                   </Grid.Column>
@@ -148,7 +158,7 @@ class InvestmentDetails extends Component {
                       </Statistic>
                     </Grid.Column>
                   </Grid.Row>
-                  <Grid.Row columns={3} divided>
+                  <Grid.Row columns={3} divided doubling>
                     <Grid.Column>
                       <Statistic size="mini" className="basic">
                         <Statistic.Label>Min Target&nbsp;
