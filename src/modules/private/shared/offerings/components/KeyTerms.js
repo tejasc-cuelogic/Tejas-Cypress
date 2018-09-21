@@ -83,7 +83,7 @@ export default class KeyTerms extends Component {
               />
             </div>
             {
-              ['securityInterest', 'ownership'].map(field => (
+              ['securityInterest', 'securitiesOwnershipPercentage'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
