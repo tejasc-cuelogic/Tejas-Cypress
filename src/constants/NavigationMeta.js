@@ -334,6 +334,12 @@ export const PRIVATE_NAV = [
 
 export const PUBLIC_NAV = [
   {
+    title: 'Home',
+    to: '',
+    exact: true,
+    header: false,
+  },
+  {
     title: 'About Us',
     to: 'about',
     noNav: true,
@@ -373,6 +379,7 @@ export const PUBLIC_NAV = [
     title: 'How NextSeed Works',
     to: 'business',
     noNav: true,
+    exact: true,
     subNavigations: [
       { title: 'How it Works', to: 'how-it-works' },
       { title: 'Funding Options', to: 'funding-options' },
@@ -385,6 +392,7 @@ export const PUBLIC_NAV = [
     title: 'Why NextSeed',
     to: 'invest',
     noNav: true,
+    exact: true,
     subNavigations: [
       { title: 'Why Nextseed', to: 'why-nextseed' },
       { title: 'How it Works', to: 'how-it-works' },
@@ -397,6 +405,7 @@ export const PUBLIC_NAV = [
     title: 'How NextSeed Works',
     to: '',
     subPanel: 1,
+    exact: true,
     subNavigations: [
       { title: 'Fundraising', to: 'business' },
       { title: 'Investing', to: 'invest' },
@@ -418,6 +427,7 @@ export const FOOTER_NAV = [
   {
     title: 'About Us',
     to: 'about',
+    exact: true,
     subPanel: 1,
     subNavigations: [
       { title: 'Mission', to: 'mission' },
@@ -426,6 +436,6 @@ export const FOOTER_NAV = [
       { title: 'Press', to: 'press' },
     ],
   },
-  { title: 'Terms of Use', to: 'agreements/terms-of-use' },
-  { title: 'Privacy Policy', to: 'agreements/privacy-policy' },
+  { title: 'Terms of Use', exact: true, to: 'agreements/terms-of-use' },
+  { title: 'Privacy Policy', exact: true, to: 'agreements/privacy-policy' },
 ];

@@ -6,6 +6,7 @@ import { Divider, Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react'
 import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
+import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
 const hasFooter = ['/'];
@@ -17,13 +18,16 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 export default class NavBarMobile extends Component {
   render() {
     const {
-      onPusherClick, onToggle, visible, publicContent, location, isMobile, navStatus, currentUser,
+      onPusherClick, onToggle, visible,
+      publicContent, location, isMobile,
+      navStatus, currentUser, stepInRoute,
     } = this.props;
+    const nav = GetNavMeta(location.pathname, [], true);
+    const navTitle = nav ? nav.title : '';
+    const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <Aux>
         <div className="public-header-section">
-          {/* <Logo onClick={onToggle} dataSrc="LogoSmallWhite"
-        className="logo hamburger" size="mini" /> */}
           <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
           <div className="full-logo">
             <Logo
@@ -33,13 +37,25 @@ export default class NavBarMobile extends Component {
               to="/"
             />
           </div>
-          <Link to="/">
-            <Header as="h5" inverted>homepage</Header>
-          </Link>
-          <Link to="/auth/login" className="sign-in">
-            Sign In
-          </Link>
-          <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">Invest Now</Button>
+          <Link to="/"><Header as="h5" inverted>{navTitle}</Header></Link>
+          {!currentUser ? (
+            <Link to={`/auth/${stepInRoute.to}`} className="sign-in">
+              {stepInRoute.title}
+            </Link>
+          ) : (
+            <Link
+              to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+              className="sign-in"
+            >
+              Dashboard
+            </Link>
+          )
+          }
+          {investBtn && (
+            <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">
+              Invest Now
+            </Button>
+          )}
         </div>
         <Sidebar.Pushable>
           <Sidebar
@@ -60,6 +76,7 @@ export default class NavBarMobile extends Component {
                     location={location}
                     isMobile={isMobile}
                     navStatus={navStatus}
+                    onToggle={onToggle}
                     navItems={PUBLIC_NAV}
                   />
                 </div>
@@ -71,6 +88,7 @@ export default class NavBarMobile extends Component {
                     location={location}
                     isMobile={isMobile}
                     navStatus={navStatus}
+                    onToggle={onToggle}
                     navItems={FOOTER_NAV}
                   />
                 </div>
