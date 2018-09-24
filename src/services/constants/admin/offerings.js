@@ -1632,6 +1632,17 @@ export const ADD_NEW_TIER = {
 };
 
 export const ADD_NEW_BONUS_REWARD = {
+  isEarlyBirds: {
+    value: [],
+    values: [
+      {
+        label: 'Early Birds',
+        value: 'EARLY_BIRDS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
   name: {
     label: 'Name of new bonus reward',
     value: '',
@@ -1640,11 +1651,11 @@ export const ADD_NEW_BONUS_REWARD = {
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   description: {
-    label: 'Name of new bonus reward',
+    label: 'Description',
     value: '',
     error: undefined,
     rule: 'string|required',
-    placeHolder: 'e.g. Invitation to the Launch Party',
+    placeHolder: 'Lorem ipsum dolor sit amet enim. Etiam ',
   },
   expirationDate: {
     label: 'Expiration Date',
