@@ -15,6 +15,8 @@ const nsvideos = {
 };
 const isTablet = document.documentElement.clientWidth >= 768
 && document.documentElement.clientWidth < 992;
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 @inject('campaignStore', 'updatesStore')
 @observer
 class Overview extends Component {
@@ -24,7 +26,7 @@ class Overview extends Component {
       <div className="campaign-content-wrapper">
         <Grid stackable>
           <Grid.Row>
-            <Grid.Column widescreen={7} computer={8} tablet={16}>
+            <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mb-30'}>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section link><b>About the Company</b></Breadcrumb.Section>
@@ -70,7 +72,7 @@ class Overview extends Component {
               </Segment>
             </Grid.Column>
             <Responsive minWidth={768} as={Aux}>
-              <Grid.Column widescreen={9} computer={8} tablet={16} className={isTablet && 'mt-30'}>
+              <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTablet && 'mt-30'}>
                 <Segment padded>
                   <Embed
                     id={nsvideos.embed}
@@ -83,7 +85,7 @@ class Overview extends Component {
             </Responsive>
           </Grid.Row>
         </Grid>
-        <Grid columns={isTablet ? 1 : 3} stackable>
+        <Grid columns={isTablet ? 1 : isTabletLand ? 2 : 3} stackable>
           <Grid.Column>
             <Segment padded>
               <Breadcrumb>
