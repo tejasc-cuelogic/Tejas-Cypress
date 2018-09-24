@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
@@ -19,7 +18,7 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
   </Header>
 );
 
-@inject('offeringCreationStore', 'uiStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Leader extends Component {
@@ -47,6 +46,7 @@ export default class Leader extends Component {
     this.props.history.push(`${this.props.refLink}/leader/1`);
   }
   render() {
+    const { isIssuer } = this.props.userStore;
     const leaderNumber = this.props.index;
     const index = leaderNumber || 0;
     const {
@@ -59,7 +59,7 @@ export default class Leader extends Component {
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
     return (
-      <Aux>
+      <div className={isIssuer ? 'ui card fluid form-card' : ''}>
         <Form>
           <Header as="h4">
             {`Leader ${index + 1}`}
@@ -206,6 +206,7 @@ export default class Leader extends Component {
               />
             ))
           }
+          <Divider hidden />
           <div className="clearfix mb-20">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />
@@ -237,7 +238,7 @@ export default class Leader extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </div>
     );
   }
 }

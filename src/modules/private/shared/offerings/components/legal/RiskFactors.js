@@ -19,7 +19,7 @@ const FormData = ({
         </label>
       }
       value={form.fields[descriptionField].value}
-      checked={form.fields[descriptionField].refSelectorValue}
+      checked={form.fields[descriptionField].refSelector.value}
       onChange={(e, result) => formChange(e, result, formName)}
     />
     <div className="checkbox-description">
