@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
-import { AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
+import { map } from 'lodash';
+import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore } from '../../../index';
@@ -27,10 +28,12 @@ export class OfferingCreationStore {
   @observable AFFILIATED_ISSUER_FRM = Validator.prepareFormObject(AFFILIATED_ISSUER);
   @observable LEADER_FRM = Validator.prepareFormObject(LEADER);
   @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
+  @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
+  @observable initLoad = [];
 
   @observable requestState = {
     search: {},
@@ -268,7 +271,78 @@ export class OfferingCreationStore {
     } else {
       this.setDataForFields(this[form].fields, data, form);
     }
+    this.initLoad.push(form);
     return false;
+  }
+
+  @action
+  evaluateFormData = (fields) => {
+    let inputData = {};
+    map(fields, (ele, key) => {
+      try {
+        const records = toJS(fields[key]);
+        if (fields[key] && Array.isArray(records)) {
+          if (fields[key] && fields[key].length > 0) {
+            inputData = { ...inputData, [key]: [] };
+            let arrObj = [];
+            records.forEach((field) => {
+              let arrayFieldsKey = {};
+              let arrayFields = [];
+              map(field, (eleV, keyRef1) => {
+                if (field[keyRef1].objType !== 'array') {
+                  arrayFields = {};
+                }
+                if (eleV.objRefOutput) {
+                  if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
+                    const fileObj =
+                      { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
+                    arrayFields = { ...arrayFields, [keyRef1]: fileObj };
+                  } else {
+                    arrayFields =
+                      { ...arrayFields, [keyRef1]: field[keyRef1].value };
+                  }
+                } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
+                  const fileObj =
+                      { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
+                  arrayFields = { ...arrayFields, [keyRef1]: fileObj };
+                } else if (field[keyRef1].objType === 'array') {
+                  arrayFields.push(field[keyRef1].value);
+                } else {
+                  arrayFields = { [keyRef1]: field[keyRef1].value };
+                }
+                if (field[keyRef1].objType === 'array') {
+                  arrayFieldsKey = { ...arrayFieldsKey, [keyRef1]: arrayFields };
+                } else {
+                  arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
+                  // if (eleV.objRefOutput) {
+                  //   arrayFieldsKey = has(arrayFieldsKey, [eleV.objRefOutput]) ?
+                  //     { ...arrayFieldsKey, [eleV.objRefOutput]: arrayFieldsKey } :
+                  //     { [eleV.objRefOutput]: arrayFieldsKey };
+                  // }
+                }
+              });
+              arrObj = [...arrObj, arrayFieldsKey];
+              inputData = { ...inputData, [key]: { ...inputData[key], ...arrObj } };
+            });
+          }
+        } else if (fields[key].objRefOutput) {
+          if (fields[key].objType && fields[key].objType === 'FileObjectType') {
+            const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
+            inputData = { ...inputData, [fields[key].objRefOutput]: { [key]: fileObj } };
+          } else {
+            inputData = { ...inputData, [fields[key].objRefOutput]: { [key]: fields[key].value } };
+          }
+        } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
+          const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
+          inputData = { ...inputData, [key]: fileObj };
+        } else {
+          inputData = { ...inputData, [key]: fields[key].value };
+        }
+      } catch (e) {
+        // do nothing
+      }
+    });
+    return inputData;
   }
 }
 

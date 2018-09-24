@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Leader from './Leader';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Leadership extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
+    }
+    if (!this.props.offeringCreationStore.initLoad.includes('LEADER_FRM')) {
+      this.props.offeringCreationStore.setFormData('LEADER_FRM', 'leadership');
     }
   }
   render() {
@@ -21,8 +23,9 @@ export default class Leadership extends Component {
       return navItems;
     });
     const { match } = this.props;
+    const { isIssuer } = this.props.userStore;
     return (
-      <Aux>
+      <div className={isIssuer ? 'ui card fluid form-card' : ''}>
         <SecondaryMenu className="tertiary" match={match} navItems={navItems} />
         <Switch>
           <Route
@@ -37,7 +40,7 @@ export default class Leadership extends Component {
             ))
           }
         </Switch>
-      </Aux>
+      </div>
     );
   }
 }

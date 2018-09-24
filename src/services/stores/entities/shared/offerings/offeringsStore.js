@@ -92,8 +92,6 @@ export class OfferingsStore {
       variables: { id },
       onFetch: (res) => {
         this.offerLoading = false;
-        offeringCreationStore.setFormData('LEADER_FRM', 'leadership');
-        offeringCreationStore.setFormData('LEADERSHIP_FRM', 'leadership');
       },
     });
   }

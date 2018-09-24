@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
@@ -19,7 +18,7 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
   </Header>
 );
 
-@inject('offeringCreationStore', 'uiStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Leader extends Component {
@@ -47,6 +46,7 @@ export default class Leader extends Component {
     this.props.history.push(`${this.props.refLink}/leader/1`);
   }
   render() {
+    const { isIssuer } = this.props.userStore;
     const leaderNumber = this.props.index;
     const index = leaderNumber || 0;
     const {
@@ -59,12 +59,12 @@ export default class Leader extends Component {
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
     return (
-      <Aux>
+      <div className={isIssuer ? 'ui card fluid form-card' : ''}>
         <Form>
           <Header as="h4">
             {`Leader ${index + 1}`}
-            <Button.Group className="pull-right">
-              <Button secondary className="relaxed" disabled={!LEADERSHIP_FRM.meta.isValid} >Save</Button>
+            <Button.Group size="mini" floated="right">
+              <Button secondary className="relaxed" content="Save" disabled={!LEADERSHIP_FRM.meta.isValid} />
               <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, 'LEADERSHIP_FRM')} />
             </Button.Group>
           </Header>
@@ -75,9 +75,7 @@ export default class Leader extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          <Header as="h4">
-            Personal Info
-          </Header>
+          <Header as="h4">Personal Info</Header>
           <Form.Group widths={2}>
             {
               ['firstName', 'lastName', 'email'].map(field => (
@@ -135,9 +133,7 @@ export default class Leader extends Component {
               dateOfBirth
             />
           </Form.Group>
-          <Header as="h4">
-            Address
-          </Header>
+          <Header as="h4">Address</Header>
           <AutoComplete
             name="street"
             fielddata={LEADERSHIP_FRM.fields.data[index].street}
@@ -182,9 +178,7 @@ export default class Leader extends Component {
             ))
           }
           <Divider section />
-          <Header as="h4">
-            Uploads
-          </Header>
+          <Header as="h4">Uploads</Header>
           <Form.Group widths="equal">
             {
               ['headshot', 'heroImage', 'license'].map(field => (
@@ -201,9 +195,7 @@ export default class Leader extends Component {
             }
           </Form.Group>
           <Divider section />
-          <Header as="h4">
-            Other Business Information
-          </Header>
+          <Header as="h4">Other Business Information</Header>
           {
             ['otherEntities', 'promoters'].map(field => (
               <FormTextarea
@@ -214,6 +206,7 @@ export default class Leader extends Component {
               />
             ))
           }
+          <Divider hidden />
           <div className="clearfix mb-20">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />
@@ -245,7 +238,7 @@ export default class Leader extends Component {
           size="mini"
           className="deletion"
         />
-      </Aux>
+      </div>
     );
   }
 }

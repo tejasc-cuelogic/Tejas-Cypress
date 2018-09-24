@@ -122,6 +122,7 @@ export default class OfferingOverview extends Component {
             fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
             changed={(e, result) => formChange(e, result, formName)}
           />
+          <Divider hidden />
           <div className="clearfix mb-20">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />

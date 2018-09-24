@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Button, Header, Icon } from 'semantic-ui-react';
 import { FormTextarea, MaskedInput } from '../../../../../../theme/form';
@@ -36,7 +37,10 @@ export default class OfferingCompany extends Component {
             containerclassname="secondary"
           />
           <Divider section />
-          <Header as="h4">History</Header>
+          <Header as="h4">
+            History
+            <Link to={this.props.match.url} className="link" onClick={e => this.addNewMileStone(e)}><small>+ Add another milestone</small></Link>
+          </Header>
           {
             COMPANY_HISTORY_FRM.fields.data.map((history, index) => (
               <Aux>
@@ -58,7 +62,6 @@ export default class OfferingCompany extends Component {
               </Aux>
             ))
           }
-          <Button size="small" color="blue" className="link-button" onClick={e => this.addNewMileStone(e)}>+ Add another milestone</Button>
           {
             ['businessModel', 'locationAnalysis'].map(field => (
               <Aux>
@@ -72,6 +75,7 @@ export default class OfferingCompany extends Component {
               </Aux>
             ))
           }
+          <Divider hidden />
           <div className="clearfix mb-20">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />

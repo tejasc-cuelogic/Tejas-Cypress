@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Form, Button, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZone } from '../../../../../theme/form';
@@ -24,6 +24,11 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', field);
     this.props.uiStore.setConfirmBox('');
   }
+  handleFormSubmit = () => {
+    const { KEY_TERMS_FRM, evaluateFormData } = this.props.offeringCreationStore;
+    const formData = evaluateFormData(KEY_TERMS_FRM.fields);
+    console.log(formData);
+  }
   render() {
     const { KEY_TERMS_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
@@ -31,7 +36,7 @@ export default class KeyTerms extends Component {
     return (
       <div className="inner-content-spacer">
         <Header as="h4">Basic</Header>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           <Form.Group widths="3">
             {
             ['legalBusinessName', 'shorthandBusinessName'].map(field => (
@@ -83,7 +88,7 @@ export default class KeyTerms extends Component {
               />
             </div>
             {
-              ['securityInterest', 'ownership'].map(field => (
+              ['securityInterest', 'securitiesOwnershipPercentage'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -214,7 +219,10 @@ export default class KeyTerms extends Component {
             onremove={this.confirmRemoveDoc}
             uploadtitle="Upload a file"
           />
-          <Button color="green" primary disabled={!KEY_TERMS_FRM.meta.isValid} className="pull-right very relaxed">Save</Button>
+          <Divider hidden />
+          <div className="clearfix">
+            <Button primary floated="right" className="very relaxed" content="Save" disabled={!KEY_TERMS_FRM.meta.isValid} />
+          </div>
         </Form>
         <Confirm
           header="Confirm"
