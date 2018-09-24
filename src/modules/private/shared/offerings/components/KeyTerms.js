@@ -24,6 +24,11 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', field);
     this.props.uiStore.setConfirmBox('');
   }
+  handleFormSubmit = () => {
+    const { KEY_TERMS_FRM, evaluateFormData } = this.props.offeringCreationStore;
+    const formData = evaluateFormData(KEY_TERMS_FRM.fields);
+    console.log(formData);
+  }
   render() {
     const { KEY_TERMS_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
@@ -31,7 +36,7 @@ export default class KeyTerms extends Component {
     return (
       <div className="inner-content-spacer">
         <Header as="h4">Basic</Header>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           <Form.Group widths="3">
             {
             ['legalBusinessName', 'shorthandBusinessName'].map(field => (
