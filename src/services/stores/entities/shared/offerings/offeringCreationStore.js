@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
 import { map } from 'lodash';
-import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE } from '../../../../constants/admin/offerings';
+import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore } from '../../../index';
@@ -29,6 +29,7 @@ export class OfferingCreationStore {
   @observable LEADER_FRM = Validator.prepareFormObject(LEADER);
   @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
   @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
+  @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -80,6 +81,14 @@ export class OfferingCreationStore {
       Validator.pullValues(e, result),
     );
   }
+
+  @action
+  verifyExpDate = (date) => {
+    this.ADD_NEW_BONUS_REWARD_FRM = Validator.onChange(
+      this.ADD_NEW_BONUS_REWARD_FRM,
+      { name: 'expirationDate', value: date },
+    );
+  };
 
   @action
   formArrayChange = (e, result, form, subForm = '', index) => {
