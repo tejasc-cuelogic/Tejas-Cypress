@@ -342,6 +342,21 @@ footer{
             left: 18px;
             color: @white;
         }
+        &.term-notes-menu {
+            background: @white;
+            >.item {
+                justify-content: space-between;
+                color: @neutral;
+                border: 1px solid @neutral-darkwhite;
+                border-radius: 4px;
+                &:hover, .active:hover {
+                    background: @white;
+                }
+                &:before {
+                    display: none;
+                }
+            }
+        }
 	}
 	//Public Mobile View End
 }
