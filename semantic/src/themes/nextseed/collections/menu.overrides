@@ -413,12 +413,11 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: @30px 0 @58px;
+    padding: @58px 0 @58px;
     height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
         height: 100%;
-        padding-top: @25px;
         overflow: auto;
         position: relative;
     }
