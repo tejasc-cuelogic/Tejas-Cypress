@@ -63,8 +63,8 @@ export default class Leader extends Component {
         <Form>
           <Header as="h4">
             {`Leader ${index + 1}`}
-            <Button.Group className="pull-right">
-              <Button secondary className="relaxed" disabled={!LEADERSHIP_FRM.meta.isValid} >Save</Button>
+            <Button.Group size="mini" floated="right">
+              <Button secondary className="relaxed" content="Save" disabled={!LEADERSHIP_FRM.meta.isValid} />
               <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, 'LEADERSHIP_FRM')} />
             </Button.Group>
           </Header>
@@ -75,9 +75,7 @@ export default class Leader extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          <Header as="h4">
-            Personal Info
-          </Header>
+          <Header as="h4">Personal Info</Header>
           <Form.Group widths={2}>
             {
               ['firstName', 'lastName', 'email'].map(field => (
@@ -135,9 +133,7 @@ export default class Leader extends Component {
               dateOfBirth
             />
           </Form.Group>
-          <Header as="h4">
-            Address
-          </Header>
+          <Header as="h4">Address</Header>
           <AutoComplete
             name="street"
             fielddata={LEADERSHIP_FRM.fields.data[index].street}
@@ -182,9 +178,7 @@ export default class Leader extends Component {
             ))
           }
           <Divider section />
-          <Header as="h4">
-            Uploads
-          </Header>
+          <Header as="h4">Uploads</Header>
           <Form.Group widths="equal">
             {
               ['headshot', 'heroImage', 'license'].map(field => (
@@ -201,9 +195,7 @@ export default class Leader extends Component {
             }
           </Form.Group>
           <Divider section />
-          <Header as="h4">
-            Other Business Information
-          </Header>
+          <Header as="h4">Other Business Information</Header>
           {
             ['otherEntities', 'promoters'].map(field => (
               <FormTextarea
