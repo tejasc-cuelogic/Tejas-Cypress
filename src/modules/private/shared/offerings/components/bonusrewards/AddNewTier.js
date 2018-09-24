@@ -15,7 +15,7 @@ export default class AddNewTier extends Component {
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Add new tier</Header>
+          <Header as="h3" textAlign="left">Add new tier</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form>
@@ -45,7 +45,7 @@ export default class AddNewTier extends Component {
                 />
               }
             </div>
-            <Button primary content="Add new bonus reward" />
+            <Button disabled={!ADD_NEW_TIER_FRM.meta.isValid} floated="right" primary content="Add new bonus reward" />
           </Form>
         </Modal.Content>
       </Modal>

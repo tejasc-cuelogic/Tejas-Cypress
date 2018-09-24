@@ -1123,7 +1123,7 @@ export const GENERAL = {
       label: 'Amount Sold',
       value: '',
       error: undefined,
-      rule: 'string|required',
+      rule: 'numeric|required',
       placeHolder: 'Type your text here...',
     },
     useOfProceeds: {
