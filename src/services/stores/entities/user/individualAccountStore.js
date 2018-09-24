@@ -3,12 +3,13 @@ import { isEmpty, find } from 'lodash';
 import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { createAccount, updateAccount } from '../../queries/account';
+import { createIndividual, updateAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = '';
+  @observable submited = false;
 
   @action
   setStepToBeRendered(step) {
@@ -17,19 +18,19 @@ class IndividualAccountStore {
 
   createAccount = (currentStep, formStatus = 'draft') => {
     uiStore.setProgress();
-    let mutation = createAccount;
+    let mutation = createIndividual;
     const variables = {
       userId: userStore.currentUser.sub,
       accountAttributes: bankAccountStore.accountAttributes,
       status: formStatus,
-      accountType: 'individual',
+      accountType: 'INDIVIDUAL',
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'individual' });
+      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables.accountId = accountDetails.accountId;
+        variables.accountId = accountDetails.details.accountId;
         actionPerformed = 'updated';
       }
     }
@@ -39,7 +40,7 @@ class IndividualAccountStore {
           mutation,
           variables,
         })
-        .then((result) => {
+        .then(action((result) => {
           if (result.data.createInvestorAccount || formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
@@ -50,6 +51,7 @@ class IndividualAccountStore {
           }
           if (formStatus === 'submit') {
             Helper.toast('Individual account created successfully.', 'success');
+            this.submited = true;
           } else if (currentStep) {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           } else {
@@ -57,7 +59,7 @@ class IndividualAccountStore {
           }
           uiStore.setErrors(null);
           resolve(result);
-        })
+        }))
         .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject();
@@ -70,15 +72,15 @@ class IndividualAccountStore {
 
   @action
   populateData = (userData) => {
-    if (!isEmpty(userData)) {
-      const account = find(userData.accounts, { accountType: 'individual' });
+    if (!isEmpty(userData) && !this.formStatus) {
+      const account = find(userData.roles, { name: 'individual' });
       if (account) {
-        if (account.accountDetails.plaidItemId) {
-          const plaidAccDetails = account.accountDetails;
+        if (account.details.linkedBank.plaidItemId) {
+          const plaidAccDetails = account.details.linkedBank;
           bankAccountStore.setPlaidAccDetails(plaidAccDetails);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            bankAccountStore.formLinkBankManually.fields[f].value = account.accountDetails[f];
+            bankAccountStore.formLinkBankManually.fields[f].value = account.details.linkedBank[f];
             return bankAccountStore.formLinkBankManually.fields[f];
           });
           bankAccountStore.linkBankFormChange();

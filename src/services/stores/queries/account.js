@@ -19,21 +19,22 @@ export const createAccount = gql`
   }`;
 
 export const updateAccount = gql`
-  mutation _updateAccount($userId: String! $accountId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: UserAccountTypeEnum!) {
+  mutation _updateAccount($userId: String! $accountId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: InvestorAccountTypeEnum!) {
     updateInvestorAccount(
       userId: $userId
       accountId: $accountId
       accountAttributes: $accountAttributes
       status: $status
-      accountType: $accountType
+      type: $accountType
     ) {
       userId
       accountId
-      accountType
-      status
-      startedDate
-      finishedDate
-      accountDetails
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+      }
+      type
     }
   }`;
 
@@ -80,3 +81,17 @@ query checkEntityTaxIdCollision($taxId: String!) {
     alreadyExists
   }
 }`;
+
+export const createIndividual = gql`
+  mutation createIndividiaul($userId: String!, $accountAttributes: AccountInputType!, $status: AccountCreationStatusEnum!, $accountType: InvestorAccountTypeEnum!){
+    createInvestorAccount(userId: $userId, accountAttributes: $accountAttributes, status: $status, type: $accountType){
+      userId
+      accountId
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+      }
+      type
+    }
+  }`;
