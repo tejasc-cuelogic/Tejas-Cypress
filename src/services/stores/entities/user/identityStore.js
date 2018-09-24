@@ -536,7 +536,9 @@ export class IdentityStore {
       this.setProfileInfoField('firstName', legalDetails.legalName.firstLegalName);
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
-    this.setProfileInfoField('email', email.address);
+    if (email) {
+      this.setProfileInfoField('email', email.address);
+    }
     if (phone !== null && phone.verified) {
       this.setProfileInfoField('phoneNumber', phone.number);
     }
