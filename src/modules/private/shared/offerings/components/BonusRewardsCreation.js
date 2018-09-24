@@ -30,6 +30,7 @@ export default class BonusRewardsCreation extends Component {
       <div className="inner-content-spacer">
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
         <Route path={`${match.url}/add-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/edit-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
         <div className="clearfix">
           <Button as={Link} to={`${match.url}/add-new-tier`} floated="right" primary content="Add new rewards tier" />
         </div>
@@ -44,7 +45,7 @@ export default class BonusRewardsCreation extends Component {
                   <p>{item.description}</p>
                   <p>Exp Date: {item.expDate}</p>
                   <Button.Group>
-                    <Button inverted size="mini" color="blue" content="Edit" />
+                    <Button inverted size="mini" color="blue" content="Edit" as={Link} to={`${match.url}/edit-new-bonus-reward`} />
                     <Button type="button" size="mini" color="red" content="Delete" />
                   </Button.Group>
                 </div>

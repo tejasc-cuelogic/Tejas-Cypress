@@ -294,3 +294,281 @@ export const getOfferingDetails = gql`
     }
   }
 `;
+
+export const createBonusRewardTier = gql`
+mutation _createBonusRewardTier{
+  createBonusRewardTier(
+    bonusRewardTierDetails: {
+      amount:500
+      earlyBirdQuantity: 0
+    }
+  ) {
+    amount
+    earlyBirdQuantity
+    created{
+      id
+      date
+      name
+    }
+  }
+}
+`;
+
+export const getBonusRewardTiers = gql`
+query _getBonusRewardTiers{
+  getBonusRewardTiers {
+    amount
+    earlyBirdQuantity
+    created{
+      id
+      date
+      name
+    }
+  }
+}
+`;
+
+export const getBonusRewardTierByKey = gql`
+query _getBonusRewardTierByKey{
+  getBonusRewardTierByKey(
+    amount: 0
+    earlyBirdQuantity: 0
+  ) {
+    amount
+    earlyBirdQuantity
+    created{
+      id
+      date
+      name
+    }
+  }
+}
+
+`;
+
+export const createBonusReward = gql`
+mutation _createBonusReward{
+  createBonusReward(
+    bonusRewardDetails: {
+      offeringId: "b99c9a6b-edf2-46fa-89fc-1a28032d2d99"
+      title: "5 Class Series + 5 Free Shoe Rentals"
+      description: "5 Class Series + 5 Free Shoe Rentals"
+      rewardStatus: "In Review"
+      expirationDate: "2018-10-05"
+      tiers:[
+        {
+          amount: 500
+          earlyBirdQuantity:0
+        }
+      ]
+    }
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      name
+      date
+    }
+    updated{
+      id
+      name
+      date
+    }
+  }
+}
+`;
+
+export const updateBonusReward = gql`
+mutation _updateBonusReward{
+  updateBonusReward(
+    id: "c6cf3540-b1b7-11e8-a3a8-cde2aa7135a5"
+    bonusRewardDetails: {
+      offeringId: "b99c9a6b-edf2-46fa-89fc-1a28032d2d99"
+      title: "5 Class Series + 5 Free Shoe Rentals"
+      description: "5 Class Series + 5 Free Shoe Rentals"
+      rewardStatus: "Submitted"
+      expirationDate: "2018-10-05"
+      tiers:[
+        {
+          amount: 500
+          earlyBirdQuantity:0
+        }
+      ]
+    }
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      name
+      date
+    }
+    updated{
+      id
+      name
+      date
+    }
+  }
+}
+`;
+
+export const deleteBonusReward = gql`
+mutation _deleteBonusReward{
+  deleteBonusReward(
+    id: "c6cf3540-b1b7-11e8-a3a8-cde2aa7135a5"
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      name
+      date
+    }
+    updated{
+      id
+      name
+      date
+    }
+    deleted{
+      id
+      name
+      date
+    }
+  }
+}
+`;
+
+export const approveBonusReward = gql`
+mutation _approveBonusReward{
+  approveBonusReward(
+    id: "c6cf3540-b1b7-11e8-a3a8-cde2aa7135a5"
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      name
+      date
+    }
+    updated{
+      id
+      name
+      date
+    }
+    approved{
+      id
+      name
+      date
+    }
+  }
+}
+`;
+
+export const getBonusRewardById = gql`
+query _getBonusRewardById{
+  getBonusRewardById(
+    id: "26a6a4e0-b1c1-11e8-a3a8-cde2aa7135a5"
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      name
+      date
+    }
+    updated{
+      id
+      name
+      date
+    }
+    deleted{
+      id
+      name
+      date
+    }
+    approved{
+      id
+      name
+      date
+    }
+  }
+}
+`;
+
+export const getBonusRewards = gql`
+query _getBonusRewards{
+  getBonusRewards(
+    filters: {
+      offeringId: "b99c9a6b-edf2-46fa-89fc-1a28032d2d00"
+      approved: false
+    }
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      name
+      date
+    }
+    updated{
+      id
+      name
+      date
+    }
+    approved{
+      id
+      name
+      date
+    }
+  }
+}
+`;
