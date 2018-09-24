@@ -244,6 +244,7 @@ export const KEY_TERMS = {
     preSignedUrl: '',
     fileId: '',
     fileData: '',
+    objType: 'FileObjectType',
   },
 };
 
@@ -1593,4 +1594,63 @@ export const LEADER = {
     },
     onlineReputation: { ...COMMON.generalOnlineReputationSearch },
   }],
+};
+
+export const ADD_NEW_TIER = {
+  isEarlyBirds: {
+    value: [],
+    values: [
+      {
+        label: 'Early Birds',
+        value: 'EARLY_BIRDS',
+      },
+    ],
+    error: undefined,
+    rule: 'alpha',
+  },
+  amountForEarlyBird: {
+    label: 'Amount for this Early Bird tier',
+    value: '',
+    error: undefined,
+    rule: 'string|required_if:isEalryBirds,EARLY_BIRDS',
+    placeHolder: 'e.g. Invitation to the Launch Party',
+  },
+  quantityForEarlyBirdsAvailable: {
+    label: 'Quantity of Early Birds available',
+    value: '',
+    error: undefined,
+    rule: 'string|required_if:isEalryBirds,EARLY_BIRDS',
+    placeHolder: 'Lorem ipsum dolor sit amet enim. Etiam',
+  },
+  amountForThisTier: {
+    label: 'Amount for this tier',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. Invitation to the Launch Party',
+  },
+};
+
+export const ADD_NEW_BONUS_REWARD = {
+  name: {
+    label: 'Name of new bonus reward',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. Invitation to the Launch Party',
+  },
+  description: {
+    label: 'Name of new bonus reward',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'e.g. Invitation to the Launch Party',
+  },
+  expirationDate: {
+    label: 'Expiration Date',
+    value: '',
+    error: undefined,
+    rule: 'date|required',
+    placeHolder: '3/4/2018',
+  },
 };
