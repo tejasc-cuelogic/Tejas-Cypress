@@ -44,7 +44,7 @@ export class NavItems extends Component {
               </Aux>
             }
           >
-            <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
+            <Dropdown.Menu className={this.isActive(item.to, location) && isMobile ? 'visible' : ''}>
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
