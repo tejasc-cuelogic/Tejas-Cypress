@@ -54,7 +54,7 @@ export default class PublicSubNav extends Component {
             </Container>
           </Menu>
         </Responsive>
-        <MobileDropDownNav refMatch={match} navItems={navItems} location={location} />
+        <MobileDropDownNav inverted refMatch={match} navItems={navItems} location={location} />
       </Aux>
     );
   }
