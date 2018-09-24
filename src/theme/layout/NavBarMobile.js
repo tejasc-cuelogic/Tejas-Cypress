@@ -39,7 +39,7 @@ export default class NavBarMobile extends Component {
     return (
       <Aux>
         <div className={`public-header-section ${visible ? 'active' : ''} ${!location.pathname.includes('/offerings') ? 'inverted' : ''}`}>
-          <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
+          {/* <Icon className="ns-nextseed-icon hamburger" /> */}
           <Link to="/"><Header as="h5" inverted>{navTitle}</Header></Link>
           {!currentUser ? (
             <Link to={`/auth/${stepInRoute.to}`} className="sign-in">
@@ -60,11 +60,17 @@ export default class NavBarMobile extends Component {
             </Button>
           )}
         </div>
-        <div className={`${visible ? 'visible-logo' : ''} full-logo`}>
+        <div
+          className={`${visible ? 'visible-logo' : ''} full-logo`}
+          onClick={!visible ? onToggle : false}
+          onKeyPress={!visible ? onToggle : false}
+          role="button"
+          tabIndex="0"
+        >
           <Logo
             alt="NextSeed.com"
             dataSrc={getLogo(location.pathname)}
-            as={Link}
+            as={visible ? Link : Logo}
             to="/"
           />
         </div>
