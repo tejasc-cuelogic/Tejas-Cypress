@@ -46,8 +46,8 @@
 		}
 	}
 }
-.button-radio{
-	.ui.radio.checkbox{
+.button-radio, .button-checkbox{
+	.ui.radio.checkbox, .ui.checkbox{
 		margin:0 @10px @10px 0;
 		&:last-of-type{
 			margin-right:0;
@@ -64,7 +64,7 @@
 				display:none;
 			}
 		}
-		input[type="radio"]{
+		input[type="radio"], input[type="checkbox"]{
 			width:100%;
 			height:100%;
 		}

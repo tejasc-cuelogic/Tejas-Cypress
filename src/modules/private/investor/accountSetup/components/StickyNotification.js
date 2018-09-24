@@ -1,4 +1,5 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import { Card, Statistic } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import AccCreationHelper from '../helper';
@@ -19,7 +20,7 @@ const checkStatus = (signupStatus) => {
     stepinfo.title = 'Please verify your identity in order to proceed';
   } else if (!signupStatus.investorProfileCompleted) {
     stepinfo.title = 'Please establish your investor profile in order to proceed';
-  } else if (!isEmpty(signupStatus.accounts)) {
+  } else if (!isEmpty(signupStatus.roles)) {
     stepinfo.title = 'You can open your another NextSeed account!';
     stepinfo.group = 'Congratulations!';
     if (accCreation.length === 1) {
@@ -34,7 +35,7 @@ const checkStatus = (signupStatus) => {
   }
 };
 
-const StickyNotification = ({ signupStatus }) => {
+const StickyNotification = observer(({ signupStatus }) => {
   checkStatus(signupStatus);
   return (
     <div className="top-cta-section">
@@ -51,6 +52,6 @@ const StickyNotification = ({ signupStatus }) => {
       </div>
     </div>
   );
-};
+});
 
 export default StickyNotification;

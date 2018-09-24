@@ -29,7 +29,7 @@ export default class AddNewTier extends Component {
               />
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS') ?
-                ['amountForEarlyBird', 'quantityForEarlyBirdsAvailable'].map(field => (
+                ['amountForEarlyBird', 'earlyBirdQuantity'].map(field => (
                   <FormInput
                     key={field}
                     name={field}

@@ -1615,7 +1615,7 @@ export const ADD_NEW_TIER = {
     rule: 'string|required_if:isEalryBirds,EARLY_BIRDS',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
-  quantityForEarlyBirdsAvailable: {
+  earlyBirdQuantity: {
     label: 'Quantity of Early Birds available',
     value: '',
     error: undefined,
