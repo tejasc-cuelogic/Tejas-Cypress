@@ -10,14 +10,20 @@ import { Logo } from '../shared';
 export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
-    this.setState({ active: name });
+    const newState = this.state.active === name ? '' : name;
+    this.setState({ active: newState });
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
   };
-  isActive = (to, location, app) => ((to !== '' && this.state.active === to) ||
+  isActive = (to, location, app, subNavigations) => {
+    if (to === '' && subNavigations) {
+      return subNavigations.find(s => location.pathname.startsWith(`/${s.to}`));
+    }
+    return ((to !== '' && this.state.active === to) ||
     ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
-    (this.props.refLoc === 'public' && location.pathname.startsWith(`/${to}`))));
+    (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
+  }
   render() {
     const {
       location, isApp, roles, match, isMobile, onToggle,
@@ -30,9 +36,11 @@ export class NavItems extends Component {
           <Dropdown
             item
             key={item.to}
-            className={this.isActive(item.to, location, app) ? 'active' : ''}
+            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active' : ''}
+            ${item.title === 'How NextSeed Works' ? 'visible' : ''}
+            `}
             name={item.to}
-            onClick={this.navClick}
+            onClick={item.title !== 'How NextSeed Works' ? this.navClick : false}
             text={
               <Aux>
                 {item.icon &&
@@ -44,7 +52,10 @@ export class NavItems extends Component {
               </Aux>
             }
           >
-            <Dropdown.Menu className={this.isActive(item.to, location) && isMobile ? 'visible' : ''}>
+            <Dropdown.Menu
+              className={`${this.isActive(item.to, location, app, item.subNavigations) && isMobile ? 'visible' : ''} ${item.title === 'How NextSeed Works' ? 'visible' : ''}
+              `}
+            >
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
@@ -61,7 +72,7 @@ export class NavItems extends Component {
           <Menu.Item
             key={item.to}
             name={item.to}
-            as={NavLink}
+            as={location.pathname === '/' ? NavLink : Link}
             onClick={isMobile ? onToggle : false}
             to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
