@@ -19,9 +19,9 @@ export default class MobileDropDownNav extends React.Component {
     this.props.campaignStore.setFieldValue('campaignSideBarShow', !this.props.campaignStore.campaignSideBarShow);
   }
   render() {
-    const { navItems, location } = this.props;
+    const { navItems, location, className } = this.props;
     return (
-      <Responsive maxWidth={767} as={Menu} inverted className="mobile-dropdown-menu">
+      <Responsive maxWidth={767} as={Menu} inverted className={`${className} mobile-dropdown-menu`}>
         <Dropdown item text={this.activeText()}>
           <Dropdown.Menu>
             <NavItems sub refLoc="public" location={location} navItems={navItems} />

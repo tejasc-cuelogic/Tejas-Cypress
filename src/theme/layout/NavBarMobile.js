@@ -27,9 +27,9 @@ export default class NavBarMobile extends Component {
     const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <Aux>
-        <div className={`public-header-section ${!location.pathname.includes('/offerings') ? 'inverted' : ''}`}>
+        <div className={`public-header-section ${visible ? 'active' : ''} ${!location.pathname.includes('/offerings') ? 'inverted' : ''}`}>
           <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
-          <div className="full-logo">
+          <div className={`${visible ? 'a' : 'b'} full-logo`}>
             <Logo
               alt="NextSeed.com"
               dataSrc={getLogo(location.pathname)}
