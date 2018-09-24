@@ -39,7 +39,7 @@ class offerDetails extends Component {
         </Responsive>
         <Responsive maxWidth={767} as={Aux}>
           <CampaignSideBar details={campaign} navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
-          <MobileDropDownNav refMatch={match} navItems={navItems} location={location} />
+          <MobileDropDownNav inverted refMatch={match} navItems={navItems} location={location} />
         </Responsive>
         <div className="offering-wrapper">
           <Switch>
