@@ -21,12 +21,22 @@ export const getBeneficiaries = gql`
   query getBeneficiaries {
     beneficiaries {   
         accountId   
-        accountType
+        type
         status
-        updatedDate
-        createdDate   
+        updated {
+          id
+          by
+          date
+        }
+        created {
+          id
+          by
+          date
+        }  
         beneficiary {     
-            requestStatus    
+            request {
+              status
+            }
             recipients {     
                 firstName    
                 lastName    
@@ -51,19 +61,21 @@ mutation _createBeneficiaries($requestId: String!, $verificationCode: String!, $
     userId
     accountId
     beneficiary {
-      requestedDate
-      requestStatus
-      recipients {
-        firstName
-        lastName
-        dob
-        relationship
-        shares
-        address {
-          street
-          city
-          state
-          zipCode
+      request {
+        status
+        date
+        recipients {
+          firstName
+          lastName
+          dob
+          relationship
+          shares
+          address {
+            street
+            city
+            state
+            zipCode
+          }
         }
       }
     }

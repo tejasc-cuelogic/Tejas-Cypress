@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-09-10)
+# 0.0.0 (2018-09-24)
 
 
 ### Bug Fixes
@@ -47,7 +47,11 @@
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** removed plaid credential dependency from ns-client ([facf81a](https://chaos.ns.team/nsv2/ns-client/commits/facf81a))
+* **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for admin/investor as per updated user schema ([3923b90](https://chaos.ns.team/nsv2/ns-client/commits/3923b90))
+* **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for Investor flow as per new updated schema changes. ([146a108](https://chaos.ns.team/nsv2/ns-client/commits/146a108))
 * **Issuer Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio stauts corrected in constant file ([bee3759](https://chaos.ns.team/nsv2/ns-client/commits/bee3759))
+* **Issuer Signup[Issue [380](https://chaos.ns.team/nsv2/ns-ops/issues/380) - issuer signup add new type commercial real estate]:** made all changes requied for adding new business type for creating application and moved common component to shared folder ([dc7866d](https://chaos.ns.team/nsv2/ns-client/commits/dc7866d))
+* **Issuer Signup[Issue [416](https://chaos.ns.team/nsv2/ns-ops/issues/416) - issuer signup non existing user on prequal success]:** auto login changes done ([978c937](https://chaos.ns.team/nsv2/ns-client/commits/978c937))
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
 * **marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback ([1416d48](https://chaos.ns.team/nsv2/ns-client/commits/1416d48))
