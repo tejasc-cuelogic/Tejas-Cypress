@@ -15,7 +15,9 @@ export class NavItems extends Component {
       this.props.history.replace(`/app/${name}`);
     }
   };
-  isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
+  isActive = (to, location, app) => ((to !== '' && this.state.active === to) ||
+    ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
+    (this.props.refLoc === 'public' && location.pathname.startsWith(`/${to}`))));
   render() {
     const {
       location, isApp, roles, match, isMobile, onToggle,
@@ -42,7 +44,7 @@ export class NavItems extends Component {
               </Aux>
             }
           >
-            <Dropdown.Menu className={this.isActive(item.to, location) || isMobile ? 'visible' : ''}>
+            <Dropdown.Menu className={this.isActive(item.to, location) ? 'visible' : ''}>
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
