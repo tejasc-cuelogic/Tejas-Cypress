@@ -9,7 +9,7 @@ import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, userStore, navStore } from '../../index';
+import { uiStore, navStore } from '../../index';
 
 export class AuthStore {
   @observable hasSession = false;
@@ -207,7 +207,6 @@ export class AuthStore {
         .mutate({
           mutation: verifyAndUpdateEmail,
           variables: {
-            userId: userStore.currentUser.sub,
             confirmationCode: this.CONFIRM_FRM.fields.code.value,
           },
         })
@@ -231,7 +230,6 @@ export class AuthStore {
         .mutate({
           mutation: requestEmailChnage,
           variables: {
-            userId: userStore.currentUser.sub,
             newEmail: this.CONFIRM_FRM.fields.email.value,
           },
         })

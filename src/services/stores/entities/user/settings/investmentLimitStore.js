@@ -17,8 +17,8 @@ export class InvestmentLimitStore {
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
     const accList = filter(this.activeAccounts, (account) => {
-      isIndividualAccount = account.accountType === 'individual' ? true : isIndividualAccount;
-      return account.accountType === 'individual' ? !find(this.activeAccounts, acc => acc.accountType === 'ira') : true;
+      isIndividualAccount = account.name === 'individual' ? true : isIndividualAccount;
+      return account.name === 'individual' ? !find(this.activeAccounts, acc => acc.name === 'ira') : true;
     });
     return toJS({ accountList: accList, isIndAccExist: isIndividualAccount });
   }
@@ -57,12 +57,12 @@ export class InvestmentLimitStore {
     // set form values accountwise
     this.currentAccountType = accountType;
     const { accountList } = this.getActiveAccountList;
-    const accountData = find(accountList, account => account.accountType === accountType);
+    const accountData = find(accountList, account => account.name === accountType);
     const limitField = (accountType === 'entity') ? 'currentLimitEntity' : 'currentLimitIndividualOrIra';
     const fieldVal = {};
     fieldVal.otherInvestments = 0;
-    fieldVal.annualIncome = (accountType === 'entity') ? accountData.accountDetails.cfInvestment.amount : accountData.accountDetails.annualIncome;
-    fieldVal.netWorth = (accountType === 'entity') ? accountData.accountDetails.netAssets : accountData.accountDetails.netWorth;
+    fieldVal.annualIncome = (accountType === 'entity') ? accountData.details.cfInvestment.amount : accountData.details.annualIncome;
+    fieldVal.netWorth = (accountType === 'entity') ? accountData.details.netAssets : accountData.details.netWorth;
     ['annualIncome', 'netWorth', 'otherInvestments'].forEach((field) => {
       this.INVESTEMENT_LIMIT_META = Validator.onChange(
         this.INVESTEMENT_LIMIT_META,
@@ -93,7 +93,7 @@ export class InvestmentLimitStore {
     this.activeAccounts = userDetailsStore.getActiveAccounts;
     const activeAccountList = this.getActiveAccountList;
     map(activeAccountList.accountList, (account) => {
-      this.setInvestmentLimitInfo(account.accountType);
+      this.setInvestmentLimitInfo(account.name);
     });
   }
 

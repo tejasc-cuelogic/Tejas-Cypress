@@ -42,86 +42,150 @@ export const allUsersQuery = gql`
 `;
 
 export const userDetailsQuery = gql`
-query getUserDetails($id: ID!) {
-  user(id: $id) {
-    id
-    firstName
-    lastName
-    email
-    accountType
-    accountStatus
-    accreditation
-    createdDate
-    lastLoginDate
-    contactDetails {
-      phone {
-        number
-        verificationDate
+  query getUserDetails($userId: ID!) {
+    user(id: $userId) {
+      id
+      info {
+        firstName
+        lastName
+        mailingAddress {
+          street
+          city
+          state
+          zipCode
+        }
+        avatar {
+          name
+          url
+        }
       }
-    }
-    legalDetails {
-      legalName {
-        firstLegalName
-        lastLegalName
+      email {
+        address
       }
-      dateOfBirth
-      ssn
-      legalAddress {
-        street
-        city
-        state
-        zipCode
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            name
+            taxId
+            address {
+              street
+              city
+              state
+              zipCode
+            }
+            isTrust
+            trustDate
+            legalInfo {
+              legalFirstName
+              legalLastName
+              title
+              legalDocUrl {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            accountId
+            iraAccountType
+            fundingType
+            identityDoc {
+              fileId
+              fileName
+              fileHandle
+            }
+            legalDocs {
+              formationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              operatingAgreementDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+              einVerificationDoc {
+                fileId
+                fileName
+                fileHandle
+              }
+            }
+            annualIncome
+            netWorth
+            netAssets
+            cfInvestment {
+              dateOfInvestment
+              amount
+            }
+            linkedBank {
+              bankName
+              plaidAccountId
+              plaidItemId
+              accountNumber
+              routingNumber
+              plaidAccessToken
+            }
+            status
+          }
+        }
       }
-      cipStatus {
+      locked {
+        lock
+      }
+      accreditation {
         status
       }
-    }
-    accounts {
-      userId
-      accountId
-      accountType
-      accountDetails
-      finishedDate
-      status
-    }
-    address {
-      mailing {
-        street
-        city
-        state
-        zipCode
+      created {
+        date
       }
-    }
-    avatar {
-      name
-      url
-    }
-    investorProfileData {
-      isPartialProfile
-      employmentStatusInfo {
-        employmentStatus
-        employer
-        currentPosition
+      lastLoginDate
+      phone {
+        number
+        verified
       }
-      investorProfileType
-      financialInfo {
-        netWorth
-        annualIncomeThirdLastYear
-        annualIncomeLastYear
-        annualIncomeCurrentYear
-        directorShareHolderOfCompany
-        employedOrAssoWithFINRAFirmName
+      legalDetails {
+        legalName {
+          firstLegalName
+          lastLegalName
+        }
+        dateOfBirth
+        ssn
+        legalAddress {
+          street
+          city
+          state
+          zipCode
+        }
+        status
       }
-      investmentExperienceInfo {
-        investmentExperienceLevel
-        readyInvestingInLimitedLiquiditySecurities
-        readyForRisksInvolved
+      investorProfileData {
+        isPartialProfile
+        employmentStatusInfo {
+          employmentStatus
+          employer
+          currentPosition
+        }
+        investorProfileType
+        financialInfo {
+          netWorth
+          annualIncomeThirdLastYear
+          annualIncomeLastYear
+          annualIncomeCurrentYear
+          directorShareHolderOfCompany
+          employedOrAssoWithFINRAFirmName
+        }
+        investmentExperienceInfo {
+          investmentExperienceLevel
+          readyInvestingInLimitedLiquiditySecurities
+          readyForRisksInvolved
+        }
       }
+      mfaMode
     }
-    accountStatus
-    mfaMode 
   }
-}
 `;
 
 export const createUserMutation = gql`

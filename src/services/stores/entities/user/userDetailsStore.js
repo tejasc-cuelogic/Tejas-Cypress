@@ -2,7 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import { isEmpty, difference, find, findKey, filter } from 'lodash';
+import { isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import {
   identityStore,
@@ -34,7 +34,7 @@ export class UserDetailsStore {
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.accounts, account => account.status === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.details.status === 'FULL');
     }
     return accDetails;
   }
@@ -86,12 +86,12 @@ export class UserDetailsStore {
   }
 
   @action
-  getUser = id => new Promise((res) => {
+  getUser = userId => new Promise((res) => {
     this.currentUser = graphql({
       client,
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
-      variables: { id },
+      variables: { userId },
       onFetch: () => {
         identityStore.setProfileInfo(this.userDetails);
         res();
@@ -100,11 +100,11 @@ export class UserDetailsStore {
   })
 
   @action
-  getUserProfileDetails = (id) => {
+  getUserProfileDetails = (userId) => {
     this.detailsOfUser = graphql({
       client,
       query: userDetailsQuery,
-      variables: { id },
+      variables: { userId },
     });
   }
 
@@ -127,28 +127,28 @@ export class UserDetailsStore {
   }
 
   @computed get signupStatus() {
-    const details = { idVerification: 'FAIL', accounts: [], phoneVerification: 'FAIL' };
+    const details = { idVerification: 'FAIL', roles: [], phoneVerification: 'FAIL' };
     const validAccTypes = ['individual', 'ira', 'entity'];
     details.inActiveAccounts = [];
     const accTypes = [];
     if (this.userDetails) {
       details.idVerification = (this.userDetails.legalDetails &&
-        this.userDetails.legalDetails.cipStatus && this.userDetails.legalDetails.cipStatus.status
-      ) ? this.userDetails.legalDetails.cipStatus.status : 'FAIL';
-      details.accounts = mapValues(this.userDetails.accounts, (a) => {
-        const data = { accountId: a.accountId, accountType: a.accountType, status: a.status };
+        this.userDetails.legalDetails.status
+      ) ? this.userDetails.legalDetails.status : 'FAIL';
+      details.roles = mapValues(this.userDetails.roles, (a) => {
+        const data = { accountId: a.accountId, name: a.name, status: a.details.status };
         return data;
       });
-      Object.keys(details.accounts).map((key) => {
-        accTypes.push(details.accounts[key].accountType);
+      Object.keys(details.roles).map((key) => {
+        accTypes.push(details.roles[key].name);
         return true;
       });
       details.inActiveAccounts = difference(validAccTypes, accTypes);
-      details.partialAccounts = map(filter(details.accounts, a => a.status === 'PARTIAL'), 'accountType');
-      details.activeAccounts = map(filter(details.accounts, a => a.status === 'FULL'), 'accountType');
-      details.phoneVerification = (this.userDetails.contactDetails &&
-        this.userDetails.contactDetails.phone &&
-        this.userDetails.contactDetails.phone.verificationDate) ? 'DONE' : 'FAIL';
+      details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
+      details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
+      details.phoneVerification = (this.userDetails.phone &&
+        this.userDetails.phone.number &&
+        !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
       details.investorProfileCompleted =
       this.userDetails.investorProfileData === null ?
         false : this.userDetails.investorProfileData ?
@@ -175,7 +175,7 @@ export class UserDetailsStore {
       } else if (step === 'accounts') {
         if (this.validAccStatus.includes(statusDetails.idVerification)) {
           if (statusDetails.phoneVerification === 'DONE') {
-            if (!isEmpty(statusDetails.accounts)) {
+            if (!isEmpty(statusDetails.roles)) {
               status = 'done';
             } else {
               status = 'enable';
@@ -210,7 +210,7 @@ export class UserDetailsStore {
       routingUrl = 'summary/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
       routingUrl = 'summary/establish-profile';
-    } else if (isEmpty(this.signupStatus.accounts)) {
+    } else if (isEmpty(this.signupStatus.roles)) {
       routingUrl = 'summary/account-creation';
     } else if (this.signupStatus.partialAccounts.length > 0) {
       const accValue =
