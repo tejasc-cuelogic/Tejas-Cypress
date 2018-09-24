@@ -5,7 +5,7 @@
 //iOS cursor position on keypad-in fix
 html,body{
 	-webkit-overflow-scrolling : touch !important;
-	overflow: auto !important;
+	// overflow: auto !important;
 	height: 100% !important;
 }
 //iOS cursor position on keypad-in fix
@@ -1842,7 +1842,7 @@ p.check-extra-info{
 
 //Public responsive start
 .public-header-section {
-	background-color: fade(@neutral, 90%);
+	background-color: @white;
     position: fixed;
     left: 0;
 	right: 0;
@@ -1856,6 +1856,12 @@ p.check-extra-info{
 	&.active {
 		z-index: 0;
 	}
+	&.inverted {
+		background-color: fade(@neutral, 90%);
+		.sign-in {
+			color: @white;
+		}
+	}
 	.icon.hamburger {
 		font-size: @30px;
 		line-height: 30px;
@@ -1867,7 +1873,7 @@ p.check-extra-info{
 	}
 	.sign-in {
 		font-size: @14px;
-		color: @white;
+		color: @neutral;
 		position: absolute;
 		top: 20px;
 		right: 18px;
@@ -1898,7 +1904,6 @@ p.check-extra-info{
     z-index: 3;
     overflow: hidden;
     transition: width 390ms ease-in-out;
-    pointer-events: none;
 	.ui.image {
 		height: 100%;
 		margin-left: 21px;

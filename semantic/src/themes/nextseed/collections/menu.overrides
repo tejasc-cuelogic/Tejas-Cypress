@@ -90,6 +90,9 @@
     border-radius:0;
     box-shadow:none;
     background-color:@white;
+    .ui.container > .item {
+        visibility: hidden;
+    }
     .item{
         padding:@3px @18px;
         &:hover {
@@ -134,6 +137,9 @@
         margin: 0;
         z-index: 1001;
         transition: all .3s ease;
+        .ui.container > .item {
+            visibility: visible;
+        }
         .item {
             img.ui.image.logo{
                 transform: scale(1);
@@ -318,21 +324,47 @@ footer{
         }
     }
     //Public Mobile View Start
-	&.mobile-dropdown-menu:not(.vertical){
+	&.mobile-dropdown-menu{
         margin:0;
         position: relative;
-        background: fade(@neutral, 90%);
         >.item {
-            justify-content: center;
+            justify-content: space-between;
             width: 100%;
-            color: @primary-one;
+            border: 1px solid @neutral-darkwhite;
+            border-radius: 4px;
             >i.dropdown.icon:before {
                 content: '\e914';
                 font-family: 'nextseed';
             }
-            &:hover, .active:hover {
-                background: fade(@neutral, 90%);
+            &:before {
+                display: none;
             }
+        }
+        .dropdown.item .menu {
+            min-width: 100%;
+        }
+        &.inverted {
+            background: fade(@neutral, 90%);
+            .dropdown.item {
+                justify-content: center;
+                color: @primary-one;
+                border: 0;
+                border-radius: 0;
+                &:hover, &.active:hover {
+                    background: fade(@neutral, 90%);
+                }
+                .menu {
+                    background: @neutral;
+                    >.item {
+                        color: @white!important;
+                        text-align: center;
+                        &:hover, &.active, &.active:hover {
+                            background: @neutral-middark !important;
+                            color: @primary-one!important;
+                        }
+                    }
+                }
+            } 
         }
         .icon.open-campaign-menu {
             position: absolute;
@@ -341,21 +373,6 @@ footer{
             top: 8px;
             left: 18px;
             color: @white;
-        }
-        &.term-notes-menu {
-            background: @white;
-            >.item {
-                justify-content: space-between;
-                color: @neutral;
-                border: 1px solid @neutral-darkwhite;
-                border-radius: 4px;
-                &:hover, .active:hover {
-                    background: @white;
-                }
-                &:before {
-                    display: none;
-                }
-            }
         }
 	}
 	//Public Mobile View End
@@ -413,12 +430,11 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: @30px 0 @58px;
+    padding: @58px 0 @58px;
     height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
         height: 100%;
-        padding-top: @25px;
         overflow: auto;
         position: relative;
     }
