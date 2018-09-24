@@ -6,6 +6,7 @@ import Aux from 'react-aux';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
+import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
 export class NavItems extends Component {
@@ -76,10 +77,7 @@ export class NavItems extends Component {
   }
 }
 
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
-  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
-));
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoWhiteGreen');
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
@@ -111,10 +109,24 @@ export class NavigationItems extends Component {
               <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
             }
           </Menu.Menu>
-          {!props.currentUser ? (
-            <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
-              <Button secondary compact>{stepInRoute.title}</Button>
+          {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business/') && !props.location.pathname.includes('commercial-real-estate/') ?
+            <Menu.Item>
+              <Button.Group>
+                <Button as={Link} to="/" inverted color="red">Cancel</Button>
+                {props.isPrequalQulify &&
+                <SubmitButton
+                  canSubmitApp={props.canSubmitApp}
+                  click={props.preQualSubmit}
+                  loading={props.loading}
+                />}
+              </Button.Group>
             </Menu.Item>
+          : !props.location.pathname.includes('/business-application') &&
+            (
+            !props.currentUser ? (
+              <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
+                <Button secondary compact>{stepInRoute.title}</Button>
+              </Menu.Item>
           ) : (
             <Menu.Item
               as={Link}
@@ -122,7 +134,7 @@ export class NavigationItems extends Component {
             >
               <Button secondary compact>Dashboard</Button>
             </Menu.Item>
-          )}
+          ))}
         </Container>
       </Menu>
     );

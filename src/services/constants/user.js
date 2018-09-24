@@ -240,7 +240,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     label: 'ZIP Code',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'required',
     placeHolder: 'ZIP Code',
   },
   profilePhoto: {
