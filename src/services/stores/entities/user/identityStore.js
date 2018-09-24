@@ -539,7 +539,7 @@ export class IdentityStore {
     if (email) {
       this.setProfileInfoField('email', email.address);
     }
-    if (phone !== null && phone && phone.verified) {
+    if (phone && phone !== null && phone.verified) {
       this.setProfileInfoField('phoneNumber', phone.number);
     }
     if (info && info.mailingAddress === null) {
