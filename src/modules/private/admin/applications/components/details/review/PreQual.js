@@ -9,6 +9,9 @@ import ManagerOverview from './ManagerOverview';
 @inject('businessAppReviewStore')
 @observer
 export default class PreQual extends Component {
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('JUSTIFICATIONS_FRM', 'review.preQualification.justifications');
+  }
   addJustification = (e) => {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('JUSTIFICATIONS_FRM');
@@ -16,6 +19,9 @@ export default class PreQual extends Component {
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
+  }
+  submit = () => {
+    this.props.businessAppReviewStore.saveReviewForms('JUSTIFICATIONS_FRM');
   }
   render() {
     const {
@@ -25,18 +31,18 @@ export default class PreQual extends Component {
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
-        <Form>
+        <Form onSubmit={this.submit}>
           <Header as="h4">
             Justifications
             <Link to={this.props.match.url} className="link" onClick={e => this.addJustification(e)}><small>+Add Justification</small></Link>
           </Header>
           {
-            JUSTIFICATIONS_FRM.fields.data.map((justification, index) => (
+            JUSTIFICATIONS_FRM.fields.data.map((justifications, index) => (
               <Aux>
                 <FormTextarea
-                  name="justification"
+                  name="justifications"
                   label={`Justification ${index + 1}`}
-                  fielddata={justification.justification}
+                  fielddata={justifications.justifications}
                   changed={(e, result) => formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', 'data', index)}
                   removed={e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM')}
                   linkto={this.props.match.url}

@@ -477,11 +477,13 @@ mutation updateBusinessApplicationInformation(
   $applicationId: String!
   $issuerId: String!
   $review: BusinessApplicationReviewInput
+  $offers: OffersReviewInput
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
     issuerId: $issuerId
     review: $review
+    offers: $offers
   ){
     applicationStatus
   }

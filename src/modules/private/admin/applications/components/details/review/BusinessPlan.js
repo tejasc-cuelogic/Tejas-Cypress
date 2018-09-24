@@ -18,7 +18,7 @@ const AddMore = ({
 @observer
 export default class BusinessPlan extends Component {
   onFileDrop = (files, name, index) => {
-    this.props.businessAppReviewStore.setFileUploadData('BUSINESS_PLAN_FRM', 'control_persons', name, files, index);
+    this.props.businessAppReviewStore.setFileUploadData('BUSINESS_PLAN_FRM', 'controlPersons', name, files, index);
   }
   addMore = (e, formName, arrayName = 'data') => {
     e.preventDefault();
@@ -71,14 +71,14 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h4">
             Control Persons
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'BUSINESS_PLAN_FRM', 'control_persons')}><small>+ Add Control Person</small></Link>
+            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'BUSINESS_PLAN_FRM', 'controlPersons')}><small>+ Add Control Person</small></Link>
           </Header>
           {
-            BUSINESS_PLAN_FRM.fields.control_persons.map((controlPerson, index) => (
+            BUSINESS_PLAN_FRM.fields.controlPersons.map((controlPerson, index) => (
               <Aux>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
-                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'control_persons')}>
+                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                 </Header>
@@ -87,7 +87,7 @@ export default class BusinessPlan extends Component {
                     <FormInput
                       name="name"
                       fielddata={controlPerson.name}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <MaskedInput
                       percentage
@@ -99,26 +99,26 @@ export default class BusinessPlan extends Component {
                     <FormInput
                       name="derogatoryMarks"
                       fielddata={controlPerson.derogatoryMarks}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                   </Form.Group>
                   <Form.Group widths={3}>
                     <FormInput
                       name="experience"
                       fielddata={controlPerson.experience}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <FormInput
                       name="creditScore"
                       fielddata={controlPerson.creditScore}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'control_persons', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                   </Form.Group>
                   <Form.Group widths={3}>
                     <Form.Field>
                       <DropZone
-                        name="experienceFile"
-                        fielddata={controlPerson.experienceFile}
+                        name="experienceUpload"
+                        fielddata={controlPerson.experienceUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
                         onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                         uploadtitle="Upload Experience File"
@@ -126,8 +126,8 @@ export default class BusinessPlan extends Component {
                     </Form.Field>
                     <Form.Field>
                       <DropZone
-                        name="creditScoreFile"
-                        fielddata={controlPerson.creditScoreFile}
+                        name="creditUpload"
+                        fielddata={controlPerson.creditUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
                         onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                         uploadtitle="Upload Credit Score File"
@@ -140,7 +140,7 @@ export default class BusinessPlan extends Component {
           }
           <Divider section />
           {
-            ['timingOfOperations', 'writeupTieToProjections', 'isPlanAdequate'].map(field => (
+            ['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
               <Aux>
                 <FormTextarea
                   key={field}
@@ -287,7 +287,7 @@ export default class BusinessPlan extends Component {
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'experienceFile' || confirmBox.entity === 'creditScoreFile'}
+          open={confirmBox.entity === 'experienceUpload' || confirmBox.entity === 'creditUpload'}
           onCancel={this.handleDelCancel}
           onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
           size="mini"

@@ -7,6 +7,9 @@ import ManagerOverview from './ManagerOverview';
 @inject('businessAppReviewStore')
 @observer
 export default class Documentation extends Component {
+  submit = () => {
+    this.props.businessAppReviewStore.saveReviewForms('PROJECTIONS_FRM');
+  }
   render() {
     const {
       DOCUMENTATION_FRM,
@@ -15,12 +18,12 @@ export default class Documentation extends Component {
     } = this.props.businessAppReviewStore;
     return (
       <div>
-        <Form>
+        <Form onSubmit={this.submit}>
           <Header as="h5">
             Prior Two Years Tax Returns for Control Owners or Three Years for Existing Business
           </Header>
           {
-            ['taxReturnsForControlOwners', 'taxReturnsForBusinessMatch', 'backupProofOfIncomeAndAssets'].map(field => (
+            ['negativeInformation', 'matchHistoricals', 'backupProof'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}
@@ -35,7 +38,7 @@ export default class Documentation extends Component {
             Prior 2 Year Historical and YTD Financial Statements (Existing Business)
           </Header>
           {
-            ['hasBusinessProfitable', 'anyQuestionableItems', 'anyNegativeTrends'].map(field => (
+            ['profitiable', 'questionableItems', 'negativeTrends'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}
@@ -50,7 +53,7 @@ export default class Documentation extends Component {
             Prior Six Months Back Statements (Existing)
           </Header>
           {
-            ['anyCushionForIncidentals', 'anyUnusualMovements'].map(field => (
+            ['consistentBalance', 'anyUnusualMovements'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}

@@ -168,6 +168,8 @@ export class Auth {
           }
         },
         newPasswordRequired: (result) => {
+          authStore.setCognitoUserSession(this.cognitoUser.Session);
+          authStore.setNewPasswordRequired(true);
           res({ data: result, action: 'newPassword' });
         },
         onFailure: err => rej(err),

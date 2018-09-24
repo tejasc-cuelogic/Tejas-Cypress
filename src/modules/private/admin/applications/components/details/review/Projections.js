@@ -8,11 +8,14 @@ import ManagerOverview from './ManagerOverview';
 @inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class Projections extends Component {
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('PROJECTIONS_FRM', 'review.projections');
+  }
   onBenchmarkDrop = (files) => {
-    this.props.businessAppReviewStore.setFileUploadData('PROJECTIONS_FRM', 'benchmarkUpload', files);
+    this.props.businessAppReviewStore.setFileUploadData('PROJECTIONS_FRM', '', 'benchmarkUpload', files);
   }
   onRevenueCheckDrop = (files) => {
-    this.props.businessAppReviewStore.setFileUploadData('PROJECTIONS_FRM', 'revenueCheckUpload', files);
+    this.props.businessAppReviewStore.setFileUploadData('PROJECTIONS_FRM', '', 'revenueCheckUpload', files);
   }
   confirmRemoveDoc = (e, name) => {
     e.preventDefault();
@@ -25,7 +28,9 @@ export default class Projections extends Component {
     this.props.businessAppReviewStore.removeUploadedData('PROJECTIONS_FRM', field);
     this.props.uiStore.setConfirmBox('');
   }
-
+  submit = () => {
+    this.props.businessAppReviewStore.saveReviewForms('PROJECTIONS_FRM');
+  }
   render() {
     const {
       PROJECTIONS_FRM,
@@ -35,9 +40,9 @@ export default class Projections extends Component {
     const { confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Form>
+        <Form onSubmit={this.submit}>
           {
-            ['compareHistoricalForReasonabless', 'areTheProjectionsComplete', 'revenueCheck'].map((field, index) => (
+            ['reasonableHistoricals', 'projectionsComplete', 'revenueCheck'].map((field, index) => (
               <Aux>
                 <FormTextarea
                   key={field}
@@ -62,7 +67,7 @@ export default class Projections extends Component {
           />
           <Divider section />
           {
-            ['majorLineItems', 'tiesToLeaseAgreement', 'benchmarkAndPrintComps'].map((field, index) => (
+            ['opex', 'rent', 'benchmark'].map((field, index) => (
               <Aux>
                 <FormTextarea
                   key={field}
@@ -87,8 +92,8 @@ export default class Projections extends Component {
           />
           <Divider section />
           <FormTextarea
-            name="requirements"
-            fielddata={PROJECTIONS_FRM.fields.requirements}
+            name="existingLiabilities"
+            fielddata={PROJECTIONS_FRM.fields.existingLiabilities}
             changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
             containerclassname="secondary"
           />

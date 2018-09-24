@@ -55,19 +55,19 @@ const TableHeader = ({ labels }) => (
 );
 
 const RemoveIcon = ({
-  match, index, toggleConfirmModal, formName,
+  match, index, toggleConfirmModal, formName, arrayName,
 }) => (
-  <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName)} >
+  <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, formName, arrayName)} >
     <Icon className="ns-close-circle" color="grey" />
   </Link>
 );
 
 const AddMore = ({
-  addMore, formName, title,
+  addMore, formName, title, arrayName,
 }) => (
   <Table.Row>
     <Table.Cell colSpan="3">
-      <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName)}>+ {title}</Button>
+      <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)}>+ {title}</Button>
     </Table.Cell>
   </Table.Row>
 );
@@ -75,12 +75,15 @@ const AddMore = ({
 @inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class Miscellaneous extends Component {
-  onFileDrop = (files, name, index) => {
-    this.props.businessAppReviewStore.setFileUploadData('OTHER_DOCUMENTATION_FRM', name, files, index);
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('MISCELLANEOUS_FRM', 'review.miscellaneous');
   }
-  addMore = (e, formName) => {
+  onFileDrop = (files, name, index) => {
+    this.props.businessAppReviewStore.setFileUploadData('MISCELLANEOUS_FRM', 'otherDocs', name, files, index);
+  }
+  addMore = (e, formName, arrayName) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.addMore(formName);
+    this.props.businessAppReviewStore.addMore(formName, arrayName);
   }
   confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
@@ -90,19 +93,20 @@ export default class Miscellaneous extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field, index) => {
-    this.props.businessAppReviewStore.removeUploadedData('OTHER_DOCUMENTATION_FRM', field, index);
+    this.props.businessAppReviewStore.removeUploadedData('MISCELLANEOUS_FRM', 'otherDocs', field, index);
     this.props.uiStore.setConfirmBox('');
   }
-  toggleConfirmModal = (e, index, formName) => {
+  toggleConfirmModal = (e, index, formName, arrayName) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
+    this.props.businessAppReviewStore.toggleConfirmModal(index, formName, arrayName);
   }
-
+  submit = () => {
+    this.props.businessAppReviewStore.saveReviewForms('MISCELLANEOUS_FRM');
+  }
   render() {
     const {
       UPLOADED_DOCUMENTS_FRM,
-      OTHER_DOCUMENTATION_FRM,
-      SOCIAL_MEDIA_FRM,
+      MISCELLANEOUS_FRM,
       formChangeWithIndex,
       confirmModal,
       confirmModalName,
@@ -112,14 +116,14 @@ export default class Miscellaneous extends Component {
     const { confirmBox } = this.props.uiStore;
     return (
       <Aux>
-        <Form size="small">
+        <Form size="small" onSubmit={this.submit}>
           <SectionHeader header="Social Media" />
           <Table basic compact className="form-table">
             <TableHeader labels={['Label', 'URL']} />
             <Table.Body>
               {
-                SOCIAL_MEDIA_FRM.fields.data.length ?
-                SOCIAL_MEDIA_FRM.fields.data.map((socialMedia, index) => (
+                MISCELLANEOUS_FRM.fields.socialMedia.length ?
+                MISCELLANEOUS_FRM.fields.socialMedia.map((socialMedia, index) => (
                   <Table.Row verticalAlign="top">
                     <Table.Cell width={3}>
                       <Dropdown
@@ -127,8 +131,9 @@ export default class Miscellaneous extends Component {
                         placeholder="eg. Facebook"
                         fluid
                         selection
+                        value={socialMedia.label.value}
                         options={SOCIAL_MEDIA_LABELS}
-                        onChange={(e, result) => formChangeWithIndex(e, result, 'SOCIAL_MEDIA_FRM', index)}
+                        onChange={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
                       />
                     </Table.Cell>
                     <Table.Cell>
@@ -136,16 +141,16 @@ export default class Miscellaneous extends Component {
                         type="text"
                         name="url"
                         fielddata={socialMedia.url}
-                        changed={(e, result) => formChangeWithIndex(e, result, 'SOCIAL_MEDIA_FRM', index)}
+                        changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
                       />
                     </Table.Cell>
                     <Table.Cell collapsing>
-                      <RemoveIcon match={this.props.match} index={index} formName="SOCIAL_MEDIA_FRM" toggleConfirmModal={this.toggleConfirmModal} />
+                      <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" toggleConfirmModal={this.toggleConfirmModal} />
                     </Table.Cell>
                   </Table.Row>
                 )) : ''
               }
-              <AddMore addMore={this.addMore} formName="SOCIAL_MEDIA_FRM" title="Add social media" />
+              <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" title="Add social media" />
             </Table.Body>
           </Table>
           <SectionHeader header="Other Documentation Uploads" subheader="(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)" />
@@ -153,32 +158,32 @@ export default class Miscellaneous extends Component {
             <TableHeader labels={['Label', 'Comment']} />
             <Table.Body>
               {
-              OTHER_DOCUMENTATION_FRM.fields.data.length ?
-              OTHER_DOCUMENTATION_FRM.fields.data.map((document, index) => (
+              MISCELLANEOUS_FRM.fields.otherDocs.length ?
+              MISCELLANEOUS_FRM.fields.otherDocs.map((document, index) => (
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5}>
                     <FormInput
                       name="label"
                       fielddata={document.label}
-                      changed={(e, result) => formChangeWithIndex(e, result, 'OTHER_DOCUMENTATION_FRM', index)}
+                      changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'otherDocs', index)}
                     />
                   </Table.Cell>
                   <Table.Cell>
                     <DropZone
-                      name="comment"
-                      fielddata={document.comment}
+                      name="docDetails"
+                      fielddata={document.docDetails}
                       ondrop={(files, name) => this.onFileDrop(files, name, index)}
                       onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
                       uploadtitle="Choose document to upload"
                     />
                   </Table.Cell>
                   <Table.Cell collapsing>
-                    <RemoveIcon match={this.props.match} index={index} formName="OTHER_DOCUMENTATION_FRM" toggleConfirmModal={this.toggleConfirmModal} />
+                    <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" toggleConfirmModal={this.toggleConfirmModal} />
                   </Table.Cell>
                 </Table.Row>
               )) : ''
               }
-              <AddMore addMore={this.addMore} formName="OTHER_DOCUMENTATION_FRM" title="Add new document" />
+              <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" title="Add new document" />
             </Table.Body>
           </Table>
           <SectionHeader header="NS Admin Uploaded Documents" subheader="Uploaded via the Activity History" />
@@ -203,13 +208,13 @@ export default class Miscellaneous extends Component {
           <div className="right-align">
             <Button.Group>
               <Button
-                disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)}
+                disabled={!MISCELLANEOUS_FRM.meta.isValid}
                 className="relaxed"
                 secondary
               >
                 Save
               </Button>
-              <Button disabled={!(OTHER_DOCUMENTATION_FRM.meta.isValid && SOCIAL_MEDIA_FRM.meta.isValid)} primary type="button">Submit for Approval</Button>
+              <Button disabled={!MISCELLANEOUS_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
             </Button.Group>
           </div>
           <ManagerOverview form={MISCELLANEOUS_MANAGER_FRM} formName="MISCELLANEOUS_MANAGER_FRM" />
@@ -217,7 +222,7 @@ export default class Miscellaneous extends Component {
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'comment'}
+          open={confirmBox.entity === 'docDetails'}
           onCancel={this.handleDelCancel}
           onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
           size="mini"
