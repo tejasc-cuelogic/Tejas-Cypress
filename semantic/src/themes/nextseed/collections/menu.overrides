@@ -340,6 +340,9 @@ footer{
                 display: none;
             }
         }
+        .dropdown.item .menu {
+            min-width: 100%;
+        }
         &.inverted {
             background: fade(@neutral, 90%);
             .dropdown.item {
