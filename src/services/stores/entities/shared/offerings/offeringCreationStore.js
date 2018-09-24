@@ -252,7 +252,7 @@ export class OfferingCreationStore {
           fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
         if (fields[key].refSelector) {
-          fields[key].refSelectorValue = fields[key].value !== '';
+          fields[key].refSelector.value = fields[key].value !== '';
         }
       } catch (e) {
         // do nothing

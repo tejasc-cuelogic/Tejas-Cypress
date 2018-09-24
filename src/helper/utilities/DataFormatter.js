@@ -35,6 +35,15 @@ class DataFormatter {
   }
 
   formatedDate = date => moment(date).format('MM/DD/YYYY');
+  QueryStringToJSON = (search) => {
+    const pairs = search.slice(1).split('&');
+    const result = {};
+    pairs.forEach((pair) => {
+      const pairVal = pair.split('=');
+      result[pairVal[0]] = decodeURIComponent(pairVal[1] || '');
+    });
+    return JSON.parse(JSON.stringify(result));
+  }
 }
 
 export default new DataFormatter();

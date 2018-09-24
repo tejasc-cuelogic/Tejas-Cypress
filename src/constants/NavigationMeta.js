@@ -82,7 +82,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-article',
     title: 'Application',
-    to: 'business-application/:applicationId',
+    to: 'business-application/:applicationType/:applicationId',
     accessibleTo: ['issuer'],
     subPanel: 0,
     path: 'issuer/businessApplication/containers/BusinessApplication',

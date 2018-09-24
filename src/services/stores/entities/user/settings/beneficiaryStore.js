@@ -110,9 +110,11 @@ export class BeneficiaryStore {
 
   @action
   getBeneficiaries = () => {
+    this.beneficiariesData = [];
     this.beneficiariesData = graphql({
       client,
       query: getBeneficiaries,
+      fetchPolicy: 'network-only',
     });
   }
 
