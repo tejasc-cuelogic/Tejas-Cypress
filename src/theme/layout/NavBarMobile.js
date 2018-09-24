@@ -23,11 +23,22 @@ export default class NavBarMobile extends Component {
       navStatus, currentUser, stepInRoute,
     } = this.props;
     const nav = GetNavMeta(location.pathname, [], true);
-    const navTitle = nav ? nav.title : '';
+    let navTitle = nav ? nav.title : '';
+    if (location.pathname.startsWith('/invest')) {
+      navTitle = 'Investing';
+    } else if (location.pathname.startsWith('/business')) {
+      navTitle = 'Fundraising';
+    } else if (location.pathname.startsWith('/resources/education-center')) {
+      navTitle = 'Education Center';
+    } else if (location.pathname.startsWith('/resources/insights')) {
+      navTitle = 'Insights';
+    } else if (location.pathname.startsWith('/offerings')) {
+      navTitle = '';
+    }
     const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <Aux>
-        <div className={`${visible ? 'active' : ''} public-header-section`}>
+        <div className={`public-header-section ${visible ? 'active' : ''} ${!location.pathname.includes('/offerings') ? 'inverted' : ''}`}>
           <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
           <Link to="/"><Header as="h5" inverted>{navTitle}</Header></Link>
           {!currentUser ? (
