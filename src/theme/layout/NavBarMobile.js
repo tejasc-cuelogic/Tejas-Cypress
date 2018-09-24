@@ -29,14 +29,6 @@ export default class NavBarMobile extends Component {
       <Aux>
         <div className={`${visible ? 'active' : ''} public-header-section`}>
           <Icon onClick={onToggle} className="ns-nextseed-icon hamburger" />
-          <div className={`${visible ? 'a' : 'b'} full-logo`}>
-            <Logo
-              alt="NextSeed.com"
-              dataSrc={getLogo(location.pathname)}
-              as={Link}
-              to="/"
-            />
-          </div>
           <Link to="/"><Header as="h5" inverted>{navTitle}</Header></Link>
           {!currentUser ? (
             <Link to={`/auth/${stepInRoute.to}`} className="sign-in">
@@ -57,6 +49,14 @@ export default class NavBarMobile extends Component {
             </Button>
           )}
         </div>
+        <div className={`${visible ? 'visible-logo' : ''} full-logo`}>
+          <Logo
+            alt="NextSeed.com"
+            dataSrc={getLogo(location.pathname)}
+            as={Link}
+            to="/"
+          />
+        </div>
         <Sidebar.Pushable>
           <Sidebar
             as={Menu}
@@ -66,9 +66,9 @@ export default class NavBarMobile extends Component {
             visible={visible}
             className="public-sidebar"
           >
+            <Icon onClick={onToggle} className="ns-close-light" />
             <div className="public-mobile-nav">
               <div className="mobile-nav-inner-container">
-                <Icon onClick={onToggle} className="ns-close-light" />
                 <div className="public-header-nav">
                   <NavItems
                     refLoc="public"

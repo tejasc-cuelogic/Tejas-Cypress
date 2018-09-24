@@ -1853,6 +1853,9 @@ p.check-extra-info{
 	justify-content: center;
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
 	z-index: 3;
+	&.active {
+		z-index: 0;
+	}
 	.icon.hamburger {
 		font-size: @30px;
 		line-height: 30px;
@@ -1861,10 +1864,6 @@ p.check-extra-info{
 		top: 14px;
 		left: 18px;
 		z-index: 1;
-
-		&:hover+.full-logo {
-			width: 260px;
-		}
 	}
 	.sign-in {
 		font-size: @14px;
@@ -1878,25 +1877,6 @@ p.check-extra-info{
 			text-decoration: none;	
 		}
 	}
-	.full-logo {
-		width: 0;
-		height: 30px;
-		position: absolute;
-		left: 0px;
-		top: 14px;
-		z-index: 0;
-		// background: #31333d;
-		overflow: hidden;
-		transition: width 0.5s ease-in-out;
-		.ui.image {
-			height: 100%;
-			margin-left: 21px;
-			img {
-				max-width: none;
-				max-height: 100%;
-			}
-		}
-	}
 	.fixed-button {
 		position: fixed;
 		bottom: 0;
@@ -1907,6 +1887,29 @@ p.check-extra-info{
 .proven-result-section {
 	.ui.grid>* {
 		padding: 0;
+	}
+}
+.full-logo {
+	width: 52px;
+    height: 30px;
+    position: absolute;
+    left: 0;
+    top: 14px;
+    z-index: 3;
+    overflow: hidden;
+    transition: width 390ms ease-in-out;
+    pointer-events: none;
+	.ui.image {
+		height: 100%;
+		margin-left: 21px;
+		img {
+			max-width: none;
+			max-height: 100%;
+		}
+	}
+	&.visible-logo {
+		width: 200px;
+		transition-delay: 110ms;
 	}
 }
 //Public responsive end
