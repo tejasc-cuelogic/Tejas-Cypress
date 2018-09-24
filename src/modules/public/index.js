@@ -75,6 +75,7 @@ export default class Public extends React.Component {
             location={location}
             isMobile
             navStatus={this.props.navStore.navStatus}
+            stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             publicContent={this.getRoutes()}
           />

@@ -22,7 +22,7 @@ class MeetTeamModal extends Component {
         <Modal.Content scrolling>
           <Grid doubling columns={2} className="compact" verticalAlign="middle">
             <Grid.Column>
-              <Image src={team1} />
+              <Image src={team1} fluid />
             </Grid.Column>
             <Grid.Column className="padded team-details-container">
               <Header as="h3">

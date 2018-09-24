@@ -6,7 +6,6 @@ import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-reac
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 
-const isMobile = document.documentElement.clientWidth < 768;
 @withRouter
 export class NavItems extends Component {
   state = { active: '' };
@@ -16,10 +15,12 @@ export class NavItems extends Component {
       this.props.history.replace(`/app/${name}`);
     }
   };
-  isActive = (to, location, app) => (to !== '' && this.state.active === to) || location.pathname.startsWith(`/${app}/${to}`);
+  isActive = (to, location, app) => ((to !== '' && this.state.active === to) ||
+    ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
+    (this.props.refLoc === 'public' && location.pathname.startsWith(`/${to}`))));
   render() {
     const {
-      location, isApp, roles, match,
+      location, isApp, roles, match, isMobile, onToggle,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
@@ -43,11 +44,12 @@ export class NavItems extends Component {
               </Aux>
             }
           >
-            <Dropdown.Menu className={this.isActive(item.to, location) || isMobile ? 'visible' : ''}>
+            <Dropdown.Menu className={this.isActive(item.to, location) && isMobile ? 'visible' : ''}>
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
                   as={NavLink}
+                  onClick={isMobile ? onToggle : false}
                   to={`${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                 >
                   {sn.title}
@@ -60,6 +62,7 @@ export class NavItems extends Component {
             key={item.to}
             name={item.to}
             as={NavLink}
+            onClick={isMobile ? onToggle : false}
             to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
             {item.icon &&
@@ -109,7 +112,12 @@ export class NavigationItems extends Component {
           </Menu.Item>
           <Menu.Menu position="right">
             {!location.pathname.includes('/business-application') &&
-              <NavItems refLoc="public" currentUser={currentUser} location={location} navItems={PUBLIC_NAV} />
+              <NavItems
+                refLoc="public"
+                currentUser={currentUser}
+                location={location}
+                navItems={PUBLIC_NAV.filter(nav => nav.header !== false)}
+              />
             }
           </Menu.Menu>
           {!currentUser ? (

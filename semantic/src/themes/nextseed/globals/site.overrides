@@ -5,7 +5,7 @@
 //iOS cursor position on keypad-in fix
 html,body{
 	-webkit-overflow-scrolling : touch !important;
-	overflow: auto !important;
+	// overflow: auto !important;
 	height: 100% !important;
 }
 //iOS cursor position on keypad-in fix
@@ -339,7 +339,7 @@ footer{
 			position: static;
 			overflow: hidden;
 			width: 100%;
-			max-height: 800px;
+			max-height: 1000px;
 			height: auto;
 			transition: all 500ms ease-in-out;
 			&.collapse {
@@ -441,11 +441,14 @@ footer{
 			.ui.padded.segment {
 				padding: @15px @30px @25px;
 				margin-bottom: @20px;
-				// .ui.breadcrumb {
-				// 	margin-bottom: @20px;
-				// }
+				display: flex;
+				flex-direction: column;
+				.ui.breadcrumb {
+					flex-grow: 0;
+				}
 				iframe {
 					width: 100%;
+					flex-grow: 1;
                 }
             }
         }
@@ -1888,7 +1891,7 @@ p.check-extra-info{
 
 //Public responsive start
 .public-header-section {
-	background-color: fade(@neutral, 90%);
+	background-color: @white;
     position: fixed;
     left: 0;
 	right: 0;
@@ -1899,6 +1902,15 @@ p.check-extra-info{
 	justify-content: center;
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
 	z-index: 3;
+	&.active {
+		z-index: 0;
+	}
+	&.inverted {
+		background-color: fade(@neutral, 90%);
+		.sign-in {
+			color: @white;
+		}
+	}
 	.icon.hamburger {
 		font-size: @30px;
 		line-height: 30px;
@@ -1907,14 +1919,10 @@ p.check-extra-info{
 		top: 14px;
 		left: 18px;
 		z-index: 1;
-
-		&:hover+.full-logo {
-			width: 260px;
-		}
 	}
 	.sign-in {
 		font-size: @14px;
-		color: @white;
+		color: @neutral;
 		position: absolute;
 		top: 20px;
 		right: 18px;
@@ -1922,28 +1930,6 @@ p.check-extra-info{
 	a {
 		&:hover {
 			text-decoration: none;	
-		}
-		.ui.header {
-			color: @white;
-		}
-	}
-	.full-logo {
-		width: 0;
-		height: 30px;
-		position: absolute;
-		left: 0px;
-		top: 14px;
-		z-index: 0;
-		// background: #31333d;
-		overflow: hidden;
-		transition: width 0.5s ease;
-		.ui.image {
-			height: 100%;
-			margin-left: 21px;
-			img {
-				max-width: none;
-				max-height: 100%;
-			}
 		}
 	}
 	.fixed-button {
@@ -1956,6 +1942,28 @@ p.check-extra-info{
 .proven-result-section {
 	.ui.grid>* {
 		padding: 0;
+	}
+}
+.full-logo {
+	width: 52px;
+    height: 30px;
+    position: absolute;
+    left: 0;
+    top: 14px;
+    z-index: 3;
+    overflow: hidden;
+    transition: width 390ms ease-in-out;
+	.ui.image {
+		height: 100%;
+		margin-left: 21px;
+		img {
+			max-width: none;
+			max-height: 100%;
+		}
+	}
+	&.visible-logo {
+		width: 200px;
+		transition-delay: 110ms;
 	}
 }
 //Public responsive end
