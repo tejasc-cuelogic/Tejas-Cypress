@@ -90,6 +90,9 @@
     border-radius:0;
     box-shadow:none;
     background-color:@white;
+    .ui.container > .item {
+        visibility: hidden;
+    }
     .item{
         padding:@3px @18px;
         &:hover {
@@ -134,6 +137,9 @@
         margin: 0;
         z-index: 1001;
         transition: all .3s ease;
+        .ui.container > .item {
+            visibility: visible;
+        }
         .item {
             img.ui.image.logo{
                 transform: scale(1);
