@@ -6,7 +6,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { FaqWidget } from '../../../../../theme/shared';
 import Leader from './leadership/Leader';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Leadership extends Component {
   componentWillMount() {
@@ -25,6 +25,7 @@ export default class Leadership extends Component {
     this.props.history.push(`${this.props.match.url}/leader/${leaderCount}`);
   }
   render() {
+    const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
     const navItems = [];
@@ -46,7 +47,7 @@ export default class Leadership extends Component {
       },
     ];
     return (
-      <div className="inner-content-spacer">
+      <div className={isIssuer ? '' : 'inner-content-spacer'}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu secondary vertical match={match} navItems={navItems} />
