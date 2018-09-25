@@ -1875,7 +1875,7 @@ p.check-extra-info{
 		font-size: @14px;
 		color: @neutral;
 		position: absolute;
-		top: 20px;
+		top: 18px;
 		right: 18px;
 	}
 	a {

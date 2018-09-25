@@ -22,7 +22,6 @@
 		&.public-pusher {
 			padding-top: 58px;
 			min-height:100vh;
-			height: auto;
 			background-color: transparent;
 		}
 		&.dimmed {
