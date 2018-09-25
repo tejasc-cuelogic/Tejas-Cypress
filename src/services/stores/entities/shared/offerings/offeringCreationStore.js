@@ -76,10 +76,20 @@ export class OfferingCreationStore {
 
   @action
   formChange = (e, result, form) => {
-    this[form] = Validator.onChange(
-      this[form],
-      Validator.pullValues(e, result),
-    );
+    if (result && result.name === 'isEarlyBirds' && !result.checked) {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+        '',
+        true,
+        result.checked,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
   }
 
   @action

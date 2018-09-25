@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
-import { FormInput, FormCheckbox } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, FormCheckbox } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
 @observer
@@ -10,7 +11,7 @@ export default class AddNewTier extends Component {
     this.props.history.push(this.props.refLink);
   }
   render() {
-    const { ADD_NEW_TIER_FRM, formChange } = this.props.offeringCreationStore;
+    const { ADD_NEW_TIER_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_TIER_FRM';
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
@@ -29,20 +30,25 @@ export default class AddNewTier extends Component {
               />
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS') ?
-                ['amountForEarlyBird', 'earlyBirdQuantity'].map(field => (
+                  <Aux>
+                    <FormInput
+                      name="amountForEarlyBird"
+                      fielddata={ADD_NEW_TIER_FRM.fields.amountForEarlyBird}
+                      changed={(e, result) => formChange(e, result, formName)}
+                    />
+                    <MaskedInput
+                      number
+                      name="earlyBirdQuantity"
+                      fielddata={ADD_NEW_TIER_FRM.fields.earlyBirdQuantity}
+                      changed={(values, field) => maskChange(values, formName, field)}
+                    />
+                  </Aux>
+                  :
                   <FormInput
-                    key={field}
-                    name={field}
-                    fielddata={ADD_NEW_TIER_FRM.fields[field]}
+                    name="amountForThisTier"
+                    fielddata={ADD_NEW_TIER_FRM.fields.amountForThisTier}
                     changed={(e, result) => formChange(e, result, formName)}
                   />
-                ))
-                :
-                <FormInput
-                  name="amountForThisTier"
-                  fielddata={ADD_NEW_TIER_FRM.fields.amountForThisTier}
-                  changed={(e, result) => formChange(e, result, formName)}
-                />
               }
             </div>
             <Button disabled={!ADD_NEW_TIER_FRM.meta.isValid} floated="right" primary content="Add new bonus reward" />

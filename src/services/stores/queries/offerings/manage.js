@@ -294,3 +294,22 @@ export const getOfferingDetails = gql`
     }
   }
 `;
+
+export const createBonusRewardTier = gql`
+  mutation _createBonusRewardTier{
+    createBonusRewardTier(
+      bonusRewardTierDetails: {
+        amount:500
+        earlyBirdQuantity: 0
+      }
+    ) {
+      amount
+      earlyBirdQuantity
+      created{
+        id
+        date
+        name
+      }
+    }
+  }
+`;

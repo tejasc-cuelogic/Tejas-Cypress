@@ -1598,7 +1598,7 @@ export const LEADER = {
 
 export const ADD_NEW_TIER = {
   isEarlyBirds: {
-    value: [],
+    value: '',
     values: [
       {
         label: 'Early Birds',
@@ -1606,27 +1606,27 @@ export const ADD_NEW_TIER = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'alpha_dash',
   },
   amountForEarlyBird: {
     label: 'Amount for this Early Bird tier',
     value: '',
     error: undefined,
-    rule: 'string|required_if:isEalryBirds,EARLY_BIRDS',
+    rule: 'required_if:isEarlyBirds,EARLY_BIRDS',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   earlyBirdQuantity: {
     label: 'Quantity of Early Birds available',
     value: '',
     error: undefined,
-    rule: 'string|required_if:isEalryBirds,EARLY_BIRDS',
+    rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
     placeHolder: 'Lorem ipsum dolor sit amet enim. Etiam',
   },
   amountForThisTier: {
     label: 'Amount for this tier',
     value: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'string|required_without:isEarlyBirds',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
 };

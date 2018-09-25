@@ -4,7 +4,6 @@ import { Route, Link } from 'react-router-dom';
 import AddNewTier from './bonusrewards/AddNewTier';
 import AddNewBonusReward from './bonusrewards/addNewBonusRewards';
 
-
 const tiersArray = [
   { title: 'Early Birds' },
   {
