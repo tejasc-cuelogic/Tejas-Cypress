@@ -532,15 +532,17 @@ export class IdentityStore {
     }
     if (info) {
       this.setProfileInfoField('lastName', info.lastName);
-    } else if (legalDetails) {
+    } else if (legalDetails && legalDetails.legalName !== null) {
       this.setProfileInfoField('firstName', legalDetails.legalName.firstLegalName);
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
-    this.setProfileInfoField('email', email.address);
-    if (phone !== null && phone.verified) {
+    if (email) {
+      this.setProfileInfoField('email', email.address);
+    }
+    if (phone && phone !== null && phone.verified) {
       this.setProfileInfoField('phoneNumber', phone.number);
     }
-    if (info.mailingAddress === null) {
+    if (info && info.mailingAddress === null) {
       const addressFields = ['street', 'city', 'state', 'zipCode'];
       if (legalDetails && legalDetails.legalAddress !== null) {
         addressFields.forEach((val) => {

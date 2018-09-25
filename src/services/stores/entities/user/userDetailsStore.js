@@ -41,8 +41,8 @@ export class UserDetailsStore {
 
   @action
   setProfilePhoto(url) {
-    if (this.currentUser) {
-      this.currentUser.data.user.avatar.url = url;
+    if (this.currentUser && this.currentUser.data.user.info.avatar) {
+      this.currentUser.data.user.info.avatar.url = url;
     }
   }
 

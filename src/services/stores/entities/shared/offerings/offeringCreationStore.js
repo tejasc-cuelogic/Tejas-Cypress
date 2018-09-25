@@ -67,7 +67,7 @@ export class OfferingCreationStore {
 
   @action
   removeData = (formName, subForm = 'data') => {
-    this[formName].fields[subForm].splice(this.removeIndex, 1);
+    // this[formName].fields[subForm].splice(this.removeIndex, 1);
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
