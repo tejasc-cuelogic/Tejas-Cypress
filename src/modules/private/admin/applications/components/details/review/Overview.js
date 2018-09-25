@@ -7,11 +7,12 @@ import { Form, Header, Button, Confirm } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 
-@inject('businessAppReviewStore', 'businessAppStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Overview extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint.description');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.overview.criticalPoint.managerOverview');
   }
   addCriticalPoint = (e) => {
     e.preventDefault();
@@ -30,47 +31,56 @@ export default class Overview extends Component {
   render() {
     const {
       OVERVIEW_FRM,
-      OVERVIEW_MANAGER_FRM,
       formChangeWithIndex,
       confirmModal,
       toggleConfirmModal,
       removeData,
       confirmModalName,
     } = this.props.businessAppReviewStore;
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
     const submitted = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
+    const approved = (review && review.overview && review.overview.criticalPoint &&
+      review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved));
     return (
       <Aux>
         <Header as="h4">
           Overview
+          {!isReadonly &&
           <Link to={this.props.match.url} className="link" onClick={this.addCriticalPoint}><small>+ Add Critical Point</small></Link>
+          }
         </Header>
         <Form onSubmit={this.submit}>
           {
             OVERVIEW_FRM.fields.data.map((field, index) => (
               <FormInput
-                type="text"
+                containerclassname={isReadonly ? 'display-only' : ''}
+                disabled={isReadonly}
                 name="description"
                 label={`Critical Point ${index + 1}`}
                 fielddata={field.description}
                 changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'data', index)}
-                removed={e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM')}
+                removed={!isReadonly ? e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM') : false}
                 linkto={this.props.match.url}
               />
             ))
           }
+          {!isManager && !approved &&
           <div className="right-align">
             <Button.Group>
               {!submitted &&
-              <Button disabled={!(OVERVIEW_FRM.meta.isValid)} secondary className="relaxed">Save</Button>
+              <Button disabled={!OVERVIEW_FRM.meta.isValid} secondary className="relaxed">Save</Button>
               }
               <Button onClick={() => this.submitWithApproval('OVERVIEW_FRM', 'REVIEW_SUBMITTED')} disabled={(!(OVERVIEW_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Button.Group>
           </div>
+          }
           {submitted &&
-          <ManagerOverview form={OVERVIEW_MANAGER_FRM} formName="OVERVIEW_MANAGER_FRM" />
+          <ManagerOverview approved={approved} isReadonly={isReadonly} formName="OVERVIEW_MANAGER_FRM" isValid={OVERVIEW_FRM.meta.isValid} />
           }
         </Form>
         <Confirm

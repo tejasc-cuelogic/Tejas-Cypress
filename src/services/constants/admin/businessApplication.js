@@ -597,6 +597,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'date|required',
+      objType: 'DATE',
       customErrors: {
         date: 'Date format is invalid.',
         required: '* required.',

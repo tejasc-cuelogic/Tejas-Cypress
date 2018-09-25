@@ -8,9 +8,9 @@ import { FormTextarea } from '../../../../../../../theme/form';
 @observer
 export default class ManagerOverview extends Component {
   render() {
-    const { formChange } = this.props.businessAppReviewStore;
-    const { form, formName } = this.props;
+    const { formChange, MANAGERS_FRM } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
+    const { isReadonly, approved } = this.props;
     if (roles && !roles.includes('manager')) {
       return null;
     }
@@ -20,16 +20,22 @@ export default class ManagerOverview extends Component {
         <Header as="h4">Manager</Header>
         <FormTextarea
           name="managerOverview"
-          fielddata={form.fields.managerOverview}
-          changed={(e, result) => formChange(e, result, formName)}
-          containerclassname="secondary"
+          fielddata={MANAGERS_FRM.fields.managerOverview}
+          changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
+          disabled={isReadonly}
+          containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
         />
+        {!isReadonly &&
         <div className="right-align">
           <Button.Group>
-            <Button disabled={!form.meta.isValid} className="relaxed" inverted red secondary>Send Back</Button>
-            <Button disabled={!form.meta.isValid} primary className="relaxed" type="button">Approve</Button>
+            <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" inverted color="red">Send Back</Button>
+            <Button disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button">Approve</Button>
           </Button.Group>
         </div>
+        }
+        {approved &&
+          <span>Approved By {approved.by}</span>
+        }
       </Aux>
     );
   }

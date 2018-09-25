@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { map } from 'lodash';
-import { CONTINGENCY, MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
+import moment from 'moment';
+import { CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -11,21 +12,13 @@ import { businessAppStore, uiStore } from '../../../index';
 
 export class BusinessAppReviewStore {
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
-  @observable OVERVIEW_MANAGER_FRM = Validator.prepareFormObject(OVERVIEW_MANAGER);
   @observable MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
   @observable JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
-  @observable JUSTIFICATIONS_MANAGER_FRM = Validator.prepareFormObject(JUSTIFICATIONS_MANAGER);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
-  @observable DOCUMENTATION_MANAGER_FRM = Validator.prepareFormObject(DOCUMENTATION_MANAGER);
   @observable PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
-  @observable PROJECTIONS_MANAGER_FRM = Validator.prepareFormObject(PROJECTIONS_MANAGER);
   @observable BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
-  @observable BUSINESS_PLAN_MANAGER_FRM = Validator.prepareFormObject(BUSINESS_PLAN_MANAGER);
-  @observable CONTINGENCY_MANAGER_FRM = Validator.prepareFormObject(CONTINGENCY_MANAGER);
   @observable CONTINGENCY_FRM = Validator.prepareFormObject(CONTINGENCY);
-  @observable MISCELLANEOUS_MANAGER_FRM = Validator.prepareFormObject(MISCELLANEOUS_MANAGER);
   @observable MISCELLANEOUS_FRM = Validator.prepareFormObject(MISCELLANEOUS);
-  @observable OFFER_MANAGER_FRM = Validator.prepareFormObject(OFFER_MANAGER);
   @observable MODEL_MANAGER_FRM = Validator.prepareFormObject(MODEL_MANAGER);
   @observable UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
   @observable OFFERS_FRM = Validator.prepareFormObject(OFFERS);
@@ -62,6 +55,7 @@ export class BusinessAppReviewStore {
       PROJECTIONS_FRM: { formData: PROJECTIONS, actionType: 'REVIEW_PROJECTIONS', objRef: 'projections' },
       DOCUMENTATION_FRM: { formData: DOCUMENTATION, actionType: 'REVIEW_DOCUMENTATION', objRef: 'documentation' },
       OFFERS_FRM: { formData: OFFERS, actionType: 'REVIEW_OFFER', objRef: 'offer' },
+      MANAGERS_FRM: { formData: MANAGERS },
     };
     return metaDataMapping[metaData][getField];
   }
@@ -309,6 +303,8 @@ export class BusinessAppReviewStore {
                   const fileObj =
                       { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
                   arrayFields = { ...arrayFields, [keyRef1]: fileObj };
+                } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
+                  arrayFields = { [keyRef1]: moment(field[keyRef1].value).toISOString() };
                 } else {
                   arrayFields = { [keyRef1]: field[keyRef1].value };
                 }
@@ -333,6 +329,8 @@ export class BusinessAppReviewStore {
         } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
           const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
           inputData = { ...inputData, [key]: fileObj };
+        } else if (fields[key].objType && fields[key].objType === 'DATE') {
+          inputData = { ...inputData, [key]: moment(fields[key].value).toISOString() };
         } else {
           inputData = { ...inputData, [key]: fields[key].value };
         }
@@ -378,6 +376,8 @@ export class BusinessAppReviewStore {
           if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
             fields[key].value = tempRef[key].fileName;
             fields[key].fileId = tempRef[key].fileId;
+          } else if (fields[key].objType === 'DATE') {
+            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
           } else {
             const fieldRef = key.split('_');
             fields[key].value = fields[key].find ?
@@ -389,6 +389,8 @@ export class BusinessAppReviewStore {
         } else if (fields[key].objType === 'FileObjectType') {
           fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
           fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
+        } else if (fields[key].objType === 'DATE') {
+          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
         } else {
           fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
@@ -402,7 +404,7 @@ export class BusinessAppReviewStore {
     });
   }
   @action
-  setFormData = (form, ref, ref2, ref3) => {
+  setFormData = (form, ref) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const appData = businessApplicationDetailsAdmin;
     const { fields } = this[form];
@@ -412,8 +414,8 @@ export class BusinessAppReviewStore {
       return data;
     });
     if (this[form].fields.data && Array.isArray(toJS(this[form].fields.data))) {
-      this.resetMe(form, this.getMetaData(form));
       if (data && data.length > 0) {
+        this.resetMe(form, this.getMetaData(form));
         const addRec = data.length - toJS(this[form].fields.data).length;
         for (let i = addRec; i > 0; i -= 1) {
           this.addMore(form);
@@ -423,6 +425,7 @@ export class BusinessAppReviewStore {
         });
       }
     } else {
+      // this.resetMe(form, this.getMetaData(form));
       this.setDataForFields(this[form].fields, data, form);
     }
   }
