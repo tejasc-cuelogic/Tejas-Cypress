@@ -9,8 +9,8 @@ const RevenueSharing = () => (
       <p className="caption-note">For illustrative purposes only.</p>
     </Grid.Column>
     <Grid.Column>
-      <Header as="h4">Revenue Sharing Notes</Header>
-      <Header as="h3" color="blue">Raise $100,000—$1 Million</Header>
+      <Header as="h3">Revenue Sharing Notes</Header>
+      {/* <Header as="h3" color="blue">Raise $100,000—$1 Million</Header> */}
       <Item.Group relaxed="very" className="question-list">
         <Item>
           <Item.Content>

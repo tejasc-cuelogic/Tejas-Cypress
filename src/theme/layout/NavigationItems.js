@@ -92,7 +92,9 @@ export class NavItems extends Component {
   }
 }
 
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoWhiteGreen');
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
+  (path.includes('offerings') ? 'LogoColor' : (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
+));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 

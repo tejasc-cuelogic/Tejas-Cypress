@@ -65,7 +65,7 @@ export default class NavBarMobile extends Component {
           )}
         </div>
         <div
-          className={`${visible ? 'visible-logo' : ''} full-logo`}
+          className={`${visible || (location.pathname.startsWith('/offerings')) ? 'visible-logo' : ''} full-logo`}
           onClick={!visible ? onToggle : false}
           onKeyPress={!visible ? onToggle : false}
           role="button"
