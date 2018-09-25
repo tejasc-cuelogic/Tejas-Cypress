@@ -16,6 +16,11 @@ export default class OfferingCompany extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore('COMPANY_HISTORY_FRM');
   }
+  handleFormSubmit = () => {
+    const { OFFERING_COMPANY_FRM, updateOffering } = this.props.offeringCreationStore;
+    const { offeringId } = this.props;
+    updateOffering(offeringId, OFFERING_COMPANY_FRM.fields, 'offering', 'about');
+  }
   render() {
     const {
       OFFERING_COMPANY_FRM,

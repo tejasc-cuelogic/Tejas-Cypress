@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Header, Confirm } from 'semantic-ui-react';
+import { Button, Header, Icon, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import AddNewTier from './bonusrewards/AddNewTier';
@@ -36,6 +36,10 @@ export default class BonusRewardsCreation extends Component {
     this.props.offeringCreationStore.removeData(confirmModalName);
     Helper.toast('Contingency has been deleted successfully.', 'success');
   }
+  removed = (e) => {
+    e.preventDefault();
+    Helper.toast('The tier has been removed.', 'success');
+  }
   render() {
     const { confirmModal, confirmModalName } = this.props.offeringCreationStore;
     const { match } = this.props;
@@ -54,6 +58,9 @@ export default class BonusRewardsCreation extends Component {
               {data.bonusRewards &&
               data.bonusRewards.map((item, index) => (
                 <div className="featured-section mb-20">
+                  <Link to="/" onClick={e => this.removed(e)}>
+                    <Icon className="close" color="grey" />
+                  </Link>
                   <Header as="h5">{item.title}</Header>
                   <p>{item.description}</p>
                   <p>Exp Date: {item.expDate}</p>

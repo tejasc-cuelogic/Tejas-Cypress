@@ -37,11 +37,21 @@ export class OfferingCreationStore {
   @observable confirmModalName = null;
   @observable removeIndex = null;
   @observable initLoad = [];
+  @observable currentOfferingId = null;
 
   @observable requestState = {
     search: {},
   };
 
+  @action
+  setCurrentOfferingId = (id) => {
+    this.currentOfferingId = id;
+  }
+
+  @action
+  resetOfferingId = () => {
+    this.currentOfferingId = null;
+  }
   @action
   setProfilePhoto(attr, value, field) {
     this.MEDIA_FRM.fields[field][attr] = value;

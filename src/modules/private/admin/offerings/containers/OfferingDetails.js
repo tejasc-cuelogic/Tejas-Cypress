@@ -9,7 +9,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import Summary from '../components/Summary';
 import OfferingModule from '../../../shared/offerings/components';
 
-@inject('navStore', 'offeringsStore')
+@inject('navStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class OfferingDetails extends Component {
   componentWillMount() {
@@ -18,9 +18,11 @@ export default class OfferingDetails extends Component {
     }
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
     this.props.offeringsStore.getOne(this.props.match.params.offeringid);
+    this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.offeringCreationStore.resetOfferingId();
     this.props.history.push(this.props.refLink);
   };
   summary = (offer) => {
