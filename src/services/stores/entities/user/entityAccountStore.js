@@ -10,7 +10,7 @@ import {
   ENTITY_FORMATION_DOCS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore } from '../../index';
-import { createAccount, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
+import { createIndividual, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
@@ -184,6 +184,7 @@ class EntityAccountStore {
 
   @computed
   get accountAttributes() {
+    /* eslint-disable camelcase */
     let payload = {};
     payload = {
       netAssets: this.FIN_INFO_FRM.fields.netAssets.value,
@@ -191,51 +192,56 @@ class EntityAccountStore {
         dateOfInvestment: '02281975',
         amount: this.FIN_INFO_FRM.fields.cfInvestment.value,
       },
-      entity: {
-        name: this.GEN_INFO_FRM.fields.name.value,
-        taxId: this.GEN_INFO_FRM.fields.taxId.value,
-        isTrust: this.TRUST_INFO_FRM.fields.isTrust.value,
-        trustDate: this.TRUST_INFO_FRM.fields.trustDate.value,
-        address: {
-          street: this.GEN_INFO_FRM.fields.street.value,
-          city: this.GEN_INFO_FRM.fields.city.value,
-          state: this.GEN_INFO_FRM.fields.state.value,
-          zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+      name: this.GEN_INFO_FRM.fields.name.value,
+      taxId: this.GEN_INFO_FRM.fields.taxId.value,
+      isTrust: this.TRUST_INFO_FRM.fields.isTrust.value,
+      trustDate: this.TRUST_INFO_FRM.fields.trustDate.value,
+      address: {
+        street: this.GEN_INFO_FRM.fields.street.value,
+        city: this.GEN_INFO_FRM.fields.city.value,
+        state: this.GEN_INFO_FRM.fields.state.value,
+        zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
+      },
+      legalInfo: {
+        legalFirstName: userStore.currentUser.givenName,
+        legalLastName: userStore.currentUser.familyName,
+        title: this.PERSONAL_INFO_FRM.fields.title.value,
+        legalDocUrl: {
+          fileId: this.PERSONAL_INFO_FRM.fields.legalDocUrl.fileId,
+          fileName: this.PERSONAL_INFO_FRM.fields.legalDocUrl.value,
         },
-        legalInfo: {
-          legalFirstName: userStore.currentUser.givenName,
-          legalLastName: userStore.currentUser.familyName,
-          title: this.PERSONAL_INFO_FRM.fields.title.value,
-          legalDocUrl: {
-            fileId: this.PERSONAL_INFO_FRM.fields.legalDocUrl.fileId,
-            fileName: this.PERSONAL_INFO_FRM.fields.legalDocUrl.value,
-          },
+      },
+      legalDocs: {
+        formationDoc: {
+          fileName: this.FORM_DOCS_FRM.fields.formationDoc.value,
+          fileId: this.FORM_DOCS_FRM.fields.formationDoc.fileId,
         },
-        legalDocs: {
-          formationDoc: {
-            fileName: this.FORM_DOCS_FRM.fields.formationDoc.value,
-            fileId: this.FORM_DOCS_FRM.fields.formationDoc.fileId,
-          },
-          operatingAgreementDoc: {
-            fileName: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.value,
-            fileId: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.fileId,
-          },
-          einVerificationDoc: {
-            fileName: this.FORM_DOCS_FRM.fields.einVerificationDoc.value,
-            fileId: this.FORM_DOCS_FRM.fields.einVerificationDoc.fileId,
-          },
+        operatingAgreementDoc: {
+          fileName: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.value,
+          fileId: this.FORM_DOCS_FRM.fields.operatingAgreementDoc.fileId,
+        },
+        einVerificationDoc: {
+          fileName: this.FORM_DOCS_FRM.fields.einVerificationDoc.value,
+          fileId: this.FORM_DOCS_FRM.fields.einVerificationDoc.fileId,
         },
       },
     };
-    if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+    if (!isEmpty(bankAccountStore.plaidAccDetails)) {
       const plaidBankDetails = {};
-      plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-      plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-      plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-      plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-      plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-      plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
-      payload.bankDetails = plaidBankDetails;
+      const {
+        account_id,
+        public_token,
+        accountNumber,
+        routingNumber,
+      } = bankAccountStore.plaidAccDetails;
+      if (account_id && public_token) {
+        plaidBankDetails.plaidPublicToken = public_token;
+        plaidBankDetails.plaidAccountId = account_id;
+      } else {
+        plaidBankDetails.accountNumber = accountNumber;
+        plaidBankDetails.routingNumber = routingNumber;
+      }
+      payload.linkedBank = plaidBankDetails;
     } else {
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       if (accountNumber && routingNumber) {
@@ -243,7 +249,7 @@ class EntityAccountStore {
           accountNumber: accountNumber.value,
           routingNumber: routingNumber.value,
         };
-        payload.bankDetails = plaidBankDetails;
+        payload.linkedBank = plaidBankDetails;
       }
     }
 
@@ -281,7 +287,7 @@ class EntityAccountStore {
   validateAndSubmitStep =
   (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
-    const accountAttributes = {};
+    let accountAttributes = {};
     const array1 = ['Financial info', 'General', 'Entity info'];
     const array2 = ['Personal info', 'Formation doc'];
     if (array1.includes(currentStep.name)) {
@@ -295,7 +301,7 @@ class EntityAccountStore {
             amount: this.FIN_INFO_FRM.fields.cfInvestment.value,
           };
         } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
-          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
+          accountAttributes = this.setEntityAttributes(currentStep.name);
         }
         if (currentStep.name === 'General') {
           this.checkTaxIdCollision().then((alreadyExists) => {
@@ -316,7 +322,7 @@ class EntityAccountStore {
       }
     } else if (array2.includes(currentStep.name)) {
       if (removeUploadedData) {
-        accountAttributes.entity =
+        accountAttributes =
         this.setEntityAttributes(currentStep.name, removeUploadedData, field);
         this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData)
           .then(() => res()).catch(() => rej());
@@ -324,7 +330,7 @@ class EntityAccountStore {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
-          accountAttributes.entity = this.setEntityAttributes(currentStep.name);
+          accountAttributes = this.setEntityAttributes(currentStep.name);
           this.submitForm(currentStep, formStatus, accountAttributes)
             .then(() => res()).catch(() => rej());
         } else {
@@ -339,15 +345,11 @@ class EntityAccountStore {
         bankAccountStore.isValidLinkBank;
       if (isValidCurrentStep) {
         uiStore.setProgress();
-        if (!isEmpty(bankAccountStore.plaidBankDetails)) {
+        if (bankAccountStore.plaidAccDetails && !isEmpty(bankAccountStore.plaidAccDetails)) {
           const plaidBankDetails = {};
-          plaidBankDetails.accountNumber = bankAccountStore.plaidBankDetails.accountNumber;
-          plaidBankDetails.bankName = bankAccountStore.plaidBankDetails.bankName;
-          plaidBankDetails.plaidPublicToken = bankAccountStore.plaidBankDetails.plaidAccessToken;
-          plaidBankDetails.plaidAccountId = bankAccountStore.plaidBankDetails.plaidAccountId;
-          plaidBankDetails.plaidItemId = bankAccountStore.plaidBankDetails.plaidItemId;
-          plaidBankDetails.routingNumber = bankAccountStore.plaidBankDetails.routingNumber;
-          accountAttributes.bankDetails = plaidBankDetails;
+          plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
+          plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
+          accountAttributes.linkedBank = plaidBankDetails;
         } else {
           const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
           if (accountNumber && routingNumber) {
@@ -355,7 +357,7 @@ class EntityAccountStore {
               accountNumber: accountNumber.value,
               routingNumber: routingNumber.value,
             };
-            accountAttributes.bankDetails = plaidBankDetails;
+            accountAttributes.linkedBank = plaidBankDetails;
           }
         }
         this.submitForm(currentStep, formStatus, accountAttributes)
@@ -370,19 +372,19 @@ class EntityAccountStore {
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
-    let mutation = createAccount;
+    let mutation = createIndividual;
     const variables = {
       userId: userStore.currentUser.sub,
       accountAttributes,
       status: formStatus,
-      accountType: 'entity',
+      accountType: 'ENTITY',
     };
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.accounts, { accountType: 'entity' });
+      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
       if (accountDetails) {
         mutation = updateAccount;
-        variables.accountId = accountDetails.accountId;
+        variables.accountId = accountDetails.details.accountId;
         actionPerformed = 'updated';
       }
     }
@@ -395,6 +397,10 @@ class EntityAccountStore {
         .then(action((result) => {
           if (result.data.createInvestorAccount || formStatus === 'submit') {
             userDetailsStore.getUser(userStore.currentUser.sub);
+          }
+          if (result.data.updateInvestorAccount && currentStep.name === 'Link bank') {
+            const { linkedBank } = result.data.updateInvestorAccount;
+            bankAccountStore.setPlaidAccDetails(linkedBank);
           }
           if (formStatus !== 'submit') {
             if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
@@ -424,6 +430,9 @@ class EntityAccountStore {
           resolve(result);
         }))
         .catch((err) => {
+          if (currentStep.name === 'Link bank') {
+            bankAccountStore.resetShowAddFunds();
+          }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
@@ -444,37 +453,39 @@ class EntityAccountStore {
           this.FIN_INFO_FRM.fields[f].value = accountDetails[f];
         }
       } else if (form === 'GEN_INFO_FRM') {
-        if ((f === 'taxId' || f === 'name') && accountDetails.entity) {
-          this.GEN_INFO_FRM.fields[f].value = accountDetails.entity[f];
-        } else if (accountDetails.entity && accountDetails.entity.address) {
-          this.GEN_INFO_FRM.fields[f].value = accountDetails.entity.address[f];
+        if ((f === 'taxId' || f === 'name') && accountDetails && accountDetails[f]) {
+          this.GEN_INFO_FRM.fields[f].value = accountDetails[f];
+        } else if (accountDetails && accountDetails.address) {
+          this.GEN_INFO_FRM.fields[f].value = accountDetails.address[f];
         }
       } else if (form === 'TRUST_INFO_FRM') {
         if (f === 'isTrust') {
-          if (accountDetails.entity && accountDetails.entity[f]) {
-            this.TRUST_INFO_FRM.fields[f].value = accountDetails.entity[f];
+          if (accountDetails && accountDetails[f]) {
+            this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
           } else {
-            this.TRUST_INFO_FRM.fields[f].value = true;
-            isDirty = true;
+            this.TRUST_INFO_FRM.fields[f].value = false;
+            if (accountDetails && typeof accountDetails[f] === 'undefined') {
+              isDirty = true;
+            }
           }
-        } else if (f === 'trustDate' && accountDetails.entity && accountDetails.entity[f]) {
-          this.TRUST_INFO_FRM.fields[f].value = accountDetails.entity[f];
+        } else if (f === 'trustDate' && accountDetails && accountDetails[f]) {
+          this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
         }
       } else if (form === 'PERSONAL_INFO_FRM') {
-        if (accountDetails.entity && accountDetails.entity.legalInfo && f === 'legalDocUrl') {
-          const fileName = accountDetails.entity.legalInfo[f].fileName === null ? '' : accountDetails.entity.legalInfo[f].fileName;
-          const fileId = accountDetails.entity.legalInfo[f].fileId === null ? '' : accountDetails.entity.legalInfo[f].fileId;
+        if (accountDetails && accountDetails.legalInfo && f === 'legalDocUrl') {
+          const fileName = accountDetails.legalInfo[f].fileName === null ? '' : accountDetails.legalInfo[f].fileName;
+          const fileId = accountDetails.legalInfo[f].fileId === null ? '' : accountDetails.legalInfo[f].fileId;
           this.PERSONAL_INFO_FRM.fields[f].value = fileName;
           this.PERSONAL_INFO_FRM.fields[f].fileId = fileId;
-        } else if (accountDetails.entity && accountDetails.entity.legalInfo) {
-          this.PERSONAL_INFO_FRM.fields[f].value = accountDetails.entity.legalInfo[f];
+        } else if (accountDetails && accountDetails.legalInfo) {
+          this.PERSONAL_INFO_FRM.fields[f].value = accountDetails.legalInfo[f];
         }
       } else if (form === 'FORM_DOCS_FRM') {
-        if (accountDetails.entity && accountDetails.entity.legalDocs) {
-          const { entity } = accountDetails;
-          if (entity.legalDocs[f]) {
-            const fileName = entity.legalDocs[f].fileName === null ? '' : entity.legalDocs[f].fileName;
-            const fileId = entity.legalDocs[f].fileId === null ? '' : entity.legalDocs[f].fileId;
+        if (accountDetails && accountDetails.legalDocs) {
+          const { legalDocs } = accountDetails;
+          if (legalDocs[f]) {
+            const fileName = legalDocs[f].fileName === null ? '' : legalDocs[f].fileName;
+            const fileId = legalDocs[f].fileId === null ? '' : legalDocs[f].fileId;
             this.FORM_DOCS_FRM.fields[f].value = fileName;
             this.FORM_DOCS_FRM.fields[f].fileId = fileId;
           }
@@ -488,39 +499,40 @@ class EntityAccountStore {
   @action
   populateData = (userData) => {
     if (!isEmpty(userData)) {
-      const account = find(userData.accounts, { accountType: 'entity' });
+      const account = find(userData.roles, { name: 'entity' });
       if (account) {
-        this.setFormData('FIN_INFO_FRM', account.accountDetails);
-        this.setFormData('GEN_INFO_FRM', account.accountDetails);
-        if (account.accountDetails.entity && account.accountDetails.entity.address) {
+        this.setFormData('FIN_INFO_FRM', account.details);
+        this.setFormData('GEN_INFO_FRM', account.details);
+        if (account.details && account.details.address) {
           this.setEntityAttributes('General');
         }
-        this.setFormData('TRUST_INFO_FRM', account.accountDetails);
-        if (account.accountDetails.entity && account.accountDetails.entity.isTrust) {
+        this.setFormData('TRUST_INFO_FRM', account.details);
+        if (account.details && account.details.isTrust) {
           this.setEntityAttributes('Entity info');
         }
-        this.setFormData('PERSONAL_INFO_FRM', account.accountDetails);
-        if (account.accountDetails.entity && account.accountDetails.entity.legalInfo) {
+        this.setFormData('PERSONAL_INFO_FRM', account.details);
+        if (account.details && account.details.legalInfo) {
           this.setEntityAttributes('Personal info');
         }
-        this.setFormData('FORM_DOCS_FRM', account.accountDetails);
+        this.setFormData('FORM_DOCS_FRM', account.details);
 
-        if (account.accountDetails.entity && account.accountDetails.entity.legalDocs) {
+        if (account.details && account.details.legalDocs) {
           this.setEntityAttributes('Formation doc');
         }
-        if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.plaidItemId) {
-          bankAccountStore.setPlaidBankDetails(account.accountDetails.bankDetails);
+        if (account.details.linkedBank &&
+          account.details.linkedBank.plaidItemId) {
+          bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
-            const { accountDetails } = account;
-            if (accountDetails.bankDetails && accountDetails.bankDetails[f] !== '') {
-              bankAccountStore.formLinkBankManually.fields[f].value = accountDetails.bankDetails[f];
+            const { details } = account;
+            if (details.linkedBank && details.linkedBank[f] !== '') {
+              bankAccountStore.formLinkBankManually.fields[f].value = details.linkedBank[f];
               return bankAccountStore.formLinkBankManually.fields[f];
             }
             return null;
           });
-          if (account.accountDetails.bankDetails && account.accountDetails.bankDetails.routingNumber !== '' &&
-          account.accountDetails.bankDetails.accountNumber !== '') {
+          if (account.details.linkedBank && account.details.linkedBank.routingNumber !== '' &&
+          account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
         }
@@ -542,7 +554,7 @@ class EntityAccountStore {
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
     } else if (!bankAccountStore.formLinkBankManually.meta.isValid &&
-      isEmpty(bankAccountStore.plaidBankDetails)) {
+      isEmpty(bankAccountStore.plaidAccDetails)) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);

@@ -156,7 +156,7 @@
         }
     }
     >.header:not(.ui).signup-header{
-        padding-top:@28px;
+        padding-top:@28px !important;
         border:none;
         .back-link{
             font-size:@16px;
@@ -190,6 +190,9 @@
         &.signup-content{
             // padding-top:0;
             padding-bottom:@20px;
+            @media only screen and (max-width:@largestMobileScreen){
+                padding:@14px !important;
+            }
             .ui.header{
                 >.icon{
                     display:inline-block;
@@ -200,12 +203,25 @@
                 }
             }
             .user-type{
-                min-height:195px;
+                min-height:210px;
                 display:flex;
                 flex-direction:column;
                 justify-content:center;
+                align-items:center;
+                @media only screen and (max-width:@largestMobileScreen){
+                    min-height:80px;
+                    flex-direction:row;
+                    >div{
+                        flex-grow:1;
+                    }
+                }
                 > i.icon{
                     margin:0 auto;
+                    font-size:@50px;
+                    color:@border-color;
+                    @media only screen and (max-width:@largestMobileScreen){
+                        margin:0 @14px 0 0;
+                    }
                 }
             }
         }
@@ -216,17 +232,33 @@
             border:darken(@neutral-offwhite, 9%) 1px solid;
             cursor:pointer;
             h4{
-                margin:@7px 0;
+                margin:@14px 0;
+                font-size:@18px;
+                color:@fullBlack;
+                line-height:@20px;
+                @media only screen and (max-width:@largestMobileScreen){
+                    margin:0 0 @7px 0;
+                }
             }
             p{
                 font-size:@13px;
-                color:@fullBlack;
+                line-height:@16px;
+                color:@neutral-middark;
+                max-height:0;
+                overflow:hidden;
+                transition:all .5s ease-in-out;
+                @media only screen and (max-width:@largestMobileScreen){
+                    max-height:48px;
+                }
             }
             &:hover, &:focus, &.active{
                 border-color:@primary-one-darken;
                 i.icon{
                     color:@primary-one-darken;
                 }
+            }
+            &.active p{
+                max-height:60px;
             }
         }
         .ui{
@@ -304,6 +336,9 @@
             text-align:center;
             border:none;
             background-color:@white;
+            @media only screen and (max-width:@largestMobileScreen){
+                padding-bottom:@21px !important;
+            }
         }
     }
     .ui.divider{

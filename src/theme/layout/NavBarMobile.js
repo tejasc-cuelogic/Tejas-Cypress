@@ -38,7 +38,11 @@ export default class NavBarMobile extends Component {
     const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <Aux>
-        <div className={`public-header-section ${visible ? 'active' : ''} ${!location.pathname.includes('/offerings') ? 'inverted' : ''}`}>
+        <div
+          className={`public-header-section ${visible ? 'active' : ''}
+          ${!location.pathname.includes('/offerings') ? 'inverted' : ''}
+          ${navStatus === 'sub' ? 'slide-up' : ''}`}
+        >
           {/* <Icon className="ns-nextseed-icon hamburger" /> */}
           <Link to="/"><Header as="h5" inverted>{navTitle}</Header></Link>
           {!currentUser ? (
@@ -61,7 +65,7 @@ export default class NavBarMobile extends Component {
           )}
         </div>
         <div
-          className={`${visible ? 'visible-logo' : ''} full-logo`}
+          className={`${visible || (location.pathname.startsWith('/offerings')) ? 'visible-logo' : ''} full-logo`}
           onClick={!visible ? onToggle : false}
           onKeyPress={!visible ? onToggle : false}
           role="button"

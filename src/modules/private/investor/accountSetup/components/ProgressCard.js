@@ -90,7 +90,7 @@ const ProgressCard = props => (
                 disabled={props.getStepStatus('accounts') === 'disable'}
                 onClick={() => props.navToAccTypes(accountType)}
               />
-              {!isEmpty(props.signupStatus.accounts) &&
+              {!isEmpty(props.signupStatus.roles) &&
               props.signupStatus.inActiveAccounts.length > 0 &&
                 <Button
                   className="link-button padded"
@@ -106,7 +106,7 @@ const ProgressCard = props => (
       ))
     }
     {props.signupStatus.partialAccounts.length === 0 &&
-    !isEmpty(props.signupStatus.accounts) &&
+    !isEmpty(props.signupStatus.roles) &&
     props.signupStatus.inActiveAccounts.length > 0 &&
       <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
         <Card.Content>

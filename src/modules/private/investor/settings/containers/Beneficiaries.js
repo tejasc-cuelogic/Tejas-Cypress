@@ -23,9 +23,10 @@ export default class Beneficiaries extends Component {
       beneficiary.beneficiary ?
         <BeneficiaryList
           accountId={beneficiary.accountId}
-          updatedDate={beneficiary.updatedDate ? beneficiary.updatedDate : beneficiary.createdDate}
+          updatedDate={beneficiary.updated.date ? beneficiary.updated.date
+            : beneficiary.created.date}
           key={beneficiary.accountId}
-          title={beneficiary.accountType}
+          title={beneficiary.type}
           match={this.props.match}
           beneficiaries={beneficiary.beneficiary}
           loading={bLoading}
@@ -35,7 +36,7 @@ export default class Beneficiaries extends Component {
           <NoBeneficiary
             accountId={beneficiary.accountId}
             match={this.props.match}
-            title={beneficiary.accountType}
+            title={beneficiary.type}
             key={beneficiary.accountId}
             curLocation={this.props.location}
           /> : null)

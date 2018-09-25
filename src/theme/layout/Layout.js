@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import Login from '../../modules/auth/containers/Login';
@@ -10,7 +10,6 @@ import ChangePassword from '../../modules/auth/containers/ChangePassword';
 import ForgotPassword from '../../modules/auth/containers/ForgotPassword';
 import ResetPassword from '../../modules/auth/containers/ResetPassword';
 
-@inject('userStore', 'uiStore', 'navStore')
 @withRouter
 @observer
 class Layout extends Component {

@@ -5,6 +5,7 @@ import Aux from 'react-aux';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
+import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
 export class NavItems extends Component {
@@ -24,6 +25,7 @@ export class NavItems extends Component {
     ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
     (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
+  doNothing = () => console.log('nothing');
   render() {
     const {
       location, isApp, roles, match, isMobile, onToggle,
@@ -37,10 +39,10 @@ export class NavItems extends Component {
             item
             key={item.to}
             className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active' : ''}
-            ${item.title === 'How NextSeed Works' ? 'visible' : ''}
+            ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
             `}
             name={item.to}
-            onClick={item.title !== 'How NextSeed Works' ? this.navClick : false}
+            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : this.doNothing}
             text={
               <Aux>
                 {item.icon &&
@@ -53,14 +55,14 @@ export class NavItems extends Component {
             }
           >
             <Dropdown.Menu
-              className={`${this.isActive(item.to, location, app, item.subNavigations) && isMobile ? 'visible' : ''} ${item.title === 'How NextSeed Works' ? 'visible' : ''}
+              className={`${this.isActive(item.to, location, app, item.subNavigations) && isMobile ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
               `}
             >
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
                   as={NavLink}
-                  onClick={isMobile ? onToggle : false}
+                  onClick={isMobile ? onToggle : this.doNothing}
                   to={`${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                 >
                   {sn.title}
@@ -73,7 +75,7 @@ export class NavItems extends Component {
             key={item.to}
             name={item.to}
             as={location.pathname === '/' ? NavLink : Link}
-            onClick={isMobile ? onToggle : false}
+            onClick={isMobile ? onToggle : this.doNothing}
             to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
             {item.icon &&
@@ -91,8 +93,7 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
-  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
+  (path.includes('offerings') ? 'LogoColor' : (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
@@ -101,9 +102,9 @@ const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width
 export class NavigationItems extends Component {
   render() {
     const {
-      stepInRoute, navStatus, location, currentUser,
+      stepInRoute, navStatus, location, currentUser, loading,
+      isPrequalQulify, canSubmitApp, preQualSubmit,
     } = this.props;
-    console.log(navStatus, 'navStatus in main...');
     return (
       <Menu
         stackable
@@ -131,10 +132,24 @@ export class NavigationItems extends Component {
               />
             }
           </Menu.Menu>
-          {!currentUser ? (
-            <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
-              <Button secondary compact>{stepInRoute.title}</Button>
+          {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
+            <Menu.Item>
+              <Button.Group>
+                <Button as={Link} to="/" inverted color="red">Cancel</Button>
+                {isPrequalQulify &&
+                <SubmitButton
+                  canSubmitApp={canSubmitApp}
+                  click={preQualSubmit}
+                  loading={loading}
+                />}
+              </Button.Group>
             </Menu.Item>
+          : !location.pathname.includes('/business-application') &&
+            (
+            !currentUser ? (
+              <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
+                <Button secondary compact>{stepInRoute.title}</Button>
+              </Menu.Item>
           ) : (
             <Menu.Item
               as={Link}
@@ -142,7 +157,7 @@ export class NavigationItems extends Component {
             >
               <Button secondary compact>Dashboard</Button>
             </Menu.Item>
-          )}
+          ))}
         </Container>
       </Menu>
     );

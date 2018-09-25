@@ -2,7 +2,7 @@ import graphql from 'mobx-apollo';
 import { observable, action, computed } from 'mobx';
 import { mapValues, keyBy, find, flatMap, map } from 'lodash';
 import Validator from 'validatorjs';
-import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO, COUNTRY_CODES } from '../../../constants/user';
+import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, userStore, userDetailsStore } from '../../index';
 import { isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
@@ -21,7 +21,11 @@ export class IdentityStore {
   @observable ID_PROFILE_INFO = FormValidator.prepareFormObject(UPDATE_PROFILE_INFO);
   @observable submitVerificationsDocs = false;
   @observable reSendVerificationCode = false;
+  @observable userCipStatus = 'FAIL';
 
+  @action setCipStatus = (status) => {
+    this.userCipStatus = status;
+  }
   @action
   setSubmitVerificationDocs(status) {
     this.submitVerificationsDocs = status;
@@ -66,6 +70,15 @@ export class IdentityStore {
   }
 
   @action
+  profileInfoMaskedChange = (values, field) => {
+    const finalValue = values.value;
+    this.ID_PROFILE_INFO = FormValidator.onChange(
+      this.ID_PROFILE_INFO,
+      { name: field, value: finalValue },
+    );
+  }
+
+  @action
   setAddressFieldsForUserVerification = (place) => {
     FormValidator.setAddressFields(place, this.ID_VERIFICATION_FRM);
   }
@@ -97,10 +110,13 @@ export class IdentityStore {
   @computed
   get formattedUserInfo() {
     const { fields } = this.ID_VERIFICATION_FRM;
-    const { phone } = userDetailsStore.userDetails.contactDetails;
+    const { phone } = userDetailsStore.userDetails;
     const userInfo = {
-      firstLegalName: fields.firstLegalName.value,
-      lastLegalName: fields.lastLegalName.value,
+      legalName: {
+        firstLegalName: fields.firstLegalName.value,
+        lastLegalName: fields.lastLegalName.value,
+      },
+      status: this.userCipStatus,
       dateOfBirth: fields.dateOfBirth.value,
       ssn: fields.ssn.value,
       legalAddress: {
@@ -110,8 +126,20 @@ export class IdentityStore {
         zipCode: fields.zipCode.value,
       },
     };
-    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone.number;
-    const phoneDetails = { number, countryCode: COUNTRY_CODES.US };
+    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
+    const verificationDocs = {
+      idProof: {
+        fileId: photoId.fileId,
+        fileName: photoId.value,
+      },
+      addressProof: {
+        fileId: proofOfResidence.fileId,
+        fileName: proofOfResidence.value,
+      },
+    };
+    userInfo.verificationDocs = this.userCipStatus === 'MANUAL_VERIFICATION_PENDING' ? verificationDocs : null;
+    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
+    const phoneDetails = { number };
     return { userInfo, phoneDetails };
   }
 
@@ -119,6 +147,7 @@ export class IdentityStore {
   get cipStatus() {
     const { key, questions } = this.ID_VERIFICATION_FRM.response;
     const cipStatus = identityHelper.getCipStatus(key, questions);
+    this.setCipStatus(cipStatus);
     return cipStatus;
   }
   @action
@@ -135,8 +164,7 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
-          const cipStatus = { status: this.cipStatus };
-          this.updateUserInfo(cipStatus);
+          this.updateUserInfo();
           resolve();
         })
         .catch((err) => {
@@ -145,8 +173,8 @@ export class IdentityStore {
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
-            const status = { status: 'FAIL' };
-            this.updateUserInfo(status);
+            this.setCipStatus('FAIL');
+            this.updateUserInfo();
             resolve();
             // reject(err);
           }
@@ -206,23 +234,10 @@ export class IdentityStore {
 
   uploadAndUpdateCIPInfo = () => {
     uiStore.setProgress();
-    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
-    const cipStatus = {
-      status: 'MANUAL_VERIFICATION_PENDING',
-      verificationDocs:
-      {
-        idProof: {
-          fileId: photoId.fileId,
-          fileName: photoId.value,
-        },
-        addressProof: {
-          fileId: proofOfResidence.fileId,
-          fileName: proofOfResidence.value,
-        },
-      },
-    };
+    const cipStatus = 'MANUAL_VERIFICATION_PENDING';
+    this.setCipStatus(cipStatus);
     return new Promise((resolve, reject) => {
-      this.updateUserInfo(cipStatus)
+      this.updateUserInfo()
         .then(() => {
           resolve();
         })
@@ -291,8 +306,8 @@ export class IdentityStore {
         .then((result) => {
           /* eslint-disable no-underscore-dangle */
           if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
-            const cipStatus = { status: 'PASS' };
-            this.updateUserInfo(cipStatus);
+            this.setCipStatus('PASS');
+            this.updateUserInfo();
           }
           resolve(result);
         })
@@ -363,39 +378,32 @@ export class IdentityStore {
     });
   }
 
-  updateUserInfo = (cipStatus) => {
-    const userId = userStore.currentUser.sub;
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: updateUserCIPInfo,
-          variables: {
-            userId,
-            user: this.formattedUserInfo.userInfo,
-            phoneDetails: this.formattedUserInfo.phoneDetails,
-            cipStatus,
-          },
-        })
-        .then((data) => {
-          userDetailsStore.getUser(userStore.currentUser.sub);
-          resolve(data);
-        })
-        .catch((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        });
-    });
-  }
+  updateUserInfo = () => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: updateUserCIPInfo,
+        variables: {
+          user: this.formattedUserInfo.userInfo,
+          phoneDetails: this.formattedUserInfo.phoneDetails,
+        },
+      })
+      .then((data) => {
+        userDetailsStore.getUser(userStore.currentUser.sub);
+        resolve(data);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        reject(err);
+      });
+  });
 
   updateUserPhoneDetails = () => {
     client
       .mutate({
         mutation: updateUserPhoneDetail,
         variables: {
-          userId: userStore.currentUser.sub,
           phoneDetails: {
             number: this.ID_VERIFICATION_FRM.fields.phoneNumber.value,
-            countryCode: COUNTRY_CODES.US,
           },
         },
       })
@@ -442,7 +450,6 @@ export class IdentityStore {
         .mutate({
           mutation: updateUserProfileData,
           variables: {
-            userId: userStore.currentUser.sub,
             profileDetails: this.profileDetails,
           },
         })
@@ -463,15 +470,14 @@ export class IdentityStore {
   get profileDetails() {
     const { fields } = this.ID_PROFILE_INFO;
     const profileDetails = {
+      salutation: fields.firstName.value,
       firstName: fields.firstName.value,
       lastName: fields.lastName.value,
-      address: {
-        mailing: {
-          street: fields.street.value,
-          city: fields.city.value,
-          state: fields.state.value,
-          zipCode: fields.zipCode.value,
-        },
+      mailingAddress: {
+        street: fields.street.value,
+        city: fields.city.value,
+        state: fields.state.value,
+        zipCode: fields.zipCode.value,
       },
       avatar: {
         name: fields.profilePhoto.value,
@@ -517,37 +523,37 @@ export class IdentityStore {
     this.resetFormData('ID_PROFILE_INFO');
     const {
       email,
-      address,
       legalDetails,
-      contactDetails,
+      info,
+      phone,
     } = userDetails;
-    if (userDetails.firstName) {
-      this.setProfileInfoField('firstName', userDetails.firstName);
+    if (info) {
+      this.setProfileInfoField('firstName', info.firstName);
     }
-    if (userDetails.lastName) {
-      this.setProfileInfoField('lastName', userDetails.lastName);
+    if (info) {
+      this.setProfileInfoField('lastName', info.lastName);
     } else if (legalDetails && legalDetails.legalName !== null) {
       this.setProfileInfoField('firstName', legalDetails.legalName.firstLegalName);
       this.setProfileInfoField('firstName', legalDetails.legalName.lastLegalName);
     }
-    this.setProfileInfoField('email', email);
-    if (contactDetails && contactDetails.phone !== null &&
-      contactDetails.phone.verificationDate !== null
-    ) {
-      this.setProfileInfoField('phoneNumber', contactDetails.phone.number);
+    if (email) {
+      this.setProfileInfoField('email', email.address);
     }
-    if (address === null) {
+    if (phone && phone !== null && phone.verified) {
+      this.setProfileInfoField('phoneNumber', phone.number);
+    }
+    if (info && info.mailingAddress === null) {
       const addressFields = ['street', 'city', 'state', 'zipCode'];
       if (legalDetails && legalDetails.legalAddress !== null) {
         addressFields.forEach((val) => {
           this.setProfileInfoField(val, legalDetails.legalAddress[val]);
         });
       }
-    } else if (address && address.mailing) {
+    } else if (info && info.mailingAddress) {
       const mailingAddressFields = ['street', 'city', 'state', 'zipCode'];
       mailingAddressFields.forEach((val) => {
-        if (address.mailing[val] !== null) {
-          this.setProfileInfoField(val, address.mailing[val]);
+        if (info.mailingAddress[val] !== null) {
+          this.setProfileInfoField(val, info.mailingAddress[val]);
         }
       });
     }

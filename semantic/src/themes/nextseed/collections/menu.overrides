@@ -111,19 +111,20 @@
         .item {
             font-weight:@fontMedium;
             text-transform:uppercase;
-            border-bottom:2px solid transparent !important;
-            border-radius:0 !important;
+            border-bottom:2px solid transparent;
+            border-radius:0;
             padding:@10px 0;
             margin:0 @18px;
             @media only screen and (max-width : @largestSmallMonitor){
                 margin:0 @14px;
             }
             &:hover, &:active, &:focus, &.active {
-                border-color:@primary-one !important;
-                background-color:transparent !important;
+                border-color:@primary-one;
+                background-color:transparent;
+                color: @primary-one;
             }
             &.header{
-                border-color:transparent !important;
+                border-color:transparent;
             }
         }
     }
@@ -487,7 +488,7 @@ footer{
         }
     }
     &.left.inverted {
-        .public-header-nav .item {
+        .item {
             text-transform: uppercase;
             &.active, &:focus, &:hover{
                 background-color: @primary-one !important;
@@ -500,10 +501,10 @@ footer{
                 }
             }
         }
-        .public-footer-nav .item.dropdown {
-            &.active, &:focus, &:hover{
-                background-color: @neutral-middark !important;
-                color: @white !important;
+        .public-footer-nav .item{
+            text-transform: none;
+            span {
+                color: @white;
             }
         }
     }

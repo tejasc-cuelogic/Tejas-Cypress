@@ -43,13 +43,13 @@ export default class FinancialInfo extends Component {
                 <Card.Content>
                   <Card.Header className="with-icon">
                     {
-                    account.accountType === 'ira' && getActiveAccountList.isIndAccExist ?
+                    account.name === 'ira' && getActiveAccountList.isIndAccExist ?
                       <Aux>
                         <Icon color="teal" className="ns-individual-line" /> Individual
-                        <Icon color="teal" className={`ns-${account.accountType}-line`} /> {account.accountType.toUpperCase()}
+                        <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name.toUpperCase()}
                       </Aux> :
                       <Aux>
-                        <Icon color="teal" className={`ns-${account.accountType}-line`} /> {startCase(account.accountType)}
+                        <Icon color="teal" className={`ns-${account.name}-line`} /> {startCase(account.name)}
                       </Aux>
                     }
                   </Card.Header>
@@ -76,11 +76,11 @@ export default class FinancialInfo extends Component {
                             />
                           </Statistic.Label>
                           <Statistic.Value>
-                            {Helper.CurrencyFormat(account.accountType === 'entity' ? fields.currentLimitEntity.value : fields.currentLimitIndividualOrIra.value)}
+                            {Helper.CurrencyFormat(account.name === 'entity' ? fields.currentLimitEntity.value : fields.currentLimitIndividualOrIra.value)}
                           </Statistic.Value>
                         </Statistic>
                         <Divider clearing hidden />
-                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.accountType)} inverted color="green" content="Update investment limits" />
+                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name)} inverted color="green" content="Update investment limits" />
                       </Card.Content>
                     </Grid.Column>
                     <Grid.Column width={8}>
