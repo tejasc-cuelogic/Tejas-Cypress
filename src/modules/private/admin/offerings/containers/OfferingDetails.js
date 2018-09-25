@@ -40,7 +40,6 @@ export default class OfferingDetails extends Component {
       ],
     };
   };
-  module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
@@ -60,9 +59,12 @@ export default class OfferingDetails extends Component {
             <Switch>
               <Route exact path={match.url} component={OfferingModule('overview')} />
               {
-                navItems.map(item => (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} component={OfferingModule(item.to)} />
-                ))
+                navItems.map((item) => {
+                  const CurrentModule = OfferingModule(item.to);
+                  return (
+                    <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule offeringId={this.props.match.params.offeringid} />} />
+                  );
+                })
               }
             </Switch>
           </Card>

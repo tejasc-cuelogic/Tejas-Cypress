@@ -236,7 +236,7 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'required',
   },
-  proFormas: {
+  uploadProformas: {
     label: 'Upload Pro Formas',
     value: '',
     error: undefined,

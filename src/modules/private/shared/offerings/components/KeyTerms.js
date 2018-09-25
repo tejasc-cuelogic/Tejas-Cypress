@@ -11,7 +11,7 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
   }
   onProFormasDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'proFormas', files);
+    this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files);
   }
   confirmRemoveDoc = (e, name) => {
     e.preventDefault();
@@ -25,9 +25,9 @@ export default class KeyTerms extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleFormSubmit = () => {
-    const { KEY_TERMS_FRM, evaluateFormData } = this.props.offeringCreationStore;
-    const formData = evaluateFormData(KEY_TERMS_FRM.fields);
-    console.log(formData);
+    const { KEY_TERMS_FRM, updateOffering } = this.props.offeringCreationStore;
+    const { offeringId } = this.props;
+    updateOffering(offeringId, KEY_TERMS_FRM.fields, 'keyTerms');
   }
   render() {
     const { KEY_TERMS_FRM, formChange, maskChange } = this.props.offeringCreationStore;
@@ -213,8 +213,8 @@ export default class KeyTerms extends Component {
             }
           </Form.Group>
           <DropZone
-            name="proFormas"
-            fielddata={KEY_TERMS_FRM.fields.proFormas}
+            name="uploadProformas"
+            fielddata={KEY_TERMS_FRM.fields.uploadProformas}
             ondrop={this.onProFormasDrop}
             onremove={this.confirmRemoveDoc}
             uploadtitle="Upload a file"
@@ -227,7 +227,7 @@ export default class KeyTerms extends Component {
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'proFormas'}
+          open={confirmBox.entity === 'uploadProformas'}
           onCancel={this.handleDelCancel}
           onConfirm={() => this.handleDelDoc(confirmBox.entity)}
           size="mini"
