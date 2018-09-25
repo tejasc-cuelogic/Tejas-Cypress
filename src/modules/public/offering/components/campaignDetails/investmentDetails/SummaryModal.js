@@ -29,58 +29,56 @@ class SummaryModal extends Component {
       >
         <Modal.Header>Revenue Sharing Summary*</Modal.Header>
         <Modal.Content>
-          <section>
-            <p>
-            This investment has a 6-month startup period during which no cash payments will
-            be made. The startup period commences the first full month after the offering’s
-            close.
-            </p>
-            <p>
-            After the end of the startup period or once the Issuer commences operations
-            (whichever comes later), the Issuer will share a percentage of each month’s gross
-            revenue with the investors as a group until they are paid in full. The total amount
-            raised by the offering will determine the Investment Multiple and the monthly
-            Revenue Sharing Percentage.
-            </p>
-            <Grid stackable doubling columns={2} verticalAlign="top" className="summary-modal">
-              <Grid.Column>
-                <p><b>Total Raise Amount: $250,000–$400,000</b></p>
-                <List as="ul" bulleted className={!isMobile && 'mb-30'}>
-                  <List.Item as="li">Investment Multiple: 1.70x</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 4.0%</List.Item>
-                </List>
-              </Grid.Column>
-              <Grid.Column>
-                <p><b>Total Raise Amount: $400,100–$600,000</b></p>
-                <List as="ul" bulleted className={!isMobile && 'mb-30'}>
-                  <List.Item as="li">Investment Multiple: 1.70x</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 7.0%</List.Item>
-                </List>
-              </Grid.Column>
-              <Grid.Column>
-                <p><b>Total Raise Amount: $600,100–$800,000</b></p>
-                <List as="ul" bulleted className={!isMobile && 'mb-30'}>
-                  <List.Item as="li">Investment Multiple: 1.80x</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 10.25%</List.Item>
-                </List>
-              </Grid.Column>
-              <Grid.Column>
-                <p><b>Total Raise Amount: $800,100–$1,000,000</b></p>
-                <List as="ul" bulleted>
-                  <List.Item as="li">Investment Multiple: 1.90x</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
-                  <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 13.5%</List.Item>
-                </List>
-              </Grid.Column>
-            </Grid>
-            <p className={isMobile && 'mt-20'}>
-            Each investor will receive its proportionate share of the monthly payments made
-            to the investors as a group.
-            </p>
-          </section>
+          <p>
+          This investment has a 6-month startup period during which no cash payments will
+          be made. The startup period commences the first full month after the offering’s
+          close.
+          </p>
+          <p>
+          After the end of the startup period or once the Issuer commences operations
+          (whichever comes later), the Issuer will share a percentage of each month’s gross
+          revenue with the investors as a group until they are paid in full. The total amount
+          raised by the offering will determine the Investment Multiple and the monthly
+          Revenue Sharing Percentage.
+          </p>
+          <Grid stackable doubling columns={2} verticalAlign="top" className="summary-modal">
+            <Grid.Column>
+              <p><b>Total Raise Amount: $250,000–$400,000</b></p>
+              <List as="ul" bulleted className={!isMobile && 'mb-30'}>
+                <List.Item as="li">Investment Multiple: 1.70x</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 4.0%</List.Item>
+              </List>
+            </Grid.Column>
+            <Grid.Column>
+              <p><b>Total Raise Amount: $400,100–$600,000</b></p>
+              <List as="ul" bulleted className={!isMobile && 'mb-30'}>
+                <List.Item as="li">Investment Multiple: 1.70x</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 7.0%</List.Item>
+              </List>
+            </Grid.Column>
+            <Grid.Column>
+              <p><b>Total Raise Amount: $600,100–$800,000</b></p>
+              <List as="ul" bulleted className={!isMobile && 'mb-30'}>
+                <List.Item as="li">Investment Multiple: 1.80x</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 10.25%</List.Item>
+              </List>
+            </Grid.Column>
+            <Grid.Column>
+              <p><b>Total Raise Amount: $800,100–$1,000,000</b></p>
+              <List as="ul" bulleted>
+                <List.Item as="li">Investment Multiple: 1.90x</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (first year): 4.0%</List.Item>
+                <List.Item as="li">Monthly Revenue Sharing Percentage (years 2–6): 13.5%</List.Item>
+              </List>
+            </Grid.Column>
+          </Grid>
+          <p className={isMobile && 'mt-20'}>
+          Each investor will receive its proportionate share of the monthly payments made
+          to the investors as a group.
+          </p>
           <Accordion className="faq-accordion">
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               Scenario 1
@@ -116,7 +114,7 @@ class SummaryModal extends Component {
             </Accordion.Title>
             <Accordion.Content active={activeIndex === 1} />
           </Accordion>
-          <p className={`${isMobile && 'mt-20'} note`}>
+          <p className="mt-20 note">
           * The calculations above are mathematical illustration only and may not reflect
           actual performance. They do not take into account NextSeed fees of 1% on each
           payment made to investors... <Link to="/">Read More</Link>

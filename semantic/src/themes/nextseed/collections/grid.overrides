@@ -23,11 +23,8 @@
         }
     }
     &.investment-terms {
-        margin: @10px 0 @20px;
-        box-shadow: 0 1px 0 @border-light;
-        padding: 0px 0 @20px;
+        margin: @10px 0 0;
         @media only screen and (max-width : @largestMobileScreen){
-            padding: 0;
             margin: 0;
         }
         >.row>.column:first-child{
@@ -36,9 +33,6 @@
         p {
             margin-bottom: 0;
             b {color: @neutral;}
-        }
-        .ui.header {
-            margin-top: @10px;
         }
         .dropdown {
             color: @neutral;
@@ -146,9 +140,6 @@
                 text-transform: uppercase;
             }
         }
-    }
-    &.summary-modal.stackable >.row>.column {
-        padding: @14px 0 !important;
     }
     &[class*="three column"].doubling>.column:not(.row){
         margin-bottom: @30px;

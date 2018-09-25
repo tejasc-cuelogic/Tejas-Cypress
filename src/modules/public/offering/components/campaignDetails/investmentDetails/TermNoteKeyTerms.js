@@ -53,7 +53,7 @@ class TermNoteKeyTerms extends Component {
                 <p><b>Monthly</b></p>
               </Table.Cell>
             </Table.Row>
-            <Table.Row>
+            <Table.Row verticalAlign="top">
               <Table.Cell><b>Revenue Sharing Percentage</b></Table.Cell>
               <Table.Cell>
                 <p>

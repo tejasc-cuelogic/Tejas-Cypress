@@ -23,6 +23,7 @@ class RevenueSharingKeyTerms extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Divider section />
         <Table basic="very">
           <Table.Body>
             <Table.Row verticalAlign="top">
@@ -54,7 +55,7 @@ class RevenueSharingKeyTerms extends Component {
                 <p><b>Monthly</b></p>
               </Table.Cell>
             </Table.Row>
-            <Table.Row>
+            <Table.Row verticalAlign="top">
               <Table.Cell><b>Revenue Sharing Percentage</b></Table.Cell>
               <Table.Cell>
                 <p>
