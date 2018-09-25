@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Icon, Header, Divider } from 'semantic-ui-react';
 import Initialise from './lendio/Initialise';
 
-@inject('businessAppStore')
 @observer
 export default class Failure extends Component {
   render() {
-    const { match } = this.props;
+    const { match, isPublic } = this.props;
     const reason = match.params.reason ? match.params.reason : '';
     return (
       <Grid container>
@@ -26,7 +25,7 @@ export default class Failure extends Component {
           </p>
           <Divider section hidden />
           {reason && reason === 'lendio' &&
-            <Initialise applicationId={this.props.businessAppStore.currentApplicationId} />
+            <Initialise isPublic={isPublic} {...this.props} />
           }
         </Grid.Column>
       </Grid>

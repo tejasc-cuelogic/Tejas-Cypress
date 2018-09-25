@@ -112,7 +112,7 @@ class InvestorProfileStore {
 
   @action
   updateInvestorProfileData = (currentStep) => {
-    FormValidator.validateForm(this[currentStep.form], false, true);
+    this[currentStep.form] = FormValidator.validateForm(this[currentStep.form], false, true);
     if (this[currentStep.form].meta.isValid) {
       let formPayload = '';
       if (currentStep.form === 'EMPLOYMENT_FORM') {

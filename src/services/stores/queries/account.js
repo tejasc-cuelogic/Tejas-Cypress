@@ -19,39 +19,22 @@ export const createAccount = gql`
   }`;
 
 export const updateAccount = gql`
-  mutation _updateAccount($userId: String! $accountId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: UserAccountTypeEnum!) {
+  mutation _updateAccount($userId: String! $accountId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: InvestorAccountTypeEnum!) {
     updateInvestorAccount(
       userId: $userId
       accountId: $accountId
       accountAttributes: $accountAttributes
       status: $status
-      accountType: $accountType
+      type: $accountType
     ) {
       userId
       accountId
-      accountType
-      status
-      startedDate
-      finishedDate
-      accountDetails
-    }
-  }`;
-
-export const getPlaidAccountdata = gql`
-  mutation _getPlaidAccountData($userId: String! $plaidPublicToken: String! $plaidAccountId: String! $bankName: String! $accountType: UserAccountTypeEnum!) {
-    plaidGetValidatedAccountData(
-    userId: $userId
-    plaidPublicToken: $plaidPublicToken
-    plaidAccountId: $plaidAccountId
-    bankName: $bankName
-    accountType: $accountType
-    ) {
-    bankName
-    accountNumber
-    routingNumber
-    plaidAccountId
-    plaidAccessToken
-    plaidItemId
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+      }
+      type
     }
   }`;
 
@@ -98,3 +81,17 @@ query checkEntityTaxIdCollision($taxId: String!) {
     alreadyExists
   }
 }`;
+
+export const createIndividual = gql`
+  mutation createIndividiaul($userId: String!, $accountAttributes: AccountInputType!, $status: AccountCreationStatusEnum!, $accountType: InvestorAccountTypeEnum!){
+    createInvestorAccount(userId: $userId, accountAttributes: $accountAttributes, status: $status, type: $accountType){
+      userId
+      accountId
+      linkedBank {
+        accountNumber
+        routingNumber
+        bankName
+      }
+      type
+    }
+  }`;

@@ -11,6 +11,9 @@ import { ListErrors } from '../../../theme/shared';
 @withRouter
 @observer
 class InvestorSignup extends Component {
+  componentWillMount() {
+    this.props.authStore.setDefaultPwdType();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.register()
@@ -88,15 +91,15 @@ class InvestorSignup extends Component {
             <FormInput
               key="password"
               name="password"
-              type={pwdInputType.password}
-              icon={togglePasswordType('password')}
+              type={pwdInputType}
+              icon={togglePasswordType()}
               fielddata={SIGNUP_FRM.fields.password}
               changed={signupChange}
             />
             <FormInput
               key="verify"
               name="verify"
-              type="password"
+              type={pwdInputType}
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
