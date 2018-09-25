@@ -2,9 +2,11 @@
 import { observable, toJS, action } from 'mobx';
 import { map } from 'lodash';
 import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
-import { FormValidator as Validator } from '../../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
+import { updateOffering } from '../../../queries/offerings/manage';
+import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore } from '../../../index';
+import { offeringsStore, uiStore } from '../../../index';
 
 const emptyDataSet = { data: [] };
 
@@ -76,10 +78,20 @@ export class OfferingCreationStore {
 
   @action
   formChange = (e, result, form) => {
-    this[form] = Validator.onChange(
-      this[form],
-      Validator.pullValues(e, result),
-    );
+    if (result && result.name === 'isEarlyBirds' && !result.checked) {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+        '',
+        true,
+        result.checked,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
   }
 
   @action
@@ -352,6 +364,34 @@ export class OfferingCreationStore {
       }
     });
     return inputData;
+  }
+
+  updateOffering = (id, fields, keyName) => {
+    const { getOfferingById } = offeringsStore.offerData.data;
+    const payloadData = {
+      applicationId: getOfferingById.applicationId,
+      issuerId: getOfferingById.issuerId,
+    };
+    payloadData[keyName] = this.evaluateFormData(fields);
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables: {
+          id,
+          offeringDetails: payloadData,
+        },
+      })
+      .then(() => {
+        Helper.toast(`${keyName} has been saved successfully.`, 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 

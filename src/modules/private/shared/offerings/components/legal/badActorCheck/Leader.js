@@ -1,49 +1,21 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button, Icon, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
-import Helper from '../../../../../../../helper/utility';
 
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class Leader extends Component {
-  addMore = (e, formName) => {
-    e.preventDefault();
-    this.props.offeringCreationStore.addMore(formName);
-    const { LEADER_FRM } = this.props.offeringCreationStore;
-    const leaderCount = LEADER_FRM.fields.data.length;
-    this.props.history.push(`${this.props.refLink}/leader/${leaderCount}`);
-  }
-  toggleConfirmModal = (e, index, formName) => {
-    e.preventDefault();
-    this.props.offeringCreationStore.toggleConfirmModal(index, formName);
-  }
-  removeData = (confirmModalName) => {
-    this.props.offeringCreationStore.removeData(confirmModalName);
-    Helper.toast('Leader has been deleted successfully.', 'success');
-    this.props.history.push(`${this.props.refLink}/leader/1`);
-  }
   render() {
-    const {
-      LEADER_FRM,
-      formChangeWithIndex,
-      confirmModal,
-      confirmModalName,
-    } = this.props.offeringCreationStore;
+    const { LEADER_FRM, formChangeWithIndex } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const { roles } = this.props.userStore.currentUser;
     return (
       <Aux>
-        <Form>
-          <div className="clearfix mt-10 mb-10">
-            <Button.Group floated="right">
-              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}> Delete selected leader</Button>
-              <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
-            </Button.Group>
-          </div>
+        <Form className="clearfix mt-10 mb-10">
           <Header as="h4">Control Person Diligence</Header>
           {
             ['controlPersonQuestionaire', 'residenceTenYears'].map(field => (
@@ -112,15 +84,6 @@ export default class Leader extends Component {
             </Button.Group>
           </div>
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this leader?"
-          open={confirmModal}
-          onCancel={this.toggleConfirmModal}
-          onConfirm={() => this.removeData(confirmModalName)}
-          size="mini"
-          className="deletion"
-        />
       </Aux>
     );
   }

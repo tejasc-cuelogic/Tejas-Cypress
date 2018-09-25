@@ -6,7 +6,6 @@ import AddNewTier from './bonusrewards/AddNewTier';
 import AddNewBonusReward from './bonusrewards/addNewBonusRewards';
 import Helper from '../../../../../helper/utility';
 
-
 const tiersArray = [
   { title: 'Early Birds' },
   {
