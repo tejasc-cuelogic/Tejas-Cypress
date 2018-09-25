@@ -1898,7 +1898,7 @@ p.check-extra-info{
 .full-logo {
 	width: 52px;
     height: 30px;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 14px;
     z-index: 3;
