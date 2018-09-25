@@ -64,7 +64,6 @@ export default class CreateNew extends Component {
                   name="role"
                   fielddata={USR_FRM.fields.role}
                   options={ROLES}
-                  multiple
                   changed={userEleChange}
                 />
                 <div>

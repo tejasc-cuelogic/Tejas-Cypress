@@ -19,11 +19,11 @@ class Login extends Component {
     e.preventDefault();
     authActions.login()
       .then(() => {
-        const { roles } = this.props.userStore.currentUser;
         const { redirectURL } = this.props.uiStore;
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
+          const { roles } = this.props.userStore.currentUser;
           this.props.authStore.reset();
           this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
             `/app/${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
