@@ -33,7 +33,7 @@ export class ArticleStore {
     }
 
     @computed get ArticlesDetails() {
-      return (this.article.data && toJS(this.article.data.insightsArticle)) || null;
+      return (this.article.data && toJS(this.article.data.insightsArticleById)) || null;
     }
 
     @computed get articleLoading() {
