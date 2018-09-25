@@ -26,7 +26,7 @@ export default class ManagerOverview extends Component {
         />
         <div className="right-align">
           <Button.Group>
-            <Button disabled={!form.meta.isValid} className="relaxed" secondary>Deny</Button>
+            <Button disabled={!form.meta.isValid} className="relaxed" inverted red secondary>Send Back</Button>
             <Button disabled={!form.meta.isValid} primary className="relaxed" type="button">Approve</Button>
           </Button.Group>
         </div>

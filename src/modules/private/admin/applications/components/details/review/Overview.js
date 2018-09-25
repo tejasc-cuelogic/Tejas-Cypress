@@ -7,7 +7,7 @@ import { Form, Header, Button, Confirm } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'businessAppStore')
 @observer
 export default class Overview extends Component {
   componentWillMount() {
@@ -24,6 +24,9 @@ export default class Overview extends Component {
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OVERVIEW_FRM');
   }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+  }
   render() {
     const {
       OVERVIEW_FRM,
@@ -34,6 +37,10 @@ export default class Overview extends Component {
       removeData,
       confirmModalName,
     } = this.props.businessAppReviewStore;
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.overview && review.overview.criticalPoint &&
+      review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
     return (
       <Aux>
         <Header as="h4">
@@ -56,11 +63,15 @@ export default class Overview extends Component {
           }
           <div className="right-align">
             <Button.Group>
-              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.data.length)} secondary className="relaxed">Save</Button>
-              <Button disabled={!(OVERVIEW_FRM.meta.isValid && OVERVIEW_FRM.fields.data.length)} primary type="button">Submit for Approval</Button>
+              {!submitted &&
+              <Button disabled={!(OVERVIEW_FRM.meta.isValid)} secondary className="relaxed">Save</Button>
+              }
+              <Button onClick={() => this.submitWithApproval('OVERVIEW_FRM', 'REVIEW_SUBMITTED')} disabled={(!(OVERVIEW_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Button.Group>
           </div>
+          {submitted &&
           <ManagerOverview form={OVERVIEW_MANAGER_FRM} formName="OVERVIEW_MANAGER_FRM" />
+          }
         </Form>
         <Confirm
           header="Confirm"

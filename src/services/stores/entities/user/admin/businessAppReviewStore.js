@@ -230,6 +230,45 @@ export class BusinessAppReviewStore {
           // refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
+          Helper.toast('Data saved successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  approveOrSubmitReviewForms = (formName, actionType = 'REVIEW_SUBMITTED') => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
+    const formInputData = this.evaluateFormData(this[formName].fields);
+    const applicationReviewAction = this.getMetaData(formName, 'actionType');
+    const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    uiStore.setProgress();
+    const payload = {
+      comments: { text: formInputData },
+      actionType,
+      applicationReviewAction,
+      applicationId,
+      userId,
+      applicationSource,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateBusinessApplicationInformationData,
+          variables: payload,
+          // refetchQueries: [{ query: getBusinessApplications }],
+        })
+        .then((result) => {
+          Helper.toast('Submitted successfully.', 'success');
           resolve(result);
         })
         .catch((error) => {

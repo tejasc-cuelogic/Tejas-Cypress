@@ -15,7 +15,7 @@ const getModule = component => Loadable({
 
 const navItems = [
   { title: 'Overview', to: 'overview' },
-  { title: 'PreQual', to: 'prequal' },
+  { title: 'PreQualification', to: 'prequal' },
   { title: 'Business Plan', to: 'business-plan' },
   { title: 'Projections', to: 'projections' },
   { title: 'Documentation', to: 'documentation' },
