@@ -494,6 +494,10 @@ footer{
                 background-color: @primary-one !important;
                 color: @white !important;
             }
+            &.active.no-active{
+                background-color: transparent !important;
+                color: @white !important;
+            }
             &.dropdown .menu.transition .item {
                 &.active, &:hover, &:focus {
                     background-color: @primary-one-darken!important;

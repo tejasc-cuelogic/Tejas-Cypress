@@ -74,7 +74,8 @@ export class NavItems extends Component {
           <Menu.Item
             key={item.to}
             name={item.to}
-            as={location.pathname === '/' ? NavLink : Link}
+            className={isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}
+            as={NavLink}
             onClick={isMobile ? onToggle : this.doNothing}
             to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
