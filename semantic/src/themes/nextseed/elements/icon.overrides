@@ -1722,6 +1722,9 @@ i.icon[class*="ns-"]{
 .ns-activity-arrow:before{
     content:@ns-activity-arrow;
 }
+.ns-appartment:before{
+    content:@ns-appartment;
+}
 .ns-arrow-double-left:before{
     content:@ns-arrow-double-left;
 }
