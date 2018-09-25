@@ -383,9 +383,11 @@ export class OfferingCreationStore {
         },
       })
       .then(() => {
+        Helper.toast(`${keyName} has been saved successfully.`, 'success');
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
       })
       .finally(() => {
         uiStore.setProgress(false);
