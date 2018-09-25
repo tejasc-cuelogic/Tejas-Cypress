@@ -10,7 +10,7 @@ class Disclosures extends Component {
             <Header as="h3">Disclosures</Header>
           </Grid.Column>
         </Grid>
-        <div className="pdf-viewer">
+        <div className="pdf-viewer mt-30">
           <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object>
         </div>
       </div>

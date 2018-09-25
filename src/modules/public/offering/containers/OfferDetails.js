@@ -45,9 +45,12 @@ class offerDetails extends Component {
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
             {
-              navItems.map(item => (
-                <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
-              ))
+              navItems.map((item) => {
+                const CurrentComponent = getModule(item.component);
+                return (
+                  <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+              );
+              })
             }
             <Route path={`${match.url}/invest-now`} component={InvestNow} />
             <Route path={`${match.url}/agreement`} component={Agreement} />

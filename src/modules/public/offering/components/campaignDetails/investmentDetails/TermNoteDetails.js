@@ -5,6 +5,8 @@ import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModa
 import KeyTermsModal from './KeyTermsModal';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 992;
 const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
 class TermNoteDetails extends Component {
@@ -88,7 +90,7 @@ class TermNoteDetails extends Component {
                   </Statistic>
                 </Grid.Column>
               </Grid.Row>
-              <Grid.Row columns={3} divided>
+              <Grid.Row columns={isMobile || isTablet ? 2 : 3} divided>
                 <Grid.Column>
                   <Statistic size="mini" className="basic">
                     <Statistic.Label>Min Target&nbsp;

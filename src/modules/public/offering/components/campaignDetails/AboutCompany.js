@@ -89,7 +89,7 @@ class AboutCompany extends Component {
                   </Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
-                <Grid doubling columns={3}>
+                <Grid columns={3}>
                   <Grid.Column>
                     <Reveal animated="small fade">
                       <Reveal.Content hidden>

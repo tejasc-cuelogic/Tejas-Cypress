@@ -151,7 +151,7 @@
         padding: @14px 0 !important;
     }
     &[class*="three column"].doubling>.column:not(.row){
-        margin-bottom: 28px;
+        margin-bottom: @30px;
         &:nth-child(3n) {
             @media only screen and (min-width : @largestTabletScreen){
                 box-shadow: none;
@@ -163,11 +163,18 @@
             }
         }
     }
-    &>[class*="two column"].row.divided>.column:nth-child(3n){
-        @media only screen and (max-width : @largestMobileScreen){
-            box-shadow: none;
+    &>[class*="two column"].row.divided>.column {
+        @media only screen and (max-width : @largestTabletScreen){
+            box-shadow: 1px 0 0 0 @neutral-darkwhite !important;
+            margin-bottom: @30px !important;
+        }
+        &:nth-child(2n){
+            @media only screen and (max-width : @largestTabletScreen){
+                box-shadow: none !important;
+            }
         }
     }
+    
 }
 .featured-statistic {
 	counter-reset: section;
