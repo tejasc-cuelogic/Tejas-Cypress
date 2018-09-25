@@ -1007,6 +1007,7 @@ export const GENERAL = {
     rule: 'numeric|required',
     placeHolder: 'Enter here',
     objRef: 'legal.general.businessPhone',
+    objType: 'businessPhone',
   },
   bankName: {
     label: 'Bank Name',
@@ -1042,6 +1043,7 @@ export const GENERAL = {
     rule: 'required',
     placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
+    objType: 'reachedMinOfferingGoal',
   },
   reachedMaxOfferingGoal: {
     label: 'If maximum offering amount is reached:',
@@ -1050,6 +1052,7 @@ export const GENERAL = {
     rule: 'required',
     placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
+    objType: 'reachedMaxOfferingGoal',
   },
   rightsOfEqShareHolders: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',

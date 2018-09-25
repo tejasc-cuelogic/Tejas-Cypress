@@ -366,6 +366,15 @@ export class OfferingCreationStore {
         } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
           const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
           inputData = { ...inputData, [key]: fileObj };
+        } else if (fields[key].objType && fields[key].objType === 'businessPhone') {
+          const fileObj = { number: fields[key].value, countryCode: '1' };
+          inputData = { ...inputData, businessPhone: fileObj };
+        } else if (fields[key].objType && fields[key].objType === 'reachedMinOfferingGoal') {
+          const fileObj = { reachedMinOfferingGoal: fields[key].value };
+          inputData = { ...inputData, useOfProceeds: fileObj };
+        } else if (fields[key].objType && fields[key].objType === 'reachedMaxOfferingGoal') {
+          const fileObj = { reachedMaxOfferingGoal: fields[key].value };
+          inputData = { ...inputData, useOfProceeds: { ...inputData.useOfProceeds, ...fileObj } };
         } else {
           inputData = { ...inputData, [key]: fields[key].value };
         }
