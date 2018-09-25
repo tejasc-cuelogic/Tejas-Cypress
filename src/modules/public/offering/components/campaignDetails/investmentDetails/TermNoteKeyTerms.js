@@ -6,7 +6,7 @@ class TermNoteKeyTerms extends Component {
   render() {
     return (
       <Modal.Content>
-        <Grid columns={3} divided className="investment-terms">
+        <Grid columns={3} stackable doubling divided className="investment-terms">
           <Grid.Row>
             <Grid.Column>
               <p><b>Issuer</b></p>
