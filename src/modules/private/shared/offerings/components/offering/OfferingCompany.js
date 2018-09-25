@@ -3,59 +3,62 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Button, Header, Icon } from 'semantic-ui-react';
-import { FormTextarea, MaskedInput } from '../../../../../../theme/form';
+import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class OfferingCompany extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering', 'about');
-    this.props.offeringCreationStore.setFormData('COMPANY_HISTORY_FRM', 'offering', 'about', 'history');
   }
-  addNewMileStone = (e) => {
+  addNewMileStone = (e, formName, arrayName) => {
     e.preventDefault();
-    this.props.offeringCreationStore.addMore('COMPANY_HISTORY_FRM');
+    this.props.offeringCreationStore.addMore(formName, arrayName);
+  }
+  handleFormSubmit = () => {
+    const {
+      OFFERING_COMPANY_FRM,
+      updateOffering,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about');
   }
   render() {
     const {
       OFFERING_COMPANY_FRM,
-      COMPANY_HISTORY_FRM,
-      formChange,
-      formChangeWithIndex,
-      maskChangeWithIndex,
+      formArrayChange,
     } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
     const formName = 'OFFERING_COMPANY_FRM';
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : ''}>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           <Header as="h4">About the Company</Header>
           <FormTextarea
             name="theCompany"
             fielddata={OFFERING_COMPANY_FRM.fields.theCompany}
-            changed={(e, result) => formChange(e, result, formName)}
+            changed={(e, result) => formArrayChange(e, result, formName)}
             containerclassname="secondary"
           />
           <Divider section />
           <Header as="h4">
             History
-            <Link to={this.props.match.url} className="link" onClick={e => this.addNewMileStone(e)}><small>+ Add another milestone</small></Link>
+            <Link to={this.props.match.url} className="link" onClick={e => this.addNewMileStone(e, formName, 'history')}><small>+ Add another milestone</small></Link>
           </Header>
           {
-            COMPANY_HISTORY_FRM.fields.data.map((history, index) => (
+            OFFERING_COMPANY_FRM.fields.history.map((history, index) => (
               <Aux>
                 <Header as="h6">{`Milestone ${index + 1}`}</Header>
                 <div className="featured-section">
-                  <MaskedInput
+                  <FormInput
                     name="date"
                     fielddata={history.date}
-                    changed={(values, field) => maskChangeWithIndex(values, 'COMPANY_HISTORY_FRM', field, index)}
-                    dateOfBirth
+                    changed={(e, result) => formArrayChange(e, result, formName, 'history', index)}
                   />
                   <FormTextarea
                     name="description"
                     fielddata={history.description}
-                    changed={(e, result) => formChangeWithIndex(e, result, 'COMPANY_HISTORY_FRM', index)}
+                    changed={(e, result) => formArrayChange(e, result, formName, 'history', index)}
                     containerclassname="secondary"
                   />
                 </div>
@@ -69,7 +72,7 @@ export default class OfferingCompany extends Component {
                 <FormTextarea
                   name={field}
                   fielddata={OFFERING_COMPANY_FRM.fields[field]}
-                  changed={(e, result) => formChange(e, result, formName)}
+                  changed={(e, result) => formArrayChange(e, result, formName)}
                   containerclassname="secondary"
                 />
               </Aux>
@@ -82,8 +85,8 @@ export default class OfferingCompany extends Component {
               Submitted by ISSUER_NAME on 2/3/2018
             </Button>
             <Button.Group floated="right">
-              <Button inverted color="red" content="Decline" className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} />
-              <Button color="green" content="Approve" className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} />
+              <Button inverted color="red" content="Decline" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid} />
+              <Button color="green" content="Approve" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid} />
             </Button.Group>
           </div>
           <div className="clearfix">
@@ -91,7 +94,7 @@ export default class OfferingCompany extends Component {
               <Icon className="ns-check-circle" color="green" />
               Approved by MANAGER_NAME on 2/3/2018
             </Button>
-            <Button primary content="Save" floated="right" className="relaxed" disabled={!(OFFERING_COMPANY_FRM.meta.isValid && COMPANY_HISTORY_FRM.meta.isValid)} />
+            <Button primary content="Save" floated="right" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid} />
           </div>
         </Form>
       </div>

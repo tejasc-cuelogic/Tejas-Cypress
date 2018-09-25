@@ -63,7 +63,9 @@ export default class Listing extends Component {
                     </Table.Cell>
                     <Table.Cell><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
                     <Table.Cell>
-                      {DataFormatter.diffDays(offering.offering.launch.targetDate)} days
+                      {offering.offering.launch &&
+                      `${DataFormatter.diffDays(offering.offering.launch.targetDate)} days`
+                      }
                     </Table.Cell>
                     <Table.Cell>{offering.lead.name}</Table.Cell>
                     <Table.Cell>
