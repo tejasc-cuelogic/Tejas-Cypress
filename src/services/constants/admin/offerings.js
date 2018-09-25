@@ -409,24 +409,7 @@ export const OFFERING_COMPANY = {
     rule: 'required',
     placeHolder: 'Tell us about why you started the company/why you`re expanding, what your vision is and walk us through your space.',
   },
-  businessModel: {
-    value: '',
-    label: 'Business Model',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Describe your revenue streams and how you will generate business.',
-  },
-  locationAnalysis: {
-    value: '',
-    label: 'Location Analysis',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Describe the neighborhood, the demographics and what makes your location the best place for your business.',
-  },
-};
-
-export const COMPANY_HISTORY = {
-  data: [{
+  history: [{
     date: {
       value: '',
       label: 'Date',
@@ -442,6 +425,20 @@ export const COMPANY_HISTORY = {
       placeHolder: 'e.g. Company was formed...',
     },
   }],
+  businessModel: {
+    value: '',
+    label: 'Business Model',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Describe your revenue streams and how you will generate business.',
+  },
+  locationAnalysis: {
+    value: '',
+    label: 'Location Analysis',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Describe the neighborhood, the demographics and what makes your location the best place for your business.',
+  },
 };
 
 export const COMPANY_LAUNCH = {

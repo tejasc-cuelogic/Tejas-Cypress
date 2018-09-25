@@ -9,7 +9,8 @@ import { FormTextarea, FormInput } from '../../../../../../theme/form';
 export default class OfferingOverview extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering', 'overview');
-    this.props.offeringCreationStore.setFormData('OFFERING_HIGHLIGHTS_FRM', 'offering', 'overview', 'highlight');
+    // this.props.offeringCreationStore.setFormData(
+    // 'OFFERING_HIGHLIGHTS_FRM', 'offering', 'overview', 'highlight');
   }
   addNewBullet = (e) => {
     e.preventDefault();

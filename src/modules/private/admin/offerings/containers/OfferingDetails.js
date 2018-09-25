@@ -36,7 +36,7 @@ export default class OfferingDetails extends Component {
         { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
         {
           title: 'Days Till Launch',
-          content: offer.offering ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
+          content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
           type: 0,
         },
       ],

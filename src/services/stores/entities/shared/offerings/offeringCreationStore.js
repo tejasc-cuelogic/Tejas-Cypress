@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
 import { map } from 'lodash';
-import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
+import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -15,7 +15,6 @@ export class OfferingCreationStore {
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_HIGHLIGHTS_FRM = Validator.prepareFormObject(OFFERING_HIGHLIGHTS);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
-  @observable COMPANY_HISTORY_FRM = Validator.prepareFormObject(COMPANY_HISTORY);
   @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
   @observable LAUNCH_CONTITNGENCIES_FRM = Validator.prepareFormObject(emptyDataSet);
@@ -191,13 +190,13 @@ export class OfferingCreationStore {
   getMetaData = (metaData) => {
     const metaDataMapping = {
       OFFERING_HIGHLIGHTS_FRM: OFFERING_HIGHLIGHTS,
-      COMPANY_HISTORY_FRM: COMPANY_HISTORY,
       LAUNCH_CONTITNGENCIES_FRM: CONTINGENCIES,
       CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
       LEADERSHIP_FRM: LEADERSHIP,
       GENERAL_FRM: GENERAL,
       AFFILIATED_ISSUER_FRM: AFFILIATED_ISSUER,
       LEADER_FRM: LEADER,
+      OFFERING_COMPANY_FRM: OFFERING_COMPANY,
     };
     return metaDataMapping[metaData];
   }
@@ -315,14 +314,11 @@ export class OfferingCreationStore {
         if (fields[key] && Array.isArray(records)) {
           if (fields[key] && fields[key].length > 0) {
             inputData = { ...inputData, [key]: [] };
-            let arrObj = [];
+            const arrObj = [];
             records.forEach((field) => {
               let arrayFieldsKey = {};
-              let arrayFields = [];
+              let arrayFields = {};
               map(field, (eleV, keyRef1) => {
-                if (field[keyRef1].objType !== 'array') {
-                  arrayFields = {};
-                }
                 if (eleV.objRefOutput) {
                   if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                     const fileObj =
@@ -336,24 +332,18 @@ export class OfferingCreationStore {
                   const fileObj =
                       { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
                   arrayFields = { ...arrayFields, [keyRef1]: fileObj };
-                } else if (field[keyRef1].objType === 'array') {
-                  arrayFields.push(field[keyRef1].value);
                 } else {
                   arrayFields = { [keyRef1]: field[keyRef1].value };
                 }
-                if (field[keyRef1].objType === 'array') {
-                  arrayFieldsKey = { ...arrayFieldsKey, [keyRef1]: arrayFields };
-                } else {
-                  arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
-                  // if (eleV.objRefOutput) {
-                  //   arrayFieldsKey = has(arrayFieldsKey, [eleV.objRefOutput]) ?
-                  //     { ...arrayFieldsKey, [eleV.objRefOutput]: arrayFieldsKey } :
-                  //     { [eleV.objRefOutput]: arrayFieldsKey };
-                  // }
-                }
+                arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
+                // if (eleV.objRefOutput) {
+                //   arrayFieldsKey = has(arrayFieldsKey, [eleV.objRefOutput]) ?
+                //     { ...arrayFieldsKey, [eleV.objRefOutput]: arrayFieldsKey } :
+                //     { [eleV.objRefOutput]: arrayFieldsKey };
+                // }
               });
-              arrObj = [...arrObj, arrayFieldsKey];
-              inputData = { ...inputData, [key]: { ...inputData[key], ...arrObj } };
+              arrObj.push(arrayFieldsKey);
+              inputData = { ...inputData, [key]: arrObj };
             });
           }
         } else if (fields[key].objRefOutput) {
