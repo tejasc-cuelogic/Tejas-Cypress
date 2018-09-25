@@ -37,11 +37,21 @@ export class OfferingCreationStore {
   @observable confirmModalName = null;
   @observable removeIndex = null;
   @observable initLoad = [];
+  @observable currentOfferingId = null;
 
   @observable requestState = {
     search: {},
   };
 
+  @action
+  setCurrentOfferingId = (id) => {
+    this.currentOfferingId = id;
+  }
+
+  @action
+  resetOfferingId = () => {
+    this.currentOfferingId = null;
+  }
   @action
   setProfilePhoto(attr, value, field) {
     this.MEDIA_FRM.fields[field][attr] = value;
@@ -366,13 +376,18 @@ export class OfferingCreationStore {
     return inputData;
   }
 
-  updateOffering = (id, fields, keyName) => {
+  updateOffering = (id, fields, keyName, subkey) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
-    payloadData[keyName] = this.evaluateFormData(fields);
+    if (subkey) {
+      payloadData[keyName] = {};
+      payloadData[keyName][subkey] = this.evaluateFormData(fields);
+    } else {
+      payloadData[keyName] = this.evaluateFormData(fields);
+    }
     uiStore.setProgress();
     client
       .mutate({

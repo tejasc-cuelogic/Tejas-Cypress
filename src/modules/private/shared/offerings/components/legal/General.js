@@ -20,9 +20,8 @@ export default class General extends Component {
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
   handleFormSubmit = () => {
-    const { GENERAL_FRM, evaluateFormData } = this.props.offeringCreationStore;
-    const formData = evaluateFormData(GENERAL_FRM.fields);
-    console.log(formData);
+    const { GENERAL_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, GENERAL_FRM.fields, 'legal', 'general');
   }
   render() {
     const {
