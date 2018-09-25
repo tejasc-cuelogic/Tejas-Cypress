@@ -215,6 +215,12 @@ footer{
 	section{
 		overflow:hidden;
 		transition:all .5s ease-in-out;
+		display: flex;
+		flex-direction: row;
+		margin: 0 -@14px;
+		>div {
+			padding: 0 @14px;
+		}
 		&.inactive{
 			height:0;
 			padding:0;
@@ -222,18 +228,12 @@ footer{
 		&.active{
 			height:240px;
 			padding:@30px 0px;
-			display: flex;
-			flex-direction: row;
-			margin: 0 -@14px;
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				height:auto;
 			}
 			@media only screen and (max-width : @largestMobileScreen){
 				height: auto;
 				flex-direction: column;
-			}
-			>div {
-				padding: 0 @14px;
 			}
 		}
 		.secure{
@@ -830,7 +830,10 @@ address {
 		}
 	}
 }
-//Insight 
+//Insight
+.insight-post{
+	min-height:~"calc(100vh - 98px)";
+}
 .insight-image-wrapper {
 	position: relative;
 	img.ui.image {
