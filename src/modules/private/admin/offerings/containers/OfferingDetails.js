@@ -62,7 +62,7 @@ export default class OfferingDetails extends Component {
                 navItems.map((item) => {
                   const CurrentModule = OfferingModule(item.to);
                   return (
-                    <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule offeringId={this.props.match.params.offeringid} />} />
+                    <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule {...props} offeringId={this.props.match.params.offeringid} />} />
                   );
                 })
               }

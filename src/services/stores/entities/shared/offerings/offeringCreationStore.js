@@ -366,13 +366,18 @@ export class OfferingCreationStore {
     return inputData;
   }
 
-  updateOffering = (id, fields, keyName) => {
+  updateOffering = (id, fields, keyName, subKey) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
-    payloadData[keyName] = this.evaluateFormData(fields);
+    if (subKey) {
+      payloadData[keyName] = {};
+      payloadData[keyName][subKey] = this.evaluateFormData(fields);
+    } else {
+      payloadData[keyName] = this.evaluateFormData(fields);
+    }
     uiStore.setProgress();
     client
       .mutate({

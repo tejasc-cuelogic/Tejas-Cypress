@@ -15,18 +15,23 @@ export default class OfferingOverview extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore('OFFERING_HIGHLIGHTS_FRM');
   }
+  handleFormSubmit = () => {
+    const { OFFERING_OVERVIEW_FRM, updateOffering } = this.props.offeringCreationStore;
+    const { offeringId } = this.props;
+    updateOffering(offeringId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview');
+  }
   render() {
     const {
       OFFERING_OVERVIEW_FRM,
       OFFERING_HIGHLIGHTS_FRM,
-      formChange,
       formChangeWithIndex,
+      formChange,
     } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : ''}>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           {
             ['elevatorPitch', 'tombstoneDescription'].map(field => (
               <Aux>
@@ -130,7 +135,7 @@ export default class OfferingOverview extends Component {
             </Button>
             <Button.Group floated="right">
               <Button inverted color="red" content="Decline" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} />
-              <Button color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Approve</Button>
+              <Button type="button" color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Approve</Button>
             </Button.Group>
           </div>
           <div className="clearfix">
@@ -139,7 +144,7 @@ export default class OfferingOverview extends Component {
               Approved by MANAGER_NAME on 2/3/2018
             </Button>
             <Button.Group floated="right">
-              <Button primary type="button" color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Save</Button>
+              <Button primary color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Save</Button>
             </Button.Group>
           </div>
         </Form>
