@@ -24,6 +24,7 @@ export class NavItems extends Component {
     ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
     (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
+  doNothing = () => console.log('nothing');
   render() {
     const {
       location, isApp, roles, match, isMobile, onToggle,
@@ -37,10 +38,10 @@ export class NavItems extends Component {
             item
             key={item.to}
             className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active' : ''}
-            ${item.title === 'How NextSeed Works' ? 'visible' : ''}
+            ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
             `}
             name={item.to}
-            onClick={item.title !== 'How NextSeed Works' ? this.navClick : false}
+            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : this.doNothing}
             text={
               <Aux>
                 {item.icon &&
@@ -53,14 +54,14 @@ export class NavItems extends Component {
             }
           >
             <Dropdown.Menu
-              className={`${this.isActive(item.to, location, app, item.subNavigations) && isMobile ? 'visible' : ''} ${item.title === 'How NextSeed Works' ? 'visible' : ''}
+              className={`${this.isActive(item.to, location, app, item.subNavigations) && isMobile ? 'visible' : ''} ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
               `}
             >
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
                   as={NavLink}
-                  onClick={isMobile ? onToggle : false}
+                  onClick={isMobile ? onToggle : this.doNothing}
                   to={`${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                 >
                   {sn.title}
@@ -73,7 +74,7 @@ export class NavItems extends Component {
             key={item.to}
             name={item.to}
             as={location.pathname === '/' ? NavLink : Link}
-            onClick={isMobile ? onToggle : false}
+            onClick={isMobile ? onToggle : this.doNothing}
             to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
           >
             {item.icon &&
@@ -103,7 +104,6 @@ export class NavigationItems extends Component {
     const {
       stepInRoute, navStatus, location, currentUser,
     } = this.props;
-    console.log(navStatus, 'navStatus in main...');
     return (
       <Menu
         stackable
