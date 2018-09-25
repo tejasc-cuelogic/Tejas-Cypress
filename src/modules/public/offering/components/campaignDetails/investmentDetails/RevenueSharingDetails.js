@@ -4,11 +4,13 @@ import { Header, Segment, Breadcrumb, Statistic, Grid, Popup, Icon } from 'seman
 import KeyTermsModal from './../investmentDetails/KeyTermsModal';
 import SummaryModal from '../investmentDetails/SummaryModal';
 
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 class RevenueSharingDetails extends Component {
   render() {
     return (
       <Grid.Row stackable doubling>
-        <Grid.Column widescreen={10} computer={10}>
+        <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
           <Segment padded>
             <Breadcrumb>
               <Breadcrumb.Section as={Link} to={`${this.props.match.url}/summary`}><b>Expand Summary</b></Breadcrumb.Section>
@@ -33,7 +35,7 @@ class RevenueSharingDetails extends Component {
             </p>
           </Segment>
         </Grid.Column>
-        <Grid.Column widescreen={6} computer={6}>
+        <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
           <Segment padded>
             <Breadcrumb>
               <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}>

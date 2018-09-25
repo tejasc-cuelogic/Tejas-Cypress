@@ -6,6 +6,10 @@ import card2 from '../../../../../assets/images/cards/pour_cards_gold.jpg';
 import card3 from '../../../../../assets/images/cards/pour_cards_plat.jpg';
 import card4 from '../../../../../assets/images/cards/pour_cards_silver.jpg';
 
+const isTablet = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 992;
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 class BonusRewards extends Component {
   render() {
     return (
@@ -15,7 +19,7 @@ class BonusRewards extends Component {
             <Header as="h3">Bonus Rewards</Header>
           </Grid.Column>
         </Grid>
-        <Grid stackable doubling columns={3}>
+        <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
           <Grid.Column>
             <Segment padded className="reward-block">
               <Header as="h6">Early Bird Reward
@@ -257,7 +261,7 @@ class BonusRewards extends Component {
                     and Saturdays + Special Events)
                   </p>
                 </Grid.Column>
-                <Grid.Column>
+                <Grid.Column className={isTablet && 'mt-30'}>
                   <Image src={card2} />
                   <Header as="h5">Gold Card</Header>
                   <p>
@@ -265,45 +269,7 @@ class BonusRewards extends Component {
                     and Saturdays + Special Events)
                   </p>
                 </Grid.Column>
-                <Grid.Column>
-                  <Image src={card4} />
-                  <Header as="h5">Silver Card</Header>
-                  <p>10% discount every visit</p>
-                </Grid.Column>
-              </Grid>
-            </Segment>
-          </Grid.Column>
-        </Grid>
-        <Grid stackable>
-          <Grid.Column>
-            <Segment padded>
-              <Grid columns={4} doubling stackable divided>
-                <Grid.Column>
-                  <Image src={card1} />
-                  <Header as="h5">Black Card</Header>
-                  <p>
-                    One Premium bottle per year, VIP/Supercar Parking (with advanced notice), 25%
-                    discount every visit and Skip the Line for you and up to 16 guests (Fridays and
-                    Saturdays + Special Events)
-                  </p>
-                </Grid.Column>
-                <Grid.Column>
-                  <Image src={card3} />
-                  <Header as="h5">Platinum Card</Header>
-                  <p>
-                    0% discount every visit and Skip the Line for you and up to 9 guests (Fridays
-                    and Saturdays + Special Events)
-                  </p>
-                </Grid.Column>
-                <Grid.Column>
-                  <Image src={card2} />
-                  <Header as="h5">Gold Card</Header>
-                  <p>
-                    15% discount every visit and Skip the Line for you and up to 9 guests (Fridays
-                    and Saturdays + Special Events)
-                  </p>
-                </Grid.Column>
-                <Grid.Column>
+                <Grid.Column className={isTablet && 'mt-30'}>
                   <Image src={card4} />
                   <Header as="h5">Silver Card</Header>
                   <p>10% discount every visit</p>

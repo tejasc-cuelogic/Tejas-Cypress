@@ -7,6 +7,8 @@ import businessModel from '../../../../../assets/images/investment-2.jpg';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 @inject('campaignStore')
 class InvestmentDetails extends Component {
   render() {
@@ -17,13 +19,13 @@ class InvestmentDetails extends Component {
         <Grid stackable doubling>
           <Grid.Row>
             <Responsive maxWidth={767} as={Aux}>
-              <Grid.Column widescreen={9} computer={8}>
+              <Grid.Column tablet={16}>
                 <Segment padded>
                   <Image src={businessModel} fluid />
                 </Segment>
               </Grid.Column>
             </Responsive>
-            <Grid.Column widescreen={7} computer={8}>
+            <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
                 <Header as="h3">Use of Proceeds</Header>
                 <p>
@@ -40,7 +42,7 @@ class InvestmentDetails extends Component {
               </Segment>
             </Grid.Column>
             <Responsive minWidth={768} as={Aux}>
-              <Grid.Column widescreen={9} computer={8}>
+              <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
                 <Segment padded>
                   <Image src={businessModel} fluid />
                 </Segment>

@@ -321,12 +321,7 @@ footer{
 
 /** Campaign Details **/
 .offer-details {
-    display: flex;
-    flex-direction: row;
 	min-height:~"calc(100vh - 58px)";
-	@media only screen and (max-width : @largestMobileScreen){
-		flex-direction: column;
-	}
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
@@ -379,7 +374,6 @@ footer{
 	}
 	.offering-wrapper {
 		background-color: @neutral-midwhite;
-		flex-grow: 1;
 		padding-left: 280px;
 		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: 0;
@@ -2004,6 +1998,13 @@ p.check-extra-info{
 // About company carousel
 .carousel {
 	width: 100%;
+	@media only screen and (max-width: @largestSmallMonitor) {
+		.ui.container {
+			width: auto!important;
+			margin-left: 1em!important;
+			margin-right: 1em!important;
+		}
+	}
 	img {
 		width: 100%;
 		height: 100%;

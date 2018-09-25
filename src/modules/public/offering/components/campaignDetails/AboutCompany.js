@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Link, Switch } from 'react-router-dom';
-import { Header, Grid, Image, Breadcrumb, Segment, Reveal, Container } from 'semantic-ui-react';
+import { Header, Grid, Image, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import { NsCarousel, InlineLoader } from '../../../../../theme/shared';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
@@ -26,6 +26,10 @@ const settings = {
   arrows: false,
 };
 
+const isTablet = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 992;
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 
 class AboutCompany extends Component {
   render() {
@@ -38,7 +42,7 @@ class AboutCompany extends Component {
       <div className="campaign-content-wrapper">
         <Grid stackable doubling>
           <Grid.Row>
-            <Grid.Column widescreen={7} computer={8}>
+            <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/companydescription`}><b>Company Description</b></Breadcrumb.Section>
@@ -60,25 +64,23 @@ class AboutCompany extends Component {
                 <Link to={`${this.props.match.url}/companydescription`}>Read More</Link>
               </Segment>
             </Grid.Column>
-            <Grid.Column widescreen={9} computer={8}>
+            <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <div className="carousel mt-10 mb-30">
-                  <Container>
-                    <NsCarousel {...settings}>
-                      {[1, 2, 3].map(() => (
-                        <Image src={videoPoster} />
-                      ))}
-                    </NsCarousel>
-                  </Container>
+                  <NsCarousel {...settings}>
+                    {[1, 2, 3].map(() => (
+                      <Image src={videoPoster} />
+                    ))}
+                  </NsCarousel>
                 </div>
               </Segment>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={3} stackable doubling className="campaign-right-sidebar">
+          <Grid.Row columns={isTablet ? 1 : isTabletLand ? 2 : 3} stackable doubling className="campaign-right-sidebar">
             <Grid.Column>
               <Segment padded>
                 <Breadcrumb className="mb-20">
@@ -160,7 +162,7 @@ class AboutCompany extends Component {
                 <Image className="business-modal" src={businessModel} fluid />
               </Segment>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column className={isTabletLand && 'mt-30'}>
               <Segment padded>
                 <Breadcrumb className="mb-20">
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/locationanalysis`}>
