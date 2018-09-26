@@ -9,17 +9,18 @@ import Helper from '../utility';
 class FormValidator {
   emptyDataSet = { data: [] };
 
-  prepareFormObject = (fields, isDirty = false, isFieldValid = true, isValid = false) => ({
-    fields: { ...fields },
-    refMetadata: { ...fields },
-    meta: {
-      isValid,
-      error: '',
-      isDirty,
-      isFieldValid,
-    },
-    response: {},
-  });
+  prepareFormObject =
+    (fields, isDirty = false, isFieldValid = true, isValid = false, metaData) => ({
+      fields: { ...fields },
+      refMetadata: metaData ? { ...metaData } : { ...fields },
+      meta: {
+        isValid,
+        error: '',
+        isDirty,
+        isFieldValid,
+      },
+      response: {},
+    });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
@@ -257,6 +258,8 @@ class FormValidator {
                 (data[key] && data[key][index]) || (tempRef[key] && tempRef[key][index]),
               );
             });
+          } else {
+            // fields[key] = [];
           }
         } else if (fields[key].objRef) {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
@@ -286,7 +289,6 @@ class FormValidator {
         }
       } catch (e) {
         // do nothing
-        console.log(e, 'catch');
       }
       return fields;
     });
@@ -295,7 +297,7 @@ class FormValidator {
 
   setFormData = (form, dataSrc, ref) => {
     let currentForm = form;
-    const data = this.getRefFromObjRef(ref, dataSrc);
+    const data = ref ? this.getRefFromObjRef(ref, dataSrc) : dataSrc;
     currentForm = this.resetFormToEmpty(currentForm.refMetadata);
     currentForm.fields = this.setDataForLevel(currentForm.fields, data);
     return currentForm;

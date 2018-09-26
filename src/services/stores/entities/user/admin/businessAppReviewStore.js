@@ -196,7 +196,7 @@ export class BusinessAppReviewStore {
     const payloadKey = formName === 'OFFERS_FRM' ? 'offers' : 'review';
     if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
-      const data = map(formInputData.data, value => value[key]);
+      const data = map(formInputData[key], value => value[key]);
       formInputData = { [key]: data };
       formInputData = formName === 'OVERVIEW_FRM' ? { criticalPoint: formInputData } : formInputData;
     }
