@@ -14,6 +14,7 @@ export default class Offering extends Component {
       this.props.history.replace(`${this.props.match.url}/overview`);
     }
     this.props.offeringsStore.getOne(this.props.match.params.id);
+    this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
