@@ -4,13 +4,11 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Form, Header, Button, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
-// import { FormValidator as Validator } from '../../../../../../helper';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class General extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal', 'general');
-    // Validator.validateForm(this.props.offeringCreationStore.GENERAL_FRM);
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
