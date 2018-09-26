@@ -19,7 +19,7 @@ const FormData = ({
         </label>
       }
       value={form.fields[descriptionField].value}
-      checked={form.fields[descriptionField].refSelector.value}
+      // checked={form.fields[form.fields[descriptionField].refSelector].value}
       onChange={(e, result) => formChange(e, result, formName)}
     />
     <div className="checkbox-description">
@@ -42,7 +42,11 @@ export default class RiskFactors extends Component {
     this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal', 'riskFactors');
   }
   handleFormSubmit = () => {
-    const { RISK_FACTORS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    const {
+      RISK_FACTORS_FRM,
+      updateOffering,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors');
   }
   render() {
@@ -81,7 +85,7 @@ export default class RiskFactors extends Component {
               Approved by MANAGER_NAME on 2/3/2018
             </Button>
             <Button.Group floated="right">
-              <Button primary className="relaxed pull-right" disabled={!RISK_FACTORS_FRM.meta.isValid} >Save</Button>
+              <Button primary className="relaxed pull-right" >Save</Button>
             </Button.Group>
           </div>
         </Form>

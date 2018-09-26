@@ -273,7 +273,8 @@ export class OfferingCreationStore {
           fields[key].value = data && typeof data === 'string' ? data : data[key];
         }
         if (fields[key].refSelector) {
-          fields[key].refSelector.value = fields[key].value !== '';
+          const ref = fields[key].refSelector;
+          fields[ref].value = fields[key].value !== null;
         }
       } catch (e) {
         // do nothing
@@ -365,6 +366,8 @@ export class OfferingCreationStore {
         } else if (fields[key].objType && fields[key].objType === 'reachedMaxOfferingGoal') {
           const fileObj = { reachedMaxOfferingGoal: fields[key].value };
           inputData = { ...inputData, useOfProceeds: { ...inputData.useOfProceeds, ...fileObj } };
+        } else if (fields[key].toSkip) {
+          inputData = { ...inputData };
         } else {
           inputData = { ...inputData, [key]: fields[key].value };
         }
