@@ -1,24 +1,23 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
 import { map } from 'lodash';
-import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
+import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
 
-const emptyDataSet = { data: [] };
-
 export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
-  @observable OFFERING_HIGHLIGHTS_FRM = Validator.prepareFormObject(OFFERING_HIGHLIGHTS);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
   @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
-  @observable LAUNCH_CONTITNGENCIES_FRM = Validator.prepareFormObject(emptyDataSet);
-  @observable CLOSING_CONTITNGENCIES_FRM = Validator.prepareFormObject(emptyDataSet);
+  @observable LAUNCH_CONTITNGENCIES_FRM =
+    Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
+  @observable CLOSING_CONTITNGENCIES_FRM =
+    Validator.prepareFormObject({ close: [] }, false, true, false, { close: CONTINGENCIES.data });
   @observable ADD_NEW_CONTINGENCY_FRM = Validator.prepareFormObject(ADD_NEW_CONTINGENCY);
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
@@ -189,7 +188,6 @@ export class OfferingCreationStore {
 
   getMetaData = (metaData) => {
     const metaDataMapping = {
-      OFFERING_HIGHLIGHTS_FRM: OFFERING_HIGHLIGHTS,
       LAUNCH_CONTITNGENCIES_FRM: CONTINGENCIES,
       CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
       LEADERSHIP_FRM: LEADERSHIP,
@@ -232,77 +230,16 @@ export class OfferingCreationStore {
   setAddressFields = (place, index) => {
     Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
   }
-
-  @action
-  resetMe = (form, ref) => {
-    this[form] = Validator.prepareFormObject(ref || emptyDataSet);
-  }
   /*
   *  Set form data
   */
   @action
-  setDataForFields = (fields, data, form) => {
-    Object.keys(fields).map((key) => {
-      try {
-        if (fields[key] && Array.isArray(toJS(fields[key]))) {
-          if (data[key] && data[key].length > 0) {
-            const addRec = data[key].length - toJS(fields[key]).length;
-            for (let i = addRec; i > 0; i -= 1) {
-              this.addMore(form, key);
-            }
-            data[key].forEach((record, index) => {
-              this.setDataForFields(fields[key][index], data[key][index]);
-            });
-          }
-        } else if (fields[key].objRef) {
-          let tempRef = false;
-          fields[key].objRef.split('.').map((k) => {
-            tempRef = !tempRef ? data[k] : tempRef[k];
-            return tempRef;
-          });
-          if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
-            fields[key].value = tempRef[key].fileName;
-            fields[key].fileId = tempRef[key].fileId;
-          } else {
-            const fieldref = key.split('_');
-            fields[key].value = fields[key].find ?
-              tempRef.find(o => o[fields[key].find].toLowerCase() === fieldref[0])[fieldref[1]] :
-              tempRef[key];
-          }
-        } else {
-          fields[key].value = data && typeof data === 'string' ? data : data[key];
-        }
-        if (fields[key].refSelector) {
-          const ref = fields[key].refSelector;
-          fields[ref].value = fields[key].value !== null;
-        }
-      } catch (e) {
-        // do nothing
-      }
-      return null;
-    });
-  }
-  @action
-  setFormData = (form, ref, ref2, ref3) => {
+  setFormData = (form, ref) => {
     const { offer } = offeringsStore;
     if (!offer) {
       return false;
     }
-    const { fields } = this[form];
-    const data = ref ? (ref2 ? (ref3 ? offer[ref][ref2][ref3] : offer[ref][ref2]) : offer[ref]) :
-      offer;
-    if (this[form].fields.data && Array.isArray(toJS(this[form].fields.data))) {
-      this.resetMe(form);
-      if (data && data.length > 0) {
-        data.forEach((record, index) => {
-          this.addMore(form);
-          this.setDataForFields(this[form].fields.data[index], data[index], form);
-        });
-      }
-    } else {
-      this.setDataForFields(this[form].fields, data, form);
-    }
-    this.initLoad.push(form);
+    this[form] = Validator.setFormData(this[form], offer, ref);
     return false;
   }
 
@@ -327,7 +264,7 @@ export class OfferingCreationStore {
                     arrayFields = { ...arrayFields, [keyRef1]: fileObj };
                   } else {
                     arrayFields =
-                      { ...arrayFields, [keyRef1]: field[keyRef1].value };
+                    { ...arrayFields, [keyRef1]: field[keyRef1].value };
                   }
                 } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                   const fileObj =

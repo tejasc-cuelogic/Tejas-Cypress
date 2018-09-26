@@ -13,10 +13,10 @@ import Helper from '../../../../../../helper/utility';
 export default class Contingency extends Component {
   componentWillMount() {
     if (!this.props.offeringCreationStore.initLoad.includes('LAUNCH_CONTITNGENCIES_FRM')) {
-      this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', 'launch');
+      this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies');
     }
     if (!this.props.offeringCreationStore.initLoad.includes('CLOSING_CONTITNGENCIES_FRM')) {
-      this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', 'close');
+      this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies');
     }
   }
   setContingencyForm = () => {
@@ -33,6 +33,15 @@ export default class Contingency extends Component {
   }
   canAddNew = roles => roles && (roles.includes('manager') || roles.includes('admin')) &&
     this.props.refTab !== 'close';
+  handleSubmitComment = () => {
+    const {
+      updateOffering,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    const { form, formName } = this.props;
+    const contingencyType = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
+    updateOffering(currentOfferingId, form.fields, 'contingencies', contingencyType);
+  }
   render() {
     const { roles } = this.props.userStore.currentUser;
     const {
@@ -42,6 +51,7 @@ export default class Contingency extends Component {
     const {
       form, formName, formChangeWithIndex, match, addon,
     } = this.props;
+    const dataKey = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
     return (
       <Aux>
         <Header as="h4">
@@ -53,10 +63,11 @@ export default class Contingency extends Component {
           {addon}
         </Header>
         {
-        form.fields.data.length > 0 ?
-        form.fields.data.map((contingency, index) => (
+        form.fields[dataKey] && form.fields[dataKey].length > 0 ?
+        form.fields[dataKey].map((contingency, index) => (
           <div className="featured-section collapsed-checkbox">
             <Checkbox
+              name="isAccepted"
               label={
                 <label>
                   <Header as="h4">
@@ -84,7 +95,7 @@ export default class Contingency extends Component {
                   </Aux>
                 }
                 {(roles && (roles.includes('support') || roles.includes('admin'))) &&
-                  <Button primary content="Submit" />
+                  <Button type="button" primary content="Submit" onClick={this.handleSubmitComment} />
                 }
               </Button.Group>
             </div>

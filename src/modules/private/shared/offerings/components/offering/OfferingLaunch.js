@@ -8,7 +8,15 @@ import { FormInput, MaskedInput } from '../../../../../../theme/form';
 @observer
 export default class OfferingLaunch extends Component {
   componentWillMount() {
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering', 'launch');
+    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
+  }
+  handleFormSubmit = () => {
+    const {
+      COMPANY_LAUNCH_FRM,
+      updateOffering,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch');
   }
   render() {
     const {
@@ -22,7 +30,7 @@ export default class OfferingLaunch extends Component {
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : ''}>
         <Header as="h4">Launch Timeline</Header>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           <Form.Group widths="equal">
             {
               ['targetDate', 'terminationDate', 'expectedOpsDate'].map(field => (

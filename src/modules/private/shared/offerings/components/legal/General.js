@@ -4,12 +4,11 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Form, Header, Button, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
-
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class General extends Component {
   componentWillMount() {
-    this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal', 'general');
+    this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
@@ -216,7 +215,7 @@ export default class General extends Component {
                     <MaskedInput
                       name="amountSold"
                       fielddata={offering.amountSold}
-                      changed={(values, name) => maskArrayChange(values, formName, name)}
+                      changed={(values, name) => maskArrayChange(values, formName, name, 'exemptOfferings', index)}
                       number
                     />
                   </Form.Group >
@@ -258,7 +257,7 @@ export default class General extends Component {
                           key={field}
                           name={field}
                           fielddata={terms[field]}
-                          changed={(e, result) => formArrayChange(e, result, formName, 'materialIndebtedness', index)}
+                          changed={(values, name) => maskArrayChange(values, formName, name, 'materialIndebtedness', index)}
                           percentage={field === 'interestRate'}
                           currency={field === 'amountOutstanding'}
                           prefix={field === 'amountOutstanding' ? '$' : ''}
@@ -318,7 +317,7 @@ export default class General extends Component {
                     prefix="$"
                     name="amountTransaction"
                     fielddata={transaction.amountTransaction}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'affiliatedTransactions', index)}
+                    changed={(values, name) => maskArrayChange(values, formName, name, 'affiliatedTransactions', index)}
                   />
                 </Form.Group >
                 <FormTextarea
