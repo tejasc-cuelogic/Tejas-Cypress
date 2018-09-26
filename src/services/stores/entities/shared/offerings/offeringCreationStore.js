@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
 import { map } from 'lodash';
-import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
+import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -11,7 +11,6 @@ import { offeringsStore, uiStore } from '../../../index';
 export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
-  @observable OFFERING_HIGHLIGHTS_FRM = Validator.prepareFormObject(OFFERING_HIGHLIGHTS);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
   @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
@@ -189,7 +188,6 @@ export class OfferingCreationStore {
 
   getMetaData = (metaData) => {
     const metaDataMapping = {
-      OFFERING_HIGHLIGHTS_FRM: OFFERING_HIGHLIGHTS,
       LAUNCH_CONTITNGENCIES_FRM: CONTINGENCIES,
       CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
       LEADERSHIP_FRM: LEADERSHIP,

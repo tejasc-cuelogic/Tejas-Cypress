@@ -22,7 +22,6 @@ export default class OfferingOverview extends Component {
   render() {
     const {
       OFFERING_OVERVIEW_FRM,
-      OFFERING_HIGHLIGHTS_FRM,
       formChangeWithIndex,
       formChange,
     } = this.props.offeringCreationStore;
@@ -49,12 +48,12 @@ export default class OfferingOverview extends Component {
           }
           <Header as="h4">Offering highlights (Top bullet points)</Header>
           {
-            OFFERING_HIGHLIGHTS_FRM.fields.data.map((highlights, index) => (
+            OFFERING_OVERVIEW_FRM.fields.highlight.map((highlights, index) => (
               <FormInput
                 name="highlight"
                 label={`Bullet ${index + 1}`}
                 fielddata={highlights.highlight}
-                changed={(e, result) => formChangeWithIndex(e, result, 'OFFERING_HIGHLIGHTS_FRM', index)}
+                changed={(e, result) => formChangeWithIndex(e, result, 'OFFERING_OVERVIEW_FRM', index)}
               />
             ))
           }
@@ -133,8 +132,8 @@ export default class OfferingOverview extends Component {
               Submitted by ISSUER_NAME on 2/3/2018
             </Button>
             <Button.Group floated="right">
-              <Button inverted color="red" content="Decline" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)} />
-              <Button type="button" color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Approve</Button>
+              <Button inverted color="red" content="Decline" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid} />
+              <Button type="button" color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Approve</Button>
             </Button.Group>
           </div>
           <div className="clearfix">
@@ -143,7 +142,7 @@ export default class OfferingOverview extends Component {
               Approved by MANAGER_NAME on 2/3/2018
             </Button>
             <Button.Group floated="right">
-              <Button primary color="green" className="relaxed" disabled={!(OFFERING_OVERVIEW_FRM.meta.isValid && OFFERING_HIGHLIGHTS_FRM.meta.isValid)}>Save</Button>
+              <Button primary color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Save</Button>
             </Button.Group>
           </div>
         </Form>

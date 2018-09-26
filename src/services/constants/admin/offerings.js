@@ -292,6 +292,15 @@ export const OFFERING_OVERVIEW = {
     rule: 'required',
     placeHolder: 'Describe your project and what you`re raising funds to accomplish.',
   },
+  highlight: [{
+    highlight: {
+      value: '',
+      label: 'Bullet',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Type your text here ...',
+    },
+  }],
   facebook_url: {
     value: '',
     label: 'Facebook',
@@ -387,18 +396,6 @@ export const OFFERING_OVERVIEW = {
     rule: 'required',
     placeHolder: 'e.g. http://company.com',
   },
-};
-
-export const OFFERING_HIGHLIGHTS = {
-  data: [{
-    highlight: {
-      value: '',
-      label: 'Bullet',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Type your text here ...',
-    },
-  }],
 };
 
 export const OFFERING_COMPANY = {
