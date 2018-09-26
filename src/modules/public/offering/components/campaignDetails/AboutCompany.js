@@ -40,7 +40,7 @@ class AboutCompany extends Component {
     ];
     return (
       <div className="campaign-content-wrapper">
-        <Grid stackable doubling>
+        <Grid stackable>
           <Grid.Row>
             <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
@@ -80,7 +80,7 @@ class AboutCompany extends Component {
               </Segment>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={isTablet ? 1 : isTabletLand ? 2 : 3} stackable doubling className="campaign-right-sidebar">
+          <Grid.Row columns={isTablet ? 1 : isTabletLand ? 2 : 3} className="campaign-right-sidebar">
             <Grid.Column>
               <Segment padded>
                 <Breadcrumb className="mb-20">

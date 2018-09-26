@@ -79,7 +79,7 @@ class Overview extends Component {
               </Segment>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={3} stackable doubling>
+          <Grid.Row columns={3}>
             <Grid.Column>
               <Segment padded>
                 <Breadcrumb>
@@ -106,9 +106,9 @@ class Overview extends Component {
                       <Statistic.Value>48 months</Statistic.Value>
                     </Statistic>
                   </Grid.Column>
-                  <Grid.Column>
+                  <Grid.Column className="mt-30">
                     <Statistic size="mini" className="basic">
-                      <Statistic.Label>Payments
+                      <Statistic.Label>Payments{' '}
                         <Popup
                           trigger={<Icon name="help circle" color="green" />}
                           content="The Issuer will make monthly payments based on the relevant
@@ -119,13 +119,13 @@ class Overview extends Component {
                       <Statistic.Value>Monthly</Statistic.Value>
                     </Statistic>
                   </Grid.Column>
-                  <Grid.Column>
+                  <Grid.Column className="mt-30">
                     <Statistic size="mini" className="basic">
                       <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
                       <Statistic.Value>0%</Statistic.Value>
                     </Statistic>
                   </Grid.Column>
-                  <Grid.Column>
+                  <Grid.Column className="mt-30">
                     <Statistic size="mini" className="basic">
                       <Statistic.Label>Type of Raise&nbsp;
                         <Popup
@@ -167,7 +167,7 @@ class Overview extends Component {
                         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
                         commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
                         velit esse cillum dolore eu fugiat nulla pariatur....
-                        <Link to="/">View Update</Link>
+                        <Link to={`${this.props.match.url}/updates`}>View Update</Link>
                       </Item.Description>
                     </Item.Content>
                   </Item>

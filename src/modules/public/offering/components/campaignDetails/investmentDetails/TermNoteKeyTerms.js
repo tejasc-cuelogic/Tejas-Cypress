@@ -2,30 +2,30 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
 class TermNoteKeyTerms extends Component {
   render() {
     return (
       <Modal.Content>
         <Grid columns={3} stackable doubling divided className="investment-terms">
-          <Grid.Row>
-            <Grid.Column>
-              <p><b>Issuer</b></p>
-              <p>Buffbrew Taproom, LLC</p>
-            </Grid.Column>
-            <Grid.Column>
-              <p><b>Securities</b></p>
-              <p>Term Note</p>
-            </Grid.Column>
-            <Grid.Column>
-              <p><b>Offering Amount</b></p>
-              <p>Min. $250,000 to max. $1,000,000</p>
-            </Grid.Column>
-          </Grid.Row>
+          <Grid.Column>
+            <p><b>Issuer</b></p>
+            <p>Buffbrew Taproom, LLC</p>
+          </Grid.Column>
+          <Grid.Column>
+            <p><b>Securities</b></p>
+            <p>Term Note</p>
+          </Grid.Column>
+          <Grid.Column>
+            <p><b>Offering Amount</b></p>
+            <p>Min. $250,000 to max. $1,000,000</p>
+          </Grid.Column>
         </Grid>
+        <Divider fitted={isMobile} />
         <Table basic="very">
           <Table.Body>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Investment Multiple</b>
+              <Table.Cell width={5}><b>Investment Multiple{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
@@ -46,7 +46,7 @@ class TermNoteKeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top" >
-              <Table.Cell width={5}><b>Payments</b>
+              <Table.Cell width={5}><b>Payments{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
@@ -54,7 +54,7 @@ class TermNoteKeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Revenue Sharing Percentage</b></Table.Cell>
+              <Table.Cell><b>Revenue Sharing Percentage{' '}</b></Table.Cell>
               <Table.Cell>
                 <p>
                 Buffbrew Taproom&apos;s revenue streams will come from tap sales, restaurant
@@ -82,7 +82,7 @@ class TermNoteKeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Maturity</b>
+              <Table.Cell width={5}><b>Maturity{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
@@ -90,7 +90,7 @@ class TermNoteKeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Security Interest</b>
+              <Table.Cell width={5}><b>Security Interest{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
@@ -99,7 +99,7 @@ class TermNoteKeyTerms extends Component {
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5}>
-                <b>Ownership % Represented by Securities</b>
+                <b>Ownership % Represented by Securities{' '}</b>
               </Table.Cell>
               <Table.Cell>
                 <p>
@@ -114,7 +114,7 @@ class TermNoteKeyTerms extends Component {
         <Divider />
         <Header as="h5" className="center-align">
           <Link to="/">
-        View the Issuer&apos;s SEC Form C filing
+            View the Issuer&apos;s SEC Form C filing
           </Link>
         </Header>
       </Modal.Content>

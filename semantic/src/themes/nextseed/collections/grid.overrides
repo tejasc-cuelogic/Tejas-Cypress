@@ -142,7 +142,6 @@
         }
     }
     &[class*="three column"].doubling>.column:not(.row){
-        margin-bottom: @30px;
         &:nth-child(3n) {
             @media only screen and (min-width : @largestTabletScreen){
                 box-shadow: none;

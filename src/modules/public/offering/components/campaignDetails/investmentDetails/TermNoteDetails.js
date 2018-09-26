@@ -12,7 +12,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 class TermNoteDetails extends Component {
   render() {
     return (
-      <Grid.Row stackable doubling>
+      <Grid.Row>
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
           <Segment padded>
             <Breadcrumb>

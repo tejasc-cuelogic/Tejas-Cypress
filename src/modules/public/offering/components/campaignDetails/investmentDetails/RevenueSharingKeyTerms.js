@@ -8,26 +8,24 @@ class RevenueSharingKeyTerms extends Component {
     return (
       <Modal.Content>
         <Grid columns={3} divided stackable doubling className="investment-terms">
-          <Grid.Row>
-            <Grid.Column>
-              <p><b>Issuer</b></p>
-              <p>Buffbrew Taproom, LLC</p>
-            </Grid.Column>
-            <Grid.Column>
-              <p><b>Securities</b></p>
-              <p>Revenue Sharing Notes</p>
-            </Grid.Column>
-            <Grid.Column>
-              <p><b>Offering Amount</b></p>
-              <p>Min. $250,000 to max. $1,000,000</p>
-            </Grid.Column>
-          </Grid.Row>
+          <Grid.Column>
+            <p><b>Issuer</b></p>
+            <p>Buffbrew Taproom, LLC</p>
+          </Grid.Column>
+          <Grid.Column>
+            <p><b>Securities</b></p>
+            <p>Revenue Sharing Notes</p>
+          </Grid.Column>
+          <Grid.Column>
+            <p><b>Offering Amount</b></p>
+            <p>Min. $250,000 to max. $1,000,000</p>
+          </Grid.Column>
         </Grid>
-        <Divider section />
+        <Divider fitted={isMobile} />
         <Table basic="very">
           <Table.Body>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Investment Multiple</b>
+              <Table.Cell width={5}><b>Investment Multiple{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
@@ -48,7 +46,7 @@ class RevenueSharingKeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top" >
-              <Table.Cell width={5}><b>Payments</b>
+              <Table.Cell width={5}><b>Payments{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
@@ -84,7 +82,7 @@ class RevenueSharingKeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Maturity</b>
+              <Table.Cell width={5}><b>Maturity{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
@@ -92,7 +90,7 @@ class RevenueSharingKeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Security Interest</b>
+              <Table.Cell width={5}><b>Security Interest{' '}</b>
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
