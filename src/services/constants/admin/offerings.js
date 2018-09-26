@@ -1216,6 +1216,7 @@ export const RISK_FACTORS = {
     label: 'Business Risk',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   businessRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1229,6 +1230,7 @@ export const RISK_FACTORS = {
     label: 'Financing Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   financingRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1242,6 +1244,7 @@ export const RISK_FACTORS = {
     label: 'Development Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   developmentRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1255,6 +1258,7 @@ export const RISK_FACTORS = {
     label: 'Reputational Risk',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   reputationalRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1268,6 +1272,7 @@ export const RISK_FACTORS = {
     label: 'Competition Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   competitionRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1281,6 +1286,7 @@ export const RISK_FACTORS = {
     label: 'Market Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   marketRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1294,6 +1300,7 @@ export const RISK_FACTORS = {
     label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   terrorismRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1307,6 +1314,7 @@ export const RISK_FACTORS = {
     label: 'Management Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   managementRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1320,6 +1328,7 @@ export const RISK_FACTORS = {
     label: 'Personnel Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   personnelRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1333,6 +1342,7 @@ export const RISK_FACTORS = {
     label: 'Labor Supply Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   laborSupplyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1346,6 +1356,7 @@ export const RISK_FACTORS = {
     label: 'Privacy Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   privacyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1359,6 +1370,7 @@ export const RISK_FACTORS = {
     label: 'Other Risks',
     value: '',
     rule: 'alpha',
+    toSkip: true,
   },
   otherRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
