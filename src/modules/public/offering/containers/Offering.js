@@ -22,9 +22,9 @@ class Offering extends Component {
                 <Form.Input
                   placeholder="Email"
                   name="email"
-                  width={6}
+                  width={7}
                 />
-                <Form.Button primary fluid content="Submit" width={2} />
+                <Form.Button primary fluid content="Submit" width={3} />
               </Form.Group>
             </Form>
           </Container>

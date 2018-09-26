@@ -35,7 +35,7 @@ export default class MobileDropDownNav extends React.Component {
           </Dropdown.Menu>
         </Dropdown>
         {location.pathname.startsWith('/offerings/') &&
-          <Icon onClick={this.toggleCampaignSideBar} name="address card outline" color="white" className="open-campaign-menu" />
+          <Icon onClick={this.toggleCampaignSideBar} color="white" className="open-campaign-menu ns-campaign-dashboard" />
         }
       </Responsive>
     );

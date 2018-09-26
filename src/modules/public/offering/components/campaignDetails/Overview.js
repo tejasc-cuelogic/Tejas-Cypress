@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Image, Icon, Embed, Grid, Segment, Breadcrumb, Popup, List, Item, Divider, Statistic } from 'semantic-ui-react';
-import videoPoster from '../../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../../assets/images/636206632.jpg';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
 import UpdatesModal from './UpdatesModal';
@@ -13,6 +13,10 @@ import KeyTermsModal from './investmentDetails/KeyTermsModal';
 const nsvideos = {
   embed: '218642510',
 };
+const isTabletBoth = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 1200;
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 
 @inject('campaignStore', 'updatesStore')
 @observer
@@ -23,10 +27,10 @@ class Overview extends Component {
       <div className="campaign-content-wrapper">
         <Grid stackable doubling>
           <Grid.Row>
-            <Grid.Column widescreen={7} computer={8}>
+            <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>About the Company</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.refLink}/about`}><b>About the Company</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header>
@@ -68,7 +72,7 @@ class Overview extends Component {
                 </div>
               </Segment>
             </Grid.Column>
-            <Grid.Column widescreen={9} computer={8}>
+            <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
               <Segment padded>
                 <Embed
                   id={nsvideos.embed}
@@ -79,79 +83,75 @@ class Overview extends Component {
               </Segment>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={3} stackable doubling>
+          <Grid.Row columns={isTabletBoth ? 1 : 3}>
             <Grid.Column>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}><b>View Key Terms</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
-                <Header as="h4">Revenue Sharing Notes</Header>
-                <Grid columns={3} doubling divided className="mt-30">
-                  <Grid.Row>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>1.6x</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>4%</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>48 months</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Payments
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content="The Issuer will make monthly payments based on the relevant
-                            revenue sharing percentage."
-                            position="top center"
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>Monthly</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                        <Statistic.Value>0%</Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Label>Type of Raise&nbsp;
-                          <Popup
-                            trigger={<Icon name="help circle" color="green" />}
-                            content={(
-                              <Aux>
-                                This campaign is raising capital under Regulation CF and
-                                Regulation D. For more information on what this means, check out
-                                our <a href="/">Education Center.</a>
-                              </Aux>
-                            )}
-                            position="top center"
-                            hoverable
-                          />
-                        </Statistic.Label>
-                        <Statistic.Value>Reg CF </Statistic.Value>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid.Row>
+                <Header as="h4" className="mb-20">Revenue Sharing Notes</Header>
+                <Grid columns={3} doubling divided className="vertical-gutter">
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>1.6x</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>4%</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>48 months</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Payments{' '}
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content="The Issuer will make monthly payments based on the relevant
+                          revenue sharing percentage."
+                          position="top center"
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>Monthly</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
+                      <Statistic.Value>0%</Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
+                  <Grid.Column>
+                    <Statistic size="mini" className="basic">
+                      <Statistic.Label>Type of Raise&nbsp;
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={(
+                            <Aux>
+                              This campaign is raising capital under Regulation CF and
+                              Regulation D. For more information on what this means, check out
+                              our <a href="/">Education Center.</a>
+                            </Aux>
+                          )}
+                          position="top center"
+                          hoverable
+                        />
+                      </Statistic.Label>
+                      <Statistic.Value>Reg CF </Statistic.Value>
+                    </Statistic>
+                  </Grid.Column>
                 </Grid>
               </Segment>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column className={isTabletLand && 'mt-30'}>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/updates`}><b>Latest Update</b></Breadcrumb.Section>
@@ -171,17 +171,17 @@ class Overview extends Component {
                         veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
                         commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
                         velit esse cillum dolore eu fugiat nulla pariatur....
-                        <Link to="/">View Update</Link>
+                        <Link to={`${this.props.match.url}/updates`}>View Update</Link>
                       </Item.Description>
                     </Item.Content>
                   </Item>
                 </Item.Group>
               </Segment>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column className={isTabletLand && 'mt-30'}>
               <Segment padded>
                 <Breadcrumb>
-                  <Breadcrumb.Section link><b>Bonus Rewards</b></Breadcrumb.Section>
+                  <Breadcrumb.Section as={Link} to={`${this.props.refLink}/bonus-rewards`}><b>Bonus Rewards</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h4">Investor Rewards</Header>

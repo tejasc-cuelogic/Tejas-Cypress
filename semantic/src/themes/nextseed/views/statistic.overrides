@@ -32,7 +32,10 @@
 				font-weight: @bold;
 				text-transform: none;
 				line-height: 30px;
-    			margin-top: @30px;
+				margin-top: @30px;
+				@media only screen and (max-width : @largestSmallMonitor){
+					margin-top: 0;
+				}
 			}
 			&.mini >.value {
 				font-size: @15px !important;

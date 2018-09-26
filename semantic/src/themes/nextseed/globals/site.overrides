@@ -275,7 +275,7 @@ footer{
     height: 100%;
     width: 100%;
     left: 0;
-	top: 100%;
+	top: ~'calc(100% + 1px)';
 	z-index: 1;
 	.offer-filter-container {
 		background-color: @white;
@@ -296,7 +296,7 @@ footer{
 		i {
 			font-size: @16px;
 			line-height: @16px;
-			color:@neutral-middark;
+			color:@neutral-darkwhite;
 			margin-top: @3px;
 		}
 		.checkbox-group {
@@ -321,12 +321,7 @@ footer{
 
 /** Campaign Details **/
 .offer-details {
-    display: flex;
-    flex-direction: row;
 	min-height:~"calc(100vh - 58px)";
-	@media only screen and (max-width : @largestMobileScreen){
-		flex-direction: column;
-	}
 	.offering-side-menu {
 		background-color: @neutral ;
 		padding: 0;
@@ -379,10 +374,10 @@ footer{
 	}
 	.offering-wrapper {
 		background-color: @neutral-midwhite;
-		flex-grow: 1;
 		padding-left: 280px;
 		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: 0;
+			padding-bottom: 30px;
 		}
 		.quick-bar {
 			padding: @10px 0;
@@ -404,6 +399,9 @@ footer{
 			padding: @40px;
 			// background-color: @white;
 			height: 100%;
+			@media only screen and (max-width : @largestMobileScreen){
+				padding: @40px 0;
+			}
 			p {
 				line-height: @20px;
 				color:@neutral-middark;
@@ -871,6 +869,10 @@ a.icon-link:hover {
 			background: @neutral-middark;
 			top: 45px;
 			height: ~"calc(100% - 45px)";
+			@media only screen and (max-width:@largestMobileScreen){
+                top: 30px;
+				height: ~"calc(100% - 30px)";
+            }
 		}
 		.vertical-timeline-element-icon {
 			width: 25px;
@@ -882,6 +884,9 @@ a.icon-link:hover {
 			@media only screen and (max-width : @largestSmallMonitor){
 				left: 21px;
 			}
+			@media only screen and (max-width:@largestMobileScreen){
+                top: 0px;
+            }
 		}
 		.vertical-timeline-element {
 			&.hide-date .vertical-timeline-element-date {
@@ -891,8 +896,8 @@ a.icon-link:hover {
 				&:not(.hide-date) {
 					margin-top: @60px;
 					.vertical-timeline-element-date {
-						left: 0;
-						top: -20%;
+						left: -27px;
+						text-align: left;
 					}
 				}
 			}
@@ -902,7 +907,7 @@ a.icon-link:hover {
 					right: auto;
 					text-align: center;
 					@media only screen and (max-width : @largestSmallMonitor){
-						left: 0;
+						left: -27px;
 						text-align: left;
 					}
 				}
@@ -915,14 +920,48 @@ a.icon-link:hover {
 	.vertical-timeline-element-content {
 		box-shadow: none;
 		padding: 0;
+		@media only screen and (max-width:@largestMobileScreen){
+			margin-left: 40px;
+		}
+		&::before {
+			@media only screen and (max-width:@largestMobileScreen){
+				display: none;
+			}
+		}
 		.ui.items {
 			>.item {
 				border-bottom: 1px solid @neutral-darkwhite;
 				padding-bottom: @14px;
 				font-weight: @bold;
 				color: @neutral;
-				.image>img {
-					border-radius: 50%;
+				.image {
+					>img {
+						border-radius: 50%;
+						@media only screen and (max-width:@largestMobileScreen){
+							max-height: 42px !important;
+						}
+					}
+					&+.content {
+						margin-left: 10px;
+						padding-top: 0;	
+					}
+				}
+				@media only screen and (max-width:@largestMobileScreen){
+					margin-top: 0;
+					flex-direction: row;
+				}
+			}
+			.ui.list .item {
+				border: 1px solid @neutral-darkwhite;
+				>.image+.content {
+					@media only screen and (max-width:@largestMobileScreen) {
+						padding-left: 3px;
+					}
+					>.description {
+						@media only screen and (max-width:@largestMobileScreen) {
+							padding: 0 !important;
+						}
+					}
 				}
 			}
 			p {
@@ -1967,6 +2006,13 @@ p.check-extra-info{
 // About company carousel
 .carousel {
 	width: 100%;
+	@media only screen and (max-width: @largestSmallMonitor) {
+		.ui.container {
+			width: auto!important;
+			margin-left: 1em!important;
+			margin-right: 1em!important;
+		}
+	}
 	img {
 		width: 100%;
 		height: 100%;

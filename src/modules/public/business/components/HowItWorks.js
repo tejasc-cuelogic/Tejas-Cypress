@@ -7,7 +7,7 @@ import supportIcon from '../../../../assets/images/icons/support.svg';
 import sellingIcon from '../../../../assets/images/icons/selling.svg';
 import networkIcon from '../../../../assets/images/icons/network.svg';
 import carouselImg from '../../../../assets/images/business/lian.jpg';
-import videoPoster from '../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../assets/images/636206632.jpg';
 
 const nsvideos = {
   embed: '247714163',

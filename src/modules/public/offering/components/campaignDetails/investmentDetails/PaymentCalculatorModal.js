@@ -3,6 +3,7 @@ import { Modal, Grid, Statistic } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import PaymentCalculator from './PaymentCalculator';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('updatesStore')
 @observer
 class PaymentCalculatorModal extends Component {
@@ -17,23 +18,23 @@ class PaymentCalculatorModal extends Component {
       >
         <Modal.Header>Total Payment Calculator</Modal.Header>
         <Modal.Content>
-          <Grid columns={4} divided doubling className="mb-30 mt-30 investment-grid">
+          <Grid columns={4} divided doubling stackable className="mb-30 mt-30 investment-grid">
             <Grid.Column>
               <Statistic className="basic" size="mini">
-                <Statistic.Label>Interest Rate*</Statistic.Label>
-                <Statistic.Value>16.00%</Statistic.Value>
+                <Statistic.Label className={isMobile && 'center-align'}>Interest Rate*</Statistic.Label>
+                <Statistic.Value className={isMobile && 'center-align'}>16.00%</Statistic.Value>
               </Statistic>
             </Grid.Column>
             <Grid.Column>
               <Statistic className="basic" size="mini">
-                <Statistic.Label>Term</Statistic.Label>
-                <Statistic.Value>60 months</Statistic.Value>
+                <Statistic.Label className={isMobile && 'center-align'}>Term</Statistic.Label>
+                <Statistic.Value className={isMobile && 'center-align'}>60 months</Statistic.Value>
               </Statistic>
             </Grid.Column>
             <Grid.Column>
               <Statistic className="basic" size="mini">
-                <Statistic.Label>Principal</Statistic.Label>
-                <Statistic.Value className="highlight-text">
+                <Statistic.Label className={isMobile && 'center-align'}>Principal</Statistic.Label>
+                <Statistic.Value className={`${isMobile && 'center-align'} highlight-text`}>
                 $100
                 </Statistic.Value>
                 <div className="slidecontainer">
@@ -50,8 +51,8 @@ class PaymentCalculatorModal extends Component {
             </Grid.Column>
             <Grid.Column>
               <Statistic className="basic" size="mini">
-                <Statistic.Label>Total Payment*</Statistic.Label>
-                <Statistic.Value>$146</Statistic.Value>
+                <Statistic.Label className={isMobile && 'center-align'}>Total Payment*</Statistic.Label>
+                <Statistic.Value className={isMobile && 'center-align'}>$146</Statistic.Value>
               </Statistic>
             </Grid.Column>
           </Grid>

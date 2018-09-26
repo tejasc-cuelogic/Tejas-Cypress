@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, Container, Embed, Grid } from 'semantic-ui-react';
-import videoPoster from '../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../assets/images/636206632.jpg';
 
 const nsvideos = { embed: '218642510' };
 

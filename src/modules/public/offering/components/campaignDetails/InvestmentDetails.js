@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
-// import Aux from 'react-aux';
+import Aux from 'react-aux';
 import { inject } from 'mobx-react';
-import { Grid, Header, Segment, Image } from 'semantic-ui-react';
+import { Grid, Header, Segment, Image, Responsive } from 'semantic-ui-react';
 // import businessModel from '../../../../../assets/images/investment-1.jpg';
 import businessModel from '../../../../../assets/images/investment-2.jpg';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 @inject('campaignStore')
 class InvestmentDetails extends Component {
   render() {
@@ -14,9 +16,16 @@ class InvestmentDetails extends Component {
 
     return (
       <div className="campaign-content-wrapper">
-        <Grid>
+        <Grid stackable doubling>
           <Grid.Row>
-            <Grid.Column widescreen={7} computer={8}>
+            <Responsive maxWidth={767} as={Aux}>
+              <Grid.Column tablet={16}>
+                <Segment padded>
+                  <Image src={businessModel} fluid />
+                </Segment>
+              </Grid.Column>
+            </Responsive>
+            <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
                 <Header as="h3">Use of Proceeds</Header>
                 <p>
@@ -32,11 +41,13 @@ class InvestmentDetails extends Component {
                 </p>
               </Segment>
             </Grid.Column>
-            <Grid.Column widescreen={9} computer={8}>
-              <Segment padded>
-                <Image src={businessModel} fluid />
-              </Segment>
-            </Grid.Column>
+            <Responsive minWidth={768} as={Aux}>
+              <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
+                <Segment padded>
+                  <Image src={businessModel} fluid />
+                </Segment>
+              </Grid.Column>
+            </Responsive>
           </Grid.Row>
           {campaign.investmentType === 'Revenue Sharing' ?
             <RevenueSharingDetails {...this.props} /> : <TermNoteDetails {...this.props} />

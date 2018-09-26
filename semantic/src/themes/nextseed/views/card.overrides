@@ -76,6 +76,9 @@
                 width: 100%;
                 align-items: center;
                 justify-content: center;
+                @media only screen and (min-width : @monitorBreakpoint) and (max-width : @largestSmallMonitor){
+                    height: 173px;
+                }
             }
             .details {
                 padding:@21px @28px;

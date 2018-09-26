@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
 import { Header, Segment, Breadcrumb, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
 import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
-import KeyTermsModal from './../investmentDetails/KeyTermsModal';
+import KeyTermsModal from './KeyTermsModal';
 
+const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 992;
+const isTabletLand = document.documentElement.clientWidth >= 992
+&& document.documentElement.clientWidth < 1200;
 class TermNoteDetails extends Component {
   render() {
     return (
-      <Grid.Row stackable doubling>
-        <Grid.Column widescreen={10} computer={10}>
+      <Grid.Row>
+        <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
           <Segment padded>
             <Breadcrumb>
               <Breadcrumb.Section as={Link} to={`${this.props.match.url}/paymentcalculator`}>
@@ -17,22 +22,22 @@ class TermNoteDetails extends Component {
               <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
             </Breadcrumb>
             <Header as="h4">Total Payment Calculator</Header>
-            <Grid columns={4} divided doubling className="investment-grid mt-30" padded="horizontally">
+            <Grid columns={4} divided doubling stackable className="investment-grid mt-30" padded="horizontally">
               <Grid.Column>
                 <Statistic className="basic">
-                  <Statistic.Label>Interest Rate*</Statistic.Label>
+                  <Statistic.Label className={isMobile && 'center-align'}>Interest Rate*</Statistic.Label>
                   <Statistic.Value className="center-align">16.00%</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
                 <Statistic className="basic">
-                  <Statistic.Label>Term</Statistic.Label>
+                  <Statistic.Label className={isMobile && 'center-align'}>Term</Statistic.Label>
                   <Statistic.Value className="center-align">60 months</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
                 <Statistic className="basic">
-                  <Statistic.Label>Principal</Statistic.Label>
+                  <Statistic.Label className={isMobile && 'center-align'}>Principal</Statistic.Label>
                   <Statistic.Value className="center-align highlight-text">
                   $100
                   </Statistic.Value>
@@ -50,7 +55,7 @@ class TermNoteDetails extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Statistic className="basic">
-                  <Statistic.Label>Total Payment*</Statistic.Label>
+                  <Statistic.Label className={isMobile && 'center-align'}>Total Payment*</Statistic.Label>
                   <Statistic.Value className="center-align">$146</Statistic.Value>
                 </Statistic>
               </Grid.Column>
@@ -61,7 +66,7 @@ class TermNoteDetails extends Component {
             </p>
           </Segment>
         </Grid.Column>
-        <Grid.Column widescreen={6} computer={6}>
+        <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
           <Segment padded>
             <Breadcrumb>
               <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}>
@@ -69,65 +74,63 @@ class TermNoteDetails extends Component {
               </Breadcrumb.Section>
               <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
             </Breadcrumb>
-            <Header as="h4">Key Investment Terms</Header>
-            <Grid doubling className="mt-30">
-              <Grid.Row columns={2} divided>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Issuer Name</Statistic.Label>
-                    <Statistic.Value>A Gard Midtown, LLC</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Security Type</Statistic.Label>
-                    <Statistic.Value>Term Note</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row columns={3} divided>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Min Target&nbsp;
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="If the minimum goal is not met by the end of the offering
-                        period, any funds you invest will be automatically returned to your
-                        NextSeed account."
-                        position="top center"
-                      />
-                    </Statistic.Label>
-                    <Statistic.Value>$200,000</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Max Target&nbsp;
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="The offering will remain open until the issuer raises the
-                        maximum goal or the offering period ends. As long as the raise
-                        exceeds the minimumgoal, the issuer will receive the funds."
-                        position="top center"
-                      />
-                    </Statistic.Label>
-                    <Statistic.Value>$1,000,000</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Payments&nbsp;
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="The Issuer will make monthly payments based on the relevant
-                        revenue sharing percentage."
-                        position="top center"
-                      />
-                    </Statistic.Label>
-                    <Statistic.Value>Monthly</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-              </Grid.Row>
+            <Header as="h4" className="mb-20">Key Investment Terms</Header>
+            <Grid columns={2} divided className="vertical-gutter">
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Issuer Name</Statistic.Label>
+                  <Statistic.Value>A Gard Midtown, LLC</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Security Type</Statistic.Label>
+                  <Statistic.Value>Term Note</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+            </Grid>
+            <Grid columns={isMobile || isTablet ? 2 : 3} divided className="vertical-gutter">
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Min Target{' '}
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="If the minimum goal is not met by the end of the offering
+                      period, any funds you invest will be automatically returned to your
+                      NextSeed account."
+                      position="top center"
+                    />
+                  </Statistic.Label>
+                  <Statistic.Value>$200,000</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Max Target{' '}
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="The offering will remain open until the issuer raises the
+                      maximum goal or the offering period ends. As long as the raise
+                      exceeds the minimumgoal, the issuer will receive the funds."
+                      position="top center"
+                    />
+                  </Statistic.Label>
+                  <Statistic.Value>$1,000,000</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Payments{' '}
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="The Issuer will make monthly payments based on the relevant
+                      revenue sharing percentage."
+                      position="top center"
+                    />
+                  </Statistic.Label>
+                  <Statistic.Value>Monthly</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
             </Grid>
           </Segment>
         </Grid.Column>

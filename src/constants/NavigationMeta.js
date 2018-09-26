@@ -371,7 +371,7 @@ export const PUBLIC_NAV = [
         icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
       },
       {
-        icon: 'ns-coments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
+        icon: 'ns-comments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
       },
     ],
   },
