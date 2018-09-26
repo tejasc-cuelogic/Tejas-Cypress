@@ -28,13 +28,13 @@ import Helper from '../../../helper/utility';
 export class Auth {
   defaultRole = 'investor';
   userPool = null;
-  cognitoUser = null
-
+  cognitoUser = null;
   constructor() {
     this.userPool = new AWSCognito.CognitoUserPool({
       UserPoolId: USER_POOL_ID,
       ClientId: COGNITO_CLIENT_ID,
     });
+    console.log('here again ?');
   }
 
   /**
@@ -143,7 +143,7 @@ export class Auth {
       Username: email,
       Pool: this.userPool,
     });
-
+    authStore.setNewPasswordRequired(false);
     return new Promise((res, rej) => {
       this.cognitoUser.authenticateUser(authenticationDetails, {
         // onSuccess: result => res({ data: result }),
@@ -168,6 +168,10 @@ export class Auth {
           }
         },
         newPasswordRequired: (result) => {
+          // authStore.setEmail(result.email);
+          authStore.setUserLoggedIn(true);
+          authStore.setCognitoUserSession(this.cognitoUser.Session);
+          authStore.setNewPasswordRequired(true);
           res({ data: result, action: 'newPassword' });
         },
         onFailure: err => rej(err),
@@ -300,14 +304,55 @@ export class Auth {
     uiStore.reset();
     uiStore.setProgress();
     const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+    const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+    const authenticationDetails = new AWSCognito.AuthenticationDetails({
+      Username: loginData.email,
+      Password: loginData.password,
+    });
+    this.cognitoUser = new AWSCognito.CognitoUser({
+      Username: loginData.email,
+      Pool: this.userPool,
+    });
     return new Promise((res, rej) => {
-      this.cognitoUser = this.userPool.getCurrentUser();
-      this.cognitoUser.getSession((err, session) => console.log(err, session));
-      this.cognitoUser.changePassword(
-        passData.oldPasswd,
-        passData.newPasswd,
-        err => (err ? rej(err) : res()),
-      );
+      this.cognitoUser.authenticateUser(authenticationDetails, {
+        // onSuccess: result => res({ data: result }),
+        onSuccess: (result) => {
+          authStore.setUserLoggedIn(true);
+          if (result.action && result.action === 'newPassword') {
+            authStore.setEmail(result.data.email);
+            authStore.setCognitoUserSession(this.cognitoUser.Session);
+            authStore.setNewPasswordRequired(true);
+          } else {
+            // Extract JWT from token
+            commonStore.setToken(result.idToken.jwtToken);
+            userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
+            userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
+              res();
+            });
+            AWS.config.region = AWS_REGION;
+            // Check if currentUser has admin role, if user has admin role set admin access to user
+            if (userStore.isCurrentUserWithRole('admin')) {
+              this.setAWSAdminAccess(result.idToken.jwtToken);
+            }
+          }
+        },
+        newPasswordRequired: (userAttributes) => {
+          const params = { ...userAttributes };
+          authStore.setUserLoggedIn(true);
+          authStore.setCognitoUserSession(this.cognitoUser.Session);
+          authStore.setNewPasswordRequired(true);
+          delete params.email_verified;
+          this.cognitoUser.completeNewPasswordChallenge(
+            passData.newPasswd,
+            params,
+            {
+              onSuccess: data => res(data),
+              onFailure: err => rej(err),
+            },
+          );
+        },
+        onFailure: err => rej(err),
+      });
     })
       .then(() => {
         Helper.toast('Password changed successfully', 'success');

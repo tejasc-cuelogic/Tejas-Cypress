@@ -1,6 +1,11 @@
 // import moment from 'moment';
 
-export const USER_ROLES = ['admin', 'issuer', 'investor'];
+export const USER_ROLES = [
+  { key: 'admin', value: 'admin', text: 'Admin' },
+  { key: 'issuer', value: 'issuer', text: 'Issuer' },
+  { key: 'investor', value: 'investor', text: 'Investor' },
+];
+
 export const USER_TYPES_META = [
   {
     key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue',
@@ -105,7 +110,7 @@ export const NEW_USER = {
     value: '', label: 'Verify Password', error: undefined, rule: 'required|same:TemporaryPassword',
   },
   role: {
-    value: [], label: 'Role', error: undefined, rule: 'required',
+    value: '', label: 'Role', error: undefined, rule: 'required',
   },
 };
 
