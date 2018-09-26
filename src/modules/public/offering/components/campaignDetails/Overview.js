@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
 import { Header, Image, Icon, Embed, Grid, Segment, Breadcrumb, Popup, List, Item, Divider, Statistic } from 'semantic-ui-react';
-import videoPoster from '../../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../../assets/images/636206632.jpg';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
 import UpdatesModal from './UpdatesModal';

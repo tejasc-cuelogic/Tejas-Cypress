@@ -5,7 +5,7 @@ import { Header, Icon, Statistic, Button, Menu, Divider, Embed } from 'semantic-
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
-import videoPoster from '../../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 const nsvideos = {
   embed: '218642510',

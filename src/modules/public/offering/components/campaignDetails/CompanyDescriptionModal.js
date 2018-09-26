@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Header, List, Icon, Image, Divider, Grid, Embed } from 'semantic-ui-react';
 import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
-import videoPoster from '../../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 const nsvideos = {
   embed: '218642510',

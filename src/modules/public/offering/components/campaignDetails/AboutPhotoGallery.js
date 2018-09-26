@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Image, Container } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../../theme/shared';
-import videoPoster from '../../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 const settings = {
   dots: false,

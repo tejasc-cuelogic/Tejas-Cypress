@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, Embed } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import videoPoster from '../../../../../../../assets/images/683547643.webp';
+import videoPoster from '../../../../../../../assets/images/683547643.jpg';
 
 const updates = {
   title: 'Featurette on Ben McPherson and BOH Pasta',
