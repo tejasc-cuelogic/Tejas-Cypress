@@ -135,7 +135,9 @@ h6{
 	text-align:center !important;
 	justify-content:center;
 }
-
+.justify-text {
+	text-align: justify;
+}
 .highlight-text{
 	color:@primary-one !important;
 }

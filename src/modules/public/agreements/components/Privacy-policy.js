@@ -10,7 +10,7 @@ const PrivacyPolicy = () => (
       <Header.Subheader>Last updated January 2018</Header.Subheader>
     </Header>
     <Divider section />
-    <div>
+    <div className="justify-text">
       <p>The Next Seed, Inc. (NextSeed) operates a public website at www.nextseed.com, and also offer an online intermediary platform through its subsidiary NextSeed US LLC for investment crowdfunding in accordance with Regulation Crowdfunding. You may browse the public content on the website without establishing a user account, but you must establish a user account to view and use non-public content on the site and to use the platform. NextSeed is committed to maintaining the confidentiality, integrity, and security of your personal information. This Privacy Policy covers NextSeed’s privacy policies for both its public site visitors and its platform users, and describes:</p>
       <List relaxed bulleted>
         <List.Item><strong>Data Collected</strong>: the personal data that NextSeed collects from you;</List.Item>
