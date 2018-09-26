@@ -44,10 +44,10 @@ class RevenueSharingDetails extends Component {
               <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
             </Breadcrumb>
             <Header as="h4">Revenue Sharing Notes</Header>
-            <Grid columns={3} doubling divided className="mt-30">
+            <Grid columns={3} doubling divided className="mt-30 vertical-gutter">
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label>Multiple
+                  <Statistic.Label>Multiple{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="Lorem Ipsum"
@@ -59,7 +59,7 @@ class RevenueSharingDetails extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label>Revenue Sharing
+                  <Statistic.Label>Revenue Sharing{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="Lorem Ipsum"
@@ -71,7 +71,7 @@ class RevenueSharingDetails extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label>Maturity
+                  <Statistic.Label>Maturity{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="Lorem Ipsum"
@@ -83,7 +83,7 @@ class RevenueSharingDetails extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label>Payments&nbsp;
+                  <Statistic.Label>Payments{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="The Issuer will make monthly payments based on the relevant
@@ -96,7 +96,7 @@ class RevenueSharingDetails extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label>Ownership
+                  <Statistic.Label>Ownership{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="Lorem Ipsum"

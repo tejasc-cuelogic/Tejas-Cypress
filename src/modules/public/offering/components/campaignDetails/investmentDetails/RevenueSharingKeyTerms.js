@@ -7,21 +7,18 @@ class RevenueSharingKeyTerms extends Component {
   render() {
     return (
       <Modal.Content>
-        <Grid columns={3} divided stackable doubling className="investment-terms">
+        <Grid columns={3} divided stackable className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b></p>
-            <p>Buffbrew Taproom, LLC</p>
+            <p><b>Issuer</b><br />Buffbrew Taproom, LLC</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Securities</b></p>
-            <p>Revenue Sharing Notes</p>
+            <p><b>Securities</b><br />Revenue Sharing Notes</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Offering Amount</b></p>
-            <p>Min. $250,000 to max. $1,000,000</p>
+            <p><b>Offering Amount</b><br />Min. $250,000 to max. $1,000,000</p>
           </Grid.Column>
         </Grid>
-        <Divider fitted={isMobile} />
+        <Divider />
         <Table basic="very">
           <Table.Body>
             <Table.Row verticalAlign="top">

@@ -93,7 +93,7 @@ class TermNoteDetails extends Component {
               <Grid.Row columns={isMobile || isTablet ? 2 : 3} divided>
                 <Grid.Column>
                   <Statistic size="mini" className="basic">
-                    <Statistic.Label>Min Target&nbsp;
+                    <Statistic.Label>Min Target{' '}
                       <Popup
                         trigger={<Icon name="help circle" color="green" />}
                         content="If the minimum goal is not met by the end of the offering
@@ -107,7 +107,7 @@ class TermNoteDetails extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Statistic size="mini" className="basic">
-                    <Statistic.Label>Max Target&nbsp;
+                    <Statistic.Label>Max Target{' '}
                       <Popup
                         trigger={<Icon name="help circle" color="green" />}
                         content="The offering will remain open until the issuer raises the
@@ -121,7 +121,7 @@ class TermNoteDetails extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <Statistic size="mini" className="basic">
-                    <Statistic.Label>Payments&nbsp;
+                    <Statistic.Label>Payments{' '}
                       <Popup
                         trigger={<Icon name="help circle" color="green" />}
                         content="The Issuer will make monthly payments based on the relevant

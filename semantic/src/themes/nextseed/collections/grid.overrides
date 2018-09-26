@@ -10,10 +10,15 @@
     }
 }
 .ui.grid{
-    &.divided:not([class*="vertically divided"]){
+    &.divided:not(.vertically){
         >.column:not(:last-child),
         >.row>.column:not(:last-child){
             box-shadow:@dividedBorder inset;
+        }
+        &.stackable>.column:not(.row){
+            @media only screen and (max-width : @largestMobileScreen){
+                padding: @14px 0 !important;
+            }
         }
     }
     >.column{
@@ -22,28 +27,13 @@
             padding-bottom:@28px;
         }
     }
-    &.investment-terms {
-        margin: @10px 0 0;
-        @media only screen and (max-width : @largestMobileScreen){
-            margin: 0;
-        }
-        >.row>.column:first-child{
-            padding-left: 0;
-        }
-        p {
-            margin-bottom: 0;
-            b {color: @neutral;}
-        }
-        .dropdown {
-            color: @neutral;
-            margin-top: @10px;
-        }
-        &.divided:not([class*="vertically divided"]).stackable .column{
-            @media only screen and (max-width : @largestMobileScreen){
-                padding: @14px 0 !important;
-            }
-        }
-    }
+    // &.investment-terms {
+    //     // .dropdown {
+    //     //     color: @neutral;
+    //     //     margin-top: @10px;
+    //     // }
+    // }
+    &.divided:not([class*="vertically divided"])
     &.agreement-details {
         margin: @30px 0;
         >.column:not(.row) {
@@ -164,7 +154,14 @@
             }
         }
     }
-    
+    &.vertical-gutter {
+        margin-top: -@14px;
+        margin-bottom: -@14px;
+        >.column {
+            margin-top: @14px;
+            margin-bottom: @14px;
+        }
+    }   
 }
 .featured-statistic {
 	counter-reset: section;
