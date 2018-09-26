@@ -243,7 +243,7 @@ class BonusRewards extends Component {
         <Grid stackable>
           <Grid.Column>
             <Segment padded>
-              <Grid columns={4} doubling stackable divided>
+              <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
                 <Grid.Column>
                   <Image src={card1} />
                   <Header as="h5">Black Card</Header>
@@ -261,7 +261,7 @@ class BonusRewards extends Component {
                     and Saturdays + Special Events)
                   </p>
                 </Grid.Column>
-                <Grid.Column className={isTablet && 'mt-30'}>
+                <Grid.Column>
                   <Image src={card2} />
                   <Header as="h5">Gold Card</Header>
                   <p>
@@ -269,7 +269,7 @@ class BonusRewards extends Component {
                     and Saturdays + Special Events)
                   </p>
                 </Grid.Column>
-                <Grid.Column className={isTablet && 'mt-30'}>
+                <Grid.Column>
                   <Image src={card4} />
                   <Header as="h5">Silver Card</Header>
                   <p>10% discount every visit</p>

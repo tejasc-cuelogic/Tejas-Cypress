@@ -74,65 +74,63 @@ class TermNoteDetails extends Component {
               </Breadcrumb.Section>
               <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
             </Breadcrumb>
-            <Header as="h4">Key Investment Terms</Header>
-            <Grid doubling className="mt-30">
-              <Grid.Row columns={2} divided>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Issuer Name</Statistic.Label>
-                    <Statistic.Value>A Gard Midtown, LLC</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Security Type</Statistic.Label>
-                    <Statistic.Value>Term Note</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-              </Grid.Row>
-              <Grid.Row columns={isMobile || isTablet ? 2 : 3} divided>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Min Target{' '}
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="If the minimum goal is not met by the end of the offering
-                        period, any funds you invest will be automatically returned to your
-                        NextSeed account."
-                        position="top center"
-                      />
-                    </Statistic.Label>
-                    <Statistic.Value>$200,000</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Max Target{' '}
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="The offering will remain open until the issuer raises the
-                        maximum goal or the offering period ends. As long as the raise
-                        exceeds the minimumgoal, the issuer will receive the funds."
-                        position="top center"
-                      />
-                    </Statistic.Label>
-                    <Statistic.Value>$1,000,000</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-                <Grid.Column>
-                  <Statistic size="mini" className="basic">
-                    <Statistic.Label>Payments{' '}
-                      <Popup
-                        trigger={<Icon name="help circle" color="green" />}
-                        content="The Issuer will make monthly payments based on the relevant
-                        revenue sharing percentage."
-                        position="top center"
-                      />
-                    </Statistic.Label>
-                    <Statistic.Value>Monthly</Statistic.Value>
-                  </Statistic>
-                </Grid.Column>
-              </Grid.Row>
+            <Header as="h4" className="mb-20">Key Investment Terms</Header>
+            <Grid columns={2} divided className="vertical-gutter">
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Issuer Name</Statistic.Label>
+                  <Statistic.Value>A Gard Midtown, LLC</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Security Type</Statistic.Label>
+                  <Statistic.Value>Term Note</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+            </Grid>
+            <Grid columns={isMobile || isTablet ? 2 : 3} divided className="vertical-gutter">
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Min Target{' '}
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="If the minimum goal is not met by the end of the offering
+                      period, any funds you invest will be automatically returned to your
+                      NextSeed account."
+                      position="top center"
+                    />
+                  </Statistic.Label>
+                  <Statistic.Value>$200,000</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Max Target{' '}
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="The offering will remain open until the issuer raises the
+                      maximum goal or the offering period ends. As long as the raise
+                      exceeds the minimumgoal, the issuer will receive the funds."
+                      position="top center"
+                    />
+                  </Statistic.Label>
+                  <Statistic.Value>$1,000,000</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
+              <Grid.Column>
+                <Statistic size="mini" className="basic">
+                  <Statistic.Label>Payments{' '}
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="The Issuer will make monthly payments based on the relevant
+                      revenue sharing percentage."
+                      position="top center"
+                    />
+                  </Statistic.Label>
+                  <Statistic.Value>Monthly</Statistic.Value>
+                </Statistic>
+              </Grid.Column>
             </Grid>
           </Segment>
         </Grid.Column>

@@ -43,8 +43,8 @@ class RevenueSharingDetails extends Component {
               </Breadcrumb.Section>
               <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
             </Breadcrumb>
-            <Header as="h4">Revenue Sharing Notes</Header>
-            <Grid columns={3} doubling divided className="mt-30 vertical-gutter">
+            <Header as="h4" className="mb-20">Revenue Sharing Notes</Header>
+            <Grid columns={3} doubling divided className="vertical-gutter">
               <Grid.Column>
                 <Statistic size="mini" className="basic">
                   <Statistic.Label>Multiple{' '}

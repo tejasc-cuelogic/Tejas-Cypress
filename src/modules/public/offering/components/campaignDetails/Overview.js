@@ -13,8 +13,8 @@ import KeyTermsModal from './investmentDetails/KeyTermsModal';
 const nsvideos = {
   embed: '218642510',
 };
-const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
+const isTabletBoth = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 1200;
 const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
 
@@ -83,15 +83,15 @@ class Overview extends Component {
               </Segment>
             </Grid.Column>
           </Grid.Row>
-          <Grid.Row columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
+          <Grid.Row columns={isTabletBoth ? 1 : 3}>
             <Grid.Column>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/keyterms`}><b>View Key Terms</b></Breadcrumb.Section>
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
-                <Header as="h4">Revenue Sharing Notes</Header>
-                <Grid columns={3} doubling divided className="mt-30 vertical-gutter">
+                <Header as="h4" className="mb-20">Revenue Sharing Notes</Header>
+                <Grid columns={3} doubling divided className="vertical-gutter">
                   <Grid.Column>
                     <Statistic size="mini" className="basic">
                       <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
@@ -151,7 +151,7 @@ class Overview extends Component {
                 </Grid>
               </Segment>
             </Grid.Column>
-            <Grid.Column>
+            <Grid.Column className={isTabletLand && 'mt-30'}>
               <Segment padded>
                 <Breadcrumb>
                   <Breadcrumb.Section as={Link} to={`${this.props.match.url}/updates`}><b>Latest Update</b></Breadcrumb.Section>
