@@ -8,7 +8,7 @@ import { FormInput, MaskedInput } from '../../../../../../theme/form';
 @observer
 export default class OfferingLaunch extends Component {
   componentWillMount() {
-    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering', 'launch');
+    this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
   }
   render() {
     const {

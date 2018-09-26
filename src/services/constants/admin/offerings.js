@@ -653,7 +653,7 @@ export const MEDIA = {
 };
 
 export const LEADERSHIP = {
-  data: [{
+  leadership: [{
     isPublic: {
       value: [],
       values: [

@@ -39,10 +39,11 @@ const FormData = ({
 @observer
 export default class RiskFactors extends Component {
   componentWillMount() {
-    this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal', 'riskFactors');
+    this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
   }
   handleFormSubmit = () => {
-    const { RISK_FACTORS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    const { RISK_FACTORS_FRM, updateOffering, currentOfferingId } =
+      this.props.offeringCreationStore;
     updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors');
   }
   render() {

@@ -13,10 +13,10 @@ import Helper from '../../../../../../helper/utility';
 export default class Contingency extends Component {
   componentWillMount() {
     if (!this.props.offeringCreationStore.initLoad.includes('LAUNCH_CONTITNGENCIES_FRM')) {
-      this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', 'launch');
+      this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies');
     }
     if (!this.props.offeringCreationStore.initLoad.includes('CLOSING_CONTITNGENCIES_FRM')) {
-      this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', 'close');
+      this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies');
     }
   }
   setContingencyForm = () => {
@@ -42,6 +42,7 @@ export default class Contingency extends Component {
     const {
       form, formName, formChangeWithIndex, match, addon,
     } = this.props;
+    const dataKey = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
     return (
       <Aux>
         <Header as="h4">
@@ -53,8 +54,8 @@ export default class Contingency extends Component {
           {addon}
         </Header>
         {
-        form.fields.data.length > 0 ?
-        form.fields.data.map((contingency, index) => (
+        form.fields[dataKey] && form.fields[dataKey].length > 0 ?
+        form.fields[dataKey].map((contingency, index) => (
           <div className="featured-section collapsed-checkbox">
             <Checkbox
               label={

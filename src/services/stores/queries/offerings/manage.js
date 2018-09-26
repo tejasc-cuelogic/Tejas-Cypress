@@ -302,4 +302,3 @@ mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
   }
 }
 `;
-

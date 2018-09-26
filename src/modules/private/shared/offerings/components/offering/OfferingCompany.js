@@ -9,7 +9,7 @@ import { FormTextarea, FormInput } from '../../../../../../theme/form';
 @observer
 export default class OfferingCompany extends Component {
   componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering', 'about');
+    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
   }
   addNewMileStone = (e, formName, arrayName) => {
     e.preventDefault();

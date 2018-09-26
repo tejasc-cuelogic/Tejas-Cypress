@@ -14,14 +14,14 @@ export default class Leadership extends Component {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
     if (!this.props.offeringCreationStore.initLoad.includes('LEADERSHIP_FRM')) {
-      this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', 'leadership');
+      this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', false);
     }
   }
   addMore = (e, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName);
     const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
-    const leaderCount = LEADERSHIP_FRM.fields.data.length;
+    const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     this.props.history.push(`${this.props.match.url}/leader/${leaderCount}`);
   }
   render() {
@@ -30,7 +30,7 @@ export default class Leadership extends Component {
     const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
     const navItems = [];
     const formName = 'LEADERSHIP_FRM';
-    LEADERSHIP_FRM.fields.data.map((leader, index) => {
+    LEADERSHIP_FRM.fields.leadership.map((leader, index) => {
       navItems.push({ title: `Leader ${index + 1}`, to: `leader/${index + 1}` });
       return navItems;
     });
