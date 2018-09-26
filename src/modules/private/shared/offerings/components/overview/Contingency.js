@@ -57,6 +57,7 @@ export default class Contingency extends Component {
         form.fields.data.map((contingency, index) => (
           <div className="featured-section collapsed-checkbox">
             <Checkbox
+              name="isAccepted"
               label={
                 <label>
                   <Header as="h4">
