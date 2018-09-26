@@ -33,6 +33,15 @@ export default class Contingency extends Component {
   }
   canAddNew = roles => roles && (roles.includes('manager') || roles.includes('admin')) &&
     this.props.refTab !== 'close';
+  handleSubmitComment = () => {
+    const {
+      updateOffering,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    const { form, formName } = this.props;
+    const contingencyType = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
+    updateOffering(currentOfferingId, form.fields, 'contingencies', contingencyType);
+  }
   render() {
     const { roles } = this.props.userStore.currentUser;
     const {
@@ -85,7 +94,7 @@ export default class Contingency extends Component {
                   </Aux>
                 }
                 {(roles && (roles.includes('support') || roles.includes('admin'))) &&
-                  <Button primary content="Submit" />
+                  <Button type="button" primary content="Submit" onClick={this.handleSubmitComment} />
                 }
               </Button.Group>
             </div>

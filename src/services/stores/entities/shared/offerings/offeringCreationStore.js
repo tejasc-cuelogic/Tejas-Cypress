@@ -326,7 +326,7 @@ export class OfferingCreationStore {
                     arrayFields = { ...arrayFields, [keyRef1]: fileObj };
                   } else {
                     arrayFields =
-                      { ...arrayFields, [keyRef1]: field[keyRef1].value };
+                    { ...arrayFields, [keyRef1]: field[keyRef1].value };
                   }
                 } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                   const fileObj =
