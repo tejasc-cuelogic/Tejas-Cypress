@@ -589,15 +589,15 @@ export const CONTINGENCY_META = {
     value: '',
     label: '',
     error: undefined,
-    rule: 'required_if:data.*.isApplied,isApplied',
+    rule: 'required_if:data.*.isAccepted,IS_ACCEPTED',
     placeHolder: 'Enter comment here...',
   },
-  isApplied: {
+  isAccepted: {
     value: [],
     values: [
       {
         label: '',
-        value: 'IS_APPLIED',
+        value: 'IS_ACCEPTED',
       },
     ],
     error: undefined,
