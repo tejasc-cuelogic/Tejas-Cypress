@@ -25,9 +25,8 @@ export default class KeyTerms extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleFormSubmit = () => {
-    const { KEY_TERMS_FRM, updateOffering } = this.props.offeringCreationStore;
-    const { offeringId } = this.props;
-    updateOffering(offeringId, KEY_TERMS_FRM.fields, 'keyTerms');
+    const { KEY_TERMS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, KEY_TERMS_FRM.fields, 'keyTerms');
   }
   render() {
     const { KEY_TERMS_FRM, formChange, maskChange } = this.props.offeringCreationStore;

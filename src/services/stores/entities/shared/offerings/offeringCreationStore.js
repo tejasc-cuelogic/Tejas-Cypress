@@ -266,7 +266,7 @@ export class OfferingCreationStore {
                     arrayFields = { ...arrayFields, [keyRef1]: fileObj };
                   } else {
                     arrayFields =
-                      { ...arrayFields, [keyRef1]: field[keyRef1].value };
+                    { ...arrayFields, [keyRef1]: field[keyRef1].value };
                   }
                 } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                   const fileObj =
@@ -305,6 +305,8 @@ export class OfferingCreationStore {
         } else if (fields[key].objType && fields[key].objType === 'reachedMaxOfferingGoal') {
           const fileObj = { reachedMaxOfferingGoal: fields[key].value };
           inputData = { ...inputData, useOfProceeds: { ...inputData.useOfProceeds, ...fileObj } };
+        } else if (fields[key].toSkip) {
+          inputData = { ...inputData };
         } else {
           inputData = { ...inputData, [key]: fields[key].value };
         }

@@ -45,6 +45,10 @@ export default class Leader extends Component {
     Helper.toast('Leader has been deleted successfully.', 'success');
     this.props.history.push(`${this.props.refLink}/leader/1`);
   }
+  handleFormSubmit = () => {
+    const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership');
+  }
   render() {
     const { isIssuer } = this.props.userStore;
     const leaderNumber = this.props.index;
@@ -64,7 +68,7 @@ export default class Leader extends Component {
           <Header as="h4">
             {`Leader ${index + 1}`}
             <Button.Group size="mini" floated="right">
-              <Button secondary className="relaxed" content="Save" disabled={!LEADERSHIP_FRM.meta.isValid} />
+              <Button secondary className="relaxed" content="Save" onClick={this.handleFormSubmit} disabled={!LEADERSHIP_FRM.meta.isValid} />
               <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, 'LEADERSHIP_FRM')} />
             </Button.Group>
           </Header>
