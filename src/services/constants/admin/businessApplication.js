@@ -20,13 +20,8 @@ export const OVERVIEW = {
         string: 'Allowed string only.',
         required: '* required.',
       },
-      objRefOutput: 'criticalPoint',
     },
   }],
-};
-
-export const OVERVIEW_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const JUSTIFICATIONS = {
@@ -42,10 +37,6 @@ export const JUSTIFICATIONS = {
       },
     },
   }],
-};
-
-export const JUSTIFICATIONS_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const DOCUMENTATION = {
@@ -112,10 +103,6 @@ export const DOCUMENTATION = {
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-};
-
-export const DOCUMENTATION_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const PROJECTIONS = {
@@ -188,10 +175,6 @@ export const PROJECTIONS = {
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-};
-
-export const PROJECTIONS_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const CONTROL_PERSONS = {
@@ -360,22 +343,6 @@ export const BUSINESS_PLAN = {
   },
   sources: [{ ...SOURCES }],
   uses: [{ ...USES }],
-};
-
-export const BUSINESS_PLAN_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
-export const CONTINGENCY_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
-export const MISCELLANEOUS_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
-export const OFFER_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const MODEL_MANAGER = {
