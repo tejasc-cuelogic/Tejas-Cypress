@@ -52,8 +52,10 @@ export default class AddNewBonusReward extends Component {
                   changed={verifyExpDate}
                 />
               </div>
+              <div className="center-align">
+                <Button primary content="Add new bonus reward" />
+              </div>
             </Form>
-            <Button primary content="Add new bonus reward" />
           </Modal.Content>
         }
       </Modal>
