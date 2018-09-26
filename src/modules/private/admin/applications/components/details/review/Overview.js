@@ -11,12 +11,12 @@ import ManagerOverview from './ManagerOverview';
 @observer
 export default class Overview extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint.description');
+    this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint');
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.overview.criticalPoint.managerOverview');
   }
   addCriticalPoint = (e) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'data');
+    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'description');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -30,12 +30,8 @@ export default class Overview extends Component {
   }
   render() {
     const {
-      OVERVIEW_FRM,
-      formChangeWithIndex,
-      confirmModal,
-      toggleConfirmModal,
-      removeData,
-      confirmModalName,
+      OVERVIEW_FRM, formChangeWithIndex, confirmModal, toggleConfirmModal,
+      removeData, confirmModalName,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -56,14 +52,14 @@ export default class Overview extends Component {
         </Header>
         <Form onSubmit={this.submit}>
           {
-            OVERVIEW_FRM.fields.data.map((field, index) => (
+            OVERVIEW_FRM.fields.description.map((field, index) => (
               <FormInput
                 containerclassname={isReadonly ? 'display-only' : ''}
                 disabled={isReadonly}
                 name="description"
                 label={`Critical Point ${index + 1}`}
                 fielddata={field.description}
-                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'data', index)}
+                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'description', index)}
                 removed={!isReadonly ? e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM') : false}
                 linkto={this.props.match.url}
               />
@@ -79,8 +75,8 @@ export default class Overview extends Component {
             </Button.Group>
           </div>
           }
-          {submitted &&
-          <ManagerOverview approved={approved} isReadonly={isReadonly} formName="OVERVIEW_MANAGER_FRM" isValid={OVERVIEW_FRM.meta.isValid} />
+          {(submitted || isManager) &&
+          <ManagerOverview formName="OVERVIEW_FRM" approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
           }
         </Form>
         <Confirm
@@ -88,7 +84,7 @@ export default class Overview extends Component {
           content="Are you sure you want to remove this critical point?"
           open={confirmModal}
           onCancel={toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, 'data')}
+          onConfirm={() => removeData(confirmModalName, 'description')}
           size="mini"
           className="deletion"
         />

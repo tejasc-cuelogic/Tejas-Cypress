@@ -14,9 +14,13 @@ const AddMore = ({
   <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)} >+ {title}</Button>
 );
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore', 'uiStore', 'businessAppStore', 'userStore')
 @observer
 export default class BusinessPlan extends Component {
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('BUSINESS_PLAN_FRM', 'review.businessPlan');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.businessPlan.managerOverview');
+  }
   onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadData('BUSINESS_PLAN_FRM', 'controlPersons', name, files, index);
   }
@@ -43,35 +47,42 @@ export default class BusinessPlan extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.saveReviewForms('BUSINESS_PLAN_FRM');
   }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+  }
   render() {
     const {
-      BUSINESS_PLAN_FRM,
-      formChangeWithIndex,
-      controlPersonMaskChange,
-      totalSourcesAmount,
-      maskChangeWithIndex,
-      totalUsesAmount,
-      confirmModal,
-      confirmModalName,
-      removeData,
-      BUSINESS_PLAN_MANAGER_FRM,
+      BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
+      maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.businessPlan && review.businessPlan &&
+      review.businessPlan.submitted) ? review.businessPlan.submitted : null;
+    const approved = (review && review.businessPlan && review.businessPlan &&
+      review.businessPlan.approved) ? review.businessPlan.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved));
     const { confirmBox } = this.props.uiStore;
     return (
       <Aux>
         <Form onSubmit={this.submit}>
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
+            containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
+            disabled={isReadonly}
             name="locationFeasibility"
             fielddata={BUSINESS_PLAN_FRM.fields.locationFeasibility}
             changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
-            containerclassname="secondary"
             hidelabel
           />
           <Divider section />
           <Header as="h4">
             Control Persons
+            {!isReadonly &&
             <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'BUSINESS_PLAN_FRM', 'controlPersons')}><small>+ Add Control Person</small></Link>
+            }
           </Header>
           {
             BUSINESS_PLAN_FRM.fields.controlPersons.map((controlPerson, index) => (
@@ -85,11 +96,15 @@ export default class BusinessPlan extends Component {
                 <div className="featured-section">
                   <Form.Group widths={3}>
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="name"
                       fielddata={controlPerson.name}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <MaskedInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       percentage
                       type="text"
                       name="ownership"
@@ -97,6 +112,8 @@ export default class BusinessPlan extends Component {
                       changed={values => controlPersonMaskChange(values, index)}
                     />
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="derogatoryMarks"
                       fielddata={controlPerson.derogatoryMarks}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
@@ -104,11 +121,15 @@ export default class BusinessPlan extends Component {
                   </Form.Group>
                   <Form.Group widths={3}>
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="experience"
                       fielddata={controlPerson.experience}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="creditScore"
                       fielddata={controlPerson.creditScore}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
@@ -117,6 +138,8 @@ export default class BusinessPlan extends Component {
                   <Form.Group widths={3}>
                     <Form.Field>
                       <DropZone
+                        containerclassname={isReadonly ? 'display-only' : ''}
+                        disabled={isReadonly}
                         name="experienceUpload"
                         fielddata={controlPerson.experienceUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
@@ -126,6 +149,8 @@ export default class BusinessPlan extends Component {
                     </Form.Field>
                     <Form.Field>
                       <DropZone
+                        containerclassname={isReadonly ? 'display-only' : ''}
+                        disabled={isReadonly}
                         name="creditUpload"
                         fielddata={controlPerson.creditUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
@@ -143,11 +168,12 @@ export default class BusinessPlan extends Component {
             ['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
               <Aux>
                 <FormTextarea
+                  containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
+                  disabled={isReadonly}
                   key={field}
                   name={field}
                   fielddata={BUSINESS_PLAN_FRM.fields[field]}
                   changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
-                  containerclassname="secondary"
                 />
                 <Divider section />
               </Aux>
@@ -172,6 +198,8 @@ export default class BusinessPlan extends Component {
                       <Table.Row key={source} verticalAlign="top">
                         <Table.Cell width={8}>
                           <FormInput
+                            containerclassname={isReadonly ? 'display-only' : ''}
+                            disabled={isReadonly}
                             name="name"
                             fielddata={source.name}
                             changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'sources', index)}
@@ -180,6 +208,8 @@ export default class BusinessPlan extends Component {
                         </Table.Cell>
                         <Table.Cell width={8}>
                           <MaskedInput
+                            containerclassname={isReadonly ? 'display-only' : ''}
+                            disabled={isReadonly}
                             prefix="$"
                             currency
                             name="amount"
@@ -199,7 +229,9 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
+                      {!isReadonly &&
                       <AddMore addMore={this.addMore} arrayName="sources" formName="BUSINESS_PLAN_FRM" title="Add Source" />
+                      }
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -228,6 +260,8 @@ export default class BusinessPlan extends Component {
                     <Table.Row key={use[index]} verticalAlign="top">
                       <Table.Cell width={8}>
                         <FormInput
+                          containerclassname={isReadonly ? 'display-only' : ''}
+                          disabled={isReadonly}
                           name="name"
                           fielddata={use.name}
                           changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'uses', index)}
@@ -236,6 +270,8 @@ export default class BusinessPlan extends Component {
                       </Table.Cell>
                       <Table.Cell width={8}>
                         <MaskedInput
+                          containerclassname={isReadonly ? 'display-only' : ''}
+                          disabled={isReadonly}
                           prefix="$"
                           currency
                           name="amount"
@@ -255,7 +291,9 @@ export default class BusinessPlan extends Component {
                   }
                   <Table.Row>
                     <Table.Cell colSpan="3">
+                      {!isReadonly &&
                       <AddMore addMore={this.addMore} arrayName="uses" formName="BUSINESS_PLAN_FRM" title="Add Use" />
+                      }
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>
@@ -276,13 +314,19 @@ export default class BusinessPlan extends Component {
             changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', '', field)}
             dateOfBirth
           />
+          {!isManager && !approved &&
           <div className="right-align">
             <Button.Group>
+              {!submitted &&
               <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-              <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} primary type="button">Approve Review</Button>
+              }
+              <Button onClick={() => this.submitWithApproval('BUSINESS_PLAN_FRM', 'REVIEW_SUBMITTED')} disabled={(!(BUSINESS_PLAN_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Approve Review'}</Button>
             </Button.Group>
           </div>
-          <ManagerOverview form={BUSINESS_PLAN_MANAGER_FRM} formName="BUSINESS_PLAN_MANAGER_FRM" />
+          }
+          {(submitted || isManager) &&
+          <ManagerOverview approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_MANAGER_FRM" />
+          }
         </Form>
         <Confirm
           header="Confirm"
@@ -299,7 +343,7 @@ export default class BusinessPlan extends Component {
           confirmModalName === 'sources' ? 'source' : 'control person'}?`}
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName)}
+          onConfirm={() => removeData('BUSINESS_PLAN_FRM', confirmModalName)}
           size="mini"
           className="deletion"
         />

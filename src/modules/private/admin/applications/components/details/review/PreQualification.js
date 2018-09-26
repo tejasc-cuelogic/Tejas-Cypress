@@ -10,7 +10,7 @@ import ManagerOverview from './ManagerOverview';
 @observer
 export default class PreQual extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('JUSTIFICATIONS_FRM', 'review.preQualification.justifications');
+    this.props.businessAppReviewStore.setFormData('JUSTIFICATIONS_FRM', 'review.preQualification');
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.preQualification.managerOverview');
   }
   addJustification = (e) => {
@@ -51,7 +51,7 @@ export default class PreQual extends Component {
             }
           </Header>
           {
-            JUSTIFICATIONS_FRM.fields.data.map((justifications, index) => (
+            JUSTIFICATIONS_FRM.fields.justifications.map((justifications, index) => (
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
@@ -59,7 +59,7 @@ export default class PreQual extends Component {
                   name="justifications"
                   label={`Justification ${index + 1}`}
                   fielddata={justifications.justifications}
-                  changed={(e, result) => formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', 'data', index)}
+                  changed={(e, result) => formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', 'justifications', index)}
                   removed={!isReadonly ? e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM') : false}
                   linkto={this.props.match.url}
                 />
@@ -71,7 +71,7 @@ export default class PreQual extends Component {
             <Button onClick={() => this.submitWithApproval('JUSTIFICATIONS_FRM', 'REVIEW_SUBMITTED')} disabled={(!(JUSTIFICATIONS_FRM.meta.isValid) || submitted)} primary={!submitted} className="relaxed" >{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
           </div>
           }
-          {submitted &&
+          {(submitted || isManager) &&
           <ManagerOverview approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           }
         </Form>

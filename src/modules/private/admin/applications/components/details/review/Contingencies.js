@@ -17,7 +17,7 @@ const TableHeader = () => (
 );
 
 const TableBody = ({
-  match, fields, formName, arrayName, onchange, addMore, toggleConfirmModal,
+  match, fields, formName, arrayName, onchange, addMore, toggleConfirmModal, isReadonly,
 }) => (
   <Table.Body>
     {
@@ -26,6 +26,8 @@ const TableBody = ({
       <Table.Row verticalAlign="top">
         <Table.Cell width={5}>
           <FormInput
+            containerclassname={isReadonly ? 'display-only' : ''}
+            disabled={isReadonly}
             name="contingency"
             fielddata={formData.contingency}
             changed={(e, result) => onchange(e, result, formName, arrayName, index)}
@@ -34,6 +36,8 @@ const TableBody = ({
         </Table.Cell>
         <Table.Cell>
           <FormInput
+            containerclassname={isReadonly ? 'display-only' : ''}
+            disabled={isReadonly}
             name="acceptance"
             fielddata={formData.acceptance}
             changed={(e, result) => onchange(e, result, formName, arrayName, index)}
@@ -41,26 +45,31 @@ const TableBody = ({
           />
         </Table.Cell>
         <Table.Cell collapsing>
+          {!isReadonly &&
           <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)} >
             <Icon className="ns-close-circle" color="grey" />
           </Link>
+          }
         </Table.Cell>
       </Table.Row>
     )) : ''
     }
     <Table.Row>
       <Table.Cell colSpan="3">
-        <Button size="small" color="blue" className="link-button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
+        {!isReadonly &&
+        <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
+        }
       </Table.Cell>
     </Table.Row>
   </Table.Body>
 );
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Contingencies extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFormData('CONTINGENCY_FRM', 'review.contingencies');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.contingencies.managerOverview');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -69,17 +78,23 @@ export default class Contingencies extends Component {
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('CONTINGENCY_FRM');
   }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+  }
   render() {
     const {
-      CONTINGENCY_FRM,
-      confirmModal,
-      confirmModalName,
-      addMore,
-      formChangeWithIndex,
-      toggleConfirmModal,
-      removeData,
-      CONTINGENCY_MANAGER_FRM,
+      CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
+      toggleConfirmModal, removeData,
     } = this.props.businessAppReviewStore;
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.contingencies && review.contingencies &&
+      review.contingencies.submitted) ? review.contingencies.submitted : null;
+    const approved = (review && review.contingencies && review.contingencies &&
+      review.contingencies.approved) ? review.contingencies.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved));
     return (
       <Aux>
         <Form onSubmit={this.submit}>
@@ -88,24 +103,28 @@ export default class Contingencies extends Component {
           </Header>
           <Table basic compact className="form-table">
             <TableHeader />
-            <TableBody match={this.props.match} arrayName="launch" fields={CONTINGENCY_FRM.fields.launch} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
+            <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="launch" fields={CONTINGENCY_FRM.fields.launch} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <Header as="h5">
             Close
           </Header>
           <Table basic compact className="form-table">
             <TableHeader />
-            <TableBody match={this.props.match} arrayName="close" fields={CONTINGENCY_FRM.fields.close} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
+            <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="close" fields={CONTINGENCY_FRM.fields.close} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
+          {!isManager && !approved &&
           <div className="right-align">
             <Button.Group className="mt-20">
-              <Button className="" disabled={!CONTINGENCY_FRM.meta.isValid} secondary>
-                Save
-              </Button>
-              <Button disabled={!CONTINGENCY_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+              {!submitted &&
+              <Button className="" disabled={!CONTINGENCY_FRM.meta.isValid} secondary>Save</Button>
+              }
+              <Button onClick={() => this.submitWithApproval('CONTINGENCY_FRM', 'REVIEW_SUBMITTED')} disabled={(!(CONTINGENCY_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Button.Group>
           </div>
-          <ManagerOverview form={CONTINGENCY_MANAGER_FRM} formName="CONTINGENCY_MANAGER_FRM" />
+          }
+          {(submitted || isManager) &&
+          <ManagerOverview formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
+          }
         </Form>
         <Confirm
           header="Confirm"

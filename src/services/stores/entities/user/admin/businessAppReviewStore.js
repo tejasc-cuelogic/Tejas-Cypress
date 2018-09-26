@@ -335,99 +335,21 @@ export class BusinessAppReviewStore {
           inputData = { ...inputData, [key]: fields[key].value };
         }
       } catch (e) {
-        // do nothing
+        console.log(e);
       }
     });
     return inputData;
   }
 
-  /*
-  *  Set form data
-  */
-  @action
-  setDataForFields = (fields, data, form) => {
-    Object.keys(fields).map((key) => {
-      try {
-        if (fields[key] && Array.isArray(toJS(fields[key]))) {
-          let tempRef = false;
-          if (toJS(fields[key])[0].objRef) {
-            fields[key][0].objRef.split('.').map((k) => {
-              tempRef = !tempRef ? data[k] : tempRef[k];
-              return tempRef;
-            });
-          }
-          if ((data[key] && data[key].length > 0) || (tempRef[key] && tempRef[key].length > 0)) {
-            const addRec = ((data[key] && data[key].length) ||
-            (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
-            for (let i = addRec; i > 0; i -= 1) {
-              this.addMore(form, key);
-            }
-            (data[key] || tempRef[key]).forEach((record, index) => {
-              this.setDataForFields(fields[key][index], (data[key] && data[key][index]) ||
-              (tempRef[key] && tempRef[key][index]));
-            });
-          }
-        } else if (fields[key].objRef) {
-          let tempRef = false;
-          fields[key].objRef.split('.').map((k) => {
-            tempRef = !tempRef ? data[k] : tempRef[k];
-            return tempRef;
-          });
-          if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
-            fields[key].value = tempRef[key].fileName;
-            fields[key].fileId = tempRef[key].fileId;
-          } else if (fields[key].objType === 'DATE') {
-            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
-          } else {
-            const fieldRef = key.split('_');
-            fields[key].value = fields[key].find ?
-              tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]] :
-              tempRef[key];
-          }
-        } else if (key === 'value') {
-          fields[key] = data && typeof data === 'string' ? data : data[key];
-        } else if (fields[key].objType === 'FileObjectType') {
-          fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
-          fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
-        } else if (fields[key].objType === 'DATE') {
-          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
-        } else {
-          fields[key].value = data && typeof data === 'string' ? data : data[key];
-        }
-        if (fields[key].refSelector) {
-          fields[key].refSelectorValue = fields[key].value !== '';
-        }
-      } catch (e) {
-        // do nothing
-      }
-      return null;
-    });
-  }
   @action
   setFormData = (form, ref) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const appData = businessApplicationDetailsAdmin;
-    const { fields } = this[form];
-    let data = false;
-    ref.split('.').map((k) => {
-      data = !data ? appData[k] : data[k];
-      return data;
-    });
-    if (this[form].fields.data && Array.isArray(toJS(this[form].fields.data))) {
-      if (data && data.length > 0) {
-        this.resetMe(form, this.getMetaData(form));
-        const addRec = data.length - toJS(this[form].fields.data).length;
-        for (let i = addRec; i > 0; i -= 1) {
-          this.addMore(form);
-        }
-        data.forEach((record, index) => {
-          this.setDataForFields(this[form].fields.data[index], data[index], form);
-        });
-      }
-    } else {
-      // this.resetMe(form, this.getMetaData(form));
-      this.setDataForFields(this[form].fields, data, form);
+    if (!appData) {
+      return false;
     }
+    this[form] = Validator.setFormData(this[form], appData, ref);
+    return false;
   }
 }
 export default new BusinessAppReviewStore();

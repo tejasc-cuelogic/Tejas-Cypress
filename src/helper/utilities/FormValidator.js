@@ -1,12 +1,17 @@
+/* eslint-disable no-underscore-dangle */
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
+import moment from 'moment';
 import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
 class FormValidator {
+  emptyDataSet = { data: [] };
+
   prepareFormObject = (fields, isDirty = false, isFieldValid = true, isValid = false) => ({
     fields: { ...fields },
+    refMetadata: { ...fields },
     meta: {
       isValid,
       error: '',
@@ -214,6 +219,87 @@ class FormValidator {
       currentForm.meta.isFieldValid = false;
     }
   }
+  resetFormToEmpty = metaData => this.prepareFormObject(metaData || this.emptyDataSet);
+
+  getMetaData = form => form.refMetadata;
+
+  getRefFromObjRef = (objRef, data) => {
+    let tempRef = false;
+    objRef.split('.').map((k) => {
+      tempRef = !tempRef ? data[k] : tempRef[k];
+      return tempRef;
+    });
+    return tempRef;
+  }
+  addMoreFields = (fields, count = 1) => {
+    const arrayData = [...toJS(fields)];
+    for (let i = count; i > 0; i -= 1) {
+      arrayData.push(toJS(fields)[0]);
+    }
+    return arrayData;
+  }
+
+  setDataForLevel = (refFields, data) => {
+    const fields = { ...refFields };
+    Object.keys(fields).map((key) => {
+      try {
+        if (fields[key] && Array.isArray(toJS(fields[key]))) {
+          const tempRef = toJS(fields[key])[0].objRef ?
+            this.getRefFromObjRef(fields[key][0].objRef, data) : false;
+          if ((data && data[key] && data[key].length > 0) ||
+          (tempRef && tempRef[key] && tempRef[key].length > 0)) {
+            const addRec = ((data[key] && data[key].length) ||
+            (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
+            fields[key] = this.addMoreFields(fields[key], addRec);
+            (data[key] || tempRef[key]).forEach((record, index) => {
+              fields[key][index] = this.setDataForLevel(
+                fields[key][index],
+                (data[key] && data[key][index]) || (tempRef[key] && tempRef[key][index]),
+              );
+            });
+          }
+        } else if (fields[key].objRef) {
+          const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
+          if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
+            fields[key].value = tempRef[key].fileName;
+            fields[key].fileId = tempRef[key].fileId;
+          } else if (fields[key].objType === 'DATE') {
+            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
+          } else {
+            const fieldRef = key.split('_');
+            fields[key].value = fields[key].find ?
+              tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]] :
+              tempRef[key];
+          }
+        } else if (key === 'value') {
+          fields[key] = data && typeof data === 'string' ? data : data[key];
+        } else if (fields[key].objType === 'FileObjectType') {
+          fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
+          fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
+        } else if (fields[key].objType === 'DATE') {
+          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
+        } else {
+          fields[key].value = data && typeof data === 'object' ? data[key] : data;
+        }
+        if (fields[key].refSelector) {
+          fields[key].refSelectorValue = fields[key].value !== '';
+        }
+      } catch (e) {
+        // do nothing
+        console.log(e, 'catch');
+      }
+      return fields;
+    });
+    return fields;
+  }
+
+  setFormData = (form, dataSrc, ref) => {
+    let currentForm = form;
+    const data = this.getRefFromObjRef(ref, dataSrc);
+    currentForm = this.resetFormToEmpty(currentForm.refMetadata);
+    currentForm.fields = this.setDataForLevel(currentForm.fields, data);
+    return currentForm;
+  };
 }
 
 export default new FormValidator();

@@ -4,18 +4,30 @@ import { Form, Header, Button, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Documentation extends Component {
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('DOCUMENTATION_FRM', 'review.documentation');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.documentation.managerOverview');
+  }
   submit = () => {
-    this.props.businessAppReviewStore.saveReviewForms('PROJECTIONS_FRM');
+    this.props.businessAppReviewStore.saveReviewForms('DOCUMENTATION_FRM');
+  }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
   }
   render() {
-    const {
-      DOCUMENTATION_FRM,
-      DOCUMENTATION_MANAGER_FRM,
-      formChange,
-    } = this.props.businessAppReviewStore;
+    const { DOCUMENTATION_FRM, formChange } = this.props.businessAppReviewStore;
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.documentation && review.documentation &&
+      review.documentation.submitted) ? review.documentation.submitted : null;
+    const approved = (review && review.documentation && review.documentation &&
+      review.documentation.approved) ? review.documentation.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved));
     return (
       <div>
         <Form onSubmit={this.submit}>
@@ -25,11 +37,12 @@ export default class Documentation extends Component {
           {
             ['negativeInformation', 'matchHistoricals', 'backupProof'].map(field => (
               <FormTextarea
+                containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+                disabled={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-                containerclassname="secondary"
               />
             ))
           }
@@ -40,11 +53,12 @@ export default class Documentation extends Component {
           {
             ['profitiable', 'questionableItems', 'negativeTrends'].map(field => (
               <FormTextarea
+                containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+                disabled={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-                containerclassname="secondary"
               />
             ))
           }
@@ -55,11 +69,12 @@ export default class Documentation extends Component {
           {
             ['consistentBalance', 'anyUnusualMovements'].map(field => (
               <FormTextarea
+                containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+                disabled={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-                containerclassname="secondary"
               />
             ))
           }
@@ -70,16 +85,23 @@ export default class Documentation extends Component {
             name="leaseOrMortgage"
             fielddata={DOCUMENTATION_FRM.fields.leaseOrMortgage}
             changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-            containerclassname="secondary"
+            containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+            disabled={isReadonly}
             hidelabel
           />
+          {!isManager && !approved &&
           <div className="right-align">
             <Button.Group>
+              {!submitted &&
               <Button disabled={!DOCUMENTATION_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-              <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+              }
+              <Button onClick={() => this.submitWithApproval('DOCUMENTATION_FRM', 'REVIEW_SUBMITTED')} disabled={(!(DOCUMENTATION_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Button.Group>
           </div>
-          <ManagerOverview form={DOCUMENTATION_MANAGER_FRM} formName="DOCUMENTATION_MANAGER_FRM" />
+          }
+          {(submitted || isManager) &&
+          <ManagerOverview isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_MANAGER_FRM" approved={approved} isReadonly={isReadonly} />
+          }
         </Form>
       </div>
     );

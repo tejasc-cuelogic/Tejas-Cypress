@@ -7,11 +7,12 @@ import { FormInput, MaskedInput } from '../../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Offer extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'offers.managerOverview');
   }
   toggleConfirmModal = (e, index) => {
     e.preventDefault();
@@ -24,22 +25,29 @@ export default class Offer extends Component {
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OFFERS_FRM');
   }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+  }
   render() {
     const {
-      OFFERS_FRM,
-      OFFER_MANAGER_FRM,
-      formChangeWithIndex,
-      maskChangeWithIndex,
-      confirmModal,
-      confirmModalName,
-      removeData,
+      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
+      confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.offer[0];
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.overview && review.overview.criticalPoint &&
+      review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
+    const approved = (review && review.overview && review.overview.criticalPoint &&
+      review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved));
     return (
       <Aux>
         <Header as="h4">
           Offers
-          {OFFERS_FRM.fields.offer.length < 4 &&
+          {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
           <Link to={this.props.match.url} className="link pull-right" onClick={this.addNewOffer}><small>+ Add new offer</small></Link>
           }
         </Header>
@@ -52,12 +60,14 @@ export default class Offer extends Component {
                 {
                   OFFERS_FRM.fields.offer.map((offer, index) => (
                     <Table.HeaderCell>Offer {String.fromCharCode('A'.charCodeAt() + index)}
+                      {!isReadonly &&
                       <Link
                         to={this.props.match.url}
                         onClick={e => this.toggleConfirmModal(e, index)}
                       >
                         <Icon className="ns-close-circle" color="grey" />
                       </Link>
+                      }
                     </Table.HeaderCell>
                   ))
                 }
@@ -70,6 +80,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <Dropdown
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="structure"
                       placeholder="Choose"
                       fluid
@@ -89,6 +101,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="amount"
                       fielddata={offer.amount}
                       changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
@@ -104,6 +118,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <MaskedInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="maturity"
                       fielddata={offer.maturity}
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
@@ -120,6 +136,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <MaskedInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="interestRate"
                       fielddata={offer.interestRate}
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
@@ -136,6 +154,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <MaskedInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       prefix="$"
                       currency
                       name="amortizationAmount"
@@ -153,6 +173,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <Dropdown
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="personalGuarantee"
                       placeholder="Type number"
                       fluid
@@ -172,6 +194,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="businessBlanket"
                       fielddata={offer.businessBlanket}
                       changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
@@ -187,6 +211,8 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <MaskedInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="expirationDate"
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                       fielddata={offer.expirationDate}
@@ -204,10 +230,11 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.offer.map((offer, index) => (
                   <Table.Cell>
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly || offer.structure.value === 'TERM_NOTE'}
                       name="multiple"
                       fielddata={offer.multiple}
                       changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
-                      disabled={offer.structure.value === 'TERM_NOTE'}
                       ishidelabel
                     />
                   </Table.Cell>
@@ -225,7 +252,8 @@ export default class Offer extends Component {
                       name="totalCapital"
                       fielddata={offer.totalCapital}
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
-                      disabled={offer.structure.value === 'TERM_NOTE'}
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly || offer.structure.value === 'TERM_NOTE'}
                       hidelabel
                     />
                   </Table.Cell>
@@ -235,25 +263,27 @@ export default class Offer extends Component {
               <Table.Row>
                 <Table.Cell>Portal agreement upload</Table.Cell>
                 <Table.Cell colSpan="4">
+                  {!isReadonly &&
                   <Button type="button" size="small" color="blue" className="link-button" >+ Add portal agreement</Button>
+                  }
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
           </Table>
           }
+          {!isManager && !approved &&
           <div className="right-align mt-20">
             <Button.Group>
-              <Button
-                disabled={!(OFFERS_FRM.meta.isValid && OFFERS_FRM.fields.offer.length)}
-                className="relaxed"
-                secondary
-              >
-                Save
-              </Button>
-              <Button disabled={!(OFFERS_FRM.meta.isValid && OFFERS_FRM.fields.offer.length)} primary type="button">Submit for Approval</Button>
+              {!submitted &&
+              <Button disabled={!OFFERS_FRM.meta.isValid} className="relaxed" secondary>Save</Button>
+              }
+              <Button onClick={() => this.submitWithApproval('OFFERS_FRM', 'REVIEW_SUBMITTED')} disabled={(!(OFFERS_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Button.Group>
           </div>
-          <ManagerOverview form={OFFER_MANAGER_FRM} formName="OFFER_MANAGER_FRM" />
+          }
+          {(submitted || isManager) &&
+          <ManagerOverview formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
+          }
         </Form>
         <Confirm
           header="Confirm"

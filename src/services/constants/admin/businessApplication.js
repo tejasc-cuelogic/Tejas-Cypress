@@ -9,7 +9,7 @@ export const MANAGERS = {
 };
 
 export const OVERVIEW = {
-  data: [{
+  description: [{
     description: {
       value: '',
       label: 'Critical Point',
@@ -30,7 +30,7 @@ export const OVERVIEW_MANAGER = {
 };
 
 export const JUSTIFICATIONS = {
-  data: [{
+  justifications: [{
     justifications: {
       value: '',
       label: 'Justification',
@@ -356,6 +356,7 @@ export const BUSINESS_PLAN = {
     placeHolder: '12-02-1989',
     error: undefined,
     rule: 'required|date',
+    objType: 'DATE',
   },
   sources: [{ ...SOURCES }],
   uses: [{ ...USES }],

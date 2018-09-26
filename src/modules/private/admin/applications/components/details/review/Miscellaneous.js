@@ -72,11 +72,12 @@ const AddMore = ({
   </Table.Row>
 );
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore', 'uiStore', 'businessAppStore', 'userStore')
 @observer
 export default class Miscellaneous extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFormData('MISCELLANEOUS_FRM', 'review.miscellaneous');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.miscellaneous.managerOverview');
   }
   onFileDrop = (files, name, index) => {
     this.props.businessAppReviewStore.setFileUploadData('MISCELLANEOUS_FRM', 'otherDocs', name, files, index);
@@ -103,17 +104,24 @@ export default class Miscellaneous extends Component {
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('MISCELLANEOUS_FRM');
   }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+  }
   render() {
     const {
-      UPLOADED_DOCUMENTS_FRM,
-      MISCELLANEOUS_FRM,
-      formChangeWithIndex,
-      confirmModal,
-      confirmModalName,
-      removeData,
-      MISCELLANEOUS_MANAGER_FRM,
+      UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
+      confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.miscellaneous && review.miscellaneous &&
+      review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
+    const approved = (review && review.miscellaneous && review.miscellaneous &&
+      review.miscellaneous.approved) ? review.miscellaneous.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved));
     return (
       <Aux>
         <Form size="small" onSubmit={this.submit}>
@@ -127,6 +135,8 @@ export default class Miscellaneous extends Component {
                   <Table.Row verticalAlign="top">
                     <Table.Cell width={3}>
                       <Dropdown
+                        containerclassname={isReadonly ? 'display-only' : ''}
+                        disabled={isReadonly}
                         name="label"
                         placeholder="eg. Facebook"
                         fluid
@@ -138,6 +148,8 @@ export default class Miscellaneous extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       <FormInput
+                        containerclassname={isReadonly ? 'display-only' : ''}
+                        disabled={isReadonly}
                         type="text"
                         name="url"
                         fielddata={socialMedia.url}
@@ -145,12 +157,16 @@ export default class Miscellaneous extends Component {
                       />
                     </Table.Cell>
                     <Table.Cell collapsing>
+                      {!isReadonly &&
                       <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" toggleConfirmModal={this.toggleConfirmModal} />
+                      }
                     </Table.Cell>
                   </Table.Row>
                 )) : ''
               }
+              {!isReadonly &&
               <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" title="Add social media" />
+              }
             </Table.Body>
           </Table>
           <SectionHeader header="Other Documentation Uploads" subheader="(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)" />
@@ -163,6 +179,8 @@ export default class Miscellaneous extends Component {
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5}>
                     <FormInput
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="label"
                       fielddata={document.label}
                       changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'otherDocs', index)}
@@ -170,6 +188,8 @@ export default class Miscellaneous extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <DropZone
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      disabled={isReadonly}
                       name="docDetails"
                       fielddata={document.docDetails}
                       ondrop={(files, name) => this.onFileDrop(files, name, index)}
@@ -178,12 +198,16 @@ export default class Miscellaneous extends Component {
                     />
                   </Table.Cell>
                   <Table.Cell collapsing>
+                    {!isReadonly &&
                     <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" toggleConfirmModal={this.toggleConfirmModal} />
+                    }
                   </Table.Cell>
                 </Table.Row>
               )) : ''
               }
+              {!isReadonly &&
               <AddMore addMore={this.addMore} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" title="Add new document" />
+              }
             </Table.Body>
           </Table>
           <SectionHeader header="NS Admin Uploaded Documents" subheader="Uploaded via the Activity History" />
@@ -205,8 +229,10 @@ export default class Miscellaneous extends Component {
               }
             </Item.Group>
           </div>
+          {!isManager && !approved &&
           <div className="right-align">
             <Button.Group>
+              {!submitted &&
               <Button
                 disabled={!MISCELLANEOUS_FRM.meta.isValid}
                 className="relaxed"
@@ -214,10 +240,14 @@ export default class Miscellaneous extends Component {
               >
                 Save
               </Button>
-              <Button disabled={!MISCELLANEOUS_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
+              }
+              <Button onClick={() => this.submitWithApproval('MISCELLANEOUS_FRM', 'REVIEW_SUBMITTED')} disabled={(!(MISCELLANEOUS_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Button.Group>
           </div>
-          <ManagerOverview form={MISCELLANEOUS_MANAGER_FRM} formName="MISCELLANEOUS_MANAGER_FRM" />
+          }
+          {(submitted || isManager) &&
+          <ManagerOverview approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
+          }
         </Form>
         <Confirm
           header="Confirm"
