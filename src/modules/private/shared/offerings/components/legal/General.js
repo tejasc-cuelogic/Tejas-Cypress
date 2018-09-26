@@ -19,6 +19,10 @@ export default class General extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
+  handleFormSubmit = () => {
+    const { GENERAL_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, GENERAL_FRM.fields, 'legal', 'general');
+  }
   render() {
     const {
       GENERAL_FRM,
@@ -35,7 +39,7 @@ export default class General extends Component {
     const { isIssuer } = this.props.userStore;
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : ''}>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           <Header as="h4">General Information</Header>
           <Form.Group widths={3}>
             {
@@ -199,7 +203,7 @@ export default class General extends Component {
                 <div className="featured-section">
                   <Form.Group widths={2}>
                     {
-                      ['dateOfOffering', 'securitiesExemption', 'securitiesOffered', 'amountSold'].map(field => (
+                      ['dateOfOffering', 'securitiesExemption', 'securitiesOffered'].map(field => (
                         <FormInput
                           hoverable={field === 'securitiesExemptionReliedUpon'}
                           key={field}
@@ -209,6 +213,12 @@ export default class General extends Component {
                         />
                       ))
                     }
+                    <MaskedInput
+                      name="amountSold"
+                      fielddata={offering.amountSold}
+                      changed={(values, name) => maskArrayChange(values, formName, name)}
+                      number
+                    />
                   </Form.Group >
                   <FormTextarea
                     name="useOfProceeds"

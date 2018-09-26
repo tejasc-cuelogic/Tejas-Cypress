@@ -9,7 +9,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 import Summary from '../components/Summary';
 import OfferingModule from '../../../shared/offerings/components';
 
-@inject('navStore', 'offeringsStore')
+@inject('navStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class OfferingDetails extends Component {
   componentWillMount() {
@@ -18,9 +18,11 @@ export default class OfferingDetails extends Component {
     }
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
     this.props.offeringsStore.getOne(this.props.match.params.offeringid);
+    this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.offeringCreationStore.resetOfferingId();
     this.props.history.push(this.props.refLink);
   };
   summary = (offer) => {
@@ -34,13 +36,12 @@ export default class OfferingDetails extends Component {
         { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
         {
           title: 'Days Till Launch',
-          content: offer.offering ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
+          content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
           type: 0,
         },
       ],
     };
   };
-  module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
@@ -60,9 +61,12 @@ export default class OfferingDetails extends Component {
             <Switch>
               <Route exact path={match.url} component={OfferingModule('overview')} />
               {
-                navItems.map(item => (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} component={OfferingModule(item.to)} />
-                ))
+                navItems.map((item) => {
+                  const CurrentModule = OfferingModule(item.to);
+                  return (
+                    <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentModule {...props} offeringId={this.props.match.params.offeringid} />} />
+                  );
+                })
               }
             </Switch>
           </Card>

@@ -1,10 +1,12 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
 import { map } from 'lodash';
-import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, COMPANY_HISTORY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
-import { FormValidator as Validator } from '../../../../../helper';
+import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_HIGHLIGHTS, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
+import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
+import { updateOffering } from '../../../queries/offerings/manage';
+import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore } from '../../../index';
+import { offeringsStore, uiStore } from '../../../index';
 
 const emptyDataSet = { data: [] };
 
@@ -13,7 +15,6 @@ export class OfferingCreationStore {
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_HIGHLIGHTS_FRM = Validator.prepareFormObject(OFFERING_HIGHLIGHTS);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
-  @observable COMPANY_HISTORY_FRM = Validator.prepareFormObject(COMPANY_HISTORY);
   @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
   @observable LAUNCH_CONTITNGENCIES_FRM = Validator.prepareFormObject(emptyDataSet);
@@ -35,11 +36,21 @@ export class OfferingCreationStore {
   @observable confirmModalName = null;
   @observable removeIndex = null;
   @observable initLoad = [];
+  @observable currentOfferingId = null;
 
   @observable requestState = {
     search: {},
   };
 
+  @action
+  setCurrentOfferingId = (id) => {
+    this.currentOfferingId = id;
+  }
+
+  @action
+  resetOfferingId = () => {
+    this.currentOfferingId = null;
+  }
   @action
   setProfilePhoto(attr, value, field) {
     this.MEDIA_FRM.fields[field][attr] = value;
@@ -76,10 +87,20 @@ export class OfferingCreationStore {
 
   @action
   formChange = (e, result, form) => {
-    this[form] = Validator.onChange(
-      this[form],
-      Validator.pullValues(e, result),
-    );
+    if (result && result.name === 'isEarlyBirds' && !result.checked) {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+        '',
+        true,
+        result.checked,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
   }
 
   @action
@@ -169,13 +190,13 @@ export class OfferingCreationStore {
   getMetaData = (metaData) => {
     const metaDataMapping = {
       OFFERING_HIGHLIGHTS_FRM: OFFERING_HIGHLIGHTS,
-      COMPANY_HISTORY_FRM: COMPANY_HISTORY,
       LAUNCH_CONTITNGENCIES_FRM: CONTINGENCIES,
       CLOSING_CONTITNGENCIES_FRM: CONTINGENCIES,
       LEADERSHIP_FRM: LEADERSHIP,
       GENERAL_FRM: GENERAL,
       AFFILIATED_ISSUER_FRM: AFFILIATED_ISSUER,
       LEADER_FRM: LEADER,
+      OFFERING_COMPANY_FRM: OFFERING_COMPANY,
     };
     return metaDataMapping[metaData];
   }
@@ -293,14 +314,11 @@ export class OfferingCreationStore {
         if (fields[key] && Array.isArray(records)) {
           if (fields[key] && fields[key].length > 0) {
             inputData = { ...inputData, [key]: [] };
-            let arrObj = [];
+            const arrObj = [];
             records.forEach((field) => {
               let arrayFieldsKey = {};
-              let arrayFields = [];
+              let arrayFields = {};
               map(field, (eleV, keyRef1) => {
-                if (field[keyRef1].objType !== 'array') {
-                  arrayFields = {};
-                }
                 if (eleV.objRefOutput) {
                   if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                     const fileObj =
@@ -314,24 +332,18 @@ export class OfferingCreationStore {
                   const fileObj =
                       { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
                   arrayFields = { ...arrayFields, [keyRef1]: fileObj };
-                } else if (field[keyRef1].objType === 'array') {
-                  arrayFields.push(field[keyRef1].value);
                 } else {
                   arrayFields = { [keyRef1]: field[keyRef1].value };
                 }
-                if (field[keyRef1].objType === 'array') {
-                  arrayFieldsKey = { ...arrayFieldsKey, [keyRef1]: arrayFields };
-                } else {
-                  arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
-                  // if (eleV.objRefOutput) {
-                  //   arrayFieldsKey = has(arrayFieldsKey, [eleV.objRefOutput]) ?
-                  //     { ...arrayFieldsKey, [eleV.objRefOutput]: arrayFieldsKey } :
-                  //     { [eleV.objRefOutput]: arrayFieldsKey };
-                  // }
-                }
+                arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
+                // if (eleV.objRefOutput) {
+                //   arrayFieldsKey = has(arrayFieldsKey, [eleV.objRefOutput]) ?
+                //     { ...arrayFieldsKey, [eleV.objRefOutput]: arrayFieldsKey } :
+                //     { [eleV.objRefOutput]: arrayFieldsKey };
+                // }
               });
-              arrObj = [...arrObj, arrayFieldsKey];
-              inputData = { ...inputData, [key]: { ...inputData[key], ...arrObj } };
+              arrObj.push(arrayFieldsKey);
+              inputData = { ...inputData, [key]: arrObj };
             });
           }
         } else if (fields[key].objRefOutput) {
@@ -344,6 +356,15 @@ export class OfferingCreationStore {
         } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
           const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
           inputData = { ...inputData, [key]: fileObj };
+        } else if (fields[key].objType && fields[key].objType === 'businessPhone') {
+          const fileObj = { number: fields[key].value, countryCode: '1' };
+          inputData = { ...inputData, businessPhone: fileObj };
+        } else if (fields[key].objType && fields[key].objType === 'reachedMinOfferingGoal') {
+          const fileObj = { reachedMinOfferingGoal: fields[key].value };
+          inputData = { ...inputData, useOfProceeds: fileObj };
+        } else if (fields[key].objType && fields[key].objType === 'reachedMaxOfferingGoal') {
+          const fileObj = { reachedMaxOfferingGoal: fields[key].value };
+          inputData = { ...inputData, useOfProceeds: { ...inputData.useOfProceeds, ...fileObj } };
         } else {
           inputData = { ...inputData, [key]: fields[key].value };
         }
@@ -352,6 +373,39 @@ export class OfferingCreationStore {
       }
     });
     return inputData;
+  }
+
+  updateOffering = (id, fields, keyName, subKey) => {
+    const { getOfferingById } = offeringsStore.offerData.data;
+    const payloadData = {
+      applicationId: getOfferingById.applicationId,
+      issuerId: getOfferingById.issuerId,
+    };
+    if (subKey) {
+      payloadData[keyName] = {};
+      payloadData[keyName][subKey] = this.evaluateFormData(fields);
+    } else {
+      payloadData[keyName] = this.evaluateFormData(fields);
+    }
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables: {
+          id,
+          offeringDetails: payloadData,
+        },
+      })
+      .then(() => {
+        Helper.toast(`${keyName} has been saved successfully.`, 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 

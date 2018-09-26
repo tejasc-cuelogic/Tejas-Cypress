@@ -41,13 +41,17 @@ export default class RiskFactors extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal', 'riskFactors');
   }
+  handleFormSubmit = () => {
+    const { RISK_FACTORS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors');
+  }
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
     const formName = 'RISK_FACTORS_FRM';
     const { isIssuer } = this.props.userStore;
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : ''}>
-        <Form>
+        <Form onSubmit={this.handleFormSubmit}>
           {
             Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
             .map(field => (
@@ -77,7 +81,7 @@ export default class RiskFactors extends Component {
               Approved by MANAGER_NAME on 2/3/2018
             </Button>
             <Button.Group floated="right">
-              <Button primary type="button" className="relaxed pull-right" disabled={!RISK_FACTORS_FRM.meta.isValid} >Save</Button>
+              <Button primary className="relaxed pull-right" disabled={!RISK_FACTORS_FRM.meta.isValid} >Save</Button>
             </Button.Group>
           </div>
         </Form>

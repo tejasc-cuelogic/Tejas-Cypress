@@ -236,7 +236,7 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'required',
   },
-  proFormas: {
+  uploadProformas: {
     label: 'Upload Pro Formas',
     value: '',
     error: undefined,
@@ -409,24 +409,7 @@ export const OFFERING_COMPANY = {
     rule: 'required',
     placeHolder: 'Tell us about why you started the company/why you`re expanding, what your vision is and walk us through your space.',
   },
-  businessModel: {
-    value: '',
-    label: 'Business Model',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Describe your revenue streams and how you will generate business.',
-  },
-  locationAnalysis: {
-    value: '',
-    label: 'Location Analysis',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Describe the neighborhood, the demographics and what makes your location the best place for your business.',
-  },
-};
-
-export const COMPANY_HISTORY = {
-  data: [{
+  history: [{
     date: {
       value: '',
       label: 'Date',
@@ -442,6 +425,20 @@ export const COMPANY_HISTORY = {
       placeHolder: 'e.g. Company was formed...',
     },
   }],
+  businessModel: {
+    value: '',
+    label: 'Business Model',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Describe your revenue streams and how you will generate business.',
+  },
+  locationAnalysis: {
+    value: '',
+    label: 'Location Analysis',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Describe the neighborhood, the demographics and what makes your location the best place for your business.',
+  },
 };
 
 export const COMPANY_LAUNCH = {
@@ -1007,6 +1004,7 @@ export const GENERAL = {
     rule: 'numeric|required',
     placeHolder: 'Enter here',
     objRef: 'legal.general.businessPhone',
+    objType: 'businessPhone',
   },
   bankName: {
     label: 'Bank Name',
@@ -1042,6 +1040,7 @@ export const GENERAL = {
     rule: 'required',
     placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
+    objType: 'reachedMinOfferingGoal',
   },
   reachedMaxOfferingGoal: {
     label: 'If maximum offering amount is reached:',
@@ -1050,6 +1049,7 @@ export const GENERAL = {
     rule: 'required',
     placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
+    objType: 'reachedMaxOfferingGoal',
   },
   rightsOfEqShareHolders: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
@@ -1123,7 +1123,7 @@ export const GENERAL = {
       label: 'Amount Sold',
       value: '',
       error: undefined,
-      rule: 'string|required',
+      rule: 'numeric|required',
       placeHolder: 'Type your text here...',
     },
     useOfProceeds: {
@@ -1598,7 +1598,7 @@ export const LEADER = {
 
 export const ADD_NEW_TIER = {
   isEarlyBirds: {
-    value: [],
+    value: '',
     values: [
       {
         label: 'Early Birds',
@@ -1606,27 +1606,27 @@ export const ADD_NEW_TIER = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'alpha_dash',
   },
   amountForEarlyBird: {
     label: 'Amount for this Early Bird tier',
     value: '',
     error: undefined,
-    rule: 'string|required_if:isEalryBirds,EARLY_BIRDS',
+    rule: 'required_if:isEarlyBirds,EARLY_BIRDS',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
-  quantityForEarlyBirdsAvailable: {
+  earlyBirdQuantity: {
     label: 'Quantity of Early Birds available',
     value: '',
     error: undefined,
-    rule: 'string|required_if:isEalryBirds,EARLY_BIRDS',
+    rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
     placeHolder: 'Lorem ipsum dolor sit amet enim. Etiam',
   },
   amountForThisTier: {
     label: 'Amount for this tier',
     value: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'string|required_without:isEarlyBirds',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
 };
