@@ -11,7 +11,7 @@ import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
 import businessModel from '../../../../../assets/images/business_model.jpg';
 import CompanyDescriptionModal from './CompanyDescriptionModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
-import videoPoster from '../../../../../assets/images/636206632.webp';
+import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 const getModule = component => Loadable({
   loader: () => import(`../${component}`),
