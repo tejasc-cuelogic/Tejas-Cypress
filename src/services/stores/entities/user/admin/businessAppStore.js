@@ -155,7 +155,7 @@ export class BusinessAppStore {
     const { by } = this.requestState.sort;
     const [field, direction] = by.split('|');
     const appType = this.applicationType;
-    const applicationTypeFilter = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
+    const applicationTypeFilter = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'IN_PROGRESS' : 'COMPLETED';
     let filterParams = {
       applicationType: applicationTypeFilter,
       orderBy: { field, sort: direction || 'desc' },
