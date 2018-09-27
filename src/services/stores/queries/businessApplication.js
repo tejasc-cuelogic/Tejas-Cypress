@@ -40,40 +40,7 @@ query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $order
     lek
     resultCount
     totalCount
-    businessApplications {
-      userId
-      applicationId
-      prequalDetails {
-        businessGeneralInfo {
-          businessName
-        }
-        failReasons
-      }
-      businessDetails {
-        stepStatus
-      }
-      businessPerformance {
-        stepStatus
-      }
-      businessDocumentation {
-        stepStatus
-      }
-      primaryPOC {
-        userId
-        firstName
-        lastName
-        phone
-        email
-      }
-      created {
-        date
-      }
-      updated {
-        date
-      }
-      applicationStatus
-      applicationSubmittedDate
-    }
+    businessApplications
   }  
 }
 `;

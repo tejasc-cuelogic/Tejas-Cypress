@@ -16,7 +16,7 @@ export class BusinessAppStore {
   @observable requestState = {
     lek: { 'page-1': null },
     filters: false,
-    sort: { by: 'createdDate|desc' },
+    sort: { by: 'applicationSubmittedDate|desc' },
     search: {},
     page: 1,
     perPage: 10,
@@ -158,7 +158,7 @@ export class BusinessAppStore {
     const applicationTypeFilter = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'IN_PROGRESS' : 'COMPLETED';
     let filterParams = {
       applicationType: applicationTypeFilter,
-      orderBy: { field, sort: direction || 'desc' },
+      orderBy: { field: appType === 'prequal-failed' ? 'updatedDate' : field, sort: direction || 'desc' },
       limit: this.requestState.perPage,
       search: keyword,
     };

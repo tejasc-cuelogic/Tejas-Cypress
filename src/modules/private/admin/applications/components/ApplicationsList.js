@@ -93,22 +93,25 @@ export default class ApplicationsList extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell singleLine>
                         <Header as="h6">
-                          {application.prequalDetails.businessGeneralInfo.businessName}
+                          {application.prequalDetails ?
+                          application.prequalDetails.businessGeneralInfo.businessName
+                            : application.businessGeneralInfo.businessName}
                           <AppStatusLabel />
                           {/* <AppStatusLabel status={application.status} /> */}
                         </Header>
                         <div className="table-info-wrap">
                           <p>
-                            {application.primaryPOC &&
-                            `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}`
+                            {application.primaryPOC ?
+                            `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}` :
+                            `${application.firstName} ${application.lastName}`
                             }
                             <br />
-                            {application.primaryPOC.email &&
-                              `${application.primaryPOC.email}`
+                            {application.primaryPOC && application.primaryPOC.email ?
+                              `${application.primaryPOC.email}` : `${application.businessGeneralInfo.email}`
                             }
                             <br />
-                            {application.primaryPOC.phone &&
-                              `${application.primaryPOC.phone}`
+                            {application.primaryPOC && application.primaryPOC.phone ?
+                              `${application.primaryPOC.phone}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
                             }
                           </p>
                           <p>
