@@ -16,12 +16,13 @@ export default class ChangePassword extends Component {
       .then(() => {
         this.props.history.goBack();
       })
-      .catch(() => {
-        this.props.authStore.forceSetError(
-          'CHANGE_PASS_FRM',
-          'oldPasswd',
-          'Entered password is incorrect, please try again.',
-        );
+      .catch((err) => {
+        console.log(err);
+        // this.props.authStore.forceSetError(
+        //   'CHANGE_PASS_FRM',
+        //   'oldPasswd',
+        //   'Entered password is incorrect, please try again.',
+        // );
       });
   }
   handleCloseModal = (e) => {
