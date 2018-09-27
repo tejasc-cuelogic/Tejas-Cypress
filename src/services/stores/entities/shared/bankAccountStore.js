@@ -1,9 +1,7 @@
 import { observable, action, computed } from 'mobx';
 import { isEmpty } from 'lodash';
-import { FormValidator as Validator, DataFormatter } from '../../../../helper';
-import { GqlClient as client } from '../../../../api/gqlApi';
-import { getPlaidAccountdata } from './../../queries/account';
-import { uiStore, userStore, accountStore } from '../../index';
+import { FormValidator as Validator } from '../../../../helper';
+import { accountStore } from '../../index';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND,
 } from '../../../../constants/account';
@@ -73,51 +71,44 @@ export class BankAccountStore {
     this.plaidBankDetails = plaidBankDetails;
   }
 
+  /* eslint-disable camelcase */
   @computed
   get accountAttributes() {
     let accountAttributes = {};
     const plaidBankDetails = {};
-    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidBankDetails)) {
-      plaidBankDetails.accountNumber = this.plaidBankDetails.accountNumber;
-      plaidBankDetails.bankName = this.plaidBankDetails.bankName;
-      plaidBankDetails.plaidPublicToken = this.plaidBankDetails.plaidAccessToken;
-      plaidBankDetails.plaidAccountId = this.plaidBankDetails.plaidAccountId;
-      plaidBankDetails.plaidItemId = this.plaidBankDetails.plaidItemId;
-      plaidBankDetails.routingNumber = this.plaidBankDetails.routingNumber;
+    if (this.bankLinkInterface === 'list' && !isEmpty(this.plaidAccDetails)) {
+      const {
+        account_id,
+        public_token,
+        accountNumber,
+        routingNumber,
+      } = this.plaidAccDetails;
+      if (account_id && public_token) {
+        plaidBankDetails.linkedBank = {
+          plaidPublicToken: public_token,
+          plaidAccountId: account_id,
+        };
+      } else {
+        plaidBankDetails.linkedBank = {
+          accountNumber,
+          routingNumber,
+        };
+      }
       accountAttributes = { ...plaidBankDetails };
     } else {
       const { accountNumber, routingNumber } = this.formLinkBankManually.fields;
-      accountAttributes.accountNumber = accountNumber.value;
-      accountAttributes.routingNumber = routingNumber.value;
+      plaidBankDetails.linkedBank = {
+        accountNumber: accountNumber.value,
+        routingNumber: routingNumber.value,
+      };
+      accountAttributes = { ...plaidBankDetails };
     }
     return accountAttributes;
   }
 
-  getPlaidAccountData = () => new Promise((resolve, reject) => {
-    client
-      .mutate({
-        mutation: getPlaidAccountdata,
-        variables: {
-          userId: userStore.currentUser.sub,
-          plaidPublicToken: this.plaidAccDetails.public_token,
-          plaidAccountId: this.plaidAccDetails.account_id,
-          bankName: this.plaidAccDetails.institution.name,
-          accountType: accountStore.investmentAccType,
-        },
-      })
-      .then((result) => {
-        this.setPlaidBankDetails(result.data.plaidGetValidatedAccountData);
-        resolve();
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        reject();
-      }));
-  });
-
   @computed
   get isValidLinkBank() {
-    return !isEmpty(this.plaidAccDetails) || !isEmpty(this.plaidBankDetails);
+    return !isEmpty(this.plaidAccDetails);
   }
 
   @action
@@ -131,11 +122,17 @@ export class BankAccountStore {
   }
 
   @action
+  resetPlaidAccData = () => {
+    this.plaidAccDetails = {};
+  }
+
+  @action
   resetLinkBank = () => {
     Validator.resetFormData(this.formLinkBankManually);
     Validator.resetFormData(this.formAddFunds);
-    this.plaidAccDetails = {};
-    this.plaidBankDetails = {};
+    if (accountStore.investmentAccType !== 'ira') {
+      this.plaidAccDetails = {};
+    }
     this.depositMoneyNow = true;
     this.showAddFunds = false;
   }

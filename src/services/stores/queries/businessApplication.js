@@ -90,15 +90,24 @@ query getBusinessApplicationSummary{
 
 
 export const createBusinessApplicationPrequalificaiton = gql`
-mutation _submitBusinessApplicationPreQualStepSuccessScenario($preQualificationData: PrequalDetailsInput!) {
-  createBusinessApplicationPrequalification(prequalificationDetails: $preQualificationData) {
+mutation updatePreQualInfo($preQualificationData: PreQualDetailsInput!) {
+  updatePrequalification(prequalificationDetails: $preQualificationData) {
     status
     id
+    userExists
     partnerStatus {
       partnerId
       status
       failReasons
     }
+  }
+}
+`;
+
+export const createBusinessApplicationBasicInfo = gql`
+mutation createBasicInfo($basicInfo: BasicInfoInput!) {
+  upsertPreQualBasicInfo(basicInfo: $basicInfo) {
+    id
   }
 }
 `;
@@ -112,13 +121,19 @@ mutation submitApplication($applicationId: String!) {
 }
 `;
 
+export const helpAndQuestion = gql`
+mutation helpAndQuestion($question: helpAndQuestionInput!) {
+  helpAndQuestion(question: $question)
+}
+`;
+
 export const upsertBusinessApplicationInformationBusinessDetails = gql`
 mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,
-  $businessGoal: BusinessGoalEnum!, $businessDetails: BusinessDetailsInput) {
+  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
+  $businessGoal: BusinessGoalEnum, $businessDetails: BusinessDetailsInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep,
+    applicationStep: $applicationStep, applicationType: $applicationType,
     businessGoal: $businessGoal, businessDetails: $businessDetails) {
       applicationId
       applicationStatus
@@ -128,11 +143,11 @@ mutation _upsertBusinessApplicationInformationBusinessDetails($applicationId: ID
 
 export const upsertBusinessApplicationInformationPerformance = gql`
 mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,
-  $businessGoal: BusinessGoalEnum!, $businessPerformance: businessPerformanceInput) {
+  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
+  $businessGoal: BusinessGoalEnum, $businessPerformance: businessPerformanceInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep,
+    applicationStep: $applicationStep, applicationType: $applicationType,
     businessGoal: $businessGoal, businessPerformance: $businessPerformance) {
       applicationId
       applicationStatus
@@ -142,11 +157,11 @@ mutation _upsertBusinessApplicationInformationPerformance($applicationId: ID!,
 
 export const upsertBusinessApplicationInformationDocumentation = gql`
 mutation _upsertBusinessApplicationInformationDocumentation($applicationId: ID!,
-  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!,
-  $businessGoal: BusinessGoalEnum!, $businessDocumentation: BusinessDocumentationInput) {
+  $isPartialData: Boolean, $applicationStep: BusinessApplicationStepEnum!, $applicationType: BusinessApplicationTypeEnum!
+  $businessGoal: BusinessGoalEnum, $businessDocumentation: BusinessDocumentationInput) {
   upsertBusinessApplicationInformation(
     applicationId: $applicationId, isPartialData: $isPartialData,
-    applicationStep: $applicationStep,
+    applicationStep: $applicationStep, applicationType: $applicationType,
     businessGoal: $businessGoal, businessDocumentation: $businessDocumentation) {
       applicationId
       applicationStatus
@@ -159,13 +174,14 @@ query _getBusinessApplications {
   businessApplications {
     userId
     applicationId
+    applicationType
     applicationStatus
-    createdDate
-    updatedDate
-    lendio {
-      status
-      failReasons
-      url
+    applicationSubmittedDate
+    created {
+      date
+    }
+    updated {
+      date
     }
     prequalDetails {
       businessGeneralInfo {
@@ -181,15 +197,17 @@ query _getBusinessApplicationById ($id: String!) {
   businessApplication(
     applicationId: $id
   ){
+    userId
     applicationId
+    applicationType
     applicationStatus
-    lendio {
-      status
-      failReasons
-      url
+    applicationStage
+    created {
+      date
     }
-    createdDate
-    updatedDate
+    updated {
+      date
+    }
     prequalDetails {
       businessModel
       businessGoal
@@ -210,6 +228,14 @@ query _getBusinessApplicationById ($id: String!) {
         }
       }
       industryTypes
+      investmentType
+      realEstateTypes
+      ownOrOperateProperty
+      target { 
+        investorIRR
+        annualInvestorRoi
+        holdTimeInYears
+       }
       existingBusinessInfo {
         ageYears
         ageMonths
@@ -259,6 +285,7 @@ query _getBusinessApplicationById ($id: String!) {
         ssn
         companyOwnerShip
         linkedInUrl
+        dateOfService
         title
         resume {
           fileId
@@ -300,6 +327,14 @@ query _getBusinessApplicationById ($id: String!) {
       stepStatus
     }
     businessDocumentation {
+      dueDiligence {
+        fileId
+        fileName
+      }
+      legalDocs {
+        fileId
+        fileName
+      }
       bankStatements {
         fileId
         fileName
@@ -317,7 +352,7 @@ query _getBusinessApplicationById ($id: String!) {
         fileName
       }
       blanketLien
-      providePersonalGurantee
+      providePersonalGuarantee
       personalGuarantee {
         fileId
         fileName
@@ -329,21 +364,55 @@ query _getBusinessApplicationById ($id: String!) {
 }
 `;
 
+export const getPrequalBusinessApplicationsById = gql`
+query getprequalInfo ($id: ID!) {
+  getPreQualificationById(preQualId: $id){
+    id
+    email
+    firstName
+    lastName
+    prequalStatus
+    lendio {
+      status
+      failReasons
+    }
+    businessGeneralInfo {
+      businessName
+      contactDetails {
+        phone {
+          number
+        }
+      }
+    }
+    existingBusinessInfo {
+      ageYears
+      ageMonths
+    }
+    performanceSnapshot {
+      nextYearSnapshot {
+        grossSales
+        cogSold
+        operatingExpenses
+        netIncome
+      }
+      pastYearSnapshot {
+        grossSales
+        cogSold
+        operatingExpenses
+        netIncome
+      }
+    }
+    businessExperience{
+      estimatedCreditScore
+      amountNeeded
+    }
+  }
+}
+`;
+
 export const submitPartneredWithLendio = gql`
-mutation submitPartneredWithLendio(
-  $applicationId: String!,
-  $preQualificationQuestions: PreQualificationQuestionsInput!,
-  $customerInformation: CustomerInformationInput!,
-  $agreeConditions: Boolean,
-  $sendDataToLendio: Boolean
-) {
-  submitPartneredWithLendio(
-    applicationId: $applicationId,
-    preQualificationQuestions: $preQualificationQuestions,
-    customerInformation: $customerInformation,
-    agreeConditions: $agreeConditions,
-    sendDataToLendio: $sendDataToLendio
-  ) {
+mutation lendioDetails ($lendioApplication: ApplicationInfoInput!) {
+  submitPartneredWithLendio(applicationDetails:$lendioApplication) {
     status
     url
   }

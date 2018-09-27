@@ -101,9 +101,10 @@ export class InvestmentStore {
     }
 
     @computed get calculateTotalPaymentTermLoan() {
-      return Math.round(((((this.annualReturn / 100.0) / 12) * this.investAmount) /
-      (1 - ((1 + ((this.annualReturn / 100.0) / 12)) **
-      (((-1) * this.targetTerm))))) * this.targetTerm);
+      return Math.round(((((this.offeringMetaData.annualReturn / 100.0) / 12) *
+      this.investmentAmount) /
+      (1 - ((1 + ((this.offeringMetaData.annualReturn / 100.0) / 12)) **
+      (((-1) * this.offeringMetaData.targetTerm))))) * this.offeringMetaData.targetTerm);
     }
 
     @action
@@ -112,8 +113,6 @@ export class InvestmentStore {
         rate,
         rateMin,
         rateMax,
-        annualReturn,
-        targetTerm,
         campaignType,
       } = this.offeringMetaData;
       const investAmt = this.investmentAmount;
@@ -134,7 +133,7 @@ export class InvestmentStore {
         } else if (campaignType === 1) {
           // const annualReturn = 0;
           // const targetTerm = 0;
-          this.estReturnVal = `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan(annualReturn, investAmt, targetTerm)))}`;
+          this.estReturnVal = `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan))}`;
           return this.estReturnVal;
         }
       } else {

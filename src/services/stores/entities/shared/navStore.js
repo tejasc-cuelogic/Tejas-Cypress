@@ -1,5 +1,6 @@
 import { toJS, observable, action, computed } from 'mobx';
 import { matchPath } from 'react-router-dom';
+import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
 import { userStore, userDetailsStore, businesssStore } from '../../index';
@@ -9,6 +10,7 @@ export class NavStore {
   @observable params = { roles: [], currentNav: [], appStatus: null };
   @observable navStatus = 'main';
   @observable navMeta = [];
+  @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
 
   constructor() {
     if (userStore.currentUser) {
@@ -23,6 +25,11 @@ export class NavStore {
       n => n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0,
     );
     return routes;
+  }
+
+  @action
+  setEverLogsIn = () => {
+    this.everLogsIn = cookie.load('EVER_LOGS_IN');
   }
 
   @action
@@ -47,8 +54,13 @@ export class NavStore {
   }
 
   @computed get sidebarItems() {
-    const reject = ['profile-settings', 'business-application/:applicationId'];
+    const reject = ['profile-settings', 'business-application/:applicationType/:applicationId'];
     return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
+  }
+
+  @computed get stepInRoute() {
+    return this.everLogsIn ? { to: 'login', title: 'Log In' } :
+      { to: 'register', title: 'Sign Up' };
   }
 
   @action

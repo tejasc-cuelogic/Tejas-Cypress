@@ -51,12 +51,12 @@ export default class Private extends React.Component {
 
   render() {
     const User = { ...this.props.userStore.currentUser };
-    const { avatar } = this.props.userDetailsStore.userDetails;
+    const { info } = this.props.userDetailsStore.userDetails;
     const { match } = this.props;
     const UserInfo = {
       firstName: User.givenName,
       lastName: User.familyName,
-      avatarUrl: avatar ? avatar.url : '',
+      avatarUrl: info ? info.avatar ? info.avatar.url : '' : '',
       roles: toJS(User.roles),
     };
     const routes = this.getPrivateRoutes(UserInfo.roles);

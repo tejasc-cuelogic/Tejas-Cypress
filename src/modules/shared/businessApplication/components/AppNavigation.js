@@ -3,8 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { Button, Icon } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
-import Helper from '../../../../../helper/utility';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import Helper from '../../../../helper/utility';
 
 @inject('businessAppStore', 'uiStore')
 @withRouter
@@ -14,18 +14,20 @@ export default class AppNavigation extends Component {
   componentWillMount() {
     const { match } = this.props;
     const navItems = GetNavMeta(match.url).subNavigations;
-    const step = navItems.findIndex(i => i.to === (match.url.split('/')[4]));
+    const step = navItems.findIndex(i => i.to === (match.url.split('/')[5]));
     this.setState({ step, navItems });
   }
   actualSubmit = (where) => {
-    const { checkFormisValid, currentApplicationId } = this.props.businessAppStore;
+    const {
+      checkFormisValid, currentApplicationId, currentApplicationType,
+    } = this.props.businessAppStore;
     if (where >= 0) {
       if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
         this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
-        this.props.history.push(`/app/business-application/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+        this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
       }
     } else {
-      this.props.history.push(`/app/business-application/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+      this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
     }
   }
 

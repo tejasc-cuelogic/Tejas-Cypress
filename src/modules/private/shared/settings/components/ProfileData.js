@@ -12,7 +12,7 @@ import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
-import { Spinner, UserAvatar } from '../../../../../theme/shared';
+import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 
 @inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
@@ -21,10 +21,8 @@ export default class ProfileData extends Component {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }
   isVerified = (cipStatus) => {
-    let checkStatus = '';
     if (cipStatus !== null) {
-      checkStatus = cipStatus.status;
-      return this.props.userDetailsStore.validAccStatus.includes(checkStatus);
+      return this.props.userDetailsStore.validAccStatus.includes(cipStatus);
     }
     return false;
   }
@@ -37,23 +35,20 @@ export default class ProfileData extends Component {
   }
   render() {
     const {
-      email, legalDetails, avatar, firstName, lastName,
+      email, legalDetails, info,
     } = this.props.userDetailsStore.userDetails;
     const User = { ...this.props.userStore.currentUser };
     const userAvatar = {
-      firstName, lastName, avatarUrl: avatar ? avatar.url : '', roles: toJS(User.roles),
+      firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
     };
     const {
       ID_PROFILE_INFO,
       profileInfoChange,
+      profileInfoMaskedChange,
       setAddressFieldsForProfile,
     } = this.props.identityStore;
-    if (isEmpty(this.props.userDetailsStore.userDetails)) {
-      return (
-        <div>
-          <Spinner loaderMessage="Loading..." />
-        </div>
-      );
+    if (isEmpty(this.props.userDetailsStore.userDetails) || !info) {
+      return <InlineLoader />;
     }
     return (
       <Grid>
@@ -118,10 +113,11 @@ export default class ProfileData extends Component {
                   options={US_STATES}
                   changed={profileInfoChange}
                 />
-                <FormInput
+                <MaskedInput
                   name="zipCode"
                   fielddata={ID_PROFILE_INFO.fields.zipCode}
-                  changed={profileInfoChange}
+                  changed={profileInfoMaskedChange}
+                  zipCode
                 />
               </Form.Group>
               <Button inverted color="green" disabled={!ID_PROFILE_INFO.meta.isValid}>Update profile info</Button>
@@ -137,12 +133,14 @@ export default class ProfileData extends Component {
                 <Link to={`${this.props.match.url}/update-profile-photo`}><b>Change profile photo</b></Link>
               </div>
             </Card>
-            <UserVerifiedDetails
-              {...this.props}
-              email={email}
-              legalDetails={legalDetails}
-              isUserVerified={this.isVerified}
-            />
+            {userAvatar.roles.includes('investor') &&
+              <UserVerifiedDetails
+                {...this.props}
+                email={email}
+                legalDetails={legalDetails}
+                isUserVerified={this.isVerified}
+              />
+            }
           </Card.Group>
         </Grid.Column>
       </Grid>

@@ -13,23 +13,20 @@ class Login extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
     this.props.authStore.reset('LOGIN');
+    this.props.authStore.setDefaultPwdType();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
       .then(() => {
-        const { roles } = this.props.userStore.currentUser;
         const { redirectURL } = this.props.uiStore;
         if (this.props.authStore.newPasswordRequired) {
           this.props.history.push('/auth/change-password');
         } else {
+          const { roles } = this.props.userStore.currentUser;
           this.props.authStore.reset();
-          if (roles && roles.includes('investor')) {
-            this.props.history.push(`/app/${this.props.userDetailsStore.pendingStep}`);
-          } else {
-            const redirectUrl = redirectURL ? redirectURL.pathname : '/app/dashboard';
-            this.props.history.push(redirectUrl);
-          }
+          this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
+            `/app/${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
         }
       });
   };
@@ -69,8 +66,8 @@ class Login extends Component {
               Object.keys(LOGIN_FRM.fields).map(field => (
                 <FormInput
                   key={field}
-                  type={field === 'password' ? pwdInputType[field] : 'email'}
-                  icon={field === 'password' ? togglePasswordType(field) : null}
+                  type={field === 'password' ? pwdInputType : 'email'}
+                  icon={field === 'password' ? togglePasswordType() : null}
                   name={field}
                   autoFocus={field === 'email'}
                   fielddata={LOGIN_FRM.fields[field]}

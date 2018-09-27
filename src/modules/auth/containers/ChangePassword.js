@@ -7,18 +7,22 @@ import { authActions } from '../../../services/actions';
 @inject('authStore', 'uiStore')
 @observer
 export default class ChangePassword extends Component {
+  componentWillMount() {
+    this.props.authStore.setDefaultPwdType();
+  }
   onSubmit = (e) => {
     e.preventDefault();
     authActions.updatePassword()
       .then(() => {
         this.props.history.goBack();
       })
-      .catch(() => {
-        this.props.authStore.forceSetError(
-          'CHANGE_PASS_FRM',
-          'oldPasswd',
-          'Entered password is incorrect, please try again.',
-        );
+      .catch((err) => {
+        console.log(err);
+        // this.props.authStore.forceSetError(
+        //   'CHANGE_PASS_FRM',
+        //   'oldPasswd',
+        //   'Entered password is incorrect, please try again.',
+        // );
       });
   }
   handleCloseModal = (e) => {
@@ -41,8 +45,8 @@ export default class ChangePassword extends Component {
                 ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
                   <FormInput
                     key={field}
-                    type={(field === 'newPasswd') || (field === 'oldPasswd') ? pwdInputType[field] : 'password'}
-                    icon={(field === 'newPasswd') || (field === 'oldPasswd') ? togglePasswordType(field) : null}
+                    type={pwdInputType}
+                    icon={(field === 'oldPasswd') ? togglePasswordType() : null}
                     name={field}
                     fielddata={CHANGE_PASS_FRM.fields[field]}
                     changed={changePassChange}

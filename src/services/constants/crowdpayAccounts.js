@@ -17,8 +17,8 @@ export const FILTER_META = {
   identityStatus: {
     value: [],
     values: [
-      { label: 'To Be reviewed', value: 'To Be reviewed' },
-      { label: 'Reviewed', value: 'Reviewed' },
+      { text: 'To Be reviewed', value: 'To Be reviewed' },
+      { text: 'Reviewed', value: 'Reviewed' },
     ],
     error: undefined,
     rule: 'empty',

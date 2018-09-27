@@ -1,9 +1,12 @@
+/* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
+import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
 export class NavItems extends Component {
@@ -74,47 +77,67 @@ export class NavItems extends Component {
   }
 }
 
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  // (path.includes('business-application') || path.includes('offerings') ? '' : 'LogoColor')
-  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
-));
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoWhiteGreen');
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
-export const NavigationItems = props => (
-  <Menu
-    stackable
-    borderless
-    inverted={!props.location.pathname.includes('/offerings')}
-    fixed="top"
-    className={props.navStatus === 'sub' ? 'slide-up' : ''}
-  >
-    <Container fluid>
-      <Menu.Item as={Link} to="/" header>
-        <Logo
-          size="small"
-          alt="NextSeed.com"
-          dataSrc={getLogo(props.location.pathname)}
-          style={getLogoStyle(props.location.pathname)}
-        />
-      </Menu.Item>
-      <Menu.Menu position="right">
-        {!props.location.pathname.includes('/business-application') &&
-          <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
-        }
-      </Menu.Menu>
-      {!props.currentUser ? (
-        <Menu.Item as={Link} to="/auth/login">
-          <Button secondary compact>Sign Up/Log In</Button>
-        </Menu.Item>
-      ) : (
-        <Menu.Item
-          as={Link}
-          to={`/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-        >
-          <Button secondary compact>Dashboard</Button>
-        </Menu.Item>
-      )}
-    </Container>
-  </Menu>
-);
+@inject('navStore')
+@observer
+export class NavigationItems extends Component {
+  render() {
+    const { props } = this;
+    const { stepInRoute } = props.navStore;
+    return (
+      <Menu
+        stackable
+        borderless
+        inverted={!props.location.pathname.includes('/offerings')}
+        fixed="top"
+        className={props.navStatus === 'sub' ? 'slide-up' : ''}
+      >
+        <Container fluid>
+          <Menu.Item as={Link} to="/" header>
+            <Logo
+              size="small"
+              alt="NextSeed.com"
+              dataSrc={getLogo(props.location.pathname)}
+              style={getLogoStyle(props.location.pathname)}
+            />
+          </Menu.Item>
+          <Menu.Menu position="right">
+            {!props.location.pathname.includes('/business-application') &&
+              <NavItems refLoc="public" currentUser={props.currentUser} location={props.location} navItems={PUBLIC_NAV} />
+            }
+          </Menu.Menu>
+          {props.location.pathname.includes('/business-application') && !props.location.pathname.includes('business/') && !props.location.pathname.includes('commercial-real-estate/') ?
+            <Menu.Item>
+              <Button.Group>
+                <Button as={Link} to="/" inverted color="red">Cancel</Button>
+                {props.isPrequalQulify &&
+                <SubmitButton
+                  canSubmitApp={props.canSubmitApp}
+                  click={props.preQualSubmit}
+                  loading={props.loading}
+                />}
+              </Button.Group>
+            </Menu.Item>
+          : !props.location.pathname.includes('/business-application') &&
+            (
+            !props.currentUser ? (
+              <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
+                <Button secondary compact>{stepInRoute.title}</Button>
+              </Menu.Item>
+          ) : (
+            <Menu.Item
+              as={Link}
+              to={`/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+            >
+              <Button secondary compact>Dashboard</Button>
+            </Menu.Item>
+          ))}
+        </Container>
+      </Menu>
+    );
+  }
+}
+

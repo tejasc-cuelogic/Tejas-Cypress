@@ -15,6 +15,7 @@ export default class InvestNow extends React.Component {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
+      this.props.uiStore.setRedirectURL(this.props.history.location);
       this.props.history.push('/auth/login');
     }
   }
@@ -29,6 +30,7 @@ export default class InvestNow extends React.Component {
   }
   handleCancel = () => {
     this.props.investmentStore.setStepToBeRendered(0);
+    this.props.investmentStore.ResetDisableNextbtn();
     this.props.history.push('invest-now');
   }
 

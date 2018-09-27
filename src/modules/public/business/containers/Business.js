@@ -16,7 +16,7 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('navStore')
+@inject('navStore', 'userStore')
 @observer
 class Business extends Component {
   componentWillMount() {
@@ -40,6 +40,7 @@ class Business extends Component {
           <PublicSubNav
             navStatus={navStore.navStatus}
             location={location}
+            currentUser={this.props.userStore.currentUser}
             navItems={navItems}
             title="Fundraising"
           />

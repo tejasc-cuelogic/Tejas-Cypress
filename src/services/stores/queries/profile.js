@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const verifyCIPUser = gql`
-  mutation verifyCIPUsers($userId: String! $user: userCIPInput) { 
-    verifyCIPIdentity(userId: $userId, user: $user) {
+mutation verifyCIPUsers($userId: String!, $user: UserCIPInput){
+    verifyCIPIdentity(userId: $userId, user: $user){
       ... on UserCIPSoftFail{
         softFailId: id
         key
@@ -11,7 +11,7 @@ export const verifyCIPUser = gql`
           key
           message
         }
-        questions {
+        questions{
           prompt
           type
           choices {
@@ -19,25 +19,17 @@ export const verifyCIPUser = gql`
           }
         }
       }
-      
-      ... on UserCIPHardFail{
-        hardFailId: id
-        key
-        message
-        qualifiers {
-          key
-          message
-        }
-      }
-      
-      ... on UserCIPPass {
+      ... on UserCIPPass{
         passId: id
         key
         message
         summary
       }
-
-      ... on UserCIPFail {
+      ... on UserCIPHardFail{
+        key
+        message
+      }
+      ... on UserCIPFail{
         key
         message
       }
@@ -45,8 +37,8 @@ export const verifyCIPUser = gql`
   }`;
 
 export const verifyCIPAnswers = gql`
-  mutation verifyCIPAnswers($userId: String!, $cipAnswers: CIPAnswersInput){
-    verifyCIPAnswers(userId: $userId, cipAnswers: $cipAnswers) {
+  mutation verifyCIPAnswers($cipAnswers: CIPAnswersInput){
+    verifyCIPAnswers(cipAnswers: $cipAnswers) {
       ... on UserCIPSoftFail{
         softFailId: id
         key
@@ -104,74 +96,73 @@ export const checkUserPhoneVerificationCode = gql`
  }`;
 
 export const updateUserCIPInfo = gql`
-  mutation updateUserCIPInfo($userId: String! $user: userCIPInput! $phoneDetails: phoneInput! $cipStatus: CipStatusInput!) {
-    updateUserCIPInfo(userId: $userId user: $user phoneDetails: $phoneDetails cipStatus: $cipStatus) {
+mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!) {
+    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails) {
       id
-      email
-      firstName
-      lastName
-      lastLoginDate
-      accreditation
+      email {
+        address
+      } info{
+        firstName
+        lastName
+      } lastLoginDate
+      accreditation {
+        status
+      }
     }
   }`;
 
 export const updateUserProfileData = gql`
-  mutation _updateUserProfileData($userId: String! $profileDetails: UserProfileInput!) {
+  mutation _updateUserProfileData($profileDetails: UserInfoInput!) {
   updateUserProfileData(
-  userId: $userId
   profileDetails: $profileDetails
   ) {
       id
-      firstName
-      lastName
-      address {
-        mailing {
-          street
-          city
-          state
-          zipCode
-        }
-        residence {
-          street
+      info {
+        salutation
+        firstName
+        lastName
+        mailingAddress {
+            street
+            city
+            state
+            zipCode
           }
-        }
       }
+    }
   }`;
 
 export const requestEmailChnage = gql`
-  mutation _requestEmailChange($userId: String! $newEmail: String!) {
+  mutation _requestEmailChange($newEmail: String!) {
     requestEmailChange(
-      userId: $userId
       newEmail: $newEmail
     )
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($userId: String! $confirmationCode: String!) {
+  mutation _verifyAndUpdateEmail($confirmationCode: String!) {
     verifyAndUpdateEmail(
-      userId: $userId
       confirmationCode: $confirmationCode
     ){
       id
-      email
+      email {
+        address
+      }
     }
   }`;
 
 export const updateUserPhoneDetail = gql`
-  mutation _updateUserPhoneDetail($phoneDetails: phoneInput! $userId: String!){
+  mutation _updateUserPhoneDetail($phoneDetails: phoneInput!){
     updateUserPhoneDetails(
       phoneDetails: $phoneDetails,
-      userId: $userId
       ) {
-      id
-      email
-      contactDetails{
+        id
+        email {
+          address
+        }
         phone {
           number
-          countryCode
-          verificationDate
+          verified
         }
-      }
     }
   }`;
 
@@ -179,5 +170,14 @@ export const isSsnExistQuery = gql`
   query getSsnCollisionsample($ssn: String!) {
     checkUserSSNCollision(ssn: $ssn) {
       alreadyExists
+    }
+  }`;
+
+export const portPrequalDataToApplication = gql`
+  mutation portPrequalDataToApplication($prequalApplicationData: PrequalApplicationInput!) {
+    portPrequalDataToApplication(
+      prequalApplicationData: $prequalApplicationData
+    ){
+      id
     }
   }`;

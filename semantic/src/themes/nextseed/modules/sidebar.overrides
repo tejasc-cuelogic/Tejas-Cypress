@@ -36,9 +36,29 @@
 }
 .ui.sidebar.menu{
 	&.vertical{
-		padding:@18px @13px @43px;
+		padding-bottom:@43px;
 		visibility:visible;
 		transition:all .5s ease;
+		.ns-scrollbar{
+			.view{
+				padding:@18px @13px 0;
+			}
+			.track-vertical{
+				width:4px !important;
+				top:2px;
+				bottom:2px;
+				right:1px;
+				opacity:0;
+				transition:all .3s ease-in-out;
+				.thumb-vertical{
+					border-radius:@4px;
+					background-color:@thumbBackground;
+				}
+			}
+			&:hover .track-vertical{
+				opacity:1;
+			}
+		}
 		.item{
 			min-width: auto;
 			text-align: left;
@@ -291,6 +311,9 @@
 }
 
 .ui.sidebar.left.inverted.menu{
+	.ns-scrollbar .track-vertical .thumb-vertical{
+		background-color:@thumbInvertedBackground;
+	}
 	.ns-close-light{
 		color:@white;
 	}

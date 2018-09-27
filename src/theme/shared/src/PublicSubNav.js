@@ -6,7 +6,7 @@ import Logo from './Logo';
 
 const PublicSubNav = (props) => {
   const {
-    moreProps, navStatus, title, location, right, navItems,
+    moreProps, navStatus, title, location, navItems,
   } = props;
   return (
     <Menu
@@ -30,11 +30,9 @@ const PublicSubNav = (props) => {
           <Menu.Item header>{title}</Menu.Item>
           <NavItems sub refLoc="public" location={location} navItems={navItems} />
         </Menu.Menu>
-        {right || (
-          <Menu.Item as={Link} to="/" position="right">
-            <Button secondary compact>Sign Up/Log In</Button>
-          </Menu.Item>
-        )}
+        <Menu.Item as={Link} to={!props.currentUser ? '/auth/login' : `/app/${props.currentUser.roles && props.currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}>
+          <Button secondary compact>{!props.currentUser ? 'Sign Up/Log In' : 'Dashboard'}</Button>
+        </Menu.Item>
       </Container>
     </Menu>
   );

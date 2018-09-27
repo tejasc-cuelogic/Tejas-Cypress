@@ -6,7 +6,26 @@
 }
 .ui.table{
     thead th{
-        font-size:@13px;
+        font-size:@12px;
+    }
+    td.status{
+        font-weight:500;
+        text-transform:capitalize;
+        &.partial, &.pending{
+            color:@highlight-secondary;
+        }
+        &.failed{
+            color:@highlight-primary;
+        }
+        &.to-be-reviewed{
+            color:@primary-two;
+        }
+        &.processing{
+            color:@neutral-offdark;
+        }
+        &.processed{
+            color:@primary-one;
+        }
     }
     &.sortable{
         thead th{
@@ -100,10 +119,10 @@
         }
     }
     &.investment-details{
-        thead th{
-            font-size:@12px;
-            color:@neutral-middark;
-        }
+        // thead th{
+        //     font-size:@12px;
+        //     color:@neutral-middark;
+        // }
         tbody{
             font-weight:@fontMedium;
             i.offering-icon{
@@ -122,9 +141,9 @@
         }
     }
     &.application-list{
-        thead th{
-            color:@neutral;
-        }
+        // thead th{
+        //     color:@neutral;
+        // }
         h6.ui.header{
             margin:0 0 @7px;
         }

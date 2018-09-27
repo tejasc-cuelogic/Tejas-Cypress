@@ -1,12 +1,20 @@
 // import moment from 'moment';
 
-export const USER_ROLES = ['admin', 'issuer', 'investor'];
+export const USER_ROLES = [
+  { key: 'admin', value: 'admin', text: 'Admin' },
+  { key: 'issuer', value: 'issuer', text: 'Issuer' },
+  { key: 'investor', value: 'investor', text: 'Investor' },
+];
+
 export const USER_TYPES_META = [
   {
-    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Open a NextSeed Investment Account to start investing in local businesses',
+    key: 'i', icon: 'ns-investor', text: 'Investor', value: 'investor', desc: 'Invest in existing businesses and get revenue',
   },
   {
-    key: 'o', icon: 'ns-business', text: 'Business Owner', value: 'issuer', desc: 'Start the funding application to get pre-qualified for your NextSeed campaign',
+    key: 'o', icon: 'ns-business', text: 'Business', value: 'issuer-type1', desc: 'Apply for funding for your business',
+  },
+  {
+    key: 'bo', icon: 'ns-appartment', text: 'Commercial Real Estate', value: 'issuer-type2', desc: 'Apply for real estate funding',
   },
 ];
 
@@ -102,7 +110,7 @@ export const NEW_USER = {
     value: '', label: 'Verify Password', error: undefined, rule: 'required|same:TemporaryPassword',
   },
   role: {
-    value: [], label: 'Role', error: undefined, rule: 'required',
+    value: '', label: 'Role', error: undefined, rule: 'required',
   },
 };
 

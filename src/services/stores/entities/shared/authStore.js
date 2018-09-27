@@ -6,15 +6,17 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail } from '../../queries/profile';
+import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { uiStore, userStore } from '../../index';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
+import { uiStore, navStore } from '../../index';
 
 export class AuthStore {
   @observable hasSession = false;
   @observable isUserLoggedIn = false;
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
+  @observable userId = null;
   @observable devAuth = {
     required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
     authStatus: cookie.load('DEV_AUTH_TOKEN'),
@@ -27,31 +29,37 @@ export class AuthStore {
   @observable RESET_PASS_FRM = Validator.prepareFormObject(RESET_PASS);
   @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
   @observable confirmProgress = false;
-  @observable pwdInputType = {
-    password: 'password',
-    oldPasswd: 'password',
-    newPasswd: 'password',
-  }
+  @observable pwdInputType = 'password';
 
 
   @action
-  setPwdVisibilityStatus = (type) => {
-    if (this.pwdInputType[type] === 'password') {
-      this.pwdInputType[type] = 'text';
+  setDefaultPwdType = () => {
+    this.pwdInputType = 'password';
+  }
+
+  @action
+  setUserId = (userId) => {
+    this.userId = userId;
+  }
+
+  @action
+  setPwdVisibilityStatus = () => {
+    if (this.pwdInputType === 'password') {
+      this.pwdInputType = 'text';
     } else {
-      this.pwdInputType[type] = 'password';
+      this.pwdInputType = 'password';
     }
   }
 
   @action
-  togglePasswordType = (type) => {
+  togglePasswordType = () => {
     let iconData = {
       link: true,
-      onClick: () => this.setPwdVisibilityStatus(type),
+      onClick: () => this.setPwdVisibilityStatus(),
     };
-    if (this.pwdInputType[type] === 'password') {
+    if (this.pwdInputType === 'password') {
       iconData.className = 'ns-view';
-    } else if (this.pwdInputType[type] === 'text') {
+    } else if (this.pwdInputType === 'text') {
       iconData.className = 'ns-view active';
     } else {
       iconData = null;
@@ -115,6 +123,10 @@ export class AuthStore {
   @action
   setUserLoggedIn(status) {
     this.isUserLoggedIn = status;
+    if (status) {
+      cookie.save('EVER_LOGS_IN', status, { maxAge: 31536000 });
+    }
+    navStore.setEverLogsIn();
   }
 
   @action
@@ -171,6 +183,23 @@ export class AuthStore {
     !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
+  @action
+  setUserDetails = (fields) => {
+    this.SIGNUP_FRM.fields.givenName.value = fields.firstName.value;
+    this.SIGNUP_FRM.fields.familyName.value = fields.lastName.value;
+    this.SIGNUP_FRM.fields.email.value = fields.email.value;
+    this.LOGIN_FRM.fields.email.value = fields.email.value;
+    this.SIGNUP_FRM.fields.role.value = 'issuer';
+    this.SIGNUP_FRM.fields.password.value = '';
+    this.SIGNUP_FRM.fields.verify.value = '';
+  }
+
+  @action
+  setUserLoginDetails = (email, password) => {
+    this.LOGIN_FRM.fields.email.value = email;
+    this.LOGIN_FRM.fields.password.value = password;
+  }
+
   verifyAndUpdateEmail = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -178,7 +207,6 @@ export class AuthStore {
         .mutate({
           mutation: verifyAndUpdateEmail,
           variables: {
-            userId: userStore.currentUser.sub,
             confirmationCode: this.CONFIRM_FRM.fields.code.value,
           },
         })
@@ -202,12 +230,37 @@ export class AuthStore {
         .mutate({
           mutation: requestEmailChnage,
           variables: {
-            userId: userStore.currentUser.sub,
             newEmail: this.CONFIRM_FRM.fields.email.value,
           },
         })
         .then(() => {
           resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  portPrequalDataToApplication = (applicationId) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      clientPublic
+        .mutate({
+          mutation: portPrequalDataToApplication,
+          variables: {
+            prequalApplicationData: {
+              userId: this.userId,
+              applicationId,
+            },
+          },
+        })
+        .then((data) => {
+          resolve(data.data.portPrequalDataToApplication.id);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
