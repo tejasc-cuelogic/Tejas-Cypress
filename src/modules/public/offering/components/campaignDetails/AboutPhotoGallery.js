@@ -26,8 +26,8 @@ class AboutPhotoGallery extends Component {
         <Modal.Content>
           <div className="carousel mt-10 mb-30">
             <Container>
-              <NsCarousel {...settings}>
-                {[1, 2, 3].map(() => (
+              <NsCarousel {...settings} thumbs={4}>
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(() => (
                   <Image src={videoPoster} />
                 ))}
               </NsCarousel>
