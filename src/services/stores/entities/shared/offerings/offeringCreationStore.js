@@ -205,6 +205,14 @@ export class OfferingCreationStore {
   }
 
   @action
+  setContingencyDataOnAdd = (formName, arrayKey) => {
+    const { fields } = this.ADD_NEW_CONTINGENCY_FRM;
+    const dataLength = this[formName].fields[arrayKey].length;
+    this[formName].fields[arrayKey][dataLength - 1].contingency.value = fields.contingency.value;
+    this[formName].fields[arrayKey][dataLength - 1].acceptance.value = fields.acceptance.value;
+  }
+
+  @action
   setAddressFields = (place, index) => {
     Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
   }
@@ -301,9 +309,9 @@ export class OfferingCreationStore {
     };
     if (subKey) {
       payloadData[keyName] = {};
-      payloadData[keyName][subKey] = this.evaluateFormData(fields);
+      payloadData[keyName][subKey] = Validator.evaluateFormData(fields);
     } else {
-      payloadData[keyName] = this.evaluateFormData(fields);
+      payloadData[keyName] = Validator.evaluateFormData(fields);
     }
     uiStore.setProgress();
     client
