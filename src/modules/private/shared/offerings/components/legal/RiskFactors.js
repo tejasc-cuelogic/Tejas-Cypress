@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Checkbox, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 
-const FormData = ({
+const FormData = observer(({
   form,
   formName,
   formChange,
@@ -14,13 +14,13 @@ const FormData = ({
 }) => (
   <div className="featured-section collapsed-checkbox">
     <Checkbox
+      name={checkboxField}
       label={
         <label>
           <Header as="h4">{form.fields[checkboxField].label}</Header>
         </label>
       }
-      value={form.fields[descriptionField].value}
-      // checked={form.fields[form.fields[descriptionField].refSelector].value}
+      checked={form.fields[checkboxField].value}
       onChange={(e, result) => formChange(e, result, formName)}
     />
     <div className="checkbox-description">
@@ -34,7 +34,7 @@ const FormData = ({
       />
     </div>
   </div>
-);
+));
 
 @inject('offeringCreationStore')
 @observer
