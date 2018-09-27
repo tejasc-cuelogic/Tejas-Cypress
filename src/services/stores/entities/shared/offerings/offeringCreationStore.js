@@ -210,6 +210,7 @@ export class OfferingCreationStore {
     const dataLength = this[formName].fields[arrayKey].length;
     this[formName].fields[arrayKey][dataLength - 1].contingency.value = fields.contingency.value;
     this[formName].fields[arrayKey][dataLength - 1].acceptance.value = fields.acceptance.value;
+    Validator.resetFormData(this.ADD_NEW_CONTINGENCY_FRM);
   }
 
   @action
