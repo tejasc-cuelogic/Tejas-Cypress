@@ -19,8 +19,8 @@ export default class AddNewContingency extends React.Component {
       LAUNCH_CONTITNGENCIES_FRM,
       CLOSING_CONTITNGENCIES_FRM,
     } = this.props.offeringCreationStore;
-    addMore(contingencyFormSelected, undefined, true);
     const contingencyType = contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
+    addMore(contingencyFormSelected, contingencyType, true);
     const form = contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? LAUNCH_CONTITNGENCIES_FRM : CLOSING_CONTITNGENCIES_FRM;
     updateOffering(currentOfferingId, form.fields, 'contingencies', contingencyType);
     this.props.history.push(this.props.refLink);
