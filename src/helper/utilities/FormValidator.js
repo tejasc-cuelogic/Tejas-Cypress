@@ -220,7 +220,6 @@ class FormValidator {
       currentForm.meta.isFieldValid = false;
     }
   }
-
   resetFormToEmpty = metaData => this.prepareFormObject(metaData || this.emptyDataSet);
 
   getMetaData = form => form.refMetadata;
@@ -233,23 +232,39 @@ class FormValidator {
     });
     return tempRef;
   }
-
-  addMoreFields = (fields, count = 1) => {
-    const arrayData = [...toJS(fields)];
-    for (let i = count; i > 0; i -= 1) {
-      arrayData.push(toJS(fields)[0]);
-    }
-    return arrayData;
-  }
-
   addMoreRecordToSubSection = (form, key, count = 1) => {
     const currentForm = form;
     currentForm.fields[key] = currentForm.fields[key] ?
       this.addMoreFields(currentForm.fields[key], count) : [];
+    currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }
-
-  setDataForLevel = (refFields, data) => {
+  addMoreFields = (fields, count = 1) => {
+    const arrayData = [...toJS(fields)];
+    for (let i = count; i > 0; i -= 1) {
+      arrayData.push(this.resetMoreFieldsObj(toJS(fields)[0]));
+    }
+    return arrayData;
+  }
+  resetMoreFieldsObj = (formFields) => {
+    const fields = formFields;
+    Object.keys(fields).forEach((key) => {
+      if (fields[key] && Array.isArray(toJS(fields[key]))) {
+        fields[key] = this.resetMoreFieldsObj(fields[key]);
+      } else if (fields[key].objType === 'FileObjectType') {
+        fields[key] = {
+          ...fields[key],
+          ...{
+            value: '', fileId: '', preSignedUrl: '', fileData: '',
+          },
+        };
+      } else {
+        fields[key].value = '';
+      }
+    });
+    return fields;
+  }
+  setDataForLevel = (refFields, data, keepAtLeastOne) => {
     const fields = { ...refFields };
     Object.keys(fields).map((key) => {
       try {
@@ -265,9 +280,10 @@ class FormValidator {
               fields[key][index] = this.setDataForLevel(
                 fields[key][index],
                 (data[key] && data[key][index]) || (tempRef[key] && tempRef[key][index]),
+                keepAtLeastOne,
               );
             });
-          } else {
+          } else if (!keepAtLeastOne) {
             fields[key] = [];
           }
         } else if (fields[key].objRef) {
@@ -304,11 +320,11 @@ class FormValidator {
     return fields;
   }
 
-  setFormData = (form, dataSrc, ref) => {
+  setFormData = (form, dataSrc, ref, keepAtLeastOne = true) => {
     let currentForm = form;
     const data = ref ? this.getRefFromObjRef(ref, dataSrc) : dataSrc;
     currentForm = this.resetFormToEmpty(currentForm.refMetadata);
-    currentForm.fields = this.setDataForLevel(currentForm.fields, data);
+    currentForm.fields = this.setDataForLevel(currentForm.fields, data, keepAtLeastOne);
     return currentForm;
   };
 
