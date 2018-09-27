@@ -15,14 +15,16 @@ export default class AddNewContingency extends React.Component {
       addMore,
       updateOffering,
       currentOfferingId,
+      setContingencyDataOnAdd,
       contingencyFormSelected,
       LAUNCH_CONTITNGENCIES_FRM,
       CLOSING_CONTITNGENCIES_FRM,
     } = this.props.offeringCreationStore;
     const contingencyType = contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
-    addMore(contingencyFormSelected, contingencyType, true);
+    addMore(contingencyFormSelected, contingencyType);
+    setContingencyDataOnAdd(contingencyFormSelected, contingencyType);
     const form = contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? LAUNCH_CONTITNGENCIES_FRM : CLOSING_CONTITNGENCIES_FRM;
-    updateOffering(currentOfferingId, form.fields, 'contingencies', contingencyType);
+    updateOffering(currentOfferingId, form.fields, 'contingencies');
     this.props.history.push(this.props.refLink);
   }
   render() {
