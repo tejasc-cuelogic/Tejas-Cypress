@@ -11,9 +11,8 @@ export default class Issuer extends Component {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
     const { roles } = this.props.userStore.currentUser;
     const formName = 'ISSUER_FRM';
-    const { isIssuer } = this.props.userStore;
     return (
-      <div className={isIssuer ? 'ui card fluid form-card' : ''}>
+      <Aux>
         <Form>
           {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
@@ -97,7 +96,7 @@ export default class Issuer extends Component {
             </Button.Group>
           </div>
         </Form>
-      </div>
+      </Aux>
     );
   }
 }
