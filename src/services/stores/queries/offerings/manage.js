@@ -278,7 +278,15 @@ export const getOfferingDetails = gql`
         name
       }
       stage
-      rewardsTierIds
+      rewardsTierIds {
+        amount
+        earlyBirdQuantity
+        created {
+          id
+          by
+          date
+        }
+      }
       created{
         id
         date

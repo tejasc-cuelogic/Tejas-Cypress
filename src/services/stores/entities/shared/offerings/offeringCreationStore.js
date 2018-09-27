@@ -201,6 +201,7 @@ export class OfferingCreationStore {
 
   @action
   addMore = (formName, arrayName = 'data', addFieldValues = false) => {
+    console.log(this[formName]);
     this[formName] = {
       ...this[formName],
       fields: {
@@ -213,14 +214,15 @@ export class OfferingCreationStore {
     };
     const arrayData = [
       ...this[formName].fields[arrayName],
-      this.getMetaData(formName)[arrayName][0],
+      toJS(this[formName].refMetadata[arrayName][0]),
     ];
     this[formName].fields[arrayName] = arrayData;
     if (addFieldValues) {
-      const dataLength = this[formName].fields.data.length;
-      this[formName].fields.data[dataLength - 1].contingency.value =
+      console.log(this.ADD_NEW_CONTINGENCY_FRM);
+      const dataLength = this[formName].fields[arrayName].length;
+      this[formName].fields[arrayName][dataLength - 1].contingency.value =
       this.ADD_NEW_CONTINGENCY_FRM.fields.contingency.value;
-      this[formName].fields.data[dataLength - 1].acceptance.value =
+      this[formName].fields[arrayName][dataLength - 1].acceptance.value =
       this.ADD_NEW_CONTINGENCY_FRM.fields.acceptance.value;
     }
     Validator.resetFormData(this.ADD_NEW_CONTINGENCY_FRM);
