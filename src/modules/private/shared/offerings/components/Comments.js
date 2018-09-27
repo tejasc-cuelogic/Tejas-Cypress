@@ -17,20 +17,18 @@ export default class Comments extends Component {
       messages, current, loading, error,
     } = messageStore;
     return (
-      <div className="inner-content-spacer">
-        <Card fluid className="messages">
-          <MessagesList
-            match={match}
-            messages={messages}
-            current={current}
-            loading={loading}
-            error={error}
-          />
-          <Switch>
-            <Route exact path={`${match.url}/:id`} component={MessagesWrap} />
-          </Switch>
-        </Card>
-      </div>
+      <Card fluid className="messages">
+        <MessagesList
+          match={match}
+          messages={messages}
+          current={current}
+          loading={loading}
+          error={error}
+        />
+        <Switch>
+          <Route exact path={`${match.url}/:id`} component={MessagesWrap} />
+        </Switch>
+      </Card>
     );
   }
 }
