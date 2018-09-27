@@ -20,7 +20,7 @@ export default class Overview extends Component {
       CLOSING_CONTITNGENCIES_FRM,
       OFFERING_DETAILS_FRM,
       formChange,
-      formChangeWithIndex,
+      formArrayChange,
     } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
@@ -40,8 +40,8 @@ export default class Overview extends Component {
               ))
             }
           </Form.Group>
-          <Contingency formChangeWithIndex={formChangeWithIndex} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
-          <Contingency formChangeWithIndex={formChangeWithIndex} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
+          <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
+          <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
         </Form>
       </div>
     );

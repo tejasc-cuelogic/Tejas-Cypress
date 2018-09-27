@@ -38,9 +38,8 @@ export default class Contingency extends Component {
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    const { form, formName } = this.props;
-    const contingencyType = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
-    updateOffering(currentOfferingId, form.fields, 'contingencies', contingencyType);
+    const { form } = this.props;
+    updateOffering(currentOfferingId, form.fields, 'contingencies');
   }
   render() {
     const { roles } = this.props.userStore.currentUser;
@@ -49,7 +48,7 @@ export default class Contingency extends Component {
       confirmModalName,
     } = this.props.offeringCreationStore;
     const {
-      form, formName, formChangeWithIndex, match, addon,
+      form, formName, formArrayChange, match, addon,
     } = this.props;
     const dataKey = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
     return (
@@ -78,14 +77,14 @@ export default class Contingency extends Component {
                   </Header>
                 </label>
               }
-              onChange={(e, result) => formChangeWithIndex(e, result, formName, index)}
+              onChange={(e, result) => formArrayChange(e, result, formName, dataKey, index)}
             />
             <div className="checkbox-description">
               <FormTextarea
                 fielddata={contingency.comment}
                 name="comment"
                 containerclassname="secondary"
-                changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                changed={(e, result) => formArrayChange(e, result, formName, dataKey, index)}
               />
               <Button.Group compact size="small">
                 {(roles && (roles.includes('manager') || roles.includes('admin'))) &&

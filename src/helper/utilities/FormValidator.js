@@ -357,50 +357,62 @@ class FormValidator {
     let inputData = {};
     map(fields, (ele, key) => {
       try {
-        const records = toJS(fields[key]);
-        let reference = false;
-        if (fields[key] && Array.isArray(records)) {
-          if (fields[key] && fields[key].length > 0) {
-            const arrObj = [];
-            records.forEach((field) => {
-              let arrayFieldsKey = {};
-              let arrayFields = {};
-              map(field, (eleV, keyRef1) => {
-                if (eleV.objRefOutput) {
-                  reference = !reference ? eleV.objRefOutput : false;
-                }
-                if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
-                  arrayFields = { ...arrayFields, [keyRef1]: this.evalFileObj(field[keyRef1]) };
-                } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
-                  arrayFields =
-                  { ...arrayFields, [keyRef1]: this.evalDateObj(field[keyRef1].value) };
+        if (!fields[key].skipField) {
+          const records = toJS(fields[key]);
+          let reference = false;
+          if (fields[key] && Array.isArray(records)) {
+            if (fields[key] && fields[key].length > 0) {
+              const arrObj = [];
+              records.forEach((field) => {
+                let arrayFieldsKey = {};
+                let arrayFields = {};
+                map(field, (eleV, keyRef1) => {
+                  if (!eleV.skipField) {
+                    let reference2 = false;
+                    let reference2Val = field[keyRef1].value;
+                    if (eleV.objRefOutput) {
+                      reference = !reference ? eleV.objRefOutput : false;
+                    }
+                    if (eleV.objRefOutput2) {
+                      reference2 = !reference2 ? eleV.objRefOutput2 : false;
+                    }
+                    if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
+                      reference2Val = this.evalFileObj(field[keyRef1]);
+                    } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
+                      reference2Val = this.evalDateObj(field[keyRef1].value);
+                    }
+                    if (reference2) {
+                      arrayFields =
+                      this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
+                    } else {
+                      arrayFields = { ...arrayFields, [keyRef1]: reference2Val };
+                    }
+                    arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
+                  }
+                });
+                arrObj.push(arrayFieldsKey);
+                if (reference) {
+                  inputData = this.evaluateObjectRef(reference, inputData, [key], arrObj);
                 } else {
-                  arrayFields = { ...arrayFields, [keyRef1]: field[keyRef1].value };
+                  inputData = { ...inputData, [key]: arrObj };
                 }
-                arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
               });
-              arrObj.push(arrayFieldsKey);
-              if (reference) {
-                inputData = this.evaluateObjectRef(reference, inputData, [key], arrObj);
-              } else {
-                inputData = { ...inputData, [key]: arrObj };
-              }
-            });
-          }
-        } else {
-          if (fields[key].objRefOutput) {
-            reference = !reference ? fields[key].objRefOutput : false;
-          }
-          let objValue = fields[key].value;
-          if (fields[key].objType && fields[key].objType === 'FileObjectType') {
-            objValue = this.evalFileObj(fields[key]);
-          } else if (fields[key].objType && fields[key].objType === 'DATE') {
-            objValue = this.evalDateObj(fields[key].value);
-          }
-          if (reference) {
-            inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
+            }
           } else {
-            inputData = { ...inputData, [key]: objValue };
+            if (fields[key].objRefOutput) {
+              reference = !reference ? fields[key].objRefOutput : false;
+            }
+            let objValue = fields[key].value;
+            if (fields[key].objType && fields[key].objType === 'FileObjectType') {
+              objValue = this.evalFileObj(fields[key]);
+            } else if (fields[key].objType && fields[key].objType === 'DATE') {
+              objValue = this.evalDateObj(fields[key].value);
+            }
+            if (reference) {
+              inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
+            } else {
+              inputData = { ...inputData, [key]: objValue };
+            }
           }
         }
       } catch (e) {
