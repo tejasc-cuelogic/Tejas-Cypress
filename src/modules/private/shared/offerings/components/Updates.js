@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Form, Grid, Divider, Button } from 'semantic-ui-react';
+import { Form, Grid, Button } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { InlineLoader } from '../../../../../theme/shared';
 import Listing from './updates/Listing';
 import NewUpdate from './updates/NewUpdate';
 
-@inject('updateStore')
+@inject('updateStore', 'userStore')
 @observer
 export default class BonusRewards extends Component {
   componentWillMount() {
@@ -23,14 +24,14 @@ export default class BonusRewards extends Component {
     const {
       updates, loading, requestState, filters,
     } = updateStore;
-
+    const { isIssuer } = this.props.userStore;
     if (loading) {
       return <InlineLoader />;
     }
     return (
-      <div className="inner-content-spacer">
-        <Form>
-          <Grid stackable>
+      <Aux>
+        <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
+          <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
                 executeSearch={this.executeSearch}
@@ -50,10 +51,11 @@ export default class BonusRewards extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Divider hidden />
-        <Listing data={updates} match={match} />
-        <Route path={`${match.url}/:id`} render={props => <NewUpdate refLink={match.url} {...props} />} />
-      </div>
+        <div className={isIssuer ? 'ui card fluid' : ''}>
+          <Listing data={updates} match={match} />
+          <Route path={`${match.url}/:id`} render={props => <NewUpdate refLink={match.url} {...props} />} />
+        </div>
+      </Aux>
     );
   }
 }
