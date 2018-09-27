@@ -233,12 +233,20 @@ class FormValidator {
     });
     return tempRef;
   }
+
   addMoreFields = (fields, count = 1) => {
     const arrayData = [...toJS(fields)];
     for (let i = count; i > 0; i -= 1) {
       arrayData.push(toJS(fields)[0]);
     }
     return arrayData;
+  }
+
+  addMoreRecordToSubSection = (form, key, count = 1) => {
+    const currentForm = form;
+    currentForm.fields[key] = currentForm.fields[key] ?
+      this.addMoreFields(currentForm.fields[key], count) : [];
+    return currentForm;
   }
 
   setDataForLevel = (refFields, data) => {

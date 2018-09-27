@@ -12,7 +12,7 @@ export default class OfferingOverview extends Component {
   }
   addNewBullet = (e) => {
     e.preventDefault();
-    this.props.offeringCreationStore.addMore('OFFERING_HIGHLIGHTS_FRM');
+    this.props.offeringCreationStore.addMore('OFFERING_OVERVIEW_FRM', 'highlight');
   }
   handleFormSubmit = () => {
     const { OFFERING_OVERVIEW_FRM, updateOffering } = this.props.offeringCreationStore;

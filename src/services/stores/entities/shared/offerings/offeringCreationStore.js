@@ -200,30 +200,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  addMore = (formName, arrayName = 'data', addFieldValues = false) => {
-    this[formName] = {
-      ...this[formName],
-      fields: {
-        ...this[formName].fields,
-      },
-      meta: {
-        ...this[formName].meta,
-        isValid: false,
-      },
-    };
-    const arrayData = [
-      ...this[formName].fields[arrayName],
-      this.getMetaData(formName)[arrayName][0],
-    ];
-    this[formName].fields[arrayName] = arrayData;
-    if (addFieldValues) {
-      const dataLength = this[formName].fields.data.length;
-      this[formName].fields.data[dataLength - 1].contingency.value =
-      this.ADD_NEW_CONTINGENCY_FRM.fields.contingency.value;
-      this[formName].fields.data[dataLength - 1].acceptance.value =
-      this.ADD_NEW_CONTINGENCY_FRM.fields.acceptance.value;
-    }
-    Validator.resetFormData(this.ADD_NEW_CONTINGENCY_FRM);
+  addMore = (form, key) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key);
   }
 
   @action
