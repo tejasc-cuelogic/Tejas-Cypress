@@ -220,6 +220,7 @@ class FormValidator {
       currentForm.meta.isFieldValid = false;
     }
   }
+
   resetFormToEmpty = metaData => this.prepareFormObject(metaData || this.emptyDataSet);
 
   getMetaData = form => form.refMetadata;
@@ -302,6 +303,88 @@ class FormValidator {
     currentForm.fields = this.setDataForLevel(currentForm.fields, data);
     return currentForm;
   };
+
+  evaluateObjectRef = (objRef, inputData, key, value) => {
+    let tempRef = inputData;
+    const rejObjects = objRef.split('.');
+    if (rejObjects.length === 1) {
+      tempRef = { ...inputData, [rejObjects[0]]: { ...inputData[[rejObjects[0]]], [key]: value } };
+    } else if (rejObjects.length === 2) {
+      tempRef = {
+        ...inputData,
+        [rejObjects[0]]: { [rejObjects[1]]: { ...inputData[[rejObjects[1]]], [key]: value } },
+      };
+    } else if (rejObjects.length === 3) {
+      tempRef = {
+        ...inputData,
+        [rejObjects[0]]: {
+          [rejObjects[1]]: { [rejObjects[2]]: { ...inputData[[rejObjects[2]]], [key]: value } },
+        },
+      };
+    }
+    return tempRef;
+  }
+
+  evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
+
+  evalDateObj = date => moment(date).toISOString();
+
+  evaluateFormData = (fields) => {
+    let inputData = {};
+    map(fields, (ele, key) => {
+      try {
+        const records = toJS(fields[key]);
+        let reference = false;
+        if (fields[key] && Array.isArray(records)) {
+          if (fields[key] && fields[key].length > 0) {
+            const arrObj = [];
+            records.forEach((field) => {
+              let arrayFieldsKey = {};
+              let arrayFields = {};
+              map(field, (eleV, keyRef1) => {
+                if (eleV.objRefOutput) {
+                  reference = !reference ? eleV.objRefOutput : false;
+                }
+                if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
+                  arrayFields = { ...arrayFields, [keyRef1]: this.evalFileObj(field[keyRef1]) };
+                } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
+                  arrayFields =
+                  { ...arrayFields, [keyRef1]: this.evalDateObj(field[keyRef1].value) };
+                } else {
+                  arrayFields = { ...arrayFields, [keyRef1]: field[keyRef1].value };
+                }
+                arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
+              });
+              arrObj.push(arrayFieldsKey);
+              if (reference) {
+                inputData = this.evaluateObjectRef(reference, inputData, [key], arrObj);
+              } else {
+                inputData = { ...inputData, [key]: arrObj };
+              }
+            });
+          }
+        } else {
+          if (fields[key].objRefOutput) {
+            reference = !reference ? fields[key].objRefOutput : false;
+          }
+          let objValue = fields[key].value;
+          if (fields[key].objType && fields[key].objType === 'FileObjectType') {
+            objValue = this.evalFileObj(fields[key]);
+          } else if (fields[key].objType && fields[key].objType === 'DATE') {
+            objValue = this.evalDateObj(fields[key].value);
+          }
+          if (reference) {
+            inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
+          } else {
+            inputData = { ...inputData, [key]: objValue };
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    return inputData;
+  }
 }
 
 export default new FormValidator();
