@@ -1004,6 +1004,18 @@ export const GENERAL = {
     placeHolder: 'Enter here',
     objRef: 'legal.general.businessPhone',
     objType: 'businessPhone',
+    objRefOutput: 'businessPhone',
+
+  },
+  countryCode: {
+    label: '',
+    value: '1',
+    error: undefined,
+    rule: 'optional',
+    objRef: 'legal.general.businessPhone',
+    objType: 'businessPhone',
+    placeHolder: 'Enter here',
+    objRefOutput: 'businessPhone',
   },
   bankName: {
     label: 'Bank Name',
@@ -1037,18 +1049,20 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
-    objType: 'reachedMinOfferingGoal',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type your text here...',
+    objRefOutput: 'useOfProceeds',
   },
   reachedMaxOfferingGoal: {
     label: 'If maximum offering amount is reached:',
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
-    objType: 'reachedMaxOfferingGoal',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type your text here...',
+    objRefOutput: 'useOfProceeds',
   },
   rightsOfEqShareHolders: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
@@ -1215,7 +1229,7 @@ export const RISK_FACTORS = {
     label: 'Business Risk',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   businessRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1229,7 +1243,7 @@ export const RISK_FACTORS = {
     label: 'Financing Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   financingRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1243,7 +1257,7 @@ export const RISK_FACTORS = {
     label: 'Development Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   developmentRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1257,7 +1271,7 @@ export const RISK_FACTORS = {
     label: 'Reputational Risk',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   reputationalRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1271,7 +1285,7 @@ export const RISK_FACTORS = {
     label: 'Competition Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   competitionRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1285,7 +1299,7 @@ export const RISK_FACTORS = {
     label: 'Market Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   marketRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1299,7 +1313,7 @@ export const RISK_FACTORS = {
     label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   terrorismRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1313,7 +1327,7 @@ export const RISK_FACTORS = {
     label: 'Management Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   managementRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1327,7 +1341,7 @@ export const RISK_FACTORS = {
     label: 'Personnel Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   personnelRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1341,7 +1355,7 @@ export const RISK_FACTORS = {
     label: 'Labor Supply Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   laborSupplyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1355,7 +1369,7 @@ export const RISK_FACTORS = {
     label: 'Privacy Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   privacyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1369,7 +1383,7 @@ export const RISK_FACTORS = {
     label: 'Other Risks',
     value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   otherRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
