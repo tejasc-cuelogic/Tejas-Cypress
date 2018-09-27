@@ -33,7 +33,7 @@ export default class Projections extends Component {
     this.props.businessAppReviewStore.saveReviewForms('PROJECTIONS_FRM');
   }
   submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
     const { PROJECTIONS_FRM, formChange } = this.props.businessAppReviewStore;

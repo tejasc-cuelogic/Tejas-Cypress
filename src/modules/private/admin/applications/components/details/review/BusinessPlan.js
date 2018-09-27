@@ -48,7 +48,7 @@ export default class BusinessPlan extends Component {
     this.props.businessAppReviewStore.saveReviewForms('BUSINESS_PLAN_FRM');
   }
   submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
     const {
@@ -329,7 +329,7 @@ export default class BusinessPlan extends Component {
           </div>
           }
           {(submitted || isManager) &&
-          <ManagerOverview approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_MANAGER_FRM" />
+          <ManagerOverview approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           }
         </Form>
         <Confirm

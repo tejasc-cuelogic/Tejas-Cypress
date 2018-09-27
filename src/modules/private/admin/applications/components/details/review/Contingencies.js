@@ -79,7 +79,7 @@ export default class Contingencies extends Component {
     this.props.businessAppReviewStore.saveReviewForms('CONTINGENCY_FRM');
   }
   submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
     const {

@@ -15,7 +15,7 @@ export default class Documentation extends Component {
     this.props.businessAppReviewStore.saveReviewForms('DOCUMENTATION_FRM');
   }
   submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
     const { DOCUMENTATION_FRM, formChange, updateStatuses } = this.props.businessAppReviewStore;
@@ -101,7 +101,7 @@ export default class Documentation extends Component {
           </div>
           }
           {(submitted || isManager) &&
-          <ManagerOverview isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_MANAGER_FRM" approved={approved} isReadonly={isReadonly} />
+          <ManagerOverview isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_FRM" approved={approved} isReadonly={isReadonly} />
           }
         </Form>
       </div>

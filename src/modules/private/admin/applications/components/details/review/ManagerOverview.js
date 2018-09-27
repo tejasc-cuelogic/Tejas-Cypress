@@ -8,9 +8,9 @@ import { FormTextarea } from '../../../../../../../theme/form';
 @observer
 export default class ManagerOverview extends Component {
   render() {
-    const { formChange, MANAGERS_FRM } = this.props.businessAppReviewStore;
+    const { formChange, MANAGERS_FRM, saveReviewForms } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
-    const { isReadonly, approved } = this.props;
+    const { isReadonly, approved, formName } = this.props;
     if (roles && !roles.includes('manager')) {
       return null;
     }
@@ -28,8 +28,8 @@ export default class ManagerOverview extends Component {
         {!isReadonly &&
         <div className="right-align">
           <Button.Group>
-            <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" inverted color="red">Send Back</Button>
-            <Button disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button">Approve</Button>
+            <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Send Back</Button>
+            <Button disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>Approve</Button>
           </Button.Group>
         </div>
         }

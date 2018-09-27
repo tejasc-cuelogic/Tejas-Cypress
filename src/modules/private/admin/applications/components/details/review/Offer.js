@@ -26,7 +26,7 @@ export default class Offer extends Component {
     this.props.businessAppReviewStore.saveReviewForms('OFFERS_FRM');
   }
   submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
     const {

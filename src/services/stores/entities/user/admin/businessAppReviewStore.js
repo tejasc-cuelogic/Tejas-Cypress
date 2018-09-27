@@ -49,23 +49,23 @@ export class BusinessAppReviewStore {
 
   @action
   updateStatuses = (key, submitted, approved) => {
-    const status = submitted && !approved ? 'ns-reload-circle' : approved ? 'ns-check-circle' : '';
+    const status = (submitted && (!approved || (approved && !approved.status))) ? 'ns-reload-circle' : approved && approved.status ? 'ns-check-circle' : '';
     this.subNavPresentation[key] = status;
   }
 
-  getMetaData = (metaData, getField = 'actionType') => {
+  getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
-      CONTINGENCY_FRM: { actionType: 'REVIEW_CONTINGENCIES', objRef: 'contingencies' },
-      JUSTIFICATIONS_FRM: { actionType: 'REVIEW_PREQUALIFICATION', objRef: 'preQualification' },
-      BUSINESS_PLAN_FRM: { actionType: 'REVIEW_BUSINESSPLAN', objRef: 'businessPlan' },
-      MISCELLANEOUS_FRM: { actionType: 'REVIEW_MISCELLANEOUS', objRef: 'miscellaneous' },
-      OVERVIEW_FRM: { actionType: 'REVIEW_OVERVIEW', objRef: 'overview' },
-      PROJECTIONS_FRM: { actionType: 'REVIEW_PROJECTIONS', objRef: 'projections' },
-      DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION', objRef: 'documentation' },
-      OFFERS_FRM: { actionType: 'REVIEW_OFFER', objRef: 'offer' },
+      CONTINGENCY_FRM: { actionType: 'REVIEW_CONTINGENCIES' },
+      JUSTIFICATIONS_FRM: { actionType: 'REVIEW_PREQUALIFICATION' },
+      BUSINESS_PLAN_FRM: { actionType: 'REVIEW_BUSINESSPLAN' },
+      MISCELLANEOUS_FRM: { actionType: 'REVIEW_MISCELLANEOUS' },
+      OVERVIEW_FRM: { actionType: 'REVIEW_OVERVIEW' },
+      PROJECTIONS_FRM: { actionType: 'REVIEW_PROJECTIONS' },
+      DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION' },
+      OFFERS_FRM: { actionType: 'REVIEW_OFFER' },
       MANAGERS_FRM: { formData: MANAGERS },
     };
-    return metaDataMapping[metaData][getField];
+    return metaDataMapping[formName][getField];
   }
 
   @action
@@ -183,34 +183,40 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  saveReviewForms = (formName) => {
+  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
     let formInputData = Validator.evaluateFormData(this[formName].fields);
+    const managerFormInputData = approveOrSubmitted === 'REVIEW_APPROVED' ? Validator.evaluateFormData(this.MANAGERS_FRM.fields) : '';
     const payloadKey = formName === 'OFFERS_FRM' ? 'offers' : 'review';
     if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
       const data = map(formInputData[key], value => value[key]);
       formInputData = { [key]: data };
+      formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, ...managerFormInputData } : formInputData;
       formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
+    } else {
+      formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, ...managerFormInputData } : formInputData;
     }
-    const actionType = this.getMetaData(formName, 'actionType');
-    const objRef = this.getMetaData(formName, 'objRef');
+    let actionType = this.getActionType(formName);
+    let applicationReviewAction = '';
+    if (approveOrSubmitted !== '') {
+      actionType = approveOrSubmitted;
+      applicationReviewAction = this.getActionType(formName);
+    }
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     uiStore.setProgress();
-    const payload = {
+    let payload = {
       [payloadKey]: formInputData,
       actionType,
       applicationId,
       userId,
       applicationSource,
     };
-    // const payload = {
-    //   [payloadKey]: { [objRef]: formName === 'OFFERS_FRM' ?
-    // formInputData.offer : formInputData },
-    //   applicationId,
-    //   issuerId: userId,
-    // };
+    if (approveOrSubmitted !== '') {
+      payload = { ...payload, applicationReviewAction };
+      payload = approveOrSubmitted === 'REVIEW_APPROVED' ? { ...payload, approvedStatus } : payload;
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -237,12 +243,19 @@ export class BusinessAppReviewStore {
   approveOrSubmitReviewForms = (formName, actionType = 'REVIEW_SUBMITTED') => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
-    const formInputData = Validator.evaluateFormData(this[formName].fields);
-    const applicationReviewAction = this.getMetaData(formName, 'actionType');
+    let formInputData = Validator.evaluateFormData(this[formName].fields);
+    const payloadKey = formName === 'OFFERS_FRM' ? 'offers' : 'review';
+    if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
+      const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
+      const data = map(formInputData[key], value => value[key]);
+      formInputData = { [key]: data };
+      formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
+    }
+    const applicationReviewAction = this.getActionType(formName);
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     uiStore.setProgress();
     const payload = {
-      comments: { text: formInputData },
+      [payloadKey]: formInputData,
       actionType,
       applicationReviewAction,
       applicationId,

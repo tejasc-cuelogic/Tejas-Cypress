@@ -105,7 +105,7 @@ export default class Miscellaneous extends Component {
     this.props.businessAppReviewStore.saveReviewForms('MISCELLANEOUS_FRM');
   }
   submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
     const {

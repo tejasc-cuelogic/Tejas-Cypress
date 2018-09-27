@@ -26,7 +26,7 @@ export default class Overview extends Component {
     this.props.businessAppReviewStore.saveReviewForms('OVERVIEW_FRM');
   }
   submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
     const {
@@ -41,7 +41,7 @@ export default class Overview extends Component {
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
     const approved = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     updateStatuses('overview', submitted, approved);
     return (
       <Aux>
