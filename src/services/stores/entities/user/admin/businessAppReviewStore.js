@@ -156,7 +156,7 @@ export class BusinessAppReviewStore {
 
   @action
   maskChangeWithIndex = (values, form, arrayName = 'data', field, index) => {
-    const fieldValue = field === 'expirationDate' ? values.formattedValue : values.floatValue;
+    const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' ? values.formattedValue : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, arrayName, index,
@@ -192,7 +192,7 @@ export class BusinessAppReviewStore {
   saveReviewForms = (formName) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
-    let formInputData = this.evaluateFormData(this[formName].fields);
+    let formInputData = Validator.evaluateFormData(this[formName].fields);
     const payloadKey = formName === 'OFFERS_FRM' ? 'offers' : 'review';
     if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
@@ -242,7 +242,7 @@ export class BusinessAppReviewStore {
   approveOrSubmitReviewForms = (formName, actionType = 'REVIEW_SUBMITTED') => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
-    const formInputData = this.evaluateFormData(this[formName].fields);
+    const formInputData = Validator.evaluateFormData(this[formName].fields);
     const applicationReviewAction = this.getMetaData(formName, 'actionType');
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     uiStore.setProgress();
@@ -274,98 +274,6 @@ export class BusinessAppReviewStore {
           uiStore.setProgress(false);
         });
     });
-  }
-
-  evaluateObjectRef = (objRef, inputData, key, value) => {
-    let tempRef = inputData;
-    const rejObjects = objRef.split('.');
-    if (rejObjects.length === 1) {
-      tempRef = { ...inputData, [rejObjects[0]]: { ...inputData[[rejObjects[0]]], [key]: value } };
-    } else if (rejObjects.length === 2) {
-      tempRef = {
-        ...inputData,
-        [rejObjects[0]]: { [rejObjects[1]]: { ...inputData[[rejObjects[1]]], [key]: value } },
-      };
-    } else if (rejObjects.length === 3) {
-      tempRef = {
-        ...inputData,
-        [rejObjects[0]]: {
-          [rejObjects[1]]: { [rejObjects[2]]: { ...inputData[[rejObjects[2]]], [key]: value } },
-        },
-      };
-    }
-    return tempRef;
-  }
-
-  evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
-
-  evalDateObj = date => moment(date).toISOString();
-
-  @action
-  evaluateFormData = (fields) => {
-    let inputData = {};
-    map(fields, (ele, key) => {
-      try {
-        const records = toJS(fields[key]);
-        let reference = false;
-        if (fields[key] && Array.isArray(records)) {
-          if (fields[key] && fields[key].length > 0) {
-            const arrObj = [];
-            records.forEach((field) => {
-              let arrayFieldsKey = {};
-              let arrayFields = {};
-              map(field, (eleV, keyRef1) => {
-                if (eleV.objRefOutput) {
-                  reference = !reference ? eleV.objRefOutput : false;
-                  if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
-                    arrayFields = { ...arrayFields, [keyRef1]: this.evalFileObj(field[keyRef1]) };
-                  } else {
-                    arrayFields = { ...arrayFields, [keyRef1]: field[keyRef1].value };
-                  }
-                } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
-                  arrayFields = { ...arrayFields, [keyRef1]: this.evalFileObj(field[keyRef1]) };
-                } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
-                  arrayFields = { [keyRef1]: this.evalDateObj(field[keyRef1].value) };
-                } else {
-                  arrayFields = { [keyRef1]: field[keyRef1].value };
-                }
-                arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
-              });
-              arrObj.push(arrayFieldsKey);
-              if (reference) {
-                inputData = this.evaluateObjectRef(reference, inputData, [key], arrObj);
-              } else {
-                inputData = { ...inputData, [key]: arrObj };
-              }
-            });
-          }
-        } else if (fields[key].objRefOutput) {
-          reference = !reference ? fields[key].objRefOutput : false;
-          if (fields[key].objType && fields[key].objType === 'FileObjectType') {
-            inputData =
-            this.evaluateObjectRef(reference, inputData, [key], this.evalFileObj(fields[key]));
-          } else if (fields[key].objType && fields[key].objType === 'DATE') {
-            inputData = this.evaluateObjectRef(
-              reference,
-              inputData,
-              [key],
-              this.evalDateObj(fields[key].value),
-            );
-          } else {
-            inputData = this.evaluateObjectRef(reference, inputData, [key], fields[key].value);
-          }
-        } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
-          inputData = { ...inputData, [key]: this.evalFileObj(fields[key]) };
-        } else if (fields[key].objType && fields[key].objType === 'DATE') {
-          inputData = { ...inputData, [key]: this.evalDateObj(fields[key].value) };
-        } else {
-          inputData = { ...inputData, [key]: fields[key].value };
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    });
-    return inputData;
   }
 
   @action

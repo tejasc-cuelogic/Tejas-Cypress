@@ -308,6 +308,8 @@ export default class BusinessPlan extends Component {
           </Grid>
           <Divider section />
           <MaskedInput
+            containerclassname={isReadonly ? 'display-only' : ''}
+            disabled={isReadonly}
             name="dateOfIncorporation"
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
             format="##-##-####"
