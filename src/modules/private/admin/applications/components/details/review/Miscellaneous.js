@@ -110,7 +110,7 @@ export default class Miscellaneous extends Component {
   render() {
     const {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
-      confirmModalName, removeData,
+      confirmModalName, removeData, updateStatuses,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     const { roles } = this.props.userStore.currentUser;
@@ -122,6 +122,7 @@ export default class Miscellaneous extends Component {
     const approved = (review && review.miscellaneous && review.miscellaneous &&
       review.miscellaneous.approved) ? review.miscellaneous.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    updateStatuses('miscellaneous', submitted, approved);
     return (
       <Aux>
         <Form size="small" onSubmit={this.submit}>

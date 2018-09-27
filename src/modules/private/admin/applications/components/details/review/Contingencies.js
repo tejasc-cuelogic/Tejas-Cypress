@@ -84,7 +84,7 @@ export default class Contingencies extends Component {
   render() {
     const {
       CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
-      toggleConfirmModal, removeData,
+      toggleConfirmModal, removeData, updateStatuses,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -95,6 +95,7 @@ export default class Contingencies extends Component {
     const approved = (review && review.contingencies && review.contingencies &&
       review.contingencies.approved) ? review.contingencies.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    updateStatuses('contingencies', submitted, approved);
     return (
       <Aux>
         <Form onSubmit={this.submit}>

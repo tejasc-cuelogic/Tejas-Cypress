@@ -15,7 +15,7 @@ export default class PreQual extends Component {
   }
   addJustification = (e) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.addMore('JUSTIFICATIONS_FRM');
+    this.props.businessAppReviewStore.addMore('JUSTIFICATIONS_FRM', 'justifications');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -30,7 +30,7 @@ export default class PreQual extends Component {
   render() {
     const {
       JUSTIFICATIONS_FRM, toggleConfirmModal, confirmModal, confirmModalName,
-      formChangeWithIndex, removeData,
+      formChangeWithIndex, removeData, updateStatuses,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -41,13 +41,14 @@ export default class PreQual extends Component {
     const approved = (review && review.preQualification && review.preQualification.approved)
       ? review.preQualification.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    updateStatuses('preQualification', submitted, approved);
     return (
       <Aux>
         <Form onSubmit={this.submit}>
           <Header as="h4">
             Justifications
             {!isReadonly &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addJustification(e)}><small>+Add Justification</small></Link>
+            <Link to={this.props.match.url} className="link" onClick={this.addJustification}><small>+Add Justification</small></Link>
             }
           </Header>
           {
@@ -80,7 +81,7 @@ export default class PreQual extends Component {
           content="Are you sure you want to remove this justification?"
           open={confirmModal}
           onCancel={toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName)}
+          onConfirm={() => removeData(confirmModalName, 'justifications')}
           size="mini"
           className="deletion"
         />

@@ -54,6 +54,7 @@ export default class BusinessPlan extends Component {
     const {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
       maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
+      updateStatuses,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -65,6 +66,7 @@ export default class BusinessPlan extends Component {
       review.businessPlan.approved) ? review.businessPlan.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved));
     const { confirmBox } = this.props.uiStore;
+    updateStatuses('businessPlan', submitted, approved);
     return (
       <Aux>
         <Form onSubmit={this.submit}>

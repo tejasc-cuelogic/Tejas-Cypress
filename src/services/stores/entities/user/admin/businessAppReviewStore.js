@@ -1,13 +1,12 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { map } from 'lodash';
-import moment from 'moment';
 import { CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../constants/businessApplication';
-import { updateApplicationStatusAndReview, updateBusinessApplicationInformationData } from '../../../queries/businessApplication';
+import { updateApplicationStatusAndReview } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 
 export class BusinessAppReviewStore {
@@ -28,6 +27,9 @@ export class BusinessAppReviewStore {
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
+  @observable subNavPresentation = {
+    overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
+  };
 
   @action
   toggleConfirmModal = (index, formName = null) => {
@@ -45,16 +47,22 @@ export class BusinessAppReviewStore {
     this.removeIndex = null;
   }
 
-  getMetaData = (metaData, getField = 'formData') => {
+  @action
+  updateStatuses = (key, submitted, approved) => {
+    const status = submitted && !approved ? 'ns-reload-circle' : approved ? 'ns-check-circle' : '';
+    this.subNavPresentation[key] = status;
+  }
+
+  getMetaData = (metaData, getField = 'actionType') => {
     const metaDataMapping = {
-      CONTINGENCY_FRM: { formData: CONTINGENCY, actionType: 'REVIEW_CONTINGENCIES', objRef: 'contingencies' },
-      JUSTIFICATIONS_FRM: { formData: JUSTIFICATIONS, actionType: 'REVIEW_PREQUALIFICATION', objRef: 'preQualification' },
-      BUSINESS_PLAN_FRM: { formData: BUSINESS_PLAN, actionType: 'REVIEW_BUSINESSPLAN', objRef: 'businessPlan' },
-      MISCELLANEOUS_FRM: { formData: MISCELLANEOUS, actionType: 'REVIEW_MISCELLANEOUS', objRef: 'miscellaneous' },
-      OVERVIEW_FRM: { formData: OVERVIEW, actionType: 'REVIEW_OVERVIEW', objRef: 'overview' },
-      PROJECTIONS_FRM: { formData: PROJECTIONS, actionType: 'REVIEW_PROJECTIONS', objRef: 'projections' },
-      DOCUMENTATION_FRM: { formData: DOCUMENTATION, actionType: 'REVIEW_DOCUMENTATION', objRef: 'documentation' },
-      OFFERS_FRM: { formData: OFFERS, actionType: 'REVIEW_OFFER', objRef: 'offer' },
+      CONTINGENCY_FRM: { actionType: 'REVIEW_CONTINGENCIES', objRef: 'contingencies' },
+      JUSTIFICATIONS_FRM: { actionType: 'REVIEW_PREQUALIFICATION', objRef: 'preQualification' },
+      BUSINESS_PLAN_FRM: { actionType: 'REVIEW_BUSINESSPLAN', objRef: 'businessPlan' },
+      MISCELLANEOUS_FRM: { actionType: 'REVIEW_MISCELLANEOUS', objRef: 'miscellaneous' },
+      OVERVIEW_FRM: { actionType: 'REVIEW_OVERVIEW', objRef: 'overview' },
+      PROJECTIONS_FRM: { actionType: 'REVIEW_PROJECTIONS', objRef: 'projections' },
+      DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION', objRef: 'documentation' },
+      OFFERS_FRM: { actionType: 'REVIEW_OFFER', objRef: 'offer' },
       MANAGERS_FRM: { formData: MANAGERS },
     };
     return metaDataMapping[metaData][getField];
@@ -62,21 +70,7 @@ export class BusinessAppReviewStore {
 
   @action
   addMore = (formName, arrayName = 'data') => {
-    this[formName] = {
-      ...this[formName],
-      fields: {
-        ...this[formName].fields,
-      },
-      meta: {
-        ...this[formName].meta,
-        isValid: false,
-      },
-    };
-    const arrayData = [
-      ...this[formName].fields[arrayName],
-      this.getMetaData(formName)[arrayName][0],
-    ];
-    this[formName].fields[arrayName] = arrayData;
+    this[formName] = Validator.addMoreRecordToSubSection(this[formName], arrayName);
   }
 
   @action
@@ -198,28 +192,29 @@ export class BusinessAppReviewStore {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
       const data = map(formInputData[key], value => value[key]);
       formInputData = { [key]: data };
-      formInputData = formName === 'OVERVIEW_FRM' ? { criticalPoint: formInputData } : formInputData;
+      formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
     }
     const actionType = this.getMetaData(formName, 'actionType');
     const objRef = this.getMetaData(formName, 'objRef');
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     uiStore.setProgress();
-    // const payload = {
-    //   [payloadKey]: { [objRef]: formInputData },
-    //   actionType,
-    //   applicationId,
-    //   userId,
-    //   applicationSource,
-    // };
     const payload = {
-      [payloadKey]: { [objRef]: formName === 'OFFERS_FRM' ? formInputData.offer : formInputData },
+      [payloadKey]: formInputData,
+      actionType,
       applicationId,
-      issuerId: userId,
+      userId,
+      applicationSource,
     };
+    // const payload = {
+    //   [payloadKey]: { [objRef]: formName === 'OFFERS_FRM' ?
+    // formInputData.offer : formInputData },
+    //   applicationId,
+    //   issuerId: userId,
+    // };
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateBusinessApplicationInformationData,
+          mutation: updateApplicationStatusAndReview,
           variables: payload,
           // refetchQueries: [{ query: getBusinessApplications }],
         })
@@ -257,7 +252,7 @@ export class BusinessAppReviewStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateBusinessApplicationInformationData,
+          mutation: updateApplicationStatusAndReview,
           variables: payload,
           // refetchQueries: [{ query: getBusinessApplications }],
         })

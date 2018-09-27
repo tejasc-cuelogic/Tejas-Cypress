@@ -450,24 +450,32 @@ mutation updateBusinessApplicationInformation(
 
 export const updateApplicationStatusAndReview = gql`
 mutation updateApplicationData(
-  $applicationId: String
-  $userId: String
-  $actionType: String
-  $applicationSource: String
-  $review: String
+  $applicationId: ID!
+  $userId: ID
+  $actionType: AdminApplicationActionTypeEnum!
+  $applicationFlag: BusinessApplicationUpdateStatusEnum
+  $applicationStatus: ApplicationStatusEnum
+  $applicationReviewAction: AdminApplicationActionTypeEnum
+  $applicationSource: ViewBusinessApplicationTypeEnum!
+  $review: BusinessApplicationReviewInput
+  $offers: OffersReviewInput
+  $comments: [BusinessApplicationCommentInput]
+  $approvedStatus: Boolean
 ) {
   updateApplicationStatusAndReview(
     applicationId: $applicationId
     userId: $userId
     actionType: $actionType
+    applicationFlag: $applicationFlag
+    applicationStatus: $applicationStatus
+    applicationReviewAction: $applicationReviewAction
     applicationSource: $applicationSource
     review: $review
+    offers: $offers
+    comments: $comments
+    approvedStatus: $approvedStatus
   ){
-    updated {
-      id
-      by
-      date
-    }
+    applicationStatus
   }
 }
 `;

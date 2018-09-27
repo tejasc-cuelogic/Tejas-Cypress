@@ -31,18 +31,17 @@ export default class Offer extends Component {
   render() {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
-      confirmModalName, removeData,
+      confirmModalName, removeData, updateStatuses,
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.offer[0];
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
-    const submitted = (review && review.overview && review.overview.criticalPoint &&
-      review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
-    const approved = (review && review.overview && review.overview.criticalPoint &&
-      review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
+    const { offers } = businessApplicationDetailsAdmin;
+    const submitted = (offers && offers.submitted) ? offers.submitted : null;
+    const approved = (offers && offers.approved) ? offers.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    updateStatuses('offer', submitted, approved);
     return (
       <Aux>
         <Header as="h4">

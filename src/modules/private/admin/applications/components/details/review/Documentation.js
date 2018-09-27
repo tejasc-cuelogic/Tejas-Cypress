@@ -18,7 +18,7 @@ export default class Documentation extends Component {
     this.props.businessAppReviewStore.approveOrSubmitReviewForms(form, action);
   }
   render() {
-    const { DOCUMENTATION_FRM, formChange } = this.props.businessAppReviewStore;
+    const { DOCUMENTATION_FRM, formChange, updateStatuses } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
@@ -28,6 +28,7 @@ export default class Documentation extends Component {
     const approved = (review && review.documentation && review.documentation &&
       review.documentation.approved) ? review.documentation.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    updateStatuses('documentation', submitted, approved);
     return (
       <div>
         <Form onSubmit={this.submit}>

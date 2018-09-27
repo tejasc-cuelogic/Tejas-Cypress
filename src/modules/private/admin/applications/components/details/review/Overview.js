@@ -31,7 +31,7 @@ export default class Overview extends Component {
   render() {
     const {
       OVERVIEW_FRM, formChangeWithIndex, confirmModal, toggleConfirmModal,
-      removeData, confirmModalName,
+      removeData, confirmModalName, updateStatuses,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -42,6 +42,7 @@ export default class Overview extends Component {
     const approved = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    updateStatuses('overview', submitted, approved);
     return (
       <Aux>
         <Header as="h4">
