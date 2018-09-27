@@ -1212,7 +1212,7 @@ export const GENERAL = {
 export const RISK_FACTORS = {
   isBusinessRisk: {
     label: 'Business Risk',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1226,7 +1226,7 @@ export const RISK_FACTORS = {
   },
   isFinancingRisk: {
     label: 'Financing Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1240,7 +1240,7 @@ export const RISK_FACTORS = {
   },
   isDevelopmentRisk: {
     label: 'Development Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1254,7 +1254,7 @@ export const RISK_FACTORS = {
   },
   isReputationalRisk: {
     label: 'Reputational Risk',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1268,7 +1268,7 @@ export const RISK_FACTORS = {
   },
   isCompetitionRisk: {
     label: 'Competition Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1282,7 +1282,7 @@ export const RISK_FACTORS = {
   },
   isMarketRisk: {
     label: 'Market Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1296,7 +1296,7 @@ export const RISK_FACTORS = {
   },
   isTerrorismRisk: {
     label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1310,7 +1310,7 @@ export const RISK_FACTORS = {
   },
   isManagementRisk: {
     label: 'Management Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1324,7 +1324,7 @@ export const RISK_FACTORS = {
   },
   isPersonnelRisk: {
     label: 'Personnel Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1338,7 +1338,7 @@ export const RISK_FACTORS = {
   },
   isLaborSupplyRisk: {
     label: 'Labor Supply Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1352,7 +1352,7 @@ export const RISK_FACTORS = {
   },
   isPrivacyRisk: {
     label: 'Privacy Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
@@ -1366,7 +1366,7 @@ export const RISK_FACTORS = {
   },
   isOtherRisk: {
     label: 'Other Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
     toSkip: true,
   },
