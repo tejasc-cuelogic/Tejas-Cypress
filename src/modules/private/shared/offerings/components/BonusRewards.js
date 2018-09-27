@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Form, Grid, Button } from 'semantic-ui-react';
+import { Header, Form, Grid, Button, Divider } from 'semantic-ui-react';
 import { ByKeyword, DropdownFilter } from '../../../../../theme/form/Filters';
 import RewardList from './rewards/RewardList';
 
@@ -18,7 +18,7 @@ const rewards = [
   },
 ];
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class BonusRewards extends Component {
   setSearchParam = (e, { name, value }) => {
@@ -31,10 +31,10 @@ export default class BonusRewards extends Component {
   }
   render() {
     const { requestState } = this.props.offeringCreationStore;
+    const { isIssuer } = this.props.userStore;
     return (
-      <div className="inner-content-spacer">
-        <Header as="h4">Bonus rewards</Header>
-        <Form>
+      <Aux>
+        <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
@@ -56,9 +56,17 @@ export default class BonusRewards extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <p className="note mt-20">For more information about bonus rewards, check out our <Link to="/">Resource Article.</Link></p>
-        <RewardList listOf="Early bird reward" data={rewards} />
-      </div>
+        <div className={!isIssuer ? 'inner-content-spacer' : ''}>
+          {isIssuer &&
+            <Divider hidden />
+          }
+          <Header as="h4">
+            Bonus rewards
+            <Header.Subheader>For more information about bonus rewards, check out our <Link to="/">Resource Article.</Link></Header.Subheader>
+          </Header>
+          <RewardList listOf="Early bird reward" data={rewards} />
+        </div>
+      </Aux>
     );
   }
 }

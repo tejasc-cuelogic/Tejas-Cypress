@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Form, Grid, Divider } from 'semantic-ui-react';
+import { Form, Grid } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import Filters from './investors/Filters';
 import Listing from './investors/Listing';
@@ -23,7 +24,7 @@ const investors = [
   },
 ];
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class BonusRewards extends Component {
   setSearchParam = (e, { name, value }) => {
@@ -36,16 +37,16 @@ export default class BonusRewards extends Component {
   }
   render() {
     const { requestState } = this.props.offeringCreationStore;
+    const { isIssuer } = this.props.userStore;
     return (
-      <div className="inner-content-spacer">
-        <Form>
-          <Grid stackable>
+      <Aux>
+        <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
+          <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
                 executeSearch={this.executeSearch}
                 w={[4]}
                 placeholder="Search by name"
-                fLabel
                 more="no"
                 addon={
                   <Filters
@@ -57,9 +58,10 @@ export default class BonusRewards extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Divider hidden />
-        <Listing data={investors} />
-      </div>
+        <div className={isIssuer ? 'ui card fluid' : ''}>
+          <Listing data={investors} />
+        </div>
+      </Aux>
     );
   }
 }

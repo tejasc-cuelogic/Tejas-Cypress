@@ -212,6 +212,7 @@
 	&.card-style{
 		border-radius:@6px;
 		box-shadow:0 0 10px rgba(0,0,0,.1);
+		overflow:hidden;
 		&:not(:last-child){
 			margin-bottom:@35px;
 		}
