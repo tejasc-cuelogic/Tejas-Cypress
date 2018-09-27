@@ -14,7 +14,7 @@ const getModule = component => Loadable({
 });
 
 @withRouter
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore')
 @observer
 export default class Offering extends Component {
   componentWillMount() {
@@ -28,10 +28,9 @@ export default class Offering extends Component {
       { title: 'About the Company', to: 'about-company', component: 'OfferingCompany' },
       { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
     ];
-    const { match, userStore } = this.props;
-    const { isIssuer } = userStore;
+    const { match } = this.props;
     return (
-      <div className={!isIssuer ? 'inner-content-spacer' : ''}>
+      <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu secondary vertical match={match} navItems={navItems} />

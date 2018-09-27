@@ -11,15 +11,7 @@ import {
   PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
 } from '../../../../../services/constants/user';
 
-// const gallery = [
-//   { name: 'first', id: 1 },
-//   { name: 'second', id: 2 },
-//   { name: 'third', id: 3 },
-//   { name: 'fourth', id: 4 },
-//   { name: 'fifth', id: 5 },
-//   { name: 'sixth', id: 6 },
-// ];
-@inject('offeringCreationStore', 'uiStore', 'userStore')
+@inject('offeringCreationStore', 'uiStore')
 @withRouter
 @observer
 export default class Media extends Component {
@@ -56,10 +48,9 @@ export default class Media extends Component {
     }
   }
   render() {
-    const { isIssuer } = this.props.userStore;
     const { MEDIA_FRM } = this.props.offeringCreationStore;
     return (
-      <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
+      <div className="inner-content-spacer">
         <Header as="h4">Hero Image</Header>
         <Form className="cropper-wrap hero-img">
           <ImageCropper

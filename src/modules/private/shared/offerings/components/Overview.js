@@ -8,7 +8,7 @@ import AddNewContingency from './overview/AddNewContingency';
 import { FormInput } from '../../../../../theme/form';
 
 @withRouter
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Overview extends Component {
   componentWillMount() {
@@ -22,11 +22,10 @@ export default class Overview extends Component {
       formChange,
       formChangeWithIndex,
     } = this.props.offeringCreationStore;
-    // const { isIssuer } = this.props.userStore;
+    const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     return (
-      // <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
-      <div className="inner-content-spacer">
+      <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
           <Route exact path={`${match.url}/add-new-contingency`} render={props => <AddNewContingency refLink={match.url} {...props} />} />
           <Header as="h4">Offering Details</Header>

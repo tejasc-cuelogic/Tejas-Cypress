@@ -25,7 +25,7 @@ const tiersArray = [
   { title: 'Invest $5000 or more' },
 ];
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore')
 @observer
 export default class BonusRewardsCreation extends Component {
   toggleConfirmModal = (e, index, formName) => {
@@ -43,9 +43,8 @@ export default class BonusRewardsCreation extends Component {
   render() {
     const { confirmModal, confirmModalName } = this.props.offeringCreationStore;
     const { match } = this.props;
-    const { isIssuer } = this.props.userStore;
     return (
-      <div className={!isIssuer ? 'inner-content-spacer' : ''}>
+      <div className="inner-content-spacer">
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
         <Route path={`${match.url}/add-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
         <Route path={`${match.url}/edit-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
@@ -54,7 +53,7 @@ export default class BonusRewardsCreation extends Component {
         </div>
         {
           tiersArray.map(data => (
-            <div className={!isIssuer ? 'reward-tier' : 'ui card fluid form-card'}>
+            <div className="reward-tier">
               <Header as="h4">
                 {data.title}
                 <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.removed(e)}>
