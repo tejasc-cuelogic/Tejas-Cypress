@@ -13,10 +13,10 @@ import Helper from '../../../../../../helper/utility';
 export default class Contingency extends Component {
   componentWillMount() {
     if (!this.props.offeringCreationStore.initLoad.includes('LAUNCH_CONTITNGENCIES_FRM')) {
-      this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies');
+      this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
     }
     if (!this.props.offeringCreationStore.initLoad.includes('CLOSING_CONTITNGENCIES_FRM')) {
-      this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies');
+      this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
     }
   }
   setContingencyForm = () => {

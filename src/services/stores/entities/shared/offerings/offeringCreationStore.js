@@ -212,12 +212,12 @@ export class OfferingCreationStore {
   *  Set form data
   */
   @action
-  setFormData = (form, ref) => {
+  setFormData = (form, ref, keepAtLeastOne) => {
     const { offer } = offeringsStore;
     if (!offer) {
       return false;
     }
-    this[form] = Validator.setFormData(this[form], offer, ref);
+    this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     return false;
   }
 
