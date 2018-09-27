@@ -163,10 +163,13 @@ export class BusinessAppStore {
       onFetch: (data) => {
         this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
         const {
-          prequalDetails, signupCode,
+          prequalDetails, signupCode, businessGeneralInfo,
         } = data.businessApplicationsDetailsAdmin;
         businessAppAdminStore
-          .setBusinessDetails(prequalDetails.businessGeneralInfo.businessName, signupCode);
+          .setBusinessDetails(
+            (businessGeneralInfo.businessName || prequalDetails.businessGeneralInfo.businessName),
+            signupCode,
+          );
         this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
         uiStore.setAppLoader(false);
         resolve();
@@ -211,7 +214,8 @@ export class BusinessAppStore {
       if (!isPartialApp) {
         this.setPrequalDetails(data.prequalDetails);
         this.setBusinessDetails(data.businessDetails);
-        this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
+        this.setPerformanceDetails(data.businessPerformance, data.businessPerformance ?
+          data.prequalDetails : null);
         this.setDocumentationDetails(data.businessDocumentation);
         if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
           this.formReadOnlyMode = true;
@@ -381,27 +385,29 @@ export class BusinessAppStore {
           });
         }
       }
-    } else if (this.currentApplicationType === 'business') {
-      ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
-        const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
-        this.BUSINESS_PERF_FRM.fields[field[key]].value =
-        prequalData.performanceSnapshot.nextYearSnapshot[ele];
-      });
-      if (this.getBusinessTypeCondtion) {
+    } else if (prequalData) {
+      if (this.currentApplicationType === 'business') {
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
-          const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
+          const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
           this.BUSINESS_PERF_FRM.fields[field[key]].value =
-          prequalData.performanceSnapshot.pastYearSnapshot[ele];
+          prequalData.performanceSnapshot.nextYearSnapshot[ele];
         });
-      } else {
-        ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+        if (this.getBusinessTypeCondtion) {
+          ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+            const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
+            this.BUSINESS_PERF_FRM.fields[field[key]].value =
+            prequalData.performanceSnapshot.pastYearSnapshot[ele];
+          });
+        } else {
+          ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+            this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+          });
+        }
+      } else if (!this.getOwnPropertyCondtion) {
+        ['priorToThreeYear', 'ytd'].forEach((ele) => {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
         });
       }
-    } else if (!this.getOwnPropertyCondtion) {
-      ['priorToThreeYear', 'ytd'].forEach((ele) => {
-        this.BUSINESS_PERF_FRM.fields[ele].rule = '';
-      });
     }
     this.BUSINESS_PERF_FRM = Validator.validateForm(this.BUSINESS_PERF_FRM);
   }

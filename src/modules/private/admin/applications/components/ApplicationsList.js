@@ -140,7 +140,7 @@ export default class ApplicationsList extends Component {
                       />
                       <ApplicationListButtons
                         refLink={match.url}
-                        applicationId={application.applicationId}
+                        applicationId={application.applicationId || application.id}
                         userId={application.userId}
                         appStatus={application.applicationStatus}
                         // status={application.status}

@@ -235,7 +235,7 @@ class FormValidator {
   addMoreRecordToSubSection = (form, key, count = 1) => {
     const currentForm = form;
     currentForm.fields[key] = currentForm.fields[key] ?
-      this.addMoreFields(currentForm.fields[key], count) : [];
+      this.addMoreFields(currentForm.refMetadata[key], count) : [];
     currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }

@@ -68,13 +68,15 @@ export default class ApplicationDetails extends Component {
       return <EmptyDataSet />;
     }
     const {
-      applicationId, userId, applicationStatus, prequalDetails, primaryPOC, signupCode, rating,
+      applicationId, userId, applicationStatus, prequalStatus, prequalDetails, primaryPOC,
+      signupCode, rating, businessGeneralInfo, firstName, lastName, failReasons, email,
     } = businessApplicationDetailsAdmin;
     let navItems = [
       { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
       { title: 'Pre-qualification', to: 'pre-qualification' },
     ];
-    if (applicationStatus !== BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+    if ((applicationStatus || prequalStatus) !==
+    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
       navItems = [
         ...navItems,
         { title: 'Business Details', to: 'business-details' },
@@ -83,8 +85,9 @@ export default class ApplicationDetails extends Component {
         { title: 'Review', to: 'review' },
       ];
     }
-    const { businessName, contactDetails } = prequalDetails.businessGeneralInfo;
-    const appStepStatus = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
+    const { businessName, contactDetails } =
+    businessGeneralInfo || prequalDetails.businessGeneralInfo;
+    const appStepStatus = applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnRootNodeClick={false} onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
@@ -94,7 +97,8 @@ export default class ApplicationDetails extends Component {
             <Label size="small" color="green">Reviewed</Label>
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
-            {applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+            {(applicationStatus || prequalStatus) ===
+            BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
             <Button secondary compact floated="right" content="Promote" />
             }
           </Header>
@@ -110,7 +114,7 @@ export default class ApplicationDetails extends Component {
                       :
                         <Aux>
                           <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
-                          <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, applicationStatus)}><Icon name="save" />Update</Link>
+                          <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}><Icon name="save" />Update</Link>
                         </Aux>
                         // <Button.Group>
                         //   <Button
@@ -159,13 +163,13 @@ export default class ApplicationDetails extends Component {
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Name</Header.Subheader>
-                          {primaryPOC.firstName} {primaryPOC.lastName}
+                          {firstName || primaryPOC.firstName} {lastName || primaryPOC.lastName}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
                         <Header as="h6">
                           <Header.Subheader>Email</Header.Subheader>
-                          {primaryPOC.email}
+                          {email || primaryPOC.email}
                         </Header>
                       </Grid.Column>
                       <Grid.Column>
@@ -178,13 +182,14 @@ export default class ApplicationDetails extends Component {
                   </Card.Content>
                 </Card>
               </Grid.Column>
-              {applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
+              {(applicationStatus || prequalStatus) ===
+              BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
                 <Grid.Column>
                   <Card fluid className="ba-info-card">
                     <Card.Header>Failed Reason</Card.Header>
                     <Card.Content>
-                      {prequalDetails.failReasons.length ?
-                        <List as="ol">{prequalDetails.failReasons.map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
+                      {failReasons.length || prequalDetails.failReasons.length ?
+                        <List as="ol">{(failReasons || prequalDetails.failReasons).map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
                         : <p>-</p>
                       }
                     </Card.Content>
