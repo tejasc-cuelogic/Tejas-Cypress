@@ -25,7 +25,7 @@ const tiersArray = [
   { title: 'Invest $5000 or more' },
 ];
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class BonusRewardsCreation extends Component {
   toggleConfirmModal = (e, index, formName) => {
@@ -43,8 +43,9 @@ export default class BonusRewardsCreation extends Component {
   render() {
     const { confirmModal, confirmModalName } = this.props.offeringCreationStore;
     const { match } = this.props;
+    const { isIssuer } = this.props.userStore;
     return (
-      <div className="inner-content-spacer">
+      <div className={!isIssuer ? 'inner-content-spacer' : ''}>
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
         <Route path={`${match.url}/add-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
         <Route path={`${match.url}/edit-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
@@ -53,25 +54,29 @@ export default class BonusRewardsCreation extends Component {
         </div>
         {
           tiersArray.map(data => (
-            <div className="featured-section mb-20">
-              <Header as="h4"> {data.title} </Header>
+            <div className={!isIssuer ? 'reward-tier' : 'ui card fluid form-card'}>
+              <Header as="h4">
+                {data.title}
+                <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.removed(e)}>
+                  <Icon className="ns-trash" />
+                </Button>
+              </Header>
               {data.bonusRewards &&
               data.bonusRewards.map((item, index) => (
-                <div className="featured-section mb-20">
-                  <Link to="/" onClick={e => this.removed(e)}>
-                    <Icon className="close" color="grey" />
-                  </Link>
+                <div className="reward-wrap">
                   <Header as="h5">{item.title}</Header>
                   <p>{item.description}</p>
                   <p>Exp Date: {item.expDate}</p>
-                  <Button.Group>
-                    <Button inverted size="mini" color="blue" content="Edit" as={Link} to={`${match.url}/edit-new-bonus-reward`} />
-                    <Button type="button" size="mini" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, 'ADD_NEW_BONUS_REWARD_FRM')} />
+                  <Button.Group size="mini" className="compact">
+                    <Button inverted color="blue" content="Edit" as={Link} to={`${match.url}/edit-new-bonus-reward`} />
+                    <Button color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, 'ADD_NEW_BONUS_REWARD_FRM')} />
                   </Button.Group>
                 </div>
               ))
               }
-              <Button size="small" color="blue" as={Link} to={`${match.url}/add-new-bonus-reward`} className="link-button">+ Add next bonus reward</Button>
+              <div>
+                <Button size="small" color="blue" as={Link} to={`${match.url}/add-new-bonus-reward`} className="link-button">+ Add next bonus reward</Button>
+              </div>
             </div>
           ))
         }
