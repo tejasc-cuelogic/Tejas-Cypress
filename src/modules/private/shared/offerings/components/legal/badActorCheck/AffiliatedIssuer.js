@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import AfIssuer from './AfIssuer';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class AffiliatedIssuer extends Component {
   componentWillMount() {
@@ -21,9 +20,10 @@ export default class AffiliatedIssuer extends Component {
       return navItems;
     });
     const { match } = this.props;
+    const { offer } = this.props.offeringsStore;
     return (
-      <Aux>
-        <SecondaryMenu className="tertiary" match={match} navItems={navItems} />
+      <div className={offer.stage === 'CREATION' ? 'ui card fluid' : ''}>
+        <SecondaryMenu className={offer.stage !== 'CREATION' ? 'tertiary' : ''} match={match} navItems={navItems} />
         <Switch>
           <Route
             exact
@@ -37,7 +37,7 @@ export default class AffiliatedIssuer extends Component {
             ))
           }
         </Switch>
-      </Aux>
+      </div>
     );
   }
 }

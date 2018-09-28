@@ -292,6 +292,21 @@
                 position:absolute;
                 right:12px;
             }
+            .comments& .ui.image{
+                position:relative;
+                width:28px;
+                height:28px;
+                >.avatar.image{
+                    position:absolute;
+                    height:20px;
+                    width:20px;
+                    top:0;
+                    +.avatar.image{
+                        top:8px;
+                        left:8px;
+                    }
+                }
+            }
         }
         .content{
             + .content{

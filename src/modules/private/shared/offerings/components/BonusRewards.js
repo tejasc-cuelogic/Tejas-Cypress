@@ -18,7 +18,7 @@ const rewards = [
   },
 ];
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class BonusRewards extends Component {
   setSearchParam = (e, { name, value }) => {
@@ -32,9 +32,10 @@ export default class BonusRewards extends Component {
   render() {
     const { requestState } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
     return (
       <Aux>
-        <Form className={!isIssuer ? 'search-filters more inner-content-spacer' : ''}>
+        <Form className={offer.stage !== 'CREATION' ? 'search-filters more inner-content-spacer' : ''}>
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
@@ -56,7 +57,7 @@ export default class BonusRewards extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <div className={!isIssuer ? 'inner-content-spacer' : ''}>
+        <div className={offer.stage !== 'CREATION' ? 'inner-content-spacer' : ''}>
           {isIssuer &&
             <Divider hidden />
           }

@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Leader from './Leader';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'offeringsStore')
 @observer
 export default class Leadership extends Component {
   componentWillMount() {
@@ -23,10 +23,11 @@ export default class Leadership extends Component {
       return navItems;
     });
     const { match } = this.props;
-    const { isIssuer } = this.props.userStore;
+    // const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
     return (
-      <div className={isIssuer ? 'ui card fluid form-card' : ''}>
-        <SecondaryMenu className="tertiary" match={match} navItems={navItems} />
+      <div className={offer.stage === 'CREATION' ? 'ui card fluid' : ''}>
+        <SecondaryMenu className={offer.stage !== 'CREATION' ? 'tertiary' : ''} match={match} navItems={navItems} />
         <Switch>
           <Route
             exact

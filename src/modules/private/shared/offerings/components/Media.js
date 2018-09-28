@@ -11,7 +11,7 @@ import {
   PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
 } from '../../../../../services/constants/user';
 
-@inject('offeringCreationStore', 'uiStore')
+@inject('offeringCreationStore', 'uiStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Media extends Component {
@@ -49,8 +49,9 @@ export default class Media extends Component {
   }
   render() {
     const { MEDIA_FRM } = this.props.offeringCreationStore;
+    const { offer } = this.props.offeringsStore;
     return (
-      <div className="inner-content-spacer">
+      <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Header as="h4">Hero Image</Header>
         <Form className="cropper-wrap hero-img">
           <ImageCropper

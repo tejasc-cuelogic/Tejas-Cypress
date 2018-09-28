@@ -14,7 +14,7 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('userStore')
+@inject('userStore', 'offeringsStore')
 @withRouter
 export default class Legal extends Component {
   componentWillMount() {
@@ -44,9 +44,9 @@ export default class Legal extends Component {
       },
     ];
     const { match } = this.props;
-    // const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
     return (
-      <div className="inner-content-spacer">
+      <div className={offer.stage !== 'CREATION' ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />

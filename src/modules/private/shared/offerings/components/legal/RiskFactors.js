@@ -1,6 +1,5 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Checkbox, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
@@ -36,7 +35,7 @@ const FormData = observer(({
   </div>
 ));
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'offeringsStore')
 @observer
 export default class RiskFactors extends Component {
   componentWillMount() {
@@ -53,8 +52,9 @@ export default class RiskFactors extends Component {
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
     const formName = 'RISK_FACTORS_FRM';
+    const { offer } = this.props.offeringsStore;
     return (
-      <Aux>
+      <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
         <Form onSubmit={this.handleFormSubmit}>
           {
             Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
@@ -89,7 +89,7 @@ export default class RiskFactors extends Component {
             </Button.Group>
           </div>
         </Form>
-      </Aux>
+      </div>
     );
   }
 }
