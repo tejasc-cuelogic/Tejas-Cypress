@@ -213,19 +213,24 @@ export class BusinessAppStore {
       this.fetchPrequalBusinessApplicationsDataById;
     if (data) {
       if (!isPartialApp) {
-        this.setPrequalDetails(data.prequalDetails);
-        this.setBusinessDetails(data.businessDetails);
-        this.setPerformanceDetails(data.businessPerformance, data.businessPerformance ?
-          data.prequalDetails : null);
-        this.setDocumentationDetails(data.businessDocumentation);
-        if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+        if ((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+          this.setPrequalDetails(data);
+        } else {
+          this.setPrequalDetails(data.prequalDetails);
+          this.setBusinessDetails(data.businessDetails);
+          this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
+          this.setDocumentationDetails(data.businessDocumentation);
+        }
+        if ((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
           this.formReadOnlyMode = true;
-        } else if (data.applicationStatus ===
+        } else if ((data.applicationStatus || data.prequalStatus) ===
           BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
           this.appStepsStatus[0].status = 'IN_PROGRESS';
         }
         this.setFieldvalue('currentApplicationType', data.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
-        navStore.setAccessParams('appStatus', data.applicationStatus);
+        navStore.setAccessParams('appStatus', (data.applicationStatus || data.prequalStatus));
         this.setPrequalBasicDetails();
       }
       if (data.lendio) {

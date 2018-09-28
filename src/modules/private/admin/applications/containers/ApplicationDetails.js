@@ -108,6 +108,8 @@ export default class ApplicationDetails extends Component {
                 <Card fluid className="ba-info-card">
                   <Card.Header>
                     Information
+                    {(applicationStatus || prequalStatus) !==
+                    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
                     <small className="pull-right">
                       {this.state.displaOnly ?
                         <Link to="/" onClick={this.editBusinessDetails}><Icon className="ns-pencil" />Edit</Link>
@@ -116,24 +118,9 @@ export default class ApplicationDetails extends Component {
                           <Link to="/" className="text-link" onClick={e => this.cancelBusinessDetails(e, businessName, signupCode)}>Cancel</Link>
                           <Link to="/" className={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid ? 'disabled' : ''} onClick={e => this.updateBusinessDetails(e, applicationId, userId, (applicationStatus || prequalStatus))}><Icon name="save" />Update</Link>
                         </Aux>
-                        // <Button.Group>
-                        //   <Button
-                        //     size="tiny"
-                        //     color="violet"
-                        //     className="ghost-button additional-field"
-                        //     content="Cancel"
-                        //   />
-                        //   <Button
-                        //     disabled={!BUSINESS_DETAILS_EDIT_FRM.meta.isValid}
-                        //     size="tiny"
-                        //     onClick={e => this
-                        //     color="violet"
-                        //     className="ghost-button additional-field"
-                        //     content="Update"
-                        //   />
-                        // </Button.Group>
                       }
                     </small>
+                    }
                   </Card.Header>
                   <Card.Content>
                     <Form>
