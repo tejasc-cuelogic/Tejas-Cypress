@@ -231,6 +231,52 @@ export class OfferingCreationStore {
   }
 
   @action
+  evaluateFormFieldToArray = (fields) => {
+    const social = [];
+    const highlight = [];
+    map(fields, (ele, key) => {
+      try {
+        const records = toJS(fields[key]);
+        if (fields[key].ArrayObjItem) {
+          const toObj = social.find(obj => obj.type === records.type);
+          if (toObj) {
+            if (key === `${records.type}_url`) {
+              toObj.url = records.value || null;
+            }
+            if (key === `${records.type}_shareLink`) {
+              toObj.shareLink = records.value || null;
+            }
+            if (key === `${records.type}_blurb`) {
+              toObj.blurb = records.value || null;
+            }
+          } else {
+            const object = {};
+            object.type = records.type;
+            if (key === `${records.type}_url`) {
+              object.url = records.value || null;
+            }
+            if (key === `${records.type}_shareLink`) {
+              object.shareLink = records.value || null;
+            }
+            if (key === `${records.type}_blurb`) {
+              object.blurb = records.value || null;
+            }
+            social.push(object);
+          }
+        }
+        if (Array.isArray(toJS(fields[key]))) {
+          records.forEach((field) => {
+            highlight.push(field.highlight.value);
+          });
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    return { social, highlight };
+  }
+
+  @action
   evaluateFormData = (fields) => {
     let inputData = {};
     map(fields, (ele, key) => {
@@ -311,6 +357,12 @@ export class OfferingCreationStore {
     if (subKey) {
       payloadData[keyName] = {};
       payloadData[keyName][subKey] = Validator.evaluateFormData(fields);
+      if (subKey === 'overview') {
+        payloadData.offering.overview = {
+          ...payloadData.offering.overview,
+          ...this.evaluateFormFieldToArray(fields),
+        };
+      }
     } else {
       payloadData[keyName] = Validator.evaluateFormData(fields);
     }
