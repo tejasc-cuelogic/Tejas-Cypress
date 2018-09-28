@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FormInput, DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
 
 const SectionHeader = ({ header, subheader }) => (
   <Aux>
@@ -110,7 +111,7 @@ export default class Miscellaneous extends Component {
   render() {
     const {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
-      confirmModalName, removeData, updateStatuses,
+      confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
     const { confirmBox } = this.props.uiStore;
     const { roles } = this.props.userStore.currentUser;
@@ -121,11 +122,12 @@ export default class Miscellaneous extends Component {
       review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
     const approved = (review && review.miscellaneous && review.miscellaneous &&
       review.miscellaneous.approved) ? review.miscellaneous.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved));
-    updateStatuses('miscellaneous', submitted, approved);
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form size="small" onSubmit={this.submit}>
+          <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
           <SectionHeader header="Social Media" />
           <Table basic compact className="form-table">
             <TableHeader labels={['Label', 'URL']} />
@@ -230,25 +232,15 @@ export default class Miscellaneous extends Component {
               }
             </Item.Group>
           </div>
-          {!isManager && !approved &&
-          <div className="right-align">
-            <Button.Group>
-              {!submitted &&
-              <Button
-                disabled={!MISCELLANEOUS_FRM.meta.isValid}
-                className="relaxed"
-                secondary
-              >
-                Save
-              </Button>
-              }
-              <Button onClick={() => this.submitWithApproval('MISCELLANEOUS_FRM', 'REVIEW_SUBMITTED')} disabled={(!(MISCELLANEOUS_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
-            </Button.Group>
-          </div>
-          }
-          {(submitted || isManager) &&
-          <ManagerOverview approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
-          }
+          <ButtonGroup
+            formName="MISCELLANEOUS_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={MISCELLANEOUS_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
         <Confirm
           header="Confirm"

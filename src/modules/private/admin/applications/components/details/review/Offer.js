@@ -6,6 +6,7 @@ import { Header, Form, Table, Dropdown, Icon, Confirm, Button } from 'semantic-u
 import { FormInput, MaskedInput } from '../../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -31,7 +32,7 @@ export default class Offer extends Component {
   render() {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
-      confirmModalName, removeData, updateStatuses,
+      confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.offer[0];
     const { roles } = this.props.userStore.currentUser;
@@ -40,17 +41,18 @@ export default class Offer extends Component {
     const { offers } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved));
-    updateStatuses('offer', submitted, approved);
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
-        <Header as="h4">
-          Offers
-          {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
-          <Link to={this.props.match.url} className="link pull-right" onClick={this.addNewOffer}><small>+ Add new offer</small></Link>
-          }
-        </Header>
         <Form onSubmit={this.submit}>
+          <ManagerOverview isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
+          <Header as="h4">
+            Offers
+            {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
+            <Link to={this.props.match.url} className="link pull-right" onClick={this.addNewOffer}><small>+ Add new offer</small></Link>
+            }
+          </Header>
           {offerFields &&
           <Table basic compact singleLine className="form-table">
             <Table.Header>
@@ -270,19 +272,15 @@ export default class Offer extends Component {
             </Table.Body>
           </Table>
           }
-          {!isManager && !approved &&
-          <div className="right-align mt-20">
-            <Button.Group>
-              {!submitted &&
-              <Button disabled={!OFFERS_FRM.meta.isValid} className="relaxed" secondary>Save</Button>
-              }
-              <Button onClick={() => this.submitWithApproval('OFFERS_FRM', 'REVIEW_SUBMITTED')} disabled={(!(OFFERS_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
-            </Button.Group>
-          </div>
-          }
-          {(submitted || isManager) &&
-          <ManagerOverview formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
-          }
+          <ButtonGroup
+            formName="OFFERS_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={OFFERS_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
         <Confirm
           header="Confirm"

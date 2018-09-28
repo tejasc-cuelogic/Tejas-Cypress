@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Form, Header, Button, Confirm } from 'semantic-ui-react';
+import { Form, Header, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -30,7 +31,7 @@ export default class PreQual extends Component {
   render() {
     const {
       JUSTIFICATIONS_FRM, toggleConfirmModal, confirmModal, confirmModalName,
-      formChangeWithIndex, removeData, updateStatuses,
+      formChangeWithIndex, removeData,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -40,11 +41,12 @@ export default class PreQual extends Component {
       ? review.preQualification.submitted : null;
     const approved = (review && review.preQualification && review.preQualification.approved)
       ? review.preQualification.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved));
-    updateStatuses('preQualification', submitted, approved);
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form onSubmit={this.submit}>
+          <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
             Justifications
             {!isReadonly &&
@@ -67,14 +69,15 @@ export default class PreQual extends Component {
               </Aux>
             ))
           }
-          {!isManager && !approved &&
-          <div className="right-align">
-            <Button onClick={() => this.submitWithApproval('JUSTIFICATIONS_FRM', 'REVIEW_SUBMITTED')} disabled={(!(JUSTIFICATIONS_FRM.meta.isValid) || submitted)} primary={!submitted} className="relaxed" >{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
-          </div>
-          }
-          {(submitted || isManager) &&
-          <ManagerOverview approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
-          }
+          <ButtonGroup
+            formName="JUSTIFICATIONS_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={JUSTIFICATIONS_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
         <Confirm
           header="Confirm"

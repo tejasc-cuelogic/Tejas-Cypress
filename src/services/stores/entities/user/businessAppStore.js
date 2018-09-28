@@ -167,7 +167,8 @@ export class BusinessAppStore {
         } = data.businessApplicationsDetailsAdmin;
         businessAppAdminStore
           .setBusinessDetails(
-            (businessGeneralInfo.businessName || prequalDetails.businessGeneralInfo.businessName),
+            ((businessGeneralInfo && businessGeneralInfo.businessName) ||
+            (prequalDetails.businessGeneralInfo.businessName)),
             signupCode,
           );
         this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);

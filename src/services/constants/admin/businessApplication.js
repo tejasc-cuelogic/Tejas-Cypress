@@ -64,7 +64,7 @@ export const DOCUMENTATION = {
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  profitiable: {
+  profitable: {
     value: '',
     label: 'Has the Business Been Profitable and Meet Our Margin Requirements?',
     error: undefined,
@@ -96,7 +96,7 @@ export const DOCUMENTATION = {
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  anyUnusualMovements: {
+  unusualMovements: {
     value: '',
     label: 'Are there any unusual movements or one-off large deposits/withdrawals that warrant an explanation?',
     error: undefined,
@@ -633,6 +633,7 @@ export const OFFERS = {
     fileId: '',
     fileData: '',
     objType: 'FileObjectType',
+    skipField: true,
     // customErrors: {
     //   string: 'Allowed string only.',
     //   required: '* required.',

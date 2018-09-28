@@ -48,9 +48,16 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  updateStatuses = (key, submitted, approved) => {
-    const status = (submitted && (!approved || (approved && !approved.status))) ? 'ns-reload-circle' : approved && approved.status ? 'ns-check-circle' : '';
-    this.subNavPresentation[key] = status;
+  updateStatuses = (steps) => {
+    const { review, offers } = businessAppStore.businessApplicationDetailsAdmin;
+    map(steps, (ele) => {
+      if (ele.to !== 'model') {
+        const submitted = ele.to === 'overview' ? review && review[ele.to] && review[ele.to].criticalPoint && review[ele.to].criticalPoint.submitted && (review[ele.to].criticalPoint.submitted || null) : ele.to === 'offer' ? offers && offers.submitted && (offers.submitted || null) : review && review[ele.to] && review[ele.to].submitted && (review[ele.to].submitted || null);
+        const approved = ele.to === 'overview' ? review && review[ele.to] && review[ele.to].criticalPoint && review[ele.to].criticalPoint.approved && (review[ele.to].criticalPoint.approved || null) : ele.to === 'offer' ? offers && offers.approved && (offers.approved || null) : review && review[ele.to] && review[ele.to].approved && (review[ele.to].approved || null);
+        const status = (submitted && (!approved || (approved && !approved.status))) ? 'ns-reload-circle' : approved && approved.status ? 'ns-check-circle' : '';
+        this.subNavPresentation[ele.to] = status;
+      }
+    });
   }
 
   getActionType = (formName, getField = 'actionType') => {
@@ -193,11 +200,10 @@ export class BusinessAppReviewStore {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
       const data = map(formInputData[key], value => value[key]);
       formInputData = { [key]: data };
-      formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, ...managerFormInputData } : formInputData;
       formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
-    } else {
-      formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, ...managerFormInputData } : formInputData;
     }
+    const key = Object.keys(formInputData)[0];
+    formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
     let actionType = this.getActionType(formName);
     let applicationReviewAction = '';
     if (approveOrSubmitted !== '') {

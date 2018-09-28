@@ -3,16 +3,17 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Button, Confirm } from 'semantic-ui-react';
+import { Form, Header, Confirm } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Overview extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint');
-    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.overview.criticalPoint.managerOverview');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.overview.managerOverview');
   }
   addCriticalPoint = (e) => {
     e.preventDefault();
@@ -31,7 +32,7 @@ export default class Overview extends Component {
   render() {
     const {
       OVERVIEW_FRM, formChangeWithIndex, confirmModal, toggleConfirmModal,
-      removeData, confirmModalName, updateStatuses,
+      removeData, confirmModalName,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -41,17 +42,18 @@ export default class Overview extends Component {
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
     const approved = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
-    updateStatuses('overview', submitted, approved);
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
-        <Header as="h4">
-          Overview
-          {!isReadonly &&
-          <Link to={this.props.match.url} className="link" onClick={this.addCriticalPoint}><small>+ Add Critical Point</small></Link>
-          }
-        </Header>
         <Form onSubmit={this.submit}>
+          <ManagerOverview formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
+          <Header as="h4">
+            Overview
+            {!isReadonly &&
+            <Link to={this.props.match.url} className="link" onClick={this.addCriticalPoint}><small>+ Add Critical Point</small></Link>
+            }
+          </Header>
           {
             OVERVIEW_FRM.fields.description.map((field, index) => (
               <FormInput
@@ -66,19 +68,15 @@ export default class Overview extends Component {
               />
             ))
           }
-          {!isManager && !approved &&
-          <div className="right-align">
-            <Button.Group>
-              {!submitted &&
-              <Button disabled={!OVERVIEW_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-              }
-              <Button onClick={() => this.submitWithApproval('OVERVIEW_FRM', 'REVIEW_SUBMITTED')} disabled={(!(OVERVIEW_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
-            </Button.Group>
-          </div>
-          }
-          {(submitted || isManager) &&
-          <ManagerOverview formName="OVERVIEW_FRM" approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
-          }
+          <ButtonGroup
+            formName="OVERVIEW_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={OVERVIEW_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
         <Confirm
           header="Confirm"

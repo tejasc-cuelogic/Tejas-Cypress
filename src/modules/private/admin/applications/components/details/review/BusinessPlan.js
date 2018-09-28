@@ -7,6 +7,7 @@ import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'seman
 import { FormTextarea, MaskedInput, FormInput, DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import Helper from '../../../../../../../helper/utility';
+import ButtonGroup from './ButtonGroup';
 
 const AddMore = ({
   addMore, formName, arrayName, title,
@@ -54,7 +55,6 @@ export default class BusinessPlan extends Component {
     const {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
       maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
-      updateStatuses,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -64,12 +64,13 @@ export default class BusinessPlan extends Component {
       review.businessPlan.submitted) ? review.businessPlan.submitted : null;
     const approved = (review && review.businessPlan && review.businessPlan &&
       review.businessPlan.approved) ? review.businessPlan.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+      && !isManager) || (isManager && approved && approved.status));
     const { confirmBox } = this.props.uiStore;
-    updateStatuses('businessPlan', submitted, approved);
     return (
       <Aux>
         <Form onSubmit={this.submit}>
+          <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
@@ -318,19 +319,15 @@ export default class BusinessPlan extends Component {
             changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', '', field)}
             dateOfBirth
           />
-          {!isManager && !approved &&
-          <div className="right-align">
-            <Button.Group>
-              {!submitted &&
-              <Button disabled={!BUSINESS_PLAN_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-              }
-              <Button onClick={() => this.submitWithApproval('BUSINESS_PLAN_FRM', 'REVIEW_SUBMITTED')} disabled={(!(BUSINESS_PLAN_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Approve Review'}</Button>
-            </Button.Group>
-          </div>
-          }
-          {(submitted || isManager) &&
-          <ManagerOverview approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
-          }
+          <ButtonGroup
+            formName="BUSINESS_PLAN_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={BUSINESS_PLAN_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
         <Confirm
           header="Confirm"

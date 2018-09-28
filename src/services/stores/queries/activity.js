@@ -13,12 +13,16 @@ export const allActivities = gql`
       activityTitle
       activity
       createdUserInfo {
-        firstName
-        lastName
-        avatar {
-          url
+        id
+        info {
+          firstName
+          lastName
+          avatar {
+            url
+            name
+          }
         }
-      }
+      }    
     }
   }
 }

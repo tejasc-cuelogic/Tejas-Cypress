@@ -5,6 +5,7 @@ import { Header, Table, Icon, Button, Form, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
 
 const TableHeader = () => (
   <Table.Header>
@@ -84,7 +85,7 @@ export default class Contingencies extends Component {
   render() {
     const {
       CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
-      toggleConfirmModal, removeData, updateStatuses,
+      toggleConfirmModal, removeData,
     } = this.props.businessAppReviewStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
@@ -94,11 +95,12 @@ export default class Contingencies extends Component {
       review.contingencies.submitted) ? review.contingencies.submitted : null;
     const approved = (review && review.contingencies && review.contingencies &&
       review.contingencies.approved) ? review.contingencies.approved : null;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved));
-    updateStatuses('contingencies', submitted, approved);
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form onSubmit={this.submit}>
+          <ManagerOverview isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
           <Header as="h5">
             Launch
           </Header>
@@ -113,19 +115,15 @@ export default class Contingencies extends Component {
             <TableHeader />
             <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="close" fields={CONTINGENCY_FRM.fields.close} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
-          {!isManager && !approved &&
-          <div className="right-align">
-            <Button.Group className="mt-20">
-              {!submitted &&
-              <Button className="" disabled={!CONTINGENCY_FRM.meta.isValid} secondary>Save</Button>
-              }
-              <Button onClick={() => this.submitWithApproval('CONTINGENCY_FRM', 'REVIEW_SUBMITTED')} disabled={(!(CONTINGENCY_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
-            </Button.Group>
-          </div>
-          }
-          {(submitted || isManager) &&
-          <ManagerOverview formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
-          }
+          <ButtonGroup
+            formName="CONTINGENCY_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={CONTINGENCY_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
         <Confirm
           header="Confirm"

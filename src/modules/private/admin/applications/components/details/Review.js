@@ -52,7 +52,8 @@ export default class Review extends Component {
   ));
   render() {
     const { match, businessAppReviewStore } = this.props;
-    const { subNavPresentation } = businessAppReviewStore;
+    const { subNavPresentation, updateStatuses } = businessAppReviewStore;
+    updateStatuses(navItems);
     return (
       <div className="inner-content-spacer">
         <Grid>

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Button, Divider, Confirm } from 'semantic-ui-react';
+import { Form, Divider, Confirm } from 'semantic-ui-react';
 import { FormTextarea, DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
 
 @inject('businessAppReviewStore', 'uiStore', 'businessAppStore', 'userStore')
 @observer
@@ -46,10 +47,12 @@ export default class Projections extends Component {
       review.projections.submitted) ? review.projections.submitted : false;
     const approved = (review && review.projections && review.projections &&
       review.projections.approved) ? review.projections.approved : false;
-    const isReadonly = ((submitted && !isManager) || (isManager && approved));
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <div>
         <Form onSubmit={this.submit}>
+          <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={PROJECTIONS_FRM.meta.isValid} formName="PROJECTIONS_FRM" />
           {
             ['reasonableHistoricals', 'projectionsComplete', 'revenueCheck'].map((field, index) => (
               <Aux>
@@ -111,19 +114,15 @@ export default class Projections extends Component {
             fielddata={PROJECTIONS_FRM.fields.existingLiabilities}
             changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
           />
-          {!isManager && !approved &&
-          <div className="right-align">
-            <Button.Group>
-              {!submitted &&
-              <Button disabled={!PROJECTIONS_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-              }
-              <Button onClick={() => this.submitWithApproval('PROJECTIONS_FRM', 'REVIEW_SUBMITTED')} disabled={(!(PROJECTIONS_FRM.meta.isValid) || submitted)} primary={!submitted} type="button">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
-            </Button.Group>
-          </div>
-          }
-          {(submitted || isManager) &&
-          <ManagerOverview approved={approved} isReadonly={isReadonly} isValid={PROJECTIONS_FRM.meta.isValid} formName="PROJECTIONS_FRM" />
-          }
+          <ButtonGroup
+            formName="PROJECTIONS_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={PROJECTIONS_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
         <Confirm
           header="Confirm"
