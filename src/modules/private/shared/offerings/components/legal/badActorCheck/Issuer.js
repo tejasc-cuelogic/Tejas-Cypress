@@ -4,15 +4,16 @@ import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Issuer extends Component {
   render() {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
     const { roles } = this.props.userStore.currentUser;
     const formName = 'ISSUER_FRM';
+    const { offer } = this.props.offeringsStore;
     return (
-      <Aux>
+      <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
         <Form>
           {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
@@ -96,7 +97,7 @@ export default class Issuer extends Component {
             </Button.Group>
           </div>
         </Form>
-      </Aux>
+      </div>
     );
   }
 }

@@ -301,6 +301,73 @@ export const OFFERING_OVERVIEW = {
       placeHolder: 'Type your text here ...',
     },
   }],
+  social: [
+    {
+      value: '',
+      label: 'Facebook',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'e.g. http://facebook.com/nextbrewery',
+      objRef: 'offering.overview.social',
+      find: 'type',
+      type: '',
+      url: '',
+      shareLink: '',
+      blurb: '',
+    },
+    {
+      value: '',
+      label: 'LinkedIn',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'e.g. http://linkedin.com/nextbrewery',
+      objRef: 'offering.overview.social',
+      find: 'type',
+      type: '',
+      url: '',
+      shareLink: '',
+      blurb: '',
+    },
+    {
+      value: '',
+      label: 'Twitter',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'e.g. http://twitter.com/nextbrewery',
+      objRef: 'offering.overview.social',
+      find: 'type',
+      type: '',
+      url: '',
+      shareLink: '',
+      blurb: '',
+    },
+    {
+      value: '',
+      label: 'Instagram',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'e.g. http://instagram.com/nextbrewery',
+      objRef: 'offering.overview.social',
+      find: 'type',
+      type: '',
+      url: '',
+      shareLink: '',
+      blurb: '',
+    },
+    {
+      value: '',
+      label: 'Yelp',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'e.g. http://yelp.com/nextbrewery',
+      objRef: 'offering.overview.social',
+      find: 'type',
+      type: '',
+      url: '',
+      shareLink: '',
+      blurb: '',
+    },
+  ],
   facebook_url: {
     value: '',
     label: 'Facebook',
@@ -1001,6 +1068,18 @@ export const GENERAL = {
     placeHolder: 'Enter here',
     objRef: 'legal.general.businessPhone',
     objType: 'businessPhone',
+    objRefOutput: 'businessPhone',
+
+  },
+  countryCode: {
+    label: '',
+    value: '1',
+    error: undefined,
+    rule: 'optional',
+    objRef: 'legal.general.businessPhone',
+    objType: 'businessPhone',
+    placeHolder: 'Enter here',
+    objRefOutput: 'businessPhone',
   },
   bankName: {
     label: 'Bank Name',
@@ -1034,18 +1113,20 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
-    objType: 'reachedMinOfferingGoal',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type your text here...',
+    objRefOutput: 'useOfProceeds',
   },
   reachedMaxOfferingGoal: {
     label: 'If maximum offering amount is reached:',
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
-    objType: 'reachedMaxOfferingGoal',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type your text here...',
+    objRefOutput: 'useOfProceeds',
   },
   rightsOfEqShareHolders: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
@@ -1210,9 +1291,9 @@ export const GENERAL = {
 export const RISK_FACTORS = {
   isBusinessRisk: {
     label: 'Business Risk',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   businessRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1224,9 +1305,9 @@ export const RISK_FACTORS = {
   },
   isFinancingRisk: {
     label: 'Financing Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   financingRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1238,9 +1319,9 @@ export const RISK_FACTORS = {
   },
   isDevelopmentRisk: {
     label: 'Development Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   developmentRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1252,9 +1333,9 @@ export const RISK_FACTORS = {
   },
   isReputationalRisk: {
     label: 'Reputational Risk',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   reputationalRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1266,9 +1347,9 @@ export const RISK_FACTORS = {
   },
   isCompetitionRisk: {
     label: 'Competition Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   competitionRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1280,9 +1361,9 @@ export const RISK_FACTORS = {
   },
   isMarketRisk: {
     label: 'Market Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   marketRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1294,9 +1375,9 @@ export const RISK_FACTORS = {
   },
   isTerrorismRisk: {
     label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   terrorismRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1308,9 +1389,9 @@ export const RISK_FACTORS = {
   },
   isManagementRisk: {
     label: 'Management Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   managementRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1322,9 +1403,9 @@ export const RISK_FACTORS = {
   },
   isPersonnelRisk: {
     label: 'Personnel Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   personnelRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1336,9 +1417,9 @@ export const RISK_FACTORS = {
   },
   isLaborSupplyRisk: {
     label: 'Labor Supply Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   laborSupplyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1350,9 +1431,9 @@ export const RISK_FACTORS = {
   },
   isPrivacyRisk: {
     label: 'Privacy Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   privacyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
@@ -1364,9 +1445,9 @@ export const RISK_FACTORS = {
   },
   isOtherRisk: {
     label: 'Other Risks',
-    value: '',
+    value: false,
     rule: 'alpha',
-    toSkip: true,
+    skipField: true,
   },
   otherRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',

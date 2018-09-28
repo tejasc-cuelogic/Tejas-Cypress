@@ -283,11 +283,8 @@
             padding:@12px;
             position:relative;
             .header{
-                font-weight:700;
+                font-weight:@fontMedium;
                 color:@fullBlack;
-            }
-            h4.header{
-                font-size:@16px;
             }
             .extra{
                 font-size:@13px;

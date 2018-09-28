@@ -19,7 +19,7 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
   </Header>
 );
 
-@inject('offeringCreationStore', 'uiStore')
+@inject('offeringCreationStore', 'uiStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Leader extends Component {
@@ -62,9 +62,10 @@ export default class Leader extends Component {
       setAddressFields,
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
+    const { offer } = this.props.offeringsStore;
     return (
       <Aux>
-        <Form>
+        <Form className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
             <Button.Group size="mini" floated="right">

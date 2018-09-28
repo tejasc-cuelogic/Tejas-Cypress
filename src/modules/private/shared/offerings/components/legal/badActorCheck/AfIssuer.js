@@ -5,7 +5,7 @@ import { Header, Form, Divider, Button, Icon, Confirm } from 'semantic-ui-react'
 import { FormTextarea, FormInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class AfIssuer extends Component {
   addMore = (e, formName) => {
@@ -35,9 +35,10 @@ export default class AfIssuer extends Component {
     const index = issuerNumber || 0;
     const formName = 'AFFILIATED_ISSUER_FRM';
     const { roles } = this.props.userStore.currentUser;
+    const { offer } = this.props.offeringsStore;
     return (
       <Aux>
-        <Form>
+        <Form className={offer.stage === 'CREATION' ? 'inner-content-spacer' : ''}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
               <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}>Delete Selected Issuer</Button>

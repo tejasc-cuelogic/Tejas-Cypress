@@ -86,13 +86,13 @@ export class OfferingCreationStore {
 
   @action
   formChange = (e, result, form) => {
-    if (result && result.name === 'isEarlyBirds' && !result.checked) {
+    if (result && (result.type === 'checkbox')) {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),
         '',
         true,
-        result.checked,
+        { value: result.checked },
       );
     } else {
       this[form] = Validator.onChange(

@@ -123,8 +123,11 @@
 }
 
 .collapsed-checkbox{
-	h4.ui.header .sub.header{
-		margin-top:@4px;
+	h4.ui.header{
+		font-size:@18px;
+		.sub.header{
+			margin-top:@4px;
+		}
 	}
 	.ui.checkbox .box, .ui.checkbox label{
 		&:before, &:after{

@@ -16,7 +16,7 @@ const MessagesList = props => (
         >
           <Item.Extra>
             {msg.messageDetails.read === '1' &&
-              <Label size="mini" color="red" horizontal>Response Needed</Label>
+              <Label size="mini" color="red" horizontal circular>Response Needed</Label>
             }
           </Item.Extra>
           <Image avatar src={ProfilePicTemp} />

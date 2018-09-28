@@ -27,7 +27,7 @@ class FormValidator {
     value: typeof data === 'undefined' ? e.target.value : data.value,
   });
 
-  onChange = (form, element, type, isDirty = true) => {
+  onChange = (form, element, type, isDirty = true, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let customErrMsg = {};
@@ -39,6 +39,8 @@ class FormValidator {
         } else {
           currentForm.fields[element.name].value.splice(index, 1);
         }
+      } else if (checked) {
+        currentForm.fields[element.name].value = checked.value;
       } else {
         currentForm.fields[element.name].value = element.value;
       }
@@ -311,7 +313,7 @@ class FormValidator {
           fields[key].value = data && typeof data === 'object' ? data[key] : data;
         }
         if (fields[key].refSelector) {
-          fields[key].refSelectorValue = fields[key].value !== '';
+          fields[fields[key].refSelector].value = fields[key].value !== null;
         }
       } catch (e) {
         // do nothing
