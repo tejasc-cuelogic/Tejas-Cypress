@@ -6,8 +6,9 @@ import ProfilePicTemp from '../../../../../../assets/images/james-wright.png';
 
 const D_FORMAT = 'MMMM D, YYYY';
 const Avatar = () => <Item.Image size="mini" avatar src={ProfilePicTemp} />;
-const MsgContent = ({ body }) => (
+const MsgContent = ({ body, extra }) => (
   <Item.Content>
+    {extra}
     <Item.Description><p>{body}</p></Item.Description>
   </Item.Content>
 );
@@ -26,7 +27,7 @@ const DateSeparator = ({ index, diff, date }) => (index === 0 || diff !== 0 ?
 
 const Body = props => (
   <div className="message-body">
-    <Item.Group className="messages">
+    <Item.Group className="messages comments">
       {
         props.thread.map((msg, index) => {
           const d2 = moment(msg.updatedAt).format(D_FORMAT);
@@ -39,16 +40,20 @@ const Body = props => (
               <DateSeparator index={index} diff={diff} date={d2} />
               <Item className={`${d2} in ${d1} ${diff}`}>
                 <Avatar />
-                <MsgContent body={msg.body} />
-                <Extra time={time} />
+                <MsgContent
+                  body={msg.body}
+                  extra={<Extra time={time} />}
+                />
               </Item>
             </Aux>
           ) : (
             <Aux>
               <DateSeparator index={index} diff={diff} date={d2} />
               <Item className={`${d2} sent ${d1} ${diff}`}>
-                <Extra sent time={time} read={msg.messageDetails.read} />
-                <MsgContent body={msg.body} />
+                <MsgContent
+                  body={msg.body}
+                  extra={<Extra sent time={time} read={msg.messageDetails.read} />}
+                />
                 <Avatar />
               </Item>
             </Aux>

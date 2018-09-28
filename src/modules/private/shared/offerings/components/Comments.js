@@ -17,7 +17,7 @@ export default class Comments extends Component {
       messages, current, loading, error,
     } = messageStore;
     return (
-      <Card fluid className="messages">
+      <Card fluid className="messages comments">
         <MessagesList
           match={match}
           messages={messages}
