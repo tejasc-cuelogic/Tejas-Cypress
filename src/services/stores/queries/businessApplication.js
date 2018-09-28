@@ -190,7 +190,6 @@ query _getBusinessApplicationById ($id: String!) {
         contactDetails {
           phone {
             number
-            countryCode
           }
         }
       }
