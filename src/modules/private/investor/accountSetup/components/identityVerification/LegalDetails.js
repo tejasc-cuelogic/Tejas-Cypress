@@ -24,7 +24,7 @@ const LegalDetails = observer(({
     <Modal.Content className="signup-content">
       {errors &&
         <Message error textAlign="left">
-          <ListErrors errors={[errors]} />
+          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
         </Message>
       }
       {form.response.qualifiers &&
