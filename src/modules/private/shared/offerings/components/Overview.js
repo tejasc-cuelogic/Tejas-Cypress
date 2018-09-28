@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { withRouter, Route } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
-import { Form, Header } from 'semantic-ui-react';
+import { Form, Header, Button } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 import AddNewContingency from './overview/AddNewContingency';
 import { FormInput } from '../../../../../theme/form';
@@ -13,6 +13,16 @@ import { FormInput } from '../../../../../theme/form';
 export default class Overview extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('OFFERING_DETAILS_FRM', false);
+    this.props.offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+    this.props.offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+  }
+  handleSubmitOfferingDetails = () => {
+    const {
+      OFFERING_DETAILS_FRM,
+      updateOffering,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, OFFERING_DETAILS_FRM.fields);
   }
   render() {
     const {
@@ -40,6 +50,7 @@ export default class Overview extends Component {
               ))
             }
           </Form.Group>
+          <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
           <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
         </Form>

@@ -101,9 +101,6 @@ export const getOfferingDetails = gql`
           contingency
           acceptance
           accepted {
-            id
-            date
-            by
             comment
           }
         }
@@ -112,9 +109,6 @@ export const getOfferingDetails = gql`
           contingency
           acceptance
           accepted {
-            id
-            date
-            by
             comment
           }
         }

@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
-import { map } from 'lodash';
+import { map, startCase } from 'lodash';
 import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateOffering } from '../../../queries/offerings/manage';
+import { updateOffering, getOfferingDetails } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -77,7 +77,7 @@ export class OfferingCreationStore {
 
   @action
   removeData = (formName, subForm = 'data') => {
-    // this[formName].fields[subForm].splice(this.removeIndex, 1);
+    this[formName].fields[subForm].splice(this.removeIndex, 1);
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
@@ -304,15 +304,16 @@ export class OfferingCreationStore {
 
   updateOffering = (id, fields, keyName, subKey) => {
     const { getOfferingById } = offeringsStore.offerData.data;
-    const payloadData = {
+    let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
     if (subKey) {
-      payloadData[keyName] = {};
-      payloadData[keyName][subKey] = Validator.evaluateFormData(fields);
+      payloadData = { ...payloadData, [keyName]: { [subKey]: Validator.evaluateFormData(fields) } };
+    } else if (keyName) {
+      payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
     } else {
-      payloadData[keyName] = Validator.evaluateFormData(fields);
+      payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
     uiStore.setProgress();
     client
@@ -322,9 +323,13 @@ export class OfferingCreationStore {
           id,
           offeringDetails: payloadData,
         },
+        refetchQueries: [{
+          query: getOfferingDetails,
+          variables: { id: getOfferingById.id },
+        }],
       })
       .then(() => {
-        Helper.toast(`${keyName} has been saved successfully.`, 'success');
+        Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
