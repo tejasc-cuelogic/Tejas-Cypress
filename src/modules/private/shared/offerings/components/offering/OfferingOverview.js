@@ -15,15 +15,16 @@ export default class OfferingOverview extends Component {
     this.props.offeringCreationStore.addMore('OFFERING_OVERVIEW_FRM', 'highlight');
   }
   handleFormSubmit = () => {
-    const { OFFERING_OVERVIEW_FRM, updateOffering } = this.props.offeringCreationStore;
-    const { offeringId } = this.props;
-    updateOffering(offeringId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview');
+    const {
+      OFFERING_OVERVIEW_FRM,
+      currentOfferingId, updateOffering,
+    } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview');
   }
   render() {
     const {
       OFFERING_OVERVIEW_FRM,
-      formChangeWithIndex,
-      formChange,
+      formArrayChange,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     return (
@@ -36,7 +37,7 @@ export default class OfferingOverview extends Component {
                 key={field}
                 name={field}
                 fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formArrayChange(e, result, formName)}
                 containerclassname="secondary"
                 hidelabel
               />
@@ -51,7 +52,7 @@ export default class OfferingOverview extends Component {
               name="highlight"
               label={`Bullet ${index + 1}`}
               fielddata={highlights.highlight}
-              changed={(e, result) => formChangeWithIndex(e, result, 'OFFERING_OVERVIEW_FRM', index)}
+              changed={(e, result) => formArrayChange(e, result, 'OFFERING_OVERVIEW_FRM', 'highlight', index)}
             />
           ))
         }
@@ -68,7 +69,7 @@ export default class OfferingOverview extends Component {
               key={field}
               name={field}
               fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
-              changed={(e, result) => formChange(e, result, formName)}
+              changed={(e, result) => formArrayChange(e, result, formName)}
             />
           ))
         }
@@ -82,24 +83,24 @@ export default class OfferingOverview extends Component {
         <FormInput
           name="facebook_shareLink"
           fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
-          changed={(e, result) => formChange(e, result, formName)}
+          changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <FormTextarea
           name="facebook_blurb"
           fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_blurb}
-          changed={(e, result) => formChange(e, result, formName)}
+          changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
         <Header as="h6">Twitter</Header>
         <FormInput
           name="twitter_shareLink"
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
-          changed={(e, result) => formChange(e, result, formName)}
+          changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <FormTextarea
           name="twitter_blurb"
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_blurb}
-          changed={(e, result) => formChange(e, result, formName)}
+          changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
         <Divider section />
@@ -111,7 +112,7 @@ export default class OfferingOverview extends Component {
         <FormTextarea
           name="googleMeta"
           fielddata={OFFERING_OVERVIEW_FRM.fields.googleMeta}
-          changed={(e, result) => formChange(e, result, formName)}
+          changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
         <Divider section />
@@ -121,7 +122,7 @@ export default class OfferingOverview extends Component {
         <FormInput
           name="issuerWebsite"
           fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
-          changed={(e, result) => formChange(e, result, formName)}
+          changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <Divider hidden />
         <div className="clearfix mb-20">
