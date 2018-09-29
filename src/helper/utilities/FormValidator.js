@@ -127,7 +127,8 @@ class FormValidator {
     return currentForm;
   }
 
-  onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
+  onArrayFieldChange =
+  (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let currentFormRelative;
@@ -152,6 +153,8 @@ class FormValidator {
         } else {
           currentFormRelative[element.name].value.splice(index, 1);
         }
+      } else if (checked) {
+        currentFormRelative[element.name].value = checked.value;
       } else {
         currentFormRelative[element.name].value = element.value;
       }
@@ -238,7 +241,7 @@ class FormValidator {
     const currentForm = form;
     currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
       this.addMoreFields(currentForm.fields[key], count) :
-      currentForm.refMetadata[key] ? this.addMoreFields(currentForm.refMetadata[key]) : [];
+      currentForm.refMetadata[key];
     currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }

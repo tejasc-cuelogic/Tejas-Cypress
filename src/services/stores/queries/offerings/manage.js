@@ -148,6 +148,8 @@ export const getOfferingDetails = gql`
         }
       }
       legal {
+        issuerBacId
+        affiliatedIssuerBacId
         general {
           websiteUrl
           monthLaunch
@@ -300,6 +302,85 @@ export const getOfferingDetails = gql`
 export const updateOffering = gql`
 mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id offeringDetails: $offeringDetails) {
+    id
+  }
+}
+`;
+
+export const getOfferingBac = gql`
+query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
+  getOfferingBac(
+    offeringId: $offeringId
+    filters: {
+      bacType: $bacType
+    }
+  ) {
+    id
+    offeringId
+    controlPersonQuestionnaire
+    residenceTenYears
+    legalName
+    email
+    bac1
+    bac2
+    bac3
+    bac4
+    bac5
+    bac6
+    bac7
+    bac8
+    civilLawsuit
+    ofac
+    onlineReputation
+    judgements
+    issuerDiligence
+    certificateFormation
+    operatingAgreement
+    evidenceGoodStanding
+    executiveTeam
+    isControlDiligence
+    isAffiliatedDiligence
+    submitted{
+      id
+      by
+      date
+    }
+    approved{
+      id
+      by
+      date
+      reportGeneratedDate
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+    deleted{
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const createBac = gql`
+mutation _createBAC($offeringBacDetails: OfferingBacInputType!) {
+  createOfferingBac(offeringBacDetails: $offeringBacDetails) {
+    id
+  }
+}
+`;
+
+export const updateBac = gql`
+mutation _updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
+  updateOfferingBac(id: $id offeringBacDetails: $offeringBacDetails) {
     id
   }
 }

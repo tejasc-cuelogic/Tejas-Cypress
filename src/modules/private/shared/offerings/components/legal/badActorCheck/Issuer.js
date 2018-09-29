@@ -7,6 +7,22 @@ import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Issuer extends Component {
+  componentWillMount() {
+    const { getOfferingBac, currentOfferingId } = this.props.offeringCreationStore;
+    getOfferingBac(currentOfferingId, 'ISSUER');
+  }
+  handleSubmitIssuer = () => {
+    const {
+      createOrUpdateOfferingBac,
+      issuerOfferingBac,
+      ISSUER_FRM,
+    } = this.props.offeringCreationStore;
+    let bacId = null;
+    if (issuerOfferingBac.length > 0) {
+      bacId = issuerOfferingBac.id;
+    }
+    createOrUpdateOfferingBac(bacId, 'ISSUER', ISSUER_FRM.fields);
+  }
   render() {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
     const { roles } = this.props.userStore.currentUser;
@@ -14,7 +30,7 @@ export default class Issuer extends Component {
     const { offer } = this.props.offeringsStore;
     return (
       <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
-        <Form>
+        <Form onSubmit={this.handleSubmitIssuer}>
           {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
               <Aux>

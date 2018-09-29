@@ -64,6 +64,7 @@ export default class Contingency extends Component {
         form.fields[dataKey].map((contingency, index) => (
           <div className="featured-section collapsed-checkbox">
             <Checkbox
+              name="isAccepted"
               label={
                 <label>
                   <Header as="h4">
@@ -74,7 +75,7 @@ export default class Contingency extends Component {
                   </Header>
                 </label>
               }
-              value={form.fields[dataKey][index].isAccepted.value}
+              checked={form.fields[dataKey][index].isAccepted.value}
               onChange={(e, result) => formArrayChange(e, result, formName, dataKey, index)}
             />
             <div className="checkbox-description">

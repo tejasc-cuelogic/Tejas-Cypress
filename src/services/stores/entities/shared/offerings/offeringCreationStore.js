@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
 import { map, startCase } from 'lodash';
+import graphql from 'mobx-apollo';
 import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateOffering, getOfferingDetails } from '../../../queries/offerings/manage';
+import { updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -36,6 +37,7 @@ export class OfferingCreationStore {
   @observable removeIndex = null;
   @observable initLoad = [];
   @observable currentOfferingId = null;
+  @observable issuerOfferingBac = {};
 
   @observable requestState = {
     search: {},
@@ -112,12 +114,23 @@ export class OfferingCreationStore {
 
   @action
   formArrayChange = (e, result, form, subForm = '', index) => {
-    this[form] = Validator.onArrayFieldChange(
-      this[form],
-      Validator.pullValues(e, result),
-      subForm,
-      index,
-    );
+    if (result && (result.type === 'checkbox')) {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+        '',
+        { value: result.checked },
+      );
+    } else {
+      this[form] = Validator.onArrayFieldChange(
+        this[form],
+        Validator.pullValues(e, result),
+        subForm,
+        index,
+      );
+    }
   }
 
   @action
@@ -330,6 +343,54 @@ export class OfferingCreationStore {
       })
       .then(() => {
         Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  getOfferingBac = (offeringId, bacType) => {
+    this.issuerOfferingBac = graphql({
+      client,
+      query: getOfferingBac,
+      variables: { offeringId, bacType },
+    });
+  }
+
+  createOrUpdateOfferingBac = (id, bacType, fields) => {
+    const { getOfferingById } = offeringsStore.offerData.data;
+    const { issuerBacId } = getOfferingById.legal;
+    const offeringBacDetails = Validator.evaluateFormData(fields);
+    offeringBacDetails.offeringId = getOfferingById.id;
+    offeringBacDetails.bacType = bacType;
+    let mutation = createBac;
+    let variables = {
+      offeringBacDetails,
+    };
+    if (issuerBacId) {
+      mutation = updateBac;
+      variables = {
+        id,
+        offeringBacDetails,
+      };
+    }
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables,
+        refetchQueries: [{
+          query: getOfferingDetails,
+          variables: { id: getOfferingById.id },
+        }],
+      })
+      .then(() => {
+        Helper.toast('Offering has been saved successfully.', 'success');
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));

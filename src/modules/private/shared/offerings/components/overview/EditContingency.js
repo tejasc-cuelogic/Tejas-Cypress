@@ -46,7 +46,7 @@ export default class EditContingency extends Component {
                 ))
               }
               <div className="center-align">
-                <Button disabled={!form.meta.isValid} className="relaxed" primary >Edit Contingency</Button>
+                <Button className="relaxed" primary >Edit Contingency</Button>
               </div>
             </Form>
           </Modal.Content>
