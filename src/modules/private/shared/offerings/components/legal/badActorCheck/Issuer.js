@@ -14,14 +14,9 @@ export default class Issuer extends Component {
   handleSubmitIssuer = () => {
     const {
       createOrUpdateOfferingBac,
-      issuerOfferingBac,
       ISSUER_FRM,
     } = this.props.offeringCreationStore;
-    let bacId = null;
-    if (issuerOfferingBac.length > 0) {
-      bacId = issuerOfferingBac.id;
-    }
-    createOrUpdateOfferingBac(bacId, 'ISSUER', ISSUER_FRM.fields);
+    createOrUpdateOfferingBac('ISSUER', ISSUER_FRM.fields);
   }
   render() {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;

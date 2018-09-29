@@ -414,7 +414,7 @@ export class OfferingCreationStore {
     });
   }
 
-  createOrUpdateOfferingBac = (id, bacType, fields) => {
+  createOrUpdateOfferingBac = (bacType, fields) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const { issuerBacId } = getOfferingById.legal;
     const offeringBacDetails = Validator.evaluateFormData(fields);
@@ -427,14 +427,14 @@ export class OfferingCreationStore {
     if (issuerBacId) {
       mutation = updateBac;
       variables = {
-        id,
+        id: issuerBacId,
         offeringBacDetails,
       };
     }
     uiStore.setProgress();
     client
       .mutate({
-        mutation: updateOffering,
+        mutation,
         variables,
         refetchQueries: [{
           query: getOfferingDetails,
