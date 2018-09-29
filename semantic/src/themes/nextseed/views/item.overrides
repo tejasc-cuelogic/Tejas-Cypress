@@ -30,12 +30,12 @@
                     margin-top:@21px;
                 }
             }
-            > .content{
+            >.content{
                 > .description{
                     margin:0;
                     padding:@12px @20px;
-                    font-size:@16px;
-                    line-height:@24px;
+                    font-size:@14px;
+                    line-height:@22px;
                     border-radius:@6px;
                     background-color:@neutral-offwhite;
                     white-space: pre-line;
@@ -70,6 +70,25 @@
                         background-color:transparent;
                         border:@borderColor 1px solid;
                     }
+                }
+            }
+        }
+        &.comments .item{
+            width:65%;
+            align-items:flex-end;
+            >.content{
+                margin-left:@14px;
+                padding:@10px @14px;
+                border-radius:@6px;
+                border-bottom-left-radius:0;
+                border:@neutral-offdark 1px solid;
+            }
+            &.sent{
+                margin-left:auto;
+                >.content{
+                    margin-left:0;
+                    margin-right:@14px;
+                    border-bottom-right-radius:0;
                 }
             }
         }

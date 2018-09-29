@@ -1,7 +1,8 @@
 import React from 'react';
 import { List, Image, Item, Label } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import ProfilePicTemp from '../../../../../../assets/images/james-wright.png';
+import user1 from '../../../../../../assets/images/user1.jpg';
+import user2 from '../../../../../../assets/images/user2.jpg';
 import { DateTimeFormat } from '../../../../../../theme/shared';
 
 const MessagesList = props => (
@@ -19,7 +20,10 @@ const MessagesList = props => (
               <Label size="mini" color="red" horizontal circular>Response Needed</Label>
             }
           </Item.Extra>
-          <Image avatar src={ProfilePicTemp} />
+          <div className="ui image">
+            <Image avatar src={user1} />
+            <Image avatar src={user2} />
+          </div>
           <List.Content>
             <List.Header as="h5">Mehul G, Loren C</List.Header>
           </List.Content>
