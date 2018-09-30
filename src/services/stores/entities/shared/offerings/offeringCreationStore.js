@@ -242,6 +242,10 @@ export class OfferingCreationStore {
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     return false;
   }
+  @action
+  setBacFormData = (form, data) => {
+    this[form] = Validator.setFormData(this[form], data);
+  }
 
   @action
   evaluateFormFieldToArray = (fields) => {
