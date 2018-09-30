@@ -415,6 +415,11 @@ export class OfferingCreationStore {
       client,
       query: getOfferingBac,
       variables: { offeringId, bacType },
+      onFetch: (res) => {
+        // if (res.data && res.data.getOfferingBac) {
+        this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
+        // }
+      },
     });
   }
 
