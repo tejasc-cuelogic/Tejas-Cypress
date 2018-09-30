@@ -11,6 +11,8 @@ export default class AffiliatedIssuer extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/1`);
     }
+    const { getOfferingBac, currentOfferingId } = this.props.offeringCreationStore;
+    getOfferingBac(currentOfferingId, 'AFFILIATED_ISSUER');
   }
   render() {
     const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
