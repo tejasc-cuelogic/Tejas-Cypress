@@ -439,7 +439,7 @@ export class OfferingCreationStore {
     });
   }
 
-  createOrUpdateOfferingBac = (bacType, fields) => {
+  createOrUpdateOfferingBac = (bacType, fields, issuerNumber = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const { issuerBacId } = getOfferingById.legal;
     const offeringBacDetails = Validator.evaluateFormData(fields);
@@ -454,6 +454,16 @@ export class OfferingCreationStore {
       variables = {
         id: issuerBacId,
         offeringBacDetails,
+      };
+    }
+    if (issuerNumber !== undefined) {
+      const payload = { ...offeringBacDetails.data[issuerNumber] };
+      payload.offeringId = getOfferingById.id;
+      payload.bacType = bacType;
+      const { affiliatedIssuerBacId } = getOfferingById.legal;
+      variables = {
+        offeringBacDetails: payload,
+        id: affiliatedIssuerBacId[issuerNumber],
       };
     }
     uiStore.setProgress();
