@@ -2,14 +2,21 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
+import { FormTextarea } from '../../../../../../../theme/form';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Issuer extends Component {
   componentWillMount() {
-    const { getOfferingBac, currentOfferingId } = this.props.offeringCreationStore;
+    const {
+      getOfferingBac,
+      currentOfferingId,
+      issuerOfferingBac,
+    } = this.props.offeringCreationStore;
     getOfferingBac(currentOfferingId, 'ISSUER');
+    if (issuerOfferingBac.data && issuerOfferingBac.data.getOfferingBac) {
+      this.props.offeringCreationStore.setBacFormData('ISSUER_FRM', issuerOfferingBac.data.getOfferingBac[0] || {});
+    }
   }
   handleSubmitIssuer = () => {
     const {
@@ -69,7 +76,7 @@ export default class Issuer extends Component {
               />
             ))
           }
-          {
+          {/* {
             ['isControlDiligence', 'isAffiliatedDiligence'].map(field => (
               <FormCheckbox
                 fielddata={ISSUER_FRM.fields[field]}
@@ -79,7 +86,7 @@ export default class Issuer extends Component {
                 containerclassname="ui relaxed list"
               />
             ))
-          }
+          } */}
           <Divider hidden />
           <div className="clearfix mb-20 right-align">
             <Button secondary content="Submit for Approval" disabled={!ISSUER_FRM.meta.isValid} />
