@@ -24,6 +24,14 @@ export default class AfIssuer extends Component {
     Helper.toast('Affiliated issuer has been deleted successfully.', 'success');
     this.props.history.push(`${this.props.refLink}/1`);
   }
+  handleSubmitIssuer = () => {
+    const {
+      createOrUpdateOfferingBac,
+      AFFILIATED_ISSUER_FRM,
+    } = this.props.offeringCreationStore;
+    const issuerNumber = this.props.index;
+    createOrUpdateOfferingBac('AFFILIATED_ISSUER', AFFILIATED_ISSUER_FRM.fields, issuerNumber);
+  }
   render() {
     const {
       AFFILIATED_ISSUER_FRM,
@@ -38,7 +46,7 @@ export default class AfIssuer extends Component {
     const { offer } = this.props.offeringsStore;
     return (
       <Aux>
-        <Form className={offer.stage === 'CREATION' ? 'inner-content-spacer' : ''}>
+        <Form onSubmit={this.handleSubmitIssuer} className={offer.stage === 'CREATION' ? 'inner-content-spacer' : ''}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
               <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}>Delete Selected Issuer</Button>

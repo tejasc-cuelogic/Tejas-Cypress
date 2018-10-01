@@ -11,12 +11,8 @@ export default class Issuer extends Component {
     const {
       getOfferingBac,
       currentOfferingId,
-      issuerOfferingBac,
     } = this.props.offeringCreationStore;
     getOfferingBac(currentOfferingId, 'ISSUER');
-    if (issuerOfferingBac.data && issuerOfferingBac.data.getOfferingBac) {
-      this.props.offeringCreationStore.setBacFormData('ISSUER_FRM', issuerOfferingBac.data.getOfferingBac[0] || {});
-    }
   }
   handleSubmitIssuer = () => {
     const {
