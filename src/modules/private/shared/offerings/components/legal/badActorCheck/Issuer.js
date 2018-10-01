@@ -77,7 +77,7 @@ export default class Issuer extends Component {
               <FormCheckbox
                 fielddata={ISSUER_FRM.fields[field]}
                 name={field}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formChange(e, result, formName, false)}
                 defaults
                 containerclassname="ui relaxed list"
               />
