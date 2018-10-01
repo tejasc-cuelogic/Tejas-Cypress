@@ -12,7 +12,7 @@ export default class AfIssuer extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName);
     const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
-    const issuerCount = AFFILIATED_ISSUER_FRM.fields.data.length;
+    const issuerCount = AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length;
     this.props.history.push(`${this.props.refLink}/${issuerCount}`);
   }
   toggleConfirmModal = (e, index, formName) => {
@@ -35,7 +35,7 @@ export default class AfIssuer extends Component {
   render() {
     const {
       AFFILIATED_ISSUER_FRM,
-      formChangeWithIndex,
+      formArrayChange,
       confirmModal,
       confirmModalName,
     } = this.props.offeringCreationStore;
@@ -55,8 +55,8 @@ export default class AfIssuer extends Component {
           </div>
           <FormInput
             name="legalName"
-            fielddata={AFFILIATED_ISSUER_FRM.fields.data[index].legalName}
-            changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+            fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].legalName}
+            changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
             containerclassname="secondary"
           />
           {
@@ -65,8 +65,8 @@ export default class AfIssuer extends Component {
                 <FormTextarea
                   key={field}
                   name={field}
-                  fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
-                  changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                  fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                   containerclassname="secondary"
                 />
               </Aux>
@@ -79,8 +79,8 @@ export default class AfIssuer extends Component {
               <FormTextarea
                 key={field}
                 name={field}
-                fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
-                changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
+                changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                 containerclassname="secondary"
               />
             ))
@@ -92,8 +92,8 @@ export default class AfIssuer extends Component {
               <FormTextarea
                 key={field}
                 name={field}
-                fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
-                changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
+                changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                 containerclassname="secondary"
               />
             ))

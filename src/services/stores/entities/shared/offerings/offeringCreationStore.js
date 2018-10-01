@@ -231,6 +231,7 @@ export class OfferingCreationStore {
   setAddressFields = (place, index) => {
     Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
   }
+
   /*
   *  Set form data
   */
@@ -243,9 +244,10 @@ export class OfferingCreationStore {
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     return false;
   }
+
   @action
-  setBacFormData = (form, data) => {
-    this[form] = Validator.setFormData(this[form], data);
+  setBacFormData = (form, data, ref) => {
+    this[form] = Validator.setFormData(this[form], data, ref);
   }
 
   @action
@@ -417,9 +419,9 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        // if (res.data && res.data.getOfferingBac) {
-        this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
-        // }
+        if (res && res.getOfferingBac) {
+          this.setBacFormData('ISSUER_FRM', res.getOfferingBac[0] || {});
+        }
       },
     });
   }
@@ -432,8 +434,8 @@ export class OfferingCreationStore {
       query: getOfferingBac,
       variables: { offeringId, bacType },
       onFetch: (res) => {
-        if (res.getOfferingBac) {
-          this.setBacFormData('AFFILIATED_ISSUER_FRM', res.getOfferingBac || {});
+        if (res && res.getOfferingBac) {
+          this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {}, false);
         }
       },
     });
@@ -457,14 +459,21 @@ export class OfferingCreationStore {
       };
     }
     if (issuerNumber !== undefined) {
-      const payload = { ...offeringBacDetails.data[issuerNumber] };
+      const payload = { ...offeringBacDetails.getOfferingBac[issuerNumber] };
       payload.offeringId = getOfferingById.id;
       payload.bacType = bacType;
       const { affiliatedIssuerBacId } = getOfferingById.legal;
-      variables = {
-        offeringBacDetails: payload,
-        id: affiliatedIssuerBacId[issuerNumber],
-      };
+      if (affiliatedIssuerBacId === null) {
+        variables = {
+          offeringBacDetails: payload,
+        };
+      } else {
+        mutation = updateBac;
+        variables = {
+          offeringBacDetails: payload,
+          id: affiliatedIssuerBacId[issuerNumber],
+        };
+      }
     }
     uiStore.setProgress();
     client
