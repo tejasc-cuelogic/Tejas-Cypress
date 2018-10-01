@@ -98,8 +98,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form) => {
-    if (result && (result.type === 'checkbox')) {
+  formChange = (e, result, form, isArr = true) => {
+    if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),

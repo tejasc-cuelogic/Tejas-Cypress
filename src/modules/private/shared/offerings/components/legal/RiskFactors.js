@@ -20,7 +20,7 @@ const FormData = observer(({
         </label>
       }
       checked={form.fields[checkboxField].value}
-      onChange={(e, result) => formChange(e, result, formName)}
+      onChange={(e, result) => formChange(e, result, formName, false)}
     />
     <div className="checkbox-description">
       <p>{form.fields[descriptionField].label}</p>
