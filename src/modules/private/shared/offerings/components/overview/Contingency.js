@@ -21,9 +21,9 @@ export default class Contingency extends Component {
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
   removeData = () => {
-    const { formName } = this.props;
-    const dataKey = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
-    this.props.offeringCreationStore.removeData(formName, dataKey);
+    const { confirmModalName } = this.props.offeringCreationStore;
+    const dataKey = confirmModalName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
+    this.props.offeringCreationStore.removeData(confirmModalName, dataKey);
     this.handleSubmitComment();
     Helper.toast('Contingency has been deleted successfully.', 'success');
   }

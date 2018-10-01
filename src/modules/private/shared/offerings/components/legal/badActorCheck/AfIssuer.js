@@ -12,7 +12,7 @@ export default class AfIssuer extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName);
     const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
-    const issuerCount = AFFILIATED_ISSUER_FRM.fields.data.length;
+    const issuerCount = AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length;
     this.props.history.push(`${this.props.refLink}/${issuerCount}`);
   }
   toggleConfirmModal = (e, index, formName) => {
@@ -24,10 +24,18 @@ export default class AfIssuer extends Component {
     Helper.toast('Affiliated issuer has been deleted successfully.', 'success');
     this.props.history.push(`${this.props.refLink}/1`);
   }
+  handleSubmitIssuer = () => {
+    const {
+      createOrUpdateOfferingBac,
+      AFFILIATED_ISSUER_FRM,
+    } = this.props.offeringCreationStore;
+    const issuerNumber = this.props.index;
+    createOrUpdateOfferingBac('AFFILIATED_ISSUER', AFFILIATED_ISSUER_FRM.fields, issuerNumber);
+  }
   render() {
     const {
       AFFILIATED_ISSUER_FRM,
-      formChangeWithIndex,
+      formArrayChange,
       confirmModal,
       confirmModalName,
     } = this.props.offeringCreationStore;
@@ -38,7 +46,7 @@ export default class AfIssuer extends Component {
     const { offer } = this.props.offeringsStore;
     return (
       <Aux>
-        <Form className={offer.stage === 'CREATION' ? 'inner-content-spacer' : ''}>
+        <Form onSubmit={this.handleSubmitIssuer} className={offer.stage === 'CREATION' ? 'inner-content-spacer' : ''}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
               <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}>Delete Selected Issuer</Button>
@@ -47,8 +55,8 @@ export default class AfIssuer extends Component {
           </div>
           <FormInput
             name="legalName"
-            fielddata={AFFILIATED_ISSUER_FRM.fields.data[index].legalName}
-            changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+            fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].legalName}
+            changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
             containerclassname="secondary"
           />
           {
@@ -57,8 +65,8 @@ export default class AfIssuer extends Component {
                 <FormTextarea
                   key={field}
                   name={field}
-                  fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
-                  changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                  fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                   containerclassname="secondary"
                 />
               </Aux>
@@ -71,8 +79,8 @@ export default class AfIssuer extends Component {
               <FormTextarea
                 key={field}
                 name={field}
-                fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
-                changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
+                changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                 containerclassname="secondary"
               />
             ))
@@ -84,8 +92,8 @@ export default class AfIssuer extends Component {
               <FormTextarea
                 key={field}
                 name={field}
-                fielddata={AFFILIATED_ISSUER_FRM.fields.data[index][field]}
-                changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
+                changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                 containerclassname="secondary"
               />
             ))
