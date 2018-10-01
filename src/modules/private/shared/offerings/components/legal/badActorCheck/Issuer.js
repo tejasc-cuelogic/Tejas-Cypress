@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormTextarea } from '../../../../../../../theme/form';
+import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
@@ -72,17 +72,17 @@ export default class Issuer extends Component {
               />
             ))
           }
-          {/* {
+          {
             ['isControlDiligence', 'isAffiliatedDiligence'].map(field => (
               <FormCheckbox
                 fielddata={ISSUER_FRM.fields[field]}
                 name={field}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formChange(e, result, formName, false)}
                 defaults
                 containerclassname="ui relaxed list"
               />
             ))
-          } */}
+          }
           <Divider hidden />
           <div className="clearfix mb-20 right-align">
             <Button secondary content="Submit for Approval" disabled={!ISSUER_FRM.meta.isValid} />
