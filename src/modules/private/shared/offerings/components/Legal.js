@@ -45,7 +45,6 @@ export default class Legal extends Component {
     ];
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
-    const { offer } = this.props.offeringsStore;
     return (
       <div className={!isIssuer ? 'inner-content-spacer' : ''}>
         <Grid>
