@@ -39,6 +39,7 @@ export class OfferingCreationStore {
   @observable currentOfferingId = null;
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
+  @observable leadershipOfferingBac = {};
 
   @observable requestState = {
     search: {},
@@ -436,6 +437,21 @@ export class OfferingCreationStore {
       onFetch: (res) => {
         if (res && res.getOfferingBac) {
           this.setBacFormData('AFFILIATED_ISSUER_FRM', res || {}, false);
+        }
+      },
+    });
+  }
+
+  @action
+  getLeadershipOfferingBac = (offeringId, bacType) => {
+    this.affiliatedIssuerOfferingBac = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: getOfferingBac,
+      variables: { offeringId, bacType },
+      onFetch: (res) => {
+        if (res && res.getOfferingBac) {
+          this.setBacFormData('LEADER_FRM', res || {}, false);
         }
       },
     });

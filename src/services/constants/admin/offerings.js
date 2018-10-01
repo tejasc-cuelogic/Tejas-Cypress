@@ -1612,8 +1612,8 @@ export const AFFILIATED_ISSUER = {
 };
 
 export const LEADER = {
-  data: [{
-    controlPersonQuestionaire: {
+  getOfferingBac: [{
+    controlPersonQuestionnaire: {
       label: 'Control Person Questionnaire',
       value: '',
       error: undefined,

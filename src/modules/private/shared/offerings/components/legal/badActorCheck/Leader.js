@@ -7,24 +7,39 @@ import { FormTextarea } from '../../../../../../../theme/form';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Leader extends Component {
+  componentWillMount() {
+    const {
+      getLeadershipOfferingBac,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
+  }
+  handleSubmitIssuer = () => {
+    const {
+      createOrUpdateOfferingBac,
+      LEADER_FRM,
+    } = this.props.offeringCreationStore;
+    const issuerNumber = this.props.index;
+    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, issuerNumber);
+  }
   render() {
-    const { LEADER_FRM, formChangeWithIndex } = this.props.offeringCreationStore;
+    const { LEADER_FRM, formArrayChange } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const { roles } = this.props.userStore.currentUser;
     const { offer } = this.props.offeringsStore;
     return (
-      <Form className={offer.stage === 'CREATION' ? 'inner-content-spacer' : 'mt-20'}>
+      <Form onSubmit={this.handleSubmitIssuer} className={offer.stage === 'CREATION' ? 'inner-content-spacer' : 'mt-20'}>
         <Header as="h4">Control Person Diligence</Header>
         {
-          ['controlPersonQuestionaire', 'residenceTenYears'].map(field => (
+          ['controlPersonQuestionnaire', 'residenceTenYears'].map(field => (
             <Aux>
               <FormTextarea
                 key={field}
                 name={field}
-                fielddata={LEADER_FRM.fields.data[index][field]}
-                changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+                fielddata={LEADER_FRM.fields.getOfferingBac[index][field]}
+                changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
                 containerclassname="secondary"
               />
             </Aux>
@@ -37,8 +52,8 @@ export default class Leader extends Component {
             <FormTextarea
               key={field}
               name={field}
-              fielddata={LEADER_FRM.fields.data[index][field]}
-              changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+              fielddata={LEADER_FRM.fields.getOfferingBac[index][field]}
+              changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
               containerclassname="secondary"
             />
           ))
@@ -50,8 +65,8 @@ export default class Leader extends Component {
             <FormTextarea
               key={field}
               name={field}
-              fielddata={LEADER_FRM.fields.data[index][field]}
-              changed={(e, result) => formChangeWithIndex(e, result, formName, index)}
+              fielddata={LEADER_FRM.fields.getOfferingBac[index][field]}
+              changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
               containerclassname="secondary"
             />
           ))
