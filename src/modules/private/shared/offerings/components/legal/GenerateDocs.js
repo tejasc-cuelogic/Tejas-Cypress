@@ -70,12 +70,6 @@ export default class GenerateDocs extends Component {
                 </Table.Cell>
               </Table.Row>
             </Table.Body>
-            <Table.Footer>
-              <Table.Row>
-                <Table.HeaderCell>Total</Table.HeaderCell>
-                <Table.HeaderCell colSpan="2">sfasdf</Table.HeaderCell>
-              </Table.Row>
-            </Table.Footer>
           </Table>
         </Form>
       </div>
