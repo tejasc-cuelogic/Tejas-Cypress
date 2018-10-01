@@ -1,6 +1,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../api/gcoolApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allCampaigns, campaignDetailsQuery } from '../../queries/campagin';
 
 export class CampaignStore {
@@ -22,7 +23,13 @@ export class CampaignStore {
 
   @action
   getCampaignDetails = (id) => {
-    this.details = graphql({ client, query: campaignDetailsQuery, variables: { id } });
+    console.log(id);
+    this.details = graphql({
+      client: clientPublic,
+      query: campaignDetailsQuery,
+      // variables: { id },
+      variables: { id: '0e1335d0-b6a1-11e8-9be7-857a6efbd9c7' },
+    });
   }
 
   @computed get allData() {
@@ -35,8 +42,8 @@ export class CampaignStore {
   }
 
   @computed get campaign() {
-    return (this.details.data && this.details.data.Campaign &&
-      toJS(this.details.data.Campaign)) || [];
+    return (this.details.data && this.details.data.getOfferingDetailsById &&
+      toJS(this.details.data.getOfferingDetailsById)) || [];
   }
 
   @computed get loading() {

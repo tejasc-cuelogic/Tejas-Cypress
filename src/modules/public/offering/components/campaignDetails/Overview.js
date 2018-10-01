@@ -35,8 +35,10 @@ class Overview extends Component {
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header>
                 <p>
-                  <b>Industry: </b>{campaign.industry}<br />
-                  <b>Investment Type: </b>{campaign.investmentType}
+                  <b>Industry: </b>
+                  {campaign && campaign.keyTerms && campaign.keyTerms.industry}<br />
+                  <b>Investment Type: </b>
+                  {campaign && campaign.selectedOffer && campaign.selectedOffer.structure}
                   <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <a target="blank" href="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor">See some examples</a>.</span>)} />
                 </p>
                 <p className="detail-section">{campaign.description}</p>
@@ -95,19 +97,25 @@ class Overview extends Component {
                   <Grid.Column>
                     <Statistic size="mini" className="basic">
                       <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>1.6x</Statistic.Value>
+                      <Statistic.Value>
+                        {campaign && campaign.keyTerms ? campaign.keyTerms.investmentMultiple : '-'}
+                      </Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
                     <Statistic size="mini" className="basic">
                       <Statistic.Label>Revenue Sharing <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>4%</Statistic.Value>
+                      <Statistic.Value>
+                        {campaign && campaign.keyTerms ? campaign.keyTerms.revSharePercentage : '-'}
+                      </Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
                     <Statistic size="mini" className="basic">
                       <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>48 months</Statistic.Value>
+                      <Statistic.Value>
+                        {campaign && campaign.keyTerms ? campaign.keyTerms.maturity : '-'}
+                      </Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
@@ -120,13 +128,17 @@ class Overview extends Component {
                           position="top center"
                         />
                       </Statistic.Label>
-                      <Statistic.Value>Monthly</Statistic.Value>
+                      <Statistic.Value>
+                        {campaign && campaign.keyTerms ? campaign.keyTerms.frequencyOfPayments : '-'}
+                      </Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
                     <Statistic size="mini" className="basic">
                       <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem Ipsum" position="top center" /></Statistic.Label>
-                      <Statistic.Value>0%</Statistic.Value>
+                      <Statistic.Value>
+                        {campaign && campaign.keyTerms ? campaign.keyTerms.securitiesOwnershipPercentage : '-'}
+                      </Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                   <Grid.Column>
@@ -145,7 +157,9 @@ class Overview extends Component {
                           hoverable
                         />
                       </Statistic.Label>
-                      <Statistic.Value>Reg CF </Statistic.Value>
+                      <Statistic.Value>
+                        {campaign && campaign.keyTerms ? campaign.keyTerms.securities : '-'}
+                      </Statistic.Value>
                     </Statistic>
                   </Grid.Column>
                 </Grid>

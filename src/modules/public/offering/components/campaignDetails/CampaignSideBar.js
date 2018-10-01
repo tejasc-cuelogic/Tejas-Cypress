@@ -39,7 +39,7 @@ export default class CampaignSideBar extends Component {
               {title}
               <Header.Subheader>{address}</Header.Subheader>
             </Header>
-            <CampaignProgress data={{ needed, collected }} />
+            <CampaignProgress data={{ needed: needed || 0, collected: collected || 0 }} />
             <p>
               <Icon name="flag" /> Surpassed minimum goal
             </p>
