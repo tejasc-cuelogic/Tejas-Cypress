@@ -1559,7 +1559,7 @@ export const ISSUER = {
   judgements: { ...COMMON.pendingLiens },
   onlineReputation: { ...COMMON.generalOnlineReputationSearch },
   isControlDiligence: {
-    value: [],
+    value: false,
     values: [
       {
         label: 'Completed All Control Person Diligence',
@@ -1570,7 +1570,7 @@ export const ISSUER = {
     rule: 'alpha',
   },
   isAffiliatedDiligence: {
-    value: [],
+    value: false,
     values: [
       {
         label: 'Completed All Affiliated Issuer Diligence',

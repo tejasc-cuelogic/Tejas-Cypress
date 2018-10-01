@@ -516,7 +516,12 @@ export class OfferingCreationStore {
         {
           query: getOfferingBac,
           variables: { offeringId: getOfferingById.id, bacType: 'AFFILIATED_ISSUER' },
-        }],
+        },
+        {
+          query: getOfferingBac,
+          variables: { offeringId: getOfferingById.id, bacType: 'ISSUER' },
+        },
+        ],
       })
       .then(() => {
         Helper.toast('Offering has been saved successfully.', 'success');
