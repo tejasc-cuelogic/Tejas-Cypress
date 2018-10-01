@@ -10,6 +10,7 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
+
 export default class BadActorCheck extends Component {
   module = name => DataFormatter.upperCamelCase(name);
 

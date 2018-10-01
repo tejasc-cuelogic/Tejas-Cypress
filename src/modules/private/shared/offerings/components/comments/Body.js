@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
-import { Label, Item } from 'semantic-ui-react';
+import { Label, Item, Header } from 'semantic-ui-react';
 import ProfilePicTemp from '../../../../../../assets/images/james-wright.png';
 
 const D_FORMAT = 'MMMM D, YYYY';
@@ -42,7 +42,12 @@ const Body = props => (
                 <Avatar />
                 <MsgContent
                   body={msg.body}
-                  extra={<Extra time={time} />}
+                  extra={
+                    <Aux>
+                      <Header as="h6">Loren Chosen</Header>
+                      <Extra time={time} />
+                    </Aux>
+                  }
                 />
               </Item>
             </Aux>
@@ -52,7 +57,12 @@ const Body = props => (
               <Item className={`${d2} sent ${d1} ${diff}`}>
                 <MsgContent
                   body={msg.body}
-                  extra={<Extra sent time={time} read={msg.messageDetails.read} />}
+                  extra={
+                    <Aux>
+                      <Header as="h6">Brandon Black</Header>
+                      <Extra sent time={time} read={msg.messageDetails.read} />
+                    </Aux>
+                  }
                 />
                 <Avatar />
               </Item>

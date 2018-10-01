@@ -1585,7 +1585,7 @@ export const ISSUER = {
 };
 
 export const AFFILIATED_ISSUER = {
-  data: [{
+  getOfferingBac: [{
     legalName: {
       label: 'Legal Name',
       value: '',

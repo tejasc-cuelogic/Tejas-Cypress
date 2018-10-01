@@ -20,7 +20,7 @@ export default class AffiliatedIssuer extends Component {
   render() {
     const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
     const navItems = [];
-    AFFILIATED_ISSUER_FRM.fields.data.map((issuer, index) => {
+    AFFILIATED_ISSUER_FRM.fields.getOfferingBac.map((issuer, index) => {
       navItems.push({ title: `Affiliated Issuer ${index + 1}`, to: `${index + 1}` });
       return navItems;
     });
