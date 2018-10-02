@@ -225,7 +225,7 @@
 		}
 		~.pusher .icon.hamburger{
 			font-size:@20px;
-			color:@neutral-middark;
+			color:@white;
 			position:absolute;
 			top:20px;
 			left:18px;

@@ -121,6 +121,7 @@
         width:665px;
     }
     >.close{
+        position:fixed;
         top:@7px;
         right:@7px;
         opacity:0.5;
@@ -518,8 +519,8 @@
     .title-meta{
         margin-left:1.5rem;
         font-size:@14px;
-        font-weight:@fontMedium;
-        color:@tertiary-text;
+        font-weight:@normal;
+        color:@neutral;
         vertical-align:middle;
         i.icon{
             font-size:1.428571em;

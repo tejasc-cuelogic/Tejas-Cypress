@@ -1,20 +1,26 @@
+/* eslint-disable no-underscore-dangle */
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
+import moment from 'moment';
 import { mapValues, replace, map, mapKeys, isArray, toArray, reduce, includes } from 'lodash';
 import CustomValidations from './CustomValidations';
 import Helper from '../utility';
 
 class FormValidator {
-  prepareFormObject = (fields, isDirty = false, isFieldValid = true, isValid = false) => ({
-    fields: { ...fields },
-    meta: {
-      isValid,
-      error: '',
-      isDirty,
-      isFieldValid,
-    },
-    response: {},
-  });
+  emptyDataSet = { data: [] };
+
+  prepareFormObject =
+    (fields, isDirty = false, isFieldValid = true, isValid = false, metaData) => ({
+      fields: { ...fields },
+      refMetadata: metaData ? { ...metaData } : { ...fields },
+      meta: {
+        isValid,
+        error: '',
+        isDirty,
+        isFieldValid,
+      },
+      response: {},
+    });
 
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
@@ -65,7 +71,7 @@ class FormValidator {
     return currentForm;
   }
 
-  validateForm = (form, isMultiForm = false, showErrors = false) => {
+  validateForm = (form, isMultiForm = false, showErrors = false, isBusinessPlanRequired = true) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let validation;
@@ -81,10 +87,16 @@ class FormValidator {
     } else {
       const formData = this.ExtractFormValues(toJS(currentForm.fields));
       let formRules = this.ExtractFormRules(toJS(currentForm.fields));
-      formRules = {
-        ...formRules,
-        businessPlan: 'required',
-      };
+      if (isBusinessPlanRequired) {
+        formRules = {
+          ...formRules,
+          businessPlan: 'required',
+        };
+      } else {
+        formRules = {
+          ...formRules,
+        };
+      }
       validation = new Validator(
         formData,
         formRules,
@@ -207,6 +219,207 @@ class FormValidator {
       currentForm.meta.isValid = false;
       currentForm.meta.isFieldValid = false;
     }
+  }
+  resetFormToEmpty = metaData => this.prepareFormObject(metaData || this.emptyDataSet);
+
+  getMetaData = form => form.refMetadata;
+
+  getRefFromObjRef = (objRef, data) => {
+    let tempRef = false;
+    objRef.split('.').map((k) => {
+      tempRef = !tempRef ? data[k] : tempRef[k];
+      return tempRef;
+    });
+    return tempRef;
+  }
+  addMoreRecordToSubSection = (form, key, count = 1) => {
+    const currentForm = form;
+    currentForm.fields[key] = currentForm.fields[key] ?
+      this.addMoreFields(currentForm.refMetadata[key], count) : [];
+    currentForm.meta = { ...currentForm.meta, isValid: false };
+    return currentForm;
+  }
+  addMoreFields = (fields, count = 1) => {
+    const arrayData = [...toJS(fields)];
+    for (let i = count; i > 0; i -= 1) {
+      arrayData.push(this.resetMoreFieldsObj(toJS(fields)[0]));
+    }
+    return arrayData;
+  }
+  resetMoreFieldsObj = (formFields) => {
+    const fields = formFields;
+    Object.keys(fields).forEach((key) => {
+      if (fields[key] && Array.isArray(toJS(fields[key]))) {
+        fields[key] = this.resetMoreFieldsObj(fields[key]);
+      } else if (fields[key].objType === 'FileObjectType') {
+        fields[key] = {
+          ...fields[key],
+          ...{
+            value: '', fileId: '', preSignedUrl: '', fileData: '',
+          },
+        };
+      } else {
+        fields[key].value = '';
+      }
+    });
+    return fields;
+  }
+  setDataForLevel = (refFields, data, keepAtLeastOne) => {
+    const fields = { ...refFields };
+    Object.keys(fields).map((key) => {
+      try {
+        if (fields[key] && Array.isArray(toJS(fields[key]))) {
+          const tempRef = toJS(fields[key])[0].objRef ?
+            this.getRefFromObjRef(fields[key][0].objRef, data) : false;
+          if ((data && data[key] && data[key].length > 0) ||
+          (tempRef && tempRef[key] && tempRef[key].length > 0)) {
+            const addRec = ((data[key] && data[key].length) ||
+            (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
+            fields[key] = this.addMoreFields(fields[key], addRec);
+            (data[key] || tempRef[key]).forEach((record, index) => {
+              fields[key][index] = this.setDataForLevel(
+                fields[key][index],
+                (data[key] && data[key][index]) || (tempRef[key] && tempRef[key][index]),
+                keepAtLeastOne,
+              );
+            });
+          } else if (!keepAtLeastOne) {
+            fields[key] = [];
+          }
+        } else if (fields[key].objRef) {
+          const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
+          if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
+            fields[key].value = tempRef[key].fileName;
+            fields[key].fileId = tempRef[key].fileId;
+          } else if (fields[key].objType === 'DATE') {
+            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
+          } else {
+            const fieldRef = key.split('_');
+            fields[key].value = fields[key].find ?
+              tempRef.find(o => o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]] :
+              tempRef[key];
+          }
+        } else if (key === 'value') {
+          fields[key] = data && typeof data === 'string' ? data : data[key];
+        } else if (fields[key].objType === 'FileObjectType') {
+          fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
+          fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
+        } else if (fields[key].objType === 'DATE') {
+          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
+        } else {
+          fields[key].value = data && typeof data === 'object' ? data[key] : data;
+        }
+        if (fields[key].refSelector) {
+          fields[key].refSelectorValue = fields[key].value !== '';
+        }
+      } catch (e) {
+        // do nothing
+      }
+      return fields;
+    });
+    return fields;
+  }
+
+  setFormData = (form, dataSrc, ref, keepAtLeastOne = true) => {
+    let currentForm = form;
+    const data = ref ? this.getRefFromObjRef(ref, dataSrc) : dataSrc;
+    currentForm = this.resetFormToEmpty(currentForm.refMetadata);
+    currentForm.fields = this.setDataForLevel(currentForm.fields, data, keepAtLeastOne);
+    return currentForm;
+  };
+
+  evaluateObjectRef = (objRef, inputData, key, value) => {
+    let tempRef = inputData;
+    const rejObjects = objRef.split('.');
+    if (rejObjects.length === 1) {
+      tempRef = { ...inputData, [rejObjects[0]]: { ...inputData[[rejObjects[0]]], [key]: value } };
+    } else if (rejObjects.length === 2) {
+      tempRef = {
+        ...inputData,
+        [rejObjects[0]]: { [rejObjects[1]]: { ...inputData[[rejObjects[1]]], [key]: value } },
+      };
+    } else if (rejObjects.length === 3) {
+      tempRef = {
+        ...inputData,
+        [rejObjects[0]]: {
+          [rejObjects[1]]: { [rejObjects[2]]: { ...inputData[[rejObjects[2]]], [key]: value } },
+        },
+      };
+    }
+    return tempRef;
+  }
+
+  evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
+
+  evalDateObj = date => moment(date).toISOString();
+
+  evaluateFormData = (fields) => {
+    let inputData = {};
+    map(fields, (ele, key) => {
+      try {
+        if (!fields[key].skipField) {
+          const records = toJS(fields[key]);
+          let reference = false;
+          if (fields[key] && Array.isArray(records)) {
+            if (fields[key] && fields[key].length > 0) {
+              const arrObj = [];
+              records.forEach((field) => {
+                let arrayFieldsKey = {};
+                let arrayFields = {};
+                map(field, (eleV, keyRef1) => {
+                  if (!eleV.skipField) {
+                    let reference2 = false;
+                    let reference2Val = field[keyRef1].value;
+                    if (eleV.objRefOutput && !reference) {
+                      reference = eleV.objRefOutput;
+                    }
+                    if (eleV.objRefOutput2 && !reference2) {
+                      reference2 = eleV.objRefOutput2;
+                    }
+                    if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
+                      reference2Val = this.evalFileObj(field[keyRef1]);
+                    } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
+                      reference2Val = this.evalDateObj(field[keyRef1].value);
+                    }
+                    if (reference2) {
+                      arrayFields =
+                      this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
+                    } else {
+                      arrayFields = { ...arrayFields, [keyRef1]: reference2Val };
+                    }
+                    arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
+                  }
+                });
+                arrObj.push(arrayFieldsKey);
+                if (reference) {
+                  inputData = this.evaluateObjectRef(reference, inputData, [key], arrObj);
+                } else {
+                  inputData = { ...inputData, [key]: arrObj };
+                }
+              });
+            }
+          } else {
+            if (fields[key].objRefOutput && !reference) {
+              reference = fields[key].objRefOutput;
+            }
+            let objValue = fields[key].value;
+            if (fields[key].objType && fields[key].objType === 'FileObjectType') {
+              objValue = this.evalFileObj(fields[key]);
+            } else if (fields[key].objType && fields[key].objType === 'DATE') {
+              objValue = this.evalDateObj(fields[key].value);
+            }
+            if (reference) {
+              inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
+            } else {
+              inputData = { ...inputData, [key]: objValue };
+            }
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    });
+    return inputData;
   }
 }
 

@@ -25,6 +25,7 @@ import {
 import Helper from '../../../../helper/utility';
 import {
   getBusinessApplicationsById,
+  getBusinessApplicationsDetailsAdmin,
   getPrequalBusinessApplicationsById,
   getBusinessApplications,
   createBusinessApplicationPrequalificaiton,
@@ -35,7 +36,7 @@ import {
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, userDetailsStore, businessAppLendioStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -142,6 +143,46 @@ export class BusinessAppStore {
   });
 
   @action
+  fetchAdminApplicationById = (appId, appType, userId) => new Promise((resolve) => {
+    this.setFieldvalue('applicationId', appId);
+    const applicationType = appType === 'prequal-failed' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    let payLoad = {
+      applicationId: appId,
+      applicationType,
+    };
+    if (applicationType === 'APPLICATION_COMPLETED') {
+      payLoad = { ...payLoad, userId };
+    }
+    uiStore.setAppLoader(true);
+    uiStore.setLoaderMessage('Getting application data');
+    this.businessApplicationsDataById = graphql({
+      client,
+      query: getBusinessApplicationsDetailsAdmin,
+      variables: payLoad,
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
+        const {
+          prequalDetails, signupCode, businessGeneralInfo,
+        } = data.businessApplicationsDetailsAdmin;
+        businessAppAdminStore
+          .setBusinessDetails(
+            ((businessGeneralInfo && businessGeneralInfo.businessName) ||
+            (prequalDetails.businessGeneralInfo.businessName)),
+            signupCode,
+          );
+        this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
+        uiStore.setAppLoader(false);
+        resolve(data);
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setAppLoader(false);
+      },
+    });
+  });
+
+  @action
   getBusinessApplications = () => {
     // applicationList
     this.businessApplicationsList = graphql({
@@ -161,25 +202,35 @@ export class BusinessAppStore {
   }
 
   @action
-  setBusinessApplicationData = (isPartialApp) => {
+  setBusinessApplicationData = (isPartialApp, outputData = null) => {
     this.formReset();
+    if (outputData) {
+      this.setFieldvalue('formReadOnlyMode', true);
+      this.setFieldvalue('isPrequalQulify', true);
+    }
     this.step = 'performace';
-    const data = !isPartialApp ? this.fetchBusinessApplicationsDataById :
+    const data = outputData ? outputData : !isPartialApp ? this.fetchBusinessApplicationsDataById :
       this.fetchPrequalBusinessApplicationsDataById;
     if (data) {
       if (!isPartialApp) {
-        this.setPrequalDetails(data.prequalDetails);
-        this.setBusinessDetails(data.businessDetails);
-        this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
-        this.setDocumentationDetails(data.businessDocumentation);
-        if (data.applicationStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+        if ((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
+          this.setPrequalDetails(data);
+        } else {
+          this.setPrequalDetails(data.prequalDetails);
+          this.setBusinessDetails(data.businessDetails);
+          this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
+          this.setDocumentationDetails(data.businessDocumentation);
+        }
+        if ((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
           this.formReadOnlyMode = true;
-        } else if (data.applicationStatus ===
+        } else if ((data.applicationStatus || data.prequalStatus) ===
           BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
           this.appStepsStatus[0].status = 'IN_PROGRESS';
         }
         this.setFieldvalue('currentApplicationType', data.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
-        navStore.setAccessParams('appStatus', data.applicationStatus);
+        navStore.setAccessParams('appStatus', (data.applicationStatus || data.prequalStatus));
         this.setPrequalBasicDetails();
       }
       if (data.lendio) {
@@ -195,10 +246,12 @@ export class BusinessAppStore {
   @action
   setPrequalBasicDetails = () => {
     this.isPrequalQulify = true;
-    const { userDetails } = userDetailsStore;
-    this.BUSINESS_APP_FRM_BASIC.fields.firstName.value = userDetails.firstName;
-    this.BUSINESS_APP_FRM_BASIC.fields.lastName.value = userDetails.lastName;
-    this.BUSINESS_APP_FRM_BASIC.fields.email.value = userDetails.email;
+    const { info, email } = userDetailsStore.userDetails;
+    if (info && email) {
+      this.BUSINESS_APP_FRM_BASIC.fields.firstName.value = info.firstName;
+      this.BUSINESS_APP_FRM_BASIC.fields.lastName.value = info.lastName;
+      this.BUSINESS_APP_FRM_BASIC.fields.email.value = email.address;
+    }
   }
 
   @action
@@ -340,27 +393,29 @@ export class BusinessAppStore {
           });
         }
       }
-    } else if (this.currentApplicationType === 'business') {
-      ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
-        const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
-        this.BUSINESS_PERF_FRM.fields[field[key]].value =
-        prequalData.performanceSnapshot.nextYearSnapshot[ele];
-      });
-      if (this.getBusinessTypeCondtion) {
+    } else if (prequalData) {
+      if (this.currentApplicationType === 'business') {
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
-          const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
+          const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
           this.BUSINESS_PERF_FRM.fields[field[key]].value =
-          prequalData.performanceSnapshot.pastYearSnapshot[ele];
+          prequalData.performanceSnapshot.nextYearSnapshot[ele];
         });
-      } else {
-        ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+        if (this.getBusinessTypeCondtion) {
+          ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
+            const field = ['pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'];
+            this.BUSINESS_PERF_FRM.fields[field[key]].value =
+            prequalData.performanceSnapshot.pastYearSnapshot[ele];
+          });
+        } else {
+          ['priorToThreeYear', 'ytd', 'pyCogs', 'pyGrossSales', 'pyNetIncome', 'pyOperatingExpenses'].forEach((ele) => {
+            this.BUSINESS_PERF_FRM.fields[ele].rule = '';
+          });
+        }
+      } else if (!this.getOwnPropertyCondtion) {
+        ['priorToThreeYear', 'ytd'].forEach((ele) => {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
         });
       }
-    } else if (!this.getOwnPropertyCondtion) {
-      ['priorToThreeYear', 'ytd'].forEach((ele) => {
-        this.BUSINESS_PERF_FRM.fields[ele].rule = '';
-      });
     }
     this.BUSINESS_PERF_FRM = Validator.validateForm(this.BUSINESS_PERF_FRM);
   }
@@ -410,6 +465,13 @@ export class BusinessAppStore {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.businessApplication
       && toJS(this.businessApplicationsDataById.data.businessApplication)
+    ) || null;
+  }
+
+  @computed get businessApplicationDetailsAdmin() {
+    return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
+      && this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin
+      && toJS(this.businessApplicationsDataById.data.businessApplicationsDetailsAdmin)
     ) || null;
   }
 

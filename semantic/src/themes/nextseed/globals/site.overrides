@@ -24,7 +24,7 @@ section{
 		display: block;
 	}
 }
-//	Helper Classes
+//	Helper Classes Starts
 iframe{
 	border:none;
 }
@@ -145,19 +145,25 @@ h6{
 		margin-bottom:0px;
 	}
 }
-a{
+//	normal link styles
+a:not(.item), a:not(.ui.button){
 	color:@link-color;
 	&:hover{
-		text-decoration:underline;
+		text-decoration:underline !important;
 	}
+}
+a{
 	&.inverted{
 		color:@white;
 	}
-}
-a.text-link{
-	color:@tertiary-text;
-	&:hover, &:active, &.active{
-		color:@neutral;
+	&.secondary-link{
+		color:@primary-two !important;
+	}
+	&.text-link{
+		color:@tertiary-text;
+		&:hover, &:active, &.active{
+			color:@neutral;
+		}
 	}
 }
 .invisible{
@@ -175,6 +181,7 @@ a.text-link{
 .primary-block {
 	background-color: @primary-two;
 }
+//	Helper Classes Ends
 
 // Footer Styles
 footer{
@@ -950,7 +957,18 @@ a.icon-link:hover {
 	padding:@50px 0px;
 }
 .inner-content-spacer{
-	padding:@20px;
+	padding:@20px !important;
+	+ .inner-content-spacer{
+		border-top:@neutral-midwhite 1px solid;
+	}
+	.field .ui.label{
+		background: transparent;
+		padding: 0px 0 14px;
+		color: @neutral;
+	}
+	p b {
+		color: @neutral;
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;
@@ -1123,6 +1141,28 @@ div.login-form {
 		padding:0 @4px;
 		margin-right:@14px;
 		background:@primary-two;
+		display:inline-block;
+		font-size:@11px;
+		line-height:@19px;
+		font-weight:@fontMedium;
+		color:@white;
+		text-align:center;
+		border-radius:@3px;
+	}
+	.ui.button.link-button{
+		padding:@11px 0;
+	}
+	&.more{
+		background-color:@neutral-midwhite;
+	}
+}
+.page-header-section, .search-filters{
+	span.filter-count{
+		height:19px;
+		min-width:19px;
+		padding:0 @4px;
+		margin-right:@14px;
+		background:@primary-one;
 		display:inline-block;
 		font-size:@11px;
 		line-height:@19px;
@@ -1657,7 +1697,7 @@ svg:not(:root).recharts-surface{
 			}
 		}
 	}
-	>.ui.header{
+	>h3.ui.header{
 		margin-bottom:@28px;
 		.sub.header{
 			margin-top:@10px;
@@ -1667,8 +1707,9 @@ svg:not(:root).recharts-surface{
 		margin-bottom:@28px;
 	}
 	.field-wrap{
-		padding:@40px;
 		height:100%;
+		margin:0;
+		padding:@40px;
 		@media only screen and (max-width:@largestMobileScreen){
 			padding:@25px;
 		}
@@ -1803,7 +1844,7 @@ p.check-extra-info{
 			color:@neutral-offdark;
 			position:absolute;
 			right:-26px;
-			top:50px;
+			top:50%;
 			transform:translate(0%, -50%);
 		}
 		&:last-of-type{
