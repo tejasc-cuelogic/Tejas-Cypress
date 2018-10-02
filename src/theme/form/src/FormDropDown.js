@@ -8,18 +8,20 @@ const FormDropDown = observer((props) => {
   const { label, error } = props.fielddata;
   return (
     <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''}>
-      <label>
-        {label}
-        {props.tooltip &&
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={props.tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
-        }
-      </label>
+      {!props.ishidelabel && label !== '' &&
+        <label>
+          {label}
+          {props.tooltip &&
+            <Popup
+              trigger={<Icon className="ns-help-circle" />}
+              content={props.tooltip}
+              position="top center"
+              className="center-align"
+              wide
+            />
+          }
+        </label>
+      }
       <Dropdown {...props} />
       <div className="dropdown-effect">{label}</div>
       {error &&

@@ -4,9 +4,9 @@ import { FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form'
 import FormElementWrap from '../FormElementWrap';
 
 const GeneralInformation = props => (
-  <FormElementWrap header="General Information">
+  <FormElementWrap hideFields={props.hideFields} header="General Information">
     <Grid>
-      <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+      <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
           {
             ['businessName', 'website'].map(field => (
@@ -30,7 +30,7 @@ const GeneralInformation = props => (
           />
         </div>
       </Grid.Column>
-      <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+      <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
           <Header as="h6">
             {props.currentApplicationType === 'business' ? 'Business Address' : 'Entity Address '}

@@ -14,12 +14,12 @@ export class Admin {
   /**
    * @desc Creates New user from parameters that have been stored in store
    */
-  createNewUser = () => {
+  createNewUser = (userDetails = null) => {
     uiStore.reset();
     uiStore.setProgress();
     uiStore.setLoaderMessage('Creating new user');
 
-    const user = mapValues(userStore.USR_FRM.fields, f => f.value);
+    const user = userDetails || mapValues(userStore.USR_FRM.fields, f => f.value);
     const attributes = [];
     Object.keys(user).map((item) => {
       if (item !== 'TemporaryPassword' && item !== 'verifyPassword') {

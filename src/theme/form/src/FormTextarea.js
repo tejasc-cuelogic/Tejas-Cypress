@@ -2,6 +2,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, TextArea } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
 const FormTextarea = observer((props) => {
@@ -14,18 +15,25 @@ const FormTextarea = observer((props) => {
   } = props.fielddata;
   return (
     <Form.Field className={props.containerclassname || ''} error={!!error}>
+      {!props.hidelabel && label !== '' &&
       <label>
-        {label}
-        {tooltip &&
-          <Popup
-            trigger={<Icon className="ns-help-circle" />}
-            content={tooltip}
-            position="top center"
-            className="center-align"
-            wide
-          />
-        }
+          {props.label || label}
+          {tooltip &&
+            <Popup
+              trigger={<Icon className="ns-help-circle" />}
+              content={tooltip}
+              position="top center"
+              className="center-align"
+              wide
+            />
+          }
+          {props.removed &&
+            <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Icon className="ns-close-circle" color="grey" />
+            </Link>
+          }
       </label>
+      }
       <TextArea
         {...props}
         value={value}
