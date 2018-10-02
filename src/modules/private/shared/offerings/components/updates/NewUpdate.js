@@ -59,8 +59,8 @@ export default class NewUpdate extends Component {
                   />
                   <HtmlEditor
                     changed={FChange}
-                    name="description"
-                    content={PBUILDER_FRM.fields.description.value}
+                    name="content"
+                    content={PBUILDER_FRM.fields.content.value}
                   />
                 </Form>
               </Grid.Column>

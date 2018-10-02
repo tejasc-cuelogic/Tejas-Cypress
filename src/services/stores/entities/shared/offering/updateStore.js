@@ -1,9 +1,10 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../../api/gcoolApi';
+import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES } from '../../../../constants/offering';
+import { offeringCreationStore } from '../../../index';
 import {
   allUpdates, newUpdate, getUpdate, editUpdate,
 } from '../../../queries/offering/Updates';
@@ -19,7 +20,8 @@ export class UpdateStore {
 
     @action
     initRequest = () => {
-      this.data = graphql({ client, query: allUpdates });
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
+      this.data = graphql({ client, query: allUpdates, variables });
     }
 
     @action
@@ -47,13 +49,18 @@ export class UpdateStore {
     @action
     save = (id, status) => {
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
+      data.offeringId = offeringCreationStore.currentOfferingId;
+      data.scope = 'INVESTORS';
+      data.isEarlyBirdOnly = false;
       client
         .mutate({
           mutation: id === 'new' ? newUpdate : editUpdate,
-          variables: id === 'new' ? data : { ...data, id },
-          refetchQueries: [{ query: allUpdates }],
+          variables: id === 'new' ? { updatesInput: data } :
+            { ...{ updatesInput: data }, id },
+          refetchQueries: [{ query: allUpdates, variables }],
         })
         .then(() => {
           Helper.toast('Update added.', 'success');
@@ -70,7 +77,7 @@ export class UpdateStore {
         variables: { id },
         onFetch: (res) => {
           Object.keys(this.PBUILDER_FRM.fields).map((key) => {
-            this.PBUILDER_FRM.fields[key].value = res.Update[key];
+            this.PBUILDER_FRM.fields[key].value = res.offeringUpdatesById[key];
             return null;
           });
           Validator.validateForm(this.PBUILDER_FRM);
@@ -93,7 +100,7 @@ export class UpdateStore {
     }
 
     @computed get updates() {
-      return (this.data.data && toJS(this.data.data.allUpdates)) || [];
+      return (this.data.data && toJS(this.data.data.offeringUpdatesByOfferId)) || [];
     }
 
     @computed get loading() {
