@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { FormCheckbox, FormInput, MaskedInput, FormTextarea, DropZone, AutoComplete } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, FormTextarea, DropZone, AutoComplete } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 
 const HeaderWithTooltip = ({ header, tooltip }) => (
@@ -24,7 +24,7 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
 @observer
 export default class Leader extends Component {
   onFileDrop = (files, name, index) => {
-    this.props.offeringCreationStore.setFileUploadData('LEADERSHIP_FRM', name, files, index);
+    this.props.offeringCreationStore.setFileUploadData('LEADERSHIP_FRM', name, files, 'leadership', index);
   }
   confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
@@ -48,17 +48,18 @@ export default class Leader extends Component {
   }
   handleFormSubmit = () => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership');
+    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields);
   }
   render() {
     const leaderNumber = this.props.index;
+    const formName = 'LEADERSHIP_FRM';
     const index = leaderNumber || 0;
     const {
       confirmModal,
       confirmModalName,
       LEADERSHIP_FRM,
-      formChangeWithIndex,
-      maskChangeWithIndex,
+      formArrayChange,
+      maskArrayChange,
       setAddressFields,
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
@@ -70,16 +71,16 @@ export default class Leader extends Component {
             {`Leader ${index + 1}`}
             <Button.Group size="mini" floated="right">
               <Button secondary className="relaxed" content="Save" onClick={this.handleFormSubmit} disabled={!LEADERSHIP_FRM.meta.isValid} />
-              <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, 'LEADERSHIP_FRM')} />
+              <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
             </Button.Group>
           </Header>
-          <FormCheckbox
+          {/* <FormCheckbox
             fielddata={LEADERSHIP_FRM.fields.leadership[index].isPublic}
             name="isPublic"
-            changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+            changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             defaults
             containerclassname="ui relaxed list"
-          />
+          /> */}
           <Header as="h4">Personal Info</Header>
           <Form.Group widths={2}>
             {
@@ -87,7 +88,7 @@ export default class Leader extends Component {
                 <FormInput
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                  changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
                 />
               ))
             }
@@ -95,7 +96,7 @@ export default class Leader extends Component {
               name="number"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].number}
               format="###-###-####"
-              changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
+              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               phoneNumber
             />
           </Form.Group>
@@ -104,7 +105,7 @@ export default class Leader extends Component {
               name="dob"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].dob}
               format="##/##/####"
-              changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
+              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />
             <MaskedInput
@@ -112,29 +113,29 @@ export default class Leader extends Component {
               type="tel"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
               ssn
-              changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
+              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput
               name="citizenship"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].citizenship}
-              changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             />
             <MaskedInput
               name="percentOwned"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].percentOwned}
               percentage
-              changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
+              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput
               name="companyPosition"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].companyPosition}
-              changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+              changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             />
             <MaskedInput
               name="dateOfService"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].dateOfService}
               format="##-##-####"
-              changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
+              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />
           </Form.Group>
@@ -143,7 +144,7 @@ export default class Leader extends Component {
             name="street"
             fielddata={LEADERSHIP_FRM.fields.leadership[index].street}
             onplaceselected={place => setAddressFields(place, index)}
-            changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+            changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             placeHolder="Street Address, City, State, Zip"
           />
           <Form.Group widths="equal">
@@ -152,14 +153,14 @@ export default class Leader extends Component {
                 <FormInput
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                  changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
                 />
               ))
             }
             <MaskedInput
               name="zip"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].zip}
-              changed={(values, name) => maskChangeWithIndex(values, 'LEADERSHIP_FRM', name, index)}
+              changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               zipCode
             />
           </Form.Group>
@@ -167,7 +168,7 @@ export default class Leader extends Component {
           <FormTextarea
             name="bio"
             fielddata={LEADERSHIP_FRM.fields.leadership[index].bio}
-            changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+            changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             containerclassname="secondary"
             hidelabel
           />
@@ -178,7 +179,7 @@ export default class Leader extends Component {
               <FormInput
                 name={field}
                 fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+                changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
               />
             ))
           }
@@ -206,7 +207,7 @@ export default class Leader extends Component {
               <FormTextarea
                 name={field}
                 fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                changed={(e, result) => formChangeWithIndex(e, result, 'LEADERSHIP_FRM', index)}
+                changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
                 containerclassname="secondary"
               />
             ))

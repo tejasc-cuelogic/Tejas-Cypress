@@ -30,7 +30,7 @@ export default class AccList extends Component {
       match, data, module, marketing,
     } = this.props;
     const params = {
-      subItems: `${module}Items`,
+      subItems: `${module}ItemList`,
       item: module === 'faq' ? 'question' : 'title',
     };
     const { selected } = this.props.educationStore;

@@ -179,13 +179,13 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, index = null) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null) => {
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
-        { name: field, value: fileData.fileName }, 'data', index,
+        { name: field, value: fileData.fileName }, subForm, index,
       );
     } else {
       this[form] = Validator.onChange(
