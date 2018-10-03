@@ -144,6 +144,7 @@ export default class ApplicationDetails extends Component {
                           ['businessName', 'signupCode'].map(field => (
                             <FormInput
                               containerclassname={this.state.displaOnly ? 'display-only' : ''}
+                              readOnly={this.state.displaOnly}
                               key={field}
                               type="text"
                               name={field}
