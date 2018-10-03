@@ -429,7 +429,7 @@ textarea{
         line-height:initial;
         background-color:transparent;
         >p{
-            color:@neutral-offdark;
+            color:@neutral-middark;
             font-weight:@normal;
             font-style:italic;
         }
