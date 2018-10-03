@@ -1,52 +1,52 @@
 import gql from 'graphql-tag';
 
 export const allUpdates = gql`
-  query allUpdates{
-    allUpdates(orderBy: createdAt_DESC) {
+  query _fetchUpdatesByOfferId ($offerId: String!) {
+    offeringUpdatesByOfferId (
+      offerId: $offerId
+    ) {
       id
-      createdAt
-      updatedAt
       title
+      updated {
+        date
+      }
       status
-      lastUpdate
+      scope
+      content
     }
   }
 `;
 
 export const newUpdate = gql`
-  mutation CreateUpdate($title: String!, $status: String!, $lastUpdate: String!, $description: String){
-    createUpdate(title: $title, status: $status, lastUpdate: $lastUpdate, description: $description) {
+  mutation _createOfferingUpdates ($updatesInput: OfferingUpdatesInput! ) {
+    createOfferingUpdates (updatesInput: $updatesInput) {
       id
-      createdAt
-      title
-      status
-      lastUpdate
-      description
     }
   }
 `;
 
 export const getUpdate = gql`
-  query oneUpdate($id: ID) {
-    Update(id: $id) {
+  query _fetchOfferingUpdatesById ($id: ID!) {
+    offeringUpdatesById (
+      id: $id
+    ) {
       id
-      createdAt
       title
       status
-      lastUpdate
-      description
+      scope
+      content
     }
   }
 `;
 
 export const editUpdate = gql`
-  mutation UpdateUpdate($id: ID!, $title: String!, $lastUpdate: String!, $status: String!, $description: String!){
-    updateUpdate(id: $id, title: $title, lastUpdate: $lastUpdate, status: $status, description: $description) {
+  mutation _updateOfferingUpdates ($id: ID!, $updatesInput: OfferingUpdatesInput!) {
+    updateOfferingUpdatesInfo (
+      id: $id,
+      updatesInput: $updatesInput
+    ) {
       id
       title
-      status
-      lastUpdate
-      description
     }
   }
 `;

@@ -30,7 +30,7 @@ const Listing = (props) => {
               <Table.Row key={record.id}>
                 <Table.Cell><Link to={`${props.match.url}/${record.id}`}>{record.title}</Link></Table.Cell>
                 <Table.Cell>Public</Table.Cell>
-                <Table.Cell><DateTimeFormat datetime={record.updatedAt} /></Table.Cell>
+                <Table.Cell><DateTimeFormat datetime={record.updated.date} /></Table.Cell>
                 <Table.Cell className={`status ${kebabCase(record.status)}`}>{record.status}</Table.Cell>
                 <Table.Cell textAlign="right">{record.lastUpdate}</Table.Cell>
               </Table.Row>

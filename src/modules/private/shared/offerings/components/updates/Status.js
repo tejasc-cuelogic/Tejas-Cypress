@@ -2,9 +2,9 @@ import React from 'react';
 import { Label } from 'semantic-ui-react';
 
 const SMap = {
-  draft: { color: 'red', label: 'Draft' },
-  submit_for_approval: { color: 'red', label: 'Waiting for approval' },
-  published: { color: 'green', label: 'Published' },
+  DRAFT: { color: 'red', label: 'Draft' },
+  PENDING: { color: 'red', label: 'Waiting for approval' },
+  PUBLISHED: { color: 'green', label: 'Published' },
 };
 
 const Status = ({ status }) => (
