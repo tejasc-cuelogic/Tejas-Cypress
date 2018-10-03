@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map } from 'lodash';
+import { map, forEach } from 'lodash';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -8,6 +8,7 @@ import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../constants/businessApplication';
 import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
+import { fileUpload } from '../../../../actions';
 
 export class BusinessAppReviewStore {
   @observable APPLICATION_STATUS_COMMENT_FRM =
@@ -134,6 +135,53 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  setFormFileArray = (formName, field, getField, value, index) => {
+    if (field === 'resume') {
+      this[formName].fields.owners[index][field][getField] = value;
+    } else if (getField === 'showLoader' || getField === 'error') {
+      this[formName].fields[field][getField] = value;
+    } else {
+      this[formName].fields[field][getField] =
+      [...this[formName].fields[field][getField],
+        value];
+    }
+  }
+
+  @action
+  businessAppUploadFiles = (files, fieldName, formName, index = null) => {
+    if (typeof files !== 'undefined' && files.length) {
+      forEach(files, (file) => {
+        const fileData = Helper.getFormattedFileData(file);
+        const stepName = this.getFileUploadEnum(fieldName, index);
+        this.setFieldvalue('isFileUploading', true);
+        this.setFormFileArray(formName, fieldName, 'showLoader', true, index);
+        fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            this.setFormFileArray(formName, fieldName, 'fileData', file, index);
+            this.setFormFileArray(formName, fieldName, 'preSignedUrl', preSignedUrl, index);
+            this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
+            this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
+            this.setFormFileArray(formName, fieldName, 'error', undefined, index);
+            if (this.currentApplicationType === 'business' && (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn')) {
+              this.checkValidationForTaxReturn();
+            }
+          }).catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+          });
+        }).catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+        }).finally(() => {
+          this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
+          this.setFieldvalue('isFileUploading', false);
+        });
+      });
+    }
+  }
+
+  @action
   removeUploadedData = (form, arrayName = 'data', field, index = null) => {
     if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
@@ -197,14 +245,16 @@ export class BusinessAppReviewStore {
     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
     uiStore.setProgress();
-    const payload = {
+    let payload = {
       actionType: 'APPLICATION_STATUS',
       applicationId,
-      userId,
       applicationSource,
       applicationFlag,
       comments: comment !== '' ? { text: comment } : formInputData,
     };
+    if (userId !== 'new') {
+      payload = { ...payload, userId };
+    }
     let reFetchPayLoad = {
       applicationId,
       applicationType: applicationSource,

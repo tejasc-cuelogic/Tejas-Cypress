@@ -5,13 +5,14 @@ import { uiStore } from '../../stores';
 import apiService from '../../../api/restApi';
 
 export class FileUpload {
-  setFileUploadData = (applicationId, fileData, stepName, userRole) =>
+  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '') =>
     new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: createUploadEntry,
           variables: {
             applicationId,
+            applicationIssuerId,
             stepName,
             userRole,
             fileData,
