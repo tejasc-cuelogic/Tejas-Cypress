@@ -44,6 +44,10 @@
                 text-overflow:ellipsis;
                 cursor:default;
             }
+            p.commet-area{
+                font-weight:500;
+                color:@neutral;
+            }
         }
     }
     .otp-wrap{
