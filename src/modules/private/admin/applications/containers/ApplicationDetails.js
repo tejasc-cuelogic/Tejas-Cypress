@@ -84,7 +84,7 @@ export default class ApplicationDetails extends Component {
     }
     const {
       id, applicationId, userId, applicationStatus, prequalStatus, prequalDetails, primaryPOC,
-      signupCode, rating, businessGeneralInfo, firstName, lastName, failReasons, email,
+      signupCode, rating, businessGeneralInfo, firstName, lastName, failReasons, email, deleted,
     } = businessApplicationDetailsAdmin;
     let navItems = [
       { title: 'Activity History', to: 'activity-history', component: ActivityHistory },
@@ -97,6 +97,11 @@ export default class ApplicationDetails extends Component {
         { title: 'Business Details', to: 'business-details' },
         { title: 'Performance', to: 'performance' },
         { title: 'Documentation', to: 'documentation' },
+      ];
+    }
+    if (!deleted) {
+      navItems = [
+        ...navItems,
         { title: 'Review', to: 'review' },
       ];
     }

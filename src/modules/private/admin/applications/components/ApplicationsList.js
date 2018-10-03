@@ -99,7 +99,7 @@ export default class ApplicationsList extends Component {
                             {application.prequalDetails ?
                             application.prequalDetails.businessGeneralInfo.businessName
                               : application.businessGeneralInfo.businessName}
-                            <AppStatusLabel />
+                            <AppStatusLabel application={application} />
                             {/* <AppStatusLabel status={application.status} /> */}
                           </Header>
                           <div className="table-info-wrap">
