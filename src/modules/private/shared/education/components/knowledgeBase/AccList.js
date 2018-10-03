@@ -27,11 +27,11 @@ export default class AccList extends Component {
   }
   render() {
     const {
-      match, data, module, marketing,
+      match, data, marketing,
     } = this.props;
     const params = {
-      subItems: `${module}ItemList`,
-      item: module === 'faq' ? 'question' : 'title',
+      subItems: 'knowledgeBaseItemList',
+      item: 'title',
     };
     const { selected } = this.props.educationStore;
     return (
@@ -45,7 +45,7 @@ export default class AccList extends Component {
                 index={record.id}
                 refItem={record[params.subItems].length > 0 ? record[params.subItems][0].id : ''}
               >
-                {record[params.item]}
+                {record.categoryName}
                 <Icon className="ns-chevron-down" />
               </Accordion.Title>
               <Accordion.Content active={this.isActive(record, params.subItems)}>

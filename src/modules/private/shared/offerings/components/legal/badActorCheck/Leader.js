@@ -19,8 +19,8 @@ export default class Leader extends Component {
       createOrUpdateOfferingBac,
       LEADER_FRM,
     } = this.props.offeringCreationStore;
-    const issuerNumber = this.props.index;
-    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, issuerNumber);
+    const leaderNumber = this.props.index;
+    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber);
   }
   render() {
     const { LEADER_FRM, formArrayChange } = this.props.offeringCreationStore;

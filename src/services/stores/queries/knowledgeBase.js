@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const allKbsQuery = gql`
+export const allKbsAndFaqsQuery = gql`
 query getListOfFAQsAndKnowledgeBase($categoryType: CategoryTypeEnum!) {
   faqAndKnowledgeBaseItems (categoryType: $categoryType) {
     id
@@ -8,21 +8,8 @@ query getListOfFAQsAndKnowledgeBase($categoryType: CategoryTypeEnum!) {
     knowledgeBaseItemList {
       id
       title
+      content
     }
   }
 }
-`;
-
-export const allFaqQuery = gql`
-  query getFaqs($scopeType: FaqTypeEnum!) {
-    faqs(scopeType: $scopeType) {
-      id
-      question
-      faqItems {
-        id
-        question
-        answer
-      }
-    }
-  }
 `;
