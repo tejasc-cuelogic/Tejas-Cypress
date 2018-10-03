@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { map } from 'lodash';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import moment from 'moment';
 import { FormInput, FormCheckbox, FormDatePicker } from '../../../../../../theme/form';
@@ -10,11 +11,17 @@ export default class AddNewBonusReward extends Component {
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
+  handleAddBonusReward = () => {
+    const { createBonusReward } = this.props.offeringCreationStore;
+    createBonusReward();
+    this.props.history.push(this.props.refLink);
+  }
   render() {
     const {
       ADD_NEW_BONUS_REWARD_FRM,
       formChange,
       verifyExpDate,
+      bonusRewardTierChange,
     } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_BONUS_REWARD_FRM';
     return (
@@ -24,7 +31,7 @@ export default class AddNewBonusReward extends Component {
         </Modal.Header>
         {
           <Modal.Content className="signup-content">
-            <Form>
+            <Form onSubmit={this.handleAddBonusReward}>
               <div className="featured-section">
                 <FormCheckbox
                   fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds}
@@ -33,6 +40,20 @@ export default class AddNewBonusReward extends Component {
                   defaults
                   containerclassname="ui relaxed list"
                 />
+                {map(ADD_NEW_BONUS_REWARD_FRM.fields, ((field) => {
+                  if (!field.key) {
+                    return null;
+                  }
+                  return (
+                    <FormCheckbox
+                      fielddata={field}
+                      name={field.key}
+                      changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
+                      defaults
+                      containerclassname="ui relaxed list"
+                    />
+                  );
+                }))}
                 {
                   ['name', 'description'].map(field => (
                     <FormInput
