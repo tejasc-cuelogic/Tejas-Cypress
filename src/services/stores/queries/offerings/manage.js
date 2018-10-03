@@ -268,6 +268,29 @@ export const getOfferingDetails = gql`
         totalCommittedAmount
         totalInvestorCount
       }
+      bonusRewards{
+        id
+        offeringId
+        title
+        description
+        rewardStatus
+        expirationDate
+        tiers{
+          amount
+          earlyBirdQuantity
+        }
+        created{
+          id
+          by
+          date
+        }
+        updated{
+          id
+          by
+          date
+        }
+      }
+  
       applicationId
       issuerId
       lead {
@@ -391,6 +414,108 @@ export const deleteBac = gql`
 mutation _deleteBac($id: String! $offeringId: String!){
   deleteOfferingBac(id: $id  offeringId: $offeringId) {
     id
+  }
+}
+`;
+
+export const createBonusRewardsTier = gql`
+mutation _createBonusRewardTier($bonusRewardTierDetails: BonusRewardTierInputType!){
+  createBonusRewardTier(bonusRewardTierDetails: $bonusRewardTierDetails) {
+    amount
+    earlyBirdQuantity
+    created{
+      id
+      date
+      by
+    }
+  }
+}
+`;
+
+export const getBonusRewardsTiers = gql`
+query _getBonusRewardTiers{
+  getBonusRewardTiers {
+    amount
+    earlyBirdQuantity
+    created{
+      id
+      date
+      by
+    }
+  }
+}
+`;
+
+export const createBonusReward = gql`
+mutation _createBonusReward($bonusRewardDetails: BonusRewardInputType!){
+  createBonusReward(
+    bonusRewardDetails: $bonusRewardDetails
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const deleteBonusRewardsTierByOffering = gql`
+mutation _deleteBonusRewardTiersByOffering{
+  deleteBonusRewardsByTierId(
+    offeringId: "8a65cb20-b80e-11e8-a4aa-87285e168369",
+    bonusRewardTierId: {
+      amount: 50,
+      earlyBirdQuantity: 0
+    }
+  ) {
+    id
+    rewardsTierIds{
+      amount
+      earlyBirdQuantity
+    }
+  }
+}
+`;
+
+export const getBonusRewards = gql`
+query _getBonusRewards($offeringId: String!){
+  getBonusRewards(offeringId: $offeringId){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
   }
 }
 `;

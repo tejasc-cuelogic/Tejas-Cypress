@@ -19,7 +19,7 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
   </Header>
 );
 
-@inject('offeringCreationStore', 'uiStore', 'offeringsStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore')
 @withRouter
 @observer
 export default class Leader extends Component {
@@ -63,10 +63,11 @@ export default class Leader extends Component {
       setAddressFields,
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
-    const { offer } = this.props.offeringsStore;
+    const { match } = this.props;
+    const { isIssuer } = this.props.userStore;
     return (
       <Aux>
-        <Form className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
+        <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
             <Button.Group size="mini" floated="right">

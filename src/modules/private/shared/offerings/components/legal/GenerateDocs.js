@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Table, Icon } from 'semantic-ui-react';
 
-@inject('offeringCreationStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class GenerateDocs extends Component {
   render() {
-    const { offer } = this.props.offeringsStore;
+    const { isIssuer } = this.props.userStore;
+    const { match } = this.props;
     return (
-      <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
+      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>
           <Header as="h4">Generate Docs from Templates</Header>
           <Button primary className="relaxed" content="Generate Docs" />

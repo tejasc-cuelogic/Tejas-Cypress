@@ -14,7 +14,7 @@ const getModule = component => Loadable({
 });
 
 @withRouter
-@inject('offeringCreationStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Offering extends Component {
   componentWillMount() {
@@ -29,15 +29,15 @@ export default class Offering extends Component {
       { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
     ];
     const { match } = this.props;
-    const { offer } = this.props.offeringsStore;
+    const { isIssuer } = this.props.userStore;
     return (
-      <div className={offer.stage !== 'CREATION' ? 'inner-content-spacer' : ''}>
+      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu secondary vertical match={match} navItems={navItems} />
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
+            <div className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
               <Switch>
                 <Route exact path={match.url} component={getModule(navItems[0].component)} />
                 {

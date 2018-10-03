@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import OfferingModule from './index';

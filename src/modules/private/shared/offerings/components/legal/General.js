@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Form, Header, Button, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
-@inject('offeringCreationStore', 'offeringsStore', 'userStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class General extends Component {
   componentWillMount() {
@@ -36,9 +36,9 @@ export default class General extends Component {
     const minimumOfferingAmount = '23,345';
     const offeringAmount = '12,345';
     const { isIssuer } = this.props.userStore;
-    const { offer } = this.props.offeringsStore;
+    const { match } = this.props;
     return (
-      <div className={offer.stage === 'CREATION' && !isIssuer ? 'ui card fluid form-card' : ''}>
+      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form onSubmit={this.handleFormSubmit}>
           <Header as="h4">General Information</Header>
           <Form.Group widths={3}>
