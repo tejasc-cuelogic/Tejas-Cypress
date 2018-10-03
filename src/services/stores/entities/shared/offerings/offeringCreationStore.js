@@ -388,16 +388,24 @@ export class OfferingCreationStore {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
-    if (subKey) {
-      payloadData = { ...payloadData, [keyName]: { [subKey]: Validator.evaluateFormData(fields) } };
-      if (subKey === 'overview') {
-        payloadData.offering.overview = {
-          ...payloadData.offering.overview,
-          ...this.evaluateFormFieldToArray(fields),
+    if (keyName) {
+      if (keyName === 'legal') {
+        payloadData[keyName] = {};
+        payloadData[keyName].general = Validator.evaluateFormData(this.GENERAL_FRM.fields);
+        payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
+      } else if (keyName === 'offering') {
+        payloadData[keyName] = {};
+        payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
+        payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData[keyName].overview =
+        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        payloadData[keyName].overview = {
+          ...payloadData[keyName].overview,
+          ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
+      } else {
+        payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
-    } else if (keyName) {
-      payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
