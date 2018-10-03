@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Leader extends Component {
   componentWillMount() {
@@ -28,9 +28,10 @@ export default class Leader extends Component {
     const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const { roles } = this.props.userStore.currentUser;
-    const { offer } = this.props.offeringsStore;
+    const { match } = this.props;
+    const { isIssuer } = this.props.userStore;
     return (
-      <Form onSubmit={this.handleSubmitIssuer} className={offer.stage === 'CREATION' ? 'inner-content-spacer' : 'mt-20'}>
+      <Form onSubmit={this.handleSubmitIssuer} className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'mt-20' : 'inner-content-spacer'}>
         <Header as="h4">Control Person Diligence</Header>
         {
           ['controlPersonQuestionnaire', 'residenceTenYears'].map(field => (
