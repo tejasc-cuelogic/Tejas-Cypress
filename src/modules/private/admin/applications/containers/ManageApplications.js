@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { mapValues } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateHOC';
-import DeleteAppModal from '../components/DeleteAppModal';
+import StatusChangeAppModal from '../components/StatusChangeAppModal';
 import { InlineLoader } from '../../../../../theme/shared';
-import ApplicationDetails from '../containers/ApplicationDetails';
+import ApplicationDetails from './ApplicationDetails';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -44,7 +44,7 @@ export default class ManageApplications extends Component {
         <Switch>
           <Route path={`${match.url}/:id/view/:appId/:userId`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
           <Route exact path={`${match.url}/:applicationType`} component={getModule('ApplicationsList')} />
-          <Route exact path={`${match.url}/:id/confirm`} component={DeleteAppModal} />
+          <Route exact path={`${match.url}/:id/:appId/:userId/:appStatus/:action/confirm`} component={StatusChangeAppModal} />
         </Switch>
       </PrivateLayout>
     );

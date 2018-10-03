@@ -11,6 +11,7 @@ import { ApplicationListStepColumn } from './ApplicationListStepColumn';
 import ApplicationListButtons from './ApplicationListButtons';
 import { AppStatusLabel } from './AppStatusLabel';
 import { InlineLoader, NsPaginationType2 } from '../../../../../theme/shared';
+import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
 @inject('businessAppAdminStore')
 @observer
@@ -90,62 +91,61 @@ export default class ApplicationsList extends Component {
               <Table.Body>
                 {getBusinessApplication.length ?
                   getBusinessApplication.map(application => (
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell singleLine>
-                        <Header as="h6">
-                          {application.prequalDetails ?
-                          application.prequalDetails.businessGeneralInfo.businessName
-                            : application.businessGeneralInfo.businessName}
-                          <AppStatusLabel />
-                          {/* <AppStatusLabel status={application.status} /> */}
-                        </Header>
-                        <div className="table-info-wrap">
-                          <p>
-                            {application.primaryPOC ?
-                            `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}` :
-                            `${application.firstName} ${application.lastName}`
-                            }
-                            <br />
-                            {application.primaryPOC && application.primaryPOC.email ?
-                              `${application.primaryPOC.email}` : `${application.businessGeneralInfo.email}`
-                            }
-                            <br />
-                            {application.primaryPOC && application.primaryPOC.phone ?
-                              `${application.primaryPOC.phone}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
-                            }
-                          </p>
-                          <p>
-                            {/* <p>Sign-up Code <b>-</b><br /> */}
-                            Started <b>{application.created ? moment(application.created.date).format('MM/DD/YYYY') : '-'}</b><br />
-                            Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
-                          </p>
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell>
-                        <Item>
-                          <Item.Header><Rating size="large" disabled defaultRating={3} maxRating={5} /></Item.Header>
-                          <Item.Content>
-                            <Item.Description>
-                              {application.commentContent}
-                            </Item.Description>
-                            <Item.Extra>
-                              <b>5/5/2018 | 1:33PM</b>
-                              <b> by Jhon</b>
-                            </Item.Extra>
-                          </Item.Content>
-                        </Item>
-                      </Table.Cell>
-                      <ApplicationListStepColumn
-                        application={application}
-                      />
-                      <ApplicationListButtons
-                        refLink={match.url}
-                        applicationId={application.applicationId || application.id}
-                        userId={application.userId}
-                        appStatus={application.applicationStatus}
-                        // status={application.status}
-                      />
-                    </Table.Row>
+                    (application.applicationStatus || application.prequalStatus) !==
+                      BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED &&
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell singleLine>
+                          <Header as="h6">
+                            {application.prequalDetails ?
+                            application.prequalDetails.businessGeneralInfo.businessName
+                              : application.businessGeneralInfo.businessName}
+                            <AppStatusLabel />
+                            {/* <AppStatusLabel status={application.status} /> */}
+                          </Header>
+                          <div className="table-info-wrap">
+                            <p>
+                              {application.primaryPOC ?
+                              `${application.primaryPOC.firstName} ${application.primaryPOC.lastName}` :
+                              `${application.firstName} ${application.lastName}`
+                              }
+                              <br />
+                              {application.primaryPOC && application.primaryPOC.email ?
+                                `${application.primaryPOC.email}` : `${application.email}`
+                              }
+                              <br />
+                              {application.primaryPOC && application.primaryPOC.phone ?
+                                `${application.primaryPOC.phone.number}` : application.businessGeneralInfo.contactDetails && `${application.businessGeneralInfo.contactDetails.phone.number}`
+                              }
+                            </p>
+                            <p>
+                              {/* <p>Sign-up Code <b>-</b><br /> */}
+                              Started <b>{application.created ? moment(application.created.date).format('MM/DD/YYYY') : '-'}</b><br />
+                              Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
+                            </p>
+                          </div>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Item>
+                            <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
+                            <Item.Content>
+                              <Item.Description>
+                                {application.comments && application.comments.length ? application.comments[application.comments.length - 1].text : '-'}
+                              </Item.Description>
+                              <Item.Extra>
+                                <b>{application.comments && application.comments.length ? moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA') : '-'}</b>
+                                <b> {application.comments && application.comments.length ? application.comments[application.comments.length - 1].commentor.by : '-'}</b>
+                              </Item.Extra>
+                            </Item.Content>
+                          </Item>
+                        </Table.Cell>
+                        <ApplicationListStepColumn
+                          application={application}
+                        />
+                        <ApplicationListButtons
+                          refLink={match.url}
+                          application={application}
+                        />
+                      </Table.Row>
                   )) :
                   <Table.Row>
                     <Table.Cell colSpan="6">

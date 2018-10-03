@@ -173,7 +173,11 @@ export class BusinessAppStore {
           );
         this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
         uiStore.setAppLoader(false);
+<<<<<<< HEAD
         resolve();
+=======
+        resolve(data);
+>>>>>>> develop
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -246,10 +250,12 @@ export class BusinessAppStore {
   @action
   setPrequalBasicDetails = () => {
     this.isPrequalQulify = true;
-    const { userDetails } = userDetailsStore;
-    this.BUSINESS_APP_FRM_BASIC.fields.firstName.value = userDetails.firstName;
-    this.BUSINESS_APP_FRM_BASIC.fields.lastName.value = userDetails.lastName;
-    this.BUSINESS_APP_FRM_BASIC.fields.email.value = userDetails.email;
+    const { info, email } = userDetailsStore.userDetails;
+    if (info && email) {
+      this.BUSINESS_APP_FRM_BASIC.fields.firstName.value = info.firstName;
+      this.BUSINESS_APP_FRM_BASIC.fields.lastName.value = info.lastName;
+      this.BUSINESS_APP_FRM_BASIC.fields.email.value = email.address;
+    }
   }
 
   @action

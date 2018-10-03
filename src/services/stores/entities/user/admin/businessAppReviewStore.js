@@ -1,15 +1,28 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { map } from 'lodash';
+<<<<<<< HEAD
 import { CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
+=======
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
+>>>>>>> develop
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../constants/businessApplication';
+<<<<<<< HEAD
 import { updateApplicationStatusAndReview } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 
 export class BusinessAppReviewStore {
+=======
+import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin } from '../../../queries/businessApplication';
+import { businessAppStore, uiStore } from '../../../index';
+
+export class BusinessAppReviewStore {
+  @observable APPLICATION_STATUS_COMMENT_FRM =
+    Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
+>>>>>>> develop
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
   @observable MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
   @observable JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
@@ -189,6 +202,7 @@ export class BusinessAppReviewStore {
     this[form] = Validator.prepareFormObject(ref);
   }
 
+<<<<<<< HEAD
   @action
   saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
@@ -222,16 +236,46 @@ export class BusinessAppReviewStore {
     if (approveOrSubmitted !== '') {
       payload = { ...payload, applicationReviewAction };
       payload = approveOrSubmitted === 'REVIEW_APPROVED' ? { ...payload, approvedStatus } : payload;
+=======
+ @action
+  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag, comment = '') => {
+    const applicationSource = applStatus ===
+    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
+    uiStore.setProgress();
+    const payload = {
+      actionType: 'APPLICATION_STATUS',
+      applicationId,
+      userId,
+      applicationSource,
+      applicationFlag,
+      comments: comment !== '' ? { text: comment } : formInputData,
+    };
+    let reFetchPayLoad = {
+      applicationId,
+      applicationType: applicationSource,
+    };
+    if (applicationSource === 'APPLICATION_COMPLETED') {
+      reFetchPayLoad = { ...reFetchPayLoad, userId };
+>>>>>>> develop
     }
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateApplicationStatusAndReview,
           variables: payload,
+<<<<<<< HEAD
           // refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           Helper.toast('Data saved successfully.', 'success');
+=======
+          refetchQueries:
+            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+        })
+        .then((result) => {
+          Helper.toast('Application status updated successfully.', 'success');
+>>>>>>> develop
           resolve(result);
         })
         .catch((error) => {
@@ -246,10 +290,18 @@ export class BusinessAppReviewStore {
   }
 
   @action
+<<<<<<< HEAD
   approveOrSubmitReviewForms = (formName, actionType = 'REVIEW_SUBMITTED') => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
     let formInputData = Validator.evaluateFormData(this[formName].fields);
+=======
+  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
+    let formInputData = Validator.evaluateFormData(this[formName].fields);
+    const managerFormInputData = approveOrSubmitted === 'REVIEW_APPROVED' ? Validator.evaluateFormData(this.MANAGERS_FRM.fields) : '';
+>>>>>>> develop
     const payloadKey = formName === 'OFFERS_FRM' ? 'offers' : 'review';
     if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
@@ -257,6 +309,7 @@ export class BusinessAppReviewStore {
       formInputData = { [key]: data };
       formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
     }
+<<<<<<< HEAD
     const applicationReviewAction = this.getActionType(formName);
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     uiStore.setProgress();
@@ -264,19 +317,56 @@ export class BusinessAppReviewStore {
       [payloadKey]: formInputData,
       actionType,
       applicationReviewAction,
+=======
+    const key = Object.keys(formInputData)[0];
+    formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
+    let actionType = this.getActionType(formName);
+    let applicationReviewAction = '';
+    if (approveOrSubmitted !== '') {
+      actionType = approveOrSubmitted;
+      applicationReviewAction = this.getActionType(formName);
+    }
+    const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    uiStore.setProgress();
+    let payload = {
+      [payloadKey]: formInputData,
+      actionType,
+>>>>>>> develop
       applicationId,
       userId,
       applicationSource,
     };
+<<<<<<< HEAD
+=======
+    if (approveOrSubmitted !== '') {
+      payload = { ...payload, applicationReviewAction };
+      payload = approveOrSubmitted === 'REVIEW_APPROVED' ? { ...payload, approvedStatus } : payload;
+    }
+    let reFetchPayLoad = {
+      applicationId,
+      applicationType: applicationSource,
+    };
+    if (applicationSource === 'APPLICATION_COMPLETED') {
+      reFetchPayLoad = { ...reFetchPayLoad, userId };
+    }
+>>>>>>> develop
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateApplicationStatusAndReview,
           variables: payload,
+<<<<<<< HEAD
           // refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           Helper.toast('Submitted successfully.', 'success');
+=======
+          refetchQueries:
+            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+        })
+        .then((result) => {
+          Helper.toast('Data saved successfully.', 'success');
+>>>>>>> develop
           resolve(result);
         })
         .catch((error) => {

@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+=======
+
+export const APPLICATION_STATUS_COMMENT = {
+  text: {
+    value: '',
+    label: 'Please enter your comments here',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your comment here...',
+  },
+};
+
+>>>>>>> develop
 export const MANAGERS = {
   managerOverview: {
     value: '',

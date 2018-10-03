@@ -10,7 +10,7 @@ const ButtonGroup = ({
     <div className="right-align">
       <Button.Group>
         {((approved && !approved.status) || !submitted) &&
-        <Button disabled={!formValid} secondary className="relaxed">Save</Button>
+        <Button disabled={!((formValid) || ((approved && !approved.status) || !submitted))} secondary className="relaxed">Save</Button>
         }
         <Button onClick={() => submitWithApproval(formName, 'REVIEW_SUBMITTED')} disabled={!((formValid) || ((approved && !approved.status) || !submitted))} primary={((approved && !approved.status) || !submitted)} type="button">{((approved && !approved.status) || !submitted) ? 'Submit for Approval' : 'Awaiting Manager Approval'}</Button>
       </Button.Group>

@@ -6,6 +6,7 @@ import { Modal, Card, Header, Form, Label, Rating, Button, Grid, List, Icon } fr
 import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
+import { adminActions } from '../../../../../services/actions';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
@@ -18,7 +19,7 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('businessAppStore', 'businessAppAdminStore')
+@inject('businessAppStore', 'businessAppAdminStore', 'businessAppReviewStore')
 @observer
 export default class ApplicationDetails extends Component {
   state = {
@@ -54,6 +55,20 @@ export default class ApplicationDetails extends Component {
     this.setState({ displaOnly: !this.state.displaOnly });
     this.props.businessAppAdminStore.setBusinessDetails(businessName, signupCode);
   }
+  promoteApplication = (id, appStatus, firstName, lastName, email) => {
+    const userDetails = {
+      givenName: firstName,
+      familyName: lastName,
+      email,
+      TemporaryPassword: 'nextseed',
+      verifyPassword: 'nextseed',
+      role: 'issuer',
+    };
+    adminActions.createNewUser(userDetails).then((data) => {
+      console.log(data);
+      this.props.businessAppReviewStore.updateApplicationStatus(id, '', appStatus, 'PROMOTE', 'APPLICATIONS PREQUAL FAILED PROMOTE');
+    });
+  }
   render() {
     const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
@@ -68,7 +83,7 @@ export default class ApplicationDetails extends Component {
       return <EmptyDataSet />;
     }
     const {
-      applicationId, userId, applicationStatus, prequalStatus, prequalDetails, primaryPOC,
+      id, applicationId, userId, applicationStatus, prequalStatus, prequalDetails, primaryPOC,
       signupCode, rating, businessGeneralInfo, firstName, lastName, failReasons, email,
     } = businessApplicationDetailsAdmin;
     let navItems = [
@@ -99,7 +114,7 @@ export default class ApplicationDetails extends Component {
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
             {(applicationStatus || prequalStatus) ===
             BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-            <Button secondary compact floated="right" content="Promote" />
+            <Button secondary compact floated="right" content="Promote" onClick={() => this.promoteApplication(id, prequalStatus, firstName, lastName, email)} />
             }
           </Header>
           <Grid columns="equal">
@@ -175,7 +190,7 @@ export default class ApplicationDetails extends Component {
                   <Card fluid className="ba-info-card">
                     <Card.Header>Failed Reason</Card.Header>
                     <Card.Content>
-                      {failReasons.length || prequalDetails.failReasons.length ?
+                      {(failReasons.length || prequalDetails.failReasons.length) ?
                         <List as="ol">{(failReasons || prequalDetails.failReasons).map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
                         : <p>-</p>
                       }

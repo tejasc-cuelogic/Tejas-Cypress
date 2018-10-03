@@ -4,7 +4,8 @@ import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/b
 
 export const ApplicationListStepColumn = (props) => {
   const {
-    applicationStatus, prequalDetails, businessDetails, businessPerformance, businessDocumentation,
+    applicationStatus, failReasons, prequalDetails, businessDetails,
+    businessPerformance, businessDocumentation, prequalStatus,
   } = props.application;
   const detailsStepTitle = businessDetails ? businessDetails.stepStatus === 'IN-PROGRESS' ? 'Continue' : 'Completed' : 'Not Completed';
   const detailsClass = detailsStepTitle === 'Completed' ? 'done' : detailsStepTitle === 'Continue' ? 'current' : '';
@@ -14,13 +15,13 @@ export const ApplicationListStepColumn = (props) => {
   const documentationClass = documentationStepTitle === 'Completed' ? 'done' : documentationStepTitle === 'Continue' ? 'current' : '';
   return (
     <Table.Cell>
-      {applicationStatus ===
+      {(applicationStatus || prequalStatus) ===
       BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ?
-        (prequalDetails.failReasons.length ?
-          <List as="ol">{prequalDetails.failReasons.map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
+        (failReasons.length || prequalDetails.failReasons.length ?
+          <List as="ol">{(failReasons || prequalDetails.failReasons).map(reason => <List.Item as="li" value="-">{reason}</List.Item>)}</List>
         : <p>-</p>
         )
-        : applicationStatus ===
+        : (applicationStatus || prequalStatus) ===
       BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
         <List as="ol" className="step-list">
           <List.Item as="li" className="done">Completed</List.Item>
