@@ -88,7 +88,8 @@ export default class PreQualBusiness extends Component {
                       {
                         ['businessAgeYears', 'businessAgeMonths'].map(field => (
                           <MaskedInput
-                            disabled={preQualFormDisabled}
+                            containerclassname={preQualFormDisabled ? 'display-only' : ''}
+                            readOnly={preQualFormDisabled}
                             key={field}
                             name={field}
                             number
@@ -135,7 +136,8 @@ export default class PreQualBusiness extends Component {
                   {
                     ['previousYearGrossSales', 'previousYearCogSold', 'previousYearOperatingExpenses', 'previousYearNetIncome'].map(field => (
                       <MaskedInput
-                        disabled={preQualFormDisabled}
+                        containerclassname={preQualFormDisabled ? 'display-only' : ''}
+                        readOnly={preQualFormDisabled}
                         key={field}
                         name={field}
                         prefix="$ "
@@ -161,7 +163,8 @@ export default class PreQualBusiness extends Component {
                 {
                   ['nextYearGrossSales', 'nextYearCogSold', 'nextYearOperatingExpenses', 'nextYearNetIncome'].map(field => (
                     <MaskedInput
-                      disabled={preQualFormDisabled}
+                      containerclassname={preQualFormDisabled ? 'display-only' : ''}
+                      readOnly={preQualFormDisabled}
                       key={field}
                       name={field}
                       prefix="$ "

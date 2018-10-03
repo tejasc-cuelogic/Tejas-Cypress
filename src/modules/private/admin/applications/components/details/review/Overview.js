@@ -58,7 +58,7 @@ export default class Overview extends Component {
             OVERVIEW_FRM.fields.description.map((field, index) => (
               <FormInput
                 containerclassname={isReadonly ? 'display-only' : ''}
-                disabled={isReadonly}
+                readOnly={isReadonly}
                 name="description"
                 label={`Critical Point ${index + 1}`}
                 fielddata={field.description}

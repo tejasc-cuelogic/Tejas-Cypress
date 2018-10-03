@@ -40,7 +40,7 @@ export default class ManagerOverview extends Component {
             name="managerOverview"
             fielddata={MANAGERS_FRM.fields.managerOverview}
             changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
           />
           <Divider section />

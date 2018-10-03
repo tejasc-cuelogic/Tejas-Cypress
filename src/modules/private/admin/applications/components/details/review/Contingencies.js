@@ -28,7 +28,7 @@ const TableBody = ({
         <Table.Cell width={5}>
           <FormInput
             containerclassname={isReadonly ? 'display-only' : ''}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="contingency"
             fielddata={formData.contingency}
             changed={(e, result) => onchange(e, result, formName, arrayName, index)}
@@ -38,7 +38,7 @@ const TableBody = ({
         <Table.Cell>
           <FormInput
             containerclassname={isReadonly ? 'display-only' : ''}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="acceptance"
             fielddata={formData.acceptance}
             changed={(e, result) => onchange(e, result, formName, arrayName, index)}

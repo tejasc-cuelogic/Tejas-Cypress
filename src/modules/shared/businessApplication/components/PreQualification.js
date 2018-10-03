@@ -92,7 +92,8 @@ export default class PreQualification extends Component {
                   ['firstName', 'lastName', 'email'].map(field => (
                     <FormInput
                       autoFocus={field === 'firstName'}
-                      disabled={isPrequalQulify}
+                      readOnly={isPrequalQulify}
+                      containerclassname={isPrequalQulify ? 'display-only' : ''}
                       key={field}
                       type="text"
                       name={field}

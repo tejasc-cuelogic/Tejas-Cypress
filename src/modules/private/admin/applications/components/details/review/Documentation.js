@@ -41,7 +41,7 @@ export default class Documentation extends Component {
             ['negativeInformation', 'matchHistoricals', 'backupProof'].map(field => (
               <FormTextarea
                 containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                disabled={isReadonly}
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
@@ -57,7 +57,7 @@ export default class Documentation extends Component {
             ['profitable', 'questionableItems', 'negativeTrends'].map(field => (
               <FormTextarea
                 containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                disabled={isReadonly}
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
@@ -73,7 +73,7 @@ export default class Documentation extends Component {
             ['consistentBalance', 'unusualMovements'].map(field => (
               <FormTextarea
                 containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                disabled={isReadonly}
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
@@ -89,7 +89,7 @@ export default class Documentation extends Component {
             fielddata={DOCUMENTATION_FRM.fields.leaseOrMortgage}
             changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
             containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             hidelabel
           />
           <ButtonGroup

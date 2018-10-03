@@ -143,7 +143,7 @@ export default class Miscellaneous extends Component {
                     <Table.Cell>
                       <FormInput
                         containerclassname={isReadonly ? 'display-only' : ''}
-                        disabled={isReadonly}
+                        readOnly={isReadonly}
                         type="text"
                         name="url"
                         fielddata={socialMedia.url}
@@ -174,7 +174,7 @@ export default class Miscellaneous extends Component {
                   <Table.Cell width={5}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="label"
                       fielddata={document.label}
                       changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'otherDocs', index)}

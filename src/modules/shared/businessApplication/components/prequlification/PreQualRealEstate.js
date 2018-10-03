@@ -101,7 +101,8 @@ export default class PreQualRealEstate extends Component {
                 {
                   ['investorIRR', 'annualInvestorRoi'].map(field => (
                     <MaskedInput
-                      disabled={preQualFormDisabled}
+                      containerclassname={preQualFormDisabled ? 'display-only' : ''}
+                      readOnly={preQualFormDisabled}
                       key={field}
                       name={field}
                       percentage
@@ -114,7 +115,8 @@ export default class PreQualRealEstate extends Component {
                 }
                 <MaskedInput
                   hoverable
-                  disabled={preQualFormDisabled}
+                  containerclassname={preQualFormDisabled ? 'display-only' : ''}
+                  readOnly={preQualFormDisabled}
                   name="holdTimeInYears"
                   number
                   value={fields.holdTimeInYears.value}

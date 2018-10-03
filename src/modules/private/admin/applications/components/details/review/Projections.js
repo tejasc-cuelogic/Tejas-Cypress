@@ -49,7 +49,7 @@ export default class Projections extends Component {
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                  disabled={isReadonly}
+                  readOnly={isReadonly}
                   key={field}
                   name={field}
                   fielddata={PROJECTIONS_FRM.fields[field]}
@@ -76,7 +76,7 @@ export default class Projections extends Component {
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                  disabled={isReadonly}
+                  readOnly={isReadonly}
                   key={field}
                   name={field}
                   fielddata={PROJECTIONS_FRM.fields[field]}
@@ -100,7 +100,7 @@ export default class Projections extends Component {
           <Divider section />
           <FormTextarea
             containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="existingLiabilities"
             fielddata={PROJECTIONS_FRM.fields.existingLiabilities}
             changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}

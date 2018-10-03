@@ -189,18 +189,6 @@ export class BusinessAppReviewStore {
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
     this.checkFormValid(form, index != null, false);
-    // if (payLoadFileId !== '') {
-    //   fileUpload.removeUploadedData(payLoadFileId).then(() => {
-    //     this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
-    //     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
-    //     this.setFormFileArray(form, arrayName, field, 'value', '', index);
-    //     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-    //     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
-    //     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    //   }).catch((error) => {
-    //     uiStore.setErrors(error.message);
-    //   });
-    // }
   }
 
   @action

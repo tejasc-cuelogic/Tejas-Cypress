@@ -65,7 +65,7 @@ export default class BusinessPlan extends Component {
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="locationFeasibility"
             fielddata={BUSINESS_PLAN_FRM.fields.locationFeasibility}
             changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
@@ -91,14 +91,14 @@ export default class BusinessPlan extends Component {
                   <Form.Group widths={3}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="name"
                       fielddata={controlPerson.name}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <MaskedInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       percentage
                       type="text"
                       name="ownership"
@@ -107,7 +107,7 @@ export default class BusinessPlan extends Component {
                     />
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="derogatoryMarks"
                       fielddata={controlPerson.derogatoryMarks}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
@@ -116,14 +116,14 @@ export default class BusinessPlan extends Component {
                   <Form.Group widths={3}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="experience"
                       fielddata={controlPerson.experience}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="creditScore"
                       fielddata={controlPerson.creditScore}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
@@ -163,7 +163,7 @@ export default class BusinessPlan extends Component {
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
-                  disabled={isReadonly}
+                  readOnly={isReadonly}
                   key={field}
                   name={field}
                   fielddata={BUSINESS_PLAN_FRM.fields[field]}
@@ -193,7 +193,7 @@ export default class BusinessPlan extends Component {
                         <Table.Cell width={8}>
                           <FormInput
                             containerclassname={isReadonly ? 'display-only' : ''}
-                            disabled={isReadonly}
+                            readOnly={isReadonly}
                             name="name"
                             fielddata={source.name}
                             changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'sources', index)}
@@ -203,7 +203,7 @@ export default class BusinessPlan extends Component {
                         <Table.Cell width={8}>
                           <MaskedInput
                             containerclassname={isReadonly ? 'display-only' : ''}
-                            disabled={isReadonly}
+                            readOnly={isReadonly}
                             prefix="$"
                             currency
                             name="amount"
@@ -255,7 +255,7 @@ export default class BusinessPlan extends Component {
                       <Table.Cell width={8}>
                         <FormInput
                           containerclassname={isReadonly ? 'display-only' : ''}
-                          disabled={isReadonly}
+                          readOnly={isReadonly}
                           name="name"
                           fielddata={use.name}
                           changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'uses', index)}
@@ -265,7 +265,7 @@ export default class BusinessPlan extends Component {
                       <Table.Cell width={8}>
                         <MaskedInput
                           containerclassname={isReadonly ? 'display-only' : ''}
-                          disabled={isReadonly}
+                          readOnly={isReadonly}
                           prefix="$"
                           currency
                           name="amount"
@@ -303,7 +303,7 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <MaskedInput
             containerclassname={isReadonly ? 'display-only' : ''}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="dateOfIncorporation"
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
             format="##-##-####"

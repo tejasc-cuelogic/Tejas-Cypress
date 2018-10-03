@@ -82,7 +82,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <Dropdown
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="structure"
                       placeholder="Choose"
                       fluid
@@ -103,7 +103,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="amount"
                       fielddata={offer.amount}
                       changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
@@ -120,7 +120,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <MaskedInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="maturity"
                       fielddata={offer.maturity}
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
@@ -138,7 +138,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <MaskedInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="interestRate"
                       fielddata={offer.interestRate}
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
@@ -156,7 +156,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <MaskedInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       prefix="$"
                       currency
                       name="amortizationAmount"
@@ -175,7 +175,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <Dropdown
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="personalGuarantee"
                       placeholder="Type number"
                       fluid
@@ -196,7 +196,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="businessBlanket"
                       fielddata={offer.businessBlanket}
                       changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
@@ -213,7 +213,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <MaskedInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="expirationDate"
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                       fielddata={offer.expirationDate}
@@ -232,7 +232,7 @@ export default class Offer extends Component {
                   <Table.Cell>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly || offer.structure.value === 'TERM_NOTE'}
+                      readOnly={isReadonly || offer.structure.value === 'TERM_NOTE'}
                       name="multiple"
                       fielddata={offer.multiple}
                       changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
@@ -254,7 +254,7 @@ export default class Offer extends Component {
                       fielddata={offer.totalCapital}
                       changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly || offer.structure.value === 'TERM_NOTE'}
+                      readOnly={isReadonly || offer.structure.value === 'TERM_NOTE'}
                       hidelabel
                     />
                   </Table.Cell>
