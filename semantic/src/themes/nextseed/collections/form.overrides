@@ -13,6 +13,13 @@
             display:inline-block;
             line-height:@18px;
         }
+        textarea{
+            padding-left:0;
+            padding-right:0;
+            border-radius:0;
+            border:none;
+            border-bottom:@borderColor 1px solid;
+        }
         &.secondary textarea{
             padding:@11px @14px;
             min-height:80px;

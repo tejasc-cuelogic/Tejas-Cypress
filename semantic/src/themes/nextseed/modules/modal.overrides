@@ -300,15 +300,22 @@
             background:none;
         }
     }
-    .ui.form{
-        textarea{
-            padding-left:0;
-            padding-right:0;
-            border-radius:0;
-            border:none;
-            border-bottom:@borderColor 1px solid;
-        }
-    }
+    // .ui.form{
+    //     textarea{
+    //         padding-left:0;
+    //         padding-right:0;
+    //         border-radius:0;
+    //         border:none;
+    //         border-bottom:@borderColor 1px solid;
+    //     }
+    //     .field.secondary textarea{
+    //         padding:@11px @14px;
+    //         min-height:80px;
+    //         max-height:80px;
+    //         border-radius:@4px;
+    //         border:@neutral-offdark 1px solid;
+    //     }
+    // }
     &.reward-modal{
         .header:not(.ui){
             padding:@25px @42px;
