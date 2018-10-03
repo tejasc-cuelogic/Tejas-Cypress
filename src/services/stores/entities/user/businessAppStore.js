@@ -173,11 +173,7 @@ export class BusinessAppStore {
           );
         this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
         uiStore.setAppLoader(false);
-<<<<<<< HEAD
-        resolve();
-=======
         resolve(data);
->>>>>>> develop
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
