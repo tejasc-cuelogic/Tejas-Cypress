@@ -10,14 +10,14 @@ const Actions = observer((props) => {
     <Button.Group compact floated="right">
       <Button
         inverted
-        onClick={() => save('draft')}
+        onClick={() => save('DRAFT')}
         color="green"
         content="Save as draft"
         disabled={!meta.isValid}
       />
       <Button
         primary
-        onClick={() => save('submit_for_approval')}
+        onClick={() => save('PENDING')}
         content="Submit for Approval"
         disabled={!meta.isValid}
       />

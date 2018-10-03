@@ -18,6 +18,7 @@ const Extra = ({ sent, read, time }) => (
       <Label size="mini" color="red">New</Label>
     }
     <span className="time-stamp">{time}</span>
+    <Label circular size="mini" color="green">Public</Label>
   </Item.Extra>
 );
 

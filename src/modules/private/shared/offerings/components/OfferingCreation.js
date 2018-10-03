@@ -18,7 +18,7 @@ export default class OfferingCreation extends Component {
       <div className={isIssuer ? 'ui card fluid' : ''}>
         <SecondaryMenu force2ary={!isIssuer} match={match} navItems={navItems} />
         <Switch>
-          <Route exact path={match.url} component={OfferingModule('overview')} />
+          <Route exact path={match.url} component={OfferingModule('key-terms')} />
           {
             navItems.map(item => (
               <Route key={item.to} path={`${match.url}/${item.to}`} component={OfferingModule(item.to)} />

@@ -44,9 +44,9 @@ export default class Legal extends Component {
       },
     ];
     const { match } = this.props;
-    const { offer } = this.props.offeringsStore;
+    const { isIssuer } = this.props.userStore;
     return (
-      <div className={offer.stage !== 'CREATION' ? 'inner-content-spacer' : ''}>
+      <div className={!isIssuer ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />

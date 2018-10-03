@@ -3,14 +3,13 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Icon, Confirm } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../../theme/form';
-import Helper from '../../../../../../../helper/utility';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class AfIssuer extends Component {
   addMore = (e, formName) => {
     e.preventDefault();
-    this.props.offeringCreationStore.addMore(formName);
+    this.props.offeringCreationStore.addMore(formName, 'getOfferingBac');
     const { AFFILIATED_ISSUER_FRM } = this.props.offeringCreationStore;
     const issuerCount = AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length;
     this.props.history.push(`${this.props.refLink}/${issuerCount}`);
@@ -19,9 +18,10 @@ export default class AfIssuer extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
-  removeData = (confirmModalName) => {
-    this.props.offeringCreationStore.removeData(confirmModalName);
-    Helper.toast('Affiliated issuer has been deleted successfully.', 'success');
+  removeData = () => {
+    const { confirmModalName, deleteBac, removeData } = this.props.offeringCreationStore;
+    deleteBac(this.props.index || 0);
+    removeData(confirmModalName, '', true);
     this.props.history.push(`${this.props.refLink}/1`);
   }
   handleSubmitIssuer = () => {
@@ -37,7 +37,6 @@ export default class AfIssuer extends Component {
       AFFILIATED_ISSUER_FRM,
       formArrayChange,
       confirmModal,
-      confirmModalName,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
@@ -131,7 +130,7 @@ export default class AfIssuer extends Component {
           content="Are you sure you want to remove this issuer?"
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => this.removeData(confirmModalName)}
+          onConfirm={() => this.removeData()}
           size="mini"
           className="deletion"
         />

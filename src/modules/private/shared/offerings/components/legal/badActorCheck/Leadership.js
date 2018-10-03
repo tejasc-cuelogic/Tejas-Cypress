@@ -11,14 +11,11 @@ export default class Leadership extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
-    if (!this.props.offeringCreationStore.initLoad.includes('LEADER_FRM')) {
-      this.props.offeringCreationStore.setFormData('LEADER_FRM', 'leadership');
-    }
   }
   render() {
     const { LEADER_FRM } = this.props.offeringCreationStore;
     const navItems = [];
-    LEADER_FRM.fields.data.map((leader, index) => {
+    LEADER_FRM.fields.getOfferingBac.map((leader, index) => {
       navItems.push({ title: `Leader ${index + 1}`, to: `leader/${index + 1}` });
       return navItems;
     });

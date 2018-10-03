@@ -385,3 +385,11 @@ mutation _updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
   }
 }
 `;
+
+export const deleteBac = gql`
+mutation _deleteBac($id: String! $offeringId: String!){
+  deleteOfferingBac(id: $id  offeringId: $offeringId) {
+    id
+  }
+}
+`;

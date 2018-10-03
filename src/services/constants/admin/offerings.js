@@ -716,6 +716,7 @@ export const LEADERSHIP = {
       rule: 'numeric|required',
       placeHolder: '555-123-8888',
       objRef: 'leadership.phone',
+      objRefOutput2: 'phone',
     },
     dob: {
       value: '',
@@ -768,6 +769,7 @@ export const LEADERSHIP = {
       rule: 'string|required',
       placeHolder: 'e.g. Baker Street 221B',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     city: {
       value: '',
@@ -776,6 +778,7 @@ export const LEADERSHIP = {
       rule: 'string|required',
       placeHolder: 'e.g. New York',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     state: {
       value: '',
@@ -784,6 +787,7 @@ export const LEADERSHIP = {
       rule: 'string|required',
       placeHolder: 'e.g. New York',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     zip: {
       value: '',
@@ -792,6 +796,7 @@ export const LEADERSHIP = {
       rule: 'numeric|required',
       placeHolder: 'e.g. 10001',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     bio: {
       value: '',
@@ -807,6 +812,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://johndoe.com',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     facebook: {
       value: '',
@@ -815,6 +821,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://facebook.com/johndoe',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     linkedin: {
       value: '',
@@ -823,6 +830,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://linkedin.com/johndoe',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     twitter: {
       value: '',
@@ -831,6 +839,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://twitter.com/johndoe',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     headshot: {
       label: 'Headshot',
@@ -841,6 +850,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       objRef: 'leadership.uploads',
+      objType: 'FileObjectType',
+      objRefOutput2: 'uploads',
     },
     heroImage: {
       label: 'Hero Image',
@@ -851,6 +862,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       objRef: 'leadership.uploads',
+      objType: 'FileObjectType',
+      objRefOutput2: 'uploads',
     },
     license: {
       label: 'Driver’s License',
@@ -861,6 +874,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       objRef: 'leadership.uploads',
+      objType: 'FileObjectType',
+      objRefOutput2: 'uploads',
     },
     // experience: [{
     //   name: {
@@ -1559,26 +1574,24 @@ export const ISSUER = {
   judgements: { ...COMMON.pendingLiens },
   onlineReputation: { ...COMMON.generalOnlineReputationSearch },
   isControlDiligence: {
-    value: [],
+    value: false,
     values: [
       {
         label: 'Completed All Control Person Diligence',
         value: 'COMPLETED',
       },
     ],
-    skipField: true,
     error: undefined,
     rule: 'alpha',
   },
   isAffiliatedDiligence: {
-    value: [],
+    value: false,
     values: [
       {
         label: 'Completed All Affiliated Issuer Diligence',
         value: 'COMPLETED',
       },
     ],
-    skipField: true,
     error: undefined,
     rule: 'alpha',
   },
@@ -1612,8 +1625,8 @@ export const AFFILIATED_ISSUER = {
 };
 
 export const LEADER = {
-  data: [{
-    controlPersonQuestionaire: {
+  getOfferingBac: [{
+    controlPersonQuestionnaire: {
       label: 'Control Person Questionnaire',
       value: '',
       error: undefined,

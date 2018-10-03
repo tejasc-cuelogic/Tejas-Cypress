@@ -4,7 +4,7 @@ import flatMap from 'lodash/flatMap';
 import mapValues from 'lodash/mapValues';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { userStore } from '../../index';
+// import { userStore } from '../../index';
 import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
 
@@ -34,16 +34,16 @@ export class EducationStore {
   @action
   initRequest = (module, props) => {
     const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
-    let scopeType = 'INVESTOR';
-    if (props && props.isMkt && props.params) {
-      scopeType = props.params.for === 'investor' ? 'INVESTOR' : 'ISSUER';
-    } else if (userStore.currentUser) {
-      scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
-    }
+    const categoryType = 'ISSUER';
+    // if (props && props.isMkt && props.params) {
+    //   scopeType = props.params.for === 'investor' ? 'INVESTOR' : 'ISSUER';
+    // } else if (userStore.currentUser) {
+    //   scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
+    // }
     this.data[module] = graphql({
       client: props && props.isMkt ? clientPublic : client,
       query,
-      variables: { scopeType },
+      variables: { categoryType },
     });
   }
 
@@ -51,8 +51,8 @@ export class EducationStore {
   getOne = (ref, id) => {
     const meta = { knowledgeBase: ['kbs', 'title', 'body'], faq: ['faqs', 'question', 'answer'] };
     if (this[meta[ref][0]].length > 1) {
-      const item = (!id) ? this[meta[ref][0]][0][`${ref}Items`][0] :
-        flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}Items`])).find(i => i.id === id);
+      const item = (!id) ? this[meta[ref][0]][0][`${ref}ItemList`][0] :
+        flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}ItemList`])).find(i => i.id === id);
       this.selected = item ? { id: item.id, title: item[meta[ref][1]], body: item[meta[ref][2]] } :
         {};
     }
@@ -68,12 +68,13 @@ export class EducationStore {
   }
 
   @computed get kbs() {
-    return (this.allData.KnowledgeBase.data && this.allData.KnowledgeBase.data.knowledgeBase
-      && clientSearch.search(
-        toJS(this.allData.KnowledgeBase.data.knowledgeBase),
-        this.searchParam.KnowledgeBase,
-        'knowledgeBase',
-      )) || [];
+    return (this.allData.KnowledgeBase.data &&
+      this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems);
+    // && clientSearch.search(
+    //   toJS(this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems),
+    //   this.searchParam.KnowledgeBase,
+    //   'knowledgeBase',
+    // )) || [];
   }
 
   @computed get faqs() {

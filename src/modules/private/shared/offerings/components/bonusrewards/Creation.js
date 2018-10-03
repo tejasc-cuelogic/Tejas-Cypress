@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Button, Header, Icon, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import AddNewTier from './bonusrewards/AddNewTier';
-import AddNewBonusReward from './bonusrewards/addNewBonusRewards';
-import Helper from '../../../../../helper/utility';
+import AddNewTier from './AddNewTier';
+import AddNewBonusReward from './addNewBonusRewards';
+import Helper from '../../../../../../helper/utility';
 
 const tiersArray = [
   { title: 'Early Birds' },
@@ -27,7 +27,7 @@ const tiersArray = [
 
 @inject('offeringCreationStore')
 @observer
-export default class BonusRewardsCreation extends Component {
+export default class Creation extends Component {
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);

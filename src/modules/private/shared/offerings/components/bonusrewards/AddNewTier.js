@@ -10,6 +10,11 @@ export default class AddNewTier extends Component {
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
+  handleAddTier = () => {
+    const { addNewTier } = this.props.offeringCreationStore;
+    addNewTier();
+    this.props.history.push(this.props.refLink);
+  }
   render() {
     const { ADD_NEW_TIER_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_TIER_FRM';
@@ -19,12 +24,12 @@ export default class AddNewTier extends Component {
           <Header as="h3">Add new tier</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form>
+          <Form onSubmit={this.handleAddTier}>
             <div className="featured-section">
               <FormCheckbox
                 fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
                 name="isEarlyBirds"
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formChange(e, result, formName, true)}
                 defaults
                 containerclassname="ui relaxed list"
               />

@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
-import { map, startCase } from 'lodash';
+import { map, startCase, isArray } from 'lodash';
 import graphql from 'mobx-apollo';
 import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac } from '../../../queries/offerings/manage';
+import { deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -26,7 +26,14 @@ export class OfferingCreationStore {
   @observable LEADERSHIP_FRM = Validator.prepareFormObject(LEADERSHIP);
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
   @observable ISSUER_FRM = Validator.prepareFormObject(ISSUER);
-  @observable AFFILIATED_ISSUER_FRM = Validator.prepareFormObject(AFFILIATED_ISSUER);
+  @observable AFFILIATED_ISSUER_FRM =
+    Validator.prepareFormObject(
+      AFFILIATED_ISSUER,
+      false,
+      true,
+      false,
+      { getOfferingBac: AFFILIATED_ISSUER.getOfferingBac },
+    );
   @observable LEADER_FRM = Validator.prepareFormObject(LEADER);
   @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
   @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
@@ -39,6 +46,7 @@ export class OfferingCreationStore {
   @observable currentOfferingId = null;
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
+  @observable leadershipOfferingBac = {};
 
   @observable requestState = {
     search: {},
@@ -79,8 +87,10 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeData = (formName, subForm = 'data') => {
-    this[formName].fields[subForm].splice(this.removeIndex, 1);
+  removeData = (formName, subForm = 'data', isApiDelete = false) => {
+    if (!isApiDelete) {
+      this[formName].fields[subForm].splice(this.removeIndex, 1);
+    }
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
@@ -88,8 +98,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form) => {
-    if (result && (result.type === 'checkbox')) {
+  formChange = (e, result, form, isArr = true) => {
+    if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),
@@ -169,13 +179,13 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, index = null) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null) => {
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
     if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
-        { name: field, value: fileData.fileName }, 'data', index,
+        { name: field, value: fileData.fileName }, subForm, index,
       );
     } else {
       this[form] = Validator.onChange(
@@ -242,12 +252,14 @@ export class OfferingCreationStore {
       return false;
     }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
+    this.initLoad.push(form);
     return false;
   }
 
   @action
   setBacFormData = (form, data, ref) => {
     this[form] = Validator.setFormData(this[form], data, ref);
+    this.initLoad.push(form);
   }
 
   @action
@@ -441,6 +453,21 @@ export class OfferingCreationStore {
     });
   }
 
+  @action
+  getLeadershipOfferingBac = (offeringId, bacType) => {
+    this.affiliatedIssuerOfferingBac = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: getOfferingBac,
+      variables: { offeringId, bacType },
+      onFetch: (res) => {
+        if (res && res.getOfferingBac) {
+          this.setBacFormData('LEADER_FRM', res || {}, false);
+        }
+      },
+    });
+  }
+
   createOrUpdateOfferingBac = (bacType, fields, issuerNumber = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const { issuerBacId } = getOfferingById.legal;
@@ -463,7 +490,9 @@ export class OfferingCreationStore {
       payload.offeringId = getOfferingById.id;
       payload.bacType = bacType;
       const { affiliatedIssuerBacId } = getOfferingById.legal;
-      if (affiliatedIssuerBacId === null) {
+      if (affiliatedIssuerBacId === null ||
+        (Array.isArray(toJS(affiliatedIssuerBacId)) && !affiliatedIssuerBacId[issuerNumber])) {
+        mutation = createBac;
         variables = {
           offeringBacDetails: payload,
         };
@@ -483,7 +512,16 @@ export class OfferingCreationStore {
         refetchQueries: [{
           query: getOfferingDetails,
           variables: { id: getOfferingById.id },
-        }],
+        },
+        {
+          query: getOfferingBac,
+          variables: { offeringId: getOfferingById.id, bacType: 'AFFILIATED_ISSUER' },
+        },
+        {
+          query: getOfferingBac,
+          variables: { offeringId: getOfferingById.id, bacType: 'ISSUER' },
+        },
+        ],
       })
       .then(() => {
         Helper.toast('Offering has been saved successfully.', 'success');
@@ -492,6 +530,35 @@ export class OfferingCreationStore {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
       })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  deleteBac = (issuerIndex) => {
+    const { getOfferingById } = offeringsStore.offerData.data;
+    const { affiliatedIssuerBacId } = getOfferingById.legal;
+    const bacType = 'AFFILIATED_ISSUER';
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: deleteBac,
+        variables: {
+          id: affiliatedIssuerBacId[issuerIndex],
+          offeringId: this.currentOfferingId,
+        },
+        refetchQueries: [{
+          query: getOfferingBac,
+          variables: { offeringId: this.currentOfferingId, bacType },
+        }],
+      })
+      .then(() => {
+        Helper.toast('Affiliated Issuer has been deleted successfully.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
       .finally(() => {
         uiStore.setProgress(false);
       });
