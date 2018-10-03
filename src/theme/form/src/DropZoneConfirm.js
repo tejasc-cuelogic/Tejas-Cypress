@@ -13,12 +13,13 @@ import { FieldError } from '../../shared';
 export default class DropZone extends Component {
   state = { showConfirmModal: false, fileName: null, key: null };
 
-  removeForm = (e) => {
+  removeForm = () => {
     this.setState({ showConfirmModal: !this.state.showConfirmModal });
-    this.props.onremove(e, this.state.fileName, this.state.key);
+    this.props.onremove(this.state.fileName, this.state.key);
   }
 
   toggleConfirm = (e, fileName, key) => {
+    e.preventDefault();
     this.setState({
       ...this.state,
       showConfirmModal: !this.state.showConfirmModal,

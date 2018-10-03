@@ -6,7 +6,7 @@ import { mapValues } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import StatusChangeAppModal from '../components/StatusChangeAppModal';
 import { InlineLoader } from '../../../../../theme/shared';
-import ApplicationDetails from '../containers/ApplicationDetails';
+import ApplicationDetails from './ApplicationDetails';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),

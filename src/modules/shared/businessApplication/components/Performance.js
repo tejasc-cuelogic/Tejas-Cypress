@@ -71,7 +71,8 @@ export default class Performance extends Component {
                       {
                         ['pyGrossSales', 'pyCogs', 'pyOperatingExpenses', 'pyNetIncome'].map(field => (
                           <MaskedInput
-                            disabled={formReadOnlyMode}
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
                             name={field}
                             prefix="$ "
@@ -91,7 +92,8 @@ export default class Performance extends Component {
                     {
                       ['nyGrossSales', 'nyCogs', 'nyOperatingExpenses', 'nyNetIncome'].map(field => (
                         <MaskedInput
-                          disabled={formReadOnlyMode}
+                          readOnly={formReadOnlyMode}
+                          containerclassname={formReadOnlyMode ? 'display-only' : ''}
                           key={field}
                           name={field}
                           prefix="$ "

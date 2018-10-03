@@ -440,9 +440,7 @@ mutation updateApplicationData(
     offers: $offers
     comments: $comments
     approvedStatus: $approvedStatus
-  ){
-    applicationStatus
-  }
+  )
 }
 `;
 

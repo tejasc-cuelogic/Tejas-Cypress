@@ -11,7 +11,8 @@ const GeneralInformation = props => (
           {
             ['businessName', 'website'].map(field => (
               <FormInput
-                disabled={props.preQualFormDisabled}
+                readOnly={props.preQualFormDisabled}
+                containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
                 key={field}
                 type="text"
                 name={field}
@@ -23,7 +24,8 @@ const GeneralInformation = props => (
             ))
           }
           <MaskedInput
-            disabled={props.preQualFormDisabled}
+            containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+            readOnly={props.preQualFormDisabled}
             name="phoneNumber"
             fielddata={props.fields.phoneNumber}
             changed={props.businessAppEleMaskChange}
@@ -46,7 +48,8 @@ const GeneralInformation = props => (
           }
           </Header>
           <AutoComplete
-            disabled={props.preQualFormDisabled}
+            containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+            readOnly={props.preQualFormDisabled}
             name="street"
             fielddata={props.fields.street}
             onplaceselected={props.setAddressFields}
@@ -56,7 +59,8 @@ const GeneralInformation = props => (
             {
               ['city', 'state', 'zipCode'].map(field => (
                 <FormInput
-                  disabled={props.preQualFormDisabled}
+                  containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+                  readOnly={props.preQualFormDisabled}
                   key={field}
                   type="text"
                   name={field}

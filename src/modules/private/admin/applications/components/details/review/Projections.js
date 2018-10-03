@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Confirm } from 'semantic-ui-react';
-import { FormTextarea, DropZone } from '../../../../../../../theme/form';
+import { Form, Divider } from 'semantic-ui-react';
+import { FormTextarea, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 
-@inject('businessAppReviewStore', 'uiStore', 'businessAppStore', 'userStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Projections extends Component {
   componentWillMount() {
@@ -19,16 +19,8 @@ export default class Projections extends Component {
   onRevenueCheckDrop = (files) => {
     this.props.businessAppReviewStore.setFileUploadData('PROJECTIONS_FRM', '', 'revenueCheckUpload', files);
   }
-  confirmRemoveDoc = (e, name) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name);
-  }
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
   handleDelDoc = (field) => {
     this.props.businessAppReviewStore.removeUploadedData('PROJECTIONS_FRM', field);
-    this.props.uiStore.setConfirmBox('');
   }
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('PROJECTIONS_FRM');
@@ -38,7 +30,6 @@ export default class Projections extends Component {
   }
   render() {
     const { PROJECTIONS_FRM, formChange } = this.props.businessAppReviewStore;
-    const { confirmBox } = this.props.uiStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
@@ -58,7 +49,7 @@ export default class Projections extends Component {
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                  disabled={isReadonly}
+                  readOnly={isReadonly}
                   key={field}
                   name={field}
                   fielddata={PROJECTIONS_FRM.fields[field]}
@@ -76,7 +67,7 @@ export default class Projections extends Component {
             name="revenueCheckUpload"
             fielddata={PROJECTIONS_FRM.fields.revenueCheckUpload}
             ondrop={this.onRevenueCheckDrop}
-            onremove={this.confirmRemoveDoc}
+            onremove={this.handleDelDoc}
             uploadtitle="Upload Revenue Check"
           />
           <Divider section />
@@ -85,7 +76,7 @@ export default class Projections extends Component {
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                  disabled={isReadonly}
+                  readOnly={isReadonly}
                   key={field}
                   name={field}
                   fielddata={PROJECTIONS_FRM.fields[field]}
@@ -103,13 +94,13 @@ export default class Projections extends Component {
             name="benchmarkUpload"
             fielddata={PROJECTIONS_FRM.fields.benchmarkUpload}
             ondrop={this.onBenchmarkDrop}
-            onremove={this.confirmRemoveDoc}
+            onremove={this.handleDelDoc}
             uploadtitle="Upload Benchmark"
           />
           <Divider section />
           <FormTextarea
             containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="existingLiabilities"
             fielddata={PROJECTIONS_FRM.fields.existingLiabilities}
             changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
@@ -124,15 +115,6 @@ export default class Projections extends Component {
             submitWithApproval={this.submitWithApproval}
           />
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'benchmarkUpload' || confirmBox.entity === 'revenueCheckUpload'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
-          size="mini"
-          className="deletion"
-        />
       </div>
     );
   }

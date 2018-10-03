@@ -98,7 +98,8 @@ export default class BusinessDetails extends Component {
                   <div className="field-wrap">
                     <Form.Group widths="equal">
                       <MaskedInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         prefix="$ "
                         currency
                         type="text"
@@ -107,7 +108,8 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                       <MaskedInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
                         type="text"
                         name="interestExpenses"
@@ -117,7 +119,8 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <MaskedInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         prefix="$ "
                         currency
                         type="text"
@@ -126,7 +129,8 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                       <MaskedInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         number
                         type="text"
                         name="term"
@@ -194,7 +198,8 @@ export default class BusinessDetails extends Component {
                       {
                         ['fullLegalName', 'title'].map(field => (
                           <FormInput
-                            disabled={formReadOnlyMode}
+                            readOnly={formReadOnlyMode}
+                            containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
                             type="text"
                             name={field}
@@ -206,7 +211,8 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <MaskedInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         number
                         type="text"
                         name="yearsOfExp"
@@ -214,7 +220,8 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
                       <MaskedInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
                         type="text"
                         name="companyOwnerShip"
@@ -235,7 +242,8 @@ export default class BusinessDetails extends Component {
                         changed={date => businessDetailsDateChange('dateOfService', date, index)}
                       />
                       <MaskedInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         ssn
                         type="text"
                         name="ssn"
@@ -245,7 +253,8 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <FormInput
-                        disabled={formReadOnlyMode}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         type="text"
                         name="linkedInUrl"
                         fielddata={owner.linkedInUrl}

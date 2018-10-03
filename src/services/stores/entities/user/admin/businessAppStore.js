@@ -95,7 +95,8 @@ export class BusinessAppStore {
     const { values } = this.filterApplicationStatus;
     this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, section));
     if (!noFilter) {
-      this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] : section === 'completed' ? ['NEW', 'REVIEWING'] : [];
+      // this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] :
+      // section === 'completed' ? ['NEW', 'REVIEWING'] : [];
       this.requestState.search =
       { ...this.requestState.search, applicationStatus: this.filterApplicationStatus.value };
     } else {

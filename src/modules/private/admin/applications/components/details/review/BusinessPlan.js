@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
-import { FormTextarea, MaskedInput, FormInput, DropZone } from '../../../../../../../theme/form';
+import { FormTextarea, MaskedInput, FormInput, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import Helper from '../../../../../../../helper/utility';
 import ButtonGroup from './ButtonGroup';
@@ -15,7 +15,7 @@ const AddMore = ({
   <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)} >+ {title}</Button>
 );
 
-@inject('businessAppReviewStore', 'uiStore', 'businessAppStore', 'userStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class BusinessPlan extends Component {
   componentWillMount() {
@@ -29,16 +29,8 @@ export default class BusinessPlan extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore(formName, arrayName);
   }
-  confirmRemoveDoc = (e, name, index) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name, index);
-  }
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
   handleDelDoc = (field, index) => {
-    this.props.businessAppReviewStore.removeUploadedData('CONTROL_PERSONS_FRM', field, index);
-    this.props.uiStore.setConfirmBox('');
+    this.props.businessAppReviewStore.removeUploadedData('BUSINESS_PLAN_FRM', field, index, 'controlPersons');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -66,7 +58,6 @@ export default class BusinessPlan extends Component {
       review.businessPlan.approved) ? review.businessPlan.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
       && !isManager) || (isManager && approved && approved.status));
-    const { confirmBox } = this.props.uiStore;
     return (
       <Aux>
         <Form onSubmit={this.submit}>
@@ -74,7 +65,7 @@ export default class BusinessPlan extends Component {
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="locationFeasibility"
             fielddata={BUSINESS_PLAN_FRM.fields.locationFeasibility}
             changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
@@ -100,14 +91,14 @@ export default class BusinessPlan extends Component {
                   <Form.Group widths={3}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="name"
                       fielddata={controlPerson.name}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <MaskedInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       percentage
                       type="text"
                       name="ownership"
@@ -116,7 +107,7 @@ export default class BusinessPlan extends Component {
                     />
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="derogatoryMarks"
                       fielddata={controlPerson.derogatoryMarks}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
@@ -125,14 +116,14 @@ export default class BusinessPlan extends Component {
                   <Form.Group widths={3}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="experience"
                       fielddata={controlPerson.experience}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      readOnly={isReadonly}
                       name="creditScore"
                       fielddata={controlPerson.creditScore}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
@@ -146,7 +137,7 @@ export default class BusinessPlan extends Component {
                         name="experienceUpload"
                         fielddata={controlPerson.experienceUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
+                        onremove={field => this.handleDelDoc(field, index)}
                         uploadtitle="Upload Experience File"
                       />
                     </Form.Field>
@@ -157,7 +148,7 @@ export default class BusinessPlan extends Component {
                         name="creditUpload"
                         fielddata={controlPerson.creditUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
+                        onremove={field => this.handleDelDoc(field, index)}
                         uploadtitle="Upload Credit Score File"
                       />
                     </Form.Field>
@@ -172,7 +163,7 @@ export default class BusinessPlan extends Component {
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
-                  disabled={isReadonly}
+                  readOnly={isReadonly}
                   key={field}
                   name={field}
                   fielddata={BUSINESS_PLAN_FRM.fields[field]}
@@ -202,7 +193,7 @@ export default class BusinessPlan extends Component {
                         <Table.Cell width={8}>
                           <FormInput
                             containerclassname={isReadonly ? 'display-only' : ''}
-                            disabled={isReadonly}
+                            readOnly={isReadonly}
                             name="name"
                             fielddata={source.name}
                             changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'sources', index)}
@@ -212,7 +203,7 @@ export default class BusinessPlan extends Component {
                         <Table.Cell width={8}>
                           <MaskedInput
                             containerclassname={isReadonly ? 'display-only' : ''}
-                            disabled={isReadonly}
+                            readOnly={isReadonly}
                             prefix="$"
                             currency
                             name="amount"
@@ -264,7 +255,7 @@ export default class BusinessPlan extends Component {
                       <Table.Cell width={8}>
                         <FormInput
                           containerclassname={isReadonly ? 'display-only' : ''}
-                          disabled={isReadonly}
+                          readOnly={isReadonly}
                           name="name"
                           fielddata={use.name}
                           changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'uses', index)}
@@ -274,7 +265,7 @@ export default class BusinessPlan extends Component {
                       <Table.Cell width={8}>
                         <MaskedInput
                           containerclassname={isReadonly ? 'display-only' : ''}
-                          disabled={isReadonly}
+                          readOnly={isReadonly}
                           prefix="$"
                           currency
                           name="amount"
@@ -312,7 +303,7 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <MaskedInput
             containerclassname={isReadonly ? 'display-only' : ''}
-            disabled={isReadonly}
+            readOnly={isReadonly}
             name="dateOfIncorporation"
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
             format="##-##-####"
@@ -329,15 +320,6 @@ export default class BusinessPlan extends Component {
             submitWithApproval={this.submitWithApproval}
           />
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'experienceUpload' || confirmBox.entity === 'creditUpload'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
-          size="mini"
-          className="deletion"
-        />
         <Confirm
           header="Confirm"
           content={`Are you sure you want to remove this ${confirmModalName === 'uses' ? 'use' :

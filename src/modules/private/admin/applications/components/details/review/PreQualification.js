@@ -58,7 +58,7 @@ export default class PreQual extends Component {
               <Aux>
                 <FormTextarea
                   containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
-                  disabled={isReadonly}
+                  readOnly={isReadonly}
                   name="justifications"
                   label={`Justification ${index + 1}`}
                   fielddata={justifications.justifications}
