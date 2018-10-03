@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 
 export const APPLICATION_STATUS_COMMENT = {
   text: {
@@ -11,7 +9,6 @@ export const APPLICATION_STATUS_COMMENT = {
   },
 };
 
->>>>>>> develop
 export const MANAGERS = {
   managerOverview: {
     value: '',
