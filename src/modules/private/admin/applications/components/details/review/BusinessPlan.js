@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Grid, Form, Button, Divider, Header, Icon, Confirm, Table } from 'semantic-ui-react';
-import { FormTextarea, MaskedInput, FormInput, DropZone } from '../../../../../../../theme/form';
+import { FormTextarea, MaskedInput, FormInput, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import Helper from '../../../../../../../helper/utility';
 import ButtonGroup from './ButtonGroup';
@@ -15,7 +15,7 @@ const AddMore = ({
   <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)} >+ {title}</Button>
 );
 
-@inject('businessAppReviewStore', 'uiStore', 'businessAppStore', 'userStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class BusinessPlan extends Component {
   componentWillMount() {
@@ -29,16 +29,8 @@ export default class BusinessPlan extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore(formName, arrayName);
   }
-  confirmRemoveDoc = (e, name, index) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name, index);
-  }
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
   handleDelDoc = (field, index) => {
-    this.props.businessAppReviewStore.removeUploadedData('CONTROL_PERSONS_FRM', field, index);
-    this.props.uiStore.setConfirmBox('');
+    this.props.businessAppReviewStore.removeUploadedData('BUSINESS_PLAN_FRM', field, index, 'controlPersons');
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -66,7 +58,6 @@ export default class BusinessPlan extends Component {
       review.businessPlan.approved) ? review.businessPlan.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
       && !isManager) || (isManager && approved && approved.status));
-    const { confirmBox } = this.props.uiStore;
     return (
       <Aux>
         <Form onSubmit={this.submit}>
@@ -146,7 +137,7 @@ export default class BusinessPlan extends Component {
                         name="experienceUpload"
                         fielddata={controlPerson.experienceUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
+                        onremove={field => this.handleDelDoc(field, index)}
                         uploadtitle="Upload Experience File"
                       />
                     </Form.Field>
@@ -157,7 +148,7 @@ export default class BusinessPlan extends Component {
                         name="creditUpload"
                         fielddata={controlPerson.creditUpload}
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                        onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
+                        onremove={field => this.handleDelDoc(field, index)}
                         uploadtitle="Upload Credit Score File"
                       />
                     </Form.Field>
@@ -329,15 +320,6 @@ export default class BusinessPlan extends Component {
             submitWithApproval={this.submitWithApproval}
           />
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'experienceUpload' || confirmBox.entity === 'creditUpload'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
-          size="mini"
-          className="deletion"
-        />
         <Confirm
           header="Confirm"
           content={`Are you sure you want to remove this ${confirmModalName === 'uses' ? 'use' :

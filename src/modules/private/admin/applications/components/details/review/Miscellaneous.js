@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Header, Table, Icon, Item, Form, Confirm, Button, Dropdown } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { FormInput, DropZone } from '../../../../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
@@ -73,7 +73,7 @@ const AddMore = ({
   </Table.Row>
 );
 
-@inject('businessAppReviewStore', 'uiStore', 'businessAppStore', 'userStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Miscellaneous extends Component {
   componentWillMount() {
@@ -87,16 +87,8 @@ export default class Miscellaneous extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore(formName, arrayName);
   }
-  confirmRemoveDoc = (e, name, index) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name, index);
-  }
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
   handleDelDoc = (field, index) => {
-    this.props.businessAppReviewStore.removeUploadedData('MISCELLANEOUS_FRM', 'otherDocs', field, index);
-    this.props.uiStore.setConfirmBox('');
+    this.props.businessAppReviewStore.removeUploadedData('MISCELLANEOUS_FRM', field, index, 'otherDocs');
   }
   toggleConfirmModal = (e, index, formName, arrayName) => {
     e.preventDefault();
@@ -113,7 +105,6 @@ export default class Miscellaneous extends Component {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
       confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
-    const { confirmBox } = this.props.uiStore;
     const { roles } = this.props.userStore.currentUser;
     const isManager = roles && roles.includes('manager');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
@@ -196,7 +187,7 @@ export default class Miscellaneous extends Component {
                       name="docDetails"
                       fielddata={document.docDetails}
                       ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                      onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
+                      onremove={field => this.handleDelDoc(field, index)}
                       uploadtitle="Choose document to upload"
                     />
                   </Table.Cell>
@@ -242,15 +233,6 @@ export default class Miscellaneous extends Component {
             submitWithApproval={this.submitWithApproval}
           />
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'docDetails'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
-          size="mini"
-          className="deletion"
-        />
         <Confirm
           header="Confirm"
           content={`Are you sure you want to remove this ${confirmModalName === 'SOCIAL_MEDIA_FRM' ? 'social media' :

@@ -5,7 +5,7 @@ import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, 
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { BUSINESS_APPLICATION_STATUS } from '../../../../constants/businessApplication';
+import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
 import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
@@ -30,6 +30,7 @@ export class BusinessAppReviewStore {
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
+  @observable removeFileIdsList = [];
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
@@ -65,15 +66,15 @@ export class BusinessAppReviewStore {
 
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
-      CONTINGENCY_FRM: { actionType: 'REVIEW_CONTINGENCIES' },
-      JUSTIFICATIONS_FRM: { actionType: 'REVIEW_PREQUALIFICATION' },
-      BUSINESS_PLAN_FRM: { actionType: 'REVIEW_BUSINESSPLAN' },
-      MISCELLANEOUS_FRM: { actionType: 'REVIEW_MISCELLANEOUS' },
-      OVERVIEW_FRM: { actionType: 'REVIEW_OVERVIEW' },
-      PROJECTIONS_FRM: { actionType: 'REVIEW_PROJECTIONS' },
-      DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION' },
-      OFFERS_FRM: { actionType: 'REVIEW_OFFER' },
-      MANAGERS_FRM: { formData: MANAGERS },
+      CONTINGENCY_FRM: { actionType: 'REVIEW_CONTINGENCIES', isMultiForm: true },
+      JUSTIFICATIONS_FRM: { actionType: 'REVIEW_PREQUALIFICATION', isMultiForm: true },
+      BUSINESS_PLAN_FRM: { actionType: 'REVIEW_BUSINESSPLAN', isMultiForm: true },
+      MISCELLANEOUS_FRM: { actionType: 'REVIEW_MISCELLANEOUS', isMultiForm: true },
+      OVERVIEW_FRM: { actionType: 'REVIEW_OVERVIEW', isMultiForm: true },
+      PROJECTIONS_FRM: { actionType: 'REVIEW_PROJECTIONS', isMultiForm: false },
+      DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION', isMultiForm: false },
+      OFFERS_FRM: { actionType: 'REVIEW_OFFER', isMultiForm: true },
+      MANAGERS_FRM: { formData: MANAGERS, isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -114,58 +115,28 @@ export class BusinessAppReviewStore {
       { name: 'ownership', value: values.floatValue }, 'controlPersons', index,
     );
   }
-
+  @action
+  checkFormValid = (form, multiForm, showErrors) => {
+    this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
+  }
   @action
   setFileUploadData = (form, arrayName, field, files, index = null) => {
-    const file = files[0];
-    const fileData = Helper.getFormattedFileData(file);
-    if (index !== null) {
-      this[form].fields[arrayName][index][field].fileId = '12345';
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        { name: field, value: fileData.fileName }, arrayName, index,
-      );
-    } else {
-      this[form].fields[field].fileId = '12345';
-      this[form] = Validator.onChange(
-        this[form],
-        { name: field, value: fileData.fileName },
-      );
-    }
-  }
-
-  @action
-  setFormFileArray = (formName, field, getField, value, index) => {
-    if (field === 'resume') {
-      this[formName].fields.owners[index][field][getField] = value;
-    } else if (getField === 'showLoader' || getField === 'error') {
-      this[formName].fields[field][getField] = value;
-    } else {
-      this[formName].fields[field][getField] =
-      [...this[formName].fields[field][getField],
-        value];
-    }
-  }
-
-  @action
-  businessAppUploadFiles = (files, fieldName, formName, index = null) => {
     if (typeof files !== 'undefined' && files.length) {
+      const { applicationId, userId } = businessAppStore.businessApplicationDetailsAdmin;
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
-        const stepName = this.getFileUploadEnum(fieldName, index);
-        this.setFieldvalue('isFileUploading', true);
-        this.setFormFileArray(formName, fieldName, 'showLoader', true, index);
-        fileUpload.setFileUploadData(this.currentApplicationId, fileData, stepName, 'ISSUER').then((result) => {
+        const stepName = this.getFileUploadEnum(form, index);
+        this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+        // Need to change userType to ADMIN from ISSUER
+        fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ISSUER', userId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
-            this.setFormFileArray(formName, fieldName, 'fileData', file, index);
-            this.setFormFileArray(formName, fieldName, 'preSignedUrl', preSignedUrl, index);
-            this.setFormFileArray(formName, fieldName, 'fileId', fileId, index);
-            this.setFormFileArray(formName, fieldName, 'value', fileData.fileName, index);
-            this.setFormFileArray(formName, fieldName, 'error', undefined, index);
-            if (this.currentApplicationType === 'business' && (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn')) {
-              this.checkValidationForTaxReturn();
-            }
+            this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+            this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+            this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+            this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+            this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+            this.checkFormValid(form, index != null, false);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
@@ -174,25 +145,75 @@ export class BusinessAppReviewStore {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
         }).finally(() => {
-          this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
-          this.setFieldvalue('isFileUploading', false);
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
         });
       });
     }
   }
 
   @action
-  removeUploadedData = (form, arrayName = 'data', field, index = null) => {
-    if (index !== null) {
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        { name: field, value: '' }, arrayName, index,
-      );
+  getFileUploadEnum = (formName, index = null) => {
+    let step = '';
+    if (index !== null && formName !== 'MISCELLANEOUS_FRM') {
+      step = `${BUSINESS_APP_FILE_UPLOAD_ENUMS[formName]}${index + 1}`;
     } else {
-      this[form] = Validator.onChange(
-        this[form],
-        { name: field, value: '' },
-      );
+      step = BUSINESS_APP_FILE_UPLOAD_ENUMS[formName];
+    }
+    return step;
+  }
+
+  @action
+  setFormFileArray = (formName, arrayName, field, getField, value, index) => {
+    if (index != null) {
+      this[formName].fields[arrayName][index][field][getField] = value;
+    } else {
+      this[formName].fields[field][getField] = value;
+    }
+  }
+
+  @action
+  removeUploadedData = (form, field, index = null, arrayName) => {
+    let removeFileIds = '';
+    if (index != null) {
+      const { fileId } = this[form].fields[arrayName][index][field];
+      removeFileIds = fileId;
+    } else {
+      const { fileId } = this[form].fields[field];
+      removeFileIds = fileId;
+    }
+    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+    this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+    this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
+    this.setFormFileArray(form, arrayName, field, 'value', '', index);
+    this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+    this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+    this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
+    this.checkFormValid(form, index != null, false);
+    // if (payLoadFileId !== '') {
+    //   fileUpload.removeUploadedData(payLoadFileId).then(() => {
+    //     this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+    //     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
+    //     this.setFormFileArray(form, arrayName, field, 'value', '', index);
+    //     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+    //     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+    //     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
+    //   }).catch((error) => {
+    //     uiStore.setErrors(error.message);
+    //   });
+    // }
+  }
+
+  @action
+  removeUploadedFiles = () => {
+    const fileList = toJS(this.removeFileIdsList);
+    if (fileList.length) {
+      forEach(fileList, (fileId) => {
+        fileUpload.removeUploadedData(fileId).then(() => {
+        }).catch((error) => {
+          uiStore.setErrors(error.message);
+        });
+      });
+      this.removeFileIdsList = [];
     }
   }
 
@@ -335,6 +356,7 @@ export class BusinessAppReviewStore {
             [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
         })
         .then((result) => {
+          this.removeUploadedFiles();
           Helper.toast('Data saved successfully.', 'success');
           resolve(result);
         })
@@ -357,6 +379,10 @@ export class BusinessAppReviewStore {
       return false;
     }
     this[form] = Validator.setFormData(this[form], appData, ref);
+    const multiForm = this.getActionType(form, 'isMultiForm');
+    if (form !== 'MANAGERS_FRM') {
+      this.checkFormValid(form, multiForm, false);
+    }
     return false;
   }
 }
