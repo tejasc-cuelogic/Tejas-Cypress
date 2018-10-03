@@ -262,6 +262,11 @@
                 margin-left:@5px;
             }
         }
+        >.content h6.ui.header{
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
+        }
     }
 }
 

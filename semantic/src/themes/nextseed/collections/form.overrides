@@ -67,6 +67,7 @@
     }
     label{
         i.ns-help-circle, a{
+            height:auto;
             margin:0 0 0 @5px;
             font-size:@14px;
             color:@neutral-middark;
