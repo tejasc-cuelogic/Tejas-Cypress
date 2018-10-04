@@ -4,6 +4,8 @@ import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
 import { isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { FormValidator as Validator } from '../../../../helper';
+import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
@@ -14,9 +16,7 @@ import {
   investorProfileStore,
 } from '../../index';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
-import {
-  INVESTMENT_ACCOUNT_TYPES,
-} from '../../../../constants/account';
+import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
@@ -25,6 +25,8 @@ export class UserDetailsStore {
   @observable editCard = 0;
   @observable deleting = 0;
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
+  @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
+  @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
@@ -114,8 +116,7 @@ export class UserDetailsStore {
   }
 
   @action
-  toggleState = () => {
-    const { accountStatus, id } = this.currentUser.data.user;
+  toggleState = (id, accountStatus) => {
     const params = { status: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCK', id };
     client
       .mutate({
@@ -242,6 +243,34 @@ export class UserDetailsStore {
       return validPanes;
     });
     return validPanes;
+  }
+
+  @action
+  setFormData = (form, ref, keepAtLeastOne) => {
+    const details = toJS({ ...this.detailsOfUser.data.user });
+    if (!details) {
+      return false;
+    }
+    this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    return false;
+  }
+
+  @action
+  formChange = (e, result, form) => {
+    if (result && (result.type === 'checkbox')) {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+        '',
+        true,
+        { value: result.checked },
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
   }
 }
 

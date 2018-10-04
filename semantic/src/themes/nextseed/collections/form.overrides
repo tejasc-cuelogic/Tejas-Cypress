@@ -76,10 +76,13 @@
             text-align:center;
         }
     }
-    .fields .field, .fields .wide.field{
-        padding-left:@gutterWidth;
-        padding-right:@gutterWidth;
-        margin-bottom:@14px;
+    .fields{
+        align-items:flex-end;
+        .field, .wide.field{
+            padding-left:@gutterWidth;
+            padding-right:@gutterWidth;
+            margin-bottom:@14px;
+        }
     }
     .error:not(.field){
         color:@negativeTextColor;

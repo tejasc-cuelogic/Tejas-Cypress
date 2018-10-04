@@ -2,16 +2,16 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Link, Route } from 'react-router-dom';
 import moment from 'moment';
-import { Header, Table, Card, Button } from 'semantic-ui-react';
+import { Container, Header, Table, Card, Button } from 'semantic-ui-react';
 import { DateTimeFormat } from '../../../../../theme/shared';
 import Redeem from './Redeem';
 
 const RewardList = props => props.rewards.map(offering => (
   <Aux>
     <Header as="h4">{offering.name}</Header>
-    <Card fluid>
+    <Container as={!props.admin ? Card : false} fluid>
       <div className="table-wrapper">
-        <Table unstackable singleLine className="investment-details">
+        <Table unstackable singleLine className={`investment-details ${props.admin ? 'form-table' : ''}`}>
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell>Reward Name</Table.HeaderCell>
@@ -26,7 +26,7 @@ const RewardList = props => props.rewards.map(offering => (
             ) : (
               offering.rewards.map(r => (
                 <Table.Row key={r.id}>
-                  <Table.Cell><Link to="/">{r.name}</Link></Table.Cell>
+                  <Table.Cell><b>{r.name}</b></Table.Cell>
                   <Table.Cell>{r.status}</Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={r.expiry} /></Table.Cell>
                   <Table.Cell textAlign="center">
@@ -52,7 +52,7 @@ const RewardList = props => props.rewards.map(offering => (
           </Table.Body>
         </Table>
       </div>
-    </Card>
+    </Container>
     <Route exact path={`${props.match.url}/redeem/:id`} component={Redeem} />
   </Aux>
 ));

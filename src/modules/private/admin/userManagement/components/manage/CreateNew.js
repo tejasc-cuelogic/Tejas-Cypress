@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import { Header, Card, Form, Button } from 'semantic-ui-react';
+import { Header, Card, Form, Button, Item, Modal } from 'semantic-ui-react';
 import { adminActions } from '../../../../../../services/actions';
-import { FormInput, FormSelect } from '../../../../../../theme/form';
+import { FormInput, FormDropDown } from '../../../../../../theme/form';
 import { ROLES } from '../../../../../../constants/user';
 
 @inject('userStore', 'uiStore')
@@ -25,56 +24,76 @@ export default class CreateNew extends Component {
       });
   }
 
+  handleCloseModal = () => this.props.history.push('/app/users');
+
   render() {
-    const { USR_FRM, userEleChange } = this.props.userStore;
+    const { USR_FRM, userEleChange, capabilitiesMeta } = this.props.userStore;
     const { inProgress } = this.props.uiStore;
     return (
-      <Aux>
-        <Header as="h3">User Details</Header>
-        <Card.Group stackable itemsPerRow={3}>
-          <Card fluid>
-            <Card.Content>
-              <Header as="h4">Personal Profile</Header>
-              <Form onSubmit={this.submit}>
-                <Form.Group widths="equal">
-                  {
-                    ['givenName', 'familyName'].map(field => (
-                      <FormInput
-                        key={field}
-                        type="text"
-                        name={field}
-                        fielddata={USR_FRM.fields[field]}
-                        changed={userEleChange}
-                      />
-                    ))
-                  }
-                </Form.Group>
+      <Modal closeIcon size="tiny" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+        <Modal.Content className="transaction-detials">
+          <Item.Group>
+            <Item className="user-intro">
+              <Item.Content verticalAlign="middle">
+                <Header as="h3">Add new user</Header>
+              </Item.Content>
+            </Item>
+          </Item.Group>
+          <Card fluid className="inner-content-spacer">
+            <Form onSubmit={this.submit}>
+              <Form.Group widths="equal">
                 {
-                  ['email', 'TemporaryPassword', 'verifyPassword'].map(field => (
+                  ['givenName', 'familyName'].map(field => (
                     <FormInput
                       key={field}
-                      type={field !== 'email' ? 'password' : 'text'}
+                      type="text"
                       name={field}
                       fielddata={USR_FRM.fields[field]}
                       changed={userEleChange}
                     />
                   ))
                 }
-                <FormSelect
-                  name="role"
-                  fielddata={USR_FRM.fields.role}
-                  options={ROLES}
-                  changed={userEleChange}
-                />
-                <div>
-                  <Button loading={inProgress} disabled={!USR_FRM.meta.isValid} color="green">Submit</Button>
-                  <p className="field-error">{USR_FRM.meta.error}</p>
-                </div>
-              </Form>
-            </Card.Content>
+              </Form.Group>
+              {
+                ['email', 'TemporaryPassword', 'verifyPassword'].map(field => (
+                  <FormInput
+                    key={field}
+                    type={field !== 'email' ? 'password' : 'text'}
+                    name={field}
+                    fielddata={USR_FRM.fields[field]}
+                    changed={userEleChange}
+                  />
+                ))
+              }
+              <FormDropDown
+                name="role"
+                fielddata={USR_FRM.fields.role}
+                options={ROLES}
+                multiple
+                selection
+                fluid
+                containerclassname="dropdown-field"
+                onChange={(e, res) => userEleChange(e, res, 'dropdown')}
+              />
+              <FormDropDown
+                name="capabilities"
+                fielddata={USR_FRM.fields.capabilities}
+                options={capabilitiesMeta}
+                search
+                multiple
+                selection
+                fluid
+                containerclassname="dropdown-field"
+                onChange={(e, res) => userEleChange(e, res, 'dropdown')}
+              />
+              <div className="center-align mt-30">
+                <Button primary className="relaxed" content="Submit" loading={inProgress} disabled={!USR_FRM.meta.isValid} />
+                <p className="field-error">{USR_FRM.meta.error}</p>
+              </div>
+            </Form>
           </Card>
-        </Card.Group>
-      </Aux>
+        </Modal.Content>
+      </Modal>
     );
   }
 }

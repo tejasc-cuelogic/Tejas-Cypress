@@ -178,6 +178,7 @@
 @ns-food: "\e940";
 @ns-food-light: "\e95a";
 @ns-franchise: "\e95b";
+@ns-freeze: "\e98a";
 @ns-help: "\e949";
 @ns-help-circle: "\e926";
 @ns-home-line: "\e97e";

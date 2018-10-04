@@ -526,7 +526,9 @@ export class Auth {
     const newData = {};
     _.map(data, (val, key) => { (newData[camel(key)] = val); });
     newData.roles = data['custom:roles'];
-    delete newData['custom:roles'];
+    newData.capabilities = data['custom:capabilities'];
+    delete newData.customRoles;
+    delete newData.customCapabilities;
     return newData;
   };
 
@@ -538,6 +540,7 @@ export class Auth {
   parseRoles = (data) => {
     const newData = data;
     newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
+    newData.capabilities = (data.capabilities) ? JSON.parse(data.capabilities) : [];
     return newData;
   };
 

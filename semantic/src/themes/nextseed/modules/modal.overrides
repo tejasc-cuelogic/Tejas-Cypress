@@ -238,33 +238,6 @@
         a.theme-link, .button.theme-link{
             color:@primary-one;
         }
-        .display-only input[type=tel]:read-only,
-        .display-only input[type=email]:read-only,
-        input[type=tel]:read-only.display-only,
-        input[type=email]:read-only.display-only,
-        .display-only input[type=tel],
-        .display-only input[type=email],
-        input[type=tel].display-only,
-        input[type=email].display-only{
-            padding:@14px @20px;
-            margin-bottom:@10px;
-            font-size:@20px;
-            font-weight:@fontMedium;
-            text-align:center;
-            border:none;
-            border-bottom:@border-light 1px solid;
-            background:@border-light;
-        }
-        .display-only input[type=tel]:not(:read-only),
-        .display-only input[type=email]:not(:read-only),
-        input[type=tel].display-only:not(:read-only),
-        input[type=email].display-only:not(:read-only){
-            background-color:@white;
-            &:focus{
-                border-color:@primary-one;
-                outline:none;
-            }
-        }
         &.reward-deatils{
             padding:@14px;
         }
@@ -357,6 +330,35 @@
         > .actions{
             padding:1rem;
             text-align:right;
+        }
+    }
+}
+.ui.modals:not(.inverted) > .content{
+    .display-only input[type=tel]:read-only,
+    .display-only input[type=email]:read-only,
+    input[type=tel]:read-only.display-only,
+    input[type=email]:read-only.display-only,
+    .display-only input[type=tel],
+    .display-only input[type=email],
+    input[type=tel].display-only,
+    input[type=email].display-only{
+        padding:@14px @20px;
+        margin-bottom:@10px;
+        font-size:@20px;
+        font-weight:@fontMedium;
+        text-align:center;
+        border:none;
+        border-bottom:@border-light 1px solid;
+        background:@border-light;
+    }
+    .display-only input[type=tel]:not(:read-only),
+    .display-only input[type=email]:not(:read-only),
+    input[type=tel].display-only:not(:read-only),
+    input[type=email].display-only:not(:read-only){
+        background-color:@white;
+        &:focus{
+            border-color:@primary-one;
+            outline:none;
         }
     }
 }
