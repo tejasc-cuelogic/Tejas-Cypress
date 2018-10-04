@@ -15,11 +15,11 @@ class InsightArticlesList extends Component {
       return <InlineLoader text="No record to display." />;
     }
     return (
-      <Grid>
+      <Grid stackable doubling>
         {InsightArticles && InsightArticles.length &&
         InsightArticles.map(article => (
-          <Grid.Column mobile={16} tablet={8} computer={4} fluid>
-            <Card className="campaign insights" as={Link} to={`/resources/insights/${article.id}`}>
+          <Grid.Column mobile={16} tablet={8} computer={4}>
+            <Card className="campaign insights" fluid as={Link} to={`/resources/insights/${article.id}`}>
               <Image
                 src={article.featureImage}
               />

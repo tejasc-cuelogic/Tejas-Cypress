@@ -1,17 +1,16 @@
+/* eslint-disable no-unused-vars */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import flatMap from 'lodash/flatMap';
-import mapValues from 'lodash/mapValues';
-import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { userStore } from '../../index';
-import { clientSearch } from '../../../../helper';
+// import { userStore } from '../../index';
+// import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
+
 
 export class EducationStore {
   @observable data = { KnowledgeBase: [], Faq: [] };
   @observable searchParam = { Faq: '', KnowledgeBase: '' };
-  @observable selected = { id: '', title: '', body: '' };
+  @observable selected = { id: '', title: '', content: '' };
   @observable faqsList = [
     {
       id: 1,
@@ -32,27 +31,36 @@ export class EducationStore {
   ];
 
   @action
-  initRequest = (module, props) => {
+  initRequest = (module, props, categoryType = 'INV_FAQ') => {
     const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
-    let scopeType = 'INVESTOR';
-    if (props && props.isMkt && props.params) {
-      scopeType = props.params.for === 'investor' ? 'INVESTOR' : 'ISSUER';
-    } else if (userStore.currentUser) {
-      scopeType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
-    }
+    // let categoryType = '';
+    // if (props && props.isMkt && props.params) {
+    //   categoryType = props.params.for === 'investor' ? 'INVESTOR_KB' : 'ISSUER_KB';
+    // } else if (userStore.currentUser) {
+    //   categoryType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
+    // }
     this.data[module] = graphql({
-      client: props && props.isMkt ? clientPublic : client,
+      client: clientPublic,
       query,
-      variables: { scopeType },
+      variables: { categoryType },
     });
   }
 
   @action
   getOne = (ref, id) => {
-    const meta = { knowledgeBase: ['kbs', 'title', 'body'], faq: ['faqs', 'question', 'answer'] };
-    if (this[meta[ref][0]].length > 1) {
-      const item = (!id) ? this[meta[ref][0]][0][`${ref}Items`][0] :
-        flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}Items`])).find(i => i.id === id);
+    const meta = { knowledgeBase: ['kbs', 'title', 'content'], faq: ['faqs', 'title', 'description'] };
+    const subItems = ref === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems';
+    if (this[meta[ref][0]].length > 0) {
+      let tempItem = {};
+      this[meta[ref][0]].forEach((element) => {
+        element[subItems].forEach((f) => {
+          if (f.id === id) {
+            tempItem = f;
+          }
+        });
+      });
+      const item = (!id) ? this[meta[ref][0]][0][subItems[0]] : tempItem;
+      // flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}ItemList`])).find(i => i.id === id);
       this.selected = item ? { id: item.id, title: item[meta[ref][1]], body: item[meta[ref][2]] } :
         {};
     }
@@ -68,17 +76,19 @@ export class EducationStore {
   }
 
   @computed get kbs() {
-    return (this.allData.KnowledgeBase.data && this.allData.KnowledgeBase.data.knowledgeBase
-      && clientSearch.search(
-        toJS(this.allData.KnowledgeBase.data.knowledgeBase),
-        this.searchParam.KnowledgeBase,
-        'knowledgeBase',
-      )) || [];
+    return (this.allData.KnowledgeBase.data &&
+      this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems);
+    // && clientSearch.search(
+    //   toJS(this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems),
+    //   this.searchParam.KnowledgeBase,
+    //   'knowledgeBase',
+    // )) || [];
   }
 
   @computed get faqs() {
-    return (this.allData.Faq.data && this.allData.Faq.data.faqs
-      && clientSearch.search(toJS(this.allData.Faq.data.faqs), this.searchParam.Faq, 'faq')) || [];
+    return (this.allData.Faq.data && this.allData.Faq.data.faqAndKnowledgeBaseItems);
+    // && clientSearch.search(toJS(this.allData.Faq.data.faqAndKnowledgeBaseItems),
+    // this.searchParam.Faq, 'knowledgeBase')) || [];
   }
 
   @computed get error() {

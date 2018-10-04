@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { inject } from 'mobx-react';
 import { Header, Modal, Item, Image, Icon, Divider } from 'semantic-ui-react';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('teamStore')
 class TeamModal extends Component {
   state = {
@@ -23,12 +24,15 @@ class TeamModal extends Component {
         size="large"
         className="team-member-modal"
       >
-        <Modal.Content>
+        {isMobile &&
+          <Modal.Header>Meet our team</Modal.Header>
+        }
+        <Modal.Content scrolling={isMobile}>
           <Item.Group>
             <Item>
               <Image src={member.avatar} />
               <Item.Content verticalAlign="middle" className="team-details-container">
-                <div className="scrollable-content">
+                <div className={isMobile ? '' : 'scrollable-content'}>
                   <Header as="h4">
                     {member.memberName}
                     <Header.Subheader>{member.title}</Header.Subheader>

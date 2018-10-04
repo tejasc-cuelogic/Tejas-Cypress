@@ -497,12 +497,6 @@ footer{
 		}
 	}
 }
-.business-learn-more {
-	p {
-		text-align: left;
-		margin-left: 56px;
-	}
-}
 .funding-option {
 	padding-top: 74px;
 	.ui.compact.button {

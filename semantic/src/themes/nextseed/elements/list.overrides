@@ -3,10 +3,18 @@
 *******************************/
 //  Public page Starts
 .campaign{
-    .ui.horizontal.list>.item{
-        font-size:@12px;
-        font-weight:@fontMedium;
-        text-transform: capitalize;
+    .ui.horizontal.list{
+        min-width: auto;
+        >.item{
+            font-size:@12px;
+            font-weight:@fontMedium;
+            text-transform: capitalize;
+            color: @neutral;
+            font-weight: @bold;
+            &:not(:first-child) {
+                padding-left: @5px !important;
+            }
+        }
     }
 }
 .ui.list {
@@ -14,111 +22,29 @@
         font-size: @20px;
         line-height: 28px;
     }
-    &.learn-more-list >.item {
+    &.learn-more-list>.item {
         .header {
             margin-bottom: @10px;
-        }
-        >.icon{
-            display:table-cell;
             +.content {
                 display:table-cell;
                 color: @neutral-middark;
+                a {
+                    color: @primary-one;
+                }
             }
+        }
+        a {
+            color: @neutral;
+        }
+        .icon {
+            margin-left: @5px !important;
         }
     }
-    &.rewards {
-        margin-left: 230px;
-        border-left: 1px solid @neutral-darkwhite;
-        max-width: 500px;
-        >li {
-            padding-left: @30px;
-            margin: @14px 0;
-            position: relative;
-            &:before {
-                content: "";
-                height: 8px;
-                width: 8px;
-                border-radius: 50%;
-                background: @primary-one;
-                position: absolute;
-                left: @13px;
-                top: @31px;
-                z-index: 2;
-            }
-            &:first-child{
-                .box:after {
-                    content: "";
-                    height: 35px;
-                    width: 1px;
-                    position: absolute;
-                    left: -32px;
-                    top: 0;
-                    z-index: 1;
-                    background: @white;
-                }
-            }
-            &:last-child{
-                .box:after {
-                    content: "";
-                    height: 100%;
-                    width: 1px;
-                    position: absolute;
-                    left: -32px;
-                    top: 35px;
-                    z-index: 1;
-                    background: @white;
-                }
-            }
-            h4.ui.header {
-                position: absolute;
-                left: -265px;
-                top: @24px;
-                text-align: right;
-                width: 210px;
-                .sub.header{
-                    margin-top: @10px;
-                }
-            }
-            .box {
-                border: 1px solid @neutral-darkwhite;
-                padding: @20px @30px;
-                border-radius: 4px;
-                position: relative;
-                &:before {
-                    content: "";
-                    position: absolute;
-                    top: @26px;
-                    left: -@7px;
-                    border-width: 1px 0 0 1px;
-                    border-style: solid;
-                    border-color: @neutral-darkwhite;
-                    display: block;
-                    width: 12px;
-                    height: 12px;
-                    transform: rotate(-45deg);
-                    background: @white;
-                }
-            }
-            ul.list {
-                padding: 0 0 0 @17px;
-                p {
-                  color: @fullBlack;
-                  margin-bottom: 0;  
-                }
-                li {
-                    color: @neutral-middark;
-                }
-            }
-        }
-    }
-    &.funding-options {
-        >.item {
-            margin-bottom: @20px;
-            line-height: 24px;
-            .header {
-                margin-bottom: @10px;
-            }
-        }
+    &.rewards >li {
+        color: @neutral-middark;
+        .header {
+            font-weight: @bold;
+        }       
     }
 }
 //  Public page Ends
@@ -341,10 +267,20 @@ ol.ui.list.step-list{
 }
 
 .ui.list.horizontal{
-    min-width:600px;
+    // below code commented as conflicts on public pages
+    // min-width:600px;
+    // @media only screen and (max-width : @largeMonitorBreakpoint){
+    //     min-width:auto;
+    // }
     .item.ui.checkbox{
         min-width:25%;
         margin:0;
         padding-right:@14px;
+    }
+    .item:not(:first-child) {
+        @media only screen and (max-width : @largeMonitorBreakpoint){
+            padding-left: 0 !important;
+            margin-left: 0;
+        }
     }
 }
