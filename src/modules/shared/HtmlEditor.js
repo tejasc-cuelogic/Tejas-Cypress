@@ -18,7 +18,7 @@ window.$ = $;
 window.jQuery = $;
 
 const uploadsConfig = { ...UPLOADS_CONFIG, ...{ acl: 'public-read', keyStart: 'uploads' } };
-const getConfig = () => {
+const getConfig = (keyStart, overrides) => {
   const config = {
     placeholderText: 'Your content goes here!',
     toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
@@ -30,13 +30,12 @@ const getConfig = () => {
     imageManager: false,
     imageUploadToS3: S3.getHash({ ...uploadsConfig }),
   };
-  console.log(config);
-  return config;
+  return { ...config, ...overrides };
 };
 
 export default class HtmlEditor extends React.Component {
   handleModelChange = (content) => {
-    this.props.changed(this.props.name, content);
+    this.props.changed(this.props.name, content, this.props.form);
   }
   render() {
     const { keyStart } = this.props;
@@ -44,7 +43,7 @@ export default class HtmlEditor extends React.Component {
       <FroalaEditor
         tag="textarea"
         model={this.props.content}
-        config={getConfig(keyStart)}
+        config={getConfig(keyStart, this.props.overrides)}
         onModelChange={this.handleModelChange}
       />
     );

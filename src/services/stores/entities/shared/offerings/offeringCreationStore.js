@@ -235,6 +235,12 @@ export class OfferingCreationStore {
   }
 
   @action
+  rtEditorChange = (field, value, form) => {
+    this[form].fields[field].value = value;
+    this[form] = Validator.validateForm(this[form], true, false, false);
+  }
+
+  @action
   formChangeWithIndex = (e, result, form, index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],

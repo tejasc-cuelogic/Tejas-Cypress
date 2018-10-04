@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Button, Header, Icon } from 'semantic-ui-react';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
@@ -23,20 +24,25 @@ export default class OfferingCompany extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about');
   }
+  editorChange = (field, value, form) => this.props.offeringCreationStore.rtEditorChange(
+    field, value, form,
+  );
   render() {
     const {
       OFFERING_COMPANY_FRM,
       formArrayChange,
+      rtEditorChange,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_COMPANY_FRM';
     return (
       <Form onSubmit={this.handleFormSubmit}>
         <Header as="h4">About the Company</Header>
-        <FormTextarea
+        <HtmlEditor
+          changed={this.editorChange}
           name="theCompany"
-          fielddata={OFFERING_COMPANY_FRM.fields.theCompany}
-          changed={(e, result) => formArrayChange(e, result, formName)}
-          containerclassname="secondary"
+          form="OFFERING_COMPANY_FRM"
+          overrides={{ height: '244px' }}
+          content={OFFERING_COMPANY_FRM.fields.theCompany.value}
         />
         <Divider section />
         <Header as="h4">
@@ -67,11 +73,13 @@ export default class OfferingCompany extends Component {
           ['businessModel', 'locationAnalysis'].map(field => (
             <Aux>
               <Divider section />
-              <FormTextarea
+              <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
+              <HtmlEditor
+                changed={rtEditorChange}
                 name={field}
-                fielddata={OFFERING_COMPANY_FRM.fields[field]}
-                changed={(e, result) => formArrayChange(e, result, formName)}
-                containerclassname="secondary"
+                form="OFFERING_COMPANY_FRM"
+                overrides={{ height: '244px' }}
+                content={OFFERING_COMPANY_FRM.fields[field].value}
               />
             </Aux>
           ))
