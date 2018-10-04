@@ -1746,8 +1746,8 @@ i.icon[class*="ns-"]{
 .ns-article:before{
     content:@ns-article;
 }
-.ns-attachment:before {
-    content:@ns-attachment; 
+.ns-attachment:before{
+    content:@ns-attachment;
 }
 .ns-author:before{
     content:@ns-author;
@@ -1778,6 +1778,9 @@ i.icon[class*="ns-"]{
 }
 .ns-calendar:before{
     content:@ns-calendar;
+}
+.ns-campaign-dashboard:before{
+    content:@ns-campaign-dashboard;
 }
 .ns-caret-down:before{
     content:@ns-caret-down;
@@ -2091,7 +2094,7 @@ i.icon[class*="ns-"]{
 .ns-search:before{
     content:@ns-search;
 }
-.ns-send-right:before {
+.ns-send-right:before{
     content:@ns-send-right;
 }
 .ns-setting:before{
@@ -2117,6 +2120,9 @@ i.icon[class*="ns-"]{
 }
 .ns-tick:before{
     content:@ns-tick;
+}
+.ns-time-left:before{
+    content:@ns-time-left;
 }
 .ns-timer:before{
     content:@ns-timer;

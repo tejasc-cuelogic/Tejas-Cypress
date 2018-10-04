@@ -125,6 +125,7 @@
 @ns-box: "\e90a";
 @ns-business: "\e90b";
 @ns-calendar: "\e90c";
+@ns-campaign-dashboard: "\e994";
 @ns-caret-down: "\e90d";
 @ns-caret-left: "\e90e";
 @ns-caret-right: "\e90f";
@@ -238,6 +239,7 @@
 @ns-tags: "\e934";
 @ns-technology: "\e968";
 @ns-tick: "\e96a";
+@ns-time-left: "\e995";
 @ns-timer: "\e96d";
 @ns-times-box: "\e935";
 @ns-times-circle: "\e936";
