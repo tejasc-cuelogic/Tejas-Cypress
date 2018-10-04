@@ -32,28 +32,28 @@ export default class AddNewBonusReward extends Component {
         {
           <Modal.Content className="signup-content">
             <Form onSubmit={this.handleAddBonusReward}>
+              <FormCheckbox
+                fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds}
+                name="isEarlyBirds"
+                changed={(e, result) => formChange(e, result, formName)}
+                defaults
+                containerclassname="ui relaxed list"
+              />
+              {map(ADD_NEW_BONUS_REWARD_FRM.fields, ((field) => {
+                if (!field.key) {
+                  return null;
+                }
+                return (
+                  <FormCheckbox
+                    fielddata={field}
+                    name={field.key}
+                    changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
+                    defaults
+                    containerclassname="ui relaxed list rewards-tier"
+                  />
+                );
+              }))}
               <div className="featured-section">
-                <FormCheckbox
-                  fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds}
-                  name="isEarlyBirds"
-                  changed={(e, result) => formChange(e, result, formName)}
-                  defaults
-                  containerclassname="ui relaxed list"
-                />
-                {map(ADD_NEW_BONUS_REWARD_FRM.fields, ((field) => {
-                  if (!field.key) {
-                    return null;
-                  }
-                  return (
-                    <FormCheckbox
-                      fielddata={field}
-                      name={field.key}
-                      changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
-                      defaults
-                      containerclassname="ui relaxed list"
-                    />
-                  );
-                }))}
                 {
                   ['name', 'description'].map(field => (
                     <FormInput

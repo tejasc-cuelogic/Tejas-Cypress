@@ -370,6 +370,13 @@ ol.ui.list.step-list{
         }
     }
 }
+.ui.list.rewards-tier{
+    .item{
+        width:50%;
+        display:inline-block;
+        padding-right:@14px;
+    }
+}
 
 .ui.bulleted.list .list>.item,
 .ui.bulleted.list>.item,
