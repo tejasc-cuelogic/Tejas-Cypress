@@ -40,29 +40,22 @@ export default class Offer extends Component {
         <Divider hidden />
         <Form>
           <Grid columns={2}>
-            <Grid.Column>
-              <Card fluid className="offer-card">
-                <Card.Content>
-                  <Card.Header>
-                    {
-                      OFFERS_FRM.fields.data.map((offer, index) => (
-                        <Aux>
-                          Offer {String.fromCharCode('A'.charCodeAt() + index)}
-                          <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index)} className="pull-right">
-                            <Icon className="ns-close-circle" color="grey" />
-                          </Link>
-                        </Aux>
-                      ))
-                    }
-                  </Card.Header>
-                </Card.Content>
-                <div className="table-wrapper">
-                  <Table basic compact singleLine>
-                    <Table.Body>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.structure.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+            {OFFERS_FRM.fields.data.map((offer, index) => (
+              <Grid.Column>
+                <Card fluid className="offer-card">
+                  <Card.Content>
+                    <Card.Header>
+                      Offer {String.fromCharCode('A'.charCodeAt() + index)}
+                      <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index)} className="pull-right">
+                        <Icon className="ns-close-circle" color="grey" />
+                      </Link>
+                    </Card.Header>
+                  </Card.Content>
+                  <div className="table-wrapper">
+                    <Table basic compact singleLine>
+                      <Table.Body>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.structure.label}</Table.Cell>
                           <Table.Cell>
                             <Dropdown
                               name="structure"
@@ -75,13 +68,9 @@ export default class Offer extends Component {
                               onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', index)}
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.offeringAmount.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.offeringAmount.label}</Table.Cell>
                           <Table.Cell>
                             <FormInput
                               name="offeringAmount"
@@ -90,13 +79,9 @@ export default class Offer extends Component {
                               ishidelabel
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.maturity.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.maturity.label}</Table.Cell>
                           <Table.Cell>
                             <MaskedInput
                               name="maturity"
@@ -106,13 +91,9 @@ export default class Offer extends Component {
                               number
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.interestRate.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.interestRate.label}</Table.Cell>
                           <Table.Cell>
                             <MaskedInput
                               name="interestRate"
@@ -122,13 +103,9 @@ export default class Offer extends Component {
                               percentage
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.amortizationAmount.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.amortizationAmount.label}</Table.Cell>
                           <Table.Cell>
                             <MaskedInput
                               prefix="$"
@@ -139,13 +116,9 @@ export default class Offer extends Component {
                               hidelabel
                             />
                           </Table.Cell>
-                        ))
-                      }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.personalGuarantee.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.personalGuarantee.label}</Table.Cell>
                           <Table.Cell>
                             <Dropdown
                               name="personalGuarantee"
@@ -158,13 +131,9 @@ export default class Offer extends Component {
                               onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', index)}
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.businessBlanket.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.businessBlanket.label}</Table.Cell>
                           <Table.Cell>
                             <FormInput
                               name="businessBlanket"
@@ -173,13 +142,9 @@ export default class Offer extends Component {
                               ishidelabel
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.expirationDate.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.expirationDate.label}</Table.Cell>
                           <Table.Cell>
                             <MaskedInput
                               name="expirationDate"
@@ -190,13 +155,9 @@ export default class Offer extends Component {
                               dateOfBirth
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.multipleOnPrincipalToPay.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.multipleOnPrincipalToPay.label}</Table.Cell>
                           <Table.Cell>
                             <FormInput
                               name="multipleOnPrincipalToPay"
@@ -206,13 +167,9 @@ export default class Offer extends Component {
                               ishidelabel
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>{offerFields.totalCapitalReturned.label}</Table.Cell>
-                        {
-                        OFFERS_FRM.fields.data.map((offer, index) => (
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.totalCapitalReturned.label}</Table.Cell>
                           <Table.Cell>
                             <MaskedInput
                               prefix="$"
@@ -224,23 +181,22 @@ export default class Offer extends Component {
                               hidelabel
                             />
                           </Table.Cell>
-                        ))
-                        }
-                      </Table.Row>
-                      <Table.Row>
-                        <Table.Cell>Portal agreement upload</Table.Cell>
-                        <Table.Cell colSpan="4">
-                          <Button type="button" size="small" color="blue" className="link-button" >+ Add portal agreement</Button>
-                        </Table.Cell>
-                      </Table.Row>
-                    </Table.Body>
-                  </Table>
-                </div>
-                <Card.Content extra className="center-align">
-                  <Button primary content="View Details" />
-                </Card.Content>
-              </Card>
-            </Grid.Column>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>Portal agreement upload</Table.Cell>
+                          <Table.Cell colSpan="4">
+                            <Button type="button" size="small" color="blue" className="link-button" >+ Add portal agreement</Button>
+                          </Table.Cell>
+                        </Table.Row>
+                      </Table.Body>
+                    </Table>
+                  </div>
+                  <Card.Content extra className="center-align">
+                    <Button primary content="View Details" />
+                  </Card.Content>
+                </Card>
+              </Grid.Column>
+            ))}
           </Grid>
           <div className="right-align mt-20">
             <Button.Group>
