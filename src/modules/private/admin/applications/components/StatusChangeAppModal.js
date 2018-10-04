@@ -6,6 +6,7 @@ import { capitalize } from 'lodash';
 import { FormTextarea } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
+import Helper from '../../../../../helper/utility';
 
 @inject('uiStore', 'businessAppReviewStore', 'businessAppStore')
 @withRouter
@@ -46,19 +47,34 @@ export default class StatusChangeAppModal extends Component {
             email: prequalData.email,
             TemporaryPassword: 'nextseed',
             verifyPassword: 'nextseed',
-            role: 'issuer',
+            role: ['issuer'],
           };
-          adminActions.createNewUser(userDetails).then((res) => {
-            console.log(res);
+          adminActions.createNewUser(userDetails).then(() => {
             this.props.businessAppReviewStore
               .updateApplicationStatus(
                 params.appId,
                 params.userId,
                 params.appStatus,
                 params.action,
-              );
+              ).then(() => {
+                this.props.uiStore.setErrors(null);
+                this.props.history.goBack();
+              });
           }).catch((err) => {
-            console.log(err);
+            if (err.message === 'An account with the given email already exists.') {
+              this.props.businessAppReviewStore
+                .updateApplicationStatus(
+                  params.appId,
+                  params.userId,
+                  params.appStatus,
+                  params.action,
+                ).then(() => {
+                  this.props.uiStore.setErrors(null);
+                  this.props.history.goBack();
+                });
+            } else {
+              Helper.toast('Something went wrong. Please try again after sometime', 'error');
+            }
           });
         }
       });
