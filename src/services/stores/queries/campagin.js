@@ -206,7 +206,7 @@ export const campaignDetailsQuery = gql`
       }
       actingUserInfo {
         id
-        userInfo {
+        info {
           firstName
           lastName
           avatar {
@@ -261,7 +261,7 @@ export const campaignDetailsQuery = gql`
       }
       actingUserInfo {
         id
-        userInfo {
+        info {
           firstName
           lastName
           avatar {
