@@ -8,6 +8,7 @@ import { deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBa
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
+import { fileUpload } from '../../../../actions';
 
 export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
@@ -72,6 +73,53 @@ export class OfferingCreationStore {
     attributes.forEach((val) => {
       this.MEDIA_FRM.fields[field][val] = '';
     });
+  }
+
+  @action
+  resetFormField = (form, field) => {
+    this[form].fields[field] = {
+      ...this.MEDIA_FRM.fields[field],
+      ...{
+        value: '', preSignedUrl: '', src: '', meta: {},
+      },
+    };
+  }
+
+  @action
+  removeMedia = (name) => {
+    const file = this.MEDIA_FRM.fields[name].value;
+    fileUpload.deleteFromS3(file)
+      .then((res) => {
+        console.log(res.location);
+        Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
+        this.resetFormField('MEDIA_FRM', name);
+        console.log(this.MEDIA_FRM.fields[name]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  @action
+  uploadMedia = (name) => {
+    const fileObj = {
+      obj: this.MEDIA_FRM.fields[name].src,
+      type: this.MEDIA_FRM.fields[name].meta.type,
+      name: this.MEDIA_FRM.fields[name].value,
+    };
+    fileUpload.uploadToS3(fileObj)
+      .then((res) => {
+        console.log(res.location);
+        this.MEDIA_FRM.fields[name].preSignedUrl = 'https://s3.ap-south-1.amazonaws.com/nsupdates/uploads/1f085d0779f7e35391a0062eca0ce54d.jpg';
+        Helper.toast(`${this.MEDIA_FRM.fields[name].label} uploaded successfully.`, 'success');
+        this.MEDIA_FRM.fields[name] = {
+          ...this.MEDIA_FRM.fields[name],
+          ...{ value: '', src: '', meta: {} },
+        };
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   @action

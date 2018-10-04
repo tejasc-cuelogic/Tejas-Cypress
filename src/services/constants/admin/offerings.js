@@ -656,22 +656,19 @@ export const OFFERING_DETAILS = {
 
 export const MEDIA = {
   heroImage: {
-    value: '',
-    error: undefined,
-    rule: '',
-    label: '',
-    src: '',
-    base64String: '',
-    responseUrl: '',
+    value: '1f085d0779f7e35391a0062eca0ce54d.jpg', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: 'https://s3.ap-south-1.amazonaws.com/nsupdates/uploads/1f085d0779f7e35391a0062eca0ce54d.jpg', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   tombstoneImage: {
-    value: '',
-    error: undefined,
-    rule: '',
-    label: '',
-    src: '',
-    base64String: '',
-    responseUrl: '',
+    value: '', src: '', label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  location: {
+    value: [], label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+  },
+  gallery: {
+    value: [], label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+  },
+  logo: {
+    value: '', src: '', label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 

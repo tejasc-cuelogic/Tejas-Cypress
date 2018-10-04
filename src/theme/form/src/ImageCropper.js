@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { observer } from 'mobx-react';
 import ReactCrop, { makeAspectCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
-import { Icon, Modal, Header } from 'semantic-ui-react';
+import { Icon, Modal, Header, Button } from 'semantic-ui-react';
 import { FieldError } from '../../shared';
 
 @observer
@@ -33,6 +33,7 @@ export default class ImageCropper extends Component {
 
     this.setState({ imageType: files[0].type });
     this.props.setData('value', files[0].name);
+    this.props.setData('meta', { type: files[0].type });
     this.props.verifySize(files[0].size);
     this.props.verifyExtension(files[0].type.split('/')[1]);
     const reader = new FileReader();
@@ -95,6 +96,12 @@ export default class ImageCropper extends Component {
 
   handleCloseModal = () => {
     this.setState({ close: false });
+    this.props.handelReset();
+  }
+
+  modalUpload = (name) => {
+    this.props.modalUploadAction(name);
+    this.handleCloseModal();
   }
 
   async test() {
@@ -121,6 +128,9 @@ export default class ImageCropper extends Component {
                 crop={this.state.crop}
               />
             </Modal.Content>
+            <Modal.Actions>
+              <Button primary content="Upload" onClick={() => this.modalUpload(this.props.name)} />
+            </Modal.Actions>
           </Modal>
           :
           <ReactCrop
@@ -134,7 +144,7 @@ export default class ImageCropper extends Component {
           :
           <div className="file-uploader">
             <div className="file-uploader-inner">
-              <Icon className="ns-upload" /> Choose a file <span>or drag it here</span>
+              <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
             </div>
             <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             {field.error &&
