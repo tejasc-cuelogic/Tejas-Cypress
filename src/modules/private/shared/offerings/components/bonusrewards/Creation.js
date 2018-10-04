@@ -5,7 +5,6 @@ import { Route, Link } from 'react-router-dom';
 import AddNewTier from './AddNewTier';
 import AddNewBonusReward from './addNewBonusRewards';
 import BonusRewardsList from './BonusRewardsList';
-import Helper from '../../../../../../helper/utility';
 
 // const tiersArray = [
 //   { title: 'Early Birds' },
@@ -28,7 +27,7 @@ import Helper from '../../../../../../helper/utility';
 //   { title: 'Invest $5000 or more' },
 // ];
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'uiStore')
 @observer
 export default class Creation extends Component {
   componentWillMount() {
@@ -36,27 +35,25 @@ export default class Creation extends Component {
     getBonusRewardsTiers();
     getBonusRewards();
   }
-  toggleConfirmModal = (e, index, formName) => {
+  confirmRemoveTier = (e, name, tier) => {
     e.preventDefault();
-    this.props.offeringCreationStore.toggleConfirmModal(index, formName);
+    this.props.uiStore.setConfirmBox(name, tier.amount, tier.earlyBirdQuantity);
   }
-  removeData = (confirmModalName) => {
-    this.props.offeringCreationStore.removeData(confirmModalName);
-    Helper.toast('Contingency has been deleted successfully.', 'success');
+  handleDelCancel = () => {
+    this.props.uiStore.setConfirmBox('');
   }
-  removed = (e) => {
-    e.preventDefault();
-    Helper.toast('The tier has been removed.', 'success');
+  deleteTier = () => {
+    const { setConfirmBox, confirmBox } = this.props.uiStore;
+    this.props.offeringCreationStore.deleteBonusRewardTier(confirmBox.refId, confirmBox.subRefId);
+    setConfirmBox('');
   }
   render() {
     const {
       bonusRewards,
-      confirmModal,
-      confirmModalName,
       bonusRewardsTiers,
     } = this.props.offeringCreationStore;
+    const { confirmBox } = this.props.uiStore;
     const { match } = this.props;
-    console.log(bonusRewards);
     return (
       <div className="inner-content-spacer">
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
@@ -71,11 +68,11 @@ export default class Creation extends Component {
             <div className="reward-tier">
               <Header as="h4">
                 Invest ${tier.amount} or more
-                <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.removed(e)}>
+                <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', tier)}>
                   <Icon className="ns-trash" />
                 </Button>
               </Header>
-              <BonusRewardsList refLink={match.ur} tier={tier} bonusRewards={bonusRewards} />
+              <BonusRewardsList refLink={match.url} tier={tier} bonusRewards={bonusRewards} />
               <Button
                 size="small"
                 color="blue"
@@ -89,10 +86,10 @@ export default class Creation extends Component {
         }
         <Confirm
           header="Confirm"
-          content="Are you sure you want to remove this contingency?"
-          open={confirmModal}
-          onCancel={this.toggleConfirmModal}
-          onConfirm={() => this.removeData(confirmModalName)}
+          content="Are you sure you want to remove this tier?"
+          open={confirmBox.entity === 'tier'}
+          onCancel={this.handleDelCancel}
+          onConfirm={this.deleteTier}
           size="mini"
           className="deletion"
         />
