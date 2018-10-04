@@ -6,27 +6,6 @@ import AddNewTier from './AddNewTier';
 import AddNewBonusReward from './addNewBonusRewards';
 import BonusRewardsList from './BonusRewardsList';
 
-// const tiersArray = [
-//   { title: 'Early Birds' },
-//   {
-//     title: 'Invest $500 or more',
-//     bonusRewards: [{
-//       title: '5 Class Series + 5 Free Shoe Rentals',
-//       description: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper.
-// Suspendisse a pellentesque dui, non felis.
-// Maecenas malesuada elit lectus felis, malesuada ultricies. ',
-//       expDate: 'May 23, 2018',
-//     },
-//     {
-//       title: 'Opening Night Invitation',
-//       description: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper.',
-//       expDate: 'May 23, 2018',
-//     }],
-//   },
-//   { title: 'Invest $1000 or more' },
-//   { title: 'Invest $5000 or more' },
-// ];
-
 @inject('offeringCreationStore', 'uiStore')
 @observer
 export default class Creation extends Component {
@@ -67,7 +46,7 @@ export default class Creation extends Component {
           bonusRewardsTiers.data.getBonusRewardTiers.map(tier => (
             <div className="reward-tier">
               <Header as="h4">
-                {tier.earlyBirdQuantity === 0 ? `Invest ${tier.amount} or more` : `Early Birds investing $${tier.amount} Or more... (#${tier.earlyBirdQuantity})`}
+                {tier.earlyBirdQuantity === 0 ? `Invest $${tier.amount} or more` : `Early Birds investing $${tier.amount} Or more... (#${tier.earlyBirdQuantity})`}
                 <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', tier)}>
                   <Icon className="ns-trash" />
                 </Button>

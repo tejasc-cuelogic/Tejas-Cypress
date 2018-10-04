@@ -1695,6 +1695,25 @@ export const ADD_NEW_TIER = {
   },
 };
 
+export const DEFAULT_TIERS = [
+  {
+    amount: 0,
+    earlyBirdQuantity: 50,
+  },
+  {
+    amount: 500,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 1000,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 2000,
+    earlyBirdQuantity: 0,
+  },
+];
+
 export const ADD_NEW_BONUS_REWARD = {
   isEarlyBirds: {
     value: [],
@@ -1706,6 +1725,8 @@ export const ADD_NEW_BONUS_REWARD = {
     ],
     error: undefined,
     rule: 'alpha',
+    key: 0,
+    earlyBirdQuantity: 50,
   },
   name: {
     label: 'Name of new bonus reward',
@@ -1730,21 +1751,3 @@ export const ADD_NEW_BONUS_REWARD = {
   },
 };
 
-export const DEFAULT_TIERS = [
-  {
-    amount: 0,
-    earlyBirdQuantity: 50,
-  },
-  {
-    amount: 500,
-    earlyBirdQuantity: 0,
-  },
-  {
-    amount: 1000,
-    earlyBirdQuantity: 0,
-  },
-  {
-    amount: 2000,
-    earlyBirdQuantity: 0,
-  },
-];

@@ -546,3 +546,30 @@ mutation _deleteBonusReward($id: String! $offeringId: String!){
   }
 }
 `;
+
+export const updateBonusReward = gql`
+mutation _updateBonusReward($id: String! $bonusRewardDetails: BonusRewardInputType!){
+  updateBonusReward(id: $id bonusRewardDetails: $bonusRewardDetails){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+  }
+}
+`;

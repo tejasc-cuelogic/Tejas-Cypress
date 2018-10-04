@@ -32,6 +32,7 @@ export default class AddNewTier extends Component {
                 changed={(e, result) => formChange(e, result, formName, true)}
                 defaults
                 containerclassname="ui relaxed list"
+                disabled
               />
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS') ?
