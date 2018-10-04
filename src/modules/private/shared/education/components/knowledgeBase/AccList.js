@@ -27,10 +27,10 @@ export default class AccList extends Component {
   }
   render() {
     const {
-      match, data, marketing,
+      match, data, module, marketing,
     } = this.props;
     const params = {
-      subItems: 'knowledgeBaseItemList',
+      subItems: module === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems',
       item: 'title',
     };
     const { selected } = this.props.educationStore;

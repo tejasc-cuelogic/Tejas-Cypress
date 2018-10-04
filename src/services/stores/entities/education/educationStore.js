@@ -1,9 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 // import { userStore } from '../../index';
 // import { clientSearch } from '../../../../helper';
-import { allKbsAndFaqsQuery } from '../../queries/knowledgeBase';
+import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
+
 
 export class EducationStore {
   @observable data = { KnowledgeBase: [], Faq: [] };
@@ -30,6 +32,7 @@ export class EducationStore {
 
   @action
   initRequest = (module, props, categoryType = 'INV_FAQ') => {
+    const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
     // let categoryType = '';
     // if (props && props.isMkt && props.params) {
     //   categoryType = props.params.for === 'investor' ? 'INVESTOR_KB' : 'ISSUER_KB';
@@ -38,24 +41,25 @@ export class EducationStore {
     // }
     this.data[module] = graphql({
       client: clientPublic,
-      query: allKbsAndFaqsQuery,
+      query,
       variables: { categoryType },
     });
   }
 
   @action
   getOne = (ref, id) => {
-    const meta = { knowledgeBase: ['kbs', 'title', 'content'], faq: ['faqs', 'title', 'content'] };
+    const meta = { knowledgeBase: ['kbs', 'title', 'content'], faq: ['faqs', 'title', 'description'] };
+    const subItems = ref === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems';
     if (this[meta[ref][0]].length > 0) {
       let tempItem = {};
       this[meta[ref][0]].forEach((element) => {
-        element.knowledgeBaseItemList.forEach((f) => {
+        element[subItems].forEach((f) => {
           if (f.id === id) {
             tempItem = f;
           }
         });
       });
-      const item = (!id) ? this[meta[ref][0]][0].knowledgeBaseItemList[0] : tempItem;
+      const item = (!id) ? this[meta[ref][0]][0][subItems[0]] : tempItem;
       // flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}ItemList`])).find(i => i.id === id);
       this.selected = item ? { id: item.id, title: item[meta[ref][1]], body: item[meta[ref][2]] } :
         {};
