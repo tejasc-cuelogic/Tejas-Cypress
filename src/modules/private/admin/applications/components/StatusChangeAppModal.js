@@ -48,8 +48,8 @@ export default class StatusChangeAppModal extends Component {
             verifyPassword: 'nextseed',
             role: 'issuer',
           };
-          adminActions.createNewUser(userDetails).then((rData) => {
-            console.log(rData);
+          adminActions.createNewUser(userDetails).then((res) => {
+            console.log(res);
             this.props.businessAppReviewStore
               .updateApplicationStatus(
                 params.appId,
@@ -57,6 +57,8 @@ export default class StatusChangeAppModal extends Component {
                 params.appStatus,
                 params.action,
               );
+          }).catch((err) => {
+            console.log(err);
           });
         }
       });
