@@ -14,12 +14,7 @@ import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
 import XmlForm from './private/admin/edgar/containers/XmlForm';
 import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
-import Users from './private/admin/userManagement/containers/Users';
-import UserDetails from './private/admin/userManagement/containers/UserDetails';
-import UsersNew from './private/admin/userManagement/containers/UsersNew';
-
-// import BusinessApplication from
-// './private/issuer/businessApplication/containers/BusinessApplication';
+import UserManagement from './private/admin/userManagement';
 
 import {
   AdminAuthorization,
@@ -122,18 +117,8 @@ export const privateRoutes = [
     exact: true,
   },
   {
-    path: '/app/users/new',
-    component: UsersNew,
-    auth: AdminAuthorization,
-  },
-  {
-    path: '/app/users/:userId',
-    component: UserDetails,
-    auth: AdminAuthorization,
-  },
-  {
     path: '/app/users',
-    component: Users,
+    component: UserManagement,
     auth: AdminAuthorization,
   },
 ];

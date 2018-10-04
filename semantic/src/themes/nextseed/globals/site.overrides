@@ -64,6 +64,9 @@ h6{
 .mb-80 {
 	margin-bottom: 80px !important;
 }
+.mt-10 {
+	margin-top: @10px !important;
+}
 .mt-20 {
 	margin-top: @20px !important;
 }
@@ -132,7 +135,7 @@ h6{
 	color:@tertiary-text !important;
 }
 .intro-text, .note{
-	color:@neutral-middark;
+	color:@border-color;
 }
 .caption-note{
 	font-size:@13px;
@@ -493,9 +496,6 @@ p i.icon {
 .explore-campaign-button {
 	margin-top: 60px;
 	text-align: center;
-}
-.featured-section {
-	background-color: @neutral-offwhite;
 }
 .learn-more {
 	background-color: @secondary-color;
@@ -961,11 +961,11 @@ a.icon-link:hover {
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
 	}
-	.field .ui.label{
-		background: transparent;
-		padding: 0px 0 14px;
-		color: @neutral;
-	}
+	// .field .ui.label{					//	commented to resolve issue on admin user creation multi-select dropdown
+	// 	background: transparent;
+	// 	padding: 0px 0 14px;
+	// 	color: @neutral;
+	// }
 	p b {
 		color: @neutral;
 	}
@@ -1132,6 +1132,9 @@ div.login-form {
 	}
 	&.more{
 		background-color:@neutral-midwhite;
+		&:not(.collapsed){
+			overflow:visible;
+		}
 	}
 }
 .page-header-section, .search-filters{
@@ -1154,25 +1157,6 @@ div.login-form {
 	}
 	&.more{
 		background-color:@neutral-midwhite;
-	}
-}
-.page-header-section, .search-filters{
-	span.filter-count{
-		height:19px;
-		min-width:19px;
-		padding:0 @4px;
-		margin-right:@14px;
-		background:@primary-one;
-		display:inline-block;
-		font-size:@11px;
-		line-height:@19px;
-		font-weight:@fontMedium;
-		color:@white;
-		text-align:center;
-		border-radius:@3px;
-	}
-	.ui.button.link-button{
-		padding:@11px 0;
 	}
 }
 .filter-meta{
@@ -1309,8 +1293,10 @@ div.login-form {
 	border-color:@neutral-middark;
 	color:@neutral-middark;
 	position:relative;
-	+ .account-type{
-		margin-left:@6px;
+	vertical-align:middle;
+	margin-left:@6px;
+	&:first-child{
+		margin-left:0;
 	}
 	&.accredited:after{
 		content:"A";
@@ -1325,6 +1311,13 @@ div.login-form {
 		border-color:@fullBlack;
 		&.accredited:after{
 			background-color:@fullBlack;
+		}
+	}
+	&.investor{
+		color:@primary-one-darken;
+		border-color:@primary-one-darken;
+		&.accredited:after{
+			background-color:@primary-one-darken;
 		}
 	}
 	&.full{

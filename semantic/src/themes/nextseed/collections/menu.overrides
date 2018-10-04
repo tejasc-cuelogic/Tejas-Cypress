@@ -6,7 +6,6 @@
         height:58px;
         border:none;
         border-radius:0;
-        box-shadow:none;
         transition: all ease-in-out 0.5s;
         .menu{
             margin:@11px @16px;
@@ -342,14 +341,17 @@ footer{
     }
 }
 .transaction-detials{
-    .ui.inverted.menu .item{
-        padding:@16px @25px;
-        &:before{
-            background-color:@tertiary-text;
-        }
-        &:hover, &:focus, &.active{
-            background-color:@white;
-            color:@link-color !important;
+    .ui.inverted.menu{
+        background-color:@neutral-middark;
+        .item{
+            padding:@16px @25px;
+            &:before{
+                background-color:@neutral-middark;
+            }
+            &:hover, &:focus, &.active{
+                background-color:@white;
+                color:@link-color !important;
+            }
         }
     }
 }

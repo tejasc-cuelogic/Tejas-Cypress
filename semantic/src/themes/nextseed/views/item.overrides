@@ -19,6 +19,23 @@
         >.content>.description {
             color: @neutral-middark;
         }
+        &.user-intro{
+            .ui.tiny.image{
+                width:60px;
+            }
+            h3.ui.header{
+                text-transform:capitalize;
+                .sub.header{
+                    font-size:@18px;
+                }
+            }
+            .account-type{
+                margin-left:@10px;
+                &:first-child{
+                    margin-left:@42px;
+                }
+            }
+        }
     }
     &.messages{
         .item{
@@ -100,7 +117,7 @@
 		}
 	}
 }
-.inner-content-spacer .featured-section {
+.inner-content-spacer .bg-offwhite {
     padding: @14px @20px;
     .ui.items>.item .content {
         .header {

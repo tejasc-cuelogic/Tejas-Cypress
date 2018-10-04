@@ -150,11 +150,6 @@
         .item .extra{
             font-size:@12px;
         }
-    }
-    &.confirm-transfer-table {
-        tr td {
-            border-top: 0;
-        }
         td.status{
             font-weight:500;
             text-transform:capitalize;

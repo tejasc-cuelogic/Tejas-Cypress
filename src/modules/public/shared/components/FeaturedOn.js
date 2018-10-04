@@ -8,7 +8,7 @@ const featuredOn = [
 ];
 
 const FeaturedOn = () => (
-  <section className="featured-section">
+  <section className="bg-offwhite">
     <Container>
       <Header as="h2" textAlign="center" className="mb-50">As seen on…</Header>
       <Grid columns="equal" doubling>

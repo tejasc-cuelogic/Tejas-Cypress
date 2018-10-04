@@ -61,7 +61,7 @@ class UserListing extends Component {
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name"><Link to={`/app/users/${user.id}/profile`}>{`${user.firstName} ${user.lastName}`}</Link></span>
+                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}>{`${user.firstName} ${user.lastName}`}</Link></span>
                     {user.email}
                   </Table.Cell>
                   <Table.Cell>
@@ -84,7 +84,7 @@ class UserListing extends Component {
                   <Table.Cell>
                     <DateTimeFormat fromNow datetime={user.lastLoginDate} />
                   </Table.Cell>
-                  <Table.Cell><Link to={`/app/users/${user.id}/profile`} className="action">view profile</Link></Table.Cell>
+                  <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
                 </Table.Row>
               ))}
               {this.statusRow(this.props)}

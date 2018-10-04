@@ -60,6 +60,7 @@
     > .icon{
         height:auto;
         vertical-align:top;
+        display:inline-block;
     }
     a.link{
         margin-left:@10px;

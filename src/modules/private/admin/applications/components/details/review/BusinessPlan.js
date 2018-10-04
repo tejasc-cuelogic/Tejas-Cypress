@@ -87,7 +87,7 @@ export default class BusinessPlan extends Component {
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                 </Header>
-                <div className="featured-section">
+                <div className="bg-offwhite">
                   <Form.Group widths={3}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}

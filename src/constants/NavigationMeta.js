@@ -49,15 +49,14 @@ export const PRIVATE_NAV = [
     path: {
       issuer: 'issuer/dashboard',
       admin: 'admin/dashboard/Dashboard',
-      support: 'admin/dashboard/Dashboard',
-      manager: 'admin/dashboard/Dashboard',
     },
-    accessibleTo: ['issuer', 'admin', 'manager', 'support'],
+    accessibleTo: ['issuer', 'admin'],
     subPanel: 0,
   },
   {
     icon: 'ns-users',
     title: 'Manage Users',
+    capability: 'USERS_ANY',
     to: 'users',
     accessibleTo: ['admin', 'manager', 'support'],
     subNavigations: [
@@ -173,16 +172,23 @@ export const PRIVATE_NAV = [
     subPanel: 1,
     subNavigations: [
       { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4] },
-      { title: 'Marketing', to: 'marketing', accessFor: [1] },
-      { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
-      { title: 'Comments', to: 'comments', accessFor: [2] },
-      { title: 'Disclosure', to: 'disclosure', accessFor: [1] },
-      { title: 'Updates', to: 'updates', accessFor: [2, 4] },
-      { title: 'Bonus Rewards Creation', to: 'bonus-rewards-creation', accessFor: [1] },
+      {
+        title: 'KeyTerms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'],
+      },
+      { title: 'Legal', to: 'legal', accessFor: [1] },
+      { title: 'Offering', to: 'offering', accessFor: [1] },
+      { title: 'Media', to: 'media', accessFor: [1] },
       { title: 'Leadership', to: 'leadership', accessFor: [1] },
-      { title: 'Bonus Rewards Redemption', to: 'bonus-rewards-redemption', accessFor: [4] },
-      { title: 'Payments', to: 'payments', accessFor: [4] },
-      { title: 'Documents', to: 'documents', accessFor: [3, 4] },
+      { title: 'Investors', to: 'investors', accessFor: [2, 3, 4] },
+      { title: 'Transactions', to: 'transactions', accessFor: [3, 4] },
+      { title: 'Comments', to: 'comments', accessFor: [2] },
+      { title: 'Updates', to: 'updates', accessFor: [2, 3, 4] },
+      {
+        title: 'Close', to: 'close', accessFor: [2], accessibleTo: ['admin', 'manager', 'support'],
+      },
+      { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
+      { title: 'Bonus Rewards Creation', to: 'bonus-rewards-creation', accessFor: [1] },
+      { title: 'Offering Creation', to: 'offering-creation', accessFor: [2] },
     ],
   },
   {
@@ -213,8 +219,26 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin', 'manager', 'support'],
   },
   {
+    icon: 'ns-users',
+    title: 'Offerings',
+    capability: 'OFFERINGS_ANY',
+    heading: 'Offerings',
+    to: 'offerings',
+    path: 'admin/offerings',
+    accessibleTo: ['admin'],
+    subPanel: 0,
+    subNavigations: [
+      { title: 'Overview', to: 'overview' },
+      { title: 'Creation', to: 'creation' },
+      { title: 'Live', to: 'live' },
+      { title: 'Engagement', to: 'engagement' },
+      { title: 'Completed', to: 'completed' },
+    ],
+  },
+  {
     icon: 'lightbulb outline',
     title: 'Insights',
+    capability: 'INSIGHTS_ANY',
     to: 'insights',
     path: 'admin/insights',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -222,6 +246,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'question',
     title: 'FAQ',
+    capability: 'FAQ_ANY',
     to: 'faqs',
     path: 'admin/faqs',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -229,6 +254,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-article',
     title: 'Knowledge Base',
+    capability: 'KNOWLEDGE_BASE_ANY',
     to: 'knowledge-base',
     path: 'admin/knowledgeBase',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -236,6 +262,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'user secret',
     title: 'Ambassadors',
+    capability: 'AMBASSADORS_ANY',
     to: 'ambassadors',
     path: 'admin/ambassadors',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -243,6 +270,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'handshake outline',
     title: 'Team',
+    capability: 'TEAM_ANY',
     to: 'team',
     path: 'admin/team',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -250,6 +278,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'wpforms',
     title: 'Applications',
+    capability: 'APPLICATIONS_ANY',
     to: 'applications',
     path: 'admin/applications/containers/ManageApplications',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -263,6 +292,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-envelope',
     title: 'Message Center',
+    capability: 'MESSAGE_CENTER_ANY',
     to: 'message-center',
     path: 'admin/messageCenter',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -270,6 +300,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'money',
     title: 'Repayments',
+    capability: 'REPAYMENTS_ANY',
     to: 'repayments',
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -277,6 +308,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'bullhorn',
     title: 'Campaigns',
+    capability: 'CAMPAIGN_ANY',
     to: 'campaigns',
     path: 'admin/campaigns',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -284,10 +316,11 @@ export const PRIVATE_NAV = [
   {
     icon: 'dollar',
     title: 'CrowdPay',
+    capability: 'CROWD_PAY_ANY',
     to: 'crowdPay',
     heading: 'Manage Crowdpay Accounts',
     path: 'admin/crowdPay',
-    accessibleTo: ['admin', 'manager', 'support'],
+    accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
       { title: 'Review', to: 'review', component: 'ApplicationsList' },
@@ -303,6 +336,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'credit card',
     title: 'Transactions',
+    capability: 'TRANSACTIONS_ANY',
     to: 'transactions',
     path: 'admin/transactions',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -310,6 +344,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'user plus',
     title: 'Beneficiaries',
+    capability: 'BENEFICIARIES_ANY',
     to: 'beneficiaries',
     path: 'admin/beneficiaries',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -317,6 +352,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'payment',
     title: 'Investments',
+    capability: 'INVESTMENTS_ANY',
     to: 'investments',
     path: 'admin/investments',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -324,6 +360,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'history',
     title: 'Activity',
+    capability: 'ACTIVITIES_ANY',
     to: 'activities',
     path: 'admin/activities',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -331,6 +368,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'rocket',
     title: 'Deployments',
+    capability: 'DEPLOYMENTS_ANY',
     to: 'deployments',
     path: 'admin/deployments',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -370,7 +408,7 @@ export const PUBLIC_NAV = [
         icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
       },
       {
-        icon: 'ns-coments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
+        icon: 'ns-comments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
       },
     ],
   },
