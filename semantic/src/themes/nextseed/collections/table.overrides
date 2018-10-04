@@ -225,32 +225,6 @@
                 color: @primary-two;
             }
         }
-        .ui.selection.dropdown {
-            border: @neutral-offdark 1px solid;
-            background: @white;
-            padding: @5px;
-            border-radius: @4px;
-            border: @neutral-offdark 1px solid;
-            min-height: auto;
-            line-height: 15px;
-            .icon {
-                padding: @7px @5px;
-            }
-            &.active {
-                border-bottom: 0 !important;
-                .menu {
-                    box-shadow: 0 2px 3px 0 rgba(34,36,38,.15);
-                    border: 1px solid rgba(34,36,38,.15);
-                    margin: 0px -1px;
-                    padding: 0 5px;
-                    min-width: calc(100% + 2px);
-                    width: calc(100% + 2px);
-                    .item {
-                        font-size: @13px;
-                    }
-                }
-            }
-        }
         + .basic.form-table{
             margin-top:@21px;
         }
