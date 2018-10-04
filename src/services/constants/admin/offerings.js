@@ -662,13 +662,13 @@ export const MEDIA = {
     value: '', objType: 's3File', src: '', label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   location: {
-    value: [], objType: 's3File', label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: '', objType: 's3File', src: '', label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   gallery: {
-    value: [], objType: 's3File', label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: '', objType: 's3File', src: '', label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   logo: {
-    value: '', objType: 's3File', src: '', label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', objType: 's3File', src: '', label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 

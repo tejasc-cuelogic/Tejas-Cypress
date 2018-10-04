@@ -29,8 +29,8 @@ export default class Media extends Component {
     this.props.offeringCreationStore.uploadMedia(name);
   }
 
-  removeMedia = (name, file) => {
-    this.props.offeringCreationStore.removeMedia(name, file);
+  removeMedia = (name, index) => {
+    this.props.offeringCreationStore.removeMedia(name, index);
   }
 
   handleVerifyFileSize = (fileSize) => {
@@ -114,8 +114,9 @@ export default class Media extends Component {
         <Header as="h4">Location Image</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
-            {MEDIA_FRM.fields.location.preSignedUrl && [1, 2].map(i => (
-              <List.Item key={i}>
+            {MEDIA_FRM.fields.location.preSignedUrl &&
+            MEDIA_FRM.fields.location.preSignedUrl.map((url, i) => (
+              <List.Item key={url}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.removeMedia('location', i)} circular icon={{ className: 'ns-close-light' }} />
                   <Image src={GalleryImage} />
@@ -142,8 +143,9 @@ export default class Media extends Component {
         <Header as="h4">Gallery</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
-            {MEDIA_FRM.fields.gallery.preSignedUrl && [1, 2, 3, 4, 5, 6].map(i => (
-              <List.Item key={i}>
+            {MEDIA_FRM.fields.gallery.preSignedUrl &&
+            MEDIA_FRM.fields.gallery.preSignedUrl.map((url, i) => (
+              <List.Item key={url}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.removeMedia('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
                   <Image src={GalleryImage} />
@@ -169,25 +171,31 @@ export default class Media extends Component {
         <Divider section />
         <Header as="h4">Logo</Header>
         <Form className="cropper-wrap gallery-img">
-          {MEDIA_FRM.fields.logo.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.removeMedia('tombstoneImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image src={LogoImage} />
-            </div>
-          ) : (
-            <ImageCropper
-              fieldData={MEDIA_FRM.fields.logo}
-              setData={(attr, value) => this.setData(attr, value, 'logo')}
-              verifySize={this.handleVerifyFileSize}
-              verifyExtension={this.handleVerifyFileExtension}
-              handelReset={() => this.handleresetProfilePhoto('logo')}
-              verifyImageDimension={this.handelImageDeimension}
-              field={MEDIA_FRM.fields.logo}
-              modalUploadAction={this.uploadMedia}
-              name="logo"
-              cropInModal
-            />
-          )}
+          <List horizontal>
+            {MEDIA_FRM.fields.logo.preSignedUrl &&
+            MEDIA_FRM.fields.logo.preSignedUrl.map((url, i) => (
+              <List.Item key={url}>
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.removeMedia('logo', i)} circular icon={{ className: 'ns-close-light' }} />
+                  <Image src={LogoImage} />
+                </div>
+              </List.Item>
+            ))}
+            <List.Item>
+              <ImageCropper
+                fieldData={MEDIA_FRM.fields.logo}
+                setData={(attr, value) => this.setData(attr, value, 'logo')}
+                verifySize={this.handleVerifyFileSize}
+                verifyExtension={this.handleVerifyFileExtension}
+                handelReset={() => this.handleresetProfilePhoto('logo')}
+                verifyImageDimension={this.handelImageDeimension}
+                field={MEDIA_FRM.fields.logo}
+                modalUploadAction={this.uploadMedia}
+                name="logo"
+                cropInModal
+              />
+            </List.Item>
+          </List>
         </Form>
       </div>
     );

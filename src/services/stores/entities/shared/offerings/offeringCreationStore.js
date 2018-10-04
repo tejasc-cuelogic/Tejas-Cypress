@@ -117,23 +117,34 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetFormField = (form, field, url) => {
+  resetFormField = (form, field, url, RemoveIndex) => {
+    if (url && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
+      this.MEDIA_FRM.fields[field].preSignedUrl.push(url);
+    } else if (url) {
+      this.MEDIA_FRM.fields[field].preSignedUrl = url;
+    } else if (RemoveIndex > -1 && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
+      this.MEDIA_FRM.fields[field].preSignedUrl.splice(RemoveIndex, 1);
+    } else if (RemoveIndex === undefined) {
+      this.MEDIA_FRM.fields[field].preSignedUrl = '';
+    }
     this[form].fields[field] = {
       ...this.MEDIA_FRM.fields[field],
       ...{
-        value: '', preSignedUrl: url || '', src: '', meta: {},
+        value: '',
+        src: '',
+        meta: {},
       },
     };
   }
 
   @action
-  removeMedia = (name) => {
+  removeMedia = (name, index = undefined) => {
     const file = this.MEDIA_FRM.fields[name].value;
     fileUpload.deleteFromS3(file)
       .then((res) => {
         console.log(res.location);
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
-        this.resetFormField('MEDIA_FRM', name);
+        this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
@@ -152,11 +163,6 @@ export class OfferingCreationStore {
       .then((res) => {
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} uploaded successfully.`, 'success');
         this.resetFormField('MEDIA_FRM', name, res.location);
-        this.MEDIA_FRM.fields[name].preSignedUrl = res.location;
-        this.MEDIA_FRM.fields[name] = {
-          ...this.MEDIA_FRM.fields[name],
-          ...{ value: '', src: '', meta: {} },
-        };
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
