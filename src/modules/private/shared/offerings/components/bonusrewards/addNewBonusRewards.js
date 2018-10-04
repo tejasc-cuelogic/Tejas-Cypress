@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { map } from 'lodash';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
-import moment from 'moment';
-import { FormInput, FormCheckbox, FormDatePicker } from '../../../../../../theme/form';
+import { FormInput, FormCheckbox, MaskedInput } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
 @observer
@@ -20,7 +19,7 @@ export default class AddNewBonusReward extends Component {
     const {
       ADD_NEW_BONUS_REWARD_FRM,
       formChange,
-      verifyExpDate,
+      maskChange,
       bonusRewardTierChange,
     } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_BONUS_REWARD_FRM';
@@ -32,28 +31,28 @@ export default class AddNewBonusReward extends Component {
         {
           <Modal.Content className="signup-content">
             <Form onSubmit={this.handleAddBonusReward}>
+              <FormCheckbox
+                fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds}
+                name="isEarlyBirds"
+                changed={(e, result) => formChange(e, result, formName)}
+                defaults
+                containerclassname="ui relaxed list"
+              />
+              {map(ADD_NEW_BONUS_REWARD_FRM.fields, ((field) => {
+                if (!field.key) {
+                  return null;
+                }
+                return (
+                  <FormCheckbox
+                    fielddata={field}
+                    name={field.key}
+                    changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
+                    defaults
+                    containerclassname="ui relaxed list rewards-tier"
+                  />
+                );
+              }))}
               <div className="featured-section">
-                <FormCheckbox
-                  fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds}
-                  name="isEarlyBirds"
-                  changed={(e, result) => formChange(e, result, formName)}
-                  defaults
-                  containerclassname="ui relaxed list"
-                />
-                {map(ADD_NEW_BONUS_REWARD_FRM.fields, ((field) => {
-                  if (!field.key) {
-                    return null;
-                  }
-                  return (
-                    <FormCheckbox
-                      fielddata={field}
-                      name={field.key}
-                      changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
-                      defaults
-                      containerclassname="ui relaxed list"
-                    />
-                  );
-                }))}
                 {
                   ['name', 'description'].map(field => (
                     <FormInput
@@ -63,14 +62,13 @@ export default class AddNewBonusReward extends Component {
                       changed={(e, result) => formChange(e, result, formName)}
                     />))
                 }
-                <FormDatePicker
-                  type="text"
-                  name="Expiration Date"
+                <MaskedInput
+                  name="expirationDate"
                   placeholder="3/4/2018"
-                  maxDate={moment()}
                   fielddata={ADD_NEW_BONUS_REWARD_FRM.fields.expirationDate}
-                  selected={ADD_NEW_BONUS_REWARD_FRM.fields.expirationDate.value}
-                  changed={verifyExpDate}
+                  format="##/##/####"
+                  changed={(values, field) => maskChange(values, 'ADD_NEW_BONUS_REWARD_FRM', field)}
+                  dateOfBirth
                 />
               </div>
               <div className="center-align">

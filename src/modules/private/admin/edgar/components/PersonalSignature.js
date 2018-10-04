@@ -49,6 +49,7 @@ const PersonalSignature = observer(props => (
             maxDate={moment()}
             fielddata={personData.signatureDate}
             selected={personData.signatureDate.value}
+            changed={date => props.changedDate(null, { name: 'signatureDate', value: date, dataid: personData.id })}
           />
         </div>
       </Form.Group>

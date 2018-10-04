@@ -1673,7 +1673,7 @@ export const ADD_NEW_TIER = {
     label: 'Amount for this Early Bird tier',
     value: '',
     error: undefined,
-    rule: 'required_if:isEarlyBirds,EARLY_BIRDS',
+    rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   earlyBirdQuantity: {
@@ -1681,16 +1681,35 @@ export const ADD_NEW_TIER = {
     value: '',
     error: undefined,
     rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
-    placeHolder: 'Lorem ipsum dolor sit amet enim. Etiam',
+    placeHolder: 'Early Bird Quantity',
   },
   amountForThisTier: {
     label: 'Amount for this tier',
     value: '',
     error: undefined,
-    rule: 'string|required_without:isEarlyBirds',
+    rule: 'numeric|required_without:isEarlyBirds',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
 };
+
+export const DEFAULT_TIERS = [
+  {
+    amount: 0,
+    earlyBirdQuantity: 50,
+  },
+  {
+    amount: 500,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 1000,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 2000,
+    earlyBirdQuantity: 0,
+  },
+];
 
 export const ADD_NEW_BONUS_REWARD = {
   isEarlyBirds: {
@@ -1703,6 +1722,8 @@ export const ADD_NEW_BONUS_REWARD = {
     ],
     error: undefined,
     rule: 'alpha',
+    key: 0,
+    earlyBirdQuantity: 50,
   },
   name: {
     label: 'Name of new bonus reward',
@@ -1726,3 +1747,4 @@ export const ADD_NEW_BONUS_REWARD = {
     placeHolder: '3/4/2018',
   },
 };
+

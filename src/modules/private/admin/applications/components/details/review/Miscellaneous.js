@@ -125,6 +125,7 @@ export default class Miscellaneous extends Component {
                       <Dropdown
                         name="label"
                         placeholder="eg. Facebook"
+                        className="secondary"
                         fluid
                         selection
                         options={SOCIAL_MEDIA_LABELS}

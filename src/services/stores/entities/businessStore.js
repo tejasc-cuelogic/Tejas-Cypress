@@ -435,12 +435,12 @@ export class BusinessStore {
       fieldRule,
       fieldCustomError,
     );
-    
+
     validation.passes();
     if (isDirtyUpdate) {
       this.formSignatureInfo.meta.isDirty = true;
     }
-    
+
     if (!fieldValue) {
       this.setPersonalSignatureError(field, id, validation.errors.first());
     } else {
@@ -539,14 +539,14 @@ export class BusinessStore {
   setXmlActiveTabName(name) {
     this.xmlActiveTabName = name;
   }
-  
+
   @action
   setXmlSubStepsStatus(stepname, isValue) {
     this.xmlSubStepsStatus[stepname] = isValue;
   }
 
   @action
-  clearXmlSubStepsStatus() {    
+  clearXmlSubStepsStatus() {
     _.forEach(this.xmlSubStepsStatus, (value, key) => {
       this.xmlSubStepsStatus[key] = false;
     });
@@ -558,10 +558,11 @@ export class BusinessStore {
   }
 
   @action
-  clearXmlTabsValue() {    
-    _.forEach(this.xmlSubmissionTabs, (value, key) => {      
+  clearXmlTabsValue() {
+    _.forEach(this.xmlSubmissionTabs, (value, key) => {
       this.xmlSubmissionTabs[key].errorClass = '';
     });
   }
+
 }
 export default new BusinessStore();
