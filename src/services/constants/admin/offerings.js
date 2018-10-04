@@ -1662,7 +1662,7 @@ export const LEADER = {
 
 export const ADD_NEW_TIER = {
   isEarlyBirds: {
-    value: '',
+    value: [],
     values: [
       {
         label: 'Early Birds',

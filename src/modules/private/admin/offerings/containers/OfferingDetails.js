@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react';
 import { Switch, Route } from 'react-router-dom';
 import { Modal, Card, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
-import Summary from '../components/Summary';
+import LiveSummary from '../components/LiveSummary';
+import CreationSummary from '../components/CreationSummary';
 import OfferingModule from '../../../shared/offerings/components';
 
 @inject('navStore', 'offeringsStore', 'offeringCreationStore')
@@ -25,23 +25,6 @@ export default class OfferingDetails extends Component {
     this.props.offeringCreationStore.resetOfferingId();
     this.props.history.push(this.props.refLink);
   };
-  summary = (offer) => {
-    return {
-      summary: [
-        {
-          title: 'Created date',
-          content: offer.created ? DataFormatter.formatedDate(offer.created.date) : 'N/A',
-          type: 0,
-        },
-        { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
-        {
-          title: 'Days Till Launch',
-          content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
-          type: 0,
-        },
-      ],
-    };
-  };
   render() {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
@@ -55,7 +38,7 @@ export default class OfferingDetails extends Component {
       <Modal closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <Header as="h3">{offer.keyTerms.legalBusinessName}</Header>
-          <Summary details={this.summary(offer)} />
+          {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} />}
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
             <Switch>
