@@ -95,6 +95,28 @@ export const getOfferingDetails = gql`
         isFood
         isAlcohol
       }
+      media {
+        heroImage {
+          url
+          isPublic
+        }
+        tombstoneImage {
+          url
+          isPublic
+        }
+        location {
+          url
+          isPublic
+        }
+        gallery {
+          url
+          isPublic
+        }
+        logo {
+          url
+          isPublic
+        }
+      }
       contingencies {
         launch {
           index
@@ -415,7 +437,36 @@ mutation _deleteBac($id: String! $offeringId: String!){
   deleteOfferingBac(id: $id  offeringId: $offeringId) {
     id
   }
-}
+}`;
+
+export const getOfferingFilingList = gql`
+  query _getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
+    businessFilings(offeringId: $offeringId ) {
+      offeringId
+      filingId
+      filingFolderName
+      created
+      folderId
+      lockedStatus
+      submissions (orderBy: $orderByBusinessFilingSubmission) {
+        xmlSubmissionId
+        created
+        xmlSubmissionDownloadUrl
+        folderName
+        xmlSubmissionStatus
+        lockedStatus
+      }
+    }
+  }
+`;
+
+export const generateBusinessFiling = gql`
+  mutation _createBusinessFiling ($offeringId: String!) {
+    createBusinessFiling(offeringId: $offeringId) {
+      filingId
+      offeringId
+    }
+  }
 `;
 
 export const createBonusRewardsTier = gql`

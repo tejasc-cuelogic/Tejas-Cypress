@@ -5,6 +5,7 @@ import { Route, Link } from 'react-router-dom';
 import AddNewTier from './AddNewTier';
 import AddNewBonusReward from './addNewBonusRewards';
 import BonusRewardsList from './BonusRewardsList';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 @inject('offeringCreationStore', 'uiStore')
 @observer
@@ -33,6 +34,9 @@ export default class Creation extends Component {
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
     const { match } = this.props;
+    if (bonusRewardsTiers.loading || bonusRewards.loading) {
+      return <InlineLoader />;
+    }
     return (
       <div className="inner-content-spacer">
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />

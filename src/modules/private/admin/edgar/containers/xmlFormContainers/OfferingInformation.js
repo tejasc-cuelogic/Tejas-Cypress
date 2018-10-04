@@ -84,16 +84,17 @@ export default class OfferingInformation extends React.Component {
             name="priceDeterminationMethod"
             changed={offeringInfoChange}
           />
-          <Form.Group widths="equal">
-            <div className="six wide field">
+          <Form.Group widths="equal" className="bottom-aligned">
+            <div className="field">
               <Header as="label">Is oversubscription Accepted?</Header>
-              <Form.Group inline>
-                <FormRadioGroup
-                  fielddata={formOfferingInfo.fields.overSubscriptionAccepted}
-                  name="overSubscriptionAccepted"
-                  changed={offeringInfoChange}
-                />
-              </Form.Group>
+              <FormRadioGroup
+                inline
+                fielddata={formOfferingInfo.fields.overSubscriptionAccepted}
+                name="overSubscriptionAccepted"
+                changed={offeringInfoChange}
+              />
+              {/* <Form.Group inline>
+              </Form.Group> */}
             </div>
             <FormSelect
               fielddata={formOfferingInfo.fields.overSubscriptionAllocationType}

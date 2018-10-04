@@ -310,6 +310,9 @@ class FormValidator {
         } else if (fields[key].objType === 'FileObjectType') {
           fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
           fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
+        } else if (fields[key].objType === 's3File') {
+          fields[key].value = data && typeof data === 'string' ? data : data[key].url;
+          fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
         } else if (fields[key].objType === 'DATE') {
           fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
         } else {

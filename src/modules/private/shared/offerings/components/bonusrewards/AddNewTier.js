@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
-import { FormInput, MaskedInput, FormCheckbox } from '../../../../../../theme/form';
+import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
 
 @inject('offeringCreationStore')
 @observer
@@ -37,10 +37,12 @@ export default class AddNewTier extends Component {
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS') ?
                   <Aux>
-                    <FormInput
+                    <MaskedInput
+                      currency
+                      prefix="$"
                       name="amountForEarlyBird"
                       fielddata={ADD_NEW_TIER_FRM.fields.amountForEarlyBird}
-                      changed={(e, result) => formChange(e, result, formName)}
+                      changed={(values, field) => maskChange(values, formName, field)}
                     />
                     <MaskedInput
                       number
@@ -50,10 +52,12 @@ export default class AddNewTier extends Component {
                     />
                   </Aux>
                   :
-                  <FormInput
+                  <MaskedInput
+                    currency
+                    prefix="$"
                     name="amountForThisTier"
                     fielddata={ADD_NEW_TIER_FRM.fields.amountForThisTier}
-                    changed={(e, result) => formChange(e, result, formName)}
+                    changed={(values, field) => maskChange(values, formName, field)}
                   />
               }
             </div>
