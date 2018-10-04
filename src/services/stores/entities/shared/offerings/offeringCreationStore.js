@@ -78,11 +78,11 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetFormField = (form, field) => {
+  resetFormField = (form, field, url) => {
     this[form].fields[field] = {
       ...this.MEDIA_FRM.fields[field],
       ...{
-        value: '', preSignedUrl: '', src: '', meta: {},
+        value: '', preSignedUrl: url || '', src: '', meta: {},
       },
     };
   }
@@ -95,7 +95,7 @@ export class OfferingCreationStore {
         console.log(res.location);
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
         this.resetFormField('MEDIA_FRM', name);
-        console.log(this.MEDIA_FRM.fields[name]);
+        this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
         console.log(err);
@@ -111,13 +111,14 @@ export class OfferingCreationStore {
     };
     fileUpload.uploadToS3(fileObj)
       .then((res) => {
-        console.log(res.location);
-        this.MEDIA_FRM.fields[name].preSignedUrl = 'https://s3.ap-south-1.amazonaws.com/nsupdates/uploads/1f085d0779f7e35391a0062eca0ce54d.jpg';
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} uploaded successfully.`, 'success');
+        this.resetFormField('MEDIA_FRM', name, res.location);
+        this.MEDIA_FRM.fields[name].preSignedUrl = res.location;
         this.MEDIA_FRM.fields[name] = {
           ...this.MEDIA_FRM.fields[name],
           ...{ value: '', src: '', meta: {} },
         };
+        this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
         console.log(err);
@@ -430,7 +431,7 @@ export class OfferingCreationStore {
     return inputData;
   }
 
-  updateOffering = (id, fields, keyName, subKey) => {
+  updateOffering = (id, fields, keyName, subKey, notify = true) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
@@ -451,6 +452,20 @@ export class OfferingCreationStore {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
+      } else if (keyName === 'media') {
+        payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
+        const mediaObj = {};
+        payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
+          const mediaItem = toJS(payloadData[keyName][k]);
+          mediaObj[k] = Array.isArray(mediaItem) ?
+            mediaItem.map((item) => {
+              const itemOfMedia = { id: 1, url: item, isPublic: true };
+              return itemOfMedia;
+            }) :
+            { id: 1, url: payloadData[keyName][k], isPublic: true };
+          return mediaObj;
+        });
+        payloadData[keyName] = mediaObj;
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
@@ -471,7 +486,9 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
-        Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+        if (notify) {
+          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+        }
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
