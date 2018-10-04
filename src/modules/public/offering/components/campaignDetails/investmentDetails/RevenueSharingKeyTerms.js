@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 class RevenueSharingKeyTerms extends Component {
   render() {
+    const { KeyTerms } = this.props;
     return (
       <Modal.Content>
         <Grid columns={3} divided stackable className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b><br />Buffbrew Taproom, LLC</p>
+            <p><b>Issuer</b><br />{KeyTerms.legalBusinessName}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Securities</b><br />Revenue Sharing Notes</p>
+            <p><b>Securities</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Offering Amount</b><br />Min. $250,000 to max. $1,000,000</p>
+            <p><b>Offering Amount</b><br />{`Min. $${KeyTerms.minOfferingAmount}, to max. $${KeyTerms.maxOfferingAmount}`}</p>
           </Grid.Column>
         </Grid>
         <Divider />
@@ -23,10 +25,10 @@ class RevenueSharingKeyTerms extends Component {
           <Table.Body>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5}><b>Investment Multiple{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                <Popup trigger={<Icon name="help circle" color="green" />} content="For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $XXX within YY months. A 1.0% service fee is deducted from each payment." position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p><b>1.70x to 1.90x</b></p>
+                <p><b>{KeyTerms.investmentMultiple}</b></p>
 
                 <p>
                   If the final offering amount raised is less than or equal to $600,000,
@@ -44,10 +46,10 @@ class RevenueSharingKeyTerms extends Component {
             </Table.Row>
             <Table.Row verticalAlign="top" >
               <Table.Cell width={5}><b>Payments{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                <Popup trigger={<Icon name="help circle" color="green" />} content="The Issuer will make monthly payments based on the relevant revenue sharing percentage." position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p><b>Monthly</b></p>
+                <p><b>{KeyTerms.frequencyOfPayments}</b></p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -80,10 +82,13 @@ class RevenueSharingKeyTerms extends Component {
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5}><b>Maturity{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                <Popup trigger={<Icon name="help circle" color="green" />} content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors." position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p><b>78 Months,</b> including a 6 month startup period for ramp up</p>
+                <p>
+                  <b>{KeyTerms.maturity} Months,</b>
+                 including a 6 month startup period for ramp up
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -91,7 +96,7 @@ class RevenueSharingKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>Blanket lien on all assets of the business</p>
+                <p>{KeyTerms.securityInterest}</p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -100,7 +105,8 @@ class RevenueSharingKeyTerms extends Component {
               </Table.Cell>
               <Table.Cell>
                 <p>
-                  <b>0%.</b> Investors will not receive any equity interests in the Issuer or
+                  <b>{KeyTerms.securitiesOwnershipPercentage}%.</b>
+                  Investors will not receive any equity interests in the Issuer or
                   any voting or management rights with respect to the Issuer as a result of
                   an investment in Securities.
                 </p>

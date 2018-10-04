@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
 import { Header, Icon, Statistic, Button, Menu, Divider, Embed } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
@@ -11,13 +12,17 @@ const nsvideos = {
   embed: '218642510',
 };
 const isMobile = document.documentElement.clientWidth < 768;
+
+@inject('campaignStore')
 @withRouter
+@observer
 export default class CampaignSideBar extends Component {
   render() {
+    const { className, campaignStore, details } = this.props;
     const {
       needed, collected, title, address,
-    } = this.props.details;
-    const { className } = this.props;
+    } = details;
+    const { campaign } = campaignStore;
     return (
       <Aux>
         <div className={`${className} offering-side-menu`}>
@@ -49,16 +54,16 @@ export default class CampaignSideBar extends Component {
                 <Statistic.Label>Days left</Statistic.Label>
               </Statistic>
               <Statistic size="mini" className="basic">
-                <Statistic.Value>106</Statistic.Value>
+                <Statistic.Value>{campaign.closureSummary.totalInvestorCount || 0}</Statistic.Value>
                 <Statistic.Label>Investors</Statistic.Label>
               </Statistic>
               <Statistic size="mini" className="basic">
-                <Statistic.Value>49</Statistic.Value>
+                <Statistic.Value>{campaign.keyTerms.earlyBirdsCount || 0}</Statistic.Value>
                 <Statistic.Label>Early Birds</Statistic.Label>
               </Statistic>
             </Statistic.Group>
             <Button fluid={isMobile} as={Link} to="invest-now" secondary>Invest Now</Button>
-            <p>$100 min investment</p>
+            <p>${campaign.keyTerms.minInvestAmt} min investment</p>
             {isMobile &&
               <Button.Group compact fluid widths="2" className="mt-30">
                 <Button basic color="grey">

@@ -3,6 +3,7 @@ import { Modal } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import RevenueSharingKeyTerms from './RevenueSharingKeyTerms';
 import TermNoteKeyTerms from './TermNoteKeyTerms';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 @inject('campaignStore')
 @observer
@@ -19,8 +20,9 @@ class KeyTerms extends Component {
         closeIcon
       >
         <Modal.Header>Key Terms</Modal.Header>
-        {campaign.investmentType === 'Revenue Sharing' ?
-          <RevenueSharingKeyTerms /> : <TermNoteKeyTerms />
+        {campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
+          <RevenueSharingKeyTerms KeyTerms={campaign.keyTerms} />
+          : <TermNoteKeyTerms KeyTerms={campaign.keyTerms} />
           }
       </Modal>
     );
