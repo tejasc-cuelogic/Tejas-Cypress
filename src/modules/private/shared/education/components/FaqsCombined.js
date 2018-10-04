@@ -59,8 +59,8 @@ export default class FaqsCombined extends Component {
                 <Icon className="ns-chevron-down" />
               </Accordion.Title>
               <Accordion.Content active={activeIndex === key}>
-                {faq.faqItems && faq.faqItems.length &&
-                faq.faqItems.map((faqItem, index) => (
+                {faq.knowledgeBaseItemList && faq.knowledgeBaseItemList.length &&
+                faq.knowledgeBaseItemList.map((faqItem, index) => (
                   <Accordion key={faqItem.id}>
                     <Accordion.Title
                       active={innerActiveIndex === index}
