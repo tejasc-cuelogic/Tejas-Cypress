@@ -24,9 +24,7 @@ export default class OfferingCompany extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about');
   }
-  editorChange = (field, value, form) => this.props.offeringCreationStore.rtEditorChange(
-    field, value, form,
-  );
+  editorChange = (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const {
       OFFERING_COMPANY_FRM,
