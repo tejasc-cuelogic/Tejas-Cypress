@@ -2,7 +2,7 @@
 import { observable, toJS, action } from 'mobx';
 import { map, startCase, isArray, forEach, find } from 'lodash';
 import graphql from 'mobx-apollo';
-import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
+import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { deleteBonusReward, deleteBonusRewardsTierByOffering, getBonusRewards, createBonusReward, deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac, createBonusRewardsTier, getBonusRewardsTiers } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -53,6 +53,20 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+
+  @action
+  setDefaultTiers = () => {
+    DEFAULT_TIERS.map((tier) => {
+      if (this.bonusRewardsTiers.data && this.bonusRewardsTiers.data.getBonusRewardTiers) {
+        this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
+      } else {
+        this.bonusRewardsTiers.data = {};
+        this.bonusRewardsTiers.data.getBonusRewardTiers = [];
+        this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
+      }
+      return null;
+    });
+  }
 
   @action
   setCurrentOfferingId = (id) => {
@@ -622,6 +636,7 @@ export class OfferingCreationStore {
       })
       .then(() => {
         Helper.toast('Tier has been created successfully', 'success');
+        Validator.resetFormData(this.ADD_NEW_TIER_FRM);
       })
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -641,6 +656,7 @@ export class OfferingCreationStore {
       onFetch: (res) => {
         if (res) {
           this.setTiersForBonusRewardsForm();
+          this.setDefaultTiers();
         }
       },
     });
@@ -652,7 +668,7 @@ export class OfferingCreationStore {
     const tiersArray = [];
     forEach(tiers, (tier, index) => {
       const tierFieldObj = { rule: 'alpha_dash', error: undefined };
-      tierFieldObj.values = [{ label: `Invest ${tier.amount} or more`, value: tier.amout }];
+      tierFieldObj.values = [{ label: `Invest ${tier.amount} or more`, value: tier.amount }];
       tierFieldObj.key = tier.amount;
       tierFieldObj.earlyBirdQuantity = tier.earlyBirdQuantity;
       tierFieldObj.value = [];
@@ -665,7 +681,6 @@ export class OfferingCreationStore {
 
   @action
   bonusRewardTierChange = (e, seqNum, result) => {
-    const changedAnswer = find(this.ADD_NEW_BONUS_REWARD_FRM.fields, { key: result.name });
     const index = this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.indexOf(result.value);
     if (index === -1) {
       this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.push(result.value);
@@ -676,10 +691,15 @@ export class OfferingCreationStore {
 
   createBonusReward = () => {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
-    const fieldsFiltered =
-      Object.keys(fields).filter(key => Array.isArray(fields[key].value) &&
-      fields[key].value.length === 1);
-    console.log(fieldsFiltered);
+    const tiers = [];
+    map(fields, ((field) => {
+      if (field.key && field.value.length && field.value.length === 1) {
+        const tierObj = {};
+        tierObj.amount = field.key;
+        tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
+        tiers.push(tierObj);
+      }
+    }));
     let payloadData = {};
     payloadData = {
       offeringId: this.currentOfferingId,
@@ -687,16 +707,7 @@ export class OfferingCreationStore {
       description: fields.description.value,
       rewardStatus: 'In Review',
       expirationDate: fields.expirationDate.value,
-      tiers: [
-        {
-          amount: 25000,
-          earlyBirdQuantity: 0,
-        },
-        {
-          amount: 11111,
-          earlyBirdQuantity: 0,
-        },
-      ],
+      tiers,
     };
     uiStore.setProgress();
     client

@@ -1729,3 +1729,22 @@ export const ADD_NEW_BONUS_REWARD = {
     placeHolder: '3/4/2018',
   },
 };
+
+export const DEFAULT_TIERS = [
+  {
+    amount: 0,
+    earlyBirdQuantity: 50,
+  },
+  {
+    amount: 500,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 1000,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 2000,
+    earlyBirdQuantity: 0,
+  },
+];

@@ -67,7 +67,7 @@ export default class Creation extends Component {
           bonusRewardsTiers.data.getBonusRewardTiers.map(tier => (
             <div className="reward-tier">
               <Header as="h4">
-                Invest ${tier.amount} or more
+                {tier.earlyBirdQuantity === 0 ? `Invest ${tier.amount} or more` : `Early Birds investing $${tier.amount} Or more... (#${tier.earlyBirdQuantity})`}
                 <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', tier)}>
                   <Icon className="ns-trash" />
                 </Button>
