@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Grid } from 'semantic-ui-react';
+import { Grid, Icon } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
+import { mapValues } from 'lodash';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -15,8 +17,8 @@ const getModule = component => Loadable({
 
 const navItems = [
   { title: 'Overview', to: 'overview' },
-  { title: 'PreQual', to: 'prequal' },
-  { title: 'Business Plan', to: 'business-plan' },
+  { title: 'PreQualification', to: 'preQualification' },
+  { title: 'Business Plan', to: 'businessPlan' },
   { title: 'Projections', to: 'projections' },
   { title: 'Documentation', to: 'documentation' },
   { title: 'Miscellaneous', to: 'miscellaneous' },
@@ -33,7 +35,9 @@ const navItems = [
   { title: 'Offer', to: 'offer' },
 ];
 
+@inject('businessAppReviewStore')
 @withRouter
+@observer
 export default class Review extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
@@ -43,13 +47,24 @@ export default class Review extends Component {
 
   module = name => DataFormatter.upperCamelCase(name);
 
+  representAddon = summary => mapValues(summary, s => (
+    s !== '' && <Icon color={s === 'ns-check-circle' ? 'green' : 'orange'} name={s} />
+  ));
   render() {
-    const { match } = this.props;
+    const { match, businessAppReviewStore } = this.props;
+    const { subNavPresentation, updateStatuses } = businessAppReviewStore;
+    updateStatuses(navItems);
     return (
       <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+            <SecondaryMenu
+              addon={{ data: this.representAddon(subNavPresentation) }}
+              secondary
+              vertical
+              match={match}
+              navItems={navItems}
+            />
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>

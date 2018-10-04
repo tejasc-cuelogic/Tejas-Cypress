@@ -5,7 +5,7 @@ import FormElementWrap from '../FormElementWrap';
 
 const EntityAndLegal = props => (
   <Aux>
-    <FormElementWrap header="What is your company’s entity structure?">
+    <FormElementWrap hideFields={props.hideFields} header="What is your company’s entity structure?">
       <FormRadioGroup
         disabled={props.preQualFormDisabled}
         fielddata={props.fields.businessEntityStructure}
@@ -16,10 +16,12 @@ const EntityAndLegal = props => (
       />
     </FormElementWrap>
     <FormElementWrap
+      hideFields={props.hideFields}
+      noDivider
       header="Legal Confirmation"
-      subHeader="Please check all that apply.
-        Note some of these items are not disqualifying conditions, but a NextSeed
-        representative may follow up to verify any applicable details."
+      subHeader={!props.hideFields ?
+        'Please check all that apply. Note some of these items are not disqualifying conditions, but a NextSeed representative may follow up to verify any applicable details.'
+        : ''}
     >
       <FormCheckbox
         disabled={props.preQualFormDisabled}

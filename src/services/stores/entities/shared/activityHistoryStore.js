@@ -1,44 +1,71 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../api/gcoolApi';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { allActivities, addActivity } from '../../queries/activity';
-import { userStore } from '../../index';
+import { businessAppStore } from '../../index';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { LOG_ACTIVITY } from '../../../constants/activity';
+import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../constants/common';
 
 export class ActivityHistoryStore {
   @observable ACTIVITY_FRM = Validator.prepareFormObject(LOG_ACTIVITY);
-  @observable requestState = { search: {} };
+  @observable requestState = { filters: {} };
   @observable data = [];
-  @observable current = {};
   @observable message = {};
 
   @action
   initRequest = () => {
-    this.current = {};
-    this.data = graphql({ client, query: allActivities });
+    const { activityType, activityUserType } = this.requestState.filters;
+    let filterParams = { resourceId: businessAppStore.applicationId, orderBy: { field: 'activityDate', sort: 'desc' } };
+    filterParams = activityType !== '' ? { ...filterParams, activityType } : { ...filterParams };
+    filterParams = activityUserType !== '' ? { ...filterParams, scope: activityUserType } : { ...filterParams };
+    this.data = graphql({
+      client,
+      query: allActivities,
+      variables: filterParams,
+    });
+  }
+
+  @action
+  setInitiateSrch = (name, value) => {
+    this.requestState.filters[name] = value;
+    this.initRequest();
   }
 
   @action
   send = () => {
-    const data = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
-    data.title = 'Posted new comment';
-    if (userStore.currentUser) {
-      data.userName = `${userStore.currentUser.givenName} ${userStore.currentUser.familyName}`;
-      data.userId = userStore.currentUser.sub;
-    }
+    const formData = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
+    const data = {
+      resourceId: businessAppStore.applicationId,
+      activityType: ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY,
+      activityTitle: 'Posted new comment',
+      activity: formData.comment,
+      scope: ACTIVITY_HISTORY_SCOPE.ADMIN,
+    };
+    this.createActivityHistory(data);
+  }
+
+  @action
+  createActivityHistory = (payload, isInternal = false) => {
     client
       .mutate({
         mutation: addActivity,
-        variables: data,
-        refetchQueries: [{ query: allActivities }],
+        variables: {
+          activityHistoryDetails: payload,
+        },
+        refetchQueries: [{
+          query: allActivities,
+          variables: { resourceId: payload.resourceId },
+        }],
       })
       .then(() => {
-        Helper.toast('sent.', 'success');
+        if (isInternal) {
+          Helper.toast('Activity history added successfully.', 'success');
+        }
         this.reset();
       })
-      .catch(e => console.log(e, 'error'));
+      .catch(() => Helper.toast('Something went wrong, please try again later.', 'error'));
   }
 
   @computed get allData() {
@@ -46,8 +73,9 @@ export class ActivityHistoryStore {
   }
 
   @computed get activities() {
-    return (this.allData.data && this.allData.data.allActivityHistories &&
-      toJS(this.allData.data.allActivityHistories)) || [];
+    return (this.allData.data && this.allData.data.filterActivityHistories &&
+      this.allData.data.filterActivityHistories.activityHistory.length &&
+      toJS(this.allData.data.filterActivityHistories.activityHistory)) || [];
   }
 
   @computed get error() {

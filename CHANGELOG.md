@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-09-24)
+# 0.0.0 (2018-10-03)
 
 
 ### Bug Fixes
@@ -17,8 +17,11 @@
 ### Features
 
 * ** investment flow[Issue [344](https://chaos.ns.team/nsv2/ns-ops/issues/344) - investment flow refinements]:** investment flow refinements ([ea3a07c](https://chaos.ns.team/nsv2/ns-client/commits/ea3a07c))
+* **Admin application details[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** application details and issuer signup issue fix application listing cta ([e96eaab](https://chaos.ns.team/nsv2/ns-client/commits/e96eaab))
 * **Admin Business Applications[Issue [270](https://chaos.ns.team/nsv2/ns-ops/issues/270) - business-application-admin-screen-business-application-lists-skeleton]:** created skeleton for admin business application list using graph cool stub api with filters ([c45b5f0](https://chaos.ns.team/nsv2/ns-client/commits/c45b5f0))
 * **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
+* **admin dashboard activity history[Issue [365](https://chaos.ns.team/nsv2/ns-ops/issues/365) - admin dashboard activity history]:** designed activity history section ([f2bd37f](https://chaos.ns.team/nsv2/ns-client/commits/f2bd37f))
+* **Admin listing changes[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** Application status label updated and filtering disabled and UI changes done ([fc6ce4c](https://chaos.ns.team/nsv2/ns-client/commits/fc6ce4c))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
 * **Auth[Issue [386](https://chaos.ns.team/nsv2/ns-ops/issues/386) - Cookie reference to show Signup/Login]:** Cookie based reference to show Signup/Login ([4105b0b](https://chaos.ns.team/nsv2/ns-client/commits/4105b0b))
 * **Business Application[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Lendio prequalification from email url]:** Lendio prequalification from email url ([189f4c0](https://chaos.ns.team/nsv2/ns-client/commits/189f4c0))

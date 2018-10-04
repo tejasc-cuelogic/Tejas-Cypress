@@ -1,23 +1,37 @@
 import gql from 'graphql-tag';
 
 export const allActivities = gql`
-  query allActivities {
-    allActivityHistories(orderBy: createdAt_DESC){
-      id
-      createdAt
-      userName
-      title
-      comment
+  query fetchActivityHistoryByFilters ($resourceId: String!, $activityType: ActivityTypeEnum, $scope: ActivityHistoryScopeEnum) {
+  filterActivityHistories (
+    resourceId: $resourceId
+    activityType: $activityType
+    scope: $scope
+  ){
+    activityHistory {
+      resourceId
+      activityDate
+      activityTitle
+      activity
+      createdUserInfo {
+        id
+        info {
+          firstName
+          lastName
+          avatar {
+            url
+            name
+          }
+        }
+      }    
     }
   }
+}
 `;
 
 export const addActivity = gql`
-  mutation CreateActivity($userId: String, $userName: String, $title: String, $comment: String){
-    createActivityHistory(userId: $userId, userName: $userName, title: $title, comment: $comment) {
-      id
-      createdAt
-      title
+  mutation createActivityHistory ($activityHistoryDetails: ActivityHistoryInput!){
+    createActivityHistory(activityHistoryDetails: $activityHistoryDetails) {
+      resourceId
     }
   }
 `;

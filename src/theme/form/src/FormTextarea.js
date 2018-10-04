@@ -34,13 +34,16 @@ const FormTextarea = observer((props) => {
           }
       </label>
       }
-      <TextArea
-        {...props}
-        value={value}
-        label={label}
-        placeholder={props.placeholder || placeHolder}
-        onChange={props.changed}
-      />
+      {props.readOnly ?
+        <p className="commet-area">{value}</p> :
+        <TextArea
+          {...props}
+          value={value}
+          label={label}
+          placeholder={placeHolder}
+          onChange={props.changed}
+        />
+      }
       {error &&
         <FieldError error={error} />
       }

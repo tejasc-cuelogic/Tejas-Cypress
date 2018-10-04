@@ -25,6 +25,10 @@ mutation verifyCIPUsers($userId: String!, $user: UserCIPInput){
         message
         summary
       }
+      ... on UserCIPHardFail{
+        key
+        message
+      }
       ... on UserCIPFail{
         key
         message
@@ -33,8 +37,8 @@ mutation verifyCIPUsers($userId: String!, $user: UserCIPInput){
   }`;
 
 export const verifyCIPAnswers = gql`
-  mutation verifyCIPAnswers($userId: String!, $cipAnswers: CIPAnswersInput){
-    verifyCIPAnswers(userId: $userId, cipAnswers: $cipAnswers) {
+  mutation verifyCIPAnswers($cipAnswers: CIPAnswersInput){
+    verifyCIPAnswers(cipAnswers: $cipAnswers) {
       ... on UserCIPSoftFail{
         softFailId: id
         key

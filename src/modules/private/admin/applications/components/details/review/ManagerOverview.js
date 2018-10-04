@@ -1,35 +1,51 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Header, Button, Divider } from 'semantic-ui-react';
+import { Header, Button, Divider, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 
-@inject('businessAppReviewStore', 'userStore')
+@inject('businessAppReviewStore')
 @observer
 export default class ManagerOverview extends Component {
   render() {
-    const { formChange } = this.props.businessAppReviewStore;
-    const { form, formName } = this.props;
-    const { roles } = this.props.userStore.currentUser;
-    if (roles && !roles.includes('manager')) {
-      return null;
-    }
+    const { formChange, MANAGERS_FRM, saveReviewForms } = this.props.businessAppReviewStore;
+    const {
+      isReadonly, approved, formName, isManager,
+    } = this.props;
     return (
       <Aux>
-        <Divider section />
-        <Header as="h4">Manager</Header>
-        <FormTextarea
-          name="managerOverview"
-          fielddata={form.fields.managerOverview}
-          changed={(e, result) => formChange(e, result, formName)}
-          containerclassname="secondary"
-        />
-        <div className="right-align">
-          <Button.Group>
-            <Button disabled={!form.meta.isValid} className="relaxed" secondary>Deny</Button>
-            <Button disabled={!form.meta.isValid} primary className="relaxed" type="button">Approve</Button>
-          </Button.Group>
-        </div>
+        {((!isManager && isReadonly && approved && approved.status) || isManager) &&
+        <Aux>
+          <Header as="h4">
+            Manager
+            {approved && approved.status &&
+              <Button.Group floated="right" size="mini">
+                <Button as="span" className="time-stamp">
+                  <Icon className="ns-check-circle" color="green" />
+                  Approved By {approved.by}
+                </Button>
+                {isManager &&
+                <Button className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                }
+              </Button.Group>
+            }
+            {!isReadonly && isManager &&
+              <Button.Group floated="right" size="mini">
+                <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>Approve</Button>
+              </Button.Group>
+            }
+          </Header>
+          <FormTextarea
+            name="managerOverview"
+            fielddata={MANAGERS_FRM.fields.managerOverview}
+            changed={(e, result) => formChange(e, result, 'MANAGERS_FRM')}
+            readOnly={isReadonly}
+            containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+          />
+          <Divider section />
+        </Aux>
+        }
       </Aux>
     );
   }

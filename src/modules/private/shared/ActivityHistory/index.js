@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Grid, Form } from 'semantic-ui-react';
 import { DropdownFilter } from '../../../../theme/form/Filters';
+import { FILTER_META } from '../../../../constants/user';
 import AddActivity from './components/AddActivity';
 import ActivityFeed from './components/ActivityFeed';
 
@@ -12,10 +13,12 @@ export default class ActivityHistory extends Component {
   componentWillMount() {
     this.props.activityHistoryStore.initRequest();
   }
+  setSearchParam = (e, { name, value }) =>
+    this.props.activityHistoryStore.setInitiateSrch(name, value);
   logActivity = () => this.props.activityHistoryStore.send();
   render() {
     const {
-      ACTIVITY_FRM, msgEleChange, activities, loading,
+      ACTIVITY_FRM, msgEleChange, activities, loading, requestState,
     } = this.props.activityHistoryStore;
     return (
       <Aux>
@@ -23,10 +26,10 @@ export default class ActivityHistory extends Component {
           <Form>
             <Grid columns={4}>
               <Grid.Column>
-                <DropdownFilter isMultiple value="" name="Activity Type" options={[]} />
+                <DropdownFilter value={requestState.filters.activityType} keyName="activityType" change={this.setSearchParam} name="Activity Type" options={FILTER_META.activityType} />
               </Grid.Column>
               <Grid.Column>
-                <DropdownFilter isMultiple value="" name="User Type" options={[]} />
+                <DropdownFilter value={requestState.filters.activityUserType} keyName="activityUserType" change={this.setSearchParam} name="User Type" options={FILTER_META.activityUserType} />
               </Grid.Column>
             </Grid>
           </Form>

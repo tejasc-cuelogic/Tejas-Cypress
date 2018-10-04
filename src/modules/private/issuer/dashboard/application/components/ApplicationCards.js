@@ -39,33 +39,34 @@ export default class ApplicationCards extends Component {
           </Card>
           {fetchBusinessApplication.length ?
             fetchBusinessApplication.map(application => (
-              <Card fluid key={application.applicationId}>
-                <Card.Content>
-                  <Header as="h3"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
-                </Card.Content>
-                <Card.Content>
-                  <dl className="dl-horizontal">
-                    <dt>Application status</dt>
-                    <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
-                    <dt>Started</dt>
-                    <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
-                    <dt>{application.applicationStatus ===
-                      BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ?
-                      'Submitted' : 'Last updated'
+              application.applicationStatus !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED &&
+                <Card fluid key={application.applicationId}>
+                  <Card.Content>
+                    <Header as="h3"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
+                  </Card.Content>
+                  <Card.Content>
+                    <dl className="dl-horizontal">
+                      <dt>Application status</dt>
+                      <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
+                      <dt>Started</dt>
+                      <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
+                      <dt>{application.applicationStatus ===
+                        BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ?
+                        'Submitted' : 'Last updated'
+                      }
+                      </dt>
+                      <dd>{application.updated ? <DateTimeFormat datetime={application.updated.date} /> : '--'}</dd>
+                    </dl>
+                    {application.applicationStatus ===
+                    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
+                      <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
                     }
-                    </dt>
-                    <dd>{application.updated ? <DateTimeFormat datetime={application.updated.date} /> : '--'}</dd>
-                  </dl>
-                  {application.applicationStatus ===
-                  BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
-                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
-                  }
-                  {application.applicationStatus ===
-                  BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED &&
-                    <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
-                  }
-                </Card.Content>
-              </Card>
+                    {application.applicationStatus ===
+                    BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED &&
+                      <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
+                    }
+                  </Card.Content>
+                </Card>
             )) : null
           }
         </Card.Group>

@@ -1,31 +1,27 @@
-import { observable, action, computed } from 'mobx';
-import { MODEL_MANAGER, OFFER_MANAGER, MISCELLANEOUS_MANAGER, CONTINGENCY_MANAGER, BUSINESS_PLAN_MANAGER, PROJECTIONS_MANAGER, DOCUMENTATION_MANAGER, JUSTIFICATIONS_MANAGER, OVERVIEW_MANAGER, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OTHER_DOCUMENTATION_UPLOADS, SOCIAL_MEDIA, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN, CONTROL_PERSONS, SOURCES, USES, LAUNCH, CLOSE } from '../../../../constants/admin/businessApplication';
+/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
+import { observable, action, computed, toJS } from 'mobx';
+import { map, forEach } from 'lodash';
+import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
+import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
+import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
+import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin } from '../../../queries/businessApplication';
+import { businessAppStore, uiStore } from '../../../index';
+import { fileUpload } from '../../../../actions';
 
 export class BusinessAppReviewStore {
+  @observable APPLICATION_STATUS_COMMENT_FRM =
+    Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
   @observable OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
-  @observable OVERVIEW_MANAGER_FRM = Validator.prepareFormObject(OVERVIEW_MANAGER);
   @observable MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
   @observable JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
-  @observable JUSTIFICATIONS_MANAGER_FRM = Validator.prepareFormObject(JUSTIFICATIONS_MANAGER);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
-  @observable DOCUMENTATION_MANAGER_FRM = Validator.prepareFormObject(DOCUMENTATION_MANAGER);
   @observable PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
-  @observable PROJECTIONS_MANAGER_FRM = Validator.prepareFormObject(PROJECTIONS_MANAGER);
   @observable BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
-  @observable BUSINESS_PLAN_MANAGER_FRM = Validator.prepareFormObject(BUSINESS_PLAN_MANAGER);
-  @observable CONTINGENCY_MANAGER_FRM = Validator.prepareFormObject(CONTINGENCY_MANAGER);
-  @observable MISCELLANEOUS_MANAGER_FRM = Validator.prepareFormObject(MISCELLANEOUS_MANAGER);
-  @observable OFFER_MANAGER_FRM = Validator.prepareFormObject(OFFER_MANAGER);
+  @observable CONTINGENCY_FRM = Validator.prepareFormObject(CONTINGENCY);
+  @observable MISCELLANEOUS_FRM = Validator.prepareFormObject(MISCELLANEOUS);
   @observable MODEL_MANAGER_FRM = Validator.prepareFormObject(MODEL_MANAGER);
-  @observable CONTROL_PERSONS_FRM = Validator.prepareFormObject(CONTROL_PERSONS);
-  @observable SOURCES_FRM = Validator.prepareFormObject(SOURCES);
-  @observable USES_FRM = Validator.prepareFormObject(USES);
-  @observable LAUNCH_FRM = Validator.prepareFormObject(LAUNCH);
-  @observable CLOSE_FRM = Validator.prepareFormObject(CLOSE);
-  @observable SOCIAL_MEDIA_FRM = Validator.prepareFormObject(SOCIAL_MEDIA);
-  @observable OTHER_DOCUMENTATION_FRM = Validator.prepareFormObject(OTHER_DOCUMENTATION_UPLOADS);
   @observable UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
   @observable OFFERS_FRM = Validator.prepareFormObject(OFFERS);
   @observable MODEL_INPUTS_FRM = Validator.prepareFormObject(MODEL_INPUTS);
@@ -34,6 +30,10 @@ export class BusinessAppReviewStore {
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
+  @observable removeFileIdsList = [];
+  @observable subNavPresentation = {
+    overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
+  };
 
   @action
   toggleConfirmModal = (index, formName = null) => {
@@ -43,46 +43,45 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  removeData = (formName) => {
-    this[formName].fields.data.splice(this.removeIndex, 1);
+  removeData = (formName, ref = 'data') => {
+    this[formName].fields[ref].splice(this.removeIndex, 1);
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
     this.removeIndex = null;
   }
 
-  getMetaData = (metaData) => {
+  @action
+  updateStatuses = (steps) => {
+    const { review, offers } = businessAppStore.businessApplicationDetailsAdmin;
+    map(steps, (ele) => {
+      if (ele.to !== 'model') {
+        const submitted = ele.to === 'overview' ? review && review[ele.to] && review[ele.to].criticalPoint && review[ele.to].criticalPoint.submitted && (review[ele.to].criticalPoint.submitted || null) : ele.to === 'offer' ? offers && offers.submitted && (offers.submitted || null) : review && review[ele.to] && review[ele.to].submitted && (review[ele.to].submitted || null);
+        const approved = ele.to === 'overview' ? review && review[ele.to] && review[ele.to].criticalPoint && review[ele.to].criticalPoint.approved && (review[ele.to].criticalPoint.approved || null) : ele.to === 'offer' ? offers && offers.approved && (offers.approved || null) : review && review[ele.to] && review[ele.to].approved && (review[ele.to].approved || null);
+        const status = (submitted && (!approved || (approved && !approved.status))) ? 'ns-reload-circle' : approved && approved.status ? 'ns-check-circle' : '';
+        this.subNavPresentation[ele.to] = status;
+      }
+    });
+  }
+
+  getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
-      LAUNCH_FRM: LAUNCH,
-      CLOSE_FRM: CLOSE,
-      CONTROL_PERSONS_FRM: CONTROL_PERSONS,
-      JUSTIFICATIONS_FRM: JUSTIFICATIONS,
-      OVERVIEW_FRM: OVERVIEW,
-      SOURCES_FRM: SOURCES,
-      USES_FRM: USES,
-      SOCIAL_MEDIA_FRM: SOCIAL_MEDIA,
-      OTHER_DOCUMENTATION_FRM: OTHER_DOCUMENTATION_UPLOADS,
-      OFFERS_FRM: OFFERS,
+      CONTINGENCY_FRM: { actionType: 'REVIEW_CONTINGENCIES', isMultiForm: true },
+      JUSTIFICATIONS_FRM: { actionType: 'REVIEW_PREQUALIFICATION', isMultiForm: true },
+      BUSINESS_PLAN_FRM: { actionType: 'REVIEW_BUSINESSPLAN', isMultiForm: true },
+      MISCELLANEOUS_FRM: { actionType: 'REVIEW_MISCELLANEOUS', isMultiForm: true },
+      OVERVIEW_FRM: { actionType: 'REVIEW_OVERVIEW', isMultiForm: true },
+      PROJECTIONS_FRM: { actionType: 'REVIEW_PROJECTIONS', isMultiForm: false },
+      DOCUMENTATION_FRM: { actionType: 'REVIEW_DOCUMENTATION', isMultiForm: false },
+      OFFERS_FRM: { actionType: 'REVIEW_OFFER', isMultiForm: true },
+      MANAGERS_FRM: { formData: MANAGERS, isMultiForm: false },
     };
-    return metaDataMapping[metaData];
+    return metaDataMapping[formName][getField];
   }
 
   @action
-  addMore = (formName) => {
-    this[formName] = {
-      ...this[formName],
-      fields: {
-        ...this[formName].fields,
-        data: [
-          ...this[formName].fields.data,
-          this.getMetaData(formName).data[0],
-        ],
-      },
-      meta: {
-        ...this[formName].meta,
-        isValid: false,
-      },
-    };
+  addMore = (formName, arrayName = 'data') => {
+    this[formName] = Validator.addMoreRecordToSubSection(this[formName], arrayName);
   }
 
   @action
@@ -94,10 +93,10 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  formChangeWithIndex = (e, result, form, index) => {
+  formChangeWithIndex = (e, result, form, ref = null, index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],
-      Validator.pullValues(e, result), 'data', index,
+      Validator.pullValues(e, result), ref, index,
     );
   }
 
@@ -111,41 +110,98 @@ export class BusinessAppReviewStore {
 
   @action
   controlPersonMaskChange = (values, index) => {
-    this.CONTROL_PERSONS_FRM = Validator.onArrayFieldChange(
-      this.CONTROL_PERSONS_FRM,
-      { name: 'ownership', value: values.formattedValue }, 'data', index,
+    this.BUSINESS_PLAN_FRM = Validator.onArrayFieldChange(
+      this.BUSINESS_PLAN_FRM,
+      { name: 'ownership', value: values.floatValue }, 'controlPersons', index,
     );
   }
-
   @action
-  setFileUploadData = (form, field, files, index = null) => {
-    const file = files[0];
-    const fileData = Helper.getFormattedFileData(file);
-    if (index !== null) {
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        { name: field, value: fileData.fileName }, 'data', index,
-      );
-    } else {
-      this[form] = Validator.onChange(
-        this[form],
-        { name: field, value: fileData.fileName },
-      );
+  checkFormValid = (form, multiForm, showErrors) => {
+    this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
+  }
+  @action
+  setFileUploadData = (form, arrayName, field, files, index = null) => {
+    if (typeof files !== 'undefined' && files.length) {
+      const { applicationId, userId } = businessAppStore.businessApplicationDetailsAdmin;
+      forEach(files, (file) => {
+        const fileData = Helper.getFormattedFileData(file);
+        const stepName = this.getFileUploadEnum(form, index);
+        this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+        // Need to change userType to ADMIN from ISSUER
+        fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ISSUER', userId).then((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+            this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+            this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+            this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+            this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+            this.checkFormValid(form, index != null, false);
+          }).catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+          });
+        }).catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+        }).finally(() => {
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+        });
+      });
     }
   }
 
   @action
-  removeUploadedData = (form, field, index = null) => {
-    if (index !== null) {
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        { name: field, value: '' }, 'data', index,
-      );
+  getFileUploadEnum = (formName, index = null) => {
+    let step = '';
+    if (index !== null && formName !== 'MISCELLANEOUS_FRM') {
+      step = `${BUSINESS_APP_FILE_UPLOAD_ENUMS[formName]}${index + 1}`;
     } else {
-      this[form] = Validator.onChange(
-        this[form],
-        { name: field, value: '' },
-      );
+      step = BUSINESS_APP_FILE_UPLOAD_ENUMS[formName];
+    }
+    return step;
+  }
+
+  @action
+  setFormFileArray = (formName, arrayName, field, getField, value, index) => {
+    if (index != null) {
+      this[formName].fields[arrayName][index][field][getField] = value;
+    } else {
+      this[formName].fields[field][getField] = value;
+    }
+  }
+
+  @action
+  removeUploadedData = (form, field, index = null, arrayName) => {
+    let removeFileIds = '';
+    if (index != null) {
+      const { fileId } = this[form].fields[arrayName][index][field];
+      removeFileIds = fileId;
+    } else {
+      const { fileId } = this[form].fields[field];
+      removeFileIds = fileId;
+    }
+    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+    this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+    this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
+    this.setFormFileArray(form, arrayName, field, 'value', '', index);
+    this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+    this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+    this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
+    this.checkFormValid(form, index != null, false);
+  }
+
+  @action
+  removeUploadedFiles = () => {
+    const fileList = toJS(this.removeFileIdsList);
+    if (fileList.length) {
+      forEach(fileList, (fileId) => {
+        fileUpload.removeUploadedData(fileId).then(() => {
+        }).catch((error) => {
+          uiStore.setErrors(error.message);
+        });
+      });
+      this.removeFileIdsList = [];
     }
   }
 
@@ -159,17 +215,18 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  maskChangeWithIndex = (values, form, field, index) => {
+  maskChangeWithIndex = (values, form, arrayName = 'data', field, index) => {
+    const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' ? values.formattedValue : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
-      { name: field, value: values.floatValue }, 'data', index,
+      { name: field, value: fieldValue }, arrayName, index,
     );
   }
 
   @computed
   get totalSourcesAmount() {
     let totalAmount = 0;
-    this.SOURCES_FRM.fields.data.map((source) => {
+    this.BUSINESS_PLAN_FRM.fields.sources.map((source) => {
       totalAmount += source.amount.value;
       return totalAmount;
     });
@@ -179,11 +236,142 @@ export class BusinessAppReviewStore {
   @computed
   get totalUsesAmount() {
     let totalAmount = 0;
-    this.USES_FRM.fields.data.map((use) => {
+    this.BUSINESS_PLAN_FRM.fields.uses.map((use) => {
       totalAmount += use.amount.value;
       return totalAmount;
     });
     return totalAmount;
+  }
+
+  @action
+  resetMe = (form, ref) => {
+    this[form] = Validator.prepareFormObject(ref);
+  }
+
+ @action
+  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag, comment = '') => {
+    const applicationSource = applStatus ===
+    BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
+    uiStore.setProgress();
+    let payload = {
+      actionType: 'APPLICATION_STATUS',
+      applicationId,
+      applicationSource,
+      applicationFlag,
+      comments: comment !== '' ? { text: comment } : formInputData,
+    };
+    if (userId !== 'new') {
+      payload = { ...payload, userId };
+    }
+    let reFetchPayLoad = {
+      applicationId,
+      applicationType: applicationSource,
+    };
+    if (applicationSource === 'APPLICATION_COMPLETED') {
+      reFetchPayLoad = { ...reFetchPayLoad, userId };
+    }
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateApplicationStatusAndReview,
+          variables: payload,
+          refetchQueries:
+            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+        })
+        .then((result) => {
+          Helper.toast('Application status updated successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
+    let formInputData = Validator.evaluateFormData(this[formName].fields);
+    const managerFormInputData = approveOrSubmitted === 'REVIEW_APPROVED' ? Validator.evaluateFormData(this.MANAGERS_FRM.fields) : '';
+    const payloadKey = formName === 'OFFERS_FRM' ? 'offers' : 'review';
+    if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
+      const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
+      const data = map(formInputData[key], value => value[key]);
+      formInputData = { [key]: data };
+      formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
+    }
+    const key = Object.keys(formInputData)[0];
+    formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
+    let actionType = this.getActionType(formName);
+    let applicationReviewAction = '';
+    if (approveOrSubmitted !== '') {
+      actionType = approveOrSubmitted;
+      applicationReviewAction = this.getActionType(formName);
+    }
+    const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
+    uiStore.setProgress();
+    let payload = {
+      [payloadKey]: formInputData,
+      actionType,
+      applicationId,
+      userId,
+      applicationSource,
+    };
+    if (approveOrSubmitted !== '') {
+      payload = { ...payload, applicationReviewAction };
+      payload = approveOrSubmitted === 'REVIEW_APPROVED' ? { ...payload, approvedStatus } : payload;
+    }
+    let reFetchPayLoad = {
+      applicationId,
+      applicationType: applicationSource,
+    };
+    if (applicationSource === 'APPLICATION_COMPLETED') {
+      reFetchPayLoad = { ...reFetchPayLoad, userId };
+    }
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateApplicationStatusAndReview,
+          variables: payload,
+          refetchQueries:
+            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+        })
+        .then((result) => {
+          this.removeUploadedFiles();
+          Helper.toast('Data saved successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  setFormData = (form, ref) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const appData = businessApplicationDetailsAdmin;
+    if (!appData) {
+      return false;
+    }
+    this[form] = Validator.setFormData(this[form], appData, ref);
+    const multiForm = this.getActionType(form, 'isMultiForm');
+    if (form !== 'MANAGERS_FRM') {
+      this.checkFormValid(form, multiForm, false);
+    }
+    return false;
   }
 }
 export default new BusinessAppReviewStore();

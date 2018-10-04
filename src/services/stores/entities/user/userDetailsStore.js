@@ -136,7 +136,8 @@ export class UserDetailsStore {
         this.userDetails.legalDetails.status
       ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.roles = mapValues(this.userDetails.roles, (a) => {
-        const data = { accountId: a.accountId, name: a.name, status: a.details.status };
+        const data =
+        { accountId: a.accountId, name: a.name, status: a.details ? a.details.status : null };
         return data;
       });
       Object.keys(details.roles).map((key) => {

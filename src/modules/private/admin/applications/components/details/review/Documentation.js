@@ -1,32 +1,51 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Button, Divider } from 'semantic-ui-react';
+import { Form, Header, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Documentation extends Component {
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('DOCUMENTATION_FRM', 'review.documentation');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.documentation.managerOverview');
+  }
+  submit = () => {
+    this.props.businessAppReviewStore.saveReviewForms('DOCUMENTATION_FRM');
+  }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
+  }
   render() {
-    const {
-      DOCUMENTATION_FRM,
-      DOCUMENTATION_MANAGER_FRM,
-      formChange,
-    } = this.props.businessAppReviewStore;
+    const { DOCUMENTATION_FRM, formChange } = this.props.businessAppReviewStore;
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.documentation && review.documentation &&
+      review.documentation.submitted) ? review.documentation.submitted : null;
+    const approved = (review && review.documentation && review.documentation &&
+      review.documentation.approved) ? review.documentation.approved : null;
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <div>
-        <Form>
+        <Form onSubmit={this.submit}>
+          <ManagerOverview isManager={isManager} isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_FRM" approved={approved} isReadonly={isReadonly} />
           <Header as="h5">
             Prior Two Years Tax Returns for Control Owners or Three Years for Existing Business
           </Header>
           {
-            ['taxReturnsForControlOwners', 'taxReturnsForBusinessMatch', 'backupProofOfIncomeAndAssets'].map(field => (
+            ['negativeInformation', 'matchHistoricals', 'backupProof'].map(field => (
               <FormTextarea
+                containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-                containerclassname="secondary"
               />
             ))
           }
@@ -35,13 +54,14 @@ export default class Documentation extends Component {
             Prior 2 Year Historical and YTD Financial Statements (Existing Business)
           </Header>
           {
-            ['hasBusinessProfitable', 'anyQuestionableItems', 'anyNegativeTrends'].map(field => (
+            ['profitable', 'questionableItems', 'negativeTrends'].map(field => (
               <FormTextarea
+                containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-                containerclassname="secondary"
               />
             ))
           }
@@ -50,13 +70,14 @@ export default class Documentation extends Component {
             Prior Six Months Back Statements (Existing)
           </Header>
           {
-            ['anyCushionForIncidentals', 'anyUnusualMovements'].map(field => (
+            ['consistentBalance', 'unusualMovements'].map(field => (
               <FormTextarea
+                containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={DOCUMENTATION_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-                containerclassname="secondary"
               />
             ))
           }
@@ -67,16 +88,19 @@ export default class Documentation extends Component {
             name="leaseOrMortgage"
             fielddata={DOCUMENTATION_FRM.fields.leaseOrMortgage}
             changed={(e, result) => formChange(e, result, 'DOCUMENTATION_FRM')}
-            containerclassname="secondary"
+            containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
+            readOnly={isReadonly}
             hidelabel
           />
-          <div className="right-align">
-            <Button.Group>
-              <Button disabled={!DOCUMENTATION_FRM.meta.isValid} secondary className="relaxed">Save</Button>
-              <Button disabled={!DOCUMENTATION_FRM.meta.isValid} primary type="button">Submit for Approval</Button>
-            </Button.Group>
-          </div>
-          <ManagerOverview form={DOCUMENTATION_MANAGER_FRM} formName="DOCUMENTATION_MANAGER_FRM" />
+          <ButtonGroup
+            formName="DOCUMENTATION_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={DOCUMENTATION_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
         </Form>
       </div>
     );

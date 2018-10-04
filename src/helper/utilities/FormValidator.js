@@ -242,6 +242,8 @@ class FormValidator {
     currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
       this.addMoreFields(currentForm.fields[key], count) :
       currentForm.refMetadata[key];
+    // currentForm.fields[key] = currentForm.fields[key] ?
+    //   this.addMoreFields(currentForm.refMetadata[key], count) : [];
     currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }
@@ -310,16 +312,13 @@ class FormValidator {
         } else if (fields[key].objType === 'FileObjectType') {
           fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
           fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
-        } else if (fields[key].objType === 's3File') {
-          fields[key].value = data && typeof data === 'string' ? data : data[key].url;
-          fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
         } else if (fields[key].objType === 'DATE') {
           fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
         } else {
           fields[key].value = data && typeof data === 'object' ? data[key] : data;
         }
         if (fields[key].refSelector) {
-          fields[fields[key].refSelector].value = fields[key].value !== null;
+          fields[key].refSelectorValue = fields[key].value !== '';
         }
       } catch (e) {
         // do nothing
@@ -379,11 +378,11 @@ class FormValidator {
                   if (!eleV.skipField) {
                     let reference2 = false;
                     let reference2Val = field[keyRef1].value;
-                    if (eleV.objRefOutput) {
-                      reference = !reference ? eleV.objRefOutput : false;
+                    if (eleV.objRefOutput && !reference) {
+                      reference = eleV.objRefOutput;
                     }
-                    if (eleV.objRefOutput2) {
-                      reference2 = !reference2 ? eleV.objRefOutput2 : false;
+                    if (eleV.objRefOutput2 && !reference2) {
+                      reference2 = eleV.objRefOutput2;
                     }
                     if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                       reference2Val = this.evalFileObj(field[keyRef1]);
@@ -408,8 +407,8 @@ class FormValidator {
               });
             }
           } else {
-            if (fields[key].objRefOutput) {
-              reference = !reference ? fields[key].objRefOutput : false;
+            if (fields[key].objRefOutput && !reference) {
+              reference = fields[key].objRefOutput;
             }
             let objValue = fields[key].value;
             if (fields[key].objType && fields[key].objType === 'FileObjectType') {

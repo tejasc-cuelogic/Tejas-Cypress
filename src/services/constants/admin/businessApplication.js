@@ -1,3 +1,14 @@
+
+export const APPLICATION_STATUS_COMMENT = {
+  text: {
+    value: '',
+    label: 'Please enter your comments here',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Type your comment here...',
+  },
+};
+
 export const MANAGERS = {
   managerOverview: {
     value: '',
@@ -9,8 +20,8 @@ export const MANAGERS = {
 };
 
 export const OVERVIEW = {
-  data: [{
-    criticalPoint: {
+  description: [{
+    description: {
       value: '',
       label: 'Critical Point',
       error: undefined,
@@ -24,13 +35,9 @@ export const OVERVIEW = {
   }],
 };
 
-export const OVERVIEW_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
 export const JUSTIFICATIONS = {
-  data: [{
-    justification: {
+  justifications: [{
+    justifications: {
       value: '',
       label: 'Justification',
       error: undefined,
@@ -43,64 +50,68 @@ export const JUSTIFICATIONS = {
   }],
 };
 
-export const JUSTIFICATIONS_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
 export const DOCUMENTATION = {
-  taxReturnsForControlOwners: {
+  negativeInformation: {
     value: '',
     label: 'Do the Tax Returns for Control Owners Reveal Any Negative Information?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  taxReturnsForBusinessMatch: {
+  matchHistoricals: {
     value: '',
     label: 'Do the Tax Returns for Business Match Historical Financials?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  backupProofOfIncomeAndAssets: {
+  backupProof: {
     value: '',
     label: 'If Providing PG, Does It Generally Back up Proof of Income and Certain Assets?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  hasBusinessProfitable: {
+  profitable: {
     value: '',
     label: 'Has the Business Been Profitable and Meet Our Margin Requirements?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  anyQuestionableItems: {
+  questionableItems: {
     value: '',
     label: 'Are There Any Questionable Items on the Balance Sheet or Other Statements?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  anyNegativeTrends: {
+  negativeTrends: {
     value: '',
     label: 'Are There Any Negative Trends?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  anyCushionForIncidentals: {
+  consistentBalance: {
     value: '',
     label: 'Have the Balances Been Relatively Consistent and is There Any Cushion for Incidentals?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  anyUnusualMovements: {
+  unusualMovements: {
     value: '',
     label: 'Are there any unusual movements or one-off large deposits/withdrawals that warrant an explanation?',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
@@ -108,27 +119,26 @@ export const DOCUMENTATION = {
     value: '',
     label: 'LOI/Lease or Mortgage',
     error: undefined,
+    objRefOutput: 'documentation',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-};
-
-export const DOCUMENTATION_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
 };
 
 export const PROJECTIONS = {
-  compareHistoricalForReasonabless: {
+  reasonableHistoricals: {
     value: '',
     label: 'If Existing Business, Compare Historical for Reasonabless',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  areTheProjectionsComplete: {
+  projectionsComplete: {
     value: '',
     label: 'Are the Projections Complete (length of time, standard line items, etc.)?',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
@@ -136,6 +146,7 @@ export const PROJECTIONS = {
     value: '',
     label: 'Revenue Check (Calculations)',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
@@ -143,29 +154,35 @@ export const PROJECTIONS = {
     label: '',
     value: '',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     preSignedUrl: '',
+    showLoader: false,
     fileId: '',
     fileData: '',
+    objType: 'FileObjectType',
   },
-  majorLineItems: {
+  opex: {
     value: '',
     label: 'Opex Major Line Litems (e.g. Rent, Salaries)',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  tiesToLeaseAgreement: {
+  rent: {
     value: '',
     label: 'Rent/NNN Ties to Lease Agreement',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  benchmarkAndPrintComps: {
+  benchmark: {
     value: '',
     label: 'Benchmark and Print Comps',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
@@ -173,43 +190,178 @@ export const PROJECTIONS = {
     label: '',
     value: '',
     error: undefined,
+    objRefOutput: 'projections',
+    showLoader: false,
     rule: 'required',
     preSignedUrl: '',
     fileId: '',
     fileData: '',
+    objType: 'FileObjectType',
   },
-  requirements: {
+  existingLiabilities: {
     value: '',
     label: 'Existing Debt/Equity Terms and Other Cash Flow Requirements',
     error: undefined,
+    objRefOutput: 'projections',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
 };
 
-export const PROJECTIONS_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
+export const CONTROL_PERSONS = {
+  name: {
+    value: '',
+    label: 'Name',
+    error: undefined,
+    objRefOutput: 'businessPlan',
+    rule: 'required|string',
+    placeHolder: 'John Doe',
+    customErrors: {
+      required: '* required.',
+      string: 'Allowed string only.',
+    },
+  },
+  ownership: {
+    value: '',
+    label: 'Ownership %',
+    error: undefined,
+    rule: 'required',
+    placeHolder: '10.0%',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  derogatoryMarks: {
+    value: '',
+    label: 'Derogatory Marks',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  experience: {
+    value: '',
+    label: 'Experience',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Experience Comment',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  creditScore: {
+    value: '',
+    label: 'Credit Score',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Credit Score Comment',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  experienceUpload: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  creditUpload: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    customErrors: {
+      required: '* required.',
+    },
+  },
+};
+
+export const SOURCES = {
+  name: {
+    value: '',
+    label: '',
+    error: undefined,
+    objRefOutput: 'businessPlan',
+    rule: 'required|string',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
+    },
+  },
+  amount: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
+};
+
+export const USES = {
+  name: {
+    value: '',
+    label: '',
+    error: undefined,
+    objRefOutput: 'businessPlan',
+    rule: 'string|required',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
+    },
+  },
+  amount: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'numeric|required',
+    customErrors: {
+      numeric: 'Allowed numbers only.',
+      required: '* required.',
+    },
+  },
 };
 
 export const BUSINESS_PLAN = {
+  controlPersons: [{ ...CONTROL_PERSONS }],
   locationFeasibility: {
     value: '',
     label: 'Location feasibility',
     error: undefined,
+    objRefOutput: 'businessPlan',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  timingOfOperations: {
+  timingOfOperation: {
     value: '',
     label: 'Timing of Operations',
     error: undefined,
+    objRefOutput: 'businessPlan',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
-  writeupTieToProjections: {
+  financialToProjection: {
     value: '',
     label: 'Does the Financial Write-up Tie to Projections?',
     error: undefined,
+    objRefOutput: 'businessPlan',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
@@ -217,6 +369,7 @@ export const BUSINESS_PLAN = {
     value: '',
     label: 'Is the Operations/Marketing Plan Adequate?',
     error: undefined,
+    objRefOutput: 'businessPlan',
     rule: 'required',
     placeHolder: 'Enter here...',
   },
@@ -225,239 +378,134 @@ export const BUSINESS_PLAN = {
     label: 'Date of Incorporation',
     placeHolder: '12-02-1989',
     error: undefined,
+    objRefOutput: 'businessPlan',
     rule: 'required|date',
+    objType: 'DATE',
   },
-};
-
-export const BUSINESS_PLAN_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
-export const CONTINGENCY_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
-export const MISCELLANEOUS_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
-};
-
-export const OFFER_MANAGER = {
-  managerOverview: { ...MANAGERS.managerOverview },
+  sources: [{ ...SOURCES }],
+  uses: [{ ...USES }],
 };
 
 export const MODEL_MANAGER = {
   managerOverview: { ...MANAGERS.managerOverview },
 };
 
-export const CONTROL_PERSONS = {
-  data: [{
-    name: {
-      value: '',
-      label: 'Name',
-      error: undefined,
-      rule: 'required|string',
-      placeHolder: 'John Doe',
-      customErrors: {
-        required: '* required.',
-        string: 'Allowed string only.',
-      },
-    },
-    ownership: {
-      value: '',
-      label: 'Ownership %',
-      error: undefined,
-      rule: 'required',
-      placeHolder: '10.0%',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    derogatoryMarks: {
-      value: '',
-      label: 'Derogatory Marks',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Enter here',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    experience: {
-      value: '',
-      label: 'Experience',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Experience Comment',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    creditScore: {
-      value: '',
-      label: 'Credit Score',
-      error: undefined,
-      rule: 'required',
-      placeHolder: 'Credit Score Comment',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    experienceFile: {
-      label: '',
-      value: '',
-      error: undefined,
-      rule: 'required',
-      preSignedUrl: '',
-      fileId: '',
-      fileData: '',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    creditScoreFile: {
-      label: '',
-      value: '',
-      error: undefined,
-      rule: 'required',
-      preSignedUrl: '',
-      fileId: '',
-      fileData: '',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-  }],
-};
-
-export const SOURCES = {
-  data: [{
-    name: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'required|string',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
-    },
-
-    amount: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'numeric|required',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required: '* required.',
-      },
-    },
-  }],
-};
-
-export const USES = {
-  data: [{
-    name: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'string|required',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
-    },
-    amount: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'numeric|required',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required: '* required.',
-      },
-    },
-  }],
-};
-
 export const LAUNCH = {
-  data: [{
-    contingency: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'string|required',
-      placeHolder: 'Enter contingency here...',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
+  contingency: {
+    value: '',
+    label: '',
+    error: undefined,
+    objRefOutput: 'contingencies',
+    rule: 'string|required',
+    placeHolder: 'Enter contingency here...',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
     },
-    acceptanceCriteria: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'string|required',
-      placeHolder: 'Enter acceptance criteria here...',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
+  },
+  acceptance: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'Enter acceptance criteria here...',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
     },
-  }],
+  },
 };
 
 export const CLOSE = {
-  data: [{
-    contingency: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'string|required',
-      placeHolder: 'Enter contingency here...',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
+  contingency: {
+    value: '',
+    label: '',
+    error: undefined,
+    objRefOutput: 'contingencies',
+    rule: 'string|required',
+    placeHolder: 'Enter contingency here...',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
     },
-    acceptanceCriteria: {
-      value: '',
-      label: '',
-      error: undefined,
-      rule: 'string|required',
-      placeHolder: 'Enter acceptance criteria here...',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
+  },
+  acceptance: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'string|required',
+    placeHolder: 'Enter acceptance criteria here...',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
     },
-  }],
+  },
+};
+
+export const CONTINGENCY = {
+  launch: [{ ...LAUNCH }],
+  close: [{ ...CLOSE }],
 };
 
 export const SOCIAL_MEDIA = {
-  data: [{
-    label: {
-      value: '',
-      label: '',
-      placeHolder: 'e.g. Facebook',
-      error: undefined,
-      rule: 'string|required',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
+  label: {
+    value: '',
+    label: '',
+    placeHolder: 'e.g. Facebook',
+    error: undefined,
+    showLoader: false,
+    objRefOutput: 'miscellaneous',
+    rule: 'string|required',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
     },
-    url: {
-      value: '',
-      label: '',
-      placeHolder: 'Enter here...',
-      error: undefined,
-      rule: 'required',
-      customErrors: {
-        required: '* required.',
-      },
+  },
+  url: {
+    value: '',
+    label: '',
+    placeHolder: 'Enter here...',
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: '* required.',
     },
-  }],
+  },
+};
+
+export const OTHER_DOCUMENTATION_UPLOADS = {
+  label: {
+    value: '',
+    label: '',
+    placeHolder: 'Enter label here',
+    error: undefined,
+    showLoader: false,
+    objRefOutput: 'miscellaneous',
+    rule: 'string|required',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
+    },
+  },
+  docDetails: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'string|required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    customErrors: {
+      string: 'Allowed string only.',
+      required: '* required.',
+    },
+  },
+};
+
+export const MISCELLANEOUS = {
+  socialMedia: [{ ...SOCIAL_MEDIA }],
+  otherDocs: [{ ...OTHER_DOCUMENTATION_UPLOADS }],
 };
 
 export const SOCIAL_MEDIA_LABELS = [
@@ -466,35 +514,6 @@ export const SOCIAL_MEDIA_LABELS = [
   { key: 'Instagram', value: 'instagram', text: 'Instagram' },
   { key: 'Linkedin', value: 'linkedin', text: 'linkedin' },
 ];
-
-export const OTHER_DOCUMENTATION_UPLOADS = {
-  data: [{
-    label: {
-      value: '',
-      label: '',
-      placeHolder: 'Enter label here',
-      error: undefined,
-      rule: 'string|required',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
-    },
-    comment: {
-      label: '',
-      value: '',
-      error: undefined,
-      rule: 'string|required',
-      preSignedUrl: '',
-      fileId: '',
-      fileData: '',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
-    },
-  }],
-};
 
 export const UPLOADED_DOCUMENTS = {
   data: [{
@@ -509,7 +528,7 @@ export const UPLOADED_DOCUMENTS = {
 };
 
 export const OFFERS = {
-  data: [{
+  offer: [{
     structure: {
       value: '',
       label: 'Structure',
@@ -521,7 +540,7 @@ export const OFFERS = {
         required: '* required.',
       },
     },
-    offeringAmount: {
+    amount: {
       value: '',
       label: 'Offering Amount ($)',
       placeHolder: 'Enter here',
@@ -593,12 +612,13 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'date|required',
+      objType: 'DATE',
       customErrors: {
         date: 'Date format is invalid.',
         required: '* required.',
       },
     },
-    multipleOnPrincipalToPay: {
+    multiple: {
       value: '',
       label: 'Multiple on Principal to Pay',
       placeHolder: 'Enter here',
@@ -609,8 +629,8 @@ export const OFFERS = {
         required_if: '* required.',
       },
     },
-    totalCapitalReturned: {
-      value: '',
+    totalCapital: {
+      value: 0,
       label: 'Total Capital Returned',
       placeHolder: 'Enter here',
       error: undefined,
@@ -621,11 +641,28 @@ export const OFFERS = {
       },
     },
   }],
+  portalAgreementUpload: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    skipField: true,
+    // customErrors: {
+    //   string: 'Allowed string only.',
+    //   required: '* required.',
+    // },
+  },
 };
 
 export const STRUCTURE_TYPES = [
-  { key: 'termnote', value: 'termnote', text: 'Term Loan' },
-  { key: 'revenueshareingnote', value: 'revenueshareingnote', text: 'Revenue Share' },
+  { key: 'TERM_NOTE', value: 'TERM_NOTE', text: 'Term Loan' },
+  { key: 'REVENUE_SHARING_NOTE', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Share' },
+  { key: 'EQUITY', value: 'EQUITY', text: 'Equity' },
+  { key: 'CONVERTIBLE_NOTE', value: 'CONVERTIBLE_NOTE', text: 'Convertible Note' },
 ];
 
 export const PERSONAL_GUARANTEE_TYPES = [

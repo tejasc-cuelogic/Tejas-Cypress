@@ -210,7 +210,7 @@
 @secondaryBackground: none;
 @secondaryMargin: 0em -@secondaryItemSpacing;
 @secondaryItemBackground: none;
-@secondaryItemSpacing: 0;
+@secondaryItemSpacing: @relative3px;
 @secondaryItemMargin: 0em @secondaryItemSpacing;
 @secondaryItemVerticalPadding: @relativeMini;
 @secondaryItemHorizontalPadding: @relativeSmall;

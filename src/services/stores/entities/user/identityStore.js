@@ -296,7 +296,6 @@ export class IdentityStore {
         .mutate({
           mutation: verifyCIPAnswers,
           variables: {
-            userId: userStore.currentUser.sub,
             cipAnswers: {
               id: this.ID_VERIFICATION_FRM.response.softFailId,
               answers: this.formattedIdentityQuestionsAnswers,

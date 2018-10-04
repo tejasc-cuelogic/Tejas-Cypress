@@ -18,6 +18,20 @@
             padding:0 0 @7px;
             color:@neutral;
         }
+        textarea{
+            padding-left:0;
+            padding-right:0;
+            border-radius:0;
+            border:none;
+            border-bottom:@borderColor 1px solid;
+        }
+        &.secondary textarea{
+            padding:@11px @14px;
+            min-height:80px;
+            max-height:80px;
+            border-radius:@4px;
+            border:@neutral-offdark 1px solid;
+        }
         &.display-only{
             >label{
                 font-weight:@normal;
@@ -34,12 +48,17 @@
             input[type=tel],
             input[type=text],
             input[type=time],
-            input[type=url]{
+            input[type=url],
+            &.secondary textarea{
                 padding:0;
                 border:none;
                 font-weight:@fontMedium;
                 text-overflow:ellipsis;
                 cursor:default;
+            }
+            p.commet-area{
+                font-weight:500;
+                color:@neutral;
             }
         }
         &.secondary textarea{
@@ -96,6 +115,7 @@
     }
     label{
         i.ns-help-circle, a{
+            height:auto;
             margin:0 0 0 @5px;
             font-size:@14px;
             color:@neutral-middark;
@@ -303,6 +323,9 @@
 		}
 	}
 }
+textarea{
+	font-family:@pageFont;
+}
 .card{
     &.editable{
         position:relative;
@@ -493,6 +516,17 @@
             &:hover{
                 color:darken(@link-color, 10%);
             }
+        }
+    }
+    &.downloadable{
+        min-height:auto;
+        padding:@4px 0;
+        line-height:initial;
+        background-color:transparent;
+        >p{
+            color:@neutral-middark;
+            font-weight:@normal;
+            font-style:italic;
         }
     }
 }
