@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-03)
+# 0.0.0 (2018-10-04)
 
 
 ### Bug Fixes
@@ -47,8 +47,8 @@
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
 * **Investor[Issue [297](https://chaos.ns.team/nsv2/ns-ops/issues/297) - investor signup integrate SSN collision check api]:** investor signup integrate SSN collision check api ([77e458e](https://chaos.ns.team/nsv2/ns-client/commits/77e458e))
 * **Investor[Issue [304](https://chaos.ns.team/nsv2/ns-ops/issues/304) - investor-signup-flow-ira-link-bank-api-integration-newly-added-step]:** API Integration for IRA Link-Bank ([d7be878](https://chaos.ns.team/nsv2/ns-client/commits/d7be878))
-* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
+* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** removed plaid credential dependency from ns-client ([facf81a](https://chaos.ns.team/nsv2/ns-client/commits/facf81a))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for admin/investor as per updated user schema ([3923b90](https://chaos.ns.team/nsv2/ns-client/commits/3923b90))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for Investor flow as per new updated schema changes. ([146a108](https://chaos.ns.team/nsv2/ns-client/commits/146a108))
@@ -79,6 +79,7 @@
 * **public investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - public investment workflow]:** designed investment workflow ([e9b1736](https://chaos.ns.team/nsv2/ns-client/commits/e9b1736))
 * **public investors[Issue [257](https://chaos.ns.team/nsv2/ns-ops/issues/257) - public investors homepage]:** - completed design of why nextseed and how it works ([52edaeb](https://chaos.ns.team/nsv2/ns-client/commits/52edaeb))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
+* **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 
 
