@@ -2,7 +2,9 @@
 import { observable, toJS, action } from 'mobx';
 import { map, startCase, filter, forEach, find } from 'lodash';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import {
+  DEFAULT_TIERS,
   ADD_NEW_TIER,
   AFFILIATED_ISSUER,
   LEADER,
@@ -24,6 +26,7 @@ import {
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import {
+  updateBonusReward,
   deleteBonusReward,
   deleteBonusRewardsTierByOffering,
   updateOffering,
@@ -93,6 +96,20 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+
+  @action
+  setDefaultTiers = () => {
+    DEFAULT_TIERS.map((tier) => {
+      if (this.bonusRewardsTiers.data && this.bonusRewardsTiers.data.getBonusRewardTiers) {
+        this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
+      } else {
+        this.bonusRewardsTiers.data = {};
+        this.bonusRewardsTiers.data.getBonusRewardTiers = [];
+        this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
+      }
+      return null;
+    });
+  }
 
   @action
   setCurrentOfferingId = (id) => {
@@ -235,6 +252,12 @@ export class OfferingCreationStore {
   }
 
   @action
+  rtEditorChange = (field, value, form) => {
+    this[form].fields[field].value = value;
+    this[form] = Validator.validateForm(this[form], true, false, false);
+  }
+
+  @action
   formChangeWithIndex = (e, result, form, index) => {
     this[form] = Validator.onArrayFieldChange(
       this[form],
@@ -244,7 +267,7 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
-    const fieldValue = field === 'terminationDate' ? values.formattedValue : values.floatValue;
+    const fieldValue = (field === 'terminationDate' || field === 'expirationDate') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -723,9 +746,13 @@ export class OfferingCreationStore {
         variables: {
           bonusRewardTierDetails: payloadData,
         },
+        refetchQueries: [
+          { query: getBonusRewardsTiers },
+        ],
       })
       .then(() => {
         Helper.toast('Tier has been created successfully', 'success');
+        Validator.resetFormData(this.ADD_NEW_TIER_FRM);
       })
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -745,6 +772,7 @@ export class OfferingCreationStore {
       onFetch: (res) => {
         if (res) {
           this.setTiersForBonusRewardsForm();
+          this.setDefaultTiers();
         }
       },
     });
@@ -756,7 +784,7 @@ export class OfferingCreationStore {
     const tiersArray = [];
     forEach(tiers, (tier, index) => {
       const tierFieldObj = { rule: 'alpha_dash', error: undefined };
-      tierFieldObj.values = [{ label: `Invest ${tier.amount} or more`, value: tier.amout }];
+      tierFieldObj.values = [{ label: `Invest $${tier.amount} or more`, value: tier.amount }];
       tierFieldObj.key = tier.amount;
       tierFieldObj.earlyBirdQuantity = tier.earlyBirdQuantity;
       tierFieldObj.value = [];
@@ -769,7 +797,6 @@ export class OfferingCreationStore {
 
   @action
   bonusRewardTierChange = (e, seqNum, result) => {
-    const changedAnswer = find(this.ADD_NEW_BONUS_REWARD_FRM.fields, { key: result.name });
     const index = this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.indexOf(result.value);
     if (index === -1) {
       this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.push(result.value);
@@ -780,27 +807,24 @@ export class OfferingCreationStore {
 
   createBonusReward = () => {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
-    const fieldsFiltered =
-      Object.keys(fields).filter(key => Array.isArray(fields[key].value) &&
-        fields[key].value.length === 1);
-    console.log(fieldsFiltered);
+    const tiers = [];
+    map(fields, ((field) => {
+      if ((field.key || field.earlyBirdQuantity) &&
+      field.value.length && field.value.length === 1) {
+        const tierObj = {};
+        tierObj.amount = field.key;
+        tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
+        tiers.push(tierObj);
+      }
+    }));
     let payloadData = {};
     payloadData = {
       offeringId: this.currentOfferingId,
       title: fields.name.value,
       description: fields.description.value,
       rewardStatus: 'In Review',
-      expirationDate: fields.expirationDate.value,
-      tiers: [
-        {
-          amount: 25000,
-          earlyBirdQuantity: 0,
-        },
-        {
-          amount: 11111,
-          earlyBirdQuantity: 0,
-        },
-      ],
+      expirationDate: moment(fields.expirationDate.value).toISOString(),
+      tiers,
     };
     uiStore.setProgress();
     client
@@ -812,6 +836,7 @@ export class OfferingCreationStore {
       })
       .then(() => {
         Helper.toast('Bonus Reward has been added successfully', 'success');
+        Validator.resetFormData(this.ADD_NEW_BONUS_REWARD_FRM);
       })
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -879,6 +904,63 @@ export class OfferingCreationStore {
       })
       .then(() => {
         Helper.toast('Tier has been deleted successfully.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  setUpdateBonusRewardsData = (bonusRewards, rewardId) => {
+    if (bonusRewards) {
+      bonusRewards.map((reward) => {
+        if (reward.id === rewardId) {
+          this.ADD_NEW_BONUS_REWARD_FRM.fields.name.value = reward.title;
+          this.ADD_NEW_BONUS_REWARD_FRM.fields.description.value = reward.description;
+          this.ADD_NEW_BONUS_REWARD_FRM.fields.expirationDate.value = reward.expirationDate;
+        }
+        return null;
+      });
+    }
+  }
+
+  updateBonusReward = (id) => {
+    const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
+    const tiers = [];
+    map(fields, ((field) => {
+      if ((field.key || field.earlyBirdQuantity) &&
+      field.value.length && field.value.length === 1) {
+        const tierObj = {};
+        tierObj.amount = field.key;
+        tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
+        tiers.push(tierObj);
+      }
+    }));
+    let payloadData = {};
+    payloadData = {
+      offeringId: this.currentOfferingId,
+      title: fields.name.value,
+      description: fields.description.value,
+      rewardStatus: 'In Review',
+      expirationDate: fields.expirationDate.value,
+      tiers,
+    };
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateBonusReward,
+        variables: {
+          id,
+          bonusRewardDetails: payloadData,
+        },
+      })
+      .then(() => {
+        Helper.toast('Bonus Reward has been updated successfully', 'success');
+        Validator.resetFormData(this.ADD_NEW_BONUS_REWARD_FRM);
       })
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));

@@ -142,7 +142,7 @@ export default class Media extends Component {
         <Header as="h4">Gallery</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
-            {MEDIA_FRM.fields.gallery.preSignedUrl && [1, 2, 3, 4, 5, 6].map(i => (
+            {[1, 2, 3, 4, 5, 6].map(i => (
               <List.Item key={i}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.removeMedia('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
