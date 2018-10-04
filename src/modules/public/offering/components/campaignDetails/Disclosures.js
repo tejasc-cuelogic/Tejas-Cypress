@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
-import { Header } from 'semantic-ui-react';
+import { Header, Grid } from 'semantic-ui-react';
 
 class Disclosures extends Component {
   render() {
     return (
-      <div className="campaign-about-wrapper">
-        <Header as="h3">Disclosures</Header>
-        <div className="pdf-viewer">
+      <div className="campaign-content-wrapper">
+        <Grid stackable>
+          <Grid.Column>
+            <Header as="h3">Disclosures</Header>
+          </Grid.Column>
+        </Grid>
+        <div className="pdf-viewer mt-30">
           <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object>
         </div>
       </div>

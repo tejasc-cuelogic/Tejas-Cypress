@@ -377,6 +377,12 @@ export const PRIVATE_NAV = [
 
 export const PUBLIC_NAV = [
   {
+    title: 'Home',
+    to: '',
+    exact: true,
+    header: false,
+  },
+  {
     title: 'About Us',
     to: 'about',
     noNav: true,
@@ -384,7 +390,7 @@ export const PUBLIC_NAV = [
       { title: 'Mission', to: 'mission' },
       { title: 'Team', to: 'team' },
       { title: 'Careers', to: 'careers' },
-      { title: 'Impact', to: 'impact' },
+      // { title: 'Impact', to: 'impact' },
       { title: 'Press', to: 'press' },
     ],
   },
@@ -408,6 +414,9 @@ export const PUBLIC_NAV = [
         icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
       },
       {
+        icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',
+      },
+      {
         icon: 'ns-comments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
       },
     ],
@@ -416,18 +425,20 @@ export const PUBLIC_NAV = [
     title: 'How NextSeed Works',
     to: 'business',
     noNav: true,
+    exact: true,
     subNavigations: [
       { title: 'How it Works', to: 'how-it-works' },
       { title: 'Funding Options', to: 'funding-options' },
       { title: 'Process', to: 'process', component: 'InvestmentDetails' },
       { title: 'All-Inclusive', to: 'all-inclusive', component: 'BonusRewards' },
-      { title: 'Compare', to: 'compare', component: 'Disclosures' },
+      // { title: 'Compare', to: 'compare', component: 'Disclosures' },
     ],
   },
   {
     title: 'Why NextSeed',
     to: 'invest',
     noNav: true,
+    exact: true,
     subNavigations: [
       { title: 'Why Nextseed', to: 'why-nextseed' },
       { title: 'How it Works', to: 'how-it-works' },
@@ -440,9 +451,37 @@ export const PUBLIC_NAV = [
     title: 'How NextSeed Works',
     to: '',
     subPanel: 1,
+    exact: true,
     subNavigations: [
-      { title: 'For Investors', to: 'invest' },
-      { title: 'For Businesses', to: 'business' },
+      { title: 'Fundraising', to: 'business' },
+      { title: 'Investing', to: 'invest' },
     ],
   },
+];
+
+
+export const FOOTER_NAV = [
+  {
+    title: 'Resources',
+    to: 'resources',
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Ed Center', to: 'education-center' },
+      { title: 'Insights', to: 'insights' },
+    ],
+  },
+  {
+    title: 'About Us',
+    to: 'about',
+    exact: true,
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team & Culture', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
+  { title: 'Terms of Use', exact: true, to: 'agreements/terms-of-use' },
+  { title: 'Privacy Policy', exact: true, to: 'agreements/privacy-policy' },
 ];

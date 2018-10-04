@@ -4,6 +4,39 @@
 //  Public page Starts
 .ui.padded.segment {
     padding: 30px;
+    h4.ui.header {
+        margin-top: 0;
+    }
+    .ui.header {
+        a {
+            color: @neutral;
+            &:hover {
+                text-decoration: none;
+            }
+        }
+        .icon {
+            height: auto;
+            font-size: @10px;
+            line-height: 1;
+            vertical-align: middle;
+            margin-left: @5px; 
+        }
+    }
+    @media only screen and (max-width : @largestMobileScreen){
+        &.attached {
+            padding:@30px 0;
+        }
+    }
+    &.reward-block {
+        .ui.header{
+            .ui.label {
+                margin: @5px 0 0;
+            }
+            >img {
+                width: 50px;
+            }
+        }
+    }
 }
 .press-news {
 	.ui.segment {
@@ -20,14 +53,14 @@
 }
 
 //  Investor Account type selection dialog
-.account-type-tab{
+.account-type-tab, .funding-option{
     .ui.attached.segment{
         border:none;
         // text-align:center;
     }
 }
 
-.transaction-detials{
+.transaction-details{
     .ui.attached.segment{
         padding-left:0;
         padding-right:0;
@@ -36,5 +69,11 @@
         max-width:100%;
         border:none;
         border-radius:0 0 @4px @4px;
+    }
+}
+.ui.grid .ui.segment {
+    height: 100%;
+    img.ui.image.business-modal {
+        width: 100%;
     }
 }

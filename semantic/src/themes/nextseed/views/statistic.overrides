@@ -16,64 +16,36 @@
 					font-weight: @bold;
 				}
 			}
+			&.three .statistic {
+				margin-bottom: @20px;
+			}
 		}
 	}
 	.offering-wrapper {
 		.ui.statistic {
 			width: 100%;
 			padding: 0;
-			text-align: center;
 			>.label{
-				color:@neutral-middark;
+				color:@neutral;
 				font-size: @13px;
-				font-weight: @bold;
 			}
 			>.value {
 				font-size: @28px !important;
-				margin: @20px 0;
 				color:@neutral-middark;
-				font-weight: @fontMedium;
+				font-weight: @bold;
 				text-transform: none;
-			}
-			p {
-				font-size: @12px;
-				text-align: center;
-				i.help {
-					color: @green;
-					margin-left: 0;
+				line-height: 30px;
+				margin-top: @30px;
+				@media only screen and (max-width : @largestSmallMonitor){
+					margin-top: 0;
 				}
 			}
-			.slider {
-				-webkit-appearance: none;
-				width: 100%;
-				height: @7px;
-				background: @neutral-darkwhite;
-				outline: none;
-				opacity: 0.7;
-				-webkit-transition: .2s;
-				transition: opacity .2s;
-				border-radius: 50px;
-			}
-			.slider:hover {
-				opacity: 1;
-			}
-			.slider::-webkit-slider-thumb {
-				-webkit-appearance: none;
-				appearance: none;
-				width: @25px;
-				height: @25px;
-				background: @white;
-				cursor: pointer;
-				border-radius: 50px;
-				box-shadow: 0px 1px rgba(0, 0, 0, 0.25);
-				border: 1px solid @neutral-darkwhite inset;
-			}
-			.slider::-moz-range-thumb {
-				width: @25px;
-				height: @25px;
-				background: @white;
-				cursor: pointer;
-				border-radius: 50px;
+			&.mini >.value {
+				font-size: @13px !important;
+				color: @neutral;
+				line-height: 18px;
+				font-weight: @normal;
+				margin-top: @8px;
 			}
 		}
 	}
@@ -85,6 +57,9 @@
 		.value, .label {
 			color: @white;
 			text-transform: none;
+		}
+		.value {
+			font-weight: @fontMedium;
 		}
 	}
 	.ui.grid.secondary-statistic {
@@ -116,6 +91,9 @@
 	}
 	.ui.celled.grid>.row>.column {
 		box-shadow: -1px 0 0 0 @neutral-offwhite;
+		@media only screen and (max-width : @largestMobileScreen){
+			border-top: 0;
+		}
 	}
 }
 // Business - how it works
@@ -137,9 +115,20 @@
 	.ui.statistic{
 		>.value {
 			font-size: @60px !important;
+			font-weight: @normal;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @30px !important;
+				font-weight: @fontMedium;
+			}
 		}
 		&.small >.value {
 			font-size: @40px !important;
+			@media only screen and (max-width : @largestSmallMonitor){
+				font-size: @30px !important;
+			}
+			@media only screen and (max-width : @largestMobileScreen){
+				font-size: @20px !important;
+			}
 		}
 	}
 	.ui.celled.grid>.row>.column {

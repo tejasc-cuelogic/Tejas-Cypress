@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Header, Container, Menu, Segment, Button, Grid } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../theme/shared';
+import { Header, Container, Menu, Segment, Grid, Responsive, Divider, List } from 'semantic-ui-react';
+import { InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import { NavItems } from '../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../helper';
 
@@ -17,8 +17,9 @@ const getModule = component => Loadable({
 const navItems = [
   { title: 'Term Notes', to: 'term-notes' },
   { title: 'Revenue Sharing', to: 'revenue-sharing' },
-  { title: 'Equity Loans', to: 'equity-loans' },
+  { title: 'Preferred Equity', to: 'preferred-equity' },
 ];
+const isMobile = document.documentElement.clientWidth < 768;
 
 export default class FundingOption extends Component {
   componentWillMount() {
@@ -32,22 +33,26 @@ export default class FundingOption extends Component {
     return (
       <Aux>
         <Container>
-          <section className="funding-option account-type-tab">
+          <section className="funding-option">
             <Grid centered>
-              <Grid.Column width={13}>
-                <Header as="h2" textAlign="center">
+              <Grid.Column computer={13} tablet={16} mobile={16} textAlign={isMobile ? 'left' : 'center'}>
+                <Header as="h2">
                 Choose a funding option that fits your business.
                 </Header>
-                <p className="center-align mb-50">
-                Whether you need working capital for your existing business,
-                expansion projects or a new venture, our financial products
-                put you in control. Grow your business on your own terms.
+                <p className={isMobile ? 'mb-10' : 'mb-50'}>
+                  Whether you’re raising capital for an expansion, a new venture or to improve your
+                  current capacity, our financial products put you in control. Grow your business
+                  with people who can support your growth. Note that all options provided are for
+                  informational purposes only. Each business is unique, and specific terms may vary
+                  based on facts and circumstances of each business. Contact us to find a solution
+                  that works best for your business.
                 </p>
               </Grid.Column>
             </Grid>
-            <Menu tabular fluid widths={3}>
+            <Responsive minWidth={768} as={Menu} tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
-            </Menu>
+            </Responsive>
+            <MobileDropDownNav refMatch={match} navItems={navItems} location={location} />
             <Segment attached="bottom" padded>
               <Switch>
                 <Route
@@ -66,10 +71,15 @@ export default class FundingOption extends Component {
                 }
               </Switch>
             </Segment>
-            <div className="center-align">
-              <Button secondary>Apply Now</Button>
-              <Button as={Link} to="/business/process" primary>See Process</Button>
-            </div>
+            <Divider />
+            <List className="learn-more-list">
+              <List.Item>
+                <List.Content as={Link} to="/business/process" className="text-uppercase" floated="right">
+                  <b>Process</b>
+                  <List.Icon className="ns-arrow-right" color="green" />
+                </List.Content>
+              </List.Item>
+            </List>
           </section>
         </Container>
       </Aux>

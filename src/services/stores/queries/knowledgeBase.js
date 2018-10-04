@@ -1,29 +1,28 @@
 import gql from 'graphql-tag';
 
 export const allKbsQuery = gql`
-  query getknowledgeBase($scopeType: KnowledgeBaseTypeEnum!) {
-    knowledgeBase(scopeType: $scopeType) {
+query getListOfFAQsAndKnowledgeBase($categoryType: CategoryTypeEnum!) {
+  faqAndKnowledgeBaseItems (categoryType: $categoryType) {
+    id
+    categoryName
+    knowledgeBaseItemList {
       id
       title
-      knowledgeBaseItems {
-        id
-        title
-        body
-      }
+      content
     }
   }
+}
 `;
 
-export const allFaqQuery = gql`
-  query getFaqs($scopeType: FaqTypeEnum!) {
-    faqs(scopeType: $scopeType) {
-      id
-      question
-      faqItems {
-        id
-        question
-        answer
-      }
-    }
+export const allFaqQuery = gql`query getListOfFAQsAndKnowledgeBase($categoryType: CategoryTypeEnum!) {
+  faqAndKnowledgeBaseItems (categoryType: $categoryType) {
+  id
+  categoryName
+  faqItems {
+    id
+    title
+    description
   }
+  }
+}
 `;

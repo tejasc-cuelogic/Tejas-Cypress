@@ -242,7 +242,7 @@
 @purple           : #A333C8;
 @pink             : #E03997;
 @brown            : #A5673F;
-@grey             : @neutral-offdark;
+@grey             : @neutral-middark;
 @black            : #1B1C1D;
 
 /*---  Light Colors  ---*/
@@ -996,7 +996,7 @@
 @neutral-offwhite:#F7F8FC;            //  @neutral-lighten
 
 @commonShadow:0px 1px 1px @thumbInactiveBackground;
-
+@nav-hover:#3A4048;                   //  campaign navigation hover
 
 /* --------------------------------------------
       OLD VARIABLE VALUES TO BE REMOVED
