@@ -437,7 +437,36 @@ mutation _deleteBac($id: String! $offeringId: String!){
   deleteOfferingBac(id: $id  offeringId: $offeringId) {
     id
   }
-}
+}`;
+
+export const getOfferingFilingList = gql`
+  query _getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
+    businessFilings(offeringId: $offeringId ) {
+      offeringId
+      filingId
+      filingFolderName
+      created
+      folderId
+      lockedStatus
+      submissions (orderBy: $orderByBusinessFilingSubmission) {
+        xmlSubmissionId
+        created
+        xmlSubmissionDownloadUrl
+        folderName
+        xmlSubmissionStatus
+        lockedStatus
+      }
+    }
+  }
+`;
+
+export const generateBusinessFiling = gql`
+  mutation _createBusinessFiling ($offeringId: String!) {
+    createBusinessFiling(offeringId: $offeringId) {
+      filingId
+      offeringId
+    }
+  }
 `;
 
 export const createBonusRewardsTier = gql`
@@ -498,14 +527,8 @@ mutation _createBonusReward($bonusRewardDetails: BonusRewardInputType!){
 `;
 
 export const deleteBonusRewardsTierByOffering = gql`
-mutation _deleteBonusRewardTiersByOffering{
-  deleteBonusRewardsByTierId(
-    offeringId: "8a65cb20-b80e-11e8-a4aa-87285e168369",
-    bonusRewardTierId: {
-      amount: 50,
-      earlyBirdQuantity: 0
-    }
-  ) {
+mutation _deleteBonusRewardTiersByOffering($offeringId: String! $bonusRewardTierId: BonusRewardTierInputType! ){
+  deleteBonusRewardsByTierId(offeringId: $offeringId bonusRewardTierId: $bonusRewardTierId) {
     id
     rewardsTierIds{
       amount
@@ -534,6 +557,39 @@ query _getBonusRewards($offeringId: String!){
       date
     }
     updated{
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const deleteBonusReward = gql`
+mutation _deleteBonusReward($id: String! $offeringId: String!){
+  deleteBonusReward(id: $id offeringId: $offeringId
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+    deleted{
       id
       by
       date

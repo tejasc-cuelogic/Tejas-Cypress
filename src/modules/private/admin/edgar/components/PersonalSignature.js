@@ -42,6 +42,7 @@ const PersonalSignature = observer(props => (
         />
         <div className="field">
           <FormDatePicker
+            type="text"
             name="signatureDate"
             id="signatureDate"
             placeholder="Select date"

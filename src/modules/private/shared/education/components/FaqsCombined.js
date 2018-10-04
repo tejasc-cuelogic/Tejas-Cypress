@@ -71,7 +71,7 @@ export default class FaqsCombined extends Component {
                       {faqItem.title}
                     </Accordion.Title>
                     <Accordion.Content active={innerActiveIndex === index}>
-                      {faqItem.content} 
+                      {faqItem.description} 
                     </Accordion.Content>
                   </Accordion>
                 ))

@@ -1,14 +1,51 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
-import { map, startCase, isArray, forEach, find } from 'lodash';
+import { map, startCase, filter, forEach, find } from 'lodash';
 import graphql from 'mobx-apollo';
-import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
+import {
+  ADD_NEW_TIER,
+  AFFILIATED_ISSUER,
+  LEADER,
+  MEDIA,
+  RISK_FACTORS,
+  GENERAL,
+  ISSUER,
+  LEADERSHIP,
+  OFFERING_DETAILS,
+  CONTINGENCIES,
+  ADD_NEW_CONTINGENCY,
+  COMPANY_LAUNCH,
+  SIGNED_LEGAL_DOCS,
+  KEY_TERMS,
+  OFFERING_OVERVIEW,
+  OFFERING_COMPANY,
+  OFFER_CLOSE,
+  ADD_NEW_BONUS_REWARD,
+} from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { getBonusRewards, createBonusReward, deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac, createBonusRewardsTier, getBonusRewardsTiers } from '../../../queries/offerings/manage';
+import {
+  deleteBonusReward,
+  deleteBonusRewardsTierByOffering,
+  updateOffering,
+  getOfferingDetails,
+  getOfferingBac,
+  createBac,
+  updateBac,
+  deleteBac,
+  createBonusReward,
+  getBonusRewards,
+  createBonusRewardsTier,
+  getBonusRewardsTiers,
+  getOfferingFilingList,
+  generateBusinessFiling,
+} from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
+import {
+  XML_STATUSES,
+} from '../../../../../constants/business';
 
 export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
@@ -47,9 +84,11 @@ export class OfferingCreationStore {
   @observable currentOfferingId = null;
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
+  @observable offeringFilingList = {};
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
+
 
   @observable requestState = {
     search: {},
@@ -447,7 +486,7 @@ export class OfferingCreationStore {
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData[keyName].overview =
-        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+          Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
           ...payloadData[keyName].overview,
           ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
@@ -725,7 +764,7 @@ export class OfferingCreationStore {
       tiersArray.push(tierFieldObj);
     });
     this.ADD_NEW_BONUS_REWARD_FRM.fields =
-    { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
+      { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
   };
 
   @action
@@ -743,7 +782,7 @@ export class OfferingCreationStore {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     const fieldsFiltered =
       Object.keys(fields).filter(key => Array.isArray(fields[key].value) &&
-      fields[key].value.length === 1);
+        fields[key].value.length === 1);
     console.log(fieldsFiltered);
     let payloadData = {};
     payloadData = {
@@ -791,6 +830,116 @@ export class OfferingCreationStore {
       query: getBonusRewards,
       variables: { offeringId: this.currentOfferingId },
     });
+  }
+
+  @action
+  deleteBonusReward = (id) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: deleteBonusReward,
+        variables: {
+          id,
+          offeringId: this.currentOfferingId,
+        },
+        refetchQueries: [
+          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
+          { query: getBonusRewardsTiers },
+        ],
+      })
+      .then(() => {
+        Helper.toast('Bonus Reward has been deleted successfully.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  deleteBonusRewardTier = (amount, earlyBirdQuantity) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: deleteBonusRewardsTierByOffering,
+        variables: {
+          offeringId: this.currentOfferingId,
+          bonusRewardTierId: {
+            amount,
+            earlyBirdQuantity,
+          },
+        },
+        refetchQueries: [
+          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
+          { query: getBonusRewardsTiers },
+        ],
+      })
+      .then(() => {
+        Helper.toast('Tier has been deleted successfully.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  createPoll = () => {
+    setTimeout(() => this.getOfferingFilingList(this.currentOfferingId, false), 15 * 1000);
+  }
+
+  @action
+  getOfferingFilingList = (offeringId) => {
+    const params = { field: 'created', sort: 'asc' };
+    graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: getOfferingFilingList,
+      variables: {
+        offeringId,
+        orderByBusinessFilingSubmission: params,
+      },
+      onFetch: (res) => {
+        this.offeringFilingList = {};
+        if (res && res.businessFilings) {
+          this.offeringFilingList = res.businessFilings;
+          filter(this.offeringFilingList, (filing) => {
+            map(filing.submissions, (submission) => {
+              if (submission.xmlSubmissionStatus === XML_STATUSES.created) {
+                this.createPoll();
+              }
+            });
+          });
+        }
+      },
+    });
+  }
+
+  generateBusinessFiling = () => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: generateBusinessFiling,
+        variables: {
+          offeringId: this.currentOfferingId,
+        },
+      })
+      .then(() => {
+        this.getOfferingFilingList(this.currentOfferingId);
+        Helper.toast('Generate Docs created.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 
