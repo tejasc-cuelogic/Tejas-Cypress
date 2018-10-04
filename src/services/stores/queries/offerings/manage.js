@@ -95,6 +95,28 @@ export const getOfferingDetails = gql`
         isFood
         isAlcohol
       }
+      media {
+        heroImage {
+          url
+          isPublic
+        }
+        tombstoneImage {
+          url
+          isPublic
+        }
+        location {
+          url
+          isPublic
+        }
+        gallery {
+          url
+          isPublic
+        }
+        logo {
+          url
+          isPublic
+        }
+      }
       contingencies {
         launch {
           index
