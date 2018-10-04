@@ -33,7 +33,7 @@ export default class CampaignList extends Component {
                     <Card className="campaign" fluid>
                       <Image
                         as={Link}
-                        to={`/offerings/${campaign.id}/overview`}
+                        to="/offerings/963c0950-b80e-11e8-a4aa-87285e168369/overview"
                         centered
                         src={require(`../../../../../assets/images/campaign/campaign-${campaign.image}.jpg`)}
                       />

@@ -23,12 +23,10 @@ export class CampaignStore {
 
   @action
   getCampaignDetails = (id) => {
-    console.log(id);
     this.details = graphql({
       client: clientPublic,
       query: campaignDetailsQuery,
-      // variables: { id },
-      variables: { id: '0e1335d0-b6a1-11e8-9be7-857a6efbd9c7' },
+      variables: { id },
     });
   }
 

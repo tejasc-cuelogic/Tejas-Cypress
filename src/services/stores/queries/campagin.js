@@ -183,10 +183,6 @@ export const campaignDetailsQuery = gql`
     closureSummary {
       totalInvestorCount
     }
-    rewardsTierIds{
-      amount
-      earlyBirdQuantity
-    }
     comments {
       id
       offeringId
