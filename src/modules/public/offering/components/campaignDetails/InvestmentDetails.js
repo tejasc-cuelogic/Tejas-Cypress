@@ -6,6 +6,7 @@ import { Grid, Header, Segment, Image, Responsive } from 'semantic-ui-react';
 import businessModel from '../../../../../assets/images/investment-2.jpg';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
@@ -49,8 +50,9 @@ class InvestmentDetails extends Component {
               </Grid.Column>
             </Responsive>
           </Grid.Row>
-          {campaign.investmentType === 'Revenue Sharing' ?
-            <RevenueSharingDetails {...this.props} /> : <TermNoteDetails {...this.props} />
+          {campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
+            <RevenueSharingDetails KeyTerms={campaign.keyTerms} {...this.props} /> :
+            <TermNoteDetails KeyTerms={campaign.keyTerms} {...this.props} />
           }
         </Grid>
       </div>

@@ -11,7 +11,8 @@ class KeyTerms extends Component {
   handleClose = () => this.props.history.goBack();
 
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { refLink, campaignStore } = this.props;
+    const { campaign } = campaignStore;
     return (
       <Modal
         open
@@ -21,8 +22,8 @@ class KeyTerms extends Component {
       >
         <Modal.Header>Key Terms</Modal.Header>
         {campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
-          <RevenueSharingKeyTerms KeyTerms={campaign.keyTerms} />
-          : <TermNoteKeyTerms KeyTerms={campaign.keyTerms} />
+          <RevenueSharingKeyTerms refLink={refLink} KeyTerms={campaign.keyTerms} />
+          : <TermNoteKeyTerms refLink={refLink} KeyTerms={campaign.keyTerms} />
           }
       </Modal>
     );

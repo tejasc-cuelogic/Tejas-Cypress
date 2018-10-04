@@ -118,7 +118,7 @@ class RevenueSharingKeyTerms extends Component {
           <Divider />
         }
         <Header as="h5" className="center-align">
-          <Link to="/">
+          <Link to="keyterms/summary">
             View the Issuer&apos;s SEC Form C filing
           </Link>
         </Header>

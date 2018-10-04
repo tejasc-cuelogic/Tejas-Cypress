@@ -18,10 +18,9 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 export default class CampaignSideBar extends Component {
   render() {
-    const { className, campaignStore, details } = this.props;
-    const {
-      needed, collected, title, address,
-    } = details;
+    const { className, campaignStore } = this.props;
+    const collected = 100;
+    const address = 'Houston, TX';
     const { campaign } = campaignStore;
     return (
       <Aux>
@@ -41,10 +40,12 @@ export default class CampaignSideBar extends Component {
                   <Icon name="arrow left" />
                 </Link>
               }
-              {title}
+              {campaign.keyTerms.legalBusinessName}
               <Header.Subheader>{address}</Header.Subheader>
             </Header>
-            <CampaignProgress data={{ needed: needed || 0, collected: collected || 0 }} />
+            <CampaignProgress
+              data={{ needed: campaign.keyTerms.maxOfferingAmount || 0, collected: collected || 0 }}
+            />
             <p>
               <Icon name="flag" /> Surpassed minimum goal
             </p>
