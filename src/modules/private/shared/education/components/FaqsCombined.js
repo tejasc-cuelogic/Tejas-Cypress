@@ -2,15 +2,23 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Input, Form, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { toJS } from 'mobx';
 import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('educationStore')
+@inject('educationStore', 'userStore')
 @observer
 export default class FaqsCombined extends Component {
   state = { activeIndex: 0, innerActiveIndex: 0 }
   componentWillMount() {
     const props = { isMkt: this.props.marketing, params: this.props.params };
-    this.props.educationStore.initRequest('Faq', props);
+    const { currentUser } = this.props.userStore;
+    let categoryType;
+    if (this.props.params.for) {
+      categoryType = this.props.params.for === 'investor' ? 'INV_FAQ' : 'ISSUER_FAQ';
+    } else if (currentUser) {
+      categoryType = toJS(currentUser.roles)[0] === 'investor' ? 'INV_TAX_FAQ' : 'ISSUER_OFFERING_CREATION_LEADERSHIP_FAQ';
+    }
+    this.props.educationStore.initRequest('Faq', props, categoryType);
   }
   toggleAccordion = (index, field) => {
     const newIndex = this.state[field] === index ? -1 : index;
@@ -47,7 +55,7 @@ export default class FaqsCombined extends Component {
           faqs.map((faq, key) => (
             <Accordion key={faq.id} className="faq-accordion" >
               <Accordion.Title active={activeIndex === key} index={key} onClick={() => this.toggleAccordion(key, 'activeIndex')}>
-                {faq.question}
+                {faq.categoryName}
                 <Icon className="ns-chevron-down" />
               </Accordion.Title>
               <Accordion.Content active={activeIndex === key}>
@@ -60,10 +68,10 @@ export default class FaqsCombined extends Component {
                       onClick={() => this.toggleAccordion(index, 'innerActiveIndex')}
                     >
                       <Icon className={innerActiveIndex === index ? 'ns-minus-square' : 'ns-plus-square'} color="green" />
-                      {faqItem.question}
+                      {faqItem.title}
                     </Accordion.Title>
                     <Accordion.Content active={innerActiveIndex === index}>
-                      {faqItem.answer} 
+                      {faqItem.content} 
                     </Accordion.Content>
                   </Accordion>
                 ))

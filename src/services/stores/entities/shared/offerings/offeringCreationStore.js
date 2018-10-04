@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
-import { map, startCase, isArray } from 'lodash';
+import { map, startCase, isArray, forEach, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac } from '../../../queries/offerings/manage';
+import { getBonusRewards, createBonusReward, deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac, createBonusRewardsTier, getBonusRewardsTiers } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -48,6 +48,8 @@ export class OfferingCreationStore {
   @observable issuerOfferingBac = {};
   @observable affiliatedIssuerOfferingBac = {};
   @observable leadershipOfferingBac = {};
+  @observable bonusRewardsTiers = {};
+  @observable bonusRewards = {};
 
   @observable requestState = {
     search: {},
@@ -377,11 +379,11 @@ export class OfferingCreationStore {
                     arrayFields = { ...arrayFields, [keyRef1]: fileObj };
                   } else {
                     arrayFields =
-                    { ...arrayFields, [keyRef1]: field[keyRef1].value };
+                      { ...arrayFields, [keyRef1]: field[keyRef1].value };
                   }
                 } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                   const fileObj =
-                      { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
+                    { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
                   arrayFields = { ...arrayFields, [keyRef1]: fileObj };
                 } else {
                   arrayFields = { [keyRef1]: field[keyRef1].value };
@@ -434,16 +436,24 @@ export class OfferingCreationStore {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
-    if (subKey) {
-      payloadData = { ...payloadData, [keyName]: { [subKey]: Validator.evaluateFormData(fields) } };
-      if (subKey === 'overview') {
-        payloadData.offering.overview = {
-          ...payloadData.offering.overview,
-          ...this.evaluateFormFieldToArray(fields),
+    if (keyName) {
+      if (keyName === 'legal') {
+        payloadData[keyName] = {};
+        payloadData[keyName].general = Validator.evaluateFormData(this.GENERAL_FRM.fields);
+        payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
+      } else if (keyName === 'offering') {
+        payloadData[keyName] = {};
+        payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
+        payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData[keyName].overview =
+        Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        payloadData[keyName].overview = {
+          ...payloadData[keyName].overview,
+          ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
         };
+      } else {
+        payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
-    } else if (keyName) {
-      payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
@@ -516,7 +526,12 @@ export class OfferingCreationStore {
     });
   }
 
-  createOrUpdateOfferingBac = (bacType, fields, issuerNumber = undefined) => {
+  createOrUpdateOfferingBac = (
+    bacType,
+    fields,
+    issuerNumber = undefined,
+    leaderNumber = undefined,
+  ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const { issuerBacId } = getOfferingById.legal;
     const offeringBacDetails = Validator.evaluateFormData(fields);
@@ -549,6 +564,24 @@ export class OfferingCreationStore {
         variables = {
           offeringBacDetails: payload,
           id: affiliatedIssuerBacId[issuerNumber],
+        };
+      }
+    }
+    if (leaderNumber !== undefined) {
+      const payload = { ...offeringBacDetails.getOfferingBac[leaderNumber] };
+      payload.offeringId = getOfferingById.id;
+      payload.bacType = bacType;
+      const { leadership } = getOfferingById;
+      if (leadership === null || (leadership && leadership[leaderNumber].leaderBacId === null)) {
+        mutation = createBac;
+        variables = {
+          offeringBacDetails: payload,
+        };
+      } else {
+        mutation = updateBac;
+        variables = {
+          offeringBacDetails: payload,
+          id: leadership[leaderNumber].leaderBacId,
         };
       }
     }
@@ -610,6 +643,137 @@ export class OfferingCreationStore {
       .finally(() => {
         uiStore.setProgress(false);
       });
+  }
+
+  addNewTier = () => {
+    let payloadData = {};
+    const { fields } = this.ADD_NEW_TIER_FRM;
+    const isEarlyBirds = fields.isEarlyBirds.value;
+    if (isEarlyBirds.length > 0) {
+      payloadData = {
+        amount: fields.amountForEarlyBird.value,
+        earlyBirdQuantity: fields.earlyBirdQuantity.value,
+      };
+    } else {
+      payloadData = {
+        amount: fields.amountForThisTier.value,
+        earlyBirdQuantity: 0,
+      };
+    }
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: createBonusRewardsTier,
+        variables: {
+          bonusRewardTierDetails: payloadData,
+        },
+      })
+      .then(() => {
+        Helper.toast('Tier has been created successfully', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  getBonusRewardsTiers = () => {
+    this.bonusRewardsTiers = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: getBonusRewardsTiers,
+      onFetch: (res) => {
+        if (res) {
+          this.setTiersForBonusRewardsForm();
+        }
+      },
+    });
+  }
+
+  @action
+  setTiersForBonusRewardsForm = () => {
+    const tiers = this.bonusRewardsTiers.data.getBonusRewardTiers;
+    const tiersArray = [];
+    forEach(tiers, (tier, index) => {
+      const tierFieldObj = { rule: 'alpha_dash', error: undefined };
+      tierFieldObj.values = [{ label: `Invest ${tier.amount} or more`, value: tier.amout }];
+      tierFieldObj.key = tier.amount;
+      tierFieldObj.earlyBirdQuantity = tier.earlyBirdQuantity;
+      tierFieldObj.value = [];
+      tierFieldObj.seqNum = index;
+      tiersArray.push(tierFieldObj);
+    });
+    this.ADD_NEW_BONUS_REWARD_FRM.fields =
+    { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
+  };
+
+  @action
+  bonusRewardTierChange = (e, seqNum, result) => {
+    const changedAnswer = find(this.ADD_NEW_BONUS_REWARD_FRM.fields, { key: result.name });
+    const index = this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.indexOf(result.value);
+    if (index === -1) {
+      this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.push(result.value);
+    } else {
+      this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.splice(index, 1);
+    }
+  }
+
+  createBonusReward = () => {
+    const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
+    const fieldsFiltered =
+      Object.keys(fields).filter(key => Array.isArray(fields[key].value) &&
+      fields[key].value.length === 1);
+    console.log(fieldsFiltered);
+    let payloadData = {};
+    payloadData = {
+      offeringId: this.currentOfferingId,
+      title: fields.name.value,
+      description: fields.description.value,
+      rewardStatus: 'In Review',
+      expirationDate: fields.expirationDate.value,
+      tiers: [
+        {
+          amount: 25000,
+          earlyBirdQuantity: 0,
+        },
+        {
+          amount: 11111,
+          earlyBirdQuantity: 0,
+        },
+      ],
+    };
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: createBonusReward,
+        variables: {
+          bonusRewardDetails: payloadData,
+        },
+      })
+      .then(() => {
+        Helper.toast('Bonus Reward has been added successfully', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  getBonusRewards = () => {
+    this.bonusRewards = graphql({
+      client,
+      fetchPolicy: 'network-only',
+      query: getBonusRewards,
+      variables: { offeringId: this.currentOfferingId },
+    });
   }
 }
 

@@ -3,6 +3,7 @@ import snakeCase from 'lodash/snakeCase';
 import Aux from 'react-aux';
 import { Card, Grid, Popup, Statistic, Icon } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
+import { DataFormatter } from '../../../../../helper';
 /*
   type =>
   0 / undefined: display as it is
@@ -14,12 +15,26 @@ const showValue = props => ((props.type === 1) ?
   (Helper.CurrencyFormat(props.content)) :
   ((props.type === 2) ? `date ${props.content}` : props.content));
 
-const Summary = props => (
+const summary = offer => [
+  {
+    title: 'Created date',
+    content: offer.created ? DataFormatter.formatedDate(offer.created.date) : 'N/A',
+    type: 0,
+  },
+  { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
+  {
+    title: 'Days Till Launch',
+    content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
+    type: 0,
+  },
+];
+
+const CreationSummary = ({ offer }) => (
   <Aux>
-    <Card fluid className={props.details.className || ''}>
-      <Grid doubling celled columns={props.cols || props.details.summary.length} className="custom-divided">
+    <Card fluid>
+      <Grid doubling celled columns={summary(offer).length} className="custom-divided">
         {
-          props.details.summary.map(row => (
+          summary(offer).map(row => (
             <Grid.Column key={snakeCase(row.title)}>
               <Card.Content>
                 <Statistic size="mini" className={row.status}>
@@ -45,4 +60,4 @@ const Summary = props => (
   </Aux>
 );
 
-export default Summary;
+export default CreationSummary;

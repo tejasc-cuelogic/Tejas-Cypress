@@ -6,7 +6,7 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { FaqWidget } from '../../../../../theme/shared';
 import Leader from './leadership/Leader';
 
-@inject('offeringCreationStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Leadership extends Component {
   componentWillMount() {
@@ -45,9 +45,9 @@ export default class Leadership extends Component {
         6. Any control person of the person described in (5). `,
       },
     ];
-    const { offer } = this.props.offeringsStore;
+    const { isIssuer } = this.props.userStore;
     return (
-      <div className={offer.stage === 'CREATION' ? '' : 'inner-content-spacer'}>
+      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu secondary vertical match={match} navItems={navItems} />

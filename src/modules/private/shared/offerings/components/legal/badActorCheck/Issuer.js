@@ -4,7 +4,7 @@ import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Issuer extends Component {
   componentWillMount() {
@@ -25,9 +25,10 @@ export default class Issuer extends Component {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
     const { roles } = this.props.userStore.currentUser;
     const formName = 'ISSUER_FRM';
-    const { offer } = this.props.offeringsStore;
+    const { isIssuer } = this.props.userStore;
+    const { match } = this.props;
     return (
-      <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
+      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form onSubmit={this.handleSubmitIssuer}>
           {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (

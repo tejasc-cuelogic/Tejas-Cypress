@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Icon, Confirm } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../../theme/form';
 
-@inject('offeringCreationStore', 'userStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class AfIssuer extends Component {
   addMore = (e, formName) => {
@@ -42,10 +42,11 @@ export default class AfIssuer extends Component {
     const index = issuerNumber || 0;
     const formName = 'AFFILIATED_ISSUER_FRM';
     const { roles } = this.props.userStore.currentUser;
-    const { offer } = this.props.offeringsStore;
+    const { match } = this.props;
+    const { isIssuer } = this.props.userStore;
     return (
       <Aux>
-        <Form onSubmit={this.handleSubmitIssuer} className={offer.stage === 'CREATION' ? 'inner-content-spacer' : ''}>
+        <Form onSubmit={this.handleSubmitIssuer} className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
               <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}>Delete Selected Issuer</Button>
