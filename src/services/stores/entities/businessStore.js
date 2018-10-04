@@ -18,7 +18,7 @@ export class BusinessStore {
   formValues = [...FORM_VALUES];
 
   @observable
-  businessId = '';
+  offeringId = '';
 
   @observable
   filingId = '';
@@ -268,7 +268,7 @@ export class BusinessStore {
   toggleRequiredFiles(key, isDirtyUpdate) {
     _.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked =
       !_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked;
-    
+
     if (_.filter(this.formDocumentInfo.documentList, document => document.name === key)[0].checked) {
       if (isDirtyUpdate) {
         this.formDocumentInfo.meta.isDirty = true;
@@ -278,8 +278,8 @@ export class BusinessStore {
   }
 
   @action
-  setBusinessId(id) {
-    this.businessId = id;
+  setOfferingId(id) {
+    this.offeringId = id;
   }
 
   @action

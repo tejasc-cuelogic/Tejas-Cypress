@@ -110,6 +110,13 @@
                 text-decoration:none;
             }
         }
+        &.link{
+            color:@linkColor;
+            text-decoration:none;
+            &:hover{
+                text-decoration:underline;
+            }
+        }
     }
     &.statment-tables{
         td>i.icon{
@@ -186,6 +193,23 @@
         tr td{
             border:none;
         }
+        .actions{
+            position:relative;
+            float:right;
+            z-index:99;
+            a, .ui.button, .ui.buttons .button{
+                font-size:@13px;
+                font-weight:@fontMedium;
+                text-transform:none;
+                margin:0;
+                padding:0 @8px;
+                border-right:@borderColor 1px solid;
+                &:last-child{
+                    border:none;
+                    padding-right:0;
+                }
+            }
+        }
         .ui.input>input {
             background: @white;
             padding: @5px;
@@ -226,6 +250,9 @@
                     }
                 }
             }
+        }
+        + .basic.form-table{
+            margin-top:@21px;
         }
     }
     &.bg-offwhite {
