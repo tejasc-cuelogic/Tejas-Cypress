@@ -221,6 +221,7 @@ export const getOfferingDetails = gql`
         firstName
         lastName
         email
+        leaderBacId
         phone {
           number
         }

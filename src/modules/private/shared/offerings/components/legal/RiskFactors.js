@@ -35,7 +35,7 @@ const FormData = observer(({
   </div>
 ));
 
-@inject('offeringCreationStore', 'offeringsStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class RiskFactors extends Component {
   componentWillMount() {
@@ -52,9 +52,10 @@ export default class RiskFactors extends Component {
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
     const formName = 'RISK_FACTORS_FRM';
-    const { offer } = this.props.offeringsStore;
+    const { isIssuer } = this.props.userStore;
+    const { match } = this.props;
     return (
-      <div className={offer.stage === 'CREATION' ? 'ui card fluid form-card' : ''}>
+      <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form onSubmit={this.handleFormSubmit}>
           {
             Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
