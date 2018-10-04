@@ -28,17 +28,17 @@ class offerDetails extends Component {
   render() {
     const { match, campaignStore, location } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
-    const { details, campaign, campaignSideBarShow } = campaignStore;
+    const { details, campaignSideBarShow } = campaignStore;
     if (!details || details.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
     return (
       <div className="offer-details">
         <Responsive minWidth={768} as={Aux}>
-          <CampaignSideBar details={campaign} navItems={navItems} />
+          <CampaignSideBar navItems={navItems} />
         </Responsive>
         <Responsive maxWidth={767} as={Aux}>
-          <CampaignSideBar details={campaign} navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
+          <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
           <MobileDropDownNav inverted refMatch={match} navItems={navItems} location={location} />
         </Responsive>
         <div className="offering-wrapper">

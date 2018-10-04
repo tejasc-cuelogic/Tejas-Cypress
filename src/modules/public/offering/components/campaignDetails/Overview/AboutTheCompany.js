@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Icon, Grid, Segment, Breadcrumb, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { INDUSTRY_TYPES } from '../../../../../../constants/offering';
 
 class AboutTheCompany extends Component {
   render() {
@@ -15,7 +16,7 @@ class AboutTheCompany extends Component {
           <Header as="h3">Top things to know</Header>
           <p>
             <b>Industry: </b>
-            {campaign && campaign.keyTerms && campaign.keyTerms.industry}<br />
+            {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
             <b>Investment Type: </b>
             {campaign && campaign.selectedOffer && campaign.selectedOffer.structure}
             <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <a target="blank" href="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor">See some examples</a>.</span>)} />

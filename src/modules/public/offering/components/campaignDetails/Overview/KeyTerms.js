@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Icon, Grid, Segment, Breadcrumb, Popup, Statistic } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 class KeyTerms extends Component {
   render() {
@@ -78,7 +79,7 @@ class KeyTerms extends Component {
                   />
                 </Statistic.Label>
                 <Statistic.Value>
-                  {campaign && campaign.keyTerms ? campaign.keyTerms.securities : '-'}
+                  {campaign && campaign.keyTerms ? CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities] : '-'}
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>

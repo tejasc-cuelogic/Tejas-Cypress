@@ -9,6 +9,7 @@ import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
 import KeyTerms from './Overview/KeyTerms';
 import LatestUpdates from './Overview/LatestUpdates';
+import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 
 const nsvideos = {
   embed: '218642510',
@@ -54,7 +55,8 @@ class Overview extends Component {
           </Grid.Row>
         </Grid>
         <Route path={`${this.props.match.url}/updates`} component={UpdatesModal} />
-        <Route path={`${this.props.match.url}/keyterms`} component={KeyTermsModal} />
+        <Route path={`${this.props.match.url}/keyterms`} render={props => <KeyTermsModal refLink={props.match} {...props} />} />
+        <Route path={`${this.props.match.url}/keyterms/summary`} component={SummaryModal} />
       </div>
     );
   }

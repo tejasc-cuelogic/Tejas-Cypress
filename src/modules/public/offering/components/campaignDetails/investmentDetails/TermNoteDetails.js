@@ -3,6 +3,7 @@ import { Link, Route } from 'react-router-dom';
 import { Header, Segment, Breadcrumb, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
 import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
 import KeyTermsModal from './KeyTermsModal';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth >= 768
@@ -11,6 +12,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
 class TermNoteDetails extends Component {
   render() {
+    const { KeyTerms } = this.props;
     return (
       <Grid.Row>
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
@@ -79,13 +81,15 @@ class TermNoteDetails extends Component {
               <Grid.Column>
                 <Statistic size="mini" className="basic">
                   <Statistic.Label>Issuer Name</Statistic.Label>
-                  <Statistic.Value>A Gard Midtown, LLC</Statistic.Value>
+                  <Statistic.Value>{KeyTerms.legalBusinessName}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
                   <Statistic.Label>Security Type</Statistic.Label>
-                  <Statistic.Value>Term Note</Statistic.Value>
+                  <Statistic.Value>
+                    {CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}
+                  </Statistic.Value>
                 </Statistic>
               </Grid.Column>
             </Grid>
@@ -101,7 +105,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>$200,000</Statistic.Value>
+                  <Statistic.Value>${KeyTerms.minOfferingAmount}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -115,7 +119,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>$1,000,000</Statistic.Value>
+                  <Statistic.Value>${KeyTerms.maxOfferingAmount}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -128,7 +132,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>Monthly</Statistic.Value>
+                  <Statistic.Value>{KeyTerms.frequencyOfPayments}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
             </Grid>
