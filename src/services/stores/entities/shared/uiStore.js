@@ -132,7 +132,7 @@ export class UiStore {
   }
 
   @action
-  setConfirmBox(entity, refId, subRefId, lockedStatus, isAnyFilingXmlLocked) {
+  setConfirmBox = (entity, refId, subRefId, lockedStatus, isAnyFilingXmlLocked) => {
     this.confirmBox.entity = entity;
     this.confirmBox.refId = refId;
     this.confirmBox.subRefId = subRefId;

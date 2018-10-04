@@ -4,7 +4,7 @@ import { map, startCase, isArray, forEach, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import { ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA, RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, OFFERING_DETAILS, CONTINGENCIES, ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW, OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { getBonusRewards, createBonusReward, deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac, createBonusRewardsTier, getBonusRewardsTiers } from '../../../queries/offerings/manage';
+import { deleteBonusReward, deleteBonusRewardsTierByOffering, getBonusRewards, createBonusReward, deleteBac, updateOffering, getOfferingDetails, getOfferingBac, createBac, updateBac, createBonusRewardsTier, getBonusRewardsTiers } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -695,6 +695,63 @@ export class OfferingCreationStore {
       query: getBonusRewards,
       variables: { offeringId: this.currentOfferingId },
     });
+  }
+
+  @action
+  deleteBonusReward = (id) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: deleteBonusReward,
+        variables: {
+          id,
+          offeringId: this.currentOfferingId,
+        },
+        refetchQueries: [
+          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
+          { query: getBonusRewardsTiers },
+        ],
+      })
+      .then(() => {
+        Helper.toast('Bonus Reward has been deleted successfully.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  deleteBonusRewardTier = (amount, earlyBirdQuantity) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: deleteBonusRewardsTierByOffering,
+        variables: {
+          offeringId: this.currentOfferingId,
+          bonusRewardTierId: {
+            amount,
+            earlyBirdQuantity,
+          },
+        },
+        refetchQueries: [
+          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
+          { query: getBonusRewardsTiers },
+        ],
+      })
+      .then(() => {
+        Helper.toast('Tier has been deleted successfully.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 
