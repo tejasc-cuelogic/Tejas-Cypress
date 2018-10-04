@@ -6,7 +6,7 @@ import {
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Table, Card, Button, Confirm } from 'semantic-ui-react';
+import { Header, Table, Message, Button, Confirm } from 'semantic-ui-react';
 import XmlSubmission from '../../../../admin/edgar/components/XmlSubmission';
 import Helper from '../../../../../../helper/utility';
 import { businessActions } from '../../../../../../services/actions';
@@ -96,11 +96,7 @@ export default class EdgarFilingList extends Component {
     const offeringFilingList = this.props.offeringFilings;
     if (isEmpty(offeringFilingList)) {
       return (
-        <Card centered>
-          <Card.Content textAlign="center">
-            No Generated Docs present in this offering
-          </Card.Content>
-        </Card>
+        <Message className="center-align">No Generated Docs present in this offering.</Message>
       );
     }
     return (
