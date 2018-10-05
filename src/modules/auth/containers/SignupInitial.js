@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Grid, Header, Icon } from 'semantic-ui-react';
+import { Modal, Button, Grid, Header, Divider, Icon } from 'semantic-ui-react';
 import { USER_TYPES_META } from './../../../constants/user';
 
 const GetBtn = ({ type }) => {
@@ -23,6 +23,7 @@ class signupInitial extends Component {
     const userTypes = USER_TYPES_META.slice();
     const { SIGNUP_FRM, signupChange } = this.props.authStore;
     const selectedType = SIGNUP_FRM.fields.role;
+    const isMobile = document.documentElement.clientWidth < 768;
     return (
       <Modal open onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
@@ -37,17 +38,18 @@ class signupInitial extends Component {
               >
                 <div className={`user-type ${(`${selectedType.value}-${type.subVal}` === `${type.value}-${type.subVal}` ? 'active' : '')}`}>
                   <Icon className={type.icon} size="huge" />
-                  <Header as="h4">{type.text}</Header>
-                  <p>{type.desc}</p>
+                  <div className={isMobile ? 'left-align' : ''}>
+                    <Header as="h4">{type.text}</Header>
+                    <p>{type.desc}</p>
+                  </div>
                 </div>
               </Grid.Column>
             ))}
-            <Grid.Row>
-              <Grid.Column>
-                <GetBtn type={selectedType.value} />
-              </Grid.Column>
-            </Grid.Row>
           </Grid>
+          <Divider hidden />
+          <div className="center-align">
+            <GetBtn type={selectedType.value} />
+          </div>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
           <p>Already have an account? <Link to="/auth/login">Log in</Link></p>

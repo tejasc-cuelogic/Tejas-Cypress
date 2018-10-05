@@ -44,7 +44,7 @@ input[type=number]{
         border-radius: @4px;
     }    
     .ui.input>input {
-        padding: @13px;
+        padding: @12px;
         background: @white;
         border-radius: @4px;
         border: 1px solid @neutral-darkwhite;
@@ -63,6 +63,11 @@ input[type=number]{
     }
     .reply.form {
         padding: @30px 0;
+    }
+    .field:last-child {
+        @media only screen and (max-width : @largestMobileScreen){
+            margin-bottom: @14px;
+        }
     }
 }
 .edu-center {

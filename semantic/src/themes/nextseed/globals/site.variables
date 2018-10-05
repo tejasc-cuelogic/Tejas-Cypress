@@ -242,7 +242,7 @@
 @purple           : #A333C8;
 @pink             : #E03997;
 @brown            : #A5673F;
-@grey             : @neutral-offdark;
+@grey             : @neutral-middark;
 @black            : #1B1C1D;
 
 /*---  Light Colors  ---*/
@@ -744,17 +744,17 @@
 @primaryColorHover    : @primary-one-darken;
 @secondaryColorHover  : @primary-two-darken;
 
-@redHover             : saturate(darken(@red, 5), 10, relative);
-@orangeHover          : saturate(darken(@orange, 5), 10, relative);
-@yellowHover          : saturate(darken(@yellow, 5), 10, relative);
-@oliveHover           : saturate(darken(@olive, 5), 10, relative);
-@greenHover           : saturate(darken(@green, 5), 10, relative);
-@tealHover            : saturate(darken(@teal, 5), 10, relative);
-@blueHover            : saturate(darken(@blue, 5), 10, relative);
-@violetHover          : saturate(darken(@violet, 5), 10, relative);
-@purpleHover          : saturate(darken(@purple, 5), 10, relative);
-@pinkHover            : saturate(darken(@pink, 5), 10, relative);
-@brownHover           : saturate(darken(@brown, 5), 10, relative);
+@redHover             : darken(@red, 10);
+@orangeHover          : darken(@orange, 10);
+@yellowHover          : darken(@yellow, 10);
+@oliveHover           : darken(@olive, 10);
+@greenHover           : darken(@green, 10);
+@tealHover            : darken(@teal, 10);
+@blueHover            : darken(@blue, 10);
+@violetHover          : darken(@violet, 10);
+@purpleHover          : darken(@purple, 10);
+@pinkHover            : darken(@pink, 10);
+@brownHover           : darken(@brown, 10);
 
 @lightRedHover        : saturate(darken(@lightRed, 5), 10, relative);
 @lightOrangeHover     : saturate(darken(@lightOrange, 5), 10, relative);
@@ -802,17 +802,17 @@
 @primaryColorFocus    : saturate(darken(@primaryColor, 8), 20, relative);
 @secondaryColorFocus  : saturate(lighten(@secondaryColor, 8), 20, relative);
 
-@redFocus             : saturate(darken(@red, 8), 20, relative);
-@orangeFocus          : saturate(darken(@orange, 8), 20, relative);
-@yellowFocus          : saturate(darken(@yellow, 8), 20, relative);
-@oliveFocus           : saturate(darken(@olive, 8), 20, relative);
-@greenFocus           : saturate(darken(@green, 8), 20, relative);
-@tealFocus            : saturate(darken(@teal, 8), 20, relative);
-@blueFocus            : saturate(darken(@blue, 8), 20, relative);
-@violetFocus          : saturate(darken(@violet, 8), 20, relative);
-@purpleFocus          : saturate(darken(@purple, 8), 20, relative);
-@pinkFocus            : saturate(darken(@pink, 8), 20, relative);
-@brownFocus           : saturate(darken(@brown, 8), 20, relative);
+@redFocus             : darken(@red, 13);
+@orangeFocus          : darken(@orange, 13);
+@yellowFocus          : darken(@yellow, 13);
+@oliveFocus           : darken(@olive, 13);
+@greenFocus           : darken(@green, 13);
+@tealFocus            : darken(@teal, 13);
+@blueFocus            : darken(@blue, 13);
+@violetFocus          : darken(@violet, 13);
+@purpleFocus          : darken(@purple, 13);
+@pinkFocus            : darken(@pink, 13);
+@brownFocus           : darken(@brown, 13);
 
 @lightRedFocus        : saturate(darken(@lightRed, 8), 20, relative);
 @lightOrangeFocus     : saturate(darken(@lightOrange, 8), 20, relative);
@@ -996,7 +996,7 @@
 @neutral-offwhite:#F7F8FC;            //  @neutral-lighten
 
 @commonShadow:0px 1px 1px @thumbInactiveBackground;
-
+@nav-hover:#3A4048;                   //  campaign navigation hover
 
 /* --------------------------------------------
       OLD VARIABLE VALUES TO BE REMOVED

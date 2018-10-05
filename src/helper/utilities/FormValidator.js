@@ -8,7 +8,6 @@ import Helper from '../utility';
 
 class FormValidator {
   emptyDataSet = { data: [] };
-
   prepareFormObject =
     (fields, isDirty = false, isFieldValid = true, isValid = false, metaData) => ({
       fields: { ...fields },
@@ -21,7 +20,6 @@ class FormValidator {
       },
       response: {},
     });
-
   pullValues = (e, data) => ({
     name: typeof data === 'undefined' ? e.target.name : data.name,
     value: typeof data === 'undefined' ? e.target.value : data.value,
@@ -48,7 +46,6 @@ class FormValidator {
         currentForm.fields[element.name].customErrors) ?
         currentForm.fields[element.name].customErrors : {};
     }
-
     const validation = new Validator(
       mapValues(currentForm.fields, f => f.value),
       mapValues(currentForm.fields, f => f.rule),
@@ -72,7 +69,6 @@ class FormValidator {
     currentForm.meta.isDirty = isDirty;
     return currentForm;
   }
-
   validateForm = (form, isMultiForm = false, showErrors = false, isBusinessPlanRequired = true) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
@@ -143,7 +139,6 @@ class FormValidator {
     } else {
       currentFormRelative = currentForm.fields;
     }
-
     if (element.name) {
       if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
         const index = currentFormRelative[element.name]
@@ -170,23 +165,18 @@ class FormValidator {
       customErrMsg,
     );
     currentForm.meta.isValid = validation.passes();
-
     if (element && element.name) {
       currentFormRelative[element.name].error = validation.errors.first(fieldName);
     }
     return currentForm;
   }
-
   ExtractValues = fields => mapValues(fields, f => f.value);
-
   ExtractFormValues = fields => mapValues(fields, f =>
     (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value))) :
       f.value));
-
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) =>
     (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
       mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
-
   resetFormData = (form) => {
     const currentForm = form;
     Object.keys(currentForm.fields).map((field) => {
@@ -198,7 +188,6 @@ class FormValidator {
     currentForm.meta.error = '';
     return currentForm;
   }
-
   setAddressFields = (place, form) => {
     const currentForm = form;
     const data = Helper.gAddressClean(place);
@@ -211,12 +200,10 @@ class FormValidator {
     this.onChange(currentForm, { name: 'city', value: data.city });
     this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
   }
-
   setIsDirty = (form, status) => {
     const currentForm = form;
     currentForm.meta.isDirty = status;
   }
-
   setFormError = (form, key, error) => {
     const currentForm = form;
     currentForm.fields[key].error = error;
@@ -334,7 +321,6 @@ class FormValidator {
     });
     return fields;
   }
-
   setFormData = (form, dataSrc, ref, keepAtLeastOne = true) => {
     let currentForm = form;
     const data = ref ? this.getRefFromObjRef(ref, dataSrc) : dataSrc;
@@ -342,7 +328,6 @@ class FormValidator {
     currentForm.fields = this.setDataForLevel(currentForm.fields, data, keepAtLeastOne);
     return currentForm;
   };
-
   evaluateObjectRef = (objRef, inputData, key, value) => {
     let tempRef = inputData;
     const rejObjects = objRef.split('.');
@@ -439,5 +424,4 @@ class FormValidator {
     return inputData;
   }
 }
-
 export default new FormValidator();

@@ -45,7 +45,7 @@ export default class RealEstateDocumentation extends Component {
         </FormElementWrap>
         <FormElementWrap
           hideFields={hideFields}
-          noDivider
+          noDivider={hideFields || formReadOnlyMode}
           header="Upload Your Legal Documents"
           subHeader="For all related entities - filing docs, governing docs"
         >

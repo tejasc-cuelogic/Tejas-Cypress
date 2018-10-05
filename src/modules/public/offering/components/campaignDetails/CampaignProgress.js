@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ResponsiveContainer, RadialBarChart, RadialBar, Legend } from 'recharts';
+import { Popup, Icon } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
 const dataRef = [
@@ -11,7 +12,13 @@ export default class CampaignProgress extends Component {
   renderLegend = () => (
     <p>
       <h4>{Helper.CurrencyFormat(this.props.data.collected, 0)}</h4>
-      <span>of {Helper.CurrencyFormat(this.props.data.needed, 0)} max</span>
+      <span>of {Helper.CurrencyFormat(this.props.data.needed, 0)} max
+        <Popup
+          trigger={<Icon name="help circle" color="grey" />}
+          content="Lorem Ipsum"
+          position="top center"
+        />
+      </span>
     </p>
   );
   render() {

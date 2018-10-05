@@ -19,3 +19,5 @@ export { default as NsPagination } from './src/NsPagination';
 export { default as NsPaginationType2 } from './src/NsPaginationType2';
 export { default as EmptyDataSet } from './src/EmptyDataSet';
 export { default as InlineLoader } from './src/InlineLoader';
+export { default as SocialLinks } from './src/SocialLinks';
+export { default as MobileDropDownNav } from './src/MobileDropDownNav';

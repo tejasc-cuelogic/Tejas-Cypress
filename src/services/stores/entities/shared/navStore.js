@@ -21,11 +21,24 @@ export class NavStore {
     }
   }
 
+  @computed get myCapabilities() {
+    console.log(this.navStatus);
+    return userStore.currentUser ? toJS(userStore.currentUser.capabilities) : [];
+  }
+
+  canAccessBasedOnCapability = (capability) => {
+    const key = capability.split('_');
+    const capabilityCheck = (key[1] !== 'ANY') ? [capability] :
+      [`${key[0]}_FULL`, `${key[0]}_MANAGER`, `${key[0]}_SUPPORT`];
+    return _.intersection(this.myCapabilities, capabilityCheck).length > 0;
+  }
+
   @computed get myRoutes() {
     const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
     const routes = _.filter(
       this.NAV_ITEMS,
-      n => n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0,
+      n => ((n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0) &&
+        (!n.capability || this.canAccessBasedOnCapability(n.capability))),
     );
     return routes;
   }
@@ -107,7 +120,9 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const { percentagePassed, topVisible } = calculations;
-    this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    if (typeof percentagePassed === 'number') {
+      this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    }
   }
 }
 

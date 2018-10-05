@@ -234,3 +234,11 @@ export const userSubscription = gql`
     }
   }
 `;
+
+export const adminAddUser = gql`
+  mutation _createUser($userDetails: UserInputObjectType! ){
+    createUser(userDetails: $userDetails) {
+        id
+      }
+  }
+`;
