@@ -15,7 +15,6 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 class InvestmentDetails extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
-
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable doubling>
@@ -82,8 +81,16 @@ class InvestmentDetails extends Component {
             </Responsive>
           </Grid.Row>
           {campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
-            <RevenueSharingDetails KeyTerms={campaign.keyTerms} {...this.props} /> :
-            <TermNoteDetails KeyTerms={campaign.keyTerms} {...this.props} />
+            <RevenueSharingDetails
+              refLink={this.props.refLink}
+              KeyTerms={campaign.keyTerms}
+              {...this.props}
+            /> :
+            <TermNoteDetails
+              refLink={this.props.refLink}
+              KeyTerms={campaign.keyTerms}
+              {...this.props}
+            />
           }
         </Grid>
       </div>

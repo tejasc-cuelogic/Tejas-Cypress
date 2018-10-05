@@ -1,5 +1,5 @@
 export const CAMPAIGN_KEYTERMS_SECURITIES = {
-  TERM_NOTE: 'Term Note',
+  TERM_NOTE: 'Term Notee',
   REVENUE_SHARING_NOTE: 'Reveneue Shareing Note',
 };
 
