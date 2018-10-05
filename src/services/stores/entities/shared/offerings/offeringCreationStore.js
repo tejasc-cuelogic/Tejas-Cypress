@@ -101,12 +101,22 @@ export class OfferingCreationStore {
   setDefaultTiers = () => {
     DEFAULT_TIERS.map((tier) => {
       if (this.bonusRewardsTiers.data && this.bonusRewardsTiers.data.getBonusRewardTiers) {
-        this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
+        const isExisted =
+        find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+        if (!isExisted) {
+          this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
+        }
       } else {
         this.bonusRewardsTiers.data = {};
         this.bonusRewardsTiers.data.getBonusRewardTiers = [];
-        this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
+        const isExisted =
+        find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+        if (!isExisted) {
+          this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
+        }
       }
+      this.bonusRewardsTiers.data.getBonusRewardTiers =
+        [...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))];
       return this.bonusRewardsTiers;
     });
   }
@@ -378,8 +388,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  addMore = (form, key) => {
-    this[form] = Validator.addMoreRecordToSubSection(this[form], key);
+  addMore = (form, key, defaultBlank) => {
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, '', defaultBlank);
   }
 
   @action
@@ -966,11 +976,12 @@ export class OfferingCreationStore {
           fields.expirationDate.value = reward.expirationDate;
           reward.tiers.map((tier) => {
             const isExisted = find(fields, { key: tier.amount });
-            if (isExisted && !isExisted.value.includes(tier.amout)) {
+            if (isExisted && !isExisted.value.includes(tier.amount)) {
               isExisted.value.push(tier.amount);
+              isExisted.value = [...new Set(toJS(isExisted.value))];
             } else {
               const isEarlyBird = find(fields, { earlyBirdQuantity: 50 });
-              if (isEarlyBird) {
+              if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS')) {
                 isEarlyBird.value.push('EARLY_BIRDS');
               }
             }
