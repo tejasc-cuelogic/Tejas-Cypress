@@ -44,7 +44,6 @@ const FormInput = observer((props) => {
       }
       <Input
         fluid
-        {...props}
         value={value}
         autoComplete="nope"
         maxLength={maxlength || false}
@@ -53,6 +52,7 @@ const FormInput = observer((props) => {
         placeholder={placeHolder}
         onChange={props.changed}
         readOnly={displayMode}
+        {...props}
       />
       {error &&
         <FieldError error={error} />
