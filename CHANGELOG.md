@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-04)
+# 0.0.0 (2018-10-05)
 
 
 ### Bug Fixes
@@ -18,6 +18,7 @@
 
 * ** investment flow[Issue [344](https://chaos.ns.team/nsv2/ns-ops/issues/344) - investment flow refinements]:** investment flow refinements ([ea3a07c](https://chaos.ns.team/nsv2/ns-client/commits/ea3a07c))
 * **Admin application details[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** application details and issuer signup issue fix application listing cta ([e96eaab](https://chaos.ns.team/nsv2/ns-client/commits/e96eaab))
+* **Admin application listing[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** issuer signup minor bug fixes and promote application done ([f70ddb0](https://chaos.ns.team/nsv2/ns-client/commits/f70ddb0))
 * **Admin Business Applications[Issue [270](https://chaos.ns.team/nsv2/ns-ops/issues/270) - business-application-admin-screen-business-application-lists-skeleton]:** created skeleton for admin business application list using graph cool stub api with filters ([c45b5f0](https://chaos.ns.team/nsv2/ns-client/commits/c45b5f0))
 * **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **admin dashboard activity history[Issue [365](https://chaos.ns.team/nsv2/ns-ops/issues/365) - admin dashboard activity history]:** designed activity history section ([f2bd37f](https://chaos.ns.team/nsv2/ns-client/commits/f2bd37f))
