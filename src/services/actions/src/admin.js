@@ -57,6 +57,7 @@ export class Admin {
         });
       })
         .then((res) => {
+          adminStore.setUserId(res.User.Username);
           adminStore.pushToDb({ ...dbPushParams, ...{ userId: res.User.Username } });
         })
         .catch((err) => {
@@ -151,6 +152,32 @@ export class Admin {
       userData.push({ Name: 'email_verified', Value: 'true' });
     }
     return userData;
+  }
+
+  checkEmailExists = (email) => {
+    uiStore.reset();
+    uiStore.setProgress();
+
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    return (
+      new Promise((res, rej) => {
+        this.awsCognitoISP.listUsers({
+          UserPoolId: USER_POOL_ID,
+          Filter: `email = '${email}'`,
+          Limit: 1,
+        }).promise()
+          .then((data) => {
+            const userId = data.Users.length ? data.Users[0].Username : null;
+            return res(userId);
+          })
+          .catch((err) => {
+            rej(err);
+            throw err;
+          })
+          .finally(() => {
+            uiStore.clearLoaderMessage();
+          });
+      }));
   }
 }
 

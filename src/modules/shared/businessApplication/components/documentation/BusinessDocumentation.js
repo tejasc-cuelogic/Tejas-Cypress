@@ -116,7 +116,7 @@ export default class BusinessDocumentation extends Component {
         </FormElementWrap>
         <FormElementWrap
           hideFields={hideFields}
-          noDivider
+          noDivider={hideFields || formReadOnlyMode}
           header="Are you willing to provide a personal guarantee?"
           subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
         >

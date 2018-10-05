@@ -33,7 +33,7 @@ export default class Performance extends Component {
           }
           <FormElementWrap
             hideFields={hideFields}
-            noDivider={`${!currentApplicationType === 'business'}`}
+            noDivider={hideFields || formReadOnlyMode}
             header={`${currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}`}
             subHeader={`${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
           >
@@ -59,7 +59,7 @@ export default class Performance extends Component {
           {currentApplicationType === 'business' &&
             <FormElementWrap
               hideFields={hideFields}
-              noDivider
+              noDivider={hideFields || formReadOnlyMode}
               header="Performance"
               subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
             >

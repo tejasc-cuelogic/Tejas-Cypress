@@ -150,7 +150,7 @@ export default class BusinessDetails extends Component {
           </FormElementWrap>
           <FormElementWrap
             hideFields={hideFields}
-            noDivider={hideFields}
+            noDivider={hideFields || formReadOnlyMode}
             header="Owners"
             subHeader="Please list all individuals with at least 20% ownership."
           >

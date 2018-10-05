@@ -8,10 +8,16 @@ import Helper from '../../../helper/utility';
 // e.g. `usersList` should be in userStore
 export class AdminStore {
   @observable usersList = {};
+  @observable userId = null;
 
   @action
   setUsersList(list) {
     this.usersList = list;
+  }
+
+  @action
+  setUserId(id) {
+    this.userId = id;
   }
 
   @action
