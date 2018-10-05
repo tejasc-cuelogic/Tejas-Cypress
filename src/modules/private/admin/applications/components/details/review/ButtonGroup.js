@@ -7,7 +7,7 @@ const ButtonGroup = ({
 }) => (
   <Aux>
     {!isManager && (!approved || (approved && !approved.status)) &&
-    <div className="right-align">
+    <div className="right-align mt-30">
       <Button.Group>
         {((approved && !approved.status) || !submitted) &&
         <Button disabled={!formValid} secondary className="relaxed">Save</Button>

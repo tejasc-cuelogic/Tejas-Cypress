@@ -21,7 +21,7 @@ export default class ApplicationCards extends Component {
   render() {
     const { fetchBusinessApplication, businessApplicationsList } = this.props.businessAppStore;
 
-    if (businessApplicationsList.loading) {
+    if (businessApplicationsList && businessApplicationsList.loading) {
       return <InlineLoader />;
     }
 
