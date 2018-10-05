@@ -10,20 +10,14 @@
     }
 }
 .ui.grid{
-<<<<<<< HEAD
     &.bottom-aligned{
         >.column:not(.row), >.row>.column{
             align-self:flex-end !important;
         }
     }
-    &.divided:not([class*="vertically divided"])>{
-        .column:not(:last-child),
-        .row>.column:not(:last-child){
-=======
     &.divided:not(.vertically){
         >.column:not(:last-child),
         >.row>.column:not(:last-child){
->>>>>>> develop
             box-shadow:@dividedBorder inset;
         }
         &.stackable>.column:not(.row){

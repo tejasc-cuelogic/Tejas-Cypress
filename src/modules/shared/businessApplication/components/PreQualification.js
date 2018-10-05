@@ -105,15 +105,18 @@ export default class PreQualification extends Component {
               </Form.Group>
             </div>
             {!isPrequalQulify &&
-            <Button
-              loading={this.props.uiStore.inProgress}
-              disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
-              size="large"
-              color="green"
-              className="very relaxed"
-            >
-              Continue
-            </Button>
+            <Aux>
+              <Divider hidden />
+              <Button
+                loading={this.props.uiStore.inProgress}
+                disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
+                size="large"
+                color="green"
+                className="very relaxed"
+              >
+                Continue
+              </Button>
+            </Aux>
             }
           </FormElementWrap>
           }

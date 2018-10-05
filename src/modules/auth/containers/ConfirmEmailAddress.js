@@ -92,6 +92,7 @@ export default class ConfirmEmailAddress extends Component {
             fielddata={CONFIRM_FRM.fields.email}
             changed={ConfirmChange}
             readOnly
+            displayMode
             className="display-only"
           />
           <p><Link to={changeEmailAddressLink}>Change email address</Link></p>

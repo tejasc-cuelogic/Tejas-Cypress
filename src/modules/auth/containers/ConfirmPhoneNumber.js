@@ -100,6 +100,7 @@ export default class ConfirmPhoneNumber extends Component {
               fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
               format="###-###-####"
               readOnly={!editMode}
+              displayMode={!editMode}
               changed={personalInfoMaskedChange}
               containerclassname="display-only"
               className="display-only"
