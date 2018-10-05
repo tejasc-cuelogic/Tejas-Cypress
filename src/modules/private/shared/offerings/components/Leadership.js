@@ -19,7 +19,7 @@ export default class Leadership extends Component {
   }
   addMore = (e, formName) => {
     e.preventDefault();
-    this.props.offeringCreationStore.addMore(formName);
+    this.props.offeringCreationStore.addMore(formName, 'leadership');
     const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
     const leaderCount = LEADERSHIP_FRM.fields.leadership.length;
     this.props.history.push(`${this.props.match.url}/leader/${leaderCount}`);
