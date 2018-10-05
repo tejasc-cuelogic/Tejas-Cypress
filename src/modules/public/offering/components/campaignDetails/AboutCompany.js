@@ -3,19 +3,18 @@ import { Route, Link, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Image, Breadcrumb, Segment, Reveal } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
-// import { forEach } from 'lodash';
+import Aux from 'react-aux';
 import { NsCarousel, InlineLoader } from '../../../../../theme/shared';
-import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
 import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
-// import teamMember2 from '../../../../../assets/images/owner-1.jpg';
-// import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
-// import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
-// import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
 import businessModel from '../../../../../assets/images/business_model.jpg';
 import CompanyDescriptionModal from './CompanyDescriptionModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import videoPoster from '../../../../../assets/images/636206632.jpg';
-
+// import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
+// import teamMember2 from '../../../../../assets/images/owner-1.jpg';
+// import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
+// import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
+// import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
 
 const getModule = component => Loadable({
   loader: () => import(`../${component}`),
@@ -45,6 +44,7 @@ class AboutCompany extends Component {
       { to: 'meetourteam', component: 'MeetTeamModal' },
     ];
     const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable>
@@ -56,8 +56,23 @@ class AboutCompany extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header>
-                <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
-                <Link to={`${this.props.match.url}/companydescription`}>Read More</Link>
+                {
+                  campaign.offering.about.theCompany !== null ?
+                    <Aux>
+                      <p
+                        dangerouslySetInnerHTML={
+                          {
+                            __html: campaign && campaign.offering
+                              && campaign.offering.about
+                              && campaign.offering.about.theCompany,
+                          }
+                        }
+                      />
+                      <Link to={`${this.props.match.url}/companydescription`}>Read More</Link>
+                    </Aux>
+                    :
+                    <p>{emptyStatement}</p>
+                }
               </Segment>
             </Grid.Column>
             <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
@@ -96,7 +111,14 @@ class AboutCompany extends Component {
                             </div>
                           </Reveal.Content>
                           <Reveal.Content visible>
-                            <Image src={defaultLeaderProfile} circular />
+                            <Image
+                              src={
+                                data.uploads.headshot.isPublic === true &&
+                                  data.uploads.headshot.url != null ?
+                                  data.uploads.headshot.url : defaultLeaderProfile
+                              }
+                              circular
+                            />
                           </Reveal.Content>
                         </Reveal>
                       </Grid.Column>

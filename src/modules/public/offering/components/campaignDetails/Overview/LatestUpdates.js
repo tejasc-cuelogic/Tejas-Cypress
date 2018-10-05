@@ -8,13 +8,18 @@ class LatestUpdates extends Component {
   render() {
     const { updates, isTabletLand, refLink } = this.props;
     const update = (updates && updates.length && updates[0]) || null;
-    let UserInfo = update ? update.actingUserInfo.info : null;
+    let UserInfo = update && update.actingUserInfo ? update.actingUserInfo.info : null;
     UserInfo = UserInfo ? {
       firstName: UserInfo.firstName,
       lastName: UserInfo.lastName,
       roles: ['investor'],
       avatarUrl: UserInfo.avatar ? UserInfo.avatar.url : null,
-    } : null;
+    } : {
+      firstName: 'T',
+      lastName: 'T',
+      roles: ['investor'],
+      avatarUrl: null,
+    };
     return (
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
