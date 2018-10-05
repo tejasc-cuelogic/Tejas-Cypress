@@ -28,6 +28,7 @@ class LocationAnalysisModal extends Component {
 
   render() {
     const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
     return (
       <Modal
         open
@@ -50,15 +51,18 @@ class LocationAnalysisModal extends Component {
                 />
               </Grid.Column>
               <Grid.Column computer={10} tablet={10} mobile={16}>
-                <p
-                  dangerouslySetInnerHTML={
-                    {
-                  __html: campaign && campaign.offering
-                   && campaign.offering.about
-                   && campaign.offering.about.locationAnalysis,
-                  }
+                {
+                  campaign.offering.about.locationAnalysis !== null ?
+                    <p
+                      dangerouslySetInnerHTML={
+                        {
+                          __html: campaign && campaign.offering
+                            && campaign.offering.about
+                            && campaign.offering.about.locationAnalysis,
+                        }
+                      }
+                    /> : <p>{emptyStatement}</p>
                 }
-                />
               </Grid.Column>
             </Grid.Row>
           </Grid>

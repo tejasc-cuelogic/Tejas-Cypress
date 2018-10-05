@@ -10,6 +10,7 @@ class BusinessModal extends Component {
 
   render() {
     const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
     return (
       <Modal
         open
@@ -26,15 +27,18 @@ class BusinessModal extends Component {
               <Image src={interiorView} wrapped />
             </Grid.Column>
             <Grid.Column computer={9} tablet={9} mobile={16}>
-              <p
-                dangerouslySetInnerHTML={
-                  {
-                __html: campaign && campaign.offering
-                 && campaign.offering.about
-                  && campaign.offering.about.businessModel,
-                  }
-                }
-              />
+              {
+                campaign.offering.about.businessModel !== null ?
+                  <p
+                    dangerouslySetInnerHTML={
+                      {
+                        __html: campaign && campaign.offering
+                          && campaign.offering.about
+                          && campaign.offering.about.businessModel,
+                      }
+                    }
+                  /> : <p>{emptyStatement}</p>
+              }
             </Grid.Column>
           </Grid>
         </Modal.Content>

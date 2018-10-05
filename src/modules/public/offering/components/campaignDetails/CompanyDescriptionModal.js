@@ -16,6 +16,8 @@ class CompanyDescriptionModal extends Component {
 
   render() {
     const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
+    const emptyHistoryStatement = 'History not found';
     return (
       <Modal
         open
@@ -26,7 +28,12 @@ class CompanyDescriptionModal extends Component {
         <Modal.Header>Company Description</Modal.Header>
         <Modal.Content scrolling>
           <Header as="h4">Buffbrew Taproom LLC</Header>
-          <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+          {
+            campaign.offering.about.theCompany !== null ?
+              <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+              :
+              <p>{emptyStatement}</p>
+          }
           {/* <Divider section />
           <Grid columns={2} stackable>
             <Grid.Column verticalAlign="middle" textAlign="center">
@@ -85,21 +92,26 @@ class CompanyDescriptionModal extends Component {
           }
           <div className="history-section">
             <Header as="h4">History</Header>
-            <List>
-              {
-                campaign.offering.about.history.map(data => (
-                  <List.Item className="mb-10">
-                    <Icon className="ns-flag-line" color="green" />
-                    <List.Content>
-                      <List.Header>{data.date}</List.Header>
-                      <List.Description>
-                        {data.description}
-                      </List.Description>
-                    </List.Content>
-                  </List.Item>
-                ))
-              }
-            </List>
+            {
+              campaign.offering.about.history.length > 0 ?
+                <List>
+                  {
+                    campaign.offering.about.history.map(data => (
+                      <List.Item className="mb-10">
+                        <Icon className="ns-flag-line" color="green" />
+                        <List.Content>
+                          <List.Header>{data.date}</List.Header>
+                          <List.Description>
+                            {data.description}
+                          </List.Description>
+                        </List.Content>
+                      </List.Item>
+                    ))
+                  }
+                </List>
+                :
+                <p>{emptyHistoryStatement}</p>
+            }
           </div>
         </Modal.Content>
       </Modal>

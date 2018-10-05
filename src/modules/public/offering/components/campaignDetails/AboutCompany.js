@@ -3,13 +3,9 @@ import { Route, Link, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid, Image, Breadcrumb, Segment, Reveal, Icon } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
-// import { forEach } from 'lodash';
+import Aux from 'react-aux';
 import { NsCarousel, InlineLoader } from '../../../../../theme/shared';
-import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
-// import teamMember2 from '../../../../../assets/images/owner-1.jpg';
-// import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
-// import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
-// import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
+import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
 import businessModel from '../../../../../assets/images/business_model.jpg';
 import CompanyDescriptionModal from './CompanyDescriptionModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
@@ -29,9 +25,9 @@ const settings = {
 };
 
 const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
+  && document.documentElement.clientWidth < 992;
 const isTabletLand = document.documentElement.clientWidth >= 992
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 
 @inject('campaignStore')
 @observer
@@ -43,20 +39,35 @@ class AboutCompany extends Component {
       { to: 'meetourteam', component: 'MeetTeamModal' },
     ];
     const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable>
           <Grid.Row>
             <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
-                <Header as="h3">
-                  <Link to={`${this.props.match.url}/companydescription`}>
-                    Buffbrew Taproom LLC
-                    <Icon className="ns-chevron-right" color="green" />
-                  </Link>
-                </Header>
-                <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
-                <Link to={`${this.props.match.url}/companydescription`}>Read More</Link>
+                <Breadcrumb>
+                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/companydescription`}><b>Company Description</b></Breadcrumb.Section>
+                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
+                </Breadcrumb>
+                <Header as="h3">Top things to know</Header>
+                {
+                  campaign.offering.about.theCompany !== null ?
+                    <Aux>
+                      <p
+                        dangerouslySetInnerHTML={
+                          {
+                            __html: campaign && campaign.offering
+                              && campaign.offering.about
+                              && campaign.offering.about.theCompany,
+                          }
+                        }
+                      />
+                      <Link to={`${this.props.match.url}/companydescription`}>Read More</Link>
+                    </Aux>
+                    :
+                    <p>{emptyStatement}</p>
+                }
               </Segment>
             </Grid.Column>
             <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
@@ -84,24 +95,39 @@ class AboutCompany extends Component {
                     <Icon className="ns-chevron-right" color="green" />
                   </Link>
                 </Header>
-                <Grid columns={3}>
-                  {
-                    campaign.leadership.map(data => (
-                      <Grid.Column>
-                        <Reveal animated="small fade">
-                          <Reveal.Content hidden>
-                            <div className="team-overlay">
-                              <p>{`${data.firstName} ${data.lastName}`}</p>
-                            </div>
-                          </Reveal.Content>
-                          <Reveal.Content visible>
-                            <Image src={teamMember1} circular />
-                          </Reveal.Content>
-                        </Reveal>
-                      </Grid.Column>
-                    ))
-                  }
-                </Grid>
+                {
+                  campaign.leadership.length > 0 ?
+                    <Grid columns={3}>
+                      {
+                        campaign.leadership.map(data => (
+                          data.isPublic === true ?
+                            <Grid.Column>
+                              <Reveal animated="small fade">
+                                <Reveal.Content hidden>
+                                  <div className="team-overlay">
+                                    <p>{`${data.firstName} ${data.lastName}`}</p>
+                                  </div>
+                                </Reveal.Content>
+                                <Reveal.Content visible>
+                                  <Image
+                                    src={
+                                      data.uploads.headshot.isPublic === true &&
+                                        data.uploads.headshot.url != null ?
+                                        data.uploads.headshot.url : defaultLeaderProfile
+                                    }
+                                    circular
+                                  />
+                                </Reveal.Content>
+                              </Reveal>
+                            </Grid.Column>
+                            :
+                            ''
+                        ))
+                      }
+                    </Grid>
+                    :
+                    <p>No detail found.</p>
+                }
               </Segment>
             </Grid.Column>
             <Grid.Column>
