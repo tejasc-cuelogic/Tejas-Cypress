@@ -122,6 +122,7 @@ export const campaignDetailsQuery = gql`
       firstName
       lastName
       companyPosition
+      isPublic
       uploads {
         headshot {
           fileId
