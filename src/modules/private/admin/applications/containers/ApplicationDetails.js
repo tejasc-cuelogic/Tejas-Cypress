@@ -6,7 +6,6 @@ import { Modal, Card, Header, Form, Label, Rating, Button, Grid, List, Icon } fr
 import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
-import { adminActions } from '../../../../../services/actions';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
@@ -55,20 +54,6 @@ export default class ApplicationDetails extends Component {
     this.setState({ displaOnly: !this.state.displaOnly });
     this.props.businessAppAdminStore.setBusinessDetails(businessName, signupCode);
   }
-  promoteApplication = (id, appStatus, firstName, lastName, email) => {
-    const userDetails = {
-      givenName: firstName,
-      familyName: lastName,
-      email,
-      TemporaryPassword: 'nextseed',
-      verifyPassword: 'nextseed',
-      role: 'issuer',
-    };
-    adminActions.createNewUser(userDetails).then((data) => {
-      console.log(data);
-      this.props.businessAppReviewStore.updateApplicationStatus(id, '', appStatus, 'PROMOTE', 'APPLICATIONS PREQUAL FAILED PROMOTE');
-    });
-  }
   render() {
     const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
@@ -107,20 +92,18 @@ export default class ApplicationDetails extends Component {
     }
     const { businessName, contactDetails } =
     businessGeneralInfo || prequalDetails.businessGeneralInfo;
-    const appStepStatus = applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
+    const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnRootNodeClick={false} onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <Header as="h3">
             {businessName}
-            <span className="title-meta">Status: <b>{appStepStatus}</b></span>
+            <span className="title-meta">  Status: <b>{appStepStatus}</b></span>
             <Label size="small" color="green">Reviewed</Label>
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
             {(applicationStatus || prequalStatus) ===
             BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-            // <Button secondary compact floated="right" content="Promote" onClick={() =>
-            // this.promoteApplication(id, prequalStatus, firstName, lastName, email)} />
             <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/prequal-failed/${id}/new/${prequalStatus}/PROMOTE/confirm`} />
             }
           </Header>
