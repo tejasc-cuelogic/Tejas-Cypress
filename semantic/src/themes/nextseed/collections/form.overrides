@@ -534,7 +534,7 @@ textarea{
     .file-uploader{
         width:250px;
         height:140px;
-        margin:0 auto;
+        margin:@5px auto;
         display:table;
         > div{
             display:table-cell;
