@@ -55,6 +55,7 @@ class AboutCompany extends Component {
               isTabletLand={isTabletLand}
               isTablet={isTablet}
               galleryUrl={this.props.match.url}
+              campaign={campaign}
             />
           </Grid.Row>
           <Grid.Row columns={isTablet ? 1 : isTabletLand ? 2 : 3} className="campaign-right-sidebar">
