@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
 import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress } from 'semantic-ui-react';
@@ -22,6 +23,11 @@ export default class CampaignSideBar extends Component {
     const collected = 100;
     const address = 'Houston, TX';
     const { campaign } = campaignStore;
+    const terminationDate = campaign && campaign.offering && campaign.offering.launch
+      && campaign.offering.launch.terminationDate;
+    const d1 = moment().format('MM/DD/YYYY');
+    const d2 = terminationDate ? moment(terminationDate).format('MM/DD/YYYY') : null;
+    const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
     return (
       <Aux>
         <div className={`${className} offering-side-menu`}>
@@ -61,7 +67,7 @@ export default class CampaignSideBar extends Component {
             </Responsive>
             <Statistic.Group widths="three" className="center-align">
               <Statistic size="mini" className="basic">
-                <Statistic.Value>28</Statistic.Value>
+                <Statistic.Value>{diff || 0}</Statistic.Value>
                 <Statistic.Label>Days left</Statistic.Label>
               </Statistic>
               <Statistic size="mini" className="basic">
