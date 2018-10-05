@@ -290,7 +290,8 @@ export class OfferingCreationStore {
 
   @action
   maskChange = (values, form, field) => {
-    const fieldValue = (field === 'terminationDate' || field === 'expirationDate') ? values.formattedValue : values.floatValue;
+    const fieldValue =
+    (field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
