@@ -17,8 +17,7 @@ const FormCheckbox = observer((props) => {
             {props.defaults ? (
               <Checkbox
                 checked={value ?
-                  (toJS(value).isArray ? toJS(value).includes(c.value) : c.value) : false}
-                // checked={value.includes(c.value)}
+                  (Array.isArray(toJS(value)) ? value.includes(c.value) : c.value) : false}
                 value={c.value}
                 {...props}
                 label={
