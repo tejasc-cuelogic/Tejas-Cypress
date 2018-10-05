@@ -107,7 +107,7 @@ export class OfferingCreationStore {
         this.bonusRewardsTiers.data.getBonusRewardTiers = [];
         this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
       }
-      return null;
+      return this.bonusRewardsTiers;
     });
   }
 
@@ -291,21 +291,56 @@ export class OfferingCreationStore {
     );
   }
 
+  // @action
+  // setFileUploadData = (form, field, files, subForm = '', index = null) => {
+  //   const file = files[0];
+  //   const fileData = Helper.getFormattedFileData(file);
+  //   if (index !== null) {
+  //     this[form] = Validator.onArrayFieldChange(
+  //       this[form],
+  //       { name: field, value: fileData.fileName }, subForm, index,
+  //     );
+  //   } else {
+  //     this[form] = Validator.onChange(
+  //       this[form],
+  //       { name: field, value: fileData.fileName },
+  //     );
+  //   }
+  // }
+
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName) => {
+    const { getOfferingById } = offeringsStore.offerData.data;
+    const { applicationId, issuerId } = getOfferingById;
+    uiStore.setProgress();
     const file = files[0];
     const fileData = Helper.getFormattedFileData(file);
-    if (index !== null) {
-      this[form] = Validator.onArrayFieldChange(
-        this[form],
-        { name: field, value: fileData.fileName }, subForm, index,
-      );
-    } else {
-      this[form] = Validator.onChange(
-        this[form],
-        { name: field, value: fileData.fileName },
-      );
-    }
+    fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', issuerId).then(action((result) => {
+      const { fileId, preSignedUrl } = result.data.createUploadEntry;
+      this[form].fields[field].fileId = fileId;
+      this[form].fields[field].preSignedUrl = preSignedUrl;
+      this[form].fields[field].fileData = file;
+      if (index !== null) {
+        this[form] = Validator.onArrayFieldChange(
+          this[form],
+          { name: field, value: fileData.fileName }, subForm, index,
+        );
+      } else {
+        this[form] = Validator.onChange(
+          this[form],
+          { name: field, value: fileData.fileName },
+        );
+      }
+      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+        .then(() => { })
+        .catch((err) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    }));
   }
 
   @action
@@ -916,12 +951,25 @@ export class OfferingCreationStore {
 
   @action
   setUpdateBonusRewardsData = (bonusRewards, rewardId) => {
+    const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     if (bonusRewards) {
       bonusRewards.map((reward) => {
         if (reward.id === rewardId) {
-          this.ADD_NEW_BONUS_REWARD_FRM.fields.name.value = reward.title;
-          this.ADD_NEW_BONUS_REWARD_FRM.fields.description.value = reward.description;
-          this.ADD_NEW_BONUS_REWARD_FRM.fields.expirationDate.value = reward.expirationDate;
+          fields.name.value = reward.title;
+          fields.description.value = reward.description;
+          fields.expirationDate.value = reward.expirationDate;
+          reward.tiers.map((tier) => {
+            const isExisted = find(fields, { key: tier.amount });
+            if (isExisted && !isExisted.value.includes(tier.amout)) {
+              isExisted.value.push(tier.amount);
+            } else {
+              const isEarlyBird = find(fields, { earlyBirdQuantity: 50 });
+              if (isEarlyBird) {
+                isEarlyBird.value.push('EARLY_BIRDS');
+              }
+            }
+            return null;
+          });
         }
         return null;
       });

@@ -11,7 +11,7 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
   }
   onProFormasDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files);
+    this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'CP1');
   }
   confirmRemoveDoc = (e, name) => {
     e.preventDefault();
