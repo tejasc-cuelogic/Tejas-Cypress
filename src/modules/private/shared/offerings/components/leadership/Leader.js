@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { FormInput, MaskedInput, FormTextarea, DropZone, AutoComplete } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, FormTextarea, DropZone, AutoComplete, FormCheckbox } from '../../../../../../theme/form';
 import Helper from '../../../../../../helper/utility';
 
 const HeaderWithTooltip = ({ header, tooltip }) => (
@@ -75,13 +75,13 @@ export default class Leader extends Component {
               <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
             </Button.Group>
           </Header>
-          {/* <FormCheckbox
+          <FormCheckbox
             fielddata={LEADERSHIP_FRM.fields.leadership[index].isPublic}
             name="isPublic"
             changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             defaults
             containerclassname="ui relaxed list"
-          /> */}
+          />
           <Header as="h4">Personal Info</Header>
           <Form.Group widths={2}>
             {

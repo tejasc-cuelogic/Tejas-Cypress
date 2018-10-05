@@ -35,6 +35,7 @@ class About extends Component {
         <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
           <PublicSubNav
             navStatus={navStore.navStatus}
+            stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
             navItems={navItems}

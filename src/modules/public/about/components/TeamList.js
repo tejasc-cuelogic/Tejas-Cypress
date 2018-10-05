@@ -11,7 +11,7 @@ const TeamList = ({
   joinColumn,
 }) => (
   <Grid.Column>
-    <Grid columns={columns} className={className}>
+    <Grid columns={columns} className={className} doubling>
       { members.map(member => (
         <Grid.Column>
           <Reveal as={Link} to={`${match.url}/${member.id}`} animated="fade">

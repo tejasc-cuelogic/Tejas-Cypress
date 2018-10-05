@@ -16,8 +16,10 @@ const FormInput = observer((props) => {
   const maxlength = props.fielddata.maxLength ? props.fielddata.maxLength : (
     props.maxLength ? props.maxLength : false
   );
+  const { displayMode } = props;
+  const fieldClass = `${props.containerclassname || ''} ${displayMode ? 'display-only' : ''}`;
   return (
-    <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''} error={!!error}>
+    <Form.Field width={props.containerwidth || false} className={fieldClass} error={!!error}>
       {!props.ishidelabel && label !== '' &&
         <label>
           {props.label || label}
@@ -39,7 +41,7 @@ const FormInput = observer((props) => {
         </label>
       }
       {props.type === 'password' &&
-        <input style={{ opacity: 0, position: 'absolute' }} tabIndex={-1} value="something" />
+        <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
       }
       <Input
         fluid
@@ -51,6 +53,7 @@ const FormInput = observer((props) => {
         type={props.type || 'text'}
         placeholder={placeHolder}
         onChange={props.changed}
+        readOnly={displayMode}
       />
       {error &&
         <FieldError error={error} />

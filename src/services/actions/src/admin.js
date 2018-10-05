@@ -21,11 +21,12 @@ export class Admin {
 
     const user = userDetails || mapValues(userStore.USR_FRM.fields, f => f.value);
     const attributes = [];
+    const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
     Object.keys(user).map((item) => {
       if (item !== 'TemporaryPassword' && item !== 'verifyPassword') {
         attributes.push({
-          Name: (item === 'role' ? 'custom:roles' : snakeCase(item)),
-          Value: (item === 'role' ? JSON.stringify(toJS(user[item])) : toJS(user[item])),
+          Name: (mapKey[item] || snakeCase(item)),
+          Value: (mapKey[item] ? JSON.stringify(toJS(user[item])) : toJS(user[item])),
         });
       }
       return true;
@@ -38,6 +39,14 @@ export class Admin {
       UserAttributes: attributes,
     };
     this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    const dbPushParams = {
+      firstName: user.givenName,
+      lastName: user.familyName,
+      email: user.email,
+      isEmailVerified: true,
+      roles: toJS(user.role).map(r => r.toUpperCase()),
+      capabilities: toJS(user.capabilities),
+    };
     return (
       new Promise((res, rej) => {
         this.awsCognitoISP.adminCreateUser(params, (err, data) => {
@@ -47,7 +56,10 @@ export class Admin {
           res(data);
         });
       })
-        .then(() => Helper.toast('User created successfully', 'success'))
+        .then((res) => {
+          adminStore.setUserId(res.User.Username);
+          adminStore.pushToDb({ ...dbPushParams, ...{ userId: res.User.Username } });
+        })
         .catch((err) => {
           if (err && err.message) {
             userStore.applyFormError('USR_FRM', err);
@@ -140,6 +152,32 @@ export class Admin {
       userData.push({ Name: 'email_verified', Value: 'true' });
     }
     return userData;
+  }
+
+  checkEmailExists = (email) => {
+    uiStore.reset();
+    uiStore.setProgress();
+
+    this.awsCognitoISP = new AWS.CognitoIdentityServiceProvider({ apiVersion: API_VERSION });
+    return (
+      new Promise((res, rej) => {
+        this.awsCognitoISP.listUsers({
+          UserPoolId: USER_POOL_ID,
+          Filter: `email = '${email}'`,
+          Limit: 1,
+        }).promise()
+          .then((data) => {
+            const userId = data.Users.length ? data.Users[0].Username : null;
+            return res(userId);
+          })
+          .catch((err) => {
+            rej(err);
+            throw err;
+          })
+          .finally(() => {
+            uiStore.clearLoaderMessage();
+          });
+      }));
   }
 }
 

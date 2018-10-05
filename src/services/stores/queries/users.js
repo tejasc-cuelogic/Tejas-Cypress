@@ -62,6 +62,7 @@ export const userDetailsQuery = gql`
       email {
         address
       }
+      capabilities
       roles {
         name
         scope
@@ -232,5 +233,13 @@ export const userSubscription = gql`
         dateOfBirth
       }
     }
+  }
+`;
+
+export const adminAddUser = gql`
+  mutation _createUser($userDetails: UserInputObjectType! ){
+    createUser(userDetails: $userDetails) {
+        id
+      }
   }
 `;

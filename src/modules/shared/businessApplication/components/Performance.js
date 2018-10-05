@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Grid, Form, Header } from 'semantic-ui-react';
+import { Grid, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -22,7 +22,7 @@ export default class Performance extends Component {
     const { fields } = BUSINESS_PERF_FRM;
     const statmentConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
-      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+      <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
           {!hideFields &&
             <FormElementWrap
@@ -33,7 +33,7 @@ export default class Performance extends Component {
           }
           <FormElementWrap
             hideFields={hideFields}
-            noDivider={`${!currentApplicationType === 'business'}`}
+            noDivider={hideFields || formReadOnlyMode}
             header={`${currentApplicationType === 'business' ? 'Financial Statements' : 'Upload your Financial Model'}`}
             subHeader={`${currentApplicationType === 'business' ? 'How has the business been performing, and what are your projections? Upload your financial statements in each section.' : 'Working model including all assumptions, project cashflows and distributions (5-10yr projections). Include stress testing'}`}
           >
@@ -59,7 +59,7 @@ export default class Performance extends Component {
           {currentApplicationType === 'business' &&
             <FormElementWrap
               hideFields={hideFields}
-              noDivider
+              noDivider={hideFields || formReadOnlyMode}
               header="Performance"
               subHeader="This information was captured from the Pre-Qualification form. You can update any numbers below if needed."
             >
@@ -111,7 +111,7 @@ export default class Performance extends Component {
           }
           <AppNavigation hideFields={hideFields} />
         </Form>
-      </Container>
+      </div>
     );
   }
 }

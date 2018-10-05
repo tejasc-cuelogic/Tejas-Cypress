@@ -119,7 +119,9 @@ export default class ApplicationDetails extends Component {
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
             {(applicationStatus || prequalStatus) ===
             BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED &&
-            <Button secondary compact floated="right" content="Promote" onClick={() => this.promoteApplication(id, prequalStatus, firstName, lastName, email)} />
+            // <Button secondary compact floated="right" content="Promote" onClick={() =>
+            // this.promoteApplication(id, prequalStatus, firstName, lastName, email)} />
+            <Button secondary compact floated="right" content="Promote" as={Link} to={`${this.props.refLink}/prequal-failed/${id}/new/${prequalStatus}/PROMOTE/confirm`} />
             }
           </Header>
           <Grid columns="equal">

@@ -9,12 +9,12 @@ import press3 from '../../../../assets/images/press3.jpg';
 
 const Press = () => (
   <Aux>
-    <Container>
-      <section className="press-news">
+    <section className="press-news">
+      <Container>
         <Header as="h2">In the news</Header>
-        <Grid>
+        <Grid stackable>
           <Grid.Row stretched>
-            <Grid.Column width={10}>
+            <Grid.Column computer={10} tablet={10} mobile={16}>
               <Segment>
                 <div className="news">
                   <Image src={press} />
@@ -25,7 +25,7 @@ const Press = () => (
                 </div>
               </Segment>
             </Grid.Column>
-            <Grid.Column width={6}>
+            <Grid.Column computer={6} tablet={6} mobile={16}>
               <Segment>
                 <div className="news">
                   <Image src={press1} />
@@ -47,10 +47,12 @@ const Press = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-      </section>
-      <Divider fitted as={Container} />
-      <section>
-        <Grid>
+      </Container>
+    </section>
+    <Divider fitted as={Container} />
+    <section>
+      <Container>
+        <Grid stackable>
           <Grid.Column width={8}>
             <Image src={press3} />
           </Grid.Column>
@@ -69,10 +71,12 @@ Quisque interdum elit sapien,
             </p>
           </Grid.Column>
         </Grid>
-      </section>
-      <Divider fitted as={Container} />
-      <section>
-        <Grid>
+      </Container>
+    </section>
+    <Divider fitted as={Container} />
+    <section>
+      <Container>
+        <Grid stackable>
           <Grid.Column width={10}>
             <Header as="h2">Media Resources</Header>
             <p className="mb-30">
@@ -87,8 +91,8 @@ Quisque interdum elit sapien,
               <p>Director of Marketing <br />+1 243 567 8901<br />email@nextseed.com</p>
             </address>
           </Grid.Column>
-          <Grid.Column width={6} className="bg-offwhite">
-            <div className="press-list">
+          <Grid.Column width={6}>
+            <div className="press-list bg-offwhite">
               <MediaResources
                 title="Documentation"
                 resources={['History', 'Press Releases', 'White Papers']}
@@ -100,8 +104,8 @@ Quisque interdum elit sapien,
             </div>
           </Grid.Column>
         </Grid>
-      </section>
-    </Container>
+      </Container>
+    </section>
   </Aux>
 );
 

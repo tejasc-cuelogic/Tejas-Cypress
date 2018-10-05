@@ -8,11 +8,13 @@ query insights{
     featureImage
     minuteRead
     title
-    author
-    updatedDate
-    createdDate
-    category
-    articleStatus
+    authorId
+    updated {
+      date
+    }
+    created {
+      date
+    }
     banner
   }
 }
@@ -28,11 +30,13 @@ query _getArticleByCategoryId($id:ID! ) {
     featureImage
     minuteRead
     title
-    author
-    updatedDate
-    createdDate
-    category
-    articleStatus
+    authorId
+    updated {
+      date
+    }
+    created {
+      date
+    }
     banner
   }
 }
@@ -40,15 +44,11 @@ query _getArticleByCategoryId($id:ID! ) {
 
 export const getArticleDetails = gql`
 query insight($id:ID! ) {
-  insightsArticle(id: $id){
+  insightsArticleById(id: $id){
     id
     title
     featureImage
     content
-    approvedBy{
-      uid
-      comment
-    }
   }
 }
 `;

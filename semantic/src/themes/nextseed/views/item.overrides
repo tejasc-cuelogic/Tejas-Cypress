@@ -19,6 +19,23 @@
         >.content>.description {
             color: @neutral-middark;
         }
+        &.user-intro{
+            .ui.tiny.image{
+                width:60px;
+            }
+            h3.ui.header{
+                text-transform:capitalize;
+                .sub.header{
+                    font-size:@18px;
+                }
+            }
+            .account-type{
+                margin-left:@10px;
+                &:first-child{
+                    margin-left:@42px;
+                }
+            }
+        }
     }
     &.messages{
         .item{
@@ -120,6 +137,35 @@
             }
         }
     }
+    &.question-list{
+        .item {
+            >.content {
+                .header {
+                    margin-bottom: @10px;
+                }
+                >.description {
+                    margin-top: 0;
+                }
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                margin: 0;
+            }
+        }
+    }
+    &.campaign-updates >.item{
+        img {
+            border-radius: 50%;
+        }
+        .content>.header:not(.ui) {
+            font-size: @13px;
+            line-height: 20px;
+        }
+        .meta {
+            font-size: @13px;
+            line-height: 20px;
+            margin: 0;
+        }
+    }
 }
 .horizontal-items {
 	&.ui.items {
@@ -128,15 +174,25 @@
 		margin-left: -@14px;
 		margin-right: -@14px;
 		>.item {
-			width: 50%;
+            width: 50%;
+            @media only screen and (max-width : @largestMobileScreen){
+                width: 100%;
+            }
 			margin-top: 0;
 			margin-bottom: @30px;
 			padding-left: @14px;
 			padding-right: @14px;
 			.ui.mini.image {
-				width: 45px;
+                width: 45px;
+                @media only screen and (max-width : @largestMobileScreen){
+                    padding-left: 0;
+                    margin: 0;
+                }
 				+.content {
-					padding-left: @10px;
+                    padding-left: @10px;
+                    @media only screen and (max-width : @largestMobileScreen){
+                        padding: 14px 0 0;
+                    }
 				}
 			}
 			.meta {
@@ -144,9 +200,46 @@
 				margin: 0;
 			}
 		}
-	}
+    }
 }
-.inner-content-spacer .featured-section {
+.slick-list .ui.items>.item {
+    >.content{
+        padding-left: @60px;
+        @media only screen and (max-width : @tabletBreakpoint){
+			padding-left: @14px;
+		}
+        h2.header:not(.ui) {
+            font-size: @40px;
+            margin: 0;
+            @media only screen and (max-width : @largestMobileScreen){
+                font-size: @20px;
+                line-height: 24px;
+            }
+        }
+        .description{
+            font-size: @28px;
+            line-height: 38px;
+            @media only screen and (max-width : @largestMobileScreen){
+                font-size: @15px;
+                line-height: 24px;
+            }
+        }
+        .extra {
+            margin: 0;
+            p {
+                color: @neutral;
+                margin-bottom: 0;
+            }
+            span {
+                line-height: @24px;
+                color: @primary-one;
+                font-weight: @bold;
+            }
+        }
+    }
+}
+.inner-content-spacer .bg-offwhite, .inner-content-spacer .featured-section {
+    padding: @14px @20px;
     .ui.items>.item .content {
         .header {
             color: @neutral;

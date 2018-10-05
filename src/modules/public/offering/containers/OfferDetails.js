@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import { Responsive } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { Spinner, InlineLoader } from '../../../../theme/shared';
+import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import InvestNow from '../components/investNow/InvestNow';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -24,22 +26,31 @@ class offerDetails extends Component {
     this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
   }
   render() {
-    const { match, campaignStore } = this.props;
+    const { match, campaignStore, location } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
-    const { details, campaign } = campaignStore;
+    const { details, campaign, campaignSideBarShow } = campaignStore;
     if (!details || details.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
     return (
       <div className="offer-details">
-        <CampaignSideBar details={campaign} navItems={navItems} />
+        <Responsive minWidth={768} as={Aux}>
+          <CampaignSideBar details={campaign} navItems={navItems} />
+        </Responsive>
+        <Responsive maxWidth={767} as={Aux}>
+          <CampaignSideBar details={campaign} navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
+          <MobileDropDownNav inverted refMatch={match} navItems={navItems} location={location} />
+        </Responsive>
         <div className="offering-wrapper">
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
             {
-              navItems.map(item => (
-                <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
-              ))
+              navItems.map((item) => {
+                const CurrentComponent = getModule(item.component);
+                return (
+                  <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+              );
+              })
             }
             <Route path={`${match.url}/invest-now`} component={InvestNow} />
             <Route path={`${match.url}/agreement`} component={Agreement} />

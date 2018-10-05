@@ -84,6 +84,7 @@ class SecondaryMenu extends Component {
               match={match}
               stepsStatus={stepsStatus}
             />
+            {this.props.rightLabel}
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={Aux}>

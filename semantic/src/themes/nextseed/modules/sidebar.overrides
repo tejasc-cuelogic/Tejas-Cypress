@@ -19,11 +19,21 @@
 		&.banner{
 			height:~"calc(100vh - 34px)";
 		}
+		&.public-pusher {
+			padding-top: 58px;
+			min-height:100vh;
+			background-color: transparent;
+		}
+		&.dimmed {
+			overflow: hidden;
+			z-index: unset;
+			&:after {
+				position: fixed !important;
+				z-index: 101;
+			}
+		}
 	}
 }
-// .pusher.white-bg{
-// 	background-color:@white !important;
-// }
 .ui.sidebar.left.thin.menu{
 	@media only screen and (min-width : @largeMonitorBreakpoint){
 		&.visible{
@@ -70,9 +80,9 @@
 			>.text{
 				max-width:150px;
 			}
-			&:first-of-type{
-				margin-bottom:@30px;
-			}
+			// &:first-of-type{
+			// 	margin-bottom:@30px;
+			// }
 			&:first-child:before, &:before{
 				display:none;
 				background:none;
@@ -145,8 +155,6 @@
 	&.push:not(.visible){
 		width:64px;
 		transform:translate3D(0,0,0);
-		// box-shadow:@boxShadow !important;
-		// overflow-y:visible !important;
 		.user-picture{
 			margin:@24px 0 @7px;
 			> img{
@@ -200,6 +208,8 @@
 			position:absolute;
 			top:12px;
 			right:10px;
+			font-size:@12px;
+			height:auto;
 		}
 		.user-picture{
 			text-align:left;
@@ -222,10 +232,10 @@
 				margin-bottom:@5px;
 			}
 		}
-		.ui.divider{
-			margin-left:-@13px;
-			margin-right:-@13px;
-		}
+		// .ui.divider{
+		// 	margin-left:-@13px;
+		// 	margin-right:-@13px;
+		// }
 		~.pusher .icon.hamburger{
 			font-size:@20px;
 			color:@white;
@@ -235,6 +245,13 @@
 			z-index:1;
 			&:hover, &:active, &:focus{
 				color:@white;
+			}
+		}
+		&.public-sidebar {
+			padding-bottom: 0;
+			.ns-close-light {
+				top: 20px;
+				z-index: 1;			
 			}
 		}
 	}
@@ -318,7 +335,7 @@
 		background-color:@thumbInvertedBackground;
 	}
 	.ns-close-light{
-		color:@white;
+		color:@neutral-middark;
 	}
 	.user-picture{
 		color:@white;
@@ -359,7 +376,6 @@
 		color:@neutral-middark;
 	}
 	&.issuer{
-		// background-color:@neutral-middark;
 		.item{
 			&:hover, &:focus, &.active, &.active:hover{
 				background-color:@neutral;

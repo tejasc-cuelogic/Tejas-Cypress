@@ -9,7 +9,7 @@ const ambassadors = () => (
     <Header.Subheader>Revision Date:&nbsp;5/16/2016</Header.Subheader>
     <Header.Subheader>Questions or Comments:&nbsp;info@nextseed.co</Header.Subheader>
     <Divider section />
-    <div>
+    <div className="justify-text">
       <Header as="h5">INTRODUCTION</Header>
       <p>NextSeed US LLC (together with its affiliates, “NextSeed”) offers its website and services
          on the terms stated in these Terms of Use (the “Terms”). The NextSeed Privacy Policy inclu

@@ -89,6 +89,7 @@ export class OfferingsStore {
     this.offerData = graphql({
       client,
       query: getOfferingDetails,
+      fetchPolicy: 'network-only',
       variables: { id },
       onFetch: (res) => {
         this.offerLoading = false;
