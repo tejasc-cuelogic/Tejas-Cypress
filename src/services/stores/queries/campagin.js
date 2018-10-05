@@ -110,6 +110,13 @@ export const campaignDetailsQuery = gql`
           date
         }
       }
+      launch {
+        targetDate
+        terminationDate
+        expectedOpsDate
+        issuerApprovedDate
+      }
+      misc
     }
     leadership {
       firstName
