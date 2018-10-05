@@ -26,7 +26,7 @@ class LatestUpdates extends Component {
           <Header as="h4">
             <Link to={`${refLink}/updates`}>
               Updates
-              <Label circular horizontal color="blue">{0}</Label>
+              <Label circular horizontal color="blue">{(updates && updates.length) || 0}</Label>
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
