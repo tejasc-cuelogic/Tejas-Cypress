@@ -6,8 +6,9 @@ import { capitalize } from 'lodash';
 import { FormTextarea } from '../../../../../theme/form';
 import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
+import Helper from '../../../../../helper/utility';
 
-@inject('uiStore', 'businessAppReviewStore', 'businessAppStore')
+@inject('uiStore', 'businessAppReviewStore', 'businessAppStore', 'adminStore')
 @withRouter
 @observer
 export default class StatusChangeAppModal extends Component {
@@ -46,17 +47,36 @@ export default class StatusChangeAppModal extends Component {
             email: prequalData.email,
             TemporaryPassword: 'nextseed',
             verifyPassword: 'nextseed',
-            role: 'issuer',
+            role: ['issuer'],
           };
-          adminActions.createNewUser(userDetails).then((rData) => {
-            console.log(rData);
-            this.props.businessAppReviewStore
-              .updateApplicationStatus(
-                params.appId,
-                params.userId,
-                params.appStatus,
-                params.action,
-              );
+          adminActions.checkEmailExists(userDetails.email).then((userId) => {
+            if (userId) {
+              this.props.businessAppReviewStore
+                .updateApplicationStatus(
+                  params.appId,
+                  userId,
+                  params.appStatus,
+                  params.action,
+                ).then(() => {
+                  this.props.uiStore.setErrors(null);
+                  this.props.history.goBack();
+                });
+            } else {
+              adminActions.createNewUser(userDetails).then(() => {
+                this.props.businessAppReviewStore
+                  .updateApplicationStatus(
+                    params.appId,
+                    this.props.adminStore.userId,
+                    params.appStatus,
+                    params.action,
+                  ).then(() => {
+                    this.props.uiStore.setErrors(null);
+                    this.props.history.goBack();
+                  });
+              }).catch(() => {
+                Helper.toast('Something went wrong. Please try again after sometime', 'error');
+              });
+            }
           });
         }
       });

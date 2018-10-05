@@ -56,7 +56,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-users',
     title: 'Manage Users',
-    capability: 'USERS_ANY',
+    // capability: 'USERS_ANY',
     to: 'users',
     accessibleTo: ['admin', 'manager', 'support'],
     subNavigations: [
