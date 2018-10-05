@@ -97,10 +97,13 @@ class AboutCompany extends Component {
             <Grid.Column>
               <Segment padded>
                 <Header as="h4">
-                  <Link to={`${this.props.match.url}/meetourteam`}>
-                    Meet our team
-                    <Icon className="ns-chevron-right" color="green" />
-                  </Link>
+                  {campaign.leadership.length ?
+                    <Link to={`${this.props.match.url}/meetourteam`}>
+                      Meet our team
+                      <Icon className="ns-chevron-right" color="green" />
+                    </Link>
+                    : <p>Meet our team</p>
+                  }
                 </Header>
                 {
                   campaign.leadership.length > 0 ?
@@ -133,7 +136,7 @@ class AboutCompany extends Component {
                       }
                     </Grid>
                     :
-                    <p>No detail found.</p>
+                    <p>{emptyStatement}</p>
                 }
               </Segment>
             </Grid.Column>
