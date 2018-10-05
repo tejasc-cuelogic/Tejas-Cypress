@@ -9,6 +9,7 @@ export default class BonusRewards extends Component {
   render() {
     const { match, offeringsStore } = this.props;
     const { offer } = offeringsStore;
-    return offer.stage === 'CREATION' ? <Creation match={match} /> : <Report />;
+    return (offer.stage === 'CREATION' ||
+    (offer.stage === 'LIVE' && match.url.split('/').pop() === 'bonus-rewards')) ? <Creation match={match} /> : <Report />;
   }
 }
