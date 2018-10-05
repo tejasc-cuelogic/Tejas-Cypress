@@ -1,8 +1,28 @@
 import React, { Component } from 'react';
 import { Modal, Header, Card, Menu } from 'semantic-ui-react';
+import { Route, Switch } from 'react-router-dom';
+import Loadable from 'react-loadable';
+import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import { DataFormatter } from '../../../../../helper';
+import { InlineLoader } from '../../../../../theme/shared';
 
-export default class ChangePassword extends Component {
+const navItems = [
+  { title: 'General Conditions', to: 'general-conditions' },
+  { title: 'Summary of Fees', to: 'summary-of-fees' },
+  { title: 'Tax Reporting', to: 'tax-reporting' },
+  { title: 'Payment Chart', to: 'payment-chart' },
+];
+
+const getModule = component => Loadable({
+  loader: () => import(`./tabs/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
+export default class ChooseOffer extends Component {
+  module = name => DataFormatter.upperCamelCase(name);
   render() {
+    const { match } = this.props;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Content>
@@ -15,21 +35,25 @@ export default class ChangePassword extends Component {
           </p>
           <Header as="h3">Offer cards will go here</Header>
           <Card fluid>
-            <Menu inverted>
-              <Menu.Item>General Conditions</Menu.Item>
-              <Menu.Item>Summary of Fees</Menu.Item>
-              <Menu.Item>Tax Reporting</Menu.Item>
-              <Menu.Item>Payment Chart</Menu.Item>
-              <Menu.Item header position="right">Offer A</Menu.Item>
-            </Menu>
+            <SecondaryMenu
+              inverted
+              match={match}
+              navItems={navItems}
+              rightLabel={<Menu.Item header position="right">Offer A</Menu.Item>}
+            />
             <div className="inner-content-spacer">
-              <Header as="h4">Offer A Issuer Conditions</Header>
-              <p>In order to successfully launch your crowdfunding campaign, please be advised
-                that we will need to complete certain steps as described below with your
-                cooperation. The documents / information requested must be received in a timely
-                manner for the offering to launch by Campaign Approval Expiration Date or we may
-                be unable to continue your campaign launch preparation.
-              </p>
+              <Switch>
+                <Route
+                  exact
+                  path={match.url}
+                  component={getModule(this.module(navItems[0].title))}
+                />
+                {
+                  navItems.map(item => (
+                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                  ))
+                }
+              </Switch>
             </div>
           </Card>
         </Modal.Content>
