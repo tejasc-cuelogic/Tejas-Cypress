@@ -66,6 +66,10 @@ export const campaignDetailsQuery = gql`
       locationRiskFactors
       isTX
     }
+    rewardsTierIds {
+      amount
+      earlyBirdQuantity
+    }
     offering {
       overview {
         elevatorPitch
