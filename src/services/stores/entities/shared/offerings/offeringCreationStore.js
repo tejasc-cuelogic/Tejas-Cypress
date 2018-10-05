@@ -300,7 +300,7 @@ export class OfferingCreationStore {
 
   @action
   maskArrayChange = (values, form, field, subForm = '', index) => {
-    const fieldValue = field === 'maturityDate' ? values.formattedValue : values.floatValue;
+    const fieldValue = (field === 'maturityDate' || field === 'dob' || field === 'dateOfService') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,
@@ -315,35 +315,43 @@ export class OfferingCreationStore {
     );
   }
 
-  // @action
-  // setFileUploadData = (form, field, files, subForm = '', index = null) => {
-  //   const file = files[0];
-  //   const fileData = Helper.getFormattedFileData(file);
-  //   if (index !== null) {
-  //     this[form] = Validator.onArrayFieldChange(
-  //       this[form],
-  //       { name: field, value: fileData.fileName }, subForm, index,
-  //     );
-  //   } else {
-  //     this[form] = Validator.onChange(
-  //       this[form],
-  //       { name: field, value: fileData.fileName },
-  //     );
-  //   }
-  // }
-
   @action
   setFileUploadData = (form, field, files, subForm = '', index = null, stepName) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
-    const { applicationId, issuerId } = getOfferingById;
-    uiStore.setProgress();
-    const file = files[0];
-    const fileData = Helper.getFormattedFileData(file);
-    fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', issuerId).then(action((result) => {
-      const { fileId, preSignedUrl } = result.data.createUploadEntry;
-      this[form].fields[field].fileId = fileId;
-      this[form].fields[field].preSignedUrl = preSignedUrl;
-      this[form].fields[field].fileData = file;
+    if (stepName) {
+      const { getOfferingById } = offeringsStore.offerData.data;
+      const { applicationId, issuerId } = getOfferingById;
+      uiStore.setProgress();
+      const file = files[0];
+      const fileData = Helper.getFormattedFileData(file);
+      fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', issuerId).then(action((result) => {
+        const { fileId, preSignedUrl } = result.data.createUploadEntry;
+        this[form].fields[field].fileId = fileId;
+        this[form].fields[field].preSignedUrl = preSignedUrl;
+        this[form].fields[field].fileData = file;
+        if (index !== null) {
+          this[form] = Validator.onArrayFieldChange(
+            this[form],
+            { name: field, value: fileData.fileName }, subForm, index,
+          );
+        } else {
+          this[form] = Validator.onChange(
+            this[form],
+            { name: field, value: fileData.fileName },
+          );
+        }
+        fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
+          .then(() => { })
+          .catch((err) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      }));
+    } else {
+      const file = files[0];
+      const fileData = Helper.getFormattedFileData(file);
       if (index !== null) {
         this[form] = Validator.onArrayFieldChange(
           this[form],
@@ -355,16 +363,7 @@ export class OfferingCreationStore {
           { name: field, value: fileData.fileName },
         );
       }
-      fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
-        .then(() => { })
-        .catch((err) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    }));
+    }
   }
 
   @action

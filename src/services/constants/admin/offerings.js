@@ -682,7 +682,7 @@ export const LEADERSHIP = {
         },
       ],
       error: undefined,
-      rule: 'alpha',
+      rule: 'optional',
     },
     firstName: {
       value: '',
