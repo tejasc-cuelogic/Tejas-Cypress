@@ -151,7 +151,7 @@
 @linkColor           : @primary-one;
 @linkUnderline       : none;
 @linkHoverColor      : @primary-one;
-@linkHoverUnderline  : @linkUnderline;
+@linkHoverUnderline  : underline;
 
 /*-------------------
     Scroll Bars

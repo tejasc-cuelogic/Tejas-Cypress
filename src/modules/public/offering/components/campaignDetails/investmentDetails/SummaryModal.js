@@ -84,7 +84,29 @@ class SummaryModal extends Component {
               Scenario 1
               <Icon className="ns-chevron-down" />
             </Accordion.Title>
-            <Accordion.Content active={activeIndex === 0} />
+            <Accordion.Content active={activeIndex === 0}>
+              <Grid centered className="mt-30 mb-30">
+                <Grid.Column width={6} textAlign="center">
+                  <p><b>Total Raise Amount:</b></p>
+                  <p>$2,000,000</p>
+                </Grid.Column>
+                <Grid.Column width={6} textAlign="center">
+                  <p><b>You Invest:</b></p>
+                  <p>$2,000,000</p>
+                </Grid.Column>
+              </Grid>
+              <p>
+                Based on the Total Raise Amount, the Issuer will share 4.0% of its revenues
+                for the first 12 months of operations and then 7.0% of revenues thereafter,
+                until the 1.70x Investment Multiple is reached.
+              </p>
+              <p className="mb-30">
+                Let’s assume that the Issuer generated $100,000 in revenues in month 9. The
+                issuer will make a $4,000 payment ($100,000 x 4% = $4,000) to investors.
+                Since you invested with 1% of the total amount raised ($5,000 / $500,000 =
+                1.0%), you would receive a $40 payment.
+              </p>
+            </Accordion.Content>
             <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
               Scenario 2
               <Icon className="ns-chevron-down" />
