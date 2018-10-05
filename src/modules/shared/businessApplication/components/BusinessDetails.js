@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
-import { Container, Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
+import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDatePicker } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -48,7 +48,7 @@ export default class BusinessDetails extends Component {
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
     return (
-      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+      <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
           {!hideFields &&
             <FormElementWrap
@@ -294,7 +294,7 @@ export default class BusinessDetails extends Component {
           size="mini"
           className="deletion"
         />
-      </Container>
+      </div>
     );
   }
 }
