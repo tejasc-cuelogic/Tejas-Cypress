@@ -52,7 +52,7 @@ class Updates extends Component {
                             }}
                           />
                         </div>
-                        <Item.Content verticalAlign="middle" >{dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo.info.lastName} <br /><span className="highlight-text">{moment(dataItem.updated.date).format('LL')}</span></Item.Content>
+                        <Item.Content verticalAlign="middle" >{dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName} <br /><span className="highlight-text">{moment(dataItem.updated.date).format('LL')}</span></Item.Content>
                       </Item>
                       <Header as="h5">{dataItem.title}</Header>
                       <p dangerouslySetInnerHTML={{ __html: dataItem.content }} />
