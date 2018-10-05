@@ -7,23 +7,26 @@
         box-shadow:@buttonHoverShadow;
     }
 }
-.offer-details {
-	.offering-side-menu {
-        .ui.secondary.button {
-            margin: @20px auto 0;
+.offering-side-menu {
+    // .ui.secondary.button {
+    //     margin: @20px auto 0;
+    // }
+    @media only screen and (min-width : @tabletBreakpoint){
+        .ui.buttons{
+            padding:@20px @26px @20px @16px;
+            position: fixed;
+            width: 280px;
+            bottom: 0;
+            background-color: @neutral;
         }
-        @media only screen and (min-width : @tabletBreakpoint){
-            .ui.buttons{
-                padding: @20px;
-                position: fixed;
-                width: 280px;
-                bottom: 0;
-                background-color: @neutral;
-                .ui.compact.button {
-                    padding: @10px;
-                }
-            }
+    }
+    @media only screen and (max-width : @largestMobileScreen){
+        .ui.buttons{
+            padding-right:@10px;
         }
+    }
+    .ui.compact.button {
+        padding: @10px;
     }
 }
 //  Public Page Ends
@@ -33,7 +36,7 @@
 .ui{
     &.button, &.buttons .button{
         + .button{
-            margin-left:@10px;
+            margin-left:@10px !important;
         }
         &.link-button{
             padding:0;
@@ -61,6 +64,12 @@
                 color:@highlight-primary;
                 &:hover, &:focus, &:active{
                     color:darken(@highlight-primary, 10%);
+                }
+            }
+            &.black{
+                color:@neutral;
+                &:hover, &:focus, &:active{
+                    text-decoration: underline;
                 }
             }
         }

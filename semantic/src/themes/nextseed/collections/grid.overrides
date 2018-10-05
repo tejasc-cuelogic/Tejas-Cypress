@@ -159,7 +159,7 @@
         >.column {
             padding: 0;
         }
-    }  
+    }
 }
 .featured-statistic {
 	counter-reset: section;

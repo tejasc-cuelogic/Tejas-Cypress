@@ -47,7 +47,7 @@ class Footer extends Component {
           </Container>
         </div>
         <Container className="clearfix">
-          <section className={this.state.fShowHide ? 'active' : 'inactive'}>
+          <section className="active">
             <div className="footer-left">
               <Menu text vertical>
                 <Menu.Header className="mb-10">RESOURCES</Menu.Header>

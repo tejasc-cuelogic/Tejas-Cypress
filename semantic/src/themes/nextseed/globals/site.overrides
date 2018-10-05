@@ -26,15 +26,6 @@ section{
 		margin-bottom:@50px !important;
 	}
 }
-.info-card{
-	a {
-		color: @fullBlack;
-		font-weight: @bold;
-	}
-	img.ui.image {
-		height: 52px;
-	}
-}
 //	Helper Classes Starts
 iframe{
 	border:none;
@@ -187,6 +178,16 @@ a:not(.item), a:not(.ui.button){
 		text-decoration:underline !important;
 	}
 }
+.info-card{
+	.ui.button>.icon:not(.button){
+		line-height: 1;
+		vertical-align: middle;
+		height: auto;
+	}
+	img.ui.image {
+		height: 52px;
+	}
+}
 a{
 	&.inverted{
 		color:@white;
@@ -195,7 +196,7 @@ a{
 		color:@primary-two !important;
 	}
 	&.text-link{
-		color:@tertiary-text;
+		color:@neutral;
 		&:hover, &:active, &.active{
 			color:@neutral;
 		}
@@ -327,9 +328,6 @@ footer{
 					line-height: 14px;
     				opacity: 1;
 					height: 14px;
-					&.ns-arrow-right {
-						margin: 0 0 0 @6px; 
-					}
 				}
 			}
 		}
@@ -441,7 +439,7 @@ footer{
 				.ui.list {
 					>.item {
 						margin-bottom: @30px;
-    					padding-bottom: 0;
+						padding-bottom: 0;
 					}
 				}
 			}
@@ -2052,7 +2050,7 @@ p.check-extra-info{
     position: fixed;
     left: 0;
     top: 14px;
-    z-index: 3;
+    z-index: 103;
     overflow: hidden;
     transition: width 250ms ease-in-out;
 	.ui.image {
@@ -2067,6 +2065,10 @@ p.check-extra-info{
 		width: 200px;
 		transition: width 300ms ease-in-out;
 		//transition-delay: 90ms;
+		position: absolute;
+	}
+	&.offering-logo {
+		width: 200px;
 	}
 }
 //Public responsive end

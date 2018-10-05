@@ -158,7 +158,7 @@
         width:665px;
     }
     >.close{
-        position:fixed;
+        // position:fixed;      commented to resolve issue on iphone
         top:@7px;
         right:@7px;
         opacity:0.5;
