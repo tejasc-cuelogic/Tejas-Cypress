@@ -27,6 +27,35 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 }
 `;
 
+export const getBusinessApplicationAdmin = gql`
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: DecryptedString){
+  businessApplicationsAdmin(
+    applicationType: $applicationType
+    orderBy: $orderBy
+    limit: $limit
+    search: $search
+    lek: $lek
+    
+  ) {
+    lek
+    resultCount
+    totalCount
+    businessApplications
+  }  
+}
+`;
+
+export const getBusinessApplicationSummary = gql`
+query getBusinessApplicationSummary{
+  businessApplicationsSummary {
+    prequalFaild
+    inProgress
+    completed
+  }
+}
+`;
+
+
 export const createBusinessApplicationPrequalificaiton = gql`
 mutation updatePreQualInfo($preQualificationData: PreQualDetailsInput!) {
   updatePrequalification(prequalificationDetails: $preQualificationData) {
@@ -161,7 +190,6 @@ query _getBusinessApplicationById ($id: String!) {
         contactDetails {
           phone {
             number
-            countryCode
           }
         }
       }
@@ -302,6 +330,16 @@ query _getBusinessApplicationById ($id: String!) {
 }
 `;
 
+export const getBusinessApplicationsDetailsAdmin = gql`
+query getBusinessApplicationsDetailsAdmin ($applicationId: String!, $userId: String, $applicationType: ViewBusinessApplicationTypeEnum!) {
+  businessApplicationsDetailsAdmin(
+    applicationId: $applicationId
+    applicationType: $applicationType
+    userId: $userId
+  )
+}
+`;
+
 export const getPrequalBusinessApplicationsById = gql`
 query getprequalInfo ($id: ID!) {
   getPreQualificationById(preQualId: $id){
@@ -353,6 +391,73 @@ mutation lendioDetails ($lendioApplication: ApplicationInfoInput!) {
   submitPartneredWithLendio(applicationDetails:$lendioApplication) {
     status
     url
+  }
+}
+`;
+
+export const updateBusinessApplicationInformation = gql`
+mutation updateBusinessApplicationInformation(
+  $applicationId: String!
+  $issuerId: String!
+  $businessName: String
+  $signupCode: String
+) {
+  updateBusinessApplicationInformation(
+    applicationId: $applicationId
+    issuerId: $issuerId
+    businessName: $businessName
+    signupCode: $signupCode
+  ){
+    applicationId
+    signupCode
+  }
+}
+`;
+
+export const updateApplicationStatusAndReview = gql`
+mutation updateApplicationData(
+  $applicationId: ID!
+  $userId: ID
+  $actionType: AdminApplicationActionTypeEnum!
+  $applicationFlag: BusinessApplicationUpdateStatusEnum
+  $applicationStatus: ApplicationStatusEnum
+  $applicationReviewAction: AdminApplicationActionTypeEnum
+  $applicationSource: ViewBusinessApplicationTypeEnum!
+  $review: BusinessApplicationReviewInput
+  $offers: OffersReviewInput
+  $comments: [BusinessApplicationCommentInput]
+  $approvedStatus: Boolean
+) {
+  updateApplicationStatusAndReview(
+    applicationId: $applicationId
+    userId: $userId
+    actionType: $actionType
+    applicationFlag: $applicationFlag
+    applicationStatus: $applicationStatus
+    applicationReviewAction: $applicationReviewAction
+    applicationSource: $applicationSource
+    review: $review
+    offers: $offers
+    comments: $comments
+    approvedStatus: $approvedStatus
+  )
+}
+`;
+
+export const updateBusinessApplicationInformationData = gql`
+mutation updateBusinessApplicationInformation(
+  $applicationId: String!
+  $issuerId: String!
+  $review: BusinessApplicationReviewInput
+  $offers: OffersReviewInput
+) {
+  updateBusinessApplicationInformation(
+    applicationId: $applicationId
+    issuerId: $issuerId
+    review: $review
+    offers: $offers
+  ){
+    applicationStatus
   }
 }
 `;

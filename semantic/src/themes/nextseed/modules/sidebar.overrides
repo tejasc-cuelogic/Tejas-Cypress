@@ -26,9 +26,10 @@
 		}
 		&.dimmed {
 			overflow: hidden;
-			height: 100vh;
+			z-index: unset;
 			&:after {
 				position: fixed !important;
+				z-index: 101;
 			}
 		}
 	}
@@ -234,7 +235,7 @@
 		// }
 		~.pusher .icon.hamburger{
 			font-size:@20px;
-			color:@neutral-middark;
+			color:@white;
 			position:absolute;
 			top:20px;
 			left:18px;

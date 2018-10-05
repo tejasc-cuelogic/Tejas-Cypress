@@ -6,7 +6,6 @@
         height:58px;
         border:none;
         border-radius:0;
-        box-shadow:none;
         transition: all ease-in-out 0.5s;
         .menu{
             margin:@11px @16px;
@@ -259,15 +258,17 @@ footer{
                     line-height: 20px;
 				}
 				>.label.circular {
-					margin-top: -5px;
+                    float: none;
+                    text-align: center;
+                    margin-left: @10px;
 				}
 				&.secondary-item {
 					color: @neutral-middark;
 				}
 			}
-			.ui.divider {
-				margin: 60px 29px 0;
-            }
+			// .ui.divider {
+			// 	margin: 60px 29px 0;
+            // }
         }
     }
     // .offering-content-spacer {
@@ -315,8 +316,44 @@ footer{
     }
     &.secondary.vertical{
         width:auto;
+        background-color: @neutral-offwhite;
         .item{
             padding:@13px @16px;
+        }
+        .dropdown{
+            .menu>.item{
+                margin-bottom:@3px;
+            }
+            &.item>.icon.dropdown{
+                font-family:'Nextseed';
+                height:14px;
+                line-height:14px;
+                color:@primary-one;
+                margin:0;
+                &:before{
+                    content:"\e914";
+                }
+            }
+            &.active .icon.dropdown{
+                transform:rotate(180deg);
+            }
+            &:hover, &:focus, &.active, &.active:hover{
+                background-color:transparent;
+                color:@tertiary-text;
+            }
+            .menu.transition{
+                position:relative;
+                left:0;
+                margin:@8px -@16px -@8px;
+                border:none;
+                box-shadow:none;
+                background:transparent;
+                .item{
+                    border-radius:0;
+                    padding:@8px @16px @8px @32px !important;
+                    color:@tertiary-text !important;
+                }
+            }
         }
     }
     a.header.item{
@@ -379,14 +416,17 @@ footer{
 	//Public Mobile View End
 }
 .transaction-detials{
-    .ui.inverted.menu .item{
-        padding:@16px @25px;
-        &:before{
-            background-color:@tertiary-text;
-        }
-        &:hover, &:focus, &.active{
-            background-color:@white;
-            color:@link-color !important;
+    .ui.inverted.menu{
+        background-color:@neutral-middark;
+        .item{
+            padding:@16px @25px;
+            &:before{
+                background-color:@neutral-middark;
+            }
+            &:hover, &:focus, &.active{
+                background-color:@white;
+                color:@link-color !important;
+            }
         }
     }
 }

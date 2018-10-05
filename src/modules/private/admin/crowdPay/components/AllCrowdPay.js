@@ -14,7 +14,6 @@ export default class AllCrowdPay extends Component {
   render() {
     const { crowdpayStore } = this.props;
     const { accounts, loading } = crowdpayStore;
-
     if (loading) {
       return <InlineLoader />;
     }

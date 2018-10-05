@@ -39,32 +39,6 @@ export default class NavBarMobile extends Component {
     return (
       <Aux>
         <div
-          className={`public-header-section ${visible ? 'active' : ''}
-          ${!location.pathname.includes('/offerings') ? 'inverted' : ''}
-          ${navStatus === 'sub' ? 'slide-up' : ''}`}
-        >
-          {/* <Icon className="ns-nextseed-icon hamburger" /> */}
-          <Link to="/"><Header as="h5" inverted>{navTitle}</Header></Link>
-          {!currentUser ? (
-            <Link to={`/auth/${stepInRoute.to}`} className="sign-in">
-              {stepInRoute.title}
-            </Link>
-          ) : (
-            <Link
-              to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-              className="sign-in"
-            >
-              Dashboard
-            </Link>
-          )
-          }
-          {investBtn && (
-            <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">
-              Invest Now
-            </Button>
-          )}
-        </div>
-        <div
           className={`${visible || (location.pathname.startsWith('/offerings')) ? 'visible-logo' : ''} full-logo`}
           onClick={!visible ? onToggle : false}
           onKeyPress={!visible ? onToggle : false}
@@ -79,6 +53,32 @@ export default class NavBarMobile extends Component {
           />
         </div>
         <Sidebar.Pushable>
+          <div
+            className={`public-header-section ${visible ? 'active' : ''}
+            ${!location.pathname.includes('/offerings') ? 'inverted' : ''}
+            ${navStatus === 'sub' ? 'slide-up' : ''}`}
+          >
+            {/* <Icon className="ns-nextseed-icon hamburger" /> */}
+            <Header as="h5" inverted>{navTitle}</Header>
+            {!currentUser ? (
+              <Link to={`/auth/${stepInRoute.to}`} className="sign-in">
+                {stepInRoute.title}
+              </Link>
+            ) : (
+              <Link
+                to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                className="sign-in"
+              >
+                Dashboard
+              </Link>
+            )
+            }
+            {investBtn && (
+              <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">
+                Invest Now
+              </Button>
+            )}
+          </div>
           <Sidebar
             as={Menu}
             animation="overlay"

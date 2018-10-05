@@ -51,7 +51,7 @@
 --------------------*/
 
 /* Inverted */
-@invertedBackgroundColor:@border-light;
+@invertedBackgroundColor:@neutral-offwhite;
 @invertedTextColor: @textColor;
 
 /* Simple */

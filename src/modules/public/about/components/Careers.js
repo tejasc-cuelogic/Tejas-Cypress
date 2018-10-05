@@ -9,17 +9,17 @@ const Careers = () => (
     <section>
       <Container>
         <Grid centered>
-          <Grid.Column computer={12} tablet={12} mobile={16}>
-            <Responsive as={Image} src={collage} maxWidth={767} />
-            <Header as="h2" textAlign={isMobile ? 'left' : 'center'}>
-            Democratize finance. Create change.<Responsive minWidth={992} as="br" /> Join our team.
+          <Grid.Column textAlign={isMobile ? 'left' : 'center'} computer={12} tablet={12} mobile={16}>
+            <Header as="h2">
+              Democratize finance. Create change.<Responsive minWidth={992} as="br" />
+              Join our team.
             </Header>
-            <p className={isMobile ? 'mt-30' : 'center-align mt-30'}>
-            We’re just getting started in our journey to shape the future of finance in
-            local communities. We’re looking for talented and motivated individuals who
-            are seeking an adventure to learn new skills and cover new ground. If you are
-            a self-starter and love working in a dynamic environment, NextSeed may be
-            the place for you.
+            <p className="mt-30">
+              We’re just getting started in our journey to shape the future of finance in
+              local communities. We’re looking for talented and motivated individuals who
+              are seeking an adventure to learn new skills and cover new ground. If you are
+              a self-starter and love working in a dynamic environment, NextSeed may be
+              the place for you.
             </p>
             <div className="center-align mt-30 mb-50">
               <Button
@@ -29,7 +29,7 @@ const Careers = () => (
               See Job Listings
               </Button>
             </div>
-            <Responsive as={Image} src={collage} minWidth={768} />
+            <Image src={collage} className="careers-banner" />
           </Grid.Column>
         </Grid>
       </Container>

@@ -136,7 +136,7 @@
 @dropdownItemBackground: transparent;
 @dropdownItemColor: @textColor;
 @dropdownItemTextTransform: none;
-@dropdownItemFontWeight: @normal;
+@dropdownItemFontWeight: @fontMedium;
 @dropdownItemBoxShadow: none;
 @dropdownItemTransition: none;
 
@@ -210,7 +210,7 @@
 @secondaryBackground: none;
 @secondaryMargin: 0em -@secondaryItemSpacing;
 @secondaryItemBackground: none;
-@secondaryItemSpacing: @relative5px;
+@secondaryItemSpacing: @relative3px;
 @secondaryItemMargin: 0em @secondaryItemSpacing;
 @secondaryItemVerticalPadding: @relativeMini;
 @secondaryItemHorizontalPadding: @relativeSmall;

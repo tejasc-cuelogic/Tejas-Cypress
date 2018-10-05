@@ -58,7 +58,7 @@ class InvestmentDetails extends Component {
   render() {
     const { match } = this.props;
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal}>
+      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <SummaryHeader details={summaryDetails} />
           <Card fluid>

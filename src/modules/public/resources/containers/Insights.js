@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Image, Menu, Dropdown, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { NsCarousel, InlineLoader } from '../../../../theme/shared';
 import Insight from '../../../../assets/images/insights2.jpg';
@@ -25,6 +25,19 @@ export default class Insights extends Component {
     } else {
       this.props.articleStore.requestAllArticles();
     }
+  }
+  activeText = () => {
+    const { InsightCategories } = this.props.articleStore;
+    const { location } = this.props;
+    const refMatch = { url: '/resources/insights' };
+    if (InsightCategories.length !== 0) {
+      const active = InsightCategories.find((i) => {
+        const path = `${refMatch.url}/${i.to}`;
+        return matchPath(location.pathname, { path, exact: true });
+      });
+      return active ? active.title : 'All';
+    }
+    return 'All';
   }
   render() {
     const {
@@ -78,7 +91,7 @@ export default class Insights extends Component {
           </Container>
         </Responsive>
         <Responsive maxWidth={767} as={Menu} className="mobile-dropdown-menu">
-          <Dropdown item>
+          <Dropdown item text={this.activeText()}>
             <Dropdown.Menu>
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
               {InsightCategories &&

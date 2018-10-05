@@ -1,36 +1,32 @@
-/* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { includes, isArray, filter } from 'lodash';
+import { includes, isArray, filter, forEach } from 'lodash';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../../api/gcoolApi';
+import { FormValidator as Validator } from '../../../../../helper';
+import { GqlClient as client } from '../../../../../api/gqlApi';
 import { FILTER_META } from '../../../../../constants/user';
-import { allBusinessApplicationses } from '../../../queries/businessApplication';
+import { BUSINESS_DETAILS_EDIT_META } from '../../../../constants/businessApplication';
+import { getBusinessApplicationsDetailsAdmin, getBusinessApplicationAdmin, getBusinessApplicationSummary, updateBusinessApplicationInformation } from '../../../queries/businessApplication';
 import Helper from '../../../../../helper/utility';
+import { uiStore } from '../../../index';
 
 export class BusinessAppStore {
   @observable businessApplicationsList = [];
+  @observable summary = { 'prequal-failed': 0, 'in-progress': 0, completed: 0 };
   @observable backup = [];
   @observable columnTitle = '';
+  @observable applicationType = 'prequal-failed';
+  @observable totalRecords = 0;
   @observable requestState = {
-    lek: null,
+    lek: { 'page-1': null },
     filters: false,
-    sort: {
-      by: 'lastLoginDate',
-      direction: 'desc',
-    },
+    sort: { by: 'applicationSubmittedDate|desc' },
     search: {},
     page: 1,
-    perPage: 2,
-    skip: 0,
+    perPage: 25,
   };
 
   @observable filterApplicationStatus = FILTER_META.applicationStatus;
-
-  @computed get totalRecords() {
-    return (this.businessApplicationsList && this.businessApplicationsList.data &&
-      this.businessApplicationsList.data._allBusinessApplicationsesMeta &&
-      this.businessApplicationsList.data._allBusinessApplicationsesMeta.count) || 0;
-  }
+  @observable BUSINESS_DETAILS_EDIT_FRM = Validator.prepareFormObject(BUSINESS_DETAILS_EDIT_META);
 
   @action
   setFieldvalue = (field, value) => {
@@ -38,15 +34,28 @@ export class BusinessAppStore {
   }
 
   @action
-  initiateSearch = (srchParams) => {
-    this.requestState.lek = null;
+  inputFieldChnage = (e, res, formName = 'BUSINESS_DETAILS_EDIT_FRM') => {
+    this[formName] = Validator.onChange(this[formName], Validator.pullValues(e, res));
+  };
+
+  @action
+  setKeyword = (e) => {
+    this.requestState.search = { ...this.requestState.search, keyword: e.target.value };
+  }
+
+  @action
+  initiateSearch = (srchParams, sortParams) => {
+    this.requestState.lek = { 'page-1': null };
+    this.requestState.page = 1;
     this.requestState.search = srchParams;
+    this.requestState.sort = sortParams;
     this.initRequest();
   }
 
   @action
   setInitiateSrch = (name, value) => {
     const srchParams = { ...this.requestState.search };
+    const sortParams = { ...this.requestState.sort };
     if (name === 'applicationStatus') {
       const index = this.filterApplicationStatus
         .value.indexOf(value);
@@ -57,46 +66,137 @@ export class BusinessAppStore {
       }
       srchParams[name] = this.filterApplicationStatus.value;
     } else if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-      srchParams[name] = value;
+      if (name === 'by') {
+        sortParams[name] = value;
+      } else {
+        srchParams[name] = value;
+      }
     } else {
       delete srchParams[name];
     }
-    this.initiateSearch(srchParams);
+    if (name === 'applicationStatus') {
+      this.requestState.search = srchParams;
+      this.filterByAppStatus();
+    } else {
+      this.initiateSearch(srchParams, sortParams);
+    }
   }
 
   @computed get getBusinessApplication() {
-    return (this.businessApplicationsList && this.businessApplicationsList.data
-      && toJS(this.businessApplicationsList.data.allBusinessApplicationses)
+    return (this.businessApplicationsList && this.businessApplicationsList.data &&
+      this.businessApplicationsList.data.businessApplicationsAdmin &&
+      toJS(this.businessApplicationsList.data.businessApplicationsAdmin.businessApplications)
     ) || [];
   }
 
   @action
-  reInitiateApplicationStatusFilterValues(section) {
-    this.requestState.search = {};
+  reInitiateApplicationStatusFilterValues(section, noFilter) {
     this.filterApplicationStatus = FILTER_META.applicationStatus;
     const { values } = this.filterApplicationStatus;
     this.filterApplicationStatus.values = values.filter(ele => includes(ele.applicable, section));
-    this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] : section === 'completed' ? ['NEW', 'REVIEWING'] : [];
-    this.requestState.search.applicationStatus = this.filterApplicationStatus.value;
+    if (!noFilter) {
+      // this.filterApplicationStatus.value = section === 'in-progress' ? ['UNSTASH'] :
+      // section === 'completed' ? ['NEW', 'REVIEWING'] : [];
+      this.requestState.search =
+      { ...this.requestState.search, applicationStatus: this.filterApplicationStatus.value };
+    } else {
+      this.filterApplicationStatus.value = this.requestState.search.applicationStatus;
+    }
+    this.filterByAppStatus();
   }
 
   @action
-  fetchBusinessApplicationsByStatus = (url) => {
-    const appType = includes(url, 'prequal-failed') ? 'prequal-failed' : includes(url, 'in-progress') ? 'in-progress' : 'completed';
-    this.reInitiateApplicationStatusFilterValues(appType);
+  getBusinessApplicationSummary = () => {
+    graphql({
+      client,
+      query: getBusinessApplicationSummary,
+      onFetch: (data) => {
+        if (data) {
+          const { prequalFaild, inProgress, completed } = data.businessApplicationsSummary;
+          this.summary = { 'prequal-failed': prequalFaild, 'in-progress': inProgress, completed };
+        }
+      },
+    });
+  }
+
+  @action
+  fetchBusinessApplicationsByStatus = (appType) => {
     this.columnTitle = appType === 'prequal-failed' ? 'Failed reasons' : appType === 'in-progress' ? 'Steps completed' : '';
-    const filterParam = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'PRE_QUALIFICATION_SUBMITTED' : 'APPLICATION_SUBMITTED';
+    this.applicationType = appType;
+    this.requestState.lek = { 'page-1': null };
+    this.requestState.page = 1;
+    this.initRequest();
+  }
+
+  @action
+  updateApplicationStatusCount = (data) => {
+    const { values } = this.filterApplicationStatus;
+    forEach(values, (v, k) => {
+      const count = filter(data, app =>
+        app.status === v.value).length;
+      values[k].label = `${values[k].label} (${count})`;
+    });
+  }
+
+  @action
+  filterByAppStatus = () => {
+    const { applicationStatus } = this.requestState.search;
+    const { data } = this.businessApplicationsList;
+    if (applicationStatus && applicationStatus.length && data && data.businessApplicationsAdmin) {
+      data.businessApplicationsAdmin.businessApplications = filter(this.backup, app =>
+        includes(toJS(applicationStatus), app.status));
+    } else if (data && data.businessApplicationsAdmin) {
+      data.businessApplicationsAdmin.businessApplications = this.backup;
+    }
+  }
+
+  @action
+  initRequest = (props) => {
+    const { first, page, noFilter } = props ||
+      {
+        first: this.requestState.perPage,
+        page: this.requestState.page,
+        noFilter: false,
+      };
+    this.requestState.page = page || this.requestState.page;
+    this.requestState.perPage = first || this.requestState.perPage;
+
+    const { keyword } = this.requestState.search;
+    const { by } = this.requestState.sort;
+    const [field, direction] = by.split('|');
+    const appType = this.applicationType;
+    const applicationTypeFilter = appType === 'prequal-failed' ? 'PRE_QUALIFICATION_FAILED' : appType === 'in-progress' ? 'IN_PROGRESS' : 'COMPLETED';
+    let filterParams = {
+      applicationType: applicationTypeFilter,
+      orderBy: { field: appType === 'prequal-failed' ? 'updatedDate' : field, sort: direction || 'desc' },
+      limit: this.requestState.perPage,
+      search: keyword,
+    };
+    filterParams = this.requestState.lek[`page-${this.requestState.page}`] ?
+      { ...filterParams, lek: this.requestState.lek[`page-${this.requestState.page}`] } : { ...filterParams };
     this.businessApplicationsList = graphql({
       client,
-      query: allBusinessApplicationses,
-      variables: {
-        filters: { applicationStatus: filterParam },
-        first: 100,
-        skip: 0,
-      },
+      query: getBusinessApplicationAdmin,
+      variables: filterParams,
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        this.initAction(data.allBusinessApplicationses);
+        if (data) {
+          const { lek, businessApplications } = data.businessApplicationsAdmin;
+          this.requestState = {
+            ...this.requestState,
+            lek: {
+              ...this.requestState.lek,
+              [`page-${this.requestState.page + 1}`]: lek,
+            },
+          };
+          this.backup = businessApplications;
+          this.reInitiateApplicationStatusFilterValues(appType, noFilter);
+          this.updateApplicationStatusCount(
+            businessApplications,
+            noFilter,
+          );
+          this.totalRecords = this.summary[appType];
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -105,41 +205,47 @@ export class BusinessAppStore {
   }
 
   @action
-  initAction = (data) => {
-    this.backup = data;
-    // const { values } = this.filterApplicationStatus;
-    // forEach(values, (v, k) => {
-    //   const count = filter(data, app => app.status === v.value).length;
-    //   values[k].label = `${values[k].label} (${count})`;
-    // });
-    this.initRequest();
-    this.requestState.page = 1;
-    this.requestState.perPage = 2;
-    this.requestState.skip = 0;
+  setBusinessDetails = (businessName, signupCode) => {
+    this.BUSINESS_DETAILS_EDIT_FRM.fields.businessName.value = businessName;
+    this.BUSINESS_DETAILS_EDIT_FRM.fields.signupCode.value = signupCode;
   }
 
   @action
-  initRequest = (props) => {
-    const { first, skip, page } = props ||
-      {
-        first: this.requestState.perPage,
-        skip: this.requestState.skip,
-        page: this.requestState.page,
-      };
-    this.requestState.page = page || this.requestState.page;
-    this.requestState.perPage = first || this.requestState.perPage;
-    this.requestState.skip = skip || this.requestState.skip;
-
-    const { applicationStatus, keyword } = this.requestState.search;
-    if (applicationStatus.length || (keyword && keyword !== '')) {
-      this.businessApplicationsList.data.allBusinessApplicationses = filter(this.backup, app =>
-        includes(toJS(applicationStatus), app.status) || includes(app.commentContent, keyword)
-          || includes(app.businessName, keyword) || includes(app.name, keyword) ||
-          includes(app.email, keyword)).slice(skip, skip + first);
-    } else if (this.backup) {
-      this.businessApplicationsList.data.allBusinessApplicationses =
-      this.backup.slice(skip, skip + first);
-    }
+  updateBusinessDetails = (appId, issuerId, appType) => {
+    const payload = Validator.ExtractValues(this.BUSINESS_DETAILS_EDIT_FRM.fields);
+    const refetchPayLoad = {
+      applicationId: appId,
+      userId: issuerId,
+      applicationType: appType === 'PRE_QUALIFICATION_FAILED' ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED',
+    };
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateBusinessApplicationInformation,
+          variables: {
+            applicationId: appId,
+            issuerId,
+            businessName: payload.businessName,
+            signupCode: payload.signupCode,
+          },
+          refetchQueries: [{
+            query: getBusinessApplicationsDetailsAdmin,
+            variables: refetchPayLoad,
+          }],
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 }
 

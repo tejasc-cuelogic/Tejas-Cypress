@@ -42,7 +42,7 @@ export class ArticleStore {
 
     @action
     getCategoryList = () => {
-      this.Categories = graphql({ client, query: getCategoryList });
+      this.Categories = graphql({ client, query: getCategoryList, variables: { categoryType: 'INSIGHTS' } });
     }
 
     @computed get InsightCategories() {

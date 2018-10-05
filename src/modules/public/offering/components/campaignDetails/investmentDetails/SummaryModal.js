@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { Modal, Grid, List, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
@@ -28,18 +28,18 @@ class SummaryModal extends Component {
         closeIcon
       >
         <Modal.Header>Revenue Sharing Summary*</Modal.Header>
-        <Modal.Content>
+        <Modal.Content scrolling>
           <p>
-          This investment has a 6-month startup period during which no cash payments will
-          be made. The startup period commences the first full month after the offering’s
-          close.
+            This investment has a 6-month startup period during which no cash payments will
+            be made. The startup period commences the first full month after the offering’s
+            close.
           </p>
           <p>
-          After the end of the startup period or once the Issuer commences operations
-          (whichever comes later), the Issuer will share a percentage of each month’s gross
-          revenue with the investors as a group until they are paid in full. The total amount
-          raised by the offering will determine the Investment Multiple and the monthly
-          Revenue Sharing Percentage.
+            After the end of the startup period or once the Issuer commences operations
+            (whichever comes later), the Issuer will share a percentage of each month’s gross
+            revenue with the investors as a group until they are paid in full. The total amount
+            raised by the offering will determine the Investment Multiple and the monthly
+            Revenue Sharing Percentage.
           </p>
           <Grid stackable doubling columns={2} verticalAlign="top" className="summary-modal">
             <Grid.Column>
@@ -76,15 +76,20 @@ class SummaryModal extends Component {
             </Grid.Column>
           </Grid>
           <p className={isMobile && 'mt-20'}>
-          Each investor will receive its proportionate share of the monthly payments made
-          to the investors as a group.
+            Each investor will receive its proportionate share of the monthly payments made
+            to the investors as a group.
           </p>
           <Accordion className="faq-accordion">
             <Accordion.Title active={activeIndex === 0} index={0} onClick={this.handleClick}>
               Scenario 1
               <Icon className="ns-chevron-down" />
             </Accordion.Title>
-            <Accordion.Content active={activeIndex === 0}>
+            <Accordion.Content active={activeIndex === 0} />
+            <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
+              Scenario 2
+              <Icon className="ns-chevron-down" />
+            </Accordion.Title>
+            <Accordion.Content active={activeIndex === 1}>
               <Grid centered className="mt-30 mb-30">
                 <Grid.Column width={6} textAlign="center">
                   <p><b>Total Raise Amount:</b></p>
@@ -96,29 +101,23 @@ class SummaryModal extends Component {
                 </Grid.Column>
               </Grid>
               <p>
-              Based on the Total Raise Amount, the Issuer will share 4.0% of its revenues
-              for the first 12 months of operations and then 7.0% of revenues thereafter,
-              until the 1.70x Investment Multiple is reached.
+                Based on the Total Raise Amount, the Issuer will share 4.0% of its revenues
+                for the first 12 months of operations and then 7.0% of revenues thereafter,
+                until the 1.70x Investment Multiple is reached.
               </p>
               <p className="mb-30">
-              Let’s assume that the Issuer generated $100,000 in revenues in month 9. The
-              issuer will make a $4,000 payment ($100,000 x 4% = $4,000) to investors.
-              Since you invested with 1% of the total amount raised ($5,000 / $500,000 =
-              1.0%), you would receive a $40 payment.
+                Let’s assume that the Issuer generated $100,000 in revenues in month 9. The
+                issuer will make a $4,000 payment ($100,000 x 4% = $4,000) to investors.
+                Since you invested with 1% of the total amount raised ($5,000 / $500,000 =
+                1.0%), you would receive a $40 payment.
               </p>
             </Accordion.Content>
-
-            <Accordion.Title active={activeIndex === 1} index={1} onClick={this.handleClick}>
-              Scenario 2
-              <Icon className="ns-chevron-down" />
-            </Accordion.Title>
-            <Accordion.Content active={activeIndex === 1} />
           </Accordion>
-          <p className="mt-20 note">
+          {/* <p className="mt-20 note">
           * The calculations above are mathematical illustration only and may not reflect
           actual performance. They do not take into account NextSeed fees of 1% on each
           payment made to investors... <Link to="/">Read More</Link>
-          </p>
+          </p> */}
         </Modal.Content>
       </Modal>
     );

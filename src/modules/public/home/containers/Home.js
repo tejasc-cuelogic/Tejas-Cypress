@@ -19,7 +19,7 @@ class Home extends Component {
         <Responsive maxWidth={767} as={Aux}>
           <Container>
             <section>
-              <Header as="h2">Raise capital<br />Invest local<br />Grow together</Header>
+              <Header as="h2">Build an investment portfolio you care about.</Header>
             </section>
             <Divider fitted />
           </Container>
@@ -50,8 +50,8 @@ class Home extends Component {
           <Container textAlign="center">
             <Header as="h2">Want to learn more about NextSeed?</Header>
             <p className="mb-30">
-              Leave us your contact information and we’ll keep you posted
-              with the latest news and updates.
+              Sign up for the mailing list to stay informed about new offerings,
+              updates and events.
             </p>
             <SubscribeForNewsletter className="public-form" />
           </Container>

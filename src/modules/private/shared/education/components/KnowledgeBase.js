@@ -3,18 +3,26 @@ import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Input, Breadcrumb } from 'semantic-ui-react';
+import { toJS } from 'mobx';
 import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 import FaqsCombined from './FaqsCombined';
 import { InlineLoader } from '../../../../../theme/shared';
 
 
-@inject('educationStore')
+@inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
     const props = { isMkt: this.props.marketing, params: this.props.match.params };
-    this.props.educationStore.initRequest('KnowledgeBase', props);
+    const { currentUser } = this.props.userStore;
+    let categoryType;
+    if (this.props.match.params.for) {
+      categoryType = this.props.match.params.for === 'investor' ? 'INVESTOR_KB' : 'ISSUER_KB';
+    } else if (currentUser) {
+      categoryType = toJS(currentUser.roles)[0] === 'investor' ? 'INVESTOR_KB' : 'ISSUER_KB';
+    }
+    this.props.educationStore.initRequest('KnowledgeBase', props, categoryType);
   }
   search = (e) => {
     this.props.educationStore.setSrchParam('KnowledgeBase', e.target.value);

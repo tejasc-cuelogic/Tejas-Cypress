@@ -58,6 +58,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails.legalName',
   },
   lastLegalName: {
     key: 'lastLegalName',
@@ -69,6 +70,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails.legalName',
   },
   residentalStreet: {
     key: 'residentalStreet',
@@ -80,6 +82,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails.legalAddress',
   },
   city: {
     key: 'city',
@@ -91,6 +94,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails.legalAddress',
   },
   state: {
     key: 'state',
@@ -102,6 +106,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails.legalAddress',
   },
   zipCode: {
     key: 'zipCode',
@@ -113,6 +118,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails.legalAddress',
   },
   phoneNumber: {
     key: 'phoneNumber',
@@ -135,6 +141,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails',
   },
   ssn: {
     key: 'ssn',
@@ -146,6 +153,7 @@ export const USER_IDENTITY = {
     customErrors: {
       required: '* required.',
     },
+    objRef: 'legalDetails',
   },
 };
 
@@ -194,6 +202,7 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     rule: 'required',
     placeHolder: 'First name',
+    objRef: 'info',
   },
   lastName: {
     value: '',
@@ -201,6 +210,7 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     rule: 'required',
     placeHolder: 'Last name',
+    objRef: 'info',
   },
   phoneNumber: {
     value: '',
@@ -208,6 +218,7 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     rule: 'string',
     placeHolder: 'Phone Number',
+    objRef: 'phone',
   },
   email: {
     value: '',
@@ -215,6 +226,7 @@ export const UPDATE_PROFILE_INFO = {
     error: undefined,
     rule: 'required|email',
     placeHolder: 'Email',
+    objRef: 'email',
   },
   street: {
     value: '',
@@ -253,6 +265,15 @@ export const UPDATE_PROFILE_INFO = {
     base64String: '',
     responseUrl: '',
   },
+};
+
+export const USER_PROFILE_FOR_ADMIN = {
+  firstName: { ...UPDATE_PROFILE_INFO.firstName },
+  lastName: { ...UPDATE_PROFILE_INFO.lastName },
+  number: { ...UPDATE_PROFILE_INFO.phoneNumber },
+  address: { ...UPDATE_PROFILE_INFO.email },
+  ...USER_IDENTITY,
+  street: { ...USER_IDENTITY.residentalStreet },
 };
 
 export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];

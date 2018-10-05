@@ -37,7 +37,7 @@ export default class Settings extends Component {
           <Grid.Column widescreen={4} largeScreen={5} computer={6} tablet={6} mobile={16}>
             <Card>
               <Card.Content>
-                <Header as="h6"> Want to update information? </Header>
+                <Header as="h6">Want to update information?</Header>
                 <Card.Description>
                   <p>If any of this information needs to be updated.
                   please contact support through the message center.

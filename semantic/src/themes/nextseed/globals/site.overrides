@@ -18,7 +18,7 @@ body{
 	display: table;
 }
 section{
-	padding:@60px 0;
+	padding:@50px 0;
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@30px 0;
 	}
@@ -31,8 +31,11 @@ section{
 		color: @fullBlack;
 		font-weight: @bold;
 	}
+	img.ui.image {
+		height: 52px;
+	}
 }
-//	Helper Classes
+//	Helper Classes Starts
 iframe{
 	border:none;
 }
@@ -177,19 +180,25 @@ h6{
 		margin-bottom:0px;
 	}
 }
-a{
+//	normal link styles
+a:not(.item), a:not(.ui.button){
 	color:@link-color;
 	&:hover{
-		text-decoration:underline;
+		text-decoration:underline !important;
 	}
+}
+a{
 	&.inverted{
 		color:@white;
 	}
-}
-a.text-link{
-	color:@tertiary-text;
-	&:hover, &:active, &.active{
-		color:@neutral;
+	&.secondary-link{
+		color:@primary-two !important;
+	}
+	&.text-link{
+		color:@tertiary-text;
+		&:hover, &:active, &.active{
+			color:@neutral;
+		}
 	}
 }
 .invisible{
@@ -207,6 +216,7 @@ a.text-link{
 .primary-block {
 	background-color: @primary-two;
 }
+//	Helper Classes Ends
 
 // Footer Styles
 footer{
@@ -228,7 +238,7 @@ footer{
 			padding:0;
 		}
 		&.active{
-			height:240px;
+			// height:240px;
 			padding:@30px 0px;
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				height:auto;
@@ -236,14 +246,6 @@ footer{
 			@media only screen and (max-width : @largestMobileScreen){
 				height: auto;
 				flex-direction: column;
-			}
-		}
-		.secure{
-			margin-top: @14px;
-			padding-top: @14px;
-			border-top: 1px solid @neutral-darkwhite;
-			@media only screen and (max-width : @largestMobileScreen){
-				border-top: 0;
 			}
 		}
 		.footer-left {
@@ -282,8 +284,8 @@ footer{
 	.offer-filter-container {
 		background-color: @white;
 		width: 100%;
-		height: auto;
-		padding: @17px 0 @59px; 
+		height: 500px;
+		padding: @17px 0 0; 
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
@@ -310,6 +312,27 @@ footer{
 				font-weight: normal; 
 			}
 		}
+		.slick-slider {
+			padding-bottom: @30px;
+		}
+		.filter-buttons .ui.buttons {
+			display: block;
+			.ui.button {
+				height: 14px;
+				font-size: @14px;
+				line-height: 14px;
+				>.icon {
+					vertical-align: top;
+					font-size: @14px;
+					line-height: 14px;
+    				opacity: 1;
+					height: 14px;
+					&.ns-arrow-right {
+						margin: 0 0 0 @6px; 
+					}
+				}
+			}
+		}
 	}
 }
 .overlay{
@@ -326,7 +349,7 @@ footer{
 	min-height:~"calc(100vh - 58px)";
 	.offering-side-menu {
 		background-color: @neutral ;
-		padding: 0;
+		padding: 0 0 74px;
 		width: 280px;
 		height: ~"calc(100vh - 58px)";
 		position: fixed;
@@ -339,6 +362,7 @@ footer{
 			max-height: 1000px;
 			height: auto;
 			transition: all 500ms ease-in-out;
+			padding: 0;
 			&.collapse {
 				max-height: 0;
 			}
@@ -346,7 +370,6 @@ footer{
 		.ui.menu, .ui.vertical.menu {
 			border: none;
 			box-shadow: none;
-			margin-bottom: @20px;
 		}
 		.progress-bar {
 			height: 210px;
@@ -356,11 +379,11 @@ footer{
 			font-size: @13px;
 			color: @white;
 			text-align: center;
-			margin: @20px 0;
+			margin: @14px 0;
 		}
 	}
 	.offering-intro {
-		padding: @32px @20px 0;
+		padding: @20px @20px 0;
 		@media only screen and (max-width : @largestMobileScreen){
 			padding: 0 @20px @32px;
 		}
@@ -377,6 +400,7 @@ footer{
 	.offering-wrapper {
 		background-color: @neutral-midwhite;
 		padding-left: 280px;
+		min-height: ~'calc(100vh - 58px)';
 		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: 0;
 			padding-bottom: 30px;
@@ -400,7 +424,6 @@ footer{
 		.campaign-content-wrapper {
 			padding: @40px;
 			// background-color: @white;
-			height: 100%;
 			@media only screen and (max-width : @largestMobileScreen){
 				padding: @40px 0;
 			}
@@ -550,12 +573,8 @@ p i.icon {
 	}
 }
 .funding-option {
-	padding-top: 74px;
-	@media only screen and (max-width : @largestMobileScreen){
-		padding-top:0;
-	}
-	.ui.compact.button {
-		margin: 0 10px; 
+	.ui.secondary.button {
+		display: block;
 	}
 }
 .content-spacer {
@@ -563,9 +582,12 @@ p i.icon {
 		background-color:@invertedMutedTextColor;
 		padding-bottom: @60px;
 		padding-top: @60px;
-		min-height:~"calc(100vh - 424px)";
+		@media only screen and (min-width: @tabletBreakpoint) {
+			min-height:~"calc(100vh - 424px)";
+		}
 		@media only screen and (max-width : @largestMobileScreen){
-			padding:0;
+			padding-bottom: @30px;
+			padding-top: @30px;
 		}
 		.ui.header{
 			margin-bottom:@4px;
@@ -631,34 +653,37 @@ p i.icon {
 		}
 	}
 	.slick-prev {
-		left: -50px;
+		left: -40px;
 		&:before {
 			content: "\e916";
 			font-family: 'nextseed';
 			font-size: @18px !important;
 		}
 		@media only screen and (max-width : @tabletBreakpoint){
-			left: -35px;
+			left: -20px;
 		}
 		@media only screen and (max-width : @largestMobileScreen){
 			left: -25px;
 		}
 	}
 	.slick-next {
-		right: -50px;
+		right: -40px;
 		&:before {
 			content: "\e918";
 			font-family: 'nextseed';
 			font-size: @18px !important;
 		}
 		@media only screen and (max-width : @tabletBreakpoint){
-			right: -35px;
+			right: -20px;
 		}
 		@media only screen and (max-width : @largestMobileScreen){
 			right: -25px;
 		}
 	}
 	.slick-dots{
+		left: 50%;
+		transform: translate(-50%, 0);
+		width: auto;
 		li{
 			width: 10px;
 			height: 10px;
@@ -680,6 +705,37 @@ p i.icon {
 			}
 		}
 	} 
+	&.slider-thumbnails {
+		background: @fullBlack;
+		.slick-slide {
+			padding: @18px @5px;
+			border-radius: 4px;
+			@media only screen and (max-width: @computerBreakpoint) {
+				padding: @5px;
+			}
+			img {
+				border: 2px solid @fullBlack;
+				border-radius: 6px;
+			}
+			&.slick-current {
+				img {
+					border-color: @primary-one;
+				}
+			}
+			// &.slick-cloned {
+			// 	display: none;
+			// }
+		}
+		.slick-track{
+			margin: 0 6px;
+			@media only screen and (max-width: @computerBreakpoint) {
+				margin: 0;
+			}
+		}
+		.slick-arrow {
+			display: none!important;
+		}
+	}
 }
 //Investor homepage
 .how-it-works-steps {
@@ -864,6 +920,11 @@ a.icon-link:hover {
 }
 // Vertical Timeline
 .updates-modal {
+	background: @white;
+	@media only screen and (min-width:@tabletBreakpoint){
+		height: ~'calc(100vh - 138px)';
+		overflow: auto;
+	}
 	.vertical-timeline {
 		margin: 0 auto;
 		&::before {
@@ -894,22 +955,30 @@ a.icon-link:hover {
 			&.hide-date .vertical-timeline-element-date {
 				display: none;
 			}
-			@media only screen and (max-width : @largestSmallMonitor){
-				&:not(.hide-date) {
+			&:not(.hide-date) {
+				@media only screen and (max-width : @largestSmallMonitor){
 					margin-top: @60px;
-					.vertical-timeline-element-date {
-						left: -27px;
+				}
+				.vertical-timeline-element-date {
+					@media only screen and (max-width : @largestSmallMonitor){
+						left: -57px;
 						text-align: left;
+					}
+					@media only screen and (max-width:@largestMobileScreen){
+						left: -27px;
 					}
 				}
 			}
 			&:nth-child(even):not(.vertical-timeline-element--left) {
 				.vertical-timeline-element-content .vertical-timeline-element-date {
-					left: -155px;
+					left: -180px;
 					right: auto;
 					text-align: center;
-					@media only screen and (max-width : @largestSmallMonitor){
+					@media only screen and (max-width : @largestMobileScreen){
 						left: -27px;
+					}
+					@media only screen and (max-width : @largestSmallMonitor){
+						left: -57px;
 						text-align: left;
 					}
 				}
@@ -983,7 +1052,7 @@ a.icon-link:hover {
 			z-index: 9999;
 			opacity: 1;
 			left: auto;
-			right: -155px;
+			right: -180px;
 			text-align: center;
 			font-size: @13px;
 			color: @neutral-middark;
@@ -1026,7 +1095,18 @@ a.icon-link:hover {
 	padding:@50px 0px;
 }
 .inner-content-spacer{
-	padding:@20px;
+	padding:@20px !important;
+	+ .inner-content-spacer{
+		border-top:@neutral-midwhite 1px solid;
+	}
+	// .field .ui.label{					//	commented to resolve issue on admin user creation multi-select dropdown
+	// 	background: transparent;
+	// 	padding: 0px 0 14px;
+	// 	color: @neutral;
+	// }
+	p b {
+		color: @neutral;
+	}
 }
 .secondary-section{
 	background-color:@neutral-offwhite;
@@ -1190,6 +1270,9 @@ div.login-form {
 	}
 	&.more{
 		background-color:@neutral-midwhite;
+		&:not(.collapsed){
+			overflow:visible;
+		}
 	}
 }
 .page-header-section, .search-filters{
@@ -1209,6 +1292,9 @@ div.login-form {
 	}
 	.ui.button.link-button{
 		padding:@11px 0;
+	}
+	&.more{
+		background-color:@neutral-midwhite;
 	}
 }
 .filter-meta{
@@ -1345,8 +1431,10 @@ div.login-form {
 	border-color:@neutral-middark;
 	color:@neutral-middark;
 	position:relative;
-	+ .account-type{
-		margin-left:@6px;
+	vertical-align:middle;
+	margin-left:@6px;
+	&:first-child{
+		margin-left:0;
 	}
 	&.accredited:after{
 		content:"A";
@@ -1361,6 +1449,13 @@ div.login-form {
 		border-color:@fullBlack;
 		&.accredited:after{
 			background-color:@fullBlack;
+		}
+	}
+	&.investor{
+		color:@primary-one-darken;
+		border-color:@primary-one-darken;
+		&.accredited:after{
+			background-color:@primary-one-darken;
 		}
 	}
 	&.full{
@@ -1733,7 +1828,7 @@ svg:not(:root).recharts-surface{
 			}
 		}
 	}
-	>.ui.header{
+	>h3.ui.header{
 		margin-bottom:@28px;
 		.sub.header{
 			margin-top:@10px;
@@ -1743,8 +1838,9 @@ svg:not(:root).recharts-surface{
 		margin-bottom:@28px;
 	}
 	.field-wrap{
-		padding:@40px;
 		height:100%;
+		margin:0;
+		padding:@40px;
 		@media only screen and (max-width:@largestMobileScreen){
 			padding:@25px;
 		}
@@ -1879,7 +1975,7 @@ p.check-extra-info{
 			color:@neutral-offdark;
 			position:absolute;
 			right:-26px;
-			top:50px;
+			top:50%;
 			transform:translate(0%, -50%);
 		}
 		&:last-of-type{
@@ -1904,10 +2000,10 @@ p.check-extra-info{
     align-items: center;
 	justify-content: center;
 	box-shadow:0px 0px 5px fade(@fullBlack, 8%);
-	z-index: 3;
-	&.active {
-		z-index: 0;
-	}
+	z-index: 100;
+	// &.active {
+	// 	z-index: 0;
+	// }
 	&.inverted {
 		background-color: fade(@neutral, 90%);
 		.sign-in {
@@ -1940,6 +2036,9 @@ p.check-extra-info{
 		bottom: 0;
 		left: 0;
 		border-radius: 0 !important;
+	}
+	.ui.header {
+		margin-bottom: 0;
 	}
 }
 .proven-result-section {
@@ -2010,9 +2109,8 @@ p.check-extra-info{
 	width: 100%;
 	@media only screen and (max-width: @largestSmallMonitor) {
 		.ui.container {
-			width: auto!important;
-			margin-left: 1em!important;
-			margin-right: 1em!important;
+			width: 100%!important;
+			margin: 0em!important;
 		}
 	}
 	img {
@@ -2020,4 +2118,47 @@ p.check-extra-info{
 		height: 100%;
 		margin-top: 0;
 	}
+}
+.carousel-counter {
+	position: absolute;
+    width: 100%;
+    height: 55px;
+	top: 0;
+	padding: @20px;
+	color: @neutral-darkwhite; 
+    background: fade(@fullBlack, 60%);
+    z-index: 1;
+}
+.about-modal {
+	.slick-prev, .slick-next {
+		background: fade(@fullBlack, 50%);
+		z-index: 1;
+		width: 40px;
+		height: 40px;
+		&:before {
+			color: @white;
+		}
+		&:hover, &:focus {
+			background: fade(@fullBlack, 50%);
+		}
+		@media only screen and (max-width : @largestMobileScreen){
+			top: 50%;
+		}
+	}
+	.slick-slider .slick-prev {
+		left: 20px;
+		@media only screen and (max-width : @largestMobileScreen){
+			left: 0px;
+		}
+	}
+	.slick-slider .slick-next {
+		right: 20px;
+		@media only screen and (max-width : @largestMobileScreen){
+			right: 0px;
+		}
+	}
+}
+// Careers Banner
+.careers-banner {
+	margin: 0 auto;
 }

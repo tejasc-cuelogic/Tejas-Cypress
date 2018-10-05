@@ -60,6 +60,7 @@
     > .icon{
         height:auto;
         vertical-align:top;
+        display:inline-block;
     }
     a.link{
         margin-left:@10px;
@@ -85,14 +86,16 @@
 	}
 }
 
-.ui.header{
-    .sub.header{
-        font-weight:inherit;
-    }
-}
+// .ui.header{
+//     .sub.header{
+//         font-weight:inherit;
+//     }
+// }
 h6.ui.header{
     .sub.header{
-        font-size:@relative14px;
+        font-size:@relative12px;
+        font-weight:@normal;
+        line-height:@22px;
         color:@neutral-middark;
     }
 }

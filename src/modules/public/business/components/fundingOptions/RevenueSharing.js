@@ -1,12 +1,17 @@
 import React from 'react';
-import { Header, List, Grid, Item } from 'semantic-ui-react';
+import { Header, List, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const RevenueSharing = () => (
   <Grid reversed="computer" doubling columns={2}>
     <Grid.Column>
       <RevenueChart />
-      <p className="caption-note">For illustrative purposes only.</p>
+      <p className="caption-note">
+        This example is for illustrative purposes only and does not reflect an actual
+        deal or performance. The terms of each deal may differ. Payments are not
+        guaranteed or insured and investors may lose some or all of the principal
+        invested if the business cannot make its payments.
+      </p>
     </Grid.Column>
     <Grid.Column>
       <Header as="h3">Revenue Sharing Notes</Header>
@@ -15,7 +20,7 @@ const RevenueSharing = () => (
         <Item>
           <Item.Content>
             <Header as="h5">
-              What are the benefits?
+              How does it work?
             </Header>
             <Item.Description>
               With revenue sharing notes, you{"'"}re sharing a percentage of gross monthly revenues
@@ -36,11 +41,15 @@ const RevenueSharing = () => (
           </Item.Content>
         </Item>
       </Item.Group>
+      <Divider hidden />
+      <Button secondary>Apply Now</Button>
       <List horizontal relaxed className="learn-more-list mt-20">
         <List.Item>
           <List.Header>Learn more</List.Header>
-          <List.Icon className="ns-arrow-right" color="green" />
-          <List.Content as="a">See how a Revenue Sharing Notes Works</List.Content>
+          {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+          <List.Content>
+            See how <a href="/">Revenue Sharing Notes Works</a>
+          </List.Content>
         </List.Item>
       </List>
     </Grid.Column>

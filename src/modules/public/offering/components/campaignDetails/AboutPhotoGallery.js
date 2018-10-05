@@ -5,12 +5,13 @@ import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 const settings = {
   dots: false,
+  infinite: false,
   slidesToShow: 1,
   slidesToScroll: 1,
-  arrows: false,
+  arrows: true,
 };
 
-
+const isTablet = document.documentElement.clientWidth < 1024;
 class AboutPhotoGallery extends Component {
   handleClose = () => this.props.history.goBack();
 
@@ -21,19 +22,18 @@ class AboutPhotoGallery extends Component {
         onClose={this.handleClose}
         size="large"
         closeIcon
+        className="about-modal"
       >
-        <Modal.Header>1/2</Modal.Header>
-        <Modal.Content>
-          <div className="carousel mt-10 mb-30">
-            <Container>
-              <NsCarousel {...settings} thumbs={4}>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(() => (
-                  <Image src={videoPoster} />
-                ))}
-              </NsCarousel>
-            </Container>
-          </div>
-        </Modal.Content>
+        <div className="carousel-counter">1/10</div>
+        <div className="carousel">
+          <Container fluid>
+            <NsCarousel {...settings} thumbs={isTablet ? 4 : 8}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(() => (
+                <Image src={videoPoster} />
+              ))}
+            </NsCarousel>
+          </Container>
+        </div>
       </Modal>
     );
   }

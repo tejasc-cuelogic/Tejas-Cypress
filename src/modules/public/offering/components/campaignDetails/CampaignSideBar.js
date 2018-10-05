@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
-import { Header, Icon, Statistic, Button, Menu, Divider, Embed } from 'semantic-ui-react';
+import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
@@ -35,20 +35,26 @@ export default class CampaignSideBar extends Component {
               />
             }
             <Header as="h4" inverted textAlign="center">
-              {!isMobile &&
+              {/* {!isMobile &&
                 <Link to="/offerings" className="icon-link">
                   <Icon name="arrow left" />
                 </Link>
-              }
+              } */}
               {campaign.keyTerms.legalBusinessName}
               <Header.Subheader>{address}</Header.Subheader>
             </Header>
-            <CampaignProgress
-              data={{ needed: campaign.keyTerms.maxOfferingAmount || 0, collected: collected || 0 }}
-            />
+            <Responsive minWidth={768} as={Aux}>
+              <CampaignProgress
+                data={
+                  { needed: campaign.keyTerms.maxOfferingAmount || 0, collected: collected || 0 }}
+              />
+            </Responsive>
             <p>
               <Icon name="flag" /> Surpassed minimum goal
             </p>
+            <Responsive maxWidth={767} as={Aux}>
+              <Progress percent={90} size="tiny" color="green">tiny</Progress>
+            </Responsive>
             <Statistic.Group widths="three" className="center-align">
               <Statistic size="mini" className="basic">
                 <Statistic.Value>28</Statistic.Value>
@@ -70,23 +76,34 @@ export default class CampaignSideBar extends Component {
                 <Button basic color="grey">
                   <Icon name="heart outline" /> Watch Deal
                 </Button>
-                <Button basic color="grey">
+                <Button basic color="grey" as={Link} to={`${this.props.match.url}/share`}>
                   <Icon name="share alternate" /> Share
                 </Button>
               </Button.Group>
             }
           </div>
           {!isMobile &&
-            <Menu vertical fluid>
-              <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} />
-              <Divider />
-              <Menu.Item as={Link} to="/" className="secondary-item">
-                <Icon name="heart outline" /> Watch Deal
-              </Menu.Item>
-              <Menu.Item as={Link} to={`${this.props.match.url}/share`} className="secondary-item">
-                <Icon name="share alternate" /> Share
-              </Menu.Item>
-            </Menu>
+            <Aux>
+              <Menu vertical fluid>
+                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} />
+                {/* <Divider />
+                <Menu.Item as={Link} to="/" className="secondary-item">
+                  <Icon name="heart outline" /> Watch Deal
+                </Menu.Item>
+                <Menu.Item as={Link} to={`${this.props.match.url}/share`}
+                className="secondary-item">
+                  <Icon name="share alternate" /> Share
+                </Menu.Item> */}
+              </Menu>
+              <Button.Group widths="2">
+                <Button compact basic color="grey">
+                  <Icon name="heart outline" /> Watch Deal
+                </Button>
+                <Button compact basic color="grey" as={Link} to={`${this.props.match.url}/share`}>
+                  <Icon name="share alternate" /> Share
+                </Button>
+              </Button.Group>
+            </Aux>
           }
           <Route path={`${this.props.match.url}/share`} component={share} />
         </div>

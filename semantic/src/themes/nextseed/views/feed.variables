@@ -28,7 +28,7 @@
 /* Icon Label */
 @iconLabelOpacity: 1;
 @iconLabelWidth: 100%;
-@iconLabelSize: 1.5em;
+@iconLabelSize: 2em;
 @iconLabelPadding: 0.25em;
 @iconLabelBackground: none;
 @iconLabelBorderRadius: none;

@@ -239,6 +239,7 @@
 @ns-tags: "\e934";
 @ns-technology: "\e968";
 @ns-tick: "\e96a";
+@ns-time-left: "\e995";
 @ns-timer: "\e96d";
 @ns-times-box: "\e935";
 @ns-times-circle: "\e936";

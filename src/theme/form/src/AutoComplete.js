@@ -10,7 +10,7 @@ const AutoComplete = observer((props) => {
     label, error, value, placeholder,
   } = props.fielddata;
   return (
-    <Form.Field error={error}>
+    <Form.Field error={error} className={props.containerclassname || ''}>
       <label>{label}</label>
       <Autocomplete
         {...props}

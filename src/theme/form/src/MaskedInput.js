@@ -14,8 +14,10 @@ const MaskedInput = observer((props) => {
     tooltip,
     placeHolder,
   } = props.fielddata;
+  const { displayMode } = props;
+  const fieldClass = `${props.containerclassname || ''} ${displayMode ? 'display-only' : ''}`;
   return (
-    <Form.Field error={!!error} className={props.containerclassname || ''}>
+    <Form.Field error={!!error} className={fieldClass}>
       <label>
         { !props.hidelabel && label}
         {tooltip &&
@@ -53,26 +55,26 @@ const MaskedInput = observer((props) => {
             {props.actionlabel}
           </Button>
         </div>) : props.currency ? (
-          <NumberFormat placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
+          <NumberFormat readOnly={displayMode} placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.number ? (
-        <NumberFormat placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
+        <NumberFormat readOnly={displayMode} placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.percentage ? (
-        <NumberFormat placeholder={placeHolder} maxLength={4} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="%" suffix="%" />
+        <NumberFormat readOnly={displayMode} placeholder={placeHolder} maxLength={props.maxlength || 4} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="%" suffix="%" />
       ) : props.phoneNumber ? (
-        <NumberFormat type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.zipCode ? (
-        <NumberFormat type="tel" format="#####" {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat readOnly={displayMode} type="tel" format="#####" {...props} placeholder={placeHolder} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.ssn ? (
-        <NumberFormat type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat readOnly={displayMode} type="tel" format="###-##-####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.dateOfBirth ? (
-        <NumberFormat type="text" format="##/##/####" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat readOnly={displayMode} type="text" format={props.format ? props.format : '##/##/####'} placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.taxId ? (
-        <NumberFormat type="tel" format="##-#######" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
+        <NumberFormat readOnly={displayMode} type="tel" format="##-#######" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} />
       ) : props.accountNumber ? (
-        <NumberFormat type="tel" format="#################" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
+        <NumberFormat readOnly={displayMode} type="tel" format="#################" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
       ) : props.routingNumber ? (
-        <NumberFormat type="tel" format="#########" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
-      ) : <NumberFormat placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
+        <NumberFormat readOnly={displayMode} type="tel" format="#########" placeholder={placeHolder} {...props} value={value} onValueChange={values => props.changed(values, props.name)} />
+      ) : <NumberFormat readOnly={displayMode} placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       }
       {error && !props.showErrorOnField &&
         <FieldError error={error} />

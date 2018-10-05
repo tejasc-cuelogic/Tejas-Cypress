@@ -9,8 +9,33 @@
     }
 }
 .ui.items{
-    >.item>.content>.description {
-        color: @neutral-middark;
+    >.item {
+        &:first-child {
+            margin-top: 0 !important;
+        }
+        &:last-child {
+            margin-bottom: 0 !important;
+        }
+        >.content>.description {
+            color: @neutral-middark;
+        }
+        &.user-intro{
+            .ui.tiny.image{
+                width:60px;
+            }
+            h3.ui.header{
+                text-transform:capitalize;
+                .sub.header{
+                    font-size:@18px;
+                }
+            }
+            .account-type{
+                margin-left:@10px;
+                &:first-child{
+                    margin-left:@42px;
+                }
+            }
+        }
     }
     &.messages{
         .item{
@@ -76,6 +101,9 @@
                     margin-top: 0;
                 }
             }
+            @media only screen and (max-width : @largestMobileScreen){
+                margin: 0;
+            }
         }
     }
     &.campaign-updates >.item{
@@ -126,7 +154,64 @@
 				margin: 0;
 			}
 		}
-	}
+    }
+}
+.slick-list .ui.items>.item {
+    >.content{
+        padding-left: @60px;
+        @media only screen and (max-width : @tabletBreakpoint){
+			padding-left: @14px;
+		}
+        h2.header:not(.ui) {
+            font-size: @40px;
+            margin: 0;
+            @media only screen and (max-width : @largestMobileScreen){
+                font-size: @20px;
+                line-height: 24px;
+            }
+        }
+        .description{
+            font-size: @28px;
+            line-height: 38px;
+            @media only screen and (max-width : @largestMobileScreen){
+                font-size: @15px;
+                line-height: 24px;
+            }
+        }
+        .extra {
+            margin: 0;
+            p {
+                color: @neutral;
+                margin-bottom: 0;
+            }
+            span {
+                line-height: @24px;
+                color: @primary-one;
+                font-weight: @bold;
+            }
+        }
+    }
+}
+.inner-content-spacer .bg-offwhite {
+    padding: @14px @20px;
+    .ui.items>.item .content {
+        .header {
+            color: @neutral;
+            font-size: @14px;
+            font-weight: @normal;
+            a {
+                color: @primary-two;
+                font-weight: @bold;
+            }
+            span {
+                margin: 0 @30px;
+                font-size: @13px;
+            }
+        }
+        .description {
+            color: @neutral;
+        }
+    }
 }
 .slick-list .ui.items>.item {
     >.content{

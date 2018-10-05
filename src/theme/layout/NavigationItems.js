@@ -86,6 +86,9 @@ export class NavItems extends Component {
               <Label circular color="red" size="mini" horizontal>3</Label>
             }
             <span>{item.title}</span>
+            {item.to === 'updates' || item.to === 'comments' ?
+              <Label circular color="blue" size="small" horizontal>5</Label> : null
+            }
           </Menu.Item>
         )}
       </Aux>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Grid, Card, List, Button, Container, Responsive } from 'semantic-ui-react';
+import { Header, Grid, Card, List, Divider, Container, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -15,8 +15,8 @@ const Process = () => (
             <Grid.Column floated={isMobile ? '' : 'right'} computer={10} tablet={16} mobile={16} verticalAlign="middle" className="side-section process-right-section">
               <Header as="h2">From approved to funded</Header>
               <p className="mb-50">
-              Once your application is approved, we make connecting with investors easy,
-              so you can find funding and get back to your business.
+                We give you the platform, tools and support to activate your investors
+                and engage your fans.
               </p>
               <Card.Group itemsPerRow={2} stackable className={isMobile ? 'mb-10' : 'mb-30'}>
                 <Card>
@@ -33,9 +33,9 @@ const Process = () => (
                   <Card.Content>
                     <Header as="h5">Easily create and launch your campaign.</Header>
                     <p>
-                      Our team of financial, legal and marketing specialists will be there to
-                      help at every step. From the content to the paperwork, our team will
-                      provide the frameworks and templates to make the process a breeze.
+                      Our team of deal structuring and content specialists will be there to help
+                      at every step. From the content to the paperwork, our team will provide
+                      the frameworks and templates to make the process a breeze.
                     </p>
                   </Card.Content>
                 </Card>
@@ -47,6 +47,17 @@ const Process = () => (
                       tools and support you need to raise funds and tap into a base of
                       thousands of local investors.
                     </p>
+                    {!isMobile &&
+                    <List horizontal relaxed className="learn-more-list mt-80">
+                      <List.Item>
+                        <List.Header>Learn more</List.Header>
+                        {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                        <List.Content>
+                          How to start a <a href="/">raise on NextSeed</a>
+                        </List.Content>
+                      </List.Item>
+                    </List>
+                    }
                   </Card.Content>
                 </Card>
                 <Card>
@@ -59,16 +70,26 @@ const Process = () => (
                   </Card.Content>
                 </Card>
               </Card.Group>
-              <List horizontal relaxed className="learn-more-list mb-50">
+              {isMobile &&
+              <List horizontal relaxed className="learn-more-list">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                  <List.Content as="a">How to start a raise on NextSeed </List.Content>
+                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                  <List.Content>
+                    How to start a <a href="/">raise on NextSeed</a>
+                  </List.Content>
                 </List.Item>
               </List>
-              <div className="center-align">
-                <Button as={Link} to="/business/all-inclusive" primary>See All-Inclusive</Button>
-              </div>
+              }
+              <Divider />
+              <List className="learn-more-list">
+                <List.Item>
+                  <List.Content as={Link} to="/business/all-inclusive" className="text-uppercase" floated="right">
+                    <b>All-Inclusive</b>
+                    <List.Icon className="ns-arrow-right" color="green" />
+                  </List.Content>
+                </List.Item>
+              </List>
             </Grid.Column>
           </Grid.Row>
         </Grid>
