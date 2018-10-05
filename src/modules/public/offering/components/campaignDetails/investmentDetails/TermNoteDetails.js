@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, Route } from 'react-router-dom';
 import { Header, Segment, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
 import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
-import KeyTermsModal from './KeyTermsModal';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -10,7 +9,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
 class TermNoteDetails extends Component {
   render() {
-    const { KeyTerms } = this.props;
+    const { KeyTerms, refLink } = this.props;
     return (
       <Grid.Row>
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
@@ -68,7 +67,7 @@ class TermNoteDetails extends Component {
         <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
           <Segment padded className="clearfix">
             <Header as="h4" className="mb-20">
-              <Link to={`${this.props.match.url}/keyterms`}>
+              <Link to={`${refLink}/overview/keyterms`}>
                 Key Terms
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
@@ -97,7 +96,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>16%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms ? KeyTerms.interestRate : '0'}%</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -109,7 +108,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>48 months</Statistic.Value>
+                  <Statistic.Value>{KeyTerms ? KeyTerms.maturity : '0'} months</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -122,7 +121,7 @@ class TermNoteDetails extends Component {
                       hoverable
                     />
                   </Statistic.Label>
-                  <Statistic.Value>$100</Statistic.Value>
+                  <Statistic.Value>${KeyTerms ? KeyTerms.minInvestAmt : '0'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -146,15 +145,14 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>0%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms ? KeyTerms.securitiesOwnershipPercentage : '0'}%</Statistic.Value>
                 </Statistic>
               </Grid.Column>
             </Grid>
-            <Link to={`${this.props.match.url}/keyterms`} className="pull-right mt-10">View More</Link>
+            <Link to={`${refLink}/overview/keyterms`} className="pull-right mt-10">View More</Link>
           </Segment>
         </Grid.Column>
         <Route path={`${this.props.match.url}/paymentcalculator`} component={PaymentCalculatorModal} />
-        <Route path={`${this.props.match.url}/keyterms`} component={KeyTermsModal} />
       </Grid.Row>
     );
   }

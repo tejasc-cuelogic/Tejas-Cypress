@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { Embed, Grid, Segment } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.jpg';
-import Updates from './Updates';
 import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
@@ -20,7 +19,7 @@ const isTabletBoth = document.documentElement.clientWidth >= 768
 const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
 
-@inject('campaignStore', 'updatesStore')
+@inject('campaignStore')
 @observer
 class Overview extends Component {
   render() {
@@ -55,7 +54,6 @@ class Overview extends Component {
             />
           </Grid.Row>
         </Grid>
-        <Route path={`${this.props.refLink.url}/updates`} component={Updates} />
         <Route path={`${this.props.match.url}/keyterms`} render={props => <KeyTermsModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/keyterms/summary`} component={SummaryModal} />
       </div>

@@ -40,14 +40,15 @@ export default class CampaignSideBar extends Component {
                   <Icon name="arrow left" />
                 </Link>
               } */}
-              {campaign && campaign.keyTerms.legalBusinessName}
+              {campaign && campaign.keyTerms && campaign.keyTerms.legalBusinessName}
               <Header.Subheader>{address}</Header.Subheader>
             </Header>
             <Responsive minWidth={768} as={Aux}>
               <CampaignProgress
                 data={
                   {
-                    needed: (campaign && campaign.keyTerms.maxOfferingAmount) || 0,
+                    needed: (campaign && campaign.keyTerms &&
+                      campaign.keyTerms.maxOfferingAmount) || 0,
                     collected: collected || 0,
                   }}
               />
@@ -64,16 +65,24 @@ export default class CampaignSideBar extends Component {
                 <Statistic.Label>Days left</Statistic.Label>
               </Statistic>
               <Statistic size="mini" className="basic">
-                <Statistic.Value>{campaign.closureSummary.totalInvestorCount || 0}</Statistic.Value>
+                <Statistic.Value>
+                  {(campaign && campaign.closureSummary &&
+                    campaign.closureSummary.totalInvestorCount) || 0}
+                </Statistic.Value>
                 <Statistic.Label>Investors</Statistic.Label>
               </Statistic>
               <Statistic size="mini" className="basic">
-                <Statistic.Value>{campaign.keyTerms.earlyBirdsCount || 0}</Statistic.Value>
+                <Statistic.Value>
+                  {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount) || 0}
+                </Statistic.Value>
                 <Statistic.Label>Early Birds</Statistic.Label>
               </Statistic>
             </Statistic.Group>
             <Button fluid={isMobile} as={Link} to="invest-now" secondary>Invest Now</Button>
-            <p>${campaign.keyTerms.minInvestAmt} min investment</p>
+            <p>
+              ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+              || 0} min investment
+            </p>
             {isMobile &&
               <Button.Group compact fluid widths="2" className="mt-30">
                 <Button basic color="grey">
