@@ -1263,7 +1263,7 @@ export const RISK_FACTORS = {
   isBusinessRisk: {
     label: 'Business Risk',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   businessRisk: {
@@ -1271,13 +1271,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isBusinessRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isFinancingRisk: {
     label: 'Financing Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   financingRisk: {
@@ -1285,13 +1285,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isFinancingRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isDevelopmentRisk: {
     label: 'Development Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   developmentRisk: {
@@ -1299,13 +1299,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isDevelopmentRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isReputationalRisk: {
     label: 'Reputational Risk',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   reputationalRisk: {
@@ -1313,13 +1313,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isReputationalRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isCompetitionRisk: {
     label: 'Competition Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   competitionRisk: {
@@ -1327,13 +1327,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isCompetitionRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isMarketRisk: {
     label: 'Market Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   marketRisk: {
@@ -1341,13 +1341,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isMarketRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isTerrorismRisk: {
     label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   terrorismRisk: {
@@ -1355,13 +1355,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isTerrorismRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isManagementRisk: {
     label: 'Management Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   managementRisk: {
@@ -1369,13 +1369,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isManagementRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isPersonnelRisk: {
     label: 'Personnel Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   personnelRisk: {
@@ -1383,13 +1383,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isPersonnelRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isLaborSupplyRisk: {
     label: 'Labor Supply Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   laborSupplyRisk: {
@@ -1397,13 +1397,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isLaborSupplyRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isPrivacyRisk: {
     label: 'Privacy Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   privacyRisk: {
@@ -1411,13 +1411,13 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isPrivacyRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isOtherRisk: {
     label: 'Other Risks',
     value: false,
-    rule: 'alpha',
+    rule: 'optional',
     skipField: true,
   },
   otherRisk: {
@@ -1425,7 +1425,7 @@ export const RISK_FACTORS = {
     value: '',
     refSelector: 'isOtherRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
 };
