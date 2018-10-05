@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { forIn } from 'lodash';
 import { Header, Modal, Grid, Image, Icon, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import team1 from '../../../../assets/images/team1.jpg';
@@ -11,25 +10,6 @@ import team2 from '../../../../assets/images/team2.jpg';
 @observer
 class MeetTeamModal extends Component {
   handleClose = () => this.props.history.goBack();
-  renderSwitch = (val, key) => {
-    switch (key) {
-      case 'twitter':
-        return (
-          <Link to={val} className="icon-link">
-            <Icon color="green" name="twitter" />
-          </Link>
-        );
-      case 'linkedin':
-        return (
-          <Link to={val} className="icon-link">
-            <Icon color="green" name="linkedin in" />
-          </Link>
-        );
-      default:
-        return '';
-    }
-  }
-
   render() {
     const { campaign } = this.props.campaignStore;
     return (
@@ -58,10 +38,12 @@ class MeetTeamModal extends Component {
                       </Header>
                       <p>{data.bio}</p>
                       <div>
-                        { /*
-                          forIn(data.social, (value, key) => (
-                          this.renderSwitch(value, key)
-                        )) */
+                        {
+                          Object.keys(data.social).map(key => (
+                            <Link to={`${data.social[key]}`} className="icon-link">
+                              <Icon color="green" name={`${key} in`} />
+                            </Link>
+                          ))
                         }
                       </div>
                     </Grid.Column>
@@ -80,12 +62,13 @@ class MeetTeamModal extends Component {
                       </Header>
                       <p>{data.bio}</p>
                       <div>
-                        <Link to="/" className="icon-link">
-                          <Icon color="green" name="twitter" />
-                        </Link>
-                        <Link to="/" className="icon-link">
-                          <Icon color="green" name="linkedin in" />
-                        </Link>
+                        {
+                          Object.keys(data.social).map(key => (
+                            <Link to={`${data.social[key]}`} className="icon-link">
+                              <Icon color="green" name={`${key} in`} />
+                            </Link>
+                          ))
+                        }
                       </div>
                     </Grid.Column>
                     <Responsive minWidth={768} as={Aux}>

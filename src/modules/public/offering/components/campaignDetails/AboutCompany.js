@@ -6,6 +6,7 @@ import Loadable from 'react-loadable';
 // import { forEach } from 'lodash';
 import { NsCarousel, InlineLoader } from '../../../../../theme/shared';
 import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
+import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
 // import teamMember2 from '../../../../../assets/images/owner-1.jpg';
 // import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
 // import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
@@ -95,7 +96,7 @@ class AboutCompany extends Component {
                             </div>
                           </Reveal.Content>
                           <Reveal.Content visible>
-                            <Image src={teamMember1} circular />
+                            <Image src={defaultLeaderProfile} circular />
                           </Reveal.Content>
                         </Reveal>
                       </Grid.Column>
