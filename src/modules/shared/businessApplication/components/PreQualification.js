@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
-import { Grid, Icon, Form, Button, Divider } from 'semantic-ui-react';
+import { Container, Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
 import { FormInput } from '../../../../theme/form';
@@ -61,14 +61,16 @@ export default class PreQualification extends Component {
       BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC,
       businessAppEleChange, isPrequalQulify, currentApplicationType,
     } = this.props.businessAppStore;
-    const { params } = this.props.match;
+    const { hideFields, match } = this.props;
+    const { params } = match;
     if (params.applicationType !== 'commercial-real-estate' && currentApplicationType !== 'commercial-real-estate' && params.applicationType !== 'business' && currentApplicationType !== 'business') {
       return <NotFound />;
     }
     return (
-      <Grid container>
-        <Grid.Column>
-          <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
+      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+        <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
+          {!hideFields &&
+          <Aux>
             <Icon className="ns-paper-plane" size="massive" color="green" />
             <FormElementWrap
               as="h1"
@@ -80,45 +82,50 @@ export default class PreQualification extends Component {
                 </Aux>
               }
             />
-            {this.props.isPublic &&
-            <FormElementWrap header="First, please tell us a little about yourself!">
-              <div className="field-wrap">
-                <Form.Group widths="equal">
-                  {
-                    ['firstName', 'lastName', 'email'].map(field => (
-                      <FormInput
-                        autoFocus={field === 'firstName'}
-                        disabled={isPrequalQulify}
-                        key={field}
-                        type="text"
-                        name={field}
-                        fielddata={BUSINESS_APP_FRM_BASIC.fields[field]}
-                        changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_FRM_BASIC')}
-                      />
-                    ))
-                  }
-                </Form.Group>
-              </div>
-              {!isPrequalQulify &&
-              <Button
-                loading={this.props.uiStore.inProgress}
-                disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
-                size="large"
-                color="green"
-                className="very relaxed"
-              >
-                Continue
-              </Button>
-              }
-            </FormElementWrap>
+          </Aux>
+          }
+          {this.props.isPublic &&
+          <FormElementWrap header="First, please tell us a little about yourself!" hideFields={hideFields}>
+            <div className="field-wrap">
+              <Form.Group widths="equal">
+                {
+                  ['firstName', 'lastName', 'email'].map(field => (
+                    <FormInput
+                      autoFocus={field === 'firstName'}
+                      readOnly={isPrequalQulify}
+                      containerclassname={isPrequalQulify ? 'display-only' : ''}
+                      key={field}
+                      type="text"
+                      name={field}
+                      fielddata={BUSINESS_APP_FRM_BASIC.fields[field]}
+                      changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_FRM_BASIC')}
+                    />
+                  ))
+                }
+              </Form.Group>
+            </div>
+            {!isPrequalQulify &&
+            <Button
+              loading={this.props.uiStore.inProgress}
+              disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
+              size="large"
+              color="green"
+              className="very relaxed"
+            >
+              Continue
+            </Button>
             }
-          </Form>
-          {isPrequalQulify &&
-          <Form onSubmit={this.submit} className="issuer-signup">
-            {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
-              <PreQualRealEstate applicationType={params.applicationType} /> :
-              <PreQualBusiness applicationType={params.applicationType} />
-            }
+          </FormElementWrap>
+          }
+        </Form>
+        {isPrequalQulify &&
+        <Form onSubmit={this.submit} className="issuer-signup">
+          {params.applicationType === 'commercial-real-estate' || currentApplicationType === 'commercial-real-estate' ?
+            <PreQualRealEstate hideFields={hideFields} applicationType={params.applicationType} /> :
+            <PreQualBusiness hideFields={hideFields} applicationType={params.applicationType} />
+          }
+          {!hideFields &&
+          <Aux>
             <Divider hidden />
             <Button
               loading={this.props.uiStore.inProgress}
@@ -129,10 +136,11 @@ export default class PreQualification extends Component {
             >
               Submit
             </Button>
-          </Form>
+          </Aux>
           }
-        </Grid.Column>
-      </Grid>
+        </Form>
+        }
+      </Container>
     );
   }
 }

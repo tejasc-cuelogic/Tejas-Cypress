@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-// Grid, Embed
 import { Modal, Header, List, Icon, Image, Divider } from 'semantic-ui-react';
 import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
 // import videoPoster from '../../../../../assets/images/636206632.jpg';
@@ -27,7 +26,7 @@ class CompanyDescriptionModal extends Component {
         closeIcon
       >
         <Modal.Header>Company Description</Modal.Header>
-        <Modal.Content>
+        <Modal.Content scrolling>
           <Header as="h4">Buffbrew Taproom LLC</Header>
           {
             campaign.offering.about.theCompany !== null ?

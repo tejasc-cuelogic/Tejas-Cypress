@@ -1,0 +1,93 @@
+/* eslint-disable jsx-a11y/label-has-for */
+import React, { Component } from 'react';
+import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { Form, Header, Confirm } from 'semantic-ui-react';
+import { FormInput } from '../../../../../../../theme/form';
+import ManagerOverview from './ManagerOverview';
+import ButtonGroup from './ButtonGroup';
+
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
+@observer
+export default class Overview extends Component {
+  componentWillMount() {
+    this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint');
+    this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.overview.managerOverview');
+  }
+  addCriticalPoint = (e) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'description');
+  }
+  toggleConfirmModal = (e, index, formName) => {
+    e.preventDefault();
+    this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
+  }
+  submit = () => {
+    this.props.businessAppReviewStore.saveReviewForms('OVERVIEW_FRM');
+  }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
+  }
+  render() {
+    const {
+      OVERVIEW_FRM, formChangeWithIndex, confirmModal, toggleConfirmModal,
+      removeData, confirmModalName,
+    } = this.props.businessAppReviewStore;
+    const { roles } = this.props.userStore.currentUser;
+    const isManager = roles && roles.includes('manager');
+    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const { review } = businessApplicationDetailsAdmin;
+    const submitted = (review && review.overview && review.overview.criticalPoint &&
+      review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
+    const approved = (review && review.overview && review.overview.criticalPoint &&
+      review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
+    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    && !isManager) || (isManager && approved && approved.status));
+    return (
+      <Aux>
+        <Form onSubmit={this.submit}>
+          <ManagerOverview formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
+          <Header as="h4">
+            Overview
+            {!isReadonly &&
+            <Link to={this.props.match.url} className="link" onClick={this.addCriticalPoint}><small>+ Add Critical Point</small></Link>
+            }
+          </Header>
+          {
+            OVERVIEW_FRM.fields.description.map((field, index) => (
+              <FormInput
+                containerclassname={isReadonly ? 'display-only' : ''}
+                readOnly={isReadonly}
+                name="description"
+                label={`Critical Point ${index + 1}`}
+                fielddata={field.description}
+                changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'description', index)}
+                removed={!isReadonly ? e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM') : false}
+                linkto={this.props.match.url}
+              />
+            ))
+          }
+          <ButtonGroup
+            formName="OVERVIEW_FRM"
+            isReadonly={isReadonly}
+            isManager={isManager}
+            submitted={submitted}
+            approved={approved}
+            formValid={OVERVIEW_FRM.meta.isValid}
+            submitWithApproval={this.submitWithApproval}
+          />
+        </Form>
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to remove this critical point?"
+          open={confirmModal}
+          onCancel={toggleConfirmModal}
+          onConfirm={() => removeData(confirmModalName, 'description')}
+          size="mini"
+          className="deletion"
+        />
+      </Aux>
+    );
+  }
+}

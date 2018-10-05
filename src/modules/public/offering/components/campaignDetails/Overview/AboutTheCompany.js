@@ -22,7 +22,8 @@ class AboutTheCompany extends Component {
             <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <a target="blank" href="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor">See some examples</a>.</span>)} />
           </p>
           <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
-          <div className="mt-30">
+          <Link to={`${this.props.refLink}/about`}>Read More</Link>
+          <div className="mt-50">
             {campaign && campaign.offering && campaign.offering.overview &&
             campaign.offering.overview.social &&
               campaign.offering.overview.social.map(socalObj => (

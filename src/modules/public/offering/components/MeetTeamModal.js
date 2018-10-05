@@ -48,7 +48,7 @@ class MeetTeamModal extends Component {
                         {
                           Object.keys(data.social).map(key => (
                             <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
-                              <Icon color="green" name={`${key} in`} />
+                              <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
                             </a>
                           ))
                         }
@@ -72,7 +72,7 @@ class MeetTeamModal extends Component {
                         {
                           Object.keys(data.social).map(key => (
                             <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
-                              <Icon color="green" name={`${key} in`} />
+                              <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
                             </a>
                           ))
                         }

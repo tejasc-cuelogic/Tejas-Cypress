@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Divider, Image, Item } from 'semantic-ui-react';
-import InvestorImg from '../../../../assets/images/investor-img.jpg';
-import InvestorImg1 from '../../../../assets/images/investor-img-1.jpg';
+import { Header, Grid, Button, Container, List, Divider, Item, Image } from 'semantic-ui-react';
+import Applied from '../../../../assets/images/icons/applied.svg';
+import TermNotes from '../../../../assets/images/icons/termnotes.svg';
 
 const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 992;
 const HowItWorks = () => (
   <Aux>
     <section>
@@ -35,16 +36,17 @@ const HowItWorks = () => (
     <section>
       <Container textAlign={isMobile ? 'left' : 'center'}>
         <Header>Choose how you want to invest.</Header>
-        <p className="mb-30">Understand and choose the right opportunities with the right payment terms for you.</p>
-        <Grid doubling columns={2} relaxed="very" className="flex-column" textAlign="left">
+        <p className="mb-80">Understand and choose the right opportunities with the right payment terms for you.</p>
+        <Grid doubling columns={2} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
           <Grid.Column>
             <div className="flex-content">
-              <Image src={InvestorImg1} />
-              <Header as="h3">Term Notes</Header>
+              <Header as="h3">
+                <Image src={TermNotes} />Term Notes
+              </Header>
               <Item.Group relaxed="very">
                 <Item>
                   <Item.Content>
-                    <Header as="h5">What are the benefits?</Header>
+                    <Header as="h5">How does it work?</Header>
                     <Item.Description attached>
                       The business agrees to pay you a set amount of interest on your investment.
                       Payments are fixed each month for a certain number of months.
@@ -64,19 +66,22 @@ const HowItWorks = () => (
             <List horizontal className={`learn-more-list ${isMobile ? 'mb-30' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
-                <List.Content as="a">See an example of a Term Note investment</List.Content>
+                {/* <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" /> */}
+                <List.Content>
+                  See an example of a <a href="/">Term Note investment</a>
+                </List.Content>
               </List.Item>
             </List>
           </Grid.Column>
           <Grid.Column>
             <div className="flex-content">
-              <Image src={InvestorImg} />
-              <Header as="h3">Revenue Sharing Notes</Header>
+              <Header as="h3">
+                <Image src={Applied} />Revenue Sharing Notes
+              </Header>
               <Item.Group relaxed="very" className="question-list">
                 <Item>
                   <Item.Content>
-                    <Header as="h5">What are the benefits?</Header>
+                    <Header as="h5">How does it work?</Header>
                     <Item.Description>
                       With revenue sharing loans, a business agrees to pay you a set total amount
                       on top of your investment. Monthly payments may be different every month.
@@ -98,51 +103,62 @@ const HowItWorks = () => (
             <List horizontal className={`learn-more-list ${isMobile ? '' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
-                <List.Content as="a">See an example of a Revenue Sharing investment</List.Content>
+                {/* <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" /> */}
+                <List.Content>
+                  See an example of a <a href="/">Revenue Sharing investment</a>
+                </List.Content>
               </List.Item>
             </List>
           </Grid.Column>
         </Grid>
       </Container>
     </section>
-    <Divider fitted as={Container} />
-    <section>
+    <section className="bg-offwhite">
       <Container>
-        <Grid relaxed="very" stackable columns={2}>
-          <Grid.Column>
-            <Header as="h2">Every investment comes with risk and opportunity.</Header>
-            <p>
-              Remember, returns and bonus rewards are not guaranteed. Investments can be lost
-              entirely. Be sure to do your own due diligence, review all offering documents
-              carefully, and never invest more than you can afford to lose. Businesses may fail,
-              but those that succeed can make a lasting impact in your city.
-            </p>
-          </Grid.Column>
-          <Grid.Column verticalAlign="middle">
-            <List relaxed className="learn-more-list">
-              <List.Item>
-                <List.Header>Learn more</List.Header>
-                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
-                <List.Content as="a">Is investing on NextSeed risky?</List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" />
-                <List.Content as="a">Are bonus rewards covered by my investment agreements?</List.Content>
-              </List.Item>
-            </List>
-          </Grid.Column>
+        <Grid relaxed={!isTablet && 'very'} stackable columns={2}>
+          <Grid.Row>
+            <Grid.Column>
+              <Header as="h2">Every investment comes with risk and opportunity.</Header>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <p>
+                Remember, returns and bonus rewards are not guaranteed. Investments can be lost
+                entirely. Be sure to do your own due diligence, review all offering documents
+                carefully, and never invest more than you can afford to lose. Businesses may fail,
+                but those that succeed can make a lasting impact in your city.
+              </p>
+            </Grid.Column>
+            <Grid.Column>
+              <List relaxed className="learn-more-list">
+                <List.Item>
+                  <List.Header>Learn more</List.Header>
+                  <List.Content>
+                    Is investing on <a href="/">NextSeed risky?</a>
+                  </List.Content>
+                </List.Item>
+              </List>
+            </Grid.Column>
+          </Grid.Row>
         </Grid>
       </Container>
     </section>
-    <Divider fitted as={Container} />
     <section>
       <Container className="center-align">
-        <Header as="h2" className="mb-30">Register for an account with just your email.</Header>
-        <Button.Group vertical={isMobile}>
+        <Header as="h2" className="mb-30">Register for an account.</Header>
+        <Button.Group vertical={isMobile} className="mb-50">
           <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-          <Button as={Link} to="/invest/account-types" primary>See Account Types</Button>
         </Button.Group>
+        <Divider />
+        <List className="learn-more-list">
+          <List.Item>
+            <List.Content as={Link} to="/invest/account-types" className="text-uppercase" floated="right">
+              <b>Account Types</b>
+              <List.Icon className="ns-arrow-right" color="green" />
+            </List.Content>
+          </List.Item>
+        </List>
       </Container>
     </section>
   </Aux>

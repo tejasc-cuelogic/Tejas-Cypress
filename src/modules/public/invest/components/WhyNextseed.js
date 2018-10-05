@@ -1,13 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Item, Responsive, Divider, Image } from 'semantic-ui-react';
+import { NsCarousel } from '../../../../theme/shared';
 import Businesses from '../../../../assets/images/icons/businesses.svg';
 import Entrepreneurs from '../../../../assets/images/icons/entrepreneurs.svg';
 import Prevetted from '../../../../assets/images/icons/prevetted.svg';
 import Investments from '../../../../assets/images/icons/investments.svg';
 import Ventures from '../../../../assets/images/icons/ventures.svg';
 import Returns from '../../../../assets/images/icons/returns.svg';
+import UserOne from '../../../../assets/images/investors/img-2.png';
+import UserTwo from '../../../../assets/images/investors/img.png';
+import UserThree from '../../../../assets/images/investors/img-1.png';
+import UserFour from '../../../../assets/images/investors/img-5.png';
+import UserFive from '../../../../assets/images/investors/img-3.png';
+import UserSix from '../../../../assets/images/investors/img-4.png';
 
 const highlights = [
   {
@@ -19,22 +26,22 @@ const highlights = [
   {
     title: 'Impactful investments',
     icon: Entrepreneurs,
-    meta: `Local business owners, local jobs and local growth. Create real
-      impact in local communities.`,
+    meta: `Local business owners, local jobs and local growth.
+    Create real impact in local communities nationwide`,
   },
   {
     title: 'Pre-vetted opportunities',
     icon: Prevetted,
-    meta: `Every business must meet our strict financial criteria, plus federal legal
-      and regulatory guidelines.`,
+    meta: `Every business must meet our proprietary financial
+    criteria in addition to federal regulatory requirements. `,
   },
   {
-    title: 'Flexible investment amounts',
+    title: 'Flexible amounts',
     icon: Investments,
-    meta: 'Never invest more than you can risk. Investments starting at $100.',
+    meta: 'Never invest more than you can risk. Investments may start as low as $100.',
   },
   {
-    title: 'Exclusive investments',
+    title: 'Exclusive deals',
     icon: Ventures,
     meta: `Uncover opportunities that were once privately reserved for wealthy
       and well-connected investors.`,
@@ -42,10 +49,16 @@ const highlights = [
   {
     title: 'Returns processed for you',
     icon: Returns,
-    meta: `No need to chase payments from business owners. NextSeed verifies and processes
-      payments from your investments automatically.`,
+    meta: `No need to chase payments from business owners. NextSeed facilitates
+     payment processing from your investments automatically.`,
   },
 ];
+const settings = {
+  slidesToShow: 1,
+  slidesToScroll: 1,
+  arrows: true,
+  dots: false,
+};
 const isMobile = document.documentElement.clientWidth < 768;
 
 const WhyNextseed = () => (
@@ -54,19 +67,17 @@ const WhyNextseed = () => (
       <Container>
         <Responsive maxWidth={767} as={Aux}>
           <Header as="h2">
-            Exclusive access to<br />
-            investment opportunities<br />
-            you believe in
+             Get access to<br />pre-vetted, local<br />investments.
           </Header>
           <Button as={Link} to="/offerings" secondary>Explore Campaigns</Button>
           <Divider section />
         </Responsive>
         <Header as="h2" className="mb-30" textAlign={isMobile ? 'left' : 'center'}>
-          Local investing, made easy.
+          Small business investing, made easy.
         </Header>
         <Responsive as={Divider} hidden maxWidth={767} />
-        <Grid relaxed="very" stackable>
-          <Grid.Column computer={11} tablet={16} mobile={16}>
+        <Grid stackable centered className={!isMobile && 'mt-50'}>
+          <Grid.Column width={14}>
             <Item.Group className="horizontal-items">
               {
                 highlights.map(h => (
@@ -81,26 +92,109 @@ const WhyNextseed = () => (
               }
             </Item.Group>
           </Grid.Column>
-          <Grid.Column computer={5} tablet={16} mobile={16}>
-            <List relaxed className="mb-50 learn-more-list">
-              <List.Item>
-                <List.Header>Learn more</List.Header>
-                <List.Icon className="ns-arrow-right" color="green" />
-                <List.Content as="a">Why invest on NextSeed?</List.Content>
-              </List.Item>
-              <List.Item>
-                <List.Icon className="ns-arrow-right" color="green" />
-                <List.Content as="a">What type of NextSeed account is best for me?</List.Content>
-              </List.Item>
-            </List>
-          </Grid.Column>
         </Grid>
-        <div className="center-align">
+        <div className="center-align mb-50">
           <Button.Group vertical={isMobile} className={!isMobile ? 'mt-50' : ''}>
             <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
-            <Button as={Link} to="/invest/how-it-works" primary>See How it Works</Button>
           </Button.Group>
         </div>
+        <Grid className="business-learn-more mb-30">
+          <Grid.Row>
+            <Grid.Column className="center-align">
+              <List horizontal relaxed className="learn-more-list left-align">
+                <List.Item>
+                  <List.Header>Learn more</List.Header>
+                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                  <List.Content>Why invest on <a href="/">NextSeed?</a></List.Content>
+                </List.Item>
+                <List.Item>
+                  {!isMobile &&
+                    <List.Header>&nbsp;</List.Header>
+                  }
+                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                  <List.Content>What are the <a href="/">risk of investing?</a></List.Content>
+                </List.Item>
+              </List>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+        <Divider fitted as={Container} />
+        <section>
+          <Container textAlign={isMobile ? 'left' : 'center'}>
+            <Header as="h2" className="mb-30">
+              Don’t just invest through Wall Street and Silicon Valley.{' '}
+              <Responsive as={Aux} minWidth={1199}><br /></Responsive>
+              Be invested in the growth of local communities.
+            </Header>
+            <p className={isMobile ? 'mb-40' : 'mb-50'}>
+              NextSeed works with Main Street businesses like breweries, fitness studios,
+              restaurants and more.
+            </p>
+          </Container>
+          {!isMobile ?
+            <Container>
+              <Grid centered stackable columns={3} className="vertical-gutter">
+                <Grid.Column textAlign="center">
+                  <Image src={UserOne} centered />
+                  <Header as="h5">Houston, TX</Header>
+                  <p>The Sugar Refinery raised $273,800 from 213 investors</p>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Image src={UserTwo} centered />
+                  <Header as="h5">San Francisco, CA</Header>
+                  <p>Rambler raised $150,000 from 131 investors</p>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Image src={UserThree} centered />
+                  <Header as="h5">Austin, TX</Header>
+                  <p>The Brewer’s Table raised $3000,000 from 190 investors</p>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Image src={UserFour} centered />
+                  <Header as="h5">San Diego, CA</Header>
+                  <p>619 Distillery & Tasting Room raised $191,600 from 238 investors</p>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Image src={UserFive} centered />
+                  <Header as="h5">Brooklyn, NY</Header>
+                  <p>California 88 raised $124,900 from 180 investors</p>
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Image src={UserSix} centered />
+                  <Header as="h5">Salt Lake City, UT</Header>
+                  <p>MOB Cycle raised $117,400 from 132 investors</p>
+                </Grid.Column>
+              </Grid>
+            </Container>
+          :
+            <Aux>
+              <Container>
+                <NsCarousel {...settings}>
+                  {
+                    [1, 2, 3].map(i => (
+                      <div key={i}>
+                        <Grid.Column textAlign="center">
+                          <Image src={UserOne} centered />
+                          <Header as="h5">Houston, TX</Header>
+                          <p>The Sugar Refinery raised $273,800 from 213 investors</p>
+                        </Grid.Column>
+                      </div>
+                    ))
+                  }
+                </NsCarousel>
+              </Container>
+            </Aux>
+          }
+        </section>
+        <Divider />
+        <List className="learn-more-list">
+          <List.Item>
+            <List.Content as={Link} to="/invest/how-it-works" className="text-uppercase" floated="right">
+              <b>How it Works</b>
+              <List.Icon className="ns-arrow-right" color="green" />
+            </List.Content>
+          </List.Item>
+        </List>
       </Container>
     </section>
   </Aux>

@@ -10,8 +10,20 @@
 .offer-details {
 	.offering-side-menu {
         .ui.secondary.button {
-            margin: 24px auto 0;
-		}
+            margin: @20px auto 0;
+        }
+        @media only screen and (min-width : @tabletBreakpoint){
+            .ui.buttons{
+                padding: @20px;
+                position: fixed;
+                width: 280px;
+                bottom: 0;
+                background-color: @neutral;
+                .ui.compact.button {
+                    padding: @10px;
+                }
+            }
+        }
     }
 }
 //  Public Page Ends

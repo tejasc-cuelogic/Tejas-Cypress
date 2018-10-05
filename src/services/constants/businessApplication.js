@@ -9,6 +9,8 @@ export const BUSINESS_GOAL = {
 
 export const BUSINESS_APPLICATION_STATUS = {
   PRE_QUALIFICATION_FAILED: 'PRE_QUALIFICATION_FAILED',
+  APPLICATION_REMOVED: 'APPLICATION_REMOVED',
+  OFFERING_PREP: 'OFFERING_PREP',
   PRE_QUALIFICATION_SUCCESSFUL: 'PRE_QUALIFICATION_SUCCESSFUL',
   PRE_QUALIFICATION_SUBMITTED: 'PRE_QUALIFICATION_SUBMITTED',
   PRE_QUALIFICATION_PROMOTED: 'PRE_QUALIFICATION_PROMOTED',
@@ -66,6 +68,19 @@ export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
   personalGuaranteeForm: 'PERSONAL_GUARANTEE',
   dueDiligence: 'DUE_DILIGENCE',
   legalDocs: 'LEGAL',
+  PROJECTIONS_FRM: 'APPN_REVIEW_PROJECTION',
+  MISCELLANEOUS_FRM: 'APPN_REVIEW_MISCELLANEOUS',
+  BUSINESS_PLAN_FRM: 'CP',
+  OFFERS_FRM: 'APPN_REVIEW_OFFER',
+};
+
+export const BUSINESS_DETAILS_EDIT_META = {
+  businessName: {
+    value: '', label: 'Business Name', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
+  },
+  signupCode: {
+    value: '', label: 'Sign-Up Code', error: undefined, rule: 'optional', placeHolder: 'e.g.  JB-123',
+  },
 };
 
 export const NEED_HELP = {
@@ -140,7 +155,7 @@ const BUSINESS_PREQUAL_COMMON = {
     rule: 'required',
     customErrors: { required: 'required' },
     placeHolder: 'e.g. $50,000',
-    tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a className="inverted" href="/business" target="_blank">click here.</a></span>),
+    tooltip: (<span>Minimum amount of funding is $50,000. For requirements on different levels of funding, <a href="/business" target="_blank">click here.</a></span>),
   },
   businessEntityStructure: {
     value: '',

@@ -16,6 +16,9 @@
 					font-weight: @bold;
 				}
 			}
+			&.three .statistic {
+				margin-bottom: @20px;
+			}
 		}
 	}
 	.offering-wrapper {
@@ -23,7 +26,7 @@
 			width: 100%;
 			padding: 0;
 			>.label{
-				color:@neutral-middark;
+				color:@neutral;
 				font-size: @13px;
 			}
 			>.value {
@@ -38,9 +41,10 @@
 				}
 			}
 			&.mini >.value {
-				font-size: @15px !important;
+				font-size: @13px !important;
 				color: @neutral;
-				line-height: 20px;
+				line-height: 18px;
+				font-weight: @normal;
 				margin-top: @8px;
 			}
 		}
@@ -53,6 +57,9 @@
 		.value, .label {
 			color: @white;
 			text-transform: none;
+		}
+		.value {
+			font-weight: @fontMedium;
 		}
 	}
 	.ui.grid.secondary-statistic {
@@ -84,6 +91,9 @@
 	}
 	.ui.celled.grid>.row>.column {
 		box-shadow: -1px 0 0 0 @neutral-offwhite;
+		@media only screen and (max-width : @largestMobileScreen){
+			border-top: 0;
+		}
 	}
 }
 // Business - how it works
@@ -105,8 +115,10 @@
 	.ui.statistic{
 		>.value {
 			font-size: @60px !important;
+			font-weight: @normal;
 			@media only screen and (max-width : @largestSmallMonitor){
 				font-size: @30px !important;
+				font-weight: @fontMedium;
 			}
 		}
 		&.small >.value {

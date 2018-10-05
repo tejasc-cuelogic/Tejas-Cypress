@@ -44,7 +44,7 @@ const SubscribeFields = ({
         }
         <Grid.Column computer={2} tablet={3} mobile={16}>
           <Button primary loading={inProgress} fluid>
-            Submit
+             Subscribe
           </Button>
         </Grid.Column>
       </Grid.Row>

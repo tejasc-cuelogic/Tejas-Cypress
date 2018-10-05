@@ -15,13 +15,16 @@ export default class CampaignList extends Component {
   componentWillMount() {
     this.props.campaignStore.initRequest();
   }
-  toggleFilters = status => this.setState({ filters: status });
+  toggleFilters = () => {
+    const { filters } = this.state;
+    this.setState({ filters: filters === false });
+  }
   render() {
     const { campaigns, loading } = this.props.campaignStore;
     return (
       <Aux>
         {this.props.filters &&
-          <Filters toggle={this.toggleFilters} status={this.state.filters} />
+          <Filters toggleFilters={this.toggleFilters} status={this.state.filters} />
         }
         <section className="campaign-list-wrapper">
           <Container>
@@ -37,20 +40,20 @@ export default class CampaignList extends Component {
                         centered
                         src={require(`../../../../../assets/images/campaign/campaign-${campaign.image}.jpg`)}
                       />
-                      <Label color="green">{campaign.flagged}</Label>
-                      <Icon name="heart" />
+                      <Label color="green">{campaign.flagged}</Label> {/* apply attribute basic for successful campaigns */}
+                      <Icon name="heart" /> {/* change name to "heart outline" for unliked campaigns */}
                       <Card.Content>
                         <div className="tags mb-10">
                           {campaign.label}
-                          <span className="pull-right">1.45x/48mos</span>
+                          <span className="pull-right">506(c)</span>
                         </div>
                         <Card.Header>{campaign.title}</Card.Header>
                         <Card.Meta>{campaign.address}</Card.Meta>
                         <Card.Description>{campaign.description}</Card.Description>
+                        <p><b>Revenue Sharing Note</b></p>
                         <List divided horizontal>
-                          <List.Item as={Link} to="/">{campaign.label}</List.Item>
-                          <List.Item as={Link} to="/">Shedule A</List.Item>
-                          <List.Item as={Link} to="/">Revenue Sharing</List.Item>
+                          <List.Item>Raised $1,000,000</List.Item>
+                          <List.Item>583 investors</List.Item>
                         </List>
                       </Card.Content>
                       {this.props.locked === campaign.id && (

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Icon, Responsive, Button, Popup, Dimmer, Loader, Confirm } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 import Aux from 'react-aux';
@@ -12,12 +13,13 @@ import { FieldError } from '../../shared';
 export default class DropZone extends Component {
   state = { showConfirmModal: false, fileName: null, key: null };
 
-  removeForm = (e) => {
+  removeForm = () => {
     this.setState({ showConfirmModal: !this.state.showConfirmModal });
-    this.props.onremove(e, this.state.fileName, this.state.key);
+    this.props.onremove(this.state.fileName, this.state.key);
   }
 
   toggleConfirm = (e, fileName, key) => {
+    e.preventDefault();
     this.setState({
       ...this.state,
       showConfirmModal: !this.state.showConfirmModal,
@@ -33,6 +35,7 @@ export default class DropZone extends Component {
       error,
       showLoader,
     } = this.props.fielddata;
+    const { hideFields } = this.props;
     return (
       <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label &&
@@ -61,7 +64,7 @@ export default class DropZone extends Component {
         }
         {(isArray(toJS(value)) && value.length) ?
           value.map((item, key) => (
-            <div className="file-uploader attached">
+            <div className={hideFields ? 'downloadable file-uploader attached' : 'file-uploader attached'}>
               {!this.props.disabled &&
                 <Aux>
                   <Responsive
@@ -83,33 +86,42 @@ export default class DropZone extends Component {
                   />
                 </Aux>
               }
-              <span title={item}>{item}</span>
+              {hideFields ?
+                <Link to="/" title={item}><Icon className="ns-file" />{item}</Link> :
+                <span title={item}>{item}</span>
+              }
             </div>
-          )) : !isArray(toJS(value)) && value &&
-          <div className="file-uploader attached">
-            {!this.props.disabled &&
-              <Aux>
-                <Responsive
-                  as={Button}
-                  minWidth={768}
-                  size="tiny"
-                  compact
-                  className="ghost-button remove pull-right"
-                  onClick={e => this.toggleConfirm(e, this.props.name)}
-                >
-                  Remove
-                </Responsive>
-                <Responsive
-                  as={Icon}
-                  maxWidth={767}
-                  name="remove"
-                  className="pull-right"
-                  onClick={e => this.toggleConfirm(e, this.props.name)}
-                />
-              </Aux>
-            }
-            <span title={value}>{value}</span>
-          </div>
+          )) : !isArray(toJS(value)) && value ?
+            <div className={hideFields ? 'downloadable file-uploader attached' : 'file-uploader attached'}>
+              {!this.props.disabled &&
+                <Aux>
+                  <Responsive
+                    as={Button}
+                    minWidth={768}
+                    size="tiny"
+                    compact
+                    className="ghost-button remove pull-right"
+                    onClick={e => this.toggleConfirm(e, this.props.name)}
+                  >
+                    Remove
+                  </Responsive>
+                  <Responsive
+                    as={Icon}
+                    maxWidth={767}
+                    name="remove"
+                    className="pull-right"
+                    onClick={e => this.toggleConfirm(e, this.props.name)}
+                  />
+                </Aux>
+              }
+              {hideFields ?
+                <Link to="/" title={value}><Icon className="ns-file" />{value}</Link> :
+                <span title={value}>{value}</span>
+              }
+            </div> : hideFields &&
+            <div className="downloadable file-uploader attached">
+              <p>No files uploaded yet.</p>
+            </div>
         }
         {error &&
           <FieldError error={error} />

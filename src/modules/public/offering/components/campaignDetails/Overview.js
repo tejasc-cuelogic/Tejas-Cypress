@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+// import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { Embed, Grid, Segment } from 'semantic-ui-react';
 import videoPoster from '../../../../../assets/images/636206632.jpg';
-import UpdatesModal from './UpdatesModal';
+import Updates from './Updates';
 import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
@@ -54,7 +55,7 @@ class Overview extends Component {
             />
           </Grid.Row>
         </Grid>
-        <Route path={`${this.props.match.url}/updates`} component={UpdatesModal} />
+        <Route path={`${this.props.match.url}/updates`} component={Updates} />
         <Route path={`${this.props.match.url}/keyterms`} render={props => <KeyTermsModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/keyterms/summary`} component={SummaryModal} />
       </div>

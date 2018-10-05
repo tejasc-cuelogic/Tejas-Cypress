@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
-import { Header, Grid, List, Button, Container, Item, Responsive } from 'semantic-ui-react';
+// import { Link } from 'react-router-dom';
+import { Header, Grid, List, Divider, Container, Item, Responsive } from 'semantic-ui-react';
 import MarketingIcon from '../../../../assets/images/business/marketing.svg';
 import EscrowIcon from '../../../../assets/images/business/escrow.svg';
 import CampaignIcon from '../../../../assets/images/business/campaign.svg';
@@ -73,7 +73,7 @@ const AllInclusive = () => (
                   <Item.Image size="mini" src={ServicesIcon} />
                   <Item.Content>
                     <Item.Header as="h5">Investor Services</Item.Header>
-                    <Item.Meta>Servicing note payments to underlying investors.</Item.Meta>
+                    <Item.Meta>Servicing payments to investors.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
@@ -84,23 +84,21 @@ const AllInclusive = () => (
                   </Item.Content>
                 </Item>
               </Item.Group>
-              <List horizontal={!isMobile} relaxed className="learn-more-list mb-50">
+              <List horizontal={!isMobile} relaxed className="learn-more-list">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                  <List.Content as="a">Small businesses and NextSeed</List.Content>
+                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                  <List.Content>NextSeed and <a href="/">Small businesses</a></List.Content>
                 </List.Item>
                 <List.Item>
                   {!isMobile &&
                     <List.Header>&nbsp;</List.Header>
                   }
-                  <List.Icon className="ns-arrow-right" color="green" />
-                  <List.Content as="a">Commercial real estate and NextSeed</List.Content>
+                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                  <List.Content>NextSeed and <a href="/">Commercial real estate</a></List.Content>
                 </List.Item>
               </List>
-              <div className="center-align">
-                <Button as={Link} to="/business/compare" primary>See How NextSeed Compares</Button>
-              </div>
+              <Divider />
             </Grid.Column>
           </Grid.Row>
         </Grid>

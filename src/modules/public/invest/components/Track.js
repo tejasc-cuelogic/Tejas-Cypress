@@ -5,9 +5,6 @@ import { Header, Button, Container, Grid, Responsive } from 'semantic-ui-react';
 
 const Track = () => (
   <Aux>
-    <Responsive as={Aux} maxWidth={767}>
-      <section className="banner track-banner" />
-    </Responsive>
     <section className="content-spacer">
       <Container>
         <Grid padded="vertically">
@@ -33,6 +30,9 @@ const Track = () => (
         </Grid>
       </Container>
     </section>
+    <Responsive as={Aux} maxWidth={767}>
+      <section className="banner track-banner mb-50" />
+    </Responsive>
   </Aux>
 );
 

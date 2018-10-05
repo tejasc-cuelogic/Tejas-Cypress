@@ -4,12 +4,12 @@ import { Header, Container, Grid, Image, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
 const featuredOn = [
-  ['bloomberg', 'houston-chronicle', 'forbes', 'ny-times', 'aas', 'w-journal', 'npr'],
-  ['time', 'msn-money', 'crowdfund-insider', 'pc', 'mashable', 'us-news'],
+  ['bloomberg', 'forbes', 'ny-times', 'w-journal', 'npr'],
+  ['time', 'msn-money', 'crowdfund-insider', 'mashable', 'us-news'],
 ];
 
 const FeaturedOn = () => (
-  <section className="featured-section">
+  <section className="bg-offwhite">
     <Container>
       <Header as="h2" textAlign="center" className="mb-50">As seen on…</Header>
       <Grid columns="equal" doubling stackable>

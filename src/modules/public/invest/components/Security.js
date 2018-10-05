@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Button, Container, Grid, Image, Responsive } from 'semantic-ui-react';
+import { Header, Divider, List, Container, Grid, Image, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import Secure from '../../../../assets/images/secure-horizontal.png';
 
@@ -17,32 +17,39 @@ const Security = () => (
               <Grid columns={2} doubling stackable>
                 <Grid.Column>
                   <Header as="h5">Your funds stay safe and sound.</Header>
-                  <p>The uninvested cash in your account1 is FDIC-insured up to $250,000.</p>
+                  <p>
+                    The uninvested cash in your account <sup>1</sup> is FDIC-insured up
+                    to $250,000.
+                  </p>
                   <Header as="h5">Keep your information protected.</Header>
                   <p>We safeguard your information with bank-level security measures</p>
                   <Responsive as={Image} minWidth={768} src={Secure} />
                 </Grid.Column>
                 <Grid.Column>
-                  <Header as="h5">First SEC-registered funding portal in the U.S.</Header>
+                  <Header as="h5">SEC-registered broker-dealer</Header>
                   <p>
-                    NextSeed was the first registered funding portal with the Securities &
-                    Exchange Commission (SEC) and is a member of the Financial Industry Regulatory
-                    Authority (FINRA). We also closed the first-ever regulation crowdfunding
-                    offering in the country.
+                    NextSeed Securities LLC operates as a broker-dealer registered with the
+                    Securities & Exchange Commission and is a member of the Financial Industry
+                    Regulatory Authority (FINRA). The team behind NextSeed created the first
+                    registered funding portal with the SEC and closed the first-ever
+                    regulation crowdfunding offering in the country.
                   </p>
                 </Grid.Column>
               </Grid>
-              <Responsive as="div" className="center-align" maxWidth={767}>
-                <Button as={Link} to="/invest/track" primary>See Track</Button>
-              </Responsive>
               <p className={`note mt-50 ${isMobile ? '' : 'mb-50'}`}>
                 <sup>1</sup> NextSeed accounts are provided and held at our partner bank, Happy
                 State Bank DBA GoldStar Trust Company (&quot;GoldStar&quot;), which provides FDIC
                 insurance for uninvested cash in NextSeed accounts.
               </p>
-              <Responsive as="div" className="center-align" minWidth={768}>
-                <Button as={Link} to="/invest/track" primary>See Track</Button>
-              </Responsive>
+              <Divider />
+              <List className="learn-more-list">
+                <List.Item>
+                  <List.Content as={Link} to="/invest/track" className="text-uppercase" floated="right">
+                    <b>Track</b>
+                    <List.Icon className="ns-arrow-right" color="green" />
+                  </List.Content>
+                </List.Item>
+              </List>
             </Grid.Column>
           </Grid.Row>
         </Grid>

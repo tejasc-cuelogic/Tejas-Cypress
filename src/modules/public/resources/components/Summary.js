@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Container, Grid, Image, Icon, Responsive, Divider } from 'semantic-ui-react';
-import UserOne from '../../../../assets/images/owner-1.jpg';
-import UserTwo from '../../../../assets/images/owner-2.jpg';
+import icon1 from '../../../../assets/images/icons/resources_1.svg';
+import icon2 from '../../../../assets/images/icons/resources_2.svg';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Summary = props => (
@@ -22,25 +22,25 @@ const Summary = props => (
     <Container>
       <Grid centered relaxed="very" stackable>
         <Grid.Column textAlign="center" width={6} className="info-card">
-          <Image src={UserOne} size="small" circular centered className="mb-20" />
+          <Image src={icon1} centered className="mb-20" />
           <p className="mb-40">
             Understand how to add local businesses to your investment portfolio, how NextSeed
             investments work, and the risks and opportunities offered by this new way of investing.
           </p>
           <Link to={`${props.refUrl}/investor`}>
+            For Investors{' '}
             <Icon className="ns-arrow-right" color="green" />
-            For Investors
           </Link>
         </Grid.Column>
         <Grid.Column textAlign="center" width={6} className="info-card">
-          <Image src={UserTwo} size="small" circular centered className="mb-20" />
+          <Image src={icon2} centered className="mb-20" />
           <p className="mb-40">
             Learn about the business implications of different types of fundraising, how to add
             NextSeed to your capital stack and how to get started.
           </p>
           <Link to={`${props.refUrl}/business`}>
+            For Businesses{' '}
             <Icon className="ns-arrow-right" color="green" />
-            For Businesses
           </Link>
         </Grid.Column>
       </Grid>

@@ -4,14 +4,15 @@ import { FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form'
 import FormElementWrap from '../FormElementWrap';
 
 const GeneralInformation = props => (
-  <FormElementWrap header="General Information">
+  <FormElementWrap hideFields={props.hideFields} header="General Information">
     <Grid>
-      <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+      <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
           {
             ['businessName', 'website'].map(field => (
               <FormInput
-                disabled={props.preQualFormDisabled}
+                readOnly={props.preQualFormDisabled}
+                containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
                 key={field}
                 type="text"
                 name={field}
@@ -23,14 +24,15 @@ const GeneralInformation = props => (
             ))
           }
           <MaskedInput
-            disabled={props.preQualFormDisabled}
+            containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+            readOnly={props.preQualFormDisabled}
             name="phoneNumber"
             fielddata={props.fields.phoneNumber}
             changed={props.businessAppEleMaskChange}
           />
         </div>
       </Grid.Column>
-      <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+      <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
           <Header as="h6">
             {props.currentApplicationType === 'business' ? 'Business Address' : 'Entity Address '}
@@ -46,7 +48,8 @@ const GeneralInformation = props => (
           }
           </Header>
           <AutoComplete
-            disabled={props.preQualFormDisabled}
+            containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+            readOnly={props.preQualFormDisabled}
             name="street"
             fielddata={props.fields.street}
             onplaceselected={props.setAddressFields}
@@ -56,7 +59,8 @@ const GeneralInformation = props => (
             {
               ['city', 'state', 'zipCode'].map(field => (
                 <FormInput
-                  disabled={props.preQualFormDisabled}
+                  containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+                  readOnly={props.preQualFormDisabled}
                   key={field}
                   type="text"
                   name={field}

@@ -17,7 +17,7 @@ class team extends Component {
   render() {
     const { teamMembers, loading } = this.props.teamStore;
     const teamInfo = (
-      <Grid doubling columns={2}>
+      <Grid doubling columns={2} className="team-list">
         <Grid.Column>
           <Grid centered>
             <Grid.Column largeScreen={8} computer={12} tablet={8} mobile={14} className={isMobile ? 'mt-30' : 'team-column'}>

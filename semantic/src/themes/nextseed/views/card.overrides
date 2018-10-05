@@ -54,6 +54,11 @@
                 font-size:@13px;
                 line-height:@20px;
             }
+            p{
+                font-size: 13px;
+                color: @neutral;
+                margin-bottom: 0;
+            }
         }
         >.content.card-hidden {
             position: absolute;
@@ -89,6 +94,9 @@
                     line-height: 1em;
                     color: @darkTextColor;
                 }
+            }
+            .meta{
+                text-transform:none;
             }
         }
         &:hover{
@@ -256,6 +264,23 @@
             &:last-child{
                 margin-bottom:0;
             }
+        }
+    }
+    &.ba-info-card{
+        height:100%;
+        >.header{
+            padding:1em 1.5em;
+            font-size:@14px;
+            font-weight:@fontMedium;
+            color:@neutral;
+            a{
+                margin-left:@5px;
+            }
+        }
+        >.content h6.ui.header{
+            overflow:hidden;
+            text-overflow:ellipsis;
+            white-space:nowrap;
         }
     }
 }

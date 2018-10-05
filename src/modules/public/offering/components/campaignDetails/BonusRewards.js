@@ -199,7 +199,7 @@ class BonusRewards extends Component {
           <Grid.Column>
             <Segment padded>
               <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$10,000+</Header>
+              <Header as="h3" className="highlight-text">$50,000+</Header>
               <List as="ul" className="rewards">
                 <List.Item as="li">
                   <List.Header>Complimentary Tasting & Name a Cocktail</List.Header>

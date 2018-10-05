@@ -13,6 +13,49 @@
             display:inline-block;
             line-height:@18px;
         }
+        textarea{
+            padding-left:0;
+            padding-right:0;
+            border-radius:0;
+            border:none;
+            border-bottom:@borderColor 1px solid;
+        }
+        &.secondary textarea{
+            padding:@11px @14px;
+            min-height:80px;
+            max-height:80px;
+            border-radius:@4px;
+            border:@neutral-offdark 1px solid;
+        }
+        &.display-only{
+            >label{
+                font-weight:@normal;
+                color:@neutral-middark;
+            }
+            input:not([type]),
+            input[type=date],
+            input[type=datetime-local],
+            input[type=email],
+            input[type=file],
+            input[type=number],
+            input[type=password],
+            input[type=search],
+            input[type=tel],
+            input[type=text],
+            input[type=time],
+            input[type=url],
+            &.secondary textarea{
+                padding:0;
+                border:none;
+                font-weight:@fontMedium;
+                text-overflow:ellipsis;
+                cursor:default;
+            }
+            p.commet-area{
+                font-weight:500;
+                color:@neutral;
+            }
+        }
     }
     .otp-wrap{
         margin:3rem 0;
@@ -33,19 +76,24 @@
             text-align:center;
         }
     }
-    .fields .field, .fields .wide.field{
-        padding-left:@gutterWidth;
-        padding-right:@gutterWidth;
-        margin-bottom:@14px;
+    .fields{
+        align-items:flex-end;
+        .field, .wide.field{
+            padding-left:@gutterWidth;
+            padding-right:@gutterWidth;
+            margin-bottom:@14px;
+        }
     }
     .error:not(.field){
         color:@negativeTextColor;
     }
     label{
-        i.icon{
+        i.ns-help-circle, a{
+            height:auto;
             margin:0 0 0 @5px;
             font-size:@14px;
             color:@neutral-middark;
+            vertical-align: middle;
         }
     }
     input:not([type]),
@@ -62,6 +110,26 @@
     input[type=url],
     textarea{
         border-bottom:@border-color 1px solid;
+    }
+    .ui.table{
+        input:not([type]),
+        input[type=date],
+        input[type=datetime-local],
+        input[type=email],
+        input[type=file],
+        input[type=number],
+        input[type=password],
+        input[type=search],
+        input[type=tel],
+        input[type=text],
+        input[type=time],
+        input[type=url],
+        textarea{
+            padding:@5px;
+            background-color:@white;
+            border-radius:@4px;
+            border:@border-color 1px solid;
+        }
     }
     /*  Inverted Form  */
     &.inverted{
@@ -128,6 +196,43 @@
             display:none;
         }
     }
+    &.comment-input {
+        padding: @10px 0 0;
+        .ui.action.input>input {
+            padding: @14px @20px;
+        }
+        .attachment {
+            position: relative;
+            width: 45px;
+            text-align: center;
+            border-bottom: @border-color 1px solid;
+            i.icon {
+                position: absolute;
+                width: 45px;
+                height: 45px;
+                line-height: 45px;
+            }
+            input[type=file] {
+                height: 45px;
+                width: 45px;
+                overflow: hidden;
+                line-height: 45px;
+                opacity: 0;
+            }
+        }
+        .ui.action.input>.button {
+            border-bottom: @border-color 1px solid;
+            box-shadow: none;
+            border-radius: 0;
+            padding: @10px;
+            &:active {
+                background: transparent !important;
+            }
+        }
+    }
+}
+textarea{
+	font-family:@pageFont;
 }
 .card{
     &.editable{
@@ -306,6 +411,7 @@
         overflow:hidden;
         text-overflow:ellipsis;
         white-space:nowrap;
+        cursor:default;
         .remove{
             margin:0 0 0 @7px;
             line-height:1;
@@ -318,6 +424,17 @@
             &:hover{
                 color:darken(@link-color, 10%);
             }
+        }
+    }
+    &.downloadable{
+        min-height:auto;
+        padding:@4px 0;
+        line-height:initial;
+        background-color:transparent;
+        >p{
+            color:@neutral-middark;
+            font-weight:@normal;
+            font-style:italic;
         }
     }
 }

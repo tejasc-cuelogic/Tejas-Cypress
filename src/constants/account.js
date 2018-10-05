@@ -376,6 +376,7 @@ export const EMPLOYMENT = {
       ],
     error: undefined,
     rule: 'required',
+    objRef: 'employmentStatusInfo',
   },
   employer: {
     key: 'employer',
@@ -384,6 +385,7 @@ export const EMPLOYMENT = {
     error: undefined,
     rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'Type employer name',
+    objRef: 'employmentStatusInfo',
   },
   currentPosition: {
     key: 'currentPosition',
@@ -392,6 +394,7 @@ export const EMPLOYMENT = {
     error: undefined,
     rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'E.g. CEO',
+    objRef: 'employmentStatusInfo',
   },
 };
 
@@ -411,6 +414,7 @@ export const FINANCES = {
     error: undefined,
     rule: 'required',
     placeHolder: 'Net Worth',
+    objRef: 'financialInfo',
   },
   annualIncomeThirdLastYear: {
     value: '',
@@ -418,6 +422,7 @@ export const FINANCES = {
     error: undefined,
     rule: 'required',
     placeHolder: '$60,000',
+    objRef: 'financialInfo',
   },
   annualIncomeLastYear: {
     value: '',
@@ -425,6 +430,7 @@ export const FINANCES = {
     error: undefined,
     rule: 'required',
     placeHolder: '$60,000',
+    objRef: 'financialInfo',
   },
   annualIncomeCurrentYear: {
     value: '',
@@ -432,6 +438,7 @@ export const FINANCES = {
     error: undefined,
     rule: 'required',
     placeHolder: '$60,000',
+    objRef: 'financialInfo',
   },
   checkbox1: {
     value: [],
@@ -475,6 +482,7 @@ export const INVESTMENT_EXPERIENCE = {
     values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
+    objRef: 'investmentExperienceInfo',
   },
   readyInvestingInLimitedLiquiditySecurities: {
     value: [],
@@ -498,4 +506,11 @@ export const INVESTMENT_EXPERIENCE = {
     error: undefined,
     rule: 'alpha',
   },
+};
+
+export const INV_PROFILE = {
+  ...EMPLOYMENT,
+  ...INVESTOR_PROFILE,
+  ...FINANCES,
+  ...INVESTMENT_EXPERIENCE,
 };

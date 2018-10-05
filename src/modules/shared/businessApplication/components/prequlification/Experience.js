@@ -7,7 +7,8 @@ const Experience = props => (
     {
       ['industryExperience', 'estimatedCreditScore'].map(field => (
         <MaskedInput
-          disabled={props.preQualFormDisabled}
+          containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+          readOnly={props.preQualFormDisabled}
           key={field}
           name={field}
           number
@@ -22,7 +23,8 @@ const Experience = props => (
       ['totalProjectCost', 'amountNeeded'].map(field => (
         <MaskedInput
           hoverable
-          disabled={props.preQualFormDisabled}
+          containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+          readOnly={props.preQualFormDisabled}
           key={field}
           prefix="$ "
           name={field}

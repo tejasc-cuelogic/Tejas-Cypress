@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Form } from 'semantic-ui-react';
+import { Header, Container } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
+import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
 class Offering extends Component {
   render() {
@@ -16,17 +17,12 @@ class Offering extends Component {
         />
         <section className="learn-more">
           <Container textAlign="center">
-            <Header as="h2">Get notified</Header>
-            <Form className="public-form mt-40" inverted>
-              <Form.Group>
-                <Form.Input
-                  placeholder="Email"
-                  name="email"
-                  width={7}
-                />
-                <Form.Button primary fluid content="Submit" width={3} />
-              </Form.Group>
-            </Form>
+            <Header as="h2">Want to learn more about NextSeed?</Header>
+            <p className="mb-30">
+              Sign up for the mailing list to stay informed about new offerings,
+              updates and events.
+            </p>
+            <SubscribeForNewsletter className="public-form" />
           </Container>
         </section>
         <CampaignList

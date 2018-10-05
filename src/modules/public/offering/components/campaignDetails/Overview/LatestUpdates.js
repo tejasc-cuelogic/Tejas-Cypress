@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Segment, Breadcrumb, Item, Divider } from 'semantic-ui-react';
+import { Grid, Segment, Item, Divider, Header, Label, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { UserAvatar } from '../../../../../../theme/shared';
@@ -23,10 +23,13 @@ class LatestUpdates extends Component {
     return (
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
-          <Breadcrumb>
-            <Breadcrumb.Section as={Link} to={`${refLink.url}/updates`}><b>Latest Update</b></Breadcrumb.Section>
-            <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
-          </Breadcrumb>
+          <Header as="h4">
+            <Link to={`${refLink.url}/updates`}>
+              Updates
+              <Label circular horizontal color="blue">{0}</Label>
+              <Icon className="ns-chevron-right" color="green" />
+            </Link>
+          </Header>
           {update ?
             <Item.Group className="campaign-updates">
               <Item>

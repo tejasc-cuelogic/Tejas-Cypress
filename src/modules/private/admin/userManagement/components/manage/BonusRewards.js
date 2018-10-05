@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
+import { Checkbox } from 'semantic-ui-react';
+import RewardList from '../../../../investor/rewardsWallet/components/RewardList';
+import { InlineLoader } from '../../../../../../theme/shared';
 
-const BonusRewards = () => (
-  <div>
-    In userBonusRewards page!
-  </div>
-);
-
-export default BonusRewards;
+@inject('rewardStore')
+@observer
+export default class BonusRewards extends Component {
+  componentWillMount() {
+    this.props.rewardStore.initRequest();
+  }
+  activeOnly = () => this.props.rewardStore.activeOnly();
+  render() {
+    const {
+      rewards, loading, error, option,
+    } = this.props.rewardStore;
+    return (
+      <Aux>
+        <Checkbox
+          defaultChecked={option}
+          onClick={this.activeOnly}
+          className="pull-right"
+          label="Show active rewards only"
+        />
+        {loading ? <InlineLoader /> :
+        <RewardList match={this.props.match} rewards={rewards} error={error} admin />
+        }
+      </Aux>
+    );
+  }
+}
