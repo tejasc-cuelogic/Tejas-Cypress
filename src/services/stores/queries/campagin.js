@@ -62,6 +62,9 @@ export const campaignDetailsQuery = gql`
       minInvestAmt
       maxInvestAmt
       revShareSummary
+      investmentMultipleSummary
+      locationRiskFactors
+      isTX
     }
     offering {
       overview {
@@ -116,14 +119,20 @@ export const campaignDetailsQuery = gql`
         headshot {
           fileId
           fileName
+          url
+          isPublic
         }
         heroImage {
           fileId
           fileName
+          url
+          isPublic
         }
         license {
           fileId
           fileName
+          url
+          isPublic
         }
       }
       bio
@@ -145,7 +154,17 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
+      heroVideo {
+        id
+        url
+        isPublic
+      }
       tombstoneImage {
+        id
+        url
+        isPublic
+      }
+      locationHeroImage {
         id
         url
         isPublic

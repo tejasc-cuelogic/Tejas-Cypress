@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { forIn } from 'lodash';
 import { Header, Modal, Grid, Image, Icon, Responsive } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import team1 from '../../../../assets/images/team1.jpg';
