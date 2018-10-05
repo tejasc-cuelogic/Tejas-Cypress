@@ -90,7 +90,7 @@ class AboutCompany extends Component {
             <Grid.Column>
               <Segment padded>
                 <Header as="h4">
-                  <Link to={`${this.props.match.url}/meetourteam`}>
+                  <Link to={null}>
                     Meet our team
                     <Icon className="ns-chevron-right" color="green" />
                   </Link>
