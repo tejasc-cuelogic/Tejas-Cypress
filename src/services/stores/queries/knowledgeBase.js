@@ -20,8 +20,8 @@ export const allFaqQuery = gql`query getListOfFAQsAndKnowledgeBase($categoryType
   categoryName
   faqItems {
     id
-    title
-    description
+    question
+    answer
   }
   }
 }
