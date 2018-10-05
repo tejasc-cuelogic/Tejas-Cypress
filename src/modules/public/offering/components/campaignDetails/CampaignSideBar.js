@@ -40,13 +40,16 @@ export default class CampaignSideBar extends Component {
                   <Icon name="arrow left" />
                 </Link>
               } */}
-              {campaign.keyTerms.legalBusinessName}
+              {campaign && campaign.keyTerms.legalBusinessName}
               <Header.Subheader>{address}</Header.Subheader>
             </Header>
             <Responsive minWidth={768} as={Aux}>
               <CampaignProgress
                 data={
-                  { needed: campaign.keyTerms.maxOfferingAmount || 0, collected: collected || 0 }}
+                  {
+                    needed: (campaign && campaign.keyTerms.maxOfferingAmount) || 0,
+                    collected: collected || 0,
+                  }}
               />
             </Responsive>
             <p>

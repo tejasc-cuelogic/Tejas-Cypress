@@ -24,7 +24,9 @@ class KeyTerms extends Component {
                     position="top center"
                   />
                 </Statistic.Label>
-                <Statistic.Value>Revenue Sharing Note</Statistic.Value>
+                <Statistic.Value>
+                  {campaign && campaign.selectedOffer && campaign.selectedOffer.structure}
+                </Statistic.Value>
               </Statistic>
             </Grid.Column>
             <Grid.Column>
