@@ -1014,7 +1014,7 @@ a.icon-link:hover {
 					}
 					&+.content {
 						margin-left: 10px;
-						padding-top: 0;	
+						padding: 0;	
 					}
 				}
 				@media only screen and (max-width:@largestMobileScreen){
@@ -2161,4 +2161,12 @@ p.check-extra-info{
 // Careers Banner
 .careers-banner {
 	margin: 0 auto;
+}
+//Avtar image on public pages
+.updates-modal, .campaign-updates {
+	.sb-avatar{
+		width:36px;
+		height:36px;
+		line-height:36px;
+	}
 }

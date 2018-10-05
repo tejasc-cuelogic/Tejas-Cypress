@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Icon, Grid, Segment, Breadcrumb, Popup } from 'semantic-ui-react';
+import { Header, Icon, Grid, Segment, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { INDUSTRY_TYPES } from '../../../../../../constants/offering';
 
@@ -9,11 +9,18 @@ class AboutTheCompany extends Component {
     return (
       <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
         <Segment padded>
-          <Breadcrumb>
-            <Breadcrumb.Section as={Link} to={`${refLink}/about`}><b>About the Company</b></Breadcrumb.Section>
+          {/* <Breadcrumb>
+            <Breadcrumb.Section as={Link}
+            to={`${refLink}/about`}><b>About the Company</b></Breadcrumb.Section>
             <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
           </Breadcrumb>
-          <Header as="h3">Top things to know</Header>
+          <Header as="h3">Top things to know</Header> */}
+          <Header as="h3">
+            <Link to={`${refLink}/about`}>
+              Top things to know
+              <Icon className="ns-chevron-right" color="green" />
+            </Link>
+          </Header>
           <p>
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />

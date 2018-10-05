@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Segment, Item, Divider, Header, Label, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Item, Divider, Header, Label, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { UserAvatar } from '../../../../../../theme/shared';
@@ -34,7 +34,9 @@ class LatestUpdates extends Component {
             <Item.Group className="campaign-updates">
               <Item>
                 <Item.Content>
-                  <UserAvatar UserInfo={UserInfo} size="mini" />
+                  <Image floated="left" size="mini">
+                    <UserAvatar UserInfo={UserInfo} />
+                  </Image>
                   <Item.Header>{update.actingUserInfo && update.actingUserInfo.info && `${update.actingUserInfo.info.firstName} ${update.actingUserInfo.info.lastName}`}</Item.Header>
                   <Item.Meta>{moment(update.updated.date).format('LL')}</Item.Meta>
                   <Divider />
