@@ -8,7 +8,7 @@ import { ListErrors } from '../../../../../theme/shared';
 import { adminActions } from '../../../../../services/actions';
 import Helper from '../../../../../helper/utility';
 
-@inject('uiStore', 'businessAppReviewStore', 'businessAppStore')
+@inject('uiStore', 'businessAppReviewStore', 'businessAppStore', 'adminStore')
 @withRouter
 @observer
 export default class StatusChangeAppModal extends Component {
@@ -49,23 +49,12 @@ export default class StatusChangeAppModal extends Component {
             verifyPassword: 'nextseed',
             role: ['issuer'],
           };
-          adminActions.createNewUser(userDetails).then(() => {
-            this.props.businessAppReviewStore
-              .updateApplicationStatus(
-                params.appId,
-                params.userId,
-                params.appStatus,
-                params.action,
-              ).then(() => {
-                this.props.uiStore.setErrors(null);
-                this.props.history.goBack();
-              });
-          }).catch((err) => {
-            if (err.message === 'An account with the given email already exists.') {
+          adminActions.checkEmailExists(userDetails.email).then((userId) => {
+            if (userId) {
               this.props.businessAppReviewStore
                 .updateApplicationStatus(
                   params.appId,
-                  params.userId,
+                  userId,
                   params.appStatus,
                   params.action,
                 ).then(() => {
@@ -73,7 +62,20 @@ export default class StatusChangeAppModal extends Component {
                   this.props.history.goBack();
                 });
             } else {
-              Helper.toast('Something went wrong. Please try again after sometime', 'error');
+              adminActions.createNewUser(userDetails).then(() => {
+                this.props.businessAppReviewStore
+                  .updateApplicationStatus(
+                    params.appId,
+                    this.props.adminStore.userId,
+                    params.appStatus,
+                    params.action,
+                  ).then(() => {
+                    this.props.uiStore.setErrors(null);
+                    this.props.history.goBack();
+                  });
+              }).catch(() => {
+                Helper.toast('Something went wrong. Please try again after sometime', 'error');
+              });
             }
           });
         }
