@@ -45,7 +45,7 @@ class Overview extends Component {
             <KeyTerms refLink={this.props.match} campaign={campaign} />
             <LatestUpdates
               updates={campaign && campaign.updates}
-              refLink={this.props.match}
+              refLink={this.props.refLink}
               isTabletLand={isTabletLand}
             />
             <BonusRewards
@@ -55,7 +55,7 @@ class Overview extends Component {
             />
           </Grid.Row>
         </Grid>
-        <Route path={`${this.props.match.url}/updates`} component={Updates} />
+        <Route path={`${this.props.refLink.url}/updates`} component={Updates} />
         <Route path={`${this.props.match.url}/keyterms`} render={props => <KeyTermsModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/keyterms/summary`} component={SummaryModal} />
       </div>

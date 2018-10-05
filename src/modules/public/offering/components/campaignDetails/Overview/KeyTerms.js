@@ -29,7 +29,7 @@ class KeyTerms extends Component {
             </Grid.Column>
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label>Multiple <Popup trigger={<Icon name="help circle" color="green" />} content="For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $XXX within YY months. A 1.0% service fee is deducted from each payment." position="top center" /></Statistic.Label>
+                <Statistic.Label><b>Multiple</b> <Popup trigger={<Icon name="help circle" color="green" />} content="For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $XXX within YY months. A 1.0% service fee is deducted from each payment." position="top center" /></Statistic.Label>
                 <Statistic.Value>
                   {campaign && campaign.keyTerms ? campaign.keyTerms.investmentMultiple : '-'}
                 </Statistic.Value>
@@ -50,7 +50,7 @@ class KeyTerms extends Component {
             </Grid.Column> */}
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label>Maturity <Popup trigger={<Icon name="help circle" color="green" />} content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors." position="top center" /></Statistic.Label>
+                <Statistic.Label><b>Maturity</b> <Popup trigger={<Icon name="help circle" color="green" />} content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors." position="top center" /></Statistic.Label>
                 <Statistic.Value>
                   {campaign && campaign.keyTerms ? campaign.keyTerms.maturity : '-'}
                 </Statistic.Value>
@@ -71,7 +71,7 @@ class KeyTerms extends Component {
             </Grid.Column>
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label>Payments{' '}
+                <Statistic.Label><b>Payments</b>{' '}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
                     content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
@@ -85,7 +85,7 @@ class KeyTerms extends Component {
             </Grid.Column>
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label>Ownership <Popup trigger={<Icon name="help circle" color="green" />} content="Equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities." position="top center" /></Statistic.Label>
+                <Statistic.Label><b>Ownership</b> <Popup trigger={<Icon name="help circle" color="green" />} content="Equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities." position="top center" /></Statistic.Label>
                 <Statistic.Value>
                   {campaign && campaign.keyTerms ? campaign.keyTerms.securitiesOwnershipPercentage : '-'}
                 </Statistic.Value>

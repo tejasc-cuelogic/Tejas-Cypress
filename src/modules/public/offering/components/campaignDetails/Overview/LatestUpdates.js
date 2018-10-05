@@ -24,7 +24,7 @@ class LatestUpdates extends Component {
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
           <Header as="h4">
-            <Link to={`${refLink.url}/updates`}>
+            <Link to={`${refLink}/updates`}>
               Updates
               <Label circular horizontal color="blue">{0}</Label>
               <Icon className="ns-chevron-right" color="green" />
@@ -41,7 +41,7 @@ class LatestUpdates extends Component {
                   <Item.Description>
                     <p><b>{update.title}</b></p>
                     <p dangerouslySetInnerHTML={{ __html: update.content }} />
-                    <Link to={`${refLink.url}/updates`}>View Update</Link>
+                    <Link to={`${refLink}/updates`}>View Update</Link>
                   </Item.Description>
                 </Item.Content>
               </Item>

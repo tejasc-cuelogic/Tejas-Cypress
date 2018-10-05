@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, Grid, Image, Segment, Breadcrumb } from 'semantic-ui-react';
+import { Header, Grid, Image, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import noEarlyBird from '../../../../../../assets/images/illustration.png';
 
@@ -9,11 +9,12 @@ class BonusRewards extends Component {
     return (
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
-          <Breadcrumb>
-            <Breadcrumb.Section as={Link} to={`${refLink}/bonus-rewards`}><b>Bonus Rewards</b></Breadcrumb.Section>
-            <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
-          </Breadcrumb>
-          <Header as="h4">Investor Rewards</Header>
+          <Header as="h4">
+            <Link to={`${refLink}/bonus-rewards`}>
+              Bonus Rewards
+              <Icon className="ns-chevron-right" color="green" />
+            </Link>
+          </Header>
           <Image src={noEarlyBird} className="no-early-bird" />
           <p className="center-align"><b>Invest more, recieve more.</b></p>
           <p className="early-bird-desc center-align">
