@@ -1,13 +1,19 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider } from 'semantic-ui-react';
+import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider, Responsive, Item } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import supportIcon from '../../../../assets/images/icons/support.svg';
 import sellingIcon from '../../../../assets/images/icons/selling.svg';
 import networkIcon from '../../../../assets/images/icons/network.svg';
-import carouselImg from '../../../../assets/images/business/lian.jpg';
-import videoPoster from '../../../../assets/images/636206632.webp';
+import carouselImg from '../../../../assets/images/business/lian.png';
+import videoPoster from '../../../../assets/images/636206632.jpg';
+import UserOne from '../../../../assets/images/business/img-2.png';
+import UserTwo from '../../../../assets/images/business/img.png';
+import UserThree from '../../../../assets/images/business/img-1.png';
+import UserFour from '../../../../assets/images/business/img-5.png';
+import UserFive from '../../../../assets/images/business/img-3.png';
+import UserSix from '../../../../assets/images/business/img-4.png';
 
 const nsvideos = {
   embed: '247714163',
@@ -18,23 +24,33 @@ const settings = {
   arrows: true,
   dots: false,
 };
+const isMobile = document.documentElement.clientWidth < 768;
 
 const HowItWorks = () => (
   <Aux>
     <section>
       <Container>
-        <Header as="h2" className="mb-80" textAlign="center">
-          Get flexible financing that doesn’t<br />cost you everything.
+        <Responsive maxWidth={767} as={Aux}>
+          <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
+          <div className="center-align">
+            <Button.Group>
+              <Button secondary content="Apply Business" />
+              <Button secondary content="Apply for CRE" />
+            </Button.Group>
+          </div>
+          <Divider section />
+        </Responsive>
+        <Header as="h2" className={isMobile ? 'mb-50' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>
+          Get flexible financing that doesn’t <Responsive minWidth={768} as="br" />cost you everything.
         </Header>
-        <Grid relaxed="very" stackable columns={3}>
+        <Grid stackable columns={3} doubling>
           <Grid.Column className="info-grid">
             <Image src={sellingIcon} verticalAlign="top" />
             <div>
               <Header as="h5">New, community-driven approach</Header>
               <p>
-                Rich uncles and banks aren’t your only funding options.
-                With NextSeed, everyone is now a potential source of capital –
-                and a potential advocate.
+                Don’t be limited by your network. With NextSeed, everyone is now a potential
+                source of capital – and a potential customer and advocate.
               </p>
             </div>
           </Grid.Column>
@@ -61,23 +77,21 @@ const HowItWorks = () => (
             </div>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-80 center-align">
-          <Button secondary content="Apply now" />
-        </div>
         <Grid className="business-learn-more">
-          <Grid.Row centered columns={2}>
+          <Grid.Row>
             <Grid.Column className="center-align">
-              {/* <p><b>Learn more</b></p> */}
               <List horizontal relaxed className="learn-more-list left-align">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                  <List.Content as="a">Why fundraise on NextSeed?</List.Content>
+                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                  <List.Content>Why fundraise on <a href="/">NextSeed?</a></List.Content>
                 </List.Item>
                 <List.Item>
-                  <List.Header>&nbsp;</List.Header>
-                  <List.Icon className="ns-arrow-right" color="green" />
-                  <List.Content as="a">Is fundraising on NextSeed risky?</List.Content>
+                  {!isMobile &&
+                    <List.Header>&nbsp;</List.Header>
+                  }
+                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
+                  <List.Content>Is fundraising on <a href="/">NextSeed risky?</a></List.Content>
                 </List.Item>
               </List>
             </Grid.Column>
@@ -86,27 +100,88 @@ const HowItWorks = () => (
       </Container>
     </section>
     <Divider fitted as={Container} />
-    <section className="testimonial-slider">
+    <section>
+      <Container textAlign={isMobile ? 'left' : 'center'}>
+        <Header as="h2" className={isMobile ? 'mb-40' : 'mb-80'}>We work with Main Street businesses.</Header>
+      </Container>
+      {!isMobile ?
+        <Container>
+          <Grid centered stackable columns={3} className="vertical-gutter">
+            <Grid.Column textAlign="center">
+              <Image src={UserOne} centered />
+              <Header as="h5">Breweries & Distilleries</Header>
+              <p>Wichita Falls Brewery raised $125,000 to build out a new taproom</p>
+            </Grid.Column>
+            <Grid.Column textAlign="center">
+              <Image src={UserTwo} centered />
+              <Header as="h5">Restaurants & Bars</Header>
+              <p>PORTERS raised $500,000 to open a new steakhouse.</p>
+            </Grid.Column>
+            <Grid.Column textAlign="center">
+              <Image src={UserThree} centered />
+              <Header as="h5">Fitness Studios</Header>
+              <p>Alkalign Studios raised $100,000 to expand franchising opportunities.</p>
+            </Grid.Column>
+            <Grid.Column textAlign="center">
+              <Image src={UserFour} centered />
+              <Header as="h5">Health & Wellness</Header>
+              <p>Healing Waters raised $110,000 to open a new floatation spa.</p>
+            </Grid.Column>
+            <Grid.Column textAlign="center">
+              <Image src={UserFive} centered />
+              <Header as="h5">Hospitality</Header>
+              <p>The Native raised $396,500 to open a boutique hostel and bar.</p>
+            </Grid.Column>
+            <Grid.Column textAlign="center">
+              <Image src={UserSix} centered />
+              <Header as="h5">Co-working</Header>
+              <p>The Annex HTX raised $230,500 to build a co-working and retail space.</p>
+            </Grid.Column>
+          </Grid>
+        </Container>
+      :
+        <Aux>
+          <Container>
+            <NsCarousel {...settings}>
+              {
+                [1, 2, 3].map(i => (
+                  <div key={i}>
+                    <Grid.Column textAlign="center" className="center-align">
+                      <Image src={UserOne} centered />
+                      <Header as="h5">Breweries & Distilleries</Header>
+                      <p>Wichita Falls Brewery raised $125,000 to build out a new taproom</p>
+                    </Grid.Column>
+                  </div>
+                ))
+              }
+            </NsCarousel>
+          </Container>
+        </Aux>
+      }
+    </section>
+    <Divider fitted as={Container} />
+    <section>
       <Container>
         <NsCarousel {...settings}>
           {
             [1, 2, 3].map(i => (
-              <Grid stackable key={i}>
-                <Grid.Column width={6}>
-                  <Image src={carouselImg} circular />
-                </Grid.Column>
-                <Grid.Column width={10} className="testimonial-details">
-                  <Header as="h2" className="mb-20">Real sucess stories {i}.</Header>
-                  <h3 className="mb-50">
-                    “Loved the experience! Financing this way allowed me to focus
-                    on my passion and not on pitching investors.”
-                  </h3>
-                  <div className="testimonial-user-details">
-                    <p><b>Lian Nguyen,</b> Bravery Chef Hall</p>
-                    <span>$1,000,000 | 539 Investors</span>
-                  </div>
-                </Grid.Column>
-              </Grid>
+              <Item.Group key={i}>
+                <Item>
+                  <Item.Image size="medium" src={carouselImg} circular />
+                  <Item.Content verticalAlign="middle">
+                    <Item.Header as="h2">Real sucess stories {i}.</Item.Header>
+                    <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
+                      “The NextSeed process was extremely smooth and allowed me to focus on
+                      getting Pitch 25 up and running. The amount of community buzz that we
+                      got through this process gave our business a huge boost.”
+                    </Item.Description>
+                    <Item.Extra className="testimonial-user-details">
+                      <p><b>Brian Ching | Pitch 25</b></p>
+                      <span>$549,900 from 392 investors</span>
+                    </Item.Extra>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
             ))
           }
         </NsCarousel>
@@ -122,46 +197,42 @@ const HowItWorks = () => (
               Every day, entrepreneurs like you are raising capital on
               NextSeed to bring their concepts to life.
             </p>
-            <Grid columns={2}>
+            <Grid columns={2} stackable>
               <Grid.Row>
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
-                    <Statistic.Value>$9M+</Statistic.Value>
+                    <Statistic.Value>$10M+</Statistic.Value>
                     <Statistic.Label>In capital deployed by NextSeed investors</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
-                    <Statistic.Value>35+</Statistic.Value>
-                    <Statistic.Label>Businesses successfully funded</Statistic.Label>
+                    <Statistic.Value>40+</Statistic.Value>
+                    <Statistic.Label>Businesses funded</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
-                    <Statistic.Value>135</Statistic.Value>
-                    <Statistic.Label>Avg. number of investors per offering</Statistic.Label>
+                    <Statistic.Value>90%+</Statistic.Value>
+                    <Statistic.Label>Campaigns successfully raise their minimum</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
-                    <Statistic.Value>11,630</Statistic.Value>
+                    <Statistic.Value>15,000+</Statistic.Value>
                     <Statistic.Label>Avg. unique page views per offering</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
               </Grid.Row>
             </Grid>
             <Divider hidden />
-            <p className="mt-30">
-              The above figures include data from both the Texas and Reg CF NextSeed platforms.
-              The total amount raised from debt crowdfunding as of Nov 2017 figure includes
-              amounts invested in offerings completed through NextSeed US LLC
-              (&quot;NextSeed&quot;) or NextSeed TX LLC (&quot;NextSeed TX&quot;),
-              an affiliate of NextSeed. The aggregate amount invested through NextSeed is
-              $6,745,700 and the aggregate amount invested through NextSeed TX is $1,303,500.
-              Historical figures only. Past performance of one business is not a guarantee of
-              future results of another business.
+            <p>
+              The above figures include the total amount raised in offerings completed through
+              NextSeed Securities, LLC ($XX,XXX,XXX), NextSeed US, LLC ($XX,XXX,XXX) and
+              NextSeed TX, LLC ($XX,XXX,XXX). Historical figures only. Past performance of one
+              business is not a guarantee of future results of another business.
             </p>
           </Grid.Column>
           <Grid.Column>
@@ -169,15 +240,26 @@ const HowItWorks = () => (
               id={nsvideos.embed}
               placeholder={videoPoster}
               source="vimeo"
+              icon="ns-play"
             />
             <p className="caption-note mt-10">
               The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
             </p>
           </Grid.Column>
         </Grid>
-        <div className="mt-80 mb-50 center-align">
-          <Button as={Link} to="/business/funding-options/term-notes" primary content="See Funding Options" />
-        </div>
+      </Container>
+    </section>
+    <section>
+      <Container>
+        <Divider />
+        <List className="learn-more-list">
+          <List.Item>
+            <List.Content as={Link} to="/business/funding-options/term-notes" className="text-uppercase" floated="right">
+              <b>Funding options</b>
+              <List.Icon className="ns-arrow-right" color="green" />
+            </List.Content>
+          </List.Item>
+        </List>
       </Container>
     </section>
   </Aux>

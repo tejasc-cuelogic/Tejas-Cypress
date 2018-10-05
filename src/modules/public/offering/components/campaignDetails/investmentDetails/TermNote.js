@@ -7,7 +7,7 @@ import PaymentCalculator from './PaymentCalculator';
 export default class TermNote extends Component {
   render() {
     return (
-      <div className="campaign-about-wrapper investment-wrapper">
+      <div className="campaign-content-wrapper investment-wrapper">
         <Header as="h3">Use of Proceeds</Header>
         <Grid stackable columns={2}>
           <Grid.Column>

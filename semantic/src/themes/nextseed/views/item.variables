@@ -48,7 +48,7 @@
 @imageMargin: 0em;
 @imagePadding: 0em;
 @imageBorder: none;
-@imageBorderRadius: 0.125rem;
+@imageBorderRadius: inherit;
 @imageBoxShadow: none;
 @imageBorder: none;
 

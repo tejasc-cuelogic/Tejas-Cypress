@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-03)
+# 0.0.0 (2018-10-05)
 
 
 ### Bug Fixes
@@ -18,6 +18,7 @@
 
 * ** investment flow[Issue [344](https://chaos.ns.team/nsv2/ns-ops/issues/344) - investment flow refinements]:** investment flow refinements ([ea3a07c](https://chaos.ns.team/nsv2/ns-client/commits/ea3a07c))
 * **Admin application details[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** application details and issuer signup issue fix application listing cta ([e96eaab](https://chaos.ns.team/nsv2/ns-client/commits/e96eaab))
+* **Admin application listing[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** issuer signup minor bug fixes and promote application done ([f70ddb0](https://chaos.ns.team/nsv2/ns-client/commits/f70ddb0))
 * **Admin Business Applications[Issue [270](https://chaos.ns.team/nsv2/ns-ops/issues/270) - business-application-admin-screen-business-application-lists-skeleton]:** created skeleton for admin business application list using graph cool stub api with filters ([c45b5f0](https://chaos.ns.team/nsv2/ns-client/commits/c45b5f0))
 * **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **admin dashboard activity history[Issue [365](https://chaos.ns.team/nsv2/ns-ops/issues/365) - admin dashboard activity history]:** designed activity history section ([f2bd37f](https://chaos.ns.team/nsv2/ns-client/commits/f2bd37f))
@@ -78,7 +79,10 @@
 * **Public demo feedback[Issue [331](https://chaos.ns.team/nsv2/ns-ops/issues/331) - Public demo feedback]:** solved logo, banner and banner title issues ([e71dbce](https://chaos.ns.team/nsv2/ns-client/commits/e71dbce))
 * **public investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - public investment workflow]:** designed investment workflow ([e9b1736](https://chaos.ns.team/nsv2/ns-client/commits/e9b1736))
 * **public investors[Issue [257](https://chaos.ns.team/nsv2/ns-ops/issues/257) - public investors homepage]:** - completed design of why nextseed and how it works ([52edaeb](https://chaos.ns.team/nsv2/ns-client/commits/52edaeb))
+* **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** completed design of public homepage and investors pages along with main header menu and footer changes ([e6733c2](https://chaos.ns.team/nsv2/ns-client/commits/e6733c2))
+* **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** updating button group CSS ([2a154c9](https://chaos.ns.team/nsv2/ns-client/commits/2a154c9))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
+* **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 
 

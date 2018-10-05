@@ -40,7 +40,7 @@ const FormInput = observer((props) => {
         </label>
       }
       {props.type === 'password' &&
-        <input style={{ opacity: 0, position: 'absolute' }} tabIndex={-1} value="something" />
+        <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
       }
       <Input
         fluid

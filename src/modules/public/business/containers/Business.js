@@ -39,6 +39,7 @@ class Business extends Component {
         >
           <PublicSubNav
             navStatus={navStore.navStatus}
+            stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
             navItems={navItems}

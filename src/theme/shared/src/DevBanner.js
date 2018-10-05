@@ -7,7 +7,7 @@ const DevBanner = props => (
   <div
     style={{
       fontSize: '14px',
-      height: '34px',
+      minHeight: '34px',
       color: 'black',
       textAlign: 'center',
       background: '#FFE626',
@@ -16,6 +16,7 @@ const DevBanner = props => (
       left: '0',
       right: '0',
       bottom: '0',
+      zIndex: '100',
     }}
   >
     <span style={{ float: 'left' }}>

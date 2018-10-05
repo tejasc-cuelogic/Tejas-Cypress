@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import _ from 'lodash';
 import Aux from 'react-aux';
 import { Menu, Icon } from 'semantic-ui-react';
-import { PRIVATE_NAV, PUBLIC_NAV } from '../../constants/NavigationMeta';
+import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 
 @inject('navStore')
@@ -50,14 +50,17 @@ export const GetNavItem = (item, roles) => {
 };
 
 export const GetNavMeta = (item, roles, nonprivate) => {
+  const ALL_PUBLIC = [...PUBLIC_NAV, ...FOOTER_NAV];
   const navMeta = !nonprivate ? _.find(PRIVATE_NAV, i => matchPath(item, { path: `/app/${i.to}` })) :
-    _.find(PUBLIC_NAV, i => matchPath(item, { path: `/${i.to}` }));
-  navMeta.title = typeof navMeta.title === 'object' && roles ? navMeta.title[roles[0]] :
-    navMeta.title;
-  if (navMeta.subNavigations && roles) {
-    navMeta.subNavigations = navMeta.subNavigations.filter(n =>
-      !n.accessibleTo || n.accessibleTo.length === 0 ||
-      _.intersection(n.accessibleTo, roles).length > 0);
+    _.find(ALL_PUBLIC, i => matchPath(item, { path: `/${i.to}`, exact: i.exact || false }));
+  if (navMeta) {
+    navMeta.title = typeof navMeta.title === 'object' && roles ? navMeta.title[roles[0]] :
+      navMeta.title;
+    if (navMeta.subNavigations && roles) {
+      navMeta.subNavigations = navMeta.subNavigations.filter(n =>
+        !n.accessibleTo || n.accessibleTo.length === 0 ||
+        _.intersection(n.accessibleTo, roles).length > 0);
+    }
   }
   return navMeta;
 };

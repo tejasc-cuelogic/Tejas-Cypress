@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
-import { Button, Form, Divider } from 'semantic-ui-react';
+import { Button, Form, Grid } from 'semantic-ui-react';
 import { FormInput } from '../../../../theme/form';
 
 const SubscribeFields = ({
   NEWSLETTER_FRM, newsLetterChange, modal, inProgress,
 }) => (
   <Aux>
-    {
+    {/* {
       Object.keys(NEWSLETTER_FRM.fields).map(field => (
         <FormInput
           key={field}
@@ -16,17 +16,39 @@ const SubscribeFields = ({
           name={field}
           fielddata={NEWSLETTER_FRM.fields[field]}
           changed={newsLetterChange}
-          containerwidth={!modal ? 4 : false}
+          containerwidth={4}
           ishidelabel={!modal}
         />
       ))
     }
-    <Divider hidden />
-    <Form.Field className={modal ? 'center-align' : ''}>
-      <Button primary className={modal ? 'very relaxed' : 'fluid'} loading={inProgress}>
+    <Form.Field>
+      <Button primary compact loading={inProgress}>
         Submit
       </Button>
-    </Form.Field>
+    </Form.Field> */}
+    <Grid centered>
+      <Grid.Row>
+        {
+          Object.keys(NEWSLETTER_FRM.fields).map(field => (
+            <Grid.Column computer={4} tablet={5} mobile={16}>
+              <FormInput
+                key={field}
+                type="text"
+                name={field}
+                fielddata={NEWSLETTER_FRM.fields[field]}
+                changed={newsLetterChange}
+                ishidelabel={!modal}
+              />
+            </Grid.Column>
+          ))
+        }
+        <Grid.Column computer={2} tablet={3} mobile={16}>
+          <Button primary loading={inProgress} fluid>
+             Subscribe
+          </Button>
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
   </Aux>
 );
 
@@ -45,14 +67,12 @@ export default class SubscribeForNewsletter extends Component {
             inProgress={inProgress}
           />
         ) : (
-          <Form.Group>
-            <SubscribeFields
-              NEWSLETTER_FRM={NEWSLETTER_FRM}
-              newsLetterChange={newsLetterChange}
-              modal={this.props.modal}
-              inProgress={inProgress}
-            />
-          </Form.Group>
+          <SubscribeFields
+            NEWSLETTER_FRM={NEWSLETTER_FRM}
+            newsLetterChange={newsLetterChange}
+            modal={this.props.modal}
+            inProgress={inProgress}
+          />
         )}
       </Form>
     );

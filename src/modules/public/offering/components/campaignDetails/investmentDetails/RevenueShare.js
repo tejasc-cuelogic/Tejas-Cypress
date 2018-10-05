@@ -16,7 +16,7 @@ export default class RevenueShare extends Component {
   render() {
     const { activeIndex } = this.state;
     return (
-      <div className="campaign-about-wrapper investment-wrapper">
+      <div className="campaign-content-wrapper investment-wrapper">
         <Header as="h3">Use of Proceeds</Header>
         <Grid stackable columns={2}>
           <Grid.Column>

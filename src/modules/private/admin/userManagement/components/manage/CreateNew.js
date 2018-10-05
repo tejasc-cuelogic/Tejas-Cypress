@@ -30,7 +30,7 @@ export default class CreateNew extends Component {
     const { USR_FRM, userEleChange, capabilitiesMeta } = this.props.userStore;
     const { inProgress } = this.props.uiStore;
     return (
-      <Modal closeIcon size="tiny" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+      <Modal closeIcon closeOnDimmerClick={false} size="tiny" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-detials">
           <Item.Group>
             <Item className="user-intro">

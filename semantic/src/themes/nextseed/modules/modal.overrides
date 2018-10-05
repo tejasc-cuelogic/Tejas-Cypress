@@ -7,6 +7,9 @@
     display: -ms-flexbox !important;
     .ui.modal{
         margin:0 !important;
+        @media only screen and (max-width:@largestSmallMonitor){
+            position: relative;
+        }
     }
 }
 //  Public pages Starts
@@ -50,15 +53,25 @@
         padding: 2.85714286rem 1.42857143rem;
     }
     &.team-member-modal {
+        border-radius: 0;
+        >.close{
+            @media only screen and (max-width:@largestMobileScreen){
+                top:10px !important;
+            }
+        }
+        .header {
+            font-size: @16px;
+        }
         .content {
-            padding: 0;
+            padding: 0 !important;
             border-radius: 0;
         }
         .item {
+            margin-top: 0;
             .image {
                 width: 50%;
                 +.team-details-container.content {
-                    padding: @40px @20px;
+                    padding: @40px @20px !important;
                 }
             }
         }
@@ -96,6 +109,30 @@
             height: 70vh;
         }
     }
+    &.large {
+        >.close {
+            @media only screen and (max-width:@largestMobileScreen){
+                top: 12px !important;
+            }
+        }
+        >.header {
+            @media only screen and (max-width:@largestMobileScreen){
+                font-size: 16px;
+            }
+        }
+    }
+    &.about-modal {
+        border-radius: 0;
+        >.close {
+            z-index: 2;
+            color: @neutral-darkwhite;
+            top: 18px;
+            opacity: 1;
+        }
+        >.icon:first-child+* {
+            border-radius: 0;
+        }
+    }
 }
 //  Public pages Ends
 
@@ -121,7 +158,7 @@
         width:665px;
     }
     >.close{
-        position:fixed;
+        // position:fixed;      commented to resolve issue on iphone
         top:@7px;
         right:@7px;
         opacity:0.5;
@@ -132,7 +169,7 @@
         }
     }
     >.header:not(.ui).signup-header{
-        padding-top:@28px;
+        padding-top:@28px !important;
         border:none;
         .back-link{
             font-size:@16px;
@@ -166,6 +203,9 @@
         &.signup-content{
             // padding-top:0;
             padding-bottom:@20px;
+            @media only screen and (max-width:@largestMobileScreen){
+                padding:@14px !important;
+            }
             .ui.header{
                 >.icon{
                     display:inline-block;
@@ -180,10 +220,21 @@
                 display:flex;
                 flex-direction:column;
                 justify-content:center;
+                align-items:center;
+                @media only screen and (max-width:@largestMobileScreen){
+                    min-height:80px;
+                    flex-direction:row;
+                    >div{
+                        flex-grow:1;
+                    }
+                }
                 > i.icon{
                     margin:0 auto;
                     font-size:@50px;
                     color:@border-color;
+                    @media only screen and (max-width:@largestMobileScreen){
+                        margin:0 @14px 0 0;
+                    }
                 }
             }
         }
@@ -198,6 +249,9 @@
                 font-size:@18px;
                 color:@fullBlack;
                 line-height:@20px;
+                @media only screen and (max-width:@largestMobileScreen){
+                    margin:0 0 @7px 0;
+                }
             }
             p{
                 font-size:@13px;
@@ -206,6 +260,9 @@
                 max-height:0;
                 overflow:hidden;
                 transition:all .5s ease-in-out;
+                @media only screen and (max-width:@largestMobileScreen){
+                    max-height:48px;
+                }
             }
             &:hover, &:focus, &.active{
                 border-color:@primary-one-darken;
@@ -265,6 +322,9 @@
             text-align:center;
             border:none;
             background-color:@white;
+            @media only screen and (max-width:@largestMobileScreen){
+                padding-bottom:@21px !important;
+            }
         }
     }
     .ui.divider{
@@ -517,7 +577,7 @@
         }
     }
 }
-.transaction-detials{
+.transaction-details{
     .title-meta{
         margin-left:1.5rem;
         font-size:@14px;
