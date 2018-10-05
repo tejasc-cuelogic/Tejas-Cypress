@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Modal, Header, List, Icon, Image, Divider } from 'semantic-ui-react';
-import campainAboutImg from '../../../../../assets/images/campaign_about.jpg';
+import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
+
 // import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 // const nsvideos = {
@@ -27,13 +28,6 @@ class CompanyDescriptionModal extends Component {
       >
         <Modal.Header>Company Description</Modal.Header>
         <Modal.Content scrolling>
-          <Header as="h4">Buffbrew Taproom LLC</Header>
-          {
-            campaign.offering.about.theCompany !== null ?
-              <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
-              :
-              <p>{emptyStatement}</p>
-          }
           {/* <Divider section />
           <Grid columns={2} stackable>
             <Grid.Column verticalAlign="middle" textAlign="center">
@@ -54,46 +48,22 @@ class CompanyDescriptionModal extends Component {
                 icon="ns-play"
               />
             </Grid.Column>
-          </Grid> */}
+          </Grid>
+          <Divider section /> */}
+          <Aux>
+            {
+              campaign.offering.about.theCompany !== null ?
+                <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+                :
+                <p>{emptyStatement}</p>
+            }
+            <Image src={campaign.media.heroImage.url !== null ? campaign.media.heroImage.url : defaultLeaderProfile} fluid centered className="mt-30" />
+          </Aux>
           <Divider section />
-
-          {
-            campaign.media.heroImage.isPublic === true ?
-              <Aux>
-                <p>
-                  The new Sawyer Yards location will allow Buffbrew the space to make beer and host
-                  guests in a beautifully and thoughtfully designed home. Standing three stories
-                  tall with over 28,000 square feet, the brewery will welcome a steady flow of beer
-                  enthusiasts, 7 days a week. The cornerstone of this experience will be the
-                  state-of-the-art Buffbrew Taproom, with over 40 beers on tap and a full-service
-                  kitchen serving up an elevated bar food menu.
-                </p>
-                <Image src={campainAboutImg} fluid centered className="mt-30" />
-                <p className="caption-note mb-30">
-                  Caption. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus
-                  dignissim vitae odio nec pellentesque.
-                </p>
-                <p>
-                  The team’s partnership with Method Architecture has been a process in staying true
-                  to the beloved elements of Buffbrew’s current home on Nolda Street – an immersive,
-                  picnic-tables-on-concrete feel – while creating a new, unparalleled scenic view.
-                </p>
-                <p>
-                  The main taproom will reside on the second floor. On one side, customers will be
-                  met with 30 feet of large, plate glass windows that directly overlook the tanks
-                  and brewers at work – a true tank-to-table, or tank-to-tap, experience. In line
-                  with its “Urban Brewery” designation, taproom patrons will also face magnificent
-                  Houston views with over 50 feet of downtown-facing windows. With no taller
-                  buildings standing between the brewery and downtown, the city’s skyline will make
-                  for a beautiful backdrop for private events, holidays, and any other reason to
-                  spend an evening on the rooftop patio or party room.
-                </p>
-              </Aux> : ''
-          }
           <div className="history-section">
             <Header as="h4">History</Header>
             {
-              campaign.offering.about.history.length > 0 ?
+              campaign.offering.about.history.length ?
                 <List>
                   {
                     campaign.offering.about.history.map(data => (
