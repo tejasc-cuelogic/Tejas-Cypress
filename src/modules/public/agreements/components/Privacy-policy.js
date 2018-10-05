@@ -10,14 +10,14 @@ const PrivacyPolicy = () => (
       <Header.Subheader>Last updated January 2018</Header.Subheader>
     </Header>
     <Divider section />
-    <div>
+    <div className="justify-text">
       <p>The Next Seed, Inc. (NextSeed) operates a public website at www.nextseed.com, and also offer an online intermediary platform through its subsidiary NextSeed US LLC for investment crowdfunding in accordance with Regulation Crowdfunding. You may browse the public content on the website without establishing a user account, but you must establish a user account to view and use non-public content on the site and to use the platform. NextSeed is committed to maintaining the confidentiality, integrity, and security of your personal information. This Privacy Policy covers NextSeed’s privacy policies for both its public site visitors and its platform users, and describes:</p>
       <List relaxed bulleted>
         <List.Item><strong>Data Collected</strong>: the personal data that NextSeed collects from you;</List.Item>
         <List.Item><strong>Use of Data</strong>: the ways that NextSeed uses that personal data, including the ways that it may combine data it collects from you with data it acquires about you from other sources; and</List.Item>
         <List.Item><strong>Disclosure of Data to Others</strong>: the circumstances under which NextSeed might share your personal data with others.</List.Item>
       </List>
-      <p>The NextSeed Terms of Service include terms governing data published by platform users, such as rights in published data, rights of other platform users to use published data, and NextSeed’s retention of data. Platform users should review this Privacy Policy together with the Terms of Service.&nbsp; <strong>&nbsp;</strong> The statements below summarize our data practices. We used the Iubenda service at www.iubenda.com to generate a more detailed description of our data practices including third party elements and information providers. The Iubenda description appears as an appendix to this Privacy Policy. References in the Iubenda policy to the “Application” means our site and services. If you have questions or there is anything that you do not understand about this Privacy Policy or NextSeed’s collection and use of your personal data, please do not hesitate to contact us at: <a href="mailto:privacy@nextseed.com">privacy@nextseed.com</a></p>
+      <p>The NextSeed Terms of Service include terms governing data published by platform users, such as rights in published data, rights of other platform users to use published data, and NextSeed’s retention of data. Platform users should review this Privacy Policy together with the Terms of Service. The statements below summarize our data practices. We used the Iubenda service at www.iubenda.com to generate a more detailed description of our data practices including third party elements and information providers. The Iubenda description appears as an appendix to this Privacy Policy. References in the Iubenda policy to the “Application” means our site and services. If you have questions or there is anything that you do not understand about this Privacy Policy or NextSeed’s collection and use of your personal data, please do not hesitate to contact us at: <a href="mailto:privacy@nextseed.com">privacy@nextseed.com</a></p>
       <Header as="h5">Data Collected</Header>
       <p><strong>Public Site Visitors</strong>: Our Web server captures your IP address, the time and duration of your visit, and the pages on the site that your visit. It may also collect information about your browser, device, location and other information of the type collected by Web servers generally. We may use “cookies,” “web beacons” or other techniques to identify you or your device to your activity on the site. Please see the section below captioned “Online Data Collection Technologies” for more information regarding our use of these techniques and your ability to restrict our collection of data in this manner. We use third party Web analytics tools to capture information about your use of the site, such as mouse clicks and scrolling activity. For example, we may use Google Analytics, Google Website Optimizer, or FullStory. The providers of these tools may capture data about your activity on our site, via cookies and other techniques. If you arrive at our site by clicking on an advertisement or content published by a third party, that third party may provide information to us about your activity on their site. For example, we may use Google AdWords or other third party advertisers, or may sponsor links on other third party sites. We may ask you to volunteer information about yourself using the site, including personal data (such as your name and email address), demographic data (such as your profession, age and gender), and information about your general interests. We may also ask you to submit a photograph of yourself. Your submission of this type of information as a public site visitor is not required. We may permit third parties to display content on our site. If you view this content, the third party may collect information about you. For example, we may permit content to be displayed by Google Fonts, Google Maps, You Tube or Vimeo. You should see the third party’s site for more information about the data they collect and their use and disclosure of the data.</p>
       <p><strong>Platform Users</strong>: You must provide personal data to establish an account, such as name, physical address, phone number, email address, and other contact information. It is your decision to provide any information; however, without establishing a full account, you may not be able to use certain features on NextSeed. As part of setting up your account, you are required to create a password, password hints, and provide answers to security questions. You are also required to provide financial information for the purpose of making investments and paying our fees, such as your bank account information. You may be required or permitted to publish personal and financial data about yourself as part of the content you post to the public and non-public parts of the site, including the comment sections of the offering pages, by means of the platform, or to qualify you as an appropriate issuer or investor under applicable laws and regulations. We may also collect additional information based on your account usage such as your investment experience. You may also be required or permitted to publish demographic data or information about your interests and background. You may be permitted to publish a photograph of yourself. The nature of these publication features necessarily identifies you to your published content. You may be permitted to share with NextSeed the personal data of your contacts via your local address book or via a third party service such as Facebook or LinkedIn. If you contact us for support (whether by phone, chat, email or other means), we may record and save the contents of the communication.</p>
@@ -42,7 +42,7 @@ const PrivacyPolicy = () => (
       <Header as="h5">Online Data Collection Technologies</Header>
       <p>A cookie is a small text file that is placed on your device, typically a string of numbers and letters. The cookie is used to uniquely identify your device. Whoever places the cookie will typically use the information to associate each of your site or services visits to your device, and to you personally if the cookie placer has information that identifies you personally to your device. Most browsers include features that enable you to block or restrict cookie placement. If you disable or restrict cookies, you may not be able to use all of the features of the site or service that placed the cookie. A Web beacon is a small electronic image that is served by a Web server when you view the Web page or email in which it is embedded. Generally, when you view the content in which the Web beacon is embedded, a call is placed to the Web beacon server that identifies your IP address or device information in a way that enables the operator of the beacon to identify your device, or you, to your activity.</p>
       <Header as="h5">Other</Header>
-      <p><strong>Security</strong>:&nbsp; We will use bank-level security measures to protect your personal data from unauthorized use and disclosure. Your submissions of sensitive personal data (such as bank account information) on our website are encrypted using secure socket layer technology (SSL). We may update our security methods and procedures as appropriate. Nonetheless, it is important to note that no method of transmission of information over internet is free of security risk. NextSeed makes no guarantee that your personal data will not be breached even with our bank-level measures safeguarding your information. We cannot assume responsibility or liability for unauthorized access to our servers and systems. We will retain your information for as long as your account is active or is needed to provide you with our services, and we will retain and use your information as necessary to comply with our legal obligations, to resolve disputes, and to enforce our agreements.</p>
+      <p><strong>Security</strong>:  We will use bank-level security measures to protect your personal data from unauthorized use and disclosure. Your submissions of sensitive personal data (such as bank account information) on our website are encrypted using secure socket layer technology (SSL). We may update our security methods and procedures as appropriate. Nonetheless, it is important to note that no method of transmission of information over internet is free of security risk. NextSeed makes no guarantee that your personal data will not be breached even with our bank-level measures safeguarding your information. We cannot assume responsibility or liability for unauthorized access to our servers and systems. We will retain your information for as long as your account is active or is needed to provide you with our services, and we will retain and use your information as necessary to comply with our legal obligations, to resolve disputes, and to enforce our agreements.</p>
       <p><strong>Children’s Online Privacy Protection: </strong>We will not knowingly collect any data from or about any person under the age of 13.</p>
       <p><strong>Changes to Our Privacy Policy: </strong>We may change, modify, add, or remove portions of this privacy policy at any time. Any changes or updates will be effective immediately upon posting to this page, and the date of such change or update will be posted at the top of the page. Your continued use of our website following the posting of any changes to this privacy policy means you consent to such changes.</p>
       <Divider section />
@@ -75,12 +75,12 @@ const PrivacyPolicy = () => (
         </Table.Header>
         <Table.Body>
           <Table.Row>
-            <Table.Cell><strong>For our everyday business purposes</strong>&nbsp;– such as to process your transactions, maintain your account(s), respond to court orders and legal investigations, or report to credit bureaus</Table.Cell>
+            <Table.Cell><strong>For our everyday business purposes</strong> – such as to process your transactions, maintain your account(s), respond to court orders and legal investigations, or report to credit bureaus</Table.Cell>
             <Table.Cell>Yes</Table.Cell>
             <Table.Cell>No</Table.Cell>
           </Table.Row>
           <Table.Row>
-            <Table.Cell><strong>For our marketing purposes</strong>&nbsp;– to offer our products and services to you</Table.Cell>
+            <Table.Cell><strong>For our marketing purposes</strong> – to offer our products and services to you</Table.Cell>
             <Table.Cell>Yes</Table.Cell>
             <Table.Cell>Yes</Table.Cell>
           </Table.Row>
@@ -90,12 +90,12 @@ const PrivacyPolicy = () => (
             <Table.Cell>Yes</Table.Cell>
           </Table.Row>
           <Table.Row>
-            <Table.Cell><strong>For our affiliates’ everyday business purposes</strong>&nbsp;– information about your transactions and experiences</Table.Cell>
+            <Table.Cell><strong>For our affiliates’ everyday business purposes</strong> – information about your transactions and experiences</Table.Cell>
             <Table.Cell>Yes</Table.Cell>
             <Table.Cell>No</Table.Cell>
           </Table.Row>
           <Table.Row>
-            <Table.Cell><strong>For our affiliates’ everyday business purposes</strong>&nbsp;– information about your creditworthiness</Table.Cell>
+            <Table.Cell><strong>For our affiliates’ everyday business purposes</strong> – information about your creditworthiness</Table.Cell>
             <Table.Cell>Yes</Table.Cell>
             <Table.Cell>Yes</Table.Cell>
           </Table.Row>
@@ -112,14 +112,14 @@ const PrivacyPolicy = () => (
         </Table.Body>
       </Table>
       <Divider hidden />
-      <p>Call (866) 282-3345 or visit us online: www.nextseed.com or contact us at&nbsp;privacy@nextseed.com</p>
+      <p>Call (866) 282-3345 or visit us online: www.nextseed.com or contact us at <a href="mailto:privacy@nextseed.com">privacy@nextseed.com</a></p>
       <p><strong>Please note:</strong> If you are a new customer, we can begin sharing your information 30 days from the date we sent this notice. When you are no longer our customer, we continue to share your information as described in this notice. However, you can contact us at any time to limit our sharing.</p>
-      <p><strong>Questions</strong> Email <a href="mailto:privacy@nextseed.com">privacy@nextseed.com</a> or go to&nbsp;<a href="https://www.nextseed.com/">www.nextseed.com</a></p>
+      <p><strong>Questions</strong> Email <a href="mailto:privacy@nextseed.com">privacy@nextseed.com</a> or go to <a href="https://www.nextseed.com/">www.nextseed.com</a></p>
       <Header as="h4">Who we are</Header>
       <Header as="h5">Who is providing this notice?</Header>
       <p>The Next Seed, Inc. is a Delaware corporation and has its principal place of business at 800 Town &amp; Country Blvd Ste 220, Houston, Texas 77024.</p>
       <Header as="h4">What we do</Header>
-      <Header as="h5">How does NextSeed protect my&nbsp;personal information?</Header>
+      <Header as="h5">How does NextSeed protect my personal information?</Header>
       <p>To protect your personal information from unauthorized access and use, we use security measures that comply with federal law. These measures include computer safeguards and secured files and buildings.</p>
       <Header as="h5">How does NextSeed collect my personal information?</Header>
       <p>We collect your personal information, for example, when you:</p>
@@ -130,7 +130,7 @@ const PrivacyPolicy = () => (
         <List.Item>Show your driver’s license</List.Item>
       </List>
       <p>We may also collect your personal information from others, such as credit bureaus, affiliates, or other companies.</p>
-      <Header as="h5">Why can’t I limit&nbsp;all sharing?</Header>
+      <Header as="h5">Why can’t I limit all sharing?</Header>
       <p>Federal law gives you the right to limit only:</p>
       <List relaxed bulleted>
         <List.Item>Sharing for affiliates’ everyday business purposes-information about your creditworthiness</List.Item>
@@ -144,7 +144,7 @@ const PrivacyPolicy = () => (
         <List.Item>Show your driver’s license</List.Item>
       </List>
       <p>State laws and individual companies may give you additional rights to limit sharing.</p>
-      <Header as="h5">What happens when I&nbsp;limit sharing for an&nbsp;account I hold jointly with someone else?</Header>
+      <Header as="h5">What happens when I limit sharing for an account I hold jointly with someone else?</Header>
       <p>Your choices will apply to everyone on your account – unless you tell us otherwise.</p>
       <Divider hidden />
       <Header as="h4">Definitions</Header>
@@ -171,7 +171,7 @@ const PrivacyPolicy = () => (
             <p>This Website collects some Personal Data from its Users.</p>
             <Header as="h4" id="owner_of_the_data">Owner and Data Controller</Header>
             <p>NextSeed US LLC, 800 Town and Country Blvd, STE 220, Houston, TX 77024</p>
-            <p><b>Owner contact email:</b> privacy@nextseed.com</p>
+            <p><b>Owner contact email:</b> <a href="mailto:privacy@nextseed.com">privacy@nextseed.com</a></p>
             <Divider hidden />
             <Header as="h4" id="types_of_data">Types of Data collected</Header>
             <p> Among the types of Personal Data that this Website collects, by itself or through third parties, there are: Cookies, Usage Data, first name, last name, phone number, email address, gender, date of birth, address, password, company name, Tax ID, profession, fax number, country, state, ZIP/Postal code, Social Security number (SSN), city, picture, username, various types of Data, website, data relating to the point of sale, profile picture and unique device identifiers for advertising (Google Advertiser ID or IDFA, for example). </p>

@@ -49,15 +49,14 @@ export const PRIVATE_NAV = [
     path: {
       issuer: 'issuer/dashboard',
       admin: 'admin/dashboard/Dashboard',
-      support: 'admin/dashboard/Dashboard',
-      manager: 'admin/dashboard/Dashboard',
     },
-    accessibleTo: ['issuer', 'admin', 'manager', 'support'],
+    accessibleTo: ['issuer', 'admin'],
     subPanel: 0,
   },
   {
     icon: 'ns-users',
     title: 'Manage Users',
+    capability: 'USERS_ANY',
     to: 'users',
     accessibleTo: ['admin', 'manager', 'support'],
     subNavigations: [
@@ -221,10 +220,11 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-users',
     title: 'Offerings',
+    capability: 'OFFERINGS_ANY',
     heading: 'Offerings',
     to: 'offerings',
     path: 'admin/offerings',
-    accessibleTo: ['admin', 'manager', 'support'],
+    accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
       { title: 'Overview', to: 'overview' },
@@ -237,6 +237,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'lightbulb outline',
     title: 'Insights',
+    capability: 'INSIGHTS_ANY',
     to: 'insights',
     path: 'admin/insights',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -244,6 +245,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'question',
     title: 'FAQ',
+    capability: 'FAQ_ANY',
     to: 'faqs',
     path: 'admin/faqs',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -251,6 +253,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-article',
     title: 'Knowledge Base',
+    capability: 'KNOWLEDGE_BASE_ANY',
     to: 'knowledge-base',
     path: 'admin/knowledgeBase',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -258,6 +261,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'user secret',
     title: 'Ambassadors',
+    capability: 'AMBASSADORS_ANY',
     to: 'ambassadors',
     path: 'admin/ambassadors',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -265,6 +269,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'handshake outline',
     title: 'Team',
+    capability: 'TEAM_ANY',
     to: 'team',
     path: 'admin/team',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -272,6 +277,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'wpforms',
     title: 'Applications',
+    capability: 'APPLICATIONS_ANY',
     to: 'applications',
     path: 'admin/applications/containers/ManageApplications',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -285,6 +291,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'ns-envelope',
     title: 'Message Center',
+    capability: 'MESSAGE_CENTER_ANY',
     to: 'message-center',
     path: 'admin/messageCenter',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -292,6 +299,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'money',
     title: 'Repayments',
+    capability: 'REPAYMENTS_ANY',
     to: 'repayments',
     path: 'admin/repayments',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -299,6 +307,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'bullhorn',
     title: 'Campaigns',
+    capability: 'CAMPAIGN_ANY',
     to: 'campaigns',
     path: 'admin/campaigns',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -306,10 +315,11 @@ export const PRIVATE_NAV = [
   {
     icon: 'dollar',
     title: 'CrowdPay',
+    capability: 'CROWD_PAY_ANY',
     to: 'crowdPay',
     heading: 'Manage Crowdpay Accounts',
     path: 'admin/crowdPay',
-    accessibleTo: ['admin', 'manager', 'support'],
+    accessibleTo: ['admin'],
     subPanel: 0,
     subNavigations: [
       { title: 'Review', to: 'review', component: 'ApplicationsList' },
@@ -325,6 +335,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'credit card',
     title: 'Transactions',
+    capability: 'TRANSACTIONS_ANY',
     to: 'transactions',
     path: 'admin/transactions',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -332,6 +343,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'user plus',
     title: 'Beneficiaries',
+    capability: 'BENEFICIARIES_ANY',
     to: 'beneficiaries',
     path: 'admin/beneficiaries',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -339,6 +351,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'payment',
     title: 'Investments',
+    capability: 'INVESTMENTS_ANY',
     to: 'investments',
     path: 'admin/investments',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -346,6 +359,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'history',
     title: 'Activity',
+    capability: 'ACTIVITIES_ANY',
     to: 'activities',
     path: 'admin/activities',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -353,6 +367,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'rocket',
     title: 'Deployments',
+    capability: 'DEPLOYMENTS_ANY',
     to: 'deployments',
     path: 'admin/deployments',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -361,6 +376,12 @@ export const PRIVATE_NAV = [
 
 export const PUBLIC_NAV = [
   {
+    title: 'Home',
+    to: '',
+    exact: true,
+    header: false,
+  },
+  {
     title: 'About Us',
     to: 'about',
     noNav: true,
@@ -368,7 +389,7 @@ export const PUBLIC_NAV = [
       { title: 'Mission', to: 'mission' },
       { title: 'Team', to: 'team' },
       { title: 'Careers', to: 'careers' },
-      { title: 'Impact', to: 'impact' },
+      // { title: 'Impact', to: 'impact' },
       { title: 'Press', to: 'press' },
     ],
   },
@@ -392,6 +413,9 @@ export const PUBLIC_NAV = [
         icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
       },
       {
+        icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',
+      },
+      {
         icon: 'ns-comments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
       },
     ],
@@ -400,18 +424,20 @@ export const PUBLIC_NAV = [
     title: 'How NextSeed Works',
     to: 'business',
     noNav: true,
+    exact: true,
     subNavigations: [
       { title: 'How it Works', to: 'how-it-works' },
       { title: 'Funding Options', to: 'funding-options' },
       { title: 'Process', to: 'process', component: 'InvestmentDetails' },
       { title: 'All-Inclusive', to: 'all-inclusive', component: 'BonusRewards' },
-      { title: 'Compare', to: 'compare', component: 'Disclosures' },
+      // { title: 'Compare', to: 'compare', component: 'Disclosures' },
     ],
   },
   {
     title: 'Why NextSeed',
     to: 'invest',
     noNav: true,
+    exact: true,
     subNavigations: [
       { title: 'Why Nextseed', to: 'why-nextseed' },
       { title: 'How it Works', to: 'how-it-works' },
@@ -424,9 +450,37 @@ export const PUBLIC_NAV = [
     title: 'How NextSeed Works',
     to: '',
     subPanel: 1,
+    exact: true,
     subNavigations: [
-      { title: 'For Investors', to: 'invest' },
-      { title: 'For Businesses', to: 'business' },
+      { title: 'Fundraising', to: 'business' },
+      { title: 'Investing', to: 'invest' },
     ],
   },
+];
+
+
+export const FOOTER_NAV = [
+  {
+    title: 'Resources',
+    to: 'resources',
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Ed Center', to: 'education-center' },
+      { title: 'Insights', to: 'insights' },
+    ],
+  },
+  {
+    title: 'About Us',
+    to: 'about',
+    exact: true,
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Mission', to: 'mission' },
+      { title: 'Team & Culture', to: 'team' },
+      { title: 'Careers', to: 'careers' },
+      { title: 'Press', to: 'press' },
+    ],
+  },
+  { title: 'Terms of Use', exact: true, to: 'agreements/terms-of-use' },
+  { title: 'Privacy Policy', exact: true, to: 'agreements/privacy-policy' },
 ];

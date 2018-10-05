@@ -19,10 +19,14 @@ const data = [
 
 export default class RevenueChart extends Component {
   render() {
+    const style = {
+      top: 0,
+      right: 0,
+    };
     return (
       <ResponsiveContainer height={220}>
-        <LineChart margin={{ top: 50, left: 40 }} width={300} height={100} data={data}>
-          <Legend layout="vertical" verticalAlign="top" align="right" />
+        <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>
+          <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={style} />
           <XAxis tickLine={false} axisLine={false} dataKey="name" interval={11} />
           <Line type="monotone" dataKey="Your Revenue" dot="" stroke="#20C86D" strokeWidth={3} />
           <Line type="monotone" dataKey="Your Payments" stroke="#263E64" strokeWidth={2} />

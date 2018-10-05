@@ -10,6 +10,7 @@
     }
 }
 .ui.grid{
+<<<<<<< HEAD
     &.bottom-aligned{
         >.column:not(.row), >.row>.column{
             align-self:flex-end !important;
@@ -18,7 +19,17 @@
     &.divided:not([class*="vertically divided"])>{
         .column:not(:last-child),
         .row>.column:not(:last-child){
+=======
+    &.divided:not(.vertically){
+        >.column:not(:last-child),
+        >.row>.column:not(:last-child){
+>>>>>>> develop
             box-shadow:@dividedBorder inset;
+        }
+        &.stackable>.column:not(.row){
+            @media only screen and (max-width : @largestMobileScreen){
+                padding: @14px 0 !important;
+            }
         }
     }
     >.column{
@@ -27,24 +38,7 @@
             padding-bottom:@28px;
         }
     }
-    &.investment-terms {
-        margin: 10px 0 20px;
-        box-shadow: 0 1px 0 @border-light;
-        padding: 0px 0 20px;
-        >.row>.column:first-child{
-            padding-left: 0
-        }
-        p {
-            margin-bottom: 0;
-        }
-        .ui.header {
-            margin-top: @10px;
-        }
-        .dropdown {
-            color: @neutral;
-            margin-top: @10px;
-        }
-    }
+    &.divided:not([class*="vertically divided"])
     &.agreement-details {
         margin: @30px 0;
         >.column:not(.row) {
@@ -83,6 +77,100 @@
             box-shadow:1px 0 0 0 @celledBorderColor, 0 1px 0 0 @celledBorderColor;
         }
     }
+    &.flex-column {
+        .column {
+            display: flex !important;
+            flex-direction: column;
+            .flex-content {
+                flex-grow: 1;
+                .ui.header>img {
+                    width: auto;
+                    @media only screen and (max-width : @largestMobileScreen){
+                        display: block;
+                        margin-bottom: 20px;
+                    }
+                }
+            }
+        }
+    }
+    &.investment-grid {
+        &[class*="horizontally padded"]{
+            width: ~"calc(100% + 14px)";
+            margin-left: -14px!important;
+        }
+        >.column:last-child {
+            background-color: @primary-one;
+            position: relative;
+            &:before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: -1px;
+                border-style: solid;
+                border-width: 10px 0px 10px 12px;
+                border-color: transparent @white;
+                display: block;
+                width: 0;
+                z-index: 0;
+                -webkit-transform: translate(0,-50%);
+                -ms-transform: translate(0,-50%);
+                transform: translate(0,-50%);
+                @media only screen and (max-width : @largestMobileScreen){
+                    top: -1px;
+                    left: 50%;
+                    border-width: 12px 10px 0px 10px;
+                    border-color: @white transparent;
+                    transform: translate(-50%,0);
+                }
+            }
+            .ui.statistic {
+                >.label{
+                    color: @white;
+                }
+                >.value {
+                    color: @white;
+                }
+            }
+        }
+        .ui.statistic{ 
+            width: 100%;
+            >.label{
+                padding-bottom: 10px;
+                text-transform: uppercase;
+            }
+        }
+    }
+    &[class*="three column"].doubling>.column:not(.row){
+        @media only screen and (min-width : @computerBreakpoint){
+            &:nth-child(3n) {
+                box-shadow: none;
+            }
+        }
+        @media only screen and (max-width : @largestTabletScreen){
+            &:nth-child(2n), &:last-child {
+                box-shadow: none;
+            }
+        }
+    }
+    &[class*="two column"].divided>.column:not(.row):nth-child(2n){
+        @media only screen and (max-width : @largestTabletScreen){
+            box-shadow: none !important;
+        }
+    }
+    &.vertical-gutter {
+        margin-top: -@14px;
+        margin-bottom: -@14px;
+        >.column {
+            margin-top: @14px;
+            margin-bottom: @14px;
+        }
+    }
+    &.team-list {
+        margin: 0;
+        >.column {
+            padding: 0;
+        }
+    }  
 }
 .featured-statistic {
 	counter-reset: section;
@@ -99,9 +187,22 @@
 			color: @neutral-darkwhite;
             height: 200px;
             line-height: 200px;
+            @media only screen and (max-width : @largestSmallMonitor){
+                left: -3%;
+                top: 0;
+                font-size: 160px;
+                line-height: 160px;
+                height: 160px;
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                display: none;
+            }
         }
         >.row>.column {
             padding: 60px;
+            @media only screen and (max-width: @largestTabletScreen) {
+                padding: @20px;
+            }
         }
     }
 }

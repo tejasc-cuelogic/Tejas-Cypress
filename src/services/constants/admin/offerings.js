@@ -1746,4 +1746,3 @@ export const ADD_NEW_BONUS_REWARD = {
     placeHolder: '3/4/2018',
   },
 };
-

@@ -1,45 +1,40 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Container, Button, Grid, Image } from 'semantic-ui-react';
-import UserOne from '../../../../assets/images/owner-1.jpg';
-import UserTwo from '../../../../assets/images/owner-2.jpg';
+import UserOne from '../../../../assets/images/icons/bizowner.svg';
+import UserTwo from '../../../../assets/images/icons/investors.svg';
 
-const HowItWorksSummary = () => (
+const HowItWorksSummary = props => (
   <section>
-    <Container textAlign="center">
-      <Header as="h2" className="mb-30">
-      A new way to fundraise and invest.<br />
-      Powered by technology. Rooted in community.
-      </Header>
+    <Container textAlign={props.isMobile ? 'left' : 'center'}>
+      <Header as="h2" className="mb-30">A new way to invest in local businesses.</Header>
       <p className="mb-80">
-      Local entrepreneurs and investors are redefining the face of Main Street
-      and regional growth. NextSeed offers the opportunity to invest in commercial
-      developments, restaurants, fitness studios and craft breweries plus a variety
-      of growing concepts. Together, we’re building vibrant, connected and engaged
-      communities around the country.
+        Local entrepreneurs and investors are reshaping the face of Main Street.
+        NextSeed offers the opportunity <br /> to invest in restaurants, fitness studios,
+        craft breweries and a variety of growing concepts.
       </p>
     </Container>
     <Container>
-      <Grid centered relaxed="very" stackable>
-        <Grid.Column textAlign="center" width={6} className="info-card">
-          <Image src={UserOne} size="small" circular centered />
-          <Header as="h4">Raise funds without giving up ownership.</Header>
+      <Grid centered relaxed stackable>
+        <Grid.Column textAlign="center" computer={6} tablet={8} mobile={8} className="info-card">
+          <Image src={UserOne} centered />
+          <Header as="h5">Business Owners</Header>
           <p>
-            Access flexible debt financing while avoiding the hassles of traditional
-            fundraising. No need to sell ownership of your business. Simply create a
-            debt offering and invite your community to invest in your growth.
+            Raise capital to expand or open a new concept.
+            We make it easy to accept investments from friends and fans,
+            and put your story in front of thousands of local investors.
           </p>
-          <Button as={Link} to="/business/how-it-works" primary content="How Fundraising Works" />
+          <Button as={Link} to="/business/how-it-works" primary content="SMB Fundraising" className="mt-20" />
         </Grid.Column>
-        <Grid.Column textAlign="center" width={6} className="info-card">
-          <Image src={UserTwo} size="small" circular centered />
-          <Header as="h4">Invest in businesses you believe in.</Header>
+        <Grid.Column textAlign="center" computer={6} tablet={8} mobile={8} className="info-card">
+          <Image src={UserTwo} centered />
+          <Header as="h5">Investors</Header>
           <p>
-            Investing isn’t just for Wall Street and Silicon Valley. Now anyone can access
-            exclusive investment opportunities. Make an impact for local businesses and
-            communities with minimum investments as low as $100.
+            Access unique, pre-vetted investment opportunities.
+            Put your money to work in businesses you understand and
+            projects that create jobs.
           </p>
-          <Button as={Link} to="/invest/how-it-works" primary content="How Investing Works" />
+          <Button as={Link} to="/invest/how-it-works" primary content="Investing" className="mt-20" />
         </Grid.Column>
       </Grid>
     </Container>
