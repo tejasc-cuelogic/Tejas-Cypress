@@ -623,7 +623,6 @@ export const CONTINGENCY_META = {
     value: false,
     error: undefined,
     rule: 'optional',
-    objRef: 'accepted',
     objRefOutput2: 'accepted',
   },
 };

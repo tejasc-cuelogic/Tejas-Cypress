@@ -64,7 +64,14 @@ export class OfferingCreationStore {
   @observable OFFERING_DETAILS_FRM = Validator.prepareFormObject(OFFERING_DETAILS);
   @observable OFFERING_CLOSE_FRM = Validator.prepareFormObject(OFFER_CLOSE);
   @observable MEDIA_FRM = Validator.prepareFormObject(MEDIA);
-  @observable LEADERSHIP_FRM = Validator.prepareFormObject(LEADERSHIP);
+  @observable LEADERSHIP_FRM =
+    Validator.prepareFormObject(
+      LEADERSHIP,
+      false,
+      true,
+      false,
+      { leadership: LEADERSHIP.leadership },
+    );
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
   @observable ISSUER_FRM = Validator.prepareFormObject(ISSUER);
   @observable AFFILIATED_ISSUER_FRM =
@@ -389,7 +396,7 @@ export class OfferingCreationStore {
 
   @action
   addMore = (form, key, defaultBlank) => {
-    this[form] = Validator.addMoreRecordToSubSection(this[form], key, '', defaultBlank);
+    this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, defaultBlank);
   }
 
   @action
