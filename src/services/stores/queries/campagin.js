@@ -1,16 +1,35 @@
 import gql from 'graphql-tag';
 
-export const allCampaigns = gql`
-  query allCampaigns {
-    allCampaigns{
+export const allOfferings = gql`
+query getOfferingList($filters: OfferingFilterInputType){
+    getOfferingList(filters: $filters) {
       id
-      createdAt
-      title
-      address
-      description
-      flagged
-      label
-      image
+      media {
+        tombstoneImage {
+        url
+        }
+      }
+      offering {
+        about {
+          theCompany
+        }
+      }
+      keyTerms {
+        industry
+        securities
+      }
+      businessGeneralInfo {
+        businessName
+        address {
+          state
+          city
+        }
+      }
+      keyTerms {
+        legalBusinessName
+        securities
+        industry
+      }
     }
   }
 `;
