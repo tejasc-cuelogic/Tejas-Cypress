@@ -15,3 +15,11 @@ export const removeUploadedFile = gql`
       fileId
     }
   }`;
+
+export const getBoxFileDetails = gql`
+  query getFileDetails($fileId: String!) {
+    getFileDetails (fileId: $fileId) {
+      boxFileId
+    }
+  }
+`;

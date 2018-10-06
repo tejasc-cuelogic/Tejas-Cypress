@@ -1,4 +1,7 @@
 import { observable, action, reaction } from 'mobx';
+import graphql from 'mobx-apollo';
+import { getBoxFileDetails } from '../queries/common';
+import { GqlClient as client } from '../../../api/gqlApi';
 
 export class CommonStore {
   @observable appName = 'NextSeed';
@@ -17,6 +20,21 @@ export class CommonStore {
       },
     );
   }
+
+  getBoxFileDetails = fileId => new Promise((resolve) => {
+    graphql({
+      client,
+      query: getBoxFileDetails,
+      variables: {
+        fileId,
+      },
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
+    });
+  });
 
   @action
   setToken(token) {

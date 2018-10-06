@@ -36,7 +36,7 @@
 .ui{
     &.button, &.buttons .button{
         + .button{
-            margin-left:@10px !important;
+            margin-left:@10px;
         }
         &.link-button{
             padding:0;
