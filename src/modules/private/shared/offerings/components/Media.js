@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Input, Header, Icon, Divider, Image, Button, List, Confirm, Grid } from 'semantic-ui-react';
+import { Form, Input, Header, Icon, Divider, Image, Button, List, Confirm, Grid, Label } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../theme/form';
 
 // import HeroImage from '../../../../../assets/images/hero-image.jpg';
@@ -110,10 +110,12 @@ export default class Media extends Component {
                 onChange={(e, result) => formChange(e, result, 'MEDIA_FRM')}
                 value={MEDIA_FRM.fields.heroVideo.value}
                 type="text"
-                placeholder="Enter url here..."
+                placeholder="Enter your Vimeo video ID here..."
+                labelPosition="right"
                 action
                 fluid
               >
+                <Label basic>https://vimeo.com/</Label>
                 <input />
                 <Button icon type="submit" basic>
                   <Icon className="ns-send-right" color="blue" size="large" />
