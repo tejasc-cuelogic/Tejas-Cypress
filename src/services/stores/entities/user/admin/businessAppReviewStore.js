@@ -418,17 +418,16 @@ export class BusinessAppReviewStore {
     const offerData = this.fetchBusinessApplicationOffers;
     const offer = offerData.offers.offer[this.selectedOfferIndex];
     delete offer.__typename;
-    // const offer = filter(offerData.offers, (o, index) => index === this.selectedOfferIndex);
     uiStore.setProgress();
     let payLoad = {
       applicationId: offerData.applicationId,
       issuerId: offerData.userId,
       selectedOffer: offer,
     };
-    if (false) {
+    if (!offer.isAccepted) {
       payLoad = {
         ...payLoad,
-        isSelectedOfferChanged: false,
+        isSelectedOfferChanged: true,
       };
     }
     return new Promise((resolve, reject) => {
@@ -436,7 +435,6 @@ export class BusinessAppReviewStore {
         .mutate({
           mutation: signPortalAgreement,
           variables: payLoad,
-          // refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           resolve(result);
@@ -462,7 +460,6 @@ export class BusinessAppReviewStore {
           variables: {
             applicationId,
           },
-          // refetchQueries: [{ query: getBusinessApplications }],
         })
         .then((result) => {
           resolve(result);

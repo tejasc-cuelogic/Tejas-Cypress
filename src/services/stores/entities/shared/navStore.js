@@ -67,7 +67,7 @@ export class NavStore {
           0,
           {
             ...navItems[bIndex],
-            ...{ title: b.keyTerms.legalBusinessName, to: `offering/${b.id}`, subNavigations: sNav },
+            ...{ title: ((b.keyTerms && b.keyTerms.legalBusinessName) || (b.businessGeneralInfo && b.businessGeneralInfo.businessName)), to: `offering/${b.id}`, subNavigations: sNav },
           },
         );
       });
