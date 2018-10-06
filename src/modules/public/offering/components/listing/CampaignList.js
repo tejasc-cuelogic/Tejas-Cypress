@@ -20,7 +20,7 @@ export default class CampaignList extends Component {
     this.setState({ filters: filters === false });
   }
   render() {
-    const { campaigns, loading } = this.props.campaignStore;
+    const { OfferingList, loading } = this.props.campaignStore;
     return (
       <Aux>
         {this.props.filters &&
@@ -31,32 +31,36 @@ export default class CampaignList extends Component {
             {this.props.heading}
             <Grid doubling columns={3} stackable>
               <Grid.Row>
-                {loading ? <Spinner loaderMessage="loading.." /> : campaigns.map(campaign => (
+                {loading ? <Spinner loaderMessage="loading.." /> : OfferingList.map(offering => (
                   <Grid.Column>
                     <Card className="campaign" fluid>
                       <Image
                         as={Link}
-                        to="/offerings/963c0950-b80e-11e8-a4aa-87285e168369/overview"
+                        to={`/offerings/${offering.id}/overview`}
                         centered
-                        src={require(`../../../../../assets/images/campaign/campaign-${campaign.image}.jpg`)}
+                        src={offering.media.tombstoneImage.url}
+                        alt={`${offering.businessGeneralInfo.businessName} poster`}
                       />
-                      <Label color="green">{campaign.flagged}</Label> {/* apply attribute basic for successful campaigns */}
+                      <Label color="green">NEW</Label> {/* apply attribute basic for successful campaigns */}
                       <Icon name="heart" /> {/* change name to "heart outline" for unliked campaigns */}
                       <Card.Content>
                         <div className="tags mb-10">
-                          {campaign.label}
+                          {offering.keyTerms.industry}
                           <span className="pull-right">506(c)</span>
                         </div>
-                        <Card.Header>{campaign.title}</Card.Header>
-                        <Card.Meta>{campaign.address}</Card.Meta>
-                        <Card.Description>{campaign.description}</Card.Description>
-                        <p><b>Revenue Sharing Note</b></p>
+                        <Card.Header>{offering.businessGeneralInfo.businessName}</Card.Header>
+                        <Card.Meta>
+                          {offering.businessGeneralInfo.address.city}
+                          {offering.businessGeneralInfo.address.state}
+                        </Card.Meta>
+                        <Card.Description>{offering.offering.about.theCompany}</Card.Description>
+                        <p><b>{offering.keyTerms.securities}</b></p>
                         <List divided horizontal>
                           <List.Item>Raised $1,000,000</List.Item>
                           <List.Item>583 investors</List.Item>
                         </List>
                       </Card.Content>
-                      {this.props.locked === campaign.id && (
+                      {this.props.locked === offering.id && (
                         <Card.Content className="card-hidden">
                           <div className="lock-image">
                             <Image src={lockIcon} />
