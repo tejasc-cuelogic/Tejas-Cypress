@@ -20,7 +20,17 @@ class AboutPhotoGallery extends Component {
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: true,
+      afterChange: (current) => {
+        console.log('Current==>', current);
+        // this.setState({ activeSlide: current });
+      },
     };
+    const galleryArr = [
+      { id: '1', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/0266554465.jpeg' },
+      { id: '2', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/balloon-1046658_960_720.jpg' },
+      { id: '3', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/0266554465.jpeg' },
+      { id: '4', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/balloon-1046658_960_720.jpg' },
+    ];
     return (
       <Modal
         open
@@ -33,7 +43,7 @@ class AboutPhotoGallery extends Component {
         <div className="carousel">
           <Container fluid>
             <NsCarousel {...settings} thumbs={isTablet ? 4 : campaign.media.gallery.length}>
-              {campaign.media.gallery.map(data => (
+              {galleryArr.map(data => (
                 <Image src={data.url} />
               ))}
             </NsCarousel>
