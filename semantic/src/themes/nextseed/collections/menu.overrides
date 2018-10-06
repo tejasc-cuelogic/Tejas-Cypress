@@ -441,7 +441,7 @@ footer{
 	}
 	//Public Mobile View End
 }
-.transaction-detials{
+.transaction-details{
     .ui.inverted.menu{
         // background-color:@neutral-middark;
         .item{

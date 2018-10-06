@@ -36,7 +36,7 @@ export default class OfferingDetails extends Component {
     navItems = navStore.filterByAccess(navItems, offeringsStore.allPhases.indexOf(offer.stage) + 1);
     return (
       <Modal closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-detials">
+        <Modal.Content className="transaction-details">
           <Header as="h3">{offer.keyTerms.legalBusinessName}</Header>
           {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} />}
           <Card fluid>

@@ -70,7 +70,7 @@ export default class AccountDetails extends Component {
     };
     return (
       <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-detials">
+        <Modal.Content className="transaction-details">
           <Item.Group>
             <Item className="user-intro">
               <div className="ui tiny circular image">
