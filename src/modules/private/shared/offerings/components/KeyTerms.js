@@ -21,7 +21,7 @@ export default class KeyTerms extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field) => {
-    this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', field);
+    this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', '', field, null, 'CP1');
     this.props.uiStore.setConfirmBox('');
   }
   handleFormSubmit = () => {

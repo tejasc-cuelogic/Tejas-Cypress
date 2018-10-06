@@ -34,7 +34,7 @@ export default class Leader extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field, index) => {
-    this.props.offeringCreationStore.removeUploadedData('LEADERSHIP_FRM', field, index);
+    this.props.offeringCreationStore.removeUploadedData('LEADERSHIP_FRM', 'leadership', field, index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {
@@ -42,9 +42,10 @@ export default class Leader extends Component {
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
   removeData = (confirmModalName) => {
-    this.props.offeringCreationStore.removeData(confirmModalName);
+    this.props.offeringCreationStore.removeData(confirmModalName, 'leadership');
     Helper.toast('Leader has been deleted successfully.', 'success');
     this.props.history.push(`${this.props.refLink}/leader/1`);
+    this.handleFormSubmit();
   }
   handleFormSubmit = () => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
@@ -230,7 +231,7 @@ export default class Leader extends Component {
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'headShot' || confirmBox.entity === 'heroImage' || confirmBox.entity === 'driverLicense'}
+          open={confirmBox.entity === 'headshot' || confirmBox.entity === 'heroImage' || confirmBox.entity === 'license'}
           onCancel={this.handleDelCancel}
           onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
           size="mini"

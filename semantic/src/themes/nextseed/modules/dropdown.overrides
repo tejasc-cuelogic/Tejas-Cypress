@@ -125,6 +125,17 @@
             }
         }
     }
+    &.display-only{
+        padding:0 !important;
+        border:none !important;
+        font-weight:@fontMedium;
+        text-overflow:ellipsis;
+        cursor:default;
+        background:none !important;
+        >.icon{
+            padding:0 !important;
+        }
+    }
 }
 .ui.dropdown.inverted>.text{
 	color:@white;
