@@ -57,7 +57,7 @@ export class Business {
    */
   submitXMLInformation = (action) => {
     const {
-      businessId,
+      offeringId,
       filingId,
       xmlSubmissionId,
       formFilerInfo,
@@ -69,7 +69,7 @@ export class Business {
     } = businessStore;
     let payload = {};
     const ids = {
-      businessId,
+      offeringId,
       filingId,
       xmlSubmissionId,
     };
@@ -362,14 +362,14 @@ export class Business {
       });
   }
 
-  getFiles = ({ businessId, filingId }) => {
+  getFiles = ({ offeringId, filingId }) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching details');
     const payload = {
-      query: 'query fetchFilingById($businessId: ID!, $filingId: ID!){businessFiling(businessId: ' +
-        '$businessId, filingId: $filingId) { folderId } }',
+      query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: ' +
+        '$offeringId, filingId: $filingId) { folderId } }',
       variables: {
-        businessId,
+        offeringId,
         filingId,
       },
     };
@@ -486,18 +486,19 @@ export class Business {
   /**
    * @desc To delete Filing for the business
    */
-  deleteFiling = (businessId, filingId) => {
+  deleteFiling = (offeringId, filingId) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Deleting Business Filing');
     const payload = {
-      query: `mutation deleteBusinessFiling($businessId: String!, $filingId: String!) {
-         deleteBusinessFiling(businessId: $businessId, filingId: $filingId ){
-           businessId 
-           created 
-          } 
+      query: `mutation deleteBusinessFiling($offeringId: String!, $filingId: String!) {
+         deleteBusinessFiling(offeringId: $offeringId, filingId: $filingId ){
+           offeringId
+           created
+          }
       }`,
       variables: {
-        businessId, filingId,
+        offeringId,
+        filingId,
       },
     };
     return new Promise((res, rej) => {
@@ -514,18 +515,18 @@ export class Business {
   /**
    * @desc To lock/unlock XML Submission
    */
-  lockUnlockXmlSubmission = (businessId, filingId, xmlSubmissionId, lockedStatus) => {
+  lockUnlockXmlSubmission = (offeringId, filingId, xmlSubmissionId, lockedStatus) => {
     const status = lockedStatus === false ? 'Unlocking' : 'Locking';
     uiStore.setProgress();
     uiStore.setLoaderMessage(`${status} XML Submission`);
     const payload = {
-      query: `mutation lockUnlockBusinessFilingSubmission($businessId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){ 
-        lockBusinessFilingSubmission(businessId: $businessId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){ 
-          businessId xmlSubmissionId lockedStatus 
-        } 
+      query: `mutation lockUnlockBusinessFilingSubmission($offeringId: String!, $filingId: String!, $xmlSubmissionId: String!, $lockedStatus: Boolean!){
+        lockBusinessFilingSubmission(offeringId: $offeringId,filingId: $filingId, xmlSubmissionId: $xmlSubmissionId, lockedStatus: $lockedStatus){
+          offeringId xmlSubmissionId lockedStatus
+        }
       }`,
       variables: {
-        businessId, filingId, xmlSubmissionId, lockedStatus,
+        offeringId, filingId, xmlSubmissionId, lockedStatus,
       },
     };
     return new Promise((res, rej) => {
@@ -645,17 +646,17 @@ export class Business {
     businessStore.setDocumentList(list);
   }
 
-  setXmlPayload = (data) => {    
+  setXmlPayload = (data) => {
     const dateFields = ['dateIncorporation', 'deadlineDate', 'signatureDate'];
     const confirmationFlags = ['confirmingCopyFlag', 'returnCopyFlag', 'overrideInternetFlag'];
-    
-    if (data) {      
-      businessStore.setBusinessId(data.businessId);
+
+    if (data) {
+      businessStore.setOfferingId(data.offeringId);
       businessStore.setFilingId(data.filingId);
       businessStore.setXmlSubmissionStatus(data.xmlSubmissionStatus);
       _.map(data.payload.filerInformation, (value, key) => {
         if (confirmationFlags.includes(key)) {
-          businessStore.setFilerInfo(key, (value || false));          
+          businessStore.setFilerInfo(key, (value || false));
         }
         else {
           businessStore.setFilerInfo(key, (value || ''));

@@ -9,6 +9,7 @@ query getListOfFAQsAndKnowledgeBase($categoryType: CategoryTypeEnum!) {
       id
       title
       content
+      order
     }
   }
 }
@@ -20,8 +21,9 @@ export const allFaqQuery = gql`query getListOfFAQsAndKnowledgeBase($categoryType
   categoryName
   faqItems {
     id
-    title
-    description
+    question
+    answer
+    order
   }
   }
 }

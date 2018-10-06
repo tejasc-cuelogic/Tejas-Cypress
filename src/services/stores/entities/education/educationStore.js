@@ -48,7 +48,7 @@ export class EducationStore {
 
   @action
   getOne = (ref, id) => {
-    const meta = { knowledgeBase: ['kbs', 'title', 'content'], faq: ['faqs', 'title', 'description'] };
+    const meta = { knowledgeBase: ['kbs', 'title', 'content'], faq: ['faqs', 'question', 'answer'] };
     const subItems = ref === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems';
     if (this[meta[ref][0]].length > 0) {
       let tempItem = {};

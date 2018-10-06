@@ -13,6 +13,11 @@
             display:inline-block;
             line-height:@18px;
         }
+        > .ui.label{
+            background:transparent;
+            padding:0 0 @7px;
+            color:@neutral;
+        }
         textarea{
             padding-left:0;
             padding-right:0;
@@ -56,6 +61,14 @@
                 color:@neutral;
             }
         }
+        &.secondary textarea{
+            background-color:@white;
+            padding:@11px @14px;
+            min-height:80px;
+            max-height:80px;
+            border-radius:@4px;
+            border:@neutral-offdark 1px solid;
+        }
     }
     .otp-wrap{
         margin:3rem 0;
@@ -77,11 +90,24 @@
         }
     }
     .fields{
-        align-items:flex-end;
+        &:last-child .field{
+            margin-bottom:@rowDistance;
+        }
+        &:not(.width){
+            flex-wrap:wrap;
+        }
+        &.bottom-aligned{
+            .field, .wide.field{
+                align-self:flex-end;
+            }
+        }
         .field, .wide.field{
             padding-left:@gutterWidth;
             padding-right:@gutterWidth;
             margin-bottom:@14px;
+        }
+        &.inline .field{
+            margin:0 !important;
         }
     }
     .error:not(.field){
@@ -93,7 +119,7 @@
             margin:0 0 0 @5px;
             font-size:@14px;
             color:@neutral-middark;
-            vertical-align: middle;
+            // vertical-align: middle;
         }
     }
     input:not([type]),
@@ -110,6 +136,13 @@
     input[type=url],
     textarea{
         border-bottom:@border-color 1px solid;
+    }
+    textarea{
+        padding-left:0;
+        padding-right:0;
+        border-radius:0;
+        border:none;
+        border-bottom:@borderColor 1px solid;
     }
     .ui.table{
         input:not([type]),
@@ -182,14 +215,65 @@
         max-height:70vh;
         text-align:center;
         .file-uploader{
-            border:none;
+            min-height:210px;
+            padding:0;
+            display:flex;
+            border:@border-light 2px dashed;
             background:@neutral-offwhite;
             .file-uploader-inner{
-                padding:@14px;
-                margin:5rem 0;
-                display:inline-block;
+                width:100%;
+                padding:@14px @7px;
                 border-radius:@4px;
-                border:@neutral-middark 1px dashed;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+            }
+        }
+        &.hero-img, &.tombstone-img, &.gallery-img{
+            .file-uploader.attached{
+                position:relative;
+                border:none;
+                    .ui.icon.button{
+                        background:@white;
+                        padding:0.5em;
+                        margin:0;
+                        height:24px;
+                        font-size:11px;
+                        border:@neutral-offdark 1px solid;
+                        position:absolute;
+                        right:5px;
+                        top:5px;
+                        z-index:1;
+                        >i.icon{
+                            height:auto;
+                        }
+                    }
+                }
+            }
+        &.hero-img{
+            max-width:705px;
+            .file-uploader{
+                height:170px;
+            }
+        }
+        &.tombstone-img{
+            max-width:420px;
+            .file-uploader{
+                height:264px;
+            }
+        }
+        &.gallery-img{
+            max-width:none;
+            max-height:none;
+            text-align:left;
+            .file-uploader{
+                width:280px;
+                height:160px;
+                min-height:auto;
+                margin:0;
+                display:flex;
+                align-items:center;
+                justify-content:space-around;
             }
         }
         .ReactCrop.ReactCrop--fixed-aspect ~ .file-uploader{
@@ -229,7 +313,23 @@
                 background: transparent !important;
             }
         }
+        &.video-url{
+            padding:0;
+            .ui.action.input>input{
+                padding-left:0;
+            }
+        }
     }
+	.featured-section{
+		padding: @14px @20px;
+		margin:@20px 0;
+		&:first-child{
+			margin-top:0;
+		}
+		&:last-child{
+			margin-bottom:0;
+		}
+	}
 }
 textarea{
 	font-family:@pageFont;
@@ -442,7 +542,7 @@ textarea{
     .file-uploader{
         width:250px;
         height:140px;
-        margin:0 auto;
+        margin:@5px auto;
         display:table;
         > div{
             display:table-cell;

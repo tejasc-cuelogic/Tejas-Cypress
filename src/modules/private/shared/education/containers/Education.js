@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateLayout';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import { InlineLoader } from '../../../../../theme/shared';
 

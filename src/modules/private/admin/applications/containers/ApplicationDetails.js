@@ -101,7 +101,7 @@ export default class ApplicationDetails extends Component {
     const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnRootNodeClick={false} onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-detials">
+        <Modal.Content className="transaction-details">
           <Header as="h3">
             {businessName}
             <span className="title-meta">  Status: <b>{appStepStatus}</b></span>

@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
@@ -34,25 +34,30 @@ export class UserStore {
 
   @computed get capabilitiesMeta() {
     console.log(this.opt);
+    const prepareOpt = (meta, tail) => {
+      const opt = { key: `${meta}_${tail}`, value: `${meta}_${tail}`, text: `${meta}_${tail}` };
+      return opt;
+    };
     let capabilities = [];
     PRIVATE_NAV.map(n => n.capability).forEach((c) => {
       if (c) {
         const meta = c.replace('_ANY', '');
         capabilities = [
           ...capabilities,
-          ...[
-            { key: `${meta}_FULL`, value: `${meta}_FULL`, text: `${meta}_FULL` },
-            { key: `${meta}_MANAGER`, value: `${meta}_MANAGER`, text: `${meta}_MANAGER` },
-            { key: `${meta}_SUPPORT`, value: `${meta}_SUPPORT`, text: `${meta}_SUPPORT` },
-          ],
+          ...[prepareOpt(meta, 'FULL'), prepareOpt(meta, 'MANAGER'), prepareOpt(meta, 'SUPPORT')],
         ];
       }
     });
-    return capabilities;
+    return [...capabilities, prepareOpt('USERS', 'FULL')];
   }
 
   isCurrentUserWithRole(role) {
     return this.currentUser.roles.includes(role);
+  }
+
+  @computed get isIssuer() {
+    const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
+    return roles.includes('issuer');
   }
 }
 

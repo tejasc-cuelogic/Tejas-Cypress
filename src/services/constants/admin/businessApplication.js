@@ -652,7 +652,7 @@ export const OFFERS = {
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
-    // skipField: true,
+    skipField: true,
     customErrors: {
       required: '* required.',
     },
@@ -668,7 +668,7 @@ export const OFFERS = {
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
-    // skipField: true,
+    skipField: true,
     customErrors: {
       required: '* required.',
     },

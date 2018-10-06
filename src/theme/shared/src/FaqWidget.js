@@ -13,13 +13,13 @@ class FaqWidget extends React.Component {
   }
 
   render() {
-    const { faqs, heading } = this.props;
+    const { faqs, heading, fullHeading } = this.props;
     const { activeIndex } = this.state;
     if (faqs) {
       return (
         <Card fluid>
           <Card.Content>
-            <Header as="h4">{`${heading} FAQs`}</Header>
+            <Header as="h4">{fullHeading || `${heading} FAQs`}</Header>
             <Accordion>
               {
                 faqs.map(faq => (

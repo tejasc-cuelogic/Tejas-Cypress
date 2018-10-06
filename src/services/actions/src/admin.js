@@ -21,7 +21,7 @@ export class Admin {
 
     const user = userDetails || mapValues(userStore.USR_FRM.fields, f => f.value);
     const attributes = [];
-    const mapKey = { role: 'custom:roles', capabilities: 'custom:capabilities' };
+    const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
     Object.keys(user).map((item) => {
       if (item !== 'TemporaryPassword' && item !== 'verifyPassword') {
         attributes.push({

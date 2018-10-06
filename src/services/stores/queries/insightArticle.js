@@ -5,7 +5,7 @@ query insights{
   insightsArticles{
     id
     content
-    featureImage
+    featuredImage
     minuteRead
     title
     authorId
@@ -27,7 +27,7 @@ query _getArticleByCategoryId($id:ID! ) {
   ) {
     id
     content
-    featureImage
+    featuredImage
     minuteRead
     title
     authorId
@@ -47,7 +47,7 @@ query insight($id:ID! ) {
   insightsArticleById(id: $id){
     id
     title
-    featureImage
+    featuredImage
     content
   }
 }

@@ -133,6 +133,7 @@ export default class Miscellaneous extends Component {
                         disabled={isReadonly}
                         name="label"
                         placeholder="eg. Facebook"
+                        className="secondary"
                         fluid
                         selection
                         value={socialMedia.label.value}

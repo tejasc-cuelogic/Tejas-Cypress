@@ -332,6 +332,33 @@
             }
         }
     }
+    &.offer-card{
+        height:100%;
+        background-color:@neutral-offwhite;
+        box-shadow:none;
+        &.active{
+            background-color:@white;
+        }
+        .content{
+            flex-grow:0;
+        }
+        .table-wrapper{
+            flex-grow:1;
+        }
+        .ui.compact.table{
+            padding-bottom:@14px;
+            border-top:@neutral-offwhite 1px solid;
+            td{
+                border-top:@neutral-offwhite 1px solid;
+                &:first-child{
+                    padding-left:@relative21px;
+                }
+                &:last-child{
+                    padding-right:@relative21px;
+                }
+            }
+        }
+    }
 }
 .ui{
     &.card, &.cards>.card{

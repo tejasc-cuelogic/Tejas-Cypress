@@ -81,6 +81,7 @@
     "react-dom": "^16.1.0",
     "react-dropzone": "^4.2.11",
     "react-error-overlay": "^1.0.10",
+    "react-froala-wysiwyg": "^2.8.4",
     "react-google-autocomplete": "^1.0.15",
     "react-image-crop": "^4.0.1",
     "react-input-mask": "^1.2.2",
@@ -119,7 +120,8 @@
     "webpack-dashboard": "^1.0.0-2",
     "webpack-dev-server": "2.7.1",
     "webpack-manifest-plugin": "1.2.1",
-    "whatwg-fetch": "2.0.3"
+    "whatwg-fetch": "2.0.3",
+    "wysiwyg-editor-node-sdk": "^2.3.4"
   },
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",

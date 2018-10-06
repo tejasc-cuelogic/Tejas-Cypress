@@ -24,7 +24,8 @@ class FormValidator {
     name: typeof data === 'undefined' ? e.target.name : data.name,
     value: typeof data === 'undefined' ? e.target.value : data.value,
   });
-  onChange = (form, element, type, isDirty = true) => {
+
+  onChange = (form, element, type, isDirty = true, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let customErrMsg = {};
@@ -36,6 +37,8 @@ class FormValidator {
         } else {
           currentForm.fields[element.name].value.splice(index, 1);
         }
+      } else if (checked) {
+        currentForm.fields[element.name].value = checked.value;
       } else {
         currentForm.fields[element.name].value = element.value;
       }
@@ -119,7 +122,9 @@ class FormValidator {
     }
     return currentForm;
   }
-  onArrayFieldChange = (form, element, formName = null, formIndex = -1, type) => {
+
+  onArrayFieldChange =
+  (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
     let currentFormRelative;
@@ -143,6 +148,8 @@ class FormValidator {
         } else {
           currentFormRelative[element.name].value.splice(index, 1);
         }
+      } else if (checked) {
+        currentFormRelative[element.name].value = checked.value;
       } else {
         currentFormRelative[element.name].value = element.value;
       }
@@ -217,10 +224,16 @@ class FormValidator {
     });
     return tempRef;
   }
-  addMoreRecordToSubSection = (form, key, count = 1) => {
+  addMoreRecordToSubSection = (form, key, count = 1, defaultBlank = false) => {
     const currentForm = form;
-    currentForm.fields[key] = currentForm.fields[key] ?
-      this.addMoreFields(currentForm.refMetadata[key], count) : [];
+    if (defaultBlank) {
+      currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
+        this.addMoreFields(currentForm.fields[key], count) :
+        currentForm.refMetadata[key];
+    } else {
+      currentForm.fields[key] = currentForm.fields[key] ?
+        this.addMoreFields(currentForm.refMetadata[key], count) : [];
+    }
     currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }
@@ -289,13 +302,22 @@ class FormValidator {
         } else if (fields[key].objType === 'FileObjectType') {
           fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
           fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
+        } else if (fields[key].objType === 's3File') {
+          if (Array.isArray(data[key])) {
+            data[key].map(item => fields[key].preSignedUrl.push(item.url));
+          } else {
+            fields[key].value = data && typeof data === 'string' ? data : data[key].url;
+            fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
+          }
         } else if (fields[key].objType === 'DATE') {
           fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
         } else {
-          fields[key].value = data && typeof data === 'object' ? data[key] : data;
+          // fields[key].value = data && typeof data === 'object' ? data[key] : data;
+          fields[key].value = data && typeof data === 'object' ? data[key] ? data[key] : fields[key].value : data;
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';
+          fields[fields[key].refSelector].value = (fields[key].value !== null && fields[key].value !== '');
         }
       } catch (e) {
         // do nothing
@@ -390,6 +412,8 @@ class FormValidator {
               objValue = this.evalFileObj(fields[key]);
             } else if (fields[key].objType && fields[key].objType === 'DATE') {
               objValue = this.evalDateObj(fields[key].value);
+            } else if (fields[key].objType && fields[key].objType === 's3File') {
+              objValue = fields[key].preSignedUrl;
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);

@@ -319,6 +319,10 @@ footer{
         background-color: @neutral-offwhite;
         .item{
             padding:@13px @16px;
+            margin-bottom:@3px;
+            &:last-child{
+                margin-bottom:0;
+            }
         }
         .dropdown{
             .menu>.item{
@@ -353,6 +357,28 @@ footer{
                     padding:@8px @16px @8px @32px !important;
                     color:@tertiary-text !important;
                 }
+            }
+        }
+    }
+    &.secondary.inverted{
+        background-color:@neutral-midwhite;
+        .item:before{
+            display:block !important;
+            background-color:@neutral-midwhite !important;
+        }
+    }
+    &.tertiary.inverted{
+        background-color:@neutral-darkwhite;
+        .item{
+            align-self:center;
+            padding:@10px !important;
+            margin:0 0 0 @3px;
+            color:@neutral;
+            &:before{
+                display:none;
+            }
+            &:hover, &:active, &.active{
+                background-color:@neutral-offwhite !important;
             }
         }
     }
@@ -418,9 +444,9 @@ footer{
 	}
 	//Public Mobile View End
 }
-.transaction-detials{
+.transaction-details{
     .ui.inverted.menu{
-        background-color:@neutral-middark;
+        // background-color:@neutral-middark;
         .item{
             padding:@16px @25px;
             &:before{

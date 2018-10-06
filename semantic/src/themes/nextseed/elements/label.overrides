@@ -12,3 +12,10 @@
         border-bottom:@border-color 1px solid;
     }
 }
+
+.ui.label{
+    &.circular.horizontal{
+        min-height:auto;
+        padding:.4em .833em !important;
+    }
+}
