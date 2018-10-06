@@ -10,6 +10,7 @@ import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../
 import { createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
+import { allOfferingsCompact } from '../../../queries/offerings/manage';
 
 export class BusinessAppReviewStore {
   @observable APPLICATION_STATUS_COMMENT_FRM =
@@ -460,6 +461,7 @@ export class BusinessAppReviewStore {
           variables: {
             applicationId,
           },
+          refetchQueries: [{ query: allOfferingsCompact, variables: { stage: 'CREATION', first: 10, skip: 0 } }],
         })
         .then((result) => {
           resolve(result);
