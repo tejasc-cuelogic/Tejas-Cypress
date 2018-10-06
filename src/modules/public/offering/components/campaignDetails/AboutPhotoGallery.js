@@ -25,12 +25,8 @@ class AboutPhotoGallery extends Component {
         // this.setState({ activeSlide: current });
       },
     };
-    const galleryArr = [
-      { id: '1', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/0266554465.jpeg' },
-      { id: '2', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/balloon-1046658_960_720.jpg' },
-      { id: '3', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/0266554465.jpeg' },
-      { id: '4', isPublic: 'true', url: 'https://nsupdates.s3.amazonaws.com/uploads/balloon-1046658_960_720.jpg' },
-    ];
+    const galleryLength = campaign.media.gallery.length < 8 ? campaign.media.gallery.length : 8;
+    const tabGalleryLength = campaign.media.gallery.length < 4 ? campaign.media.gallery.length : 4;
     return (
       <Modal
         open
@@ -42,8 +38,13 @@ class AboutPhotoGallery extends Component {
         <div className="carousel-counter">{this.state.activeSlide}/{campaign.media.gallery.length}</div>
         <div className="carousel">
           <Container fluid>
-            <NsCarousel {...settings} thumbs={isTablet ? 4 : campaign.media.gallery.length}>
-              {galleryArr.map(data => (
+            <NsCarousel
+              {...settings}
+              thumbs={isTablet ? tabGalleryLength : galleryLength}
+              imageCount={campaign.media.gallery.length}
+              isTablet={isTablet}
+            >
+              {campaign.media.gallery.map(data => (
                 <Image src={data.url} />
               ))}
             </NsCarousel>
