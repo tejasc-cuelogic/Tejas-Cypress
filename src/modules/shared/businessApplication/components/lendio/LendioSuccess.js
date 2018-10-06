@@ -49,8 +49,8 @@ export default class LendioSuccess extends Component {
                 </p>
                 <a href="mailto:apply@nextseed.com" className="link">
                   <b>apply@nextseed.com</b>
-                </a> or check out our <Link to="/about/faq" className="link"><b>Borrow page</b></Link> or
-                <Link to="/about/faq" className="link"><b>FAQ </b></Link> section for more information on our general business requirements.
+                </a> or check out our <Link to="/resources/education-center/business/faq" className="link"><b>Borrow page</b></Link> or
+                <Link to="/resources/education-center/business/faq" className="link"><b>FAQ </b></Link> section for more information on our general business requirements.
               </Aux>
           }
         </Grid.Column>
