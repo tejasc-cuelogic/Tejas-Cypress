@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-05)
+# 0.0.0 (2018-10-06)
 
 
 ### Bug Fixes
@@ -58,6 +58,7 @@
 * **Issuer Signup[Issue [416](https://chaos.ns.team/nsv2/ns-ops/issues/416) - issuer signup non existing user on prequal success]:** auto login changes done ([978c937](https://chaos.ns.team/nsv2/ns-client/commits/978c937))
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
+* **IssuerSignup AdminApplication[Issue [469](https://chaos.ns.team/nsv2/ns-ops/issues/469) - businessapplication test run 1]:** Issuer signup and Admin application details bug fixes done ([e91043f](https://chaos.ns.team/nsv2/ns-client/commits/e91043f))
 * **marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback ([1416d48](https://chaos.ns.team/nsv2/ns-client/commits/1416d48))
 * **Marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - Marketing pages - feedback]:** Marketing pages - feedback ([e4b44f7](https://chaos.ns.team/nsv2/ns-client/commits/e4b44f7))
 * **Marketing pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - general fixes]:** general fixes ([21c7dc4](https://chaos.ns.team/nsv2/ns-client/commits/21c7dc4))
