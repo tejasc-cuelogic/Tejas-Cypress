@@ -1,17 +1,16 @@
 import React, { Component } from 'react';
-import { Route, Link, Switch } from 'react-router-dom';
-import { Header, Grid, Image, Breadcrumb, Segment, Reveal, Icon } from 'semantic-ui-react';
+import { Route, Switch } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { Grid } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
-import { NsCarousel, InlineLoader } from '../../../../../theme/shared';
-import teamMember1 from '../../../../../assets/images/avatar-1.jpg';
-import teamMember2 from '../../../../../assets/images/owner-1.jpg';
-import teamMember3 from '../../../../../assets/images/avatar-3.jpg';
-import teamMember4 from '../../../../../assets/images/avatar-4.jpg';
-import teamMember5 from '../../../../../assets/images/avatar-5.jpg';
-import businessModel from '../../../../../assets/images/business_model.jpg';
+import { InlineLoader } from '../../../../../theme/shared';
 import CompanyDescriptionModal from './CompanyDescriptionModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
-import videoPoster from '../../../../../assets/images/636206632.jpg';
+import Gallery from './AboutCompany/Gallery';
+import CompanyTopThings from './AboutCompany/CompanyTopThings';
+import MeetOurTeam from './AboutCompany/MeetOurTeam';
+import BusinessModel from './AboutCompany/BusinessModel';
+import LocationAnalysis from './AboutCompany/LocationAnalysis';
 
 const getModule = component => Loadable({
   loader: () => import(`../${component}`),
@@ -27,10 +26,12 @@ const settings = {
 };
 
 const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
+  && document.documentElement.clientWidth < 992;
 const isTabletLand = document.documentElement.clientWidth >= 992
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 
+@inject('campaignStore')
+@observer
 class AboutCompany extends Component {
   render() {
     const navItems = [
@@ -38,147 +39,39 @@ class AboutCompany extends Component {
       { to: 'locationanalysis', component: 'LocationAnalysisModal' },
       { to: 'meetourteam', component: 'MeetTeamModal' },
     ];
+    const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable>
           <Grid.Row>
-            <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
-              <Segment padded>
-                <Header as="h3">
-                  <Link to={`${this.props.match.url}/companydescription`}>
-                    Buffbrew Taproom LLC
-                    <Icon className="ns-chevron-right" color="green" />
-                  </Link>
-                </Header>
-                <p className="detail-section">
-                  In the six years since its founding, Buffalo Bayou Brewing Company (“Buffbrew”)
-                  has grown and cultivated a craft brewery that is not only substantial in size,
-                  but even more importantly, substantive in quality.
-                </p>
-                <p>
-                  Their independent and relentless, boundary-pushing approach to craft brewing
-                  has resulted in an unmatched 70 innovative beer varieties and a business that
-                  is now Houston’s largest self-distributing brewery. Buffbrew has outgrown its
-                  brewing space, and it has heard the resounding demand for a dedicated taproom
-                  and event space.
-                </p>
-                <Link to={`${this.props.match.url}/companydescription`}>Read More</Link>
-              </Segment>
-            </Grid.Column>
-            <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
-              <Segment padded>
-                <Breadcrumb>
-                  <Breadcrumb.Section as={Link} to={`${this.props.match.url}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
-                  <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
-                </Breadcrumb>
-                <div className="carousel mt-10 mb-30">
-                  <NsCarousel {...settings}>
-                    {[1, 2, 3].map(() => (
-                      <Image src={videoPoster} />
-                    ))}
-                  </NsCarousel>
-                </div>
-              </Segment>
-            </Grid.Column>
+            <CompanyTopThings
+              companyDescriptionUrl={this.props.match.url}
+              emptyStatement={emptyStatement}
+              campaign={campaign}
+            />
+            <Gallery
+              settings={settings}
+              isTabletLand={isTabletLand}
+              isTablet={isTablet}
+              galleryUrl={this.props.match.url}
+              campaign={campaign}
+            />
           </Grid.Row>
           <Grid.Row columns={isTablet ? 1 : isTabletLand ? 2 : 3} className="campaign-right-sidebar">
-            <Grid.Column>
-              <Segment padded>
-                <Header as="h4">
-                  <Link to={`${this.props.match.url}/meetourteam`}>
-                    Meet our team
-                    <Icon className="ns-chevron-right" color="green" />
-                  </Link>
-                </Header>
-                <Grid columns={3}>
-                  <Grid.Column>
-                    <Reveal animated="small fade">
-                      <Reveal.Content hidden>
-                        <div className="team-overlay">
-                          <p>Rassul Zarinfar</p>
-                        </div>
-                      </Reveal.Content>
-                      <Reveal.Content visible>
-                        <Image src={teamMember1} circular />
-                      </Reveal.Content>
-                    </Reveal>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Reveal animated="fade">
-                      <Reveal.Content hidden>
-                        <div className="team-overlay">
-                          <p>Alex Griggs</p>
-                        </div>
-                      </Reveal.Content>
-                      <Reveal.Content visible>
-                        <Image src={teamMember2} circular />
-                      </Reveal.Content>
-                    </Reveal>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Reveal animated="fade">
-                      <Reveal.Content hidden>
-                        <div className="team-overlay">
-                          <p>Ryan Robertson</p>
-                        </div>
-                      </Reveal.Content>
-                      <Reveal.Content visible>
-                        <Image src={teamMember3} circular />
-                      </Reveal.Content>
-                    </Reveal>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Reveal animated="fade">
-                      <Reveal.Content hidden>
-                        <div className="team-overlay">
-                          <p>Troy Witherspoon</p>
-                        </div>
-                      </Reveal.Content>
-                      <Reveal.Content visible>
-                        <Image src={teamMember4} circular />
-                      </Reveal.Content>
-                    </Reveal>
-                  </Grid.Column>
-                  <Grid.Column>
-                    <Reveal animated="fade">
-                      <Reveal.Content hidden>
-                        <div className="team-overlay">
-                          <p>Tre O{"'"}Brien</p>
-                        </div>
-                      </Reveal.Content>
-                      <Reveal.Content visible>
-                        <Image src={teamMember5} circular />
-                      </Reveal.Content>
-                    </Reveal>
-                  </Grid.Column>
-                </Grid>
-              </Segment>
-            </Grid.Column>
-            <Grid.Column>
-              <Segment padded>
-                <Header as="h4">
-                  <Link to={`${this.props.match.url}/business`}>
-                    Business Model
-                    <Icon className="ns-chevron-right" color="green" />
-                  </Link>
-                </Header>
-                <Image className="business-modal" src={businessModel} fluid />
-              </Segment>
-            </Grid.Column>
-            <Grid.Column className={isTabletLand && 'mt-30'}>
-              <Segment padded>
-                <Header as="h4">
-                  <Link to={`${this.props.match.url}/locationanalysis`}>
-                    Location Analysis
-                    <Icon className="ns-chevron-right" color="green" />
-                  </Link>
-                </Header>
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.8980695673813!2d73.87562555088532!3d18.53350778733976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0f824992459%3A0x4f126e7b4c0ac0f6!2sCuelogic+Technologies!5e0!3m2!1sen!2sin!4v1530687811942"
-                  title="test"
-                />
-              </Segment>
-            </Grid.Column>
+            <MeetOurTeam
+              campaign={campaign}
+              emptyStatement={emptyStatement}
+              meetOurTeamUrl={this.props.match.url}
+            />
+            <BusinessModel
+              businessModelUrl={this.props.match.url}
+            />
+            <LocationAnalysis
+              isTabletLand={isTabletLand}
+              LocationAnalysisDetailUrl={this.props.match.url}
+              campaign={campaign}
+            />
           </Grid.Row>
         </Grid>
         <Switch>

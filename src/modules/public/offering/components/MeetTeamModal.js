@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
 import { Header, Modal, Grid, Image, Icon, Responsive } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import team1 from '../../../../assets/images/team1.jpg';
-import team2 from '../../../../assets/images/team2.jpg';
+import emptyHeroImagePlaceholder from '../../../../assets/images/gallery-placeholder.jpg';
 
+@inject('campaignStore')
+@observer
 class MeetTeamModal extends Component {
   handleClose = () => this.props.history.goBack();
-
   render() {
+    const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
     return (
       <Modal
         open
@@ -17,63 +19,78 @@ class MeetTeamModal extends Component {
         size="large"
       >
         <Header as="h3">
-        Meet the Team
+          Meet the Team
         </Header>
         <Modal.Content scrolling>
           <Grid doubling columns={2} className="compact" verticalAlign="middle">
-            <Grid.Column>
-              <Image src={team1} fluid />
-            </Grid.Column>
-            <Grid.Column className="padded team-details-container">
-              <Header as="h3">
-                Rassul Zainfar
-                <Header.Subheader>co-founder & ceo</Header.Subheader>
-              </Header>
-              <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div>
-                <Link to="/" className="icon-link">
-                  <Icon color="green" name="twitter" />
-                </Link>
-                <Link to="/" className="icon-link">
-                  <Icon color="green" name="linkedin in" />
-                </Link>
-              </div>
-            </Grid.Column>
-            <Responsive maxWidth={992} as={Aux}>
-              <Grid.Column>
-                <Image src={team2} fluid />
-              </Grid.Column>
-            </Responsive>
-            <Grid.Column className="padded team-details-container">
-              <Header as="h3">
-                Alex Grigss
-                <Header.Subheader>co-founder & Director of projects</Header.Subheader>
-              </Header>
-              <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-              </p>
-              <div>
-                <Link to="/" className="icon-link">
-                  <Icon color="green" name="twitter" />
-                </Link>
-                <Link to="/" className="icon-link">
-                  <Icon color="green" name="linkedin in" />
-                </Link>
-              </div>
-            </Grid.Column>
-            <Responsive minWidth={993} as={Aux}>
-              <Grid.Column>
-                <Image src={team2} fluid />
-              </Grid.Column>
-            </Responsive>
+            {
+              campaign.leadership.map((data, index) => (
+                (index === 0 || index % 2 === 0) ?
+                  <Aux>
+                    <Grid.Column>
+                      <Image
+                        src={
+                          data.uploads.heroImage.isPublic === true &&
+                            data.uploads.heroImage.url != null ?
+                            data.uploads.heroImage.url : emptyHeroImagePlaceholder
+                        }
+                        fluid
+                      />
+                    </Grid.Column>
+                    <Grid.Column className="padded team-details-container">
+                      <Header as="h3">
+                        {`${data.firstName} ${data.lastName}`}
+                        <Header.Subheader>{data.companyPosition}</Header.Subheader>
+                      </Header>
+                      <p>{data.bio !== null && data.bio !== '' ? data.bio : emptyStatement }</p>
+                      <div>
+                        {
+                          Object.keys(data.social).map(key => (
+                            <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+                              <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
+                            </a>
+                          ))
+                        }
+                      </div>
+                    </Grid.Column>
+                    <Responsive maxWidth={767} as={Aux}>
+                      <Grid.Column>
+                        <Image src={emptyHeroImagePlaceholder} />
+                      </Grid.Column>
+                    </Responsive>
+                  </Aux>
+                  :
+                  <Aux>
+                    <Grid.Column className="padded team-details-container">
+                      <Header as="h3">
+                        {`${data.firstName} ${data.lastName}`}
+                        <Header.Subheader>{data.companyPosition}</Header.Subheader>
+                      </Header>
+                      <p>{data.bio !== null && data.bio !== '' ? data.bio : emptyStatement }</p>
+                      <div>
+                        {
+                          Object.keys(data.social).map(key => (
+                            <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+                              <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
+                            </a>
+                          ))
+                        }
+                      </div>
+                    </Grid.Column>
+                    <Responsive minWidth={768} as={Aux}>
+                      <Grid.Column>
+                        <Image
+                          src={
+                            data.uploads.heroImage.isPublic === true &&
+                              data.uploads.heroImage.url != null ?
+                              data.uploads.heroImage.url : emptyHeroImagePlaceholder
+                          }
+                        />
+                      </Grid.Column>
+                    </Responsive>
+                  </Aux>
+              ))
+            }
           </Grid>
         </Modal.Content>
       </Modal>

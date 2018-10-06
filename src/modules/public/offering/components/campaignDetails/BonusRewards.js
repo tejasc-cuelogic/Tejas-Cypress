@@ -1,17 +1,30 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
+import { intersectionBy, orderBy } from 'lodash';
 import { Header, Grid, Segment, Label, List, Image } from 'semantic-ui-react';
 import noEarlyBird from '../../../../../assets/images/illustration.png';
 import card1 from '../../../../../assets/images/cards/pour_cards_black.jpg';
 import card2 from '../../../../../assets/images/cards/pour_cards_gold.jpg';
 import card3 from '../../../../../assets/images/cards/pour_cards_plat.jpg';
 import card4 from '../../../../../assets/images/cards/pour_cards_silver.jpg';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const isTablet = document.documentElement.clientWidth >= 768
 && document.documentElement.clientWidth < 992;
 const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
+
+@inject('campaignStore')
+@observer
 class BonusRewards extends Component {
   render() {
+    const { campaign } = this.props.campaignStore;
+    const rewardsTiers = campaign && campaign.rewardsTierIds &&
+    campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+    const bonusRewards = campaign && campaign.bonusRewards &&
+    campaign.bonusRewards.length && campaign.bonusRewards;
+    const earlyBirdsCount = ((campaign && campaign.earlyBirdsCount) || 0);
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable>
@@ -20,225 +33,40 @@ class BonusRewards extends Component {
           </Grid.Column>
         </Grid>
         <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
-          <Grid.Column>
-            <Segment padded className="reward-block">
-              <Header as="h6">Early Bird Reward
-                <Image src={noEarlyBird} floated="right" />
-                <Header.Subheader>
-                  <Label size="small" color="green" className="text-uppercase">49 remaining</Label>
-                </Header.Subheader>
-              </Header>
-              <Header as="h5" className="intro-text">First 100 investors who invest $1,000 or more will receive:</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>Complimentary bottle</List.Header>
-                  <List.Description>
-                    on your birthday within our first year of opening and used during your
-                    birthday month
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$50 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$100+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>2 private invitations</List.Description>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$500+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>4 private invitations</List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$50 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$1,000+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>Pour Behaviour Silver Card <small>(see below)</small></List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>6 private invitations</List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$50 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$2,500+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>Pour Behaviour Gold Card <small>(see below)</small></List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>
-                    8 private invitations (table reservation if available)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$100 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$5,000+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>Pour Behaviour Gold Card <small>(see below)</small></List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>Complimentary bottle</List.Header>
-                  <List.Description>On your birthday</List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>
-                    10 private invitations (table reservation if available)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$100 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$10,000+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>Free draft beer for LIFE!</List.Header>
-                  <List.Description>1 per day in perpetuity</List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>
-                    Pour Behaviour Platinum Card <small>(see below)</small>
-                  </List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>
-                    15 private invitations (guaranteed table reservation)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$500 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$25,000+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>Name a Table</List.Header>
-                  <List.Description>
-                    In order of investment, pick a table to name which guarantees your section
-                    for Fri/Sat/Special Events/Concerts (Name to be approved)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>
-                    Pour Behaviour Black Card <small>(see below)</small>
-                  </List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>
-                    Free draft beer for LIFE! <small>(1 per day in perpetuity)</small>
-                  </List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>Complimentary bottle</List.Header>
-                  <List.Description>On your birthday</List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>
-                    20 private invitations (guaranteed table reservation)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$1,000 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Segment padded>
-              <Header as="h6">Invest</Header>
-              <Header as="h3" className="highlight-text">$50,000+</Header>
-              <List as="ul" className="rewards">
-                <List.Item as="li">
-                  <List.Header>Complimentary Tasting & Name a Cocktail</List.Header>
-                  <List.Description>
-                    Add your story to the menus as a description of the cocktail you name.
-                    (Name to be approved)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>Name a Table</List.Header>
-                  <List.Description>
-                    In order of investment, pick a table to name which guarantees your section
-                    for Fri/Sat/Special Events/Concerts (Name to be approved)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>Pour Behaviour Black Card <small>(see below)</small></List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>
-                    Free draft beer for LIFE! <small>(1 per day in perpetuity)</small>
-                  </List.Header>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>Complimentary bottle</List.Header>
-                  <List.Description>On your birthday</List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>VIP Launch Party</List.Header>
-                  <List.Description>
-                    25 private invitations (guaranteed table reservation)
-                  </List.Description>
-                </List.Item>
-                <List.Item as="li">
-                  <List.Header>$2,000 Gift Certificate</List.Header>
-                </List.Item>
-              </List>
-            </Segment>
-          </Grid.Column>
+          {rewardsTiers ?
+          rewardsTiers.map(tier => (
+            <Grid.Column>
+              <Segment padded className="reward-block">
+                {tier.earlyBirdQuantity > 0 ?
+                  <Aux>
+                    <Header as="h6">Early Bird Reward
+                      <Image src={noEarlyBird} floated="right" />
+                      <Header.Subheader>
+                        <Label size="small" color="green" className="text-uppercase">{earlyBirdsCount} remaining</Label>
+                      </Header.Subheader>
+                    </Header>
+                    <Header as="h5" className="intro-text">First {tier.earlyBirdQuantity} {tier.amount > 0 ? 'investors who invest $1,000 or more' : ''} will receive:</Header>
+                  </Aux>
+                :
+                  <Aux>
+                    <Header as="h6">Invest</Header>
+                    <Header as="h3" className="highlight-text">${tier.amount}+</Header>
+                  </Aux>
+                }
+                <List as="ul" className="rewards">
+                  {bonusRewards &&
+                    bonusRewards.map(reward => (
+                    (intersectionBy([tier], (reward && reward.tiers), (tier.earlyBirdQuantity > 0 ? 'earlyBirdQuantity' : 'amount')).length > 0) &&
+                      <List.Item as="li">
+                        <List.Header>{reward.title}</List.Header>
+                        <List.Description>{reward.description}</List.Description>
+                      </List.Item>
+                  ))}
+                </List>
+              </Segment>
+            </Grid.Column>
+            )) : <InlineLoader text="No bonus rewards are available." />
+          }
         </Grid>
         <Grid stackable>
           <Grid.Column>

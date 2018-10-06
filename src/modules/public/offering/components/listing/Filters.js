@@ -8,7 +8,6 @@ import filterIcon from '../../../../../assets/images/icons/icon_filter.png';
 import closeIcon from '../../../../../assets/images/icons/icon_close.png';
 
 const isMobile = document.documentElement.clientWidth < 768;
-
 export default class Filters extends Component {
   state = {
     activeSlide: 0,
