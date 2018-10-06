@@ -73,7 +73,7 @@ const AddMore = ({
   </Table.Row>
 );
 
-@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
 @observer
 export default class Miscellaneous extends Component {
   componentWillMount() {
@@ -105,8 +105,8 @@ export default class Miscellaneous extends Component {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
       confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
-    const { roles } = this.props.userStore.currentUser;
-    const isManager = roles && roles.includes('manager');
+    const { myCapabilities } = this.props.navStore;
+    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
     const submitted = (review && review.miscellaneous && review.miscellaneous &&
@@ -133,6 +133,7 @@ export default class Miscellaneous extends Component {
                         disabled={isReadonly}
                         name="label"
                         placeholder="eg. Facebook"
+                        className="secondary"
                         fluid
                         selection
                         value={socialMedia.label.value}

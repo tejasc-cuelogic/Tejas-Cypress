@@ -1,5 +1,6 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Icon, Popup, List, Checkbox } from 'semantic-ui-react';
@@ -15,7 +16,8 @@ const FormCheckbox = observer((props) => {
           <List.Item className="ui checkbox">
             {props.defaults ? (
               <Checkbox
-                checked={value.includes(c.value)}
+                checked={value ?
+                  (Array.isArray(toJS(value)) ? value.includes(c.value) : c.value) : false}
                 value={c.value}
                 {...props}
                 label={

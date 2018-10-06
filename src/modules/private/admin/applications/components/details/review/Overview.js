@@ -8,7 +8,7 @@ import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 
-@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
 @observer
 export default class Overview extends Component {
   componentWillMount() {
@@ -34,8 +34,8 @@ export default class Overview extends Component {
       OVERVIEW_FRM, formChangeWithIndex, confirmModal, toggleConfirmModal,
       removeData, confirmModalName,
     } = this.props.businessAppReviewStore;
-    const { roles } = this.props.userStore.currentUser;
-    const isManager = roles && roles.includes('manager');
+    const { myCapabilities } = this.props.navStore;
+    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
     const submitted = (review && review.overview && review.overview.criticalPoint &&

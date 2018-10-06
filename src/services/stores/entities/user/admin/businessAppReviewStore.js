@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach } from 'lodash';
+import { map, forEach, filter } from 'lodash';
+import graphql from 'mobx-apollo';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin } from '../../../queries/businessApplication';
+import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 
@@ -27,6 +28,7 @@ export class BusinessAppReviewStore {
   @observable MODEL_INPUTS_FRM = Validator.prepareFormObject(MODEL_INPUTS);
   @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
+  @observable businessApplicationOffers = null;
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
@@ -62,6 +64,11 @@ export class BusinessAppReviewStore {
         this.subNavPresentation[ele.to] = status;
       }
     });
+  }
+
+  @computed get checkAllStepsIsApproved() {
+    const isPartial = filter(this.subNavPresentation, (step, key) => (key !== 'model' && key !== 'offer' && (step === 'ns-reload-circle' || step === '')));
+    return isPartial.length;
   }
 
   getActionType = (formName, getField = 'actionType') => {
@@ -136,7 +143,7 @@ export class BusinessAppReviewStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form, index != null, false);
+            this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
@@ -188,7 +195,7 @@ export class BusinessAppReviewStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, index != null, false);
+    this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
   }
 
   @action
@@ -308,7 +315,11 @@ export class BusinessAppReviewStore {
       formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
     }
     const key = Object.keys(formInputData)[0];
-    formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
+    if (formName === 'OFFERS_FRM') {
+      formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, ...managerFormInputData } : formInputData;
+    } else {
+      formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
+    }
     let actionType = this.getActionType(formName);
     let applicationReviewAction = '';
     if (approveOrSubmitted !== '') {
@@ -359,10 +370,39 @@ export class BusinessAppReviewStore {
     });
   }
 
+  @computed get fetchBusinessApplicationOffers() {
+    return (this.businessApplicationOffers && this.businessApplicationOffers.data
+      && this.businessApplicationOffers.data.businessApplication
+      && toJS(this.businessApplicationOffers.data.businessApplication)
+    ) || null;
+  }
+
   @action
-  setFormData = (form, ref) => {
+  fetchApplicationOffers = applicationId => new Promise((resolve) => {
+    uiStore.setAppLoader(true);
+    uiStore.setLoaderMessage('Getting application data');
+    this.businessApplicationOffers = graphql({
+      client,
+      query: getBusinessApplicationOffers,
+      variables: {
+        id: applicationId,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: () => {
+        uiStore.setAppLoader(false);
+        resolve();
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setAppLoader(false);
+      },
+    });
+  });
+
+  @action
+  setFormData = (form, ref, store = 'appStore') => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
-    const appData = businessApplicationDetailsAdmin;
+    const appData = store === 'appStore' ? businessApplicationDetailsAdmin : this.fetchBusinessApplicationOffers;
     if (!appData) {
       return false;
     }

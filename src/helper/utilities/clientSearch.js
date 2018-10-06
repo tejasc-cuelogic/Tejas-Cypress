@@ -1,9 +1,9 @@
 class ClientSearch {
   search = (list, srch, what) => {
     const params = {
-      subItems: `${what}Items`,
-      item: what === 'faq' ? 'question' : 'title',
-      body: what === 'faq' ? 'answer' : 'body',
+      subItems: `${what}ItemList`,
+      item: 'categoryName',
+      body: 'content',
     };
     let result = list.filter(f => f[params.item].toLowerCase().includes(srch.toLowerCase()) ||
       f[params.subItems].find(item => item[params.item].toLowerCase().includes(srch.toLowerCase())

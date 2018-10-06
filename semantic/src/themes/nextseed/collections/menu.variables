@@ -215,7 +215,7 @@
 @secondaryItemVerticalPadding: @relativeMini;
 @secondaryItemHorizontalPadding: @relativeSmall;
 @secondaryItemPadding: @relativeMini @relativeSmall;
-@secondaryItemBorderRadius: @defaultBorderRadius;
+@secondaryItemBorderRadius: 0;
 @secondaryItemTransition: color @defaultDuration @defaultEasing;
 @secondaryItemColor: @unselectedTextColor;
 
@@ -264,10 +264,10 @@
 
 
 /* Inverted Secondary */
-@secondaryInvertedColor: @invertedLightTextColor;
+@secondaryInvertedColor: @neutral;
 
-@secondaryInvertedHoverBackground: @transparentWhite;
-@secondaryInvertedHoverColor: @invertedSelectedTextColor;
+@secondaryInvertedHoverBackground: @white;
+@secondaryInvertedHoverColor: @primary-one;
 
 @secondaryInvertedActiveBackground: @strongTransparentWhite;
 @secondaryInvertedActiveColor: @invertedSelectedTextColor;

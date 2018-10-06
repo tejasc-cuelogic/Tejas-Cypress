@@ -157,6 +157,9 @@ h6{
 .tertiary-text{
 	color:@tertiary-text !important;
 }
+.warning-text{
+  color:@highlight-secondary !important;
+}
 .intro-text, .note{
 	color:@neutral-middark !important;
 }
@@ -527,12 +530,33 @@ p i.icon {
 	margin-top: 60px;
 	text-align: center;
 }
-.featured-section {
+.featured-section, .reward-tier{
 	background-color: @neutral-offwhite;
 	.ui.stackable.grid>.column:not(.row) {
 		@media only screen and (max-width : @largestMobileScreen){
 			width: 50% !important;
 		}
+	}
+}
+.reward-tier{
+	padding:@30px @35px;
+	margin:@20px 0;
+	&:first-child{
+		margin-top:0;
+	}
+	&:last-child{
+		margin-bottom:0;
+	}
+}
+.reward-wrap{
+	padding:@21px;
+	margin:@14px 0;
+	background-color:fade(@neutral-midwhite, 80%);
+	&:first-child{
+		margin-top:0;
+	}
+	&:last-child{
+		margin-bottom:0;
 	}
 }
 .learn-more {
@@ -732,6 +756,17 @@ p i.icon {
 		}
 		.slick-arrow {
 			display: none!important;
+		}
+		&.custom-count .slick-list .slick-slide{
+			// height:auto;
+			width:12.5% !important;
+			@media only screen and (max-width: @smallMonitorScreen) {
+				width:25% !important;
+			}
+			// img {
+			// 	max-height:90px;
+			// 	width:auto !important;
+			// }
 		}
 	}
 }
@@ -986,6 +1021,7 @@ a.icon-link:hover {
 			}
 		}
 	}
+
 	.vertical-timeline-element-content {
 		box-shadow: none;
 		padding: 0;
@@ -1012,7 +1048,7 @@ a.icon-link:hover {
 					}
 					&+.content {
 						margin-left: 10px;
-						padding-top: 0;	
+						padding: 0;	
 					}
 				}
 				@media only screen and (max-width:@largestMobileScreen){
@@ -1097,6 +1133,16 @@ a.icon-link:hover {
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
 	}
+	// .featured-section{
+	// 	padding: @14px @20px;
+	// 	margin:@20px 0;
+	// 	&:first-child{
+	// 		margin-top:0;
+	// 	}
+	// 	&:last-child{
+	// 		margin-bottom:0;
+	// 	}
+	// }
 	// .field .ui.label{					//	commented to resolve issue on admin user creation multi-select dropdown
 	// 	background: transparent;
 	// 	padding: 0px 0 14px;
@@ -1292,7 +1338,7 @@ div.login-form {
 		padding:@11px 0;
 	}
 	&.more{
-		background-color:@neutral-midwhite;
+		background-color:@neutral-offwhite;
 	}
 }
 .filter-meta{
@@ -1986,6 +2032,56 @@ p.check-extra-info{
 }
 
 
+//	Froala Editor Styles override - STARTS
+.fr-box.html-editor{
+	box-shadow:0px 0px 10px 0px @trackBackground;
+	.fr-toolbar.fr-top{
+		padding:0;
+		background-color:@neutral-offwhite;
+		border:none;
+		border-bottom:@neutral-darkwhite 1px solid;
+		border-radius:@6px @6px 0 0;
+		box-shadow:none;
+	}
+	.fr-separator{
+		background-color:@neutral-darkwhite;
+	}
+	&.fr-basic{
+		&.fr-top .fr-wrapper{
+			border-radius:0 0 @6px @6px;
+			box-shadow:none;
+		}
+		.fr-element{
+			height:100%;
+		}
+	}
+	&.fr-code-view textarea.fr-code{
+		min-height:100%;
+		padding:@10px !important;
+		border:none !important;
+	}
+	.fr-toolbar .fr-command.fr-btn i{
+		&.fa-code, &.fa-eraser, &.fa-expand, &.fa-compress{
+			font-family:'nextseed';
+		}
+		&.fa-code:before{
+			content:"\e990";
+		}
+		&.fa-eraser:before{
+			content:"\e98f";
+		}
+		&.fa-expand:before{
+			content:"\e991";
+		}
+		&.fa-compress:before{
+			content:"\e993";
+		}
+	}
+	.fr-toolbar .fr-command.fr-btn.fr-active{
+		color:@primary-two;
+	}
+}
+//	Froala Editor Styles override - ENDS
 //Public responsive start
 .public-header-section {
 	background-color: @white;
@@ -2163,4 +2259,12 @@ p.check-extra-info{
 // Careers Banner
 .careers-banner {
 	margin: 0 auto;
+}
+//Avtar image on public pages
+.updates-modal, .campaign-updates {
+	.sb-avatar{
+		width:36px;
+		height:36px;
+		line-height:36px;
+	}
 }

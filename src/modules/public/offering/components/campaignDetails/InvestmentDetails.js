@@ -7,6 +7,7 @@ import businessModel from '../../../../../assets/images/investment-2.jpg';
 import termnotes from '../../../../../assets/images/investment-1.jpg';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
@@ -14,7 +15,6 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 class InvestmentDetails extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
-
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable doubling>
@@ -22,14 +22,19 @@ class InvestmentDetails extends Component {
             <Responsive maxWidth={767} as={Aux}>
               <Grid.Column tablet={16}>
                 <Segment padded>
-                  <Image src={campaign.investmentType === 'Revenue Sharing' ? businessModel : termnotes} fluid />
+                  <Image
+                    src={campaign.keyTerms.securities ===
+                    CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ? businessModel : termnotes}
+                    fluid
+                  />
                 </Segment>
               </Grid.Column>
             </Responsive>
             <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
                 <Header as="h3">Use of Proceeds</Header>
-                {campaign.investmentType === 'Revenue Sharing' ?
+                {campaign.keyTerms.securities ===
+                CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
                   <Aux>
                     <p>
                       BuffBrew expects the complete buildout of the new building and brewery to be a
@@ -63,13 +68,29 @@ class InvestmentDetails extends Component {
             <Responsive minWidth={768} as={Aux}>
               <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
                 <Segment padded>
-                  <Image src={campaign.investmentType === 'Revenue Sharing' ? businessModel : termnotes} fluid />
+                  <Image
+                    src={
+                      campaign.keyTerms.securities ===
+                      CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
+                      businessModel : termnotes
+                    }
+                    fluid
+                  />
                 </Segment>
               </Grid.Column>
             </Responsive>
           </Grid.Row>
-          {campaign.investmentType === 'Revenue Sharing' ?
-            <RevenueSharingDetails {...this.props} /> : <TermNoteDetails {...this.props} />
+          {campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
+            <RevenueSharingDetails
+              refLink={this.props.refLink}
+              KeyTerms={campaign.keyTerms}
+              {...this.props}
+            /> :
+            <TermNoteDetails
+              refLink={this.props.refLink}
+              KeyTerms={campaign.keyTerms}
+              {...this.props}
+            />
           }
         </Grid>
       </div>

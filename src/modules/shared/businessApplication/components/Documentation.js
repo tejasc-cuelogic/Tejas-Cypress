@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Form } from 'semantic-ui-react';
+import { Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
@@ -16,7 +16,7 @@ export default class Documentation extends Component {
     const { currentApplicationType } = this.props.businessAppStore;
     const { hideFields } = this.props;
     return (
-      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+      <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
           {!hideFields &&
             <FormElementWrap
@@ -31,7 +31,7 @@ export default class Documentation extends Component {
           }
           <AppNavigation hideFields={hideFields} />
         </Form>
-      </Container>
+      </div>
     );
   }
 }

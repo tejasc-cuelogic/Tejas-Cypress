@@ -93,6 +93,9 @@ export class OfferingsStore {
       variables: { id },
       onFetch: (res) => {
         this.offerLoading = false;
+        offeringCreationStore.setFormData('OFFERING_DETAILS_FRM', false);
+        offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+        offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
       },
     });
   }

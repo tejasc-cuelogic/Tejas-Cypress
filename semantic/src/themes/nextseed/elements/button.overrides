@@ -107,6 +107,18 @@
                 }
             }
         }
+        &.time-stamp{
+            background-color:transparent;
+            box-shadow:none !important;
+            color:@neutral;
+            cursor:default;
+            &:first-child{
+                padding-left:0;
+            }
+            &:last-child{
+                padding-right:0;
+            }
+        }
     }
     &.vertical.buttons .button{
         + .button{

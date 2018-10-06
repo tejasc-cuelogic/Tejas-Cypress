@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Grid, Form, Header } from 'semantic-ui-react';
+import { Grid, Form, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput, DropZoneConfirm as DropZone } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
@@ -22,7 +22,7 @@ export default class Performance extends Component {
     const { fields } = BUSINESS_PERF_FRM;
     const statmentConst = getBusinessTypeCondtion || getOwnPropertyCondtion ? ['priorToThreeYear', 'ytd', 'fiveYearProjection'] : ['fiveYearProjection'];
     return (
-      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+      <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
           {!hideFields &&
             <FormElementWrap
@@ -111,7 +111,7 @@ export default class Performance extends Component {
           }
           <AppNavigation hideFields={hideFields} />
         </Form>
-      </Container>
+      </div>
     );
   }
 }
