@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { map, forEach, filter } from 'lodash';
+import graphql from 'mobx-apollo';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin } from '../../../queries/businessApplication';
+import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 
@@ -27,6 +28,7 @@ export class BusinessAppReviewStore {
   @observable MODEL_INPUTS_FRM = Validator.prepareFormObject(MODEL_INPUTS);
   @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
+  @observable businessApplicationOffers = null;
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
@@ -368,10 +370,39 @@ export class BusinessAppReviewStore {
     });
   }
 
+  @computed get fetchBusinessApplicationOffers() {
+    return (this.businessApplicationOffers && this.businessApplicationOffers.data
+      && this.businessApplicationOffers.data.businessApplication
+      && toJS(this.businessApplicationOffers.data.businessApplication)
+    ) || null;
+  }
+
   @action
-  setFormData = (form, ref) => {
+  fetchApplicationOffers = applicationId => new Promise((resolve) => {
+    uiStore.setAppLoader(true);
+    uiStore.setLoaderMessage('Getting application data');
+    this.businessApplicationOffers = graphql({
+      client,
+      query: getBusinessApplicationOffers,
+      variables: {
+        id: applicationId,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: () => {
+        uiStore.setAppLoader(false);
+        resolve();
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setAppLoader(false);
+      },
+    });
+  });
+
+  @action
+  setFormData = (form, ref, store = 'appStore') => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
-    const appData = businessApplicationDetailsAdmin;
+    const appData = store === 'appStore' ? businessApplicationDetailsAdmin : this.fetchBusinessApplicationOffers;
     if (!appData) {
       return false;
     }

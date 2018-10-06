@@ -17,7 +17,7 @@ class Dashboard extends Component {
         P5={<StickyNotification />}
       >
         <ApplicationCard />
-        <Route path={`${match.url}/offers`} component={ChooseOffer} />
+        <Route path={`${match.url}/:applicationId/offers`} component={ChooseOffer} />
       </PrivateLayout>
     );
   }

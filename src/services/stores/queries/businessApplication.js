@@ -461,3 +461,44 @@ mutation updateBusinessApplicationInformation(
   }
 }
 `;
+
+export const getBusinessApplicationOffers = gql`
+query _getBusinessApplicationById ($id: String!) {
+  businessApplication(
+    applicationId: $id
+  ){
+    userId
+    applicationId
+    applicationStatus
+    created {
+      date
+    }
+    updated {
+      date
+    }
+    prequalDetails {
+      businessModel
+      businessGoal
+      businessGeneralInfo {
+        businessName
+      }
+    }
+    offers {
+      offer {
+        structure
+        amount
+        maturity
+        interestRate
+        amortizationAmount
+        mthRevenueSharing
+        personalGuarantee
+        businessBlanket
+        expirationDate
+        multiple
+        totalCapital
+        isAccepted
+      }
+    }  
+  }
+}
+`;

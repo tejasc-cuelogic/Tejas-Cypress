@@ -18,9 +18,11 @@ export default class OffersPanel extends Component {
               <Card.Content>
                 <Card.Header>
                   Offer {String.fromCharCode('A'.charCodeAt() + index)}
+                  {!isReadonly && OFFERS_FRM.fields.offer.length > 1 &&
                   <Link to={match.url} onClick={e => this.toggleConfirmModal(e, index)} className="pull-right">
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Card.Header>
               </Card.Content>
               <div className="table-wrapper">
@@ -36,7 +38,7 @@ export default class OffersPanel extends Component {
                           placeholder="Choose"
                           fluid
                           selection
-                          // value={offer.structure.value}
+                          value={offer.structure.value}
                           options={STRUCTURE_TYPES}
                           // fielddata={offer.structure}
                           onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}

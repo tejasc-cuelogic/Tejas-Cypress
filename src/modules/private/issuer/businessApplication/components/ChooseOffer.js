@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Modal, Header, Card, Menu } from 'semantic-ui-react';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
+import OffersPanel from '../../../shared/offerings/components/shared/OffersPanel';
 
 const navItems = [
   { title: 'General Conditions', to: 'general-conditions' },
@@ -19,10 +21,23 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
+
+@inject('businessAppReviewStore')
+@withRouter
+@observer
 export default class ChooseOffer extends Component {
+  componentWillMount() {
+    const { match, businessAppReviewStore } = this.props;
+    businessAppReviewStore.fetchApplicationOffers(match.params.applicationId).then(() => {
+      this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
+    });
+  }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
-    const { match } = this.props;
+    const { match, businessAppReviewStore } = this.props;
+    const {
+      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex,
+    } = businessAppReviewStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Content>
@@ -34,6 +49,14 @@ export default class ChooseOffer extends Component {
             of your crowdfunding campaign.
           </p>
           <Header as="h3">Offer cards will go here</Header>
+          <OffersPanel
+            OFFERS_FRM={OFFERS_FRM}
+            formChangeWithIndex={formChangeWithIndex}
+            maskChangeWithIndex={maskChangeWithIndex}
+            isReadonly
+            match={this.props.match}
+            refModule="admin"
+          />
           <Card fluid>
             <SecondaryMenu
               inverted
