@@ -244,6 +244,7 @@ export const getOfferingDetails = gql`
         }
       }
       leadership {
+        isPublic
         firstName
         lastName
         email

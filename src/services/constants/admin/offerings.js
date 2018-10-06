@@ -674,7 +674,7 @@ export const MEDIA = {
 export const LEADERSHIP = {
   leadership: [{
     isPublic: {
-      value: [],
+      value: false,
       values: [
         {
           label: 'Include in Offering Page',
