@@ -50,11 +50,12 @@
             input[type=time],
             input[type=url],
             &.secondary textarea{
-                padding:0;
-                border:none;
+                padding:0 !important;
+                border:none !important;
                 font-weight:@fontMedium;
                 text-overflow:ellipsis;
                 cursor:default;
+                background:none !important;
             }
             p.commet-area{
                 font-weight:500;

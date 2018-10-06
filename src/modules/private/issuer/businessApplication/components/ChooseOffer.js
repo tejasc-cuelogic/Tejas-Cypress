@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Header, Card, Menu } from 'semantic-ui-react';
+import { Modal, Header, Card, Grid, Menu } from 'semantic-ui-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -33,7 +33,13 @@ export default class ChooseOffer extends Component {
             signing the Portal Agreement to formalize our partnership and initiate the preparation
             of your crowdfunding campaign.
           </p>
-          <Header as="h3">Offer cards will go here</Header>
+          <Grid columns={3}>
+            <Grid.Column>
+              <Card fluid className="offer-card">
+                <Header as="h3">Offer cards will go here</Header>
+              </Card>
+            </Grid.Column>
+          </Grid>
           <Card fluid>
             <SecondaryMenu
               inverted
