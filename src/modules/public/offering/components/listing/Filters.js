@@ -245,7 +245,7 @@ export default class Filters extends Component {
                               className="link-button"
                             >
                               NEXT
-                              <Icon className="ns-arrow-right" color="grey" />
+                              <Icon className="ns-arrow-right right" color="grey" />
                             </Button>
                           </Button.Group>
                         }

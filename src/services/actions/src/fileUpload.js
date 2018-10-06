@@ -1,8 +1,10 @@
+import { uploadFile, deleteFile } from '../../../helper/aws-s3/S3Client';
 import { createUploadEntry, removeUploadedFile } from '../../stores/queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
 import { uiStore } from '../../stores';
 import apiService from '../../../api/restApi';
+import { UPLOADS_CONFIG } from '../../../constants/aws';
 
 export class FileUpload {
   setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '') =>
@@ -67,6 +69,36 @@ export class FileUpload {
     field.value = [];
     field.fileId = [];
     field.rule = 'required';
+  }
+
+  uploadToS3 = (fileObj) => {
+    const config = {
+      bucketName: UPLOADS_CONFIG.bucket,
+      dirName: 'uploads',
+      region: UPLOADS_CONFIG.region,
+      accessKeyId: UPLOADS_CONFIG.accessKey,
+      secretAccessKey: UPLOADS_CONFIG.secretKey,
+    };
+    return new Promise((resolve, reject) => {
+      uploadFile(fileObj, config)
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
+  }
+
+  deleteFromS3 = (file) => {
+    const config = {
+      bucketName: UPLOADS_CONFIG.bucket,
+      dirName: 'uploads',
+      region: UPLOADS_CONFIG.region,
+      accessKeyId: UPLOADS_CONFIG.accessKey,
+      secretAccessKey: UPLOADS_CONFIG.secretKey,
+    };
+    return new Promise((resolve, reject) => {
+      deleteFile(file, config)
+        .then(data => resolve(data))
+        .catch(err => reject(err));
+    });
   }
 }
 

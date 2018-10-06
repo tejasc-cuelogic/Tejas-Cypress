@@ -90,11 +90,11 @@ export default class CampaignSideBar extends Component {
               || 0} min investment
             </p>
             {isMobile &&
-              <Button.Group compact fluid widths="2" className="mt-30">
-                <Button basic color="grey">
+              <Button.Group compact widths="2" className="mt-30">
+                <Button basic inverted color="green">
                   <Icon name="heart outline" /> Watch Deal
                 </Button>
-                <Button basic color="grey" as={Link} to={`${this.props.match.url}/share`}>
+                <Button basic inverted color="green" as={Link} to={`${this.props.match.url}/share`}>
                   <Icon name="share alternate" /> Share
                 </Button>
               </Button.Group>
@@ -114,10 +114,10 @@ export default class CampaignSideBar extends Component {
                 </Menu.Item> */}
               </Menu>
               <Button.Group widths="2">
-                <Button compact basic color="grey">
+                <Button compact basic inverted color="green">
                   <Icon name="heart outline" /> Watch Deal
                 </Button>
-                <Button compact basic color="grey" as={Link} to={`${this.props.match.url}/share`}>
+                <Button compact basic inverted color="green" as={Link} to={`${this.props.match.url}/share`}>
                   <Icon name="share alternate" /> Share
                 </Button>
               </Button.Group>

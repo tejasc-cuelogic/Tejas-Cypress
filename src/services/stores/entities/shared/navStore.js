@@ -3,13 +3,16 @@ import { matchPath } from 'react-router-dom';
 import cookie from 'react-cookies';
 import _ from 'lodash';
 import { PRIVATE_NAV } from '../../../../constants/NavigationMeta';
-import { userStore, userDetailsStore, businesssStore } from '../../index';
+import { userStore, userDetailsStore, offeringsStore } from '../../index';
 
 export class NavStore {
-  @observable NAV_ITEMS = { ...PRIVATE_NAV };
-  @observable params = { roles: [], currentNav: [], appStatus: null };
+  @observable NAV_ITEMS = [...PRIVATE_NAV];
+  @observable params = {
+    roles: [], currentNav: [], appStatus: null, specificNav: null,
+  };
   @observable navStatus = 'main';
   @observable navMeta = [];
+  @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
 
   constructor() {
@@ -46,20 +49,26 @@ export class NavStore {
   }
 
   @action
-  filterByAccess = (sNavs, phase) => toJS(sNavs.filter(sN => !sN.accessFor ||
-      sN.accessFor.includes(phase)));
+  filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor ||
+      (sN.accessFor.includes(phase) && !exclude.includes(sN.to))));
 
   @computed get allNavItems() {
     const navItems = [...this.myRoutes];
     const bIndex = navItems.findIndex(r => r.title === 'Offering');
     if (bIndex !== -1) {
       const subNavigations = [...navItems[bIndex].subNavigations];
-      businesssStore.businesses.forEach((b) => {
-        const sNav = this.filterByAccess(subNavigations, b.phase);
+      offeringsStore.offerings.forEach((b) => {
+        const sNav = this.filterByAccess(
+          subNavigations,
+          offeringsStore.allPhases.indexOf(b.stage) + 1,
+        );
         navItems.splice(
           bIndex,
           0,
-          { ...navItems[bIndex], ...{ title: b.name, to: `offering/${b.id}`, subNavigations: sNav } },
+          {
+            ...navItems[bIndex],
+            ...{ title: ((b.keyTerms && b.keyTerms.legalBusinessName) || (b.businessGeneralInfo && b.businessGeneralInfo.businessName)), to: `offering/${b.id}`, subNavigations: sNav },
+          },
         );
       });
     }
@@ -67,13 +76,27 @@ export class NavStore {
   }
 
   @computed get sidebarItems() {
-    const reject = ['profile-settings', 'business-application/:applicationType/:applicationId'];
+    const reject = ['profile-settings', 'business-application/:applicationType/:applicationId', 'edgar'];
     return this.allNavItems.filter(r => !reject.includes(r.to) && r.title !== 'Offering');
   }
 
   @computed get stepInRoute() {
     return this.everLogsIn ? { to: 'login', title: 'Log In' } :
       { to: 'register', title: 'Sign Up' };
+  }
+
+  @computed get specificNavs() {
+    const { roles, specificNav } = this.params;
+    let nav = [];
+    if (roles && specificNav) {
+      nav = toJS(this.NAV_ITEMS.find(i => matchPath(specificNav, { path: `/app/${i.to}` })));
+      if (nav && nav.subNavigations) {
+        nav.title = typeof nav.title === 'object' && roles ? nav.title[roles[0]] : nav.title;
+        nav.subNavigations = nav.subNavigations.filter(n => !n.accessibleTo ||
+          n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, roles).length > 0);
+      }
+    }
+    return nav;
   }
 
   @action

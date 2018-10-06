@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
-import { Container, Icon, Form, Button, Divider } from 'semantic-ui-react';
+import { Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../helper/utility';
 import { FormInput } from '../../../../theme/form';
@@ -35,6 +35,7 @@ export default class PreQualification extends Component {
           this.props.history.push(`/business-application/${url}`);
         });
     } else {
+      this.props.businessAppStore.setPrequalBasicDetails();
       this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
         .then(() => {
           this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
@@ -67,7 +68,7 @@ export default class PreQualification extends Component {
       return <NotFound />;
     }
     return (
-      <Container className={hideFields ? 'inner-content-spacer' : ''}>
+      <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form onSubmit={this.prequalBasicSubmit} className="issuer-signup">
           {!hideFields &&
           <Aux>
@@ -105,15 +106,18 @@ export default class PreQualification extends Component {
               </Form.Group>
             </div>
             {!isPrequalQulify &&
-            <Button
-              loading={this.props.uiStore.inProgress}
-              disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
-              size="large"
-              color="green"
-              className="very relaxed"
-            >
-              Continue
-            </Button>
+            <Aux>
+              <Divider hidden />
+              <Button
+                loading={this.props.uiStore.inProgress}
+                disabled={!BUSINESS_APP_FRM_BASIC.meta.isValid}
+                size="large"
+                color="green"
+                className="very relaxed"
+              >
+                Continue
+              </Button>
+            </Aux>
             }
           </FormElementWrap>
           }
@@ -140,7 +144,7 @@ export default class PreQualification extends Component {
           }
         </Form>
         }
-      </Container>
+      </div>
     );
   }
 }

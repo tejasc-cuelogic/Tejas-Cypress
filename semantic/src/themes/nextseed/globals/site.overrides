@@ -26,15 +26,6 @@ section{
 		margin-bottom:@50px !important;
 	}
 }
-.info-card{
-	a {
-		color: @fullBlack;
-		font-weight: @bold;
-	}
-	img.ui.image {
-		height: 52px;
-	}
-}
 //	Helper Classes Starts
 iframe{
 	border:none;
@@ -166,6 +157,9 @@ h6{
 .tertiary-text{
 	color:@tertiary-text !important;
 }
+.warning-text{
+  color:@highlight-secondary !important;
+}
 .intro-text, .note{
 	color:@neutral-middark !important;
 }
@@ -187,6 +181,16 @@ a:not(.item), a:not(.ui.button){
 		text-decoration:underline !important;
 	}
 }
+.info-card{
+	.ui.button>.icon:not(.button){
+		line-height: 1;
+		vertical-align: middle;
+		height: auto;
+	}
+	img.ui.image {
+		height: 52px;
+	}
+}
 a{
 	&.inverted{
 		color:@white;
@@ -195,7 +199,7 @@ a{
 		color:@primary-two !important;
 	}
 	&.text-link{
-		color:@tertiary-text;
+		color:@neutral;
 		&:hover, &:active, &.active{
 			color:@neutral;
 		}
@@ -327,9 +331,6 @@ footer{
 					line-height: 14px;
     				opacity: 1;
 					height: 14px;
-					&.ns-arrow-right {
-						margin: 0 0 0 @6px; 
-					}
 				}
 			}
 		}
@@ -441,7 +442,7 @@ footer{
 				.ui.list {
 					>.item {
 						margin-bottom: @30px;
-    					padding-bottom: 0;
+						padding-bottom: 0;
 					}
 				}
 			}
@@ -529,12 +530,33 @@ p i.icon {
 	margin-top: 60px;
 	text-align: center;
 }
-.featured-section {
+.featured-section, .reward-tier{
 	background-color: @neutral-offwhite;
 	.ui.stackable.grid>.column:not(.row) {
 		@media only screen and (max-width : @largestMobileScreen){
 			width: 50% !important;
 		}
+	}
+}
+.reward-tier{
+	padding:@30px @35px;
+	margin:@20px 0;
+	&:first-child{
+		margin-top:0;
+	}
+	&:last-child{
+		margin-bottom:0;
+	}
+}
+.reward-wrap{
+	padding:@21px;
+	margin:@14px 0;
+	background-color:fade(@neutral-midwhite, 80%);
+	&:first-child{
+		margin-top:0;
+	}
+	&:last-child{
+		margin-bottom:0;
 	}
 }
 .learn-more {
@@ -999,6 +1021,7 @@ a.icon-link:hover {
 			}
 		}
 	}
+
 	.vertical-timeline-element-content {
 		box-shadow: none;
 		padding: 0;
@@ -1110,6 +1133,16 @@ a.icon-link:hover {
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
 	}
+	// .featured-section{
+	// 	padding: @14px @20px;
+	// 	margin:@20px 0;
+	// 	&:first-child{
+	// 		margin-top:0;
+	// 	}
+	// 	&:last-child{
+	// 		margin-bottom:0;
+	// 	}
+	// }
 	// .field .ui.label{					//	commented to resolve issue on admin user creation multi-select dropdown
 	// 	background: transparent;
 	// 	padding: 0px 0 14px;
@@ -1305,7 +1338,7 @@ div.login-form {
 		padding:@11px 0;
 	}
 	&.more{
-		background-color:@neutral-midwhite;
+		background-color:@neutral-offwhite;
 	}
 }
 .filter-meta{
@@ -1999,6 +2032,56 @@ p.check-extra-info{
 }
 
 
+//	Froala Editor Styles override - STARTS
+.fr-box.html-editor{
+	box-shadow:0px 0px 10px 0px @trackBackground;
+	.fr-toolbar.fr-top{
+		padding:0;
+		background-color:@neutral-offwhite;
+		border:none;
+		border-bottom:@neutral-darkwhite 1px solid;
+		border-radius:@6px @6px 0 0;
+		box-shadow:none;
+	}
+	.fr-separator{
+		background-color:@neutral-darkwhite;
+	}
+	&.fr-basic{
+		&.fr-top .fr-wrapper{
+			border-radius:0 0 @6px @6px;
+			box-shadow:none;
+		}
+		.fr-element{
+			height:100%;
+		}
+	}
+	&.fr-code-view textarea.fr-code{
+		min-height:100%;
+		padding:@10px !important;
+		border:none !important;
+	}
+	.fr-toolbar .fr-command.fr-btn i{
+		&.fa-code, &.fa-eraser, &.fa-expand, &.fa-compress{
+			font-family:'nextseed';
+		}
+		&.fa-code:before{
+			content:"\e990";
+		}
+		&.fa-eraser:before{
+			content:"\e98f";
+		}
+		&.fa-expand:before{
+			content:"\e991";
+		}
+		&.fa-compress:before{
+			content:"\e993";
+		}
+	}
+	.fr-toolbar .fr-command.fr-btn.fr-active{
+		color:@primary-two;
+	}
+}
+//	Froala Editor Styles override - ENDS
 //Public responsive start
 .public-header-section {
 	background-color: @white;
@@ -2063,7 +2146,7 @@ p.check-extra-info{
     position: fixed;
     left: 0;
     top: 14px;
-    z-index: 3;
+    z-index: 103;
     overflow: hidden;
     transition: width 250ms ease-in-out;
 	.ui.image {
@@ -2078,6 +2161,10 @@ p.check-extra-info{
 		width: 200px;
 		transition: width 300ms ease-in-out;
 		//transition-delay: 90ms;
+		position: absolute;
+	}
+	&.offering-logo {
+		width: 200px;
 	}
 }
 //Public responsive end

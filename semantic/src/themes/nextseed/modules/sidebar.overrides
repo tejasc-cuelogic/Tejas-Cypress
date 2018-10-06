@@ -3,33 +3,52 @@
 *******************************/
 
 // 	Sidebar pushable CSS
-.pushable>.sidebar{
-	&.push ~ .pusher{
-		padding-left:64px;
+.pushable {
+	&:not(body) {
+		transform: none;
 	}
-	~ .pusher{
-		transition:all .5s ease;
-		height:100vh;
-		overflow-y:auto;
-		background-color:@neutral-offwhite;
-		.ui.vertical.segment.content{
-			padding:0;
-			min-height:~"calc(100vh - 58px)";
+	>.sidebar{
+		&.push ~ .pusher{
+			padding-left:64px;
 		}
-		&.banner{
-			height:~"calc(100vh - 34px)";
+		~ .pusher{
+			transition:all .5s ease;
+			height:100vh;
+			overflow-y:auto;
+			background-color:@neutral-offwhite;
+			.ui.vertical.segment.content{
+				padding:0;
+				min-height:~"calc(100vh - 58px)";
+			}
+			&.banner{
+				height:~"calc(100vh - 34px)";
+			}
+			&.public-pusher {
+				padding-top: 58px;
+				min-height:auto;
+				height:auto;
+				background-color: transparent;
+			}
+			&.dimmed {
+				overflow: hidden;
+				z-index: unset;
+				&:after {
+					position: fixed !important;
+					z-index: 101;
+				}
+			}
 		}
-		&.public-pusher {
-			padding-top: 58px;
-			min-height:100vh;
-			background-color: transparent;
+	}
+	&.show-pushable {
+		&:not(body) {
+			transform: translateZ(0);
 		}
-		&.dimmed {
-			overflow: hidden;
-			z-index: unset;
-			&:after {
-				position: fixed !important;
-				z-index: 101;
+		>.sidebar {
+			~ .pusher{
+				&.public-pusher {
+					min-height:100vh;
+					height:100vh;
+				}
 			}
 		}
 	}
@@ -77,6 +96,9 @@
 			border-radius:@4px !important;
 			margin-bottom:@3px;
 			font-weight:400;
+			>.text{
+				max-width:150px;
+			}
 			// &:first-of-type{
 			// 	margin-bottom:@30px;
 			// }

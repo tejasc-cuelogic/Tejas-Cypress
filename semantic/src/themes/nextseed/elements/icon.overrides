@@ -1716,7 +1716,6 @@ i.icon.youtube.play:before { content: "\f167"; }
 }
 i.icon[class*="ns-"]{
     font-family:'nextseed';
-    height:auto;
 }
 
 .ns-activity-arrow:before{

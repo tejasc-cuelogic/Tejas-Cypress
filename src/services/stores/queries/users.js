@@ -62,6 +62,7 @@ export const userDetailsQuery = gql`
       email {
         address
       }
+      capabilities
       roles {
         name
         scope

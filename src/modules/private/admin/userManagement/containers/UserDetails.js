@@ -9,6 +9,7 @@ import Helper from '../../../../../helper/utility';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
+import ActivityHistory from '../../../shared/ActivityHistory';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/manage/${component}`),
@@ -34,7 +35,7 @@ const navMeta = [
     title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'],
   },
   {
-    title: 'Activity', to: 'activity', component: 'Activity', accessibleTo: [],
+    title: 'Activity', to: 'activity', component: ActivityHistory, load: false, accessibleTo: [],
   },
 ];
 
@@ -69,7 +70,7 @@ export default class AccountDetails extends Component {
     };
     return (
       <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-detials">
+        <Modal.Content className="transaction-details">
           <Item.Group>
             <Item className="user-intro">
               <div className="ui tiny circular image">
@@ -96,7 +97,7 @@ export default class AccountDetails extends Component {
               <Switch>
                 {
                   navItems.map(item => (
-                    <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+                    <Route key={item.to} path={`${match.url}/${item.to}`} component={item.load === false ? item.component : getModule(item.component)} />
                   ))
                 }
               </Switch>

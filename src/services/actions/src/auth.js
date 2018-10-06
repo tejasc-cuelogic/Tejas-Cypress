@@ -508,7 +508,11 @@ export class Auth {
     const mappedUser = data.reduce((obj, item) => {
       const key = camel(item.Name.replace(/^custom:/, ''));
       const newObj = obj;
-      newObj[key] = item.Value;
+      if (key === 'userCapabilities') {
+        newObj.capabilities = item.Value;
+      } else {
+        newObj[key] = item.Value;
+      }
       return newObj;
     }, {});
     return mappedUser;
@@ -525,7 +529,7 @@ export class Auth {
     const newData = {};
     _.map(data, (val, key) => { (newData[camel(key)] = val); });
     newData.roles = data['custom:roles'];
-    newData.capabilities = data['custom:capabilities'];
+    newData.capabilities = data['custom:user_capabilities'];
     delete newData.customRoles;
     delete newData.customCapabilities;
     return newData;

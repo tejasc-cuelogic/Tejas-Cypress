@@ -17,7 +17,7 @@ const FormInput = observer((props) => {
     props.maxLength ? props.maxLength : false
   );
   const { displayMode } = props;
-  const fieldClass = `${props.containerclassname || ''} ${displayMode ? 'display-only' : ''}`;
+  const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
   return (
     <Form.Field width={props.containerwidth || false} className={fieldClass} error={!!error}>
       {!props.ishidelabel && label !== '' &&
@@ -25,6 +25,7 @@ const FormInput = observer((props) => {
           {props.label || label}
           {tooltip &&
             <Popup
+              hoverable={props.hoverable}
               trigger={<Icon className="ns-help-circle" />}
               content={tooltip}
               position="top center"
@@ -44,15 +45,15 @@ const FormInput = observer((props) => {
       }
       <Input
         fluid
-        {...props}
-        value={value}
         autoComplete="nope"
         maxLength={maxlength || false}
-        label={props.prefix || false}
         type={props.type || 'text'}
         placeholder={placeHolder}
         onChange={props.changed}
         readOnly={displayMode}
+        {...props}
+        value={value}
+        label={props.prefix || false}
       />
       {error &&
         <FieldError error={error} />

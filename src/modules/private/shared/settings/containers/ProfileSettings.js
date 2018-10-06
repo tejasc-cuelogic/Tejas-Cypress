@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateLayout';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
 import ProfileData from '../components/ProfileData';
 import InvestmentLimits from '../../../investor/settings/containers/InvestmentLimits';

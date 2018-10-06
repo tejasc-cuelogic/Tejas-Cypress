@@ -319,6 +319,10 @@ footer{
         background-color: @neutral-offwhite;
         .item{
             padding:@13px @16px;
+            margin-bottom:@3px;
+            &:last-child{
+                margin-bottom:0;
+            }
         }
         .dropdown{
             .menu>.item{
@@ -356,6 +360,28 @@ footer{
             }
         }
     }
+    &.secondary.inverted{
+        background-color:@neutral-midwhite;
+        .item:before{
+            display:block !important;
+            background-color:@neutral-midwhite !important;
+        }
+    }
+    &.tertiary.inverted{
+        background-color:@neutral-darkwhite;
+        .item{
+            align-self:center;
+            padding:@10px !important;
+            margin:0 0 0 @3px;
+            color:@neutral;
+            &:before{
+                display:none;
+            }
+            &:hover, &:active, &.active{
+                background-color:@neutral-offwhite !important;
+            }
+        }
+    }
     a.header.item{
         &:hover, &:active{
             background-color:transparent;
@@ -380,6 +406,9 @@ footer{
         }
         .dropdown.item .menu {
             min-width: 100%;
+            >.item>.label{
+                margin:0 0 0 @11px;
+            }
         }
         &.inverted {
             background: fade(@neutral, 90%);
@@ -415,9 +444,9 @@ footer{
 	}
 	//Public Mobile View End
 }
-.transaction-detials{
+.transaction-details{
     .ui.inverted.menu{
-        background-color:@neutral-middark;
+        // background-color:@neutral-middark;
         .item{
             padding:@16px @25px;
             &:before{
@@ -471,7 +500,7 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: @58px 0 @58px;
+    padding: @58px 0 0;
     height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
@@ -491,14 +520,14 @@ footer{
         margin-bottom: @20px;
     }
     .social-media {
-        position: absolute;
+        // position: absolute;
         text-align: center;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        // left: 0;
+        // right: 0;
+        // bottom: 0;
         background: @neutral;
-        height: 58px;
-        padding: @18px 0;
+        // height: 58px;
+        padding: 0 0 @14px;
         .item {
             margin-bottom: 0;
             padding: 0 @8px !important;

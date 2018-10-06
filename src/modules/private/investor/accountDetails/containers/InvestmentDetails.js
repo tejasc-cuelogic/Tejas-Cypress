@@ -59,7 +59,7 @@ class InvestmentDetails extends Component {
     const { match } = this.props;
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-detials">
+        <Modal.Content className="transaction-details">
           <SummaryHeader details={summaryDetails} />
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />

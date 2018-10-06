@@ -11,13 +11,12 @@ const GeneralInformation = props => (
           {
             ['businessName', 'website'].map(field => (
               <FormInput
-                readOnly={props.preQualFormDisabled}
                 containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+                readOnly={props.preQualFormDisabled}
                 key={field}
                 type="text"
                 name={field}
                 label={field === 'businessName' ? props.currentApplicationType === 'business' ? 'Business Name' : 'Entity Name' : 'Website'}
-                value={props.fields[field].value}
                 fielddata={props.fields[field]}
                 changed={props.businessAppEleChange}
               />

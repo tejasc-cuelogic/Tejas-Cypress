@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Container, Grid, Image, Icon, Responsive, Divider } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Header, Container, Grid, Image, Icon, Responsive, Divider, Button } from 'semantic-ui-react';
 import icon1 from '../../../../assets/images/icons/resources_1.svg';
 import icon2 from '../../../../assets/images/icons/resources_2.svg';
 
@@ -27,10 +27,10 @@ const Summary = props => (
             Understand how to add local businesses to your investment portfolio, how NextSeed
             investments work, and the risks and opportunities offered by this new way of investing.
           </p>
-          <Link to={`${props.refUrl}/investor`}>
-            For Investors{' '}
-            <Icon className="ns-arrow-right" color="green" />
-          </Link>
+          <Button as={Link} to={`${props.refUrl}/investor`} color="black" className="link-button">
+            For Investors
+            <Icon className="ns-arrow-right right" color="green" />
+          </Button>
         </Grid.Column>
         <Grid.Column textAlign="center" width={6} className="info-card">
           <Image src={icon2} centered className="mb-20" />
@@ -38,10 +38,10 @@ const Summary = props => (
             Learn about the business implications of different types of fundraising, how to add
             NextSeed to your capital stack and how to get started.
           </p>
-          <Link to={`${props.refUrl}/business`}>
-            For Businesses{' '}
-            <Icon className="ns-arrow-right" color="green" />
-          </Link>
+          <Button as={Link} to={`${props.refUrl}/business`} color="black" className="link-button">
+            For Businesses
+            <Icon className="ns-arrow-right right" color="green" />
+          </Button>
         </Grid.Column>
       </Grid>
     </Container>

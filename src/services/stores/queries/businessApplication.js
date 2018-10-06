@@ -461,3 +461,74 @@ mutation updateBusinessApplicationInformation(
   }
 }
 `;
+
+export const getBusinessApplicationOffers = gql`
+query _getBusinessApplicationById ($id: String!) {
+  businessApplication(
+    applicationId: $id
+  ){
+    userId
+    applicationId
+    applicationStatus
+    created {
+      date
+    }
+    updated {
+      date
+    }
+    prequalDetails {
+      businessModel
+      businessGoal
+      businessGeneralInfo {
+        businessName
+      }
+    }
+    offers {
+      offer {
+        structure
+        amount
+        maturity
+        interestRate
+        amortizationAmount
+        mthRevenueSharing
+        personalGuarantee
+        businessBlanket
+        expirationDate
+        multiple
+        totalCapital
+        isAccepted
+      }
+    }  
+  }
+}
+`;
+
+export const signPortalAgreement = gql`
+mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean){
+  signPortalAgreement(
+    applicationId: $applicationId
+    issuerId: $issuerId
+    selectedOffer: $selectedOffer
+    isSelectedOfferChanged: $isSelectedOfferChanged
+  )
+}
+`;
+
+export const getPortalAgreementStatus = gql`
+query _getPortalAgreementStatus($applicationId: String!, $issuerId: String!){
+  getPortalAgreementStatus(
+    applicationId: $applicationId
+    issuerId: $issuerId
+  )
+}
+`;
+
+export const createOffering = gql`
+mutation _createOffering($applicationId: String!){
+  createOffering(
+    applicationId: $applicationId
+  ){
+    id
+  }
+}
+`;

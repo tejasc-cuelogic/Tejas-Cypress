@@ -10,6 +10,11 @@
     }
 }
 .ui.grid{
+    &.bottom-aligned{
+        >.column:not(.row), >.row>.column{
+            align-self:flex-end !important;
+        }
+    }
     &.divided:not(.vertically){
         >.column:not(:last-child),
         >.row>.column:not(:last-child){
@@ -159,7 +164,7 @@
         >.column {
             padding: 0;
         }
-    }  
+    }
 }
 .featured-statistic {
 	counter-reset: section;

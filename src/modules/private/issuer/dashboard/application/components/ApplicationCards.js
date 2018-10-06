@@ -21,7 +21,7 @@ export default class ApplicationCards extends Component {
   render() {
     const { fetchBusinessApplication, businessApplicationsList } = this.props.businessAppStore;
 
-    if (businessApplicationsList.loading) {
+    if (businessApplicationsList && businessApplicationsList.loading) {
       return <InlineLoader />;
     }
 
@@ -64,6 +64,10 @@ export default class ApplicationCards extends Component {
                     {application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED &&
                       <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
+                    }
+                    {application.applicationStatus ===
+                    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED &&
+                      <Button inverted color="green" as={Link} to={`dashboard/${application.applicationId}/offers`}>Sign agreement</Button>
                     }
                   </Card.Content>
                 </Card>
