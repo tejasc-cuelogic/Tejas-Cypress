@@ -53,9 +53,14 @@ export default class Admin extends Component {
         </Form.Group>
         <Divider />
         <Header as="h6">Role and Capabilities</Header>
-        <Form.Group widths={4}>
-          <Form.Input fluid label="Role" placeholder="Address" value="Manager" readOnly className="display-only" />
-          <Form.Input fluid label="Capabilities" placeholder="City" value="FAQ, KNOWLEDGE_BASE" readOnly className="display-only" />
+        <Form.Group widths={2}>
+          <Form.Input fluid label="Role" placeholder="Address" value="Admin" readOnly className="display-only" />
+          <div class="field display-only">
+            <label>Capabilities</label>
+            <div class="ui fluid input">
+              {USER_BASIC.fields.capabilities.value.join(', ')}
+            </div>
+          </div>
         </Form.Group>
       </Form>
     );
