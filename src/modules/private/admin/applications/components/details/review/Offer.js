@@ -2,18 +2,24 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Header, Form, Table, Dropdown, Icon, Confirm, Button } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../../../../../theme/form';
+import { Header, Form, Table, Dropdown, Icon, Confirm } from 'semantic-ui-react';
+import { FormInput, MaskedInput, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 
-@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
 @observer
 export default class Offer extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'offers.managerOverview');
+  }
+  onFileDrop = (files, name) => {
+    this.props.businessAppReviewStore.setFileUploadData('OFFERS_FRM', '', name, files);
+  }
+  handleDelDoc = (field) => {
+    this.props.businessAppReviewStore.removeUploadedData('OFFERS_FRM', field);
   }
   toggleConfirmModal = (e, index) => {
     e.preventDefault();
@@ -32,21 +38,22 @@ export default class Offer extends Component {
   render() {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
-      confirmModalName, removeData,
+      confirmModalName, removeData, checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
     const offerFields = OFFERS_FRM.fields.offer[0];
-    const { roles } = this.props.userStore.currentUser;
-    const isManager = roles && roles.includes('manager');
+    const { myCapabilities } = this.props.navStore;
+    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { offers } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
     && !isManager) || (isManager && approved && approved.status));
+    console.log(checkAllStepsIsApproved);
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
+          <ManagerOverview isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} stepStatus={checkAllStepsIsApproved} />
           <Header as="h4">
             Offers
             {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
@@ -264,9 +271,34 @@ export default class Offer extends Component {
               <Table.Row>
                 <Table.Cell>Portal agreement upload</Table.Cell>
                 <Table.Cell colSpan="4">
-                  {!isReadonly &&
-                  <Button type="button" size="small" color="blue" className="link-button" >+ Add portal agreement</Button>
-                  }
+                  <DropZone
+                    containerclassname={isReadonly ? 'display-only' : ''}
+                    disabled={isReadonly}
+                    name="term"
+                    fielddata={OFFERS_FRM.fields.term}
+                    ondrop={(files, name) => this.onFileDrop(files, name)}
+                    onremove={field => this.handleDelDoc(field)}
+                    uploadtitle="Choose document to upload"
+                  />
+                  {/* {!isReadonly &&
+                  <Button type="button" size="small" color="blue" className="link-button" >
+                  + Add portal agreement</Button>
+                  } */}
+                </Table.Cell>
+                <Table.Cell colSpan="4">
+                  <DropZone
+                    containerclassname={isReadonly ? 'display-only' : ''}
+                    disabled={isReadonly}
+                    name="rev"
+                    fielddata={OFFERS_FRM.fields.rev}
+                    ondrop={(files, name) => this.onFileDrop(files, name)}
+                    onremove={field => this.handleDelDoc(field)}
+                    uploadtitle="Choose document to upload"
+                  />
+                  {/* {!isReadonly &&
+                  <Button type="button" size="small" color="blue" className="link-button" >
+                  + Add portal agreement</Button>
+                  } */}
                 </Table.Cell>
               </Table.Row>
             </Table.Body>

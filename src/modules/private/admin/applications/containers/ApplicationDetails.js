@@ -88,7 +88,9 @@ export default class ApplicationDetails extends Component {
       ];
     }
     if (!deleted && !stashed && (applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+    BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED &&
+    (applicationStatus || prequalStatus) ===
+    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED) {
       navItems = [
         ...navItems,
         { title: 'Review', to: 'review' },
