@@ -3,10 +3,10 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Form, Header, Divider, Image, Button, List, Confirm } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../theme/form';
-import HeroImage from '../../../../../assets/images/hero-image.jpg';
-import TombstoneImage from '../../../../../assets/images/tombstone-image.jpg';
-import GalleryImage from '../../../../../assets/images/gallery-image.jpg';
-import LogoImage from '../../../../../assets/images/gardens-america.jpg';
+// import HeroImage from '../../../../../assets/images/hero-image.jpg';
+// import TombstoneImage from '../../../../../assets/images/tombstone-image.jpg';
+// import GalleryImage from '../../../../../assets/images/gallery-image.jpg';
+// import LogoImage from '../../../../../assets/images/gardens-america.jpg';
 import {
   PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
 } from '../../../../../services/constants/user';
@@ -81,7 +81,7 @@ export default class Media extends Component {
           {MEDIA_FRM.fields.heroImage.preSignedUrl ? (
             <div className="file-uploader attached">
               <Button onClick={() => this.showConfirmModal('heroImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image src={HeroImage} />
+              <Image src={MEDIA_FRM.fields.heroImage.preSignedUrl} />
             </div>
           ) : (
             <ImageCropper
@@ -104,7 +104,7 @@ export default class Media extends Component {
           {MEDIA_FRM.fields.tombstoneImage.preSignedUrl ? (
             <div className="file-uploader attached">
               <Button onClick={() => this.showConfirmModal('tombstoneImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image src={TombstoneImage} />
+              <Image src={MEDIA_FRM.fields.tombstoneImage.preSignedUrl} />
             </div>
           ) : (
             <ImageCropper
@@ -130,7 +130,7 @@ export default class Media extends Component {
               <List.Item key={url}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('location', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image src={GalleryImage} />
+                  <Image src={url} />
                 </div>
               </List.Item>
             ))}
@@ -159,7 +159,7 @@ export default class Media extends Component {
               <List.Item key={`gallery${url}`}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image src={GalleryImage} />
+                  <Image src={url} />
                 </div>
               </List.Item>
             ))}
@@ -188,7 +188,7 @@ export default class Media extends Component {
               <List.Item key={`logo${url}`}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('logo', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image src={LogoImage} />
+                  <Image src={url} />
                 </div>
               </List.Item>
             ))}
@@ -209,9 +209,12 @@ export default class Media extends Component {
           </List>
         </Form>
         <Confirm
+          content="Are you sure you want to remove this media file?"
           open={this.state.ConfirmModal}
           onCancel={this.handleRemoveCancel}
           onConfirm={this.handleRemoveConfirm}
+          size="mini"
+          className="deletion"
         />
       </div>
     );

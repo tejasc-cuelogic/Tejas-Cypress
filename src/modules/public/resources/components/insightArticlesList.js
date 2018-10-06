@@ -21,7 +21,7 @@ class InsightArticlesList extends Component {
           <Grid.Column mobile={16} tablet={8} computer={4}>
             <Card className="campaign insights" fluid as={Link} to={`/resources/insights/${article.id}`}>
               <Image
-                src={article.featureImage}
+                src={article.featuredImage}
               />
               <Card.Content>
                 <div className="tags">
