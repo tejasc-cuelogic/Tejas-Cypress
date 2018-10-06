@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateLayout';
 import CreateNew from '../components/manage/CreateNew';
 
 export default class UsersNew extends Component {

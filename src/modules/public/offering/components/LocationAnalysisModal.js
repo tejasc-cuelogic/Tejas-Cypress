@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Header, Modal, Grid } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+import { Header, Modal, Grid, Image } from 'semantic-ui-react';
+import emptyHeroImagePlaceholder from '../../../../assets/images/gallery-placeholder.jpg';
 // import ChartPie from './ChartPie';
 
 
@@ -20,10 +22,14 @@ import { Header, Modal, Grid } from 'semantic-ui-react';
 // const AGE_COLORS = ['#263E64', '#516583', '#7D8BA2', '#A8B2C1', '#D4D8E0'];
 const isMobile = document.documentElement.clientWidth < 768;
 
+@inject('campaignStore')
+@observer
 class LocationAnalysisModal extends Component {
   handleClose = () => this.props.history.goBack();
 
   render() {
+    const { campaign } = this.props.campaignStore;
+    const emptyStatement = 'Detail not found';
     return (
       <Modal
         open
@@ -32,65 +38,38 @@ class LocationAnalysisModal extends Component {
         size="large"
       >
         <Header as="h3">
-        Location Analysis
+          Location Analysis
         </Header>
-        <Modal.Content scrolling>
+        <Modal.Content>
           <Grid>
             <Grid.Row>
               <Grid.Column computer={6} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
-                <iframe
+                <Image
+                  src={
+                    campaign.media.locationHeroImage.url !== null ?
+                      campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
+                  }
+                />
+                {/* <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.8980695673813!2d73.87562555088532!3d18.53350778733976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0f824992459%3A0x4f126e7b4c0ac0f6!2sCuelogic+Technologies!5e0!3m2!1sen!2sin!4v1530687811942"
                   title="test"
                   height="100%"
                   width="100%"
-                />
+                /> */}
               </Grid.Column>
               <Grid.Column computer={10} tablet={10} mobile={16}>
-                <Header as="h5">
-                    Neighborhood
-                </Header>
-                <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
-                <Header as="h5">
-                    Customer Demographics
-                </Header>
-                {/* <Grid columns={3} stackable celled="internally" divided
-                className="demographics">
-                  <Grid.Row>
-                    <Grid.Column>
-                      <ChartPie title="Gender" data={CUSTOMER_DEMO_GENDER} colors={GENDER_COLORS}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                      <ChartPie title="Age" data={CUSTOMER_DEMO_AGE} colors={AGE_COLORS} />
-                    </Grid.Column>
-                    <Grid.Column verticalAlign="middle" textAlign="center">
-                      <Statistic size="tiny" className="basic">
-                        <Statistic.Value>$82,000/yr</Statistic.Value>
-                        <Statistic.Label>Average Income</Statistic.Label>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid.Row>
-                </Grid> */}
-                <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                </p>
+                {
+                  campaign.offering.about.locationAnalysis !== null ?
+                    <p
+                      dangerouslySetInnerHTML={
+                        {
+                          __html: campaign && campaign.offering
+                            && campaign.offering.about
+                            && campaign.offering.about.locationAnalysis,
+                        }
+                      }
+                    /> : <p>{emptyStatement}</p>
+                }
               </Grid.Column>
             </Grid.Row>
           </Grid>

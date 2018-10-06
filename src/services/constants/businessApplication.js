@@ -16,6 +16,7 @@ export const BUSINESS_APPLICATION_STEP_STATUS = {
 export const BUSINESS_APPLICATION_STATUS = {
   PRE_QUALIFICATION_FAILED: 'PRE_QUALIFICATION_FAILED',
   APPLICATION_REMOVED: 'APPLICATION_REMOVED',
+  APPLICATION_OFFERED: 'APPLICATION_OFFERED',
   OFFERING_PREP: 'OFFERING_PREP',
   PRE_QUALIFICATION_SUCCESSFUL: 'PRE_QUALIFICATION_SUCCESSFUL',
   PRE_QUALIFICATION_SUBMITTED: 'PRE_QUALIFICATION_SUBMITTED',
@@ -49,6 +50,7 @@ export const BUSINESS_APP_USER_STATUS = {
   PRE_QUALIFICATION_SUBMITTED: { status: 'In-progress', icon: 'ns-pencil-circle-line', color: '' },
   PRE_QUALIFICATION_PROMOTED: { status: 'Promoted', icon: 'ns-reload-circle-line', color: '' },
   APPLICATION_SUBMITTED: { status: 'Pending Review', icon: 'ns-check-circle-line', color: 'green' },
+  APPLICATION_OFFERED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
   APPLICATION_REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
   APPLICATION_FAILED: { status: 'Failed', icon: 'ns-reload-circle-line', color: '' },
   APPLICATION_SUCCESSFUL: { status: 'Successful', icon: 'ns-reload-circle-line', color: '' },

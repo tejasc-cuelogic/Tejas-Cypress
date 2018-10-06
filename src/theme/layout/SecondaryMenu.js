@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { NavLink, withRouter } from 'react-router-dom';
-import { Responsive, Menu, Dropdown, Icon } from 'semantic-ui-react';
+import { Responsive, Menu, Dropdown, Icon, Header } from 'semantic-ui-react';
 import map from 'lodash/map';
 import mapKeys from 'lodash/mapKeys';
 
@@ -56,18 +56,22 @@ class SecondaryMenu extends Component {
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
   render() {
     const {
-      navItems, match, vertical, noinvert, attached, className, stepsStatus, addon,
+      navItems, match, vertical, noinvert, attached, className, stepsStatus, addon, heading,
+      force2ary,
     } = this.props;
     const mobNavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
+          { heading &&
+            <Header as="h6">{heading}</Header>
+          }
           <Menu
             className={className || ''}
             celled={!vertical}
             horizontal={!vertical}
             inverted={(!noinvert && !vertical)}
-            secondary={vertical}
+            secondary={force2ary || vertical}
             vertical={vertical}
             attached={attached}
           >
@@ -80,6 +84,7 @@ class SecondaryMenu extends Component {
               match={match}
               stepsStatus={stepsStatus}
             />
+            {this.props.rightLabel}
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={Aux}>

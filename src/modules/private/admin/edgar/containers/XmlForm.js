@@ -25,7 +25,7 @@ import {
 export default class XmlForm extends React.Component {
   componentDidMount() {
     this.props.businessStore.setXmlActiveTabName('filer');
-    this.props.businessStore.setBusinessId(this.props.match.params.businessId);
+    this.props.businessStore.setOfferingId(this.props.match.params.offeringId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
     this.props.businessStore.setXmlSubmissionId(this.props.match.params.xmlId);
     businessActions.getFiles(this.props.match.params)
@@ -324,7 +324,7 @@ export default class XmlForm extends React.Component {
   handleXmlSubmissionSubmit = () => {
     businessActions.submitXMLInformation('xmlSubmission')
       .then(() => {
-        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
         Helper.toast('XML form submitted successfully', 'success');
       })
       .catch((errors) => {
@@ -338,7 +338,7 @@ export default class XmlForm extends React.Component {
 
     businessActions.copyXMLInformation()
       .then(() => {
-        this.props.history.push(`/app/edgar/${this.props.match.params.businessId}`);
+        this.props.history.push(`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`);
         Helper.toast('Copy XML submission successfully', 'success');
       })
       .catch((error) => {
@@ -399,7 +399,7 @@ export default class XmlForm extends React.Component {
             <Responsive
               minWidth={Responsive.onlyLargeScreen.minWidth}
               as={Link}
-              to={`/app/edgar/${this.props.match.params.businessId}`}
+              to={`/app/offerings/creation/edit/${this.props.match.params.offeringId}/legal/generate-docs`}
               className="back-link"
             >
               <Icon name="ns-arrow-left" />

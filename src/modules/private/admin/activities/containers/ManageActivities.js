@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateLayout';
 import { ByKeyword as Search } from '../../../../../theme/form/Filters';
 import AllActivities from '../components/AllActivities';
 

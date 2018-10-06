@@ -26,6 +26,10 @@ export default class Signature extends React.Component {
     businessActions.addPersonalSignature();
   }
 
+  changedDate = (e, { name, value, dataid }) => {
+    this.props.businessStore.changePersonalSignature(name, dataid, value, true);
+  };
+
   handleDelete = (e, { dataid }) => this.props.businessStore.deletePersonalSignature(dataid);
 
   render() {
@@ -61,12 +65,13 @@ export default class Signature extends React.Component {
             handleDeleteClick={this.handleDelete}
             handleOnBlurSigPer={this.handlePersonalSignatureOnBlur}
             xmlSubmissionStatus={xmlSubmissionStatus}
+            changedDate={this.changedDate}
           />
           <Divider hidden />
           {
             xmlSubmissionStatus === XML_STATUSES.draft &&
             <div>
-              <Button color="grey" compact onClick={this.handleAdd}>Add</Button>
+              <Button primary compact onClick={this.handleAdd}>Add</Button>
             </div>
           }
         </Card>

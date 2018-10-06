@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PrivateLayout from '../../shared/PrivateHOC';
+import PrivateLayout from '../../shared/PrivateLayout';
 
 class Dashboard extends Component {
   render() {

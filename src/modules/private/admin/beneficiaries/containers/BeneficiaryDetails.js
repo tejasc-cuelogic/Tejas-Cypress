@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateLayout';
 
 @inject('helloWorldStore')
 @withRouter

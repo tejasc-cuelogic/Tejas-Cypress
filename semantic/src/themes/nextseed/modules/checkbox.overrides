@@ -121,3 +121,26 @@
 		}
 	}
 }
+
+.collapsed-checkbox{
+	h4.ui.header{
+		font-size:@18px;
+		.sub.header{
+			margin-top:@4px;
+		}
+	}
+	.ui.checkbox .box, .ui.checkbox label{
+		&:before, &:after{
+			top:3px;
+		}
+	}
+	.checkbox-description{
+		max-height:0;
+		overflow:hidden;
+		transition:all .5s ease-in-out;
+	}
+	.checked + .checkbox-description{
+		max-height:400px;
+		padding-top:@20px;
+	}
+}

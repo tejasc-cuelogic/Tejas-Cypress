@@ -10,7 +10,7 @@ export default class ManagerOverview extends Component {
   render() {
     const { formChange, MANAGERS_FRM, saveReviewForms } = this.props.businessAppReviewStore;
     const {
-      isReadonly, approved, formName, isManager,
+      isReadonly, approved, formName, isManager, stepStatus,
     } = this.props;
     return (
       <Aux>
@@ -31,8 +31,8 @@ export default class ManagerOverview extends Component {
             }
             {!isReadonly && isManager &&
               <Button.Group floated="right" size="mini">
-                <Button disabled={!MANAGERS_FRM.meta.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
-                <Button disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>Approve</Button>
+                <Button disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>Approve</Button>
               </Button.Group>
             }
           </Header>

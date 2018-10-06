@@ -95,6 +95,28 @@ export const getOfferingDetails = gql`
         isFood
         isAlcohol
       }
+      media {
+        heroImage {
+          url
+          isPublic
+        }
+        tombstoneImage {
+          url
+          isPublic
+        }
+        location {
+          url
+          isPublic
+        }
+        gallery {
+          url
+          isPublic
+        }
+        logo {
+          url
+          isPublic
+        }
+      }
       contingencies {
         launch {
           index
@@ -152,6 +174,8 @@ export const getOfferingDetails = gql`
         }
       }
       legal {
+        issuerBacId
+        affiliatedIssuerBacId
         general {
           websiteUrl
           monthLaunch
@@ -220,9 +244,11 @@ export const getOfferingDetails = gql`
         }
       }
       leadership {
+        isPublic
         firstName
         lastName
         email
+        leaderBacId
         phone {
           number
         }
@@ -269,6 +295,29 @@ export const getOfferingDetails = gql`
         totalCommittedAmount
         totalInvestorCount
       }
+      bonusRewards{
+        id
+        offeringId
+        title
+        description
+        rewardStatus
+        expirationDate
+        tiers{
+          amount
+          earlyBirdQuantity
+        }
+        created{
+          id
+          by
+          date
+        }
+        updated{
+          id
+          by
+          date
+        }
+      }
+  
       applicationId
       issuerId
       lead {
@@ -305,6 +354,278 @@ export const updateOffering = gql`
 mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id offeringDetails: $offeringDetails) {
     id
+  }
+}
+`;
+
+export const getOfferingBac = gql`
+query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
+  getOfferingBac(
+    offeringId: $offeringId
+    filters: {
+      bacType: $bacType
+    }
+  ) {
+    id
+    offeringId
+    controlPersonQuestionnaire
+    residenceTenYears
+    legalName
+    email
+    bac1
+    bac2
+    bac3
+    bac4
+    bac5
+    bac6
+    bac7
+    bac8
+    civilLawsuit
+    ofac
+    onlineReputation
+    judgements
+    issuerDiligence
+    certificateFormation
+    operatingAgreement
+    evidenceGoodStanding
+    executiveTeam
+    isControlDiligence
+    isAffiliatedDiligence
+    submitted{
+      id
+      by
+      date
+    }
+    approved{
+      id
+      by
+      date
+      reportGeneratedDate
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+    deleted{
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const createBac = gql`
+mutation _createBAC($offeringBacDetails: OfferingBacInputType!) {
+  createOfferingBac(offeringBacDetails: $offeringBacDetails) {
+    id
+  }
+}
+`;
+
+export const updateBac = gql`
+mutation _updateBac($id: String! $offeringBacDetails: OfferingBacInputType!) {
+  updateOfferingBac(id: $id offeringBacDetails: $offeringBacDetails) {
+    id
+  }
+}
+`;
+
+export const deleteBac = gql`
+mutation _deleteBac($id: String! $offeringId: String!){
+  deleteOfferingBac(id: $id  offeringId: $offeringId) {
+    id
+  }
+}`;
+
+export const getOfferingFilingList = gql`
+  query _getOfferingFilingList($offeringId: ID! $orderByBusinessFilingSubmission: businessfilingsubmissionOrderBy) {
+    businessFilings(offeringId: $offeringId ) {
+      offeringId
+      filingId
+      filingFolderName
+      created
+      folderId
+      lockedStatus
+      submissions (orderBy: $orderByBusinessFilingSubmission) {
+        xmlSubmissionId
+        created
+        xmlSubmissionDownloadUrl
+        folderName
+        xmlSubmissionStatus
+        lockedStatus
+      }
+    }
+  }
+`;
+
+export const generateBusinessFiling = gql`
+  mutation _createBusinessFiling ($offeringId: String!) {
+    createBusinessFiling(offeringId: $offeringId) {
+      filingId
+      offeringId
+    }
+  }
+`;
+
+export const createBonusRewardsTier = gql`
+mutation _createBonusRewardTier($bonusRewardTierDetails: BonusRewardTierInputType!){
+  createBonusRewardTier(bonusRewardTierDetails: $bonusRewardTierDetails) {
+    amount
+    earlyBirdQuantity
+    created{
+      id
+      date
+      by
+    }
+  }
+}
+`;
+
+export const getBonusRewardsTiers = gql`
+query _getBonusRewardTiers{
+  getBonusRewardTiers {
+    amount
+    earlyBirdQuantity
+    created{
+      id
+      date
+      by
+    }
+  }
+}
+`;
+
+export const createBonusReward = gql`
+mutation _createBonusReward($bonusRewardDetails: BonusRewardInputType!){
+  createBonusReward(
+    bonusRewardDetails: $bonusRewardDetails
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const deleteBonusRewardsTierByOffering = gql`
+mutation _deleteBonusRewardTiersByOffering($offeringId: String! $bonusRewardTierId: BonusRewardTierInputType! ){
+  deleteBonusRewardsByTierId(offeringId: $offeringId bonusRewardTierId: $bonusRewardTierId) {
+    id
+    rewardsTierIds{
+      amount
+      earlyBirdQuantity
+    }
+  }
+}
+`;
+
+export const getBonusRewards = gql`
+query _getBonusRewards($offeringId: String!){
+  getBonusRewards(offeringId: $offeringId){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const deleteBonusReward = gql`
+mutation _deleteBonusReward($id: String! $offeringId: String!){
+  deleteBonusReward(id: $id offeringId: $offeringId
+  ){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
+    deleted{
+      id
+      by
+      date
+    }
+  }
+}
+`;
+
+export const updateBonusReward = gql`
+mutation _updateBonusReward($id: String! $bonusRewardDetails: BonusRewardInputType!){
+  updateBonusReward(id: $id bonusRewardDetails: $bonusRewardDetails){
+    id
+    offeringId
+    title
+    description
+    rewardStatus
+    expirationDate
+    tiers{
+      amount
+      earlyBirdQuantity
+    }
+    created{
+      id
+      by
+      date
+    }
+    updated{
+      id
+      by
+      date
+    }
   }
 }
 `;

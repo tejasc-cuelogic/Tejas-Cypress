@@ -274,6 +274,16 @@ export const USER_PROFILE_FOR_ADMIN = {
   address: { ...UPDATE_PROFILE_INFO.email },
   ...USER_IDENTITY,
   street: { ...USER_IDENTITY.residentalStreet },
+  capabilities: {
+    value: [],
+    key: 'capabilities',
+    error: undefined,
+    rule: '',
+    label: '',
+    src: '',
+    base64String: '',
+    responseUrl: '',
+  },
 };
 
 export const PROFILE_PHOTO_EXTENSIONS = ['jpeg', 'jpg', 'png'];

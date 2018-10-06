@@ -86,27 +86,27 @@ export const publicRoutes = [
 
 export const privateRoutes = [
   {
-    path: '/app/edgar/:businessId/edgar/:filingId',
+    path: '/app/edgar/:offeringId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar/:businessId/edgar',
+    path: '/app/edgar/:offeringId/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/edgar/:businessId/filing/:filingId/xml/:xmlId',
+    path: '/app/edgar/:offeringId/filing/:filingId/xml/:xmlId',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/edgar/:businessId/filing/:filingId/xml',
+    path: '/app/edgar/:offeringId/filing/:filingId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/edgar/:businessId',
+    path: '/app/edgar/:offeringId',
     component: BusinessDetails,
     auth: BusinessAuthorization,
   },

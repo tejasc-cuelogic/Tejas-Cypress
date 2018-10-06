@@ -309,6 +309,9 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. http://facebook.com/nextbrewery',
     objRef: 'offering.overview.social',
     find: 'type',
+    type: 'facebook',
+    skipField: true,
+    ArrayObjItem: true,
   },
   linkedin_url: {
     value: '',
@@ -318,15 +321,21 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. http://linkedin.com/nextbrewery',
     objRef: 'offering.overview.social',
     find: 'type',
+    type: 'linkedin',
+    skipField: true,
+    ArrayObjItem: true,
   },
   twitter_url: {
     value: '',
-    label: 'LinkedIn',
+    label: 'Twitter',
     error: undefined,
     rule: 'required',
     placeHolder: 'e.g. http://twitter.com/nextbrewery',
     objRef: 'offering.overview.social',
     find: 'type',
+    skipField: true,
+    type: 'twitter',
+    ArrayObjItem: true,
   },
   instagram_url: {
     value: '',
@@ -336,6 +345,9 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. http://instagram.com/nextbrewery',
     objRef: 'offering.overview.social',
     find: 'type',
+    skipField: true,
+    type: 'instagram',
+    ArrayObjItem: true,
   },
   yelp_url: {
     value: '',
@@ -345,6 +357,9 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. http://yelp.com/nextbrewery',
     objRef: 'offering.overview.social',
     find: 'type',
+    skipField: true,
+    type: 'yelp',
+    ArrayObjItem: true,
   },
   facebook_shareLink: {
     value: '',
@@ -354,6 +369,9 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. http://facebook.com/nextbrewery',
     objRef: 'offering.overview.social',
     find: 'type',
+    skipField: true,
+    type: 'facebook',
+    ArrayObjItem: true,
   },
   facebook_blurb: {
     value: '',
@@ -363,6 +381,9 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. Company was formed...',
     objRef: 'offering.overview.social',
     find: 'type',
+    skipField: true,
+    type: 'facebook',
+    ArrayObjItem: true,
   },
   twitter_shareLink: {
     value: '',
@@ -372,6 +393,9 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. http://twitter.com/nextbrewery',
     objRef: 'offering.overview.social',
     find: 'type',
+    skipField: true,
+    type: 'twitter',
+    ArrayObjItem: true,
   },
   twitter_blurb: {
     value: '',
@@ -381,6 +405,9 @@ export const OFFERING_OVERVIEW = {
     placeHolder: 'e.g. Company was formed...',
     objRef: 'offering.overview.social',
     find: 'type',
+    skipField: true,
+    type: 'twitter',
+    ArrayObjItem: true,
   },
   googleMeta: {
     value: '',
@@ -588,20 +615,15 @@ export const CONTINGENCY_META = {
     error: undefined,
     rule: 'required_if:data.*.isAccepted,IS_ACCEPTED',
     placeHolder: 'Enter comment here...',
-    objRefOutput2: 'accepted',
+    refSelector: 'isAccepted',
     objRef: 'accepted',
+    objRefOutput2: 'accepted',
   },
   isAccepted: {
-    value: [],
-    values: [
-      {
-        label: '',
-        value: 'IS_ACCEPTED',
-      },
-    ],
+    value: false,
     error: undefined,
     rule: 'optional',
-    skipField: true,
+    objRefOutput2: 'accepted',
   },
 };
 
@@ -632,30 +654,30 @@ export const OFFERING_DETAILS = {
 };
 
 export const MEDIA = {
+  heroVideo: {
+    value: '', label: '', error: undefined, rule: 'optional',
+  },
   heroImage: {
-    value: '',
-    error: undefined,
-    rule: '',
-    label: '',
-    src: '',
-    base64String: '',
-    responseUrl: '',
+    value: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   tombstoneImage: {
-    value: '',
-    error: undefined,
-    rule: '',
-    label: '',
-    src: '',
-    base64String: '',
-    responseUrl: '',
+    value: '', objType: 's3File', src: '', label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  location: {
+    value: '', objType: 's3File', src: '', label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  gallery: {
+    value: '', objType: 's3File', src: '', label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  logo: {
+    value: '', objType: 's3File', src: '', label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 
 export const LEADERSHIP = {
   leadership: [{
     isPublic: {
-      value: [],
+      value: false,
       values: [
         {
           label: 'Include in Offering Page',
@@ -663,7 +685,7 @@ export const LEADERSHIP = {
         },
       ],
       error: undefined,
-      rule: 'alpha',
+      rule: 'optional',
     },
     firstName: {
       value: '',
@@ -693,6 +715,7 @@ export const LEADERSHIP = {
       rule: 'numeric|required',
       placeHolder: '555-123-8888',
       objRef: 'leadership.phone',
+      objRefOutput2: 'phone',
     },
     dob: {
       value: '',
@@ -745,6 +768,7 @@ export const LEADERSHIP = {
       rule: 'string|required',
       placeHolder: 'e.g. Baker Street 221B',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     city: {
       value: '',
@@ -753,6 +777,7 @@ export const LEADERSHIP = {
       rule: 'string|required',
       placeHolder: 'e.g. New York',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     state: {
       value: '',
@@ -761,6 +786,7 @@ export const LEADERSHIP = {
       rule: 'string|required',
       placeHolder: 'e.g. New York',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     zip: {
       value: '',
@@ -769,6 +795,7 @@ export const LEADERSHIP = {
       rule: 'numeric|required',
       placeHolder: 'e.g. 10001',
       objRef: 'leadership.address',
+      objRefOutput2: 'address',
     },
     bio: {
       value: '',
@@ -784,6 +811,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://johndoe.com',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     facebook: {
       value: '',
@@ -792,6 +820,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://facebook.com/johndoe',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     linkedin: {
       value: '',
@@ -800,6 +829,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://linkedin.com/johndoe',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     twitter: {
       value: '',
@@ -808,6 +838,7 @@ export const LEADERSHIP = {
       rule: 'required',
       placeHolder: 'e.g. http://twitter.com/johndoe',
       objRef: 'leadership.social',
+      objRefOutput2: 'social',
     },
     headshot: {
       label: 'Headshot',
@@ -818,6 +849,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       objRef: 'leadership.uploads',
+      objType: 'FileObjectType',
+      objRefOutput2: 'uploads',
     },
     heroImage: {
       label: 'Hero Image',
@@ -828,6 +861,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       objRef: 'leadership.uploads',
+      objType: 'FileObjectType',
+      objRefOutput2: 'uploads',
     },
     license: {
       label: 'Driver’s License',
@@ -838,6 +873,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       objRef: 'leadership.uploads',
+      objType: 'FileObjectType',
+      objRefOutput2: 'uploads',
     },
     // experience: [{
     //   name: {
@@ -1005,6 +1042,18 @@ export const GENERAL = {
     placeHolder: 'Enter here',
     objRef: 'legal.general.businessPhone',
     objType: 'businessPhone',
+    objRefOutput: 'businessPhone',
+
+  },
+  countryCode: {
+    label: '',
+    value: '1',
+    error: undefined,
+    rule: 'optional',
+    objRef: 'legal.general.businessPhone',
+    objType: 'businessPhone',
+    placeHolder: 'Enter here',
+    objRefOutput: 'businessPhone',
   },
   bankName: {
     label: 'Bank Name',
@@ -1038,18 +1087,20 @@ export const GENERAL = {
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
-    objType: 'reachedMinOfferingGoal',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type your text here...',
+    objRefOutput: 'useOfProceeds',
   },
   reachedMaxOfferingGoal: {
     label: 'If maximum offering amount is reached:',
     value: '',
     error: undefined,
     rule: 'required',
-    placeHolder: 'Type your text here...',
     objRef: 'legal.general.useOfProceeds',
-    objType: 'reachedMaxOfferingGoal',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type your text here...',
+    objRefOutput: 'useOfProceeds',
   },
   rightsOfEqShareHolders: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
@@ -1214,170 +1265,170 @@ export const GENERAL = {
 export const RISK_FACTORS = {
   isBusinessRisk: {
     label: 'Business Risk',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   businessRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isBusinessRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isFinancingRisk: {
     label: 'Financing Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   financingRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isFinancingRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isDevelopmentRisk: {
     label: 'Development Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   developmentRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isDevelopmentRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isReputationalRisk: {
     label: 'Reputational Risk',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   reputationalRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isReputationalRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isCompetitionRisk: {
     label: 'Competition Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   competitionRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isCompetitionRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isMarketRisk: {
     label: 'Market Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   marketRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isMarketRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isTerrorismRisk: {
     label: 'Risks from Work Stoppages, Terrorism or Natural Disasters',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   terrorismRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isTerrorismRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isManagementRisk: {
     label: 'Management Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   managementRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isManagementRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isPersonnelRisk: {
     label: 'Personnel Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   personnelRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPersonnelRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isLaborSupplyRisk: {
     label: 'Labor Supply Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   laborSupplyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isLaborSupplyRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isPrivacyRisk: {
     label: 'Privacy Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   privacyRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPrivacyRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
   isOtherRisk: {
     label: 'Other Risks',
-    value: '',
-    rule: 'alpha',
-    toSkip: true,
+    value: false,
+    rule: 'optional',
+    skipField: true,
   },
   otherRisk: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isOtherRisk',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Any operational growth will place additional demands on our administrative, management and financial resources. It is imperative that we manage our growth; if we do not effectively manage growth, our operations and financial condition may be negatively impacted. The timing and extent of future growth depends, in part, on our ability to manage its organizational structure and financial resources. ',
   },
 };
@@ -1522,7 +1573,7 @@ export const ISSUER = {
   judgements: { ...COMMON.pendingLiens },
   onlineReputation: { ...COMMON.generalOnlineReputationSearch },
   isControlDiligence: {
-    value: [],
+    value: false,
     values: [
       {
         label: 'Completed All Control Person Diligence',
@@ -1533,7 +1584,7 @@ export const ISSUER = {
     rule: 'alpha',
   },
   isAffiliatedDiligence: {
-    value: [],
+    value: false,
     values: [
       {
         label: 'Completed All Affiliated Issuer Diligence',
@@ -1546,7 +1597,7 @@ export const ISSUER = {
 };
 
 export const AFFILIATED_ISSUER = {
-  data: [{
+  getOfferingBac: [{
     legalName: {
       label: 'Legal Name',
       value: '',
@@ -1573,8 +1624,8 @@ export const AFFILIATED_ISSUER = {
 };
 
 export const LEADER = {
-  data: [{
-    controlPersonQuestionaire: {
+  getOfferingBac: [{
+    controlPersonQuestionnaire: {
       label: 'Control Person Questionnaire',
       value: '',
       error: undefined,
@@ -1610,7 +1661,7 @@ export const LEADER = {
 
 export const ADD_NEW_TIER = {
   isEarlyBirds: {
-    value: '',
+    value: [],
     values: [
       {
         label: 'Early Birds',
@@ -1624,7 +1675,7 @@ export const ADD_NEW_TIER = {
     label: 'Amount for this Early Bird tier',
     value: '',
     error: undefined,
-    rule: 'required_if:isEarlyBirds,EARLY_BIRDS',
+    rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
   earlyBirdQuantity: {
@@ -1632,16 +1683,35 @@ export const ADD_NEW_TIER = {
     value: '',
     error: undefined,
     rule: 'numeric|required_if:isEarlyBirds,EARLY_BIRDS',
-    placeHolder: 'Lorem ipsum dolor sit amet enim. Etiam',
+    placeHolder: 'Early Bird Quantity',
   },
   amountForThisTier: {
     label: 'Amount for this tier',
     value: '',
     error: undefined,
-    rule: 'string|required_without:isEarlyBirds',
+    rule: 'numeric|required_without:isEarlyBirds',
     placeHolder: 'e.g. Invitation to the Launch Party',
   },
 };
+
+export const DEFAULT_TIERS = [
+  {
+    amount: 0,
+    earlyBirdQuantity: 50,
+  },
+  {
+    amount: 500,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 1000,
+    earlyBirdQuantity: 0,
+  },
+  {
+    amount: 2000,
+    earlyBirdQuantity: 0,
+  },
+];
 
 export const ADD_NEW_BONUS_REWARD = {
   isEarlyBirds: {
@@ -1654,6 +1724,8 @@ export const ADD_NEW_BONUS_REWARD = {
     ],
     error: undefined,
     rule: 'alpha',
+    key: 0,
+    earlyBirdQuantity: 50,
   },
   name: {
     label: 'Name of new bonus reward',

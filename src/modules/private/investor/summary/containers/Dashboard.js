@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Card } from 'semantic-ui-react';
-import PrivateLayout from '../../../shared/PrivateHOC';
+import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 
