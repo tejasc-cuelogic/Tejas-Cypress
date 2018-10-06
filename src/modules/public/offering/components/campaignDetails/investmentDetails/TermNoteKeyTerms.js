@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 class TermNoteKeyTerms extends Component {
   render() {
+    const { KeyTerms } = this.props;
     return (
       <Modal.Content scrolling>
         <Grid columns={3} stackable divided className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b><br />A Gard Midtown, LLC</p>
+            <p><b>Issuer</b><br />{KeyTerms.legalBusinessName}</p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Regulation</b><br />506(c)</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Security</b><br />Term Notes</p>
+            <p><b>Security</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
           </Grid.Column>
         </Grid>
         <Divider />
@@ -26,7 +28,7 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>$250,000</p>
+                <p>${KeyTerms.minOfferingAmount}</p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -34,7 +36,7 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>$1,000,000</p>
+                <p>${KeyTerms.maxOfferingAmount}</p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -50,7 +52,7 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>16.0%</p>
+                <p><b>{KeyTerms.interestRate}%</b></p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -62,7 +64,7 @@ class TermNoteKeyTerms extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                <p>60 Months</p>
+                <p><b>{KeyTerms.maturity} Months</b></p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -74,7 +76,7 @@ class TermNoteKeyTerms extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                <p>Monthly</p>
+                <p><b>{KeyTerms.frequencyOfPayments}</b></p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -82,7 +84,7 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>Blanket lien on all assets of the business</p>
+                <p>{KeyTerms.securityInterest}%</p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -91,7 +93,8 @@ class TermNoteKeyTerms extends Component {
               </Table.Cell>
               <Table.Cell>
                 <p>
-                  <b>0%.</b> Investors will not receive any equity interests in the Issuer or
+                  <b>{KeyTerms.securitiesOwnershipPercentage}%.
+                  </b> Investors will not receive any equity interests in the Issuer or
                   any voting or management rights with respect to the Issuer as a result of
                   an investment in Securities.
                 </p>
@@ -103,7 +106,7 @@ class TermNoteKeyTerms extends Component {
         <Divider />
         }
         <Header as="h5" className="center-align">
-          <Link to="/">
+          <Link to="keyterms/summary">
             View the Issuer&apos;s SEC Form C filing
           </Link>
         </Header>

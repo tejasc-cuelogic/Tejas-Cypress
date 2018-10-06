@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-05)
+# 0.0.0 (2018-10-06)
 
 
 ### Bug Fixes
@@ -53,11 +53,13 @@
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** removed plaid credential dependency from ns-client ([facf81a](https://chaos.ns.team/nsv2/ns-client/commits/facf81a))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for admin/investor as per updated user schema ([3923b90](https://chaos.ns.team/nsv2/ns-client/commits/3923b90))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for Investor flow as per new updated schema changes. ([146a108](https://chaos.ns.team/nsv2/ns-client/commits/146a108))
+* **Investor[Issue [474](https://chaos.ns.team/nsv2/ns-ops/issues/474) - -investor-issue-fixes-changes]:** Done changes for Individual Account Creation ([e118592](https://chaos.ns.team/nsv2/ns-client/commits/e118592))
 * **Issuer Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio stauts corrected in constant file ([bee3759](https://chaos.ns.team/nsv2/ns-client/commits/bee3759))
 * **Issuer Signup[Issue [380](https://chaos.ns.team/nsv2/ns-ops/issues/380) - issuer signup add new type commercial real estate]:** made all changes requied for adding new business type for creating application and moved common component to shared folder ([dc7866d](https://chaos.ns.team/nsv2/ns-client/commits/dc7866d))
 * **Issuer Signup[Issue [416](https://chaos.ns.team/nsv2/ns-ops/issues/416) - issuer signup non existing user on prequal success]:** auto login changes done ([978c937](https://chaos.ns.team/nsv2/ns-client/commits/978c937))
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
+* **IssuerSignup AdminApplication[Issue [469](https://chaos.ns.team/nsv2/ns-ops/issues/469) - businessapplication test run 1]:** Issuer signup and Admin application details bug fixes done ([e91043f](https://chaos.ns.team/nsv2/ns-client/commits/e91043f))
 * **marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback ([1416d48](https://chaos.ns.team/nsv2/ns-client/commits/1416d48))
 * **Marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - Marketing pages - feedback]:** Marketing pages - feedback ([e4b44f7](https://chaos.ns.team/nsv2/ns-client/commits/e4b44f7))
 * **Marketing pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - general fixes]:** general fixes ([21c7dc4](https://chaos.ns.team/nsv2/ns-client/commits/21c7dc4))
@@ -82,6 +84,7 @@
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** completed design of public homepage and investors pages along with main header menu and footer changes ([e6733c2](https://chaos.ns.team/nsv2/ns-client/commits/e6733c2))
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** updating button group CSS ([2a154c9](https://chaos.ns.team/nsv2/ns-client/commits/2a154c9))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
+* **release 01[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - application to offering:** application to offering ([f90bef7](https://chaos.ns.team/nsv2/ns-client/commits/f90bef7))
 * **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 

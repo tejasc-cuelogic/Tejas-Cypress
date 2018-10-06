@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Modal, Header, Card, Menu, Button } from 'semantic-ui-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import { Modal, Header, Card, Menu, Button } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';

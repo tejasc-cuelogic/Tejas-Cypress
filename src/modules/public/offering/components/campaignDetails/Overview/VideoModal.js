@@ -1,0 +1,33 @@
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import { Grid, Segment, Embed, Modal } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../../../theme/shared';
+
+@inject('campaignStore')
+@observer
+class VideoModal extends Component {
+  handleClose = () => this.props.history.goBack();
+  render() {
+    const { campaign } = this.props.campaignStore;
+    const { isTabletLand } = this.props;
+    const videoUrl = (campaign && campaign.media && campaign.media.heroVideo) || null;
+    return (
+      <Modal open onClose={this.handleClose} size="large" closeIcon >
+        <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
+          <Segment padded>
+            {videoUrl ?
+              <Embed
+                url={videoUrl.url}
+                // id={videoUrl.url}
+                // source="vimeo"
+                // icon="ns-play"
+              /> : <InlineLoader text="No video is uploaded." />
+            }
+          </Segment>
+        </Grid.Column>
+      </Modal>
+    );
+  }
+}
+
+export default VideoModal;

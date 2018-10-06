@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-import { Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Header, Segment, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
-import KeyTermsModal from './../investmentDetails/KeyTermsModal';
-import SummaryModal from '../investmentDetails/SummaryModal';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
 && document.documentElement.clientWidth < 1200;
 class RevenueSharingDetails extends Component {
   render() {
+    const { KeyTerms, refLink } = this.props;
     return (
       <Grid.Row>
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
           <Segment padded>
             <Header as="h4">
-              <Link to={`${this.props.match.url}/summary`}>
+              <Link to={`${refLink}/overview/keyterms`}>
                 Revenue Sharing Summary*
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
@@ -54,7 +54,9 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>Revenue Sharing Note</Statistic.Value>
+                  <Statistic.Value>
+                    {CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}
+                  </Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -66,7 +68,7 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>16%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms ? KeyTerms.interestRate : '0'}%</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -78,7 +80,7 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>48 months</Statistic.Value>
+                  <Statistic.Value>{KeyTerms ? KeyTerms.maturity : '0'} months</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -91,7 +93,7 @@ class RevenueSharingDetails extends Component {
                       hoverable
                     />
                   </Statistic.Label>
-                  <Statistic.Value>$100</Statistic.Value>
+                  <Statistic.Value>${KeyTerms ? KeyTerms.minInvestAmt : '0'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -103,7 +105,7 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>Monthly</Statistic.Value>
+                  <Statistic.Value>{KeyTerms.frequencyOfPayments}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -115,15 +117,13 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>0%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms ? KeyTerms.securitiesOwnershipPercentage : '0'}%</Statistic.Value>
                 </Statistic>
               </Grid.Column>
             </Grid>
-            <Link to={`${this.props.match.url}/keyterms`} className="pull-right mt-10">View More</Link>
+            <Link to={`${refLink}/overview/keyterms`} className="pull-right mt-10">View More</Link>
           </Segment>
         </Grid.Column>
-        <Route path={`${this.props.match.url}/keyterms`} component={KeyTermsModal} />
-        <Route path={`${this.props.match.url}/summary`} component={SummaryModal} />
       </Grid.Row>
     );
   }

@@ -757,6 +757,17 @@ p i.icon {
 		.slick-arrow {
 			display: none!important;
 		}
+		&.custom-count .slick-list .slick-slide{
+			// height:auto;
+			width:12.5% !important;
+			@media only screen and (max-width: @smallMonitorScreen) {
+				width:25% !important;
+			}
+			// img {
+			// 	max-height:90px;
+			// 	width:auto !important;
+			// }
+		}
 	}
 }
 //Investor homepage
@@ -1037,7 +1048,7 @@ a.icon-link:hover {
 					}
 					&+.content {
 						margin-left: 10px;
-						padding-top: 0;	
+						padding: 0;	
 					}
 				}
 				@media only screen and (max-width:@largestMobileScreen){
@@ -2248,4 +2259,12 @@ p.check-extra-info{
 // Careers Banner
 .careers-banner {
 	margin: 0 auto;
+}
+//Avtar image on public pages
+.updates-modal, .campaign-updates {
+	.sb-avatar{
+		width:36px;
+		height:36px;
+		line-height:36px;
+	}
 }

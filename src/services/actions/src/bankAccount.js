@@ -2,7 +2,7 @@ import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import apiService from '../../../api/restApi';
-import { bankAccountStore, individualAccountStore, uiStore } from '../../stores';
+import { bankAccountStore, individualAccountStore, accountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
 export class BankAccount {
@@ -43,7 +43,9 @@ export class BankAccount {
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
         Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
-        individualAccountStore.setStepToBeRendered(1);
+        if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 0) {
+          individualAccountStore.setStepToBeRendered(1);
+        }
         bankAccountStore.setShowAddFunds();
       },
       onExit: (err) => {
