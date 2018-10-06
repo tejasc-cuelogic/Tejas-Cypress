@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Input, Header, Icon, Divider, Image, Button, List, Confirm } from 'semantic-ui-react';
+import { Form, Input, Header, Icon, Divider, Image, Button, List, Confirm, Grid } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../theme/form';
 
 // import HeroImage from '../../../../../assets/images/hero-image.jpg';
@@ -77,45 +77,51 @@ export default class Media extends Component {
     const { isIssuer } = this.props.userStore;
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : 'ui card fluid form-card'}>
-        <Header as="h4">Hero Image</Header>
-        <Form className="cropper-wrap hero-img">
-          {MEDIA_FRM.fields.heroImage.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.showConfirmModal('heroImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image src={MEDIA_FRM.fields.heroImage.preSignedUrl} />
-            </div>
-          ) : (
-            <ImageCropper
-              fieldData={MEDIA_FRM.fields.heroImage}
-              setData={(attr, value) => this.setData(attr, value, 'heroImage')}
-              verifySize={this.handleVerifyFileSize}
-              verifyExtension={this.handleVerifyFileExtension}
-              handelReset={() => this.handleresetProfilePhoto('heroImage')}
-              verifyImageDimension={this.handelImageDeimension}
-              field={MEDIA_FRM.fields.heroImage}
-              modalUploadAction={this.uploadMedia}
-              name="heroImage"
-              cropInModal
-            />
-          )}
-        </Form>
-        <Form>
-          <Header as="h4">Hero Video</Header>
-          <Input
-            name="heroVideo"
-            onChange={(e, result) => formChange(e, result, 'MEDIA_FRM')}
-            value={MEDIA_FRM.fields.heroVideo.value}
-            type="text"
-            placeholder="Enter url here..."
-            action
-            fluid
-          >
-            <input />
-            <Button icon type="submit" basic>
-              <Icon className="ns-send-right" color="blue" size="large" />
-            </Button>
-          </Input>
-        </Form>
+        <Grid columns={2} stackable>
+          <Grid.Column>
+            <Header as="h4">Hero Image</Header>
+            <Form className="cropper-wrap hero-img">
+              {MEDIA_FRM.fields.heroImage.preSignedUrl ? (
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.showConfirmModal('heroImage')} circular icon={{ className: 'ns-close-light' }} />
+                  <Image src={MEDIA_FRM.fields.heroImage.preSignedUrl} />
+                </div>
+              ) : (
+                <ImageCropper
+                  fieldData={MEDIA_FRM.fields.heroImage}
+                  setData={(attr, value) => this.setData(attr, value, 'heroImage')}
+                  verifySize={this.handleVerifyFileSize}
+                  verifyExtension={this.handleVerifyFileExtension}
+                  handelReset={() => this.handleresetProfilePhoto('heroImage')}
+                  verifyImageDimension={this.handelImageDeimension}
+                  field={MEDIA_FRM.fields.heroImage}
+                  modalUploadAction={this.uploadMedia}
+                  name="heroImage"
+                  cropInModal
+                />
+              )}
+            </Form>
+          </Grid.Column>
+          <Grid.Column>
+            <Form className="comment-input video-url">
+              <Header as="h4">Hero Video</Header>
+              <Input
+                name="heroVideo"
+                onChange={(e, result) => formChange(e, result, 'MEDIA_FRM')}
+                value={MEDIA_FRM.fields.heroVideo.value}
+                type="text"
+                placeholder="Enter url here..."
+                action
+                fluid
+              >
+                <input />
+                <Button icon type="submit" basic>
+                  <Icon className="ns-send-right" color="blue" size="large" />
+                </Button>
+              </Input>
+            </Form>
+          </Grid.Column>
+        </Grid>
         <Divider section />
         <Header as="h4">Tombstone image</Header>
         <Form className="cropper-wrap tombstone-img">
