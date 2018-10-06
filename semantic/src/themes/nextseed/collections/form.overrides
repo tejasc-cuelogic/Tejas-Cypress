@@ -264,6 +264,7 @@
         }
         &.gallery-img{
             max-width:none;
+            max-height:none;
             text-align:left;
             .file-uploader{
                 width:230px;
