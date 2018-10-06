@@ -7,7 +7,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 
@@ -29,13 +29,20 @@ export class BusinessAppReviewStore {
   @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
   @observable businessApplicationOffers = null;
+  @observable getPortalAgreementStatus = null;
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
+  @observable selectedOfferIndex = null;
   @observable removeFileIdsList = [];
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
+
+  @action
+  setFieldvalue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   toggleConfirmModal = (index, formName = null) => {
@@ -377,6 +384,13 @@ export class BusinessAppReviewStore {
     ) || null;
   }
 
+  @computed get getPortalAgreementStatus() {
+    return (this.getPortalAgreementStatus && this.getPortalAgreementStatus.data
+      && this.getPortalAgreementStatus.data.getPortalAgreementStatus
+      && toJS(this.getPortalAgreementStatus.data.getPortalAgreementStatus)
+    ) || null;
+  }
+
   @action
   fetchApplicationOffers = applicationId => new Promise((resolve) => {
     uiStore.setAppLoader(true);
@@ -391,6 +405,89 @@ export class BusinessAppReviewStore {
       onFetch: () => {
         uiStore.setAppLoader(false);
         resolve();
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        uiStore.setAppLoader(false);
+      },
+    });
+  });
+
+  @action
+  signPortalAgreement = () => {
+    const offerData = this.fetchBusinessApplicationOffers;
+    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    delete offer.__typename;
+    uiStore.setProgress();
+    let payLoad = {
+      applicationId: offerData.applicationId,
+      issuerId: offerData.userId,
+      selectedOffer: offer,
+    };
+    if (!offer.isAccepted) {
+      payLoad = {
+        ...payLoad,
+        isSelectedOfferChanged: true,
+      };
+    }
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: signPortalAgreement,
+          variables: payLoad,
+        })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  createOffering = (applicationId) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: createOffering,
+          variables: {
+            applicationId,
+          },
+        })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
+  getPortalAgreementStatus = () => new Promise((resolve) => {
+    const offerData = this.fetchBusinessApplicationOffers;
+    this.getPortalAgreementStatus = graphql({
+      client,
+      query: getPortalAgreementStatus,
+      variables: {
+        applicationId: offerData.applicationId,
+        issuerId: offerData.userId,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        resolve(data);
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');

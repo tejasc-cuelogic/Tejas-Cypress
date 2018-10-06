@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-05)
+# 0.0.0 (2018-10-06)
 
 
 ### Bug Fixes
@@ -23,6 +23,8 @@
 * **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **admin dashboard activity history[Issue [365](https://chaos.ns.team/nsv2/ns-ops/issues/365) - admin dashboard activity history]:** designed activity history section ([f2bd37f](https://chaos.ns.team/nsv2/ns-client/commits/f2bd37f))
 * **Admin listing changes[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** Application status label updated and filtering disabled and UI changes done ([fc6ce4c](https://chaos.ns.team/nsv2/ns-client/commits/fc6ce4c))
+* **Admin-offering-media[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - Admin-offering-media]:** Adding upload media page UI ([543f94d](https://chaos.ns.team/nsv2/ns-client/commits/543f94d))
+* **Admin[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin-offerings-creation-listing-tab]:** Done changes for offering-listing - edit and delete, Edit - internal Overview, Key Terms and Offerings tab. ([666bcdb](https://chaos.ns.team/nsv2/ns-client/commits/666bcdb))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
 * **Auth[Issue [386](https://chaos.ns.team/nsv2/ns-ops/issues/386) - Cookie reference to show Signup/Login]:** Cookie based reference to show Signup/Login ([4105b0b](https://chaos.ns.team/nsv2/ns-client/commits/4105b0b))
 * **Business Application[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Lendio prequalification from email url]:** Lendio prequalification from email url ([189f4c0](https://chaos.ns.team/nsv2/ns-client/commits/189f4c0))
@@ -48,16 +50,18 @@
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
 * **Investor[Issue [297](https://chaos.ns.team/nsv2/ns-ops/issues/297) - investor signup integrate SSN collision check api]:** investor signup integrate SSN collision check api ([77e458e](https://chaos.ns.team/nsv2/ns-client/commits/77e458e))
 * **Investor[Issue [304](https://chaos.ns.team/nsv2/ns-ops/issues/304) - investor-signup-flow-ira-link-bank-api-integration-newly-added-step]:** API Integration for IRA Link-Bank ([d7be878](https://chaos.ns.team/nsv2/ns-client/commits/d7be878))
-* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
+* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** removed plaid credential dependency from ns-client ([facf81a](https://chaos.ns.team/nsv2/ns-client/commits/facf81a))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for admin/investor as per updated user schema ([3923b90](https://chaos.ns.team/nsv2/ns-client/commits/3923b90))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for Investor flow as per new updated schema changes. ([146a108](https://chaos.ns.team/nsv2/ns-client/commits/146a108))
+* **Investor[Issue [474](https://chaos.ns.team/nsv2/ns-ops/issues/474) - -investor-issue-fixes-changes]:** Done changes for Individual Account Creation ([e118592](https://chaos.ns.team/nsv2/ns-client/commits/e118592))
 * **Issuer Business Application[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** lendio stauts corrected in constant file ([bee3759](https://chaos.ns.team/nsv2/ns-client/commits/bee3759))
 * **Issuer Signup[Issue [380](https://chaos.ns.team/nsv2/ns-ops/issues/380) - issuer signup add new type commercial real estate]:** made all changes requied for adding new business type for creating application and moved common component to shared folder ([dc7866d](https://chaos.ns.team/nsv2/ns-client/commits/dc7866d))
 * **Issuer Signup[Issue [416](https://chaos.ns.team/nsv2/ns-ops/issues/416) - issuer signup non existing user on prequal success]:** auto login changes done ([978c937](https://chaos.ns.team/nsv2/ns-client/commits/978c937))
 * **Issuer-Dashboard[Issue [296](https://chaos.ns.team/nsv2/ns-ops/issues/296) - issuer-manage-business-application-list-on-dashboard]:** issuer application lists on dashboard showing buttons as per app status ([6dbf80b](https://chaos.ns.team/nsv2/ns-client/commits/6dbf80b))
 * **Issuer[Issue [309](https://chaos.ns.team/nsv2/ns-ops/issues/309) - business-application-issues-finding-fix]:** feedback changes done ([4b5017d](https://chaos.ns.team/nsv2/ns-client/commits/4b5017d))
+* **IssuerSignup AdminApplication[Issue [469](https://chaos.ns.team/nsv2/ns-ops/issues/469) - businessapplication test run 1]:** Issuer signup and Admin application details bug fixes done ([e91043f](https://chaos.ns.team/nsv2/ns-client/commits/e91043f))
 * **marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - marketing pages - feedback]:** marketing pages - feedback ([1416d48](https://chaos.ns.team/nsv2/ns-client/commits/1416d48))
 * **Marketing pages - feedback[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - Marketing pages - feedback]:** Marketing pages - feedback ([e4b44f7](https://chaos.ns.team/nsv2/ns-client/commits/e4b44f7))
 * **Marketing pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - general fixes]:** general fixes ([21c7dc4](https://chaos.ns.team/nsv2/ns-client/commits/21c7dc4))
@@ -70,6 +74,7 @@
 * **Marketing pages[Issue [295](https://chaos.ns.team/nsv2/ns-ops/issues/295) - public resources pages]:** insights, resources landing page, faq pages ([0e643f0](https://chaos.ns.team/nsv2/ns-client/commits/0e643f0))
 * **marketing pages[Issue [306](https://chaos.ns.team/nsv2/ns-ops/issues/306) - marketing pages- campaign listing]:** marketing pages- campaign listing and filter ([740a9fd](https://chaos.ns.team/nsv2/ns-client/commits/740a9fd))
 * **Notification[Issue 197 - Notification panel]:** Redesign Notification panel for private pages ([76744dd](https://chaos.ns.team/nsv2/ns-client/commits/76744dd))
+* **Offerings[Issue [446](https://chaos.ns.team/nsv2/ns-ops/issues/446) - offerings merge current edgar implementation in offering flow part 1 and 2]:** Completed Edgar functionality. ([0754cdb](https://chaos.ns.team/nsv2/ns-client/commits/0754cdb))
 * **Profile-Setting-MFA[Issue [195](https://chaos.ns.team/nsv2/ns-ops/issues/195) - mfa-in-the-security-section]:** implement MFA in security ([7dac0df](https://chaos.ns.team/nsv2/ns-client/commits/7dac0df))
 * **public business pages[Issue [244](https://chaos.ns.team/nsv2/ns-ops/issues/244) - public business pages how it works]:** completed design of how it works section. ([49e05ae](https://chaos.ns.team/nsv2/ns-client/commits/49e05ae))
 * **public business pages[Issue [249](https://chaos.ns.team/nsv2/ns-ops/issues/249) - public business funding options]:** completed design of business funding option and process ([9753070](https://chaos.ns.team/nsv2/ns-client/commits/9753070))
@@ -82,6 +87,7 @@
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** completed design of public homepage and investors pages along with main header menu and footer changes ([e6733c2](https://chaos.ns.team/nsv2/ns-client/commits/e6733c2))
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** updating button group CSS ([2a154c9](https://chaos.ns.team/nsv2/ns-client/commits/2a154c9))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
+* **release 01[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - application to offering:** application to offering ([f90bef7](https://chaos.ns.team/nsv2/ns-client/commits/f90bef7))
 * **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 

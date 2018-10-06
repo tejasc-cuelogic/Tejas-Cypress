@@ -8,6 +8,7 @@ export default class OffersPanel extends Component {
   render() {
     const {
       OFFERS_FRM, maskChangeWithIndex, formChangeWithIndex, isReadonly, match,
+      selectOffer, selectedOfferIndex,
     } = this.props;
     const offerFields = OFFERS_FRM.fields.offer[0];
     return (
@@ -179,7 +180,10 @@ export default class OffersPanel extends Component {
               </div>
               {this.props.refModule !== 'admin' && (
                 <Card.Content extra className="center-align">
-                  <Button primary content="View Details" />
+                  {selectedOfferIndex !== index ?
+                    <Button primary content="View Details" onClick={() => selectOffer('selectedOfferIndex', index)} />
+                  : <p>See details below</p>
+                  }
                 </Card.Content>
               )}
             </Card>

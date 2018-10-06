@@ -8,7 +8,7 @@ import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
 class IndividualAccountStore {
-  @observable stepToBeRendered = '';
+  @observable stepToBeRendered = 0;
   @observable submited = false;
 
   @action

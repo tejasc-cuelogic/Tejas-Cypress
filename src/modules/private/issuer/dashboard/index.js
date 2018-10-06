@@ -5,6 +5,8 @@ import PrivateLayout from '../../shared/PrivateLayout';
 import StickyNotification from './components/StickyNotification';
 import ApplicationCard from '../dashboard/application/components/ApplicationCards';
 import ChooseOffer from '../businessApplication/components/ChooseOffer';
+import OfferSigning from '../businessApplication/components/OfferSigning';
+import GettingStarted from '../businessApplication/components/GettingStarted';
 
 @inject('userStore')
 @observer
@@ -18,6 +20,8 @@ class Dashboard extends Component {
       >
         <ApplicationCard />
         <Route path={`${match.url}/:applicationId/offers`} component={ChooseOffer} />
+        <Route path={`${match.url}/:applicationId/offers/offersSigning`} component={OfferSigning} />
+        <Route path={`${match.url}/:applicationId/offers/gettingStarted`} component={GettingStarted} />
       </PrivateLayout>
     );
   }
