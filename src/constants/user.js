@@ -108,8 +108,6 @@ export const ROLES = [
   { key: 'admin', value: 'admin', text: 'Admin' },
   { key: 'issuer', value: 'issuer', text: 'Business Owner' },
   { key: 'investor', value: 'investor', text: 'Investor' },
-  { key: 'manager', value: 'manager', text: 'Manager' },
-  { key: 'support', value: 'support', text: 'Support' },
 ];
 
 export const NEW_USER = {
