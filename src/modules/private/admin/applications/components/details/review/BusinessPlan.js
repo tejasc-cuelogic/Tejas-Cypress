@@ -74,7 +74,7 @@ export default class BusinessPlan extends Component {
           <Divider section />
           <Header as="h4">
             Control Persons
-            {(!isReadonly || BUSINESS_PLAN_FRM.fields.controlPersons.length < 5) &&
+            {(!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length < 5) &&
             <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'BUSINESS_PLAN_FRM', 'controlPersons')}><small>+ Add Control Person</small></Link>
             }
           </Header>

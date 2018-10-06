@@ -10,8 +10,9 @@ export default class ManagerOverview extends Component {
   render() {
     const { formChange, MANAGERS_FRM, saveReviewForms } = this.props.businessAppReviewStore;
     const {
-      isReadonly, approved, formName, isManager, stepStatus,
+      isReadonly, approved, formName, isManager, stepStatus, uiStore,
     } = this.props;
+    const { inProgress } = uiStore;
     return (
       <Aux>
         {((!isManager && isReadonly && approved && approved.status) || isManager) &&
@@ -25,14 +26,14 @@ export default class ManagerOverview extends Component {
                   Approved By {approved.by}
                 </Button>
                 {isManager &&
-                <Button className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button className="relaxed" loading={inProgress} inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
                 }
               </Button.Group>
             }
             {!isReadonly && isManager &&
               <Button.Group floated="right" size="mini">
-                <Button disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
-                <Button disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>Approve</Button>
+                <Button loading={inProgress} disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button loading={inProgress} disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>Approve</Button>
               </Button.Group>
             }
           </Header>
