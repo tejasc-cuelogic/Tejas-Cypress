@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { Header, Button, Divider, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'uiStore')
 @observer
 export default class ManagerOverview extends Component {
   render() {
