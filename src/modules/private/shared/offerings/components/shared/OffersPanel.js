@@ -30,15 +30,15 @@ export default class OffersPanel extends Component {
                       <Table.Cell>{offerFields.structure.label}</Table.Cell>
                       <Table.Cell>
                         <Dropdown
-                          containerclassname={isReadonly ? 'display-only' : 'secondary'}
+                          className={isReadonly ? 'display-only' : 'secondary'}
                           readOnly={isReadonly}
                           name="structure"
                           placeholder="Choose"
                           fluid
                           selection
-                          value={offer.structure.value}
+                          // value={offer.structure.value}
                           options={STRUCTURE_TYPES}
-                          fielddata={offer.structure}
+                          // fielddata={offer.structure}
                           onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                         />
                       </Table.Cell>
@@ -103,15 +103,15 @@ export default class OffersPanel extends Component {
                       <Table.Cell>{offerFields.personalGuarantee.label}</Table.Cell>
                       <Table.Cell>
                         <Dropdown
-                          containerclassname={isReadonly ? 'display-only' : 'secondary'}
+                          className={isReadonly ? 'display-only' : 'secondary'}
                           readOnly={isReadonly}
                           name="personalGuarantee"
                           placeholder="Type number"
                           fluid
                           selection
-                          value={offer.personalGuarantee.value}
+                          // value={offer.personalGuarantee.value}
                           options={PERSONAL_GUARANTEE_TYPES}
-                          fielddata={offer.personalGuarantee}
+                          // fielddata={offer.personalGuarantee}
                           onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                         />
                       </Table.Cell>
@@ -170,14 +170,6 @@ export default class OffersPanel extends Component {
                           readOnly={isReadonly || offer.structure.value === 'TERM_NOTE'}
                           hidelabel
                         />
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>Portal agreement upload</Table.Cell>
-                      <Table.Cell colSpan="4">
-                        {!isReadonly &&
-                        <Button type="button" size="small" color="blue" className="link-button" >+ Add portal agreement</Button>
-                        }
                       </Table.Cell>
                     </Table.Row>
                   </Table.Body>

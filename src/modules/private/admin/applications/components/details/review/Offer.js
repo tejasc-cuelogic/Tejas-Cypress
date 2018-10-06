@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Header, Form, Confirm, Divider } from 'semantic-ui-react';
+import { Header, Form, Confirm, Divider, Table } from 'semantic-ui-react';
 import OffersPanel from '../../../../../shared/offerings/components/shared/OffersPanel';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'navStore')
 @observer
@@ -47,7 +48,6 @@ export default class Offer extends Component {
     const approved = (offers && offers.approved) ? offers.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
     && !isManager) || (isManager && approved && approved.status));
-    console.log(checkAllStepsIsApproved);
     return (
       <Aux>
         <Form onSubmit={this.submit}>
@@ -67,6 +67,35 @@ export default class Offer extends Component {
             match={this.props.match}
             refModule="admin"
           />
+          <Table basic compact className="form-table">
+            <Table.Body>
+              <Table.Row verticalAlign="top">
+                <Table.Cell collapsing>
+                  <Header as="h5">Portal agreement upload</Header>
+                </Table.Cell>
+                <Table.Cell>
+                  <DropZone
+                    containerclassname={isReadonly ? 'display-only' : ''}
+                    disabled={isReadonly}
+                    name="term"
+                    fielddata={OFFERS_FRM.fields.term}
+                    ondrop={this.onFileDrop}
+                    onremove={this.handleDelDoc}
+                    uploadtitle="Add Term Note portal agreement"
+                  />
+                  <DropZone
+                    containerclassname={isReadonly ? 'display-only' : ''}
+                    disabled={isReadonly}
+                    name="rev"
+                    fielddata={OFFERS_FRM.fields.rev}
+                    ondrop={this.onFileDrop}
+                    onremove={this.handleDelDoc}
+                    uploadtitle="Add Rev Sharing portal agreement"
+                  />
+                </Table.Cell>
+              </Table.Row>
+            </Table.Body>
+          </Table>
           <ButtonGroup
             formName="OFFERS_FRM"
             isReadonly={isReadonly}

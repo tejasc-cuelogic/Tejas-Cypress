@@ -678,8 +678,8 @@ export const OFFERS = {
 export const STRUCTURE_TYPES = [
   { key: 'TERM_NOTE', value: 'TERM_NOTE', text: 'Term Loan' },
   { key: 'REVENUE_SHARING_NOTE', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Share' },
-  { key: 'EQUITY', value: 'EQUITY', text: 'Equity' },
-  { key: 'CONVERTIBLE_NOTE', value: 'CONVERTIBLE_NOTE', text: 'Convertible Note' },
+  // { key: 'EQUITY', value: 'EQUITY', text: 'Equity' },
+  // { key: 'CONVERTIBLE_NOTE', value: 'CONVERTIBLE_NOTE', text: 'Convertible Note' },
 ];
 
 export const PERSONAL_GUARANTEE_TYPES = [

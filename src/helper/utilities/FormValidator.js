@@ -286,7 +286,7 @@ class FormValidator {
           }
         } else if (fields[key].objRef) {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
-          if (typeof tempRef[key] === 'object' && tempRef[key].__typename === 'FileObjectType') {
+          if (fields[key].objType === 'FileObjectType') {
             fields[key].value = tempRef[key].fileName;
             fields[key].fileId = tempRef[key].fileId;
           } else if (fields[key].objType === 'DATE') {
