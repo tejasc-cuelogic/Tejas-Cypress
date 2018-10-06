@@ -502,3 +502,33 @@ query _getBusinessApplicationById ($id: String!) {
   }
 }
 `;
+
+export const signPortalAgreement = gql`
+mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean){
+  signPortalAgreement(
+    applicationId: $applicationId
+    issuerId: $issuerId
+    selectedOffer: $selectedOffer
+    isSelectedOfferChanged: $isSelectedOfferChanged
+  )
+}
+`;
+
+export const getPortalAgreementStatus = gql`
+query _getPortalAgreementStatus($applicationId: String!, $issuerId: String!){
+  getPortalAgreementStatus(
+    applicationId: $applicationId
+    issuerId: $issuerId
+  )
+}
+`;
+
+export const createOffering = gql`
+mutation _createOffering($applicationId: String!){
+  createOffering(
+    applicationId: $applicationId
+  ){
+    id
+  }
+}
+`;

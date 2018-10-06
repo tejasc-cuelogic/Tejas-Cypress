@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Header, Card, Menu } from 'semantic-ui-react';
+import { Modal, Header, Card, Menu, Button } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
@@ -32,11 +32,17 @@ export default class ChooseOffer extends Component {
       this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
     });
   }
+  signPortalAgreement = () => {
+    const { match, businessAppReviewStore } = this.props;
+    businessAppReviewStore.signPortalAgreement().then(() => {
+      this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
+    });
+  }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
-      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex,
+      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, setFieldvalue, selectedOfferIndex,
     } = businessAppReviewStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
@@ -48,37 +54,43 @@ export default class ChooseOffer extends Component {
             signing the Portal Agreement to formalize our partnership and initiate the preparation
             of your crowdfunding campaign.
           </p>
-          <Header as="h3">Offer cards will go here</Header>
           <OffersPanel
             OFFERS_FRM={OFFERS_FRM}
             formChangeWithIndex={formChangeWithIndex}
             maskChangeWithIndex={maskChangeWithIndex}
             isReadonly
             match={this.props.match}
-            refModule="admin"
+            selectOffer={setFieldvalue}
+            refModule="issuer"
+            selectedOfferIndex={selectedOfferIndex}
           />
-          <Card fluid>
-            <SecondaryMenu
-              inverted
-              match={match}
-              navItems={navItems}
-              rightLabel={<Menu.Item header position="right">Offer A</Menu.Item>}
-            />
-            <div className="inner-content-spacer">
-              <Switch>
-                <Route
-                  exact
-                  path={match.url}
-                  component={getModule(this.module(navItems[0].title))}
-                />
-                {
-                  navItems.map(item => (
-                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                  ))
-                }
-              </Switch>
-            </div>
-          </Card>
+          {selectedOfferIndex !== null ?
+            <Card fluid>
+              <SecondaryMenu
+                inverted
+                match={match}
+                navItems={navItems}
+                rightLabel={<Menu.Item header position="right">Offer {String.fromCharCode('A'.charCodeAt() + selectedOfferIndex)}</Menu.Item>}
+              />
+              <div className="inner-content-spacer">
+                <Switch>
+                  <Route
+                    exact
+                    path={match.url}
+                    component={getModule(this.module(navItems[0].title))}
+                  />
+                  {
+                    navItems.map(item => (
+                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
+                    ))
+                  }
+                </Switch>
+              </div>
+              <Card.Content extra className="center-align">
+                <Button primary className="very relaxed" content="Sign portal agreement" onClick={this.signPortalAgreement} />
+              </Card.Content>
+            </Card> : null
+          }
         </Modal.Content>
       </Modal>
     );
