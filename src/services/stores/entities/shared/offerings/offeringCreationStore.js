@@ -367,8 +367,21 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedData = (form, subForm = 'data', field, index = null) => {
-    if (index !== null) {
+  removeUploadedData = (form, subForm = 'data', field, index = null, stepName) => {
+    if (stepName) {
+      const currentStep = { name: stepName };
+      const { fileId } = this[form].fields[field];
+      fileUpload.removeUploadedData(fileId).then(action(() => {
+        this[form] = Validator.onChange(
+          this[form],
+          { name: field, value: '' },
+        );
+        this[form].fields[field].fileId = '';
+        this[form].fields[field].preSignedUrl = '';
+        this.createAccount(currentStep, 'draft', true, field);
+      }))
+        .catch(() => { });
+    } else if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
         { name: field, value: '' }, subForm, index,
