@@ -84,6 +84,7 @@
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** completed design of public homepage and investors pages along with main header menu and footer changes ([e6733c2](https://chaos.ns.team/nsv2/ns-client/commits/e6733c2))
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** updating button group CSS ([2a154c9](https://chaos.ns.team/nsv2/ns-client/commits/2a154c9))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
+* **release 01[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - application to offering:** application to offering ([f90bef7](https://chaos.ns.team/nsv2/ns-client/commits/f90bef7))
 * **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 
