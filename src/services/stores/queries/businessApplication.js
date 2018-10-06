@@ -502,7 +502,6 @@ query _getBusinessApplicationById ($id: String!) {
   }
 }
 `;
-<<<<<<< HEAD
 
 export const signPortalAgreement = gql`
 mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean){
@@ -533,5 +532,3 @@ mutation _createOffering($applicationId: String!){
   }
 }
 `;
-=======
->>>>>>> develop
