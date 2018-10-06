@@ -34,7 +34,7 @@ export default class Leader extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field, index) => {
-    this.props.offeringCreationStore.removeUploadedData('LEADERSHIP_FRM', field, index);
+    this.props.offeringCreationStore.removeUploadedData('LEADERSHIP_FRM', 'leadership', field, index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {

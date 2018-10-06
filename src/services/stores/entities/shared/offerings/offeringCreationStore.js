@@ -367,11 +367,11 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedData = (form, field, index = null) => {
+  removeUploadedData = (form, subForm = 'data', field, index = null) => {
     if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
-        { name: field, value: '' }, 'data', index,
+        { name: field, value: '' }, subForm, index,
       );
     } else {
       this[form] = Validator.onChange(
