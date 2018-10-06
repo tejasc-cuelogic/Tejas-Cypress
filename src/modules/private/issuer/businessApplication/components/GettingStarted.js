@@ -17,10 +17,8 @@ export default class GettingStarted extends Component {
   }
   createOffer = () => {
     const { match, businessAppReviewStore } = this.props;
-    businessAppReviewStore.createOffering(match.params.applicationId).then((data) => {
-      if (data.getPortalAgreementStatus === 'completed') {
-        this.props.history.push('/app/dashboard');
-      }
+    businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
+      this.props.history.push('/app/dashboard');
     });
   }
   module = name => DataFormatter.upperCamelCase(name);
