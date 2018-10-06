@@ -710,16 +710,12 @@ p i.icon {
 		.slick-slide {
 			padding: @18px @5px;
 			border-radius: 4px;
-			// height:126px;
-			// width:auto !important;
 			@media only screen and (max-width: @computerBreakpoint) {
 				padding: @5px;
 			}
 			img {
 				border: 2px solid @fullBlack;
 				border-radius: 6px;
-				// max-height:90px;
-				// width:auto !important;
 			}
 			&.slick-current {
 				img {
@@ -740,12 +736,15 @@ p i.icon {
 			display: none!important;
 		}
 		&.custom-count .slick-list .slick-slide{
-			height:126px;
-			width:auto !important;
-			img {
-				max-height:90px;
-				width:auto !important;
+			// height:auto;
+			width:12.5% !important;
+			@media only screen and (max-width: @smallMonitorScreen) {
+				width:25% !important;
 			}
+			// img {
+			// 	max-height:90px;
+			// 	width:auto !important;
+			// }
 		}
 	}
 }

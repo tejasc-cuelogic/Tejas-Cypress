@@ -70,6 +70,7 @@ class AboutCompany extends Component {
             <LocationAnalysis
               isTabletLand={isTabletLand}
               LocationAnalysisDetailUrl={this.props.match.url}
+              campaign={campaign}
             />
           </Grid.Row>
         </Grid>

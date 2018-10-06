@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Modal, Grid } from 'semantic-ui-react';
+import { Header, Modal, Grid, Image } from 'semantic-ui-react';
+import emptyHeroImagePlaceholder from '../../../../assets/images/gallery-placeholder.jpg';
 // import ChartPie from './ChartPie';
 
 
@@ -43,12 +44,18 @@ class LocationAnalysisModal extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column computer={6} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
-                <iframe
+                <Image
+                  src={
+                    campaign.media.locationHeroImage.url !== null ?
+                      campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
+                  }
+                />
+                {/* <iframe
                   src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3782.8980695673813!2d73.87562555088532!3d18.53350778733976!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c0f824992459%3A0x4f126e7b4c0ac0f6!2sCuelogic+Technologies!5e0!3m2!1sen!2sin!4v1530687811942"
                   title="test"
                   height="100%"
                   width="100%"
-                />
+                /> */}
               </Grid.Column>
               <Grid.Column computer={10} tablet={10} mobile={16}>
                 {

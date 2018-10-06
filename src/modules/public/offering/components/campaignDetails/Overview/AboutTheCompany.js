@@ -35,7 +35,7 @@ class AboutTheCompany extends Component {
             campaign.offering.overview.social &&
               campaign.offering.overview.social.map(socalObj => (
                 socalObj.url && socalObj.url !== '' &&
-                  <a href={socalObj.url} target="_blank" rel="noopener noreferrer" className="icon-link mr-10">
+                  <a href={`https://${socalObj.url}`} target="_blank" rel="noopener noreferrer" className="icon-link mr-10">
                     <Icon color="grey" name={socalObj.type} />
                   </a>
               ))

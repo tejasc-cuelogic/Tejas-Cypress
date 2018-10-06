@@ -20,10 +20,6 @@ class AboutPhotoGallery extends Component {
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: true,
-      afterChange: (current) => {
-        console.log('Current==>', current);
-        // this.setState({ activeSlide: current });
-      },
     };
     const galleryLength = campaign.media.gallery.length < 8 ? campaign.media.gallery.length : 8;
     const tabGalleryLength = campaign.media.gallery.length < 4 ? campaign.media.gallery.length : 4;
