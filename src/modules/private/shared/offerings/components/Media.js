@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Header, Divider, Image, Button, List, Confirm } from 'semantic-ui-react';
+import { Form, Input, Header, Icon, Divider, Image, Button, List, Confirm } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../theme/form';
+
 // import HeroImage from '../../../../../assets/images/hero-image.jpg';
 // import TombstoneImage from '../../../../../assets/images/tombstone-image.jpg';
 // import GalleryImage from '../../../../../assets/images/gallery-image.jpg';
@@ -71,7 +72,7 @@ export default class Media extends Component {
     this.setState({ ConfirmModal: false, index: undefined });
   }
   render() {
-    const { MEDIA_FRM } = this.props.offeringCreationStore;
+    const { MEDIA_FRM, formChange } = this.props.offeringCreationStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     return (
@@ -97,6 +98,23 @@ export default class Media extends Component {
               cropInModal
             />
           )}
+        </Form>
+        <Form>
+          <Header as="h4">Hero Video</Header>
+          <Input
+            name="heroVideo"
+            onChange={(e, result) => formChange(e, result, 'MEDIA_FRM')}
+            value={MEDIA_FRM.fields.heroVideo.value}
+            type="text"
+            placeholder="Enter url here..."
+            action
+            fluid
+          >
+            <input />
+            <Button icon type="submit" basic>
+              <Icon className="ns-send-right" color="blue" size="large" />
+            </Button>
+          </Input>
         </Form>
         <Divider section />
         <Header as="h4">Tombstone image</Header>

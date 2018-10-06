@@ -709,8 +709,9 @@ export class OfferingCreationStore {
       payload.offeringId = getOfferingById.id;
       payload.bacType = bacType;
       const { leadership } = getOfferingById;
-      if (leadership === null || (leadership && leadership[leaderNumber].leaderBacId === null)) {
+      if (leadership && leadership[leaderNumber].leaderBacId === null) {
         mutation = createBac;
+        payload.email = leadership[leaderNumber].email;
         variables = {
           offeringBacDetails: payload,
         };
