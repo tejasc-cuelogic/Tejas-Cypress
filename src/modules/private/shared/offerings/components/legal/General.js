@@ -9,6 +9,7 @@ import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/fo
 export default class General extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
+    this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();

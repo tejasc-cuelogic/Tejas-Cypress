@@ -23,6 +23,12 @@
             .ui.tiny.image{
                 width:60px;
             }
+            .sb-avatar{
+                width:58px;
+                height:58px;
+                font-size:@20px;
+                line-height:58px;
+            }
             h3.ui.header{
                 text-transform:capitalize;
                 .sub.header{

@@ -31,7 +31,7 @@ export default class CreateNew extends Component {
     const { inProgress } = this.props.uiStore;
     return (
       <Modal closeIcon closeOnDimmerClick={false} size="tiny" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-detials">
+        <Modal.Content className="transaction-details">
           <Item.Group>
             <Item className="user-intro">
               <Item.Content verticalAlign="middle">

@@ -38,7 +38,7 @@ export default class NewUpdate extends Component {
     const isNew = this.props.match.params.id === 'new';
     return (
       <Modal closeIcon size="large" closeOnDimmerClick={false} dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
-        <Modal.Content className="transaction-detials">
+        <Modal.Content className="transaction-details">
           <Header as="h3">
             {isNew ? 'New' : 'Edit'} update
             <Status status={PBUILDER_FRM.fields.status.value} />

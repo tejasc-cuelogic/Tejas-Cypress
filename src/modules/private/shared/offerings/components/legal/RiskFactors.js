@@ -39,6 +39,7 @@ const FormData = observer(({
 @observer
 export default class RiskFactors extends Component {
   componentWillMount() {
+    this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
     this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
   }
   handleFormSubmit = () => {

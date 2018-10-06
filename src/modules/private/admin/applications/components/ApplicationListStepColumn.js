@@ -1,17 +1,17 @@
 import React from 'react';
 import { Table, List } from 'semantic-ui-react';
-import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
+import { BUSINESS_APPLICATION_STATUS, BUSINESS_APPLICATION_STEP_STATUS } from '../../../../../services/constants/businessApplication';
 
 export const ApplicationListStepColumn = (props) => {
   const {
     applicationStatus, failReasons, prequalDetails, businessDetails,
     businessPerformance, businessDocumentation, prequalStatus,
   } = props.application;
-  const detailsStepTitle = businessDetails ? businessDetails.stepStatus === 'IN-PROGRESS' ? 'Continue' : 'Completed' : 'Not Completed';
+  const detailsStepTitle = businessDetails && businessDetails.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.IN_PROGRESS ? 'Continue' : businessDetails && businessDetails.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.COMPLETE ? 'Completed' : 'Not Completed';
   const detailsClass = detailsStepTitle === 'Completed' ? 'done' : detailsStepTitle === 'Continue' ? 'current' : '';
-  const performanceStepTitle = businessPerformance ? businessPerformance.stepStatus === 'IN-PROGRESS' ? 'Continue' : 'Completed' : 'Not Completed';
+  const performanceStepTitle = businessPerformance && businessPerformance.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.IN_PROGRESS ? 'Continue' : businessPerformance && businessPerformance.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.COMPLETE ? 'Completed' : 'Not Completed';
   const performanceClass = performanceStepTitle === 'Completed' ? 'done' : performanceStepTitle === 'Continue' ? 'current' : '';
-  const documentationStepTitle = businessDocumentation ? businessDocumentation.stepStatus === 'IN-PROGRESS' ? 'Continue' : 'Completed' : 'Not Completed';
+  const documentationStepTitle = businessDocumentation && businessDocumentation.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.IN_PROGRESS ? 'Continue' : businessDocumentation && businessDocumentation.stepStatus === BUSINESS_APPLICATION_STEP_STATUS.COMPLETE ? 'Completed' : 'Not Completed';
   const documentationClass = documentationStepTitle === 'Completed' ? 'done' : documentationStepTitle === 'Continue' ? 'current' : '';
   return (
     <Table.Cell>

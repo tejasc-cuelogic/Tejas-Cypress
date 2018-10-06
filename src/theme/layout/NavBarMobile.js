@@ -38,21 +38,21 @@ export default class NavBarMobile extends Component {
     const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <Aux>
-        <div
-          className={`${visible || (location.pathname.startsWith('/offerings')) ? 'visible-logo' : ''} full-logo`}
-          onClick={!visible ? onToggle : false}
-          onKeyPress={!visible ? onToggle : false}
-          role="button"
-          tabIndex="0"
-        >
-          <Logo
-            alt="NextSeed.com"
-            dataSrc={getLogo(location.pathname)}
-            as={visible ? Link : Logo}
-            to="/"
-          />
-        </div>
-        <Sidebar.Pushable>
+        <Sidebar.Pushable className={visible && 'show-pushable'}>
+          <div
+            className={`${visible ? 'visible-logo' : (location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
+            onClick={!visible ? onToggle : false}
+            onKeyPress={!visible ? onToggle : false}
+            role="button"
+            tabIndex="0"
+          >
+            <Logo
+              alt="NextSeed.com"
+              dataSrc={getLogo(location.pathname)}
+              as={visible ? Link : Logo}
+              to="/"
+            />
+          </div>
           <div
             className={`public-header-section ${visible ? 'active' : ''}
             ${!location.pathname.includes('/offerings') ? 'inverted' : ''}
@@ -113,9 +113,10 @@ export default class NavBarMobile extends Component {
                     navItems={FOOTER_NAV}
                   />
                 </div>
-              </div>
-              <div className="social-media">
-                <SocialLinks />
+                <Divider />
+                <div className="social-media">
+                  <SocialLinks />
+                </div>
               </div>
             </div>
           </Sidebar>

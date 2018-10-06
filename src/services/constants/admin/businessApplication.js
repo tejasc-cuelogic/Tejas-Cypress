@@ -641,20 +641,37 @@ export const OFFERS = {
       },
     },
   }],
-  portalAgreementUpload: {
+  term: {
     label: '',
     value: '',
     error: undefined,
-    rule: 'optional',
+    rule: 'required',
     preSignedUrl: '',
     fileId: '',
     fileData: '',
+    objRef: 'portalAgreementUpload',
+    objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
     skipField: true,
-    // customErrors: {
-    //   string: 'Allowed string only.',
-    //   required: '* required.',
-    // },
+    customErrors: {
+      required: '* required.',
+    },
+  },
+  rev: {
+    label: '',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objRef: 'portalAgreementUpload',
+    objRefOutput: 'portalAgreementUpload',
+    objType: 'FileObjectType',
+    skipField: true,
+    customErrors: {
+      required: '* required.',
+    },
   },
 };
 

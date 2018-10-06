@@ -406,6 +406,9 @@ footer{
         }
         .dropdown.item .menu {
             min-width: 100%;
+            >.item>.label{
+                margin:0 0 0 @11px;
+            }
         }
         &.inverted {
             background: fade(@neutral, 90%);
@@ -441,7 +444,7 @@ footer{
 	}
 	//Public Mobile View End
 }
-.transaction-detials{
+.transaction-details{
     .ui.inverted.menu{
         // background-color:@neutral-middark;
         .item{
@@ -497,7 +500,7 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: @58px 0 @58px;
+    padding: @58px 0 0;
     height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
@@ -517,14 +520,14 @@ footer{
         margin-bottom: @20px;
     }
     .social-media {
-        position: absolute;
+        // position: absolute;
         text-align: center;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        // left: 0;
+        // right: 0;
+        // bottom: 0;
         background: @neutral;
-        height: 58px;
-        padding: @18px 0;
+        // height: 58px;
+        padding: 0 0 @14px;
         .item {
             margin-bottom: 0;
             padding: 0 @8px !important;

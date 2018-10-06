@@ -1,14 +1,17 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { toJS } from 'mobx';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Icon, Responsive, Button, Popup, Dimmer, Loader, Confirm } from 'semantic-ui-react';
 import Dropzone from 'react-dropzone';
 import Aux from 'react-aux';
 import { isArray } from 'lodash';
 import { FieldError } from '../../shared';
+import { FILE_UPLOAD_HANDLE_URL } from '../../../constants/common';
 
+
+@inject('commonStore')
 @observer
 export default class DropZone extends Component {
   state = { showConfirmModal: false, fileName: null, key: null };
@@ -28,12 +31,24 @@ export default class DropZone extends Component {
     });
   }
 
+  handelGetFileHandel = (e, fileId) => {
+    e.preventDefault();
+    this.props.commonStore.getBoxFileDetails(fileId).then((response) => {
+      const boxFileId = response && response.getFileDetails &&
+      response.getFileDetails.boxFileId;
+      if (boxFileId) {
+        window.open(`${FILE_UPLOAD_HANDLE_URL}${boxFileId}`, '_blank');
+      }
+    });
+  }
+
   render() {
     const {
       label,
       value,
       error,
       showLoader,
+      fileId,
     } = this.props.fielddata;
     const { hideFields } = this.props;
     return (
@@ -87,7 +102,7 @@ export default class DropZone extends Component {
                 </Aux>
               }
               {hideFields ?
-                <Link to="/" title={item}><Icon className="ns-file" />{item}</Link> :
+                <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId)} title={item}><Icon className="ns-file" />{item}</Link> :
                 <span title={item}>{item}</span>
               }
             </div>
@@ -115,7 +130,7 @@ export default class DropZone extends Component {
                 </Aux>
               }
               {hideFields ?
-                <Link to="/" title={value}><Icon className="ns-file" />{value}</Link> :
+                <Link as={Button} to="/" onClick={e => this.handelGetFileHandel(e, fileId)} title={value}><Icon className="ns-file" />{value}</Link> :
                 <span title={value}>{value}</span>
               }
             </div> : hideFields &&

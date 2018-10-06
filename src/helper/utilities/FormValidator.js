@@ -317,7 +317,7 @@ class FormValidator {
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';
-          fields[fields[key].refSelector].value = (fields[key].value !== null || fields[key].value !== '');
+          fields[fields[key].refSelector].value = (fields[key].value !== null && fields[key].value !== '');
         }
       } catch (e) {
         // do nothing

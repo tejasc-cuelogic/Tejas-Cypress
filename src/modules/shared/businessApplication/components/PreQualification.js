@@ -35,6 +35,7 @@ export default class PreQualification extends Component {
           this.props.history.push(`/business-application/${url}`);
         });
     } else {
+      this.props.businessAppStore.setPrequalBasicDetails();
       this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
         .then(() => {
           this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
