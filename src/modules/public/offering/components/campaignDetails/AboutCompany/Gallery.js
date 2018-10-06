@@ -20,7 +20,7 @@ class Gallery extends Component {
             <NsCarousel {...settings}>
               {campaign.media.gallery.map(data => (
                 <Image src={data.url} />
-                            ))}
+              ))}
             </NsCarousel>
           </div>
         </Segment>

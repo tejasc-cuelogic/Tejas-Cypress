@@ -34,7 +34,6 @@ export class Auth {
       UserPoolId: USER_POOL_ID,
       ClientId: COGNITO_CLIENT_ID,
     });
-    console.log('here again ?');
   }
 
   /**
