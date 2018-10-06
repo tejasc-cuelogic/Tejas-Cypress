@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -55,9 +56,9 @@ export default class Admin extends Component {
         <Header as="h6">Role and Capabilities</Header>
         <Form.Group widths={2}>
           <Form.Input fluid label="Role" placeholder="Address" value="Admin" readOnly className="display-only" />
-          <div class="field display-only">
+          <div className="field display-only">
             <label>Capabilities</label>
-            <div class="ui fluid input">
+            <div className="ui fluid input">
               {USER_BASIC.fields.capabilities.value.join(', ')}
             </div>
           </div>

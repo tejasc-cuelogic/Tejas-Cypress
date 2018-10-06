@@ -75,7 +75,7 @@ export default class Media extends Component {
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     return (
-      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
+      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : 'ui card fluid form-card'}>
         <Header as="h4">Hero Image</Header>
         <Form className="cropper-wrap hero-img">
           {MEDIA_FRM.fields.heroImage.preSignedUrl ? (
