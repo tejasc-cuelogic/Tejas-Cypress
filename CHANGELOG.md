@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-06)
+# 0.0.0 (2018-10-07)
 
 
 ### Bug Fixes
@@ -50,8 +50,8 @@
 * **Investor[Issue [235](https://chaos.ns.team/nsv2/ns-ops/issues/235) - manage-beneficiaries-feedback-changes]:** investor beneficiary feedback changes ([9718a27](https://chaos.ns.team/nsv2/ns-client/commits/9718a27))
 * **Investor[Issue [297](https://chaos.ns.team/nsv2/ns-ops/issues/297) - investor signup integrate SSN collision check api]:** investor signup integrate SSN collision check api ([77e458e](https://chaos.ns.team/nsv2/ns-client/commits/77e458e))
 * **Investor[Issue [304](https://chaos.ns.team/nsv2/ns-ops/issues/304) - investor-signup-flow-ira-link-bank-api-integration-newly-added-step]:** API Integration for IRA Link-Bank ([d7be878](https://chaos.ns.team/nsv2/ns-client/commits/d7be878))
-* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([d41995a](https://chaos.ns.team/nsv2/ns-client/commits/d41995a))
+* **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** Changes keys for payload for account creation using plaid ([cb7431f](https://chaos.ns.team/nsv2/ns-client/commits/cb7431f))
 * **Investor[Issue [327](https://chaos.ns.team/nsv2/ns-ops/issues/327) - investor-signup-plaid-keys-changed-in-ns-server-accommodating-impact-on-client-app]:** removed plaid credential dependency from ns-client ([facf81a](https://chaos.ns.team/nsv2/ns-client/commits/facf81a))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for admin/investor as per updated user schema ([3923b90](https://chaos.ns.team/nsv2/ns-client/commits/3923b90))
 * **Investor[Issue [376](https://chaos.ns.team/nsv2/ns-ops/issues/376) - dbschema-changes-v2-impacts-on-client-side]:** Done changes for Investor flow as per new updated schema changes. ([146a108](https://chaos.ns.team/nsv2/ns-client/commits/146a108))
@@ -80,14 +80,22 @@
 * **public business pages[Issue [249](https://chaos.ns.team/nsv2/ns-ops/issues/249) - public business funding options]:** completed design of business funding option and process ([9753070](https://chaos.ns.team/nsv2/ns-client/commits/9753070))
 * **public business pages[Issue [254](https://chaos.ns.team/nsv2/ns-ops/issues/254) - public business inclusive and compare]:** completed design of business inclusive and compare section ([81cce10](https://chaos.ns.team/nsv2/ns-client/commits/81cce10))
 * **public campaign details[Issue [308](https://chaos.ns.team/nsv2/ns-ops/issues/308) - public campaign details and comments]:** completed design of disclosure modal, business modal, comments section. ([1b03678](https://chaos.ns.team/nsv2/ns-client/commits/1b03678))
+* **public campaign ui updates[Issue [413](https://chaos.ns.team/nsv2/ns-ops/issues/413) - public campaign ui updates]:** updated ui designs of campaign pages ([dd868b3](https://chaos.ns.team/nsv2/ns-client/commits/dd868b3))
 * **public campaign[Issue [310](https://chaos.ns.team/nsv2/ns-ops/issues/310) - public campaign investment and rewards]:** completed investment details and rewards section ui as well as solved ui issues and replaced all .png files with .jpg files. ([e9043b1](https://chaos.ns.team/nsv2/ns-client/commits/e9043b1))
 * **Public demo feedback[Issue [331](https://chaos.ns.team/nsv2/ns-ops/issues/331) - Public demo feedback]:** solved logo, banner and banner title issues ([e71dbce](https://chaos.ns.team/nsv2/ns-client/commits/e71dbce))
 * **public investment workflow[Issue [319](https://chaos.ns.team/nsv2/ns-ops/issues/319) - public investment workflow]:** designed investment workflow ([e9b1736](https://chaos.ns.team/nsv2/ns-client/commits/e9b1736))
 * **public investors[Issue [257](https://chaos.ns.team/nsv2/ns-ops/issues/257) - public investors homepage]:** - completed design of why nextseed and how it works ([52edaeb](https://chaos.ns.team/nsv2/ns-client/commits/52edaeb))
+* **public mobile campaign pages[Issue [423](https://chaos.ns.team/nsv2/ns-ops/issues/423) -  public mobile campaign pages]:** campaign pages mobile view. ([16f3441](https://chaos.ns.team/nsv2/ns-client/commits/16f3441))
+* **public mobile navigation updates[Issue [419](https://chaos.ns.team/nsv2/ns-ops/issues/419) - public mobile navigation updates]:** created menu mobile ui ([4c48e83](https://chaos.ns.team/nsv2/ns-client/commits/4c48e83))
+* **public mobile view about pages[Issue [407](https://chaos.ns.team/nsv2/ns-ops/issues/407) - public mobile view about pages]:** completed mobile design of about pages and tested on actual devices. ([7bf7fae](https://chaos.ns.team/nsv2/ns-client/commits/7bf7fae))
+* **public mobile view business pages[Issue [397](https://chaos.ns.team/nsv2/ns-ops/issues/397) - public mobile view business pages]:** designed mobile view of public business pages ([e4f4939](https://chaos.ns.team/nsv2/ns-client/commits/e4f4939))
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** completed design of public homepage and investors pages along with main header menu and footer changes ([e6733c2](https://chaos.ns.team/nsv2/ns-client/commits/e6733c2))
 * **public mobile view homepage[Issue [375](https://chaos.ns.team/nsv2/ns-ops/issues/375) - public mobile view homepage]:** updating button group CSS ([2a154c9](https://chaos.ns.team/nsv2/ns-client/commits/2a154c9))
+* **public mobile view resources and insights[Issue [409](https://chaos.ns.team/nsv2/ns-ops/issues/409) - public mobile view resources and insights]:** completed design of resources and insights pages except FAQ section. ([5e5786e](https://chaos.ns.team/nsv2/ns-client/commits/5e5786e))
+* **Public offering pages[Issue [447](https://chaos.ns.team/nsv2/ns-ops/issues/447) - offering details public pages api integration]:** API integrated for public offering pages ([f3f77d6](https://chaos.ns.team/nsv2/ns-client/commits/f3f77d6))
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
 * **release 01[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - application to offering:** application to offering ([f90bef7](https://chaos.ns.team/nsv2/ns-client/commits/f90bef7))
+* **Safari bug fix[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Safari bug fix]:** solved header, main navigation and sub navigation issues ([dc1faa7](https://chaos.ns.team/nsv2/ns-client/commits/dc1faa7))
 * **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 
