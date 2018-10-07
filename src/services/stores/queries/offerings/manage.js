@@ -6,16 +6,12 @@ export const allOfferingsCompact = gql`
       id
       businessGeneralInfo {
         businessName
-<<<<<<< HEAD
-      }
-=======
       }  
->>>>>>> 080e8b737e4e68db8f1a845d2951334c12274694
       keyTerms {
         legalBusinessName
       }
       stage
-      created{
+      created {
         id
         date
       }
