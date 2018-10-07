@@ -15,7 +15,7 @@ const Careers = () => (
               Join our team.
             </Header>
             <p className="mt-30">
-              We’re just getting started in our journey to shape the future of finance in
+              We are just getting started in our journey to shape the future of finance in
               local communities. We’re looking for talented and motivated individuals who
               are seeking an adventure to learn new skills and cover new ground. If you are
               a self-starter and love working in a dynamic environment, NextSeed may be
