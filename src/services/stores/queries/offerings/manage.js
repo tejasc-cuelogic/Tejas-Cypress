@@ -4,11 +4,11 @@ export const allOfferingsCompact = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
       id
-      businessGeneralInfo {
-        businessName
-      }  
       keyTerms {
         legalBusinessName
+      }
+      businessGeneralInfo {
+        businessName
       }
       stage
       created {
