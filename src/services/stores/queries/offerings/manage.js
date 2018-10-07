@@ -8,7 +8,7 @@ export const allOfferingsCompact = gql`
         legalBusinessName
       }
       stage
-      created{
+      created {
         id
         date
       }
