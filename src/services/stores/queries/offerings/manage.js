@@ -41,11 +41,11 @@ export const allOfferings = gql`
         name
       }
       stage
-      created{
+      created {
         id
         date
       }
-      updated{
+      updated {
         id
         date
       }
