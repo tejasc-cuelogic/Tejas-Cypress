@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
-import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress } from 'semantic-ui-react';
+import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
@@ -84,7 +84,8 @@ export default class CampaignSideBar extends Component {
                 <Statistic.Label>Early Birds</Statistic.Label>
               </Statistic>
             </Statistic.Group>
-            <Button fluid={isMobile} as={Link} to="invest-now" secondary>Invest Now</Button>
+            <Divider hidden />
+            <Button compact fluid={isMobile} as={Link} to="invest-now" secondary>Invest Now</Button>
             <p>
               ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
               || 0} min investment

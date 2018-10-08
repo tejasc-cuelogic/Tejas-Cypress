@@ -55,7 +55,7 @@ class MeetTeamModal extends Component {
                     </Grid.Column>
                     <Responsive maxWidth={767} as={Aux}>
                       <Grid.Column>
-                        <Image src={emptyHeroImagePlaceholder} />
+                        <Image src={emptyHeroImagePlaceholder} fluid />
                       </Grid.Column>
                     </Responsive>
                   </Aux>
@@ -85,6 +85,7 @@ class MeetTeamModal extends Component {
                               data.uploads.heroImage.url != null ?
                               data.uploads.heroImage.url : emptyHeroImagePlaceholder
                           }
+                          fluid
                         />
                       </Grid.Column>
                     </Responsive>
