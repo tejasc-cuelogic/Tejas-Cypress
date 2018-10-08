@@ -105,8 +105,8 @@ export default class Miscellaneous extends Component {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
       confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.userStore;
-    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
+    const access = this.props.userStore.myAccessForModule('APPLICATIONS');
+    const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
     const submitted = (review && review.miscellaneous && review.miscellaneous &&
