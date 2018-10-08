@@ -3,7 +3,6 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Visibility } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
@@ -25,18 +24,13 @@ class Business extends Component {
     }
   }
   module = name => DataFormatter.upperCamelCase(name);
-  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
     const { location, match, navStore } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
         {location.pathname === '/business/how-it-works' && <Banner />}
-        <Visibility
-          onUpdate={this.handleUpdate}
-          continuous
-          className={`slide-down ${location.pathname.split('/')[2]}`}
-        >
+        <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <PublicSubNav
             navStatus={navStore.navStatus}
             stepInRoute={navStore.stepInRoute}
@@ -57,7 +51,7 @@ class Business extends Component {
               ))
             }
           </Switch>
-        </Visibility>
+        </div>
       </Aux>
     );
   }
