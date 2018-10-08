@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class OfferingOverview extends Component {
   componentWillMount() {
@@ -29,6 +29,7 @@ export default class OfferingOverview extends Component {
       formArrayChange,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     return (
       <Form onSubmit={this.handleFormSubmit}>
         {
@@ -127,23 +128,20 @@ export default class OfferingOverview extends Component {
           changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <Divider hidden />
-        <div className="clearfix mb-20">
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Submitted by ISSUER_NAME on 2/3/2018
-          </Button>
-          <Button.Group floated="right">
-            <Button inverted color="red" content="Decline" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid} />
-            <Button type="button" color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Approve</Button>
-          </Button.Group>
-        </div>
         <div className="clearfix">
           <Button as="span" className="time-stamp">
             <Icon className="ns-check-circle" color="green" />
-            Approved by MANAGER_NAME on 2/3/2018
+            Submitted by USER_NAME on 2/3/2018
           </Button>
           <Button.Group floated="right">
-            <Button primary color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Save</Button>
+            {access.asManager ? (
+              <Aux>
+                <Button inverted color="red" content="Decline" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid} />
+                <Button color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Approve</Button>
+              </Aux>
+            ) : (
+              <Button primary color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Save</Button>
+            )}
           </Button.Group>
         </div>
       </Form>

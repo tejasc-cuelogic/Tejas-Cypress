@@ -46,7 +46,7 @@ export default class Legal extends Component {
     const { match, offeringsStore } = this.props;
     const { isIssuer } = this.props.userStore;
     const { offer, offerLoading } = offeringsStore;
-    if (offerLoading || (offer && !offer.keyTerms)) {
+    if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }
     return (

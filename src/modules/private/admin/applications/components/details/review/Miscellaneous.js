@@ -73,7 +73,7 @@ const AddMore = ({
   </Table.Row>
 );
 
-@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Miscellaneous extends Component {
   componentWillMount() {
@@ -105,7 +105,7 @@ export default class Miscellaneous extends Component {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
       confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.navStore;
+    const { myCapabilities } = this.props.userStore;
     const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
