@@ -7,7 +7,7 @@ import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 
-@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class PreQual extends Component {
   componentWillMount() {
@@ -33,7 +33,7 @@ export default class PreQual extends Component {
       JUSTIFICATIONS_FRM, toggleConfirmModal, confirmModal, confirmModalName,
       formChangeWithIndex, removeData,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.navStore;
+    const { myCapabilities } = this.props.userStore;
     const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
