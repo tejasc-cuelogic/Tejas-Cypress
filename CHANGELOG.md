@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-07)
+# 0.0.0 (2018-10-08)
 
 
 ### Bug Fixes
@@ -23,6 +23,7 @@
 * **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **admin dashboard activity history[Issue [365](https://chaos.ns.team/nsv2/ns-ops/issues/365) - admin dashboard activity history]:** designed activity history section ([f2bd37f](https://chaos.ns.team/nsv2/ns-client/commits/f2bd37f))
 * **Admin listing changes[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** Application status label updated and filtering disabled and UI changes done ([fc6ce4c](https://chaos.ns.team/nsv2/ns-client/commits/fc6ce4c))
+* **admin offerings creation listing tab[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** resolved UI issues got from Client ([68bea80](https://chaos.ns.team/nsv2/ns-client/commits/68bea80))
 * **Admin-offering-media[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - Admin-offering-media]:** Adding upload media page UI ([543f94d](https://chaos.ns.team/nsv2/ns-client/commits/543f94d))
 * **Admin[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin-offerings-creation-listing-tab]:** Done changes for offering-listing - edit and delete, Edit - internal Overview, Key Terms and Offerings tab. ([666bcdb](https://chaos.ns.team/nsv2/ns-client/commits/666bcdb))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
@@ -35,8 +36,8 @@
 * **Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - manage Crowdpay accounts]:** manage Crowdpay accounts ([53ff095](https://chaos.ns.team/nsv2/ns-client/commits/53ff095))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([16a38ce](https://chaos.ns.team/nsv2/ns-client/commits/16a38ce))
-* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([92d7999](https://chaos.ns.team/nsv2/ns-client/commits/92d7999))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))
+* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([92d7999](https://chaos.ns.team/nsv2/ns-client/commits/92d7999))
 * **EDGAR[Issue [325](https://chaos.ns.team/nsv2/ns-ops/issues/325) -  updated edgar offering page under text]:** updated edgar offering page under text ([560e6ce](https://chaos.ns.team/nsv2/ns-client/commits/560e6ce))
 * **Hello World structure [Issue [204](https://chaos.ns.team/nsv2/ns-ops/issues/204) - Setup Hello World structure for Issuer/Admin]:** Hello World structure for Issuer/Admin ([76810e0](https://chaos.ns.team/nsv2/ns-client/commits/76810e0))
 * **home page ui[Issue [228](https://chaos.ns.team/nsv2/ns-ops/issues/228) - public pages home page 2]:** created ui of home page ([e0e48e7](https://chaos.ns.team/nsv2/ns-client/commits/e0e48e7))
