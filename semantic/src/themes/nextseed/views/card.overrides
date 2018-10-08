@@ -10,6 +10,9 @@
 .ui.card{
     &.campaign{
         box-shadow:none;
+        &:hover {
+            text-decoration: none;
+        }
         .ui.label{
             border:none;
             text-transform:uppercase;

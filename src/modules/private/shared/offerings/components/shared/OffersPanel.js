@@ -5,10 +5,16 @@ import { FormInput, MaskedInput } from '../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../services/constants/admin/businessApplication';
 
 export default class OffersPanel extends Component {
+  formChangeWithIndex = (e, result, form, arrayName, index) => {
+    this.props.formChangeWithIndex(e, result, form, arrayName, index);
+  }
+  maskChangeWithIndex = (values, form, arrayName, field, index) => {
+    this.props.maskChangeWithIndex(values, form, arrayName, field, index);
+  }
   render() {
     const {
-      OFFERS_FRM, maskChangeWithIndex, formChangeWithIndex, isReadonly, match,
-      selectOffer, selectedOfferIndex,
+      OFFERS_FRM, isReadonly, match, selectOffer, selectedOfferIndex,
+      toggleConfirmModal,
     } = this.props;
     const offerFields = OFFERS_FRM.fields.offer[0];
     return (
@@ -20,7 +26,7 @@ export default class OffersPanel extends Component {
                 <Card.Header>
                   Offer {String.fromCharCode('A'.charCodeAt() + index)}
                   {!isReadonly && OFFERS_FRM.fields.offer.length > 1 &&
-                  <Link to={match.url} onClick={e => this.toggleConfirmModal(e, index)} className="pull-right">
+                  <Link to={match.url} onClick={e => toggleConfirmModal(e, index)} className="pull-right">
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                   }
@@ -34,15 +40,14 @@ export default class OffersPanel extends Component {
                       <Table.Cell>
                         <Dropdown
                           className={isReadonly ? 'display-only' : 'secondary'}
-                          readOnly={isReadonly}
+                          disabled={isReadonly}
                           name="structure"
                           placeholder="Choose"
                           fluid
                           selection
                           value={offer.structure.value}
                           options={STRUCTURE_TYPES}
-                          // fielddata={offer.structure}
-                          onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
+                          onChange={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                         />
                       </Table.Cell>
                     </Table.Row>
@@ -54,7 +59,7 @@ export default class OffersPanel extends Component {
                           readOnly={isReadonly}
                           name="amount"
                           fielddata={offer.amount}
-                          changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
+                          changed={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                           ishidelabel
                         />
                       </Table.Cell>
@@ -67,7 +72,7 @@ export default class OffersPanel extends Component {
                           readOnly={isReadonly}
                           name="maturity"
                           fielddata={offer.maturity}
-                          changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                          changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           hidelabel
                           number
                         />
@@ -81,7 +86,7 @@ export default class OffersPanel extends Component {
                           readOnly={isReadonly}
                           name="interestRate"
                           fielddata={offer.interestRate}
-                          changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                          changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           hidelabel
                           percentage
                         />
@@ -97,7 +102,7 @@ export default class OffersPanel extends Component {
                           currency
                           name="amortizationAmount"
                           fielddata={offer.amortizationAmount}
-                          changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                          changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           hidelabel
                         />
                       </Table.Cell>
@@ -107,15 +112,14 @@ export default class OffersPanel extends Component {
                       <Table.Cell>
                         <Dropdown
                           className={isReadonly ? 'display-only' : 'secondary'}
-                          readOnly={isReadonly}
+                          disabled={isReadonly}
                           name="personalGuarantee"
                           placeholder="Type number"
                           fluid
                           selection
-                          // value={offer.personalGuarantee.value}
+                          value={offer.personalGuarantee.value}
                           options={PERSONAL_GUARANTEE_TYPES}
-                          // fielddata={offer.personalGuarantee}
-                          onChange={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
+                          onChange={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                         />
                       </Table.Cell>
                     </Table.Row>
@@ -127,7 +131,7 @@ export default class OffersPanel extends Component {
                           readOnly={isReadonly}
                           name="businessBlanket"
                           fielddata={offer.businessBlanket}
-                          changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
+                          changed={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                           ishidelabel
                         />
                       </Table.Cell>
@@ -139,7 +143,7 @@ export default class OffersPanel extends Component {
                           containerclassname={isReadonly ? 'display-only' : ''}
                           readOnly={isReadonly}
                           name="expirationDate"
-                          changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                          changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           fielddata={offer.expirationDate}
                           format="##-##-####"
                           hidelabel
@@ -155,7 +159,7 @@ export default class OffersPanel extends Component {
                           readOnly={isReadonly || offer.structure.value === 'TERM_NOTE'}
                           name="multiple"
                           fielddata={offer.multiple}
-                          changed={(e, result) => formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
+                          changed={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                           ishidelabel
                         />
                       </Table.Cell>
@@ -168,7 +172,7 @@ export default class OffersPanel extends Component {
                           currency
                           name="totalCapital"
                           fielddata={offer.totalCapital}
-                          changed={(values, field) => maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                          changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           containerclassname={isReadonly ? 'display-only' : ''}
                           readOnly={isReadonly || offer.structure.value === 'TERM_NOTE'}
                           hidelabel

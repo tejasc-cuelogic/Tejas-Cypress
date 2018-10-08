@@ -65,7 +65,7 @@ const TableBody = ({
   </Table.Body>
 );
 
-@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Contingencies extends Component {
   componentWillMount() {
@@ -87,7 +87,7 @@ export default class Contingencies extends Component {
       CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
       toggleConfirmModal, removeData,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.navStore;
+    const { myCapabilities } = this.props.userStore;
     const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;

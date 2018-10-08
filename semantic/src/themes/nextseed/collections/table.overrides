@@ -225,6 +225,11 @@
                 color: @primary-two;
             }
         }
+        .file-uploader-wrap.display-only .file-uploader.attached{
+            background-color:transparent;
+            line-height:1;
+            padding:0;
+        }
         + .basic.form-table{
             margin-top:@21px;
         }
@@ -237,6 +242,9 @@
                 background-color: @neutral-midwhite;        
             }
         }
+    }
+    &.clickable tr{
+        cursor:pointer;
     }
     .dark-cell {
         background-color: @neutral-midwhite;

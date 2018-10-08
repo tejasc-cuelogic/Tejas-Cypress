@@ -200,6 +200,20 @@ class FormValidator {
     this.onChange(currentForm, { name: 'city', value: data.city });
     this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
   }
+
+  setAddressFieldsIndex = (place, form, formName, subForm = 'data', index) => {
+    const currentForm = form;
+    const data = Helper.gAddressClean(place);
+    if (currentForm.fields[subForm][index].street) {
+      this.onArrayFieldChange(currentForm, { name: 'street', value: data.residentalStreet }, subForm, index);
+    } else {
+      this.onArrayFieldChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet }, subForm, index);
+    }
+    this.onArrayFieldChange(currentForm, { name: 'state', value: data.state }, subForm, index);
+    this.onArrayFieldChange(currentForm, { name: 'city', value: data.city }, subForm, index);
+    this.onArrayFieldChange(currentForm, { name: 'zip', value: data.zipCode }, subForm, index);
+  }
+
   setIsDirty = (form, status) => {
     const currentForm = form;
     currentForm.meta.isDirty = status;
@@ -226,14 +240,10 @@ class FormValidator {
   }
   addMoreRecordToSubSection = (form, key, count = 1, defaultBlank = false) => {
     const currentForm = form;
-    if (defaultBlank) {
-      currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
-        this.addMoreFields(currentForm.fields[key], count) :
-        currentForm.refMetadata[key];
-    } else {
-      currentForm.fields[key] = currentForm.fields[key] ?
-        this.addMoreFields(currentForm.refMetadata[key], count) : [];
-    }
+    currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
+      this.addMoreFields(currentForm.fields[key], count) : (
+        defaultBlank ? currentForm.refMetadata[key] : []
+      );
     currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }
