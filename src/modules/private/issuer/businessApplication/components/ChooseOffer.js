@@ -38,6 +38,9 @@ export default class ChooseOffer extends Component {
       this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
     });
   }
+  handleCloseModal = () => {
+    this.props.history.push('/app/dashboard');
+  }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, businessAppReviewStore } = this.props;
@@ -54,16 +57,18 @@ export default class ChooseOffer extends Component {
             signing the Portal Agreement to formalize our partnership and initiate the preparation
             of your crowdfunding campaign.
           </p>
-          <OffersPanel
-            OFFERS_FRM={OFFERS_FRM}
-            formChangeWithIndex={formChangeWithIndex}
-            maskChangeWithIndex={maskChangeWithIndex}
-            isReadonly
-            match={this.props.match}
-            selectOffer={setFieldvalue}
-            refModule="issuer"
-            selectedOfferIndex={selectedOfferIndex}
-          />
+          <div className="ui form mt-20">
+            <OffersPanel
+              OFFERS_FRM={OFFERS_FRM}
+              formChangeWithIndex={formChangeWithIndex}
+              maskChangeWithIndex={maskChangeWithIndex}
+              isReadonly
+              match={this.props.match}
+              selectOffer={setFieldvalue}
+              refModule="issuer"
+              selectedOfferIndex={selectedOfferIndex}
+            />
+          </div>
           {selectedOfferIndex !== null ?
             <Card fluid>
               <SecondaryMenu

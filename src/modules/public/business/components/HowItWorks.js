@@ -24,6 +24,38 @@ const settings = {
   arrows: true,
   dots: false,
 };
+const businesses = [
+  {
+    title: 'Breweries & Distilleries',
+    image: UserOne,
+    description: 'Wichita Falls Brewery raised $125,000 to build out a new taproom',
+  },
+  {
+    title: 'Restaurants & Bars',
+    image: UserTwo,
+    description: 'PORTERS raised $500,000 to open a new steakhouse.',
+  },
+  {
+    title: 'Fitness Studios',
+    image: UserThree,
+    description: 'Alkalign Studios raised $100,000 to expand franchising opportunities.',
+  },
+  {
+    title: 'Health & Wellness',
+    image: UserFour,
+    description: 'Healing Waters raised $110,000 to open a new floatation spa.',
+  },
+  {
+    title: 'Hospitality',
+    image: UserFive,
+    description: 'The Native raised $396,500 to open a boutique hostel and bar.',
+  },
+  {
+    title: 'Co-working',
+    image: UserSix,
+    description: 'The Annex HTX raised $230,500 to build a co-working and retail space.',
+  },
+];
 const isMobile = document.documentElement.clientWidth < 768;
 
 const HowItWorks = () => (
@@ -107,36 +139,15 @@ const HowItWorks = () => (
       {!isMobile ?
         <Container>
           <Grid centered stackable columns={3} className="vertical-gutter">
-            <Grid.Column textAlign="center">
-              <Image src={UserOne} centered />
-              <Header as="h5">Breweries & Distilleries</Header>
-              <p>Wichita Falls Brewery raised $125,000 to build out a new taproom</p>
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <Image src={UserTwo} centered />
-              <Header as="h5">Restaurants & Bars</Header>
-              <p>PORTERS raised $500,000 to open a new steakhouse.</p>
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <Image src={UserThree} centered />
-              <Header as="h5">Fitness Studios</Header>
-              <p>Alkalign Studios raised $100,000 to expand franchising opportunities.</p>
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <Image src={UserFour} centered />
-              <Header as="h5">Health & Wellness</Header>
-              <p>Healing Waters raised $110,000 to open a new floatation spa.</p>
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <Image src={UserFive} centered />
-              <Header as="h5">Hospitality</Header>
-              <p>The Native raised $396,500 to open a boutique hostel and bar.</p>
-            </Grid.Column>
-            <Grid.Column textAlign="center">
-              <Image src={UserSix} centered />
-              <Header as="h5">Co-working</Header>
-              <p>The Annex HTX raised $230,500 to build a co-working and retail space.</p>
-            </Grid.Column>
+            {
+              businesses.map(b => (
+                <Grid.Column textAlign="center">
+                  <Image src={b.image} centered />
+                  <Header as="h5">{b.title}</Header>
+                  <p>{b.description}</p>
+                </Grid.Column>
+              ))
+            }
           </Grid>
         </Container>
       :
@@ -144,12 +155,12 @@ const HowItWorks = () => (
           <Container>
             <NsCarousel {...settings}>
               {
-                [1, 2, 3].map(i => (
-                  <div key={i}>
-                    <Grid.Column textAlign="center" className="center-align">
-                      <Image src={UserOne} centered />
-                      <Header as="h5">Breweries & Distilleries</Header>
-                      <p>Wichita Falls Brewery raised $125,000 to build out a new taproom</p>
+                businesses.map(b => (
+                  <div key={b}>
+                    <Grid.Column className="center-align">
+                      <Image src={b.image} centered />
+                      <Header as="h5">{b.title}</Header>
+                      <p>{b.description}</p>
                     </Grid.Column>
                   </div>
                 ))

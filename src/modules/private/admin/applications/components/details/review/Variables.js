@@ -174,7 +174,7 @@ export default class Variables extends Component {
               </Table.Row>
             </Table.Body>
           </Table>
-          <div className="right-align">
+          <div className="right-align mt-20">
             <Button disabled={!MODEL_VARIABLES_FRM.meta.isValid} primary className="relaxed" type="button">Save & Update Results</Button>
           </div>
         </Form>

@@ -10,8 +10,9 @@ export default class UpdateBonusReward extends Component {
   componentWillMount() {
     const { rewardId } = this.props.match.params;
     const { bonusRewards } = this.props;
-    const { setUpdateBonusRewardsData } = this.props.offeringCreationStore;
+    const { setUpdateBonusRewardsData, setCurrentRewardId } = this.props.offeringCreationStore;
     setUpdateBonusRewardsData(bonusRewards.data.getBonusRewards, rewardId);
+    setCurrentRewardId(rewardId);
   }
   handleUpdateBonusReward = () => {
     const { rewardId } = this.props.match.params;
@@ -19,6 +20,7 @@ export default class UpdateBonusReward extends Component {
     this.props.history.push(this.props.refLink);
   }
   handleCloseModal = () => {
+    this.props.offeringCreationStore.resetRewardId();
     this.props.history.push(this.props.refLink);
   }
   render() {

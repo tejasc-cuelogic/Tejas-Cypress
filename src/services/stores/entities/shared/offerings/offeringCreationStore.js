@@ -98,6 +98,7 @@ export class OfferingCreationStore {
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
+  @observable currentRewardId = null;
 
 
   @observable requestState = {
@@ -137,6 +138,17 @@ export class OfferingCreationStore {
   resetOfferingId = () => {
     this.currentOfferingId = null;
   }
+
+  @action
+  setCurrentRewardId = (id) => {
+    this.currentRewardId = id;
+  }
+
+  @action
+  resetRewardId = () => {
+    this.currentRewardId = null;
+  }
+
   @action
   setProfilePhoto(attr, value, field) {
     this.MEDIA_FRM.fields[field][attr] = value;
@@ -847,6 +859,10 @@ export class OfferingCreationStore {
         if (res) {
           this.setTiersForBonusRewardsForm();
           this.setDefaultTiers();
+          this.setUpdateBonusRewardsData(
+            this.bonusRewards.data.getBonusRewards,
+            this.currentRewardId,
+          );
         }
       },
     });

@@ -20,8 +20,8 @@ export default class Documentation extends Component {
   }
   render() {
     const { DOCUMENTATION_FRM, formChange } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.userStore;
-    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
+    const access = this.props.userStore.myAccessForModule('APPLICATIONS');
+    const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
     const submitted = (review && review.documentation && review.documentation &&
