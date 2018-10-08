@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter } from 'lodash';
+import { map, forEach, filter, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
@@ -541,7 +541,7 @@ export class BusinessAppReviewStore {
     if (!appData) {
       return false;
     }
-    this.paBoxFolderId = appData.paBoxFolderId ? appData.paBoxFolderId : null;
+    this.paBoxFolderId = get(appData, 'storageDetails.Application.Review.Offer.id');
     this[form] = Validator.setFormData(this[form], appData, ref);
     const multiForm = this.getActionType(form, 'isMultiForm');
     if (form !== 'MANAGERS_FRM') {
