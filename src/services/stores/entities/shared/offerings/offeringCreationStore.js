@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action } from 'mobx';
-import { map, startCase, filter, forEach, find } from 'lodash';
+import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import {
@@ -123,7 +123,7 @@ export class OfferingCreationStore {
         }
       }
       this.bonusRewardsTiers.data.getBonusRewardTiers =
-        [...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))];
+      orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
       return this.bonusRewardsTiers;
     });
   }
