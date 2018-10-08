@@ -125,6 +125,10 @@ export const getOfferingDetails = gql`
           url
           isPublic
         }
+        heroVideo {
+          url
+          isPublic
+        }
       }
       contingencies {
         launch {

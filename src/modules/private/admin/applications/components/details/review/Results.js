@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Table, Form } from 'semantic-ui-react';
-import ManagerOverview from './ManagerOverview';
+// import ManagerOverview from './ManagerOverview';
 import Helper from '../../../../../../../helper/utility';
 
 @inject('businessAppReviewStore')
 @observer
 export default class Results extends Component {
   render() {
-    const { RESULTS_FRM, MODEL_MANAGER_FRM } = this.props.businessAppReviewStore;
+    const { RESULTS_FRM } = this.props.businessAppReviewStore;
     return (
       <Aux>
         <Header as="h4">
@@ -71,7 +71,7 @@ export default class Results extends Component {
           </Table.Body>
         </Table>
         <Form>
-          <ManagerOverview form={MODEL_MANAGER_FRM} formName="MODEL_MANAGER_FRM" />
+          {/* <ManagerOverview form={MODEL_MANAGER_FRM} formName="MODEL_MANAGER_FRM" /> */}
         </Form>
       </Aux>
     );

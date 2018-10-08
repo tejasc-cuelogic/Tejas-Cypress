@@ -6,7 +6,7 @@
         height:58px;
         border:none;
         border-radius:0;
-        transition: all ease-in-out 0.5s;
+        transition: all .3s ease-in-out;
         .menu{
             margin:@11px @16px;
             .item{
@@ -55,6 +55,13 @@
         &.slide-up {
             top: -100px;
         }
+        &.active.animate{
+            top:-58px;
+            background:@neutral;
+            &.reverse{
+                top:0;
+            }
+        }
         .dropdown.item .menu {
             top: 129%;
             background: transparent;
@@ -89,19 +96,11 @@
     border-radius:0;
     box-shadow:none;
     background-color:@white;
-    .ui.container > .item {
-        visibility: hidden;
-    }
+    transition: all .3s ease-in-out;
     .item{
         padding:@3px @18px;
         &:hover {
             background-color: transparent;
-        }
-        img.ui.image.logo{
-            transform: scale(0);
-        } 
-        >.button {
-            transform: scale(0);
         }
     }
     .menu.menu-secondary {
@@ -127,28 +126,27 @@
             }
         }
     }
+    + .animate-placeholder{
+        width:100%;
+        height:0;
+    }
     &.active {
         background-color: @white;
         box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
         position: fixed;
-        top: 0;
+        top:58px;
         left: 0;
         right: 0;
         margin: 0;
-        z-index: 1001;
-        transition: all .3s ease;
-        .ui.container > .item {
-            visibility: visible;
-        }
-        .item {
-            img.ui.image.logo{
-                transform: scale(1);
-                transition: transform .3s ease;
-            } 
-            >.button {
-                transform: scale(1);
-                transition: transform .3s ease;
+        z-index: 100;
+        &.animate{
+            top:0;
+            &.reverse{
+                top:58px;
             }
+        }
+        + .animate-placeholder{
+            height:58px;
         }
     }
     &.insight-menu {
@@ -385,6 +383,12 @@ footer{
                 margin:0 0 0 @11px;
             }
         }
+        &.active{
+            position:fixed;
+            width:100%;
+            top:58px;
+            z-index:9;
+        }
         &.inverted {
             background: fade(@neutral, 90%);
             .dropdown.item {
@@ -495,13 +499,8 @@ footer{
         margin-bottom: @20px;
     }
     .social-media {
-        // position: absolute;
         text-align: center;
-        // left: 0;
-        // right: 0;
-        // bottom: 0;
         background: @neutral;
-        // height: 58px;
         padding: 0 0 @14px;
         .item {
             margin-bottom: 0;
