@@ -211,7 +211,7 @@ class FormValidator {
     }
     this.onArrayFieldChange(currentForm, { name: 'state', value: data.state }, subForm, index);
     this.onArrayFieldChange(currentForm, { name: 'city', value: data.city }, subForm, index);
-    this.onArrayFieldChange(currentForm, { name: 'zipCode', value: data.zipCode }, subForm, index);
+    this.onArrayFieldChange(currentForm, { name: 'zip', value: data.zipCode }, subForm, index);
   }
 
   setIsDirty = (form, status) => {

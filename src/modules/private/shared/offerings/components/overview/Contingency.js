@@ -6,7 +6,6 @@ import { Link, withRouter, Route } from 'react-router-dom';
 import { Header, Button, Checkbox, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 import EditContingency from './EditContingency';
-import Helper from '../../../../../../helper/utility';
 
 @withRouter
 @inject('offeringCreationStore', 'userStore')
@@ -24,12 +23,12 @@ export default class Contingency extends Component {
     const { confirmModalName } = this.props.offeringCreationStore;
     const dataKey = confirmModalName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
     this.props.offeringCreationStore.removeData(confirmModalName, dataKey);
-    this.handleSubmitComment();
-    Helper.toast('Contingency has been deleted successfully.', 'success');
+    const successMsg = 'Contingency has been deleted successfully';
+    this.handleSubmitComment(successMsg);
   }
   canAddNew = roles => roles && (roles.includes('manager') || roles.includes('admin')) &&
     this.props.refTab !== 'close';
-  handleSubmitComment = () => {
+  handleSubmitComment = (successMsg) => {
     const {
       updateOffering,
       currentOfferingId,
@@ -37,7 +36,7 @@ export default class Contingency extends Component {
       CLOSING_CONTITNGENCIES_FRM,
     } = this.props.offeringCreationStore;
     const fields = { ...LAUNCH_CONTITNGENCIES_FRM.fields, ...CLOSING_CONTITNGENCIES_FRM.fields };
-    updateOffering(currentOfferingId, fields, 'contingencies');
+    updateOffering(currentOfferingId, fields, 'contingencies', '', true, successMsg);
   }
   render() {
     const { roles } = this.props.userStore.currentUser;
@@ -93,7 +92,7 @@ export default class Contingency extends Component {
                   </Aux>
                 }
                 {(roles && (roles.includes('support') || roles.includes('admin'))) &&
-                  <Button type="button" primary content="Submit" onClick={this.handleSubmitComment} />
+                  <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null)} />
                 }
               </Button.Group>
             </div>

@@ -564,7 +564,7 @@ export class OfferingCreationStore {
     return inputData;
   }
 
-  updateOffering = (id, fields, keyName, subKey, notify = true) => {
+  updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
@@ -619,7 +619,9 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
-        if (notify) {
+        if (successMsg) {
+          Helper.toast(`${successMsg}`, 'success');
+        } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
       })
@@ -997,12 +999,14 @@ export class OfferingCreationStore {
           fields.expirationDate.value = reward.expirationDate;
           reward.tiers.map((tier) => {
             const isExisted = find(fields, { key: tier.amount });
-            if (isExisted && !isExisted.value.includes(tier.amount)) {
+            if (isExisted && !isExisted.value.includes(tier.amount) &&
+              Array.isArray(toJS(isExisted.value))) {
               isExisted.value.push(tier.amount);
               isExisted.value = [...new Set(toJS(isExisted.value))];
             } else {
               const isEarlyBird = find(fields, { earlyBirdQuantity: 50 });
-              if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS')) {
+              if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS') &&
+              Array.isArray(toJS(isEarlyBird.value))) {
                 isEarlyBird.value.push('EARLY_BIRDS');
               }
             }

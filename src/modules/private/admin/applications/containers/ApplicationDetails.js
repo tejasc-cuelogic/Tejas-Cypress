@@ -7,7 +7,7 @@ import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { InlineLoader, EmptyDataSet } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
@@ -59,15 +59,11 @@ export default class ApplicationDetails extends Component {
     const { match, businessAppStore, businessAppAdminStore } = this.props;
     const {
       businessApplicationDetailsAdmin,
-      // businessApplicationsDataById,
     } = businessAppStore;
     const { BUSINESS_DETAILS_EDIT_FRM, inputFieldChnage } = businessAppAdminStore;
     const { fields } = BUSINESS_DETAILS_EDIT_FRM;
-    // if (businessApplicationsDataById && businessApplicationsDataById.loading) {
-    //   return <InlineLoader />;
-    // }
     if (!businessApplicationDetailsAdmin) {
-      return <EmptyDataSet />;
+      return <InlineLoader />;
     }
     const {
       id, applicationId, userId, applicationStatus, prequalStatus, prequalDetails, primaryPOC,
