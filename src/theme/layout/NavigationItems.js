@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
 import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
@@ -103,19 +104,25 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 
+@inject('navStore')
+@observer
 export class NavigationItems extends Component {
   render() {
     const {
-      stepInRoute, navStatus, location, currentUser, loading,
-      isPrequalQulify, canSubmitApp, preQualSubmit,
+      stepInRoute, location, currentUser, loading,
+      isPrequalQulify, canSubmitApp, preQualSubmit, navStore,
     } = this.props;
+    const { navStatus, subNavStatus } = navStore;
     return (
       <Menu
         stackable
         borderless
         inverted={!location.pathname.includes('/offerings')}
         fixed="top"
-        className={navStatus === 'sub' ? 'slide-up' : ''}
+        // className={navStatus === 'sub' ? 'slide-up1' : ''}
+        className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
+        // className={`${navStatus === 'sub' ? 'active' : ''}
+        // ${bottomPassed ? { subNavStatus } : ''}`}
       >
         <Container fluid>
           <Menu.Item as={Link} to="/" header>
