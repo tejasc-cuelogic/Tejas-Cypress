@@ -33,10 +33,8 @@ export default class CampaignList extends Component {
               <Grid.Row>
                 {loading ? <Spinner loaderMessage="loading.." /> : OfferingList.map(offering => (
                   <Grid.Column>
-                    <Card className="campaign" fluid>
+                    <Card className="campaign" fluid as={Link} to={`/offerings/${offering.id}/overview`}>
                       <Image
-                        as={Link}
-                        to={`/offerings/${offering.id}/overview`}
                         centered
                         src={offering.media.tombstoneImage.url}
                         alt={`${offering.businessGeneralInfo.businessName} poster`}

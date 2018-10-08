@@ -96,7 +96,7 @@ export default class ApplicationDetails extends Component {
     businessGeneralInfo || prequalDetails.businessGeneralInfo;
     const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open closeOnRootNodeClick={false} onClose={this.handleCloseModal} centered={false}>
+      <Modal closeIcon size="large" dimmer="inverted" open closeOnDimmerClick={false} onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <Header as="h3">
             {businessName}
