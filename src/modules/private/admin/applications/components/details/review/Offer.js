@@ -40,8 +40,8 @@ export default class Offer extends Component {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
       confirmModalName, removeData, checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.userStore;
-    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
+    const access = this.props.userStore.myAccessForModule('APPLICATIONS');
+    const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { offers } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;

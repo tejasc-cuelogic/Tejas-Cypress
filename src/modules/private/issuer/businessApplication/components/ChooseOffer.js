@@ -38,6 +38,9 @@ export default class ChooseOffer extends Component {
       this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
     });
   }
+  handleCloseModal = () => {
+    this.props.history.push('/app/dashboard');
+  }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, businessAppReviewStore } = this.props;
