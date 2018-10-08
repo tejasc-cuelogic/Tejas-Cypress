@@ -57,7 +57,16 @@ class CompanyDescriptionModal extends Component {
                 :
                 <p>{emptyStatement}</p>
             }
-            <Image src={campaign.media.heroImage.url !== null ? campaign.media.heroImage.url : defaultLeaderProfile} fluid centered className="mt-30" />
+            <Image
+              src={
+                campaign && campaign.media && campaign.media.heroImage
+                  && campaign.media.heroImage.url ?
+                  campaign.media.heroImage.url : defaultLeaderProfile
+              }
+              fluid
+              centered
+              className="mt-30"
+            />
           </Aux>
           <Divider section />
           <div className="history-section">
