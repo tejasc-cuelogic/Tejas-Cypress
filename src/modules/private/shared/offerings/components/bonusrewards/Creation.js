@@ -6,6 +6,7 @@ import AddNewTier from './AddNewTier';
 import AddNewBonusReward from './addNewBonusRewards';
 import BonusRewardsList from './BonusRewardsList';
 import { InlineLoader } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 
 @inject('offeringCreationStore', 'uiStore')
 @observer
@@ -50,7 +51,7 @@ export default class Creation extends Component {
           bonusRewardsTiers.data.getBonusRewardTiers.map(tier => (
             <div className="reward-tier">
               <Header as="h4">
-                {tier.earlyBirdQuantity === 0 ? `Invest $${tier.amount} or more` : `Early Birds investing $${tier.amount} Or more... (#${tier.earlyBirdQuantity})`}
+                {tier.earlyBirdQuantity === 0 ? `Invest ${Helper.CurrencyFormat(tier.amount)} or more` : `Early Birds investing ${Helper.CurrencyFormat(tier.amount)} Or more... (#${tier.earlyBirdQuantity})`}
                 <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', tier)}>
                   <Icon className="ns-trash" />
                 </Button>

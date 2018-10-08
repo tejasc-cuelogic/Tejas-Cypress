@@ -59,15 +59,15 @@ export default class Listing extends Component {
                 offerings.map(offering => (
                   <Table.Row key={offering.id}>
                     <Table.Cell>
-                      <b>{offering.keyTerms.legalBusinessName}</b>
+                      <b>{offering.keyTerms ? offering.keyTerms.legalBusinessName : ''}</b>
                     </Table.Cell>
                     <Table.Cell><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
                     <Table.Cell>
-                      {offering.offering.launch &&
-                      `${DataFormatter.diffDays(offering.offering.launch.targetDate)} days`
+                      {offering.offering ? offering.offering.launch &&
+                      `${DataFormatter.diffDays(offering.offering.launch.targetDate)} days` : ''
                       }
                     </Table.Cell>
-                    <Table.Cell>{offering.lead.name}</Table.Cell>
+                    <Table.Cell>{offering.lead ? offering.lead.name : ''}</Table.Cell>
                     <Table.Cell>
                       <p>
                         <b>pocname11</b><br />

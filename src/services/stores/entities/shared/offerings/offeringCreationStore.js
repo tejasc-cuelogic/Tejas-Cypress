@@ -423,7 +423,7 @@ export class OfferingCreationStore {
 
   @action
   setAddressFields = (place, index) => {
-    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'data', index);
+    Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'LEADERSHIP_FRM', 'leadership', index);
   }
 
   /*
@@ -856,7 +856,7 @@ export class OfferingCreationStore {
     const tiersArray = [];
     forEach(tiers, (tier, index) => {
       const tierFieldObj = { rule: 'alpha_dash', error: undefined };
-      tierFieldObj.values = [{ label: `Invest $${tier.amount} or more`, value: tier.amount }];
+      tierFieldObj.values = [{ label: `Invest ${Helper.CurrencyFormat(tier.amount)} or more`, value: tier.amount }];
       tierFieldObj.key = tier.amount;
       tierFieldObj.earlyBirdQuantity = tier.earlyBirdQuantity;
       tierFieldObj.value = [];

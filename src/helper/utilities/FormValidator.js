@@ -200,6 +200,20 @@ class FormValidator {
     this.onChange(currentForm, { name: 'city', value: data.city });
     this.onChange(currentForm, { name: 'zipCode', value: data.zipCode });
   }
+
+  setAddressFieldsIndex = (place, form, formName, subForm = 'data', index) => {
+    const currentForm = form;
+    const data = Helper.gAddressClean(place);
+    if (currentForm.fields[subForm][index].street) {
+      this.onArrayFieldChange(currentForm, { name: 'street', value: data.residentalStreet }, subForm, index);
+    } else {
+      this.onArrayFieldChange(currentForm, { name: 'residentalStreet', value: data.residentalStreet }, subForm, index);
+    }
+    this.onArrayFieldChange(currentForm, { name: 'state', value: data.state }, subForm, index);
+    this.onArrayFieldChange(currentForm, { name: 'city', value: data.city }, subForm, index);
+    this.onArrayFieldChange(currentForm, { name: 'zipCode', value: data.zipCode }, subForm, index);
+  }
+
   setIsDirty = (form, status) => {
     const currentForm = form;
     currentForm.meta.isDirty = status;
