@@ -87,7 +87,7 @@ export default class OfferingLaunch extends Component {
               <Icon className="ns-check-circle" color="green" />
               Submitted on 3/4/2018
             </Button>
-            <Button type="button" primary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Approve and Launch</Button>
+            <Button type="button" primary className="relaxed" >Approve and Launch</Button>
           </Button.Group>
         </div>
       </Form>

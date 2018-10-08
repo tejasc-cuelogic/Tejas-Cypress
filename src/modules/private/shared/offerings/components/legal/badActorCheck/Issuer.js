@@ -23,10 +23,10 @@ export default class Issuer extends Component {
   }
   render() {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
-    const { roles } = this.props.userStore.currentUser;
     const formName = 'ISSUER_FRM';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form onSubmit={this.handleSubmitIssuer}>
@@ -89,18 +89,14 @@ export default class Issuer extends Component {
             <Button secondary content="Submit for Approval" disabled={!ISSUER_FRM.meta.isValid} />
           </div>
           <div className="clearfix mb-20">
-            {roles && (roles.includes('admin') || roles.includes('support')) &&
-              <Button content="Awaiting Manager Approval" color="gray" disabled={!ISSUER_FRM.meta.isValid} />
-            }
+            <Button content="Awaiting Manager Approval" color="gray" disabled={!ISSUER_FRM.meta.isValid} />
+            {access.asManager &&
             <Button.Group floated="right">
-              {roles && (roles.includes('admin') || roles.includes('manager')) &&
-              <Aux>
-                <Button inverted content="Decline" color="red" disabled={!ISSUER_FRM.meta.isValid} />
-                <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
-                <Button primary content="Approve" color="green" disabled={!ISSUER_FRM.meta.isValid} />
-              </Aux>
-              }
+              <Button inverted content="Decline" color="red" />
+              <Button secondary content="Generate Report" />
+              <Button primary content="Approve" color="green" />
             </Button.Group>
+            }
           </div>
           <div className="clearfix">
             <Button.Group floated="right">
