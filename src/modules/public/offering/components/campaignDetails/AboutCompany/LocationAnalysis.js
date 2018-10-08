@@ -21,7 +21,8 @@ class LocationAnalysis extends Component {
           </Header>
           <Image
             src={
-              campaign.media.locationHeroImage && campaign.media.locationHeroImage.url !== null ?
+              campaign && campaign.media && campaign.media.locationHeroImage
+              && campaign.media.locationHeroImage.url ?
               campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
             }
           />

@@ -137,7 +137,7 @@ export default class OfferingOverview extends Component {
             {access.asManager ? (
               <Aux>
                 <Button inverted color="red" content="Decline" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid} />
-                <Button type="button" color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Approve</Button>
+                <Button color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Approve</Button>
               </Aux>
             ) : (
               <Button primary color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Save</Button>

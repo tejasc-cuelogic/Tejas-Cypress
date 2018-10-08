@@ -99,6 +99,18 @@ export class Api {
         });
     })
   )
+  getRemoteFile = url => (
+    new Promise((resolve, reject) => {
+      request
+        .get(`${url}`)
+        .end((err, data) => {
+          if (err) {
+            reject(err);
+          }
+          resolve(data);
+        });
+    })
+  )
 }
 
 export default new Api();

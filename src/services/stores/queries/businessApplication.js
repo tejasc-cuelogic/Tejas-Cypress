@@ -532,3 +532,12 @@ mutation _createOffering($applicationId: String!){
   }
 }
 `;
+
+export const generatePortalAgreement = gql`
+mutation _generatePortalAgreement($applicationId: String!, $userId: String!){
+  generatePortalAgreement(
+    applicationId: $applicationId
+    userId: $userId
+  )
+}
+`;

@@ -13,9 +13,9 @@
     }
 }
 
-.ui.label{
-    &.circular.horizontal{
-        min-height:auto;
-        padding:.4em .833em !important;
-    }
-}
+// .ui.label{                  // commented to resolve label design in sidebar menu
+//     &.circular.horizontal{
+//         min-height:auto;
+//         padding:.4em .833em !important;
+//     }
+// }

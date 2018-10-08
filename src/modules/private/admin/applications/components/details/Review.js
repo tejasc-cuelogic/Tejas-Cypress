@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
-import { Grid, Icon } from 'semantic-ui-react';
+import { Grid, Icon, Button, Divider } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import { mapValues } from 'lodash';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
 import { InlineLoader } from '../../../../../../theme/shared';
+import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
 
 const getModule = component => Loadable({
   loader: () => import(`./review/${component}`),
@@ -52,7 +53,9 @@ export default class Review extends Component {
   ));
   render() {
     const { match, businessAppReviewStore } = this.props;
-    const { subNavPresentation, updateStatuses } = businessAppReviewStore;
+    const {
+      subNavPresentation, updateStatuses, paBoxFolderId, generatePortalAgreement,
+    } = businessAppReviewStore;
     updateStatuses(navItems);
     return (
       <div className="inner-content-spacer">
@@ -65,6 +68,13 @@ export default class Review extends Component {
               match={match}
               navItems={navItems}
             />
+            <Divider hidden />
+            <Button.Group size="mini">
+              <Button color="blue" type="button" onClick={generatePortalAgreement} >Generate PA</Button>
+              {paBoxFolderId &&
+              <Button color="blue" className="link-button" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')}>PA BOX Link</Button>
+              }
+            </Button.Group>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>

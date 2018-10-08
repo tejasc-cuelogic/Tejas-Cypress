@@ -7,7 +7,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -35,6 +35,7 @@ export class BusinessAppReviewStore {
   @observable confirmModalName = null;
   @observable removeIndex = null;
   @observable selectedOfferIndex = null;
+  @observable paBoxFolderId = null;
   @observable removeFileIdsList = [];
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
@@ -142,8 +143,7 @@ export class BusinessAppReviewStore {
         const fileData = Helper.getFormattedFileData(file);
         const stepName = this.getFileUploadEnum(form, index);
         this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
-        // Need to change userType to ADMIN from ISSUER
-        fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ISSUER', userId).then((result) => {
+        fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', userId).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
             this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
@@ -499,12 +499,49 @@ export class BusinessAppReviewStore {
   });
 
   @action
+  generatePortalAgreement = () => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const { applicationId, userId } = businessApplicationDetailsAdmin;
+    const reFetchPayLoad = {
+      applicationId,
+      applicationType: 'APPLICATION_COMPLETED',
+      userId,
+    };
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: generatePortalAgreement,
+          variables: {
+            applicationId,
+            userId,
+          },
+          refetchQueries:
+            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+        })
+        .then((result) => {
+          Helper.toast('Portal agreement generated successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  };
+
+  @action
   setFormData = (form, ref, store = 'appStore') => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const appData = store === 'appStore' ? businessApplicationDetailsAdmin : this.fetchBusinessApplicationOffers;
     if (!appData) {
       return false;
     }
+    this.paBoxFolderId = appData.paBoxFolderId ? appData.paBoxFolderId : null;
     this[form] = Validator.setFormData(this[form], appData, ref);
     const multiForm = this.getActionType(form, 'isMultiForm');
     if (form !== 'MANAGERS_FRM') {

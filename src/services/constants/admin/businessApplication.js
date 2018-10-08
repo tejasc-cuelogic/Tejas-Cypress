@@ -623,7 +623,7 @@ export const OFFERS = {
       label: 'Multiple on Principal to Pay',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string|required_if:data.*.structure,revenueshareingnote',
+      rule: 'string|required_if:data.*.structure,REVENUE_SHARING_NOTE',
       customErrors: {
         string: 'Allowed string only.',
         required_if: '* required.',
@@ -634,7 +634,7 @@ export const OFFERS = {
       label: 'Total Capital Returned',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric|required_if:data.*.structure,revenueshareingnote',
+      rule: 'numeric|required_if:data.*.structure,REVENUE_SHARING_NOTE',
       customErrors: {
         numeric: 'Allowed numbers only.',
         required_if: '* required.',
