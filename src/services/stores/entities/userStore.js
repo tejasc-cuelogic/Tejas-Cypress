@@ -51,6 +51,21 @@ export class UserStore {
     return [...capabilities, prepareOpt('USERS', 'FULL')];
   }
 
+  @computed get myCapabilities() {
+    return this.currentUser ? toJS(this.currentUser.capabilities) : [];
+  }
+
+  myAccessForModule(module) {
+    return this.myCapabilities.includes(`${module}_FULL`) ?
+      { asManager: true, level: 'FULL' } : (
+        this.myCapabilities.includes(`${module}_MANAGER`) ?
+          { asManager: true, level: 'MANAGER' } : (
+            this.myCapabilities.includes(`${module}_SUPPORT`) ?
+              { asSupport: true, level: 'SUPPORT' } : {}
+          )
+      );
+  }
+
   isCurrentUserWithRole(role) {
     return this.currentUser.roles.includes(role);
   }

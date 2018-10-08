@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
-import { observable, toJS, action } from 'mobx';
+import { observable, toJS, action, computed } from 'mobx';
 import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
@@ -98,6 +98,7 @@ export class OfferingCreationStore {
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
+  @observable currentRewardId = null;
 
 
   @observable requestState = {
@@ -137,6 +138,17 @@ export class OfferingCreationStore {
   resetOfferingId = () => {
     this.currentOfferingId = null;
   }
+
+  @action
+  setCurrentRewardId = (id) => {
+    this.currentRewardId = id;
+  }
+
+  @action
+  resetRewardId = () => {
+    this.currentRewardId = null;
+  }
+
   @action
   setProfilePhoto(attr, value, field) {
     this.MEDIA_FRM.fields[field][attr] = value;
@@ -564,7 +576,7 @@ export class OfferingCreationStore {
     return inputData;
   }
 
-  updateOffering = (id, fields, keyName, subKey, notify = true) => {
+  updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
@@ -619,7 +631,9 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
-        if (notify) {
+        if (successMsg) {
+          Helper.toast(`${successMsg}`, 'success');
+        } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
       })
@@ -845,6 +859,10 @@ export class OfferingCreationStore {
         if (res) {
           this.setTiersForBonusRewardsForm();
           this.setDefaultTiers();
+          this.setUpdateBonusRewardsData(
+            this.bonusRewards.data.getBonusRewards,
+            this.currentRewardId,
+          );
         }
       },
     });
@@ -929,6 +947,12 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed
+  get allBonusRewards() {
+    return (this.bonusRewards &&
+    toJS(this.bonusRewards)) || [];
+  }
+
   @action
   deleteBonusReward = (id) => {
     uiStore.setProgress();
@@ -997,12 +1021,14 @@ export class OfferingCreationStore {
           fields.expirationDate.value = reward.expirationDate;
           reward.tiers.map((tier) => {
             const isExisted = find(fields, { key: tier.amount });
-            if (isExisted && !isExisted.value.includes(tier.amount)) {
+            if (isExisted && !isExisted.value.includes(tier.amount) &&
+              Array.isArray(toJS(isExisted.value))) {
               isExisted.value.push(tier.amount);
               isExisted.value = [...new Set(toJS(isExisted.value))];
             } else {
               const isEarlyBird = find(fields, { earlyBirdQuantity: 50 });
-              if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS')) {
+              if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS') &&
+              Array.isArray(toJS(isEarlyBird.value))) {
                 isEarlyBird.value.push('EARLY_BIRDS');
               }
             }

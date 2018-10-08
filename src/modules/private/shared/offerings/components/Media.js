@@ -1,13 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Form, Input, Header, Icon, Divider, Image, Button, List, Confirm, Grid, Label } from 'semantic-ui-react';
+import { Form, Input, Header, Icon, Divider, Button, List, Confirm, Grid, Label } from 'semantic-ui-react';
 import { ImageCropper } from '../../../../../theme/form';
-
-// import HeroImage from '../../../../../assets/images/hero-image.jpg';
-// import TombstoneImage from '../../../../../assets/images/tombstone-image.jpg';
-// import GalleryImage from '../../../../../assets/images/gallery-image.jpg';
-// import LogoImage from '../../../../../assets/images/gardens-america.jpg';
+import { Image64 } from '../../../../../theme/shared';
 import {
   PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
 } from '../../../../../services/constants/user';
@@ -84,7 +80,7 @@ export default class Media extends Component {
               {MEDIA_FRM.fields.heroImage.preSignedUrl ? (
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('heroImage')} circular icon={{ className: 'ns-close-light' }} />
-                  <Image src={MEDIA_FRM.fields.heroImage.preSignedUrl} />
+                  <Image64 srcUrl={MEDIA_FRM.fields.heroImage.preSignedUrl} />
                 </div>
               ) : (
                 <ImageCropper
@@ -130,7 +126,7 @@ export default class Media extends Component {
           {MEDIA_FRM.fields.tombstoneImage.preSignedUrl ? (
             <div className="file-uploader attached">
               <Button onClick={() => this.showConfirmModal('tombstoneImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image src={MEDIA_FRM.fields.tombstoneImage.preSignedUrl} />
+              <Image64 srcUrl={MEDIA_FRM.fields.tombstoneImage.preSignedUrl} />
             </div>
           ) : (
             <ImageCropper
@@ -156,7 +152,7 @@ export default class Media extends Component {
               <List.Item key={url}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('location', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image src={url} />
+                  <Image64 srcUrl={url} />
                 </div>
               </List.Item>
             ))}
@@ -185,7 +181,7 @@ export default class Media extends Component {
               <List.Item key={`gallery${url}`}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image src={url} />
+                  <Image64 srcUrl={url} />
                 </div>
               </List.Item>
             ))}
@@ -214,7 +210,7 @@ export default class Media extends Component {
               <List.Item key={`logo${url}`}>
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('logo', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image src={url} />
+                  <Image64 srcUrl={url} />
                 </div>
               </List.Item>
             ))}

@@ -613,7 +613,7 @@ export const CONTINGENCY_META = {
     value: '',
     label: '',
     error: undefined,
-    rule: 'required_if:data.*.isAccepted,IS_ACCEPTED',
+    rule: 'required_if:data.*.isAccepted,true',
     placeHolder: 'Enter comment here...',
     refSelector: 'isAccepted',
     objRef: 'accepted',
@@ -1739,7 +1739,7 @@ export const ADD_NEW_BONUS_REWARD = {
     value: '',
     error: undefined,
     rule: 'string|required',
-    placeHolder: 'Lorem ipsum dolor sit amet enim. Etiam ',
+    placeHolder: 'Description',
   },
   expirationDate: {
     label: 'Expiration Date',
@@ -1747,5 +1747,6 @@ export const ADD_NEW_BONUS_REWARD = {
     error: undefined,
     rule: 'date|required',
     placeHolder: '3/4/2018',
+    objType: 'DATE',
   },
 };

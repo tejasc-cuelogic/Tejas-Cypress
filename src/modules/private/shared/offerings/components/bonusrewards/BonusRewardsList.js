@@ -5,6 +5,7 @@ import { intersectionBy } from 'lodash';
 import { Header, Button, Confirm } from 'semantic-ui-react';
 import { Link, Route } from 'react-router-dom';
 import UpdateBonusReward from './UpdateBonusReward';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 @inject('offeringCreationStore', 'uiStore')
 @observer
@@ -22,14 +23,19 @@ export default class BonusRewardsList extends Component {
     setConfirmBox('');
   }
   render() {
-    const { tier, bonusRewards, refLink } = this.props;
+    const { tier, refLink } = this.props;
+    const { allBonusRewards } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
+    const bonusRewards = allBonusRewards.data.getBonusRewards;
+    if (allBonusRewards.loading) {
+      return <InlineLoader text="Loading Bonus Rewards List..." />;
+    }
     return (
       <div>
         <Route path={`${refLink}/edit-bonus-reward/:rewardId`} render={props => <UpdateBonusReward refLink={refLink} {...props} {...this.props} />} />
         {
-          bonusRewards.data.getBonusRewards &&
-          bonusRewards.data.getBonusRewards.map((reward) => {
+          bonusRewards &&
+          bonusRewards.map((reward) => {
             if (intersectionBy([tier], (reward && reward.tiers), 'amount').length > 0) {
               return (
                 <div className="reward-wrap">

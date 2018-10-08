@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Grid, Form, Input, Breadcrumb } from 'semantic-ui-react';
+import { Grid, Form, Input, Breadcrumb, Divider } from 'semantic-ui-react';
 import { toJS } from 'mobx';
 import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 import FaqsCombined from './FaqsCombined';
 import { InlineLoader } from '../../../../../theme/shared';
 
-
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
@@ -68,7 +68,7 @@ export default class KnowledgeBase extends Component {
             </Grid.Row>
           )}
           <Grid.Row>
-            <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16} mobile={16}>
+            <Grid.Column widescreen={6} largeScreen={6} computer={6} tablet={6} mobile={16}>
               <AccList
                 marketing={marketing}
                 module={modul}
@@ -78,7 +78,7 @@ export default class KnowledgeBase extends Component {
                 data={kbs}
               />
             </Grid.Column>
-            <Grid.Column widescreen={10} largeScreen={10} only="large screen">
+            <Grid.Column widescreen={10} largeScreen={10} computer={10} tablet={10} mobile={16}>
               <Route
                 exact
                 path={match.url}
@@ -87,7 +87,13 @@ export default class KnowledgeBase extends Component {
               <Route
                 path={`${match.url}/faq`}
                 render={props =>
-                  <FaqsCombined marketing={marketing} params={match.params} {...props} />}
+                  (
+                    <Aux>
+                      {isMobile && <Divider hidden />}
+                      <FaqsCombined marketing={marketing} params={match.params} {...props} />
+                    </Aux>
+                  )
+                }
               />
               <Route
                 path={`${match.url}/:id`}
