@@ -185,7 +185,7 @@ export default class OffersPanel extends Component {
               {this.props.refModule !== 'admin' && (
                 <Card.Content extra className="center-align">
                   {selectedOfferIndex !== index ?
-                    <Button primary content="View Details" onClick={() => selectOffer('selectedOfferIndex', index)} />
+                    <Button primary className="relaxed" content="View Details" onClick={() => selectOffer('selectedOfferIndex', index)} />
                   : <p>See details below</p>
                   }
                 </Card.Content>
