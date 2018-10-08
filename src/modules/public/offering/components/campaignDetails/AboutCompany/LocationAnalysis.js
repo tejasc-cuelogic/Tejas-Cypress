@@ -15,14 +15,15 @@ class LocationAnalysis extends Component {
         <Segment padded>
           <Header as="h4">
             <Link to={`${LocationAnalysisDetailUrl}/locationanalysis`}>
-              Location Analysis
+              Location Analysis location
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
           <Image
             src={
-              campaign.media.locationHeroImage && campaign.media.locationHeroImage.url !== null ?
-              campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
+              campaign && campaign.media && campaign.media.location &&
+               campaign.media.location[0].url ?
+              campaign.media.location[0].url : emptyHeroImagePlaceholder
             }
           />
           {/* <iframe

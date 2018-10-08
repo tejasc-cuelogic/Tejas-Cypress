@@ -46,7 +46,8 @@ class LocationAnalysisModal extends Component {
               <Grid.Column computer={6} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
                 <Image
                   src={
-                    campaign.media.locationHeroImage.url !== null ?
+                    campaign && campaign.media && campaign.media.locationHeroImage &&
+                      campaign.media.locationHeroImage.url ?
                       campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
                   }
                 />

@@ -30,8 +30,8 @@ class MeetTeamModal extends Component {
                     <Grid.Column>
                       <Image
                         src={
-                          data.uploads.heroImage.isPublic === true &&
-                            data.uploads.heroImage.url != null ?
+                            data && data.uploads && data.uploads.heroImage &&
+                             data.uploads.heroImage.url ?
                             data.uploads.heroImage.url : emptyHeroImagePlaceholder
                         }
                         fluid
