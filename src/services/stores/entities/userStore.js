@@ -48,7 +48,7 @@ export class UserStore {
         ];
       }
     });
-    return [...capabilities, prepareOpt('USERS', 'FULL')];
+    return [...new Set(capabilities)];
   }
 
   @computed get myCapabilities() {
