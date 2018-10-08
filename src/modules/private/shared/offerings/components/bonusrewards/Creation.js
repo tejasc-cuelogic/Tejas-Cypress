@@ -56,7 +56,7 @@ export default class Creation extends Component {
                   <Icon className="ns-trash" />
                 </Button>
               </Header>
-              <BonusRewardsList refLink={match.url} tier={tier} bonusRewards={bonusRewards} />
+              <BonusRewardsList refLink={match.url} tier={tier} />
               <Button
                 size="small"
                 color="blue"
