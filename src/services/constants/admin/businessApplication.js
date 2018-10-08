@@ -542,12 +542,21 @@ export const OFFERS = {
     },
     amount: {
       value: '',
-      label: 'Offering Amount ($)',
+      label: 'Max Offering Amount ($)',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string|required',
+      rule: 'required',
       customErrors: {
-        string: 'Allowed string only.',
+        required: '* required.',
+      },
+    },
+    minimumAmount: {
+      value: '',
+      label: 'Min Offering Amount ($)',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'required',
+      customErrors: {
         required: '* required.',
       },
     },

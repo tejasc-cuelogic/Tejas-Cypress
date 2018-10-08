@@ -263,6 +263,11 @@ export class BusinessAppReviewStore {
     this[form] = Validator.prepareFormObject(ref);
   }
 
+  @action
+  resetCommentFrm = () => {
+    this.APPLICATION_STATUS_COMMENT_FRM = Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
+  }
+
  @action
   updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag, comment = '') => {
     const applicationSource = applStatus ===

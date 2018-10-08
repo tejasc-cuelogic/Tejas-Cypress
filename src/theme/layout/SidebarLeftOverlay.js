@@ -6,6 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
 import { UserAvatar, Logo } from '../shared';
+import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
 @inject('uiStore')
 @observer
@@ -13,9 +14,12 @@ class SidebarLeftPush extends Component {
   toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
   toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
   render() {
-    const { layoutState } = this.props.uiStore;
+    const { layoutState, showFireworkAnimation } = this.props.uiStore;
     return (
       <Aux>
+        {showFireworkAnimation &&
+        <FireworksAnimation />
+        }
         <Responsive minWidth={1200}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
         </Responsive>

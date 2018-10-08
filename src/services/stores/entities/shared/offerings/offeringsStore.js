@@ -1,11 +1,11 @@
-/* eslint-disable no-underscore-dangle, no-unused-vars */
+/* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import {
   allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails,
 } from '../../../queries/offerings/manage';
-import { offeringCreationStore } from '../../../index';
+import { offeringCreationStore, userStore } from '../../../index';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -42,19 +42,20 @@ export class OfferingsStore {
       page: this.requestState.page,
       stage: this.requestState.stage,
     };
-    const params = {};
     this.requestState.page = page || this.requestState.page;
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
     this.requestState.stage = stage || this.requestState.stage;
+    const params = {
+      stage: stageMap[stage] || [stage.toUpperCase()],
+      first: first || this.requestState.perPage,
+      skip,
+    };
     this.data = graphql({
       client,
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
-      variables: {
-        stage: stageMap[stage] || [stage.toUpperCase()],
-        first: first || this.requestState.perPage,
-        skip,
-      },
+      variables: stage !== 'active' ? params :
+        { ...params, ...{ issuerId: userStore.currentUser.sub } },
     });
   }
 
@@ -91,7 +92,7 @@ export class OfferingsStore {
       query: getOfferingDetails,
       fetchPolicy: 'network-only',
       variables: { id },
-      onFetch: (res) => {
+      onFetch: () => {
         this.offerLoading = false;
         offeringCreationStore.setFormData('OFFERING_DETAILS_FRM', false);
         offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);

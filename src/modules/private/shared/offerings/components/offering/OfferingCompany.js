@@ -6,7 +6,7 @@ import { Form, Divider, Button, Header, Icon } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class OfferingCompany extends Component {
   componentWillMount() {
@@ -34,6 +34,7 @@ export default class OfferingCompany extends Component {
       formArrayChange,
       rtEditorChange,
     } = this.props.offeringCreationStore;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const formName = 'OFFERING_COMPANY_FRM';
     return (
       <Form onSubmit={this.handleFormSubmit}>
@@ -86,16 +87,18 @@ export default class OfferingCompany extends Component {
           ))
         }
         <Divider hidden />
+        {access.asManager &&
         <div className="clearfix mb-20">
           <Button as="span" className="time-stamp">
             <Icon className="ns-check-circle" color="green" />
             Submitted by ISSUER_NAME on 2/3/2018
           </Button>
           <Button.Group floated="right">
-            <Button inverted color="red" content="Decline" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid} />
-            <Button color="green" content="Approve" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid} />
+            <Button inverted color="red" content="Decline" className="relaxed" />
+            <Button color="green" content="Approve" className="relaxed" />
           </Button.Group>
         </div>
+        }
         <div className="clearfix">
           <Button as="span" className="time-stamp">
             <Icon className="ns-check-circle" color="green" />
