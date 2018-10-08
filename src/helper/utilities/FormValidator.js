@@ -240,14 +240,10 @@ class FormValidator {
   }
   addMoreRecordToSubSection = (form, key, count = 1, defaultBlank = false) => {
     const currentForm = form;
-    if (defaultBlank) {
-      currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
-        this.addMoreFields(currentForm.fields[key], count) :
-        currentForm.refMetadata[key];
-    } else {
-      currentForm.fields[key] = currentForm.fields[key] ?
-        this.addMoreFields(currentForm.refMetadata[key], count) : [];
-    }
+    currentForm.fields[key] = currentForm.fields[key] && currentForm.fields[key][0] ?
+      this.addMoreFields(currentForm.fields[key], count) : (
+        defaultBlank ? currentForm.refMetadata[key] : []
+      );
     currentForm.meta = { ...currentForm.meta, isValid: false };
     return currentForm;
   }
