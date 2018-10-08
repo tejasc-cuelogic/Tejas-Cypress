@@ -267,7 +267,7 @@ class FormValidator {
           },
         };
       } else {
-        fields[key].value = '';
+        fields[key].value = typeof fields[key].value === 'number' ? 0 : '';
       }
     });
     return fields;
