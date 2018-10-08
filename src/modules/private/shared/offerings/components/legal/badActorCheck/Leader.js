@@ -27,7 +27,7 @@ export default class Leader extends Component {
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
-    const { roles } = this.props.userStore.currentUser;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     return (
@@ -77,18 +77,14 @@ export default class Leader extends Component {
           <Button secondary content="Submit for Approval" disabled={!LEADER_FRM.meta.isValid} />
         </div>
         <div className="clearfix mb-20">
-          {roles && (roles.includes('admin') || roles.includes('support')) &&
-            <Button color="gray" content="Awaiting Manager Approval" disabled={!LEADER_FRM.meta.isValid} />
-          }
+          <Button color="gray" content="Awaiting Manager Approval" disabled={!LEADER_FRM.meta.isValid} />
+          {access.asManager &&
           <Button.Group floated="right">
-            {roles && (roles.includes('admin') || roles.includes('manager')) &&
-            <Aux>
-              <Button inverted content="Send Back" color="red" disabled={!LEADER_FRM.meta.isValid} />
-              <Button secondary content="Generate Report" disabled={!LEADER_FRM.meta.isValid} />
-              <Button primary content="Approve" color="green" disabled={!LEADER_FRM.meta.isValid} />
-            </Aux>
-            }
+            <Button inverted content="Send Back" color="red" />
+            <Button secondary content="Generate Report" />
+            <Button primary content="Approve" color="green" />
           </Button.Group>
+          }
         </div>
         <div className="clearfix">
           <Button.Group floated="right">
