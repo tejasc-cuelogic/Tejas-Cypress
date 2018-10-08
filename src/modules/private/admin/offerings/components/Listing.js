@@ -41,7 +41,7 @@ export default class Listing extends Component {
     return (
       <Card fluid>
         <div className="table-wrapper">
-          <Table unstackable className="application-list">
+          <Table unstackable className="application-list clickable">
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
@@ -57,7 +57,7 @@ export default class Listing extends Component {
                 <Table.Row><Table.Cell colSpan={6} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
                 ) :
                 offerings.map(offering => (
-                  <Table.Row key={offering.id}>
+                  <Table.Row key={offering.id} onClick={() => this.handleAction('Edit', offering.id)}>
                     <Table.Cell>
                       <b>{offering.businessGeneralInfo ?
                           offering.businessGeneralInfo.businessName :

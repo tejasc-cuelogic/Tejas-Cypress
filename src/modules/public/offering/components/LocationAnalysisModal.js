@@ -40,12 +40,13 @@ class LocationAnalysisModal extends Component {
         <Header as="h3">
           Location Analysis
         </Header>
-        <Modal.Content>
+        <Modal.Content scrolling>
           <Grid>
             <Grid.Row>
               <Grid.Column computer={6} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
                 <Image
                   src={
+                    campaign.media.locationHeroImage &&
                     campaign.media.locationHeroImage.url !== null ?
                       campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
                   }
