@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
-import { observable, toJS, action } from 'mobx';
+import { observable, toJS, action, computed } from 'mobx';
 import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
@@ -98,6 +98,7 @@ export class OfferingCreationStore {
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
+  @observable currentRewardId = null;
 
 
   @observable requestState = {
@@ -137,6 +138,17 @@ export class OfferingCreationStore {
   resetOfferingId = () => {
     this.currentOfferingId = null;
   }
+
+  @action
+  setCurrentRewardId = (id) => {
+    this.currentRewardId = id;
+  }
+
+  @action
+  resetRewardId = () => {
+    this.currentRewardId = null;
+  }
+
   @action
   setProfilePhoto(attr, value, field) {
     this.MEDIA_FRM.fields[field][attr] = value;
@@ -847,6 +859,10 @@ export class OfferingCreationStore {
         if (res) {
           this.setTiersForBonusRewardsForm();
           this.setDefaultTiers();
+          this.setUpdateBonusRewardsData(
+            this.bonusRewards.data.getBonusRewards,
+            this.currentRewardId,
+          );
         }
       },
     });
@@ -929,6 +945,12 @@ export class OfferingCreationStore {
       query: getBonusRewards,
       variables: { offeringId: this.currentOfferingId },
     });
+  }
+
+  @computed
+  get allBonusRewards() {
+    return (this.bonusRewards &&
+    toJS(this.bonusRewards)) || [];
   }
 
   @action
