@@ -15,7 +15,7 @@ class LocationAnalysis extends Component {
         <Segment padded>
           <Header as="h4">
             <Link to={`${LocationAnalysisDetailUrl}/locationanalysis`}>
-              Location Analysis location
+              Location Analysis
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
