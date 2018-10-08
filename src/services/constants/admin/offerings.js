@@ -613,7 +613,7 @@ export const CONTINGENCY_META = {
     value: '',
     label: '',
     error: undefined,
-    rule: 'required_if:data.*.isAccepted,IS_ACCEPTED',
+    rule: 'required_if:data.*.isAccepted,true',
     placeHolder: 'Enter comment here...',
     refSelector: 'isAccepted',
     objRef: 'accepted',
