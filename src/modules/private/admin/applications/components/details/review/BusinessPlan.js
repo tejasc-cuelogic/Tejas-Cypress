@@ -15,7 +15,7 @@ const AddMore = ({
   <Button size="small" color="blue" className="link-button" onClick={e => addMore(e, formName, arrayName)} >+ {title}</Button>
 );
 
-@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class BusinessPlan extends Component {
   componentWillMount() {
@@ -48,7 +48,7 @@ export default class BusinessPlan extends Component {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
       maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.navStore;
+    const { myCapabilities } = this.props.userStore;
     const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;

@@ -529,7 +529,7 @@ export class Auth {
     const newData = {};
     _.map(data, (val, key) => { (newData[camel(key)] = val); });
     newData.roles = data['custom:roles'];
-    newData.capabilities = data['custom:user_capabilities'];
+    newData.capabilities = data['custom:user_capabilities'] || data['custom:capabilities'] || null;
     delete newData.customRoles;
     delete newData.customCapabilities;
     return newData;
