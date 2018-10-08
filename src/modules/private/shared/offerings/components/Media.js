@@ -67,6 +67,10 @@ export default class Media extends Component {
   handleRemoveCancel = () => {
     this.setState({ ConfirmModal: false, index: undefined });
   }
+  handleFormSubmit = () => {
+    const { MEDIA_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, MEDIA_FRM.fields, 'media');
+  }
   render() {
     const { MEDIA_FRM, formChange } = this.props.offeringCreationStore;
     const { match } = this.props;
@@ -99,7 +103,7 @@ export default class Media extends Component {
             </Form>
           </Grid.Column>
           <Grid.Column>
-            <Form className="comment-input video-url">
+            <Form className="comment-input video-url" onSubmit={this.handleFormSubmit}>
               <Header as="h4">Hero Video</Header>
               <Input
                 name="heroVideo"

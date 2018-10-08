@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { intersectionBy } from 'lodash';
@@ -31,7 +32,7 @@ export default class BonusRewardsList extends Component {
       return <InlineLoader text="Loading Bonus Rewards List..." />;
     }
     return (
-      <div>
+      <Aux>
         <Route path={`${refLink}/edit-bonus-reward/:rewardId`} render={props => <UpdateBonusReward refLink={refLink} {...props} {...this.props} />} />
         {
           bonusRewards &&
@@ -61,7 +62,7 @@ export default class BonusRewardsList extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }

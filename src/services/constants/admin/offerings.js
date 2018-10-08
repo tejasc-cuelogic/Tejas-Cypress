@@ -655,7 +655,7 @@ export const OFFERING_DETAILS = {
 
 export const MEDIA = {
   heroVideo: {
-    value: '', label: '', error: undefined, rule: 'optional',
+    value: '', label: '', error: undefined, rule: 'optional', objType: 's3File',
   },
   heroImage: {
     value: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
