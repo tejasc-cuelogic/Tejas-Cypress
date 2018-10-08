@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
-import { observable, toJS, action } from 'mobx';
+import { observable, toJS, action, computed } from 'mobx';
 import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
@@ -927,6 +927,12 @@ export class OfferingCreationStore {
       query: getBonusRewards,
       variables: { offeringId: this.currentOfferingId },
     });
+  }
+
+  @computed
+  get allBonusRewards() {
+    return (this.bonusRewards &&
+    toJS(this.bonusRewards)) || [];
   }
 
   @action

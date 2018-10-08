@@ -6,7 +6,7 @@ import OfferingModule from '../../shared/offerings/components';
 import { DataFormatter } from '../../../../helper';
 import { InlineLoader } from '../../../../theme/shared';
 
-@inject('uiStore', 'navStore', 'offeringsStore')
+@inject('uiStore', 'navStore', 'offeringsStore', 'offeringCreationStore')
 @observer
 export default class Offering extends Component {
   componentWillMount() {
@@ -15,6 +15,7 @@ export default class Offering extends Component {
     }
     this.props.offeringsStore.getOne(this.props.match.params.id);
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
+    this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
