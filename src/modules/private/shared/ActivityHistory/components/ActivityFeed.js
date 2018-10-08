@@ -1,7 +1,7 @@
 import React from 'react';
 import { Feed, Image, Transition } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared/';
-import UserOne from '../../../../../assets/images/owner-1.jpg';
+import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
 import DateTimeFormat from '../../../../../theme/shared/src/DateTimeFormat';
 
 const ActivityFeed = ({ loading, activities }) => (
@@ -12,13 +12,13 @@ const ActivityFeed = ({ loading, activities }) => (
           <Feed.Event>
             <Feed.Label>
               <Image
-                src={a.createdUserInfo.avatar && a.createdUserInfo.avatar.url ?
-                  a.avatar.url : UserOne}
+                src={a.createdUserInfo && a.createdUserInfo.avatar && a.createdUserInfo.avatar.url ?
+                  a.avatar.url : defaultLeaderProfile}
               />
             </Feed.Label>
             <Feed.Content>
               <Feed.Meta>
-                {a.createdUserInfo.firstName} {a.createdUserInfo.lastName} <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
+                {a.createdUserInfo && a.createdUserInfo.firstName} {a.createdUserInfo && a.createdUserInfo.lastName} <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>
               <Feed.Extra text>{a.activity}</Feed.Extra>

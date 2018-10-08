@@ -235,60 +235,35 @@ footer{
         }
     }
 }
-.offer-details {
-    .offering-side-menu {
-        .ui.vertical.menu {
-			background-color: transparent;
-			.item {
-                color: @white;
-                line-height: 20px;
-				border-left: @4px solid transparent;
-				border-radius: 0;
-				padding-left: @27px;
-				&:hover, &.active {
-					background-color: @nav-hover;
-					border-color: @primary-one;
-					color: @primary-one;
-				}
-				>i.icon {
-					float: left;
-					margin-left: 0;
-                    margin-right: @14px;
-                    font-size: @20px;
-                    line-height: 20px;
-				}
-				>.label.circular {
-                    float: none;
-                    text-align: center;
-                    margin-left: @10px;
-				}
-				&.secondary-item {
-					color: @neutral-middark;
-				}
-			}
-			// .ui.divider {
-			// 	margin: 60px 29px 0;
-            // }
+.offer-details .ui.vertical.menu {
+    background-color: transparent;
+    .item {
+        color: @white;
+        line-height: 20px;
+        border-left: @4px solid transparent;
+        border-radius: 0;
+        padding-left: @27px;
+        &:hover, &.active {
+            background-color: @nav-hover;
+            border-color: @primary-one;
+            color: @primary-one;
+        }
+        >i.icon {
+            float: left;
+            margin-left: 0;
+            margin-right: @14px;
+            font-size: @20px;
+            line-height: 20px;
+        }
+        >.label.circular {
+            float: none;
+            text-align: center;
+            margin:0 0 0 @10px;
+        }
+        &.secondary-item {
+            color: @neutral-middark;
         }
     }
-    // .offering-content-spacer {
-    //     .ui.secondary.menu .item {
-    //         font-weight: @bold;
-    //         color: @neutral;
-    //         >i.icon {
-    //             font-size: @20px;
-    //         }
-    //         &.span {
-    //             font-weight: @bold;
-    //             line-height: @24px;
-    //             font-size: @13px;
-    //             color: @neutral-middark;
-    //         }
-    //         &:hover {
-    //             background-color: transparent;
-    //         }
-    //     }
-    // }
 }
 
 //  Private pages menus

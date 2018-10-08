@@ -652,7 +652,6 @@ export const OFFERS = {
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
-    skipField: true,
     customErrors: {
       required: '* required.',
     },
@@ -668,7 +667,6 @@ export const OFFERS = {
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
-    skipField: true,
     customErrors: {
       required: '* required.',
     },
@@ -676,15 +674,15 @@ export const OFFERS = {
 };
 
 export const STRUCTURE_TYPES = [
-  { key: 'TERM_NOTE', value: 'TERM_NOTE', text: 'Term Loan' },
-  { key: 'REVENUE_SHARING_NOTE', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Share' },
+  { text: 'Term Loan', value: 'TERM_NOTE' },
+  { text: 'Revenue Share', value: 'REVENUE_SHARING_NOTE' },
   // { key: 'EQUITY', value: 'EQUITY', text: 'Equity' },
   // { key: 'CONVERTIBLE_NOTE', value: 'CONVERTIBLE_NOTE', text: 'Convertible Note' },
 ];
 
 export const PERSONAL_GUARANTEE_TYPES = [
-  { key: 'yes', value: 'yes', text: 'Yes' },
-  { key: 'no', value: 'no', text: 'No' },
+  { text: 'Yes', value: 'yes' },
+  { text: 'No', value: 'no' },
 ];
 
 export const MODEL_INPUTS = {

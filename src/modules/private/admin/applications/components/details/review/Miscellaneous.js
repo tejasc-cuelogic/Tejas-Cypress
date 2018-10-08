@@ -183,8 +183,8 @@ export default class Miscellaneous extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <DropZone
-                      containerclassname={isReadonly ? 'display-only' : ''}
-                      disabled={isReadonly}
+                      className={isReadonly ? 'display-only secondary' : 'secondary'}
+                      readOnly={isReadonly}
                       name="docDetails"
                       fielddata={document.docDetails}
                       ondrop={(files, name) => this.onFileDrop(files, name, index)}
