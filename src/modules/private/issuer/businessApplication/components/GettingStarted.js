@@ -31,7 +31,7 @@ export default class GettingStarted extends Component {
         {this.state.showFireworks &&
         <FireworksAnimation />
         }
-        <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
+        <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>
           </Modal.Header>
