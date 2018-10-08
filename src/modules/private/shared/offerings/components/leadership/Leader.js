@@ -187,7 +187,7 @@ export default class Leader extends Component {
           }
           <Divider section />
           <Header as="h4">Uploads</Header>
-          <Form.Group widths="equal">
+          <Form.Group widths={3}>
             {
               ['headshot', 'heroImage', 'license'].map(field => (
                 <DropZone

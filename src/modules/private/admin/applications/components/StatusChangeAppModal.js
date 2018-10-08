@@ -13,13 +13,14 @@ import Helper from '../../../../../helper/utility';
 @observer
 export default class StatusChangeAppModal extends Component {
   componentWillMount() {
-    // this.props.businessAppReviewStore.resetMe
-    // ('APPLICATION_STATUS_COMMENT_FRM', 'APPLICATION_STATUS_COMMENT');
+    this.props.businessAppReviewStore.resetCommentFrm();
   }
   handleCloseModal = (e) => {
-    e.preventDefault();
+    e.stopPropagation();
+    const { match } = this.props;
+    const { params } = match;
     this.props.uiStore.setErrors(null);
-    this.props.history.goBack();
+    this.props.history.push(`/app/applications/${params.id}`);
   }
   updateApplicationStatus = (e) => {
     e.preventDefault();
@@ -29,7 +30,7 @@ export default class StatusChangeAppModal extends Component {
       .updateApplicationStatus(params.appId, params.userId, params.appStatus, params.action)
       .then(() => {
         this.props.uiStore.setErrors(null);
-        this.props.history.goBack();
+        this.props.history.push(`/app/applications/${params.id}`);
       });
   }
   promoteApplication = (e) => {
@@ -59,7 +60,7 @@ export default class StatusChangeAppModal extends Component {
                   params.action,
                 ).then(() => {
                   this.props.uiStore.setErrors(null);
-                  this.props.history.goBack();
+                  this.props.history.push('/app/applications/in-progress');
                 });
             } else {
               adminActions.createNewUser(userDetails).then(() => {
@@ -71,7 +72,7 @@ export default class StatusChangeAppModal extends Component {
                     params.action,
                   ).then(() => {
                     this.props.uiStore.setErrors(null);
-                    this.props.history.goBack();
+                    this.props.history.push('/app/applications/in-progress');
                   });
               }).catch(() => {
                 Helper.toast('Something went wrong. Please try again after sometime', 'error');
