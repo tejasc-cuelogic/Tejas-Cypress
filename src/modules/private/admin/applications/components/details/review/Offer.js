@@ -8,7 +8,7 @@ import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 
-@inject('businessAppReviewStore', 'businessAppStore', 'navStore')
+@inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Offer extends Component {
   componentWillMount() {
@@ -40,7 +40,7 @@ export default class Offer extends Component {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
       confirmModalName, removeData, checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.navStore;
+    const { myCapabilities } = this.props.userStore;
     const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { offers } = businessApplicationDetailsAdmin;

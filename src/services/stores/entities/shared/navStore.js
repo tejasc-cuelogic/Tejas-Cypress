@@ -21,16 +21,11 @@ export class NavStore {
     }
   }
 
-  @computed get myCapabilities() {
-    console.log(this.navStatus);
-    return userStore.currentUser ? toJS(userStore.currentUser.capabilities) : [];
-  }
-
   canAccessBasedOnCapability = (capability) => {
     const key = capability.split('_');
     const capabilityCheck = (key[1] !== 'ANY') ? [capability] :
       [`${key[0]}_FULL`, `${key[0]}_MANAGER`, `${key[0]}_SUPPORT`];
-    return _.intersection(this.myCapabilities, capabilityCheck).length > 0;
+    return _.intersection(userStore.myCapabilities, capabilityCheck).length > 0;
   }
 
   @computed get myRoutes() {
