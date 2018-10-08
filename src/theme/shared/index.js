@@ -21,3 +21,4 @@ export { default as EmptyDataSet } from './src/EmptyDataSet';
 export { default as InlineLoader } from './src/InlineLoader';
 export { default as SocialLinks } from './src/SocialLinks';
 export { default as MobileDropDownNav } from './src/MobileDropDownNav';
+export { default as Image64 } from './src/Image64';
