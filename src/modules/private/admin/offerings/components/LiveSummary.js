@@ -3,7 +3,11 @@ import { Card, Grid, Icon, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const leftSummary = offer => [
-  { title: 'Business Name', content: offer.keyTerms ? offer.keyTerms.legalBusinessName : 'N/A' },
+  {
+    title: 'Business Name',
+    content: offer.keyTerms ? offer.keyTerms.legalBusinessName :
+      offer.businessGeneralInfo.businessName,
+  },
   { title: 'Launch Date', content: '3/15/18' },
   { title: 'Date Till Close', content: '34 days' },
 ];

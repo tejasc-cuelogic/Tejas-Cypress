@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const allOfferingsCompact = gql`
-  query _getOfferings($stage: [OfferingStageEnumType]){
-    getOfferings(filters: { stage: $stage }){
+  query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String!){
+    getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
       id
       keyTerms {
         legalBusinessName
