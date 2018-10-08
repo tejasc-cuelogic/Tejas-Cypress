@@ -48,8 +48,8 @@ export default class BusinessPlan extends Component {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
       maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.userStore;
-    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
+    const access = this.props.userStore.myAccessForModule('APPLICATIONS');
+    const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
     const { review } = businessApplicationDetailsAdmin;
     const submitted = (review && review.businessPlan && review.businessPlan &&
@@ -83,9 +83,11 @@ export default class BusinessPlan extends Component {
               <Aux>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
+                  {!isReadonly &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="bg-offwhite">
                   <Form.Group widths={3}>
@@ -214,9 +216,11 @@ export default class BusinessPlan extends Component {
                           />
                         </Table.Cell>
                         <Table.Cell collapsing>
+                          {!isReadonly &&
                           <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'sources')} >
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
+                          }
                         </Table.Cell>
                       </Table.Row>
                     )) : ''
@@ -276,9 +280,11 @@ export default class BusinessPlan extends Component {
                         />
                       </Table.Cell>
                       <Table.Cell collapsing>
+                        {!isReadonly &&
                         <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'uses')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
+                        }
                       </Table.Cell>
                     </Table.Row>
                   )) : ''

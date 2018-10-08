@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Image, Container } from 'semantic-ui-react';
-import { NsCarousel } from '../../../../../theme/shared';
-// import videoPoster from '../../../../../assets/images/636206632.jpg';
+import { NsCarousel, Image64 } from '../../../../../theme/shared';
+import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
 const isTablet = document.documentElement.clientWidth < 1024;
 @inject('campaignStore')
@@ -40,9 +40,15 @@ class AboutPhotoGallery extends Component {
               imageCount={campaign.media.gallery.length}
               isTablet={isTablet}
             >
-              {campaign.media.gallery.map(data => (
-                <Image src={data.url} />
-              ))}
+              {
+                campaign && campaign.media &&
+                  campaign.media.gallery && campaign.media.gallery.length ?
+                  campaign.media.gallery.map(data => (
+                    <Image64 srcUrl={data.url} />
+                  ))
+                  :
+                  <Image src={emptyHeroImagePlaceholder} />
+              }
             </NsCarousel>
           </Container>
         </div>

@@ -21,11 +21,11 @@ class MeetOurTeam extends Component {
             }
           </Header>
           {
-            campaign.leadership.length > 0 ?
+            campaign.leadership.length ?
               <Grid columns={3}>
                 {
                   campaign.leadership.map(data => (
-                    data.isPublic === true ?
+                    data.isPublic === false ?
                       <Grid.Column>
                         <Reveal animated="small fade">
                           <Reveal.Content hidden>
@@ -36,8 +36,8 @@ class MeetOurTeam extends Component {
                           <Reveal.Content visible>
                             <Image
                               src={
-                                data.uploads.headshot.isPublic === true &&
-                                  data.uploads.headshot.url != null ?
+                                data && data.uploads && data.uploads.headshot &&
+                                  data.uploads.headshot.url ?
                                   data.uploads.headshot.url : defaultLeaderProfile
                               }
                               circular
