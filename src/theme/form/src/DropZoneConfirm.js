@@ -8,7 +8,7 @@ import Dropzone from 'react-dropzone';
 import Aux from 'react-aux';
 import { isArray } from 'lodash';
 import { FieldError } from '../../shared';
-import { FILE_UPLOAD_HANDLE_URL } from '../../../constants/common';
+import { NEXTSEED_BOX_URL } from '../../../constants/common';
 
 
 @inject('commonStore')
@@ -37,7 +37,7 @@ export default class DropZone extends Component {
       const boxFileId = response && response.getFileDetails &&
       response.getFileDetails.boxFileId;
       if (boxFileId) {
-        window.open(`${FILE_UPLOAD_HANDLE_URL}${boxFileId}`, '_blank');
+        window.open(`${NEXTSEED_BOX_URL}file/${boxFileId}`, '_blank');
       }
     });
   }

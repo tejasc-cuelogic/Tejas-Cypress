@@ -66,6 +66,7 @@ export default class Offer extends Component {
             isReadonly={isReadonly}
             match={this.props.match}
             refModule="admin"
+            toggleConfirmModal={this.toggleConfirmModal}
           />
           <Table basic compact className="form-table">
             <Table.Body>
