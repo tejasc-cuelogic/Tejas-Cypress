@@ -21,7 +21,7 @@ export default class Offering extends Component {
     const { match, offeringsStore } = this.props;
     const navItems = this.props.navStore.navMeta.subNavigations;
     const { offer, offerLoading } = offeringsStore;
-    if (offerLoading || (offer && !offer.keyTerms)) {
+    if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }
     return (

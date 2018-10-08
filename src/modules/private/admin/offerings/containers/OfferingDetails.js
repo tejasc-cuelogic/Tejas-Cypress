@@ -30,14 +30,14 @@ export default class OfferingDetails extends Component {
     let navItems = navStore.specificNavs.subNavigations;
     const { offer, offerLoading } = offeringsStore;
 
-    if (offerLoading || (offer && !offer.keyTerms)) {
+    if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }
     navItems = navStore.filterByAccess(navItems, offeringsStore.allPhases.indexOf(offer.stage) + 1);
     return (
       <Modal closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
-          <Header as="h3">{offer.keyTerms.legalBusinessName}</Header>
+          <Header as="h3">{offer.businessGeneralInfo ? offer.businessGeneralInfo.businessName : offer.keyTerms.legalBusinessName}</Header>
           {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} />}
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />

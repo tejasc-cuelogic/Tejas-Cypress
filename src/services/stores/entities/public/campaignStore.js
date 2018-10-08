@@ -1,8 +1,8 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { GqlClient as client } from '../../../../api/gcoolApi';
+// import { GqlClient as client } from '../../../../api/gcoolApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allCampaigns, campaignDetailsQuery } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery } from '../../queries/campagin';
 
 export class CampaignStore {
   @observable data = [];
@@ -18,7 +18,7 @@ export class CampaignStore {
 
   @action
   initRequest = () => {
-    this.data = graphql({ client, query: allCampaigns });
+    this.data = graphql({ client: clientPublic, query: allOfferings, variables: { filters: { stage: 'LIVE' } } });
   }
 
   @action
@@ -34,9 +34,9 @@ export class CampaignStore {
     return this.data;
   }
 
-  @computed get campaigns() {
-    return (this.allData.data && this.allData.data.allCampaigns &&
-      toJS(this.allData.data.allCampaigns)) || [];
+  @computed get OfferingList() {
+    return (this.allData.data && this.allData.data.getOfferingList &&
+      toJS(this.allData.data.getOfferingList)) || [];
   }
 
   @computed get campaign() {
