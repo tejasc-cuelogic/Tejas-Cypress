@@ -37,8 +37,8 @@
 * **Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - manage Crowdpay accounts]:** manage Crowdpay accounts ([53ff095](https://chaos.ns.team/nsv2/ns-client/commits/53ff095))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([16a38ce](https://chaos.ns.team/nsv2/ns-client/commits/16a38ce))
-* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([92d7999](https://chaos.ns.team/nsv2/ns-client/commits/92d7999))
+* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))
 * **EDGAR[Issue [325](https://chaos.ns.team/nsv2/ns-ops/issues/325) -  updated edgar offering page under text]:** updated edgar offering page under text ([560e6ce](https://chaos.ns.team/nsv2/ns-client/commits/560e6ce))
 * **Hello World structure [Issue [204](https://chaos.ns.team/nsv2/ns-ops/issues/204) - Setup Hello World structure for Issuer/Admin]:** Hello World structure for Issuer/Admin ([76810e0](https://chaos.ns.team/nsv2/ns-client/commits/76810e0))
 * **home page ui[Issue [228](https://chaos.ns.team/nsv2/ns-ops/issues/228) - public pages home page 2]:** created ui of home page ([e0e48e7](https://chaos.ns.team/nsv2/ns-client/commits/e0e48e7))
@@ -103,6 +103,7 @@
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
 * **release 01[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - application to offering:** application to offering ([f90bef7](https://chaos.ns.team/nsv2/ns-client/commits/f90bef7))
 * **Safari bug fix[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Safari bug fix]:** solved header, main navigation and sub navigation issues ([dc1faa7](https://chaos.ns.team/nsv2/ns-client/commits/dc1faa7))
+* **ui secondary menu animation[Issue [392](https://chaos.ns.team/nsv2/ns-ops/issues/392) - ui secondary menu animation]:** Update secondary and main menu animation ([09cc958](https://chaos.ns.team/nsv2/ns-client/commits/09cc958))
 * **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 
