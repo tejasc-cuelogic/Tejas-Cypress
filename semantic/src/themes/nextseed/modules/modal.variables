@@ -190,3 +190,9 @@
 @largeComputerMargin: 0em 0em 0em 0em;
 @largeLargeMonitorMargin: 0em 0em 0em 0em;
 @largeWidescreenMonitorMargin: 0em 0em 0em 0em;
+
+// Added custom variable for team modal
+@largeTabletHeight: calc((100vw * 0.88) / 2);  // value: 0.88 represents to @tabletWidth variable
+@largeComputerHeight: (@largeComputerWidth / 2);
+@largeMonitorHeight: (@largeLargeMonitorWidth / 2);
+@largeWidescreenMonitorHeight: (@largeWidescreenMonitorWidth / 2);
