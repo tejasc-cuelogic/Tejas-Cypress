@@ -106,7 +106,7 @@ class TermNoteKeyTerms extends Component {
         <Divider />
         }
         <Header as="h5" className="center-align">
-          <Link to="keyterms/summary">
+          <Link to="keyterms/summary" target="_blank">
             View the Issuer&apos;s SEC Form C filing
           </Link>
         </Header>
