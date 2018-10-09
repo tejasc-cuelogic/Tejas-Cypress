@@ -26,7 +26,7 @@ export default class Details extends Component {
     return (
       <Card fluid>
         <Card.Content className="padded knowledge-details">
-          {details}
+          <div dangerouslySetInnerHTML={{ __html: details }} />
         </Card.Content>
       </Card>
     );
