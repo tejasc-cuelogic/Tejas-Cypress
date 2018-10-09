@@ -2,12 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
 import cookie from 'react-cookies';
-import { Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
 import { validationActions } from '../../../../../../services/actions';
 import Helper from '../../../../../../helper/utility';
-import ConfirmEmailAddress from '../../../../../auth/containers/ConfirmEmailAddress';
 
 @inject('authStore', 'uiStore')
 @withRouter
@@ -19,7 +18,7 @@ export default class NewEmailAddress extends Component {
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
       const userCredentials = { email: email.value, password: btoa(password.value) };
       cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-      this.props.history.push(`${this.props.match.url}/confirm`);
+      this.props.history.push('/app/profile-settings/profile-data/confirm-email-address');
     })
       .catch(() => {});
   }
@@ -37,10 +36,6 @@ export default class NewEmailAddress extends Component {
     }
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
-        <Route
-          path={`${this.props.match.url}/confirm`}
-          render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
-        />
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Enter new email address</Header>
           <p>We will send you a verification code to the email address you provide.</p>
