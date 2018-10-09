@@ -2104,9 +2104,9 @@ p.check-extra-info{
 		.sign-in {
 			color: @white;
 		}
-		// &.slide-up{
-		// 	background-color:@neutral;
-		// }
+		&.slide-up{
+			background-color:@neutral;
+		}
 	}
 	.icon.hamburger {
 		font-size: @30px;
