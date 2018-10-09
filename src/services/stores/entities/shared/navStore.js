@@ -123,7 +123,6 @@ export class NavStore {
     const {
       topVisible, direction, bottomPassed,
     } = calculations;
-    // console.log(topVisible, direction, pixelsPassed, bottomPassed, bottomVisible);
     if (typeof topVisible === 'boolean') {
       this.navStatus = forced || (!topVisible ? 'sub' : 'main');
       if ((this.navStatus === 'sub') && (bottomPassed)) {

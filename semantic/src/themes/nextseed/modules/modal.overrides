@@ -19,6 +19,7 @@
         font-family: 'nextseed';
     }
     .team-details-container {
+        height: 100%;
         .ui.header {
             position: relative;
             margin-bottom: 34px;
@@ -40,7 +41,7 @@
         }
         &.content {
             .scrollable-content {
-                max-height: 50vh;
+                max-height: 100%;
                 overflow-y: auto; 
                 padding: @20px;
             }
@@ -68,10 +69,28 @@
         }
         .item {
             margin-top: 0;
+            // height: ~"calc(100vw * 0.44)";
+            @media only screen and (min-width : @tabletBreakpoint) {
+                height: @largeTabletHeight;
+            }
+            @media only screen and (min-width : @computerBreakpoint) {
+                height: @largeComputerHeight;
+            }
+            @media only screen and (min-width : @largeMonitorBreakpoint) {
+                height: @largeMonitorHeight;
+            }
+            @media only screen and (min-width : @widescreenMonitorBreakpoint) {
+                height: @largeWidescreenMonitorHeight;
+            }
             .image {
                 width: 50%;
+                height: 100%;
+                // height: ~"calc(100vw * ("@tabletWidth" / 2))";
+                // height: ~"calc("(@tabletWidth * 100)~" / "@gridGutterWidth~")";
                 +.team-details-container.content {
                     padding: @40px @20px !important;
+                    display: flex;
+                    align-items: center;
                 }
             }
         }

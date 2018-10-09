@@ -52,10 +52,11 @@ class CompanyDescriptionModal extends Component {
           <Divider section /> */}
           <Aux>
             {
-              campaign.offering.about.theCompany !== null ?
-                <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+              campaign && campaign.offering && campaign.offering.about &&
+               campaign.offering.about.theCompany ?
+                 <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign.offering.about.theCompany }} />
                 :
-                <p>{emptyStatement}</p>
+                 <p>{emptyStatement}</p>
             }
             <Image
               src={
