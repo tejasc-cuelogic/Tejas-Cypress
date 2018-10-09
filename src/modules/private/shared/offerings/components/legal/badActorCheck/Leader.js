@@ -73,18 +73,25 @@ export default class Leader extends Component {
           ))
         }
         <Divider hidden />
-        <div className="clearfix mb-20 right-align">
-          <Button secondary content="Submit for Approval" disabled={!LEADER_FRM.meta.isValid} />
-        </div>
         <div className="clearfix mb-20">
-          <Button color="gray" content="Awaiting Manager Approval" disabled={!LEADER_FRM.meta.isValid} />
-          {access.asManager &&
-          <Button.Group floated="right">
-            <Button inverted content="Send Back" color="red" />
-            <Button secondary content="Generate Report" />
-            <Button primary content="Approve" color="green" />
-          </Button.Group>
-          }
+          {access.asManager ?
+            <Button.Group floated="right">
+              <Button inverted content="Decline" color="red" />
+              <Button disabled={!LEADER_FRM.meta.isValid} secondary content="Generate Report" />
+              <Button disabled={!LEADER_FRM.meta.isValid} primary content="Approve" color="green" />
+            </Button.Group>
+            :
+            <Aux>
+              <div className="clearfix mb-20 right-align">
+                <Button secondary content="Submit for Approval" disabled={!LEADER_FRM.meta.isValid} />
+              </div>
+              {/* <Button
+                content="Awaiting Manager Approval"
+                color="gray"
+                disabled={!LEADER_FRM.meta.isValid}
+              /> */}
+            </Aux>
+            }
         </div>
         <div className="clearfix">
           <Button.Group floated="right">
