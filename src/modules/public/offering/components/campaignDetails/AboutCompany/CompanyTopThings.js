@@ -25,14 +25,14 @@ class CompanyTopThings extends Component {
             </Link>
           </Header>
           {
-            campaign.offering.about.theCompany ?
+            campaign && campaign.offering
+            && campaign.offering.about
+            && campaign.offering.about.theCompany ?
               <Aux>
                 <p
                   dangerouslySetInnerHTML={
                     {
-                      __html: campaign && campaign.offering
-                        && campaign.offering.about
-                        && campaign.offering.about.theCompany,
+                      __html: campaign.offering.about.theCompany,
                     }
                   }
                 />

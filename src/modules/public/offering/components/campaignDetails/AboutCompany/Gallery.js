@@ -17,7 +17,10 @@ class Gallery extends Component {
             <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
           </Breadcrumb>
           <div className="carousel mt-10 mb-30">
-            <NsCarousel {...settings}>
+            <NsCarousel
+              {...settings}
+              handlePaginationFun={() => {}}
+            >
               {
                 campaign && campaign.media &&
                   campaign.media.gallery && campaign.media.gallery.length ?

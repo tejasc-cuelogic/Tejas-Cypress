@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { filter } from 'lodash';
 import { InlineLoader } from '../../../../../../theme/shared';
 import defaultLeaderProfile from '../../../../../../assets/images/leader-placeholder.jpg';
 
@@ -9,6 +10,11 @@ class MeetOurTeam extends Component {
     const {
       campaign, meetOurTeamUrl, emptyStatement,
     } = this.props;
+    const leadershipArr = campaign && campaign.leadership && campaign.leadership.length ?
+      campaign.leadership : [];
+    const meetTeamOjb = filter(leadershipArr, o => (
+      o.isPublic
+    ));
     return (
       <Grid.Column>
         <Segment padded>
@@ -22,10 +28,10 @@ class MeetOurTeam extends Component {
             }
           </Header>
           {
-            campaign && campaign.leadership && campaign.leadership.length ?
+            meetTeamOjb.length ?
               <Grid columns={3}>
                 {
-                  campaign.leadership.map(data => (
+                  meetTeamOjb.map(data => (
                     data.isPublic ?
                       <Grid.Column>
                         <Reveal animated="small fade">

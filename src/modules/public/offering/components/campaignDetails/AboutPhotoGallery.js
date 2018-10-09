@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Image, Container } from 'semantic-ui-react';
-import { NsCarousel } from '../../../../../theme/shared';
+import { NsCarousel, Image64 } from '../../../../../theme/shared';
 import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
 const isTablet = document.documentElement.clientWidth < 1024;
@@ -22,10 +22,6 @@ class AboutPhotoGallery extends Component {
       slidesToScroll: 1,
       arrows: true,
     };
-    const galleryImage = [
-      'https://nsupdates.s3.amazonaws.com/uploads/heart-700141_960_720.jpg',
-      'https://nsupdates.s3.amazonaws.com/uploads/heart-700141_960_720.jpg',
-    ];
     const galleryLength = campaign.media.gallery.length < 8 ? campaign.media.gallery.length : 8;
     const tabGalleryLength = campaign.media.gallery.length < 4 ? campaign.media.gallery.length : 4;
     return (
@@ -47,9 +43,10 @@ class AboutPhotoGallery extends Component {
               handlePaginationFun={this.handlePagination}
             >
               {
-                galleryImage.length ?
-                  galleryImage.map(data => (
-                    <Image src={data} />
+                campaign && campaign.media &&
+                  campaign.media.gallery && campaign.media.gallery.length ?
+                  campaign.media.gallery.map(data => (
+                    <Image64 srcUrl={data.url} />
                   ))
                   :
                   <Image src={emptyHeroImagePlaceholder} />
