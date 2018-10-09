@@ -22,7 +22,7 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'uiStore')
 @withRouter
 @observer
 export default class ChooseOffer extends Component {
@@ -46,6 +46,7 @@ export default class ChooseOffer extends Component {
     const { match, businessAppReviewStore } = this.props;
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, setFieldvalue, selectedOfferIndex,
+      offerLoading,
     } = businessAppReviewStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
@@ -57,18 +58,21 @@ export default class ChooseOffer extends Component {
             signing the Portal Agreement to formalize our partnership and initiate the preparation
             of your crowdfunding campaign.
           </p>
-          <div className="ui form mt-20">
-            <OffersPanel
-              OFFERS_FRM={OFFERS_FRM}
-              formChangeWithIndex={formChangeWithIndex}
-              maskChangeWithIndex={maskChangeWithIndex}
-              isReadonly
-              match={this.props.match}
-              selectOffer={setFieldvalue}
-              refModule="issuer"
-              selectedOfferIndex={selectedOfferIndex}
-            />
-          </div>
+          {offerLoading ?
+            <InlineLoader /> :
+            <div className="ui form mt-20">
+              <OffersPanel
+                OFFERS_FRM={OFFERS_FRM}
+                formChangeWithIndex={formChangeWithIndex}
+                maskChangeWithIndex={maskChangeWithIndex}
+                isReadonly
+                match={this.props.match}
+                selectOffer={setFieldvalue}
+                refModule="issuer"
+                selectedOfferIndex={selectedOfferIndex}
+              />
+            </div>
+          }
           {selectedOfferIndex !== null ?
             <Card fluid>
               <SecondaryMenu
@@ -92,7 +96,7 @@ export default class ChooseOffer extends Component {
                 </Switch>
               </div>
               <Card.Content extra className="center-align">
-                <Button primary className="very relaxed" content="Sign portal agreement" onClick={this.signPortalAgreement} />
+                <Button primary loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign portal agreement" onClick={this.signPortalAgreement} />
               </Card.Content>
             </Card> : null
           }
