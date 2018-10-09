@@ -30,7 +30,6 @@ export class BusinessAppReviewStore {
   @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
   @observable businessApplicationOffers = null;
-  @observable getPortalAgreementStatus = null;
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
@@ -390,11 +389,8 @@ export class BusinessAppReviewStore {
     ) || null;
   }
 
-  @computed get getPortalAgreementStatus() {
-    return (this.getPortalAgreementStatus && this.getPortalAgreementStatus.data
-      && this.getPortalAgreementStatus.data.getPortalAgreementStatus
-      && toJS(this.getPortalAgreementStatus.data.getPortalAgreementStatus)
-    ) || null;
+  @computed get offerLoading() {
+    return this.businessApplicationOffers.loading;
   }
 
   @action
@@ -482,10 +478,9 @@ export class BusinessAppReviewStore {
     });
   }
 
-  @action
   getPortalAgreementStatus = () => new Promise((resolve) => {
     const offerData = this.fetchBusinessApplicationOffers;
-    this.getPortalAgreementStatus = graphql({
+    graphql({
       client,
       query: getPortalAgreementStatus,
       variables: {
