@@ -31,6 +31,7 @@ stages:
     - master
     - develop
     - qa
+    - demo
   tags:
     - ns-client
 
