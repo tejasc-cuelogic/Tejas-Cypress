@@ -25,7 +25,7 @@ class MeetOurTeam extends Component {
               <Grid columns={3}>
                 {
                   campaign.leadership.map(data => (
-                    data.isPublic === false ?
+                    data.isPublic ?
                       <Grid.Column>
                         <Reveal animated="small fade">
                           <Reveal.Content hidden>
