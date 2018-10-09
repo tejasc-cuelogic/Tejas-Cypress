@@ -34,6 +34,7 @@ export default class GettingStarted extends Component {
           <Divider hidden />
           <div className="center-align">
             <Button
+              loading={this.props.uiStore.inProgress}
               primary
               onClick={this.createOffer}
             >Get Started

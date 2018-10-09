@@ -89,6 +89,8 @@
                 // height: ~"calc("(@tabletWidth * 100)~" / "@gridGutterWidth~")";
                 +.team-details-container.content {
                     padding: @40px @20px !important;
+                    display: flex;
+                    align-items: center;
                 }
             }
         }
