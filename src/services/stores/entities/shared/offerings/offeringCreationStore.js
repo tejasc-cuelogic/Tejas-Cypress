@@ -3,52 +3,20 @@ import { observable, toJS, action, computed } from 'mobx';
 import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import {
-  DEFAULT_TIERS,
-  ADD_NEW_TIER,
-  AFFILIATED_ISSUER,
-  LEADER,
-  MEDIA,
-  RISK_FACTORS,
-  GENERAL,
-  ISSUER,
-  LEADERSHIP,
-  OFFERING_DETAILS,
-  CONTINGENCIES,
-  ADD_NEW_CONTINGENCY,
-  COMPANY_LAUNCH,
-  SIGNED_LEGAL_DOCS,
-  KEY_TERMS,
-  OFFERING_OVERVIEW,
-  OFFERING_COMPANY,
-  OFFER_CLOSE,
-  ADD_NEW_BONUS_REWARD,
-} from '../../../../constants/admin/offerings';
+import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
+  RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import {
-  updateBonusReward,
-  deleteBonusReward,
-  deleteBonusRewardsTierByOffering,
-  updateOffering,
-  getOfferingDetails,
-  getOfferingBac,
-  createBac,
-  updateBac,
-  deleteBac,
-  createBonusReward,
-  getBonusRewards,
-  createBonusRewardsTier,
-  getBonusRewardsTiers,
-  getOfferingFilingList,
-  generateBusinessFiling,
-} from '../../../queries/offerings/manage';
+import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
+  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
+  getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
+  generateBusinessFiling } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
-import {
-  XML_STATUSES,
-} from '../../../../../constants/business';
+import { XML_STATUSES } from '../../../../../constants/business';
 
 export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
@@ -72,6 +40,7 @@ export class OfferingCreationStore {
       false,
       { leadership: LEADERSHIP.leadership },
     );
+  @observable LEADERSHIP_EXP_FRM = Validator.prepareFormObject(LEADERSHIP_EXP);
   @observable GENERAL_FRM = Validator.prepareFormObject(GENERAL);
   @observable ISSUER_FRM = Validator.prepareFormObject(ISSUER);
   @observable AFFILIATED_ISSUER_FRM =
@@ -99,8 +68,13 @@ export class OfferingCreationStore {
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
   @observable currentRewardId = null;
-
-
+  @observable leadershipExperience = {
+    0: LEADERSHIP_EXP.employer,
+    1: LEADERSHIP_EXP.employer,
+    2: LEADERSHIP_EXP.employer,
+    3: LEADERSHIP_EXP.employer,
+    4: LEADERSHIP_EXP.employer,
+  };
   @observable requestState = {
     search: {},
   };
@@ -236,6 +210,9 @@ export class OfferingCreationStore {
     Validator.validateForm(this[formName], true, false, false);
     this.confirmModal = !this.confirmModal;
     this.confirmModalName = null;
+    if (subForm === 'leadership') {
+      this.leadershipExperience[this.removeIndex] = LEADERSHIP_EXP.employer;
+    }
     this.removeIndex = null;
   }
 
@@ -266,7 +243,7 @@ export class OfferingCreationStore {
   };
 
   @action
-  formArrayChange = (e, result, form, subForm = '', index) => {
+  formArrayChange = (e, result, form, subForm = '', index, index2) => {
     if (result && (result.type === 'checkbox')) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -283,6 +260,9 @@ export class OfferingCreationStore {
         subForm,
         index,
       );
+      if (form === 'LEADERSHIP_EXP_FRM') {
+        this.leadershipExperience[index2] = this[form];
+      }
     }
   }
 
@@ -311,12 +291,15 @@ export class OfferingCreationStore {
   }
 
   @action
-  maskArrayChange = (values, form, field, subForm = '', index) => {
+  maskArrayChange = (values, form, field, subForm = '', index, index2) => {
     const fieldValue = (field === 'maturityDate' || field === 'dob' || field === 'dateOfService') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, subForm, index,
     );
+    if (form === 'LEADERSHIP_EXP_FRM') {
+      this.leadershipExperience[index2] = this[form];
+    }
   }
 
   @action
@@ -438,6 +421,15 @@ export class OfferingCreationStore {
     Validator.setAddressFieldsIndex(place, this.LEADERSHIP_FRM, 'LEADERSHIP_FRM', 'leadership', index);
   }
 
+
+  @action
+  setLeadershipExpData = (index) => {
+    const formData = Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
+    this.LEADERSHIP_EXP_FRM = Validator.prepareFormObject(LEADERSHIP_EXP);
+    this.LEADERSHIP_EXP_FRM = Validator.setFormData(this.LEADERSHIP_EXP_FRM, formData);
+    this.LEADERSHIP_EXP_FRM = Validator.validateForm(this.LEADERSHIP_EXP_FRM, true, false, false);
+  }
+
   /*
   *  Set form data
   */
@@ -449,6 +441,17 @@ export class OfferingCreationStore {
     }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     this.initLoad.push(form);
+    if (form === 'LEADERSHIP_FRM') {
+      forEach(offer.leadership, (emp, key) => {
+        this.LEADERSHIP_EXP_FRM =
+        Validator.setFormData(
+          this.LEADERSHIP_EXP_FRM,
+          offer.leadership[key],
+          ref, keepAtLeastOne,
+        );
+        this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
+      });
+    }
     return false;
   }
 
@@ -585,7 +588,10 @@ export class OfferingCreationStore {
     if (keyName) {
       if (keyName === 'legal') {
         payloadData[keyName] = {};
-        payloadData[keyName].general = Validator.evaluateFormData(this.GENERAL_FRM.fields);
+        const generalInfo = Validator.evaluateFormData(this.GENERAL_FRM.fields);
+        if (generalInfo.websiteUrl) {
+          payloadData[keyName].general = generalInfo;
+        }
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
@@ -611,6 +617,14 @@ export class OfferingCreationStore {
           return mediaObj;
         });
         payloadData[keyName] = mediaObj;
+      } else if (keyName === 'leadership') {
+        let leadershipFields = Validator.evaluateFormData(fields);
+        leadershipFields = leadershipFields.leadership.map((leadership, index) => {
+          const employer =
+          Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
+          return { ...leadership, ...{ employer: employer.employer } };
+        });
+        payloadData = { ...payloadData, [keyName]: leadershipFields };
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
