@@ -127,6 +127,11 @@ section{
         }
     }
 }
+.public-pusher>section.banner{
+    @media only screen and (max-width : @largestMobileScreen){
+        margin-top:-58px;
+    }
+}
 // business and invest pages
 .slide-down{
     min-height:~"calc(100vh - 98px)";
