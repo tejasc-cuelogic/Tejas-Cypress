@@ -47,7 +47,7 @@ class LocationAnalysisModal extends Component {
                 <Image
                   src={
                     campaign.media.locationHeroImage &&
-                    campaign.media.locationHeroImage.url !== null ?
+                    campaign.media.locationHeroImage.url ?
                       campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
                   }
                 />

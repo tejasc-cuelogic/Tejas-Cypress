@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 class CompanyTopThings extends Component {
   render() {
@@ -24,7 +25,7 @@ class CompanyTopThings extends Component {
             </Link>
           </Header>
           {
-            campaign.offering.about.theCompany !== null ?
+            campaign.offering.about.theCompany ?
               <Aux>
                 <p
                   dangerouslySetInnerHTML={
@@ -38,7 +39,7 @@ class CompanyTopThings extends Component {
                 <Link to={`${companyDescriptionUrl}/companydescription`}>Read More</Link>
               </Aux>
               :
-              <p>{emptyStatement}</p>
+              <InlineLoader text={emptyStatement} />
           }
         </Segment>
       </Grid.Column>

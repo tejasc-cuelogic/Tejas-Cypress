@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { InlineLoader } from '../../../../../../theme/shared';
 import defaultLeaderProfile from '../../../../../../assets/images/leader-placeholder.jpg';
 
 class MeetOurTeam extends Component {
@@ -21,7 +22,7 @@ class MeetOurTeam extends Component {
             }
           </Header>
           {
-            campaign.leadership.length ?
+            campaign && campaign.leadership && campaign.leadership.length ?
               <Grid columns={3}>
                 {
                   campaign.leadership.map(data => (
@@ -51,7 +52,7 @@ class MeetOurTeam extends Component {
                 }
               </Grid>
               :
-              <p>{emptyStatement}</p>
+              <InlineLoader text={emptyStatement} />
           }
         </Segment>
       </Grid.Column>
