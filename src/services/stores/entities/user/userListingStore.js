@@ -43,6 +43,7 @@ export class UserListingStore {
       query: allUsersQuery,
       variables: {
         search: keyword,
+        page: '1',
         orderBy: { field: this.requestState.sort.by, sort: this.requestState.sort.direction },
         filters: params || [],
       },
@@ -55,8 +56,8 @@ export class UserListingStore {
 
   @computed get users() {
     return (this.allUsers.data
-      && this.allUsers.data.users
-      && toJS(this.allUsers.data.users.users)
+      && this.allUsers.data.listUsers
+      && toJS(this.allUsers.data.listUsers.users)
     ) || [];
   }
 
