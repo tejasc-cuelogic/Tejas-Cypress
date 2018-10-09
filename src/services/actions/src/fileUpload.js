@@ -74,7 +74,7 @@ export class FileUpload {
   uploadToS3 = (fileObj) => {
     const config = {
       bucketName: UPLOADS_CONFIG.bucket,
-      dirName: 'uploads',
+      dirName: 'offerings',
       region: UPLOADS_CONFIG.region,
       accessKeyId: UPLOADS_CONFIG.accessKey,
       secretAccessKey: UPLOADS_CONFIG.secretKey,
@@ -89,7 +89,7 @@ export class FileUpload {
   deleteFromS3 = (file) => {
     const config = {
       bucketName: UPLOADS_CONFIG.bucket,
-      dirName: 'uploads',
+      dirName: 'offerings',
       region: UPLOADS_CONFIG.region,
       accessKeyId: UPLOADS_CONFIG.accessKey,
       secretAccessKey: UPLOADS_CONFIG.secretKey,
