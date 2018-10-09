@@ -86,7 +86,8 @@ export default class ApplicationDetails extends Component {
     if (!deleted && !stashed && ((applicationStatus || prequalStatus) ===
     BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ||
     (applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)) {
+    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED || (applicationStatus || prequalStatus) ===
+    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
       navItems = [
         ...navItems,
         { title: 'Review', to: 'review' },
@@ -94,7 +95,7 @@ export default class ApplicationDetails extends Component {
     }
     const { businessName, contactDetails } =
     businessGeneralInfo || prequalDetails.businessGeneralInfo;
-    const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
+    const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnDimmerClick={false} onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">

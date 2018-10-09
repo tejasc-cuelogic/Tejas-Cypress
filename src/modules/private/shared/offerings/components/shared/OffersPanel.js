@@ -22,7 +22,7 @@ export default class OffersPanel extends Component {
       <Grid columns={2}>
         {OFFERS_FRM.fields.offer.map((offer, index) => (
           <Grid.Column>
-            <Card fluid className="offer-card">
+            <Card fluid className={`offer-card ${selectedOfferIndex === index ? 'active' : ''}`}>
               <Card.Content>
                 <Card.Header>
                   Offer {String.fromCharCode('A'.charCodeAt() + index)}

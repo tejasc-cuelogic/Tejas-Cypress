@@ -268,8 +268,8 @@
             max-height:none;
             text-align:left;
             .file-uploader{
-                width:280px;
-                height:160px;
+                width:320px;
+                height:180px;
                 min-height:auto;
                 margin:0;
                 display:flex;
