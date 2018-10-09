@@ -17,7 +17,7 @@ export default class Details extends Component {
     const details = (selected ? (
       <Aux>
         <Header as="h3">{selected.title}</Header>
-        <p>{selected.body}</p>
+        <p dangerouslySetInnerHTML={{ __html: selected.body }} />
       </Aux>
     ) : <div>Nothing to display !</div>);
     if (this.props.marketing) {
@@ -26,7 +26,7 @@ export default class Details extends Component {
     return (
       <Card fluid>
         <Card.Content className="padded knowledge-details">
-          <div dangerouslySetInnerHTML={{ __html: details }} />
+          {details}
         </Card.Content>
       </Card>
     );
