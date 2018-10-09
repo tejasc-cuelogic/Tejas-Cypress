@@ -176,6 +176,35 @@ deploy:qa:
   dependencies:
     - build:qa
 
+#---------------------------------Demo--------------------------------------------
+
+#Building code
+build:demo:
+  <<: *build_definition
+  only:
+    refs:
+      - demo
+  <<: *before_script_defination
+  script:
+    - sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME
+    - npm install
+    - npm run build  
+
+#Deploying code to s3 bucket
+deploy:demo:
+  <<: *deploy_defination
+  only:
+    refs:
+      - demo
+  environment:
+    name: demo
+    url: http://$DEMO_URL
+  script: 
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - sh deployApp.sh $DEMO_URL
+  dependencies:
+    - build:demo
+
 #---------------------------------Production------------------------------------
 
 #Building code
