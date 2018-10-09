@@ -142,15 +142,17 @@ export default class ImageCropper extends Component {
             crop={this.state.crop}
           />
           :
-          <div className="file-uploader">
-            <div className="file-uploader-inner">
-              <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
+          <Aux>
+            <div className="file-uploader">
+              <div className="file-uploader-inner">
+                <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
+              </div>
+              <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             </div>
-            <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             {field.error &&
               <FieldError error={field.error} />
             }
-          </div>
+          </Aux>
         }
       </Aux>
     );
