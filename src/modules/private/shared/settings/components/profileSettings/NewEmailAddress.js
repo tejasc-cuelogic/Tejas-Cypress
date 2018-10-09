@@ -35,7 +35,7 @@ export default class NewEmailAddress extends Component {
       return null;
     }
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
+      <Modal closeOnDimmerClick={false} size="mini" open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Enter new email address</Header>
           <p>We will send you a verification code to the email address you provide.</p>
