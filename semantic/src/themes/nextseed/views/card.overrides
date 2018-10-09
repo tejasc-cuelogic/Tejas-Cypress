@@ -383,6 +383,9 @@
                 }
             }
         }
+        .extra{
+            color:@neutral;
+        }
     }
 }
 .ui{
