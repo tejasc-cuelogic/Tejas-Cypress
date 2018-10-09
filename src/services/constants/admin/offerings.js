@@ -674,6 +674,52 @@ export const MEDIA = {
   },
 };
 
+export const LEADERSHIP_EXP = {
+  employer: [{
+    name: {
+      label: 'Business Name',
+      value: '',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'e.g. John Doe',
+      customErrors: { required: '* required.', string: '* required.' },
+    },
+    type: {
+      label: 'Type of Business',
+      value: '',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'e.g. bakery',
+      customErrors: { required: '* required.', string: '* required.' },
+    },
+    description: {
+      label: 'Description',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Enter here',
+      customErrors: { required: '* required.' },
+    },
+    title: {
+      label: 'Title',
+      value: '',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'Enter here',
+      customErrors: { required: '* required.', string: '* required.' },
+    },
+    dateOfService: {
+      label: 'Dates of Service',
+      value: '',
+      error: undefined,
+      rule: 'date|required',
+      placeHolder: 'MM-DD-YYYY',
+      objType: 'DATE',
+      customErrors: { required: '* required.', date: '* required.' },
+    },
+  }],
+};
+
 export const LEADERSHIP = {
   leadership: [{
     isPublic: {

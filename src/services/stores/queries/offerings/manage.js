@@ -257,6 +257,13 @@ export const getOfferingDetails = gql`
         }
       }
       leadership {
+        employer {
+          name
+          type
+          description
+          title
+          dateOfService
+        }
         isPublic
         firstName
         lastName
