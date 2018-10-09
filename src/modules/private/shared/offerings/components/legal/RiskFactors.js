@@ -1,6 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Header, Checkbox, Form, Divider, Button, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 
@@ -72,25 +73,20 @@ export default class RiskFactors extends Component {
             ))
           }
           <Divider hidden />
-          {access.asManager &&
-            <div className="clearfix mb-20">
-              <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
-                Submitted by ISSUER_NAME on 2/3/2018
-              </Button>
-              <Button.Group floated="right">
-                <Button inverted color="red" content="Decline" />
-                <Button color="green" className="relaxed" >Approve</Button>
-              </Button.Group>
-            </div>
-          }
           <div className="clearfix">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />
-              Approved by MANAGER_NAME on 2/3/2018
+              Submitted by USER_NAME on 2/3/2018
             </Button>
             <Button.Group floated="right">
-              <Button primary className="relaxed pull-right" >Save</Button>
+              {access.asManager ? (
+                <Aux>
+                  <Button inverted color="red" content="Decline" disabled={!RISK_FACTORS_FRM.meta.isValid} />
+                  <Button color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid}>Approve</Button>
+                </Aux>
+              ) : (
+                <Button primary color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid}>Save</Button>
+              )}
             </Button.Group>
           </div>
         </Form>
