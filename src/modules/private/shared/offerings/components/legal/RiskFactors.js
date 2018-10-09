@@ -55,6 +55,7 @@ export default class RiskFactors extends Component {
     const formName = 'RISK_FACTORS_FRM';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form onSubmit={this.handleFormSubmit}>
@@ -71,16 +72,18 @@ export default class RiskFactors extends Component {
             ))
           }
           <Divider hidden />
-          <div className="clearfix mb-20">
-            <Button as="span" className="time-stamp">
-              <Icon className="ns-check-circle" color="green" />
-              Submitted by ISSUER_NAME on 2/3/2018
-            </Button>
-            <Button.Group floated="right">
-              <Button inverted color="red" content="Decline" disabled={!RISK_FACTORS_FRM.meta.isValid} />
-              <Button color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid} >Approve</Button>
-            </Button.Group>
-          </div>
+          {access.asManager &&
+            <div className="clearfix mb-20">
+              <Button as="span" className="time-stamp">
+                <Icon className="ns-check-circle" color="green" />
+                Submitted by ISSUER_NAME on 2/3/2018
+              </Button>
+              <Button.Group floated="right">
+                <Button inverted color="red" content="Decline" />
+                <Button color="green" className="relaxed" >Approve</Button>
+              </Button.Group>
+            </div>
+          }
           <div className="clearfix">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />

@@ -34,6 +34,12 @@ export class UiStore {
   @observable editMode = false;
   @observable pwdInputType = 'password';
   @observable isEnterPressed = false;
+  @observable showFireworkAnimation = false;
+
+  @action
+  setFieldvalue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   setIsEnterPressed = (charCode) => {

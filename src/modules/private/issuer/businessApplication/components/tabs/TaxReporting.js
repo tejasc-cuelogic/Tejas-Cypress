@@ -1,46 +1,29 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Header, List } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 
 const GeneralConditions = () => (
   <Aux>
-    <Header as="h4">Offer A Issuer Conditions</Header>
-    <p>In order to successfully launch your crowdfunding campaign, please be advised
-    that we will need to complete certain steps as described below with your
-    cooperation. The documents / information requested must be received in a timely
-    manner for the offering to launch by Campaign Approval Expiration Date or we may
-    be unable to continue your campaign launch preparation.
+    <Header as="h4">Tax reporting related service provided by Nextseed</Header>
+    <p>From the closing of your crowdfunding campaign to Maturity, your investors will receive
+      relevant tax forms horn NextSeed  and GoldStar related to Me interest income they receive
+      each calendar year. We provide investors with 1.099-IIT and 1099-B forms, as applicable,
+      by the deadline of January, 31th of the following year. Your investors will correspond
+      with NextSeed  directly (rather than you with respect to these tax forms.
     </p>
-    <List relaxed bulleted className="mt-40 mb-30">
-      <List.Item>
-        <List.Content>
-          <b>Satisfactory Legal Diligence</b> — you will need to provide certain background
-          information about the business and control persons. We perform a Bad Actor Check
-          to verify your eligibility to launch a crowdfunding campaign.
-        </List.Content>
-      </List.Item>
-      <List.Item>
-        <List.Content><b>Regulatory Filings</b> — you will need to execute necessary regulatory
-          documentation (Form ID, Form C, and any applicable state filings) with our assistance.
-        </List.Content>
-      </List.Item>
-      <List.Item>
-        <List.Content><b>Escrow Documentation</b> — you will need to execute documents required
-          by our partner bank, GoldStar Trust Company.
-        </List.Content>
-      </List.Item>
-      <List.Item>
-        <List.Content><b>Campaign Creation materials</b> — you will need to provide the
-          appropriate media files and information about your business for us to build
-          your offering page content.
-        </List.Content>
-      </List.Item>
-      <List.Item>
-        <List.Content><b>Legally Required Disclosures under Reg CF</b> — you will need to
-          provide information described in Section 3 of this Letter.
-        </List.Content>
-      </List.Item>
-    </List>
+    <p>During the same period, we will also provide you with year-end summary statement that
+      includes (1) total payment made,  (2) total principal repayment made, and (3) total
+      interest payment made for the calendar year. You can provide this  information to your
+      accountant for your tax filings.
+    </p>
+    <p><b>Satisfactory Legal Diligence</b><br />
+      Under the Internal Revenue Code, you agree to file a statement with your federal income tax
+      return classifying the revenue sharing note as debt. For more information, please seek advice
+      from your tax accountant.
+    </p>
+    <p>For other types of deals, K-1 or other forms will be provided in lieu of 1099 forms
+      as applicable.
+    </p>
   </Aux>
 );
 

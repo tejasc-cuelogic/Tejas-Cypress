@@ -2100,8 +2100,12 @@ p.check-extra-info{
 	// }
 	&.inverted {
 		background-color: fade(@neutral, 90%);
+		transition:all 300ms ease-in-out;
 		.sign-in {
 			color: @white;
+		}
+		&.slide-up{
+			background-color:@neutral;
 		}
 	}
 	.icon.hamburger {

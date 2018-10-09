@@ -11,6 +11,7 @@ export class NavStore {
     roles: [], currentNav: [], appStatus: null, specificNav: null,
   };
   @observable navStatus = 'main';
+  @observable subNavStatus = '';
   @observable navMeta = [];
   @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
@@ -63,8 +64,8 @@ export class NavStore {
           {
             ...navItems[bIndex],
             ...{
-              title: b.businessGeneralInfo ?
-                b.businessGeneralInfo.businessName : b.keyTerms.legalBusinessName,
+              title: b.keyTerms ?
+                b.keyTerms.legalBusinessName : b.businessGeneralInfo.businessName,
               to: `offering/${b.id}`,
               subNavigations: sNav,
             },
@@ -119,9 +120,15 @@ export class NavStore {
 
   @action
   setNavStatus(calculations, forced) {
-    const { percentagePassed, topVisible } = calculations;
-    if (typeof percentagePassed === 'number') {
-      this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    const {
+      topVisible, direction, bottomPassed,
+    } = calculations;
+    // console.log(topVisible, direction, pixelsPassed, bottomPassed, bottomVisible);
+    if (typeof topVisible === 'boolean') {
+      this.navStatus = forced || (!topVisible ? 'sub' : 'main');
+      if ((this.navStatus === 'sub') && (bottomPassed)) {
+        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+      }
     }
   }
 }

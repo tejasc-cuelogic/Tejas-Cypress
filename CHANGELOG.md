@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-07)
+# 0.0.0 (2018-10-08)
 
 
 ### Bug Fixes
@@ -23,6 +23,8 @@
 * **Admin Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - admin crowdpay accounts manage crowdpay accounts]:** basic implementation with gcool api ([fbf2351](https://chaos.ns.team/nsv2/ns-client/commits/fbf2351))
 * **admin dashboard activity history[Issue [365](https://chaos.ns.team/nsv2/ns-ops/issues/365) - admin dashboard activity history]:** designed activity history section ([f2bd37f](https://chaos.ns.team/nsv2/ns-client/commits/f2bd37f))
 * **Admin listing changes[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** Application status label updated and filtering disabled and UI changes done ([fc6ce4c](https://chaos.ns.team/nsv2/ns-client/commits/fc6ce4c))
+* **admin offerings creation listing tab[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** made changes on investor and business homepage business gallery. ([66b2aef](https://chaos.ns.team/nsv2/ns-client/commits/66b2aef))
+* **admin offerings creation listing tab[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** resolved UI issues got from Client ([68bea80](https://chaos.ns.team/nsv2/ns-client/commits/68bea80))
 * **Admin-offering-media[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - Admin-offering-media]:** Adding upload media page UI ([543f94d](https://chaos.ns.team/nsv2/ns-client/commits/543f94d))
 * **Admin[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin-offerings-creation-listing-tab]:** Done changes for offering-listing - edit and delete, Edit - internal Overview, Key Terms and Offerings tab. ([666bcdb](https://chaos.ns.team/nsv2/ns-client/commits/666bcdb))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
@@ -101,6 +103,7 @@
 * **public pages[Issue [245](https://chaos.ns.team/nsv2/ns-ops/issues/245) - public pages]:** public pages ([8b2e624](https://chaos.ns.team/nsv2/ns-client/commits/8b2e624))
 * **release 01[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - application to offering:** application to offering ([f90bef7](https://chaos.ns.team/nsv2/ns-client/commits/f90bef7))
 * **Safari bug fix[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Safari bug fix]:** solved header, main navigation and sub navigation issues ([dc1faa7](https://chaos.ns.team/nsv2/ns-client/commits/dc1faa7))
+* **ui secondary menu animation[Issue [392](https://chaos.ns.team/nsv2/ns-ops/issues/392) - ui secondary menu animation]:** Update secondary and main menu animation ([09cc958](https://chaos.ns.team/nsv2/ns-client/commits/09cc958))
 * **User Management[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/367) - push admin created user to dynamo]:** push admin created user to dynamo ([2e67ca3](https://chaos.ns.team/nsv2/ns-client/commits/2e67ca3))
 * **UserAvatar[Issue [213](https://chaos.ns.team/nsv2/ns-ops/issues/213) - User Avatar Fallback]:** Integrate react-avatar for user avatar fallback solution ([422be01](https://chaos.ns.team/nsv2/ns-client/commits/422be01))
 

@@ -12,13 +12,14 @@ const ActivityFeed = ({ loading, activities }) => (
           <Feed.Event>
             <Feed.Label>
               <Image
-                src={a.createdUserInfo && a.createdUserInfo.avatar && a.createdUserInfo.avatar.url ?
-                  a.avatar.url : defaultLeaderProfile}
+                src={a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.avatar &&
+                  a.createdUserInfo.info.avatar.url ? a.createdUserInfo.info.avatar.url :
+                  defaultLeaderProfile}
               />
             </Feed.Label>
             <Feed.Content>
               <Feed.Meta>
-                {a.createdUserInfo && a.createdUserInfo.firstName} {a.createdUserInfo && a.createdUserInfo.lastName} <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
+                {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName} <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>
               <Feed.Extra text>{a.activity}</Feed.Extra>
