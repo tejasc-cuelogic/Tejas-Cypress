@@ -130,9 +130,13 @@ export class OfferingCreationStore {
 
   @action
   resetProfilePhoto = (field) => {
-    const attributes = ['src', 'error', 'value', 'base64String'];
+    const attributes = ['src', 'error', 'value', 'meta'];
     attributes.forEach((val) => {
-      this.MEDIA_FRM.fields[field][val] = '';
+      if ((typeof this.MEDIA_FRM.fields[field][val] === 'object') && (this.MEDIA_FRM.fields[field][val] !== null)) {
+        this.MEDIA_FRM.fields[field][val] = {};
+      } else {
+        this.MEDIA_FRM.fields[field][val] = '';
+      }
     });
   }
 
@@ -159,8 +163,15 @@ export class OfferingCreationStore {
 
   @action
   removeMedia = (name, index = undefined) => {
-    const file = this.MEDIA_FRM.fields[name].value;
-    fileUpload.deleteFromS3(file)
+    let filename = '';
+    if (index === undefined) {
+      const splitted = this.MEDIA_FRM.fields[name].preSignedUrl.split('/');
+      filename = splitted[splitted.length - 1];
+    } else {
+      const splitted = this.MEDIA_FRM.fields[name].preSignedUrl[index].split('/');
+      filename = splitted[splitted.length - 1];
+    }
+    fileUpload.deleteFromS3(filename)
       .then((res) => {
         console.log(res.location);
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
