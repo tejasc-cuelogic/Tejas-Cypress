@@ -70,7 +70,7 @@ export default class Offer extends Component {
           />
           <Table basic compact className="mt-30 form-table">
             <Table.Body>
-              <Table.Row verticalAlign="top">
+              <Table.Row>
                 <Table.Cell collapsing>
                   <Header as="h6">Term Note portal agreement</Header>
                 </Table.Cell>
@@ -86,7 +86,7 @@ export default class Offer extends Component {
                   />
                 </Table.Cell>
               </Table.Row>
-              <Table.Row verticalAlign="top">
+              <Table.Row>
                 <Table.Cell collapsing>
                   <Header as="h6">Rev Sharing portal agreement</Header>
                 </Table.Cell>

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
-import { Header, Button, Checkbox, Confirm } from 'semantic-ui-react';
+import { Header, Button, Checkbox, Confirm, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 import EditContingency from './EditContingency';
 
@@ -26,8 +26,6 @@ export default class Contingency extends Component {
     const successMsg = 'Contingency has been deleted successfully';
     this.handleSubmitComment(successMsg);
   }
-  canAddNew = roles => roles && (roles.includes('manager') || roles.includes('admin')) &&
-    this.props.refTab !== 'close';
   handleSubmitComment = (successMsg) => {
     const {
       updateOffering,
@@ -39,7 +37,7 @@ export default class Contingency extends Component {
     updateOffering(currentOfferingId, fields, 'contingencies', '', true, successMsg);
   }
   render() {
-    const { roles } = this.props.userStore.currentUser;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const {
       confirmModal,
     } = this.props.offeringCreationStore;
@@ -52,7 +50,7 @@ export default class Contingency extends Component {
         <Route path={`${match.url}/${dataKey}/edit-contingency/:index`} render={() => <EditContingency formArrayChange={formArrayChange} dataKey={dataKey} form={form} formName={formName} refLink={match.url} />} />
         <Header as="h4">
           {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
-          {this.canAddNew(roles) ?
+          {access.asManager ?
             <Link onClick={() => this.setContingencyForm()} to={`${match.url}/add-new-contingency`} className="link"><small>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</small></Link>
           :
           null}
@@ -85,13 +83,16 @@ export default class Contingency extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName, dataKey, index)}
               />
               <Button.Group compact size="small">
-                {(roles && (roles.includes('manager') || roles.includes('admin'))) &&
+                {access.asManager ?
                   <Aux>
                     <Button as={Link} inverted color="blue" content="Edit" to={`${match.url}/${dataKey}/edit-contingency/${index}`} />
                     <Button type="button" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, formName)} />
+                    <Button as="span" className="time-stamp">
+                      <Icon className="ns-check-circle" color="green" />
+                      Submitted by USER_NAME on 2/3/2018
+                    </Button>
                   </Aux>
-                }
-                {(roles && (roles.includes('support') || roles.includes('admin'))) &&
+                :
                   <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null)} />
                 }
               </Button.Group>
