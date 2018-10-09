@@ -95,7 +95,15 @@ export default class ImageCropper extends Component {
   }
 
   handleCloseModal = () => {
-    this.setState({ close: false });
+    this.setState({
+      close: true,
+      crop: {
+        x: 0,
+        y: 0,
+      },
+      image: '',
+      minWidth: 20,
+    });
     this.props.handelReset();
   }
 
