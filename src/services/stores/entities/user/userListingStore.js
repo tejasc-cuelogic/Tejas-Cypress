@@ -43,7 +43,7 @@ export class UserListingStore {
       query: allUsersQuery,
       variables: {
         search: keyword,
-        page: '1',
+        page: 1,
         orderBy: { field: this.requestState.sort.by, sort: this.requestState.sort.direction },
         filters: params || [],
       },
