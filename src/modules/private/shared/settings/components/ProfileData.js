@@ -10,6 +10,7 @@ import { US_STATES } from '../../../../../constants/account';
 import UserVerifiedDetails from '../../../investor/settings/components/UserVerifiedDetails';
 import NewPhoneNumber from './profileSettings/NewPhoneNumber';
 import NewEmailAddress from './profileSettings/NewEmailAddress';
+import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
@@ -54,6 +55,10 @@ export default class ProfileData extends Component {
       <Grid>
         <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
         <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
+        <Route
+          path={`${this.props.match.url}/confirm-email-address`}
+          render={props => <ConfirmEmailAddress refLink={this.props.match.url} {...props} />}
+        />
         <Route
           path={`${this.props.match.url}/update-profile-photo`}
           render={props => <UpdateProfilePhoto refLink={this.props.match.url} {...props} />}

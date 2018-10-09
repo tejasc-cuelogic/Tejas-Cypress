@@ -75,17 +75,19 @@ export default class CreateNew extends Component {
                 containerclassname="dropdown-field"
                 onChange={(e, res) => userEleChange(e, res, 'dropdown')}
               />
-              <FormDropDown
-                name="capabilities"
-                fielddata={USR_FRM.fields.capabilities}
-                options={capabilitiesMeta}
-                search
-                multiple
-                selection
-                fluid
-                containerclassname="dropdown-field"
-                onChange={(e, res) => userEleChange(e, res, 'dropdown')}
-              />
+              {USR_FRM.fields.role.value.includes('admin') && (
+                <FormDropDown
+                  name="capabilities"
+                  fielddata={USR_FRM.fields.capabilities}
+                  options={capabilitiesMeta}
+                  search
+                  multiple
+                  selection
+                  fluid
+                  containerclassname="dropdown-field"
+                  onChange={(e, res) => userEleChange(e, res, 'dropdown')}
+                />
+              )}
               <div className="center-align mt-30">
                 <Button primary className="relaxed" content="Submit" loading={inProgress} disabled={!USR_FRM.meta.isValid} />
                 <p className="field-error">{USR_FRM.meta.error}</p>
