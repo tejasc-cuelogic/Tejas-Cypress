@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-08)
+# 0.0.0 (2018-10-09)
 
 
 ### Bug Fixes
@@ -25,6 +25,7 @@
 * **Admin listing changes[Issue [420](https://chaos.ns.team/nsv2/ns-ops/issues/420) - admin application details review api integration]:** Application status label updated and filtering disabled and UI changes done ([fc6ce4c](https://chaos.ns.team/nsv2/ns-client/commits/fc6ce4c))
 * **admin offerings creation listing tab[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** made changes on investor and business homepage business gallery. ([66b2aef](https://chaos.ns.team/nsv2/ns-client/commits/66b2aef))
 * **admin offerings creation listing tab[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** resolved UI issues got from Client ([68bea80](https://chaos.ns.team/nsv2/ns-client/commits/68bea80))
+* **admin offerings creation listing tab[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** solved feedback issues ([7452979](https://chaos.ns.team/nsv2/ns-client/commits/7452979))
 * **Admin-offering-media[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - Admin-offering-media]:** Adding upload media page UI ([543f94d](https://chaos.ns.team/nsv2/ns-client/commits/543f94d))
 * **Admin[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin-offerings-creation-listing-tab]:** Done changes for offering-listing - edit and delete, Edit - internal Overview, Key Terms and Offerings tab. ([666bcdb](https://chaos.ns.team/nsv2/ns-client/commits/666bcdb))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
