@@ -73,7 +73,7 @@ export default class ChooseOffer extends Component {
               />
             </div>
           }
-          {selectedOfferIndex !== null ?
+          {selectedOfferIndex !== null && !offerLoading ?
             <Card fluid>
               <SecondaryMenu
                 inverted
