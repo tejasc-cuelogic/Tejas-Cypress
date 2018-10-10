@@ -18,6 +18,7 @@ export default class OfferSigning extends Component {
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
+    const { signPortalAgreementURL } = this.props.businessAppReviewStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
         <Modal.Content>
@@ -25,7 +26,7 @@ export default class OfferSigning extends Component {
             <Grid.Row>
               <Grid.Column className="welcome-packet">
                 <div className="pdf-viewer">
-                  <iframe width="100%" height="100%" title="pdf" src="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" />
+                  <iframe width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
                   {/* <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object> */}
                 </div>
               </Grid.Column>
