@@ -16,8 +16,9 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = () => {
-    this.data = graphql({ client: clientPublic, query: allOfferings, variables: { filters: { stage: 'LIVE' } } });
+  initRequest = (stage) => {
+    this.data =
+    graphql({ client: clientPublic, query: allOfferings, variables: { filters: { stage } } });
   }
 
   @action

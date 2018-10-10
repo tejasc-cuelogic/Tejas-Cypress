@@ -4,6 +4,7 @@ export const allOfferings = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      stage
       media {
         tombstoneImage {
         url
