@@ -83,7 +83,7 @@ class TermNoteDetails extends Component {
                     />
                   </Statistic.Label>
                   <Statistic.Value>
-                    {CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}
+                    {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : ''}
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>

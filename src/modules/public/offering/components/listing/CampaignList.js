@@ -8,6 +8,7 @@ import { Container, Card, Image, Label, Icon, List, Grid } from 'semantic-ui-rea
 import Filters from './Filters';
 import { Spinner } from '../../../../../theme/shared';
 import lockIcon from '../../../../../assets/images/icon_lock.png';
+import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
 @inject('campaignStore')
 @observer
@@ -36,7 +37,10 @@ export default class CampaignList extends Component {
                   <Card className="campaign" fluid as={Link} to={`/offerings/${offering.id}/overview`}>
                     <Image
                       centered
-                      src={offering.media.tombstoneImage.url}
+                      src={offering && offering.media && offering.media.tombstoneImage &&
+                        offering.media.tombstoneImage.url ? offering.media.tombstoneImage.url :
+                        emptyHeroImagePlaceholder
+                      }
                       alt={`${offering.keyTerms.shorthandBusinessName} poster`}
                     />
                     <Label color="green">NEW</Label> {/* apply attribute basic for successful campaigns */}
@@ -46,13 +50,28 @@ export default class CampaignList extends Component {
                         {offering && offering.keyTerms && capitalize(offering.keyTerms.industry.split('_').join(' '))}
                         <span className="pull-right">506(c)</span>
                       </div>
-                      <Card.Header>{offering.keyTerms.shorthandBusinessName}</Card.Header>
+                      <Card.Header>{offering && offering.keyTerms &&
+                        offering.keyTerms.shorthandBusinessName ? offering.keyTerms.shorthandBusinessName : ''
+                      }
+                      </Card.Header>
                       <Card.Meta>
-                        {offering.businessGeneralInfo.address.city}
-                        {offering.businessGeneralInfo.address.state}
+                        {offering && offering.businessGeneralInfo &&
+                          offering.businessGeneralInfo.address &&
+                          offering.businessGeneralInfo.address.city ?
+                          offering.businessGeneralInfo.address.city : '-'
+                        }
+                        {offering && offering.businessGeneralInfo &&
+                          offering.businessGeneralInfo.address &&
+                          offering.businessGeneralInfo.address.state ?
+                          offering.businessGeneralInfo.address.state : '-'
+                        }
                       </Card.Meta>
                       <Card.Description
-                        dangerouslySetInnerHTML={{ __html: offering.offering.about.theCompany }}
+                        dangerouslySetInnerHTML={{
+                          __html: offering && offering.offering &&
+                            offering.offering.about && offering.offering.about.theCompany ?
+                            offering.offering.about.theCompany : '',
+                        }}
                       />
                       <p><b>{offering && offering.keyTerms && capitalize(offering.keyTerms.securities.split('_').join(' '))}</b></p>
                       <List divided horizontal>
