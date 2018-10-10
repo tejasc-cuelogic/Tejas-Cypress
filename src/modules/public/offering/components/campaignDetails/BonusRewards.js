@@ -11,9 +11,9 @@ import card4 from '../../../../../assets/images/cards/pour_cards_silver.jpg';
 import { InlineLoader } from '../../../../../theme/shared';
 
 const isTablet = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 992;
+  && document.documentElement.clientWidth < 992;
 const isTabletLand = document.documentElement.clientWidth >= 992
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 
 @inject('campaignStore')
 @observer
@@ -21,9 +21,9 @@ class BonusRewards extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     const rewardsTiers = campaign && campaign.rewardsTierIds &&
-    campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+      campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
     const bonusRewards = campaign && campaign.bonusRewards &&
-    campaign.bonusRewards.length && campaign.bonusRewards;
+      campaign.bonusRewards.length && campaign.bonusRewards;
     const earlyBirdsCount = ((campaign && campaign.earlyBirdsCount) || 0);
     return (
       <div className="campaign-content-wrapper">
@@ -34,37 +34,39 @@ class BonusRewards extends Component {
         </Grid>
         <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
           {rewardsTiers ?
-          rewardsTiers.map(tier => (
-            <Grid.Column>
-              <Segment padded className="reward-block">
-                {tier.earlyBirdQuantity > 0 ?
-                  <Aux>
-                    <Header as="h6">Early Bird Reward
-                      <Image src={noEarlyBird} floated="right" />
-                      <Header.Subheader>
-                        <Label size="small" color="green" className="text-uppercase">{earlyBirdsCount} remaining</Label>
-                      </Header.Subheader>
-                    </Header>
-                    <Header as="h5" className="intro-text">First {tier.earlyBirdQuantity} {tier.amount > 0 ? 'investors who invest $1,000 or more' : ''} will receive:</Header>
-                  </Aux>
-                :
-                  <Aux>
-                    <Header as="h6">Invest</Header>
-                    <Header as="h3" className="highlight-text">${tier.amount}+</Header>
-                  </Aux>
-                }
-                <List as="ul" className="rewards">
-                  {bonusRewards &&
-                    bonusRewards.map(reward => (
-                    (intersectionBy([tier], (reward && reward.tiers), (tier.earlyBirdQuantity > 0 ? 'earlyBirdQuantity' : 'amount')).length > 0) &&
-                      <List.Item as="li">
-                        <List.Header>{reward.title}</List.Header>
-                        <List.Description>{reward.description}</List.Description>
-                      </List.Item>
-                  ))}
-                </List>
-              </Segment>
-            </Grid.Column>
+            rewardsTiers.map(tier => (
+              <Grid.Column>
+                <Segment padded className="reward-block">
+                  {tier.earlyBirdQuantity > 0 ?
+                    <Aux>
+                      <Header as="h6">Early Bird Reward
+                        <Image src={noEarlyBird} floated="right" />
+                        <Header.Subheader>
+                          <Label size="small" color="green" className="text-uppercase">{earlyBirdsCount} remaining</Label>
+                        </Header.Subheader>
+                      </Header>
+                      <Header as="h5" className="intro-text">First {tier.earlyBirdQuantity} {tier.amount > 0 ? 'investors who invest $1,000 or more' : ''} will receive:</Header>
+                    </Aux>
+                    :
+                    <Aux>
+                      <Header as="h6">Invest</Header>
+                      <Header as="h3" className="highlight-text">${tier.amount}+</Header>
+                    </Aux>
+                  }
+                  <List as="ul" className="rewards">
+                    {bonusRewards &&
+                      bonusRewards.map(reward => (
+                        (intersectionBy([tier], (reward && reward.tiers), (tier.earlyBirdQuantity > 0 ? 'earlyBirdQuantity' : 'amount')).length > 0) &&
+                        <List.Item as="li">
+                          <List.Header>{reward.title}</List.Header>
+                          <List.Description>
+                            <p className="detail-section" dangerouslySetInnerHTML={{ __html: reward.description }} />
+                          </List.Description>
+                        </List.Item>
+                      ))}
+                  </List>
+                </Segment>
+              </Grid.Column>
             )) : <InlineLoader text="No bonus rewards are available." />
           }
         </Grid>
