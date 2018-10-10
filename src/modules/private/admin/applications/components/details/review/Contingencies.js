@@ -46,7 +46,7 @@ const TableBody = ({
           />
         </Table.Cell>
         <Table.Cell collapsing>
-          {!isReadonly &&
+          {!isReadonly && fields.length > 1 &&
           <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)} >
             <Icon className="ns-close-circle" color="grey" />
           </Link>
@@ -57,7 +57,7 @@ const TableBody = ({
     }
     <Table.Row>
       <Table.Cell colSpan="3">
-        {!isReadonly &&
+        {!isReadonly && fields.length < 5 &&
         <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
         }
       </Table.Cell>

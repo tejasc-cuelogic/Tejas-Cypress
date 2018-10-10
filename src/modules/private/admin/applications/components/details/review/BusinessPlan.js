@@ -83,7 +83,7 @@ export default class BusinessPlan extends Component {
               <Aux>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
-                  {!isReadonly &&
+                  {!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>

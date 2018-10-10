@@ -49,7 +49,7 @@ export default class PreQual extends Component {
           <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
             Justifications
-            {!isReadonly &&
+            {!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length < 5 &&
             <Link to={this.props.match.url} className="link" onClick={this.addJustification}><small>+Add Justification</small></Link>
             }
           </Header>
@@ -63,7 +63,7 @@ export default class PreQual extends Component {
                   label={`Justification ${index + 1}`}
                   fielddata={justifications.justifications}
                   changed={(e, result) => formChangeWithIndex(e, result, 'JUSTIFICATIONS_FRM', 'justifications', index)}
-                  removed={!isReadonly ? e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM') : false}
+                  removed={!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length > 1 ? e => this.toggleConfirmModal(e, index, 'JUSTIFICATIONS_FRM') : false}
                   linkto={this.props.match.url}
                 />
               </Aux>

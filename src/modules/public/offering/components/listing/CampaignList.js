@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
+import { capitalize } from 'lodash';
 import { Container, Card, Image, Label, Icon, List, Grid } from 'semantic-ui-react';
 import Filters from './Filters';
 import { Spinner } from '../../../../../theme/shared';
@@ -37,25 +38,30 @@ export default class CampaignList extends Component {
                       <Image
                         centered
                         src={offering.media.tombstoneImage.url}
-                        alt={`${offering.businessGeneralInfo.businessName} poster`}
+                        alt={`${offering.keyTerms.shorthandBusinessName} poster`}
                       />
                       <Label color="green">NEW</Label> {/* apply attribute basic for successful campaigns */}
                       <Icon name="heart" /> {/* change name to "heart outline" for unliked campaigns */}
                       <Card.Content>
                         <div className="tags mb-10">
-                          {offering.keyTerms.industry}
+                          {offering && offering.keyTerms && capitalize(offering.keyTerms.industry.split('_').join(' '))}
                           <span className="pull-right">506(c)</span>
                         </div>
-                        <Card.Header>{offering.businessGeneralInfo.businessName}</Card.Header>
+                        <Card.Header>{offering.keyTerms.shorthandBusinessName}</Card.Header>
                         <Card.Meta>
                           {offering.businessGeneralInfo.address.city}
                           {offering.businessGeneralInfo.address.state}
                         </Card.Meta>
-                        <Card.Description>{offering.offering.about.theCompany}</Card.Description>
-                        <p><b>{offering.keyTerms.securities}</b></p>
+                        <Card.Description
+                          dangerouslySetInnerHTML={{ __html: offering.offering.about.theCompany }}
+                        />
+                        <p><b>{offering && offering.keyTerms && capitalize(offering.keyTerms.securities.split('_').join(' '))}</b></p>
                         <List divided horizontal>
                           <List.Item>Raised $1,000,000</List.Item>
-                          <List.Item>583 investors</List.Item>
+                          <List.Item>
+                            {(offering && offering.closureSummary &&
+                              offering.closureSummary.totalInvestorCount) || 0} investors
+                          </List.Item>
                         </List>
                       </Card.Content>
                       {this.props.locked === offering.id && (
