@@ -68,6 +68,13 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
+    businessGeneralInfo {
+      businessName
+      address {
+        state
+        city
+      }
+    }
     keyTerms {
       legalBusinessName
       shorthandBusinessName
