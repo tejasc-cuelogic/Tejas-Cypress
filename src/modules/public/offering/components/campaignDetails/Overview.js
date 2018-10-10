@@ -8,6 +8,7 @@ import BonusRewards from './Overview/BonusRewards';
 import KeyTerms from './Overview/KeyTerms';
 import LatestUpdates from './Overview/LatestUpdates';
 import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
+import OverviewModal from '../campaignDetails/Overview/OverviewModal';
 import VideoModal from './Overview/VideoModal';
 import videoPoster from '../../../../../assets/images/636206632.jpg';
 
@@ -50,6 +51,7 @@ class Overview extends Component {
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/keyterms`} render={props => <KeyTermsModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/keyterms/summary`} component={SummaryModal} />
+        <Route path={`${this.props.match.url}/details`} component={OverviewModal} />
       </div>
     );
   }

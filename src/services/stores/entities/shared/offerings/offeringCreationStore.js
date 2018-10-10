@@ -188,7 +188,7 @@ export class OfferingCreationStore {
   @action
   uploadMedia = (name) => {
     const fileObj = {
-      obj: this.MEDIA_FRM.fields[name].src,
+      obj: this.MEDIA_FRM.fields[name].base64String,
       type: this.MEDIA_FRM.fields[name].meta.type,
       name: this.MEDIA_FRM.fields[name].value,
     };
