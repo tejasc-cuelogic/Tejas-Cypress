@@ -1,6 +1,5 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-// import { GqlClient as client } from '../../../../api/gcoolApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allOfferings, campaignDetailsQuery } from '../../queries/campagin';
 

@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Button, Divider, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
+import { BUSINESS_APPLICATION_STATUS } from '../../../../../../../services/constants/businessApplication';
 
 @inject('businessAppReviewStore', 'uiStore')
 @observer
@@ -10,7 +11,7 @@ export default class ManagerOverview extends Component {
   render() {
     const { formChange, MANAGERS_FRM, saveReviewForms } = this.props.businessAppReviewStore;
     const {
-      isReadonly, approved, formName, isManager, stepStatus, uiStore, title,
+      isReadonly, approved, formName, isManager, stepStatus, uiStore, title, applicationStatus,
     } = this.props;
     const { inProgress } = uiStore;
     return (
@@ -25,7 +26,8 @@ export default class ManagerOverview extends Component {
                   <Icon className="ns-check-circle" color="green" />
                   Approved By {approved.by}
                 </Button>
-                {isManager &&
+                {isManager && applicationStatus
+                !== BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL &&
                 <Button className="relaxed" loading={inProgress} inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
                 }
               </Button.Group>

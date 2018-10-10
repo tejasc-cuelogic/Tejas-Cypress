@@ -13,7 +13,7 @@ class S3Client {
 
         const fd = new FormData();
         const key = `${config.dirName ? config.dirName + "/" : ""}${file.name}`;
-        const url = `https://${config.bucketName}.s3.amazonaws.com/`;
+        const url = `https://s3.amazonaws.com/${config.bucketName}`;
         fd.append("key", key);
         fd.append("acl", "public-read");
         fd.append("Content-Type", file.type);

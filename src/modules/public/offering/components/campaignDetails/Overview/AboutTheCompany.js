@@ -16,7 +16,7 @@ class AboutTheCompany extends Component {
           </Breadcrumb>
           <Header as="h3">Top things to know</Header> */}
           <Header as="h3">
-            <Link to={`${refLink}/overview`}>
+            <Link to={`${refLink}/details`}>
               Top things to know
               <Icon className="ns-chevron-right" color="green" />
             </Link>
