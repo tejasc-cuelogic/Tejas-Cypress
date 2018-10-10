@@ -8,7 +8,7 @@ import BonusRewardsList from './BonusRewardsList';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
-@inject('offeringCreationStore', 'uiStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore')
 @observer
 export default class Creation extends Component {
   componentWillMount() {
@@ -35,11 +35,12 @@ export default class Creation extends Component {
     } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
     const { match } = this.props;
+    const { isIssuer } = this.props.userStore;
     if (bonusRewardsTiers.loading || bonusRewards.loading) {
       return <InlineLoader />;
     }
     return (
-      <div className="inner-content-spacer">
+      <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : 'ui card fluid form-card'}>
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
         <Route path={`${match.url}/add-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
         <Route path={`${match.url}/edit-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />

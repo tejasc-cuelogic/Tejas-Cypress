@@ -90,7 +90,7 @@ export default class Contingencies extends Component {
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.contingencies && review.contingencies &&
       review.contingencies.submitted) ? review.contingencies.submitted : null;
     const approved = (review && review.contingencies && review.contingencies &&
@@ -100,7 +100,7 @@ export default class Contingencies extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
           <Header as="h5">
             Launch
           </Header>
