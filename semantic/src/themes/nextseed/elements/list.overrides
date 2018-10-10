@@ -322,3 +322,8 @@ ul.ui.list li{
         color:@primary-one;
     }
 }
+
+//Offering filter list
+.offer-filter-container .ui.list > .item {
+    cursor: pointer;
+}

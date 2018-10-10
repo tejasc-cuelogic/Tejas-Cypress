@@ -83,7 +83,7 @@ class TermNoteDetails extends Component {
                     />
                   </Statistic.Label>
                   <Statistic.Value>
-                    {CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}
+                    {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : ''}
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>
@@ -133,7 +133,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms.frequencyOfPayments}</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.frequencyOfPayments}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
