@@ -10,7 +10,7 @@ class RevenueSharingKeyTerms extends Component {
       <Modal.Content scrolling>
         <Grid columns={3} divided stackable className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b><br />{KeyTerms.legalBusinessName}</p>
+            <p><b>Issuer</b><br />{KeyTerms.shorthandBusinessName}</p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Securities</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
