@@ -23,9 +23,9 @@ class team extends Component {
             <Grid.Column largeScreen={8} computer={12} tablet={8} mobile={14} className={isMobile ? 'mt-30' : 'team-column'}>
               <Header as="h2">Meet our team.</Header>
               <p>
-              We&apos;re a team of entrepreneurs with backgrounds in business, finance,
-              law, marketing and technology. We&apos;re here to empower business owners
-              and everyday people to invest in one another.
+                We&apos;re a team of entrepreneurs with backgrounds in business, finance,
+                law, marketing and technology. We&apos;re here to empower business owners
+                and everyday people to invest in one another.
               </p>
             </Grid.Column>
           </Grid>
@@ -47,8 +47,8 @@ class team extends Component {
     return (
       <Aux>
         {loading ? (<InlineLoader />)
-        : teamMembers.length === 0 ? <section className="center-align"><h3 style={{ color: '#31333d7d' }}>No Records to Display</h3></section>
-        : teamInfo}
+          : teamMembers.length === 0 ? <section className="center-align"><h3 style={{ color: '#31333d7d' }}>No Records to Display</h3></section>
+            : teamInfo}
       </Aux>
     );
   }

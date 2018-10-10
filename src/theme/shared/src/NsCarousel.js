@@ -29,7 +29,9 @@ export default class NsCarousel extends Component {
       arrows: this.props.arrows,
       dots: this.props.dots,
       beforeChange: (current, next) => {
-        this.props.handlePaginationFun(next);
+        if (this.props.handlePaginationFun) {
+          this.props.handlePaginationFun(next);
+        }
       },
     };
 

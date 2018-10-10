@@ -35,6 +35,7 @@ export class BusinessAppReviewStore {
   @observable removeIndex = null;
   @observable selectedOfferIndex = null;
   @observable paBoxFolderId = null;
+  @observable signPortalAgreementURL = '';
   @observable removeFileIdsList = [];
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
@@ -439,6 +440,7 @@ export class BusinessAppReviewStore {
           variables: payLoad,
         })
         .then((result) => {
+          this.setFieldvalue('signPortalAgreementURL', result.data.signPortalAgreement);
           resolve(result);
         })
         .catch((error) => {
