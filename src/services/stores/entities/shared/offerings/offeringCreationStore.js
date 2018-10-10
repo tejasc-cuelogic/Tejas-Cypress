@@ -722,7 +722,7 @@ export class OfferingCreationStore {
     leaderNumber = undefined,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
-    const { issuerBacId } = getOfferingById.legal;
+    const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
     const offeringBacDetails = Validator.evaluateFormData(fields);
     offeringBacDetails.offeringId = getOfferingById.id;
     offeringBacDetails.bacType = bacType;

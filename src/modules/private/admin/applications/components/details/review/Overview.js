@@ -50,7 +50,7 @@ export default class Overview extends Component {
           <ManagerOverview formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
           <Header as="h4">
             Overview
-            {!isReadonly &&
+            {!isReadonly && OVERVIEW_FRM.fields.description.length < 5 &&
             <Link to={this.props.match.url} className="link" onClick={this.addCriticalPoint}><small>+ Add Critical Point</small></Link>
             }
           </Header>
@@ -63,7 +63,7 @@ export default class Overview extends Component {
                 label={`Critical Point ${index + 1}`}
                 fielddata={field.description}
                 changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'description', index)}
-                removed={!isReadonly ? e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM') : false}
+                removed={!isReadonly && OVERVIEW_FRM.fields.description.length > 1 ? e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM') : false}
                 linkto={this.props.match.url}
               />
             ))

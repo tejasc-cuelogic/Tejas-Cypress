@@ -41,8 +41,9 @@ section{
             }
             .banner-meta {
                 align-self: baseline;
+                color: @neutral;
                 @media only screen and (max-width: @largestMobileScreen) {
-                    background: fade(@white, 90%);
+                    background: fade(@neutral-darkwhite, 90%);
                     width: ~"calc(100% + "(@relative28px)~")";
                     margin: 0 -@relative14px;
                     padding: @relative14px;

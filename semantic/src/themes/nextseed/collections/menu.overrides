@@ -123,6 +123,8 @@
             }
             &.header{
                 border-color:transparent;
+                font-style: italic;
+                color: @neutral-middark;
             }
         }
     }

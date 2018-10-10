@@ -18,6 +18,9 @@ query getOfferingList($filters: OfferingFilterInputType){
         industry
         securities
       }
+      closureSummary {
+        totalInvestorCount
+      }
       businessGeneralInfo {
         businessName
         address {
@@ -26,6 +29,7 @@ query getOfferingList($filters: OfferingFilterInputType){
         }
       }
       keyTerms {
+        shorthandBusinessName
         legalBusinessName
         securities
         industry

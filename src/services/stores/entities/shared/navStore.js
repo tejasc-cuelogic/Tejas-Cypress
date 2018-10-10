@@ -46,7 +46,7 @@ export class NavStore {
 
   @action
   filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor ||
-      (sN.accessFor.includes(phase) && !exclude.includes(sN.to))));
+      (sN.accessFor.includes(phase <= 4 ? phase : 4) && !exclude.includes(sN.to))));
 
   @computed get allNavItems() {
     const navItems = [...this.myRoutes];
