@@ -180,12 +180,16 @@ export default class Filters extends Component {
                  Filter
               </Menu.Item>
               {this.props.status ? (
-                <Menu.Item name="clear all" onClick={this.clearAll} position="right">
-                  CLEAR ALL
+                <Menu.Menu position="right">
+                  <Menu.Item name="clear all" onClick={this.clearAll}>
+                    CLEAR ALL
+                  </Menu.Item>
                   {!isMobile &&
-                    <Image src={closeIcon} className="closeIcon" />
+                    <Menu.Item name="clear all">
+                      <Image src={closeIcon} className="closeIcon" onClick={this.props.toggleFilters} />
+                    </Menu.Item>
                   }
-                </Menu.Item>
+                </Menu.Menu>
               ) : (
                 <Menu.Item name="3 Results Found" position="right" />
               )
