@@ -22,8 +22,10 @@ class AboutPhotoGallery extends Component {
       slidesToScroll: 1,
       arrows: true,
     };
-    const galleryLength = campaign.media.gallery.length < 8 ? campaign.media.gallery.length : 8;
-    const tabGalleryLength = campaign.media.gallery.length < 4 ? campaign.media.gallery.length : 4;
+    const galleryArray = campaign && campaign.media && campaign.media.gallery &&
+      campaign.media.gallery.length ? campaign.media.gallery : [];
+    const galleryLength = galleryArray.length < 8 ? galleryArray.length : 8;
+    const tabGalleryLength = galleryArray < 4 ? galleryArray.length : 4;
     return (
       <Modal
         open
@@ -32,20 +34,19 @@ class AboutPhotoGallery extends Component {
         closeIcon
         className="about-modal"
       >
-        <div className="carousel-counter">{this.state.activeSlide + 1}/{campaign.media.gallery.length}</div>
+        <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
         <div className="carousel">
           <Container fluid>
             <NsCarousel
               {...settings}
               thumbs={isTablet ? tabGalleryLength : galleryLength}
-              imageCount={campaign.media.gallery.length}
+              imageCount={galleryArray.length}
               isTablet={isTablet}
               handlePaginationFun={this.handlePagination}
             >
               {
-                campaign && campaign.media &&
-                  campaign.media.gallery && campaign.media.gallery.length ?
-                  campaign.media.gallery.map(data => (
+                galleryArray.length ?
+                  galleryArray.map(data => (
                     <Image64 srcUrl={data.url} />
                   ))
                   :

@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-09)
+# 0.0.0 (2018-10-10)
 
 
 ### Bug Fixes
@@ -34,10 +34,15 @@
 * **Business Application[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Lendio prequalification from email url]:** Lendio prequalification from email url ([189f4c0](https://chaos.ns.team/nsv2/ns-client/commits/189f4c0))
 * **Business Application[Issue [229](https://chaos.ns.team/nsv2/ns-ops/issues/229) - Business Application form]:** Business Application form ([ea453a9](https://chaos.ns.team/nsv2/ns-client/commits/ea453a9))
 * **campaign details page[Issue [236](https://chaos.ns.team/nsv2/ns-ops/issues/236) - public pages campaign details pages ui updates]:** completed ui changes on campaign details page ([af97def](https://chaos.ns.team/nsv2/ns-client/commits/af97def))
+* **Campaign Listing[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** Done changes for campaign listing on public page ([0c00237](https://chaos.ns.team/nsv2/ns-client/commits/0c00237))
 * **Changelog [Issue [134](https://chaos.ns.team/nsv2/ns-ops/issues/134) - Maintain change logs/versioning]:** enabled changelog generation ([769ae41](https://chaos.ns.team/nsv2/ns-client/commits/769ae41))
 * **Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - manage Crowdpay accounts]:** manage Crowdpay accounts ([53ff095](https://chaos.ns.team/nsv2/ns-client/commits/53ff095))
-* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([5fee3f3](https://chaos.ns.team/nsv2/ns-client/commits/5fee3f3))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([c2c7a53](https://chaos.ns.team/nsv2/ns-client/commits/c2c7a53))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([ad48da8](https://chaos.ns.team/nsv2/ns-client/commits/ad48da8))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([16a38ce](https://chaos.ns.team/nsv2/ns-client/commits/16a38ce))
+* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
+* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([92d7999](https://chaos.ns.team/nsv2/ns-client/commits/92d7999))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))
 * **EDGAR[Issue [325](https://chaos.ns.team/nsv2/ns-ops/issues/325) -  updated edgar offering page under text]:** updated edgar offering page under text ([560e6ce](https://chaos.ns.team/nsv2/ns-client/commits/560e6ce))

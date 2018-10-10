@@ -23,7 +23,7 @@ export default class Documentation extends Component {
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.documentation && review.documentation &&
       review.documentation.submitted) ? review.documentation.submitted : null;
     const approved = (review && review.documentation && review.documentation &&
@@ -33,7 +33,7 @@ export default class Documentation extends Component {
     return (
       <div>
         <Form onSubmit={this.submit}>
-          <ManagerOverview isManager={isManager} isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_FRM" approved={approved} isReadonly={isReadonly} />
+          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_FRM" approved={approved} isReadonly={isReadonly} />
           <Header as="h5">
             Prior Two Years Tax Returns for Control Owners or Three Years for Existing Business
           </Header>

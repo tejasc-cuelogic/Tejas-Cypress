@@ -17,7 +17,7 @@ import { UPLOADS_CONFIG } from '../../constants/aws';
 window.$ = $;
 window.jQuery = $;
 
-const uploadsConfig = { ...UPLOADS_CONFIG, ...{ acl: 'public-read', keyStart: 'uploads' } };
+const uploadsConfig = { ...UPLOADS_CONFIG, ...{ acl: 'public-read', keyStart: 'offerings/' } };
 const getConfig = (keyStart, overrides) => {
   const config = {
     placeholderText: 'Your content goes here!',

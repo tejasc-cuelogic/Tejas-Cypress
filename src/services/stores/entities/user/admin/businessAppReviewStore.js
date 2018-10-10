@@ -35,6 +35,7 @@ export class BusinessAppReviewStore {
   @observable removeIndex = null;
   @observable selectedOfferIndex = null;
   @observable paBoxFolderId = null;
+  @observable signPortalAgreementURL = '';
   @observable removeFileIdsList = [];
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
@@ -241,7 +242,7 @@ export class BusinessAppReviewStore {
   get totalSourcesAmount() {
     let totalAmount = 0;
     this.BUSINESS_PLAN_FRM.fields.sources.map((source) => {
-      totalAmount += source.amount.value;
+      totalAmount += parseInt(source.amount.value || 0, 10);
       return totalAmount;
     });
     return totalAmount;
@@ -251,7 +252,7 @@ export class BusinessAppReviewStore {
   get totalUsesAmount() {
     let totalAmount = 0;
     this.BUSINESS_PLAN_FRM.fields.uses.map((use) => {
-      totalAmount += use.amount.value;
+      totalAmount += parseInt(use.amount.value || 0, 10);
       return totalAmount;
     });
     return totalAmount;
@@ -439,6 +440,7 @@ export class BusinessAppReviewStore {
           variables: payLoad,
         })
         .then((result) => {
+          this.setFieldvalue('signPortalAgreementURL', result.data.signPortalAgreement);
           resolve(result);
         })
         .catch((error) => {

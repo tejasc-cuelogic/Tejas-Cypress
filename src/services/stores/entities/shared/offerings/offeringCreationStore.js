@@ -173,12 +173,14 @@ export class OfferingCreationStore {
     }
     fileUpload.deleteFromS3(filename)
       .then((res) => {
-        console.log(res.location);
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
         this.resetFormField('MEDIA_FRM', name, undefined, index);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
+        // force record deletion from db;
+        this.resetFormField('MEDIA_FRM', name, undefined, index);
+        this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         console.log(err);
       });
   }
@@ -186,7 +188,7 @@ export class OfferingCreationStore {
   @action
   uploadMedia = (name) => {
     const fileObj = {
-      obj: this.MEDIA_FRM.fields[name].src,
+      obj: this.MEDIA_FRM.fields[name].base64String,
       type: this.MEDIA_FRM.fields[name].meta.type,
       name: this.MEDIA_FRM.fields[name].value,
     };
@@ -722,7 +724,7 @@ export class OfferingCreationStore {
     leaderNumber = undefined,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
-    const { issuerBacId } = getOfferingById.legal;
+    const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
     const offeringBacDetails = Validator.evaluateFormData(fields);
     offeringBacDetails.offeringId = getOfferingById.id;
     offeringBacDetails.bacType = bacType;

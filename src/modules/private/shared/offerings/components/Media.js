@@ -98,6 +98,7 @@ export default class Media extends Component {
                   modalUploadAction={this.uploadMedia}
                   name="heroImage"
                   cropInModal
+                  aspect={16 / 9}
                 />
               )}
             </Form>
@@ -144,6 +145,7 @@ export default class Media extends Component {
               modalUploadAction={this.uploadMedia}
               name="tombstoneImage"
               cropInModal
+              aspect={3 / 2}
             />
           )}
         </Form>
@@ -172,6 +174,7 @@ export default class Media extends Component {
                 modalUploadAction={this.uploadMedia}
                 name="location"
                 cropInModal
+                aspect={3 / 2}
               />
             </List.Item>
           </List>
@@ -201,6 +204,7 @@ export default class Media extends Component {
                 modalUploadAction={this.uploadMedia}
                 name="gallery"
                 cropInModal
+                aspect={16 / 9}
               />
             </List.Item>
           </List>
@@ -230,6 +234,7 @@ export default class Media extends Component {
                 modalUploadAction={this.uploadMedia}
                 name="logo"
                 cropInModal
+                aspect="none"
               />
             </List.Item>
           </List>
