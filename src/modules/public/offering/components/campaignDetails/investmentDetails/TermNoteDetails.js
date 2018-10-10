@@ -133,7 +133,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms.frequencyOfPayments}</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.frequencyOfPayments}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
