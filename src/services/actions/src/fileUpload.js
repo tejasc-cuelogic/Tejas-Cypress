@@ -74,7 +74,7 @@ export class FileUpload {
   uploadToS3 = (fileObj) => {
     const config = {
       bucketName: UPLOADS_CONFIG.bucket,
-      dirName: 'offerings',
+      dirName: '/offerings',
       region: UPLOADS_CONFIG.region,
       accessKeyId: UPLOADS_CONFIG.accessKey,
       secretAccessKey: UPLOADS_CONFIG.secretKey,

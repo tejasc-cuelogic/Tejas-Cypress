@@ -51,7 +51,7 @@ export default class BusinessPlan extends Component {
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.businessPlan && review.businessPlan &&
       review.businessPlan.submitted) ? review.businessPlan.submitted : null;
     const approved = (review && review.businessPlan && review.businessPlan &&
@@ -61,7 +61,7 @@ export default class BusinessPlan extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}

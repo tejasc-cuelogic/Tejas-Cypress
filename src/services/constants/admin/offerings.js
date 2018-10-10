@@ -658,19 +658,19 @@ export const MEDIA = {
     value: '', label: '', error: undefined, rule: 'optional', objType: 's3File',
   },
   heroImage: {
-    value: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   tombstoneImage: {
-    value: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   location: {
-    value: '', objType: 's3File', src: '', meta: {}, label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   gallery: {
-    value: '', objType: 's3File', src: '', meta: {}, label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   logo: {
-    value: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 

@@ -134,7 +134,7 @@
         background:none !important;
         pointer-events:none;
         >.icon{
-            padding:0 !important;
+            display:none;
         }
     }
 }

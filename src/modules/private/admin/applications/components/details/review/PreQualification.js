@@ -36,7 +36,7 @@ export default class PreQual extends Component {
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.preQualification && review.preQualification.submitted)
       ? review.preQualification.submitted : null;
     const approved = (review && review.preQualification && review.preQualification.approved)
@@ -46,7 +46,7 @@ export default class PreQual extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
             Justifications
             {!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length < 5 &&
