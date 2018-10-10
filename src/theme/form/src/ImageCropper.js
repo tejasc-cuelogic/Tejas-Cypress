@@ -125,7 +125,7 @@ export default class ImageCropper extends Component {
     return (
       <Aux>
         { field.src && !field.error ? cropInModal ?
-          <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false}>
+          <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
             <Modal.Content>
               <Header as="h3">Crop image for ...</Header>
               <ReactCrop
