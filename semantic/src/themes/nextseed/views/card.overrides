@@ -119,6 +119,7 @@
                 .description {
                     font-size: @14px;
                     margin: 0 0 @30px;
+                    height: auto;
                 }
             }
             .extra {
