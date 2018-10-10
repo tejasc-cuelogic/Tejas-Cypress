@@ -22,7 +22,7 @@ class LocationAnalysis extends Component {
           <Image
             src={
               campaign && campaign.media && campaign.media.location &&
-               campaign.media.location[0].url ?
+              campaign.media.location.length && campaign.media.location[0].url ?
               campaign.media.location[0].url : emptyHeroImagePlaceholder
             }
           />
