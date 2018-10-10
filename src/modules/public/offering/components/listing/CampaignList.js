@@ -14,15 +14,15 @@ import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-plac
 @observer
 export default class CampaignList extends Component {
   state = { filters: false };
-  componentWillMount() {
-    this.props.campaignStore.initRequest();
-  }
+  // componentWillMount() {
+  //   this.props.campaignStore.initRequest(this.props.type);
+  // }
   toggleFilters = () => {
     const { filters } = this.state;
     this.setState({ filters: filters === false });
   }
   render() {
-    const { OfferingList, loading } = this.props.campaignStore;
+    const { campaigns, loading } = this.props;
     return (
       <Aux>
         {this.props.filters &&
@@ -33,7 +33,7 @@ export default class CampaignList extends Component {
             {this.props.heading}
             <Grid doubling columns={3} stackable>
               <Grid.Row>
-                {loading ? <Spinner loaderMessage="loading.." /> : OfferingList.map(offering => (
+                {loading ? <Spinner loaderMessage="loading.." /> : campaigns && campaigns.length && campaigns.map(offering => (
                   <Grid.Column>
                     <Card className="campaign" fluid as={Link} to={`/offerings/${offering.id}/overview`}>
                       <Image
