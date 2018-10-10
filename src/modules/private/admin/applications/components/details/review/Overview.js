@@ -37,7 +37,7 @@ export default class Overview extends Component {
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
     const approved = (review && review.overview && review.overview.criticalPoint &&
@@ -47,7 +47,7 @@ export default class Overview extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
           <Header as="h4">
             Overview
             {!isReadonly && OVERVIEW_FRM.fields.description.length < 5 &&

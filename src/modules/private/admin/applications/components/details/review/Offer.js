@@ -43,7 +43,7 @@ export default class Offer extends Component {
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { offers } = businessApplicationDetailsAdmin;
+    const { offers, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
@@ -51,7 +51,7 @@ export default class Offer extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview title="Submit offer" isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} stepStatus={checkAllStepsIsApproved} />
+          <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} stepStatus={checkAllStepsIsApproved} />
           <Header as="h4">
             Offers
             {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
