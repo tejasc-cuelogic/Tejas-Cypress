@@ -36,6 +36,7 @@
 * **campaign details page[Issue [236](https://chaos.ns.team/nsv2/ns-ops/issues/236) - public pages campaign details pages ui updates]:** completed ui changes on campaign details page ([af97def](https://chaos.ns.team/nsv2/ns-client/commits/af97def))
 * **Changelog [Issue [134](https://chaos.ns.team/nsv2/ns-ops/issues/134) - Maintain change logs/versioning]:** enabled changelog generation ([769ae41](https://chaos.ns.team/nsv2/ns-client/commits/769ae41))
 * **Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - manage Crowdpay accounts]:** manage Crowdpay accounts ([53ff095](https://chaos.ns.team/nsv2/ns-client/commits/53ff095))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([c2c7a53](https://chaos.ns.team/nsv2/ns-client/commits/c2c7a53))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([5fee3f3](https://chaos.ns.team/nsv2/ns-client/commits/5fee3f3))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([ad48da8](https://chaos.ns.team/nsv2/ns-client/commits/ad48da8))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
