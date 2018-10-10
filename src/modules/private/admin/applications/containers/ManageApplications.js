@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -35,11 +36,11 @@ export default class ManageApplications extends Component {
   render() {
     const { match, businessAppAdminStore } = this.props;
     const { summary } = businessAppAdminStore;
+    // subNavAddon={{ data: this.representAddon(summary) }}
     return (
       <PrivateLayout
         {...this.props}
         subNav
-        subNavAddon={{ data: this.representAddon(summary) }}
       >
         <Switch>
           <Route path={`${match.url}/:id/view/:appId/:userId`} render={props => <ApplicationDetails refLink={match.url} {...props} />} />
