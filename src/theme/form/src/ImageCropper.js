@@ -51,7 +51,8 @@ export default class ImageCropper extends Component {
       crop: makeAspectCrop({
         x: 0,
         y: 0,
-        aspect: 1 / 1,
+        aspect: this.props.aspect ?
+          this.props.aspect === 'none' ? null : this.props.aspect : 1 / 1,
         width: cropWidthPer,
       }, image.width / image.height),
       image,
