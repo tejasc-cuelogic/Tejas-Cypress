@@ -31,7 +31,7 @@ export default class AccList extends Component {
     } = this.props;
     const params = {
       subItems: module === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems',
-      item: 'title',
+      item: module === 'knowledgeBase' ? 'title' : 'question',
     };
     const { selected } = this.props.educationStore;
     return (
