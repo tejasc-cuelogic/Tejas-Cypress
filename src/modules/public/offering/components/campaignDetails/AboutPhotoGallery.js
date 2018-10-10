@@ -12,6 +12,7 @@ class AboutPhotoGallery extends Component {
     activeSlide: 0,
   };
   handleClose = () => this.props.history.goBack();
+  handlePagination = newIndex => this.setState({ activeSlide: newIndex });
   render() {
     const { campaign } = this.props.campaignStore;
     const settings = {
@@ -31,7 +32,7 @@ class AboutPhotoGallery extends Component {
         closeIcon
         className="about-modal"
       >
-        <div className="carousel-counter">{this.state.activeSlide}/{campaign.media.gallery.length}</div>
+        <div className="carousel-counter">{this.state.activeSlide + 1}/{campaign.media.gallery.length}</div>
         <div className="carousel">
           <Container fluid>
             <NsCarousel
@@ -39,6 +40,7 @@ class AboutPhotoGallery extends Component {
               thumbs={isTablet ? tabGalleryLength : galleryLength}
               imageCount={campaign.media.gallery.length}
               isTablet={isTablet}
+              handlePaginationFun={this.handlePagination}
             >
               {
                 campaign && campaign.media &&

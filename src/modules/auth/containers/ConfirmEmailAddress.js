@@ -17,7 +17,9 @@ import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
     const credentials = cookie.load('USER_CREDENTIALS');
-    this.props.authStore.setCredentials(credentials);
+    if (credentials) {
+      this.props.authStore.setCredentials(credentials);
+    }
   }
   componentWillUnmount() {
     cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
@@ -77,7 +79,7 @@ export default class ConfirmEmailAddress extends Component {
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+      <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <Divider />

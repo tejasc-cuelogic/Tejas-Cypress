@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, Route, Switch } from 'react-router-dom';
-import { Modal, Card, Header, Form, Label, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
+import { Modal, Card, Header, Form, Rating, Button, Grid, List, Icon } from 'semantic-ui-react';
 import Loadable from 'react-loadable';
 import ActivityHistory from '../../../shared/ActivityHistory';
 import { DataFormatter } from '../../../../../helper';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
 import { FormInput } from '../../../../../theme/form';
+import { AppStatusLabel } from '../components/AppStatusLabel';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../services/constants/businessApplication';
 
 const getModule = component => Loadable({
@@ -86,7 +87,8 @@ export default class ApplicationDetails extends Component {
     if (!deleted && !stashed && ((applicationStatus || prequalStatus) ===
     BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ||
     (applicationStatus || prequalStatus) ===
-    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED)) {
+    BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED || (applicationStatus || prequalStatus) ===
+    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
       navItems = [
         ...navItems,
         { title: 'Review', to: 'review' },
@@ -94,14 +96,14 @@ export default class ApplicationDetails extends Component {
     }
     const { businessName, contactDetails } =
     businessGeneralInfo || prequalDetails.businessGeneralInfo;
-    const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : applicationStatus || prequalStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
+    const appStepStatus = (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'Failed' : (applicationStatus || prequalStatus) === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED ? 'In-Progress' : 'Completed';
     return (
       <Modal closeIcon size="large" dimmer="inverted" open closeOnDimmerClick={false} onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <Header as="h3">
             {businessName}
             <span className="title-meta">  Status: <b>{appStepStatus}</b></span>
-            <Label size="small" color="green">Reviewed</Label>
+            <AppStatusLabel application={businessApplicationDetailsAdmin} />
             <span className="title-meta">Rating</span>
             <Rating size="huge" disabled defaultRating={rating || 0} maxRating={5} />
             {(applicationStatus || prequalStatus) ===

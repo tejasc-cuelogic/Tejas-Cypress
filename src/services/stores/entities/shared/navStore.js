@@ -46,7 +46,7 @@ export class NavStore {
 
   @action
   filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor ||
-      (sN.accessFor.includes(phase) && !exclude.includes(sN.to))));
+      (sN.accessFor.includes(phase <= 4 ? phase : 4) && !exclude.includes(sN.to))));
 
   @computed get allNavItems() {
     const navItems = [...this.myRoutes];
@@ -123,7 +123,6 @@ export class NavStore {
     const {
       topVisible, direction, bottomPassed,
     } = calculations;
-    // console.log(topVisible, direction, pixelsPassed, bottomPassed, bottomVisible);
     if (typeof topVisible === 'boolean') {
       this.navStatus = forced || (!topVisible ? 'sub' : 'main');
       if ((this.navStatus === 'sub') && (bottomPassed)) {

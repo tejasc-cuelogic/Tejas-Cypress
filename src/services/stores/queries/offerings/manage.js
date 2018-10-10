@@ -103,6 +103,12 @@ export const getOfferingDetails = gql`
         isHealthcare
         isFood
         isAlcohol
+        uploadProformas {
+          fileId
+          url
+          fileName
+          isPublic
+        }
       }
       media {
         heroImage {
@@ -257,6 +263,13 @@ export const getOfferingDetails = gql`
         }
       }
       leadership {
+        employer {
+          name
+          type
+          description
+          title
+          dateOfService
+        }
         isPublic
         firstName
         lastName

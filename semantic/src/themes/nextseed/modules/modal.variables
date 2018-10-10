@@ -181,7 +181,7 @@
 @largeHeaderSize: 1.6em;
 @largeMobileWidth: @mobileWidth;
 @largeTabletWidth: @tabletWidth;
-@largeComputerWidth: (@computerWidth * @largeRatio);
+@largeComputerWidth: @computerWidth;
 @largeLargeMonitorWidth: (@largeMonitorWidth * @largeRatio);
 @largeWidescreenMonitorWidth: (@widescreenMonitorWidth * @largeRatio);
 

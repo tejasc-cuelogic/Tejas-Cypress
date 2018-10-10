@@ -9,7 +9,7 @@ export const STATUSES = {
 };
 
 export const UPLOADS_CONFIG = {
-  region: 'ap-south-1',
+  region: AWS_REGION || 'ap-south-1',
   bucket: process.env.REACT_APP_UPLOADS_BUCKET,
   accessKey: process.env.REACT_APP_UPLOADS_ACCESS_KEY,
   secretKey: process.env.REACT_APP_UPLOADS_SECRET_KEY,
