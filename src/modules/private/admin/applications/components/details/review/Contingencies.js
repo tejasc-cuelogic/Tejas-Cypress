@@ -46,7 +46,7 @@ const TableBody = ({
           />
         </Table.Cell>
         <Table.Cell collapsing>
-          {!isReadonly &&
+          {!isReadonly && fields.length > 1 &&
           <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)} >
             <Icon className="ns-close-circle" color="grey" />
           </Link>
@@ -57,7 +57,7 @@ const TableBody = ({
     }
     <Table.Row>
       <Table.Cell colSpan="3">
-        {!isReadonly &&
+        {!isReadonly && fields.length < 5 &&
         <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
         }
       </Table.Cell>
@@ -90,7 +90,7 @@ export default class Contingencies extends Component {
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.contingencies && review.contingencies &&
       review.contingencies.submitted) ? review.contingencies.submitted : null;
     const approved = (review && review.contingencies && review.contingencies &&
@@ -100,7 +100,7 @@ export default class Contingencies extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
           <Header as="h5">
             Launch
           </Header>

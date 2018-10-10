@@ -37,7 +37,7 @@ export default class OfferingDetails extends Component {
     return (
       <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
-          <Header as="h3">{offer.businessGeneralInfo ? offer.businessGeneralInfo.businessName : offer.keyTerms.legalBusinessName}</Header>
+          <Header as="h3">{offer.keyTerms.shorthandBusinessName ? offer.keyTerms.shorthandBusinessName : offer.businessGeneralInfo.businessName}</Header>
           {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} />}
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />

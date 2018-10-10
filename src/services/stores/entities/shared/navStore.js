@@ -46,7 +46,16 @@ export class NavStore {
 
   @action
   filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor ||
-      (sN.accessFor.includes(phase) && !exclude.includes(sN.to))));
+      (sN.accessFor.includes(phase <= 4 ? phase : 4) && !exclude.includes(sN.to))));
+
+  businessName = b => ((b.keyTerms && b.keyTerms.shorthandBusinessName) ?
+    b.keyTerms.shorthandBusinessName : (
+      (b.keyTerms && b.keyTerms.legalBusinessName) ?
+        b.keyTerms.legalBusinessName : (
+          b.businessGeneralInfo && b.businessGeneralInfo.businessName ?
+            b.businessGeneralInfo.businessName : 'N/A'
+        )
+    ));
 
   @computed get allNavItems() {
     const navItems = [...this.myRoutes];
@@ -64,8 +73,7 @@ export class NavStore {
           {
             ...navItems[bIndex],
             ...{
-              title: b.keyTerms ?
-                b.keyTerms.legalBusinessName : b.businessGeneralInfo.businessName,
+              title: this.businessName(b),
               to: `offering/${b.id}`,
               subNavigations: sNav,
             },

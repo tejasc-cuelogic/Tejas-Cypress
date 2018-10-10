@@ -4,6 +4,7 @@ export const allOfferings = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      stage
       media {
         tombstoneImage {
         url
@@ -18,6 +19,9 @@ query getOfferingList($filters: OfferingFilterInputType){
         industry
         securities
       }
+      closureSummary {
+        totalInvestorCount
+      }
       businessGeneralInfo {
         businessName
         address {
@@ -26,6 +30,7 @@ query getOfferingList($filters: OfferingFilterInputType){
         }
       }
       keyTerms {
+        shorthandBusinessName
         legalBusinessName
         securities
         industry
@@ -63,6 +68,13 @@ export const campaignDetailsQuery = gql`
     referralCode
     selectedOffer {
       structure
+    }
+    businessGeneralInfo {
+      businessName
+      address {
+        state
+        city
+      }
     }
     keyTerms {
       legalBusinessName

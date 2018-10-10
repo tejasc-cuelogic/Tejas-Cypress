@@ -51,7 +51,8 @@ export default class ImageCropper extends Component {
       crop: makeAspectCrop({
         x: 0,
         y: 0,
-        aspect: 1 / 1,
+        aspect: this.props.aspect ?
+          this.props.aspect === 'none' ? null : this.props.aspect : 1 / 1,
         width: cropWidthPer,
       }, image.width / image.height),
       image,
@@ -124,7 +125,7 @@ export default class ImageCropper extends Component {
     return (
       <Aux>
         { field.src && !field.error ? cropInModal ?
-          <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false}>
+          <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
             <Modal.Content>
               <Header as="h3">Crop image for ...</Header>
               <ReactCrop

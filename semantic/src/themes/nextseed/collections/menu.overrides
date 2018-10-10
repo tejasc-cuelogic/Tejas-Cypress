@@ -123,6 +123,8 @@
             }
             &.header{
                 border-color:transparent;
+                font-style: italic;
+                color: @neutral-middark;
             }
         }
     }
@@ -229,6 +231,7 @@ footer{
             }
             .ui.image.closeIcon {
                 margin-left: 117px;
+                cursor: pointer;
             }
         }
     }

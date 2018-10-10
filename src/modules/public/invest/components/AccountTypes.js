@@ -23,7 +23,7 @@ const AccountTypes = () => (
                   </p>
                   <Header as="h5">Investment Entity</Header>
                   <p>Invest on NextSeed with a corporate, LLC or Trust investment account.</p>
-                  <p>Minimum opening deposit of $5,000. Please note <Link as={Link} to="/" color="green">investment limits may apply</Link>.</p>
+                  <p>Minimum opening deposit of $5,000. Please note <Link to="/" color="green">investment limits may apply</Link>.</p>
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">Self-Directed IRA</Header>
@@ -32,11 +32,11 @@ const AccountTypes = () => (
                     Get the benefits of investing with a retirement account (Traditional
                     and Roth IRA options available) while investing in a new asset class.
                   </p>
-                  <p>Minimum opening deposit of $5,000. Please note <Link as={Link} to="/">investment limits may apply</Link>.</p>
+                  <p>Minimum opening deposit of $5,000. Please note <Link to="/">investment limits may apply</Link>.</p>
                   <p>
                     Promotional Offer: For new NextSeed IRA Accounts, NextSeed will cover
                     the one-time setup fee and annual account fees for four years! For
-                    full details, go to the <Link as={Link} to="/">Terms and Conditions</Link>.
+                    full details, go to the <Link to="/agreements/terms-of-use">Terms and Conditions</Link>.
                   </p>
                 </Grid.Column>
               </Grid>

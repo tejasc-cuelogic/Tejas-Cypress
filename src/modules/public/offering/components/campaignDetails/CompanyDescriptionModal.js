@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Modal, Header, List, Icon, Image, Divider } from 'semantic-ui-react';
-import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
+import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
 // import videoPoster from '../../../../../assets/images/636206632.jpg';
 
@@ -53,16 +53,16 @@ class CompanyDescriptionModal extends Component {
           <Aux>
             {
               campaign && campaign.offering && campaign.offering.about &&
-               campaign.offering.about.theCompany ?
-                 <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign.offering.about.theCompany }} />
+                campaign.offering.about.theCompany ?
+                  <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign.offering.about.theCompany }} />
                 :
-                 <p>{emptyStatement}</p>
+                  <p>{emptyStatement}</p>
             }
             <Image
               src={
                 campaign && campaign.media && campaign.media.heroImage
                   && campaign.media.heroImage.url ?
-                  campaign.media.heroImage.url : defaultLeaderProfile
+                  campaign.media.heroImage.url : emptyHeroImagePlaceholder
               }
               fluid
               centered
@@ -73,9 +73,10 @@ class CompanyDescriptionModal extends Component {
           <div className="history-section">
             <Header as="h4">History</Header>
             {
-              campaign.offering.about.history.length ?
-                <List>
-                  {
+              campaign && campaign.offering && campaign.offering.about &&
+                campaign.offering.about.history && campaign.offering.about.history.length ?
+                  <List>
+                    {
                     campaign.offering.about.history.map(data => (
                       <List.Item className="mb-10">
                         <Icon className="ns-flag-line" color="green" />
@@ -88,9 +89,9 @@ class CompanyDescriptionModal extends Component {
                       </List.Item>
                     ))
                   }
-                </List>
+                  </List>
                 :
-                <p>{emptyHistoryStatement}</p>
+                  <p>{emptyHistoryStatement}</p>
             }
           </div>
         </Modal.Content>

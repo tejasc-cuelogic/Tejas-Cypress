@@ -36,7 +36,7 @@ const navItems = [
   { title: 'Offer', to: 'offer' },
 ];
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'uiStore')
 @withRouter
 @observer
 export default class Review extends Component {
@@ -70,7 +70,7 @@ export default class Review extends Component {
             />
             <Divider hidden />
             <Button.Group size="mini">
-              <Button color="blue" type="button" onClick={generatePortalAgreement} >Generate PA</Button>
+              <Button color="blue" loading={this.props.uiStore.inProgress} type="button" onClick={generatePortalAgreement} >Generate PA</Button>
               {paBoxFolderId &&
               <Button color="blue" className="link-button" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')}>PA BOX Link</Button>
               }
