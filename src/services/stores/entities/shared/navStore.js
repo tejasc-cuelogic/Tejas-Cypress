@@ -65,7 +65,7 @@ export class NavStore {
             ...navItems[bIndex],
             ...{
               title: b.keyTerms ?
-                b.keyTerms.legalBusinessName : b.businessGeneralInfo.businessName,
+                b.keyTerms.shorthandBusinessName : b.businessGeneralInfo.businessName,
               to: `offering/${b.id}`,
               subNavigations: sNav,
             },

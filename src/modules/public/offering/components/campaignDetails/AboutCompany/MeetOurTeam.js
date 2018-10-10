@@ -19,7 +19,7 @@ class MeetOurTeam extends Component {
       <Grid.Column>
         <Segment padded>
           <Header as="h4">
-            {campaign.leadership.length ?
+            {meetTeamOjb.length ?
               <Link to={`${meetOurTeamUrl}/meetourteam`}>
                 Meet our team
                 <Icon className="ns-chevron-right" color="green" />
