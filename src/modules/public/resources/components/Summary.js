@@ -23,8 +23,8 @@ const Summary = props => (
       <Grid centered relaxed="very" stackable>
         <Grid.Column textAlign="center" width={6}>
           <Card as={Link} to={`${props.refUrl}/investor`} className="info-card campaign">
-            <Image src={icon1} centered className="mb-20" />
             <Card.Content>
+              <Image src={icon1} centered className="mb-20" />
               <Card.Description>
                 Understand how to add local businesses to your investment portfolio, how NextSeed
                 investments work, and the risks and opportunities offered by this
@@ -41,8 +41,8 @@ const Summary = props => (
         </Grid.Column>
         <Grid.Column textAlign="center" width={6}>
           <Card className="info-card campaign" as={Link} to={`${props.refUrl}/business`}>
-            <Image src={icon2} centered className="mb-20" />
             <Card.Content>
+              <Image src={icon2} centered className="mb-20" />
               <Card.Description>
                 Learn about the business implications of different types of fundraising,
                 how to add NextSeed to your capital stack and how to get started.
