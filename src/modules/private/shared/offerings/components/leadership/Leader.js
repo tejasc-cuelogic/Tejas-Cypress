@@ -141,7 +141,7 @@ export default class Leader extends Component {
             <MaskedInput
               name="dateOfService"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].dateOfService}
-              format="##-##-####"
+              format="##/##/####"
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
               dateOfBirth
             />

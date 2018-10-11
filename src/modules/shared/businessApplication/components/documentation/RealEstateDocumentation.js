@@ -37,8 +37,8 @@ export default class RealEstateDocumentation extends Component {
                 fielddata={fields.dueDiligence}
                 ondrop={(files, fieldName) =>
                   businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) =>
-                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                onremove={(fieldName, index) =>
+                  businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>
@@ -59,8 +59,8 @@ export default class RealEstateDocumentation extends Component {
                 fielddata={fields.legalDocs}
                 ondrop={(files, fieldName) =>
                   businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) =>
-                  businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                onremove={(fieldName, index) =>
+                  businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </Grid.Column>
           </Grid>

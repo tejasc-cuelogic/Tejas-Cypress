@@ -1060,7 +1060,7 @@ export class BusinessAppStore {
   };
 
   @action
-  businessAppRemoveFiles = (e, fieldName, formName, index) => {
+  businessAppRemoveFiles = (fieldName, formName, index) => {
     if (fieldName === 'resume') {
       const removeFileIds = this[formName].fields.owners[index][fieldName].fileId;
       this[formName].fields.owners[index][fieldName].value = '';

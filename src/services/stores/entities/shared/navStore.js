@@ -46,7 +46,7 @@ export class NavStore {
 
   @action
   filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor ||
-      (sN.accessFor.includes(phase <= 4 ? phase : 4) && !exclude.includes(sN.to))));
+      (sN.accessFor.includes(typeof phase === 'number' ? (phase <= 4 ? phase : 4) : phase) && !exclude.includes(sN.to))));
 
   businessName = b => ((b.keyTerms && b.keyTerms.shorthandBusinessName) ?
     b.keyTerms.shorthandBusinessName : (
@@ -129,11 +129,13 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const {
-      topVisible, direction, bottomPassed,
+      topVisible, direction, bottomPassed, isMoveTop,
     } = calculations;
     if (typeof topVisible === 'boolean') {
       this.navStatus = forced || (!topVisible ? 'sub' : 'main');
       if ((this.navStatus === 'sub') && (bottomPassed)) {
+        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+      } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
         this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
       }
     }

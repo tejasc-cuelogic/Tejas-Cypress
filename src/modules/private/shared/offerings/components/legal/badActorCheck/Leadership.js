@@ -11,6 +11,12 @@ export default class Leadership extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
+    const { LEADERSHIP_FRM, addMore } = this.props.offeringCreationStore;
+    if (!this.props.offeringCreationStore.initLoad.includes('LEADERSHIP_FRM')) {
+      this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', false);
+      const leadersCount = LEADERSHIP_FRM.fields.leadership.length;
+      addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
+    }
   }
   render() {
     const { LEADER_FRM } = this.props.offeringCreationStore;

@@ -59,7 +59,7 @@ export default class BusinessDocumentation extends Component {
                     name={field}
                     fielddata={fields[field]}
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                    onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                    onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                     tooltip={fields[field].tooltip}
                   />
                 </Grid.Column>
@@ -95,7 +95,7 @@ export default class BusinessDocumentation extends Component {
                   name={field}
                   fielddata={fields[field]}
                   ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                  onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                  onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                 />
               ))
             }
@@ -142,7 +142,7 @@ export default class BusinessDocumentation extends Component {
                 name="personalGuaranteeForm"
                 fielddata={fields.personalGuaranteeForm}
                 ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
-                onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DOC_FRM', index)}
+                onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
               />
             </div>
           }
