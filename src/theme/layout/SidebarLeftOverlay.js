@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
@@ -56,12 +57,14 @@ const MySidebar = observer(props => (
             renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
             renderView={p => <div {...p} className="view" />}
           >
-            <Logo
-              className="logo"
-              dataSrc={((props.layoutState.leftPanel) ?
-                (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
-                'LogoSmall')}
-            />
+            <Link to="/">
+              <Logo
+                className="logo"
+                dataSrc={((props.layoutState.leftPanel) ?
+                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+                  'LogoSmall')}
+              />
+            </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             <div className="user-picture">
               <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
