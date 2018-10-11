@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const allOfferingsCompact = gql`
-  query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String!){
+  query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String){
     getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
       id
       keyTerms {
@@ -651,6 +651,22 @@ mutation _updateBonusReward($id: String! $bonusRewardDetails: BonusRewardInputTy
       id
       by
       date
+    }
+  }
+}
+`;
+
+export const unlinkTiersFromBonusRewards = gql`
+mutation _unlinkTiersFromBonusRewards($bonusRewardId: String! $offeringId: String! $bonusRewardTierId: BonusRewardTierInputType!){
+  unlinkTiersFromBonusRewards(
+    bonusRewardId: $bonusRewardId
+    offeringId: $offeringId
+    bonusRewardTierId: $bonusRewardTierId
+  ) {
+    id
+    rewardsTierIds{
+      amount
+      earlyBirdQuantity
     }
   }
 }

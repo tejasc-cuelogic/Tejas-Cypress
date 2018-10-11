@@ -83,18 +83,17 @@ export default class Contingency extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName, dataKey, index)}
               />
               <Button.Group compact size="small">
-                {access.asManager ?
+                {access.asManager &&
                   <Aux>
                     <Button as={Link} inverted color="blue" content="Edit" to={`${match.url}/${dataKey}/edit-contingency/${index}`} />
                     <Button type="button" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, formName)} />
-                    <Button as="span" className="time-stamp">
-                      <Icon className="ns-check-circle" color="green" />
-                      Submitted by USER_NAME on 2/3/2018
-                    </Button>
                   </Aux>
-                :
-                  <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null)} />
                 }
+                <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null)} />
+                <Button as="span" className="time-stamp">
+                  <Icon className="ns-check-circle" color="green" />
+                  Submitted by USER_NAME on 2/3/2018
+                </Button>
               </Button.Group>
             </div>
           </div>

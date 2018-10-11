@@ -1,11 +1,12 @@
 import gql from 'graphql-tag';
 
 export const allActivities = gql`
-  query fetchActivityHistoryByFilters ($resourceId: String!, $activityType: ActivityTypeEnum, $scope: ActivityHistoryScopeEnum) {
+  query fetchActivityHistoryByFilters ($resourceId: String!, $activityType: ActivityTypeEnum, $scope: ActivityHistoryScopeEnum, $orderBy: activityhistoryOrderBy) {
   filterActivityHistories (
     resourceId: $resourceId
     activityType: $activityType
     scope: $scope
+    orderBy: $orderBy
   ){
     activityHistory {
       resourceId
