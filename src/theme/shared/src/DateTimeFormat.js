@@ -6,7 +6,7 @@ import { DATE_FORMAT, DATE_ONLY } from '../../../constants/common';
 const dateTimeFormat = props => (
   <Aux>
     {props.fromNow ? (
-      <Moment fromNow>{props.datetime}</Moment>
+      <Moment fromNow unix={props.unix}>{props.datetime}</Moment>
     ) : (
       props.dateonly ? <Moment format={DATE_ONLY}>{props.datetime}</Moment> : (
         props.format ? <Moment format={props.format}>{props.datetime}</Moment> :

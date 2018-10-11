@@ -492,7 +492,9 @@ export class BusinessAppReviewStore {
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        resolve(data);
+        if (data) {
+          resolve(data);
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');

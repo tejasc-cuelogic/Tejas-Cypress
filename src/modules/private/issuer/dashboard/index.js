@@ -21,7 +21,7 @@ class Dashboard extends Component {
         <ApplicationCard />
         <Route path={`${match.url}/:applicationId/offers`} component={ChooseOffer} />
         <Route path={`${match.url}/:applicationId/offers/offersSigning`} component={OfferSigning} />
-        <Route path={`${match.url}/:applicationId/offers/gettingStarted`} component={GettingStarted} />
+        <Route path={`${match.url}/:applicationId/gettingStarted`} component={GettingStarted} />
       </PrivateLayout>
     );
   }
