@@ -31,12 +31,12 @@ export default class Media extends Component {
     this.props.offeringCreationStore.removeMedia(name, index);
   }
 
-  handleVerifyFileSize = (fileSize) => {
+  handleVerifyFileSize = (fileSize, field) => {
     if (fileSize > PROFILE_PHOTO_BYTES) {
-      const field = 'error';
+      const attr = 'error';
       const errorMsg = 'File size cannot be more than 5 MB.';
-      this.props.offeringCreationStore.setProfilePhoto(field, errorMsg);
-      this.props.offeringCreationStore.setProfilePhoto('value', '');
+      this.props.offeringCreationStore.setProfilePhoto(attr, errorMsg, field);
+      this.props.offeringCreationStore.setProfilePhoto('value', '', field);
     }
   }
 
@@ -49,12 +49,12 @@ export default class Media extends Component {
     }
   }
 
-  handelImageDeimension = (width, height) => {
+  handelImageDeimension = (width, height, field) => {
     if (width < 200 || height < 200) {
-      const field = 'error';
+      const attr = 'error';
       const errorMsg = 'Image size should not be less than 200 x 200.';
-      this.props.offeringCreationStore.setProfilePhoto(field, errorMsg);
-      this.props.offeringCreationStore.setProfilePhoto('value', '');
+      this.props.offeringCreationStore.setProfilePhoto(attr, errorMsg, field);
+      this.props.offeringCreationStore.setProfilePhoto('value', '', field);
     }
   }
   showConfirmModal = (imageType, index) => {

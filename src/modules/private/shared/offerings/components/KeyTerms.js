@@ -11,7 +11,7 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
   }
   onProFormasDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'CP1');
+    this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'KEY_TERMS_PROFORMAS');
   }
   confirmRemoveDoc = (e, name) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ export default class KeyTerms extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field) => {
-    this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', '', field, null, 'CP1');
+    this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', '', field, null, 'KEY_TERMS_PROFORMAS');
     this.props.uiStore.setConfirmBox('');
   }
   handleFormSubmit = () => {
