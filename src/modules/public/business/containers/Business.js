@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import { Responsive } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
@@ -29,7 +30,9 @@ class Business extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
-        {location.pathname === '/business/how-it-works' && <Banner />}
+        {location.pathname === '/business/how-it-works' ? <Banner /> :
+        <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
+        }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <PublicSubNav
             navStatus={navStore.navStatus}

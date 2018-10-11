@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
-import { Header, Grid, List, Divider, Container, Item, Responsive } from 'semantic-ui-react';
+import { Header, Grid, List, Divider, Container, Item } from 'semantic-ui-react';
 import MarketingIcon from '../../../../assets/images/business/marketing.svg';
 import EscrowIcon from '../../../../assets/images/business/escrow.svg';
 import CampaignIcon from '../../../../assets/images/business/campaign.svg';
@@ -15,7 +15,6 @@ const isMobile = document.documentElement.clientWidth < 768;
 
 const AllInclusive = () => (
   <Aux>
-    <Responsive as="section" maxWidth={767} className="banner inclusive-banner" />
     <section className="content-spacer">
       <Container>
         <Grid relaxed padded="vertically">

@@ -7,7 +7,6 @@ import Secure from '../../../../assets/images/secure-horizontal.png';
 const isMobile = document.documentElement.clientWidth < 768;
 const Security = () => (
   <Aux>
-    <Responsive as="section" maxWidth={767} className="banner security-banner" />
     <section className="content-spacer">
       <Container>
         <Grid padded="vertically">

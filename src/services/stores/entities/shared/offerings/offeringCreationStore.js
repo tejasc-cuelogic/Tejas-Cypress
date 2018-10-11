@@ -752,7 +752,8 @@ export class OfferingCreationStore {
       const payload = { ...offeringBacDetails.getOfferingBac[issuerNumber] };
       payload.offeringId = getOfferingById.id;
       payload.bacType = bacType;
-      const { affiliatedIssuerBacId } = getOfferingById.legal;
+      const affiliatedIssuerBacId = getOfferingById.legal &&
+      getOfferingById.legal.affiliatedIssuerBacId;
       if (affiliatedIssuerBacId === null ||
         (Array.isArray(toJS(affiliatedIssuerBacId)) && !affiliatedIssuerBacId[issuerNumber])) {
         mutation = createBac;
@@ -819,7 +820,15 @@ export class OfferingCreationStore {
 
   deleteBac = (issuerIndex) => {
     const { getOfferingById } = offeringsStore.offerData.data;
+    if (!getOfferingById.legal) {
+      this.removeData('AFFILIATED_ISSUER_FRM', 'getOfferingBac');
+      return;
+    }
     const { affiliatedIssuerBacId } = getOfferingById.legal;
+    if (!affiliatedIssuerBacId[issuerIndex]) {
+      this.removeData('AFFILIATED_ISSUER_FRM', 'getOfferingBac');
+      return;
+    }
     const bacType = 'AFFILIATED_ISSUER';
     uiStore.setProgress();
     client
