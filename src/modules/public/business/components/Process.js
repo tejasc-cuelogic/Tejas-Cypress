@@ -1,13 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Grid, Card, List, Divider, Container, Responsive } from 'semantic-ui-react';
+import { Header, Grid, Card, List, Divider, Container } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
 const Process = () => (
   <Aux>
-    <Responsive as="section" maxWidth={767} className="banner process-banner" />
     <section className="content-spacer">
       <Container>
         <Grid padded="vertically">
