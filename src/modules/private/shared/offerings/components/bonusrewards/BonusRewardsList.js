@@ -14,13 +14,14 @@ export default class BonusRewardsList extends Component {
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
-  confirmRemoveBonusReward = (e, name, id) => {
+  confirmRemoveBonusReward = (e, name, id, tier) => {
     e.preventDefault();
     this.props.uiStore.setConfirmBox(name, id);
+    this.props.offeringCreationStore.setTierToBeUnlinked(tier);
   }
   deleteBonusReward = () => {
     const { setConfirmBox, confirmBox } = this.props.uiStore;
-    this.props.offeringCreationStore.deleteBonusReward(confirmBox.refId);
+    this.props.offeringCreationStore.unlinkTierFromBonusReward(confirmBox.refId);
     setConfirmBox('');
   }
   render() {
@@ -45,7 +46,7 @@ export default class BonusRewardsList extends Component {
                   <p>Exp Date: {moment(reward.expirationDate).format('MMM D, YYYY')}</p>
                   <Button.Group size="mini" className="compact">
                     <Button inverted color="blue" content="Edit" as={Link} to={`${refLink}/edit-bonus-reward/${reward.id}`} />
-                    <Button color="red" content="Delete" onClick={e => this.confirmRemoveBonusReward(e, 'bonusRewards', reward.id)} />
+                    <Button color="red" content="Delete" onClick={e => this.confirmRemoveBonusReward(e, 'bonusRewards', reward.id, tier)} />
                   </Button.Group>
                 </div>
               );

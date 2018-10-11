@@ -11,7 +11,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
   getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling } from '../../../queries/offerings/manage';
+  generateBusinessFiling, unlinkTiersFromBonusRewards } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -68,6 +68,7 @@ export class OfferingCreationStore {
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
   @observable currentRewardId = null;
+  @observable tierTobeUnlinked = {};
   @observable leadershipExperience = {
     0: LEADERSHIP_EXP.employer,
     1: LEADERSHIP_EXP.employer,
@@ -78,6 +79,14 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+
+  @action
+  setTierToBeUnlinked = (tier) => {
+    this.tierTobeUnlinked = tier ? {
+      amount: tier.amount,
+      earlyBirdQuantity: tier.earlyBirdQuantity,
+    } : {};
+  }
 
   @action
   setDefaultTiers = () => {
@@ -1045,7 +1054,7 @@ export class OfferingCreationStore {
         if (reward.id === rewardId) {
           fields.name.value = reward.title;
           fields.description.value = reward.description;
-          fields.expirationDate.value = reward.expirationDate;
+          fields.expirationDate.value = moment(reward.expirationDate).format('MM/DD/YYYY');
           reward.tiers.map((tier) => {
             const isExisted = find(fields, { key: tier.amount });
             if (isExisted && !isExisted.value.includes(tier.amount) &&
@@ -1085,7 +1094,7 @@ export class OfferingCreationStore {
       title: fields.name.value,
       description: fields.description.value,
       rewardStatus: 'In Review',
-      expirationDate: fields.expirationDate.value,
+      expirationDate: moment(fields.expirationDate.value).toISOString(),
       tiers,
     };
     uiStore.setProgress();
@@ -1153,6 +1162,35 @@ export class OfferingCreationStore {
       .then(() => {
         this.getOfferingFilingList(this.currentOfferingId);
         Helper.toast('Generate Docs created.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  unlinkTierFromBonusReward = (id, tier) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: unlinkTiersFromBonusRewards,
+        variables: {
+          bonusRewardId: id,
+          offeringId: this.currentOfferingId,
+          bonusRewardTierId: this.tierTobeUnlinked,
+        },
+        refetchQueries: [
+          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
+          { query: getBonusRewardsTiers },
+        ],
+      })
+      .then(() => {
+        Helper.toast('Bonus Reward has been deleted successfully.', 'success');
+        this.setTierToBeUnlinked(null);
       })
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
