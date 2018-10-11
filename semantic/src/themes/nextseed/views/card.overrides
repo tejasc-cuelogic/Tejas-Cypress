@@ -191,6 +191,10 @@
             line-height:40px;
         }
     }
+    .fr-box.html-editor{
+        box-shadow:none;
+        border:@neutral-darkwhite 1px solid;
+    }
 }
 .ui.stackable.cards>.card{
     @media only screen and (max-width : @largestMobileScreen){

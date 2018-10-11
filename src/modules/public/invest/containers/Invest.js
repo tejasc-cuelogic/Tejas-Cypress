@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
-import { Visibility } from 'semantic-ui-react';
+import { Visibility, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -31,7 +31,9 @@ class Invest extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
-        {location.pathname === '/invest/why-nextseed' && <Banner />}
+        {location.pathname === '/invest/why-nextseed' ? <Banner /> :
+        <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
+        }
         <Visibility
           onUpdate={this.handleUpdate}
           continuous

@@ -38,8 +38,8 @@ export const FILTER_META = {
     { text: 'Entity', value: 'entity' },
   ],
   accountStatus: [
-    { text: 'Unlocked', value: 'unlocked' },
-    { text: 'Locked', value: 'locked' },
+    { text: 'Unlocked', value: 'UNLOCK' },
+    { text: 'Locked', value: 'LOCK' },
   ],
   accreditation: [
     { text: 'Accridiated', value: 'yes' },

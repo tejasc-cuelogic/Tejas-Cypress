@@ -34,27 +34,25 @@ export default class AddNewContingency extends React.Component {
       formChange,
     } = this.props.offeringCreationStore;
     return (
-      <div>
-        <Modal size="small" open closeIcon onClose={this.handleCloseModal} >
-          <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
-          <Modal.Content>
-            <Form onSubmit={() => this.handleSubmitForm()}>
-              {
-                ['contingency', 'acceptance'].map(field => (
-                  <FormInput
-                    name={field}
-                    fielddata={ADD_NEW_CONTINGENCY_FRM.fields[field]}
-                    changed={(e, result) => formChange(e, result, 'ADD_NEW_CONTINGENCY_FRM')}
-                  />
-                ))
-              }
-              <div className="center-align">
-                <Button className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
-              </div>
-            </Form>
-          </Modal.Content>
-        </Modal>
-      </div>
+      <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
+        <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
+        <Modal.Content>
+          <Form onSubmit={() => this.handleSubmitForm()}>
+            {
+              ['contingency', 'acceptance'].map(field => (
+                <FormInput
+                  name={field}
+                  fielddata={ADD_NEW_CONTINGENCY_FRM.fields[field]}
+                  changed={(e, result) => formChange(e, result, 'ADD_NEW_CONTINGENCY_FRM')}
+                />
+              ))
+            }
+            <div className="center-align">
+              <Button className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
+            </div>
+          </Form>
+        </Modal.Content>
+      </Modal>
     );
   }
 }

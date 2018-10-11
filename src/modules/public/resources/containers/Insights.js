@@ -57,10 +57,10 @@ export default class Insights extends Component {
                 <Image src={Insight} key={i} />
                 <div className="image-caption">
                   <p className="news-category">
-                  BUSINESS
+                    BUSINESS
                   </p>
                   <p className="news-title">
-                  Bring the local food movement home with hyper local sourcing.
+                    Bring the local food movement home with hyper local sourcing.
                   </p>
                 </div>
               </div>
@@ -72,9 +72,9 @@ export default class Insights extends Component {
             <Menu.Menu secondary className="menu-secondary">
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
               {InsightCategories &&
-              InsightCategories.map(item => (
-                <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
-              ))}
+                InsightCategories.map(item => (
+                  <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+                ))}
             </Menu.Menu>
             <Menu.Item position="right">
               SORT BY
@@ -93,15 +93,15 @@ export default class Insights extends Component {
             <Dropdown.Menu>
               <Menu.Item as={Link} to="/resources/insights">All</Menu.Item>
               {InsightCategories &&
-              InsightCategories.map(item => (
-                <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
-              ))}
+                InsightCategories.map(item => (
+                  <Menu.Item as={NavLink} to={`/resources/insights/${item.to}`}>{item.title}</Menu.Item>
+                ))}
             </Dropdown.Menu>
           </Dropdown>
         </Responsive>
         <section>
           <Container>
-            {loading ? <InlineLoader /> : <InsightArticlesList /> }
+            {loading ? <InlineLoader /> : <InsightArticlesList />}
           </Container>
         </section>
       </Aux>
