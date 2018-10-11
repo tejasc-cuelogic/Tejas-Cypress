@@ -9,6 +9,7 @@ import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
+@observer
 export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
@@ -88,7 +89,7 @@ export class NavItems extends Component {
             }
             <span>{item.title}</span>
             {item.to === 'updates' || item.to === 'comments' ?
-              <Label circular color="blue" size="small">{this.props.updates.length}</Label> : null
+              <Label circular color="blue" size="small">{this.props.updates && this.props.updates.length}</Label> : null
             }
           </Menu.Item>
         )}

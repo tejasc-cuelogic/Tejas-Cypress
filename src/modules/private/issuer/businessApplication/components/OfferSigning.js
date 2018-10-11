@@ -3,8 +3,9 @@ import { Modal, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { DataFormatter } from '../../../../../helper';
+import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('businessAppReviewStore')
+@inject('businessAppReviewStore', 'uiStore')
 @withRouter
 @observer
 export default class OfferSigning extends Component {
@@ -13,8 +14,10 @@ export default class OfferSigning extends Component {
     businessAppReviewStore.getPortalAgreementStatus().then((data) => {
       if (data.getPortalAgreementStatus === 'completed') {
         this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/gettingStarted`);
+      } else {
+        this.props.history.push('/app/dashboard');
       }
-    });
+    }).finally(() => this.props.uiStore.setProgress(false));
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
@@ -26,8 +29,9 @@ export default class OfferSigning extends Component {
             <Grid.Row>
               <Grid.Column className="welcome-packet">
                 <div className="pdf-viewer">
-                  <iframe width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
-                  {/* <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object> */}
+                  {this.props.uiStore.inProgress ? <InlineLoader /> :
+                  <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
+                  }
                 </div>
               </Grid.Column>
             </Grid.Row>

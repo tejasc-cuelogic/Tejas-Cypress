@@ -1,12 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header, Container, Grid, Responsive, List, Divider } from 'semantic-ui-react';
+import { Header, Container, Grid, List, Divider } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const AccountTypes = () => (
   <Aux>
-    <Responsive as="section" maxWidth={767} className="banner account-type-banner" />
     <section className="content-spacer">
       <Container>
         <Grid relaxed padded="vertically">

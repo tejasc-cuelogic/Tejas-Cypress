@@ -24,7 +24,7 @@ export default class AddNewBonusReward extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_BONUS_REWARD_FRM';
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+      <Modal open closeIcon size="small" onClose={this.handleCloseModal} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Add new bonus reward</Header>
         </Modal.Header>
@@ -48,7 +48,7 @@ export default class AddNewBonusReward extends Component {
                     name={field.key}
                     changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
                     defaults
-                    containerclassname="ui relaxed list rewards-tier"
+                    containerclassname="ui list rewards-tier"
                   />
                 );
               }))}
