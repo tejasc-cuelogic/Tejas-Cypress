@@ -55,7 +55,7 @@ const MaskedInput = observer((props) => {
             {props.actionlabel}
           </Button>
         </div>) : props.currency ? (
-          <NumberFormat readOnly={displayMode} placeholder={placeHolder} maxLength={18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
+          <NumberFormat readOnly={displayMode} placeholder={placeHolder} maxLength={props.maxlength || 18} thousandSeparator {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.number ? (
         <NumberFormat readOnly={displayMode} placeholder={placeHolder} maxLength={18} {...props} value={value} onValueChange={values => props.changed(values, props.name)} error={!!error} mask="_" />
       ) : props.percentage ? (
