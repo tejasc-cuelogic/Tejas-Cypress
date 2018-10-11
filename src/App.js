@@ -13,7 +13,7 @@ import { authActions, activityActions } from './services/actions';
 /**
  * Main App
  */
-@inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore')
+@inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
 class App extends Component {
@@ -42,13 +42,20 @@ class App extends Component {
   componentDidUpdate(prevProps) {
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
-
+    const calculations = {
+      topVisible: true,
+      direction: 'up',
+      bottomPassed: true,
+      isMoveTop: true,
+    };
     if (isLoggingIn) {
       this.props.history.push(this.props.uiStore.redireURL);
     } else if (isLoggingOut) {
       this.props.uiStore.clearRedirectURL();
       this.props.authStore.setUserLoggedIn(false);
     }
+    window.scrollTo(0, 0);
+    this.props.navStore.setNavStatus(calculations);
   }
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();

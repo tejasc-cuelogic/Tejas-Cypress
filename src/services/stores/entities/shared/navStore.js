@@ -121,11 +121,13 @@ export class NavStore {
   @action
   setNavStatus(calculations, forced) {
     const {
-      topVisible, direction, bottomPassed,
+      topVisible, direction, bottomPassed, isMoveTop,
     } = calculations;
     if (typeof topVisible === 'boolean') {
       this.navStatus = forced || (!topVisible ? 'sub' : 'main');
       if ((this.navStatus === 'sub') && (bottomPassed)) {
+        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+      } else if ((this.navStatus === 'main') && (bottomPassed) && (isMoveTop)) {
         this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
       }
     }
