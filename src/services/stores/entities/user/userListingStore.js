@@ -24,7 +24,7 @@ export class UserListingStore {
 
   @action
   initRequest = () => {
-    const { keyword } = this.requestState.search;
+    const { keyword, accountType, accountStatus } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
     const params = [];
@@ -43,6 +43,8 @@ export class UserListingStore {
       query: allUsersQuery,
       variables: {
         search: keyword,
+        accountType,
+        accountStatus,
         page: 1,
         orderBy: { field: this.requestState.sort.by, sort: this.requestState.sort.direction },
         filters: params || [],

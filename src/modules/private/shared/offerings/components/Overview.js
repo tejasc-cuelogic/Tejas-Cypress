@@ -45,7 +45,9 @@ export default class Overview extends Component {
               ))
             }
           </Form.Group>
-          <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
+          <div className="clearfix">
+            <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
+          </div>
           <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
         </Form>
