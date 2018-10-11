@@ -31,7 +31,7 @@ const Track = () => (
       </Container>
     </section>
     <Responsive as={Aux} maxWidth={767}>
-      <section className="banner track-banner mb-50" />
+      <section className="banner track mb-50" />
     </Responsive>
   </Aux>
 );

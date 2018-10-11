@@ -76,7 +76,7 @@ export default class BusinessDetails extends Component {
               name="businessPlan"
               fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
               ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
-              onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+              onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
             />
           </FormElementWrap>
           <FormElementWrap
@@ -267,7 +267,7 @@ export default class BusinessDetails extends Component {
                           name="resume"
                           fielddata={owner.resume}
                           ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM', index)}
-                          onremove={(e, fieldName) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_DETAILS_FRM', index)}
+                          onremove={fieldName => businessAppRemoveFiles(fieldName, 'BUSINESS_DETAILS_FRM', index)}
                         />
                       </Form.Field>
                     </Form.Group>

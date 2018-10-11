@@ -110,20 +110,20 @@ section{
                 height:260px;
             }
         }
-        &.account-type-banner {
+        &.account-types {
             background:url(../../assets/images/investors/account_types_mobile.jpg) center center no-repeat / cover;
         }
-        &.security-banner {
+        &.security {
             background:url(../../assets/images/investors/security_mobile.jpg) center center no-repeat / cover;
         }
-        &.track-banner {
+        &.track {
             background:url(../../assets/images/investors/laptop_mobile.png) center center no-repeat / contain;
             height: 160px;
         }
-        &.process-banner {
+        &.process {
             background:url(../../assets/images/business/process_mobile.jpg) center center no-repeat / cover;
         }
-        &.inclusive-banner {
+        &.all-inclusive {
             background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat / cover;
         }
     }
@@ -131,6 +131,13 @@ section{
 .public-pusher>section.banner{
     @media only screen and (max-width : @largestMobileScreen){
         margin-top:-58px;
+        &.funding-options, &.how-it-works, &.track {
+            height: auto;
+            margin-top: 0;
+        }
+        &.track{
+            background: none;
+        }
     }
 }
 // business and invest pages

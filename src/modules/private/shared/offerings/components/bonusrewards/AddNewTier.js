@@ -53,6 +53,7 @@ export default class AddNewTier extends Component {
                   </Aux>
                   :
                   <MaskedInput
+                    maxlength={12}
                     currency
                     prefix="$"
                     name="amountForThisTier"
