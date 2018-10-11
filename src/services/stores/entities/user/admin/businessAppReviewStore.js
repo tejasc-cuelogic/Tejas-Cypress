@@ -8,7 +8,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
 import { generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
-import { businessAppStore, uiStore } from '../../../index';
+import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
 
@@ -35,6 +35,7 @@ export class BusinessAppReviewStore {
   @observable removeIndex = null;
   @observable selectedOfferIndex = null;
   @observable paBoxFolderId = null;
+  @observable signPortalAgreementURL = '';
   @observable removeFileIdsList = [];
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
@@ -439,6 +440,7 @@ export class BusinessAppReviewStore {
           variables: payLoad,
         })
         .then((result) => {
+          this.setFieldvalue('signPortalAgreementURL', result.data.signPortalAgreement);
           resolve(result);
         })
         .catch((error) => {
@@ -455,6 +457,7 @@ export class BusinessAppReviewStore {
   @action
   createOffering = (applicationId) => {
     uiStore.setProgress();
+    const issuerId = userStore.currentUser ? userStore.currentUser.sub : '';
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -462,7 +465,7 @@ export class BusinessAppReviewStore {
           variables: {
             applicationId,
           },
-          refetchQueries: [{ query: allOfferingsCompact, variables: { stage: 'CREATION', first: 10, skip: 0 } }],
+          refetchQueries: [{ query: allOfferingsCompact, variables: { stage: 'CREATION', issuerId } }],
         })
         .then((result) => {
           resolve(result);

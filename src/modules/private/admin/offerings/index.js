@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { mapValues } from 'lodash';
@@ -20,11 +21,11 @@ export default class Repayments extends Component {
   render() {
     const { match } = this.props;
     const { subTabs } = this.props.offeringsStore;
+    // subNavAddon={{ data: this.representAddon(subTabs) }}
     return (
       <PrivateLayout
         {...this.props}
         subNav
-        subNavAddon={{ data: this.representAddon(subTabs) }}
       >
         <Switch>
           <Route exact path={`${match.url}/overview`} component={Overview} />
