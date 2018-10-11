@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($search: String, $page: Int) {
-    listUsers (search: $search, page: $page) {
+  query listUsers($accountType: [String], $accountStatus: [String], $search: String, $page: Int) {
+    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, page: $page) {
       users {
         id
         email {

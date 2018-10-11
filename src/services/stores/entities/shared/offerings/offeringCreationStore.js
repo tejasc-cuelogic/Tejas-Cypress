@@ -11,7 +11,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
   getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling } from '../../../queries/offerings/manage';
+  generateBusinessFiling, unlinkTiersFromBonusRewards } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -68,6 +68,7 @@ export class OfferingCreationStore {
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
   @observable currentRewardId = null;
+  @observable tierTobeUnlinked = {};
   @observable leadershipExperience = {
     0: LEADERSHIP_EXP.employer,
     1: LEADERSHIP_EXP.employer,
@@ -78,6 +79,14 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+
+  @action
+  setTierToBeUnlinked = (tier) => {
+    this.tierTobeUnlinked = tier ? {
+      amount: tier.amount,
+      earlyBirdQuantity: tier.earlyBirdQuantity,
+    } : {};
+  }
 
   @action
   setDefaultTiers = () => {
@@ -331,7 +340,7 @@ export class OfferingCreationStore {
       uiStore.setProgress();
       const file = files[0];
       const fileData = Helper.getFormattedFileData(file);
-      fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', issuerId).then(action((result) => {
+      fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then(action((result) => {
         const { fileId, preSignedUrl } = result.data.createUploadEntry;
         this[form].fields[field].fileId = fileId;
         this[form].fields[field].preSignedUrl = preSignedUrl;
@@ -743,7 +752,8 @@ export class OfferingCreationStore {
       const payload = { ...offeringBacDetails.getOfferingBac[issuerNumber] };
       payload.offeringId = getOfferingById.id;
       payload.bacType = bacType;
-      const { affiliatedIssuerBacId } = getOfferingById.legal;
+      const affiliatedIssuerBacId = getOfferingById.legal &&
+      getOfferingById.legal.affiliatedIssuerBacId;
       if (affiliatedIssuerBacId === null ||
         (Array.isArray(toJS(affiliatedIssuerBacId)) && !affiliatedIssuerBacId[issuerNumber])) {
         mutation = createBac;
@@ -810,7 +820,15 @@ export class OfferingCreationStore {
 
   deleteBac = (issuerIndex) => {
     const { getOfferingById } = offeringsStore.offerData.data;
+    if (!getOfferingById.legal) {
+      this.removeData('AFFILIATED_ISSUER_FRM', 'getOfferingBac');
+      return;
+    }
     const { affiliatedIssuerBacId } = getOfferingById.legal;
+    if (!affiliatedIssuerBacId[issuerIndex]) {
+      this.removeData('AFFILIATED_ISSUER_FRM', 'getOfferingBac');
+      return;
+    }
     const bacType = 'AFFILIATED_ISSUER';
     uiStore.setProgress();
     client
@@ -1045,7 +1063,7 @@ export class OfferingCreationStore {
         if (reward.id === rewardId) {
           fields.name.value = reward.title;
           fields.description.value = reward.description;
-          fields.expirationDate.value = reward.expirationDate;
+          fields.expirationDate.value = moment(reward.expirationDate).format('MM/DD/YYYY');
           reward.tiers.map((tier) => {
             const isExisted = find(fields, { key: tier.amount });
             if (isExisted && !isExisted.value.includes(tier.amount) &&
@@ -1085,7 +1103,7 @@ export class OfferingCreationStore {
       title: fields.name.value,
       description: fields.description.value,
       rewardStatus: 'In Review',
-      expirationDate: fields.expirationDate.value,
+      expirationDate: moment(fields.expirationDate.value).toISOString(),
       tiers,
     };
     uiStore.setProgress();
@@ -1153,6 +1171,35 @@ export class OfferingCreationStore {
       .then(() => {
         this.getOfferingFilingList(this.currentOfferingId);
         Helper.toast('Generate Docs created.', 'success');
+      })
+      .catch(action((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      }))
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+
+  @action
+  unlinkTierFromBonusReward = (id, tier) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: unlinkTiersFromBonusRewards,
+        variables: {
+          bonusRewardId: id,
+          offeringId: this.currentOfferingId,
+          bonusRewardTierId: this.tierTobeUnlinked,
+        },
+        refetchQueries: [
+          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
+          { query: getBonusRewardsTiers },
+        ],
+      })
+      .then(() => {
+        Helper.toast('Bonus Reward has been deleted successfully.', 'success');
+        this.setTierToBeUnlinked(null);
       })
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
