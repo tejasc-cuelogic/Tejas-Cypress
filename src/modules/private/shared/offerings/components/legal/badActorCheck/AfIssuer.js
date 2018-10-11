@@ -19,9 +19,8 @@ export default class AfIssuer extends Component {
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
   removeData = () => {
-    const { confirmModalName, deleteBac, removeData } = this.props.offeringCreationStore;
+    const { deleteBac } = this.props.offeringCreationStore;
     deleteBac(this.props.index || 0);
-    removeData(confirmModalName, '', true);
     this.props.history.push(`${this.props.refLink}/1`);
   }
   handleSubmitIssuer = () => {

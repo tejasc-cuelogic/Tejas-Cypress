@@ -655,3 +655,19 @@ mutation _updateBonusReward($id: String! $bonusRewardDetails: BonusRewardInputTy
   }
 }
 `;
+
+export const unlinkTiersFromBonusRewards = gql`
+mutation _unlinkTiersFromBonusRewards($bonusRewardId: String! $offeringId: String! $bonusRewardTierId: BonusRewardTierInputType!){
+  unlinkTiersFromBonusRewards(
+    bonusRewardId: $bonusRewardId
+    offeringId: $offeringId
+    bonusRewardTierId: $bonusRewardTierId
+  ) {
+    id
+    rewardsTierIds{
+      amount
+      earlyBirdQuantity
+    }
+  }
+}
+`;

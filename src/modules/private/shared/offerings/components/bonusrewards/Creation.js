@@ -48,6 +48,7 @@ export default class Creation extends Component {
           <Button as={Link} to={`${match.url}/add-new-tier`} floated="right" primary content="Add new rewards tier" />
         </div>
         {
+          bonusRewardsTiers.data &&
           bonusRewardsTiers.data.getBonusRewardTiers &&
           bonusRewardsTiers.data.getBonusRewardTiers.map(tier => (
             <div className="reward-tier">
