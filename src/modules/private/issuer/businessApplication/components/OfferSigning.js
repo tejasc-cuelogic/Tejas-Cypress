@@ -13,6 +13,8 @@ export default class OfferSigning extends Component {
     businessAppReviewStore.getPortalAgreementStatus().then((data) => {
       if (data.getPortalAgreementStatus === 'completed') {
         this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/gettingStarted`);
+      } else {
+        this.props.history.push('/app/dashboard');
       }
     });
   }
@@ -27,7 +29,6 @@ export default class OfferSigning extends Component {
               <Grid.Column className="welcome-packet">
                 <div className="pdf-viewer">
                   <iframe width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
-                  {/* <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object> */}
                 </div>
               </Grid.Column>
             </Grid.Row>
