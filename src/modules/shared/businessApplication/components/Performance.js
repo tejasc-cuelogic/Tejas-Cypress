@@ -49,7 +49,7 @@ export default class Performance extends Component {
                       name={field}
                       fielddata={fields[field]}
                       ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
-                      onremove={(e, fieldName, index) => businessAppRemoveFiles(e, fieldName, 'BUSINESS_PERF_FRM', index)}
+                      onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
                     />
                   </Grid.Column>
                 ))
