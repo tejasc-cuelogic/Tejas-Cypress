@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const allOfferingsCompact = gql`
-  query _getOfferings($stage: [OfferingStageEnumType]){
-    getOfferings(filters: { stage: $stage }){
+  query _getOfferings($stage: [OfferingStageEnumType], $issuerId: String!){
+    getOfferings(filters: { stage: $stage, issuerId: $issuerId }){
       id
       keyTerms {
         legalBusinessName
@@ -103,9 +103,11 @@ export const getOfferingDetails = gql`
         isHealthcare
         isFood
         isAlcohol
-        uploadProformas{
+        uploadProformas {
           fileId
+          url
           fileName
+          isPublic
         }
       }
       media {
@@ -126,6 +128,10 @@ export const getOfferingDetails = gql`
           isPublic
         }
         logo {
+          url
+          isPublic
+        }
+        heroVideo {
           url
           isPublic
         }
@@ -257,6 +263,13 @@ export const getOfferingDetails = gql`
         }
       }
       leadership {
+        employer {
+          name
+          type
+          description
+          title
+          dateOfService
+        }
         isPublic
         firstName
         lastName

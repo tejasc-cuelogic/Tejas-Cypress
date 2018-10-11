@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Modal, Image, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { InlineLoader } from '../../../../theme/shared';
 import interiorView from '../../../../assets/images/interior-view-patio-garden.jpg';
 
 @inject('campaignStore')
@@ -10,7 +11,7 @@ class BusinessModal extends Component {
 
   render() {
     const { campaign } = this.props.campaignStore;
-    const emptyStatement = 'Detail not found';
+    // const emptyStatement = 'Detail not found';
     return (
       <Modal
         open
@@ -28,16 +29,15 @@ class BusinessModal extends Component {
             </Grid.Column>
             <Grid.Column computer={9} tablet={9} mobile={16}>
               {
-                campaign.offering.about.businessModel !== null ?
-                  <p
-                    dangerouslySetInnerHTML={
+                campaign && campaign.offering && campaign.offering.about &&
+                  campaign.offering.about.businessModel ?
+                    <p
+                      dangerouslySetInnerHTML={
                       {
-                        __html: campaign && campaign.offering
-                          && campaign.offering.about
-                          && campaign.offering.about.businessModel,
+                        __html: campaign.offering.about.businessModel,
                       }
                     }
-                  /> : <p>{emptyStatement}</p>
+                    /> : <InlineLoader text="No data found." />
               }
             </Grid.Column>
           </Grid>

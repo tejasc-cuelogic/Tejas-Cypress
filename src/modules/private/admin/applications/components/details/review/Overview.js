@@ -34,10 +34,10 @@ export default class Overview extends Component {
       OVERVIEW_FRM, formChangeWithIndex, confirmModal, toggleConfirmModal,
       removeData, confirmModalName,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.userStore;
-    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
+    const access = this.props.userStore.myAccessForModule('APPLICATIONS');
+    const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
     const approved = (review && review.overview && review.overview.criticalPoint &&
@@ -47,10 +47,10 @@ export default class Overview extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
           <Header as="h4">
             Overview
-            {!isReadonly &&
+            {!isReadonly && OVERVIEW_FRM.fields.description.length < 5 &&
             <Link to={this.props.match.url} className="link" onClick={this.addCriticalPoint}><small>+ Add Critical Point</small></Link>
             }
           </Header>
@@ -63,7 +63,7 @@ export default class Overview extends Component {
                 label={`Critical Point ${index + 1}`}
                 fielddata={field.description}
                 changed={(e, result) => formChangeWithIndex(e, result, 'OVERVIEW_FRM', 'description', index)}
-                removed={!isReadonly ? e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM') : false}
+                removed={!isReadonly && OVERVIEW_FRM.fields.description.length > 1 ? e => this.toggleConfirmModal(e, index, 'OVERVIEW_FRM') : false}
                 linkto={this.props.match.url}
               />
             ))

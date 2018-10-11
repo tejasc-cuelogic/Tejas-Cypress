@@ -21,10 +21,14 @@ export default class CampaignSideBar extends Component {
   render() {
     const { className, campaignStore } = this.props;
     const collected = 100;
-    const address = 'Houston, TX';
     const { campaign } = campaignStore;
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
+    const updatesArr = campaign && campaign.updates &&
+     campaign.updates.length ? campaign.updates : [];
+    const address = campaign && campaign.businessGeneralInfo &&
+     campaign.businessGeneralInfo.address ?
+      `${campaign.businessGeneralInfo.address.city ? campaign.businessGeneralInfo.address.city : '-'}, ${campaign.businessGeneralInfo.address.state ? campaign.businessGeneralInfo.address.state : '-'}` : '--';
     const d1 = moment().format('MM/DD/YYYY');
     const d2 = terminationDate ? moment(terminationDate).format('MM/DD/YYYY') : null;
     const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
@@ -46,7 +50,7 @@ export default class CampaignSideBar extends Component {
                   <Icon name="arrow left" />
                 </Link>
               } */}
-              {campaign && campaign.keyTerms && campaign.keyTerms.legalBusinessName}
+              {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
               <Header.Subheader>{address}</Header.Subheader>
             </Header>
             <Responsive minWidth={768} as={Aux}>
@@ -104,7 +108,7 @@ export default class CampaignSideBar extends Component {
           {!isMobile &&
             <Aux>
               <Menu vertical fluid>
-                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} />
+                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} updates={updatesArr} />
                 {/* <Divider />
                 <Menu.Item as={Link} to="/" className="secondary-item">
                   <Icon name="heart outline" /> Watch Deal

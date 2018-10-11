@@ -50,10 +50,10 @@ class UserListing extends Component {
                       <div className="user-image">
                         <UserAvatar
                           UserInfo={{
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            avatarUrl: user.avatar ? user.avatar.url : '',
-                            roles: user.accountType,
+                            firstName: user.info ? user.info.firstName : '',
+                            lastName: user.info ? user.info.lastName : '',
+                            avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+                            roles: user.roles.map(r => r.scope),
                           }}
                           size="mini"
                         />
@@ -61,28 +61,28 @@ class UserListing extends Component {
                     }
                   </Table.Cell>
                   <Table.Cell className="user-status">
-                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}>{`${user.firstName} ${user.lastName}`}</Link></span>
-                    {user.email}
+                    <span className="user-name"><Link to={`/app/users/${user.id}/profile-data`}>{`${user.info ? user.info.firstName : ''} ${user.info ? user.info.lastName : ''}`}</Link></span>
+                    {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>
-                    {user.legalDetails && user.legalDetails.legalAddress &&
-                      `${user.legalDetails.legalAddress.city}, ${user.legalDetails.legalAddress.state} (${user.legalDetails.legalAddress.zipCode})`
+                    {user.mailingAddress && user.mailingAddress.city ?
+                      user.mailingAddress.city : ''
                     }
                   </Table.Cell>
                   <Table.Cell>
-                    {user.contactDetails && user.contactDetails.phone &&
-                      user.contactDetails.phone.number &&
-                      `${user.contactDetails.phone.number}`
-                    }
+                    {user.phone ? user.phone.number : ''}
                   </Table.Cell>
                   <Table.Cell>
-                    <UserTypeIcon user={user} />
+                    <UserTypeIcon
+                      role={user.roles.map(r => r.scope)[0]}
+                      items={user.roles.map(r => r.scope).filter(r => r !== 'investor')}
+                    />
                   </Table.Cell>
                   <Table.Cell>
-                    <DateTimeFormat fromNow datetime={user.createdDate} />
+                    {user.created && <DateTimeFormat fromNow datetime={user.created.date} />}
                   </Table.Cell>
                   <Table.Cell>
-                    <DateTimeFormat fromNow datetime={user.lastLoginDate} />
+                    {user.lastLoginDate && <DateTimeFormat fromNow datetime={user.lastLoginDate} />}
                   </Table.Cell>
                   <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
                 </Table.Row>

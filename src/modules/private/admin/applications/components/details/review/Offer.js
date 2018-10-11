@@ -40,10 +40,10 @@ export default class Offer extends Component {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
       confirmModalName, removeData, checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.userStore;
-    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
+    const access = this.props.userStore.myAccessForModule('APPLICATIONS');
+    const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { offers } = businessApplicationDetailsAdmin;
+    const { offers, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
@@ -51,7 +51,7 @@ export default class Offer extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview title="Submit offer" isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} stepStatus={checkAllStepsIsApproved} />
+          <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} stepStatus={checkAllStepsIsApproved} />
           <Header as="h4">
             Offers
             {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
@@ -68,11 +68,11 @@ export default class Offer extends Component {
             refModule="admin"
             toggleConfirmModal={this.toggleConfirmModal}
           />
-          <Table basic compact className="form-table">
+          <Table basic compact className="mt-30 form-table">
             <Table.Body>
-              <Table.Row verticalAlign="top">
+              <Table.Row>
                 <Table.Cell collapsing>
-                  <Header as="h5">Portal agreement upload</Header>
+                  <Header as="h6">Term Note portal agreement</Header>
                 </Table.Cell>
                 <Table.Cell>
                   <DropZone
@@ -84,6 +84,13 @@ export default class Offer extends Component {
                     onremove={this.handleDelDoc}
                     uploadtitle="Add Term Note portal agreement"
                   />
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell collapsing>
+                  <Header as="h6">Rev Sharing portal agreement</Header>
+                </Table.Cell>
+                <Table.Cell>
                   <DropZone
                     containerclassname={isReadonly ? 'display-only' : ''}
                     disabled={isReadonly}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
 import { Table, Dropdown, Icon, Button, Grid, Card } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../services/constants/admin/businessApplication';
@@ -21,7 +22,7 @@ export default class OffersPanel extends Component {
       <Grid columns={2}>
         {OFFERS_FRM.fields.offer.map((offer, index) => (
           <Grid.Column>
-            <Card fluid className="offer-card">
+            <Card fluid className={`offer-card ${selectedOfferIndex === index ? 'active' : ''}`}>
               <Card.Content>
                 <Card.Header>
                   Offer {String.fromCharCode('A'.charCodeAt() + index)}
@@ -39,8 +40,8 @@ export default class OffersPanel extends Component {
                       <Table.Cell>{offerFields.structure.label}</Table.Cell>
                       <Table.Cell>
                         <Dropdown
-                          className={isReadonly ? 'display-only' : 'secondary'}
-                          disabled={isReadonly}
+                          className={isReadonly ? 'display-only secondary' : 'secondary'}
+                          readOnly={isReadonly}
                           name="structure"
                           placeholder="Choose"
                           fluid
@@ -51,19 +52,44 @@ export default class OffersPanel extends Component {
                         />
                       </Table.Cell>
                     </Table.Row>
-                    <Table.Row>
-                      <Table.Cell>{offerFields.amount.label}</Table.Cell>
-                      <Table.Cell>
-                        <FormInput
-                          containerclassname={isReadonly ? 'display-only' : ''}
-                          readOnly={isReadonly}
-                          name="amount"
-                          fielddata={offer.amount}
-                          changed={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
-                          ishidelabel
-                        />
-                      </Table.Cell>
-                    </Table.Row>
+                    {!isReadonly ?
+                      <Aux>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.minimumAmount.label}</Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              containerclassname={isReadonly ? 'display-only' : ''}
+                              readOnly={isReadonly}
+                              prefix="$"
+                              currency
+                              name="minimumAmount"
+                              fielddata={offer.minimumAmount}
+                              changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                              hidelabel
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                        <Table.Row>
+                          <Table.Cell>{offerFields.amount.label}</Table.Cell>
+                          <Table.Cell>
+                            <MaskedInput
+                              containerclassname={isReadonly ? 'display-only' : ''}
+                              readOnly={isReadonly}
+                              prefix="$"
+                              currency
+                              name="amount"
+                              fielddata={offer.amount}
+                              changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
+                              hidelabel
+                            />
+                          </Table.Cell>
+                        </Table.Row>
+                      </Aux> :
+                      <Table.Row>
+                        <Table.Cell>Offering Amount</Table.Cell>
+                        <Table.Cell>{`$${offer.minimumAmount.value} - $${offer.amount.value}`}</Table.Cell>
+                      </Table.Row>
+                      }
                     <Table.Row>
                       <Table.Cell>{offerFields.maturity.label}</Table.Cell>
                       <Table.Cell>
@@ -111,10 +137,10 @@ export default class OffersPanel extends Component {
                       <Table.Cell>{offerFields.personalGuarantee.label}</Table.Cell>
                       <Table.Cell>
                         <Dropdown
-                          className={isReadonly ? 'display-only' : 'secondary'}
-                          disabled={isReadonly}
+                          className={isReadonly ? 'display-only secondary' : 'secondary'}
+                          readOnly={isReadonly}
                           name="personalGuarantee"
-                          placeholder="Type number"
+                          placeholder="Choose"
                           fluid
                           selection
                           value={offer.personalGuarantee.value}
@@ -156,7 +182,8 @@ export default class OffersPanel extends Component {
                       <Table.Cell>
                         <FormInput
                           containerclassname={isReadonly ? 'display-only' : ''}
-                          readOnly={isReadonly || offer.structure.value === 'TERM_NOTE'}
+                          readOnly={isReadonly}
+                          disabled={offer.structure.value === 'TERM_NOTE'}
                           name="multiple"
                           fielddata={offer.multiple}
                           changed={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
@@ -174,7 +201,8 @@ export default class OffersPanel extends Component {
                           fielddata={offer.totalCapital}
                           changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           containerclassname={isReadonly ? 'display-only' : ''}
-                          readOnly={isReadonly || offer.structure.value === 'TERM_NOTE'}
+                          readOnly={isReadonly}
+                          disabled={offer.structure.value === 'TERM_NOTE'}
                           hidelabel
                         />
                       </Table.Cell>
@@ -185,7 +213,7 @@ export default class OffersPanel extends Component {
               {this.props.refModule !== 'admin' && (
                 <Card.Content extra className="center-align">
                   {selectedOfferIndex !== index ?
-                    <Button primary content="View Details" onClick={() => selectOffer('selectedOfferIndex', index)} />
+                    <Button primary className="relaxed" content="View Details" onClick={() => selectOffer('selectedOfferIndex', index)} />
                   : <p>See details below</p>
                   }
                 </Card.Content>

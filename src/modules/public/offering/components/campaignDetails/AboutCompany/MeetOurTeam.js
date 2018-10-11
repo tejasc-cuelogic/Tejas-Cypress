@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { filter } from 'lodash';
+import { InlineLoader } from '../../../../../../theme/shared';
 import defaultLeaderProfile from '../../../../../../assets/images/leader-placeholder.jpg';
 
 class MeetOurTeam extends Component {
@@ -8,11 +10,16 @@ class MeetOurTeam extends Component {
     const {
       campaign, meetOurTeamUrl, emptyStatement,
     } = this.props;
+    const leadershipArr = campaign && campaign.leadership && campaign.leadership.length ?
+      campaign.leadership : [];
+    const meetTeamOjb = filter(leadershipArr, o => (
+      o.isPublic
+    ));
     return (
       <Grid.Column>
         <Segment padded>
           <Header as="h4">
-            {campaign.leadership.length ?
+            {meetTeamOjb.length ?
               <Link to={`${meetOurTeamUrl}/meetourteam`}>
                 Meet our team
                 <Icon className="ns-chevron-right" color="green" />
@@ -21,11 +28,11 @@ class MeetOurTeam extends Component {
             }
           </Header>
           {
-            campaign.leadership.length > 0 ?
+            meetTeamOjb.length ?
               <Grid columns={3}>
                 {
-                  campaign.leadership.map(data => (
-                    data.isPublic === true ?
+                  meetTeamOjb.map(data => (
+                    data.isPublic ?
                       <Grid.Column>
                         <Reveal animated="small fade">
                           <Reveal.Content hidden>
@@ -36,8 +43,8 @@ class MeetOurTeam extends Component {
                           <Reveal.Content visible>
                             <Image
                               src={
-                                data.uploads.headshot.isPublic === true &&
-                                  data.uploads.headshot.url != null ?
+                                data && data.uploads && data.uploads.headshot &&
+                                  data.uploads.headshot.url ?
                                   data.uploads.headshot.url : defaultLeaderProfile
                               }
                               circular
@@ -51,7 +58,7 @@ class MeetOurTeam extends Component {
                 }
               </Grid>
               :
-              <p>{emptyStatement}</p>
+              <InlineLoader text={emptyStatement} />
           }
         </Segment>
       </Grid.Column>

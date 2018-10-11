@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Breadcrumb, Grid, Image, Segment } from 'semantic-ui-react';
+import { Breadcrumb, Grid, Segment, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { NsCarousel } from '../../../../../../theme/shared';
-// import videoPoster from '../../../../../../assets/images/636206632.jpg';
+import { NsCarousel, Image64 } from '../../../../../../theme/shared';
+import emptyHeroImagePlaceholder from '../../../../../../assets/images/gallery-placeholder.jpg';
 
 class Gallery extends Component {
   render() {
@@ -17,10 +17,19 @@ class Gallery extends Component {
             <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
           </Breadcrumb>
           <div className="carousel mt-10 mb-30">
-            <NsCarousel {...settings}>
-              {campaign.media.gallery.map(data => (
-                <Image src={data.url} />
-              ))}
+            <NsCarousel
+              {...settings}
+              handlePaginationFun={() => {}}
+            >
+              {
+                campaign && campaign.media &&
+                  campaign.media.gallery && campaign.media.gallery.length ?
+                  campaign.media.gallery.map(data => (
+                    <Image64 srcUrl={data.url} />
+                  ))
+                  :
+                  <Image src={emptyHeroImagePlaceholder} />
+              }
             </NsCarousel>
           </div>
         </Segment>

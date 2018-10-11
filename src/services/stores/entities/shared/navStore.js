@@ -11,6 +11,7 @@ export class NavStore {
     roles: [], currentNav: [], appStatus: null, specificNav: null,
   };
   @observable navStatus = 'main';
+  @observable subNavStatus = '';
   @observable navMeta = [];
   @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
@@ -45,7 +46,16 @@ export class NavStore {
 
   @action
   filterByAccess = (sNavs, phase, exclude = []) => toJS(sNavs.filter(sN => !sN.accessFor ||
-      (sN.accessFor.includes(phase) && !exclude.includes(sN.to))));
+      (sN.accessFor.includes(phase <= 4 ? phase : 4) && !exclude.includes(sN.to))));
+
+  businessName = b => ((b.keyTerms && b.keyTerms.shorthandBusinessName) ?
+    b.keyTerms.shorthandBusinessName : (
+      (b.keyTerms && b.keyTerms.legalBusinessName) ?
+        b.keyTerms.legalBusinessName : (
+          b.businessGeneralInfo && b.businessGeneralInfo.businessName ?
+            b.businessGeneralInfo.businessName : 'N/A'
+        )
+    ));
 
   @computed get allNavItems() {
     const navItems = [...this.myRoutes];
@@ -63,8 +73,7 @@ export class NavStore {
           {
             ...navItems[bIndex],
             ...{
-              title: b.businessGeneralInfo ?
-                b.businessGeneralInfo.businessName : b.keyTerms.legalBusinessName,
+              title: this.businessName(b),
               to: `offering/${b.id}`,
               subNavigations: sNav,
             },
@@ -119,9 +128,14 @@ export class NavStore {
 
   @action
   setNavStatus(calculations, forced) {
-    const { percentagePassed, topVisible } = calculations;
-    if (typeof percentagePassed === 'number') {
-      this.navStatus = forced || ((percentagePassed > 0 && !topVisible) ? 'sub' : 'main');
+    const {
+      topVisible, direction, bottomPassed,
+    } = calculations;
+    if (typeof topVisible === 'boolean') {
+      this.navStatus = forced || (!topVisible ? 'sub' : 'main');
+      if ((this.navStatus === 'sub') && (bottomPassed)) {
+        this.subNavStatus = (direction === 'down' ? 'animate' : 'animate reverse');
+      }
     }
   }
 }

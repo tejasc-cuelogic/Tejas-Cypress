@@ -57,21 +57,21 @@ export default class Listing extends Component {
                 <Table.Row><Table.Cell colSpan={6} textAlign="center">No Offering to display !</Table.Cell></Table.Row>
                 ) :
                 offerings.map(offering => (
-                  <Table.Row key={offering.id} onClick={() => this.handleAction('Edit', offering.id)}>
-                    <Table.Cell>
-                      <b>{offering.businessGeneralInfo ?
-                          offering.businessGeneralInfo.businessName :
-                          offering.keyTerms.legalBusinessName}
+                  <Table.Row key={offering.id}>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
+                      <b>{offering.keyTerms ?
+                          offering.keyTerms.legalBusinessName :
+                          offering.businessGeneralInfo.businessName}
                       </b>
                     </Table.Cell>
-                    <Table.Cell><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
                       `${DataFormatter.diffDays(offering.offering.launch.targetDate)} days`
                       }
                     </Table.Cell>
-                    <Table.Cell>{offering.lead ? offering.lead.name : 'N/A'}</Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.lead ? offering.lead.name : 'N/A'}</Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
                         <b>pocname11</b><br />
                         pocemail11@test.com<br />

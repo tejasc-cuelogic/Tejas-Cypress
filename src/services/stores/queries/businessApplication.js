@@ -487,6 +487,7 @@ query _getBusinessApplicationById ($id: String!) {
       offer {
         structure
         amount
+        minimumAmount
         maturity
         interestRate
         amortizationAmount

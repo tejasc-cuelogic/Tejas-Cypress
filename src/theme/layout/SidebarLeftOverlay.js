@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
 import { UserAvatar, Logo } from '../shared';
+import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
 @inject('uiStore')
 @observer
@@ -13,9 +15,12 @@ class SidebarLeftPush extends Component {
   toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
   toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
   render() {
-    const { layoutState } = this.props.uiStore;
+    const { layoutState, showFireworkAnimation } = this.props.uiStore;
     return (
       <Aux>
+        {showFireworkAnimation &&
+        <FireworksAnimation />
+        }
         <Responsive minWidth={1200}>
           <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
         </Responsive>
@@ -52,12 +57,14 @@ const MySidebar = observer(props => (
             renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
             renderView={p => <div {...p} className="view" />}
           >
-            <Logo
-              className="logo"
-              dataSrc={((props.layoutState.leftPanel) ?
-                (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
-                'LogoSmall')}
-            />
+            <Link to="/">
+              <Logo
+                className="logo"
+                dataSrc={((props.layoutState.leftPanel) ?
+                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+                  'LogoSmall')}
+              />
+            </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             <div className="user-picture">
               <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />

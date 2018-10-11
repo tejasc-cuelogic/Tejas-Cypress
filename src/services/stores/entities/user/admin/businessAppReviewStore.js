@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter } from 'lodash';
+import { map, forEach, filter, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
@@ -30,12 +30,12 @@ export class BusinessAppReviewStore {
   @observable MODEL_VARIABLES_FRM = Validator.prepareFormObject(MODEL_VARIABLES);
   @observable RESULTS_FRM = Validator.prepareFormObject(MODEL_RESULTS);
   @observable businessApplicationOffers = null;
-  @observable getPortalAgreementStatus = null;
   @observable confirmModal = false;
   @observable confirmModalName = null;
   @observable removeIndex = null;
   @observable selectedOfferIndex = null;
   @observable paBoxFolderId = null;
+  @observable signPortalAgreementURL = '';
   @observable removeFileIdsList = [];
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
@@ -242,7 +242,7 @@ export class BusinessAppReviewStore {
   get totalSourcesAmount() {
     let totalAmount = 0;
     this.BUSINESS_PLAN_FRM.fields.sources.map((source) => {
-      totalAmount += source.amount.value;
+      totalAmount += parseInt(source.amount.value || 0, 10);
       return totalAmount;
     });
     return totalAmount;
@@ -252,7 +252,7 @@ export class BusinessAppReviewStore {
   get totalUsesAmount() {
     let totalAmount = 0;
     this.BUSINESS_PLAN_FRM.fields.uses.map((use) => {
-      totalAmount += use.amount.value;
+      totalAmount += parseInt(use.amount.value || 0, 10);
       return totalAmount;
     });
     return totalAmount;
@@ -261,6 +261,11 @@ export class BusinessAppReviewStore {
   @action
   resetMe = (form, ref) => {
     this[form] = Validator.prepareFormObject(ref);
+  }
+
+  @action
+  resetCommentFrm = () => {
+    this.APPLICATION_STATUS_COMMENT_FRM = Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
   }
 
  @action
@@ -385,11 +390,8 @@ export class BusinessAppReviewStore {
     ) || null;
   }
 
-  @computed get getPortalAgreementStatus() {
-    return (this.getPortalAgreementStatus && this.getPortalAgreementStatus.data
-      && this.getPortalAgreementStatus.data.getPortalAgreementStatus
-      && toJS(this.getPortalAgreementStatus.data.getPortalAgreementStatus)
-    ) || null;
+  @computed get offerLoading() {
+    return this.businessApplicationOffers.loading;
   }
 
   @action
@@ -438,6 +440,7 @@ export class BusinessAppReviewStore {
           variables: payLoad,
         })
         .then((result) => {
+          this.setFieldvalue('signPortalAgreementURL', result.data.signPortalAgreement);
           resolve(result);
         })
         .catch((error) => {
@@ -477,10 +480,9 @@ export class BusinessAppReviewStore {
     });
   }
 
-  @action
   getPortalAgreementStatus = () => new Promise((resolve) => {
     const offerData = this.fetchBusinessApplicationOffers;
-    this.getPortalAgreementStatus = graphql({
+    graphql({
       client,
       query: getPortalAgreementStatus,
       variables: {
@@ -541,7 +543,7 @@ export class BusinessAppReviewStore {
     if (!appData) {
       return false;
     }
-    this.paBoxFolderId = appData.paBoxFolderId ? appData.paBoxFolderId : null;
+    this.paBoxFolderId = get(appData, 'storageDetails.Application.Review.Offer.id');
     this[form] = Validator.setFormData(this[form], appData, ref);
     const multiForm = this.getActionType(form, 'isMultiForm');
     if (form !== 'MANAGERS_FRM') {

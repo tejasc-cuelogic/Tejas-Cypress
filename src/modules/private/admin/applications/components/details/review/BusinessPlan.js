@@ -48,10 +48,10 @@ export default class BusinessPlan extends Component {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
       maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
     } = this.props.businessAppReviewStore;
-    const { myCapabilities } = this.props.userStore;
-    const isManager = myCapabilities.includes('APPLICATIONS_MANAGER');
+    const access = this.props.userStore.myAccessForModule('APPLICATIONS');
+    const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
-    const { review } = businessApplicationDetailsAdmin;
+    const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.businessPlan && review.businessPlan &&
       review.businessPlan.submitted) ? review.businessPlan.submitted : null;
     const approved = (review && review.businessPlan && review.businessPlan &&
@@ -61,7 +61,7 @@ export default class BusinessPlan extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
@@ -83,9 +83,11 @@ export default class BusinessPlan extends Component {
               <Aux>
                 <Header as="h6">
                   {`Control Person ${index + 1}`}
+                  {!isReadonly && BUSINESS_PLAN_FRM.fields.controlPersons.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'controlPersons')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="bg-offwhite">
                   <Form.Group widths={3}>
@@ -214,9 +216,11 @@ export default class BusinessPlan extends Component {
                           />
                         </Table.Cell>
                         <Table.Cell collapsing>
+                          {!isReadonly &&
                           <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'sources')} >
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
+                          }
                         </Table.Cell>
                       </Table.Row>
                     )) : ''
@@ -276,9 +280,11 @@ export default class BusinessPlan extends Component {
                         />
                       </Table.Cell>
                       <Table.Cell collapsing>
+                        {!isReadonly &&
                         <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'uses')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
+                        }
                       </Table.Cell>
                     </Table.Row>
                   )) : ''

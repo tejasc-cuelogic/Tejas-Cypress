@@ -2,41 +2,35 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query getUsers($search: String, $orderBy: userOrderBy, $filters: [UserFilter]) {
-    users(search: $search, orderBy: $orderBy, filters: $filters) {
-      resultCount
-      totalCount
-      lek {
-        id
-      }
+  query listUsers($search: String, $page: Int) {
+    listUsers (search: $search, page: $page) {
       users {
         id
-        firstName
-        lastName
-        email
-        accountType
-        accreditation
-        createdDate
-        lastLoginDate
-        contactDetails {
-          phone {
-            number
-          }
+        email {
+          address
         }
-        legalDetails {
-          legalAddress {
+        info {
+          firstName
+          lastName
+          avatar {
+            url
+            name
+          }
+          mailingAddress {
             city
-            state
-            zipCode
           }
         }
-        avatar {
-          name
-          url
+        phone {
+          number
         }
-        accountStatus
+        roles {
+          scope
+        }
+        lastLoginDate
+        created {
+          date
+        }
       }
-      
     }
   }
 `;

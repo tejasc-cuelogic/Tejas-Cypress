@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
@@ -11,7 +10,7 @@ class RevenueSharingKeyTerms extends Component {
       <Modal.Content scrolling>
         <Grid columns={3} divided stackable className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b><br />{KeyTerms.legalBusinessName}</p>
+            <p><b>Issuer</b><br />{KeyTerms.shorthandBusinessName}</p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Securities</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
@@ -149,9 +148,9 @@ class RevenueSharingKeyTerms extends Component {
           <Divider />
         }
         <Header as="h5" className="center-align">
-          <Link to="keyterms/summary">
+          <a href="/https://www.sec.gov/Archives/edgar/data/1735180/000173518018000003/0001735180-18-000003-index.htm" target="blank">
             View the Issuer&apos;s SEC Form C filing
-          </Link>
+          </a>
         </Header>
       </Modal.Content>
     );

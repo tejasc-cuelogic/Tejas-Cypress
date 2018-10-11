@@ -67,6 +67,10 @@ export default class Media extends Component {
   handleRemoveCancel = () => {
     this.setState({ ConfirmModal: false, index: undefined });
   }
+  handleFormSubmit = () => {
+    const { MEDIA_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, MEDIA_FRM.fields, 'media');
+  }
   render() {
     const { MEDIA_FRM, formChange } = this.props.offeringCreationStore;
     const { match } = this.props;
@@ -94,12 +98,13 @@ export default class Media extends Component {
                   modalUploadAction={this.uploadMedia}
                   name="heroImage"
                   cropInModal
+                  aspect={16 / 9}
                 />
               )}
             </Form>
           </Grid.Column>
           <Grid.Column>
-            <Form className="comment-input video-url">
+            <Form className="comment-input video-url" onSubmit={this.handleFormSubmit}>
               <Header as="h4">Hero Video</Header>
               <Input
                 name="heroVideo"
@@ -140,6 +145,7 @@ export default class Media extends Component {
               modalUploadAction={this.uploadMedia}
               name="tombstoneImage"
               cropInModal
+              aspect={3 / 2}
             />
           )}
         </Form>
@@ -168,6 +174,7 @@ export default class Media extends Component {
                 modalUploadAction={this.uploadMedia}
                 name="location"
                 cropInModal
+                aspect={3 / 2}
               />
             </List.Item>
           </List>
@@ -197,6 +204,7 @@ export default class Media extends Component {
                 modalUploadAction={this.uploadMedia}
                 name="gallery"
                 cropInModal
+                aspect={16 / 9}
               />
             </List.Item>
           </List>
@@ -226,6 +234,7 @@ export default class Media extends Component {
                 modalUploadAction={this.uploadMedia}
                 name="logo"
                 cropInModal
+                aspect="none"
               />
             </List.Item>
           </List>

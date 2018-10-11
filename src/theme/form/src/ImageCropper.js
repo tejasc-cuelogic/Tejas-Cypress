@@ -51,7 +51,8 @@ export default class ImageCropper extends Component {
       crop: makeAspectCrop({
         x: 0,
         y: 0,
-        aspect: 1 / 1,
+        aspect: this.props.aspect ?
+          this.props.aspect === 'none' ? null : this.props.aspect : 1 / 1,
         width: cropWidthPer,
       }, image.width / image.height),
       image,
@@ -95,7 +96,15 @@ export default class ImageCropper extends Component {
   }
 
   handleCloseModal = () => {
-    this.setState({ close: false });
+    this.setState({
+      close: true,
+      crop: {
+        x: 0,
+        y: 0,
+      },
+      image: '',
+      minWidth: 20,
+    });
     this.props.handelReset();
   }
 
@@ -116,7 +125,7 @@ export default class ImageCropper extends Component {
     return (
       <Aux>
         { field.src && !field.error ? cropInModal ?
-          <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false}>
+          <Modal closeOnRootNodeClick={false} closeIcon size="large" open={this.state.close} onClose={this.handleCloseModal} centered={false} closeOnDimmerClick={false}>
             <Modal.Content>
               <Header as="h3">Crop image for ...</Header>
               <ReactCrop
@@ -142,15 +151,17 @@ export default class ImageCropper extends Component {
             crop={this.state.crop}
           />
           :
-          <div className="file-uploader">
-            <div className="file-uploader-inner">
-              <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
+          <Aux>
+            <div className="file-uploader">
+              <div className="file-uploader-inner">
+                <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
+              </div>
+              <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             </div>
-            <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             {field.error &&
               <FieldError error={field.error} />
             }
-          </div>
+          </Aux>
         }
       </Aux>
     );

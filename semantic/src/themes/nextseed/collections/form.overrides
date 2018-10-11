@@ -234,28 +234,32 @@
             .file-uploader.attached{
                 position:relative;
                 border:none;
-                    .ui.icon.button{
-                        background:@white;
-                        padding:0.5em;
-                        margin:0;
-                        height:24px;
-                        font-size:11px;
-                        border:@neutral-offdark 1px solid;
-                        position:absolute;
-                        right:5px;
-                        top:5px;
-                        z-index:1;
-                        >i.icon{
-                            height:auto;
-                        }
+                display:block;
+                img.ui.image{
+                    width:100%;
+                }
+                .ui.icon.button{
+                    background:@white;
+                    padding:0.5em;
+                    margin:0;
+                    height:24px;
+                    font-size:11px;
+                    border:@neutral-offdark 1px solid;
+                    position:absolute;
+                    right:5px;
+                    top:5px;
+                    z-index:1;
+                    >i.icon{
+                        height:auto;
                     }
                 }
             }
+        }
         &.hero-img{
             max-width:705px;
-            .file-uploader{
-                height:170px;
-            }
+            // .file-uploader{
+            //     height:170px;
+            // }
         }
         &.tombstone-img{
             max-width:420px;
@@ -268,8 +272,8 @@
             max-height:none;
             text-align:left;
             .file-uploader{
-                width:280px;
-                height:160px;
+                width:320px;
+                height:180px;
                 min-height:auto;
                 margin:0;
                 display:flex;

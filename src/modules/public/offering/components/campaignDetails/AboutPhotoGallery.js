@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Image, Container } from 'semantic-ui-react';
-import { NsCarousel } from '../../../../../theme/shared';
-// import videoPoster from '../../../../../assets/images/636206632.jpg';
+import { NsCarousel, Image64 } from '../../../../../theme/shared';
+import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
 const isTablet = document.documentElement.clientWidth < 1024;
 @inject('campaignStore')
@@ -12,6 +12,7 @@ class AboutPhotoGallery extends Component {
     activeSlide: 0,
   };
   handleClose = () => this.props.history.goBack();
+  handlePagination = newIndex => this.setState({ activeSlide: newIndex });
   render() {
     const { campaign } = this.props.campaignStore;
     const settings = {
@@ -21,8 +22,10 @@ class AboutPhotoGallery extends Component {
       slidesToScroll: 1,
       arrows: true,
     };
-    const galleryLength = campaign.media.gallery.length < 8 ? campaign.media.gallery.length : 8;
-    const tabGalleryLength = campaign.media.gallery.length < 4 ? campaign.media.gallery.length : 4;
+    const galleryArray = campaign && campaign.media && campaign.media.gallery &&
+      campaign.media.gallery.length ? campaign.media.gallery : [];
+    const galleryLength = galleryArray.length < 8 ? galleryArray.length : 8;
+    const tabGalleryLength = galleryArray < 4 ? galleryArray.length : 4;
     return (
       <Modal
         open
@@ -31,18 +34,24 @@ class AboutPhotoGallery extends Component {
         closeIcon
         className="about-modal"
       >
-        <div className="carousel-counter">{this.state.activeSlide}/{campaign.media.gallery.length}</div>
+        <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
         <div className="carousel">
           <Container fluid>
             <NsCarousel
               {...settings}
               thumbs={isTablet ? tabGalleryLength : galleryLength}
-              imageCount={campaign.media.gallery.length}
+              imageCount={galleryArray.length}
               isTablet={isTablet}
+              handlePaginationFun={this.handlePagination}
             >
-              {campaign.media.gallery.map(data => (
-                <Image src={data.url} />
-              ))}
+              {
+                galleryArray.length ?
+                  galleryArray.map(data => (
+                    <Image64 srcUrl={data.url} />
+                  ))
+                  :
+                  <Image src={emptyHeroImagePlaceholder} />
+              }
             </NsCarousel>
           </Container>
         </div>

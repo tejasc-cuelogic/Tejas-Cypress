@@ -20,7 +20,6 @@ export default class NsCarousel extends Component {
       nav2: this.slider2,
     });
   }
-
   render() {
     const settings = {
       infinite: true,
@@ -29,6 +28,11 @@ export default class NsCarousel extends Component {
       slidesToScroll: this.props.slidesToScroll,
       arrows: this.props.arrows,
       dots: this.props.dots,
+      beforeChange: (current, next) => {
+        if (this.props.handlePaginationFun) {
+          this.props.handlePaginationFun(next);
+        }
+      },
     };
 
     if (this.props.thumbs) {
@@ -38,7 +42,6 @@ export default class NsCarousel extends Component {
       } else {
         thumbnailClassToApply = this.props.imageCount >= 8 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
       }
-
       return (
         <Aux>
           <Slider
@@ -66,7 +69,7 @@ export default class NsCarousel extends Component {
     return (
       <Slider {...settings}>
         {this.props.children}
-      </Slider>
+      </Slider >
     );
   }
 }

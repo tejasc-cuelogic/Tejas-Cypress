@@ -106,6 +106,29 @@
             box-shadow:@cardHoverShadow;
             border: 1px solid @neutral-darkwhite;
         }
+        &.info-card {
+            border-color: transparent;
+            padding: @14px;
+            width: auto;
+            &:hover {
+                border-color: @neutral-darkwhite;
+            }
+            .content {
+                border: 0;
+                padding: 0 @28px;
+                .description {
+                    font-size: @14px;
+                    margin: 0 0 @30px;
+                    height: auto;
+                }
+            }
+            .extra {
+                border-top: 0 !important;
+            }
+            >.image {
+                background: transparent;
+            }
+        }
     }
     &.insights{
         height: 100%;
@@ -360,6 +383,9 @@
                     padding-right:@relative21px;
                 }
             }
+        }
+        .extra{
+            color:@neutral;
         }
     }
 }

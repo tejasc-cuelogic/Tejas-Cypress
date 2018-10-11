@@ -27,7 +27,7 @@ export default class Leader extends Component {
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
-    const { roles } = this.props.userStore.currentUser;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     return (
@@ -73,22 +73,25 @@ export default class Leader extends Component {
           ))
         }
         <Divider hidden />
-        <div className="clearfix mb-20 right-align">
-          <Button secondary content="Submit for Approval" disabled={!LEADER_FRM.meta.isValid} />
-        </div>
         <div className="clearfix mb-20">
-          {roles && (roles.includes('admin') || roles.includes('support')) &&
-            <Button color="gray" content="Awaiting Manager Approval" disabled={!LEADER_FRM.meta.isValid} />
-          }
-          <Button.Group floated="right">
-            {roles && (roles.includes('admin') || roles.includes('manager')) &&
+          {access.asManager ?
+            <Button.Group floated="right">
+              <Button inverted content="Decline" color="red" />
+              <Button disabled={!LEADER_FRM.meta.isValid} secondary content="Generate Report" />
+              <Button disabled={!LEADER_FRM.meta.isValid} primary content="Approve" color="green" />
+            </Button.Group>
+            :
             <Aux>
-              <Button inverted content="Send Back" color="red" disabled={!LEADER_FRM.meta.isValid} />
-              <Button secondary content="Generate Report" disabled={!LEADER_FRM.meta.isValid} />
-              <Button primary content="Approve" color="green" disabled={!LEADER_FRM.meta.isValid} />
+              <div className="clearfix mb-20 right-align">
+                <Button secondary content="Submit for Approval" disabled={!LEADER_FRM.meta.isValid} />
+              </div>
+              {/* <Button
+                content="Awaiting Manager Approval"
+                color="gray"
+                disabled={!LEADER_FRM.meta.isValid}
+              /> */}
             </Aux>
             }
-          </Button.Group>
         </div>
         <div className="clearfix">
           <Button.Group floated="right">

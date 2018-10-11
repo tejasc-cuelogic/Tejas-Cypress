@@ -655,23 +655,69 @@ export const OFFERING_DETAILS = {
 
 export const MEDIA = {
   heroVideo: {
-    value: '', label: '', error: undefined, rule: 'optional',
+    value: '', label: '', error: undefined, rule: 'optional', objType: 's3File',
   },
   heroImage: {
-    value: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   tombstoneImage: {
-    value: '', objType: 's3File', src: '', label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   location: {
-    value: '', objType: 's3File', src: '', label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   gallery: {
-    value: '', objType: 's3File', src: '', label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   logo: {
-    value: '', objType: 's3File', src: '', label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
   },
+};
+
+export const LEADERSHIP_EXP = {
+  employer: [{
+    name: {
+      label: 'Business Name',
+      value: '',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'e.g. John Doe',
+      customErrors: { required: '* required.', string: '* required.' },
+    },
+    type: {
+      label: 'Type of Business',
+      value: '',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'e.g. bakery',
+      customErrors: { required: '* required.', string: '* required.' },
+    },
+    description: {
+      label: 'Description',
+      value: '',
+      error: undefined,
+      rule: 'required',
+      placeHolder: 'Enter here',
+      customErrors: { required: '* required.' },
+    },
+    title: {
+      label: 'Title',
+      value: '',
+      error: undefined,
+      rule: 'string|required',
+      placeHolder: 'Enter here',
+      customErrors: { required: '* required.', string: '* required.' },
+    },
+    dateOfService: {
+      label: 'Dates of Service',
+      value: '',
+      error: undefined,
+      rule: 'date|required',
+      placeHolder: 'MM-DD-YYYY',
+      objType: 'DATE',
+      customErrors: { required: '* required.', date: '* required.' },
+    },
+  }],
 };
 
 export const LEADERSHIP = {

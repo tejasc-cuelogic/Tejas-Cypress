@@ -2100,8 +2100,12 @@ p.check-extra-info{
 	// }
 	&.inverted {
 		background-color: fade(@neutral, 90%);
+		transition:all 300ms ease-in-out;
 		.sign-in {
 			color: @white;
+		}
+		&.slide-up{
+			background-color:@neutral;
 		}
 	}
 	.icon.hamburger {
@@ -2266,5 +2270,25 @@ p.check-extra-info{
 		width:36px;
 		height:36px;
 		line-height:36px;
+	}
+}
+//investment-limit-calculator
+#investment-limit-calculator .form-group.row {
+	display: flex;
+    flex-direction: row;
+	margin-bottom: @10px;
+	label {
+		flex: 1;
+	}
+	.input-group {
+		flex: 2;
+		margin: 0 !important;
+		input {
+			height: 35px;
+			border: 1px solid @neutral-middark;
+			border-radius: 6px;
+			padding: @6px;
+			box-shadow: inset @commonShadow;
+		}
 	}
 }

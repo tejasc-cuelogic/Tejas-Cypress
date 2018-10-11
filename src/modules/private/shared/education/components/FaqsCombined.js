@@ -70,9 +70,10 @@ export default class FaqsCombined extends Component {
                       <Icon className={innerActiveIndex === index ? 'ns-minus-square' : 'ns-plus-square'} color="green" />
                       {faqItem.question}
                     </Accordion.Title>
-                    <Accordion.Content active={innerActiveIndex === index}>
-                      {faqItem.answer} 
-                    </Accordion.Content>
+                    <Accordion.Content
+                      dangerouslySetInnerHTML={{ __html: faqItem.answer }}
+                      active={innerActiveIndex === index}
+                    />
                   </Accordion>
                 ))
                 }

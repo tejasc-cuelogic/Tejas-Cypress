@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import { Header, Container, Grid, Image, Icon, Responsive, Divider, Button } from 'semantic-ui-react';
+import { Header, Container, Grid, Image, Icon, Responsive, Divider, Button, Card } from 'semantic-ui-react';
 import icon1 from '../../../../assets/images/icons/resources_1.svg';
 import icon2 from '../../../../assets/images/icons/resources_2.svg';
 
@@ -21,27 +21,40 @@ const Summary = props => (
     </Container>
     <Container>
       <Grid centered relaxed="very" stackable>
-        <Grid.Column textAlign="center" width={6} className="info-card">
-          <Image src={icon1} centered className="mb-20" />
-          <p className="mb-40">
-            Understand how to add local businesses to your investment portfolio, how NextSeed
-            investments work, and the risks and opportunities offered by this new way of investing.
-          </p>
-          <Button as={Link} to={`${props.refUrl}/investor`} color="black" className="link-button">
-            For Investors
-            <Icon className="ns-arrow-right right" color="green" />
-          </Button>
+        <Grid.Column textAlign="center" width={6}>
+          <Card as={Link} to={`${props.refUrl}/investor`} className="info-card campaign">
+            <Card.Content>
+              <Image src={icon1} centered className="mb-20" />
+              <Card.Description>
+                Understand how to add local businesses to your investment portfolio, how NextSeed
+                investments work, and the risks and opportunities offered by this
+                new way of investing.
+              </Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+              <Button color="black" className="link-button">
+                For Investors
+                <Icon className="ns-arrow-right right" color="green" />
+              </Button>
+            </Card.Content>
+          </Card>
         </Grid.Column>
-        <Grid.Column textAlign="center" width={6} className="info-card">
-          <Image src={icon2} centered className="mb-20" />
-          <p className="mb-40">
-            Learn about the business implications of different types of fundraising, how to add
-            NextSeed to your capital stack and how to get started.
-          </p>
-          <Button as={Link} to={`${props.refUrl}/business`} color="black" className="link-button">
-            For Businesses
-            <Icon className="ns-arrow-right right" color="green" />
-          </Button>
+        <Grid.Column textAlign="center" width={6}>
+          <Card className="info-card campaign" as={Link} to={`${props.refUrl}/business`}>
+            <Card.Content>
+              <Image src={icon2} centered className="mb-20" />
+              <Card.Description>
+                Learn about the business implications of different types of fundraising,
+                how to add NextSeed to your capital stack and how to get started.
+              </Card.Description>
+            </Card.Content>
+            <Card.Content extra>
+              <Button color="black" className="link-button">
+                For Businesses
+                <Icon className="ns-arrow-right right" color="green" />
+              </Button>
+            </Card.Content>
+          </Card>
         </Grid.Column>
       </Grid>
     </Container>

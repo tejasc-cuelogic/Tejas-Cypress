@@ -59,6 +59,38 @@ const settings = {
   arrows: true,
   dots: false,
 };
+const businesses = [
+  {
+    title: 'Houston, TX',
+    image: UserOne,
+    description: 'The Sugar Refinery raised $273,800 from 213 investors',
+  },
+  {
+    title: 'San Francisco, CA',
+    image: UserTwo,
+    description: 'Rambler raised $150,000 from 131 investors',
+  },
+  {
+    title: 'Austin, TX',
+    image: UserThree,
+    description: 'The Brewer’s Table raised $3000,000 from 190 investors',
+  },
+  {
+    title: 'San Diego, CA',
+    image: UserFour,
+    description: '619 Distillery & Tasting Room raised $191,600 from 238 investors',
+  },
+  {
+    title: 'Brooklyn, NY',
+    image: UserFive,
+    description: 'California 88 raised $124,900 from 180 investors',
+  },
+  {
+    title: 'Salt Lake City, UT',
+    image: UserSix,
+    description: 'MOB Cycle raised $117,400 from 132 investors',
+  },
+];
 const isMobile = document.documentElement.clientWidth < 768;
 
 const WhyNextseed = () => (
@@ -134,36 +166,15 @@ const WhyNextseed = () => (
           {!isMobile ?
             <Container>
               <Grid centered stackable columns={3} className="vertical-gutter">
-                <Grid.Column textAlign="center">
-                  <Image src={UserOne} centered />
-                  <Header as="h5">Houston, TX</Header>
-                  <p>The Sugar Refinery raised $273,800 from 213 investors</p>
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Image src={UserTwo} centered />
-                  <Header as="h5">San Francisco, CA</Header>
-                  <p>Rambler raised $150,000 from 131 investors</p>
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Image src={UserThree} centered />
-                  <Header as="h5">Austin, TX</Header>
-                  <p>The Brewer’s Table raised $3000,000 from 190 investors</p>
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Image src={UserFour} centered />
-                  <Header as="h5">San Diego, CA</Header>
-                  <p>619 Distillery & Tasting Room raised $191,600 from 238 investors</p>
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Image src={UserFive} centered />
-                  <Header as="h5">Brooklyn, NY</Header>
-                  <p>California 88 raised $124,900 from 180 investors</p>
-                </Grid.Column>
-                <Grid.Column textAlign="center">
-                  <Image src={UserSix} centered />
-                  <Header as="h5">Salt Lake City, UT</Header>
-                  <p>MOB Cycle raised $117,400 from 132 investors</p>
-                </Grid.Column>
+                {
+                  businesses.map(b => (
+                    <Grid.Column textAlign="center">
+                      <Image src={b.image} centered />
+                      <Header as="h5">{b.title}</Header>
+                      <p>{b.description}</p>
+                    </Grid.Column>
+                  ))
+                }
               </Grid>
             </Container>
           :
@@ -171,12 +182,12 @@ const WhyNextseed = () => (
               <Container>
                 <NsCarousel {...settings}>
                   {
-                    [1, 2, 3].map(i => (
-                      <div key={i}>
-                        <Grid.Column textAlign="center">
-                          <Image src={UserOne} centered />
-                          <Header as="h5">Houston, TX</Header>
-                          <p>The Sugar Refinery raised $273,800 from 213 investors</p>
+                    businesses.map(b => (
+                      <div key={b}>
+                        <Grid.Column className="center-align">
+                          <Image src={b.image} centered />
+                          <Header as="h5">{b.title}</Header>
+                          <p>{b.description}</p>
                         </Grid.Column>
                       </div>
                     ))

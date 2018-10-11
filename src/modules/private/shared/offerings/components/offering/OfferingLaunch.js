@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Button, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'userStore')
 @observer
 export default class OfferingLaunch extends Component {
   componentWillMount() {
@@ -28,6 +28,7 @@ export default class OfferingLaunch extends Component {
       maskChange,
     } = this.props.offeringCreationStore;
     const formName = 'COMPANY_LAUNCH_FRM';
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     return (
       <Form onSubmit={this.handleFormSubmit}>
         <Header as="h4">Launch Timeline</Header>
@@ -78,17 +79,16 @@ export default class OfferingLaunch extends Component {
           changed={(e, result) => formChange(e, result, formName)}
         />
         <Divider hidden />
-        <div className="clearfix mb-20 right-align">
-          <Button secondary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Submit for Approval</Button>
-        </div>
-        <div className="clearfix right-align">
-          <Button.Group>
-            <Button as="span" className="time-stamp">
-              <Icon className="ns-check-circle" color="green" />
-              Submitted on 3/4/2018
-            </Button>
-            <Button type="button" primary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Approve and Launch</Button>
-          </Button.Group>
+        <div className="clearfix">
+          <Button as="span" className="time-stamp">
+            <Icon className="ns-check-circle" color="green" />
+            Submitted by USER_NAME on 2/3/2018
+          </Button>
+          {access.asManager ? (
+            <Button floated="right" type="button" primary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Approve and Launch</Button>
+          ) : (
+            <Button floated="right" secondary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Submit for Approval</Button>
+          )}
         </div>
       </Form>
     );

@@ -34,7 +34,7 @@ const HowItWorksSummary = props => (
             Put your money to work in businesses you understand and
             projects that create jobs.
           </p>
-          <Button as={Link} to="/invest/how-it-works" primary content="Investing" className="mt-20" />
+          <Button as={Link} to="/invest/why-nextseed" primary content="Investing" className="mt-20" />
         </Grid.Column>
       </Grid>
     </Container>
