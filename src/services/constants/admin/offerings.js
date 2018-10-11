@@ -1736,7 +1736,7 @@ export const ADD_NEW_TIER = {
     value: '',
     error: undefined,
     rule: 'numeric|required_without:isEarlyBirds',
-    placeHolder: 'e.g. Invitation to the Launch Party',
+    placeHolder: '',
   },
 };
 
