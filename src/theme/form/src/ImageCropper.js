@@ -34,7 +34,7 @@ export default class ImageCropper extends Component {
     this.setState({ imageType: files[0].type });
     this.props.setData('value', files[0].name);
     this.props.setData('meta', { type: files[0].type });
-    this.props.verifySize(files[0].size);
+    this.props.verifySize(files[0].size, this.props.name);
     this.props.verifyExtension(files[0].type.split('/')[1]);
     const reader = new FileReader();
     reader.onload = () => {
@@ -44,7 +44,7 @@ export default class ImageCropper extends Component {
   }
 
   onImageLoaded = (image) => {
-    this.props.verifyImageDimension(image.width, image.height);
+    this.props.verifyImageDimension(image.width, image.height, this.props.name);
     const minimumWidth = 200;
     const cropWidthPer = (minimumWidth / image.width) * 100;
     this.setState({
