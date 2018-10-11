@@ -11,7 +11,9 @@ export default class UpdateBonusReward extends Component {
     const { rewardId } = this.props.match.params;
     const { bonusRewards } = this.props;
     const { setUpdateBonusRewardsData, setCurrentRewardId } = this.props.offeringCreationStore;
-    setUpdateBonusRewardsData(bonusRewards.data.getBonusRewards, rewardId);
+    if (bonusRewards) {
+      setUpdateBonusRewardsData(bonusRewards.data.getBonusRewards, rewardId);
+    }
     setCurrentRewardId(rewardId);
   }
   handleUpdateBonusReward = () => {

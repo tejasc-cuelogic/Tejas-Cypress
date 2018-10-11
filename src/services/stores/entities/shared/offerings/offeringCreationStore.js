@@ -331,7 +331,7 @@ export class OfferingCreationStore {
       uiStore.setProgress();
       const file = files[0];
       const fileData = Helper.getFormattedFileData(file);
-      fileUpload.setFileUploadData(applicationId, fileData, stepName, 'ADMIN', issuerId).then(action((result) => {
+      fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then(action((result) => {
         const { fileId, preSignedUrl } = result.data.createUploadEntry;
         this[form].fields[field].fileId = fileId;
         this[form].fields[field].preSignedUrl = preSignedUrl;

@@ -9,6 +9,7 @@ import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
+@observer
 export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
