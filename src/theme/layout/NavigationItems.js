@@ -89,7 +89,7 @@ export class NavItems extends Component {
             }
             <span>{item.title}</span>
             {item.to === 'updates' || item.to === 'comments' ?
-              <Label circular color="blue" size="small">{this.props.updates.length}</Label> : null
+              <Label circular color="blue" size="small">{this.props.updates && this.props.updates.length ? this.props.updates.length : 0 }</Label> : null
             }
           </Menu.Item>
         )}

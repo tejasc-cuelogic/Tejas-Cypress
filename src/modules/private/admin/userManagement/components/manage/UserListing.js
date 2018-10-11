@@ -79,10 +79,16 @@ class UserListing extends Component {
                     />
                   </Table.Cell>
                   <Table.Cell>
-                    {user.created && <DateTimeFormat fromNow datetime={user.created.date} />}
+                    {user.created ?
+                      <DateTimeFormat unix fromNow datetime={user.created.date} /> :
+                      'N/A'
+                    }
                   </Table.Cell>
                   <Table.Cell>
-                    {user.lastLoginDate && <DateTimeFormat fromNow datetime={user.lastLoginDate} />}
+                    {user.lastLoginDate ?
+                      <DateTimeFormat unix fromNow datetime={user.lastLoginDate} /> :
+                      'N/A'
+                    }
                   </Table.Cell>
                   <Table.Cell><Link to={`/app/users/${user.id}/profile-data`} className="action">view profile</Link></Table.Cell>
                 </Table.Row>
