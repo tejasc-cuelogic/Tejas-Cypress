@@ -6,7 +6,7 @@ import Aux from 'react-aux';
 import { capitalize } from 'lodash';
 import { Container, Card, Image, Label, Icon, List, Grid } from 'semantic-ui-react';
 import Filters from './Filters';
-import { Spinner, InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import lockIcon from '../../../../../assets/images/icon_lock.png';
 import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
@@ -31,8 +31,10 @@ export default class CampaignList extends Component {
         <section className="campaign-list-wrapper">
           <Container>
             {this.props.heading}
+            {loading ? <InlineLoader /> :
             <Grid doubling columns={3} stackable>
-              {loading ? <Spinner loaderMessage="loading.." /> : campaigns && campaigns.length ? campaigns.map(offering => (
+              {campaigns && campaigns.length ?
+              campaigns.map(offering => (
                 <Grid.Column>
                   <Card className="campaign" fluid as={Link} to={`/offerings/${offering.id}/overview`}>
                     <Image
@@ -103,6 +105,7 @@ export default class CampaignList extends Component {
                 </Grid.Column>
               )) : <InlineLoader text="No data found." />}
             </Grid>
+            }
           </Container>
           {this.state.filters && <div className="overlay" />}
         </section>
