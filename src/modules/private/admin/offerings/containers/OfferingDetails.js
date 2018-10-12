@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars, arrow-body-style */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Switch, Route } from 'react-router-dom';
-import { Modal, Card, Header } from 'semantic-ui-react';
+import { Switch, Route, Link } from 'react-router-dom';
+import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { InlineLoader } from '../../../../../theme/shared';
 import LiveSummary from '../components/LiveSummary';
@@ -37,7 +37,13 @@ export default class OfferingDetails extends Component {
     return (
       <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
-          <Header as="h3">{offer.keyTerms && offer.keyTerms.shorthandBusinessName ? offer.keyTerms.shorthandBusinessName : offer.businessGeneralInfo.businessName}</Header>
+          <Header as="h3">{offer.keyTerms && offer.keyTerms.shorthandBusinessName ? offer.keyTerms.shorthandBusinessName : offer.keyTerms.legalBusinessName}
+            <Header.Subheader>
+              <Link target="_blank" to={`/offering/preview/${offer.id}`}className="link">
+                <Icon className="ns-view" />Preview the offering page
+              </Link>
+            </Header.Subheader>
+          </Header>
           {offer.stage === 'CREATION' ? <CreationSummary offer={offer} /> : <LiveSummary offer={offer} />}
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />

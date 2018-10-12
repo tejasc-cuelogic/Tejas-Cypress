@@ -7,9 +7,6 @@ export const allOfferingsCompact = gql`
       keyTerms {
         legalBusinessName
       }
-      businessGeneralInfo {
-        businessName
-      }
       stage
       created {
         id
@@ -23,9 +20,6 @@ export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
       id
-      businessGeneralInfo {
-        businessName
-      }
       keyTerms {
         legalBusinessName
       }
@@ -67,9 +61,6 @@ export const getOfferingDetails = gql`
       id
       offeringUrl
       referralCode
-      businessGeneralInfo {
-        businessName
-      }
       keyTerms {
         legalBusinessName
         shorthandBusinessName
@@ -445,6 +436,14 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
     }
   }
 }
+`;
+
+export const createOffer = gql`
+  mutation _createOffering($applicationId: String!){
+    createOffering(applicationId: $applicationId) {
+      id
+    }
+  }
 `;
 
 export const createBac = gql`
