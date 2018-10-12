@@ -217,7 +217,38 @@ export class OfferingCreationStore {
         console.log(err);
       });
   }
+  @action
+  uploadFileToS3 = (form, name, files, key, index) => {
+    fileUpload.uploadToS3(files[0])
+      .then(action((res) => {
+        Helper.toast('file uploaded successfully', 'success');
+        this[form].fields[key][index][name].fileId = `${files[0].name}${Date.now()}`;
+        this[form].fields[key][index][name].fileName = files[0].name;
+        this[form].fields[key][index][name].fileData = files[0].name;
+        this[form].fields[key][index][name].value = files[0].name;
+        this[form].fields[key][index][name].isPublic = true;
+        this[form].fields[key][index][name].preSignedUrl = res.location;
+      }))
+      .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        console.log(err);
+      });
+  }
 
+  @action
+  removeFileFromS3 = (form, name, key, index) => {
+    fileUpload.deleteFromS3(this[form].fields[key][index][name].fileName)
+      .then(action((res) => {
+        ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
+          this[form].fields[key][index][name].subKey = '';
+          Helper.toast('file Deleted successfully', 'success');
+        });
+      }))
+      .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        console.log(err);
+      });
+  }
   @action
   setContingencyFormSelected = (formName) => {
     this.contingencyFormSelected = formName;
@@ -433,6 +464,9 @@ export class OfferingCreationStore {
   @action
   addMore = (form, key) => {
     this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, true);
+    if (form === 'LEADER_FRM') {
+      this.initLoad.push('LEADERS_ADDED');
+    }
   }
 
   @action
@@ -485,8 +519,10 @@ export class OfferingCreationStore {
 
   @action
   setBacFormData = (form, data, ref) => {
-    this[form] = Validator.setFormData(this[form], data, ref);
-    this.initLoad.push(form);
+    if (!this.initLoad.includes(form)) {
+      this.initLoad.push(form);
+      this[form] = Validator.setFormData(this[form], data, ref);
+    }
   }
 
   @action
@@ -535,78 +571,6 @@ export class OfferingCreationStore {
     return { social, highlight };
   }
 
-  @action
-  evaluateFormData = (fields) => {
-    let inputData = {};
-    map(fields, (ele, key) => {
-      try {
-        const records = toJS(fields[key]);
-        if (fields[key] && Array.isArray(records)) {
-          if (fields[key] && fields[key].length > 0) {
-            inputData = { ...inputData, [key]: [] };
-            const arrObj = [];
-            records.forEach((field) => {
-              let arrayFieldsKey = {};
-              let arrayFields = {};
-              map(field, (eleV, keyRef1) => {
-                if (eleV.objRefOutput) {
-                  if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
-                    const fileObj =
-                      { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
-                    arrayFields = { ...arrayFields, [keyRef1]: fileObj };
-                  } else {
-                    arrayFields =
-                      { ...arrayFields, [keyRef1]: field[keyRef1].value };
-                  }
-                } else if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
-                  const fileObj =
-                    { fileId: field[keyRef1].fileId, fileName: field[keyRef1].value };
-                  arrayFields = { ...arrayFields, [keyRef1]: fileObj };
-                } else {
-                  arrayFields = { [keyRef1]: field[keyRef1].value };
-                }
-                arrayFieldsKey = { ...arrayFieldsKey, ...arrayFields };
-                // if (eleV.objRefOutput) {
-                //   arrayFieldsKey = has(arrayFieldsKey, [eleV.objRefOutput]) ?
-                //     { ...arrayFieldsKey, [eleV.objRefOutput]: arrayFieldsKey } :
-                //     { [eleV.objRefOutput]: arrayFieldsKey };
-                // }
-              });
-              arrObj.push(arrayFieldsKey);
-              inputData = { ...inputData, [key]: arrObj };
-            });
-          }
-        } else if (fields[key].objRefOutput) {
-          if (fields[key].objType && fields[key].objType === 'FileObjectType') {
-            const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
-            inputData = { ...inputData, [fields[key].objRefOutput]: { [key]: fileObj } };
-          } else {
-            inputData = { ...inputData, [fields[key].objRefOutput]: { [key]: fields[key].value } };
-          }
-        } else if (fields[key].objType && fields[key].objType === 'FileObjectType') {
-          const fileObj = { fileId: fields[key].fileId, fileName: fields[key].value };
-          inputData = { ...inputData, [key]: fileObj };
-        } else if (fields[key].objType && fields[key].objType === 'businessPhone') {
-          const fileObj = { number: fields[key].value, countryCode: '1' };
-          inputData = { ...inputData, businessPhone: fileObj };
-        } else if (fields[key].objType && fields[key].objType === 'reachedMinOfferingGoal') {
-          const fileObj = { reachedMinOfferingGoal: fields[key].value };
-          inputData = { ...inputData, useOfProceeds: fileObj };
-        } else if (fields[key].objType && fields[key].objType === 'reachedMaxOfferingGoal') {
-          const fileObj = { reachedMaxOfferingGoal: fields[key].value };
-          inputData = { ...inputData, useOfProceeds: { ...inputData.useOfProceeds, ...fileObj } };
-        } else if (fields[key].toSkip) {
-          inputData = { ...inputData };
-        } else {
-          inputData = { ...inputData, [key]: fields[key].value };
-        }
-      } catch (e) {
-        // do nothing
-      }
-    });
-    return inputData;
-  }
-
   addNewOffer = () => {
     const params = {};
     uiStore.setProgress();
@@ -627,7 +591,7 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
-
+  
   updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -748,6 +712,10 @@ export class OfferingCreationStore {
       onFetch: (res) => {
         if (res && res.getOfferingBac) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
+          const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
+          if (!this.initLoad.includes('LEADERS_ADDED')) {
+            this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
+          }
         }
       },
     });
@@ -758,6 +726,7 @@ export class OfferingCreationStore {
     fields,
     issuerNumber = undefined,
     leaderNumber = undefined,
+    afIssuerId,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -779,10 +748,7 @@ export class OfferingCreationStore {
       const payload = { ...offeringBacDetails.getOfferingBac[issuerNumber] };
       payload.offeringId = getOfferingById.id;
       payload.bacType = bacType;
-      const affiliatedIssuerBacId = getOfferingById.legal &&
-      getOfferingById.legal.affiliatedIssuerBacId;
-      if (affiliatedIssuerBacId === null ||
-        (Array.isArray(toJS(affiliatedIssuerBacId)) && !affiliatedIssuerBacId[issuerNumber])) {
+      if (!afIssuerId) {
         mutation = createBac;
         variables = {
           offeringBacDetails: payload,
@@ -791,7 +757,7 @@ export class OfferingCreationStore {
         mutation = updateBac;
         variables = {
           offeringBacDetails: payload,
-          id: affiliatedIssuerBacId[issuerNumber],
+          id: afIssuerId,
         };
       }
     }
@@ -800,7 +766,7 @@ export class OfferingCreationStore {
       payload.offeringId = getOfferingById.id;
       payload.bacType = bacType;
       const { leadership } = getOfferingById;
-      if (leadership && leadership[leaderNumber].leaderBacId === null) {
+      if (!afIssuerId) {
         mutation = createBac;
         payload.email = leadership[leaderNumber].email;
         variables = {
@@ -810,7 +776,7 @@ export class OfferingCreationStore {
         mutation = updateBac;
         variables = {
           offeringBacDetails: payload,
-          id: leadership[leaderNumber].leaderBacId,
+          id: afIssuerId,
         };
       }
     }
@@ -845,15 +811,10 @@ export class OfferingCreationStore {
       });
   }
 
-  deleteBac = (issuerIndex) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
-    if (!getOfferingById.legal) {
+  deleteBac = (afIssuerId) => {
+    if (!afIssuerId) {
       this.removeData('AFFILIATED_ISSUER_FRM', 'getOfferingBac');
-      return;
-    }
-    const { affiliatedIssuerBacId } = getOfferingById.legal;
-    if (!affiliatedIssuerBacId[issuerIndex]) {
-      this.removeData('AFFILIATED_ISSUER_FRM', 'getOfferingBac');
+      Helper.toast('Affiliated Issuer has been deleted successfully.', 'success');
       return;
     }
     const bacType = 'AFFILIATED_ISSUER';
@@ -862,7 +823,7 @@ export class OfferingCreationStore {
       .mutate({
         mutation: deleteBac,
         variables: {
-          id: affiliatedIssuerBacId[issuerIndex],
+          id: afIssuerId,
           offeringId: this.currentOfferingId,
         },
         refetchQueries: [{
@@ -870,9 +831,14 @@ export class OfferingCreationStore {
           variables: { offeringId: this.currentOfferingId, bacType },
         }],
       })
-      .then(() => {
+      .then(action((() => {
+        Validator.validateForm(this.AFFILIATED_ISSUER_FRM, true, false, false);
+        this.confirmModal = !this.confirmModal;
+        this.confirmModalName = null;
+        this.removeIndex = null;
+        uiStore.setConfirmBox('');
         Helper.toast('Affiliated Issuer has been deleted successfully.', 'success');
-      })
+      })))
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');

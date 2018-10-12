@@ -76,6 +76,7 @@ export default class Offer extends Component {
                 </Table.Cell>
                 <Table.Cell>
                   <DropZone
+                    size="small"
                     containerclassname={isReadonly ? 'display-only' : ''}
                     disabled={isReadonly}
                     name="term"
@@ -92,6 +93,7 @@ export default class Offer extends Component {
                 </Table.Cell>
                 <Table.Cell>
                   <DropZone
+                    size="small"
                     containerclassname={isReadonly ? 'display-only' : ''}
                     disabled={isReadonly}
                     name="rev"

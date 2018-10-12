@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
+// import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 class CompanyTopThings extends Component {
@@ -18,17 +18,17 @@ class CompanyTopThings extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header> */}
-          <Header as="h3">
-            <Link to={`${companyDescriptionUrl}/companydescription`}>
-              Top things to know
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
-          </Header>
-          {
-            campaign && campaign.offering
-            && campaign.offering.about
-            && campaign.offering.about.theCompany ?
-              <Aux>
+          <div className="segment-container">
+            <Header as="h3">
+              <Link to={`${companyDescriptionUrl}/companydescription`}>
+                Top things to know
+                <Icon className="ns-chevron-right" color="green" />
+              </Link>
+            </Header>
+            {
+              campaign && campaign.offering
+              && campaign.offering.about
+              && campaign.offering.about.theCompany ?
                 <p
                   dangerouslySetInnerHTML={
                     {
@@ -36,11 +36,11 @@ class CompanyTopThings extends Component {
                     }
                   }
                 />
-                <Link to={`${companyDescriptionUrl}/companydescription`}>Read More</Link>
-              </Aux>
-              :
-              <InlineLoader text={emptyStatement} />
-          }
+                :
+                <InlineLoader text={emptyStatement} />
+              }
+          </div>
+          <Link to={`${companyDescriptionUrl}/companydescription`}>Read More</Link>
         </Segment>
       </Grid.Column>
     );

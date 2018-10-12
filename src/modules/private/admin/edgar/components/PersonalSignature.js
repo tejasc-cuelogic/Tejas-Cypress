@@ -40,18 +40,16 @@ const PersonalSignature = observer(props => (
           name="personTitle"
           changed={props.handleChange}
         />
-        <div className="field">
-          <FormDatePicker
-            type="text"
-            name="signatureDate"
-            id="signatureDate"
-            placeholder="Select date"
-            maxDate={moment()}
-            fielddata={personData.signatureDate}
-            selected={personData.signatureDate.value}
-            changed={date => props.changedDate(null, { name: 'signatureDate', value: date, dataid: personData.id })}
-          />
-        </div>
+        <FormDatePicker
+          type="text"
+          name="signatureDate"
+          id="signatureDate"
+          placeholder="Select date"
+          maxDate={moment()}
+          fielddata={personData.signatureDate}
+          selected={personData.signatureDate.value}
+          changed={date => props.changedDate(null, { name: 'signatureDate', value: date, dataid: personData.id })}
+        />
       </Form.Group>
     ))}
   </div>

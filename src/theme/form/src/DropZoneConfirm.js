@@ -50,7 +50,7 @@ export default class DropZone extends Component {
       showLoader,
       fileId,
     } = this.props.fielddata;
-    const { hideFields } = this.props;
+    const { hideFields, size } = this.props;
     return (
       <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label &&
@@ -70,7 +70,7 @@ export default class DropZone extends Component {
         { !this.props.disabled && (!value || this.props.multiple) ?
           <div className="file-uploader">
             <Dimmer active={showLoader}>
-              <Loader />
+              <Loader size={size} />
             </Dimmer>
             <Dropzone {...this.props} onDrop={files => this.props.ondrop(files, this.props.name)} className="test" style={{}}>
               <Icon className="ns-upload" /> {this.props.uploadtitle ? <span>{this.props.uploadtitle}</span> : <span>Upload document{this.props.multiple ? 's' : ''}</span>}
