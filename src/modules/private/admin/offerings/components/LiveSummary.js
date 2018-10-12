@@ -5,8 +5,10 @@ import { Link } from 'react-router-dom';
 const leftSummary = offer => [
   {
     title: 'Business Name',
-    content: offer.keyTerms ? offer.keyTerms.shorthandBusinessName :
-      offer.businessGeneralInfo.businessName,
+    content: ((offer.keyTerms && offer.keyTerms.shorthandBusinessName) ?
+      offer.keyTerms.shorthandBusinessName : (
+        (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
+      )),
   },
   { title: 'Launch Date', content: '3/15/18' },
   { title: 'Date Till Close', content: '34 days' },

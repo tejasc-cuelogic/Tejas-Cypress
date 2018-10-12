@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -10,8 +11,24 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 @observer
 class Updates extends Component {
+  state = {
+    selected: '',
+  };
   handleClose = () => this.props.history.goBack();
+  // handleReadMore = (e) => this.props.campaignStore.setReadMoreToShowStatus(true);
+  // handleReadLess = () => this.props.campaignStore.setReadMoreToShowStatus(false);
+  handleReadMore = (e) => {
+    console.log('dataItem==>', e.target.id);
+    this.setState({ selected: e.target.id });
+  };
 
+  handleReadLess = (e) => {
+    console.log('dataItem==>', e.target.id);
+    this.setState({ selected: e.target.id });
+  };
+
+  isActiveReadMore = value => (value === this.state.selected || this.state.selected === '' ? { display: 'none' } : { display: 'block' });
+  isActiveReadLess = value => (value === this.state.selected || this.state.selected === '' ? { display: 'block' } : { display: 'none' });
   render() {
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates;
@@ -56,7 +73,22 @@ class Updates extends Component {
                         <Item.Content verticalAlign="middle" >{dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName} <br /><span className="highlight-text">{moment(dataItem.updated.date).format('LL')}</span></Item.Content>
                       </Item>
                       <Header as="h5">{dataItem.title}</Header>
-                      <p dangerouslySetInnerHTML={{ __html: dataItem.content }} />
+                      <div style={this.isActiveReadLess(index)} >
+                        <p dangerouslySetInnerHTML={{
+                          __html: dataItem.content.length <= 805 ?
+                            dataItem.content : dataItem.content.substring(1, 805),
+                        }}
+                        />
+                        <a href onClick={this.handleReadMore} id={index} >
+                          Read More
+                        </a>
+                      </div>
+                      <div style={this.isActiveReadMore(index)} >
+                        <p dangerouslySetInnerHTML={{ __html: dataItem.content }} />
+                        <a href onClick={this.handleReadLess} id={index} >
+                          Read Less
+                        </a>
+                      </div>
                     </Item.Group>
                   </VerticalTimelineElement>
                 ))

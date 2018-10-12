@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Table, Dropdown, Icon, Button, Grid, Card } from 'semantic-ui-react';
-import { FormInput, MaskedInput } from '../../../../../../theme/form';
+import { Table, Icon, Button, Grid, Card } from 'semantic-ui-react';
+import { FormInput, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../services/constants/admin/businessApplication';
 
 export default class OffersPanel extends Component {
@@ -39,14 +39,15 @@ export default class OffersPanel extends Component {
                     <Table.Row>
                       <Table.Cell>{offerFields.structure.label}</Table.Cell>
                       <Table.Cell>
-                        <Dropdown
+                        <FormDropDown
+                          fielddata={offer.structure}
+                          ishidelabel
                           className={isReadonly ? 'display-only secondary' : 'secondary'}
                           readOnly={isReadonly}
                           name="structure"
                           placeholder="Choose"
                           fluid
                           selection
-                          value={offer.structure.value}
                           options={STRUCTURE_TYPES}
                           onChange={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                         />
@@ -136,14 +137,15 @@ export default class OffersPanel extends Component {
                     <Table.Row>
                       <Table.Cell>{offerFields.personalGuarantee.label}</Table.Cell>
                       <Table.Cell>
-                        <Dropdown
+                        <FormDropDown
+                          fielddata={offer.personalGuarantee}
+                          ishidelabel
                           className={isReadonly ? 'display-only secondary' : 'secondary'}
                           readOnly={isReadonly}
                           name="personalGuarantee"
                           placeholder="Choose"
                           fluid
                           selection
-                          value={offer.personalGuarantee.value}
                           options={PERSONAL_GUARANTEE_TYPES}
                           onChange={(e, result) => this.formChangeWithIndex(e, result, 'OFFERS_FRM', 'offer', index)}
                         />
