@@ -39,23 +39,13 @@ query getOfferingList($filters: OfferingFilterInputType){
   }
 `;
 
-// export const campaignDetailsQuery = gql`
-//   query campaignDetailsQuery($id: ID!) {
-//     Campaign(id: $id) {
-//       id
-//       createdAt
-//       title
-//       address
-//       description
-//       collected
-//       needed
-//       flagged
-//       label
-//       industry
-//       investmentType
-//     }
-//   }
-// `;
+export const getOfferingById = gql`
+  query getOfferingById($id: ID!) {
+    getOfferingDetailsById(id: $id) {
+      issuerId
+    }
+  }
+`;
 
 export const campaignDetailsQuery = gql`
   query getOfferingById($id: ID) {

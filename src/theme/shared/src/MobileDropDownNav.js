@@ -12,7 +12,7 @@ export default class MobileDropDownNav extends React.Component {
     const { navItems, location, refMatch } = this.props;
     const active = navItems.find((i) => {
       const path = `${refMatch.url}/${i.to}`;
-      return matchPath(location.pathname, { path, exact: true });
+      return matchPath(location.pathname, { path });
     });
     return active ? active.title : this.props.navItems[0].title;
   }

@@ -1,7 +1,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allOfferings, campaignDetailsQuery } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, getOfferingById } from '../../queries/campagin';
 
 export class CampaignStore {
   @observable data = [];
@@ -30,6 +30,20 @@ export class CampaignStore {
       variables: { id },
     });
   }
+
+  @action
+  getIssuerIdForOffering = id => new Promise((resolve) => {
+    this.details = graphql({
+      client: clientPublic,
+      query: getOfferingById,
+      variables: { id },
+      onFetch: (data) => {
+        if (data) {
+          resolve(data.data.getOfferingDetailsById);
+        }
+      },
+    });
+  });
 
   @computed get allData() {
     return this.data;
