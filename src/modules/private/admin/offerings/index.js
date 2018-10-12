@@ -6,6 +6,7 @@ import { Route, Switch } from 'react-router-dom';
 import PrivateLayout from '../../shared/PrivateLayout';
 import Overview from './containers/Overview';
 import AllOfferings from './containers/AllOfferings';
+import NewOffer from './components/NewOffer';
 import OfferingDetails from './containers/OfferingDetails';
 
 @inject('uiStore', 'navStore', 'offeringsStore')
@@ -30,6 +31,7 @@ export default class Repayments extends Component {
         <Switch>
           <Route exact path={`${match.url}/overview`} component={Overview} />
           <Route exact path={`${match.url}/:stage`} component={AllOfferings} />
+          <Route exact path={`${match.url}/creation/new`} component={NewOffer} />
           <Route path={`${match.url}/:stage/edit/:offeringid`} render={props => <OfferingDetails refLink={match.url} {...props} />} />
         </Switch>
       </PrivateLayout>
