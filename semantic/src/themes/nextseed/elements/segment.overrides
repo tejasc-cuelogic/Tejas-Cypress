@@ -4,6 +4,8 @@
 //  Public page Starts
 .ui.padded.segment {
     padding: 30px;
+    display: flex;
+    flex-direction: column; 
     h4.ui.header {
         margin-top: 0;
     }
@@ -35,6 +37,17 @@
             >img {
                 width: 50px;
             }
+        }
+    }
+    .segment-container {
+        max-height: 410px;
+        overflow: hidden;
+        flex-grow: 1;
+        &.small {
+            max-height: 356px;
+        }
+        &.mini {
+            max-height: 90px;
         }
     }
 }
