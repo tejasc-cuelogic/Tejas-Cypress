@@ -129,11 +129,10 @@ export default class Miscellaneous extends Component {
                   <Table.Row verticalAlign="top">
                     <Table.Cell width={3}>
                       <Dropdown
-                        containerclassname={isReadonly ? 'display-only' : ''}
-                        disabled={isReadonly}
+                        className={isReadonly ? 'display-only secondary' : 'secondary'}
+                        readOnly={isReadonly}
                         name="label"
                         placeholder="eg. Facebook"
-                        className="secondary"
                         fluid
                         selection
                         value={socialMedia.label.value}
@@ -187,7 +186,7 @@ export default class Miscellaneous extends Component {
                     <DropZone
                       size="small"
                       className={isReadonly ? 'display-only secondary' : 'secondary'}
-                      readOnly={isReadonly}
+                      disabled={isReadonly}
                       name="docDetails"
                       fielddata={document.docDetails}
                       ondrop={(files, name) => this.onFileDrop(files, name, index)}

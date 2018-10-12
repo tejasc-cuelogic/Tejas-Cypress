@@ -554,5 +554,19 @@ export class BusinessAppReviewStore {
     }
     return false;
   }
+
+  // @action
+  // resetForms = () => {
+  //   this.OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
+  //   this.MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
+  //   this.JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
+  //   this.DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
+  //   this.PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
+  //   this.BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
+  //   this.CONTINGENCY_FRM = Validator.prepareFormObject(CONTINGENCY);
+  //   this.MISCELLANEOUS_FRM = Validator.prepareFormObject(MISCELLANEOUS);
+  //   this.UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
+  //   this.OFFERS_FRM = Validator.prepareFormObject(OFFERS);
+  // }
 }
 export default new BusinessAppReviewStore();

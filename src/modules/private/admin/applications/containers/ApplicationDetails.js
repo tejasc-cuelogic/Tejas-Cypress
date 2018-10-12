@@ -30,6 +30,7 @@ export default class ApplicationDetails extends Component {
     const { params } = match;
     this.props.businessAppStore.fetchAdminApplicationById(params.appId, params.id, params.userId)
       .then(() => {
+        // this.props.businessAppReviewStore.resetForms();
         if (match.isExact) {
           this.props.history.push(`${match.url}/activity-history`);
         }

@@ -592,7 +592,6 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
-
   updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -714,7 +713,7 @@ export class OfferingCreationStore {
         if (res && res.getOfferingBac) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
-          if (!this.initLoad.includes('LEADERS_ADDED') && (leadersCount - 1) !== 0) {
+          if (!this.initLoad.includes('LEADERS_ADDED') && (leadersCount - 1 !== 0)) {
             this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
           }
         }
