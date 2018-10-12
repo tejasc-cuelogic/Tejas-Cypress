@@ -492,7 +492,7 @@ export const OTHER_DOCUMENTATION_UPLOADS = {
     error: undefined,
     rule: 'string|required',
     preSignedUrl: '',
-    showLoader: true,
+    showLoader: false,
     fileId: '',
     fileData: '',
     objType: 'FileObjectType',
