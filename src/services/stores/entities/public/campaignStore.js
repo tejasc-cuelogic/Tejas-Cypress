@@ -39,7 +39,7 @@ export class CampaignStore {
       variables: { id },
       onFetch: (data) => {
         if (data) {
-          resolve(data.data.getOfferingDetailsById);
+          resolve(data.getOfferingDetailsById);
         }
       },
     });
