@@ -1644,6 +1644,12 @@ export const ISSUER = {
 
 export const AFFILIATED_ISSUER = {
   getOfferingBac: [{
+    id: {
+      value: '',
+      error: undefined,
+      rule: 'string',
+      skipField: true,
+    },
     legalName: {
       label: 'Legal Name',
       value: '',

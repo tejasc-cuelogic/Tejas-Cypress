@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Icon, Confirm } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../../theme/form';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'uiStore')
 @observer
 export default class AfIssuer extends Component {
   addMore = (e, formName) => {
@@ -14,23 +14,27 @@ export default class AfIssuer extends Component {
     const issuerCount = AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length;
     this.props.history.push(`${this.props.refLink}/${issuerCount}`);
   }
-  toggleConfirmModal = (e, index, formName) => {
+  toggleConfirmModal = (e, index, formName, afIssuerId) => {
     e.preventDefault();
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
+    this.props.uiStore.setConfirmBox('', afIssuerId);
   }
   removeData = () => {
     const { deleteBac } = this.props.offeringCreationStore;
-    deleteBac(this.props.index || 0);
+    const { confirmBox } = this.props.uiStore;
+    deleteBac(confirmBox.refId);
     this.props.history.push(`${this.props.refLink}/1`);
+    this.props.uiStore.setConfirmBox('');
   }
-  handleSubmitIssuer = () => {
+  handleSubmitIssuer = (id) => {
     const {
       createOrUpdateOfferingBac,
       AFFILIATED_ISSUER_FRM,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
-    createOrUpdateOfferingBac('AFFILIATED_ISSUER', AFFILIATED_ISSUER_FRM.fields, issuerNumber);
+    createOrUpdateOfferingBac('AFFILIATED_ISSUER', AFFILIATED_ISSUER_FRM.fields, issuerNumber, undefined, id);
   }
+
   render() {
     const {
       AFFILIATED_ISSUER_FRM,
@@ -43,12 +47,13 @@ export default class AfIssuer extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
+    const afIssuerId = AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].id.value;
     return (
       <Aux>
-        <Form onSubmit={this.handleSubmitIssuer} className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
+        <Form onSubmit={() => this.handleSubmitIssuer(afIssuerId)} className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
-              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName)}>Delete Selected Issuer</Button>
+              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName, afIssuerId)}>Delete Selected Issuer</Button>
               <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
             </Button.Group>
           </div>
