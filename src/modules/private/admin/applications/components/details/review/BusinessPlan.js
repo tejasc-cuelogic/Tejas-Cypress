@@ -184,7 +184,7 @@ export default class BusinessPlan extends Component {
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
                     <Table.HeaderCell>Amount</Table.HeaderCell>
-                    <Table.HeaderCell />
+                    {!isReadonly && <Table.HeaderCell /> }
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
@@ -248,7 +248,7 @@ export default class BusinessPlan extends Component {
                   <Table.Row>
                     <Table.HeaderCell>Name</Table.HeaderCell>
                     <Table.HeaderCell>Amount</Table.HeaderCell>
-                    <Table.HeaderCell />
+                    {!isReadonly && <Table.HeaderCell /> }
                   </Table.Row>
                 </Table.Header>
                 <Table.Body>
