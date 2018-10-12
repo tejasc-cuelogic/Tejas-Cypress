@@ -405,38 +405,37 @@ export default class XmlForm extends React.Component {
               <Icon name="ns-arrow-left" />
             </Responsive>
             XML Form
-            {
-              xmlSubmissionStatus === XML_STATUSES.completed &&
-              <Button
-                color="green"
-                floated="right"
-                onClick={this.handleXmlSubmissionCopy}
-              >
-                Copy XML Submission
-              </Button>
-            }
-            {
-              xmlSubmissionStatus === XML_STATUSES.draft &&
-              <Button
-                color="red"
-                floated="right"
-                disabled={!this.props.businessStore.checkStepsStatus}
-                onClick={this.handleXmlSubmissionSubmit}
-              >
-                Submit
-              </Button>
-            }
-            {
-              xmlSubmissionStatus === XML_STATUSES.draft &&
-              <Button
-                color="green"
-                floated="right"
-                disabled={this.checkStepWiseStatus(xmlActiveTabName)}
-                onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
-              >
-                Save
-              </Button>
-            }
+            <Button.Group floated="right">
+              {
+                xmlSubmissionStatus === XML_STATUSES.completed &&
+                <Button
+                  color="green"
+                  onClick={this.handleXmlSubmissionCopy}
+                >
+                  Copy XML Submission
+                </Button>
+              }
+              {
+                xmlSubmissionStatus === XML_STATUSES.draft &&
+                <Button
+                  color="green"
+                  disabled={this.checkStepWiseStatus(xmlActiveTabName)}
+                  onClick={() => this.handleValidationToActiveTab(xmlActiveTabName)}
+                >
+                  Save
+                </Button>
+              }
+              {
+                xmlSubmissionStatus === XML_STATUSES.draft &&
+                <Button
+                  color="red"
+                  disabled={!this.props.businessStore.checkStepsStatus}
+                  onClick={this.handleXmlSubmissionSubmit}
+                >
+                  Submit
+                </Button>
+              }
+            </Button.Group>
           </Header>
         </div>
         <div className="content-spacer">

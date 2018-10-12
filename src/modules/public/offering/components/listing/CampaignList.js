@@ -57,15 +57,11 @@ export default class CampaignList extends Component {
                       }
                       </Card.Header>
                       <Card.Meta>
-                        {offering && offering.businessGeneralInfo &&
-                          offering.businessGeneralInfo.address &&
-                          offering.businessGeneralInfo.address.city ?
-                          offering.businessGeneralInfo.address.city : '-'
+                        {offering && offering.keyTerms && offering.keyTerms.city ?
+                          offering.keyTerms.city : '-'
                         }
-                        {offering && offering.businessGeneralInfo &&
-                          offering.businessGeneralInfo.address &&
-                          offering.businessGeneralInfo.address.state ?
-                          offering.businessGeneralInfo.address.state : '-'
+                        {offering && offering.keyTerms && offering.keyTerms.state ?
+                          offering.keyTerms.state : '-'
                         }
                       </Card.Meta>
                       <Card.Description

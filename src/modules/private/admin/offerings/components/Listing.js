@@ -59,9 +59,10 @@ export default class Listing extends Component {
                 offerings.map(offering => (
                   <Table.Row key={offering.id}>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
-                      <b>{offering.keyTerms ?
-                          offering.keyTerms.legalBusinessName :
-                          offering.businessGeneralInfo.businessName}
+                      <b>{((offering.keyTerms && offering.keyTerms.shorthandBusinessName) ?
+                          offering.keyTerms.shorthandBusinessName : (
+                          (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
+                        ))}
                       </b>
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>

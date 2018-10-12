@@ -49,13 +49,11 @@ export default class Inputs extends Component {
             }
             <div className="field">
               <Header as="label">Personal Guarantee</Header>
-              <Form.Group inline>
-                <FormRadioGroup
-                  fielddata={MODEL_INPUTS_FRM.fields.personalGuarantee}
-                  name="personalGuarantee"
-                  changed={(e, result) => formChange(e, result, 'MODEL_INPUTS_FRM')}
-                />
-              </Form.Group>
+              <FormRadioGroup
+                fielddata={MODEL_INPUTS_FRM.fields.personalGuarantee}
+                name="personalGuarantee"
+                changed={(e, result) => formChange(e, result, 'MODEL_INPUTS_FRM')}
+              />
             </div>
           </Form.Group>
           <FormDatePicker
