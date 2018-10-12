@@ -6,12 +6,12 @@ import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD } from '../../../../constants/admin/offerings';
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
   getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling, unlinkTiersFromBonusRewards } from '../../../queries/offerings/manage';
+  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, createOffer } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -19,6 +19,7 @@ import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 
 export class OfferingCreationStore {
+  @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
@@ -147,6 +148,11 @@ export class OfferingCreationStore {
         this.MEDIA_FRM.fields[field][val] = '';
       }
     });
+  }
+
+  @action
+  resetForm = (form) => {
+    Validator.resetFormData(this[form]);
   }
 
   @action
@@ -599,6 +605,27 @@ export class OfferingCreationStore {
       }
     });
     return inputData;
+  }
+
+  addNewOffer = () => {
+    const params = {};
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: createOffer,
+        variables: params,
+        refetchQueries: [{
+          query: allOfferings,
+          variables: { stage: ['CREATION'] },
+        }],
+      })
+      .then(() => Helper.toast('Offering created successfully.', 'success'))
+      .catch(() => {
+        Helper.toast('Error while creating offer', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 
   updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
