@@ -215,23 +215,23 @@ export default class BusinessPlan extends Component {
                             size="small"
                           />
                         </Table.Cell>
+                        {!isReadonly &&
                         <Table.Cell collapsing>
-                          {!isReadonly &&
                           <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'sources')} >
                             <Icon className="ns-close-circle" color="grey" />
                           </Link>
-                          }
                         </Table.Cell>
+                        }
                       </Table.Row>
                     )) : ''
                   }
+                  {!isReadonly &&
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      {!isReadonly &&
                       <AddMore addMore={this.addMore} arrayName="sources" formName="BUSINESS_PLAN_FRM" title="Add Source" />
-                      }
                     </Table.Cell>
                   </Table.Row>
+                  }
                 </Table.Body>
                 <Table.Footer>
                   <Table.Row>
@@ -279,23 +279,23 @@ export default class BusinessPlan extends Component {
                           size="small"
                         />
                       </Table.Cell>
+                      {!isReadonly &&
                       <Table.Cell collapsing>
-                        {!isReadonly &&
                         <Link to={this.props.match.url} onClick={e => this.toggleConfirmModal(e, index, 'uses')} >
                           <Icon className="ns-close-circle" color="grey" />
                         </Link>
-                        }
                       </Table.Cell>
+                      }
                     </Table.Row>
                   )) : ''
                   }
+                  {!isReadonly &&
                   <Table.Row>
                     <Table.Cell colSpan="3">
-                      {!isReadonly &&
                       <AddMore addMore={this.addMore} arrayName="uses" formName="BUSINESS_PLAN_FRM" title="Add Use" />
-                      }
                     </Table.Cell>
                   </Table.Row>
+                  }
                 </Table.Body>
                 <Table.Footer>
                   <Table.Row>
