@@ -1884,3 +1884,20 @@ export const ADD_NEW_BONUS_REWARD = {
     objType: 'DATE',
   },
 };
+
+export const DOCUMENTATION = {
+  corporateFormationDocs: {
+    value: [],
+    label: 'Corporate Formation Documents',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
+    customErrors:
+    {
+      required_if: 'required',
+    },
+  },
+};
