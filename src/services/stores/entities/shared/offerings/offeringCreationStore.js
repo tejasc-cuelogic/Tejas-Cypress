@@ -202,7 +202,38 @@ export class OfferingCreationStore {
         console.log(err);
       });
   }
+  @action
+  uploadFileToS3 = (form, name, files, key, index) => {
+    fileUpload.uploadToS3(files[0])
+      .then(action((res) => {
+        Helper.toast('file uploaded successfully', 'success');
+        this[form].fields[key][index][name].fileId = `${files[0].name}${Date.now()}`;
+        this[form].fields[key][index][name].fileName = files[0].name;
+        this[form].fields[key][index][name].fileData = files[0].name;
+        this[form].fields[key][index][name].value = files[0].name;
+        this[form].fields[key][index][name].isPublic = true;
+        this[form].fields[key][index][name].preSignedUrl = res.location;
+      }))
+      .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        console.log(err);
+      });
+  }
 
+  @action
+  removeFileFromS3 = (form, name, key, index) => {
+    fileUpload.deleteFromS3(this[form].fields[key][index][name].fileName)
+      .then(action((res) => {
+        ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
+          this[form].fields[key][index][name].subKey = '';
+          Helper.toast('file Deleted successfully', 'success');
+        });
+      }))
+      .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        console.log(err);
+      });
+  }
   @action
   setContingencyFormSelected = (formName) => {
     this.contingencyFormSelected = formName;

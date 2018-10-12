@@ -27,7 +27,7 @@ export default class Leader extends Component {
     this.props.offeringCreationStore.setLeadershipExpData(this.props.index);
   }
   onFileDrop = (files, name, index) => {
-    this.props.offeringCreationStore.setFileUploadData('LEADERSHIP_FRM', name, files, 'leadership', index);
+    this.props.offeringCreationStore.uploadFileToS3('LEADERSHIP_FRM', name, files, 'leadership', index);
   }
   confirmRemoveDoc = (e, name, index) => {
     e.preventDefault();
@@ -37,7 +37,7 @@ export default class Leader extends Component {
     this.props.uiStore.setConfirmBox('');
   }
   handleDelDoc = (field, index) => {
-    this.props.offeringCreationStore.removeUploadedData('LEADERSHIP_FRM', 'leadership', field, index);
+    this.props.offeringCreationStore.removeFileFromS3('LEADERSHIP_FRM', field, 'leadership', index);
     this.props.uiStore.setConfirmBox('');
   }
   toggleConfirmModal = (e, index, formName) => {
