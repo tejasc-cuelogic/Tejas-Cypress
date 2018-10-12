@@ -31,6 +31,7 @@ export default class Offerings extends Component {
 
   render() {
     const { match } = this.props;
+    const { stage } = this.props.match.params;
     const {
       offerings,
       loading,
@@ -45,7 +46,7 @@ export default class Offerings extends Component {
             <Grid.Row>
               <ByKeyword
                 executeSearch={this.executeSearch}
-                w={[10]}
+                w={[8]}
                 placeholder="Search by keyword or phrase"
                 toggleSearch={this.toggleSearch}
                 requestState={requestState}
@@ -53,15 +54,20 @@ export default class Offerings extends Component {
                 more="no"
                 addon={
                   <Aux>
-                    <Grid.Column width={4} textAlign="right">
+                    <Grid.Column width={3} textAlign="right">
                       {totalRecords > 0 &&
                       <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
                       }
                     </Grid.Column>
-                    <Grid.Column width={2} textAlign="right">
+                    <Grid.Column width={5} textAlign="right">
                       <Button className="relaxed" color="green" as={Link} floated="right" to={match.url}>
                         Export
                       </Button>
+                      {stage === 'creation' &&
+                        <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
+                          Create New Offering
+                        </Button>
+                      }
                     </Grid.Column>
                   </Aux>
                 }

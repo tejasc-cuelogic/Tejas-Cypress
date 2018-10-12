@@ -50,11 +50,7 @@ export class NavStore {
 
   businessName = b => ((b.keyTerms && b.keyTerms.shorthandBusinessName) ?
     b.keyTerms.shorthandBusinessName : (
-      (b.keyTerms && b.keyTerms.legalBusinessName) ?
-        b.keyTerms.legalBusinessName : (
-          b.businessGeneralInfo && b.businessGeneralInfo.businessName ?
-            b.businessGeneralInfo.businessName : 'N/A'
-        )
+      (b.keyTerms && b.keyTerms.legalBusinessName) ? b.keyTerms.legalBusinessName : 'N/A'
     ));
 
   @computed get allNavItems() {
