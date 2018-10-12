@@ -235,6 +235,7 @@
         }
     }
     &.bg-offwhite {
+        padding:0;
         background-color: @neutral-offwhite;
         thead th {
             background-color: @neutral-offwhite;

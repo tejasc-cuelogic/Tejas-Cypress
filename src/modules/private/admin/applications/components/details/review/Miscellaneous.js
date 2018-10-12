@@ -40,7 +40,7 @@ const UploadedDocument = ({
   </Item>
 );
 
-const TableHeader = ({ labels }) => (
+const TableHeader = ({ labels, isReadonly }) => (
   <Table.Header>
     <Table.Row>
       {
@@ -50,7 +50,7 @@ const TableHeader = ({ labels }) => (
           </Aux>
         ))
       }
-      <Table.HeaderCell />
+      {!isReadonly && <Table.HeaderCell /> }
     </Table.Row>
   </Table.Header>
 );
@@ -121,7 +121,7 @@ export default class Miscellaneous extends Component {
           <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
           <SectionHeader header="Social Media" />
           <Table basic compact className="form-table">
-            <TableHeader labels={['Label', 'URL']} />
+            <TableHeader isReadonly={isReadonly} labels={['Label', 'URL']} />
             <Table.Body>
               {
                 MISCELLANEOUS_FRM.fields.socialMedia.length ?
@@ -151,11 +151,13 @@ export default class Miscellaneous extends Component {
                         changed={(e, result) => formChangeWithIndex(e, result, 'MISCELLANEOUS_FRM', 'socialMedia', index)}
                       />
                     </Table.Cell>
+                    {!isReadonly &&
                     <Table.Cell collapsing>
-                      {!isReadonly && MISCELLANEOUS_FRM.fields.socialMedia.length > 1 &&
+                      {MISCELLANEOUS_FRM.fields.socialMedia.length > 1 &&
                       <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="socialMedia" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'socialMedia')} />
                       }
                     </Table.Cell>
+                    }
                   </Table.Row>
                 )) : ''
               }
@@ -166,7 +168,7 @@ export default class Miscellaneous extends Component {
           </Table>
           <SectionHeader header="Other Documentation Uploads" subheader="(e.g. Material Sales Agreements and Contracts, Equity/Debt Agreements, etc.)" />
           <Table basic compact className="form-table">
-            <TableHeader labels={['Label', 'Comment']} />
+            <TableHeader isReadonly={isReadonly} labels={['Label', 'Comment']} />
             <Table.Body>
               {
               MISCELLANEOUS_FRM.fields.otherDocs.length ?
@@ -193,11 +195,13 @@ export default class Miscellaneous extends Component {
                       uploadtitle="Choose document to upload"
                     />
                   </Table.Cell>
+                  {!isReadonly &&
                   <Table.Cell collapsing>
-                    {!isReadonly && MISCELLANEOUS_FRM.fields.otherDocs.length > 1 &&
+                    {MISCELLANEOUS_FRM.fields.otherDocs.length > 1 &&
                     <RemoveIcon match={this.props.match} index={index} formName="MISCELLANEOUS_FRM" arrayName="otherDocs" toggleConfirmModal={e => this.toggleConfirmModal(e, index, 'otherDocs')} />
                     }
                   </Table.Cell>
+                  }
                 </Table.Row>
               )) : ''
               }
