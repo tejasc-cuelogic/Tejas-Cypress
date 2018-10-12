@@ -11,6 +11,7 @@ import InvestNow from '../components/investNow/InvestNow';
 import Agreement from '../components/investNow/agreement/components/Agreement';
 import DocSign from '../components/investNow/agreement/components/DocSign';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
+import DevPassProtected from '../../../auth/containers/DevPassProtected';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -19,16 +20,43 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('campaignStore')
+@inject('campaignStore', 'userStore')
 @observer
 class offerDetails extends Component {
+  state = {
+    showPassDialog: false,
+  }
   componentWillMount() {
-    this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+    const { currentUser } = this.props.userStore;
+    if ((!currentUser || (currentUser && !currentUser.roles.includes('admin'))) && this.props.match.url.includes('preview')) {
+      if (currentUser && currentUser.roles.includes('issuer')) {
+        this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
+          if (data.issuerId === currentUser.sub) {
+            this.setState({ showPassDialog: false });
+            this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+          }
+        });
+      } else {
+        this.setState({ showPassDialog: true });
+      }
+    } else {
+      this.setState({ showPassDialog: false });
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+    }
+  }
+  authPreviewOffer = (isAuthenticated) => {
+    if (isAuthenticated) {
+      this.setState({ showPassDialog: false });
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+    }
   }
   render() {
     const { match, campaignStore, location } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     const { details, campaignSideBarShow } = campaignStore;
+    if (this.state.showPassDialog) {
+      return <DevPassProtected offerPreview authPreviewOffer={this.authPreviewOffer} />;
+    }
     if (!details || details.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
