@@ -720,6 +720,7 @@ export const LEADERSHIP_EXP = {
   }],
 };
 
+
 export const LEADERSHIP = {
   leadership: [{
     isPublic: {
@@ -739,6 +740,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. John',
+      customErrors: {
+        required: '* required.',
+      },
     },
     lastName: {
       value: '',
@@ -746,6 +750,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. Doe',
+      customErrors: {
+        required: '* required.',
+      },
     },
     email: {
       value: '',
@@ -753,6 +760,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'email|required',
       placeHolder: 'john.doe@contact.com',
+      customErrors: {
+        required: '* required.',
+      },
     },
     number: {
       value: '',
@@ -762,6 +772,9 @@ export const LEADERSHIP = {
       placeHolder: '555-123-8888',
       objRef: 'leadership.phone',
       objRefOutput2: 'phone',
+      customErrors: {
+        required: '* required.',
+      },
     },
     dob: {
       value: '',
@@ -769,6 +782,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'date|required',
       placeHolder: 'MM/DD/YYYY',
+      customErrors: {
+        required: '* required.',
+      },
     },
     ssn: {
       value: '',
@@ -776,6 +792,9 @@ export const LEADERSHIP = {
       placeHolder: 'XXX-XXX-XXXX',
       error: undefined,
       rule: 'required|maskedSSN',
+      customErrors: {
+        required: '* required.',
+      },
     },
     citizenship: {
       value: '',
@@ -783,6 +802,9 @@ export const LEADERSHIP = {
       placeHolder: 'United States',
       error: undefined,
       rule: 'required|string',
+      customErrors: {
+        required: '* required.',
+      },
     },
     percentOwned: {
       value: '',
@@ -791,6 +813,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required|numeric',
       tooltip: 'List any person who owns, directly or indirectly, 20% or more of the Issuer’s equity, based on voting power',
+      customErrors: {
+        required: '* required.',
+      },
     },
     companyPosition: {
       value: '',
@@ -798,6 +823,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. CEO',
       error: undefined,
       rule: 'required|string',
+      customErrors: {
+        required: '* required.',
+      },
     },
     dateOfService: {
       value: '',
@@ -806,6 +834,9 @@ export const LEADERSHIP = {
       rule: 'date|required',
       placeHolder: 'MM-DD-YYYY',
       tooltip: 'If you had left the company previously and are returning, enter the start date of your current employment position.',
+      customErrors: {
+        required: '* required.',
+      },
     },
     street: {
       value: '',
@@ -815,6 +846,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. Baker Street 221B',
       objRef: 'leadership.address',
       objRefOutput2: 'address',
+      customErrors: {
+        required: '* required.',
+      },
     },
     city: {
       value: '',
@@ -824,6 +858,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. New York',
       objRef: 'leadership.address',
       objRefOutput2: 'address',
+      customErrors: {
+        required: '* required.',
+      },
     },
     state: {
       value: '',
@@ -833,6 +870,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. New York',
       objRef: 'leadership.address',
       objRefOutput2: 'address',
+      customErrors: {
+        required: '* required.',
+      },
     },
     zip: {
       value: '',
@@ -842,6 +882,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. 10001',
       objRef: 'leadership.address',
       objRefOutput2: 'address',
+      customErrors: {
+        required: '* required.',
+      },
     },
     bio: {
       value: '',
@@ -849,6 +892,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Enter here ...',
+      customErrors: {
+        required: '* required.',
+      },
     },
     website: {
       value: '',
@@ -858,6 +904,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. http://johndoe.com',
       objRef: 'leadership.social',
       objRefOutput2: 'social',
+      customErrors: {
+        required: '* required.',
+      },
     },
     facebook: {
       value: '',
@@ -867,6 +916,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. http://facebook.com/johndoe',
       objRef: 'leadership.social',
       objRefOutput2: 'social',
+      customErrors: {
+        required: '* required.',
+      },
     },
     linkedin: {
       value: '',
@@ -876,6 +928,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. http://linkedin.com/johndoe',
       objRef: 'leadership.social',
       objRefOutput2: 'social',
+      customErrors: {
+        required: '* required.',
+      },
     },
     twitter: {
       value: '',
@@ -885,6 +940,9 @@ export const LEADERSHIP = {
       placeHolder: 'e.g. http://twitter.com/johndoe',
       objRef: 'leadership.social',
       objRefOutput2: 'social',
+      customErrors: {
+        required: '* required.',
+      },
     },
     headshot: {
       label: 'Headshot',
@@ -898,6 +956,9 @@ export const LEADERSHIP = {
       objRef: 'leadership.uploads',
       objType: 'FileObjectType',
       objRefOutput2: 'uploads',
+      customErrors: {
+        required: '* required.',
+      },
     },
     heroImage: {
       label: 'Hero Image',
@@ -911,6 +972,9 @@ export const LEADERSHIP = {
       objRef: 'leadership.uploads',
       objType: 'FileObjectType',
       objRefOutput2: 'uploads',
+      customErrors: {
+        required: '* required.',
+      },
     },
     license: {
       label: 'Driver’s License',
@@ -924,43 +988,46 @@ export const LEADERSHIP = {
       objRef: 'leadership.uploads',
       objType: 'FileObjectType',
       objRefOutput2: 'uploads',
+      customErrors: {
+        required: '* required.',
+      },
     },
     // experience: [{
-    //   name: {
-    //     label: 'Business Name',
-    //     value: '',
-    //     error: undefined,
-    //     rule: 'string|required',
-    //     placeHolder: 'e.g. John Doe',
-    //   },
-    //   type: {
-    //     label: 'Type of Business',
-    //     value: '',
-    //     error: undefined,
-    //     rule: 'string|required',
-    //     placeHolder: 'e.g. bakery',
-    //   },
-    //   description: {
-    //     label: 'Description',
-    //     value: '',
-    //     error: undefined,
-    //     rule: 'required',
-    //     placeHolder: 'Enter here',
-    //   },
-    //   title: {
-    //     label: 'Title',
-    //     value: '',
-    //     error: undefined,
-    //     rule: 'string|required',
-    //     placeHolder: 'Enter here',
-    //   },
-    //   dateOfService: {
-    //     label: 'Dates of Service',
-    //     value: '',
-    //     error: undefined,
-    //     rule: 'date|required',
-    //     placeHolder: 'MM-DD-YYYY',
-    //   },
+    // name: {
+    // label: 'Business Name',
+    // value: '',
+    // error: undefined,
+    // rule: 'string|required',
+    // placeHolder: 'e.g. John Doe',
+    // },
+    // type: {
+    // label: 'Type of Business',
+    // value: '',
+    // error: undefined,
+    // rule: 'string|required',
+    // placeHolder: 'e.g. bakery',
+    // },
+    // description: {
+    // label: 'Description',
+    // value: '',
+    // error: undefined,
+    // rule: 'required',
+    // placeHolder: 'Enter here',
+    // },
+    // title: {
+    // label: 'Title',
+    // value: '',
+    // error: undefined,
+    // rule: 'string|required',
+    // placeHolder: 'Enter here',
+    // },
+    // dateOfService: {
+    // label: 'Dates of Service',
+    // value: '',
+    // error: undefined,
+    // rule: 'date|required',
+    // placeHolder: 'MM-DD-YYYY',
+    // },
     // }],
     otherEntities: {
       label: 'Names of other entities over which you have control',
@@ -968,6 +1035,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Enter here',
+      customErrors: {
+        required: '* required.',
+      },
     },
     promoters: {
       label: 'Names of promoters that have been or will be paid in connection with promoting the Issuer`s securities during offering',
@@ -975,6 +1045,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'Enter here',
+      customErrors: {
+        required: '* required.',
+      },
     },
   }],
 };
@@ -1647,6 +1720,12 @@ export const ISSUER = {
 
 export const AFFILIATED_ISSUER = {
   getOfferingBac: [{
+    id: {
+      value: '',
+      error: undefined,
+      rule: 'string',
+      skipField: true,
+    },
     legalName: {
       label: 'Legal Name',
       value: '',
