@@ -14,9 +14,9 @@ import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 
 const isTabletBoth = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 const isTabletLand = document.documentElement.clientWidth >= 992
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 
 @inject('campaignStore')
 @observer

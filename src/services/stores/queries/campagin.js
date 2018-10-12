@@ -15,25 +15,16 @@ query getOfferingList($filters: OfferingFilterInputType){
           theCompany
         }
       }
-      keyTerms {
-        industry
-        securities
-      }
       closureSummary {
         totalInvestorCount
-      }
-      businessGeneralInfo {
-        businessName
-        address {
-          state
-          city
-        }
       }
       keyTerms {
         shorthandBusinessName
         legalBusinessName
         securities
         industry
+        state
+        city
       }
     }
   }
@@ -59,13 +50,6 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
-    businessGeneralInfo {
-      businessName
-      address {
-        state
-        city
-      }
-    }
     keyTerms {
       legalBusinessName
       shorthandBusinessName
@@ -86,6 +70,8 @@ export const campaignDetailsQuery = gql`
       investmentMultipleSummary
       locationRiskFactors
       isTX
+      state
+      city
     }
     rewardsTierIds {
       amount
