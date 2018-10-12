@@ -1886,9 +1886,51 @@ export const ADD_NEW_BONUS_REWARD = {
 };
 
 export const DOCUMENTATION = {
+  formId: {
+    value: [],
+    label: 'Form ID',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
+    customErrors:
+    {
+      required_if: 'required',
+    },
+  },
   corporateFormationDocs: {
     value: [],
     label: 'Corporate Formation Documents',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
+    customErrors:
+    {
+      required_if: 'required',
+    },
+  },
+  issuerFinancials: {
+    value: [],
+    label: 'Issuer Financials',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: [],
+    fileId: [],
+    fileData: [],
+    customErrors:
+    {
+      required_if: 'required',
+    },
+  },
+  leaseAgreementOrLetterOfIntent: {
+    value: [],
+    label: 'Lease Agreement or Letter of Intent(LOI)',
     error: undefined,
     rule: 'required',
     showLoader: false,
