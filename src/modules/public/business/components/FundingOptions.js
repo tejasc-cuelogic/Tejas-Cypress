@@ -52,7 +52,7 @@ export default class FundingOption extends Component {
             <Responsive minWidth={768} as={Menu} tabular fluid widths={3}>
               <NavItems sub refLoc="public" location={location} navItems={navItems} />
             </Responsive>
-            <MobileDropDownNav refMatch={match} navItems={navItems} location={location} />
+            <MobileDropDownNav refMatch={match} navItems={navItems} location={location} slideUpNot />
             <Segment attached="bottom" padded>
               <Switch>
                 <Route
