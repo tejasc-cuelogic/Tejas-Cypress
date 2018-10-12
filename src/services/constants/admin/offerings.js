@@ -1753,6 +1753,12 @@ export const AFFILIATED_ISSUER = {
 
 export const LEADER = {
   getOfferingBac: [{
+    id: {
+      value: '',
+      error: undefined,
+      rule: 'string',
+      skipField: true,
+    },
     controlPersonQuestionnaire: {
       label: 'Control Person Questionnaire',
       value: '',
