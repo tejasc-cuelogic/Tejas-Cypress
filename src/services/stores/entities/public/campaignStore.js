@@ -8,6 +8,7 @@ export class CampaignStore {
   @observable details = {};
   @observable option = false;
   @observable campaignSideBarShow = false;
+  @observable isReadmoreToShow = false;
 
 
   @action
@@ -18,7 +19,7 @@ export class CampaignStore {
   @action
   initRequest = (stage) => {
     this.data =
-    graphql({ client: clientPublic, query: allOfferings, variables: { filters: { stage } } });
+      graphql({ client: clientPublic, query: allOfferings, variables: { filters: { stage } } });
   }
 
   @action
@@ -38,7 +39,7 @@ export class CampaignStore {
       variables: { id },
       onFetch: (data) => {
         if (data) {
-          resolve(data.data.getOfferingDetailsById);
+          resolve(data.getOfferingDetailsById);
         }
       },
     });
@@ -60,6 +61,12 @@ export class CampaignStore {
 
   @computed get loading() {
     return this.allData.loading;
+  }
+  @action
+  setReadMoreToShowStatus(readMoreStatus) {
+    if (readMoreStatus !== this.isReadmoreToShow) {
+      this.isReadmoreToShow = readMoreStatus;
+    }
   }
 }
 

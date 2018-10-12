@@ -22,13 +22,13 @@ export default class MobileDropDownNav extends React.Component {
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
     const {
-      navItems, location, className, navStore,
+      navItems, location, className, navStore, slideUpNot,
     } = this.props;
     const { navStatus } = navStore;
     return (
       <Responsive maxWidth={767} as={Aux}>
         <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
-          <Menu inverted className={`mobile-dropdown-menu ${className} ${navStatus === 'sub' ? 'active' : ''}`}>
+          <Menu inverted className={`mobile-dropdown-menu ${className} ${navStatus === 'sub' && !slideUpNot ? 'active' : ''}`}>
             <Dropdown item text={this.activeText()}>
               <Dropdown.Menu>
                 <NavItems sub refLoc="public" location={location} navItems={navItems} />
