@@ -183,6 +183,7 @@ export default class Miscellaneous extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <DropZone
+                      size="small"
                       className={isReadonly ? 'display-only secondary' : 'secondary'}
                       readOnly={isReadonly}
                       name="docDetails"
