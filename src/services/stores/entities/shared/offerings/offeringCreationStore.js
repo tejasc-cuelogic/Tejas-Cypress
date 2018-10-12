@@ -6,11 +6,7 @@ import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-<<<<<<< HEAD
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, DOCUMENTATION } from '../../../../constants/admin/offerings';
-=======
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER } from '../../../../constants/admin/offerings';
->>>>>>> 1212f672c522ccd5bcf51a51a772ecd727d3aa05
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -596,7 +592,7 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
-  
+
   updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -718,7 +714,7 @@ export class OfferingCreationStore {
         if (res && res.getOfferingBac) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
-          if (!this.initLoad.includes('LEADERS_ADDED')) {
+          if (!this.initLoad.includes('LEADERS_ADDED') && (leadersCount - 1) !== 0) {
             this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
           }
         }
