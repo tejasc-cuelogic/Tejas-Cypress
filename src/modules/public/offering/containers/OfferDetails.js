@@ -34,6 +34,8 @@ class offerDetails extends Component {
           if (data.issuerId === currentUser.sub) {
             this.setState({ showPassDialog: false });
             this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+          } else {
+            this.setState({ showPassDialog: true });
           }
         });
       } else {
