@@ -534,9 +534,8 @@ export const OFFERS = {
       label: 'Structure',
       placeHolder: 'Choose',
       error: undefined,
-      rule: 'string|required',
+      rule: 'required',
       customErrors: {
-        string: 'Allowed string only.',
         required: '* required.',
       },
     },
@@ -598,9 +597,8 @@ export const OFFERS = {
       label: 'Personal Guarantee',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string|required',
+      rule: 'required',
       customErrors: {
-        string: 'Allowed string only.',
         required: '* required.',
       },
     },
@@ -683,8 +681,8 @@ export const OFFERS = {
 };
 
 export const STRUCTURE_TYPES = [
-  { text: 'Term Loan', value: 'TERM_NOTE' },
-  { text: 'Revenue Share', value: 'REVENUE_SHARING_NOTE' },
+  { key: 'TERM_NOTE', value: 'TERM_NOTE', text: 'Term Loan' },
+  { key: 'REVENUE_SHARING_NOTE', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Share' },
   // { key: 'EQUITY', value: 'EQUITY', text: 'Equity' },
   // { key: 'CONVERTIBLE_NOTE', value: 'CONVERTIBLE_NOTE', text: 'Convertible Note' },
 ];
