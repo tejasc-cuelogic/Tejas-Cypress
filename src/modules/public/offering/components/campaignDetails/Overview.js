@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Grid, Segment, Image } from 'semantic-ui-react';
+import { Grid, Segment, Embed } from 'semantic-ui-react';
 import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
@@ -14,9 +14,9 @@ import videoPoster from '../../../../../assets/images/636206632.jpg';
 
 
 const isTabletBoth = document.documentElement.clientWidth >= 768
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 const isTabletLand = document.documentElement.clientWidth >= 992
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 
 @inject('campaignStore')
 @observer
@@ -30,7 +30,15 @@ class Overview extends Component {
             <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
             <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
               <Segment padded>
-                <Image as={Link} to={`${this.props.match.url}/herovideo`} src={videoPoster} />
+                {/* <Image as={Link} to={`${this.props.match.url}/herovideo`}
+              src={videoPoster} /> */}
+                <Embed
+                  as={Link}
+                  to={`${this.props.match.url}/herovideo`}
+                  placeholder={videoPoster}
+                  source="vimeo"
+                  icon="ns-play"
+                />
               </Segment>
             </Grid.Column>
           </Grid.Row>

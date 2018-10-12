@@ -54,7 +54,9 @@ export default class Legal extends Component {
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />
-            <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />
+            {!isIssuer &&
+              <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />
+            }
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>
@@ -68,7 +70,7 @@ export default class Legal extends Component {
                   <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
                 ))
               }
-              {
+              {!isIssuer &&
                 adminLegalInfo.map(item => (
                   <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
                 ))

@@ -62,6 +62,10 @@ export const publicRoutes = [
     component: CaseStudies,
   },
   {
+    path: '/offerings/preview/:id',
+    component: OfferDetails,
+  },
+  {
     path: '/offerings/:id',
     component: OfferDetails,
   },

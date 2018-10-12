@@ -64,7 +64,13 @@ export default class UpdateProfilePhoto extends Component {
     const { ID_PROFILE_INFO, canUpdateProfilePhoto, resetProfilePhoto } = this.props.identityStore;
     const { inProgress } = this.props.uiStore;
     return (
-      <Modal open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+      <Modal
+        open
+        closeIcon
+        closeOnRootNodeClick={false}
+        onClose={() => this.handleCloseModal()}
+        closeOnDimmerClick={false}
+      >
         <Modal.Header>Select a Photo</Modal.Header>
         <Modal.Content>
           <Form className="cropper-wrap">
