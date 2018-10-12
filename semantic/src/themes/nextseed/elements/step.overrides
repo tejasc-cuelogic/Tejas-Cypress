@@ -21,8 +21,7 @@
 .ui.steps .step .title{
 	margin-bottom:0;
 }
-.ui.steps .step.tab-error{
-  .title{
-    color:@highlight-primary !important;
-  }
+.ui.steps .step.tab-error,
+.ui.steps .step.active.tab-error .title{
+  color:@highlight-primary !important;
 }

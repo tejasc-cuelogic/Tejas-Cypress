@@ -479,7 +479,6 @@ export const OTHER_DOCUMENTATION_UPLOADS = {
     label: '',
     placeHolder: 'Enter label here',
     error: undefined,
-    showLoader: false,
     objRefOutput: 'miscellaneous',
     rule: 'string|required',
     customErrors: {
@@ -493,6 +492,7 @@ export const OTHER_DOCUMENTATION_UPLOADS = {
     error: undefined,
     rule: 'string|required',
     preSignedUrl: '',
+    showLoader: false,
     fileId: '',
     fileData: '',
     objType: 'FileObjectType',
@@ -534,9 +534,8 @@ export const OFFERS = {
       label: 'Structure',
       placeHolder: 'Choose',
       error: undefined,
-      rule: 'string|required',
+      rule: 'required',
       customErrors: {
-        string: 'Allowed string only.',
         required: '* required.',
       },
     },
@@ -598,9 +597,8 @@ export const OFFERS = {
       label: 'Personal Guarantee',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string|required',
+      rule: 'required',
       customErrors: {
-        string: 'Allowed string only.',
         required: '* required.',
       },
     },
@@ -658,6 +656,7 @@ export const OFFERS = {
     preSignedUrl: '',
     fileId: '',
     fileData: '',
+    showLoader: false,
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
@@ -673,6 +672,7 @@ export const OFFERS = {
     preSignedUrl: '',
     fileId: '',
     fileData: '',
+    showLoader: false,
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
@@ -683,8 +683,8 @@ export const OFFERS = {
 };
 
 export const STRUCTURE_TYPES = [
-  { text: 'Term Loan', value: 'TERM_NOTE' },
-  { text: 'Revenue Share', value: 'REVENUE_SHARING_NOTE' },
+  { key: 'TERM_NOTE', value: 'TERM_NOTE', text: 'Term Loan' },
+  { key: 'REVENUE_SHARING_NOTE', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Share' },
   // { key: 'EQUITY', value: 'EQUITY', text: 'Equity' },
   // { key: 'CONVERTIBLE_NOTE', value: 'CONVERTIBLE_NOTE', text: 'Convertible Note' },
 ];

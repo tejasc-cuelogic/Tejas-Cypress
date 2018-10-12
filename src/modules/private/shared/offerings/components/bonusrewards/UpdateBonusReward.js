@@ -59,7 +59,7 @@ export default class UpdateBonusReward extends Component {
                       name={field.key}
                       changed={(e, result) => bonusRewardTierChange(e, field.seqNum, result)}
                       defaults
-                      containerclassname="ui relaxed list"
+                      containerclassname="ui list rewards-tier"
                     />
                   );
                 }))}

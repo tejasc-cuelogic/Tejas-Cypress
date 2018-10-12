@@ -30,6 +30,7 @@ export default class ApplicationDetails extends Component {
     const { params } = match;
     this.props.businessAppStore.fetchAdminApplicationById(params.appId, params.id, params.userId)
       .then(() => {
+        // this.props.businessAppReviewStore.resetForms();
         if (match.isExact) {
           this.props.history.push(`${match.url}/activity-history`);
         }
@@ -204,13 +205,17 @@ export default class ApplicationDetails extends Component {
                 component={navItems[0].component || getModule(this.module(navItems[0].title))}
               />
               {
-                navItems.map(item => (
-                  <Route
-                    key={item.to}
-                    path={`${match.url}/${item.to}`}
-                    component={item.component || getModule(this.module(item.title))}
-                  />
-                ))
+                navItems.map((item) => {
+                  const { params } = match;
+                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
+                  return (
+                    <Route
+                      key={item.to}
+                      path={`${match.url}/${item.to}`}
+                      render={props => <CurrentComponent resourceId={params.appId} {...props} />}
+                    />
+                  );
+                })
               }
             </Switch>
           </Card>
