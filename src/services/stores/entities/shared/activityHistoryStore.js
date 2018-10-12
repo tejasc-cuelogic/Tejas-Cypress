@@ -1,8 +1,8 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
+import { isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allActivities, addActivity } from '../../queries/activity';
-import { businessAppStore } from '../../index';
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { LOG_ACTIVITY } from '../../../constants/activity';
@@ -15,29 +15,37 @@ export class ActivityHistoryStore {
   @observable message = {};
 
   @action
-  initRequest = () => {
+  initRequest = (resourceId) => {
     const { activityType, activityUserType } = this.requestState.filters;
-    let filterParams = { resourceId: businessAppStore.applicationId, orderBy: { field: 'activityDate', sort: 'desc' } };
-    filterParams = activityType !== '' ? { ...filterParams, activityType } : { ...filterParams };
-    filterParams = activityUserType !== '' ? { ...filterParams, scope: activityUserType } : { ...filterParams };
+    let filterParams = { resourceId, orderBy: { field: 'activityDate', sort: 'desc' } };
+    filterParams = activityType ? { ...filterParams, activityType } : { ...filterParams };
+    filterParams = activityUserType ? { ...filterParams, scope: activityUserType } :
+      { ...filterParams };
     this.data = graphql({
       client,
       query: allActivities,
       variables: filterParams,
+      fetchPolicy: 'network-only',
     });
   }
 
   @action
-  setInitiateSrch = (name, value) => {
-    this.requestState.filters[name] = value;
-    this.initRequest();
+  setInitiateSrch = (name, value, resourceId) => {
+    const srchParams = { ...this.requestState.filters };
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      srchParams[name] = value;
+    } else {
+      delete srchParams[name];
+    }
+    this.requestState.filters = srchParams;
+    this.initRequest(resourceId);
   }
 
   @action
-  send = () => {
+  send = (resourceId) => {
     const formData = Validator.ExtractValues(this.ACTIVITY_FRM.fields);
     const data = {
-      resourceId: businessAppStore.applicationId,
+      resourceId,
       activityType: ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY,
       activityTitle: 'Posted new comment',
       activity: formData.comment,
@@ -56,7 +64,8 @@ export class ActivityHistoryStore {
         },
         refetchQueries: [{
           query: allActivities,
-          variables: { resourceId: payload.resourceId },
+          variables: { resourceId: payload.resourceId, orderBy: { field: 'activityDate', sort: 'desc' } },
+          fetchPolicy: 'network-only',
         }],
       })
       .then(() => {
