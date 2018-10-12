@@ -11,11 +11,11 @@ import ActivityFeed from './components/ActivityFeed';
 @observer
 export default class ActivityHistory extends Component {
   componentWillMount() {
-    this.props.activityHistoryStore.initRequest();
+    this.props.activityHistoryStore.initRequest(this.props.resourceId);
   }
   setSearchParam = (e, { name, value }) =>
-    this.props.activityHistoryStore.setInitiateSrch(name, value);
-  logActivity = () => this.props.activityHistoryStore.send();
+    this.props.activityHistoryStore.setInitiateSrch(name, value, this.props.resourceId);
+  logActivity = () => this.props.activityHistoryStore.send(this.props.resourceId);
   render() {
     const {
       ACTIVITY_FRM, msgEleChange, activities, loading, requestState,
@@ -26,10 +26,10 @@ export default class ActivityHistory extends Component {
           <Form>
             <Grid columns={4}>
               <Grid.Column>
-                <DropdownFilter value={requestState.filters.activityType} keyName="activityType" change={this.setSearchParam} name="Activity Type" options={FILTER_META.activityType} />
+                <DropdownFilter value={requestState.filters.activityType} keyName="activityType" change={this.setSearchParam} name="Activity Type" options={FILTER_META.activityType} isMultiple />
               </Grid.Column>
               <Grid.Column>
-                <DropdownFilter value={requestState.filters.activityUserType} keyName="activityUserType" change={this.setSearchParam} name="User Type" options={FILTER_META.activityUserType} />
+                <DropdownFilter value={requestState.filters.activityUserType} keyName="activityUserType" change={this.setSearchParam} name="User Type" options={FILTER_META.activityUserType} isMultiple />
               </Grid.Column>
             </Grid>
           </Form>

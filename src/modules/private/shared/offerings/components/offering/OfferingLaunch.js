@@ -85,7 +85,7 @@ export default class OfferingLaunch extends Component {
             Submitted by USER_NAME on 2/3/2018
           </Button>
           {access.asManager ? (
-            <Button floated="right" type="button" primary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Approve and Launch</Button>
+            <Button floated="right" primary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Approve and Launch</Button>
           ) : (
             <Button floated="right" secondary className="relaxed" disabled={!COMPANY_LAUNCH_FRM.meta.isValid} >Submit for Approval</Button>
           )}

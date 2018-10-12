@@ -41,8 +41,10 @@ class LatestUpdates extends Component {
                   <Item.Meta>{moment(update.updated.date).format('LL')}</Item.Meta>
                   <Divider />
                   <Item.Description>
-                    <p><b>{update.title}</b></p>
-                    <p dangerouslySetInnerHTML={{ __html: update.content }} />
+                    <div className="segment-container mini">
+                      <p><b>{update.title}</b></p>
+                      <p dangerouslySetInnerHTML={{ __html: update.content }} />
+                    </div>
                     <Link to={`${refLink}/updates`}>View Update</Link>
                   </Item.Description>
                 </Item.Content>
