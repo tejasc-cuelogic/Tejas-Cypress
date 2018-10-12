@@ -37,9 +37,13 @@ export default class OfferingDetails extends Component {
     return (
       <Modal closeOnDimmerClick={false} closeOnRootNodeClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
-          <Header as="h3">{offer.keyTerms && offer.keyTerms.shorthandBusinessName ? offer.keyTerms.shorthandBusinessName : offer.keyTerms.legalBusinessName}
+          <Header as="h3">
+            {((offer.keyTerms && offer.keyTerms.shorthandBusinessName) ?
+              offer.keyTerms.shorthandBusinessName : (
+              (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
+            ))}
             <Header.Subheader className="mt-10">
-              <Link target="_blank" to={`/offering/preview/${offer.id}`}>
+              <Link target="_blank" to={`/offerings/preview/${offer.id}`}>
                 <Icon className="ns-view" /><b>Preview the offering page</b>
               </Link>
             </Header.Subheader>
