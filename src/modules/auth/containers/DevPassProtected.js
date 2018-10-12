@@ -26,6 +26,13 @@ class DevPassProtected extends Component {
         this.setState({ error: 'Entered password is invalid, please try again.' });
       });
   }
+  authPreviewOffer = () => {
+    if (this.state.password === 'fourroses') {
+      this.props.authPreviewOffer(true, this.state.password);
+    } else {
+      this.setState({ error: 'Entered password is invalid, please try again.' });
+    }
+  }
   render() {
     return (
       <Aux>
@@ -33,7 +40,7 @@ class DevPassProtected extends Component {
           <Logo size="medium" centered dataSrc="LogoWhiteGreen" />
           <Divider hidden />
           <Modal.Content className="signup-modal multistep">
-            <Form onSubmit={this.submit}>
+            <Form onSubmit={this.props.offerPreview ? this.authPreviewOffer : this.submit}>
               <Form.Input
                 onChange={e => this.setState({ password: e.target.value, error: '' })}
                 fluid
@@ -46,7 +53,7 @@ class DevPassProtected extends Component {
               />
               <FieldError error={this.state.error} />
               <div className="center-align">
-                <Button disabled={!this.state.password} primary size="large" className="very relaxed">Log in</Button>
+                <Button disabled={!this.state.password} primary size="large" className="very relaxed">{this.props.offerPreview ? 'Continue' : 'Log in'}</Button>
               </div>
             </Form>
           </Modal.Content>
