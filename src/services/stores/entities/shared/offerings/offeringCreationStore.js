@@ -591,7 +591,7 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
-  
+
   updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
