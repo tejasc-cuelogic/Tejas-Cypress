@@ -62,7 +62,7 @@ export default class Projections extends Component {
             ))
           }
           <DropZone
-            containerclassname={isReadonly ? 'display-only fluid' : 'fluid'}
+            containerclassname={isReadonly ? 'display-only' : ''}
             disabled={isReadonly}
             name="revenueCheckUpload"
             fielddata={PROJECTIONS_FRM.fields.revenueCheckUpload}
@@ -89,7 +89,7 @@ export default class Projections extends Component {
             ))
           }
           <DropZone
-            containerclassname={isReadonly ? 'display-only fluid' : 'fluid'}
+            containerclassname={isReadonly ? 'display-only' : ''}
             disabled={isReadonly}
             name="benchmarkUpload"
             fielddata={PROJECTIONS_FRM.fields.benchmarkUpload}

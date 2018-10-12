@@ -7,12 +7,12 @@ import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 
-const TableHeader = () => (
+const TableHeader = ({ isReadonly }) => (
   <Table.Header>
     <Table.Row>
       <Table.HeaderCell>Contingency</Table.HeaderCell>
       <Table.HeaderCell>Acceptance Criteria</Table.HeaderCell>
-      <Table.HeaderCell />
+      {!isReadonly && <Table.HeaderCell /> }
     </Table.Row>
   </Table.Header>
 );
@@ -45,23 +45,27 @@ const TableBody = ({
             size="small"
           />
         </Table.Cell>
+        {!isReadonly &&
         <Table.Cell collapsing>
-          {!isReadonly && fields.length > 1 &&
+          {fields.length > 1 &&
           <Link to={match.url} className="icon-link" onClick={e => toggleConfirmModal(e, index, arrayName)} >
             <Icon className="ns-close-circle" color="grey" />
           </Link>
           }
         </Table.Cell>
+        }
       </Table.Row>
     )) : ''
     }
+    {!isReadonly &&
     <Table.Row>
       <Table.Cell colSpan="3">
-        {!isReadonly && fields.length < 5 &&
+        {fields.length < 5 &&
         <Button size="small" color="blue" className="link-button" type="button" onClick={() => addMore(formName, arrayName)}>+ Add Contingency</Button>
         }
       </Table.Cell>
     </Table.Row>
+    }
   </Table.Body>
 );
 
@@ -105,14 +109,14 @@ export default class Contingencies extends Component {
             Launch
           </Header>
           <Table basic compact className="form-table">
-            <TableHeader />
+            <TableHeader isReadonly={isReadonly} />
             <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="launch" fields={CONTINGENCY_FRM.fields.launch} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <Header as="h5">
             Close
           </Header>
           <Table basic compact className="form-table">
-            <TableHeader />
+            <TableHeader isReadonly={isReadonly} />
             <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="close" fields={CONTINGENCY_FRM.fields.close} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <ButtonGroup
