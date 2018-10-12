@@ -17,13 +17,13 @@ export default class Leader extends Component {
       getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
     }
   }
-  handleSubmitIssuer = () => {
+  handleSubmitIssuer = (leaderId) => {
     const {
       createOrUpdateOfferingBac,
       LEADER_FRM,
     } = this.props.offeringCreationStore;
     const leaderNumber = this.props.index;
-    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber);
+    createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId);
   }
   render() {
     const { LEADER_FRM, formArrayChange } = this.props.offeringCreationStore;
@@ -33,8 +33,9 @@ export default class Leader extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
+    const leaderId = LEADER_FRM.fields.getOfferingBac[index].id.value;
     return (
-      <Form onSubmit={this.handleSubmitIssuer} className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'mt-20' : 'inner-content-spacer'}>
+      <Form onSubmit={() => this.handleSubmitIssuer(leaderId)} className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'mt-20' : 'inner-content-spacer'}>
         <Header as="h4">Control Person Diligence</Header>
         {
           ['controlPersonQuestionnaire', 'residenceTenYears'].map(field => (
