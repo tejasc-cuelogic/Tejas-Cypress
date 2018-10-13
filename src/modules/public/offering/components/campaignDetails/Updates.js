@@ -27,8 +27,16 @@ class Updates extends Component {
     this.setState({ selected: e.target.id });
   };
 
-  isActiveReadMore = value => (value === this.state.selected || this.state.selected === '' ? { display: 'none' } : { display: 'block' });
-  isActiveReadLess = value => (value === this.state.selected || this.state.selected === '' ? { display: 'block' } : { display: 'none' });
+  isActiveReadMore(value) {
+    const newLocal = (value === this.state.selected || this.state.selected === '') ? { display: 'block' } : { display: 'none' };
+    return newLocal;
+  }
+
+  isActiveReadLess(value) {
+    const newLocal = (value === this.state.selected || this.state.selected === '') ? { display: 'none' } : { display: 'block' };
+    return newLocal;
+  }
+
   render() {
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates;
@@ -73,7 +81,7 @@ class Updates extends Component {
                         <Item.Content verticalAlign="middle" >{dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.firstName} {dataItem.actingUserInfo && dataItem.actingUserInfo.info && dataItem.actingUserInfo.info.lastName} <br /><span className="highlight-text">{moment(dataItem.updated.date).format('LL')}</span></Item.Content>
                       </Item>
                       <Header as="h5">{dataItem.title}</Header>
-                      <div style={this.isActiveReadLess(index)} >
+                      <div styles={this.state.selected === '' ? { display: 'block' } : () => this.isActiveReadLess(index)} >
                         <p dangerouslySetInnerHTML={{
                           __html: dataItem.content.length <= 805 ?
                             dataItem.content : dataItem.content.substring(1, 805),
@@ -83,7 +91,7 @@ class Updates extends Component {
                           Read More
                         </a>
                       </div>
-                      <div style={this.isActiveReadMore(index)} >
+                      <div styles={this.state.selected === '' ? { display: 'none' } : () => this.isActiveReadMore(index)} >
                         <p dangerouslySetInnerHTML={{ __html: dataItem.content }} />
                         <a href onClick={this.handleReadLess} id={index} >
                           Read Less
