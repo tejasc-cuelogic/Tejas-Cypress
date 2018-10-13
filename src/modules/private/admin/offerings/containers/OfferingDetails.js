@@ -42,9 +42,9 @@ export default class OfferingDetails extends Component {
               offer.keyTerms.shorthandBusinessName : (
               (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
             ))}
-            <Header.Subheader>
-              <Link target="_blank" to={`/offerings/preview/${offer.id}`}className="link">
-                <Icon className="ns-view" />Preview the offering page
+            <Header.Subheader className="mt-10">
+              <Link target="_blank" to={`/offerings/preview/${offer.id}`}>
+                <Icon className="ns-view" /><b>Preview the offering page</b>
               </Link>
             </Header.Subheader>
           </Header>

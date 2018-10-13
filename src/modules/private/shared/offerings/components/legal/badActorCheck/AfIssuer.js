@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button, Icon, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../../theme/form';
+import ButtonGroupType2 from '../../ButtonGroupType2';
 
 @inject('offeringCreationStore', 'userStore', 'uiStore')
 @observer
@@ -26,13 +27,13 @@ export default class AfIssuer extends Component {
     this.props.history.push(`${this.props.refLink}/1`);
     this.props.uiStore.setConfirmBox('');
   }
-  handleSubmitIssuer = (id) => {
+  handleSubmitIssuer = (id, approved) => {
     const {
       createOrUpdateOfferingBac,
       AFFILIATED_ISSUER_FRM,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
-    createOrUpdateOfferingBac('AFFILIATED_ISSUER', AFFILIATED_ISSUER_FRM.fields, issuerNumber, undefined, id);
+    createOrUpdateOfferingBac('AFFILIATED_ISSUER', AFFILIATED_ISSUER_FRM.fields, issuerNumber, undefined, id, approved);
   }
 
   render() {
@@ -48,9 +49,12 @@ export default class AfIssuer extends Component {
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     const afIssuerId = AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].id.value;
+    const isApproved = false;
+    const isSubmitted = false;
+    const isReadonly = isApproved;
     return (
       <Aux>
-        <Form onSubmit={() => this.handleSubmitIssuer(afIssuerId)} className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
+        <Form className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
               <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName, afIssuerId)}>Delete Selected Issuer</Button>
@@ -58,6 +62,7 @@ export default class AfIssuer extends Component {
             </Button.Group>
           </div>
           <FormInput
+            displayMode={isReadonly}
             name="legalName"
             fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].legalName}
             changed={(e, result) => formArrayChange(e, result, formName, 'getOfferingBac', index)}
@@ -67,6 +72,7 @@ export default class AfIssuer extends Component {
             ['certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
               <Aux>
                 <FormTextarea
+                  readOnly={isReadonly}
                   key={field}
                   name={field}
                   fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
@@ -81,6 +87,7 @@ export default class AfIssuer extends Component {
           {
             ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
               <FormTextarea
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
@@ -94,6 +101,7 @@ export default class AfIssuer extends Component {
           {
             ['ofac', 'civilLawsuit', 'onlineReputation'].map(field => (
               <FormTextarea
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index][field]}
@@ -103,35 +111,13 @@ export default class AfIssuer extends Component {
             ))
           }
           <Divider hidden />
-          <div className="clearfix mb-20">
-            {access.asManager ?
-              <Button.Group floated="right">
-                <Button inverted content="Decline" color="red" />
-                <Button disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} secondary content="Generate Report" />
-                <Button disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} primary content="Approve" color="green" />
-              </Button.Group>
-            :
-              <Aux>
-                <div className="clearfix mb-20 right-align">
-                  <Button secondary content="Submit for Approval" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
-                </div>
-                {/* <Button
-                  content="Awaiting Manager Approval"
-                  color="gray"
-                  disabled={!AFFILIATED_ISSUER_FRM.meta.isValid}
-                /> */}
-              </Aux>
-            }
-          </div>
-          <div className="clearfix">
-            <Button.Group floated="right">
-              <Button secondary content="Generate Report" disabled={!AFFILIATED_ISSUER_FRM.meta.isValid} />
-              <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
-                Approved by Manager on 2/3/2018
-              </Button>
-            </Button.Group>
-          </div>
+          <ButtonGroupType2
+            isSubmitted={isSubmitted}
+            isManager={access.asManager}
+            formValid={AFFILIATED_ISSUER_FRM.meta.isValid}
+            isApproved={isApproved}
+            updateFunction={approved => this.handleSubmitIssuer(afIssuerId, approved)}
+          />
         </Form>
         <Confirm
           header="Confirm"

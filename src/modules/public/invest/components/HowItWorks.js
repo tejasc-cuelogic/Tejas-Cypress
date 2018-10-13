@@ -36,7 +36,7 @@ const HowItWorks = () => (
     <section>
       <Container textAlign={isMobile ? 'left' : 'center'}>
         <Header>Choose how you want to invest.</Header>
-        <p className="mb-80">Understand and choose the right opportunities with the right payment terms for you.</p>
+        <p className={isMobile ? 'mb-50' : 'mb-80'}>Understand and choose the right opportunities with the right payment terms for you.</p>
         <Grid doubling columns={2} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
           <Grid.Column>
             <div className="flex-content">
