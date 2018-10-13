@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
+import { Form, Divider, Header, Button } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
 
 @inject('offeringCreationStore', 'userStore')
 @observer
@@ -16,12 +17,12 @@ export default class OfferingOverview extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore('OFFERING_OVERVIEW_FRM', 'highlight');
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const {
       OFFERING_OVERVIEW_FRM,
       currentOfferingId, updateOffering,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview');
+    updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview', true, undefined, isApproved);
   }
   render() {
     const {
@@ -30,6 +31,8 @@ export default class OfferingOverview extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isApproved = false;
+    const isReadonly = isApproved;
     return (
       <Form onSubmit={this.handleFormSubmit}>
         {
@@ -37,6 +40,7 @@ export default class OfferingOverview extends Component {
             <Aux>
               <Header as="h4">{OFFERING_OVERVIEW_FRM.fields[field].label}</Header>
               <FormTextarea
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
@@ -52,6 +56,7 @@ export default class OfferingOverview extends Component {
         {
           OFFERING_OVERVIEW_FRM.fields.highlight.map((highlights, index) => (
             <FormInput
+              displayMode={isReadonly}
               name="highlight"
               label={`Bullet ${index + 1}`}
               fielddata={highlights.highlight}
@@ -69,6 +74,7 @@ export default class OfferingOverview extends Component {
         {
           ['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
             <FormInput
+              displayMode={isReadonly}
               key={field}
               name={field}
               fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
@@ -84,11 +90,13 @@ export default class OfferingOverview extends Component {
         </Header>
         <Header as="h6">Facebook</Header>
         <FormInput
+          displayMode={isReadonly}
           name="facebook_shareLink"
           fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
           changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <FormTextarea
+          readOnly={isReadonly}
           name="facebook_blurb"
           fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_blurb}
           changed={(e, result) => formArrayChange(e, result, formName)}
@@ -96,11 +104,13 @@ export default class OfferingOverview extends Component {
         />
         <Header as="h6">Twitter</Header>
         <FormInput
+          displayMode={isReadonly}
           name="twitter_shareLink"
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
           changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <FormTextarea
+          readOnly={isReadonly}
           name="twitter_blurb"
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_blurb}
           changed={(e, result) => formArrayChange(e, result, formName)}
@@ -113,6 +123,7 @@ export default class OfferingOverview extends Component {
           </Header.Subheader>
         </Header>
         <FormTextarea
+          readOnly={isReadonly}
           name="googleMeta"
           fielddata={OFFERING_OVERVIEW_FRM.fields.googleMeta}
           changed={(e, result) => formArrayChange(e, result, formName)}
@@ -123,27 +134,18 @@ export default class OfferingOverview extends Component {
           <Header.Subheader>Links to Issuer’s company website</Header.Subheader>
         </Header>
         <FormInput
+          displayMode={isReadonly}
           name="issuerWebsite"
           fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
           changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <Divider hidden />
-        <div className="clearfix">
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Submitted by USER_NAME on 2/3/2018
-          </Button>
-          <Button.Group floated="right">
-            {access.asManager ? (
-              <Aux>
-                <Button inverted color="red" content="Decline" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid} />
-                <Button color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Approve</Button>
-              </Aux>
-            ) : (
-              <Button primary color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Save</Button>
-            )}
-          </Button.Group>
-        </div>
+        <ButtonGroup
+          isManager={access.asManager}
+          formValid={OFFERING_OVERVIEW_FRM.meta.isValid}
+          isApproved={isApproved}
+          updateOffer={this.handleFormSubmit}
+        />
       </Form>
     );
   }
