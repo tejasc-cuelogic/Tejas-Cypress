@@ -59,9 +59,10 @@ export class EducationStore {
           }
         });
       });
-      const item = (!id) ? this[meta[ref][0]][0][subItems[0]] : tempItem;
+      const item = (!id) ? this[meta[ref][0]][0][subItems][0] : tempItem;
       // flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}ItemList`])).find(i => i.id === id);
-      this.selected = item ? { id: item.id, title: item[meta[ref][1]], body: item[meta[ref][2]] } :
+      this.selected = item ?
+        { id: item.id, title: item[meta[ref][1]], content: item[meta[ref][2]] } :
         {};
     }
   }
