@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 // import { userStore } from '../../index';
-// import { clientSearch } from '../../../../helper';
+import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
 
 
@@ -78,18 +78,20 @@ export class EducationStore {
 
   @computed get kbs() {
     return (this.allData.KnowledgeBase.data &&
-      this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems);
-    // && clientSearch.search(
-    //   toJS(this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems),
-    //   this.searchParam.KnowledgeBase,
-    //   'knowledgeBase',
-    // )) || [];
+      this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems
+    && clientSearch.search(
+      toJS(this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems),
+      this.searchParam.KnowledgeBase,
+      'knowledgeBase',
+    )) || [];
   }
 
   @computed get faqs() {
-    return (this.allData.Faq.data && this.allData.Faq.data.faqAndKnowledgeBaseItems);
-    // && clientSearch.search(toJS(this.allData.Faq.data.faqAndKnowledgeBaseItems),
-    // this.searchParam.Faq, 'knowledgeBase')) || [];
+    return (this.allData.Faq.data && this.allData.Faq.data.faqAndKnowledgeBaseItems
+    && clientSearch.search(
+      toJS(this.allData.Faq.data.faqAndKnowledgeBaseItems),
+      this.searchParam.Faq, 'faq',
+    )) || [];
   }
 
   @computed get error() {
