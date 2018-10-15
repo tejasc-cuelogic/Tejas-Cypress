@@ -13,7 +13,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 class Updates extends Component {
   componentWillMount() {
     const { campaign } = this.props.campaignStore;
-    const updates = campaign && campaign.updates;
+    const updates = campaign && campaign.updates ? campaign.updates : [];
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
   }
   handleClose = () => this.props.history.goBack();
