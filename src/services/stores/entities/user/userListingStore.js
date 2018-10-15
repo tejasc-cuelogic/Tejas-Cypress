@@ -15,7 +15,7 @@ export class UserListingStore {
     skip: 0,
     filters: false,
     sort: {
-      by: 'lastLoginDate',
+      by: 'createdDate',
       direction: 'desc',
     },
     search: {
@@ -53,7 +53,8 @@ export class UserListingStore {
   @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-      const isoDate = moment(values.formattedValue).toISOString();
+      const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
+        moment(values.formattedValue).add(1, 'day').toISOString();
       this.setInitiateSrch(field, isoDate);
     }
   }
