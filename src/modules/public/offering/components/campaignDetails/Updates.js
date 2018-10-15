@@ -12,30 +12,25 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 class Updates extends Component {
   state = {
-    selected: '',
+    selectedReadMore: {},
+    selectedReadLess: {},
   };
+  componentWillMount() {
+    const { campaign } = this.props.campaignStore;
+    const updates = campaign && campaign.updates;
+    this.setState({ selectedReadMore: updates.map(() => true) });
+    this.setState({ selectedReadLess: updates.map(() => true) });
+  }
   handleClose = () => this.props.history.goBack();
-  // handleReadMore = (e) => this.props.campaignStore.setReadMoreToShowStatus(true);
-  // handleReadLess = () => this.props.campaignStore.setReadMoreToShowStatus(false);
-  handleReadMore = (e) => {
-    console.log('dataItem==>', e.target.id);
-    this.setState({ selected: e.target.id });
+  handleReadMoreReadLess = (index) => {
+    const newReadMoreStatus = [...this.state.selectedReadMore];
+    newReadMoreStatus[index] = !this.state.selectedReadMore[index];
+    this.setState({ selectedReadMore: newReadMoreStatus });
+
+    const newReadLessStatus = [...this.state.selectedReadLess];
+    newReadLessStatus[index] = !this.state.selectedReadLess[index];
+    this.setState({ selectedReadLess: newReadLessStatus });
   };
-
-  handleReadLess = (e) => {
-    console.log('dataItem==>', e.target.id);
-    this.setState({ selected: e.target.id });
-  };
-
-  isActiveReadMore(value) {
-    const newLocal = value === this.state.selected ? { display: 'none' } : { display: 'block' };
-    return newLocal;
-  }
-
-  isActiveReadLess(value) {
-    const newLocal = value === this.state.selected ? { display: 'block' } : { display: 'none' };
-    return newLocal;
-  }
   render() {
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates;
@@ -81,22 +76,24 @@ class Updates extends Component {
                       </Item>
                       <Header as="h5">{dataItem.title}</Header>
                       <div
-                        style={this.isActiveReadMore(index)}
+                        style={this.state.selectedReadMore[index] ? { display: 'block' } : { display: 'none' }}
                       >
                         <p dangerouslySetInnerHTML={{
                           __html: dataItem.content.length <= 805 ?
                             dataItem.content : dataItem.content.substring(1, 805),
                         }}
                         />
-                        <a href onClick={this.handleReadMore} id={index} >
-                          Read More
-                        </a>
+                        { dataItem.content.length > 805 ?
+                          <a href onClick={() => this.handleReadMoreReadLess(index)} id={index} >
+                            Read More
+                          </a> : ''
+                        }
                       </div>
                       <div
-                        style={this.isActiveReadLess(index)}
+                        style={!this.state.selectedReadLess[index] ? { display: 'block' } : { display: 'none' }}
                       >
                         <p dangerouslySetInnerHTML={{ __html: dataItem.content }} />
-                        <a href onClick={this.handleReadLess} id={index} >
+                        <a href onClick={() => this.handleReadMoreReadLess(index)} id={index} >
                           Read Less
                         </a>
                       </div>

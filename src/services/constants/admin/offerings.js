@@ -1894,18 +1894,15 @@ export const ADD_NEW_BONUS_REWARD = {
 
 export const DOCUMENTATION = {
   formId: {
-    value: [],
+    value: '',
     label: 'Form ID',
     error: undefined,
     rule: 'required',
     showLoader: false,
-    preSignedUrl: [],
-    fileId: [],
-    fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
   },
   corporateFormationDocs: {
     value: [],
@@ -1916,10 +1913,7 @@ export const DOCUMENTATION = {
     preSignedUrl: [],
     fileId: [],
     fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    objType: 'FileObjectType',
   },
   issuerFinancials: {
     value: [],
@@ -1930,10 +1924,7 @@ export const DOCUMENTATION = {
     preSignedUrl: [],
     fileId: [],
     fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    objType: 'FileObjectType',
   },
   leaseAgreementOrLetterOfIntent: {
     value: [],
@@ -1944,9 +1935,6 @@ export const DOCUMENTATION = {
     preSignedUrl: [],
     fileId: [],
     fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    objType: 'FileObjectType',
   },
 };
