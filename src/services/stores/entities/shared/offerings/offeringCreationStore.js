@@ -371,10 +371,46 @@ export class OfferingCreationStore {
   }
 
   @action
+  setFormFileArray = (formName, arrayName, field, getField, value, index = null) => {
+    if (index !== null) {
+      this[formName].fields[arrayName][index][field][getField] = value;
+    } else {
+      this[formName].fields[field][getField] = value;
+    }
+  }
+
+  @action
+  setFileUploadDataMulitple = (form, arrayName, field, files, stepName, index = null) => {
+    if (typeof files !== 'undefined' && files.length) {
+      forEach(files, (file) => {
+        const fileData = Helper.getFormattedFileData(file);
+        this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+        fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+            this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+            this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+            this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+            this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+            this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+          }).catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+          });
+        }).catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+        }).finally(() => {
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+        });
+      });
+    }
+  }
+
+  @action
   setFileUploadData = (form, field, files, subForm = '', index = null, stepName) => {
     if (stepName) {
-      const { getOfferingById } = offeringsStore.offerData.data;
-      const { applicationId, issuerId } = getOfferingById;
       uiStore.setProgress();
       const file = files[0];
       const fileData = Helper.getFormattedFileData(file);

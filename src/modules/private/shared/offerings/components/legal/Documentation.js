@@ -7,16 +7,16 @@ import { DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 @observer
 export default class Documentation extends Component {
   onCorporateFormationDocDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('DOCUMENTATION_FRM', '', 'corporateFormationDocs', files);
+    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'corporateFormationDocs', files, 'DOCUMENTS_LEGAL_CORPORATE_FORMATION_DOCS');
   }
   onFormIdDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('DOCUMENTATION_FRM', '', 'formId', files);
+    this.props.offeringCreationStore.setFileUploadData('DOCUMENTATION_FRM', '', 'formId', files, '');
   }
   onIssuerFinancialsDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('DOCUMENTATION_FRM', '', 'issuerFinancials', files);
+    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'issuerFinancials', files, 'DOCUMENTS_LEGAL_ISSUER_FINANCIALS');
   }
   onLeaseAgreementOrLetterOfIntentDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadData('DOCUMENTATION_FRM', '', 'issuerFinancials', files);
+    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'leaseAgreementOrLetterOfIntent', files, 'DOCUMENTS_LA_LOI');
   }
   render() {
     const { isIssuer } = this.props.userStore;
@@ -36,6 +36,7 @@ export default class Documentation extends Component {
         />
         <Header as="h3">Corporate Formation Documents</Header>
         <DropZone
+          multiple
           containerclassname="fluid"
           name="corporateFormationDocs"
           fielddata={DOCUMENTATION_FRM.fields.corporateFormationDocs}
@@ -45,6 +46,7 @@ export default class Documentation extends Component {
         />
         <Header as="h3">Issuer Financials</Header>
         <DropZone
+          multiple
           containerclassname="fluid"
           name="issuerFinancials"
           fielddata={DOCUMENTATION_FRM.fields.issuerFinancials}
@@ -54,6 +56,7 @@ export default class Documentation extends Component {
         />
         <Header as="h3">Lease Agreement or Letter of Intent(LOI)</Header>
         <DropZone
+          multiple
           containerclassname="fluid"
           name="leaseAgreementOrLetterOfIntent"
           fielddata={DOCUMENTATION_FRM.fields.leaseAgreementOrLetterOfIntent}
