@@ -30,19 +30,18 @@ export const P5 = props => (
             <DropdownFilter value={props.requestState.search.accountType} name="Account Type" change={props.setSearchParam} options={FILTER_META.accountType} isMultiple />
           </Grid.Column>
           <Grid.Column width={3}>
-            <DropdownFilter value={props.requestState.search.accountStatus} name="Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <DropdownFilter value={props.requestState.search.accreditation} name="Accreditation" change={props.setSearchParam} options={FILTER_META.accreditation} />
+            <DropdownFilter value={props.requestState.search.accountStatus} name="Account Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
           </Grid.Column>
           <Grid.Column width={4}>
-            <DateRangeFilter filters={props.requestState.search} label="Creation date" name="createdAt" changeStart={props.dateFilterStart} changeEnd={props.dateFilterEnd} />
-          </Grid.Column>
-          <Grid.Column width={3}>
-            <DropdownFilter isMultiple value={props.requestState.search.city} name="City" change={props.setSearchParam} options={FILTER_META.city} />
+            <DateRangeFilter filters={props.requestState.search} label="Account Creation" name="createdAt" changeStart={props.dateFilter} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
     </Form>
   </div>
 );
+
+// <Grid.Column width={3}>
+// <DropdownFilter value={props.requestState.search.accreditation}
+// name="Accreditation" change={props.setSearchParam} options={FILTER_META.accreditation} />
+// </Grid.Column>
