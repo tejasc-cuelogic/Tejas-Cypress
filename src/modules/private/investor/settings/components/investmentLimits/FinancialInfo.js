@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
@@ -61,9 +61,15 @@ export default class FinancialInfo extends Component {
                       <Card.Content>
                         <Header as="h4">Regulation Crowdfunding Limits</Header>
                         <p className="intro-text">
-                          Pellentesque facilisis. Nulla imperdiet sit amet magna.
-                          Vestibulum dapibus, mauris nec malesuada fames ac turpis
-                          Pellentesque facilisis. Nulla imperdiet sit amet
+                          {account.name === 'ira' ? `The total amount you can invest in Regulation
+                            Crowdfunding offerings within a 12-month period depends on your income
+                            and net worth.` : `The total amount you can invest in Regulation
+                            Crowdfunding offerings within a 12-month period depends on the
+                            entity's annual revenue and net assets.`
+                          }
+                          <Link target="_blank" to="/app/resources/faq">
+                            &nbsp;See FAQ on investment limits
+                          </Link>
                         </p>
                         <Statistic size="tiny">
                           <Statistic.Label>

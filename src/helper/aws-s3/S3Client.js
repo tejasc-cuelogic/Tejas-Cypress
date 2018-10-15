@@ -10,9 +10,9 @@ class S3Client {
 
         // Error Thrower :x:
         throwError(config, file);
-
+        const fileName = `${Date.now()}_${file.name}`;
         const fd = new FormData();
-        const key = `${config.dirName ? config.dirName + "/" : ""}${file.name}`;
+        const key = config.dirName ? `${config.dirName}/${fileName}` : `${fileName}`;
         const url = `https://${config.bucketName}.s3.amazonaws.com/`;
         fd.append("key", key);
         fd.append("acl", "public-read");
@@ -31,7 +31,7 @@ class S3Client {
             "X-Amz-Signature",
             Signature.getSignature(config, dateYMD, Policy.getPolicy(config))
         );
-        fd.append("file", file.obj);
+        fd.append("file", (file.obj || file));
 
         const params = {
             method: "post",
@@ -45,21 +45,19 @@ class S3Client {
         if (!data.ok) return Promise.reject(data);
         return Promise.resolve({
             bucket: config.bucketName,
-            key: `${config.dirName ? config.dirName + "/" : ""}${file.name}`,
+            key,
             location: `${url}${config.dirName ? config.dirName + "/" : ""}${
-                file.name
+                fileName
                 }`,
+            fileName,
             result: data
         });
     }
     static async deleteFile(fileName, config) {
 
         const fd = new FormData();
-        const url = `https://${config.bucketName}.s3-${
-            config.region
-            }.amazonaws.com/${
-            config.dirName ? config.dirName + "/" : ""
-            }${fileName}`;
+        const filePath = config.dirName ? `${config.dirName}/${fileName}` : `${fileName}`;
+        const url = `https://${config.bucketName}.s3.amazonaws.com/${filePath}`;
         fd.append("Date", xAmzDate);
         fd.append("X-Amz-Date", xAmzDate);
         fd.append(

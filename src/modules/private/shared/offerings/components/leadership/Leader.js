@@ -52,9 +52,9 @@ export default class Leader extends Component {
       this.handleFormSubmit();
     }
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership');
+    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, undefined, isApproved);
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
@@ -71,17 +71,24 @@ export default class Leader extends Component {
     const { confirmBox } = this.props.uiStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
+    const isApproved = false;
+    const isReadonly = isApproved;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     return (
       <Aux>
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
             <Button.Group size="mini" floated="right">
-              <Button secondary className="relaxed" content="Save" onClick={this.handleFormSubmit} disabled={!(LEADERSHIP_FRM.meta.isValid && LEADERSHIP_EXP_FRM.meta.isValid)} />
+              {access.asManager ?
+                <Button secondary className="relaxed" content={isApproved ? 'Edit' : 'Approve'} onClick={() => this.handleFormSubmit(true)} disabled={!(LEADERSHIP_FRM.meta.isValid && LEADERSHIP_EXP_FRM.meta.isValid)} />
+              : <Button secondary className="relaxed" content="Save" onClick={this.handleFormSubmit} disabled={!(LEADERSHIP_FRM.meta.isValid && LEADERSHIP_EXP_FRM.meta.isValid)} />
+              }
               <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
             </Button.Group>
           </Header>
           <FormCheckbox
+            disabled={isReadonly}
             fielddata={LEADERSHIP_FRM.fields.leadership[index].isPublic}
             name="isPublic"
             changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
@@ -93,6 +100,7 @@ export default class Leader extends Component {
             {
               ['firstName', 'lastName', 'email'].map(field => (
                 <FormInput
+                  displayMode={isReadonly}
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
                   changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
@@ -100,6 +108,7 @@ export default class Leader extends Component {
               ))
             }
             <MaskedInput
+              displayMode={isReadonly}
               name="number"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].number}
               format="###-###-####"
@@ -109,6 +118,7 @@ export default class Leader extends Component {
           </Form.Group>
           <Form.Group widths={3}>
             <MaskedInput
+              displayMode={isReadonly}
               name="dob"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].dob}
               format="##/##/####"
@@ -116,6 +126,7 @@ export default class Leader extends Component {
               dateOfBirth
             />
             <MaskedInput
+              displayMode={isReadonly}
               name="ssn"
               type="tel"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].ssn}
@@ -123,22 +134,26 @@ export default class Leader extends Component {
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput
+              displayMode={isReadonly}
               name="citizenship"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].citizenship}
               changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             />
             <MaskedInput
+              displayMode={isReadonly}
               name="percentOwned"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].percentOwned}
               percentage
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
             />
             <FormInput
+              displayMode={isReadonly}
               name="companyPosition"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].companyPosition}
               changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
             />
             <MaskedInput
+              displayMode={isReadonly}
               name="dateOfService"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].dateOfService}
               format="##/##/####"
@@ -148,6 +163,7 @@ export default class Leader extends Component {
           </Form.Group>
           <Header as="h4">Address</Header>
           <AutoComplete
+            readOnly={isReadonly}
             name="street"
             fielddata={LEADERSHIP_FRM.fields.leadership[index].street}
             onplaceselected={place => setAddressFields(place, index)}
@@ -158,6 +174,7 @@ export default class Leader extends Component {
             {
               ['city', 'state'].map(field => (
                 <FormInput
+                  displayMode={isReadonly}
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
                   changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
@@ -165,6 +182,7 @@ export default class Leader extends Component {
               ))
             }
             <MaskedInput
+              displayMode={isReadonly}
               name="zip"
               fielddata={LEADERSHIP_FRM.fields.leadership[index].zip}
               changed={(values, name) => maskArrayChange(values, formName, name, 'leadership', index)}
@@ -173,6 +191,7 @@ export default class Leader extends Component {
           </Form.Group>
           <HeaderWithTooltip header="Bio" tooltip="To be used on the public offering page" />
           <FormTextarea
+            readOnly={isReadonly}
             name="bio"
             fielddata={LEADERSHIP_FRM.fields.leadership[index].bio}
             changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
@@ -184,6 +203,7 @@ export default class Leader extends Component {
           {
             ['website', 'facebook', 'linkedin', 'twitter'].map(field => (
               <FormInput
+                displayMode={isReadonly}
                 name={field}
                 fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
                 changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
@@ -196,6 +216,7 @@ export default class Leader extends Component {
             {
               ['headshot', 'heroImage', 'license'].map(field => (
                 <DropZone
+                  disabled={isReadonly}
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
                   ondrop={(files, name) => this.onFileDrop(files, name, index)}
@@ -210,7 +231,7 @@ export default class Leader extends Component {
           <Divider section />
           <Header as="h4">
             Experience
-            {LEADERSHIP_EXP_FRM.fields.employer.length < 5 &&
+            {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length < 5 &&
             <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'LEADERSHIP_EXP_FRM', 'employer')}><small>+ Add another business</small></Link>
             }
           </Header>
@@ -219,7 +240,7 @@ export default class Leader extends Component {
               <Aux>
                 <Header as="h6">
                   {`Business ${index2 + 1}`}
-                  {LEADERSHIP_EXP_FRM.fields.employer.length > 1 &&
+                  {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
@@ -230,6 +251,7 @@ export default class Leader extends Component {
                     {
                       ['name', 'type'].map(field => (
                         <FormInput
+                          displayMode={isReadonly}
                           name={field}
                           fielddata={exp[field]}
                           changed={(e, result) => formArrayChange(e, result, 'LEADERSHIP_EXP_FRM', 'employer', index2, index)}
@@ -237,6 +259,7 @@ export default class Leader extends Component {
                       ))
                     }
                     <MaskedInput
+                      displayMode={isReadonly}
                       name="dateOfService"
                       fielddata={exp.dateOfService}
                       format="##-##-####"
@@ -244,12 +267,14 @@ export default class Leader extends Component {
                       dateOfBirth
                     />
                     <FormInput
+                      displayMode={isReadonly}
                       name="title"
                       fielddata={exp.title}
                       changed={(e, result) => formArrayChange(e, result, 'LEADERSHIP_EXP_FRM', 'employer', index2, index)}
                     />
                   </Form.Group>
                   <FormTextarea
+                    readOnly={isReadonly}
                     name="description"
                     fielddata={exp.description}
                     changed={(e, result) => formArrayChange(e, result, 'LEADERSHIP_EXP_FRM', 'employer', index2, index)}
@@ -264,6 +289,7 @@ export default class Leader extends Component {
           {
             ['otherEntities', 'promoters'].map(field => (
               <FormTextarea
+                readOnly={isReadonly}
                 name={field}
                 fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
                 changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
@@ -278,12 +304,14 @@ export default class Leader extends Component {
               Submitted by ISSUER_NAME on 2/3/2018
             </Button>
           </div>
+          {isApproved &&
           <div className="clearfix">
             <Button as="span" className="time-stamp">
               <Icon className="ns-check-circle" color="green" />
               Approved by MANAGER_NAME on 2/3/2018
             </Button>
           </div>
+          }
         </Form>
         <Confirm
           header="Confirm"

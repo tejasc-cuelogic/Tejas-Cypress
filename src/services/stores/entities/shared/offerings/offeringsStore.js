@@ -94,9 +94,10 @@ export class OfferingsStore {
       variables: { id },
       onFetch: () => {
         this.offerLoading = false;
-        offeringCreationStore.setFormData('OFFERING_DETAILS_FRM', false);
-        offeringCreationStore.setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
-        offeringCreationStore.setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+        const { setFormData } = offeringCreationStore;
+        setFormData('OFFERING_DETAILS_FRM', false);
+        setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
+        setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
       },
     });
   }

@@ -667,22 +667,22 @@ export const OFFERING_DETAILS = {
 
 export const MEDIA = {
   heroVideo: {
-    value: '', label: '', error: undefined, rule: 'optional', objType: 's3File',
+    fileName: '', value: '', label: '', error: undefined, rule: 'optional', objType: 's3File',
   },
   heroImage: {
-    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   tombstoneImage: {
-    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   location: {
-    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   gallery: {
-    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   logo: {
-    value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
 };
 
@@ -782,7 +782,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'numeric|required',
       placeHolder: '555-123-8888',
-      objRef: 'leadership.phone',
+      objRef: 'phone',
       objRefOutput2: 'phone',
       customErrors: {
         required: '* required.',
@@ -856,7 +856,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. Baker Street 221B',
-      objRef: 'leadership.address',
+      objRef: 'address',
       objRefOutput2: 'address',
       customErrors: {
         required: '* required.',
@@ -868,7 +868,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. New York',
-      objRef: 'leadership.address',
+      objRef: 'address',
       objRefOutput2: 'address',
       customErrors: {
         required: '* required.',
@@ -880,7 +880,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'string|required',
       placeHolder: 'e.g. New York',
-      objRef: 'leadership.address',
+      objRef: 'address',
       objRefOutput2: 'address',
       customErrors: {
         required: '* required.',
@@ -892,7 +892,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'numeric|required',
       placeHolder: 'e.g. 10001',
-      objRef: 'leadership.address',
+      objRef: 'address',
       objRefOutput2: 'address',
       customErrors: {
         required: '* required.',
@@ -914,7 +914,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://johndoe.com',
-      objRef: 'leadership.social',
+      objRef: 'social',
       objRefOutput2: 'social',
       customErrors: {
         required: '* required.',
@@ -926,7 +926,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://facebook.com/johndoe',
-      objRef: 'leadership.social',
+      objRef: 'social',
       objRefOutput2: 'social',
       customErrors: {
         required: '* required.',
@@ -938,7 +938,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://linkedin.com/johndoe',
-      objRef: 'leadership.social',
+      objRef: 'social',
       objRefOutput2: 'social',
       customErrors: {
         required: '* required.',
@@ -950,7 +950,7 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'required',
       placeHolder: 'e.g. http://twitter.com/johndoe',
-      objRef: 'leadership.social',
+      objRef: 'social',
       objRefOutput2: 'social',
       customErrors: {
         required: '* required.',
@@ -965,8 +965,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       fileName: '',
-      objRef: 'leadership.uploads',
-      objType: 'FileObjectType',
+      objRef: 'uploads',
+      objType: 's3File',
       objRefOutput2: 'uploads',
       customErrors: {
         required: '* required.',
@@ -981,8 +981,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       fileName: '',
-      objRef: 'leadership.uploads',
-      objType: 'FileObjectType',
+      objRef: 'uploads',
+      objType: 's3File',
       objRefOutput2: 'uploads',
       customErrors: {
         required: '* required.',
@@ -997,8 +997,8 @@ export const LEADERSHIP = {
       fileId: '',
       fileData: '',
       fileName: '',
-      objRef: 'leadership.uploads',
-      objType: 'FileObjectType',
+      objRef: 'uploads',
+      objType: 's3File',
       objRefOutput2: 'uploads',
       customErrors: {
         required: '* required.',
