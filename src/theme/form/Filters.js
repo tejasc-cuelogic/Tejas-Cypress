@@ -57,18 +57,22 @@ export const DateRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
     <Form.Group widths="equal">
-      <NumberFormat
-        type="text"
-        format="##-##-####"
-        placeholder="MM-DD-YYYY"
-        onValueChange={values => props.changeStart(values, 'startDate')}
-      />
-      <NumberFormat
-        type="text"
-        format="##-##-####"
-        placeholder="MM-DD-YYYY"
-        onValueChange={values => props.changeStart(values, 'endDate')}
-      />
+      <Form.Field>
+        <NumberFormat
+          type="text"
+          format="##-##-####"
+          placeholder="MM-DD-YYYY"
+          onValueChange={values => props.changeStart(values, 'startDate')}
+        />
+      </Form.Field>
+      <Form.Field>
+        <NumberFormat
+          type="text"
+          format="##-##-####"
+          placeholder="MM-DD-YYYY"
+          onValueChange={values => props.changeStart(values, 'endDate')}
+        />
+      </Form.Field>
     </Form.Group>
   </Form.Field>
 );

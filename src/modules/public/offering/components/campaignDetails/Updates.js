@@ -11,29 +11,17 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 @observer
 class Updates extends Component {
-  state = {
-    selectedReadMore: {},
-    selectedReadLess: {},
-  };
   componentWillMount() {
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates;
-    this.setState({ selectedReadMore: updates.map(() => true) });
-    this.setState({ selectedReadLess: updates.map(() => true) });
+    this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
   }
   handleClose = () => this.props.history.goBack();
-  handleReadMoreReadLess = (index) => {
-    const newReadMoreStatus = [...this.state.selectedReadMore];
-    newReadMoreStatus[index] = !this.state.selectedReadMore[index];
-    this.setState({ selectedReadMore: newReadMoreStatus });
-
-    const newReadLessStatus = [...this.state.selectedReadLess];
-    newReadLessStatus[index] = !this.state.selectedReadLess[index];
-    this.setState({ selectedReadLess: newReadLessStatus });
-  };
   render() {
     const { campaign } = this.props.campaignStore;
     const updates = campaign && campaign.updates;
+    const readMoreStatus = this.props.campaignStore.curretnStatusForReadMore;
+    const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     return (
       <div className="campaign-content-wrapper">
         <div className="updates-modal">
@@ -76,24 +64,36 @@ class Updates extends Component {
                       </Item>
                       <Header as="h5">{dataItem.title}</Header>
                       <div
-                        style={this.state.selectedReadMore[index] ? { display: 'block' } : { display: 'none' }}
+                        style={readMoreStatus[index] ? { display: 'block' } : { display: 'none' }}
                       >
                         <p dangerouslySetInnerHTML={{
                           __html: dataItem.content.length <= 805 ?
                             dataItem.content : dataItem.content.substring(1, 805),
                         }}
                         />
-                        { dataItem.content.length > 805 ?
-                          <a href onClick={() => this.handleReadMoreReadLess(index)} id={index} >
+                        {dataItem.content.length > 805 ?
+                          <a
+                            href
+                            onClick={
+                              () => this.props.campaignStore.handleReadMoreReadLess(index)
+                            }
+                            id={index}
+                          >
                             Read More
                           </a> : ''
                         }
                       </div>
                       <div
-                        style={!this.state.selectedReadLess[index] ? { display: 'block' } : { display: 'none' }}
+                        style={!readLessStatus[index] ? { display: 'block' } : { display: 'none' }}
                       >
                         <p dangerouslySetInnerHTML={{ __html: dataItem.content }} />
-                        <a href onClick={() => this.handleReadMoreReadLess(index)} id={index} >
+                        <a
+                          href
+                          onClick={
+                            () => this.props.campaignStore.handleReadMoreReadLess(index)
+                          }
+                          id={index}
+                        >
                           Read Less
                         </a>
                       </div>
