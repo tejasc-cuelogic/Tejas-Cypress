@@ -79,7 +79,7 @@ export default class AccountDetails extends Component {
               <Item.Content verticalAlign="middle">
                 <Header as="h3">
                   {details.info && details.info.firstName} {details.info && details.info.lastName}
-                  <UserTypeIcon role={rolesRaw[0]} items={roles.filter(r => r !== 'investor')} />
+                  <UserTypeIcon role={details.roles} />
                   <Header.Subheader>{rolesRaw[0]}</Header.Subheader>
                 </Header>
                 <Button.Group floated="right">

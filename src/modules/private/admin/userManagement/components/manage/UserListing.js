@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { DateTimeFormat, UserAvatar } from './../../../../../../theme/shared';
+import { DateTimeFormat, UserAvatar, NsPagination } from './../../../../../../theme/shared';
 import UserTypeIcon from './UserTypeIcon';
 
 class UserListing extends Component {
@@ -21,7 +21,11 @@ class UserListing extends Component {
     );
   };
   render() {
-    const { by, direction } = this.props.sortState;
+    const {
+      paginate, sortState, listData, requestState, count,
+    } = this.props;
+    const { by, direction } = sortState;
+    const totalRecords = count || 0;
     return (
       <Card fluid>
         <div className="table-wrapper">
@@ -43,7 +47,7 @@ class UserListing extends Component {
               as="tbody"
               continuous
             >
-              {this.props.listData.map(user => (
+              {listData.map(user => (
                 <Table.Row className={(user.accountStatus === 'locked') ? 'locked' : ''} key={user.id}>
                   <Table.Cell collapsing>
                     {!user.profilepic &&
@@ -69,18 +73,11 @@ class UserListing extends Component {
                       user.mailingAddress.city : ''
                     }
                   </Table.Cell>
-                  <Table.Cell>
-                    {user.phone ? user.phone.number : ''}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <UserTypeIcon
-                      role={user.roles.map(r => r.scope)[0]}
-                      items={user.roles.map(r => r.scope).filter(r => r !== 'investor')}
-                    />
-                  </Table.Cell>
+                  <Table.Cell>{user.phone ? user.phone.number : ''}</Table.Cell>
+                  <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created ?
-                      <DateTimeFormat unix fromNow datetime={user.created.date} /> :
+                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={user.created.date} /> :
                       'N/A'
                     }
                   </Table.Cell>
@@ -97,6 +94,9 @@ class UserListing extends Component {
             </Visibility>
           </Table>
         </div>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={paginate} meta={{ totalRecords, requestState }} />
+        }
       </Card>
     );
   }

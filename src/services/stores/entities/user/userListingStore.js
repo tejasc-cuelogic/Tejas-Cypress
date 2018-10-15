@@ -2,7 +2,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import map from 'lodash/map';
 import isArray from 'lodash/isArray';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allUsersQuery } from '../../queries/users';
@@ -11,7 +10,9 @@ export class UserListingStore {
   @observable usersData = [];
   @observable filters = false;
   @observable requestState = {
-    lek: null,
+    page: 1,
+    perPage: 10,
+    skip: 0,
     filters: false,
     sort: {
       by: 'lastLoginDate',
@@ -23,33 +24,38 @@ export class UserListingStore {
   };
 
   @action
-  initRequest = () => {
-    const { keyword, accountType, accountStatus } = this.requestState.search;
+  initRequest = (reqParams) => {
+    const {
+      keyword, accountType, accountStatus, startDate, endDate,
+    } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
-    const params = [];
-    map(filters, (val, key) => {
-      if (key !== 'startDate' && key !== 'endDate') {
-        params.push({ field: key, value: isArray(val) ? val.join(',') : val });
-      }
-    });
-    if (filters.startDate && filters.endDate) {
-      const dateObj = `${moment(filters.startDate).format('YYYY-MM-DD')},${moment(filters.endDate).format('YYYY-MM-DD')}`;
-      params.push({ field: 'createdDate', value: dateObj });
+    let params = {
+      search: keyword,
+      accountType,
+      accountStatus,
+      page: reqParams ? reqParams.page : 1,
+    };
+    this.requestState.page = params.page;
+    if (startDate && endDate) {
+      params = {
+        ...params,
+        ...{ accountCreateFromDate: startDate, accountCreateToDate: endDate },
+      };
     }
-
     this.usersData = graphql({
       client,
       query: allUsersQuery,
-      variables: {
-        search: keyword,
-        accountType,
-        accountStatus,
-        page: 1,
-        orderBy: { field: this.requestState.sort.by, sort: this.requestState.sort.direction },
-        filters: params || [],
-      },
+      variables: params,
     });
+  }
+
+  @action
+  maskChange = (values, field) => {
+    if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+      const isoDate = moment(values.formattedValue).toISOString();
+      this.setInitiateSrch(field, isoDate);
+    }
   }
 
   @computed get allUsers() {
@@ -86,7 +92,10 @@ export class UserListingStore {
   }
 
   @computed get count() {
-    return this.users.length || 0;
+    return (this.allUsers.data
+      && this.allUsers.data.listUsers
+      && toJS(this.allUsers.data.listUsers.resultCount)
+    ) || 0;
   }
 
   @computed get sortInfo() {
@@ -102,7 +111,6 @@ export class UserListingStore {
 
   @action
   initiateSearch = (srchParams) => {
-    this.requestState.lek = null;
     this.requestState.search = srchParams;
     this.initRequest();
   }
