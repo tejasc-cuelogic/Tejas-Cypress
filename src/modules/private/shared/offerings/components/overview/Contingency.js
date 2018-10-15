@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
-import { Header, Button, Checkbox, Confirm, Icon } from 'semantic-ui-react';
+import { Header, Button, Checkbox, Confirm, Icon, Modal, Form } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 import EditContingency from './EditContingency';
 
@@ -111,6 +111,27 @@ export default class Contingency extends Component {
           size="mini"
           className="deletion"
         />
+        <Modal size="small" trigger={<Button className="link">Add New</Button>} closeIcon onClose={this.handleCloseModal}>
+          <Modal.Header>Add New Launch Contingency</Modal.Header>
+          <Modal.Content>
+            <Form onSubmit={() => this.handleSubmitForm()}>
+              <Form.Input fluid label="Contingency Name" placeholder="Contingency Name" />
+              <Form.Input fluid label="Acceptance Criteria" placeholder="Acceptance Criteria" />
+              {/* {
+                ['contingency', 'acceptance'].map(field => (
+                  <FormInput
+                    name={field}
+                    fielddata={ADD_NEW_CONTINGENCY_FRM.fields[field]}
+                    changed={(e, result) => formChange(e, result, 'ADD_NEW_CONTINGENCY_FRM')}
+                  />
+                ))
+              } */}
+              <div className="center-align">
+                <Button className="relaxed" primary>Add Contingency</Button>
+              </div>
+            </Form>
+          </Modal.Content>
+        </Modal>
       </Aux>
     );
   }
