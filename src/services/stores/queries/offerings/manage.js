@@ -129,20 +129,18 @@ export const getOfferingDetails = gql`
       }
       contingencies {
         launch {
-          index
           contingency
           acceptance
           accepted {
             by
+            date
             comment
           }
         }
         close {
-          index
           contingency
           acceptance
           accepted {
-            id
             date
             by
             comment

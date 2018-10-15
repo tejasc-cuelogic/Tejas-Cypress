@@ -582,7 +582,36 @@ export class OfferingCreationStore {
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
     }
+    const multiForm = this.getActionType(form, 'isMultiForm');
+    this.checkFormValid(form, multiForm, false);
     return false;
+  }
+
+  getActionType = (formName, getField = 'actionType') => {
+    const metaDataMapping = {
+      MEDIA_FRM: { isMultiForm: false },
+      KEY_TERMS_FRM: { isMultiForm: false },
+      OFFERING_OVERVIEW_FRM: { isMultiForm: true },
+      OFFERING_COMPANY_FRM: { isMultiForm: true },
+      COMPANY_LAUNCH_FRM: { isMultiForm: false },
+      LAUNCH_CONTITNGENCIES_FRM: { isMultiForm: true },
+      CLOSING_CONTITNGENCIES_FRM: { isMultiForm: true },
+      OFFERING_DETAILS_FRM: { isMultiForm: false },
+      OFFERING_CLOSE_FRM: { isMultiForm: false },
+      LEADERSHIP_FRM: { isMultiForm: true },
+      LEADERSHIP_EXP_FRM: { isMultiForm: true },
+      AFFILIATED_ISSUER_FRM: { isMultiForm: true },
+      LEADER_FRM: { isMultiForm: true },
+      GENERAL_FRM: { isMultiForm: true },
+      ISSUER_FRM: { isMultiForm: false },
+      RISK_FACTORS_FRM: { isMultiForm: false },
+    };
+    return metaDataMapping[formName][getField];
+  }
+
+  @action
+  checkFormValid = (form, multiForm, showErrors) => {
+    this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
   }
 
   @action
@@ -906,7 +935,6 @@ export class OfferingCreationStore {
         }],
       })
       .then(action((() => {
-        Validator.validateForm(this.AFFILIATED_ISSUER_FRM, true, false, false);
         this.confirmModal = !this.confirmModal;
         this.confirmModalName = null;
         this.removeIndex = null;
