@@ -24,7 +24,7 @@ export class UserListingStore {
   };
 
   @action
-  initRequest = () => {
+  initRequest = (reqParams) => {
     const {
       keyword, accountType, accountStatus, startDate, endDate,
     } = this.requestState.search;
@@ -34,8 +34,9 @@ export class UserListingStore {
       search: keyword,
       accountType,
       accountStatus,
-      page: 1,
+      page: reqParams ? reqParams.page : 1,
     };
+    this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
         ...params,
@@ -110,7 +111,6 @@ export class UserListingStore {
 
   @action
   initiateSearch = (srchParams) => {
-    this.requestState.lek = null;
     this.requestState.search = srchParams;
     this.initRequest();
   }
