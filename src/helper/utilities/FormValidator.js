@@ -301,6 +301,17 @@ class FormValidator {
             tempRef[key].length) ? tempRef[key][0].fileName : tempRef[key].fileName;
             fields[key].fileId = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
             tempRef[key].length) ? tempRef[key][0].fileId : tempRef[key].fileId;
+          } else if (fields[key].objType === 's3File') {
+            if (fields[key] && Array.isArray(fields[key]) && fields[key].length) {
+              tempRef[key].map((item) => {
+                fields[key].preSignedUrl.push(item.url);
+                fields[key].value.push(item.fileName);
+                return false;
+              });
+            } else {
+              fields[key].value = tempRef[key].fileName;
+              fields[key].preSignedUrl = tempRef[key].url;
+            }
           } else if (fields[key].objType === 'DATE') {
             fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
           } else {
@@ -320,12 +331,15 @@ class FormValidator {
             fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
           }
         } else if (fields[key].objType === 's3File') {
-          if (Array.isArray(data[key])) {
-            data[key].map(item => fields[key].preSignedUrl.push(item.url));
-          } else if (fields[key].preSignedUrl !== undefined) {
-            fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
+          if (data[key] && Array.isArray(data[key]) && data[key].length) {
+            data[key].map((item) => {
+              fields[key].preSignedUrl.push(item.url);
+              fields[key].value.push(item.fileName);
+              return false;
+            });
           } else {
-            fields[key].value = data && typeof data === 'string' ? data : data[key].url;
+            fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
+            fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
           }
         } else if (fields[key].objType === 'DATE') {
           fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
@@ -401,6 +415,11 @@ class FormValidator {
                     }
                     if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                       reference2Val = this.evalFileObj(field[keyRef1]);
+                    } else if (field[keyRef1].objType && field[keyRef1].objType === 's3File') {
+                      reference2Val = {
+                        url: field[keyRef1].preSignedUrl,
+                        fileName: field[keyRef1].value,
+                      };
                     } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
                       reference2Val = this.evalDateObj(field[keyRef1].value);
                     }
@@ -431,11 +450,10 @@ class FormValidator {
             } else if (fields[key].objType && fields[key].objType === 'DATE') {
               objValue = this.evalDateObj(fields[key].value);
             } else if (fields[key].objType && fields[key].objType === 's3File') {
-              if (fields[key].preSignedUrl) {
-                objValue = fields[key].preSignedUrl;
-              } else {
-                objValue = fields[key].value;
-              }
+              objValue = {
+                url: fields[key].preSignedUrl,
+                fileName: fields[key].value,
+              };
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);

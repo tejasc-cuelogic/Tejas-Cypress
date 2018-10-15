@@ -141,7 +141,7 @@ export class OfferingCreationStore {
 
   @action
   resetProfilePhoto = (field) => {
-    const attributes = ['src', 'error', 'value', 'meta'];
+    const attributes = ['src', 'error', 'meta'];
     attributes.forEach((val) => {
       if ((typeof this.MEDIA_FRM.fields[field][val] === 'object') && (this.MEDIA_FRM.fields[field][val] !== null)) {
         this.MEDIA_FRM.fields[field][val] = {};
@@ -157,20 +157,23 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetFormField = (form, field, url, RemoveIndex) => {
-    if (url && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
-      this.MEDIA_FRM.fields[field].preSignedUrl.push(url);
-    } else if (url) {
-      this.MEDIA_FRM.fields[field].preSignedUrl = url;
+  resetFormField = (form, field, fileObj, RemoveIndex) => {
+    if (fileObj && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
+      this.MEDIA_FRM.fields[field].preSignedUrl.push(fileObj.location);
+      this.MEDIA_FRM.fields[field].value.push(fileObj.fileName);
+    } else if (fileObj) {
+      this.MEDIA_FRM.fields[field].preSignedUrl = fileObj.location;
+      this.MEDIA_FRM.fields[field].value = fileObj.fileName;
     } else if (RemoveIndex > -1 && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.splice(RemoveIndex, 1);
+      this.MEDIA_FRM.fields[field].value.splice(RemoveIndex, 1);
     } else if (RemoveIndex === undefined) {
       this.MEDIA_FRM.fields[field].preSignedUrl = '';
+      this.MEDIA_FRM.fields[field].value = '';
     }
     this[form].fields[field] = {
       ...this.MEDIA_FRM.fields[field],
       ...{
-        value: '',
         src: '',
         meta: {},
       },
@@ -181,13 +184,11 @@ export class OfferingCreationStore {
   removeMedia = (name, index = undefined) => {
     let filename = '';
     if (index === undefined) {
-      const splitted = this.MEDIA_FRM.fields[name].preSignedUrl.split('/');
-      filename = splitted[splitted.length - 1];
+      filename = this.MEDIA_FRM.fields[name].value;
     } else {
-      const splitted = this.MEDIA_FRM.fields[name].preSignedUrl[index].split('/');
-      filename = splitted[splitted.length - 1];
+      filename = this.MEDIA_FRM.fields[name].value[index];
     }
-    fileUpload.deleteFromS3(filename)
+    fileUpload.deleteFromS3(this.MEDIA_FRM.fields[name].value)
       .then((res) => {
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
         this.resetFormField('MEDIA_FRM', name, undefined, index);
@@ -206,28 +207,25 @@ export class OfferingCreationStore {
     const fileObj = {
       obj: this.MEDIA_FRM.fields[name].base64String,
       type: this.MEDIA_FRM.fields[name].meta.type,
-      name: this.MEDIA_FRM.fields[name].value,
+      name: this.MEDIA_FRM.fields[name].fileName,
     };
     fileUpload.uploadToS3(fileObj)
       .then((res) => {
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} uploaded successfully.`, 'success');
-        this.resetFormField('MEDIA_FRM', name, res.location);
+        this.resetFormField('MEDIA_FRM', name, res);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
   @action
   uploadFileToS3 = (form, name, files, key, index) => {
     fileUpload.uploadToS3(files[0])
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
-        this[form].fields[key][index][name].fileId = `${files[0].name}${Date.now()}`;
-        this[form].fields[key][index][name].fileName = files[0].name;
-        this[form].fields[key][index][name].fileData = files[0].name;
-        this[form].fields[key][index][name].value = files[0].name;
-        this[form].fields[key][index][name].isPublic = true;
+        this[form].fields[key][index][name].value = res.fileName;
         this[form].fields[key][index][name].preSignedUrl = res.location;
       }))
       .catch((err) => {
@@ -241,9 +239,9 @@ export class OfferingCreationStore {
     fileUpload.deleteFromS3(this[form].fields[key][index][name].fileName)
       .then(action((res) => {
         ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
-          this[form].fields[key][index][name].subKey = '';
-          Helper.toast('file Deleted successfully', 'success');
+          this[form].fields[key][index][name][subKey] = '';
         });
+        Helper.toast('file Deleted successfully', 'success');
       }))
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -660,13 +658,20 @@ export class OfferingCreationStore {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
         const mediaObj = {};
         payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
-          const mediaItem = toJS(payloadData[keyName][k]);
+          const mediaItem = toJS(payloadData[keyName][k].url);
           mediaObj[k] = Array.isArray(mediaItem) ?
-            mediaItem.map((item) => {
-              const itemOfMedia = { id: 1, url: item, isPublic: true };
+            mediaItem.map((item, index) => {
+              const itemOfMedia = {
+                id: 1, url: item, fileName: payloadData[keyName][k].fileName[index], isPublic: true,
+              };
               return itemOfMedia;
             }) :
-            { id: 1, url: payloadData[keyName][k], isPublic: true };
+            {
+              id: 1,
+              url: payloadData[keyName][k].url,
+              fileName: payloadData[keyName][k].fileName,
+              isPublic: true,
+            };
           return mediaObj;
         });
         payloadData[keyName] = mediaObj;

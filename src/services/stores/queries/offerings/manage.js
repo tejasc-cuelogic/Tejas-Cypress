@@ -105,26 +105,32 @@ export const getOfferingDetails = gql`
         heroImage {
           url
           isPublic
+          fileName
         }
         tombstoneImage {
           url
           isPublic
+          fileName
         }
         location {
           url
           isPublic
+          fileName
         }
         gallery {
           url
           isPublic
+          fileName
         }
         logo {
           url
           isPublic
+          fileName
         }
         heroVideo {
           url
           isPublic
+          fileName
         }
       }
       contingencies {
@@ -284,15 +290,15 @@ export const getOfferingDetails = gql`
         bio
         uploads {
           headshot {
-            fileId
+            url
             fileName
           }
           heroImage {
-            fileId
+            url
             fileName
           }
           license {
-            fileId
+            url
             fileName
           }
         }
