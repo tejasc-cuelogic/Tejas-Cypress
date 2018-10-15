@@ -1,9 +1,9 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import { Header, Checkbox, Form, Divider, Button, Icon } from 'semantic-ui-react';
+import { Header, Checkbox, Form, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
 
 const FormData = observer(({
   form,
@@ -11,9 +11,11 @@ const FormData = observer(({
   formChange,
   checkboxField,
   descriptionField,
+  isReadonly,
 }) => (
   <div className="featured-section collapsed-checkbox">
     <Checkbox
+      disabled={isReadonly}
       name={checkboxField}
       label={
         <label>
@@ -26,6 +28,7 @@ const FormData = observer(({
     <div className="checkbox-description">
       <p>{form.fields[descriptionField].label}</p>
       <FormTextarea
+        readOnly={isReadonly}
         fielddata={form.fields[descriptionField]}
         name={descriptionField}
         containerclassname="secondary"
@@ -43,13 +46,13 @@ export default class RiskFactors extends Component {
     this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
     this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const {
       RISK_FACTORS_FRM,
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors');
+    updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors', true, undefined, isApproved);
   }
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
@@ -57,13 +60,16 @@ export default class RiskFactors extends Component {
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isApproved = false;
+    const isReadonly = isApproved;
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
-        <Form onSubmit={this.handleFormSubmit}>
+        <Form>
           {
             Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
             .map(field => (
               <FormData
+                isReadonly={isReadonly}
                 formName={formName}
                 form={RISK_FACTORS_FRM}
                 formChange={formChange}
@@ -73,22 +79,12 @@ export default class RiskFactors extends Component {
             ))
           }
           <Divider hidden />
-          <div className="clearfix">
-            <Button as="span" className="time-stamp">
-              <Icon className="ns-check-circle" color="green" />
-              Submitted by USER_NAME on 2/3/2018
-            </Button>
-            <Button.Group floated="right">
-              {access.asManager ? (
-                <Aux>
-                  <Button inverted color="red" content="Decline" disabled={!RISK_FACTORS_FRM.meta.isValid} />
-                  <Button color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid}>Approve</Button>
-                </Aux>
-              ) : (
-                <Button primary color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid}>Save</Button>
-              )}
-            </Button.Group>
-          </div>
+          <ButtonGroup
+            isManager={access.asManager}
+            formValid={RISK_FACTORS_FRM.meta.isValid}
+            isApproved={isApproved}
+            updateOffer={this.handleFormSubmit}
+          />
         </Form>
       </div>
     );

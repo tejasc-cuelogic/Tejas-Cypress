@@ -628,7 +628,10 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
-  updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
+  updateOffering = (
+    id,
+    fields, keyName, subKey, notify = true, successMsg = undefined, isApproved,
+  ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
@@ -636,6 +639,7 @@ export class OfferingCreationStore {
     };
     if (keyName) {
       if (keyName === 'legal') {
+        console.log(isApproved);
         payloadData[keyName] = {};
         const generalInfo = Validator.evaluateFormData(this.GENERAL_FRM.fields);
         if (generalInfo.websiteUrl) {
