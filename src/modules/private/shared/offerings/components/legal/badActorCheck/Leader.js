@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ButtonGroupType2 from '../../ButtonGroupType2';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('offeringCreationStore', 'userStore')
 @observer
@@ -12,11 +13,8 @@ export default class Leader extends Component {
     const {
       getLeadershipOfferingBac,
       currentOfferingId,
-      initLoad,
     } = this.props.offeringCreationStore;
-    if (!initLoad.includes('LEADER_FRM')) {
-      getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
-    }
+    getLeadershipOfferingBac(currentOfferingId, 'LEADERSHIP');
   }
   handleSubmitIssuer = (leaderId, approved) => {
     const {
@@ -27,17 +25,25 @@ export default class Leader extends Component {
     createOrUpdateOfferingBac('LEADERSHIP', LEADER_FRM.fields, undefined, leaderNumber, leaderId, approved);
   }
   render() {
-    const { LEADER_FRM, formArrayChange } = this.props.offeringCreationStore;
+    const {
+      LEADER_FRM,
+      formArrayChange,
+      leaderShipOfferingBac,
+    } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
     const formName = 'LEADER_FRM';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
-    const leaderId = LEADER_FRM.fields.getOfferingBac[index].id.value;
     const isApproved = false;
     const isSubmitted = false;
     const isReadonly = isApproved;
+    let leaderId = '';
+    if (leaderShipOfferingBac.loading) {
+      return <InlineLoader />;
+    }
+    leaderId = LEADER_FRM.fields.getOfferingBac[index].id.value;
     return (
       <Form className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'mt-20' : 'inner-content-spacer'}>
         <Header as="h4">Control Person Diligence</Header>

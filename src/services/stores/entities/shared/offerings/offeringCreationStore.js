@@ -744,7 +744,7 @@ export class OfferingCreationStore {
 
   @action
   getLeadershipOfferingBac = (offeringId, bacType) => {
-    this.affiliatedIssuerOfferingBac = graphql({
+    this.leaderShipOfferingBac = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingBac,
@@ -753,7 +753,8 @@ export class OfferingCreationStore {
         if (res && res.getOfferingBac) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
-          if (!this.initLoad.includes('LEADERS_ADDED') && (leadersCount - 1 !== 0)) {
+          if (leadersCount !==
+            this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
             this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
           }
         }
