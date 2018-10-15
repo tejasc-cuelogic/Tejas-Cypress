@@ -73,18 +73,11 @@ class UserListing extends Component {
                       user.mailingAddress.city : ''
                     }
                   </Table.Cell>
-                  <Table.Cell>
-                    {user.phone ? user.phone.number : ''}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <UserTypeIcon
-                      role={user.roles.map(r => r.scope)[0]}
-                      items={user.roles.map(r => r.scope).filter(r => r !== 'investor')}
-                    />
-                  </Table.Cell>
+                  <Table.Cell>{user.phone ? user.phone.number : ''}</Table.Cell>
+                  <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created ?
-                      <DateTimeFormat unix fromNow datetime={user.created.date} /> :
+                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={user.created.date} /> :
                       'N/A'
                     }
                   </Table.Cell>

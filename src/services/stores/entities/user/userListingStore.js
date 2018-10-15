@@ -15,7 +15,7 @@ export class UserListingStore {
     skip: 0,
     filters: false,
     sort: {
-      by: 'lastLoginDate',
+      by: 'createdDate',
       direction: 'desc',
     },
     search: {
@@ -24,7 +24,7 @@ export class UserListingStore {
   };
 
   @action
-  initRequest = () => {
+  initRequest = (reqParams) => {
     const {
       keyword, accountType, accountStatus, startDate, endDate,
     } = this.requestState.search;
@@ -34,8 +34,9 @@ export class UserListingStore {
       search: keyword,
       accountType,
       accountStatus,
-      page: 1,
+      page: reqParams ? reqParams.page : 1,
     };
+    this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
         ...params,
@@ -52,7 +53,8 @@ export class UserListingStore {
   @action
   maskChange = (values, field) => {
     if (moment(values.formattedValue, 'MM-DD-YYYY', true).isValid()) {
-      const isoDate = moment(values.formattedValue).toISOString();
+      const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
+        moment(values.formattedValue).add(1, 'day').toISOString();
       this.setInitiateSrch(field, isoDate);
     }
   }
@@ -110,7 +112,6 @@ export class UserListingStore {
 
   @action
   initiateSearch = (srchParams) => {
-    this.requestState.lek = null;
     this.requestState.search = srchParams;
     this.initRequest();
   }
