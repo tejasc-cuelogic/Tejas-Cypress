@@ -613,7 +613,7 @@ export const CONTINGENCY_META = {
     value: '',
     label: '',
     error: undefined,
-    rule: 'required_if:data.*.isAccepted,true',
+    rule: 'optional',
     placeHolder: 'Enter comment here...',
     refSelector: 'isAccepted',
     objRef: 'accepted',
@@ -630,6 +630,18 @@ export const CONTINGENCY_META = {
 export const ADD_NEW_CONTINGENCY = {
   contingency: { ...CONTINGENCY_META.contingency },
   acceptance: { ...CONTINGENCY_META.acceptance },
+};
+
+export const EDIT_CONTINGENCY = {
+  contingency: { ...CONTINGENCY_META.contingency },
+  acceptance: { ...CONTINGENCY_META.acceptance },
+  comment: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter comment here...',
+  },
 };
 
 export const CONTINGENCIES = {
@@ -1894,18 +1906,15 @@ export const ADD_NEW_BONUS_REWARD = {
 
 export const DOCUMENTATION = {
   formId: {
-    value: [],
+    value: '',
     label: 'Form ID',
     error: undefined,
     rule: 'required',
     showLoader: false,
-    preSignedUrl: [],
-    fileId: [],
-    fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
   },
   corporateFormationDocs: {
     value: [],
@@ -1916,10 +1925,7 @@ export const DOCUMENTATION = {
     preSignedUrl: [],
     fileId: [],
     fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    objType: 'FileObjectType',
   },
   issuerFinancials: {
     value: [],
@@ -1930,10 +1936,7 @@ export const DOCUMENTATION = {
     preSignedUrl: [],
     fileId: [],
     fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    objType: 'FileObjectType',
   },
   leaseAgreementOrLetterOfIntent: {
     value: [],
@@ -1944,9 +1947,6 @@ export const DOCUMENTATION = {
     preSignedUrl: [],
     fileId: [],
     fileData: [],
-    customErrors:
-    {
-      required_if: 'required',
-    },
+    objType: 'FileObjectType',
   },
 };
