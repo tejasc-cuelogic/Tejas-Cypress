@@ -81,6 +81,7 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+  @observable removeFileIdsList = [];
 
   @action
   setTierToBeUnlinked = (tier) => {
@@ -371,9 +372,17 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFormFileArray = (formName, arrayName, field, getField, value, index = null) => {
-    if (index !== null) {
+  setFormFileArray = (formName, arrayName, field, getField, value, index = undefined) => {
+    if (index && arrayName) {
       this[formName].fields[arrayName][index][field][getField] = value;
+    } else if (index !== null) {
+      if (getField === 'error' || getField === 'showLoader') {
+        this[formName].fields[field][getField] = value;
+      } else {
+        this[formName].fields[field][getField].splice(index, 1);
+      }
+    } else if (Array.isArray(toJS(this[formName].fields[field][getField]))) {
+      this[formName].fields[field][getField].push(value);
     } else {
       this[formName].fields[field][getField] = value;
     }
@@ -393,7 +402,6 @@ export class OfferingCreationStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
@@ -406,6 +414,28 @@ export class OfferingCreationStore {
         });
       });
     }
+  }
+
+  @action
+  removeUploadedDataMultiple = (form, field, index = undefined, arrayName) => {
+    let removeFileIds = '';
+    if (index && arrayName) {
+      const { fileId } = this[form].fields[arrayName][index][field];
+      removeFileIds = fileId;
+    } else if (index !== undefined) {
+      const filesId = this[form].fields[field].fileId;
+      removeFileIds = filesId[index];
+    } else {
+      const { fileId } = this[form].fields[field];
+      removeFileIds = fileId;
+    }
+    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+    this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+    this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
+    this.setFormFileArray(form, arrayName, field, 'value', '', index);
+    this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+    this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+    this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
   }
 
   @action
@@ -646,6 +676,8 @@ export class OfferingCreationStore {
           payloadData[keyName].general = generalInfo;
         }
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
+        payloadData[keyName].documentation =
+        Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
