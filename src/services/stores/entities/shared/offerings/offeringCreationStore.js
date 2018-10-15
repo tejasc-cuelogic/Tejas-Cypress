@@ -6,7 +6,7 @@ import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION } from '../../../../constants/admin/offerings';
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -57,6 +57,7 @@ export class OfferingCreationStore {
   @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
   @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
+  @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -676,8 +677,8 @@ export class OfferingCreationStore {
           payloadData[keyName].general = generalInfo;
         }
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
-        payloadData[keyName].documentation =
-        Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        // payloadData[keyName].documentation =
+        // Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -1274,6 +1275,22 @@ export class OfferingCreationStore {
       .finally(() => {
         uiStore.setProgress(false);
       });
+  }
+
+  @action
+  setDataForEditContingency = (form, dataKey, index) => {
+    const { fields } = this.EDIT_CONTINGENCY_FRM;
+    fields.contingency.value = form.fields[dataKey][index].contingency.value;
+    fields.acceptance.value = form.fields[dataKey][index].acceptance.value;
+    fields.comment.value = form.fields[dataKey][index].comment.value;
+  }
+
+  @action
+  setDataForFormAfterEdit = (form, dataKey, index) => {
+    const { fields } = this.EDIT_CONTINGENCY_FRM;
+    form.fields[dataKey][index].contingency.value = fields.contingency.value;
+    form.fields[dataKey][index].acceptance.value = fields.acceptance.value;
+    form.fields[dataKey][index].comment.value = fields.comment.value;
   }
 }
 

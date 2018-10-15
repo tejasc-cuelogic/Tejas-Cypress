@@ -613,7 +613,7 @@ export const CONTINGENCY_META = {
     value: '',
     label: '',
     error: undefined,
-    rule: 'required_if:data.*.isAccepted,true',
+    rule: 'optional',
     placeHolder: 'Enter comment here...',
     refSelector: 'isAccepted',
     objRef: 'accepted',
@@ -630,6 +630,18 @@ export const CONTINGENCY_META = {
 export const ADD_NEW_CONTINGENCY = {
   contingency: { ...CONTINGENCY_META.contingency },
   acceptance: { ...CONTINGENCY_META.acceptance },
+};
+
+export const EDIT_CONTINGENCY = {
+  contingency: { ...CONTINGENCY_META.contingency },
+  acceptance: { ...CONTINGENCY_META.acceptance },
+  comment: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter comment here...',
+  },
 };
 
 export const CONTINGENCIES = {
