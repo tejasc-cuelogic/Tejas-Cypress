@@ -8,8 +8,7 @@ class Image64 extends React.Component {
   componentWillMount() {
     apiService.getRemoteFile(this.props.srcUrl).then((res) => {
       this.setState({ data: res.text || emptyImage });
-    })
-      .catch(() => this.setState({ data: emptyImage }));
+    }).catch(() => this.setState({ data: emptyImage }));
   }
   render() {
     return <Image src={this.state.data} />;

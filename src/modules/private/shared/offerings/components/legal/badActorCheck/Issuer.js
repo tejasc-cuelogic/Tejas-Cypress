@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Form, Divider, Button, Icon } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FormTextarea, FormCheckbox } from '../../../../../../../theme/form';
+import ButtonGroupType2 from '../../ButtonGroupType2';
 
 @inject('offeringCreationStore', 'userStore')
 @observer
@@ -14,12 +15,12 @@ export default class Issuer extends Component {
     } = this.props.offeringCreationStore;
     getOfferingBac(currentOfferingId, 'ISSUER');
   }
-  handleSubmitIssuer = () => {
+  handleSubmitIssuer = (isApproved = null) => {
     const {
       createOrUpdateOfferingBac,
       ISSUER_FRM,
     } = this.props.offeringCreationStore;
-    createOrUpdateOfferingBac('ISSUER', ISSUER_FRM.fields);
+    createOrUpdateOfferingBac('ISSUER', ISSUER_FRM.fields, undefined, undefined, undefined, isApproved);
   }
   render() {
     const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
@@ -27,9 +28,12 @@ export default class Issuer extends Component {
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isApproved = false;
+    const isSubmitted = false;
+    const isReadonly = isApproved;
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
-        <Form onSubmit={this.handleSubmitIssuer}>
+        <Form>
           {
             ['issuerDiligence', 'certificateFormation', 'operatingAgreement', 'evidenceGoodStanding', 'executiveTeam'].map(field => (
               <Aux>
@@ -37,6 +41,7 @@ export default class Issuer extends Component {
                   <Header as="h4">{ISSUER_FRM.fields[field].label}</Header>
                 }
                 <FormTextarea
+                  readOnly={isReadonly}
                   hidelabel={field === 'issuerDiligence'}
                   key={field}
                   name={field}
@@ -52,6 +57,7 @@ export default class Issuer extends Component {
           {
             ['bac1', 'bac2', 'bac3', 'bac4', 'bac5', 'bac6', 'bac7', 'bac8'].map(field => (
               <FormTextarea
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={ISSUER_FRM.fields[field]}
@@ -65,6 +71,7 @@ export default class Issuer extends Component {
           {
             ['ofac', 'civilLawsuit', 'judgements', 'onlineReputation'].map(field => (
               <FormTextarea
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={ISSUER_FRM.fields[field]}
@@ -76,6 +83,7 @@ export default class Issuer extends Component {
           {
             ['isControlDiligence', 'isAffiliatedDiligence'].map(field => (
               <FormCheckbox
+                disabled={isReadonly}
                 fielddata={ISSUER_FRM.fields[field]}
                 name={field}
                 changed={(e, result) => formChange(e, result, formName, false)}
@@ -85,35 +93,13 @@ export default class Issuer extends Component {
             ))
           }
           <Divider hidden />
-          <div className="clearfix mb-20">
-            {access.asManager ?
-              <Button.Group floated="right">
-                <Button inverted content="Decline" color="red" />
-                <Button disabled={!ISSUER_FRM.meta.isValid} secondary content="Generate Report" />
-                <Button disabled={!ISSUER_FRM.meta.isValid} primary content="Approve" color="green" />
-              </Button.Group>
-            :
-              <Aux>
-                <div className="clearfix mb-20 right-align">
-                  <Button secondary content="Submit for Approval" disabled={!ISSUER_FRM.meta.isValid} />
-                </div>
-                {/* <Button
-                  content="Awaiting Manager Approval"
-                  color="gray"
-                  disabled={!ISSUER_FRM.meta.isValid}
-                /> */}
-              </Aux>
-            }
-          </div>
-          <div className="clearfix">
-            <Button.Group floated="right">
-              <Button secondary content="Generate Report" disabled={!ISSUER_FRM.meta.isValid} />
-              <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
-                Approved by Manager on 2/3/2018
-              </Button>
-            </Button.Group>
-          </div>
+          <ButtonGroupType2
+            isSubmitted={isSubmitted}
+            isManager={access.asManager}
+            formValid={ISSUER_FRM.meta.isValid}
+            isApproved={isApproved}
+            updateFunction={this.handleSubmitIssuer}
+          />
         </Form>
       </div>
     );

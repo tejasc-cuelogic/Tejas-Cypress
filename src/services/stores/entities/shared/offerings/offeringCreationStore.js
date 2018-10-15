@@ -6,7 +6,7 @@ import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER } from '../../../../constants/admin/offerings';
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -56,6 +56,7 @@ export class OfferingCreationStore {
   @observable RISK_FACTORS_FRM = Validator.prepareFormObject(RISK_FACTORS);
   @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
   @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
+  @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -80,6 +81,7 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+  @observable removeFileIdsList = [];
 
   @action
   setTierToBeUnlinked = (tier) => {
@@ -370,10 +372,75 @@ export class OfferingCreationStore {
   }
 
   @action
+  setFormFileArray = (formName, arrayName, field, getField, value, index = undefined) => {
+    if (index && arrayName) {
+      this[formName].fields[arrayName][index][field][getField] = value;
+    } else if (index !== null) {
+      if (getField === 'error' || getField === 'showLoader') {
+        this[formName].fields[field][getField] = value;
+      } else {
+        this[formName].fields[field][getField].splice(index, 1);
+      }
+    } else if (Array.isArray(toJS(this[formName].fields[field][getField]))) {
+      this[formName].fields[field][getField].push(value);
+    } else {
+      this[formName].fields[field][getField] = value;
+    }
+  }
+
+  @action
+  setFileUploadDataMulitple = (form, arrayName, field, files, stepName, index = null) => {
+    if (typeof files !== 'undefined' && files.length) {
+      forEach(files, (file) => {
+        const fileData = Helper.getFormattedFileData(file);
+        this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+        fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+            this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+            this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+            this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+            this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+          }).catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+          });
+        }).catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+        }).finally(() => {
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+        });
+      });
+    }
+  }
+
+  @action
+  removeUploadedDataMultiple = (form, field, index = undefined, arrayName) => {
+    let removeFileIds = '';
+    if (index && arrayName) {
+      const { fileId } = this[form].fields[arrayName][index][field];
+      removeFileIds = fileId;
+    } else if (index !== undefined) {
+      const filesId = this[form].fields[field].fileId;
+      removeFileIds = filesId[index];
+    } else {
+      const { fileId } = this[form].fields[field];
+      removeFileIds = fileId;
+    }
+    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+    this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+    this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
+    this.setFormFileArray(form, arrayName, field, 'value', '', index);
+    this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+    this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+    this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
+  }
+
+  @action
   setFileUploadData = (form, field, files, subForm = '', index = null, stepName) => {
     if (stepName) {
-      const { getOfferingById } = offeringsStore.offerData.data;
-      const { applicationId, issuerId } = getOfferingById;
       uiStore.setProgress();
       const file = files[0];
       const fileData = Helper.getFormattedFileData(file);
@@ -591,7 +658,10 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
-  updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
+  updateOffering = (
+    id,
+    fields, keyName, subKey, notify = true, successMsg = undefined, isApproved,
+  ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
@@ -599,12 +669,15 @@ export class OfferingCreationStore {
     };
     if (keyName) {
       if (keyName === 'legal') {
+        console.log(isApproved);
         payloadData[keyName] = {};
         const generalInfo = Validator.evaluateFormData(this.GENERAL_FRM.fields);
         if (generalInfo.websiteUrl) {
           payloadData[keyName].general = generalInfo;
         }
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
+        payloadData[keyName].documentation =
+        Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -703,7 +776,7 @@ export class OfferingCreationStore {
 
   @action
   getLeadershipOfferingBac = (offeringId, bacType) => {
-    this.affiliatedIssuerOfferingBac = graphql({
+    this.leaderShipOfferingBac = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingBac,
@@ -712,7 +785,8 @@ export class OfferingCreationStore {
         if (res && res.getOfferingBac) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
-          if (!this.initLoad.includes('LEADERS_ADDED') && (leadersCount - 1 !== 0)) {
+          if (leadersCount !==
+            this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
             this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
           }
         }
