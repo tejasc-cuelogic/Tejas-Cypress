@@ -6,7 +6,8 @@ import { Grid, Input, Dropdown, Form, Label, Icon, List, Button } from 'semantic
 import moment from 'moment';
 import camelCase from 'lodash/camelCase';
 import startCase from 'lodash/startCase';
-import DatePicker from './src/FormDatePicker';
+import NumberFormat from 'react-number-format';
+
 
 export const DropdownFilter = props => (
   <Form.Field className="dropdown-field">
@@ -56,18 +57,22 @@ export const DateRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
     <Form.Group widths="equal">
-      <DatePicker
-        selected={props.filters.startDate}
-        placeholder="MM/DD/YYYY"
-        maxdate={moment()}
-        onchange={props.changeStart}
-      />
-      <DatePicker
-        selected={props.filters.endDate}
-        placeholder="MM/DD/YYYY"
-        maxdate={moment()}
-        onchange={props.changeEnd}
-      />
+      <Form.Field>
+        <NumberFormat
+          type="text"
+          format="##-##-####"
+          placeholder="MM-DD-YYYY"
+          onValueChange={values => props.changeStart(values, 'startDate')}
+        />
+      </Form.Field>
+      <Form.Field>
+        <NumberFormat
+          type="text"
+          format="##-##-####"
+          placeholder="MM-DD-YYYY"
+          onValueChange={values => props.changeStart(values, 'endDate')}
+        />
+      </Form.Field>
     </Form.Group>
   </Form.Field>
 );
