@@ -257,6 +257,26 @@ export const getOfferingDetails = gql`
           privacyRisk
           otherRisk
         }
+        documentation {
+          issuer {
+            formID {
+              fileId
+              fileName
+            }
+            corpFormation {
+              fileId
+              fileName
+            }
+            issuerFinancials {
+              fileId
+              fileName
+            }
+            leaseAgreement {
+              fileId
+              fileName
+            }
+          }
+        }
       }
       leadership {
         employer {

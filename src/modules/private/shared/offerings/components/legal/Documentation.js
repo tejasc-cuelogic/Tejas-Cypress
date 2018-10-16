@@ -7,17 +7,23 @@ import ButtonGroup from '../ButtonGroup';
 @inject('offeringCreationStore', 'userStore')
 @observer
 export default class Documentation extends Component {
+  componentWillMount() {
+    const { initLoad, setFormData } = this.props.offeringCreationStore;
+    if (!initLoad.includes('DOCUMENTATION_FRM')) {
+      setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    }
+  }
   onCorporateFormationDocDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'corporateFormationDocs', files, 'DOCUMENTS_LEGAL_CORPORATE_FORMATION_DOCS');
+    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'corpFormation', files, 'DOCUMENTS_LEGAL_CORPORATE_FORMATION_DOCS');
   }
   onFormIdDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'formId', files, 'DOCUMENTS_LEGAL_FORM_ID');
+    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'formID', files, 'DOCUMENTS_LEGAL_FORM_ID');
   }
   onIssuerFinancialsDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'issuerFinancials', files, 'DOCUMENTS_LEGAL_ISSUER_FINANCIALS');
   }
   onLeaseAgreementOrLetterOfIntentDrop = (files) => {
-    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'leaseAgreementOrLetterOfIntent', files, 'DOCUMENTS_LA_LOI');
+    this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'leaseAgreement', files, 'DOCUMENTS_LA_LOI');
   }
   handleDelDoc = (field, index = undefined) => {
     this.props.offeringCreationStore.removeUploadedDataMultiple('DOCUMENTATION_FRM', field, index, '');
@@ -39,11 +45,11 @@ export default class Documentation extends Component {
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Header as="h3">Form ID</Header>
-        <Form onSubmit={this.handleFormSubmit}>
+        <Form>
           <DropZone
             containerclassname="fluid"
-            name="formId"
-            fielddata={DOCUMENTATION_FRM.fields.formId}
+            name="formID"
+            fielddata={DOCUMENTATION_FRM.fields.formID}
             ondrop={this.onFormIdDrop}
             onremove={field => this.handleDelDoc(field)}
             uploadtitle="Upload"
@@ -52,8 +58,8 @@ export default class Documentation extends Component {
           <DropZone
             multiple
             containerclassname="fluid"
-            name="corporateFormationDocs"
-            fielddata={DOCUMENTATION_FRM.fields.corporateFormationDocs}
+            name="corpFormation"
+            fielddata={DOCUMENTATION_FRM.fields.corpFormation}
             ondrop={this.onCorporateFormationDocDrop}
             onremove={(field, index) => this.handleDelDoc(field, index)}
             uploadtitle="Upload"
@@ -72,8 +78,8 @@ export default class Documentation extends Component {
           <DropZone
             multiple
             containerclassname="fluid"
-            name="leaseAgreementOrLetterOfIntent"
-            fielddata={DOCUMENTATION_FRM.fields.leaseAgreementOrLetterOfIntent}
+            name="leaseAgreement"
+            fielddata={DOCUMENTATION_FRM.fields.leaseAgreement}
             ondrop={this.onLeaseAgreementOrLetterOfIntentDrop}
             onremove={(field, index) => this.handleDelDoc(field, index)}
             uploadtitle="Upload"

@@ -401,6 +401,7 @@ export class OfferingCreationStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+            this.checkFormValid(form);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
@@ -435,6 +436,21 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
+    this.checkFormValid(form);
+  }
+
+  @action
+  removeUploadedFiles = () => {
+    const fileList = toJS(this.removeFileIdsList);
+    if (fileList.length) {
+      forEach(fileList, (fileId) => {
+        fileUpload.removeUploadedData(fileId).then(() => {
+        }).catch((error) => {
+          uiStore.setErrors(error.message);
+        });
+      });
+      this.removeFileIdsList = [];
+    }
   }
 
   @action
@@ -606,6 +622,7 @@ export class OfferingCreationStore {
       GENERAL_FRM: { isMultiForm: true },
       ISSUER_FRM: { isMultiForm: false },
       RISK_FACTORS_FRM: { isMultiForm: false },
+      DOCUMENTATION_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -707,6 +724,7 @@ export class OfferingCreationStore {
           payloadData[keyName].general = generalInfo;
         }
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
+        payloadData[keyName].documentation = {};
         payloadData[keyName].documentation[subKey] =
         Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
@@ -768,6 +786,7 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
+        this.removeUploadedFiles();
         if (successMsg) {
           Helper.toast(`${successMsg}`, 'success');
         } else if (notify) {
