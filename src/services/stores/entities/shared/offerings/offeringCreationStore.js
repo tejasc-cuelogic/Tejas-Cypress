@@ -374,7 +374,7 @@ export class OfferingCreationStore {
   setFormFileArray = (formName, arrayName, field, getField, value, index = undefined) => {
     if (index && arrayName) {
       this[formName].fields[arrayName][index][field][getField] = value;
-    } else if (index !== null && index) {
+    } else if (index !== null) {
       if (getField === 'error' || getField === 'showLoader') {
         this[formName].fields[field][getField] = value;
       } else {
