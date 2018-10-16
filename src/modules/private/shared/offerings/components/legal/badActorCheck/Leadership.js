@@ -4,7 +4,7 @@ import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../../../theme/layout/SecondaryMenu';
 import Leader from './Leader';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Leadership extends Component {
   componentWillMount() {
@@ -16,14 +16,19 @@ export default class Leadership extends Component {
     }
   }
   render() {
-    const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
+    const { getOfferingById } = this.props.offeringsStore.offerData.data;
     const navItems = [];
-    LEADERSHIP_FRM.fields.leadership.map((leader, index) => {
-      navItems.push({ title: `Leader ${index + 1}`, to: `leader/${index + 1}` });
-      return navItems;
-    });
+    if (getOfferingById.leadership) {
+      getOfferingById.leadership.map((leader, index) => {
+        navItems.push({ title: `Leader ${index + 1}`, to: `leader/${index + 1}` });
+        return navItems;
+      });
+    }
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
+    if (navItems.length === 0) {
+      return <p className="center-align">No Leaders to Display!</p>;
+    }
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid'}>
         <SecondaryMenu className={!isIssuer ? 'tertiary' : ''} match={match} navItems={navItems} />
