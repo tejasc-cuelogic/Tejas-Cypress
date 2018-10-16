@@ -190,6 +190,9 @@ a:not(.item), a:not(.ui.button){
 	img.ui.image {
 		height: 52px;
 	}
+	&.home-summary {
+		margin: 0 @35px;
+	}
 }
 a{
 	&.inverted{
