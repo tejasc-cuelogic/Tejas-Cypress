@@ -297,17 +297,31 @@ class FormValidator {
         } else if (fields[key].objRef) {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
           if (fields[key].objType === 'FileObjectType') {
-            fields[key].value = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
-            tempRef[key].length) ? tempRef[key][0].fileName : tempRef[key].fileName;
-            fields[key].fileId = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
-            tempRef[key].length) ? tempRef[key][0].fileId : tempRef[key].fileId;
+            if (tempRef[key] && Array.isArray(toJS(tempRef[key]))) {
+              if (tempRef[key].length) {
+                tempRef[key].map((item) => {
+                  fields[key].value.push(item.fileName);
+                  fields[key].fileId.push(item.fileId);
+                  return false;
+                });
+              }
+            } else {
+              fields[key].value = tempRef[key].fileName;
+              fields[key].fileId = tempRef[key].fileId;
+            }
+            // fields[key].value = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
+            // tempRef[key].length) ? tempRef[key][0].fileName : tempRef[key].fileName;
+            // fields[key].fileId = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
+            // tempRef[key].length) ? tempRef[key][0].fileId : tempRef[key].fileId;
           } else if (fields[key].objType === 's3File') {
-            if (fields[key] && Array.isArray(fields[key]) && fields[key].length) {
-              tempRef[key].map((item) => {
-                fields[key].preSignedUrl.push(item.url);
-                fields[key].value.push(item.fileName);
-                return false;
-              });
+            if (fields[key] && Array.isArray(fields[key])) {
+              if (fields[key].length) {
+                tempRef[key].map((item) => {
+                  fields[key].preSignedUrl.push(item.url);
+                  fields[key].value.push(item.fileName);
+                  return false;
+                });
+              }
             } else {
               fields[key].value = tempRef[key].fileName;
               fields[key].preSignedUrl = tempRef[key].url;
@@ -323,20 +337,27 @@ class FormValidator {
         } else if (key === 'value') {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else if (fields[key].objType === 'FileObjectType') {
-          if (data[key] && Array.isArray(toJS(data[key])) && data[key].length) {
-            fields[key].value = data[key][0].fileName;
-            fields[key].fileId = data[key][0].fileId;
+          if (data[key] && Array.isArray(toJS(data[key]))) {
+            if (data[key].length) {
+              data[key].map((item) => {
+                fields[key].value.push(item.fileName);
+                fields[key].fileId.push(item.fileId);
+                return false;
+              });
+            }
           } else {
             fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
             fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
           }
         } else if (fields[key].objType === 's3File') {
-          if (data[key] && Array.isArray(data[key]) && data[key].length) {
-            data[key].map((item) => {
-              fields[key].preSignedUrl.push(item.url);
-              fields[key].value.push(item.fileName);
-              return false;
-            });
+          if (data[key] && Array.isArray(data[key])) {
+            if (data[key].length) {
+              data[key].map((item) => {
+                fields[key].preSignedUrl.push(item.url);
+                fields[key].value.push(item.fileName);
+                return false;
+              });
+            }
           } else {
             fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
             fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
@@ -386,7 +407,40 @@ class FormValidator {
     return tempRef;
   }
 
-  evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
+  evalS3FileObj = (fileData) => {
+    const fileObj = toJS(fileData);
+    let fileObjOutput;
+    if (Array.isArray(fileObj.preSignedUrl)) {
+      fileObjOutput =
+      map(fileObj.preSignedUrl, (file, index) => ({
+        id: 1,
+        isPublic: true,
+        url: file,
+        fileName: fileObj.value[index],
+      }));
+    } else {
+      fileObjOutput = fileObj.value ? {
+        id: 1,
+        url: fileObj.preSignedUrl || fileObj.value,
+        fileName: fileObj.value,
+        isPublic: true,
+      } : null;
+    }
+    return fileObjOutput;
+  }
+
+  evalFileObj = (fileData) => {
+    const fileObj = toJS(fileData);
+    let fileObjOutput;
+    if (Array.isArray(fileObj.fileId)) {
+      fileObjOutput =
+      map(fileObj.fileId, (file, index) => ({ fileId: file, fileName: fileObj.value[index] }));
+    } else {
+      fileObjOutput = { fileId: fileData.fileId, fileName: fileData.value };
+    }
+    return fileObjOutput;
+  }
+  // evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
 
   evalDateObj = date => moment(date).toISOString();
 
@@ -416,12 +470,13 @@ class FormValidator {
                     if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                       reference2Val = this.evalFileObj(field[keyRef1]);
                     } else if (field[keyRef1].objType && field[keyRef1].objType === 's3File') {
-                      reference2Val = {
-                        id: 1,
-                        url: field[keyRef1].preSignedUrl,
-                        fileName: field[keyRef1].value,
-                        isPublic: true,
-                      };
+                      reference2Val = this.evalS3FileObj(field[keyRef1]);
+                      // {
+                      //   id: 1,
+                      //   url: field[keyRef1].preSignedUrl,
+                      //   fileName: field[keyRef1].value,
+                      //   isPublic: true,
+                      // };
                     } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
                       reference2Val = this.evalDateObj(field[keyRef1].value);
                     }
@@ -452,12 +507,13 @@ class FormValidator {
             } else if (fields[key].objType && fields[key].objType === 'DATE') {
               objValue = this.evalDateObj(fields[key].value);
             } else if (fields[key].objType && fields[key].objType === 's3File') {
-              objValue = {
-                id: 1,
-                url: fields[key].preSignedUrl,
-                fileName: fields[key].value,
-                isPublic: true,
-              };
+              objValue = this.evalS3FileObj(fields[key]);
+              // {
+              //   id: 1,
+              //   url: fields[key].preSignedUrl,
+              //   fileName: fields[key].value,
+              //   isPublic: true,
+              // };
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
