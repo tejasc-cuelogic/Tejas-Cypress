@@ -47,8 +47,8 @@ export class SidebarNav extends Component {
         {
           roles && roles.includes('investor') &&
           signupStatus.activeAccounts.length > 0 &&
-          <Menu.Item key="logout" name="logout" onClick={this.handleAddNewAccount}>
-            <Icon name="sign out" />
+          <Menu.Item key="logout" name="add-account" className="add-account" onClick={this.handleAddNewAccount}>
+            <Icon name="add circle" />
             <span>Add New Account</span>
           </Menu.Item>
         }
