@@ -481,6 +481,19 @@ textarea{
         margin-bottom:@4px;
         display:inline-block;
     }
+    &.inline-attachments{
+        label{
+            display:block;
+        }
+        .file-uploader.attached{
+            width:250px;
+            display:inline-block;
+            margin:0 5px 0px 0;
+            padding:0 0 0 @13px;
+            height:auto;
+            min-height:auto;
+        }
+    }
 }
 
 .file-uploader{

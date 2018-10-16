@@ -34,7 +34,7 @@ export default class OfferingOverview extends Component {
     const isApproved = false;
     const isReadonly = isApproved;
     return (
-      <Form onSubmit={this.handleFormSubmit}>
+      <Form>
         {
           ['elevatorPitch', 'tombstoneDescription'].map(field => (
             <Aux>

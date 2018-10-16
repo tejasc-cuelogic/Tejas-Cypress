@@ -96,6 +96,7 @@ export class UserDetailsStore {
       variables: { userId },
       onFetch: () => {
         identityStore.setProfileInfo(this.userDetails);
+        accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         res();
       },
     });

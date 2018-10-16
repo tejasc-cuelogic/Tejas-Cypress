@@ -151,6 +151,7 @@ export default class Media extends Component {
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
             {MEDIA_FRM.fields.location.preSignedUrl &&
+            MEDIA_FRM.fields.location.preSignedUrl.length &&
             MEDIA_FRM.fields.location.preSignedUrl.map((url, i) => (
               <List.Item key={url}>
                 <div className="file-uploader attached">
@@ -181,6 +182,7 @@ export default class Media extends Component {
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
             {MEDIA_FRM.fields.gallery.preSignedUrl &&
+            MEDIA_FRM.fields.gallery.preSignedUrl.length &&
             MEDIA_FRM.fields.gallery.preSignedUrl.map((url, i) => (
               <List.Item key={`gallery${url}`}>
                 <div className="file-uploader attached">
@@ -210,7 +212,7 @@ export default class Media extends Component {
         <Header as="h4">Logo</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
-            {MEDIA_FRM.fields.logo.preSignedUrl &&
+            {MEDIA_FRM.fields.logo.preSignedUrl && MEDIA_FRM.fields.logo.preSignedUrl.length &&
             MEDIA_FRM.fields.logo.preSignedUrl.map((url, i) => (
               <List.Item key={`logo${url}`}>
                 <div className="file-uploader attached">
