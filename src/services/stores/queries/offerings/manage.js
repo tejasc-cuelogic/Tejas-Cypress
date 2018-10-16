@@ -96,9 +96,8 @@ export const getOfferingDetails = gql`
         isAlcohol
         uploadProformas {
           fileId
-          url
           fileName
-          isPublic
+          fileHandle
         }
       }
       media {
