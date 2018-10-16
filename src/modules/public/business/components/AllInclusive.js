@@ -45,7 +45,7 @@ const AllInclusive = () => (
                   <Item.Content>
                     <Item.Header as="h5">Campaign Development</Item.Header>
                     <Item.Meta>Design and content creation services.</Item.Meta>
-                  </Item.Content>
+                  </Item .Content>
                 </Item>
                 <Item>
                   <Item.Image size="mini" src={PaymentIcon} />
@@ -65,7 +65,7 @@ const AllInclusive = () => (
                   <Item.Image size="mini" src={PreparationIcon} />
                   <Item.Content>
                     <Item.Header as="h5">Disclosure Preparation</Item.Header>
-                    <Item.Meta>Legal templates and SEC documents.</Item.Meta>
+                    <Item.Meta>Legal templates and Regulatory filing assistance.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>

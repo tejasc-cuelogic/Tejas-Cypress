@@ -16,8 +16,8 @@ const Banner = () => (
           power of the crowd
           </Header>
           <Button.Group className={!isTablet && 'mt-30'}>
-            <Button secondary content="Apply Business" />
-            <Button secondary content="Apply for CRE" />
+            <Button secondary content="Business Application" />
+            <Button secondary content="CRE Application" />
           </Button.Group>
         </div>
       </Responsive>

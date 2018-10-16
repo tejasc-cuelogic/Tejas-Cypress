@@ -14,7 +14,8 @@ const Track = () => (
                 <Header as="h2">Track your investments.</Header>
                 <p className="mb-30">
                 See how you’re doing and reinvest any earnings effortlessly
-                with our easy-to-use dashboard.
+                with our
+                  <Responsive as={Aux} minWidth={1200}><br /></Responsive> easy-to-use dashboard.
                 </p>
                 <Responsive as={Aux} minWidth={768}>
                   <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>

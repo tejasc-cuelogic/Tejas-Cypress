@@ -66,8 +66,8 @@ const HowItWorks = () => (
           <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
           <div className="center-align">
             <Button.Group>
-              <Button secondary content="Apply Business" />
-              <Button secondary content="Apply for CRE" />
+              <Button secondary content="Business Application" />
+              <Button secondary content="CRE Application" />
             </Button.Group>
           </div>
           <Divider section />
@@ -123,7 +123,7 @@ const HowItWorks = () => (
                     <List.Header>&nbsp;</List.Header>
                   }
                   {/* <List.Icon className="ns-arrow-right" color="green" /> */}
-                  <List.Content>Is fundraising on <a href="/">NextSeed risky?</a></List.Content>
+                  <List.Content>Is fundraising on <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
                 </List.Item>
               </List>
             </Grid.Column>
@@ -203,7 +203,7 @@ const HowItWorks = () => (
       <Container>
         <Grid columns={2} stackable>
           <Grid.Column>
-            <Header as="h2">Proven results.</Header>
+            <Header as="h2">Data so far.</Header>
             <p className="mb-30">
               Every day, entrepreneurs like you are raising capital on
               NextSeed to bring their concepts to life.
