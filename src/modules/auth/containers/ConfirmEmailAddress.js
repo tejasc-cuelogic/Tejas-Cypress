@@ -62,7 +62,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.authStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
       })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       authActions.resendConfirmationCode();
     }
@@ -98,11 +98,6 @@ export default class ConfirmEmailAddress extends Component {
             className="display-only"
           />
           <p><Link to={changeEmailAddressLink}>Change email address</Link></p>
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <Form onSubmit={this.handleSubmitForm}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
@@ -115,6 +110,11 @@ export default class ConfirmEmailAddress extends Component {
                 onChange={ConfirmChange}
               />
             </Form.Field>
+            {errors &&
+              <Message error textAlign="left" style={{ display: 'block' }}>
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
             <Button.Group vertical>
               <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))}>Confirm</Button>
               <Button type="button" className="link-button cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>

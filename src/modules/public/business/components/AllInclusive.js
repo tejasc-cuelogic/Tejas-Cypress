@@ -2,14 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { Header, Grid, List, Divider, Container, Item } from 'semantic-ui-react';
-import MarketingIcon from '../../../../assets/images/business/marketing.svg';
-import EscrowIcon from '../../../../assets/images/business/escrow.svg';
-import CampaignIcon from '../../../../assets/images/business/campaign.svg';
-import PaymentIcon from '../../../../assets/images/business/payment.svg';
-import QuestionIcon from '../../../../assets/images/business/questions.svg';
-import PreparationIcon from '../../../../assets/images/business/preparation.svg';
-import ServicesIcon from '../../../../assets/images/business/services.svg';
-import TaxIcon from '../../../../assets/images/business/tax.svg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -27,56 +20,56 @@ const AllInclusive = () => (
               </p>
               <Item.Group className="horizontal-items">
                 <Item>
-                  <Item.Image size="mini" src={MarketingIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/marketing.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Marketing</Item.Header>
                     <Item.Meta>Expert advertising, marketing and PR resources.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={EscrowIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/escrow.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Escrow</Item.Header>
                     <Item.Meta>Handling all banking, escrow and processing fees.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={CampaignIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/campaign.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Campaign Development</Item.Header>
                     <Item.Meta>Design and content creation services.</Item.Meta>
                   </Item .Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={PaymentIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/payment.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Payment Processing</Item.Header>
                     <Item.Meta>Collecting commitments and distributing funds.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={QuestionIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/questions.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Q&A</Item.Header>
                     <Item.Meta>Facilitating investor questions during the offering.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={PreparationIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/preparation.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Disclosure Preparation</Item.Header>
                     <Item.Meta>Legal templates and Regulatory filing assistance.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={ServicesIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/services.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Investor Services</Item.Header>
                     <Item.Meta>Servicing payments to investors.</Item.Meta>
                   </Item.Content>
                 </Item>
                 <Item>
-                  <Item.Image size="mini" src={TaxIcon} />
+                  <Item.Image size="mini" src={`${ASSETS_URL}images/business/tax.svg`} />
                   <Item.Content>
                     <Item.Header as="h5">Tax Form Preparation</Item.Header>
                     <Item.Meta>Distributing year-end documents to investors.</Item.Meta>
