@@ -6,7 +6,7 @@ import Aux from 'react-aux';
 import { capitalize } from 'lodash';
 import { Container, Card, Image, Label, Icon, List, Grid } from 'semantic-ui-react';
 import Filters from './Filters';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, Image64 } from '../../../../../theme/shared';
 import lockIcon from '../../../../../assets/images/icon_lock.png';
 import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
@@ -37,10 +37,11 @@ export default class CampaignList extends Component {
               campaigns.map(offering => (
                 <Grid.Column>
                   <Card className="campaign" fluid as={Link} to={`/offerings/${offering.id}/overview`}>
-                    <Image
+                    <Image64
                       centered
-                      src={offering && offering.media && offering.media.tombstoneImage &&
-                        offering.media.tombstoneImage.url ? offering.media.tombstoneImage.url :
+                      srcUrl={offering && offering.media && offering.media.tombstoneImage &&
+                        offering.media.tombstoneImage.url ?
+                         offering.media.tombstoneImage.url :
                         emptyHeroImagePlaceholder
                       }
                       alt={`${offering.keyTerms.shorthandBusinessName} poster`}
