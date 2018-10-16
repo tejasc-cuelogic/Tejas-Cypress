@@ -649,9 +649,9 @@ export const CONTINGENCIES = {
 };
 
 export const OFFERING_DETAILS = {
-  offeringUrl: {
+  offeringSlug: {
     value: '',
-    label: 'Offering Url',
+    label: 'Offering Slug',
     error: undefined,
     rule: 'required',
     placeHolder: 'Enter here',

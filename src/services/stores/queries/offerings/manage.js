@@ -59,7 +59,7 @@ export const getOfferingDetails = gql`
   query _getOfferingById($id: String!) {
     getOfferingById(id: $id) {
       id
-      offeringUrl
+      offeringSlug
       referralCode
       keyTerms {
         legalBusinessName
