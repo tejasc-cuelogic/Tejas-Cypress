@@ -52,16 +52,19 @@ class InvestmentDetails extends Component {
                     </Aux>
                   :
                     <Aux>
+                      <Header as="h6">If minimum offering amount is reached:</Header>
                       <p>
-                      The buildout and launch of America Gardens in East Midtown Houston
-                      is estimated at $1.8 million.
+                        The buildout and launch of America Gardens in East Midtown Houston
+                        is estimated at $1.8 million.
                       </p>
+                      <Header as="h6">If maximum offering amount is reached:</Header>
                       <p>
-                      Jonathan Serrano and Shawn Rao have raised equity commitments of $1,800,000
-                      (contributed cash of $750,000) in equity for the project thus far. Through
-                      the NextSeed campaign, the business is seeking to raise between $200,000 and
-                      $1,000,000 to complete construction. Upon completion of the NextSeed campaign,
-                      the equity commitments will cover any remaining balance of the project cost.
+                        Jonathan Serrano and Shawn Rao have raised equity commitments of $1,800,000
+                        (contributed cash of $750,000) in equity for the project thus far. Through
+                        the NextSeed campaign, the business is seeking to raise between $200,000 and
+                        $1,000,000 to complete construction. Upon completion of the NextSeed
+                        campaign, the equity commitments will cover any remaining balance of the
+                        project cost.
                       </p>
                     </Aux>
                 }

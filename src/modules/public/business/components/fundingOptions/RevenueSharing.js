@@ -3,7 +3,7 @@ import { Header, List, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const RevenueSharing = () => (
-  <Grid reversed="computer" doubling columns={2}>
+  <Grid reversed="computer" doubling columns={2} relaxed="very">
     <Grid.Column>
       <RevenueChart />
       <p className="caption-note">

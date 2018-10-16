@@ -727,7 +727,7 @@ export class OfferingCreationStore {
                 id: 1, url: item, fileName: payloadData[keyName][k].fileName[index], isPublic: true,
               };
               return itemOfMedia;
-            }) :
+            }) : payloadData[keyName][k].url &&
             {
               id: 1,
               url: payloadData[keyName][k].url,

@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Header, Container, Embed, Grid, Responsive } from 'semantic-ui-react';
-import videoPoster from '../../../../assets/images/636206632.jpg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const nsvideos = { embed: '218642510' };
 
@@ -19,7 +19,7 @@ const HowItWorks = () => (
           <Embed
             className="centered-video"
             id={nsvideos.embed}
-            placeholder={videoPoster}
+            placeholder={`${ASSETS_URL}images/636206632.jpg`}
             source="vimeo"
             icon="ns-play"
           />
