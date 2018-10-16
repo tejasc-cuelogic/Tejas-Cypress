@@ -40,9 +40,12 @@ class Login extends Component {
       <Modal
         size="mini"
         open
+        closeOnDimmerClick={false}
+        closeIcon
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
+          this.props.uiStore.clearErrors();
           }
         }
       >

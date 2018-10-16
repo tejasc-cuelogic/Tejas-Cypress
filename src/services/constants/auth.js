@@ -5,6 +5,9 @@ export const COMMON = {
     placeHolder: 'E-mail address',
     label: 'E-mail',
     rule: 'required|email',
+    customErrors: {
+      required: '* required field.',
+    },
   },
   password: {
     value: '',
@@ -12,6 +15,9 @@ export const COMMON = {
     placeHolder: 'Password',
     rule: 'required|min:8|max:15',
     error: undefined,
+    customErrors: {
+      required: '* required field.',
+    },
   },
   code: {
     value: '',
@@ -19,6 +25,9 @@ export const COMMON = {
     rule: 'required',
     key: 'code',
     label: 'Enter verification code here:',
+    customErrors: {
+      required: '* required field.',
+    },
   },
   verify: {
     value: '',
@@ -27,6 +36,9 @@ export const COMMON = {
     placeHolder: 'Verify Password',
     rule: 'required|same:password',
     key: 'verify',
+    customErrors: {
+      required: '* required field.',
+    },
   },
 };
 
@@ -49,7 +61,7 @@ export const SIGNUP = {
     label: 'First Name',
     placeHolder: 'First Name',
     customErrors: {
-      required: 'The First Name field is required',
+      required: '* required field.',
     },
   },
   familyName: {
@@ -59,7 +71,7 @@ export const SIGNUP = {
     label: 'Last Name',
     placeHolder: 'Last Name',
     customErrors: {
-      required: 'The Last Name field is required',
+      required: '* required field.',
     },
   },
   email: { ...COMMON.email },
