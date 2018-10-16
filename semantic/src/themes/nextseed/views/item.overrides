@@ -159,7 +159,7 @@
         }
     }
     &.campaign-updates >.item{
-        img {
+        .ui.image img {
             border-radius: 50%;
         }
         .content>.header:not(.ui) {
@@ -170,6 +170,9 @@
             font-size: @13px;
             line-height: 20px;
             margin: 0;
+        }
+        img {
+            width: 100%;
         }
     }
 }

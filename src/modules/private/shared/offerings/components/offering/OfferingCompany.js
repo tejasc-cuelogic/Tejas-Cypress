@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Button, Header, Icon } from 'semantic-ui-react';
+import { Form, Divider, Header } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
 
 @inject('offeringCreationStore', 'userStore')
 @observer
@@ -18,13 +19,13 @@ export default class OfferingCompany extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const {
       OFFERING_COMPANY_FRM,
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about');
+    updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about', true, undefined, isApproved);
   }
   editorChange =
   (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
@@ -35,6 +36,8 @@ export default class OfferingCompany extends Component {
       rtEditorChange,
     } = this.props.offeringCreationStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isApproved = false;
+    const isReadonly = isApproved;
     const formName = 'OFFERING_COMPANY_FRM';
     return (
       <Form onSubmit={this.handleFormSubmit}>
@@ -57,11 +60,13 @@ export default class OfferingCompany extends Component {
               <Header as="h6">{`Milestone ${index + 1}`}</Header>
               <div className="featured-section">
                 <FormInput
+                  displayMode={isReadonly}
                   name="date"
                   fielddata={history.date}
                   changed={(e, result) => formArrayChange(e, result, formName, 'history', index)}
                 />
                 <FormTextarea
+                  readOnly={isReadonly}
                   name="description"
                   fielddata={history.description}
                   changed={(e, result) => formArrayChange(e, result, formName, 'history', index)}
@@ -87,22 +92,12 @@ export default class OfferingCompany extends Component {
           ))
         }
         <Divider hidden />
-        <div className="clearfix">
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Submitted by USER_NAME on 2/3/2018
-          </Button>
-          <Button.Group floated="right">
-            {access.asManager ? (
-              <Aux>
-                <Button inverted color="red" content="Decline" disabled={!OFFERING_COMPANY_FRM.meta.isValid} />
-                <Button color="green" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid}>Approve</Button>
-              </Aux>
-            ) : (
-              <Button primary color="green" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid}>Save</Button>
-            )}
-          </Button.Group>
-        </div>
+        <ButtonGroup
+          isManager={access.asManager}
+          formValid={OFFERING_COMPANY_FRM.meta.isValid}
+          isApproved={isApproved}
+          updateOffer={this.handleFormSubmit}
+        />
       </Form>
     );
   }

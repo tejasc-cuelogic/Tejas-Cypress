@@ -14,18 +14,6 @@ class Users extends Component {
 
   setSearchParam = (e, { name, value }) => this.props.userListingStore.setInitiateSrch(name, value);
 
-  dateFilterStart = (date) => {
-    if (date) {
-      this.props.userListingStore.setInitiateSrch('startDate', date);
-    }
-  }
-
-  dateFilterEnd = (date) => {
-    if (date) {
-      this.props.userListingStore.setInitiateSrch('endDate', date);
-    }
-  }
-
   toggleSearch = () => this.props.userListingStore.toggleSearch();
 
   loadMore = () => this.props.userListingStore.loadMore();
@@ -41,10 +29,10 @@ class Users extends Component {
       this.props.userListingStore.setInitiateSrch('keyword', e.target.value);
     }
   }
-
+  paginate = params => this.props.userListingStore.initRequest(params);
   render() {
     const {
-      users, loading, error, usersSummary, requestState, filters,
+      users, loading, error, usersSummary, requestState, filters, maskChange, count,
     } = this.props.userListingStore;
     return (
       <PrivateLayout
@@ -59,8 +47,7 @@ class Users extends Component {
         P2={<P5
           requestState={requestState}
           setSearchParam={this.setSearchParam}
-          dateFilterStart={this.dateFilterStart}
-          dateFilterEnd={this.dateFilterEnd}
+          dateFilter={maskChange}
           summary={usersSummary}
           removeFilter={this.removeFilter}
           filters={filters}
@@ -74,6 +61,9 @@ class Users extends Component {
           sortHandler={this.sortHandler}
           loadMore={this.loadMore}
           sortState={this.props.userListingStore.sortInfo}
+          paginate={this.paginate}
+          count={count}
+          requestState={requestState}
         />
       </PrivateLayout>
     );

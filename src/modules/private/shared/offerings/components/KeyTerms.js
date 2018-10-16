@@ -58,16 +58,17 @@ export default class KeyTerms extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </div>
-            {
-            ['maturity', 'frequencyOfPayments'].map(field => (
-              <MaskedInput
-                name={field}
-                fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(values, name) => maskChange(values, formName, name)}
-                number
-              />
-            ))
-            }
+            <MaskedInput
+              name="maturity"
+              fielddata={KEY_TERMS_FRM.fields.maturity}
+              changed={(values, name) => maskChange(values, formName, name)}
+              number
+            />
+            <FormInput
+              name="frequencyOfPayments"
+              fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}
+              changed={(e, result) => formChange(e, result, formName)}
+            />
             <MaskedInput
               name="terminationDate"
               fielddata={KEY_TERMS_FRM.fields.terminationDate}
@@ -86,16 +87,17 @@ export default class KeyTerms extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </div>
-            {
-              ['securityInterest', 'securitiesOwnershipPercentage'].map(field => (
-                <MaskedInput
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  percentage
-                />
-              ))
-            }
+            <FormInput
+              name="securityInterest"
+              fielddata={KEY_TERMS_FRM.fields.securityInterest}
+              changed={(e, result) => formChange(e, result, formName)}
+            />
+            <MaskedInput
+              name="securitiesOwnershipPercentage"
+              fielddata={KEY_TERMS_FRM.fields.securitiesOwnershipPercentage}
+              changed={(values, name) => maskChange(values, formName, name)}
+              percentage
+            />
             <FormInput
               key="investmentMultiple"
               name="investmentMultiple"
