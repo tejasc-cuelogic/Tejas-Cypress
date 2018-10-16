@@ -8,6 +8,7 @@ import NavBarMobile from './../../theme/layout/NavBarMobile';
 import { authActions } from '../../services/actions';
 import Header from './../../theme/layout/Header';
 import Footer from './../../theme/layout/Footer';
+import Auth from '../auth';
 import NotFound from '../shared/NotFound';
 import Helper from '../../helper/utility';
 
@@ -34,6 +35,7 @@ export default class Public extends React.Component {
           key={route.path}
         />
       ))}
+      <Route path="/auth" component={Auth} />
       <Route component={NotFound} />
     </Switch>
   );

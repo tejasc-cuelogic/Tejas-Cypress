@@ -59,7 +59,7 @@ export const getOfferingDetails = gql`
   query _getOfferingById($id: String!) {
     getOfferingById(id: $id) {
       id
-      offeringUrl
+      offeringSlug
       referralCode
       keyTerms {
         legalBusinessName
@@ -96,9 +96,10 @@ export const getOfferingDetails = gql`
         isAlcohol
         uploadProformas {
           fileId
-          url
           fileName
-          isPublic
+          fileHandle {
+            id
+          }
         }
       }
       media {
@@ -288,16 +289,22 @@ export const getOfferingDetails = gql`
         bio
         uploads {
           headshot {
+            id
             url
             fileName
+            isPublic
           }
           heroImage {
+            id
             url
             fileName
+            isPublic
           }
           license {
+            id
             url
             fileName
+            isPublic
           }
         }
         social {
