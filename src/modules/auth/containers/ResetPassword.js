@@ -46,7 +46,7 @@ export default class ResetPassword extends Component {
                 ))
               }
               <div className="mt-30 center-align">
-                <Button secondary size="large" className="very relaxed" content="Send the link" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
+                <Button fluid secondary size="large" className="very relaxed" content="Send the link" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
               </div>
             </Form>
           </Modal.Content>

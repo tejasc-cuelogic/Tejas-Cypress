@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import {
@@ -14,11 +15,11 @@ const LegalDetails = observer(({
   <Modal size="mini" open closeIcon onClose={close}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">Welcome {name}</Header>
-      <p>Let’s get you set up with a NextSeed investment <br /> account.</p>
+      <p>Let’s create your NextSeed investment account.</p>
       <Divider />
       <p>
-        Federal regulations require us to verify your legal<br />
-        identity. We use state-of-the-art security measures<br /> to protect your information.
+        Federal regulations require us to verify your legal identity.
+        We use state-of-the-art security measures to protect your information.
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
@@ -106,14 +107,17 @@ const LegalDetails = observer(({
           ssn
           changed={maskChange}
         />
-        <div className="center-align">
-          <Button.Group vertical>
-            <Button loading={inProgress} size="large" color="green" className="relaxed" >Verify my identity</Button>
+        <div className="center-align mt-30">
+          <Button secondary size="large" className="very relaxed" content="Verify my identity" loading={inProgress} />
+          {/* <Button.Group vertical>
             <Button type="button" className="link-button cancel-link" onClick={close}>I’ll finish this later</Button>
-          </Button.Group>
+          </Button.Group> */}
         </div>
       </Form>
     </Modal.Content>
+    <Modal.Actions className="signup-actions">
+      <p><Link to="/" onClick={close}>I’ll finish this later</Link></p>
+    </Modal.Actions>
   </Modal>
 ));
 

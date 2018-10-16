@@ -80,7 +80,7 @@ class Login extends Component {
               <Link to="/"><b>Forgot password?</b></Link>
             </Form.Field>
             <div className="center-align mt-40">
-              <Button fluid secondary size="large" className="very relaxed" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid}>Log in</Button>
+              <Button fluid secondary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
