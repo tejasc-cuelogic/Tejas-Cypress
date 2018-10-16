@@ -45,6 +45,7 @@ class Login extends Component {
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
+          this.props.uiStore.clearErrors();
           }
         }
       >
