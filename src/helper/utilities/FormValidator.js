@@ -344,12 +344,13 @@ class FormValidator {
         } else if (fields[key].objType === 'DATE') {
           fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
         } else {
-          // fields[key].value = data && typeof data === 'object' ? data[key] : data;
-          fields[key].value = data && typeof data === 'object' ? data[key] ? data[key] : fields[key].value : data;
+          fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data;
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';
-          fields[fields[key].refSelector].value = (fields[key].value !== null && fields[key].value !== '');
+          if (fields[key].value !== undefined) {
+            fields[fields[key].refSelector].value = (fields[key].value !== null && fields[key].value !== '');
+          }
         }
       } catch (e) {
         // do nothing
