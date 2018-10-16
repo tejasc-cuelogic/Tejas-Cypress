@@ -104,7 +104,7 @@ class InvestorSignup extends Component {
               minLength={8}
               minScore={2}
               scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-              inputProps={{ name: 'password_input', autoComplete: 'off', className: 'form-control' }}
+              inputProps={{ name: 'password', autoComplete: 'off', className: 'form-control' }}
             />
             <FormInput
               key="verify"
