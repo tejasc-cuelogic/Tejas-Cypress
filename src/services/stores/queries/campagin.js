@@ -45,7 +45,7 @@ export const campaignDetailsQuery = gql`
     stage
     applicationId
     issuerId
-    offeringUrl
+    offeringSlug
     referralCode
     selectedOffer {
       structure
