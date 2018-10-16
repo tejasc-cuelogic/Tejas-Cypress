@@ -289,16 +289,22 @@ export const getOfferingDetails = gql`
         bio
         uploads {
           headshot {
+            id
             url
             fileName
+            isPublic
           }
           heroImage {
+            id
             url
             fileName
+            isPublic
           }
           license {
+            id
             url
             fileName
+            isPublic
           }
         }
         social {
