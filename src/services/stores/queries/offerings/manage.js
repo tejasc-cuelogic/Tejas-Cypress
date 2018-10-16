@@ -97,7 +97,9 @@ export const getOfferingDetails = gql`
         uploadProformas {
           fileId
           fileName
-          fileHandle
+          fileHandle {
+            id
+          }
         }
       }
       media {
