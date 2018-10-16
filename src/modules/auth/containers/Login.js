@@ -36,6 +36,8 @@ class Login extends Component {
       LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType, reset,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    const customError = errors && errors.message === 'User does not exist.'
+      ? 'Incorrect username or password.' : errors && errors.message;
     return (
       <Modal
         size="mini"
@@ -52,7 +54,7 @@ class Login extends Component {
         <Modal.Content className="signup-content">
           {errors &&
             <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
+              <ListErrors errors={[customError]} />
             </Message>
           }
           <Form>
