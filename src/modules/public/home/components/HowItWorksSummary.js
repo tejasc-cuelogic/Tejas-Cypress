@@ -15,8 +15,8 @@ const HowItWorksSummary = props => (
       </p>
     </Container>
     <Container>
-      <Grid centered relaxed stackable>
-        <Grid.Column textAlign="center" computer={6} tablet={8} mobile={8} className="info-card">
+      <Grid centered relaxed>
+        <Grid.Column textAlign="center" computer={6} tablet={6} mobile={16} className={`info-card home-summary ${props.isMobile && 'mb-50'}`}>
           <Image src={UserOne} centered />
           <Header as="h5">Business Owners</Header>
           <p>
@@ -26,7 +26,7 @@ const HowItWorksSummary = props => (
           </p>
           <Button as={Link} to="/business/how-it-works" primary content="SMB Fundraising" className="mt-20" />
         </Grid.Column>
-        <Grid.Column textAlign="center" computer={6} tablet={8} mobile={8} className="info-card">
+        <Grid.Column textAlign="center" computer={6} tablet={6} mobile={16} className="info-card home-summary">
           <Image src={UserTwo} centered />
           <Header as="h5">Investors</Header>
           <p>
