@@ -11,7 +11,7 @@ const PrivacyPolicy = () => (
     </Header>
     <Divider section />
     <div className="justify-text">
-      <p>The Next Seed, Inc. (NextSeed) operates a public website at www.nextseed.com, and also offer an online intermediary platform through its subsidiary NextSeed US LLC for investment crowdfunding in accordance with Regulation Crowdfunding. You may browse the public content on the website without establishing a user account, but you must establish a user account to view and use non-public content on the site and to use the platform. NextSeed is committed to maintaining the confidentiality, integrity, and security of your personal information. This Privacy Policy covers NextSeed’s privacy policies for both its public site visitors and its platform users, and describes:</p>
+      <p>The NextSeed, Inc. (NextSeed) operates a public website at www.nextseed.com, and also offer an online intermediary platform through its subsidiary NextSeed US LLC for investment crowdfunding in accordance with Regulation Crowdfunding. You may browse the public content on the website without establishing a user account, but you must establish a user account to view and use non-public content on the site and to use the platform. NextSeed is committed to maintaining the confidentiality, integrity, and security of your personal information. This Privacy Policy covers NextSeed’s privacy policies for both its public site visitors and its platform users, and describes:</p>
       <List relaxed bulleted>
         <List.Item><strong>Data Collected</strong>: the personal data that NextSeed collects from you;</List.Item>
         <List.Item><strong>Use of Data</strong>: the ways that NextSeed uses that personal data, including the ways that it may combine data it collects from you with data it acquires about you from other sources; and</List.Item>
@@ -117,7 +117,7 @@ const PrivacyPolicy = () => (
       <p><strong>Questions</strong> Email <a href="mailto:privacy@nextseed.com">privacy@nextseed.com</a> or go to <a href="https://www.nextseed.com/">www.nextseed.com</a></p>
       <Header as="h4">Who we are</Header>
       <Header as="h5">Who is providing this notice?</Header>
-      <p>The Next Seed, Inc. is a Delaware corporation and has its principal place of business at 800 Town &amp; Country Blvd Ste 220, Houston, Texas 77024.</p>
+      <p>The NextSeed, Inc. is a Delaware corporation and has its principal place of business at 800 Town &amp; Country Blvd Ste 220, Houston, Texas 77024.</p>
       <Header as="h4">What we do</Header>
       <Header as="h5">How does NextSeed protect my personal information?</Header>
       <p>To protect your personal information from unauthorized access and use, we use security measures that comply with federal law. These measures include computer safeguards and secured files and buildings.</p>
@@ -151,7 +151,7 @@ const PrivacyPolicy = () => (
       <Header as="h5">Affiliates</Header>
       <p>Companies related by common ownership or control. They can be financial and nonfinancial companies.</p>
       <List relaxed bulleted>
-        <List.Item>Our affiliates include The Next Seed Inc. and NextSeed TX LLC.</List.Item>
+        <List.Item>Our affiliates include The NextSeed Inc. and NextSeed TX LLC.</List.Item>
       </List>
       <Header as="h5">Non-affiliates</Header>
       <p>Companies not related by common ownership or control. They can be financial and nonfinancial companies.</p>

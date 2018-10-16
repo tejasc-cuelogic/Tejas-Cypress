@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Accordion, Icon, List } from 'semantic-ui-react';
-import mapValues from 'lodash/mapValues';
 
 @inject('educationStore')
 @observer
@@ -22,8 +21,8 @@ export default class AccList extends Component {
     if (this.props.educationStore.selected) {
       currId = this.props.educationStore.selected.id;
     }
-    const ids = mapValues(record[key], f => f.id);
-    return this.state.activeIndex === record.id || Object.values(ids).includes(currId);
+    const ids = record[key].map(item => item.id);
+    return this.state.activeIndex === record.id || ids.includes(currId);
   }
   render() {
     const {

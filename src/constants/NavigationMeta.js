@@ -218,7 +218,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin', 'manager', 'support'],
   },
   {
-    icon: 'ns-users',
+    icon: 'bullhorn',
     title: 'Offerings',
     capability: 'OFFERINGS_ANY',
     heading: 'Offerings',
@@ -302,14 +302,6 @@ export const PRIVATE_NAV = [
     capability: 'REPAYMENTS_ANY',
     to: 'repayments',
     path: 'admin/repayments',
-    accessibleTo: ['admin', 'manager', 'support'],
-  },
-  {
-    icon: 'bullhorn',
-    title: 'Campaigns',
-    capability: 'CAMPAIGN_ANY',
-    to: 'campaigns',
-    path: 'admin/campaigns',
     accessibleTo: ['admin', 'manager', 'support'],
   },
   {

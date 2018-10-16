@@ -11,17 +11,14 @@ export default class Leadership extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/leader/1`);
     }
-    const { LEADERSHIP_FRM, addMore } = this.props.offeringCreationStore;
     if (!this.props.offeringCreationStore.initLoad.includes('LEADERSHIP_FRM')) {
       this.props.offeringCreationStore.setFormData('LEADERSHIP_FRM', false);
-      const leadersCount = LEADERSHIP_FRM.fields.leadership.length;
-      addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
     }
   }
   render() {
-    const { LEADER_FRM } = this.props.offeringCreationStore;
+    const { LEADERSHIP_FRM } = this.props.offeringCreationStore;
     const navItems = [];
-    LEADER_FRM.fields.getOfferingBac.map((leader, index) => {
+    LEADERSHIP_FRM.fields.leadership.map((leader, index) => {
       navItems.push({ title: `Leader ${index + 1}`, to: `leader/${index + 1}` });
       return navItems;
     });
