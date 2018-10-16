@@ -72,22 +72,24 @@
         }
     }
     .otp-wrap{
-        margin:3rem 0;
+        margin:0 0 3rem 0;
         >label{
             width:100%;
         }
     }
     .otp-field{
         min-width:300px;
+        margin-top:@28px;
         label{
             font-size:@14px;
         }
         > input{
             max-width:30px;
-            margin:0 @10px;
+            margin:0 @3px;
             font-size:@22px;
             padding:@12px 0;
             text-align:center;
+            background-color:@neutral-offwhite !important;
         }
     }
     .fields{

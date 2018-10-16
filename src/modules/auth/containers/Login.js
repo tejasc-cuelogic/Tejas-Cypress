@@ -40,6 +40,7 @@ class Login extends Component {
       <Modal
         size="mini"
         open
+        closeIcon
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
@@ -60,7 +61,7 @@ class Login extends Component {
               Log in with Facebook
             </Button>
           </Form>
-          <Divider horizontal section>Or</Divider>
+          <Divider horizontal section>or</Divider>
           <Form error onSubmit={this.handleSubmitForm}>
             {
               Object.keys(LOGIN_FRM.fields).map(field => (
@@ -75,8 +76,11 @@ class Login extends Component {
                 />
               ))
             }
-            <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid}>Log in</Button>
+            <Form.Field>
+              <Link to="/"><b>Forgot password?</b></Link>
+            </Form.Field>
+            <div className="center-align mt-40">
+              <Button fluid secondary size="large" className="very relaxed" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid}>Log in</Button>
             </div>
           </Form>
         </Modal.Content>
