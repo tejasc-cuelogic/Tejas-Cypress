@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import ReactPasswordStrength from 'react-password-strength';
 import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
@@ -30,8 +31,9 @@ class InvestorSignup extends Component {
       .catch(() => { });
   };
   render() {
+    // togglePasswordType
     const {
-      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType, reset,
+      SIGNUP_FRM, signupChange, pwdInputType, reset,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
 
@@ -88,13 +90,21 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
             />
-            <FormInput
+            {/* <FormInput
               key="password"
               name="password"
               type={pwdInputType}
               icon={togglePasswordType()}
               fielddata={SIGNUP_FRM.fields.password}
               changed={signupChange}
+            /> */}
+            <ReactPasswordStrength
+              className="customClass"
+              style={{ display: 'block' }}
+              minLength={8}
+              minScore={2}
+              scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
+              inputProps={{ name: 'password_input', autoComplete: 'off', className: 'form-control' }}
             />
             <FormInput
               key="verify"
