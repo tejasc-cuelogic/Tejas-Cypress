@@ -8,7 +8,8 @@ export class CampaignStore {
   @observable details = {};
   @observable option = false;
   @observable campaignSideBarShow = false;
-  @observable isReadmoreToShow = false;
+  @observable selectedReadMore = {};
+  @observable selectedReadLess = {};
 
 
   @action
@@ -63,10 +64,27 @@ export class CampaignStore {
     return this.allData.loading;
   }
   @action
-  setReadMoreToShowStatus(readMoreStatus) {
-    if (readMoreStatus !== this.isReadmoreToShow) {
-      this.isReadmoreToShow = readMoreStatus;
+  setInitialStateForReadMoreAndReadLess(updatesData) {
+    if (updatesData.length) {
+      this.selectedReadMore = updatesData.map(() => true);
+      this.selectedReadLess = updatesData.map(() => true);
     }
+  }
+  @computed get curretnStatusForReadMore() {
+    return this.selectedReadMore;
+  }
+  @computed get curretnStatusForReadLess() {
+    return this.selectedReadLess;
+  }
+  @action
+  handleReadMoreReadLess(index) {
+    const newReadMoreStatus = [...this.selectedReadMore];
+    newReadMoreStatus[index] = !this.selectedReadMore[index];
+    this.selectedReadMore = newReadMoreStatus;
+
+    const newReadLessStatus = [...this.selectedReadLess];
+    newReadLessStatus[index] = !this.selectedReadLess[index];
+    this.selectedReadLess = newReadLessStatus;
   }
 }
 
