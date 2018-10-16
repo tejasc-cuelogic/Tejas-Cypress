@@ -739,25 +739,27 @@ export class OfferingCreationStore {
         };
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
-        const mediaObj = {};
-        payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
-          const mediaItem = toJS(payloadData[keyName][k].url);
-          mediaObj[k] = Array.isArray(mediaItem) ?
-            mediaItem.map((item, index) => {
-              const itemOfMedia = {
-                id: 1, url: item, fileName: payloadData[keyName][k].fileName[index], isPublic: true,
-              };
-              return itemOfMedia;
-            }) : payloadData[keyName][k].fileName &&
-            {
-              id: 1,
-              url: k === 'heroVideo' ? payloadData[keyName][k].fileName : payloadData[keyName][k].url,
-              fileName: payloadData[keyName][k].fileName,
-              isPublic: true,
-            };
-          return mediaObj;
-        });
-        payloadData[keyName] = mediaObj;
+        // const mediaObj = {};
+        // payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
+        //   const mediaItem = toJS(payloadData[keyName][k].url);
+        //   mediaObj[k] = Array.isArray(mediaItem) ?
+        //     mediaItem.map((item, index) => {
+        //       const itemOfMedia = {
+        //         id: 1, url: item, fileName: payloadData[keyName][k].fileName[index],
+        // isPublic: true,
+        //       };
+        //       return itemOfMedia;
+        //     }) : payloadData[keyName][k].fileName &&
+        //     {
+        //       id: 1,
+        //       url: k === 'heroVideo' ? payloadData[keyName][k].fileName :
+        // payloadData[keyName][k].url,
+        //       fileName: payloadData[keyName][k].fileName,
+        //       isPublic: true,
+        //     };
+        //   return mediaObj;
+        // });
+        // payloadData[keyName] = mediaObj;
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
