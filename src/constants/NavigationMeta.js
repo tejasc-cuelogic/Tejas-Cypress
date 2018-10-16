@@ -35,13 +35,13 @@ export const PRIVATE_NAV = [
       },
     ],
   },
-  {
-    icon: 'ns-envelope',
-    title: 'Messages',
-    to: 'messages',
-    accessibleTo: [],
-    path: 'shared/messages/containers/Messages',
-  },
+  // {
+  //   icon: 'ns-envelope',
+  //   title: 'Messages',
+  //   to: 'messages',
+  //   accessibleTo: [],
+  //   path: 'shared/messages/containers/Messages',
+  // },
   {
     icon: 'ns-dashboard',
     title: 'Dashboard',
