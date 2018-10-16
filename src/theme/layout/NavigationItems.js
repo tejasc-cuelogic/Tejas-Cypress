@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
-import { Link, NavLink, withRouter } from 'react-router-dom';
+import { Link, NavLink, withRouter, matchPath } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
@@ -99,7 +99,8 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (path.includes('offerings/:id/:section?') ? 'LogoColor' : (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
+  (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoColor' :
+    (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
@@ -118,7 +119,7 @@ export class NavigationItems extends Component {
       <Menu
         stackable
         borderless
-        inverted={!location.pathname.includes('/offerings/:id/:section?')}
+        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' })}
         fixed="top"
         // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}

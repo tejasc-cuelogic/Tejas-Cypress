@@ -63,7 +63,7 @@ class offerDetails extends Component {
     if (!details || details.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
-    if (!details.data.getOfferingDetailsById) {
+    if (details && details.data && !details.data.getOfferingDetailsById) {
       return <NotFound />;
     }
     return (
