@@ -64,7 +64,7 @@ export const KEY_TERMS = {
     value: '',
     label: 'Security Interest',
     error: undefined,
-    rule: 'numeric|required',
+    rule: 'required',
     placeHolder: 'Enter here',
   },
   securitiesOwnershipPercentage: {
