@@ -40,7 +40,7 @@ export default class OfferingCompany extends Component {
     const isReadonly = isApproved;
     const formName = 'OFFERING_COMPANY_FRM';
     return (
-      <Form onSubmit={this.handleFormSubmit}>
+      <Form>
         <Header as="h4">About the Company</Header>
         <HtmlEditor
           changed={this.editorChange}

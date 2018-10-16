@@ -13,10 +13,11 @@ const GetBtn = ({ type }) => {
   return <Button disabled={!type} as={Link} to={type ? BtnMeta[type].to : '/auth/register'} primary size="large" className="relaxed" content={type ? BtnMeta[type].label : 'Open account'} />;
 };
 
-@inject('authStore')
+@inject('authStore', 'uiStore')
 @observer
 class signupInitial extends Component {
   componentWillMount() {
+    this.props.uiStore.clearErrors();
     this.props.authStore.reset('SIGNUP');
   }
   render() {
