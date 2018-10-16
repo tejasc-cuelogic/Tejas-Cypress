@@ -33,7 +33,7 @@ export default class Overview extends Component {
           <Header as="h4">Offering Details</Header>
           <Form.Group widths={2}>
             {
-              ['offeringUrl', 'referralCode'].map(field => (
+              ['offeringSlug', 'referralCode'].map(field => (
                 <FormInput
                   name={field}
                   fielddata={OFFERING_DETAILS_FRM.fields[field]}

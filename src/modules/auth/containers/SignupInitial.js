@@ -25,7 +25,7 @@ class signupInitial extends Component {
     const selectedType = SIGNUP_FRM.fields.role;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
-      <Modal open onClose={() => this.props.history.push('/')}>
+      <Modal closeOnDimmerClick={false} open closeIcon onClose={() => this.props.history.push('/')}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Join the NextSeed community</Header>
         </Modal.Header>
