@@ -329,11 +329,13 @@
 		padding:@10px @25px;
 		font-weight:@fontMedium;
 		color:@primary-two;
+		text-decoration:none;
 		position:absolute;
 		left:0;
 		bottom:44px;
 		z-index:999;
 		background-color:@white;
+		cursor:pointer;
 		> .icon{
 			margin-right:@13px;
 			height:auto;
