@@ -100,7 +100,7 @@ export default class Contingency extends Component {
                     ))
                   }
                   <div className="center-align">
-                    <Button type="button" onClick={this.handleSubmitForm} className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
+                    <Button onClick={this.handleSubmitForm} className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
                   </div>
                 </Form>
               </Modal.Content>
@@ -153,7 +153,7 @@ export default class Contingency extends Component {
                             ))
                           }
                           <div className="center-align">
-                            <Button type="button" onClick={() => this.handleUpdateForm(form, dataKey, index)} disabled={!EDIT_CONTINGENCY_FRM.meta.isValid} className="relaxed" primary >Update Contingency</Button>
+                            <Button onClick={() => this.handleUpdateForm(form, dataKey, index)} disabled={!EDIT_CONTINGENCY_FRM.meta.isValid} className="relaxed" primary >Update Contingency</Button>
                           </div>
                         </Form>
                       </Modal.Content>
