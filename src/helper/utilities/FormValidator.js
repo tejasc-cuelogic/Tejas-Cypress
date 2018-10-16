@@ -418,8 +418,10 @@ class FormValidator {
                       reference2Val = this.evalFileObj(field[keyRef1]);
                     } else if (field[keyRef1].objType && field[keyRef1].objType === 's3File') {
                       reference2Val = {
+                        id: 1,
                         url: field[keyRef1].preSignedUrl,
                         fileName: field[keyRef1].value,
+                        isPublic: true,
                       };
                     } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
                       reference2Val = this.evalDateObj(field[keyRef1].value);
@@ -452,8 +454,10 @@ class FormValidator {
               objValue = this.evalDateObj(fields[key].value);
             } else if (fields[key].objType && fields[key].objType === 's3File') {
               objValue = {
+                id: 1,
                 url: fields[key].preSignedUrl,
                 fileName: fields[key].value,
+                isPublic: true,
               };
             }
             if (reference) {

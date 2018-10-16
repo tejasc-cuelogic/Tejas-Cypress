@@ -183,12 +183,11 @@
 		margin-left: -@14px;
 		margin-right: -@14px;
 		>.item {
-            width: 50%;
+            width: 43%;
             @media only screen and (max-width : @largestMobileScreen){
                 width: 100%;
             }
-			margin-top: 0;
-			margin-bottom: @30px;
+            margin: 0 auto @30px;
 			padding-left: @14px;
 			padding-right: @14px;
 			.ui.mini.image {

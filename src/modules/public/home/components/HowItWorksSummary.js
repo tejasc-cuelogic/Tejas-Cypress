@@ -15,7 +15,7 @@ const HowItWorksSummary = props => (
       </p>
     </Container>
     <Container>
-      <Grid centered relaxed>
+      <Grid centered relaxed="very">
         <Grid.Column textAlign="center" computer={6} tablet={6} mobile={16} className={`info-card home-summary ${props.isMobile && 'mb-50'}`}>
           <Image src={UserOne} centered />
           <Header as="h5">Business Owners</Header>

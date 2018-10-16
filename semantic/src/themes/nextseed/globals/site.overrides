@@ -457,6 +457,9 @@ footer{
 					flex: 1;
 				}
 			}
+			.ui.padded.segment h6.ui.header {
+				margin: @7px 0;
+			}
 		}
 		.campaign-right-sidebar {
 			padding: @30px @30px @30px 0;

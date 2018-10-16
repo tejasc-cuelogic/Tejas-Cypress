@@ -72,6 +72,7 @@ export default class Contingency extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const {
       confirmModal,
+      confirmModalName,
       formChange,
       contingencyFormSelected,
       ADD_NEW_CONTINGENCY_FRM,
@@ -177,7 +178,7 @@ export default class Contingency extends Component {
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this contingency?"
-          open={confirmModal}
+          open={confirmModal && confirmModalName === formName}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => this.removeData()}
           size="mini"

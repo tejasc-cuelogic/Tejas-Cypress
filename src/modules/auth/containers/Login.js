@@ -15,6 +15,9 @@ class Login extends Component {
     this.props.authStore.reset('LOGIN');
     this.props.authStore.setDefaultPwdType();
   }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
@@ -47,7 +50,6 @@ class Login extends Component {
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
-          this.props.uiStore.clearErrors();
           }
         }
       >
