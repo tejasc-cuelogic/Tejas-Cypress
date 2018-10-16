@@ -5,7 +5,7 @@ import Aux from 'react-aux';
 const PreferredEquity = () => (
   <Aux>
     <Header as="h3">Preferred Equity</Header>
-    <Grid doubling columns={2}>
+    <Grid doubling columns={2} relaxed="very">
       <Grid.Column>
         <Item.Group className="question-list">
           <Item>
