@@ -32,7 +32,7 @@ export default class ImageCropper extends Component {
     const { files } = (e.dataTransfer) ? e.dataTransfer : e.target;
 
     this.setState({ imageType: files[0].type });
-    this.props.setData('value', files[0].name);
+    this.props.setData('fileName', files[0].name);
     this.props.setData('meta', { type: files[0].type });
     this.props.verifySize(files[0].size, this.props.name);
     this.props.verifyExtension(files[0].type.split('/')[1]);
@@ -108,8 +108,8 @@ export default class ImageCropper extends Component {
     this.props.handelReset();
   }
 
-  modalUpload = (name) => {
-    this.props.modalUploadAction(name);
+  modalUpload = (name, field) => {
+    this.props.modalUploadAction(name, field);
     this.handleCloseModal();
   }
 
@@ -138,7 +138,7 @@ export default class ImageCropper extends Component {
               />
             </Modal.Content>
             <Modal.Actions>
-              <Button primary content="Upload" onClick={() => this.modalUpload(this.props.name)} />
+              <Button primary content="Upload" onClick={() => this.modalUpload(this.props.name, field)} />
             </Modal.Actions>
           </Modal>
           :
