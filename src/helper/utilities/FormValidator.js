@@ -297,7 +297,8 @@ class FormValidator {
         } else if (fields[key].objRef) {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
           if (fields[key].objType === 'FileObjectType') {
-            if (tempRef[key] && Array.isArray(toJS(tempRef[key]))) {
+            if (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
+            fields[key] && Array.isArray(toJS(fields[key]))) {
               if (tempRef[key].length) {
                 tempRef[key].map((item) => {
                   fields[key].value.push(item.fileName);
@@ -306,8 +307,10 @@ class FormValidator {
                 });
               }
             } else {
-              fields[key].value = tempRef[key].fileName;
-              fields[key].fileId = tempRef[key].fileId;
+              fields[key].value = Array.isArray(toJS(tempRef[key])) ?
+                tempRef[key][0].fileName : tempRef[key].fileName;
+              fields[key].fileId = Array.isArray(toJS(tempRef[key])) ?
+                tempRef[key][0].fileId : tempRef[key].fileId;
             }
             // fields[key].value = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
             // tempRef[key].length) ? tempRef[key][0].fileName : tempRef[key].fileName;
@@ -337,7 +340,8 @@ class FormValidator {
         } else if (key === 'value') {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else if (fields[key].objType === 'FileObjectType') {
-          if (data[key] && Array.isArray(toJS(data[key]))) {
+          if (data[key] && Array.isArray(toJS(data[key])) &&
+          fields[key] && Array.isArray(toJS(fields[key]))) {
             if (data[key].length) {
               data[key].map((item) => {
                 fields[key].value.push(item.fileName);
@@ -346,8 +350,8 @@ class FormValidator {
               });
             }
           } else {
-            fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
-            fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
+            fields[key].value = data && typeof data === 'string' ? data : Array.isArray(toJS(data[key])) ? data[key][0].fileName : data[key].fileName;
+            fields[key].fileId = data && typeof data === 'string' ? data : Array.isArray(toJS(data[key])) ? data[key][0].fileId : data[key].fileId;
           }
         } else if (fields[key].objType === 's3File') {
           if (data[key] && Array.isArray(data[key])) {
