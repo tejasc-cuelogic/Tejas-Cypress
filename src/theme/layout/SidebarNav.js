@@ -7,7 +7,7 @@ import { Menu, Icon } from 'semantic-ui-react';
 import { PRIVATE_NAV, PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 import { NavItems } from './NavigationItems';
 
-@inject('navStore', 'offeringsStore')
+@inject('navStore', 'offeringsStore', 'userDetailsStore')
 @withRouter
 @observer
 export class SidebarNav extends Component {
@@ -21,10 +21,14 @@ export class SidebarNav extends Component {
   componentWillReceiveProps(nextProps) {
     this.props.navStore.setAccessParams('currentNav', nextProps.match.url);
   }
+  handleAddNewAccount = () => {
+    this.props.history.push('/app/summary/account-creation');
+  }
   render() {
     const {
       roles, location, isVerified, createdAccount, navStore, onlyMount,
     } = this.props;
+    const { signupStatus } = this.props.userDetailsStore;
     if (onlyMount) return null;
     return (
       <Aux>
@@ -40,6 +44,14 @@ export class SidebarNav extends Component {
           <Icon name="sign out" />
           <span>Logout</span>
         </Menu.Item>
+        {
+          roles && roles.includes('investor') &&
+          signupStatus.activeAccounts.length > 0 &&
+          <Menu.Item key="logout" name="logout" onClick={this.handleAddNewAccount}>
+            <Icon name="sign out" />
+            <span>Add New Account</span>
+          </Menu.Item>
+        }
       </Aux>
     );
   }
