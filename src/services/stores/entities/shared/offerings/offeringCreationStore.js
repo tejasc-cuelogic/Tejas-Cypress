@@ -745,15 +745,15 @@ export class OfferingCreationStore {
         //   mediaObj[k] = Array.isArray(mediaItem) ?
         //     mediaItem.map((item, index) => {
         //       const itemOfMedia = {
-        //         id: 1, url: item, fileName: payloadData[keyName][k].fileName[index],
-        // isPublic: true,
+        //         id: 1, url: item,
+        // fileName: payloadData[keyName][k].fileName[index], isPublic: true,
         //       };
         //       return itemOfMedia;
         //     }) : payloadData[keyName][k].fileName &&
         //     {
         //       id: 1,
-        //       url: k === 'heroVideo' ? payloadData[keyName][k].fileName :
-        // payloadData[keyName][k].url,
+        //       url: k === 'heroVideo' ?
+        // payloadData[keyName][k].fileName : payloadData[keyName][k].url,
         //       fileName: payloadData[keyName][k].fileName,
         //       isPublic: true,
         //     };
