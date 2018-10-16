@@ -110,7 +110,8 @@ const LegalDetails = observer(({
         <div className="center-align mt-30">
           <Button secondary size="large" className="very relaxed" content="Verify my identity" loading={inProgress} />
           {/* <Button.Group vertical>
-            <Button type="button" className="link-button cancel-link" onClick={close}>I’ll finish this later</Button>
+            <Button type="button" className="link-button cancel-link"
+            onClick={close}>I’ll finish this later</Button>
           </Button.Group> */}
         </div>
       </Form>
