@@ -83,6 +83,7 @@ export class OfferingCreationStore {
     search: {},
   };
   @observable removeFileIdsList = [];
+  @observable removeFileNamesList = [];
 
   @action
   setTierToBeUnlinked = (tier) => {
@@ -229,6 +230,8 @@ export class OfferingCreationStore {
         Helper.toast('file uploaded successfully', 'success');
         this[form].fields[key][index][name].value = res.fileName;
         this[form].fields[key][index][name].preSignedUrl = res.location;
+        this[form].fields[key][index][name].id = `${res.fileName}${Date.now()}`;
+        this[form].fields[key][index][name].fileName = `${res.fileName}${Date.now()}`;
       }))
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -383,7 +386,7 @@ export class OfferingCreationStore {
 
   @action
   setFormFileArray = (formName, arrayName, field, getField, value, index = undefined) => {
-    if (index && arrayName) {
+    if (index !== undefined && arrayName) {
       this[formName].fields[arrayName][index][field][getField] = value;
     } else if (index !== null) {
       if (getField === 'error' || getField === 'showLoader') {
@@ -428,39 +431,68 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedDataMultiple = (form, field, index = null, arrayName) => {
-    let removeFileIds = '';
-    if (index && arrayName) {
-      const { fileId } = this[form].fields[arrayName][index][field];
-      removeFileIds = fileId;
-    } else if (index !== undefined) {
-      const filesId = this[form].fields[field].fileId;
-      removeFileIds = filesId[index];
+  removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false) => {
+    if (fromS3) {
+      let removeFileNames = '';
+      if (index !== null && arrayName) {
+        const { value } = this[form].fields[arrayName][index][field];
+        removeFileNames = value;
+      } else if (index !== undefined) {
+        const { value } = this[form].fields[field];
+        removeFileNames = value[index];
+      } else {
+        const { value } = this[form].fields[field];
+        removeFileNames = value;
+      }
+      this.removeFileNamesList = [...this.removeFileNamesList, removeFileNames];
+      this.setFormFileArray(form, arrayName, field, 'fileName', '', index);
     } else {
-      const { fileId } = this[form].fields[field];
-      removeFileIds = fileId;
+      let removeFileIds = '';
+      if (index !== null && arrayName) {
+        const { fileId } = this[form].fields[arrayName][index][field];
+        removeFileIds = fileId;
+      } else if (index !== undefined) {
+        const filesId = this[form].fields[field].fileId;
+        removeFileIds = filesId[index];
+      } else {
+        const { fileId } = this[form].fields[field];
+        removeFileIds = fileId;
+      }
+      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+      this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
     }
-    this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
-    this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
     this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
     this.setFormFileArray(form, arrayName, field, 'value', '', index);
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form);
+    this.checkFormValid(form, form === 'LEADERSHIP_FRM');
   }
 
   @action
-  removeUploadedFiles = () => {
-    const fileList = toJS(this.removeFileIdsList);
-    if (fileList.length) {
-      forEach(fileList, (fileId) => {
-        fileUpload.removeUploadedData(fileId).then(() => {
-        }).catch((error) => {
-          uiStore.setErrors(error.message);
+  removeUploadedFiles = (fromS3) => {
+    if (fromS3) {
+      const fileList = toJS(this.removeFileNamesList);
+      if (fileList.length) {
+        forEach(fileList, (fileName) => {
+          fileUpload.deleteFromS3(fileName).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
         });
-      });
-      this.removeFileIdsList = [];
+        this.removeFileNamesList = [];
+      }
+    } else {
+      const fileList = toJS(this.removeFileIdsList);
+      if (fileList.length) {
+        forEach(fileList, (fileId) => {
+          fileUpload.removeUploadedData(fileId).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
+        });
+        this.removeFileIdsList = [];
+      }
     }
   }
 
@@ -720,7 +752,7 @@ export class OfferingCreationStore {
 
   updateOffering = (
     id,
-    fields, keyName, subKey, notify = true, successMsg = undefined, isApproved,
+    fields, keyName, subKey, notify = true, successMsg = undefined, isApproved, fromS3 = false,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -801,7 +833,7 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
-        this.removeUploadedFiles();
+        this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(`${successMsg}`, 'success');
         } else if (notify) {

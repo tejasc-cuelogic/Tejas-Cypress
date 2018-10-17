@@ -29,7 +29,7 @@ export default class Leader extends Component {
     this.props.offeringCreationStore.uploadFileToS3('LEADERSHIP_FRM', name, files, 'leadership', index);
   }
   handleDelDoc = (field) => {
-    this.props.offeringCreationStore.removeFileFromS3('LEADERSHIP_FRM', field, 'leadership', this.props.index || 0);
+    this.props.offeringCreationStore.removeUploadedDataMultiple('LEADERSHIP_FRM', field, this.props.index || 0, 'leadership', true);
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -44,7 +44,7 @@ export default class Leader extends Component {
   }
   handleFormSubmit = (isApproved = null, successMsg) => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved);
+    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true);
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
