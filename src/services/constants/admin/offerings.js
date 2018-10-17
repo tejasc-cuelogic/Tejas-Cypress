@@ -1907,7 +1907,7 @@ export const ADD_NEW_BONUS_REWARD = {
 export const DOCUMENTATION = {
   formID: {
     value: '',
-    label: 'Form ID',
+    label: '',
     error: undefined,
     rule: 'required',
     showLoader: false,
@@ -1918,7 +1918,7 @@ export const DOCUMENTATION = {
   },
   corpFormation: {
     value: [],
-    label: 'Corporate Formation Documents',
+    label: '',
     error: undefined,
     rule: 'required',
     showLoader: false,
@@ -1929,7 +1929,7 @@ export const DOCUMENTATION = {
   },
   issuerFinancials: {
     value: [],
-    label: 'Issuer Financials',
+    label: '',
     error: undefined,
     rule: 'required',
     showLoader: false,
@@ -1940,7 +1940,7 @@ export const DOCUMENTATION = {
   },
   leaseAgreement: {
     value: [],
-    label: 'Lease Agreement or Letter of Intent(LOI)',
+    label: '',
     error: undefined,
     rule: 'required',
     showLoader: false,

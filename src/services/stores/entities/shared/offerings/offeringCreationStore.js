@@ -417,7 +417,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedDataMultiple = (form, field, index = undefined, arrayName) => {
+  removeUploadedDataMultiple = (form, field, index = null, arrayName) => {
     let removeFileIds = '';
     if (index && arrayName) {
       const { fileId } = this[form].fields[arrayName][index][field];
