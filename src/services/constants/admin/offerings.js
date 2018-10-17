@@ -933,12 +933,8 @@ export const LEADERSHIP = {
       label: 'Driver’s License',
       value: '',
       error: undefined,
-<<<<<<< HEAD
-      rule: 'required',
       showLoader: false,
-=======
       rule: 'optional',
->>>>>>> 2b654994e8bf14839ab6329e0acc2aa9b897d50c
       preSignedUrl: '',
       id: '',
       fileData: '',
