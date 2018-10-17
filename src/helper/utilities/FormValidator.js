@@ -298,7 +298,7 @@ class FormValidator {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
           if (fields[key].objType === 'FileObjectType') {
             if (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
-            fields[key] && Array.isArray(toJS(fields[key]))) {
+            fields[key] && Array.isArray(toJS(fields[key].value))) {
               if (tempRef[key].length) {
                 tempRef[key].map((item) => {
                   fields[key].value.push(item.fileName);
@@ -341,7 +341,7 @@ class FormValidator {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else if (fields[key].objType === 'FileObjectType') {
           if (data[key] && Array.isArray(toJS(data[key])) &&
-          fields[key] && Array.isArray(toJS(fields[key]))) {
+          fields[key] && Array.isArray(toJS(fields[key].value))) {
             if (data[key].length) {
               data[key].map((item) => {
                 fields[key].value.push(item.fileName);

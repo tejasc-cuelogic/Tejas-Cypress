@@ -108,6 +108,7 @@ class InvestorSignup extends Component {
                 tooShortWord="Weak"
                 scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
                 inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+                changed={signupChange}
               />
             </Form.Field>
             <FormInput
