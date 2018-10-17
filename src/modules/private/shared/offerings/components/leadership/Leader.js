@@ -3,8 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
-import { FormInput, MaskedInput, FormTextarea, DropZone, AutoComplete, FormCheckbox } from '../../../../../../theme/form';
-import Helper from '../../../../../../helper/utility';
+import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox } from '../../../../../../theme/form';
 
 const HeaderWithTooltip = ({ header, tooltip }) => (
   <Header as="h4">
@@ -29,16 +28,8 @@ export default class Leader extends Component {
   onFileDrop = (files, name, index) => {
     this.props.offeringCreationStore.uploadFileToS3('LEADERSHIP_FRM', name, files, 'leadership', index);
   }
-  confirmRemoveDoc = (e, name, index) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name, index);
-  }
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
-  handleDelDoc = (field, index) => {
-    this.props.offeringCreationStore.removeFileFromS3('LEADERSHIP_FRM', field, 'leadership', index);
-    this.props.uiStore.setConfirmBox('');
+  handleDelDoc = (field) => {
+    this.props.offeringCreationStore.removeFileFromS3('LEADERSHIP_FRM', field, 'leadership', this.props.index || 0);
   }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
@@ -47,14 +38,13 @@ export default class Leader extends Component {
   removeData = (confirmModalName, arrayName = 'leadership') => {
     this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
     if (arrayName === 'leadership') {
-      Helper.toast('Leader has been deleted successfully.', 'success');
       this.props.history.push(`${this.props.refLink}/leader/1`);
-      this.handleFormSubmit();
+      this.handleFormSubmit(null, 'Leader has been deleted successfully.');
     }
   }
-  handleFormSubmit = (isApproved = null) => {
+  handleFormSubmit = (isApproved = null, successMsg) => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, undefined, isApproved);
+    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved);
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
@@ -68,7 +58,6 @@ export default class Leader extends Component {
       LEADERSHIP_EXP_FRM, confirmModal, confirmModalName, removeIndex, LEADERSHIP_FRM,
       formArrayChange, maskArrayChange, setAddressFields,
     } = this.props.offeringCreationStore;
-    const { confirmBox } = this.props.uiStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     const isApproved = false;
@@ -220,7 +209,7 @@ export default class Leader extends Component {
                   name={field}
                   fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
                   ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                  onremove={(e, name) => this.confirmRemoveDoc(e, name, index)}
+                  onremove={fieldName => this.handleDelDoc(fieldName)}
                   uploadtitle="Upload a file"
                   tooltip={field !== 'license' ? 'To be used on the public offering page' : false}
                   containerclassname="field"
@@ -313,15 +302,6 @@ export default class Leader extends Component {
           </div>
           }
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'headshot' || confirmBox.entity === 'heroImage' || confirmBox.entity === 'license'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity, confirmBox.refId)}
-          size="mini"
-          className="deletion"
-        />
         <Confirm
           header="Confirm"
           content={`Are you sure you want to remove this ${confirmModalName === 'LEADERSHIP_FRM' ? 'leader' : 'business'} ${removeIndex + 1}?`}

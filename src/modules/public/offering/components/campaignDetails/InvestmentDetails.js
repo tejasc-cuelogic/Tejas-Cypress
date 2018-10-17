@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
 import { Grid, Header, Segment, Image, Responsive } from 'semantic-ui-react';
+import { ASSETS_URL } from '../../../../../constants/aws';
 // import businessModel from '../../../../../assets/images/investment-1.jpg';
-import businessModel from '../../../../../assets/images/investment-2.jpg';
-import termnotes from '../../../../../assets/images/investment-1.jpg';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
@@ -25,7 +24,7 @@ class InvestmentDetails extends Component {
                   <Image
                     src={campaign && campaign.keyTerms &&
                       campaign.keyTerms.securities && campaign.keyTerms.securities ===
-                      CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ? businessModel : termnotes}
+                      CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ? `${ASSETS_URL}images/investment-2.jpg` : `${ASSETS_URL}images/investment-1.jpg`}
                     fluid
                   />
                 </Segment>
@@ -78,7 +77,7 @@ class InvestmentDetails extends Component {
                       campaign.keyTerms.securities &&
                       campaign.keyTerms.securities ===
                       CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
-                      businessModel : termnotes
+                      `${ASSETS_URL}images/investment-2.jpg` : `${ASSETS_URL}images/investment-1.jpg`
                     }
                     fluid
                   />
