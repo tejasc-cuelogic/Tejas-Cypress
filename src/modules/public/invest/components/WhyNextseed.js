@@ -3,52 +3,41 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Grid, Button, Container, List, Item, Responsive, Divider, Image } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
-import Businesses from '../../../../assets/images/icons/businesses.svg';
-import Entrepreneurs from '../../../../assets/images/icons/entrepreneurs.svg';
-import Prevetted from '../../../../assets/images/icons/prevetted.svg';
-import Investments from '../../../../assets/images/icons/investments.svg';
-import Ventures from '../../../../assets/images/icons/ventures.svg';
-import Returns from '../../../../assets/images/icons/returns.svg';
-import UserOne from '../../../../assets/images/investors/img-2.png';
-import UserTwo from '../../../../assets/images/investors/img.png';
-import UserThree from '../../../../assets/images/investors/img-1.png';
-import UserFour from '../../../../assets/images/investors/img-5.png';
-import UserFive from '../../../../assets/images/investors/img-3.png';
-import UserSix from '../../../../assets/images/investors/img-4.png';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const highlights = [
   {
     title: 'Businesses you understand',
-    icon: Businesses,
+    icon: `${ASSETS_URL}images/icons/businesses.svg`,
     meta: `Investments in Main Street businesses and local properties 
       generating real cash flow.`,
   },
   {
     title: 'Impactful investments',
-    icon: Entrepreneurs,
+    icon: `${ASSETS_URL}images/icons/entrepreneurs.svg`,
     meta: `Local business owners, local jobs and local growth.
     Create real impact in local communities nationwide`,
   },
   {
     title: 'Pre-vetted opportunities',
-    icon: Prevetted,
+    icon: `${ASSETS_URL}images/icons/prevetted.svg`,
     meta: `Every business must meet our proprietary financial
     criteria in addition to federal regulatory requirements. `,
   },
   {
     title: 'Flexible amounts',
-    icon: Investments,
+    icon: `${ASSETS_URL}images/icons/investments.svg`,
     meta: 'Never invest more than you can risk. Investments may start as low as $100.',
   },
   {
     title: 'Exclusive deals',
-    icon: Ventures,
+    icon: `${ASSETS_URL}images/icons/ventures.svg`,
     meta: `Uncover opportunities that were once privately reserved for wealthy
       and well-connected investors.`,
   },
   {
     title: 'Returns processed for you',
-    icon: Returns,
+    icon: `${ASSETS_URL}images/icons/returns.svg`,
     meta: `No need to chase payments from business owners. NextSeed facilitates
      payment processing from your investments automatically.`,
   },
@@ -62,32 +51,32 @@ const settings = {
 const businesses = [
   {
     title: 'Houston, TX',
-    image: UserOne,
+    image: `${ASSETS_URL}images/investors/img-2.png`,
     description: 'The Sugar Refinery raised $273,800 from 213 investors',
   },
   {
     title: 'San Francisco, CA',
-    image: UserTwo,
+    image: `${ASSETS_URL}images/investors/img.png`,
     description: 'Rambler raised $150,000 from 131 investors',
   },
   {
     title: 'Austin, TX',
-    image: UserThree,
+    image: `${ASSETS_URL}images/investors/img-1.png`,
     description: 'The Brewer’s Table raised $3000,000 from 190 investors',
   },
   {
     title: 'San Diego, CA',
-    image: UserFour,
+    image: `${ASSETS_URL}images/investors/img-5.png`,
     description: '619 Distillery & Tasting Room raised $191,600 from 238 investors',
   },
   {
     title: 'Brooklyn, NY',
-    image: UserFive,
+    image: `${ASSETS_URL}images/investors/img-3.png`,
     description: 'California 88 raised $124,900 from 180 investors',
   },
   {
     title: 'Salt Lake City, UT',
-    image: UserSix,
+    image: `${ASSETS_URL}images/investors/img-4.png`,
     description: 'MOB Cycle raised $117,400 from 132 investors',
   },
 ];

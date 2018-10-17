@@ -3,7 +3,7 @@ import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
 import { InlineLoader } from '../../../../../../theme/shared';
-import defaultLeaderProfile from '../../../../../../assets/images/leader-placeholder.jpg';
+import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class MeetOurTeam extends Component {
   render() {
@@ -45,7 +45,7 @@ class MeetOurTeam extends Component {
                               src={
                                 data && data.uploads && data.uploads.headshot &&
                                   data.uploads.headshot.url ?
-                                  data.uploads.headshot.url : defaultLeaderProfile
+                                  data.uploads.headshot.url : `${ASSETS_URL}images/leader-placeholder.jpg`
                               }
                               circular
                             />

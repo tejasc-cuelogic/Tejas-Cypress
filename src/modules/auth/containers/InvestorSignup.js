@@ -68,7 +68,7 @@ class InvestorSignup extends Component {
               Sign up with Facebook
             </Button>
           </Form>
-          <Divider horizontal section>Or</Divider>
+          <Divider horizontal section>or</Divider>
           <Form onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
               {
@@ -118,8 +118,8 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
-            <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid}>Register</Button>
+            <div className="center-align mt-30">
+              <Button fluid secondary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
