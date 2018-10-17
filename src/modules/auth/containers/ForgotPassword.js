@@ -31,7 +31,7 @@ export default class ForgotPassword extends Component {
             <Header as="h3">Reset your password</Header>
             <p>
               Please enter the email address associated with your account.
-              We&#39;ll send you a link to reset your password.
+              We&#39;ll send you a verification code to reset your password.
             </p>
           </Modal.Header>
           <Modal.Content className="signup-content">
@@ -48,12 +48,12 @@ export default class ForgotPassword extends Component {
                 ))
               }
               <div className="mt-30 center-align">
-                <Button secondary size="large" className="very relaxed" content="Send the link" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
+                <Button secondary size="large" className="very relaxed" content="Send verification code" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
               </div>
             </Form>
           </Modal.Content>
           <Modal.Actions className="signup-actions">
-            <p>Back to <Link to="/auth/login">log in</Link></p>
+            <p>Back to <Link to="/auth/login">Log in</Link></p>
           </Modal.Actions>
         </Modal>
       </div>
