@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
-import { MaskedInput } from '../../../theme/form';
+import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
-import { ListErrors } from '../../../theme/shared';
+// import { MaskedInput } from '../../../theme/form';
+// import { ListErrors } from '../../../theme/shared';
 
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
@@ -69,24 +69,26 @@ export default class ConfirmPhoneNumber extends Component {
 
   render() {
     const {
-      ID_VERIFICATION_FRM,
+      // ID_VERIFICATION_FRM,
+      // personalInfoMaskedChange,
       ID_PHONE_VERIFICATION,
-      personalInfoMaskedChange,
       phoneVerificationChange,
       reSendVerificationCode,
     } = this.props.identityStore;
-    const { errors, editMode } = this.props.uiStore;
+    const { editMode } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false}>
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your phone number</Header>
-          <Divider />
-          <p> Please confirm the 6-digit verification code
-              sent by text to your phone number:
+          <p>
+            We&#39;re introducing Multi-Factor Authentication (MFA) to
+            increase the security of your NextSeed account
           </p>
+          <Divider section />
+          <p>Please confirm the 6-digit verification code sent to <b className="positive-text">123-456-7890</b></p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {errors &&
+          {/* {errors &&
             <Message error>
               <ListErrors errors={errors.message ? [errors.message] : [errors]} />
             </Message>
@@ -106,7 +108,7 @@ export default class ConfirmPhoneNumber extends Component {
               className="display-only"
               phoneNumber
             />
-          </Form>
+          </Form> */}
           {editMode ?
             <p>
               <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
@@ -134,12 +136,23 @@ export default class ConfirmPhoneNumber extends Component {
                 onChange={phoneVerificationChange}
               />
             </Form.Field>
-            <Button.Group vertical>
-              <Button loading={!reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!ID_PHONE_VERIFICATION.meta.isValid}>Confirm</Button>
-              <Button loading={reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="link-button cancel-link" onClick={() => this.startPhoneVerification()}>Resend the code to my phone</Button>
-            </Button.Group>
+            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
+            {/* <Header as="h3">
+              <Icon className="ns-check-circle" color="green" /><br />
+              Your phone number has been confirmed.
+            </Header> */}
+            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
+            <Button secondary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+            {/* <Button.Group vertical>
+              <Button loading={reSendVerificationCode && this.props.uiStore.inProgress}
+              type="button" className="link-button cancel-link"
+              onClick={() => this.startPhoneVerification()}>Resend the code to my phone</Button>
+            </Button.Group> */}
           </Form>
         </Modal.Content>
+        <Modal.Actions className="signup-actions">
+          <p><Link to="/" onClick={() => this.handleResendCode()}>Resend the code to my phone</Link></p>
+        </Modal.Actions>
       </Modal>
     );
   }

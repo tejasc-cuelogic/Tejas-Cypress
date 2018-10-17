@@ -12,11 +12,11 @@ import { US_STATES } from '../../../../../../constants/account';
 const LegalDetails = observer(({
   form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange,
 }) => (
-  <Modal size="mini" open closeIcon onClose={close}>
+  <Modal size="mini" open closeIcon onClose={close} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">Welcome {name}</Header>
       <p>Let’s create your NextSeed investment account.</p>
-      <Divider />
+      <Divider section />
       <p>
         Federal regulations require us to verify your legal identity.
         We use state-of-the-art security measures to protect your information.

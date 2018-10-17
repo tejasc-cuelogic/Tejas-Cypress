@@ -497,6 +497,12 @@ textarea{
     font-weight:@fontMedium;
     text-align:center;
     cursor:pointer;
+    &:first-child{
+        margin-top:0;
+    }
+    &:last-child{
+        margin-bottom:0;
+    }
     .icon{
         height:auto;
         margin-right:@6px;
