@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
+import { ListErrors } from '../../../theme/shared';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -21,9 +22,13 @@ export default class ForgotPassword extends Component {
     authActions.resetPassword()
       .then(() => this.props.history.push('/auth/reset-password'));
   }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.goBack();
+  }
   render() {
     const { FORGOT_PASS_FRM, forgotPassChange } = this.props.authStore;
-    const { inProgress } = this.props.uiStore;
+    const { inProgress, errors } = this.props.uiStore;
     return (
       <div>
         <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
@@ -35,6 +40,11 @@ export default class ForgotPassword extends Component {
             </p>
           </Modal.Header>
           <Modal.Content className="signup-content">
+            {errors &&
+              <Message error textAlign="left">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
+            }
             <Form onSubmit={this.onSubmit}>
               {
                 Object.keys(FORGOT_PASS_FRM.fields).map(field => (

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
+import { ListErrors } from '../../../theme/shared';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -10,6 +11,9 @@ export default class ResetPassword extends Component {
   componentWillMount() {
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
+  }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
   }
   onSubmit = (e) => {
     e.preventDefault();
@@ -21,6 +25,7 @@ export default class ResetPassword extends Component {
   }
   render() {
     const { RESET_PASS_FRM, resetPassChange } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -31,6 +36,11 @@ export default class ResetPassword extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
+          }
           <Form onSubmit={this.onSubmit}>
             {
               ['password', 'verify', 'code'].map(field => (
