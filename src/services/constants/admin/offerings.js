@@ -29,7 +29,7 @@ export const KEY_TERMS = {
     value: '',
     label: 'What Industry is the Business in?',
     error: undefined,
-    rule: 'string',
+    rule: 'string|required',
     placeHolder: 'Choose here',
   },
   maturity: {
@@ -57,7 +57,7 @@ export const KEY_TERMS = {
     value: '',
     label: 'Securities',
     error: undefined,
-    rule: 'string',
+    rule: 'string|required',
     placeHolder: 'Choose here',
   },
   securityInterest: {
@@ -113,7 +113,7 @@ export const KEY_TERMS = {
     value: '',
     label: 'Legal Business Type',
     error: undefined,
-    rule: 'string',
+    rule: 'string|required',
     placeHolder: 'Choose here',
   },
   nsMinFees: {
