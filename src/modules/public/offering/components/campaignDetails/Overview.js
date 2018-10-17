@@ -11,8 +11,8 @@ import LatestUpdates from './Overview/LatestUpdates';
 import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 import OverviewModal from '../campaignDetails/Overview/OverviewModal';
 import VideoModal from './Overview/VideoModal';
-import { ASSETS_URL } from '../../../../../constants/aws';
 import { Image64 } from '../../../../../theme/shared';
+import emptyImage from '../../../../../assets/images/gallery-placeholder.jpg';
 
 const isTabletBoth = document.documentElement.clientWidth >= 768
   && document.documentElement.clientWidth < 1200;
@@ -39,7 +39,7 @@ class Overview extends Component {
                       placeholder={
                         campaign && campaign.media &&
                         campaign.media.heroImage && campaign.media.heroImage.url ?
-                        campaign.media.heroImage.url : `${ASSETS_URL}images/636206632.jpg`
+                        campaign.media.heroImage.url : emptyImage
                       }
                       source="vimeo"
                       icon="ns-play"
@@ -50,7 +50,7 @@ class Overview extends Component {
                         srcUrl={
                           campaign && campaign.media &&
                           campaign.media.heroImage && campaign.media.heroImage.url ?
-                          campaign.media.heroImage.url : `${ASSETS_URL}images/636206632.jpg`
+                          campaign.media.heroImage.url : emptyImage
                         }
                       />
                       <Icon
