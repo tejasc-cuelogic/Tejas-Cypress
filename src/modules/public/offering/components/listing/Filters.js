@@ -4,8 +4,7 @@ import Aux from 'react-aux';
 import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup, List, Button } from 'semantic-ui-react';
 // import BusinessType from './BusinessType';
 import Slider from 'react-slick';
-import filterIcon from '../../../../../assets/images/icons/icon_filter.png';
-import closeIcon from '../../../../../assets/images/icons/icon_close.png';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const isMobile = document.documentElement.clientWidth < 768;
 export default class Filters extends Component {
@@ -176,7 +175,7 @@ export default class Filters extends Component {
           <Container>
             <Menu text>
               <Menu.Item name="filter" onClick={this.props.toggleFilters} className="text-uppercase">
-                <Image src={filterIcon} className="filterIcon" />
+                <Image src={`${ASSETS_URL}images/icons/icon_filter.png`} className="filterIcon" />
                  Filter
               </Menu.Item>
               {this.props.status ? (
@@ -186,7 +185,7 @@ export default class Filters extends Component {
                   </Menu.Item>
                   {!isMobile &&
                     <Menu.Item name="clear all">
-                      <Image src={closeIcon} className="closeIcon" onClick={this.props.toggleFilters} />
+                      <Image src={`${ASSETS_URL}images/icons/icon_close.png`} className="closeIcon" onClick={this.props.toggleFilters} />
                     </Menu.Item>
                   }
                 </Menu.Menu>

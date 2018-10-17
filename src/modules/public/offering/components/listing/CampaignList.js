@@ -7,8 +7,7 @@ import { capitalize } from 'lodash';
 import { Container, Card, Image, Label, Icon, List, Grid } from 'semantic-ui-react';
 import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import lockIcon from '../../../../../assets/images/icon_lock.png';
-import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 @inject('campaignStore')
 @observer
@@ -42,7 +41,7 @@ export default class CampaignList extends Component {
                       srcUrl={offering && offering.media && offering.media.tombstoneImage &&
                         offering.media.tombstoneImage.url ?
                          offering.media.tombstoneImage.url :
-                        emptyHeroImagePlaceholder
+                        `${ASSETS_URL}images/gallery-placeholder.jpg`
                       }
                       alt={`${offering.keyTerms.shorthandBusinessName} poster`}
                     />
@@ -84,7 +83,7 @@ export default class CampaignList extends Component {
                     {this.props.locked === offering.id && (
                       <Card.Content className="card-hidden">
                         <div className="lock-image">
-                          <Image src={lockIcon} />
+                          <Image src={`${ASSETS_URL}images/icon_lock.png`} />
                         </div>
                         <div className="details">
                           <div className="tags mb-10">

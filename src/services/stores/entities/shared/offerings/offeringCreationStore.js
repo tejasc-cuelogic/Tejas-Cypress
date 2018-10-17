@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
+import { map, startCase, filter, forEach, find, orderBy, kebabCase } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
@@ -11,7 +11,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
   getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, createOffer } from '../../../queries/offerings/manage';
+  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -277,6 +277,17 @@ export class OfferingCreationStore {
   }
 
   @action
+  offerCreateChange = (formName, field) => {
+    if (field !== 'offeringSlug') {
+      const { value } = this[formName].fields[field];
+      if (field === 'legalBusinessName') {
+        this[formName].fields.shorthandBusinessName.value = value;
+      }
+      this[formName].fields.offeringSlug.value = kebabCase(value);
+    }
+  }
+
+  @action
   formChange = (e, result, form, isArr = true) => {
     if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
@@ -401,6 +412,7 @@ export class OfferingCreationStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+            this.checkFormValid(form);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
@@ -416,7 +428,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedDataMultiple = (form, field, index = undefined, arrayName) => {
+  removeUploadedDataMultiple = (form, field, index = null, arrayName) => {
     let removeFileIds = '';
     if (index && arrayName) {
       const { fileId } = this[form].fields[arrayName][index][field];
@@ -435,6 +447,21 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
+    this.checkFormValid(form);
+  }
+
+  @action
+  removeUploadedFiles = () => {
+    const fileList = toJS(this.removeFileIdsList);
+    if (fileList.length) {
+      forEach(fileList, (fileId) => {
+        fileUpload.removeUploadedData(fileId).then(() => {
+        }).catch((error) => {
+          uiStore.setErrors(error.message);
+        });
+      });
+      this.removeFileIdsList = [];
+    }
   }
 
   @action
@@ -567,6 +594,9 @@ export class OfferingCreationStore {
     if (!offer) {
       return false;
     }
+    if (form === 'MEDIA_FRM') {
+      this.MEDIA_FRM = Validator.prepareFormObject(MEDIA);
+    }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     this.initLoad.push(form);
     if (form === 'LEADERSHIP_FRM') {
@@ -603,6 +633,7 @@ export class OfferingCreationStore {
       GENERAL_FRM: { isMultiForm: true },
       ISSUER_FRM: { isMultiForm: false },
       RISK_FACTORS_FRM: { isMultiForm: false },
+      DOCUMENTATION_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -667,12 +698,12 @@ export class OfferingCreationStore {
   }
 
   addNewOffer = () => {
-    const params = {};
+    const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
     uiStore.setProgress();
     client
       .mutate({
-        mutation: createOffer,
-        variables: params,
+        mutation: upsertOffering,
+        variables: { offeringDetails },
         refetchQueries: [{
           query: allOfferings,
           variables: { stage: ['CREATION'] },
@@ -686,6 +717,7 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
+
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined, isApproved,
@@ -704,8 +736,10 @@ export class OfferingCreationStore {
           payloadData[keyName].general = generalInfo;
         }
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
-        // payloadData[keyName].documentation =
-        // Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation = {};
+        payloadData[keyName].documentation.issuer = {};
+        payloadData[keyName].documentation.issuer =
+        Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -718,25 +752,27 @@ export class OfferingCreationStore {
         };
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
-        const mediaObj = {};
-        payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
-          const mediaItem = toJS(payloadData[keyName][k].url);
-          mediaObj[k] = Array.isArray(mediaItem) ?
-            mediaItem.map((item, index) => {
-              const itemOfMedia = {
-                id: 1, url: item, fileName: payloadData[keyName][k].fileName[index], isPublic: true,
-              };
-              return itemOfMedia;
-            }) :
-            {
-              id: 1,
-              url: payloadData[keyName][k].url,
-              fileName: payloadData[keyName][k].fileName,
-              isPublic: true,
-            };
-          return mediaObj;
-        });
-        payloadData[keyName] = mediaObj;
+        // const mediaObj = {};
+        // payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
+        //   const mediaItem = toJS(payloadData[keyName][k].url);
+        //   mediaObj[k] = Array.isArray(mediaItem) ?
+        //     mediaItem.map((item, index) => {
+        //       const itemOfMedia = {
+        //         id: 1, url: item,
+        // fileName: payloadData[keyName][k].fileName[index], isPublic: true,
+        //       };
+        //       return itemOfMedia;
+        //     }) : payloadData[keyName][k].fileName &&
+        //     {
+        //       id: 1,
+        //       url: k === 'heroVideo' ?
+        // payloadData[keyName][k].fileName : payloadData[keyName][k].url,
+        //       fileName: payloadData[keyName][k].fileName,
+        //       isPublic: true,
+        //     };
+        //   return mediaObj;
+        // });
+        // payloadData[keyName] = mediaObj;
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
@@ -765,6 +801,7 @@ export class OfferingCreationStore {
         }],
       })
       .then(() => {
+        this.removeUploadedFiles();
         if (successMsg) {
           Helper.toast(`${successMsg}`, 'success');
         } else if (notify) {

@@ -397,6 +397,7 @@ footer{
             .dropdown.item {
                 justify-content: center;
                 color: @primary-one;
+                text-align: center;
                 border: 0;
                 border-radius: 0;
                 &:hover, &.active:hover {

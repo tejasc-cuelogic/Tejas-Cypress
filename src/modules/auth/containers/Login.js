@@ -15,6 +15,9 @@ class Login extends Component {
     this.props.authStore.reset('LOGIN');
     this.props.authStore.setDefaultPwdType();
   }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
@@ -36,10 +39,13 @@ class Login extends Component {
       LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType, reset,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    const customError = errors && errors.message === 'User does not exist.'
+      ? 'Incorrect username or password.' : errors && errors.message;
     return (
       <Modal
         size="mini"
         open
+        closeIcon
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
@@ -52,7 +58,7 @@ class Login extends Component {
         <Modal.Content className="signup-content">
           {errors &&
             <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
+              <ListErrors errors={[customError]} />
             </Message>
           }
           <Form>
@@ -60,7 +66,7 @@ class Login extends Component {
               Log in with Facebook
             </Button>
           </Form>
-          <Divider horizontal section>Or</Divider>
+          <Divider horizontal section>or</Divider>
           <Form error onSubmit={this.handleSubmitForm}>
             {
               Object.keys(LOGIN_FRM.fields).map(field => (
@@ -75,8 +81,11 @@ class Login extends Component {
                 />
               ))
             }
-            <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid}>Log in</Button>
+            <Form.Field>
+              <Link to="/auth/forgot-password"><b>Forgot password?</b></Link>
+            </Form.Field>
+            <div className="center-align mt-40">
+              <Button fluid secondary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>

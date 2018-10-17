@@ -97,7 +97,7 @@
 			margin-bottom:@3px;
 			font-weight:400;
 			>.text{
-				max-width:150px;
+				max-width:142px;
 			}
 			// &:first-of-type{
 			// 	margin-bottom:@30px;
@@ -322,6 +322,23 @@
 	&.visible .user-picture{
 		&:hover{
 			background-color:@neutral-offwhite;
+		}
+	}
+	~ a.add-account{
+		width:220px;
+		padding:@10px @25px;
+		font-weight:@fontMedium;
+		color:@primary-two;
+		text-decoration:none;
+		position:absolute;
+		left:0;
+		bottom:44px;
+		z-index:999;
+		background-color:@white;
+		cursor:pointer;
+		> .icon{
+			margin-right:@13px;
+			height:auto;
 		}
 	}
 	~ .ui.button.collapseIcon{

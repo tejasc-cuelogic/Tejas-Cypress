@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Grid, Image, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import noEarlyBird from '../../../../../../assets/images/illustration.png';
+import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class BonusRewards extends Component {
   render() {
@@ -15,7 +15,7 @@ class BonusRewards extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          <Image src={noEarlyBird} className="no-early-bird" />
+          <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
           <p className="center-align"><b>Invest more, recieve more.</b></p>
           <p className="early-bird-desc center-align">
             See the bonus rewards BuffBrew Taproom is offering for higher

@@ -72,22 +72,24 @@
         }
     }
     .otp-wrap{
-        margin:3rem 0;
+        margin:0 0 3rem 0;
         >label{
             width:100%;
         }
     }
     .otp-field{
         min-width:300px;
+        margin-top:@28px;
         label{
             font-size:@14px;
         }
         > input{
             max-width:30px;
-            margin:0 @10px;
+            margin:0 @3px;
             font-size:@22px;
             padding:@12px 0;
             text-align:center;
+            background-color:@neutral-offwhite !important;
         }
     }
     .fields{
@@ -481,6 +483,19 @@ textarea{
         margin-bottom:@4px;
         display:inline-block;
     }
+    &.inline-attachments{
+        label{
+            display:block;
+        }
+        .file-uploader.attached{
+            width:250px;
+            display:inline-block;
+            margin:0 5px 0px 0;
+            padding:0 0 0 @13px;
+            height:auto;
+            min-height:auto;
+        }
+    }
 }
 
 .file-uploader{
@@ -495,6 +510,12 @@ textarea{
     font-weight:@fontMedium;
     text-align:center;
     cursor:pointer;
+    &:first-child{
+        margin-top:0;
+    }
+    &:last-child{
+        margin-bottom:0;
+    }
     .icon{
         height:auto;
         margin-right:@6px;

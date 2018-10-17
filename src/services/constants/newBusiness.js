@@ -16,10 +16,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
     rule: 'required',
   },
   businessName: {
-    value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery',
+    value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g. NextBrewery',
   },
   webSite: {
-    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g.  NextBrewery',
+    value: '', label: 'Website', error: undefined, rule: 'required|url', placeHolder: 'e.g. NextBrewery',
   },
   phoneNumber: {
     value: '', label: 'Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
@@ -28,13 +28,13 @@ export const BUSINESS_PRE_QUALIFICATION = {
     value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g.next.brewery@contact.com',
   },
   street: {
-    value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery',
+    value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g. NextBrewery',
   },
   city: {
-    value: '', label: 'City', error: undefined, rule: 'required', placeHolder: 'e.g.  NY',
+    value: '', label: 'City', error: undefined, rule: 'required', placeHolder: 'e.g. NY',
   },
   state: {
-    value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g.  NY',
+    value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g. NY',
   },
   zipCode: {
     value: '', label: 'Zip Code', error: undefined, rule: 'required', maxLength: 6,
@@ -320,7 +320,7 @@ export const LENDIO_PRE_QUAL = {
     label: 'Business Name (or anticipated name)',
     error: undefined,
     rule: 'required|string',
-    placeHolder: 'e.g.  NextBrewery',
+    placeHolder: 'e.g. NextBrewery',
   },
   businessOwnerName: {
     value: '', label: 'Business Owner\'s Full Name', error: undefined, rule: 'required', placeHolder: 'e.g. John Doe',

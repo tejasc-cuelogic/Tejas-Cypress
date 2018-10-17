@@ -190,6 +190,12 @@ a:not(.item), a:not(.ui.button){
 	img.ui.image {
 		height: 52px;
 	}
+	&.home-summary {
+		margin: 0 @35px;
+	}
+	&.campaign img.ui.image {
+		height: auto !important;
+	}
 }
 a{
 	&.inverted{
@@ -453,6 +459,9 @@ footer{
 				> object {
 					flex: 1;
 				}
+			}
+			.ui.padded.segment h6.ui.header {
+				margin: @7px 0;
 			}
 		}
 		.campaign-right-sidebar {

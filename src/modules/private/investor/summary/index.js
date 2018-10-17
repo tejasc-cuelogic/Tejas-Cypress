@@ -9,6 +9,7 @@ import Dashboard from './containers/Dashboard';
 export default class Summary extends Component {
   render() {
     const { signupStatus } = this.props.userDetailsStore;
-    return <Route component={!signupStatus.finalStatus ? AccountSetup : Dashboard} />;
+    const activeAccLength = signupStatus.activeAccounts.length;
+    return <Route component={activeAccLength === 0 ? AccountSetup : Dashboard} />;
   }
 }

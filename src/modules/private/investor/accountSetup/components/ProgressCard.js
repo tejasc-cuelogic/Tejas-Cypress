@@ -107,6 +107,7 @@ const ProgressCard = props => (
     }
     {props.signupStatus.partialAccounts.length === 0 &&
     !isEmpty(props.signupStatus.roles) &&
+    props.signupStatus.roles.length > 1 &&
     props.signupStatus.inActiveAccounts.length > 0 &&
       <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
         <Card.Content>

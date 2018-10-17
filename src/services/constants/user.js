@@ -259,6 +259,7 @@ export const UPDATE_PROFILE_INFO = {
     value: '',
     key: 'profilePhoto',
     error: undefined,
+    fileName: '',
     rule: '',
     label: '',
     src: '',
