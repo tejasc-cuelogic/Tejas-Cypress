@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Modal, Grid, Image } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../theme/shared';
-import emptyHeroImagePlaceholder from '../../../../assets/images/gallery-placeholder.jpg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -32,7 +32,7 @@ class LocationAnalysisModal extends Component {
                   src={
                     campaign && campaign.media && campaign.media.locationHeroImage &&
                     campaign.media.locationHeroImage.url ?
-                      campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
+                      campaign.media.locationHeroImage.url : `${ASSETS_URL}images/gallery-placeholder.jpg`
                   }
                 />
               </Grid.Column>

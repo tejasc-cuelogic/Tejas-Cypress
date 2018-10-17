@@ -80,7 +80,6 @@ export const campaignDetailsQuery = gql`
     offering {
       overview {
         elevatorPitch
-        slug
         tombstoneDescription
         highlight
         social {
@@ -136,19 +135,19 @@ export const campaignDetailsQuery = gql`
       isPublic
       uploads {
         headshot {
-          fileId
+          id
           fileName
           url
           isPublic
         }
         heroImage {
-          fileId
+          id
           fileName
           url
           isPublic
         }
         license {
-          fileId
+          id
           fileName
           url
           isPublic

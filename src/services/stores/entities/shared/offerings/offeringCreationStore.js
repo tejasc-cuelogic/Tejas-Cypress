@@ -737,7 +737,8 @@ export class OfferingCreationStore {
         }
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
         payloadData[keyName].documentation = {};
-        payloadData[keyName].documentation[subKey] =
+        payloadData[keyName].documentation.issuer = {};
+        payloadData[keyName].documentation.issuer =
         Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};

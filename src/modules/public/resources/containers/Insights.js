@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { Link, NavLink, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { NsCarousel, InlineLoader } from '../../../../theme/shared';
-import Insight from '../../../../assets/images/insights2.jpg';
+import { ASSETS_URL } from '../../../../constants/aws';
 import InsightArticlesList from '../components/insightArticlesList';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -54,7 +54,7 @@ export default class Insights extends Component {
           {
             [1, 2, 3, 4, 5].map(i => (
               <div className="insight-image-wrapper">
-                <Image src={Insight} key={i} />
+                <Image src={`${ASSETS_URL}images/insights2.jpg`} key={i} />
                 <div className="image-caption">
                   <p className="news-category">
                     BUSINESS
