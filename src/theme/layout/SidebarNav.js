@@ -40,18 +40,19 @@ export class SidebarNav extends Component {
           createdAccount={createdAccount}
           isApp
         />
-        <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
-          <Icon name="sign out" />
-          <span>Logout</span>
-        </Menu.Item>
         {
           roles && roles.includes('investor') &&
           signupStatus.activeAccounts.length > 0 &&
-          <Menu.Item key="logout" name="add-account" className="add-account" onClick={this.handleAddNewAccount}>
+          !signupStatus.finalStatus &&
+          <Menu.Item name="add-account" className="add-account" onClick={this.handleAddNewAccount}>
             <Icon name="add circle" />
             <span>Add New Account</span>
           </Menu.Item>
         }
+        <Menu.Item key="logout" name="logout" onClick={this.props.handleLogOut}>
+          <Icon name="sign out" />
+          <span>Logout</span>
+        </Menu.Item>
       </Aux>
     );
   }
