@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
-import { BUSINESS_INDUSTRIES, BUSINESS_TYPE_VALUES } from '../../../../../services/constants/admin/offerings';
-import { FormDropDown, FormInput } from '../../../../../theme/form';
+import { FormInput } from '../../../../../theme/form';
 
 @inject('offeringCreationStore')
 @observer
@@ -18,8 +17,12 @@ export default class NewOffer extends Component {
     addNewOffer();
     this.handleCloseModal();
   }
+  change = (e, result, formName, field) => {
+    this.props.offeringCreationStore.formChange(e, result, formName);
+    this.props.offeringCreationStore.offerCreateChange(formName, field);
+  }
   render() {
-    const { NEW_OFFER_FRM, formChange } = this.props.offeringCreationStore;
+    const { NEW_OFFER_FRM } = this.props.offeringCreationStore;
     const formName = 'NEW_OFFER_FRM';
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
@@ -29,25 +32,12 @@ export default class NewOffer extends Component {
         <Modal.Content className="signup-content">
           <Form onSubmit={this.handleSubmit}>
             {
-              ['legalBusinessName', 'shorthandBusinessName'].map(field => (
+              ['legalBusinessName', 'shorthandBusinessName', 'offeringSlug'].map(field => (
                 <FormInput
                   key={field}
                   name={field}
                   fielddata={NEW_OFFER_FRM.fields[field]}
-                  changed={(e, result) => formChange(e, result, formName)}
-                />))
-            }
-            {
-              ['industry', 'legalBusinessType'].map(field => (
-                <FormDropDown
-                  fielddata={NEW_OFFER_FRM.fields[field]}
-                  selection
-                  containerclassname="dropdown-field"
-                  value={NEW_OFFER_FRM.fields[field].value}
-                  key={field}
-                  name={field}
-                  options={field === 'industry' ? BUSINESS_INDUSTRIES : BUSINESS_TYPE_VALUES}
-                  onChange={(e, result) => formChange(e, result, formName)}
+                  changed={(e, result) => this.change(e, result, formName, field)}
                 />))
             }
             <div className="center-align">

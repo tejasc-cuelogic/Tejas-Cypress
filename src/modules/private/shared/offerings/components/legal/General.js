@@ -11,6 +11,9 @@ export default class General extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
     this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+    if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
+      this.props.offeringCreationStore.setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    }
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
