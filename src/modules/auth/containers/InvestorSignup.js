@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -98,14 +99,17 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.password}
               changed={signupChange}
             /> */}
-            <ReactPasswordStrength
-              className="customClass"
-              style={{ display: 'block' }}
-              minLength={8}
-              minScore={2}
-              scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-              inputProps={{ name: 'password', autoComplete: 'off', className: 'form-control' }}
-            />
+            <Form.Field>
+              <label>Password</label>
+              <ReactPasswordStrength
+                className="ui input"
+                minLength={8}
+                minScore={2}
+                tooShortWord="Weak"
+                scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+              />
+            </Form.Field>
             <FormInput
               key="verify"
               name="verify"
