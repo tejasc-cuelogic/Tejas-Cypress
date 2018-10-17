@@ -4,10 +4,10 @@ import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message, ListErrors } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { authActions, validationActions } from '../../../services/actions';
 // import { FormInput } from '../../../theme/form';
-// import { ListErrors } from '../../../theme/shared';
+import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 
