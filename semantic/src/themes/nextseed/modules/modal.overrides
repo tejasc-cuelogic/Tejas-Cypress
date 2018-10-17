@@ -176,6 +176,9 @@
     @media only screen and (min-width:@tabletBreakpoint){
         width:665px;
     }
+    a{
+        color:@primary-two;
+    }
     >.close{
         // position:fixed;      commented to resolve issue on iphone
         top:@7px;
@@ -341,13 +344,16 @@
             text-align:center;
             border:none;
             background-color:@white;
+            > p{
+                font-weight:@fontMedium;
+            }
             @media only screen and (max-width:@largestMobileScreen){
                 padding-bottom:@21px !important;
             }
         }
     }
     .ui.divider{
-        color:@neutral-middark;
+        color:@neutral-offdark;
         &:before, &:after{
             background:none;
         }

@@ -1,31 +1,25 @@
 import React from 'react';
 import { Image } from 'semantic-ui-react';
-import LogoColor from '../../../assets/images/logo-color.svg';
-import LogoWhite from '../../../assets/images/logo-white.svg';
-import LogoWhiteGreen from '../../../assets/images/logo-white-green.svg';
-import LogoSmall from '../../../assets/images/logo-icon.svg';
-import LogoSmallWhite from '../../../assets/images/logo-icon-white.svg';
-import LogoLendio from '../../../assets/images/lendio_logo.svg';
-import LogoNsAndLendio from '../../../assets/images/nextseed_and_lendio.svg';
+import { ASSETS_URL } from '../../../constants/aws';
 
 const getSrc = (src) => {
   switch (src) {
     case 'LogoColor':
-      return LogoColor;
+      return `${ASSETS_URL}images/logo-color.svg`;
     case 'LogoWhite':
-      return LogoWhite;
+      return `${ASSETS_URL}images/logo-white.svg`;
     case 'LogoWhiteGreen':
-      return LogoWhiteGreen;
+      return `${ASSETS_URL}images/logo-white-green.svg`;
     case 'LogoSmall':
-      return LogoSmall;
+      return `${ASSETS_URL}images/logo-icon.svg`;
     case 'LogoSmallWhite':
-      return LogoSmallWhite;
+      return `${ASSETS_URL}images/logo-icon-white.svg`;
     case 'LogoLendio':
-      return LogoLendio;
+      return `${ASSETS_URL}images/lendio_logo.svg`;
     case 'LogoNsAndLendio':
-      return LogoNsAndLendio;
+      return `${ASSETS_URL}images/nextseed_and_lendio.svg`;
     default:
-      return LogoColor;
+      return `${ASSETS_URL}images/logo-color.svg`;
   }
 };
 

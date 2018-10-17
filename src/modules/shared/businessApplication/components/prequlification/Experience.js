@@ -7,6 +7,7 @@ const Experience = props => (
     {
       ['industryExperience', 'estimatedCreditScore'].map(field => (
         <MaskedInput
+          maxlength={field === 'estimatedCreditScore' ? 3 : 2}
           containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
           readOnly={props.preQualFormDisabled}
           key={field}

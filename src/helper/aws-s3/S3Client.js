@@ -13,7 +13,7 @@ class S3Client {
         const fileName = `${Date.now()}_${file.name}`;
         const fd = new FormData();
         const key = config.dirName ? `${config.dirName}/${fileName}` : `${fileName}`;
-        const url = `https://${config.bucketName}.s3.amazonaws.com/`;
+        const url = `https://s3.amazonaws.com/${config.bucketName}/`;
         fd.append("key", key);
         fd.append("acl", "public-read");
         fd.append("Content-Type", file.type);
@@ -57,7 +57,7 @@ class S3Client {
 
         const fd = new FormData();
         const filePath = config.dirName ? `${config.dirName}/${fileName}` : `${fileName}`;
-        const url = `https://${config.bucketName}.s3.amazonaws.com/${filePath}`;
+        const url = `https://s3.amazonaws.com/${config.bucketName}/${filePath}`;
         fd.append("Date", xAmzDate);
         fd.append("X-Amz-Date", xAmzDate);
         fd.append(

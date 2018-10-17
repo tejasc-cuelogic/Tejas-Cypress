@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { authActions, validationActions } from '../../../services/actions';
-import { FormInput } from '../../../theme/form';
+// import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
@@ -62,15 +62,15 @@ export default class ConfirmEmailAddress extends Component {
       this.props.authStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
       })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       authActions.resendConfirmationCode();
     }
   }
 
   render() {
-    const changeEmailAddressLink = this.props.refLink ?
-      this.props.refLink : '/auth/register-investor';
+    // const changeEmailAddressLink = this.props.refLink ?
+    //   this.props.refLink : '/auth/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,
@@ -82,11 +82,14 @@ export default class ConfirmEmailAddress extends Component {
       <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
-          <Divider />
-          <p>Please confirm the 6-digit verification code sent to your email</p>
+          <p>
+            Please confirm the 6-digit verification code sent to<br />
+            {/* <b className="positive-text">{CONFIRM_FRM.fields.email}</b> */}
+            <b className="positive-text">{CONFIRM_FRM.fields.email.value}</b>
+          </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          <FormInput
+          {/* <FormInput
             ishidelabel
             type="email"
             size="huge"
@@ -97,13 +100,8 @@ export default class ConfirmEmailAddress extends Component {
             displayMode
             className="display-only"
           />
-          <p><Link to={changeEmailAddressLink}>Change email address</Link></p>
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
-          <Form onSubmit={this.handleSubmitForm}>
+          <p><Link to={changeEmailAddressLink}>Change email address</Link></p> */}
+          <Form onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -115,12 +113,23 @@ export default class ConfirmEmailAddress extends Component {
                 onChange={ConfirmChange}
               />
             </Form.Field>
-            <Button.Group vertical>
-              <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))}>Confirm</Button>
-              <Button type="button" className="link-button cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
-            </Button.Group>
+            {errors &&
+              <Message error textAlign="left">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
+            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
+            {/* <Header as="h3">
+              <Icon className="ns-check-circle" color="green" /><br />
+              Your e-mail address has been confirmed.
+            </Header> */}
+            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
+            <Button secondary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
           </Form>
         </Modal.Content>
+        <Modal.Actions className="signup-actions">
+          <p><Link to="/" onClick={() => this.handleResendCode()}>Resend the code to my email</Link></p>
+        </Modal.Actions>
       </Modal>
     );
   }

@@ -59,7 +59,7 @@ export const getOfferingDetails = gql`
   query _getOfferingById($id: String!) {
     getOfferingById(id: $id) {
       id
-      offeringUrl
+      offeringSlug
       referralCode
       keyTerms {
         legalBusinessName
@@ -96,9 +96,10 @@ export const getOfferingDetails = gql`
         isAlcohol
         uploadProformas {
           fileId
-          url
           fileName
-          isPublic
+          fileHandle {
+            id
+          }
         }
       }
       media {
@@ -256,6 +257,26 @@ export const getOfferingDetails = gql`
           privacyRisk
           otherRisk
         }
+        documentation {
+          issuer {
+            formID {
+              fileId
+              fileName
+            }
+            corpFormation {
+              fileId
+              fileName
+            }
+            issuerFinancials {
+              fileId
+              fileName
+            }
+            leaseAgreement {
+              fileId
+              fileName
+            }
+          }
+        }
       }
       leadership {
         employer {
@@ -288,16 +309,22 @@ export const getOfferingDetails = gql`
         bio
         uploads {
           headshot {
+            id
             url
             fileName
+            isPublic
           }
           heroImage {
+            id
             url
             fileName
+            isPublic
           }
           license {
+            id
             url
             fileName
+            isPublic
           }
         }
         social {
@@ -374,6 +401,14 @@ export const getOfferingDetails = gql`
 export const updateOffering = gql`
 mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id offeringDetails: $offeringDetails) {
+    id
+  }
+}
+`;
+
+export const upsertOffering = gql`
+mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
+  upsertOffering(id: $id, offeringDetails: $offeringDetails) {
     id
   }
 }

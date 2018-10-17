@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
 import { Grid, Header, Segment, Image, Responsive } from 'semantic-ui-react';
+import { ASSETS_URL } from '../../../../../constants/aws';
 // import businessModel from '../../../../../assets/images/investment-1.jpg';
-import businessModel from '../../../../../assets/images/investment-2.jpg';
-import termnotes from '../../../../../assets/images/investment-1.jpg';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
@@ -25,7 +24,7 @@ class InvestmentDetails extends Component {
                   <Image
                     src={campaign && campaign.keyTerms &&
                       campaign.keyTerms.securities && campaign.keyTerms.securities ===
-                      CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ? businessModel : termnotes}
+                      CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ? `${ASSETS_URL}images/investment-2.jpg` : `${ASSETS_URL}images/investment-1.jpg`}
                     fluid
                   />
                 </Segment>
@@ -52,16 +51,19 @@ class InvestmentDetails extends Component {
                     </Aux>
                   :
                     <Aux>
+                      <Header as="h6">If minimum offering amount is reached:</Header>
                       <p>
-                      The buildout and launch of America Gardens in East Midtown Houston
-                      is estimated at $1.8 million.
+                        The buildout and launch of America Gardens in East Midtown Houston
+                        is estimated at $1.8 million.
                       </p>
+                      <Header as="h6">If maximum offering amount is reached:</Header>
                       <p>
-                      Jonathan Serrano and Shawn Rao have raised equity commitments of $1,800,000
-                      (contributed cash of $750,000) in equity for the project thus far. Through
-                      the NextSeed campaign, the business is seeking to raise between $200,000 and
-                      $1,000,000 to complete construction. Upon completion of the NextSeed campaign,
-                      the equity commitments will cover any remaining balance of the project cost.
+                        Jonathan Serrano and Shawn Rao have raised equity commitments of $1,800,000
+                        (contributed cash of $750,000) in equity for the project thus far. Through
+                        the NextSeed campaign, the business is seeking to raise between $200,000 and
+                        $1,000,000 to complete construction. Upon completion of the NextSeed
+                        campaign, the equity commitments will cover any remaining balance of the
+                        project cost.
                       </p>
                     </Aux>
                 }
@@ -75,7 +77,7 @@ class InvestmentDetails extends Component {
                       campaign.keyTerms.securities &&
                       campaign.keyTerms.securities ===
                       CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
-                      businessModel : termnotes
+                      `${ASSETS_URL}images/investment-2.jpg` : `${ASSETS_URL}images/investment-1.jpg`
                     }
                     fluid
                   />

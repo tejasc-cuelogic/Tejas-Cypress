@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Container, Menu, Image, Responsive, Divider } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import secure from '../../assets/images/secure-horizontal-1.png';
+import { ASSETS_URL } from '../../constants/aws';
 import { SocialLinks } from '../shared';
 
 class Footer extends Component {
@@ -63,7 +63,7 @@ class Footer extends Component {
               </Menu>
               <Responsive minWidth={768} as={Aux}>
                 <div className="secure mt-30">
-                  <Image src={secure} />
+                  <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
                 </div>
               </Responsive>
             </div>
@@ -101,7 +101,7 @@ class Footer extends Component {
             </div>
             <Responsive maxWidth={767} as={Aux}>
               <div className="secure">
-                <Image src={secure} />
+                <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
               </div>
             </Responsive>
           </section>

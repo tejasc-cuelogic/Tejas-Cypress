@@ -51,7 +51,8 @@ export default class Private extends React.Component {
 
   render() {
     const User = { ...this.props.userStore.currentUser };
-    const { info } = this.props.userDetailsStore.userDetails;
+    const { signupStatus, userDetails } = this.props.userDetailsStore;
+    const { info } = userDetails;
     const { match } = this.props;
     const UserInfo = {
       firstName: User.givenName,
@@ -62,7 +63,12 @@ export default class Private extends React.Component {
     const routes = this.getPrivateRoutes(UserInfo.roles);
     if (this.props.authStore.isUserLoggedIn) {
       return (
-        <SidebarLeftOverlay match={match} UserInfo={UserInfo} handleLogOut={this.handleLogOut}>
+        <SidebarLeftOverlay
+          match={match}
+          UserInfo={UserInfo}
+          handleLogOut={this.handleLogOut}
+          signupStatus={signupStatus}
+        >
           <Switch>
             {privateRoutes.map(route => (
               <Route

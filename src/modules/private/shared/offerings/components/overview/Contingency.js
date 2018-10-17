@@ -72,6 +72,7 @@ export default class Contingency extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const {
       confirmModal,
+      confirmModalName,
       formChange,
       contingencyFormSelected,
       ADD_NEW_CONTINGENCY_FRM,
@@ -100,7 +101,7 @@ export default class Contingency extends Component {
                     ))
                   }
                   <div className="center-align">
-                    <Button type="button" onClick={this.handleSubmitForm} className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
+                    <Button onClick={this.handleSubmitForm} className="relaxed" primary disabled={!ADD_NEW_CONTINGENCY_FRM.meta.isValid} >Add Contingency</Button>
                   </div>
                 </Form>
               </Modal.Content>
@@ -153,7 +154,7 @@ export default class Contingency extends Component {
                             ))
                           }
                           <div className="center-align">
-                            <Button type="button" onClick={() => this.handleUpdateForm(form, dataKey, index)} disabled={!EDIT_CONTINGENCY_FRM.meta.isValid} className="relaxed" primary >Update Contingency</Button>
+                            <Button onClick={() => this.handleUpdateForm(form, dataKey, index)} disabled={!EDIT_CONTINGENCY_FRM.meta.isValid} className="relaxed" primary >Update Contingency</Button>
                           </div>
                         </Form>
                       </Modal.Content>
@@ -177,7 +178,7 @@ export default class Contingency extends Component {
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this contingency?"
-          open={confirmModal}
+          open={confirmModal && confirmModalName === formName}
           onCancel={this.toggleConfirmModal}
           onConfirm={() => this.removeData()}
           size="mini"

@@ -2,10 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Header, Container, Grid, Image, Divider, Segment } from 'semantic-ui-react';
 import MediaResources from './press/MediaResources';
-import press from '../../../../assets/images/press.jpg';
-import press1 from '../../../../assets/images/press1.jpg';
-import press2 from '../../../../assets/images/press2.jpg';
-import press3 from '../../../../assets/images/press3.jpg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const Press = () => (
   <Aux>
@@ -17,7 +14,7 @@ const Press = () => (
             <Grid.Column computer={10} tablet={10} mobile={16}>
               <Segment>
                 <div className="news">
-                  <Image src={press} />
+                  <Image src={`${ASSETS_URL}images/press.jpg`} />
                   <div className="image-caption">
                     <p className="news-category">News</p>
                     <p className="news-title">Making a splash in D.C.</p>
@@ -28,7 +25,7 @@ const Press = () => (
             <Grid.Column computer={6} tablet={6} mobile={16}>
               <Segment>
                 <div className="news">
-                  <Image src={press1} />
+                  <Image src={`${ASSETS_URL}images/press1.jpg`} />
                   <div className="image-caption">
                     <p className="news-category">News</p>
                     <p className="news-title">Press title here.</p>
@@ -37,7 +34,7 @@ const Press = () => (
               </Segment>
               <Segment>
                 <div className="news">
-                  <Image src={press2} />
+                  <Image src={`${ASSETS_URL}images/press2.jpg`} />
                   <div className="image-caption">
                     <p className="news-category">News</p>
                     <p className="news-title">Press title here.</p>
@@ -54,7 +51,7 @@ const Press = () => (
       <Container>
         <Grid stackable>
           <Grid.Column width={8}>
-            <Image src={press3} />
+            <Image src={`${ASSETS_URL}images/press3.jpg`} />
           </Grid.Column>
           <Grid.Column width={8}>
             <Header as="h2">History</Header>

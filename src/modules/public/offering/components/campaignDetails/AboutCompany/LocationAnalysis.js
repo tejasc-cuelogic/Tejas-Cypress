@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import emptyHeroImagePlaceholder from '../../../../../../assets/images/gallery-placeholder.jpg';
+import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class LocationAnalysis extends Component {
   render() {
@@ -23,7 +23,7 @@ class LocationAnalysis extends Component {
             src={
               campaign && campaign.media && campaign.media.location &&
               campaign.media.location.length && campaign.media.location[0].url ?
-              campaign.media.location[0].url : emptyHeroImagePlaceholder
+              campaign.media.location[0].url : `${ASSETS_URL}images/gallery-placeholder.jpg`
             }
           />
         </Segment>

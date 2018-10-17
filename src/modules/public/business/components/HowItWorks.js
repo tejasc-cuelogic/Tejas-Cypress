@@ -3,17 +3,7 @@ import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider, Responsive, Item } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
-import supportIcon from '../../../../assets/images/icons/support.svg';
-import sellingIcon from '../../../../assets/images/icons/selling.svg';
-import networkIcon from '../../../../assets/images/icons/network.svg';
-import carouselImg from '../../../../assets/images/business/lian.png';
-import videoPoster from '../../../../assets/images/636206632.jpg';
-import UserOne from '../../../../assets/images/business/img-2.png';
-import UserTwo from '../../../../assets/images/business/img.png';
-import UserThree from '../../../../assets/images/business/img-1.png';
-import UserFour from '../../../../assets/images/business/img-5.png';
-import UserFive from '../../../../assets/images/business/img-3.png';
-import UserSix from '../../../../assets/images/business/img-4.png';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const nsvideos = {
   embed: '247714163',
@@ -27,32 +17,32 @@ const settings = {
 const businesses = [
   {
     title: 'Breweries & Distilleries',
-    image: UserOne,
+    image: `${ASSETS_URL}images/business/img-2.png`,
     description: 'Wichita Falls Brewery raised $125,000 to build out a new taproom',
   },
   {
     title: 'Restaurants & Bars',
-    image: UserTwo,
+    image: `${ASSETS_URL}images/business/img.png`,
     description: 'PORTERS raised $500,000 to open a new steakhouse.',
   },
   {
     title: 'Fitness Studios',
-    image: UserThree,
+    image: `${ASSETS_URL}images/business/img-1.png`,
     description: 'Alkalign Studios raised $100,000 to expand franchising opportunities.',
   },
   {
     title: 'Health & Wellness',
-    image: UserFour,
+    image: `${ASSETS_URL}images/business/img-5.png`,
     description: 'Healing Waters raised $110,000 to open a new floatation spa.',
   },
   {
     title: 'Hospitality',
-    image: UserFive,
+    image: `${ASSETS_URL}images/business/img-3.png`,
     description: 'The Native raised $396,500 to open a boutique hostel and bar.',
   },
   {
     title: 'Co-working',
-    image: UserSix,
+    image: `${ASSETS_URL}images/business/img-4.png`,
     description: 'The Annex HTX raised $230,500 to build a co-working and retail space.',
   },
 ];
@@ -66,8 +56,8 @@ const HowItWorks = () => (
           <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
           <div className="center-align">
             <Button.Group>
-              <Button secondary content="Apply Business" />
-              <Button secondary content="Apply for CRE" />
+              <Button secondary content="Business Application" />
+              <Button secondary content="CRE Application" />
             </Button.Group>
           </div>
           <Divider section />
@@ -77,7 +67,7 @@ const HowItWorks = () => (
         </Header>
         <Grid stackable columns={3} doubling>
           <Grid.Column className="info-grid">
-            <Image src={sellingIcon} verticalAlign="top" />
+            <Image src={`${ASSETS_URL}images/icons/selling.svg`} verticalAlign="top" />
             <div>
               <Header as="h5">New, community-driven approach</Header>
               <p>
@@ -87,7 +77,7 @@ const HowItWorks = () => (
             </div>
           </Grid.Column>
           <Grid.Column className="info-grid">
-            <Image src={supportIcon} verticalAlign="top" />
+            <Image src={`${ASSETS_URL}images/icons/support.svg`} verticalAlign="top" />
             <div>
               <Header as="h5">Simpler, easier, with support built in</Header>
               <p>
@@ -98,7 +88,7 @@ const HowItWorks = () => (
             </div>
           </Grid.Column>
           <Grid.Column className="info-grid">
-            <Image src={networkIcon} verticalAlign="top" />
+            <Image src={`${ASSETS_URL}images/icons/network.svg`} verticalAlign="top" />
             <div>
               <Header as="h5">Cost-effective capital, with marketing benefits</Header>
               <p>
@@ -123,7 +113,7 @@ const HowItWorks = () => (
                     <List.Header>&nbsp;</List.Header>
                   }
                   {/* <List.Icon className="ns-arrow-right" color="green" /> */}
-                  <List.Content>Is fundraising on <a href="/">NextSeed risky?</a></List.Content>
+                  <List.Content>Is fundraising on <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
                 </List.Item>
               </List>
             </Grid.Column>
@@ -178,7 +168,7 @@ const HowItWorks = () => (
             [1, 2, 3].map(i => (
               <Item.Group key={i}>
                 <Item>
-                  <Item.Image size="medium" src={carouselImg} circular />
+                  <Item.Image size="medium" src={`${ASSETS_URL}images/business/lian.png`} circular />
                   <Item.Content verticalAlign="middle">
                     <Item.Header as="h2">Real sucess stories {i}.</Item.Header>
                     <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
@@ -203,7 +193,7 @@ const HowItWorks = () => (
       <Container>
         <Grid columns={2} stackable>
           <Grid.Column>
-            <Header as="h2">Proven results.</Header>
+            <Header as="h2">Data so far.</Header>
             <p className="mb-30">
               Every day, entrepreneurs like you are raising capital on
               NextSeed to bring their concepts to life.
@@ -249,7 +239,7 @@ const HowItWorks = () => (
           <Grid.Column>
             <Embed
               id={nsvideos.embed}
-              placeholder={videoPoster}
+              placeholder={`${ASSETS_URL}images/636206632.jpg`}
               source="vimeo"
               icon="ns-play"
             />
