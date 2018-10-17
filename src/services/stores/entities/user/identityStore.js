@@ -567,7 +567,7 @@ export class IdentityStore {
 
   @computed
   get canUpdateProfilePhoto() {
-    return this.ID_PROFILE_INFO.fields.profilePhoto.value !== '';
+    return this.ID_PROFILE_INFO.fields.profilePhoto.fileName !== '';
   }
 
   @action

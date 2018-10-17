@@ -33,7 +33,7 @@ export default class OfferingLaunch extends Component {
     const isApproved = false;
     const isReadonly = isApproved;
     return (
-      <Form onSubmit={this.handleFormSubmit}>
+      <Form>
         <Header as="h4">Launch Timeline</Header>
         <Form.Group widths="equal">
           {

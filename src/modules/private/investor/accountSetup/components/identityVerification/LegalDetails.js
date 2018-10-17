@@ -2,10 +2,9 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
-import {
-  FormInput, FormSelect, AutoComplete, MaskedInput,
-} from '../../../../../../theme/form';
+import { FormInput, FormSelect, AutoComplete, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
+
 import { US_STATES } from '../../../../../../constants/account';
 
 const LegalDetails = observer(({
@@ -17,21 +16,21 @@ const LegalDetails = observer(({
       <p>Let’s get you set up with a NextSeed investment <br /> account.</p>
       <Divider />
       <p>
-        Federal regulations require us to verify your legal<br />
-        identity. We use state-of-the-art security measures<br /> to protect your information.
+          Federal regulations require us to verify your legal<br />
+          identity. We use state-of-the-art security measures<br /> to protect your information.
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
       {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-      }
+      <Message error textAlign="left">
+        <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+      </Message>
+        }
       {form.response.qualifiers &&
-        <Message error>
-          <CipErrors errorsList={form.response.qualifiers} />
-        </Message>
-      }
+      <Message error>
+        <CipErrors errorsList={form.response.qualifiers} />
+      </Message>
+        }
       <Form onSubmit={onSubmit}>
         <Form.Group widths="equal">
           <FormSelect
@@ -42,16 +41,16 @@ const LegalDetails = observer(({
             changed={change}
           />
           {
-            ['firstLegalName', 'lastLegalName'].map(field => (
-              <FormInput
-                key={field}
-                type="text"
-                name={field}
-                fielddata={form.fields[field]}
-                changed={change}
-              />
-            ))
-          }
+              ['firstLegalName', 'lastLegalName'].map(field => (
+                <FormInput
+                  key={field}
+                  type="text"
+                  name={field}
+                  fielddata={form.fields[field]}
+                  changed={change}
+                />
+              ))
+            }
         </Form.Group>
         <AutoComplete
           name="residentalStreet"
@@ -68,12 +67,23 @@ const LegalDetails = observer(({
             fielddata={form.fields.city}
             changed={change}
           />
-          <FormSelect
+          {/* <FormSelect
             key="state"
             name="state"
             fielddata={form.fields.state}
             options={US_STATES}
             changed={change}
+          /> */}
+          <FormDropDown
+            name="state"
+            fielddata={form.fields.state}
+            options={US_STATES}
+            search
+            selection
+            compact
+            placeholder="NY"
+            // onChange={(e, res) => userEleChange(e, res, 'dropdown')}
+            onChange={change}
           />
           <MaskedInput
             key="zipCode"
