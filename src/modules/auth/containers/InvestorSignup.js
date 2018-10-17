@@ -102,6 +102,7 @@ class InvestorSignup extends Component {
             <Form.Field>
               <label>Password</label>
               <ReactPasswordStrength
+                key="password"
                 className="ui input"
                 minLength={8}
                 minScore={2}
