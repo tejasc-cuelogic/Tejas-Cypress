@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Grid, Segment, Embed } from 'semantic-ui-react';
+import { Grid, Segment, Embed, Image } from 'semantic-ui-react';
 import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
@@ -10,7 +10,8 @@ import LatestUpdates from './Overview/LatestUpdates';
 import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 import OverviewModal from '../campaignDetails/Overview/OverviewModal';
 import VideoModal from './Overview/VideoModal';
-import videoPoster from '../../../../../assets/images/636206632.jpg';
+import { Image64 } from '../../../../../theme/shared';
+import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
 
 
 const isTabletBoth = document.documentElement.clientWidth >= 768
@@ -30,15 +31,30 @@ class Overview extends Component {
             <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
             <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
               <Segment padded>
-                {/* <Image as={Link} to={`${this.props.match.url}/herovideo`}
-              src={videoPoster} /> */}
-                <Embed
-                  as={Link}
-                  to={`${this.props.match.url}/herovideo`}
-                  placeholder={videoPoster}
-                  source="vimeo"
-                  icon="ns-play"
-                />
+                {campaign && campaign.media &&
+                  campaign.media.heroVideo && campaign.media.heroVideo.url ?
+                    <Embed
+                      as={Link}
+                      to={`${this.props.match.url}/herovideo`}
+                      placeholder={
+                        campaign && campaign.media &&
+                        campaign.media.heroImage && campaign.media.heroImage.url ?
+                        campaign.media.heroImage.url : emptyHeroImagePlaceholder
+                      }
+                      source="vimeo"
+                      icon="ns-play"
+                    />
+                  :
+                    <Image64
+                      as={Link}
+                      to={`${this.props.match.url}/herovideo`}
+                      srcUrl={
+                        campaign && campaign.media &&
+                        campaign.media.heroImage && campaign.media.heroImage.url ?
+                        campaign.media.heroImage.url : emptyHeroImagePlaceholder
+                      }
+                    />
+                }
               </Segment>
             </Grid.Column>
           </Grid.Row>
