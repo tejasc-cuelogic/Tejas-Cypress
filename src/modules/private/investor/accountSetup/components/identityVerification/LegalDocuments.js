@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message, Confirm, Dimmer, Loader } from 'semantic-ui-react';
 
@@ -19,14 +20,14 @@ const LegalDocuments = observer(({
   submitVerificationsDocs,
   onSubmit,
 }) => (
-  <Modal size="tiny" open closeIcon onClose={close}>
+  <Modal size="tiny" open closeIcon onClose={close} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">Verify your identity</Header>
-      <Divider />
+      <Divider section />
       <p>
       Unfortunately, we were still unable to verify your identity based on the information entered.
       To complete identity verification,
-      we`ll need a copy of a valid photo ID and proof of residence.
+      we’ll need a copy of a valid photo ID and proof of residence.
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
@@ -89,12 +90,12 @@ const LegalDocuments = observer(({
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Divider section hidden />
-        <div className="center-align">
-          <Button.Group vertical>
-            <Button loading={submitVerificationsDocs && inProgress} primary size="large" className="relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
-            <Button type="button" className="link-button cancel-link" onClick={() => close()}>I`ll finish this later</Button>
-          </Button.Group>
+        <div className="center-align mt-30">
+          <Button secondary size="large" className="very relaxed" content="Verify my identity" loading={submitVerificationsDocs && inProgress} disabled={!form.meta.isValid} />
+          {/* <Button.Group vertical>
+            <Button type="button" className="link-button cancel-link"
+            onClick={() => close()}>I`ll finish this later</Button>
+          </Button.Group> */}
         </div>
       </Form>
       <Confirm
@@ -107,6 +108,9 @@ const LegalDocuments = observer(({
         className="deletion"
       />
     </Modal.Content>
+    <Modal.Actions className="signup-actions">
+      <p><Link to="/" onClick={close}>I’ll finish this later</Link></p>
+    </Modal.Actions>
   </Modal>
 ));
 

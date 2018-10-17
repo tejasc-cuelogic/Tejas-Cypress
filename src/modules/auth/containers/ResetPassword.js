@@ -22,34 +22,33 @@ export default class ResetPassword extends Component {
   render() {
     const { RESET_PASS_FRM, resetPassChange } = this.props.authStore;
     return (
-      <div>
-        <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
-          <Modal.Header className="center-align signup-header">
-            <Header as="h3">Reset Password</Header>
-            <p>The verification code has been sent to your registered email address</p>
-          </Modal.Header>
-          <Modal.Content className="signup-content">
-            <Form onSubmit={this.onSubmit}>
-              {
-                ['password', 'verify', 'code'].map(field => (
-                  <FormInput
-                    key={field}
-                    type="password"
-                    name={field}
-                    fielddata={RESET_PASS_FRM.fields[field]}
-                    changed={resetPassChange}
-                  />
-                ))
-              }
-              <div className="mt-30 center-align">
-                <Button loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} primary size="large">
-                  Reset Password
-                </Button>
-              </div>
-            </Form>
-          </Modal.Content>
-        </Modal>
-      </div>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h3">Set a new password</Header>
+          <p>
+            Password must contain one lowercase letter,
+            one number and be at least 8 characters long.
+          </p>
+        </Modal.Header>
+        <Modal.Content className="signup-content">
+          <Form onSubmit={this.onSubmit}>
+            {
+              ['password', 'verify', 'code'].map(field => (
+                <FormInput
+                  key={field}
+                  type="password"
+                  name={field}
+                  fielddata={RESET_PASS_FRM.fields[field]}
+                  changed={resetPassChange}
+                />
+              ))
+            }
+            <div className="mt-30 center-align">
+              <Button fluid secondary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
+            </div>
+          </Form>
+        </Modal.Content>
+      </Modal>
     );
   }
 }
