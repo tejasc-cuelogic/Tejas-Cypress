@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
+import { map, startCase, filter, forEach, find, orderBy, kebabCase } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
@@ -11,7 +11,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../../helper
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
   getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, createOffer } from '../../../queries/offerings/manage';
+  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore } from '../../../index';
@@ -274,6 +274,17 @@ export class OfferingCreationStore {
       this.leadershipExperience[this.removeIndex] = LEADERSHIP_EXP.employer;
     }
     this.removeIndex = null;
+  }
+
+  @action
+  offerCreateChange = (formName, field) => {
+    if (field !== 'offeringSlug') {
+      const { value } = this[formName].fields[field];
+      if (field === 'legalBusinessName') {
+        this[formName].fields.shorthandBusinessName.value = value;
+      }
+      this[formName].fields.offeringSlug.value = kebabCase(value);
+    }
   }
 
   @action
@@ -687,12 +698,12 @@ export class OfferingCreationStore {
   }
 
   addNewOffer = () => {
-    const params = {};
+    const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
     uiStore.setProgress();
     client
       .mutate({
-        mutation: createOffer,
-        variables: params,
+        mutation: upsertOffering,
+        variables: { offeringDetails },
         refetchQueries: [{
           query: allOfferings,
           variables: { stage: ['CREATION'] },
@@ -706,6 +717,7 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
+
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined, isApproved,

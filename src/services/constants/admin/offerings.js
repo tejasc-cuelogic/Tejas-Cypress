@@ -1397,10 +1397,9 @@ export const GENERAL = {
 };
 
 export const NEW_OFFER = {
-  legalBusinessName: { ...KEY_TERMS.legalBusinessName },
-  shorthandBusinessName: { ...KEY_TERMS.shorthandBusinessName },
-  industry: { ...KEY_TERMS.industry },
-  legalBusinessType: { ...KEY_TERMS.legalBusinessType },
+  legalBusinessName: { ...KEY_TERMS.legalBusinessName, objRefOutput: 'keyTerms' },
+  shorthandBusinessName: { ...KEY_TERMS.shorthandBusinessName, objRefOutput: 'keyTerms' },
+  offeringSlug: { ...OFFERING_DETAILS.offeringSlug },
 };
 
 export const RISK_FACTORS = {

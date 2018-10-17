@@ -406,6 +406,14 @@ mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
 }
 `;
 
+export const upsertOffering = gql`
+mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
+  upsertOffering(id: $id, offeringDetails: $offeringDetails) {
+    id
+  }
+}
+`;
+
 export const getOfferingBac = gql`
 query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
   getOfferingBac(
