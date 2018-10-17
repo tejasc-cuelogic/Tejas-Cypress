@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Grid, Segment, Embed, Image } from 'semantic-ui-react';
+import { Grid, Segment, Embed } from 'semantic-ui-react';
 import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
