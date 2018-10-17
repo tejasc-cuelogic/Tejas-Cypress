@@ -11,7 +11,6 @@ import LatestUpdates from './Overview/LatestUpdates';
 import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 import OverviewModal from '../campaignDetails/Overview/OverviewModal';
 import VideoModal from './Overview/VideoModal';
-import { ASSETS_URL } from '../../../../../constants/aws';
 import { Image64 } from '../../../../../theme/shared';
 import emptyImage from '../../../../../assets/images/gallery-placeholder.jpg';
 
