@@ -10,8 +10,7 @@ import LatestUpdates from './Overview/LatestUpdates';
 import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 import OverviewModal from '../campaignDetails/Overview/OverviewModal';
 import VideoModal from './Overview/VideoModal';
-import videoPoster from '../../../../../assets/images/636206632.jpg';
-
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const isTabletBoth = document.documentElement.clientWidth >= 768
   && document.documentElement.clientWidth < 1200;
@@ -35,7 +34,7 @@ class Overview extends Component {
                 <Embed
                   as={Link}
                   to={`${this.props.match.url}/herovideo`}
-                  placeholder={videoPoster}
+                  placeholder={`${ASSETS_URL}images/636206632.jpg`}
                   source="vimeo"
                   icon="ns-play"
                 />

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Modal, Header, List, Icon, Image, Divider } from 'semantic-ui-react';
-import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 // import videoPoster from '../../../../../assets/images/636206632.jpg';
 
@@ -62,7 +62,7 @@ class CompanyDescriptionModal extends Component {
               src={
                 campaign && campaign.media && campaign.media.heroImage
                   && campaign.media.heroImage.url ?
-                  campaign.media.heroImage.url : emptyHeroImagePlaceholder
+                  campaign.media.heroImage.url : `${ASSETS_URL}images/gallery-placeholder.jpg`
               }
               fluid
               centered

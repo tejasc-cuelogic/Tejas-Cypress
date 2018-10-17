@@ -2,8 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Grid, Button, Container, List, Divider, Item, Image } from 'semantic-ui-react';
-import Applied from '../../../../assets/images/icons/applied.svg';
-import TermNotes from '../../../../assets/images/icons/termnotes.svg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -41,7 +40,7 @@ const HowItWorks = () => (
           <Grid.Column>
             <div className="flex-content">
               <Header as="h3">
-                <Image src={TermNotes} />Term Notes
+                <Image src={`${ASSETS_URL}images/icons/termnotes.svg`} />Term Notes
               </Header>
               <Item.Group relaxed="very">
                 <Item>
@@ -76,7 +75,7 @@ const HowItWorks = () => (
           <Grid.Column>
             <div className="flex-content">
               <Header as="h3">
-                <Image src={Applied} />Revenue Sharing Notes
+                <Image src={`${ASSETS_URL}images/icons/applied.svg`} />Revenue Sharing Notes
               </Header>
               <Item.Group relaxed="very" className="question-list">
                 <Item>

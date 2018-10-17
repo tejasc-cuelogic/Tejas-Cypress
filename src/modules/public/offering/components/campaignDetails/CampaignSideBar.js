@@ -7,7 +7,7 @@ import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Div
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
-import videoPoster from '../../../../../assets/images/636206632.jpg';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const nsvideos = {
   embed: '218642510',
@@ -38,7 +38,7 @@ export default class CampaignSideBar extends Component {
             {isMobile &&
               <Embed
                 id={nsvideos.embed}
-                placeholder={videoPoster}
+                placeholder={`${ASSETS_URL}images/636206632.jpg`}
                 source="vimeo"
                 icon="ns-play"
               />
