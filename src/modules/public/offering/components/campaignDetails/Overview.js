@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+// import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Grid, Segment, Embed } from 'semantic-ui-react';
+import { Grid, Segment, Embed, Icon } from 'semantic-ui-react';
 import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
@@ -29,7 +30,7 @@ class Overview extends Component {
           <Grid.Row>
             <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
             <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
-              <Segment padded>
+              <Segment padded className="overview-video">
                 {campaign && campaign.media &&
                   campaign.media.heroVideo && campaign.media.heroVideo.url ?
                     <Embed
@@ -44,15 +45,18 @@ class Overview extends Component {
                       icon="ns-play"
                     />
                   :
-                    <Image64
-                      as={Link}
-                      to={`${this.props.match.url}/herovideo`}
-                      srcUrl={
-                        campaign && campaign.media &&
-                        campaign.media.heroImage && campaign.media.heroImage.url ?
-                        campaign.media.heroImage.url : `${ASSETS_URL}images/636206632.jpg`
-                      }
-                    />
+                    <Link to={`${this.props.match.url}/herovideo`}>
+                      <Image64
+                        srcUrl={
+                          campaign && campaign.media &&
+                          campaign.media.heroImage && campaign.media.heroImage.url ?
+                          campaign.media.heroImage.url : `${ASSETS_URL}images/636206632.jpg`
+                        }
+                      />
+                      <Icon
+                        className="ns-play play-icon"
+                      />
+                    </Link>
                 }
               </Segment>
             </Grid.Column>
