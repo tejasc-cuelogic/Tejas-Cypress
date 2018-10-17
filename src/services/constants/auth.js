@@ -2,8 +2,8 @@ export const COMMON = {
   email: {
     value: '',
     error: undefined,
-    placeHolder: 'E-mail address',
-    label: 'E-mail',
+    placeHolder: 'Type e-mail address',
+    label: 'E-mail Address',
     rule: 'required|email',
     customErrors: {
       required: '* required field.',
@@ -12,7 +12,7 @@ export const COMMON = {
   password: {
     value: '',
     label: 'Password',
-    placeHolder: 'Password',
+    placeHolder: 'Type your password',
     rule: 'required|min:8|max:15',
     error: undefined,
     customErrors: {

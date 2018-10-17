@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import businessModel from '../../../../../../assets/images/business_model.jpg';
+import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class BusinessModel extends Component {
   render() {
@@ -17,7 +17,7 @@ class BusinessModel extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          <Image className="business-modal" src={businessModel} fluid />
+          <Image className="business-modal" src={`${ASSETS_URL}images/business_model.jpg`} fluid />
         </Segment>
       </Grid.Column>
     );

@@ -138,8 +138,16 @@
         }
     }
 }
-.ui.dropdown.inverted>.text{
-	color:@white;
+.ui.dropdown{
+    >.text{
+        width:100%;
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+    }
+    &.inverted>.text{
+        color:@white;
+    }
 }
 .notification-box{
 	.ui.dropdown .icon.dropdown{

@@ -1,13 +1,11 @@
 import { observable, computed } from 'mobx';
-import teammember from '../../../../assets/images/owner-2.jpg';
-import img from '../../../../assets/images/img.jpg';
-import timeline from '../../../../assets/images/timeline.jpg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 export class UpdatesStore {
     generalData = {
       description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       name: 'Rassul Zarnifar ',
-      avatar: teammember,
+      avatar: `${ASSETS_URL}images/owner-2.jpg`,
       title: 'Closing campaign early!',
     }
     @observable data = [
@@ -18,9 +16,9 @@ export class UpdatesStore {
       {
         ...this.generalData,
         date: '2018-03-19T12:59-0500',
-        postImage: img,
+        postImage: `${ASSETS_URL}images/img.jpg`,
         externalArticleLink: 'https://www.articlesource.com/',
-        extArticalImage: timeline,
+        extArticalImage: `${ASSETS_URL}images/timeline.jpg`,
         extArticalTitle: 'External Article Title',
       },
       {
@@ -34,9 +32,9 @@ export class UpdatesStore {
       {
         ...this.generalData,
         date: '2018-01-19T12:59-0500',
-        postImage: img,
+        postImage: `${ASSETS_URL}images/img.jpg`,
         externalArticleLink: 'https://www.articlesource.com/',
-        extArticalImage: timeline,
+        extArticalImage: `${ASSETS_URL}images/timeline.jpg`,
         extArticalTitle: 'External Article Title',
       },
       {

@@ -441,7 +441,7 @@ class FormValidator {
       fileObjOutput =
       map(fileObj.fileId, (file, index) => ({ fileId: file, fileName: fileObj.value[index] }));
     } else {
-      fileObjOutput = { fileId: fileData.fileId, fileName: fileData.value };
+      fileObjOutput = { fileId: fileData.fileId ? fileData.fileId : '', fileName: fileData.value ? fileData.value : '' };
     }
     return fileObjOutput;
   }
