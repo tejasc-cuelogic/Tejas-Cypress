@@ -82,7 +82,7 @@ class Login extends Component {
               ))
             }
             <Form.Field>
-              <Link to="/"><b>Forgot password?</b></Link>
+              <Link to="/auth/forgot-password"><b>Forgot password?</b></Link>
             </Form.Field>
             <div className="center-align mt-40">
               <Button fluid secondary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />

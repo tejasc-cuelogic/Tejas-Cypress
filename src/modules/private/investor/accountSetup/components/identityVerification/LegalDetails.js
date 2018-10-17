@@ -42,16 +42,16 @@ const LegalDetails = observer(({
             changed={change}
           />
           {
-              ['firstLegalName', 'lastLegalName'].map(field => (
-                <FormInput
-                  key={field}
-                  type="text"
-                  name={field}
-                  fielddata={form.fields[field]}
-                  changed={change}
-                />
-              ))
-            }
+            ['firstLegalName', 'lastLegalName'].map(field => (
+              <FormInput
+                key={field}
+                type="text"
+                name={field}
+                fielddata={form.fields[field]}
+                changed={change}
+              />
+            ))
+          }
         </Form.Group>
         <AutoComplete
           name="residentalStreet"
@@ -60,7 +60,7 @@ const LegalDetails = observer(({
           changed={change}
           placeHolder="Street Address, City, State, Zip"
         />
-        <Form.Group widths="equal">
+        <Form.Group widths={2}>
           <FormInput
             key="city"
             type="text"
@@ -68,13 +68,6 @@ const LegalDetails = observer(({
             fielddata={form.fields.city}
             changed={change}
           />
-          {/* <FormSelect
-            key="state"
-            name="state"
-            fielddata={form.fields.state}
-            options={US_STATES}
-            changed={change}
-          /> */}
           <FormDropDown
             name="state"
             fielddata={form.fields.state}
@@ -86,6 +79,8 @@ const LegalDetails = observer(({
             // onChange={(e, res) => userEleChange(e, res, 'dropdown')}
             onChange={change}
           />
+        </Form.Group>
+        <Form.Group widths={2}>
           <MaskedInput
             key="zipCode"
             name="zipCode"
@@ -93,8 +88,6 @@ const LegalDetails = observer(({
             changed={maskChange}
             zipCode
           />
-        </Form.Group>
-        <Form.Group widths="equal">
           <MaskedInput
             name="phoneNumber"
             type="tel"
@@ -103,6 +96,8 @@ const LegalDetails = observer(({
             changed={maskChange}
             phoneNumber
           />
+        </Form.Group>
+        <Form.Group widths={2}>
           <MaskedInput
             name="dateOfBirth"
             fielddata={form.fields.dateOfBirth}
@@ -110,13 +105,13 @@ const LegalDetails = observer(({
             changed={maskChange}
             dateOfBirth
           />
+          <MaskedInput
+            name="ssn"
+            fielddata={form.fields.ssn}
+            ssn
+            changed={maskChange}
+          />
         </Form.Group>
-        <MaskedInput
-          name="ssn"
-          fielddata={form.fields.ssn}
-          ssn
-          changed={maskChange}
-        />
         <div className="center-align mt-30">
           <Button secondary size="large" className="very relaxed" content="Verify my identity" loading={inProgress} />
           {/* <Button.Group vertical>
