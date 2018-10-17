@@ -1,5 +1,5 @@
 <a name="0.0.0"></a>
-# 0.0.0 (2018-10-16)
+# 0.0.0 (2018-10-17)
 
 
 ### Bug Fixes
@@ -36,16 +36,17 @@
 * **campaign details page[Issue [236](https://chaos.ns.team/nsv2/ns-ops/issues/236) - public pages campaign details pages ui updates]:** completed ui changes on campaign details page ([af97def](https://chaos.ns.team/nsv2/ns-client/commits/af97def))
 * **Campaign Listing[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** Done changes for campaign listing on public page ([0c00237](https://chaos.ns.team/nsv2/ns-client/commits/0c00237))
 * **Changelog [Issue [134](https://chaos.ns.team/nsv2/ns-ops/issues/134) - Maintain change logs/versioning]:** enabled changelog generation ([769ae41](https://chaos.ns.team/nsv2/ns-client/commits/769ae41))
+* **clientfeedback[Issue [506](https://chaos.ns.team/nsv2/ns-ops/issues/506) - clientfeedback]:** clientfeedback ([e27ff71](https://chaos.ns.team/nsv2/ns-client/commits/e27ff71))
 * **Crowdpay[Issue [340](https://chaos.ns.team/nsv2/ns-ops/issues/340) - manage Crowdpay accounts]:** manage Crowdpay accounts ([53ff095](https://chaos.ns.team/nsv2/ns-client/commits/53ff095))
-* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([01732ee](https://chaos.ns.team/nsv2/ns-client/commits/01732ee))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([b3873e6](https://chaos.ns.team/nsv2/ns-client/commits/b3873e6))
-* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([76ca90f](https://chaos.ns.team/nsv2/ns-client/commits/76ca90f))
-* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([a67ea3e](https://chaos.ns.team/nsv2/ns-client/commits/a67ea3e))
-* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([aa0af42](https://chaos.ns.team/nsv2/ns-client/commits/aa0af42))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([c2c7a53](https://chaos.ns.team/nsv2/ns-client/commits/c2c7a53))
-* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([fa14c89](https://chaos.ns.team/nsv2/ns-client/commits/fa14c89))
-* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([5fee3f3](https://chaos.ns.team/nsv2/ns-client/commits/5fee3f3))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([ad48da8](https://chaos.ns.team/nsv2/ns-client/commits/ad48da8))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([fa14c89](https://chaos.ns.team/nsv2/ns-client/commits/fa14c89))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([aa0af42](https://chaos.ns.team/nsv2/ns-client/commits/aa0af42))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([01732ee](https://chaos.ns.team/nsv2/ns-client/commits/01732ee))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([76ca90f](https://chaos.ns.team/nsv2/ns-client/commits/76ca90f))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([5fee3f3](https://chaos.ns.team/nsv2/ns-client/commits/5fee3f3))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([a67ea3e](https://chaos.ns.team/nsv2/ns-client/commits/a67ea3e))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([54f2e23](https://chaos.ns.team/nsv2/ns-client/commits/54f2e23))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([16a38ce](https://chaos.ns.team/nsv2/ns-client/commits/16a38ce))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
