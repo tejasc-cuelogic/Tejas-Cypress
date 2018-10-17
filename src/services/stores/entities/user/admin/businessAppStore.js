@@ -125,6 +125,7 @@ export class BusinessAppStore {
     this.applicationType = appType;
     this.requestState.lek = { 'page-1': null };
     this.requestState.page = 1;
+    this.requestState.search.keyword = null;
     this.initRequest();
   }
 
