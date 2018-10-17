@@ -74,6 +74,14 @@ const MySidebar = observer(props => (
             <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
           </Scrollbars>
         </Sidebar>
+        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
+          props.signupStatus && props.signupStatus.activeAccounts.length > 0 &&
+          !props.signupStatus.finalStatus &&
+          <Link className="add-account" to="/app/summary/account-creation">
+            <Icon name="add circle" />
+            <span>Add New Account</span>
+          </Link>
+        }
         {props.desktop &&
           <Button onClick={props.toggle} className="item collapseIcon">
             <i className={`angle ${(props.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
