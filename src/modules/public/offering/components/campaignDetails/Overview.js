@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Link } from 'react-router-dom';
-import { Grid, Segment, Embed, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Icon } from 'semantic-ui-react';
 import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
@@ -12,7 +12,6 @@ import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 import OverviewModal from '../campaignDetails/Overview/OverviewModal';
 import VideoModal from './Overview/VideoModal';
 import { Image64 } from '../../../../../theme/shared';
-import emptyImage from '../../../../../assets/images/gallery-placeholder.jpg';
 
 const isTabletBoth = document.documentElement.clientWidth >= 768
   && document.documentElement.clientWidth < 1200;
@@ -33,30 +32,26 @@ class Overview extends Component {
               <Segment padded className="overview-video">
                 {campaign && campaign.media &&
                   campaign.media.heroVideo && campaign.media.heroVideo.url ?
-                    <Embed
-                      as={Link}
-                      to={`${this.props.match.url}/herovideo`}
-                      placeholder={
-                        campaign && campaign.media &&
-                        campaign.media.heroImage && campaign.media.heroImage.url ?
-                        campaign.media.heroImage.url : emptyImage
-                      }
-                      source="vimeo"
-                      icon="ns-play"
-                    />
-                  :
                     <Link to={`${this.props.match.url}/herovideo`}>
                       <Image64
-                        srcUrl={
-                          campaign && campaign.media &&
-                          campaign.media.heroImage && campaign.media.heroImage.url ?
-                          campaign.media.heroImage.url : emptyImage
+                        srcUrl={campaign && campaign.media &&
+                          campaign.media.heroImage &&
+                          campaign.media.heroImage.url ?
+                          campaign.media.heroImage.url : null
                         }
                       />
                       <Icon
                         className="ns-play play-icon"
                       />
                     </Link>
+                    :
+                    <Image64
+                      srcUrl={campaign && campaign.media &&
+                        campaign.media.heroImage &&
+                        campaign.media.heroImage.url ?
+                        campaign.media.heroImage.url : null
+                      }
+                    />
                 }
               </Segment>
             </Grid.Column>
