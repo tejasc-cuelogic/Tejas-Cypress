@@ -345,7 +345,7 @@
             border:none;
             background-color:@white;
             > p{
-                font-weight:@bold;
+                font-weight:@fontMedium;
             }
             @media only screen and (max-width:@largestMobileScreen){
                 padding-bottom:@21px !important;

@@ -87,7 +87,7 @@ export default class ConfirmEmailAddress extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code sent to <b className="positive-text">johnsmith@contact.com</b></p>
+          <p>Please confirm the 6-digit verification code sent to<br /><b className="positive-text">johnsmith@contact.com</b></p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {/* <FormInput

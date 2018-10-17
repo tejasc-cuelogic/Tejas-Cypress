@@ -69,7 +69,7 @@ export default class ConfirmPhoneNumber extends Component {
 
   render() {
     const {
-      // ID_VERIFICATION_FRM,
+      ID_VERIFICATION_FRM,
       // personalInfoMaskedChange,
       ID_PHONE_VERIFICATION,
       phoneVerificationChange,
@@ -85,7 +85,25 @@ export default class ConfirmPhoneNumber extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code sent to <b className="positive-text">123-456-7890</b></p>
+          <p>
+            Please confirm the 6-digit verification code sent to<br />
+            <b className="positive-text">{ID_VERIFICATION_FRM.fields.phoneNumber.value}</b>
+          </p>
+          {editMode ?
+            <p>
+              <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
+                <b>Confirm Phone number</b>
+              </Link>
+            </p> :
+            <p>
+              <Link
+                to={this.props.refLink ? this.props.refLink : this.props.match.url}
+                onClick={this.handleChangePhoneNumber}
+              >
+                <b>Change phone number</b>
+              </Link>
+            </p>
+          }
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {/* {errors &&
@@ -109,21 +127,6 @@ export default class ConfirmPhoneNumber extends Component {
               phoneNumber
             />
           </Form> */}
-          {editMode ?
-            <p>
-              <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
-                Confirm Phone number
-              </Link>
-            </p> :
-            <p>
-              <Link
-                to={this.props.refLink ? this.props.refLink : this.props.match.url}
-                onClick={this.handleChangePhoneNumber}
-              >
-                Change phone number
-              </Link>
-            </p>
-          }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
