@@ -606,7 +606,7 @@ export const CONTINGENCY_META = {
     value: '',
     label: 'Acceptance Criteria',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here',
   },
   comment: {
@@ -639,7 +639,7 @@ export const EDIT_CONTINGENCY = {
     value: '',
     label: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter comment here...',
   },
 };
@@ -660,7 +660,7 @@ export const OFFERING_DETAILS = {
     value: '',
     label: 'Offering Referral Code',
     error: undefined,
-    rule: 'required',
+    rule: 'optional|alpha_num',
     placeHolder: 'Enter here',
   },
 };
