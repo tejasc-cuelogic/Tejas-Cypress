@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
@@ -27,7 +28,11 @@ export default class ForgotPassword extends Component {
       <div>
         <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
           <Modal.Header className="center-align signup-header">
-            <Header as="h3">Need a link to reset your password?</Header>
+            <Header as="h3">Reset your password</Header>
+            <p>
+              Please enter the email address associated with your account.
+              We&#39;ll send you a link to reset your password.
+            </p>
           </Modal.Header>
           <Modal.Content className="signup-content">
             <Form onSubmit={this.onSubmit}>
@@ -43,12 +48,13 @@ export default class ForgotPassword extends Component {
                 ))
               }
               <div className="mt-30 center-align">
-                <Button loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} primary size="large">
-                  Continue
-                </Button>
+                <Button secondary size="large" className="very relaxed" content="Send the link" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
               </div>
             </Form>
           </Modal.Content>
+          <Modal.Actions className="signup-actions">
+            <p>Back to <Link to="/auth/login">log in</Link></p>
+          </Modal.Actions>
         </Modal>
       </div>
     );

@@ -89,7 +89,8 @@ export default class ConfirmEmailAddress extends Component {
           <Divider section />
           <p>
             Please confirm the 6-digit verification code sent to<br />
-            <b className="positive-text">{CONFIRM_FRM.fields.email}</b>
+            {/* <b className="positive-text">{CONFIRM_FRM.fields.email}</b> */}
+            <b className="positive-text">{CONFIRM_FRM.fields.email.value}</b>
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
