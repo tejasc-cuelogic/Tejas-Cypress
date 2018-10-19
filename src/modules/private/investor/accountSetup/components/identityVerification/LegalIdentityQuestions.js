@@ -13,7 +13,7 @@ const LegalIdentityQuestions = observer(({
   onSubmit,
   identityQuestionAnswerChange,
 }) => (
-  <Modal size="mini" open closeIcon onClose={() => close()}>
+  <Modal size="mini" open closeIcon onClose={() => close()} closeOnDimmerClick={false} >
     <Modal.Header className="center-align signup-header">
       <Header as="h3">We need to confirm your identity</Header>
       <Divider />
