@@ -3,7 +3,7 @@ import { Header, Form, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES } from '../../../../../../../constants/account';
 import { ListErrors } from '../../../../../../../theme/shared';
-import { FormInput, MaskedInput, FormSelect, AutoComplete } from '../../../../../../../theme/form';
+import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../theme/form';
 
 @inject('entityAccountStore', 'uiStore')
 @observer
@@ -54,11 +54,21 @@ export default class General extends Component {
                 fielddata={GEN_INFO_FRM.fields.city}
                 changed={genInfoChange}
               />
-              <FormSelect
+              {/* <FormSelect
                 name="state"
                 fielddata={GEN_INFO_FRM.fields.state}
                 options={US_STATES}
                 changed={genInfoChange}
+              /> */}
+              <FormDropDown
+                name="state"
+                fielddata={GEN_INFO_FRM.fields.state}
+                options={US_STATES}
+                search
+                selection
+                compact
+                placeholder="NY"
+                onChange={genInfoChange}
               />
               <MaskedInput
                 name="zipCode"

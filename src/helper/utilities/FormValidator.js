@@ -425,7 +425,7 @@ class FormValidator {
       }));
     } else {
       fileObjOutput = fileObj.value ? {
-        id: 1,
+        id: fileObj.id || 1,
         url: fileObj.preSignedUrl || fileObj.value,
         fileName: fileObj.value,
         isPublic: true,

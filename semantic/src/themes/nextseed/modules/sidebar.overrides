@@ -97,7 +97,7 @@
 			margin-bottom:@3px;
 			font-weight:400;
 			>.text{
-				max-width:150px;
+				max-width:142px;
 			}
 			// &:first-of-type{
 			// 	margin-bottom:@30px;
@@ -324,7 +324,7 @@
 			background-color:@neutral-offwhite;
 		}
 	}
-	~ .item.add-account{
+	~ a.add-account{
 		width:220px;
 		padding:@10px @25px;
 		font-weight:@fontMedium;

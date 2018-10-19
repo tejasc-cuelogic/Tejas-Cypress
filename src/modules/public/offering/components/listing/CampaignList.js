@@ -40,8 +40,7 @@ export default class CampaignList extends Component {
                       centered
                       srcUrl={offering && offering.media && offering.media.tombstoneImage &&
                         offering.media.tombstoneImage.url ?
-                         offering.media.tombstoneImage.url :
-                        `${ASSETS_URL}images/gallery-placeholder.jpg`
+                         offering.media.tombstoneImage.url : null
                       }
                       alt={`${offering.keyTerms.shorthandBusinessName} poster`}
                     />

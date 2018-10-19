@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
+import { ListErrors } from '../../../theme/shared';
 
 @inject('authStore', 'uiStore')
 @observer
@@ -11,6 +11,9 @@ export default class ResetPassword extends Component {
   componentWillMount() {
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
+  }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
   }
   onSubmit = (e) => {
     e.preventDefault();
@@ -22,39 +25,40 @@ export default class ResetPassword extends Component {
   }
   render() {
     const { RESET_PASS_FRM, resetPassChange } = this.props.authStore;
+    const { errors } = this.props.uiStore;
     return (
-      <div>
-        <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
-          <Modal.Header className="center-align signup-header">
-            <Header as="h3">Reset Password</Header>
-            <p>
-              Please enter the email address associated with your account.
-              We&#39;ll send you a link to reset your password.
-            </p>
-          </Modal.Header>
-          <Modal.Content className="signup-content">
-            <Form onSubmit={this.onSubmit}>
-              {
-                ['email'].map(field => (
-                  <FormInput
-                    key={field}
-                    type="email"
-                    name={field}
-                    fielddata={RESET_PASS_FRM.fields[field]}
-                    changed={resetPassChange}
-                  />
-                ))
-              }
-              <div className="mt-30 center-align">
-                <Button fluid secondary size="large" className="very relaxed" content="Send the link" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
-              </div>
-            </Form>
-          </Modal.Content>
-          <Modal.Actions className="signup-actions">
-            <p>Back to <Link to="/auth/login">log in</Link></p>
-          </Modal.Actions>
-        </Modal>
-      </div>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h3">Set a new password</Header>
+          <p>
+            Password must contain one lowercase letter,
+            one number and be at least 8 characters long.
+          </p>
+        </Modal.Header>
+        <Modal.Content className="signup-content">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
+          }
+          <Form onSubmit={this.onSubmit}>
+            {
+              ['password', 'verify', 'code'].map(field => (
+                <FormInput
+                  key={field}
+                  type="password"
+                  name={field}
+                  fielddata={RESET_PASS_FRM.fields[field]}
+                  changed={resetPassChange}
+                />
+              ))
+            }
+            <div className="mt-30 center-align">
+              <Button fluid secondary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
+            </div>
+          </Form>
+        </Modal.Content>
+      </Modal>
     );
   }
 }

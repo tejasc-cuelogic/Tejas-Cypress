@@ -72,7 +72,7 @@ export default class AddNewBonusReward extends Component {
                 />
               </div>
               <div className="center-align">
-                <Button primary content="Add new bonus reward" />
+                <Button primary content="Add new bonus reward" disabled={!ADD_NEW_BONUS_REWARD_FRM.meta.isValid} />
               </div>
             </Form>
           </Modal.Content>
