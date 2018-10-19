@@ -74,7 +74,12 @@ export class AuthStore {
 
   @action
   signupChange = (e, result) => {
-    this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
+    if (e.password) {
+      this.SIGNUP_FRM =
+      Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
+    } else {
+      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
+    }
   };
 
   @action
@@ -180,7 +185,7 @@ export class AuthStore {
   @computed
   get canSubmitConfirmEmail() {
     return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error &&
-    !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
+      !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
   @action

@@ -2,10 +2,9 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import ReactPasswordStrength from 'react-password-strength';
 import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../theme/form';
+import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
@@ -99,20 +98,18 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.password}
               changed={signupChange}
             /> */}
-            <Form.Field>
-              <label>Password</label>
-              <ReactPasswordStrength
-                key="password"
-                className="ui input"
-                minLength={8}
-                minScore={2}
-                tooShortWord="Weak"
-                scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-                changeCallback={signupChange}
-                fielddata={SIGNUP_FRM.fields.password}
-              />
-            </Form.Field>
+            <FormPasswordStrength
+              key="password"
+              name="password"
+              type="password"
+              minLength={8}
+              minScore={2}
+              tooShortWord="Weak"
+              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+              changed={signupChange}
+              fielddata={SIGNUP_FRM.fields.password}
+            />
             <FormInput
               key="verify"
               name="verify"
