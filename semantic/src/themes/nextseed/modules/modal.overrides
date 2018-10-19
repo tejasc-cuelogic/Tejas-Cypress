@@ -176,9 +176,6 @@
     @media only screen and (min-width:@tabletBreakpoint){
         width:665px;
     }
-    a{
-        color:@primary-two;
-    }
     >.close{
         // position:fixed;      commented to resolve issue on iphone
         top:@7px;

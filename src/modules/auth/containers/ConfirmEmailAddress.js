@@ -114,7 +114,7 @@ export default class ConfirmEmailAddress extends Component {
               />
             </Form.Field>
             {errors &&
-              <Message error textAlign="left">
+              <Message error textAlign="left" className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
@@ -124,7 +124,7 @@ export default class ConfirmEmailAddress extends Component {
               Your e-mail address has been confirmed.
             </Header> */}
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            <Button secondary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">

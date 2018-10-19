@@ -69,6 +69,7 @@
 			height:100%;
 		}
 		input:checked ~ label{
+			color:@primary-one;
 			border-color:@primary-one;
 		}
 	}

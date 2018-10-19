@@ -34,7 +34,7 @@ class DataFormatter {
     return daysDifference;
   }
 
-  formatedDate = date => moment(date).format('MM/DD/YYYY');
+  formatedDate = date => moment(date).format('MM-DD-YYYY');
   QueryStringToJSON = (search) => {
     const pairs = search.slice(1).split('&');
     const result = {};
