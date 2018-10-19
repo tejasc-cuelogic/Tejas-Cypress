@@ -37,6 +37,7 @@ const LegalDetails = observer(({
           <FormSelect
             containerwidth={8}
             name="title"
+            placeholder="Select"
             fielddata={form.fields.title}
             options={USER_TITLE}
             changed={change}
