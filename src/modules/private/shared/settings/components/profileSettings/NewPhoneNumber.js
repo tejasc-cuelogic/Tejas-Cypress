@@ -32,7 +32,7 @@ export default class NewPhoneNumber extends Component {
     const { match } = this.props;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
+      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick>
         <Route
           path={`${match.url}/confirm`}
           render={props => <ConfirmPhoneNumber newPhoneNumber refLink={match.url} {...props} />}

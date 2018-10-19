@@ -39,7 +39,8 @@ class InvestorSignup extends Component {
       <Modal
         size="mini"
         open
-        closeOnRootNodeClick={false}
+        closeOnDimmerClick={false}
+        closeIcon
         onClose={
           () => {
             reset('SIGNUP');
