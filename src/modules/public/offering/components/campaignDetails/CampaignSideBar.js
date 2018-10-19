@@ -28,8 +28,8 @@ export default class CampaignSideBar extends Component {
      campaign.updates.length ? campaign.updates : [];
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const d1 = moment().format('MM/DD/YYYY');
-    const d2 = terminationDate ? moment(terminationDate).format('MM/DD/YYYY') : null;
+    const d1 = moment().format('MM-DD-YYYY');
+    const d2 = terminationDate ? moment(terminationDate).format('MM-DD-YYYY') : null;
     const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
     return (
       <Aux>

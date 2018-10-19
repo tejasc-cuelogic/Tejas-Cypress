@@ -330,7 +330,7 @@ class FormValidator {
               fields[key].preSignedUrl = tempRef[key].url;
             }
           } else if (fields[key].objType === 'DATE') {
-            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
+            fields[key].value = moment(tempRef[key]).format('MM-DD-YYYY');
           } else {
             const fieldRef = key.split('_');
             fields[key].value = fields[key].find ?
@@ -367,7 +367,7 @@ class FormValidator {
             fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
           }
         } else if (fields[key].objType === 'DATE') {
-          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
+          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM-DD-YYYY') : moment(data[key]).format('MM-DD-YYYY');
         } else {
           fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data;
         }

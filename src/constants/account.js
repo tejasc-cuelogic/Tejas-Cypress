@@ -1,4 +1,4 @@
-// import moment from 'moment';
+import moment from 'moment';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
@@ -299,7 +299,7 @@ export const ENTITY_TRUST_INFO = {
     rule: 'required',
   },
   trustDate: {
-    key: 'trustDate', value: '2018-01-01', error: undefined, rule: 'required', label: 'Date of Trust',
+    key: 'trustDate', value: moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY'), error: undefined, rule: 'required', label: 'Date of Trust',
   },
 };
 
