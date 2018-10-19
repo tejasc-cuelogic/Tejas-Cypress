@@ -34,5 +34,11 @@ export class AccountStore {
     const type = this.INVESTMENT_ACC_TYPES.fields.accType.value;
     return INVESTMENT_ACCOUNT_TYPES[type];
   }
+
+  @action
+  resetStoreData = () => {
+    this.INVESTMENT_ACC_TYPES.fields.accType.values = ACC_TYPE.accType.values;
+    this.INVESTMENT_ACC_TYPES.fields.accType.value = 0;
+  }
 }
 export default new AccountStore();

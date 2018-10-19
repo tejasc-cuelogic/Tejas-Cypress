@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 // import { MaskedInput } from '../../../theme/form';
-// import { ListErrors } from '../../../theme/shared';
+import { ListErrors } from '../../../theme/shared';
 
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
@@ -37,7 +37,7 @@ export default class ConfirmPhoneNumber extends Component {
         Helper.toast('Phone number is confirmed.', 'success');
         this.props.history.push('/app/summary/establish-profile');
       })
-        .catch(() => {});
+        .catch(() => { });
     }
   }
 
@@ -75,7 +75,7 @@ export default class ConfirmPhoneNumber extends Component {
       phoneVerificationChange,
       reSendVerificationCode,
     } = this.props.identityStore;
-    const { editMode } = this.props.uiStore;
+    const { errors, editMode } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -139,17 +139,22 @@ export default class ConfirmPhoneNumber extends Component {
                 onChange={phoneVerificationChange}
               />
             </Form.Field>
+            {errors &&
+              <Message error textAlign="left" className="mb-40">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
             {/* <Header as="h3">
               <Icon className="ns-check-circle" color="green" /><br />
               Your phone number has been confirmed.
             </Header> */}
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            <Button secondary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><Link to="/" onClick={() => this.handleResendCode()}>Resend the code to my phone</Link></p>
+          <Button type="button" className="link-button cancel-link mt-30" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
         </Modal.Actions>
       </Modal>
     );

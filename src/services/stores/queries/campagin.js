@@ -168,12 +168,10 @@ export const campaignDetailsQuery = gql`
     }
     media {
       heroImage {
-        id
         url
         isPublic
       }
       heroVideo {
-        id
         url
         isPublic
       }

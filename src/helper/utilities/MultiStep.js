@@ -161,7 +161,7 @@ export default class MultiStep extends React.Component {
           open
           closeIcon
           className="multistep-modal"
-          closeOnRootNodeClick={false}
+          closeOnDimmerClick={false}
           onClose={() => this.props.handleMultiStepModalclose()}
         >
           {!this.props.hideHeader &&

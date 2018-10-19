@@ -273,6 +273,11 @@ export class UserDetailsStore {
       );
     }
   }
+
+  @action
+  resetStoreData = () => {
+    this.currentUser = {};
+  }
 }
 
 export default new UserDetailsStore();

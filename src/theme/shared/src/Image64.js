@@ -6,9 +6,13 @@ import emptyImage from '../../../assets/images/gallery-placeholder.jpg';
 class Image64 extends React.Component {
   state = { data: '' };
   componentWillMount() {
-    apiService.getRemoteFile(this.props.srcUrl).then((res) => {
-      this.setState({ data: res.text || emptyImage });
-    }).catch(() => this.setState({ data: emptyImage }));
+    if (this.props.srcUrl) {
+      apiService.getRemoteFile(this.props.srcUrl).then((res) => {
+        this.setState({ data: res.text || emptyImage });
+      }).catch(() => this.setState({ data: emptyImage }));
+    } else {
+      this.setState({ data: emptyImage });
+    }
   }
   render() {
     return <Image src={this.state.data} />;

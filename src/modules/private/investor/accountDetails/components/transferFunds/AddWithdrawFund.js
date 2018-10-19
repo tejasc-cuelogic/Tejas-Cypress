@@ -24,7 +24,7 @@ export default class AddWithdrawFund extends Component {
     } = this.props;
     const { TRANSFER_FRM, TransferChange } = transactionStore;
     return (
-      <Modal dimmer open size="mini" closeIcon onClose={this.goBack} className="reward-modal">
+      <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false} className="reward-modal">
         <Modal.Header>
           <Header as="h3"><AccTypeTitle noText /> {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds</Header>
         </Modal.Header>

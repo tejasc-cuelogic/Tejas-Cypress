@@ -46,6 +46,7 @@ class Login extends Component {
         size="mini"
         open
         closeIcon
+        closeOnDimmerClick={false}
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
@@ -85,7 +86,7 @@ class Login extends Component {
               <Link to="/auth/forgot-password"><b>Forgot password?</b></Link>
             </Form.Field>
             <div className="center-align mt-40">
-              <Button fluid secondary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
+              <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>

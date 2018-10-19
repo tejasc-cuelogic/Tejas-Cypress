@@ -14,6 +14,7 @@ import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmE
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
+import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
 
 @inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
@@ -54,6 +55,11 @@ export default class ProfileData extends Component {
     return (
       <Grid>
         <Route path={`${this.props.match.url}/new-phone-number`} component={NewPhoneNumber} />
+        <Route
+          path={`${this.props.match.url}/confirm`}
+          render={props =>
+            <ConfirmPhoneNumber newPhoneNumber refLink={this.props.match.url} {...props} />}
+        />
         <Route path={`${this.props.match.url}/new-email-address`} component={NewEmailAddress} />
         <Route
           path={`${this.props.match.url}/confirm-email-address`}

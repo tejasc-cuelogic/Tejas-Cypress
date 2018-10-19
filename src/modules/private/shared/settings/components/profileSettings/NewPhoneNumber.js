@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
-import { Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Header, Modal, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
-import ConfirmPhoneNumber from './ConfirmPhoneNumber';
 import { ListErrors } from '../../../../../../theme/shared';
 
 @inject('uiStore', 'identityStore')
@@ -20,7 +19,7 @@ export default class NewPhoneNumber extends Component {
   handleChangePhoneNumber = () => {
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
     this.props.identityStore.startPhoneVerification().then(() => {
-      this.props.history.push(`${this.props.match.url}/confirm`);
+      this.props.history.push('/app/profile-settings/profile-data/confirm');
     })
       .catch(() => {});
   }
@@ -29,14 +28,9 @@ export default class NewPhoneNumber extends Component {
       ID_VERIFICATION_FRM,
       personalInfoMaskedChange,
     } = this.props.identityStore;
-    const { match } = this.props;
     const { errors } = this.props.uiStore;
     return (
-      <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
-        <Route
-          path={`${match.url}/confirm`}
-          render={props => <ConfirmPhoneNumber newPhoneNumber refLink={match.url} {...props} />}
-        />
+      <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnDimmerClick>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Enter new phone number</Header>
           <p>We will send you a verification code to the phone number you provide.</p>
