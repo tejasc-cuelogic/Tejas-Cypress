@@ -783,7 +783,7 @@ export const LEADERSHIP = {
       label: 'DOB',
       error: undefined,
       rule: 'date',
-      placeHolder: 'MM-DD-YYYY',
+      placeHolder: 'MM/DD/YYYY',
     },
     ssn: {
       value: '',

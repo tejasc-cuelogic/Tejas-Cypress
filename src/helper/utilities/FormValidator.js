@@ -24,7 +24,10 @@ class FormValidator {
     name: typeof data === 'undefined' ? e.target.name : data.name,
     value: typeof data === 'undefined' ? e.target.value : data.value,
   });
-
+  pullValuesForPassword = e => ({
+    name: 'password',
+    value: e.password,
+  });
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
@@ -124,52 +127,52 @@ class FormValidator {
   }
 
   onArrayFieldChange =
-  (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
-    CustomValidations.loadCustomValidations(form);
-    const currentForm = form;
-    let currentFormRelative;
-    let fieldName = element.name;
-    let customErrMsg = {};
-    if (formIndex > -1 && formName) {
-      currentFormRelative = currentForm.fields[formName][formIndex];
-      fieldName = `${formName}.${formIndex}.${element.name}`;
-    } else if (formName) {
-      currentFormRelative = currentForm.fields[formName];
-      fieldName = `${formName}.${element.name}`;
-    } else {
-      currentFormRelative = currentForm.fields;
-    }
-    if (element.name) {
-      if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
-        const index = currentFormRelative[element.name]
-          .value.indexOf(element.value);
-        if (index === -1) {
-          currentFormRelative[element.name].value.push(element.value);
-        } else {
-          currentFormRelative[element.name].value.splice(index, 1);
-        }
-      } else if (checked) {
-        currentFormRelative[element.name].value = checked.value;
+    (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
+      CustomValidations.loadCustomValidations(form);
+      const currentForm = form;
+      let currentFormRelative;
+      let fieldName = element.name;
+      let customErrMsg = {};
+      if (formIndex > -1 && formName) {
+        currentFormRelative = currentForm.fields[formName][formIndex];
+        fieldName = `${formName}.${formIndex}.${element.name}`;
+      } else if (formName) {
+        currentFormRelative = currentForm.fields[formName];
+        fieldName = `${formName}.${element.name}`;
       } else {
-        currentFormRelative[element.name].value = element.value;
+        currentFormRelative = currentForm.fields;
       }
-      customErrMsg = (currentFormRelative[element.name] &&
-        currentFormRelative[element.name].customErrors) ?
-        currentFormRelative[element.name].customErrors : {};
+      if (element.name) {
+        if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
+          const index = currentFormRelative[element.name]
+            .value.indexOf(element.value);
+          if (index === -1) {
+            currentFormRelative[element.name].value.push(element.value);
+          } else {
+            currentFormRelative[element.name].value.splice(index, 1);
+          }
+        } else if (checked) {
+          currentFormRelative[element.name].value = checked.value;
+        } else {
+          currentFormRelative[element.name].value = element.value;
+        }
+        customErrMsg = (currentFormRelative[element.name] &&
+          currentFormRelative[element.name].customErrors) ?
+          currentFormRelative[element.name].customErrors : {};
+      }
+      const formData = this.ExtractFormValues(toJS(currentForm.fields));
+      const formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      const validation = new Validator(
+        formData,
+        formRules,
+        customErrMsg,
+      );
+      currentForm.meta.isValid = validation.passes();
+      if (element && element.name) {
+        currentFormRelative[element.name].error = validation.errors.first(fieldName);
+      }
+      return currentForm;
     }
-    const formData = this.ExtractFormValues(toJS(currentForm.fields));
-    const formRules = this.ExtractFormRules(toJS(currentForm.fields));
-    const validation = new Validator(
-      formData,
-      formRules,
-      customErrMsg,
-    );
-    currentForm.meta.isValid = validation.passes();
-    if (element && element.name) {
-      currentFormRelative[element.name].error = validation.errors.first(fieldName);
-    }
-    return currentForm;
-  }
   ExtractValues = fields => mapValues(fields, f => f.value);
   ExtractFormValues = fields => mapValues(fields, f =>
     (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value))) :
@@ -293,9 +296,9 @@ class FormValidator {
           const tempRef = toJS(fields[key])[0].objRef ?
             this.getRefFromObjRef(fields[key][0].objRef, data) : false;
           if ((data && data[key] && data[key].length > 0) ||
-          (tempRef && tempRef[key] && tempRef[key].length > 0)) {
+            (tempRef && tempRef[key] && tempRef[key].length > 0)) {
             const addRec = ((data[key] && data[key].length) ||
-            (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
+              (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
             fields[key] = this.addMoreFields(fields[key], addRec);
             (data[key] || tempRef[key]).forEach((record, index) => {
               fields[key][index] = this.setDataForLevel(
@@ -311,7 +314,7 @@ class FormValidator {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
           if (fields[key].objType === 'FileObjectType') {
             if (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
-            fields[key] && Array.isArray(toJS(fields[key].value))) {
+              fields[key] && Array.isArray(toJS(fields[key].value))) {
               if (tempRef[key].length) {
                 tempRef[key].map((item) => {
                   fields[key].value.push(item.fileName);
@@ -343,7 +346,7 @@ class FormValidator {
               fields[key].preSignedUrl = tempRef[key].url;
             }
           } else if (fields[key].objType === 'DATE') {
-            fields[key].value = moment(tempRef[key]).format('MM-DD-YYYY');
+            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
           } else {
             const fieldRef = key.split('_');
             fields[key].value = fields[key].find ?
@@ -354,7 +357,7 @@ class FormValidator {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else if (fields[key].objType === 'FileObjectType') {
           if (data[key] && Array.isArray(toJS(data[key])) &&
-          fields[key] && Array.isArray(toJS(fields[key].value))) {
+            fields[key] && Array.isArray(toJS(fields[key].value))) {
             if (data[key].length) {
               data[key].map((item) => {
                 fields[key].value.push(item.fileName);
@@ -380,7 +383,7 @@ class FormValidator {
             fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
           }
         } else if (fields[key].objType === 'DATE') {
-          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM-DD-YYYY') : moment(data[key]).format('MM-DD-YYYY');
+          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
         } else {
           fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data;
         }
@@ -430,12 +433,12 @@ class FormValidator {
     let fileObjOutput;
     if (Array.isArray(fileObj.preSignedUrl)) {
       fileObjOutput =
-      map(fileObj.preSignedUrl, (file, index) => ({
-        id: 1,
-        isPublic: true,
-        url: file,
-        fileName: fileObj.value[index],
-      }));
+        map(fileObj.preSignedUrl, (file, index) => ({
+          id: 1,
+          isPublic: true,
+          url: file,
+          fileName: fileObj.value[index],
+        }));
     } else {
       fileObjOutput = fileObj.value ? {
         id: fileObj.id || 1,
@@ -452,7 +455,7 @@ class FormValidator {
     let fileObjOutput;
     if (Array.isArray(fileObj.fileId)) {
       fileObjOutput =
-      map(fileObj.fileId, (file, index) => ({ fileId: file, fileName: fileObj.value[index] }));
+        map(fileObj.fileId, (file, index) => ({ fileId: file, fileName: fileObj.value[index] }));
     } else {
       fileObjOutput = { fileId: fileData.fileId ? fileData.fileId : '', fileName: fileData.value ? fileData.value : '' };
     }
@@ -500,7 +503,7 @@ class FormValidator {
                     }
                     if (reference2) {
                       arrayFields =
-                      this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
+                        this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
                     } else {
                       arrayFields = { ...arrayFields, [keyRef1]: reference2Val };
                     }
