@@ -46,6 +46,7 @@ class Login extends Component {
         size="mini"
         open
         closeIcon
+        closeOnDimmerClick={false}
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
