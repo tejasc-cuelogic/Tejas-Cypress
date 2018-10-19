@@ -154,7 +154,7 @@ export default class ConfirmPhoneNumber extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><Link to="/" onClick={() => this.handleResendCode()}>Resend the code to my phone</Link></p>
+          <Button type="button" className="link-button cancel-link mt-30" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
         </Modal.Actions>
       </Modal>
     );
