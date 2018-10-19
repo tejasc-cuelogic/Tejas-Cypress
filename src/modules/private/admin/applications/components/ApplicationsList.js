@@ -118,8 +118,8 @@ export default class ApplicationsList extends Component {
                             </p>
                             <p>
                               {/* <p>Sign-up Code <b>-</b><br /> */}
-                              Started <b>{application.created ? moment(application.created.date).format('MM-DD-YYYY') : '-'}</b><br />
-                              Updated <b>{application.updated ? moment(application.updated.date).format('MM-DD-YYYY') : '-'}</b>
+                              Started <b>{application.created ? moment(application.created.date).format('MM/DD/YYYY') : '-'}</b><br />
+                              Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
                             </p>
                           </div>
                         </Table.Cell>

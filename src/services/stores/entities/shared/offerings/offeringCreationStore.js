@@ -1232,7 +1232,7 @@ export class OfferingCreationStore {
         if (reward.id === rewardId) {
           fields.name.value = reward.title;
           fields.description.value = reward.description;
-          fields.expirationDate.value = moment(reward.expirationDate).format('MM-DD-YYYY');
+          fields.expirationDate.value = moment(reward.expirationDate).format('MM/DD/YYYY');
           reward.tiers.map((tier) => {
             const isExisted = find(fields, { key: tier.amount });
             if (isExisted && !isExisted.value.includes(tier.amount) &&
