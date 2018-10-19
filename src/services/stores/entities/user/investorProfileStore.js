@@ -257,6 +257,23 @@ class InvestorProfileStore {
     });
     FormValidator.onChange(this[form], '', '');
   }
+
+  @action
+  resetFormData(form) {
+    const resettedForm = FormValidator.resetFormData(this[form]);
+    this[form] = resettedForm;
+  }
+
+  @action
+  resetStoreData = () => {
+    this.resetFormData('EMPLOYMENT_FORM');
+    this.resetFormData('INVESTOR_PROFILE_FORM');
+    this.resetFormData('FINANCES_FORM');
+    this.resetFormData('INVESTMENT_EXP_FORM');
+    this.stepToBeRendered = 0;
+    console.log(this.FINANCES_FORM);
+    console.log(this.INVESTMENT_EXP_FORM);
+  }
 }
 
 export default new InvestorProfileStore();

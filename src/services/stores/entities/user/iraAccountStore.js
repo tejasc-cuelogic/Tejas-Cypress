@@ -429,5 +429,21 @@ class IraAccountStore {
     }))
       .catch(() => { });
   }
+
+  @action
+  resetFormData(form) {
+    const resettedForm = FormValidator.resetFormData(this[form]);
+    this[form] = resettedForm;
+  }
+
+  @action
+  resetStoreData = () => {
+    this.resetFormData('FIN_INFO_FRM');
+    this.resetFormData('IDENTITY_FRM');
+    this.resetFormData('ACC_TYPES_FRM');
+    this.resetFormData('FUNDING_FRM');
+    this.stepToBeRendered = 0;
+    this.accountNotSet = '';
+  }
 }
 export default new IraAccountStore();

@@ -2,6 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { isEmpty, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import React from 'react';
+import moment from 'moment';
 import {
   ENTITY_FIN_INFO,
   ENTITY_GEN_INFO,
@@ -600,6 +601,28 @@ class EntityAccountStore {
     }))
       .catch(() => { });
   }
+
+  @action
+  resetFormData(form) {
+    const resettedForm = FormValidator.resetFormData(this[form]);
+    this[form] = resettedForm;
+  }
+
+  @action
+  resetStoreData = () => {
+    this.resetFormData('FIN_INFO_FRM');
+    this.resetFormData('GEN_INFO_FRM');
+    this.resetFormData('PERSONAL_INFO_FRM');
+    this.resetFormData('FORM_DOCS_FRM');
+    this.TRUST_INFO_FRM.fields.isTrust.value = true;
+    this.TRUST_INFO_FRM.fields.isTrust.error = undefined;
+    this.TRUST_INFO_FRM.fields.trustDate.value = moment(`${new Date().getFullYear()}-01-01`).format('MM/DD/YYYY');
+    this.TRUST_INFO_FRM.fields.trustDate.error = undefined;
+    this.TRUST_INFO_FRM.meta.isValid = false;
+    this.TRUST_INFO_FRM.meta.error = '';
+    this.entityData = {};
+    this.stepToBeRendered = '';
+  };
 }
 
 export default new EntityAccountStore();

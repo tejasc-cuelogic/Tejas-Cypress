@@ -7,7 +7,18 @@ import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
 } from '../../../constants/aws';
 import {
-  userStore, userDetailsStore, authStore, commonStore, adminStore, uiStore,
+  userStore,
+  userDetailsStore,
+  authStore,
+  commonStore,
+  adminStore,
+  uiStore,
+  accountStore,
+  identityStore,
+  investorProfileStore,
+  iraAccountStore,
+  entityAccountStore,
+  bankAccountStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -488,6 +499,13 @@ export class Auth {
       this.cognitoUser.signOut();
       AWS.config.clear();
       authStore.setUserLoggedIn(false);
+      accountStore.resetStoreData();
+      identityStore.resetStoreData();
+      investorProfileStore.resetStoreData();
+      userDetailsStore.resetStoreData();
+      iraAccountStore.resetStoreData();
+      entityAccountStore.resetStoreData();
+      bankAccountStore.resetStoreData();
       res();
     })
     // Clear all AWS credentials

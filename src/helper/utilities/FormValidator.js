@@ -180,8 +180,21 @@ class FormValidator {
   resetFormData = (form) => {
     const currentForm = form;
     Object.keys(currentForm.fields).map((field) => {
-      currentForm.fields[field].value = '';
+      if (Array.isArray(toJS(currentForm.fields[field].value))) {
+        currentForm.fields[field].value = [];
+      } else {
+        currentForm.fields[field].value = '';
+      }
       currentForm.fields[field].error = undefined;
+      if (currentForm.fields[field].fileId) {
+        currentForm.fields[field].fileId = '';
+      }
+      if (currentForm.fields[field].fileData) {
+        currentForm.fields[field].fileData = '';
+      }
+      if (currentForm.fields[field].preSignedUrl) {
+        currentForm.fields[field].preSignedUrl = '';
+      }
       return true;
     });
     currentForm.meta.isValid = false;
