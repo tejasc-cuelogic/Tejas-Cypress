@@ -114,7 +114,7 @@ export default class ConfirmEmailAddress extends Component {
               />
             </Form.Field>
             {errors &&
-              <Message error textAlign="left">
+              <Message error textAlign="left" className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
