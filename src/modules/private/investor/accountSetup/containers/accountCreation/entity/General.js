@@ -54,12 +54,6 @@ export default class General extends Component {
                 fielddata={GEN_INFO_FRM.fields.city}
                 changed={genInfoChange}
               />
-              {/* <FormSelect
-                name="state"
-                fielddata={GEN_INFO_FRM.fields.state}
-                options={US_STATES}
-                changed={genInfoChange}
-              /> */}
               <FormDropDown
                 name="state"
                 fielddata={GEN_INFO_FRM.fields.state}
