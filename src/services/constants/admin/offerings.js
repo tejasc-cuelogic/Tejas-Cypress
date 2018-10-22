@@ -85,14 +85,14 @@ export const KEY_TERMS = {
     value: null,
     label: 'Revenue Sharing Percentage',
     error: undefined,
-    rule: 'numeric',
+    rule: 'string',
     placeHolder: 'Enter here',
   },
   interestRate: {
     value: null,
     label: 'Interest Rate',
     error: undefined,
-    rule: 'numeric',
+    rule: 'string',
     placeHolder: 'Enter here',
   },
   minOfferingAmount: {
