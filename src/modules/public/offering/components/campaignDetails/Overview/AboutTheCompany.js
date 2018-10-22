@@ -25,7 +25,7 @@ class AboutTheCompany extends Component {
           <div className="segment-container small">
             <Header as="h3">
               <Link to={`${refLink}/overview/details`}>
-                Top things to know
+                Top Things to Know
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
             </Header>

@@ -21,7 +21,7 @@ class CompanyTopThings extends Component {
           <div className="segment-container">
             <Header as="h3">
               <Link to={`${companyDescriptionUrl}/companydescription`}>
-                Top things to know
+                Company Description
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
             </Header>

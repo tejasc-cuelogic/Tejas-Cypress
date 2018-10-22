@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
+import Aux from 'react-aux';
 
 class MeetOurTeam extends Component {
   render() {
@@ -21,10 +22,14 @@ class MeetOurTeam extends Component {
           <Header as="h4">
             {meetTeamOjb.length ?
               <Link to={`${meetOurTeamUrl}/meetourteam`}>
-                Meet our team
+                Meet Our Team
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
-              : <p>Meet our team</p>
+              :
+              <Aux>
+                Meet Our Team
+                <Icon className="ns-chevron-right" color="green" />
+              </Aux>
             }
           </Header>
           {

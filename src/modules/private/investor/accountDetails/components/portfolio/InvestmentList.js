@@ -4,7 +4,7 @@ import { Icon, Table, Accordion, Progress, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
-const investments = [
+const investments1 = [
   {
     type: 'food', name: 'MUHU Hot Pot', location: 'Houston', investmentType: 'Term Note', amount: 20000, status: 'Live', achieved: 25, closeDate: '2-12-2018',
   },
@@ -21,6 +21,8 @@ const investments = [
 
 const InvestmentList = (props) => {
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['% to goal'] : ['Close Date'])];
+  const { investments } = props;
+  console.log(investments1);
   return (
     <Accordion fluid styled className="card-style">
       <Accordion.Title active>
@@ -41,7 +43,7 @@ const InvestmentList = (props) => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {
+              {investments && investments.length &&
                 investments.map(data => (
                   <Table.Row key={data.name}>
                     <Table.Cell>
@@ -69,7 +71,7 @@ const InvestmentList = (props) => {
               <Table.Row>
                 <Table.HeaderCell colSpan="2" />
                 <Table.HeaderCell>Total:</Table.HeaderCell>
-                <Table.HeaderCell textAlign="right">{Helper.getTotal(investments, 'amount')}</Table.HeaderCell>
+                <Table.HeaderCell textAlign="right">{Helper.getTotal(investments, 'investedAmount')}</Table.HeaderCell>
                 <Table.HeaderCell colSpan="3" />
               </Table.Row>
             </Table.Footer>
