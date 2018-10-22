@@ -12,7 +12,7 @@ const Process = () => (
         <Grid padded="vertically">
           <Grid.Row>
             <Grid.Column floated={isMobile ? '' : 'right'} computer={10} tablet={16} mobile={16} verticalAlign="middle" className="side-section process-right-section">
-              <Header as="h2">From approved to funded</Header>
+              <Header as="h2">From approved to funded.</Header>
               <p className="mb-50">
                 We give you the platform, tools and support to activate your investors
                 and engage your fans.

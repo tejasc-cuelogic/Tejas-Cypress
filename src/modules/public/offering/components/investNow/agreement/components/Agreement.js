@@ -31,7 +31,7 @@ export default class Agreement extends React.Component {
     return (
       <Modal size="large" open closeIcon closeOnRo otNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Content className="signup-header">
-          <Header as="h3">
+          <Header as="h3" className="mb-40">
             Let&#39;s confirm your investment.<br />You are investing
             <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in Pour Behavior.
           </Header>
