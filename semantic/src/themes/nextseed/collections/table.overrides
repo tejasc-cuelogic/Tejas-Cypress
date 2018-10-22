@@ -215,7 +215,7 @@
             padding: @5px;
         }
         .file-uploader {
-            padding:0 @14px;
+            padding:0;
             margin: 0;
             min-height: auto;
             border: 0;
@@ -223,6 +223,9 @@
             text-align: left;
             span {
                 color: @primary-two;
+            }
+            &.attached{
+                padding:0 0 0 @14px;
             }
         }
         .file-uploader-wrap.display-only .file-uploader.attached{
