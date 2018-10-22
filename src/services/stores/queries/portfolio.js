@@ -47,3 +47,19 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
   }
 }
 `;
+
+export const getInvestorDetailsById = gql`
+query getInvestmentDetailsOverview($userId: String!, $accountId: String!, $offeringId: String!) {
+  getInvestmentDetailsOverview(
+    userId: $userId,
+    accountId: $accountId,
+    offeringId: $offeringId,
+    ) {
+      totalRaisedAmount
+      fundedDate
+      myInvestment
+      netPaymentsReceived
+      netAnnualizedReturn
+  }
+}
+`;
