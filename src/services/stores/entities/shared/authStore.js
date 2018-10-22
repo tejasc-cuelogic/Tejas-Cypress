@@ -74,7 +74,7 @@ export class AuthStore {
 
   @action
   signupChange = (e, result) => {
-    if (e.password) {
+    if (e.password || e.password === '') {
       this.SIGNUP_FRM =
       Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
     } else {
