@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Progress, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const investments1 = [
@@ -47,17 +48,17 @@ const InvestmentList = (props) => {
                 investments.map(data => (
                   <Table.Row key={data.name}>
                     <Table.Cell>
-                      <Icon className={`ns-${data.type} offering-icon`} />
+                      <Icon className={`${INDUSTRY_TYPES_ICONS[data.offering.keyTerms.industry]} offering-icon`} />
                       <Link to={`${props.match.url}/investment-details/1`}>{data.name}</Link>
                     </Table.Cell>
                     <Table.Cell>{data.location}</Table.Cell>
-                    <Table.Cell>{data.investmentType}</Table.Cell>
-                    <Table.Cell textAlign="right">${data.amount}</Table.Cell>
+                    <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
+                    <Table.Cell textAlign="right">${data.investedAmount}</Table.Cell>
                     <Table.Cell>{data.status}</Table.Cell>
                     {
                       props.listOf === 'pending' ?
-                        <Table.Cell collapsing><Progress percent={data.achieved} size="small" color="violet" label={`${data.achieved}%`} /></Table.Cell> :
-                        <Table.Cell>{data.closeDate}</Table.Cell>
+                        <Table.Cell collapsing><Progress percent={(data.achieved || 0)} size="small" color="violet" label={`${(data.achieved || 0)}%`} /></Table.Cell> :
+                        <Table.Cell>{data.closeDate || data.daysToClose}</Table.Cell>
                     }
                     <Table.Cell collapsing>
                       <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
@@ -71,7 +72,7 @@ const InvestmentList = (props) => {
               <Table.Row>
                 <Table.HeaderCell colSpan="2" />
                 <Table.HeaderCell>Total:</Table.HeaderCell>
-                <Table.HeaderCell textAlign="right">{Helper.getTotal(investments, 'investedAmount')}</Table.HeaderCell>
+                <Table.HeaderCell textAlign="right">{investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0}</Table.HeaderCell>
                 <Table.HeaderCell colSpan="3" />
               </Table.Row>
             </Table.Footer>

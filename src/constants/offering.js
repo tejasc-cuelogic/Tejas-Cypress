@@ -19,3 +19,19 @@ export const INDUSTRY_TYPES = {
   COMMERCIAL_REAL_ESTATE: 'Commercial Real Estate',
   OTHER: 'Other',
 };
+export const INDUSTRY_TYPES_ICONS = {
+  FASHION_AND_MERCHANDISING: 'ns-store',
+  BEAUTY_AND_SPA: 'ns-beauty-spa',
+  FOOD_AND_BEVERAGE: 'ns-food-light',
+  REAL_ESTATE: 'ns-real-estate',
+  FITNESS_AND_WELLNESS: 'ns-dumbbells',
+  HOSPITALITY: 'ns-first-aid',
+  TECHNOLOGY: 'ns-technology',
+  RESTAURANT_AND_BAR: 'ns-food-light',
+  BREWERY_AND_BREWPUB: 'Brewery and Brewpub',
+  HEALTH_AND_WELLNESS: 'ns-beauty-spa',
+  FITNESS: 'ns-dumbbells',
+  FASHION_AND_APPAREL: 'ns-store',
+  COMMERCIAL_REAL_ESTATE: 'ns-real-estate',
+  OTHER: '',
+};
