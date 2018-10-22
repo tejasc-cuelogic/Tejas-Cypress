@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { Header } from 'semantic-ui-react';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
@@ -26,7 +27,12 @@ const summaryDetails = {
   ],
 };
 
+@inject('portfolioStore')
+@observer
 export default class Portfolio extends Component {
+  componentWillMount() {
+    this.props.portfolioStore.getInvestorAccountPortfolio('ira');
+  }
   render() {
     const { match } = this.props;
     return (
