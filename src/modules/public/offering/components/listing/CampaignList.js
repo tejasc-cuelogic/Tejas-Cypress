@@ -31,8 +31,9 @@ export default class CampaignList extends Component {
           <Container>
             {this.props.heading}
             {loading ? <InlineLoader /> :
-            <Grid doubling columns={3} stackable>
-              {campaigns && campaigns.length ?
+            campaigns && campaigns.length ?
+              <Grid doubling columns={3} stackable>
+                {
               campaigns.map(offering => (
                 <Grid.Column>
                   <Card className="campaign" fluid as={Link} to={`/offerings/${offering.id}/overview`}>
@@ -98,8 +99,9 @@ export default class CampaignList extends Component {
                     }
                   </Card>
                 </Grid.Column>
-              )) : <InlineLoader text="No data found." />}
-            </Grid>
+              ))}
+              </Grid>
+             : <InlineLoader text="No data found." />
             }
           </Container>
           {this.state.filters && <div className="overlay" />}
