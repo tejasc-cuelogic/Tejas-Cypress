@@ -1,31 +1,37 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
+import { find } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 import { userDetailsStore } from '../../index';
 
 export class PortfolioStore {
-  @observable investmentList = null;
-  @observable filters = false;
+  @observable investmentLists = null;
 
   @action
   getInvestorAccountPortfolio = (accountType) => {
-    const accountStatus = userDetailsStore.signupStatus;
-    console.log(accountType, accountStatus);
-    this.investmentList = graphql({
+    const activeAccounts = userDetailsStore.getActiveAccounts;
+    const { userDetails } = userDetailsStore;
+    const account = find(activeAccounts, acc => acc.name === accountType);
+    this.investmentLists = graphql({
       client,
       query: getInvestorAccountPortfolio,
-      variables: { },
+      variables: {
+        userId: userDetails.id,
+        accountId: account.details.accountId,
+      },
+      fetchPolicy: 'network-only',
     });
   }
 
-  @computed get getInvestorAccountPortfolio() {
-    return (this.investmentList && this.investmentList.data.getInvestorAccountPortfolio &&
-        toJS(this.investmentList.data.getInvestorAccountPortfolio)) || null;
+  @computed get getInvestorAccounts() {
+    return (this.investmentLists && this.investmentLists.data &&
+      this.investmentLists.data.getInvestorAccountPortfolio &&
+        toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
   }
 
   @computed get loading() {
-    return this.investmentList.loading;
+    return this.investmentLists.loading;
   }
 }
 
