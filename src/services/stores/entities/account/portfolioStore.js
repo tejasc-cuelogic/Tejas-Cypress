@@ -4,7 +4,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 import { userDetailsStore } from '../../index';
 
-export class TransactionStore {
+export class PortfolioStore {
   @observable investmentList = null;
   @observable filters = false;
 
@@ -29,4 +29,4 @@ export class TransactionStore {
   }
 }
 
-export default new TransactionStore();
+export default new PortfolioStore();
