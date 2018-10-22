@@ -2,7 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Header, Button, List, Divider } from 'semantic-ui-react';
-import DimensionedExample from './FireworkAnimation';
+import Firework from './FireworkAnimation';
 import Helper from '../../../../../../../helper/utility';
 
 @inject('investmentStore')
@@ -22,7 +22,7 @@ export default class Congratulation extends React.Component {
     return (
       <div>
         {this.state.showFireworks &&
-        <DimensionedExample />
+        <Firework />
         }
         <Modal open closeIcon closeOnRootNodeClick={false} onClose={this.handleCloseModal}>
           <Modal.Header className="center-align signup-header">
