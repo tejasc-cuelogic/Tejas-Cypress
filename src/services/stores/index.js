@@ -14,6 +14,7 @@ export { default as statementStore } from './entities/account/statementStore';
 export { default as teamStore } from './entities/admin/teamStore';
 export { default as transactionStore } from './entities/account/transactionStore';
 export { default as settingStore } from './entities/account/settingStore';
+export { default as portfolioStore } from './entities/account/portfolioStore';
 export { default as articleStore } from './entities/admin/articleStore';
 export { default as crowdpayStore } from './entities/admin/crowdpayStore';
 export { default as repaymentStore } from './entities/admin/repaymentStore';
