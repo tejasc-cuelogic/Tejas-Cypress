@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Form, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
@@ -37,7 +38,7 @@ class AccountType extends Component {
     } = this.props.investmentStore;
     prepareAccountTypes(UserAccounts);
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
         <Form error className="account-type-tab">
           {investAccTypes.values[0] ?
@@ -57,7 +58,7 @@ class AccountType extends Component {
             changed={accTypeChanged}
           />
         </Form>
-      </div>
+      </Aux>
     );
   }
 }
