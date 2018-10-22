@@ -20,8 +20,8 @@ class InvestmentDetails extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
-      this.props.portfolioStore.getInvestorDetails('ira', this.props.match.params.id);
     }
+    this.props.portfolioStore.getInvestorDetails('ira', this.props.match.params.id);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
@@ -29,7 +29,8 @@ class InvestmentDetails extends Component {
   };
 
   render() {
-    const { getInvestor } = this.props.portfolioStore;
+    const { match, portfolioStore } = this.props;
+    const { getInvestor } = portfolioStore;
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
@@ -45,10 +46,10 @@ class InvestmentDetails extends Component {
           title: 'Date', content: getInvestor && moment(getInvestor.fundedDate).format('ll'), info: 'Date of investment started',
         },
         {
-          title: 'Net Payments Received', content: 1762.5, type: 1, info: 'Your Net Payments Received till date',
+          title: 'Net Payments Received', content: getInvestor && getInvestor.netPaymentsReceived, type: 1, info: 'Your Net Payments Received till date',
         },
         {
-          title: 'Net Annualied Returns', content: '23.5%', info: 'Your Net Annualied Returns till date',
+          title: 'Net Annualied Returns', content: getInvestor && getInvestor.netAnnualizedReturn, info: 'Your Net Annualied Returns till date',
         },
       ],
     };
@@ -58,7 +59,6 @@ class InvestmentDetails extends Component {
         return <InlineLoader />;
       },
     });
-    const { match } = this.props;
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
