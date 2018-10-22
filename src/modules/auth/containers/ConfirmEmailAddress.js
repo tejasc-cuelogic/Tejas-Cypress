@@ -129,7 +129,7 @@ export default class ConfirmEmailAddress extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><Link to="/" onClick={() => this.handleResendCode()}>Resend the code to my email</Link></p>
+          <p><Link to={this.props.refLink ? `${this.props.refLink}/confirm-email-address` : '/auth/confirm-email'} onClick={() => this.handleResendCode()}>Resend the code to my email</Link></p>
         </Modal.Actions>
       </Modal>
     );

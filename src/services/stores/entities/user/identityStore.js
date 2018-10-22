@@ -589,7 +589,6 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_FRM');
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
-    console.log(this.ID_VERIFICATION_DOCS_FRM);
   }
 }
 
