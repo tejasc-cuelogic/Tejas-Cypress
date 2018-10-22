@@ -18,6 +18,10 @@ class Login extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.goBack();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.login()
@@ -36,7 +40,7 @@ class Login extends Component {
 
   render() {
     const {
-      LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType, reset,
+      LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.message === 'User does not exist.'
@@ -47,11 +51,7 @@ class Login extends Component {
         open
         closeIcon
         closeOnDimmerClick={false}
-        onClose={() => {
-          reset('LOGIN');
-          this.props.history.push('/');
-          }
-        }
+        onClose={this.handleCloseModal}
       >
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Log in to NextSeed</Header>

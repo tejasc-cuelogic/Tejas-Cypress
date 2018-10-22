@@ -14,6 +14,10 @@ class InvestorSignup extends Component {
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
   }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.goBack();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.register()
@@ -31,7 +35,7 @@ class InvestorSignup extends Component {
   };
   render() {
     const {
-      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType, reset,
+      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
 
@@ -41,12 +45,7 @@ class InvestorSignup extends Component {
         open
         closeOnDimmerClick={false}
         closeIcon
-        onClose={
-          () => {
-            reset('SIGNUP');
-            this.props.history.push('/');
-          }
-        }
+        onClose={this.handleCloseModal}
       >
         <Modal.Header className="center-align signup-header">
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>

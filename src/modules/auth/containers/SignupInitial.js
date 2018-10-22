@@ -20,13 +20,18 @@ class signupInitial extends Component {
     this.props.uiStore.clearErrors();
     this.props.authStore.reset('SIGNUP');
   }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.goBack();
+    console.log('History obj==>', this.props.history);
+  }
   render() {
     const userTypes = USER_TYPES_META.slice();
     const { SIGNUP_FRM, signupChange } = this.props.authStore;
     const selectedType = SIGNUP_FRM.fields.role;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
-      <Modal closeOnDimmerClick={false} open closeIcon onClose={() => this.props.history.push('/')}>
+      <Modal closeOnDimmerClick={false} open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Join the NextSeed community</Header>
         </Modal.Header>

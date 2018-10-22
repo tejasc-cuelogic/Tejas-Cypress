@@ -52,7 +52,8 @@ export default class ConfirmEmailAddress extends Component {
 
   handleCloseModal = () => {
     this.props.authStore.reset('CONFIRM');
-    this.props.history.push(this.props.refLink || '/');
+    // this.props.history.push(this.props.refLink || '/');
+    this.props.history.goBack();
     this.props.uiStore.clearErrors();
   }
 
