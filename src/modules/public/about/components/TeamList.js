@@ -29,24 +29,16 @@ const TeamList = ({
           </Reveal>
         </Grid.Column>))}
       { joinColumn &&
-      <Grid.Column>
-        <Reveal animated="fade">
-          <div
-            className="team-overlay"
-            role="button"
-            tabIndex="0"
-            onClick={() => window.open('https://nextseed.workable.com/', '_blank')}
-            onKeyPress={() => window.open('https://nextseed.workable.com/', '_blank')}
-          >
-            <Header as="h4" textAlign="center">
-               Join our team
-              <Header.Subheader>
-                <Icon color="green" className="ns-arrow-right" />
+      <Grid.Column verticalAlign="middle">
+        <Link to="/about/careers">
+          <Header as="h4" textAlign="center">
+            Join our team
+            <Header.Subheader className="mt-10">
               See open positions
-              </Header.Subheader>
-            </Header>
-          </div>
-        </Reveal>
+              <Icon color="green" className="ns-arrow-right right" />
+            </Header.Subheader>
+          </Header>
+        </Link>
       </Grid.Column> }
     </Grid>
   </Grid.Column>

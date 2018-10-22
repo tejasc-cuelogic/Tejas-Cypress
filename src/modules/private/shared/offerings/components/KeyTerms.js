@@ -89,20 +89,13 @@ export default class KeyTerms extends Component {
               changed={(values, name) => maskChange(values, formName, name)}
               percentage
             />
-            <FormInput
-              key="investmentMultiple"
-              name="investmentMultiple"
-              fielddata={KEY_TERMS_FRM.fields.investmentMultiple}
-              changed={(e, result) => formChange(e, result, formName)}
-            />
             {
-              ['revSharePercentage', 'interestRate'].map(field => (
-                <MaskedInput
+              ['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
+                <FormInput
+                  key={field}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  percentage={field !== 'investmentMuliple'}
-                  number={field === 'investmentMuliple'}
+                  changed={(e, result) => formChange(e, result, formName)}
                 />
               ))
             }

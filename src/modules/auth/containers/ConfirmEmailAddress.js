@@ -23,6 +23,7 @@ export default class ConfirmEmailAddress extends Component {
   }
   componentWillUnmount() {
     cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
+    this.props.uiStore.clearErrors();
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
