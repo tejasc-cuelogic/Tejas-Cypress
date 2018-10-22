@@ -14,6 +14,9 @@ class InvestorSignup extends Component {
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
   }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.register()
