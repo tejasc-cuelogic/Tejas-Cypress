@@ -1,6 +1,6 @@
 export const CAMPAIGN_KEYTERMS_SECURITIES = {
-  TERM_NOTE: 'Term Notee',
-  REVENUE_SHARING_NOTE: 'Reveneue Shareing Note',
+  TERM_NOTE: 'Term Note',
+  REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
 };
 
 export const INDUSTRY_TYPES = {

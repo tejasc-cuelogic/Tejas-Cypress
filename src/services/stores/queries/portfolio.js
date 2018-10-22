@@ -17,31 +17,51 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         agreementId
         offeringName
         location
-        investmentType
-        investedAmount
         investmentDate
         status
         daysToClose
+        offering {
+          offeringStatus
+          keyTerms {
+            shorthandBusinessName
+            securities
+            industry
+          }
+        }
       }
       active {
         offeringId
         offeringName
         location
-        investmentType
         investedAmount
         investmentDate
         status
         closeDate
+        offering {
+          offeringStatus
+          keyTerms {
+            shorthandBusinessName
+            securities
+            industry
+          }
+        }
       }
       completed {
         offeringId
         offeringName
         location
-        investmentType
         investedAmount
         investmentDate
         status
         closeDate
+        offering {
+          offeringStatus
+          keyTerms {
+            shorthandBusinessName
+            securities
+            industry
+          }
+        }
       }
     }
   }
