@@ -22,7 +22,8 @@ class signupInitial extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    // this.props.history.goBack();
+    this.props.history.push('/');
     console.log('History obj==>', this.props.history);
   }
   render() {
