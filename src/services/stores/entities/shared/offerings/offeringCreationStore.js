@@ -437,7 +437,7 @@ export class OfferingCreationStore {
       if (index !== null && arrayName) {
         const { value } = this[form].fields[arrayName][index][field];
         removeFileNames = value;
-      } else if (index !== undefined) {
+      } else if (index !== null) {
         const { value } = this[form].fields[field];
         removeFileNames = value[index];
       } else {
@@ -451,7 +451,7 @@ export class OfferingCreationStore {
       if (index !== null && arrayName) {
         const { fileId } = this[form].fields[arrayName][index][field];
         removeFileIds = fileId;
-      } else if (index !== undefined) {
+      } else if (index !== null) {
         const filesId = this[form].fields[field].fileId;
         removeFileIds = filesId[index];
       } else {
