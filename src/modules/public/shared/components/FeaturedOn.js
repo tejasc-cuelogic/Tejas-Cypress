@@ -25,7 +25,7 @@ const FeaturedOn = () => (
         </Responsive>
         <Responsive maxWidth="767" as={Aux}>
           {featuredOn.map(row => row.map(f => (
-            <Grid.Column>
+            <Grid.Column className="featured-logos">
               <Image centered src={require(`../../../../assets/images/featured/${f}.png`)} />
             </Grid.Column>
           )))}

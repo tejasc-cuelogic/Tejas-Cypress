@@ -16,7 +16,7 @@ export default class AutoComplete extends Component {
       label, error, value, placeHolder,
     } = props.fielddata;
     return (
-      <Form.Field error={(!!error && this.state.showError)} className={props.containerclassname || ''}>
+      <Form.Field error={(!!error && this.state.showError) || (!!error && props.showerror)} className={props.containerclassname || ''}>
         <label>{label}</label>
         <Autocomplete
           {...props}
@@ -26,10 +26,10 @@ export default class AutoComplete extends Component {
           value={value}
           placeHolder={placeHolder}
           types={['address']}
-          onChange={(e) => { props.changed(e); this.triggerError(false); }}
+          onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
           onBlur={() => this.triggerError(true)}
         />
-        {error && this.state.showError &&
+        {((error && this.state.showError) || (error && props.showerror)) &&
           <FieldError error={error} />
         }
       </Form.Field>

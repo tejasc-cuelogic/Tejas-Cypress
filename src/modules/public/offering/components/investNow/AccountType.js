@@ -39,17 +39,17 @@ class AccountType extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
-        {investAccTypes.values[0] ?
-          <p className="center-align">Choose an account type</p> :
-          <div className="center-align">
-            <p>Investment Accounts are not yet Created!</p>
-            <Link to="/app/summary" className="text-link">
-              <Icon className="ns-arrow-right" color="green" />
-              Go to My Accounts
-            </Link>
-          </div>
-        }
         <Form error className="account-type-tab">
+          {investAccTypes.values[0] ?
+            <p className="center-align">Choose an account type</p> :
+            <div className="center-align">
+              <p>Investment Accounts are not yet Created!</p>
+              <Link to="/app/summary" className="text-link">
+                <Icon className="ns-arrow-right" color="green" />
+                Go to My Accounts
+              </Link>
+            </div>
+          }
           <FormRadioGroup
             name="investAccountType"
             containerclassname="button-radio center-align"
