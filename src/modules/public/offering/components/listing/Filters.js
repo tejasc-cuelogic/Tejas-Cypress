@@ -236,9 +236,9 @@ export default class Filters extends Component {
                             <Button
                               onClick={this.done}
                               floated="right"
-                              className="link-button"
+                              className="link-button highlight-text"
                             >
-                              DONE
+                              Update
                             </Button>
                           </Button.Group> :
                           <Button.Group>
