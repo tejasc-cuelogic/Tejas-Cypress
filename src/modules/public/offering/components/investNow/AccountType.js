@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Form, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
@@ -37,19 +38,19 @@ class AccountType extends Component {
     } = this.props.investmentStore;
     prepareAccountTypes(UserAccounts);
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
-        {investAccTypes.values[0] ?
-          <p className="center-align">Choose an account type</p> :
-          <div className="center-align">
-            <p>Investment Accounts are not yet Created!</p>
-            <Link to="/app/summary" className="text-link">
-              <Icon className="ns-arrow-right" color="green" />
-              Go to My Accounts
-            </Link>
-          </div>
-        }
         <Form error className="account-type-tab">
+          {investAccTypes.values[0] ?
+            <p className="center-align">Choose an account type</p> :
+            <div className="center-align">
+              <p>Investment Accounts are not yet Created!</p>
+              <Link to="/app/summary" className="text-link">
+                <Icon className="ns-arrow-right" color="green" />
+                Go to My Accounts
+              </Link>
+            </div>
+          }
           <FormRadioGroup
             name="investAccountType"
             containerclassname="button-radio center-align"
@@ -57,7 +58,7 @@ class AccountType extends Component {
             changed={accTypeChanged}
           />
         </Form>
-      </div>
+      </Aux>
     );
   }
 }

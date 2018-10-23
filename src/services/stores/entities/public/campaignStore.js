@@ -1,7 +1,7 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery } from '../../queries/campagin';
 
 export class CampaignStore {
   @observable data = [];
@@ -20,15 +20,21 @@ export class CampaignStore {
   @action
   initRequest = (stage) => {
     this.data =
-      graphql({ client: clientPublic, query: allOfferings, variables: { filters: { stage } } });
+      graphql({
+        client: clientPublic,
+        query: allOfferings,
+        variables: { filters: { stage } },
+        fetchPolicy: 'network-only',
+      });
   }
 
   @action
-  getCampaignDetails = (id) => {
+  getCampaignDetails = (id, queryType) => {
     this.details = graphql({
       client: clientPublic,
-      query: campaignDetailsQuery,
+      query: queryType ? campaignDetailsForInvestmentQuery : campaignDetailsQuery,
       variables: { id },
+      fetchPolicy: 'network-only',
     });
   }
 
@@ -43,6 +49,7 @@ export class CampaignStore {
           resolve(data.getOfferingDetailsById);
         }
       },
+      fetchPolicy: 'network-only',
     });
   });
 

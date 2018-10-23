@@ -24,49 +24,47 @@ export default class ForgotPassword extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.push(this.props.uiStore.authRef || '/');
   }
   render() {
     const { FORGOT_PASS_FRM, forgotPassChange } = this.props.authStore;
     const { inProgress, errors } = this.props.uiStore;
     return (
-      <div>
-        <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
-          <Modal.Header className="center-align signup-header">
-            <Header as="h3">Reset your password</Header>
-            <p>
-              Please enter the email address associated with your account.
-              We&#39;ll send you a verification code to reset your password.
-            </p>
-          </Modal.Header>
-          <Modal.Content className="signup-content">
-            {errors &&
-              <Message error textAlign="left">
-                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-              </Message>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h3">Reset your password</Header>
+          <p>
+            Please enter the email address associated with your account.
+            We&#39;ll send you a verification code to reset your password.
+          </p>
+        </Modal.Header>
+        <Modal.Content className="signup-content">
+          {errors &&
+            <Message error textAlign="left">
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            </Message>
+          }
+          <Form onSubmit={this.onSubmit}>
+            {
+              Object.keys(FORGOT_PASS_FRM.fields).map(field => (
+                <FormInput
+                  key={field}
+                  type="text"
+                  name={field}
+                  fielddata={FORGOT_PASS_FRM.fields[field]}
+                  changed={forgotPassChange}
+                />
+              ))
             }
-            <Form onSubmit={this.onSubmit}>
-              {
-                Object.keys(FORGOT_PASS_FRM.fields).map(field => (
-                  <FormInput
-                    key={field}
-                    type="text"
-                    name={field}
-                    fielddata={FORGOT_PASS_FRM.fields[field]}
-                    changed={forgotPassChange}
-                  />
-                ))
-              }
-              <div className="mt-30 center-align">
-                <Button secondary size="large" className="very relaxed" content="Send verification code" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
-              </div>
-            </Form>
-          </Modal.Content>
-          <Modal.Actions className="signup-actions">
-            <p>Back to <Link to="/auth/login">Log in</Link></p>
-          </Modal.Actions>
-        </Modal>
-      </div>
+            <div className="mt-30 center-align">
+              <Button secondary size="large" className="very relaxed" content="Send verification code" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
+            </div>
+          </Form>
+        </Modal.Content>
+        <Modal.Actions className="signup-actions">
+          <p><b>Back to</b> <Link to="/auth/login">Log in</Link></p>
+        </Modal.Actions>
+      </Modal>
     );
   }
 }

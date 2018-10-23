@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
@@ -21,10 +22,14 @@ class MeetOurTeam extends Component {
           <Header as="h4">
             {meetTeamOjb.length ?
               <Link to={`${meetOurTeamUrl}/meetourteam`}>
-                Meet our team
+                Meet Our Team
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
-              : <p>Meet our team</p>
+              :
+              <Aux>
+                Meet Our Team
+                <Icon className="ns-chevron-right" color="green" />
+              </Aux>
             }
           </Header>
           {

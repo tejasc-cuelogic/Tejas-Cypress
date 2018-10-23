@@ -33,26 +33,20 @@ class Login extends Component {
         }
       });
   };
-
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.authStore.reset('LOGIN');
+    this.props.history.push(this.props.uiStore.authRef || '/');
+  }
   render() {
     const {
-      LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType, reset,
+      LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
     return (
-      <Modal
-        size="mini"
-        open
-        closeIcon
-        closeOnDimmerClick={false}
-        onClose={() => {
-          reset('LOGIN');
-          this.props.history.push('/');
-          }
-        }
-      >
+      <Modal size="mini" open closeIcon closeOnDimmerClick={false} onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
@@ -83,7 +77,7 @@ class Login extends Component {
               ))
             }
             <Form.Field>
-              <Link to="/auth/forgot-password"><b>Forgot password?</b></Link>
+              <Link to="/auth/forgot-password">Forgot password?</Link>
             </Form.Field>
             <div className="center-align mt-40">
               <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
@@ -91,7 +85,7 @@ class Login extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Dont have an account? <Link to="/auth/register">Sign up</Link></p>
+          <p><b>Dont have an account?</b> <Link to="/auth/register">Sign up</Link></p>
         </Modal.Actions>
       </Modal>
     );

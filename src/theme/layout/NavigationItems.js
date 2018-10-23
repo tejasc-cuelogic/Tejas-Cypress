@@ -106,9 +106,12 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 
-@inject('navStore')
+@inject('navStore', 'uiStore')
 @observer
 export class NavigationItems extends Component {
+  setAuthRef = () => {
+    this.props.uiStore.setAuthRef(this.props.location.pathname);
+  }
   render() {
     const {
       stepInRoute, location, currentUser, loading,
@@ -160,7 +163,7 @@ export class NavigationItems extends Component {
           : !location.pathname.includes('/business-application') &&
             (
             !currentUser ? (
-              <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
+              <Menu.Item as={Link} onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`}>
                 <Button secondary compact>{stepInRoute.title}</Button>
               </Menu.Item>
           ) : (

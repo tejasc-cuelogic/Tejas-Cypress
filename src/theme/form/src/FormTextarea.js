@@ -17,6 +17,7 @@ export default class FormTextarea extends Component {
       error,
       tooltip,
       placeHolder,
+      defaultValue,
       value,
     } = props.fielddata;
 
@@ -45,9 +46,10 @@ export default class FormTextarea extends Component {
           <p className="commet-area">{value}</p> :
           <TextArea
             {...props}
-            value={value}
+            value={value === '' ? undefined : value}
             label={label}
             placeholder={placeHolder}
+            defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
             onChange={(e) => { props.changed(e); this.triggerError(false); }}
             onBlur={() => this.triggerError(true)}
           />

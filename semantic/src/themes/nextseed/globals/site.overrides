@@ -80,6 +80,9 @@ h6{
 .mb-50 {
 	margin-bottom: @50px !important;
 }
+.mb-60{
+	margin-bottom:@60px !important;
+}
 .mb-80 {
 	margin-bottom: 80px !important;
 }
@@ -144,7 +147,9 @@ h6{
 .text-uppercase {
 	text-transform: uppercase !important;
 }
-
+.text-capitalize {
+	text-transform:capitalize !important;
+}
 .inverse-text{
 	color:@white !important;
 }
@@ -272,6 +277,10 @@ footer{
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				max-width: 480px;
 			}
+			a {
+				color: @neutral-middark;
+				text-decoration: underline;
+			}
 		}
 	}
 }
@@ -294,8 +303,7 @@ footer{
 	.offer-filter-container {
 		background-color: @white;
 		width: 100%;
-		height: 500px;
-		padding: @17px 0 0; 
+		padding: @17px 0 @50px; 
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
@@ -325,8 +333,13 @@ footer{
 		.slick-slider {
 			padding-bottom: @30px;
 		}
+		.ui.buttons {
+			position: absolute;
+			bottom: 60px;
+		}
 		.filter-buttons .ui.buttons {
 			display: block;
+			position: static;
 			.ui.button {
 				height: 14px;
 				font-size: @14px;
@@ -821,6 +834,14 @@ p i.icon {
 			padding: 0 !important;
 			&:last-child {
 				padding: @20px !important;
+				a {
+					text-decoration: none;
+					.icon {
+						margin: 0 0 0 @10px;
+						vertical-align: middle;
+     					line-height: 1;
+					}
+				}
 			}
 		}
 	}
@@ -2304,6 +2325,14 @@ p.check-extra-info{
 			border-radius: 6px;
 			padding: @6px;
 			box-shadow: inset @commonShadow;
+		}
+	}
+}
+//Homepage featured on section logos - mobile
+.featured-logos {
+	img.ui.image {
+		@media only screen and (max-width : @largestMobileScreen){
+			transform: scale(0.8, 0.8);
 		}
 	}
 }

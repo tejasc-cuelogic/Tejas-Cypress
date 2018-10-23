@@ -35,6 +35,7 @@ export class UiStore {
   @observable pwdInputType = 'password';
   @observable isEnterPressed = false;
   @observable showFireworkAnimation = false;
+  @observable authRef = '';
 
   @action
   setFieldvalue = (field, value) => {
@@ -181,6 +182,11 @@ export class UiStore {
     this.loaderMessage = '';
     this.appLoader = false;
     this.submitButtonDisabled = false;
+  }
+
+  @action
+  setAuthRef = (url) => {
+    this.authRef = url || '';
   }
 }
 

@@ -6,6 +6,10 @@
     &:hover{
         box-shadow:@buttonHoverShadow;
     }
+    &.basic {
+        border: 1px solid @thumbBackground;
+        box-shadow: none !important;
+    }
 }
 .offering-side-menu {
     // .ui.secondary.button {

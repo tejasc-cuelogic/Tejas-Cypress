@@ -101,6 +101,8 @@
 	.ui.mini.statistic {
 		>.value {
 			text-align: left;
+			font-size: @40px !important;
+			font-weight: @fontMedium;
 		}
 		>.label {
 			font-size: @15px;
