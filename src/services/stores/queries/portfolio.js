@@ -20,6 +20,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         investedAmount
         status
         offering {
+          id
           offeringStatus
           keyTerms {
             shorthandBusinessName
@@ -35,6 +36,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         status
         closeDate
         offering {
+          id
           offeringStatus
           keyTerms {
             shorthandBusinessName
@@ -50,6 +52,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         status
         closeDate
         offering {
+          id
           offeringStatus
           keyTerms {
             shorthandBusinessName

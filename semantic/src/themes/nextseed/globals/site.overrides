@@ -147,7 +147,9 @@ h6{
 .text-uppercase {
 	text-transform: uppercase !important;
 }
-
+.text-capitalize {
+	text-transform:capitalize !important;
+}
 .inverse-text{
 	color:@white !important;
 }
