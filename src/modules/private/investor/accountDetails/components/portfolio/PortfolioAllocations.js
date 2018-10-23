@@ -21,12 +21,12 @@ const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'
 const PortfolioAllocations = () => (
   <Aux>
     <Header as="h4">Portfolio Allocations</Header>
-    <Grid columns={2} celled="internally">
+    <Grid celled="internally">
       <Grid.Row>
-        <Grid.Column className="portfolio-allocation" widescreen={5} largeScreen={5} computer={16} mobile={16}>
+        <Grid.Column className="portfolio-allocation" widescreen={8} largeScreen={8} computer={16} mobile={16}>
           <ChartPie title="Investment Type" data={INVESTMENT_TYPE} colors={COLORS} />
         </Grid.Column>
-        <Grid.Column className="portfolio-allocation" widescreen={5} largeScreen={5} computer={16} mobile={16}>
+        <Grid.Column className="portfolio-allocation" widescreen={8} largeScreen={8} computer={16} mobile={16}>
           <ChartPie title="Industry" data={INDUSTRY} colors={COLORS} />
         </Grid.Column>
       </Grid.Row>
