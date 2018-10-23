@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
+import { filter } from 'lodash';
+import { inject, observer } from 'mobx-react';
 import { Container, Divider, Header, Button, Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import HowItWorksSummary from '../components/HowItWorksSummary';
@@ -9,9 +11,17 @@ import FeaturedOn from '../../shared/components/FeaturedOn';
 import CampaignList from '../../offering/components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 import NewsLetter from '../components/NewsLetter';
+import { OFFERING_STAGE } from '../../../../services/constants/offering';
 
+@inject('campaignStore')
+@observer
 class Home extends Component {
+  componentWillMount() {
+    this.props.campaignStore.initRequest([OFFERING_STAGE.LIVE]);
+  }
   render() {
+    const { OfferingList, loading } = this.props.campaignStore;
+    const liveCampaign = filter(OfferingList, ele => ele.stage === OFFERING_STAGE.LIVE);
     const isMobile = document.documentElement.clientWidth < 768;
     return (
       <Aux>
@@ -31,7 +41,9 @@ class Home extends Component {
         <HowItWorks />
         <Divider fitted as={Container} />
         <CampaignList
+          loading={loading}
           explore
+          campaigns={liveCampaign}
           heading={
             <Aux>
               <Header as="h2" textAlign="center">Latest Campaigns</Header>

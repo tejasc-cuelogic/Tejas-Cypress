@@ -24,7 +24,7 @@ export default class ForgotPassword extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.push(this.props.uiStore.authRef || '/');
   }
   render() {
     const { FORGOT_PASS_FRM, forgotPassChange } = this.props.authStore;

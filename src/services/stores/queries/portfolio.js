@@ -15,11 +15,10 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
     investments {
       pending {
         agreementId
-        offeringName
         location
         investmentDate
+        investedAmount
         status
-        daysToClose
         offering {
           offeringStatus
           keyTerms {
@@ -30,8 +29,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         }
       }
       active {
-        offeringId
-        offeringName
         location
         investedAmount
         investmentDate
@@ -47,8 +44,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         }
       }
       completed {
-        offeringId
-        offeringName
         location
         investedAmount
         investmentDate
@@ -80,60 +75,6 @@ query getInvestmentDetailsOverview($userId: String!, $accountId: String!, $offer
       myInvestment
       netPaymentsReceived
       netAnnualizedReturn
-      offering {
-        id
-        offeringStatus
-        selectedOffer {
-          structure
-          amount
-          minimumAmount
-          maturity
-          interestRate
-          amortizationAmount
-          mthRevenueSharing
-          personalGuarantee
-          businessBlanket
-          expirationDate
-          multiple
-          totalCapital
-          isAccepted
-        }
-        offeringSlug
-        applicationId
-        issuerId
-        keyTerms {
-          legalBusinessName
-          shorthandBusinessName
-          legalBusinessType
-          maturity
-          frequencyOfPayments
-          securities
-          securityInterest
-          securitiesOwnershipPercentage
-          investmentMultiple
-          revSharePercentage
-          interestRate
-          minOfferingAmount
-          maxOfferingAmount
-          industry
-          minInvestAmt
-          maxInvestAmt
-          revShareSummary
-          investmentMultipleSummary
-          locationRiskFactors
-          isTX
-          state
-          city
-        }
-        offering {
-          launch {
-            targetDate
-            terminationDate
-            expectedOpsDate
-            issuerApprovedDate
-          }
-        }
-      }
   }
 }
 `;
