@@ -13,12 +13,23 @@ const GetBtn = ({ type }) => {
   return <Button disabled={!type} as={Link} to={type ? BtnMeta[type].to : '/auth/register'} primary size="large" className="very relaxed" content={type ? BtnMeta[type].label : 'Open account'} />;
 };
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'navStore')
 @observer
 class signupInitial extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
     this.props.authStore.reset('SIGNUP');
+    console.log(this.props.uiStore.authRef);
+  }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    this.props.history.push(this.props.uiStore.authRef || '/');
+  }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    // this.props.history.goBack();
+    this.props.history.push('/');
+    console.log('History obj==>', this.props.history);
   }
   render() {
     const userTypes = USER_TYPES_META.slice();
@@ -26,7 +37,7 @@ class signupInitial extends Component {
     const selectedType = SIGNUP_FRM.fields.role;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
-      <Modal closeOnDimmerClick={false} open closeIcon onClose={() => this.props.history.push('/')}>
+      <Modal closeOnDimmerClick={false} open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Join the NextSeed community</Header>
         </Modal.Header>
@@ -53,7 +64,7 @@ class signupInitial extends Component {
           </div>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Already have an account? <Link to="/auth/login">Log in</Link></p>
+          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

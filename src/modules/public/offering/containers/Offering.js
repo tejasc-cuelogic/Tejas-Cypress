@@ -12,7 +12,6 @@ import { OFFERING_STAGE } from '../../../../services/constants/offering';
 @observer
 class Offering extends Component {
   componentWillMount() {
-    console.log(this.props);
     this.props.campaignStore.initRequest([OFFERING_STAGE.LIVE, OFFERING_STAGE.COMPLETE]);
   }
   render() {

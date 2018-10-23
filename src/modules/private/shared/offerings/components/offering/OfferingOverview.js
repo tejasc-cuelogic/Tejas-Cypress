@@ -129,16 +129,6 @@ export default class OfferingOverview extends Component {
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
-        <Divider section />
-        <Header as="h4">Issuer Website
-          <Header.Subheader>Links to Issuer’s company website</Header.Subheader>
-        </Header>
-        <FormInput
-          displayMode={isReadonly}
-          name="issuerWebsite"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
-          changed={(e, result) => formArrayChange(e, result, formName)}
-        />
         <Divider hidden />
         <ButtonGroup
           isManager={access.asManager}

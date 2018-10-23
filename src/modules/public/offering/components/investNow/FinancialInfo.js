@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
@@ -14,7 +15,7 @@ class FinancialInfo extends Component {
       calculateEstimatedReturn,
     } = this.props.investmentStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
         <Form error size="huge">
           <MaskedInput
@@ -35,10 +36,8 @@ class FinancialInfo extends Component {
             position="top center"
           />
         </p>
-        <p>
-          + 2 Private VIP Launch Party Invitations
-        </p>
-      </div>
+        <p>+ 2 Private VIP Launch Party Invitations</p>
+      </Aux>
     );
   }
 }

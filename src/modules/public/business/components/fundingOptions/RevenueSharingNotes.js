@@ -2,7 +2,7 @@ import React from 'react';
 import { Header, List, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
-const RevenueSharing = () => (
+const RevenueSharingNotes = () => (
   <Grid reversed="computer" doubling columns={2} relaxed="very">
     <Grid.Column>
       <RevenueChart />
@@ -56,4 +56,4 @@ const RevenueSharing = () => (
   </Grid>
 );
 
-export default RevenueSharing;
+export default RevenueSharingNotes;

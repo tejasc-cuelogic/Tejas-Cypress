@@ -21,12 +21,18 @@ import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+  @observable currentActiveAccount = null;
   @observable detailsOfUser = {};
   @observable editCard = 0;
   @observable deleting = 0;
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
@@ -39,6 +45,11 @@ export class UserDetailsStore {
       accDetails = filter(this.userDetails.roles, account => account.details.status === 'FULL');
     }
     return accDetails;
+  }
+
+  @computed get currentActiveAccountDetails() {
+    const activeAccounts = this.getActiveAccounts;
+    return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
   }
 
   @action

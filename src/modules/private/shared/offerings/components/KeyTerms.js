@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../services/constants/admin/offerings';
-import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZone } from '../../../../../theme/form';
+import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 
 @inject('offeringCreationStore', 'uiStore')
 @observer
@@ -13,16 +13,8 @@ export default class KeyTerms extends Component {
   onProFormasDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'KEY_TERMS_PROFORMAS');
   }
-  confirmRemoveDoc = (e, name) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name);
-  }
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
   handleDelDoc = (field) => {
-    this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', '', field, null, 'KEY_TERMS_PROFORMAS');
-    this.props.uiStore.setConfirmBox('');
+    this.props.offeringCreationStore.removeUploadedDataMultiple('KEY_TERMS_FRM', field, null, '');
   }
   handleFormSubmit = () => {
     const { KEY_TERMS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
@@ -30,7 +22,6 @@ export default class KeyTerms extends Component {
   }
   render() {
     const { KEY_TERMS_FRM, formChange, maskChange } = this.props.offeringCreationStore;
-    const { confirmBox } = this.props.uiStore;
     const formName = 'KEY_TERMS_FRM';
     return (
       <div className="inner-content-spacer">
@@ -98,20 +89,13 @@ export default class KeyTerms extends Component {
               changed={(values, name) => maskChange(values, formName, name)}
               percentage
             />
-            <FormInput
-              key="investmentMultiple"
-              name="investmentMultiple"
-              fielddata={KEY_TERMS_FRM.fields.investmentMultiple}
-              changed={(e, result) => formChange(e, result, formName)}
-            />
             {
-              ['revSharePercentage', 'interestRate'].map(field => (
-                <MaskedInput
+              ['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
+                <FormInput
+                  key={field}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  percentage={field !== 'investmentMuliple'}
-                  number={field === 'investmentMuliple'}
+                  changed={(e, result) => formChange(e, result, formName)}
                 />
               ))
             }
@@ -138,28 +122,7 @@ export default class KeyTerms extends Component {
               />
             </div>
             {
-              ['nsMinFees', 'nsMaxFees', 'gsFees'].map(field => (
-                <MaskedInput
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              ))
-            }
-            {
-              ['stateOfFormation', 'city', 'state'].map(field => (
-                <FormInput
-                  key={field}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(e, result) => formChange(e, result, formName)}
-                />
-              ))
-            }
-            {
-              ['minInvestAmt', 'maxInvestAmt'].map(field => (
+              ['nsMinFees', 'nsMaxFees'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -176,6 +139,27 @@ export default class KeyTerms extends Component {
             />
             {
               ['offeringExpTarget', 'offeringExpMax'].map(field => (
+                <MaskedInput
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskChange(values, formName, name)}
+                  currency
+                  prefix="$"
+                />
+              ))
+            }
+            {
+              ['locationRiskFactors', 'city', 'state', 'stateOfFormation'].map(field => (
+                <FormInput
+                  key={field}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(e, result) => formChange(e, result, formName)}
+                />
+              ))
+            }
+            {
+              ['minInvestAmt', 'maxInvestAmt'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -216,24 +200,16 @@ export default class KeyTerms extends Component {
           <DropZone
             name="uploadProformas"
             fielddata={KEY_TERMS_FRM.fields.uploadProformas}
-            ondrop={this.onProFormasDrop}
-            onremove={this.confirmRemoveDoc}
+            ondrop={(files, name) => this.onProFormasDrop(files, name)}
+            onremove={fieldName => this.handleDelDoc(fieldName)}
             uploadtitle="Upload a file"
+            containerclassname="field"
           />
           <Divider hidden />
           <div className="clearfix">
             <Button primary floated="right" className="very relaxed" content="Save" disabled={!KEY_TERMS_FRM.meta.isValid} />
           </div>
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'uploadProformas'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
-          size="mini"
-          className="deletion"
-        />
       </div>
     );
   }

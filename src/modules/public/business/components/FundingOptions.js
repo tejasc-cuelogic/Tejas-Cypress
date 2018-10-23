@@ -16,7 +16,7 @@ const getModule = component => Loadable({
 
 const navItems = [
   { title: 'Term Notes', to: 'term-notes' },
-  { title: 'Revenue Sharing', to: 'revenue-sharing' },
+  { title: 'Revenue Sharing Notes', to: 'revenue-sharing-notes' },
   { title: 'Preferred Equity', to: 'preferred-equity' },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
@@ -35,7 +35,7 @@ export default class FundingOption extends Component {
         <Container>
           <section className="funding-option">
             <Grid centered>
-              <Grid.Column computer={13} tablet={16} mobile={16} textAlign={isMobile ? 'left' : 'center'}>
+              <Grid.Column computer={15} tablet={16} mobile={16} textAlign={isMobile ? 'left' : 'center'}>
                 <Header as="h2">
                 Choose a funding option that fits your business.
                 </Header>

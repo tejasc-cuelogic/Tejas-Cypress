@@ -49,36 +49,40 @@ const settings = {
   dots: false,
 };
 const businesses = [
-  {
-    title: 'Houston, TX',
-    image: `${ASSETS_URL}images/investors/img-2.png`,
-    description: 'The Sugar Refinery raised $273,800 from 213 investors',
-  },
-  {
-    title: 'San Francisco, CA',
-    image: `${ASSETS_URL}images/investors/img.png`,
-    description: 'Rambler raised $150,000 from 131 investors',
-  },
-  {
-    title: 'Austin, TX',
-    image: `${ASSETS_URL}images/investors/img-1.png`,
-    description: 'The Brewer’s Table raised $3000,000 from 190 investors',
-  },
-  {
-    title: 'San Diego, CA',
-    image: `${ASSETS_URL}images/investors/img-5.png`,
-    description: '619 Distillery & Tasting Room raised $191,600 from 238 investors',
-  },
-  {
-    title: 'Brooklyn, NY',
-    image: `${ASSETS_URL}images/investors/img-3.png`,
-    description: 'California 88 raised $124,900 from 180 investors',
-  },
-  {
-    title: 'Salt Lake City, UT',
-    image: `${ASSETS_URL}images/investors/img-4.png`,
-    description: 'MOB Cycle raised $117,400 from 132 investors',
-  },
+  [
+    {
+      title: 'Houston, TX',
+      image: `${ASSETS_URL}images/investors/img-2.png`,
+      description: 'The Sugar Refinery raised $273,800 from 213 investors',
+    },
+    {
+      title: 'San Francisco, CA',
+      image: `${ASSETS_URL}images/investors/img.png`,
+      description: 'Rambler raised $150,000 from 131 investors',
+    },
+    {
+      title: 'Austin, TX',
+      image: `${ASSETS_URL}images/investors/img-1.png`,
+      description: 'The Brewer’s Table raised $3000,000 from 190 investors',
+    },
+  ],
+  [
+    {
+      title: 'San Diego, CA',
+      image: `${ASSETS_URL}images/investors/img-5.png`,
+      description: '619 Distillery & Tasting Room raised $191,600 from 238 investors',
+    },
+    {
+      title: 'Brooklyn, NY',
+      image: `${ASSETS_URL}images/investors/img-3.png`,
+      description: 'California 88 raised $124,900 from 180 investors',
+    },
+    {
+      title: 'Salt Lake City, UT',
+      image: `${ASSETS_URL}images/investors/img-4.png`,
+      description: 'MOB Cycle raised $117,400 from 132 investors',
+    },
+  ],
 ];
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -154,14 +158,19 @@ const WhyNextseed = () => (
           </Container>
           {!isMobile ?
             <Container>
-              <Grid centered stackable columns={3} className="vertical-gutter">
-                {
-                  businesses.map(b => (
-                    <Grid.Column textAlign="center">
-                      <Image src={b.image} centered />
-                      <Header as="h5">{b.title}</Header>
-                      <p>{b.description}</p>
-                    </Grid.Column>
+              <Grid centered stackable className="vertical-gutter">
+                {businesses.map(row => (
+                  <Grid.Row>
+                    {
+                      row.map(b => (
+                        <Grid.Column textAlign="center" width={4}>
+                          <Image src={b.image} centered />
+                          <Header as="h5">{b.title}</Header>
+                          <p>{b.description}</p>
+                        </Grid.Column>
+                      ))
+                    }
+                  </Grid.Row>
                   ))
                 }
               </Grid>
@@ -170,15 +179,16 @@ const WhyNextseed = () => (
             <Aux>
               <Container>
                 <NsCarousel {...settings}>
-                  {
-                    businesses.map(b => (
-                      <div key={b}>
-                        <Grid.Column className="center-align">
-                          <Image src={b.image} centered />
-                          <Header as="h5">{b.title}</Header>
-                          <p>{b.description}</p>
-                        </Grid.Column>
-                      </div>
+                  {businesses.map(row => (
+                      row.map(b => (
+                        <Grid.Row>
+                          <Grid.Column className="center-align">
+                            <Image src={b.image} centered />
+                            <Header as="h5">{b.title}</Header>
+                            <p>{b.description}</p>
+                          </Grid.Column>
+                        </Grid.Row>
+                      ))
                     ))
                   }
                 </NsCarousel>

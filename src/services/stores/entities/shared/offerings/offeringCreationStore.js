@@ -437,7 +437,7 @@ export class OfferingCreationStore {
       if (index !== null && arrayName) {
         const { value } = this[form].fields[arrayName][index][field];
         removeFileNames = value;
-      } else if (index !== undefined) {
+      } else if (index !== null) {
         const { value } = this[form].fields[field];
         removeFileNames = value[index];
       } else {
@@ -451,7 +451,7 @@ export class OfferingCreationStore {
       if (index !== null && arrayName) {
         const { fileId } = this[form].fields[arrayName][index][field];
         removeFileIds = fileId;
-      } else if (index !== undefined) {
+      } else if (index !== null) {
         const filesId = this[form].fields[field].fileId;
         removeFileIds = filesId[index];
       } else {
@@ -761,12 +761,9 @@ export class OfferingCreationStore {
     };
     if (keyName) {
       if (keyName === 'legal') {
-        console.log(isApproved);
         payloadData[keyName] = {};
         const generalInfo = Validator.evaluateFormData(this.GENERAL_FRM.fields);
-        if (generalInfo.websiteUrl) {
-          payloadData[keyName].general = generalInfo;
-        }
+        payloadData[keyName].general = generalInfo;
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
         payloadData[keyName].documentation = {};
         payloadData[keyName].documentation.issuer = {};
@@ -813,6 +810,13 @@ export class OfferingCreationStore {
           return { ...leadership, ...{ employer: employer.employer } };
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
+      } else if (keyName === 'editForm') {
+        payloadData.offering = {};
+        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData = {
+          ...payloadData,
+          keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
+        };
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
@@ -977,6 +981,8 @@ export class OfferingCreationStore {
         ],
       })
       .then(() => {
+        this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+        // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })
       .catch((err) => {
@@ -1013,6 +1019,7 @@ export class OfferingCreationStore {
         this.confirmModalName = null;
         this.removeIndex = null;
         uiStore.setConfirmBox('');
+        this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         Helper.toast('Affiliated Issuer has been deleted successfully.', 'success');
       })))
       .catch(action((err) => {
