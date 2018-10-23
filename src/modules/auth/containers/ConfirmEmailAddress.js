@@ -89,10 +89,7 @@ export default class ConfirmEmailAddress extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>
-            Please confirm the 6-digit verification code sent to your email address<br />
-            {/* <b className="positive-text">{CONFIRM_FRM.fields.email.value}</b> */}
-          </p>
+          <p>Please confirm the 6-digit verification code sent to your email address</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
@@ -125,8 +122,8 @@ export default class ConfirmEmailAddress extends Component {
               </Message>
             }
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            {/* <Header as="h3">
-              <Icon className="ns-check-circle" color="green" /><br />
+            {/* <Header as="h3" className="success-msg mb-60">
+              <Icon className="ns-check-circle" color="green" />
               Your e-mail address has been confirmed.
             </Header> */}
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}

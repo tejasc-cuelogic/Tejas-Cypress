@@ -80,6 +80,9 @@ h6{
 .mb-50 {
 	margin-bottom: @50px !important;
 }
+.mb-60{
+	margin-bottom:@60px !important;
+}
 .mb-80 {
 	margin-bottom: 80px !important;
 }
