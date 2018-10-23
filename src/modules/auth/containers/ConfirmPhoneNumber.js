@@ -40,7 +40,6 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => { });
     }
   }
-
   handleChangePhoneNumber = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(true);
@@ -48,7 +47,6 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.clearErrors();
     }
   }
-
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
     this.props.identityStore.startPhoneVerification();
@@ -56,7 +54,6 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.setEditMode(false);
     }
   }
-
   handleCloseModal = () => {
     if (this.props.refLink) {
       this.props.history.replace(this.props.refLink);
@@ -66,7 +63,6 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
-
   render() {
     const {
       ID_VERIFICATION_FRM,
@@ -136,8 +132,8 @@ export default class ConfirmPhoneNumber extends Component {
               </Message>
             }
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            {/* <Header as="h3">
-              <Icon className="ns-check-circle" color="green" /><br />
+            {/* <Header as="h3" className="success-msg mb-60">
+              <Icon className="ns-check-circle" color="green" />
               Your phone number has been confirmed.
             </Header> */}
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}

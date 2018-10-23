@@ -1,6 +1,6 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { find, forEach } from 'lodash';
+import { forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getInvestorAccountPortfolio, getInvestorDetailsById } from '../../queries/portfolio';
 import { userDetailsStore } from '../../index';
@@ -61,9 +61,9 @@ export class PortfolioStore {
   @observable investmentDetails = null;
   @action
   getInvestorAccountPortfolio = (accountType) => {
-    const activeAccounts = userDetailsStore.getActiveAccounts;
+    userDetailsStore.setFieldValue('currentActiveAccount', accountType);
+    const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
-    const account = find(activeAccounts, acc => acc.name === accountType);
     this.investmentLists = graphql({
       client,
       query: getInvestorAccountPortfolio,
@@ -86,9 +86,9 @@ export class PortfolioStore {
   }
   @action
   getInvestorDetails = (accountType, offeringId) => new Promise((resolve) => {
-    const activeAccounts = userDetailsStore.getActiveAccounts;
+    userDetailsStore.setFieldValue('currentActiveAccount', accountType);
+    const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
-    const account = find(activeAccounts, acc => acc.name === accountType);
     this.investmentDetails = graphql({
       client,
       query: getInvestorDetailsById,

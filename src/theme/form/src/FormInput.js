@@ -18,6 +18,7 @@ export default class FormInput extends Component {
       error,
       tooltip,
       placeHolder,
+      defaultValue,
       value,
     } = props.fielddata;
     const maxlength = props.fielddata.maxLength ? props.fielddata.maxLength : (
@@ -60,11 +61,12 @@ export default class FormInput extends Component {
           maxLength={maxlength || false}
           type={props.type || 'text'}
           placeholder={placeHolder}
+          defaultValue={defaultValue}
           onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
           onBlur={() => this.triggerError(true)}
           readOnly={displayMode}
           {...props}
-          value={value}
+          value={value === '' ? undefined : value}
           label={props.prefix || false}
         />
         {((error && this.state.showError) || (error && props.showerror)) &&
