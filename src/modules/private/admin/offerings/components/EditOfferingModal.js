@@ -19,6 +19,7 @@ export default class EditOffering extends React.Component {
         currentOfferingId,
       } = this.props.offeringCreationStore;
       updateOffering(currentOfferingId, null, 'editForm');
+      this.props.history.push(this.props.refLink);
     }
     render() {
       const {
