@@ -113,7 +113,7 @@ class InvestorSignup extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Already have an account? <Link to="/auth/login">Log in</Link></p>
+          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

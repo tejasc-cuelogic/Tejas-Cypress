@@ -30,7 +30,7 @@
 @headerHorizontalPadding:3rem;
 @headerPadding: @headerVerticalPadding @headerHorizontalPadding;
 @headerBackground: @white;
-@headerColor: @darkTextColor;
+@headerColor: @neutral;
 @headerFontSize: @huge;
 @headerBoxShadow: none;
 @headerFontWeight: @bold;
