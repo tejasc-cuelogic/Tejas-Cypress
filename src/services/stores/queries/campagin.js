@@ -332,3 +332,97 @@ export const campaignDetailsQuery = gql`
   }
 }
 `;
+export const campaignDetailsForInvestmentQuery = gql`
+query getOfferingById($id: ID) {
+  getOfferingDetailsById (id: $id) {
+    id
+    offeringSlug
+    offeringStatus
+    keyTerms {
+      legalBusinessName
+      shorthandBusinessName
+      maturity
+      securities
+      securityInterest
+      securitiesOwnershipPercentage
+      interestRate
+      isTX
+      state
+      city
+    }
+    offering {
+      launch {
+        targetDate
+      }
+    }
+    bonusRewards{
+      id
+      offeringId
+      title
+      rewardStatus
+      description
+      expirationDate
+      tiers{
+        amount
+        earlyBirdQuantity
+      }
+      created {
+        id
+        by
+        date
+      }
+      updated {
+        id
+        by
+        date
+      }
+    }
+    updates {
+      id
+      offeringId
+      title
+      content
+      status
+      scope
+      tiers {
+        amount
+        earlyBirdQuantity
+      }
+      isEarlyBirdOnly
+      notificationSent {
+        id
+        by
+        date
+        to
+      }
+      approved {
+        id
+        by
+        date
+      }
+      updated {
+        id
+        by
+        date
+      }
+      deleted {
+        id
+        by
+        date
+      }
+      actingUserInfo {
+        id
+        info {
+          firstName
+          lastName
+          avatar {
+            url
+            name
+          }
+        }
+      }
+    }
+  
+  }
+}
+`;

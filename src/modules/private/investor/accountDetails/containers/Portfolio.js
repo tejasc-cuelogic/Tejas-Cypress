@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { includes } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
-import { Header } from 'semantic-ui-react';
+import { Route, Link } from 'react-router-dom';
+import { Header, Grid, Card, Button } from 'semantic-ui-react';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
@@ -14,7 +14,8 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class Portfolio extends Component {
   componentWillMount() {
-    this.props.portfolioStore.getInvestorAccountPortfolio('ira');
+    const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+    this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
   }
   render() {
     const { match, portfolioStore } = this.props;
@@ -46,9 +47,34 @@ export default class Portfolio extends Component {
         <SummaryHeader details={summaryDetails} />
         <PortfolioAllocations pieChart={calculateInvestmentType} />
         <Header as="h4">My Investments</Header>
-        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.investments.pending} listOf="pending" match={match} />
-        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.investments.active} listOf="active" match={match} />
-        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.investments.completed} listOf="completed" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.pending.length &&
+        <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} />
+        }
+        {getInvestorAccounts && getInvestorAccounts.investments.active.length &&
+        <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} />
+        }
+        {getInvestorAccounts && getInvestorAccounts.investments.completed.length &&
+        <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} />
+        }
+        {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
+          !getInvestorAccounts.investments.active.length &&
+          !getInvestorAccounts.investments.completed.length &&
+          <Aux>
+            <p>No investments or reservations pending.</p>
+            <Grid>
+              <Grid.Row>
+                <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
+                  <Card className="form-card">
+                    <Card.Content>
+                      <Header as="h4">Browse the latest investment opportunities.</Header>
+                      <Button as={Link} to="/offerings" size="medium" color="green">Start investing now</Button>
+                    </Card.Content>
+                  </Card>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Aux>
+        }
         <Route
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
