@@ -7,6 +7,7 @@ import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import NotFound from '../../../../shared/NotFound';
 
 const navItems = [
   { title: 'Overview', to: 'overview', component: 'Overview' },
@@ -14,14 +15,16 @@ const navItems = [
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
 ];
-@inject('portfolioStore')
+@inject('portfolioStore', 'campaignStore')
 @observer
 class InvestmentDetails extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
-    this.props.portfolioStore.getInvestorDetails('ira', this.props.match.params.id);
+    this.props.portfolioStore.getInvestorDetails('ira', this.props.match.params.id).then(() => {
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+    });
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
@@ -30,7 +33,7 @@ class InvestmentDetails extends Component {
 
   render() {
     const { match, portfolioStore } = this.props;
-    const { getInvestor } = portfolioStore;
+    const { getInvestor, investmentDetails } = portfolioStore;
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
@@ -59,6 +62,10 @@ class InvestmentDetails extends Component {
         return <InlineLoader />;
       },
     });
+    if (investmentDetails && investmentDetails.data &&
+      !investmentDetails.data.getInvestmentDetailsOverview) {
+      return <NotFound />;
+    }
     return (
       <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
