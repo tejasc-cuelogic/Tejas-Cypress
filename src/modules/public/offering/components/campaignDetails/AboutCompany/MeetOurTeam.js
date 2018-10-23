@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
 import { InlineLoader } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
-import Aux from 'react-aux';
 
 class MeetOurTeam extends Component {
   render() {

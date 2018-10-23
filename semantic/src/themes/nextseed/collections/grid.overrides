@@ -77,13 +77,27 @@
             flex-direction: column;
             .flex-content {
                 flex-grow: 1;
-                .ui.header>img {
-                    width: auto;
-                    @media only screen and (max-width : @largestMobileScreen){
-                        display: block;
-                        margin-bottom: 20px;
+                h3.ui.header{
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    line-height: 30px;
+                    margin-bottom: 0;
+                    height: 60px;
+                    span {
+                        padding-left: 10px;
+                    }
+                    >img {
+                        width: auto;
+                        @media only screen and (max-width : @largestMobileScreen){
+                            display: block;
+                            margin-bottom: 20px;
+                        }
                     }
                 }
+            }
+            .ui.horizontal.list {
+                min-height: 70px;
             }
         }
     }
