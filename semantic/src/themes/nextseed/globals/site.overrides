@@ -144,7 +144,9 @@ h6{
 .text-uppercase {
 	text-transform: uppercase !important;
 }
-
+.text-capitalize {
+	text-transform:capitalize !important;
+}
 .inverse-text{
 	color:@white !important;
 }
@@ -298,8 +300,7 @@ footer{
 	.offer-filter-container {
 		background-color: @white;
 		width: 100%;
-		height: 500px;
-		padding: @17px 0 0; 
+		padding: @17px 0 @50px; 
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
@@ -329,8 +330,13 @@ footer{
 		.slick-slider {
 			padding-bottom: @30px;
 		}
+		.ui.buttons {
+			position: absolute;
+			bottom: 60px;
+		}
 		.filter-buttons .ui.buttons {
 			display: block;
+			position: static;
 			.ui.button {
 				height: 14px;
 				font-size: @14px;

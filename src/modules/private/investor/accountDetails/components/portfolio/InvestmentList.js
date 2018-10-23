@@ -1,30 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Icon, Table, Accordion, Progress, Button } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import moment from 'moment';
+import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
-const investments1 = [
-  {
-    type: 'food', name: 'MUHU Hot Pot', location: 'Houston', investmentType: 'Term Note', amount: 20000, status: 'Live', achieved: 25, closeDate: '2-12-2018',
-  },
-  {
-    type: 'food', name: 'Intero Ristorante', location: 'New York', investmentType: 'Term Note', amount: 1500, status: 'Processing', achieved: 50, closeDate: '2-12-2018',
-  },
-  {
-    type: 'food', name: 'The Brewers Table', location: 'San Francisco', investmentType: 'Rev Share', amount: 12000, status: 'Processing', achieved: 5, closeDate: '2-12-2018',
-  },
-  {
-    type: 'food', name: 'Smiley Transportation', location: 'Bostan', investmentType: 'Term Note', amount: 400, status: 'Live', achieved: 25, closeDate: '2-12-2018',
-  },
-];
-
 const InvestmentList = (props) => {
-  const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['% to goal'] : ['Close Date'])];
+  const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
   const { investments } = props;
-  console.log(investments1);
   return (
     <Accordion fluid styled className="card-style">
       <Accordion.Title active>
@@ -52,20 +38,22 @@ const InvestmentList = (props) => {
                     <Table.Row key={data.name}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[data.offering.keyTerms.industry]} offering-icon`} />
-                        <Link to={`${props.match.url}/investment-details/1`}>{data.name}</Link>
+                        <Link to={`${props.match.url}/investment-details/1`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
                       </Table.Cell>
                       <Table.Cell>{data.location}</Table.Cell>
                       <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
                       <Table.Cell textAlign="right">{Helper.CurrencyFormat(data.investedAmount)}</Table.Cell>
-                      <Table.Cell>{data.status}</Table.Cell>
-                      {
-                        props.listOf === 'pending' ?
-                          <Table.Cell collapsing><Progress percent={(data.achieved || 0)} size="small" color="violet" label={`${(data.achieved || 0)}%`} /></Table.Cell> :
-                          <Table.Cell>{data.closeDate || data.daysToClose}</Table.Cell>
-                      }
+                      <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
+                      <Table.Cell collapsing>{moment(props.listOf === 'pending' ? data.daysToClose : data.closeDate).format('MM/DD/YYYY')}</Table.Cell>
                       <Table.Cell collapsing>
-                        <Button size="tiny" color="red" className="ghost-button">Cancel</Button>
-                        <Button color="green" className="link-button" icon={{ className: 'ns-replay' }} />
+                        {props.listOf !== 'pending' ?
+                          <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="green" className="ghost-button">View Details</Button>
+                        :
+                          <Aux>
+                            <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="green" className="ghost-button">Change</Button>
+                            <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="red" className="ghost-button">Cancel</Button>
+                          </Aux>
+                        }
                       </Table.Cell>
                     </Table.Row>
                   ))

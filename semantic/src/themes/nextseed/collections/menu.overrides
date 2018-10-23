@@ -230,7 +230,6 @@ footer{
                 margin-right: @10px;
             }
             .ui.image.closeIcon {
-                margin-left: 117px;
                 cursor: pointer;
             }
         }

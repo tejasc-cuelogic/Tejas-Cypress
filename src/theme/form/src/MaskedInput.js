@@ -29,23 +29,25 @@ export default class MaskedInput extends Component {
         error={(!!error && this.state.showError) || (!!error && props.showerror)}
         className={fieldClass}
       >
-        <label>
-          {!props.hidelabel && label}
-          {tooltip &&
-            <Popup
-              hoverable={props.hoverable}
-              trigger={<Icon className="ns-help-circle" />}
-              // content={tooltip}
-              position="top center"
-              className={props.containerClassname}
-              wide
-            >
-              <Popup.Content>
-                {tooltip}
-              </Popup.Content>
-            </Popup>
-          }
-        </label>
+        {!props.hidelabel &&
+          <label>
+            {props.label || label}
+            {tooltip &&
+              <Popup
+                hoverable={props.hoverable}
+                trigger={<Icon className="ns-help-circle" />}
+                // content={tooltip}
+                position="top center"
+                className={props.containerClassname}
+                wide
+              >
+                <Popup.Content>
+                  {tooltip}
+                </Popup.Content>
+              </Popup>
+            }
+          </label>
+        }
         {props.action ? (
           <div className="ui action input">
             <InputMask
@@ -74,6 +76,10 @@ export default class MaskedInput extends Component {
             <NumberFormat readOnly={displayMode} placeholder={placeHolder} maxLength={props.maxlength || 4} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
           ) : props.phoneNumber ? (
             <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+          ) : props.phoneNumberDisplayMode ? (
+            <div className="ui huge fluid input">
+              <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+            </div>
           ) : props.zipCode ? (
             <NumberFormat readOnly={displayMode} type="tel" format="#####" {...props} placeholder={placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.ssn ? (
