@@ -8,6 +8,7 @@ import SummaryHeader from '../components/portfolio/SummaryHeader';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
 import InvestmentDetails from './InvestmentDetails';
+import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('portfolioStore')
@@ -78,6 +79,10 @@ export default class Portfolio extends Component {
         <Route
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
+        />
+        <Route
+          path={`${match.url}/cancel-investment/:id`}
+          render={props => <CancelInvestment refLink={match.url} {...props} />}
         />
       </Aux>
     );

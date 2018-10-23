@@ -7,6 +7,13 @@ import Helper from '../../../../../../helper/utility';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
+function calculateDateDiff(terminationDate) {
+  const d1 = moment().format('MM/DD/YYYY');
+  const d2 = terminationDate ? moment(terminationDate).format('MM/DD/YYYY') : null;
+  const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
+  return diff;
+}
+
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const InvestmentList = (props) => {
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
@@ -44,14 +51,16 @@ const InvestmentList = (props) => {
                       <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
                       <Table.Cell textAlign="right">{Helper.CurrencyFormat(data.investedAmount)}</Table.Cell>
                       <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
-                      <Table.Cell collapsing>{moment(props.listOf === 'pending' ? data.daysToClose : data.closeDate).format('MM/DD/YYYY')}</Table.Cell>
+                      <Table.Cell collapsing>{props.listOf === 'pending' ? `${calculateDateDiff(data.offering.keyTerms.terminationDate)} days` : moment(data.closeDate).format('MM/DD/YYYY')}</Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
                           <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="green" className="ghost-button">View Details</Button>
                         :
                           <Aux>
                             <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="green" className="ghost-button">Change</Button>
+                            {calculateDateDiff(data.daysToClose) > 2 &&
                             <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="red" className="ghost-button">Cancel</Button>
+                            }
                           </Aux>
                         }
                       </Table.Cell>

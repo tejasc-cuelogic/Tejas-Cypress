@@ -2,8 +2,9 @@ import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getInvestorAccountPortfolio, getInvestorDetailsById } from '../../queries/portfolio';
-import { userDetailsStore } from '../../index';
+import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement } from '../../queries/portfolio';
+import { userDetailsStore, uiStore } from '../../index';
+import Helper from '../../../../helper/utility';
 
 export class PortfolioStore {
   @observable investmentLists = null;
@@ -53,7 +54,9 @@ export class PortfolioStore {
     }
     ['investmentType', 'industry'].forEach((field) => {
       forEach(this.pieChartDataEval[field], (data) => {
-        this.pieChartData[field].push(data);
+        if (data.value) {
+          this.pieChartData[field].push(data);
+        }
       });
     });
     return toJS(this.pieChartData);
@@ -110,6 +113,40 @@ export class PortfolioStore {
   }
   @computed get loadingInvestDetails() {
     return this.investmentDetails.loading;
+  }
+
+  @action
+  cancelAgreement = () => {
+    uiStore.setProgress();
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const { userDetails } = userDetailsStore;
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: cancelAgreement,
+          variables: {
+            agreementId: '',
+          },
+          refetchQueries: [{
+            query: getInvestorAccountPortfolio,
+            variables: {
+              userId: userDetails.id,
+              accountId: account.details.accountId,
+            },
+          }],
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 }
 

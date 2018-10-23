@@ -26,6 +26,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             shorthandBusinessName
             securities
             industry
+            terminationDate
           }
         }
       }
@@ -81,3 +82,8 @@ query getInvestmentDetailsOverview($userId: String!, $accountId: String!, $offer
   }
 }
 `;
+
+export const cancelAgreement = gql`
+  mutation cancelAgreement($agreementId: Int!) {
+    cancelAgreement(agreementId: $agreementId)
+  }`;
