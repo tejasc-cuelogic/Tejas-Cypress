@@ -71,6 +71,7 @@ export const getOfferingDetails = gql`
         securities
         securityInterest
         securitiesOwnershipPercentage
+        locationRiskFactors
         investmentMultiple
         revSharePercentage
         interestRate
@@ -85,6 +86,7 @@ export const getOfferingDetails = gql`
         state
         minInvestAmt
         maxInvestAmt
+        investmentMultipleSummary
         stockType
         offeringExpTarget
         offeringExpMax
