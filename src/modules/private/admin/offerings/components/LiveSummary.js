@@ -11,7 +11,7 @@ const leftSummary = offer => [
       )),
   },
   { title: 'Launch Date', content: '3/15/18' },
-  { title: 'Date Till Close', content: '34 days' },
+  { title: 'Days Till Close', content: '34 days' },
 ];
 
 const rightSummary = offer => [
