@@ -7,6 +7,7 @@ import { ASSETS_URL } from '../../../../../constants/aws';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -14,6 +15,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 class InvestmentDetails extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
+    const emptyContent = 'No data found.';
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable doubling>
@@ -33,39 +35,29 @@ class InvestmentDetails extends Component {
             <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
               <Segment padded>
                 <Header as="h3">Use of Proceeds</Header>
-                {campaign && campaign.keyTerms &&
-                  campaign.keyTerms.securities && campaign.keyTerms.securities ===
-                  CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
-                    <Aux>
-                      <p>
-                      BuffBrew expects the complete buildout of the new building and brewery to be a
-                      $14 million project. The scope of the Buffbrew Taproom is $3.4 million.
-                      Buffbrew is committed to financing the total project, while opening up a
-                      portion of the financing for BuffBrew Taproom through NextSeed.
-                      </p>
-                      <p>
-                      100% of the funding proceeds will be used towards the buildout of the new
-                      Buffbrew Taproom facility. The spend includes construction as well as the
-                      purchasing of equipment, furniture and supplies.
-                      </p>
-                    </Aux>
-                  :
+                {campaign && campaign.legal &&
+                  campaign.legal.general && campaign.legal.general.useOfProceeds &&
+                  campaign.legal.general.useOfProceeds ?
                     <Aux>
                       <Header as="h6">If minimum offering amount is reached:</Header>
                       <p>
-                        The buildout and launch of America Gardens in East Midtown Houston
-                        is estimated at $1.8 million.
+                        {campaign && campaign.legal &&
+                          campaign.legal.general && campaign.legal.general.useOfProceeds &&
+                          campaign.legal.general.useOfProceeds.reachedMinOfferingGoal ?
+                          campaign.legal.general.useOfProceeds.reachedMinOfferingGoal : emptyContent
+                        }
                       </p>
                       <Header as="h6">If maximum offering amount is reached:</Header>
                       <p>
-                        Jonathan Serrano and Shawn Rao have raised equity commitments of $1,800,000
-                        (contributed cash of $750,000) in equity for the project thus far. Through
-                        the NextSeed campaign, the business is seeking to raise between $200,000 and
-                        $1,000,000 to complete construction. Upon completion of the NextSeed
-                        campaign, the equity commitments will cover any remaining balance of the
-                        project cost.
+                        {campaign && campaign.legal &&
+                          campaign.legal.general && campaign.legal.general.useOfProceeds &&
+                          campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal ?
+                          campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal : emptyContent
+                        }
                       </p>
                     </Aux>
+                  :
+                    <InlineLoader text={emptyContent} />
                 }
               </Segment>
             </Grid.Column>
@@ -88,17 +80,17 @@ class InvestmentDetails extends Component {
           {campaign && campaign.keyTerms &&
             campaign.keyTerms.securities &&
             campaign.keyTerms.securities ===
-             CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
-               <RevenueSharingDetails
-                 refLink={this.props.refLink}
-                 KeyTerms={campaign.keyTerms}
-                 {...this.props}
-               /> :
-               <TermNoteDetails
-                 refLink={this.props.refLink}
-                 KeyTerms={campaign.keyTerms}
-                 {...this.props}
-               />
+            CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
+              <RevenueSharingDetails
+                refLink={this.props.refLink}
+                KeyTerms={campaign.keyTerms}
+                {...this.props}
+              /> :
+              <TermNoteDetails
+                refLink={this.props.refLink}
+                KeyTerms={campaign.keyTerms}
+                {...this.props}
+              />
           }
         </Grid>
       </div>

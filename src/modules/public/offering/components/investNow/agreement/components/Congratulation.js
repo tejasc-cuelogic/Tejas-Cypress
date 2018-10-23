@@ -1,7 +1,8 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Modal, Header, Button, List, Divider } from 'semantic-ui-react';
+import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import Firework from './FireworkAnimation';
 import Helper from '../../../../../../../helper/utility';
 
@@ -20,7 +21,7 @@ export default class Congratulation extends React.Component {
       this.setState({ showFireworks: false });
     }, 8500);
     return (
-      <div>
+      <Aux>
         {this.state.showFireworks &&
         <Firework />
         }
@@ -43,15 +44,19 @@ export default class Congratulation extends React.Component {
               </Button>
             </div>
             <Divider hidden />
-            <List horizontal className="learn-more-list mt-30">
+            <Link to="/app/summary" className="text-link">
+              <Icon className="ns-arrow-right" color="green" />
+              Go to My Accounts
+            </Link>
+            {/* <List horizontal className="learn-more-list mt-30">
               <List.Item>
                 <List.Icon className="ns-arrow-right" color="green" />
                 <List.Content as={Link} to="/app/summary">Go to My Account</List.Content>
               </List.Item>
-            </List>
+            </List> */}
           </Modal.Content>
         </Modal>
-      </div>
+      </Aux>
     );
   }
 }

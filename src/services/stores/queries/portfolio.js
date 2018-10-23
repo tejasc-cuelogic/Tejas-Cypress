@@ -15,35 +15,66 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
     investments {
       pending {
         agreementId
-        offeringName
         location
-        investmentType
-        investedAmount
         investmentDate
+        investedAmount
         status
-        daysToClose
+        offering {
+          offeringStatus
+          keyTerms {
+            shorthandBusinessName
+            securities
+            industry
+          }
+        }
       }
       active {
-        offeringId
-        offeringName
         location
-        investmentType
         investedAmount
         investmentDate
         status
         closeDate
+        offering {
+          offeringStatus
+          keyTerms {
+            shorthandBusinessName
+            securities
+            industry
+          }
+        }
       }
       completed {
-        offeringId
-        offeringName
         location
-        investmentType
         investedAmount
         investmentDate
         status
         closeDate
+        offering {
+          offeringStatus
+          keyTerms {
+            shorthandBusinessName
+            securities
+            industry
+          }
+        }
       }
     }
+  }
+}
+`;
+
+export const getInvestorDetailsById = gql`
+query getInvestmentDetailsOverview($userId: String!, $accountId: String!, $offeringId: String!) {
+  getInvestmentDetailsOverview(
+    userId: $userId,
+    accountId: $accountId,
+    offeringId: $offeringId,
+    ) {
+      totalRaisedAmount
+      fundedDate
+      myInvestment
+      netPaymentsReceived
+      netAnnualizedReturn
   }
 }
 `;
