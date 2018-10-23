@@ -21,7 +21,7 @@ export default class Portfolio extends Component {
     if (portfolioStore.loading) {
       return <InlineLoader />;
     }
-    const { getInvestorAccounts } = portfolioStore;
+    const { getInvestorAccounts, calculateInvestmentType } = portfolioStore;
     const summaryDetails = {
       accountType: includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
@@ -40,6 +40,7 @@ export default class Portfolio extends Component {
         },
       ],
     };
+    console.log(calculateInvestmentType);
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />

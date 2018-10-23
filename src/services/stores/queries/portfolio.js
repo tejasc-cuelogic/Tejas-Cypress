@@ -15,11 +15,10 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
     investments {
       pending {
         agreementId
-        offeringName
         location
         investmentDate
+        investedAmount
         status
-        daysToClose
         offering {
           offeringStatus
           keyTerms {
@@ -30,8 +29,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         }
       }
       active {
-        offeringId
-        offeringName
         location
         investedAmount
         investmentDate
@@ -47,8 +44,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         }
       }
       completed {
-        offeringId
-        offeringName
         location
         investedAmount
         investmentDate
