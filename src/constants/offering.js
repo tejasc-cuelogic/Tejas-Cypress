@@ -35,3 +35,10 @@ export const INDUSTRY_TYPES_ICONS = {
   COMMERCIAL_REAL_ESTATE: 'ns-real-estate',
   OTHER: '',
 };
+export const CAMPAIGN_OFFERING_STATUS = {
+  FUNDED: 'Funded',
+  START_UP_PERIOD: 'Start up period',
+  PRE_OPENING: 'Pre opening',
+  IN_REPAYMENT: 'In repayment',
+  IN_DEFAULT: 'In default',
+};
