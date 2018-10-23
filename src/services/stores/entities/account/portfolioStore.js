@@ -73,14 +73,14 @@ export class PortfolioStore {
   @computed get getInvestorAccounts() {
     return (this.investmentLists && this.investmentLists.data &&
       this.investmentLists.data.getInvestorAccountPortfolio &&
-        toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
+      toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
   }
 
   @computed get loading() {
     return this.investmentLists.loading;
   }
   @action
-  getInvestorDetails = (accountType, offeringId) => {
+  getInvestorDetails = (accountType, offeringId) => new Promise((resolve) => {
     const activeAccounts = userDetailsStore.getActiveAccounts;
     const { userDetails } = userDetailsStore;
     const account = find(activeAccounts, acc => acc.name === accountType);
@@ -92,12 +92,16 @@ export class PortfolioStore {
         accountId: account.details.accountId,
         offeringId,
       },
+      onFetch: () => {
+        resolve();
+      },
+      fetchPolicy: 'network-only',
     });
-  }
+  });
   @computed get getInvestor() {
     return (this.investmentDetails && this.investmentDetails.data &&
-        this.investmentDetails.data.getInvestmentDetailsOverview &&
-        toJS(this.investmentDetails.data.getInvestmentDetailsOverview)) || null;
+      this.investmentDetails.data.getInvestmentDetailsOverview &&
+      toJS(this.investmentDetails.data.getInvestmentDetailsOverview)) || null;
   }
   @computed get loadingInvestDetails() {
     return this.investmentDetails.loading;
