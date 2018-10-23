@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
+import { includes } from 'lodash';
 import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -23,9 +24,11 @@ class InvestmentDetails extends Component {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
-    this.props.portfolioStore.getInvestorDetails('ira', this.props.match.params.id).then(() => {
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
-    });
+    const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+    this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id)
+      .then(() => {
+        this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
+      });
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
