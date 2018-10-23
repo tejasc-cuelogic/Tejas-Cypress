@@ -25,6 +25,12 @@ class signupInitial extends Component {
     e.stopPropagation();
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
+  handleCloseModal = (e) => {
+    e.stopPropagation();
+    // this.props.history.goBack();
+    this.props.history.push('/');
+    console.log('History obj==>', this.props.history);
+  }
   render() {
     const userTypes = USER_TYPES_META.slice();
     const { SIGNUP_FRM, signupChange } = this.props.authStore;

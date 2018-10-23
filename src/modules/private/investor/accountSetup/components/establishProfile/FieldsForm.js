@@ -15,7 +15,7 @@ const FieldsForm = observer(({
           changed={financesChange}
         />
         <Button.Group>
-          <Button color="green" className="very relaxed" disabled={!canSubmitFieldsForm} >Submit</Button>
+          <Button primary disabled={!canSubmitFieldsForm}>Submit</Button>
           <Button onClick={close}>Cancel</Button>
         </Button.Group>
       </Form>

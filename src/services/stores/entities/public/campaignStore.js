@@ -20,7 +20,12 @@ export class CampaignStore {
   @action
   initRequest = (stage) => {
     this.data =
-      graphql({ client: clientPublic, query: allOfferings, variables: { filters: { stage } } });
+      graphql({
+        client: clientPublic,
+        query: allOfferings,
+        variables: { filters: { stage } },
+        fetchPolicy: 'network-only',
+      });
   }
 
   @action
@@ -29,6 +34,7 @@ export class CampaignStore {
       client: clientPublic,
       query: campaignDetailsQuery,
       variables: { id },
+      fetchPolicy: 'network-only',
     });
   }
 
@@ -43,6 +49,7 @@ export class CampaignStore {
           resolve(data.getOfferingDetailsById);
         }
       },
+      fetchPolicy: 'network-only',
     });
   });
 

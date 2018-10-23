@@ -36,11 +36,12 @@ const HowItWorks = () => (
       <Container textAlign={isMobile ? 'left' : 'center'}>
         <Header>Choose how you want to invest.</Header>
         <p className={isMobile ? 'mb-50' : 'mb-80'}>Understand and choose the right opportunities with the right payment terms for you.</p>
-        <Grid doubling columns={2} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
+        <Grid doubling columns={3} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
           <Grid.Column>
             <div className="flex-content">
               <Header as="h3">
-                <Image src={`${ASSETS_URL}images/icons/termnotes.svg`} />Term Notes
+                <Image src={`${ASSETS_URL}images/icons/termnotes.svg`} />
+                <span>Term Notes</span>
               </Header>
               <Item.Group relaxed="very">
                 <Item>
@@ -62,7 +63,7 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List horizontal className={`learn-more-list ${isMobile ? 'mb-30' : 'mt-30'}`}>
+            <List verticalAlign="top" horizontal className={`learn-more-list ${isMobile ? 'mb-30' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 {/* <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" /> */}
@@ -75,7 +76,8 @@ const HowItWorks = () => (
           <Grid.Column>
             <div className="flex-content">
               <Header as="h3">
-                <Image src={`${ASSETS_URL}images/icons/applied.svg`} />Revenue Sharing Notes
+                <Image src={`${ASSETS_URL}images/icons/applied.svg`} />
+                <span>Revenue Sharing Notes</span>
               </Header>
               <Item.Group relaxed="very" className="question-list">
                 <Item>
@@ -99,15 +101,45 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List horizontal className={`learn-more-list ${isMobile ? '' : 'mt-30'}`}>
+            <List verticalAlign="top" horizontal className={`learn-more-list ${isMobile ? '' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
                 {/* <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" /> */}
                 <List.Content>
-                  See an example of a <a href="/">Revenue Sharing investment</a>
+                  See an example of a <a href="/">Revenue Sharing Note investment</a>
                 </List.Content>
               </List.Item>
             </List>
+          </Grid.Column>
+          <Grid.Column>
+            <div className="flex-content">
+              <Header as="h3">
+                <Image src={`${ASSETS_URL}images/icons/equity.svg`} />
+                <span>Preferred Equity</span>
+              </Header>
+              <Item.Group relaxed="very" className="question-list">
+                <Item>
+                  <Item.Content>
+                    <Header as="h5">How does it work?</Header>
+                    <Item.Description>
+                      Preferred equity holders have an interest directly in the entity and may
+                      realize long-term upside on the equity. Payment terms will vary and there
+                      is no maturity date, but there may be a higher potential return.
+                    </Item.Description>
+                  </Item.Content>
+                </Item>
+                <Item>
+                  <Item.Content>
+                    <Header as="h5">Who is this option best for?</Header>
+                    <Item.Description>
+                      Investors who can tolerate greater risk, but who are interested in an
+                      equity stake in a project and a potentially higher financial return over
+                      a longer period.
+                    </Item.Description>
+                  </Item.Content>
+                </Item>
+              </Item.Group>
+            </div>
           </Grid.Column>
         </Grid>
       </Container>

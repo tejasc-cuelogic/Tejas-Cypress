@@ -117,7 +117,7 @@
         color:@negativeTextColor;
     }
     label{
-        i.ns-help-circle, a{
+        i.ns-help-circle{
             height:auto;
             margin:0 0 0 @5px;
             font-size:@14px;
