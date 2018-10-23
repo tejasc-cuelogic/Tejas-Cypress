@@ -50,6 +50,7 @@ const LegalDetails = observer(({
                 name={field}
                 fielddata={form.fields[field]}
                 changed={change}
+                showerror
               />
             ))
           }
@@ -60,6 +61,7 @@ const LegalDetails = observer(({
           onplaceselected={autoComplete}
           changed={change}
           placeHolder="Street Address, City, State, Zip"
+          showerror
         />
         <Form.Group widths={2}>
           <FormInput
@@ -68,6 +70,7 @@ const LegalDetails = observer(({
             name="city"
             fielddata={form.fields.city}
             changed={change}
+            showerror
           />
           <FormDropDown
             name="state"
@@ -88,6 +91,7 @@ const LegalDetails = observer(({
             fielddata={form.fields.zipCode}
             changed={maskChange}
             zipCode
+            showerror
           />
           <MaskedInput
             name="phoneNumber"
@@ -96,6 +100,7 @@ const LegalDetails = observer(({
             format="###-###-####"
             changed={maskChange}
             phoneNumber
+            showerror
           />
         </Form.Group>
         <Form.Group widths={2}>
@@ -105,12 +110,14 @@ const LegalDetails = observer(({
             format="##/##/####"
             changed={maskChange}
             dateOfBirth
+            showerror
           />
           <MaskedInput
             name="ssn"
             fielddata={form.fields.ssn}
             ssn
             changed={maskChange}
+            showerror
           />
         </Form.Group>
         <div className="center-align mt-30">

@@ -28,9 +28,9 @@ class BonusRewards extends Component {
             <Header as="h3">Bonus Rewards</Header>
           </Grid.Column>
         </Grid>
-        <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
-          {rewardsTiers ?
-            rewardsTiers.map(tier => (
+        {rewardsTiers && rewardsTiers.length ?
+          <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
+            {rewardsTiers.map(tier => (
               <Grid.Column>
                 <Segment padded className="reward-block">
                   {tier.earlyBirdQuantity > 0 ?
@@ -63,9 +63,9 @@ class BonusRewards extends Component {
                   </List>
                 </Segment>
               </Grid.Column>
-            )) : <InlineLoader text="No bonus rewards are available." />
-          }
-        </Grid>
+            ))}
+          </Grid> : <InlineLoader text="No bonus rewards are available." />
+        }
         <Grid stackable>
           <Grid.Column>
             <Segment padded>

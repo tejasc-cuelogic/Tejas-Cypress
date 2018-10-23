@@ -52,7 +52,7 @@ class TransferRequest extends Component {
             </Table.Row>
             <Table.Row>
               <Table.Cell>
-            Cash Available:
+                Cash Available:
                 <Popup
                   wide
                   trigger={<Icon name="help circle" color="green" />}
@@ -61,7 +61,7 @@ class TransferRequest extends Component {
                 />
               </Table.Cell>
               <Table.Cell collapsing>
-              ({cashAvailable && Helper.CurrencyFormat(cashAvailable, 'number')})
+                ({cashAvailable && Helper.CurrencyFormat(cashAvailable, 'number')})
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -91,19 +91,14 @@ class TransferRequest extends Component {
         </Table>
         <Divider hidden />
         <Button.Group>
-          <Button
-            primary
-            onClick={this.props.confirm}
-            disabled={!TRANSFER_REQ_FORM.meta.isValid}
-          >Confirm
-          </Button>
+          <Button primary content="Confirm" onClick={this.props.confirm} disabled={!TRANSFER_REQ_FORM.meta.isValid} />
           <Button onClick={this.props.cancel}>Cancel</Button>
         </Button.Group>
         <p className="mt-50">
-      By clicking the “Confirm” button, I authorize the transfer from
-      my <Link to="/">Banco do Brasil account (x-1923)</Link> to my NextSeed account in the
-      amount equal to the Transfer Requested above. I understand this transfer will
-      be <Link to="/">initiated within 1 business day</Link>.
+          By clicking the “Confirm” button, I authorize the transfer from
+          my <Link to="/">Banco do Brasil account (x-1923)</Link> to my NextSeed account in the
+          amount equal to the Transfer Requested above. I understand this transfer will
+          be <Link to="/">initiated within 1 business day</Link>.
         </p>
       </div>
     );

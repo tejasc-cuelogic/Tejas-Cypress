@@ -37,10 +37,11 @@ const Mission = () => (
               <p>
                 The team behind NextSeed created the first registered funding portal with the
                 Securities & Exchange Commission (SEC) and became a member of the Financial
-                Industry Regulatory Authority (FINRA). The portal closed the first-ever
-                regulation crowdfunding offering in the country. Beginning in October 2018,
-                NextSeed Securities LLC operates as an SEC-registered broker-dealer and FINRA
-                member.
+                Industry Regulatory Authority{' '}
+                (<a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
+                {' '}The portal closed the first-ever regulation crowdfunding offering in the country.
+                Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered
+                broker-dealer and FINRA member.
               </p>
               <p>
                 Anyone in the US, regardless of income or net worth, can now invest in innovative
@@ -53,86 +54,19 @@ const Mission = () => (
         </Grid>
       </Container>
     </section>
-    <section className="statistic-section bg-offwhite">
+    <Divider as={Container} />
+    <section className="statistic-section featured-statistic">
       <Container>
         <Grid centered>
           <Grid.Row>
             <Grid.Column width={16}>
-              <Header as="h2" className="mb-10" textAlign="center">Our impact so far.</Header>
+              <Header as="h2" className="mb-10" textAlign="center">
+                We{"'"}ve built our brand and our platform <Responsive minWidth={992} as="br" />on three core values.
+              </Header>
             </Grid.Column>
           </Grid.Row>
-          <Grid celled="internally" centered stackable as={Container}>
-            <Grid.Row>
-              <Grid.Column width={8} textAlign="center">
-                <Grid.Row>
-                  <Grid className="green-block">
-                    <Grid.Column>
-                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
-                        <Statistic.Value>290</Statistic.Value>
-                        <Statistic.Label>Jobs created <sup>5</sup></Statistic.Label>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid>
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid divided className="secondary-statistic">
-                    <Grid.Column width={8} textAlign="center">
-                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
-                        <Statistic.Value className="primary-text">70%</Statistic.Value>
-                        <Statistic.Label>Food & Beverage</Statistic.Label>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column width={8} textAlign="center">
-                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
-                        <Statistic.Value className="primary-text">7%</Statistic.Value>
-                        <Statistic.Label>Hospitality</Statistic.Label>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid>
-                </Grid.Row>
-              </Grid.Column>
-              <Grid.Column width={8} textAlign="center">
-                <Grid.Row>
-                  <Grid className="blue-block">
-                    <Grid.Column>
-                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
-                        <Statistic.Value>$17,819,390</Statistic.Value>
-                        <Statistic.Label>
-                          Economic impact of businesses funded <sup>6</sup>
-                        </Statistic.Label>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid>
-                </Grid.Row>
-                <Grid.Row>
-                  <Grid divided className="secondary-statistic">
-                    <Grid.Column width={8} textAlign="center">
-                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
-                        <Statistic.Value className="secondary-text">10%</Statistic.Value>
-                        <Statistic.Label>Wellness & Fitness</Statistic.Label>
-                      </Statistic>
-                    </Grid.Column>
-                    <Grid.Column width={8} textAlign="center">
-                      <Statistic size={isMobile ? 'mini' : 'tiny'} className="basic">
-                        <Statistic.Value className="secondary-text">13%</Statistic.Value>
-                        <Statistic.Label>Other</Statistic.Label>
-                      </Statistic>
-                    </Grid.Column>
-                  </Grid>
-                </Grid.Row>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
         </Grid>
-        <p className="note mt-50 center-align">
-          <sup>5,6</sup> Based on reported retail impact as reported by the National Retail
-          Federation, we derived the average jobs and GDP impact per establishment and
-          applied the data to NextSeed deals completed.
-        </p>
-      </Container>
-    </section>
-    <section className="statistic-section featured-statistic">
-      <Container>
+        <Divider section as={Container} hidden />
         <Grid celled columns={isMobile ? 1 : 2} className="mb-30">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
@@ -144,13 +78,13 @@ const Mission = () => (
             </Grid.Column>
             <Grid.Column className="blue-block center-align">
               <Statistic size={isMobile ? 'small' : 'large'} className="basic">
-                <Statistic.Value>$1.175M</Statistic.Value>
+                <Statistic.Value>Top 3%</Statistic.Value>
                 <Statistic.Label className="mb-30">
-                  Total amount paid to investors <sup>7</sup>
+                Business applicants approved and launched campaigns <sup>1</sup>
                 </Statistic.Label>
-                <Statistic.Value>40%</Statistic.Value>
+                <Statistic.Value>90%+</Statistic.Value>
                 <Statistic.Label>
-                  Returning investors who invest in more than one offering <sup>8</sup>
+                Campaigns meet fundraising goals <sup>2</sup>
                 </Statistic.Label>
               </Statistic>
             </Grid.Column>
@@ -190,29 +124,31 @@ const Mission = () => (
               </p>
             </Grid.Column>
             <Grid.Column className="green-block center-align">
-              <Header as="h5" className="center-align">Issuers include:</Header>
               <Statistic size={isMobile ? 'small' : 'large'} className="basic">
-                <Statistic.Value>$4.2M</Statistic.Value>
+                <Statistic.Value>$8.9 million</Statistic.Value>
                 <Statistic.Label className="mb-30">
-                  Invested in women and minority-owned businesses <sup>9</sup>
+                  Invested in women and minority-owned businesses <sup>3</sup>
                 </Statistic.Label>
-                <Statistic.Value>34%</Statistic.Value>
-                <Statistic.Label className="mb-30">
-                  Women
-                </Statistic.Label>
-                <Statistic.Value>50%</Statistic.Value>
+                <Statistic.Value>80%</Statistic.Value>
                 <Statistic.Label>
-                  1st or 2nd generation
+                  Issuers are women and minority-owned businesses <sup>4</sup>
                 </Statistic.Label>
               </Statistic>
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <p className="note mt-30 mb-50 center-align">
-          The above figures include the total amount raised in offerings completed
-          through NextSeed Securities, LLC ($XX,XXX,XXX), NextSeed US, LLC ($XX,XXX,XXX)
-          and NextSeed TX, LLC ($XX,XXX,XXX). Historical figures only. Past performance
-          of one business is not a guarantee of future results of another business.
+        <p className="note mt-30 center-align">
+          <sup>1</sup> This calculates the percent of businesses that began the application
+          process, passed NextSeed{"'"}s objective diligence <Responsive minWidth={992} as="br" />
+          criteria, and launched an offering on the platform since NextSeed{"'"}s inception.
+        </p>
+        <p className="note center-align">
+          <sup>2</sup> Historical figures only. Past performance of one business is not a
+          guarantee of future results of another business.
+        </p>
+        <p className="mb-50 note center-align">
+          <sup>3,4</sup> Data reflects figures from both the NextSeed TX and Reg CF
+           Platforms as of October 2018.
         </p>
       </Container>
     </section>
