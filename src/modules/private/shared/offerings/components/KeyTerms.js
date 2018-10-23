@@ -122,28 +122,7 @@ export default class KeyTerms extends Component {
               />
             </div>
             {
-              ['nsMinFees', 'nsMaxFees', 'gsFees'].map(field => (
-                <MaskedInput
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              ))
-            }
-            {
-              ['stateOfFormation', 'city', 'state'].map(field => (
-                <FormInput
-                  key={field}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(e, result) => formChange(e, result, formName)}
-                />
-              ))
-            }
-            {
-              ['minInvestAmt', 'maxInvestAmt'].map(field => (
+              ['nsMinFees', 'nsMaxFees'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -160,6 +139,27 @@ export default class KeyTerms extends Component {
             />
             {
               ['offeringExpTarget', 'offeringExpMax'].map(field => (
+                <MaskedInput
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskChange(values, formName, name)}
+                  currency
+                  prefix="$"
+                />
+              ))
+            }
+            {
+              ['locationRiskFactors', 'city', 'state', 'stateOfFormation'].map(field => (
+                <FormInput
+                  key={field}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(e, result) => formChange(e, result, formName)}
+                />
+              ))
+            }
+            {
+              ['minInvestAmt', 'maxInvestAmt'].map(field => (
                 <MaskedInput
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}

@@ -810,6 +810,13 @@ export class OfferingCreationStore {
           return { ...leadership, ...{ employer: employer.employer } };
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
+      } else if (keyName === 'editForm') {
+        payloadData.offering = {};
+        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData = {
+          ...payloadData,
+          keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
+        };
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
@@ -974,6 +981,8 @@ export class OfferingCreationStore {
         ],
       })
       .then(() => {
+        this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+        // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })
       .catch((err) => {
@@ -1010,6 +1019,7 @@ export class OfferingCreationStore {
         this.confirmModalName = null;
         this.removeIndex = null;
         uiStore.setConfirmBox('');
+        this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         Helper.toast('Affiliated Issuer has been deleted successfully.', 'success');
       })))
       .catch(action((err) => {

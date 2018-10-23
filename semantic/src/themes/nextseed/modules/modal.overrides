@@ -232,6 +232,12 @@
                 .sub.header{
                     font-weight:@normal;
                 }
+                &.success-msg>.icon{
+                    display:block;
+                    margin:0 auto @14px;
+                    font-size:@44px;
+                    line-height:1;
+                }
             }
             .user-type{
                 min-height:210px;

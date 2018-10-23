@@ -38,12 +38,12 @@ const InvestmentList = (props) => {
                     <Table.Row key={data.name}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[data.offering.keyTerms.industry]} offering-icon`} />
-                        <Link to={`${props.match.url}/investment-details/1`}>{data.name}</Link>
+                        <Link to={`${props.match.url}/investment-details/1`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
                       </Table.Cell>
                       <Table.Cell>{data.location}</Table.Cell>
                       <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
                       <Table.Cell textAlign="right">{Helper.CurrencyFormat(data.investedAmount)}</Table.Cell>
-                      <Table.Cell>{data.status}</Table.Cell>
+                      <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
                       <Table.Cell collapsing>{moment(props.listOf === 'pending' ? data.daysToClose : data.closeDate).format('MM/DD/YYYY')}</Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?

@@ -57,7 +57,7 @@ export default class NewEmailAddress extends Component {
               error={!!CONFIRM_FRM.fields.email.error}
             />
             <FieldError error={CONFIRM_FRM.fields.email.error} />
-            <div className="center-align">
+            <div className="center-align mt-30">
               <Button disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
             </div>
           </Form>

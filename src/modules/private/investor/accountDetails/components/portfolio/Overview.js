@@ -5,13 +5,14 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 
-@inject('portfolioStore')
+@inject('portfolioStore', 'campaignStore')
 @observer
 class Overview extends Component {
   render() {
-    const { getInvestor } = this.props.portfolioStore;
+    const { campaign } = this.props.campaignStore;
     return (
       <Aux>
         <div className="inner-content-spacer bg-offwhite">
@@ -21,7 +22,7 @@ class Overview extends Component {
             </Header>
           </span>
           <span className="pull-right">
-            <Link target="_blank" to="/offerings/cjk9i3tv31vh70197umi5y2ak/overview" className="pull-right">View offering page</Link>
+            <Link target="_blank" to={`/offerings/${campaign.id}/overview`} className="pull-right">View offering page</Link>
           </span>
         </div>
         <div className="inner-content-spacer">
@@ -34,10 +35,9 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell width={5}>Issuer</Table.Cell>
                       <Table.Cell>
-                        {getInvestor && getInvestor.offering &&
-                          getInvestor.offering.keyTerms &&
-                          getInvestor.offering.keyTerms.shorthandBusinessName ?
-                          getInvestor.offering.keyTerms.shorthandBusinessName
+                        {campaign && campaign.keyTerms &&
+                          campaign.keyTerms.shorthandBusinessName ?
+                          campaign.keyTerms.shorthandBusinessName
                           :
                           'NA'
                         }
@@ -46,10 +46,9 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Entity Type</Table.Cell>
                       <Table.Cell>
-                        {getInvestor && getInvestor.offering &&
-                          getInvestor.offering.keyTerms &&
-                          getInvestor.offering.keyTerms.legalBusinessType ?
-                          getInvestor.offering.keyTerms.legalBusinessType
+                        {campaign && campaign.keyTerms &&
+                          campaign.keyTerms.legalBusinessType ?
+                          campaign.keyTerms.legalBusinessType
                           :
                           'NA'
                         }
@@ -58,11 +57,10 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Anticipated Opening</Table.Cell>
                       <Table.Cell>
-                        {getInvestor && getInvestor.offering &&
-                          getInvestor.offering.offering &&
-                          getInvestor.offering.offering.launch &&
-                          getInvestor.offering.offering.launch.targetDate ?
-                          moment(getInvestor.offering.offering.launch.targetDate).format('ll')
+                        {campaign && campaign.offering &&
+                          campaign.offering.launch &&
+                          campaign.offering.launch.targetDate ?
+                          moment(campaign.offering.launch.targetDate).format('ll')
                           :
                           'NA'
                         }
@@ -71,10 +69,9 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Maturity</Table.Cell>
                       <Table.Cell>
-                        {getInvestor && getInvestor.offering &&
-                          getInvestor.offering.keyTerms &&
-                          getInvestor.offering.keyTerms.maturity ?
-                          `${getInvestor.offering.keyTerms.maturity} Months to Offering Summary`
+                        {campaign && campaign.keyTerms &&
+                          campaign.keyTerms.maturity ?
+                          `${campaign.keyTerms.maturity} Months to Offering Summary`
                           :
                           'NA'
                         }
@@ -87,10 +84,9 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Security Interest</Table.Cell>
                       <Table.Cell>
-                        {getInvestor && getInvestor.offering &&
-                          getInvestor.offering.keyTerms &&
-                          getInvestor.offering.keyTerms.securityInterest ?
-                           getInvestor.offering.keyTerms.securityInterest
+                        {campaign && campaign.keyTerms &&
+                          campaign.keyTerms.securityInterest ?
+                          campaign.keyTerms.securityInterest
                           :
                           'NA'
                         }
@@ -98,18 +94,38 @@ class Overview extends Component {
                     </Table.Row>
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Ownership %</Table.Cell>
-                      <Table.Cell>Term Notes</Table.Cell>
+                      <Table.Cell>
+                        {campaign && campaign.keyTerms &&
+                          campaign.keyTerms.securitiesOwnershipPercentage ?
+                          `${campaign.keyTerms.securitiesOwnershipPercentage}% 
+                          Investors will not receive any equity interests in
+                          the Issuer or any voting or management rights with respect
+                          to the Issuer as a result of an investment in Securities.`
+                          :
+                          'NA'
+                        }
+                      </Table.Cell>
                     </Table.Row>
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Interest Rate</Table.Cell>
-                      <Table.Cell>18%</Table.Cell>
+                      <Table.Cell>
+                        {campaign && campaign.keyTerms &&
+                          campaign.keyTerms.interestRate ?
+                          campaign.keyTerms.interestRate
+                          :
+                          'NA'
+                        }
+                      </Table.Cell>
                     </Table.Row>
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Securities</Table.Cell>
                       <Table.Cell>
-                        0%. Investors will not receive any equity interests in
-                        the Issuer or any voting or management rights with respect
-                        to the Issuer as a result of an investment in Securities.
+                        {campaign && campaign.keyTerms &&
+                          campaign.keyTerms.securities ?
+                          CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
+                          :
+                          'NA'
+                        }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row>
