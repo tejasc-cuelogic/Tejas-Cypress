@@ -67,3 +67,73 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
   }
 }
 `;
+
+export const getInvestorDetailsById = gql`
+query getInvestmentDetailsOverview($userId: String!, $accountId: String!, $offeringId: String!) {
+  getInvestmentDetailsOverview(
+    userId: $userId,
+    accountId: $accountId,
+    offeringId: $offeringId,
+    ) {
+      totalRaisedAmount
+      fundedDate
+      myInvestment
+      netPaymentsReceived
+      netAnnualizedReturn
+      offering {
+        id
+        offeringStatus
+        selectedOffer {
+          structure
+          amount
+          minimumAmount
+          maturity
+          interestRate
+          amortizationAmount
+          mthRevenueSharing
+          personalGuarantee
+          businessBlanket
+          expirationDate
+          multiple
+          totalCapital
+          isAccepted
+        }
+        offeringSlug
+        applicationId
+        issuerId
+        keyTerms {
+          legalBusinessName
+          shorthandBusinessName
+          legalBusinessType
+          maturity
+          frequencyOfPayments
+          securities
+          securityInterest
+          securitiesOwnershipPercentage
+          investmentMultiple
+          revSharePercentage
+          interestRate
+          minOfferingAmount
+          maxOfferingAmount
+          industry
+          minInvestAmt
+          maxInvestAmt
+          revShareSummary
+          investmentMultipleSummary
+          locationRiskFactors
+          isTX
+          state
+          city
+        }
+        offering {
+          launch {
+            targetDate
+            terminationDate
+            expectedOpsDate
+            issuerApprovedDate
+          }
+        }
+      }
+  }
+}
+`;

@@ -50,8 +50,7 @@ class Login extends Component {
         onClose={() => {
           reset('LOGIN');
           this.props.history.push('/');
-          }
-        }
+        }}
       >
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Log in to NextSeed</Header>
