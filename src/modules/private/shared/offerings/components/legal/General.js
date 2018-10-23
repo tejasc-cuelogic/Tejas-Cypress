@@ -51,7 +51,7 @@ export default class General extends Component {
           <Header as="h4">General Information</Header>
           <Form.Group widths={3}>
             {
-              ['websiteUrl', 'monthLaunch', 'offeringDeadline'].map(field => (
+              ['websiteUrl', 'monthLaunch', 'offeringDeadline', 'employmentIdNumber'].map(field => (
                 <FormInput
                   displayMode={isReadonly}
                   key={field}
@@ -61,18 +61,14 @@ export default class General extends Component {
                 />
               ))
             }
-            {
-              ['employmentIdNumber', 'numOfEmployees'].map(field => (
-                <MaskedInput
-                  displayMode={isReadonly}
-                  key={field}
-                  name={field}
-                  fielddata={GENERAL_FRM.fields[field]}
-                  changed={(values, name) => maskArrayChange(values, formName, name)}
-                  number
-                />
-              ))
-            }
+            <MaskedInput
+              displayMode={isReadonly}
+              key="numOfEmployees"
+              name="numOfEmployees"
+              fielddata={GENERAL_FRM.fields.numOfEmployees}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
+              number
+            />
           </Form.Group>
           <Header as="h4">Contact</Header>
           <Form.Group widths={3}>
@@ -133,7 +129,7 @@ export default class General extends Component {
             fielddata={GENERAL_FRM.fields.businessCapitalization}
             changed={(e, result) => formArrayChange(e, result, formName)}
             containerclassname="secondary"
-            placeholder={`Because ${shorthandName} was formed recently, the Issuer’s operations are limited and there are no historical results of operation to report.  The Issuer anticipates that the total cost of the project will be approximately $[X]. ${shorthandName} is seeking to crowdfund an amount between the minimum of $${minimumOfferingAmount} and maximum of $${offeringAmount} through the Offering. ${shorthandName} has also raised $[x] through sale of equity interests. If ${shorthandName} is able to complete a successful Offering, the members of the Issuer have committed to provide or arrange for sufficient financing for the Issuer to cover the remaining balance of the project cost. Please also see Section V – “Financial Statements” and Appendix A for more information.`}
+            defaultValue={`Because ${shorthandName} was formed recently, the Issuer’s operations are limited and there are no historical results of operation to report.  The Issuer anticipates that the total cost of the project will be approximately $[X]. ${shorthandName} is seeking to crowdfund an amount between the minimum of $${minimumOfferingAmount} and maximum of $${offeringAmount} through the Offering. ${shorthandName} has also raised $[x] through sale of equity interests. If ${shorthandName} is able to complete a successful Offering, the members of the Issuer have committed to provide or arrange for sufficient financing for the Issuer to cover the remaining balance of the project cost. Please also see Section V – “Financial Statements” and Appendix A for more information.`}
             hidelabel
           />
           <Divider section />
@@ -290,6 +286,7 @@ export default class General extends Component {
                           fielddata={terms[field]}
                           changed={(values, name) => maskArrayChange(values, formName, name, 'materialIndebtedness', index)}
                           percentage={field === 'interestRate'}
+                          maxlength={field === 'interestRate' ? 8 : 0}
                           currency={field === 'amountOutstanding'}
                           prefix={field === 'amountOutstanding' ? '$' : ''}
                           dateOfBirth={field === 'maturityDate'}

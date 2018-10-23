@@ -27,7 +27,7 @@ export default class MaskedInput extends Component {
     return (
       <Form.Field error={(!!error && this.state.showError)} className={fieldClass}>
         <label>
-          {!props.hidelabel && label}
+          {!props.hidelabel && (props.label || label)}
           {tooltip &&
             <Popup
               hoverable={props.hoverable}

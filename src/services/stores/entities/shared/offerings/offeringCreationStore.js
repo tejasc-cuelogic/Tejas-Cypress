@@ -813,6 +813,13 @@ export class OfferingCreationStore {
           return { ...leadership, ...{ employer: employer.employer } };
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
+      } else if (keyName === 'editForm') {
+        payloadData.offering = {};
+        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData = {
+          ...payloadData,
+          keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
+        };
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
