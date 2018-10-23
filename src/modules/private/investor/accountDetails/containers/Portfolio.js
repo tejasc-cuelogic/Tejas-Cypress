@@ -21,7 +21,7 @@ export default class Portfolio extends Component {
     if (portfolioStore.loading) {
       return <InlineLoader />;
     }
-    const { getInvestorAccounts } = portfolioStore;
+    const { getInvestorAccounts, calculateInvestmentType } = portfolioStore;
     const summaryDetails = {
       accountType: includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
@@ -40,14 +40,15 @@ export default class Portfolio extends Component {
         },
       ],
     };
+    console.log(calculateInvestmentType);
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
-        <PortfolioAllocations />
+        <PortfolioAllocations pieChart={calculateInvestmentType} />
         <Header as="h4">My Investments</Header>
-        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.pending} listOf="pending" match={match} />
-        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.active} listOf="active" match={match} />
-        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.completed} listOf="completed" match={match} />
+        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.investments.pending} listOf="pending" match={match} />
+        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.investments.active} listOf="active" match={match} />
+        <InvestmentList investments={getInvestorAccounts && getInvestorAccounts.investments.completed} listOf="completed" match={match} />
         <Route
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}

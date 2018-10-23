@@ -34,32 +34,30 @@ export default class ChangePassword extends Component {
       CHANGE_PASS_FRM, changePassChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
     return (
-      <div>
-        <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
-          <Modal.Header className="center-align signup-header">
-            <Header as="h3">Change your Password</Header>
-          </Modal.Header>
-          <Modal.Content className="signup-content">
-            <Form onSubmit={this.onSubmit}>
-              {
-                ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
-                  <FormInput
-                    key={field}
-                    type={pwdInputType}
-                    icon={(field === 'oldPasswd') ? togglePasswordType() : null}
-                    name={field}
-                    fielddata={CHANGE_PASS_FRM.fields[field]}
-                    changed={changePassChange}
-                  />
-                ))
-              }
-              <div className="mt-30 center-align">
-                <Button loading={this.props.uiStore.inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} primary size="large">Set new password</Button>
-              </div>
-            </Form>
-          </Modal.Content>
-        </Modal>
-      </div>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h3">Change your Password</Header>
+        </Modal.Header>
+        <Modal.Content className="signup-content">
+          <Form onSubmit={this.onSubmit}>
+            {
+              ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
+                <FormInput
+                  key={field}
+                  type={pwdInputType}
+                  icon={(field === 'oldPasswd') ? togglePasswordType() : null}
+                  name={field}
+                  fielddata={CHANGE_PASS_FRM.fields[field]}
+                  changed={changePassChange}
+                />
+              ))
+            }
+            <div className="mt-30 center-align">
+              <Button loading={this.props.uiStore.inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} primary size="large">Set new password</Button>
+            </div>
+          </Form>
+        </Modal.Content>
+      </Modal>
     );
   }
 }

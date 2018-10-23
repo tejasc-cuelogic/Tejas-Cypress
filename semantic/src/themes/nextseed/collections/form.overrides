@@ -72,7 +72,7 @@
         }
     }
     .otp-wrap{
-        margin:0 0 3rem 0;
+        margin:@32px 0 @42px 0;
         >label{
             width:100%;
         }

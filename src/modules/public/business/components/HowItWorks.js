@@ -155,17 +155,15 @@ const HowItWorks = () => (
           <Container>
             <NsCarousel {...settings}>
               {businesses.map(row => (
-                <Grid.Row>
-                  {
-                    row.map(b => (
-                      <Grid.Column className="center-align">
-                        <Image src={b.image} centered />
-                        <Header as="h5">{b.title}</Header>
-                        <p>{b.description}</p>
-                      </Grid.Column>
-                    ))
-                  }
-                </Grid.Row>
+                row.map(b => (
+                  <Grid.Row>
+                    <Grid.Column className="center-align">
+                      <Image src={b.image} centered />
+                      <Header as="h5">{b.title}</Header>
+                      <p>{b.description}</p>
+                    </Grid.Column>
+                  </Grid.Row>
+                ))
               ))
             }
             </NsCarousel>
