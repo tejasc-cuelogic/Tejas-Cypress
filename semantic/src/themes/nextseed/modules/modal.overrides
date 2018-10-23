@@ -208,7 +208,6 @@
         p{
             font-size:@14px;
             font-weight:@normal;
-            color:@neutral-middark;
         }
     }
     // h4.ui.header{
@@ -341,11 +340,15 @@
             text-align:center;
             border:none;
             background-color:@white;
-            > p{
-                font-weight:@fontMedium;
-            }
             @media only screen and (max-width:@largestMobileScreen){
                 padding-bottom:@21px !important;
+            }
+            .link-button{
+                font-weight:@normal;
+                color:@primary-one;
+                &:hover{
+                    text-decoration:underline
+                }
             }
         }
     }
@@ -435,6 +438,7 @@
     input[type=tel].display-only:not(:read-only),
     input[type=email].display-only:not(:read-only){
         background-color:@white;
+        border-radius:0;
         &:focus{
             border-color:@primary-one;
             outline:none;
