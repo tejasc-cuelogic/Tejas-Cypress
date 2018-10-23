@@ -59,18 +59,11 @@ class InvestorSignup extends Component {
           </Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <Form>
-            <Button color="facebook" size="large" fluid>
-              Sign up with Facebook
-            </Button>
+            <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
           </Form>
           <Divider horizontal section>or</Divider>
-          <Form onSubmit={this.handleSubmitForm}>
+          <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
               {
                 ['givenName', 'familyName'].map(field => (
@@ -107,6 +100,11 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
             <div className="center-align mt-30">
               <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid} />
             </div>
