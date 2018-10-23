@@ -14,6 +14,9 @@ class Offering extends Component {
   componentWillMount() {
     this.props.campaignStore.initRequest([OFFERING_STAGE.LIVE, OFFERING_STAGE.COMPLETE]);
   }
+  componentWillReceiveProps() {
+    this.props.campaignStore.initRequest([OFFERING_STAGE.LIVE, OFFERING_STAGE.COMPLETE]);
+  }
   render() {
     const { OfferingList, loading } = this.props.campaignStore;
     const liveCampaign = filter(OfferingList, ele => ele.stage === OFFERING_STAGE.LIVE);

@@ -61,8 +61,8 @@ const HowItWorks = () => (
           <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
           <div className="center-align">
             <Button.Group>
-              <Button secondary content="Business Application" />
-              <Button secondary content="CRE Application" />
+              <Button as={Link} to="business-application/business" secondary content="Business Application" />
+              <Button as={Link} to="business-application/commercial-real-estate" secondary content="CRE Application" />
             </Button.Group>
           </div>
           <Divider section />
