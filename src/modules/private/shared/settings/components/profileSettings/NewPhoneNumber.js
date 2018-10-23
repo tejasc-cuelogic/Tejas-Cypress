@@ -50,7 +50,7 @@ export default class NewPhoneNumber extends Component {
               changed={personalInfoMaskedChange}
               phoneNumber
             />
-            <div className="center-align">
+            <div className="center-align mt-30">
               <Button loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>
             </div>
           </Form>
