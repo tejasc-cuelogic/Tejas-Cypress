@@ -7,6 +7,7 @@ import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import { CAMPAIGN_OFFERING_STATUS } from '../../../../../constants/offering';
 import NotFound from '../../../../shared/NotFound';
 
 const navItems = [
@@ -23,7 +24,7 @@ class InvestmentDetails extends Component {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
     this.props.portfolioStore.getInvestorDetails('ira', this.props.match.params.id).then(() => {
-      this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
     });
   }
   handleCloseModal = (e) => {
@@ -34,6 +35,8 @@ class InvestmentDetails extends Component {
   render() {
     const { match, portfolioStore } = this.props;
     const { getInvestor, investmentDetails } = portfolioStore;
+    const { campaign } = this.props.campaignStore;
+
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
@@ -43,7 +46,7 @@ class InvestmentDetails extends Component {
           title: 'Total invested amount', content: getInvestor && getInvestor.totalRaisedAmount, type: 1, info: 'Your Total invested amount as of today',
         },
         {
-          title: 'Status', content: 'Funded', info: 'Your Status as of today',
+          title: 'Status', content: campaign && campaign.offeringStatus ? CAMPAIGN_OFFERING_STATUS[campaign.offeringStatus] : 'NA', info: 'Your Status as of today',
         },
         {
           title: 'Date', content: getInvestor && moment(getInvestor.fundedDate).format('ll'), info: 'Date of investment started',
