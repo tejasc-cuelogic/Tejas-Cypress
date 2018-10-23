@@ -286,7 +286,7 @@ export default class General extends Component {
                           fielddata={terms[field]}
                           changed={(values, name) => maskArrayChange(values, formName, name, 'materialIndebtedness', index)}
                           percentage={field === 'interestRate'}
-                          maxlength={field === 'interestRate' ? 8 : 0}
+                          maxlength={field === 'interestRate' && 8}
                           currency={field === 'amountOutstanding'}
                           prefix={field === 'amountOutstanding' ? '$' : ''}
                           dateOfBirth={field === 'maturityDate'}

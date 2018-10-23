@@ -416,13 +416,6 @@ export const OFFERING_OVERVIEW = {
     rule: 'optional',
     placeHolder: 'e.g. Company was formed...',
   },
-  issuerWebsite: {
-    value: '',
-    label: 'Issuer Website',
-    error: undefined,
-    rule: 'optional',
-    placeHolder: 'e.g. http://company.com',
-  },
 };
 
 export const OFFERING_COMPANY = {
@@ -1243,6 +1236,9 @@ export const GENERAL = {
       error: undefined,
       rule: 'date',
       placeHolder: 'Select date',
+      customErrors: {
+        date: 'Maturity Date is not a valid date format.',
+      },
     },
     paymentSchedule: {
       label: 'Payment Schedule',
