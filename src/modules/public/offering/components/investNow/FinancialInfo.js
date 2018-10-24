@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Form, Popup, Icon, Divider, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 
@@ -21,11 +22,11 @@ class FinancialInfo extends Component {
           Your investment limit: $8,000
           <Popup
             wide
-            trigger={<Icon name="help circle" color="green" />}
+            trigger={<Icon className="ns-help-circle" color="green" />}
             content="This calculates"
             position="top center"
           />
-          <Button className="link-button">Update</Button>
+          <Link to="/" className="link"><small>Update</small></Link>
         </Header>
         <Form error size="huge">
           <MaskedInput
@@ -41,7 +42,7 @@ class FinancialInfo extends Component {
           <b>Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}</b>
           <Popup
             wide
-            trigger={<Icon name="help circle" color="green" />}
+            trigger={<Icon name="ns-help-circle" color="green" />}
             content="This calculates the total amount that the issuer agrees to pay you under the note purchase agrrement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
             position="top center"
           />
