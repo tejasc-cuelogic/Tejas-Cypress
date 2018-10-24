@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
+import { Header, Form, Popup, Icon, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 
@@ -17,6 +17,16 @@ class FinancialInfo extends Component {
     return (
       <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
+        <Header as="h4" textAlign="center">
+          Your investment limit: $8,000
+          <Popup
+            wide
+            trigger={<Icon name="help circle" color="green" />}
+            content="This calculates"
+            position="top center"
+          />
+          <Button className="link-button">Update</Button>
+        </Header>
         <Form error size="huge">
           <MaskedInput
             name="investmentAmount"

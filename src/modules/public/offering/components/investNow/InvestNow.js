@@ -34,9 +34,9 @@ export default class InvestNow extends React.Component {
     this.props.history.push('invest-now');
   }
 
-  handleconfirm = () => {
+  handleConfirm = () => {
     this.setState({ submitLoading: !this.state.submitLoading });
-    Helper.toast('Transfer requeste is in process!', 'success');
+    Helper.toast('Transfer request is in process!', 'success');
     setTimeout(() => {
       this.props.investmentStore.setStepToBeRendered(0);
       this.setState({ submitLoading: !this.state.submitLoading });
@@ -55,20 +55,20 @@ export default class InvestNow extends React.Component {
     const steps =
     [
       {
-        name: 'Financial Info',
-        component: <FinancialInfo />,
+        name: 'Account Type',
+        component: <AccountType UserAccounts={signupStatus.activeAccounts} />,
         isValid: '',
         stepToBeRendered: 1,
       },
       {
-        name: 'Account Type',
-        component: <AccountType UserAccounts={signupStatus.activeAccounts} />,
+        name: 'Financial Info',
+        component: <FinancialInfo />,
         isValid: '',
         stepToBeRendered: 2,
       },
       {
         name: 'TransferRequest',
-        component: <TransferRequest confirm={this.handleconfirm} cancel={this.handleCancel} />,
+        component: <TransferRequest confirm={this.handleConfirm} cancel={this.handleCancel} />,
         stepToBeRendered: 3,
         isValid: '',
       },
