@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { capitalize } from 'lodash';
 import graphql from 'mobx-apollo';
 import { INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
@@ -30,6 +30,7 @@ export class InvestmentStore {
     }
     @observable estReturnVal = '-';
     @observable disableNextbtn = true;
+    @observable isValidInvestAmtInOffering = false;
 
     @computed get getSelectedAccountTypeId() {
       const accType = this.investAccTypes.value;
@@ -198,15 +199,25 @@ export class InvestmentStore {
 
     @action
     validateInvestmentAmountInOffering = () => {
-      const { campaign } = campaignStore;
       this.details = graphql({
         client,
         query: validateInvestmentAmountInOffering,
         variables: {
           investmentAmount: this.investmentAmount,
-          offeringId: campaign.id,
+          offeringId: campaignStore.getOfferingId,
           userId: userDetailsStore.currentUserId,
           accountId: this.getSelectedAccountTypeId,
+        },
+        onFetch: (res) => {
+          this.isValidInvestAmtInOffering = res.validateInvestmentAmountInOffering;
+          const errMsg = 'This amount exceeds your current investment limit. Update your income and net worth, or lower your investment amount.';
+          if (!res.validateInvestmentAmountInOffering) {
+            this.INVESTMONEY_FORM.fields.investmentAmount.error = errMsg;
+            this.INVESTMONEY_FORM.meta.isValid = false;
+          } else {
+            this.INVESTMONEY_FORM.fields.investmentAmount.error = undefined;
+            this.INVESTMONEY_FORM.meta.isValid = true;
+          }
         },
         fetchPolicy: 'network-only',
       });
@@ -330,7 +341,7 @@ export class InvestmentStore {
 
   @computed get validBonusRewards() {
     const { campaign } = campaignStore;
-    const bonusRewards = [];
+    let bonusRewards = [];
     campaign.bonusRewards.map((reward) => {
       reward.tiers.map((tier) => {
         if (this.investmentAmount >= tier.amount) {
@@ -340,6 +351,7 @@ export class InvestmentStore {
       });
       return null;
     });
+    bonusRewards = [...new Set(toJS(bonusRewards))];
     return bonusRewards;
   }
 }
