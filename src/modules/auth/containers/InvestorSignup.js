@@ -47,7 +47,8 @@ class InvestorSignup extends Component {
         onClose={
           () => {
             reset('SIGNUP');
-            this.props.history.push('/');
+            // this.props.history.push('/');
+            this.props.history.push(this.props.uiStore.authRef || '/');
           }
         }
       >
