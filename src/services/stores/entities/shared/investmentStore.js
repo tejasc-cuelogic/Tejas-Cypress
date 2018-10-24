@@ -5,7 +5,7 @@ import { INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DET
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore } from '../../index';
+import { uiStore, userDetailsStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash, getUserRewardBalance,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
@@ -13,6 +13,10 @@ import {
 } from '../../queries/investNow';
 
 export class InvestmentStore {
+    @observable userId = (userDetailsStore.userDetaiils && userDetailsStore.userDetaiils.id)
+    || null;
+    @observable currentInvestmentLimit = (userDetailsStore.userDetails &&
+      userDetailsStore.userDetails.limits && userDetailsStore.userDetails.limits.limit) || 0
     @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
     @observable TRANSFER_REQ_FORM = Validator.prepareFormObject(TRANSFER_REQ_INFO);
     @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
@@ -29,6 +33,13 @@ export class InvestmentStore {
     }
     @observable estReturnVal = '-';
     @observable disableNextbtn = true;
+
+    @computed get getSelectedAccountTypeId() {
+      const accType = this.investAccTypes.value;
+      userDetailsStore.setFieldValue('currentActiveAccount', accType);
+      const selectedAccount = userDetailsStore.currentActiveAccountDetails;
+      return selectedAccount;
+    }
 
     @action
     setDisableNextbtn = () => {
@@ -78,17 +89,13 @@ export class InvestmentStore {
     @action
     prepareAccountTypes = (UserAccounts) => {
       if (this.investAccTypes.values.length === 0 && UserAccounts) {
-        ['individual', 'ira', 'entity'].map((type, index) => {
-          UserAccounts.map((acc) => {
-            if (acc === type) {
-              const label = type === 'ira' ? 'IRA' : capitalize(type);
-              this.investAccTypes.values.push({ label, value: index });
-              return null;
-            }
-            return null;
-          });
+        UserAccounts.map((acc) => {
+          const label = acc === 'ira' ? 'IRA' : capitalize(acc);
+          this.investAccTypes.values.push({ label, value: acc });
           return null;
         });
+        const val = this.investAccTypes.values[0].value;
+        this.investAccTypes.value = val;
       }
     }
     @action
@@ -158,7 +165,7 @@ export class InvestmentStore {
         query: getAmountInvestedInCampaign,
         variables: {
           // offeringId,
-          // userId,
+          userId: this.userId,
           // accountId,
         },
         fetchPolicy: 'network-only',
@@ -171,7 +178,7 @@ export class InvestmentStore {
         client,
         query: getInvestorAvailableCash,
         variables: {
-          // userId,
+          userId: this.userId,
           // accountId,
           // includeInFlight,
           // includeInterest,
@@ -195,7 +202,7 @@ export class InvestmentStore {
         client,
         query: getUserRewardBalance,
         variables: {
-          // userId,
+          userId: this.userId,
           // dateFilterStart,
           // dateFilterStop,
         },
@@ -211,7 +218,7 @@ export class InvestmentStore {
         variables: {
           // investmentAmount,
           // offeringId,
-          // userId,
+          userId: this.userId,
           // accountId,
         },
         fetchPolicy: 'network-only',
@@ -224,7 +231,7 @@ export class InvestmentStore {
         client,
         query: validateInvestmentAmount,
         variables: {
-          // userId,
+          userId: this.userId,
           // accountId,
           // offeringId,
           // investmentAmount,
@@ -241,7 +248,7 @@ export class InvestmentStore {
         client,
         query: getInvestorInFlightCash,
         variables: {
-          // userId,
+          userId: this.userId,
           // accountId,
           // isAutoDraft,
         },
@@ -257,7 +264,7 @@ export class InvestmentStore {
         .mutate({
           mutation: addFunds,
           variables: {
-            // userId,
+            userId: this.userId,
             // accountId,
             // amount,
             // description,
@@ -286,7 +293,7 @@ export class InvestmentStore {
         .mutate({
           mutation: generateAgreement,
           variables: {
-            // userId,
+            userId: this.userId,
             // accountId,
             // offeringId,
             // investmentAmount,
@@ -315,7 +322,7 @@ export class InvestmentStore {
         .mutate({
           mutation: finishInvestment,
           variables: {
-            // userId,
+            userId: this.userId,
             // accountId,
             // offeringId,
             // investmentAmount,
@@ -344,7 +351,7 @@ export class InvestmentStore {
         .mutate({
           mutation: transferFundsForInvestment,
           variables: {
-            // userId,
+            userId: this.userId,
             // accountId,
             // transferAmount,
           },

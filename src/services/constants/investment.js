@@ -53,7 +53,7 @@ export const TRANSFER_REQ_INFO = {
 };
 
 export const INVEST_ACCOUNT_TYPES = {
-  value: 0,
+  value: '',
   values: [],
   error: undefined,
   rule: 'required',

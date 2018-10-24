@@ -42,7 +42,7 @@ export class UserDetailsStore {
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.details.status === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.details && account.details.status === 'FULL');
     }
     return accDetails;
   }

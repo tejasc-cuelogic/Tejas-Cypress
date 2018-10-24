@@ -41,8 +41,17 @@ class AccountType extends Component {
       <Aux>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
         <Form error className="account-type-tab">
-          {investAccTypes.values[0] ?
-            <p className="center-align">Choose an account type</p> :
+          {investAccTypes.values.length ?
+            <Aux>
+              <p className="center-align">Choose an account type</p>
+              <FormRadioGroup
+                name="investAccountType"
+                containerclassname="button-radio center-align"
+                fielddata={investAccTypes}
+                changed={accTypeChanged}
+              />
+            </Aux>
+            :
             <div className="center-align">
               <p>Investment Accounts are not yet Created!</p>
               <Link to="/app/summary" className="text-link">
@@ -51,12 +60,6 @@ class AccountType extends Component {
               </Link>
             </div>
           }
-          <FormRadioGroup
-            name="investAccountType"
-            containerclassname="button-radio center-align"
-            fielddata={investAccTypes}
-            changed={accTypeChanged}
-          />
         </Form>
       </Aux>
     );
