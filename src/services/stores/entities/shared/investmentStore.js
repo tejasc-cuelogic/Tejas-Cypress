@@ -5,22 +5,19 @@ import { INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DET
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, campaignStore } from '../../index';
+import { uiStore, userDetailsStore, campaignStore, rewardStore } from '../../index';
 import {
-  getAmountInvestedInCampaign, getInvestorAvailableCash, getUserRewardBalance,
+  getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
-  addFunds, generateAgreement, finishInvestment, transferFundsForInvestment,
+  generateAgreement, finishInvestment, transferFundsForInvestment,
 } from '../../queries/investNow';
 
 export class InvestmentStore {
-    @observable userId = (userDetailsStore.userDetails && userDetailsStore.userDetails.id)
-    || null;
-    @observable currentInvestmentLimit = (userDetailsStore.userDetails &&
-      userDetailsStore.userDetails.limits && userDetailsStore.userDetails.limits.limit) || 0
+    @observable currentInvestmentLimit = 0;
     @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
     @observable TRANSFER_REQ_FORM = Validator.prepareFormObject(TRANSFER_REQ_INFO);
     @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
-    @observable cashAvailable = 5819.01;
+    @observable cashAvailable = 0;
     @observable investAccTypes = { ...INVEST_ACCOUNT_TYPES };
     @observable stepToBeRendered = 0;
     @observable offeringMetaData = {
@@ -40,7 +37,14 @@ export class InvestmentStore {
       const selectedAccount = userDetailsStore.currentActiveAccountDetails;
       return selectedAccount.details.accountId;
     }
-
+    @computed get getCurrCashAvailable() {
+      return (this.cashAvailable && parseInt(this.cashAvailable.data.getInvestorAvailableCash, 10))
+      || 0;
+    }
+    @computed get getTransferRequestAmount() {
+      return this.investmentAmount -
+      (this.getCurrCashAvailable + rewardStore.getCurrCreditAvailable);
+    }
     @action
     setDisableNextbtn = () => {
       this.disableNextbtn = false;
@@ -88,7 +92,7 @@ export class InvestmentStore {
 
     @action
     prepareAccountTypes = (UserAccounts) => {
-      if (this.investAccTypes.values.length === 0 && UserAccounts) {
+      if (this.investAccTypes.values.length === 0 && UserAccounts.length) {
         UserAccounts.map((acc) => {
           const label = acc === 'ira' ? 'IRA' : capitalize(acc);
           this.investAccTypes.values.push({ label, value: acc });
@@ -104,7 +108,8 @@ export class InvestmentStore {
       Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
     }
     @computed get investmentAmount() {
-      return this.INVESTMONEY_FORM.fields.investmentAmount.value;
+      const val = this.INVESTMONEY_FORM.fields.investmentAmount.value;
+      return parseInt(val || 0, 10);
     }
 
     @computed get investmentLimitsChecked() {
@@ -165,7 +170,7 @@ export class InvestmentStore {
         query: getAmountInvestedInCampaign,
         variables: {
           // offeringId,
-          userId: this.userId,
+          userId: userDetailsStore.currentUserId,
           // accountId,
         },
         fetchPolicy: 'network-only',
@@ -174,41 +179,22 @@ export class InvestmentStore {
 
     @action
     getInvestorAvailableCash = () => new Promise((resolve) => {
-      this.details = graphql({
+      this.cashAvailable = graphql({
         client,
         query: getInvestorAvailableCash,
         variables: {
-          userId: this.userId,
-          // accountId,
-          // includeInFlight,
-          // includeInterest,
-          // includeReferralCredit,
-          // dateFilterStart,
-          // dateFilterStop,
-          // txOnly,
+          userId: userDetailsStore.currentUserId,
+          accountId: this.getSelectedAccountTypeId,
         },
         onFetch: (data) => {
           if (data) {
+            rewardStore.getUserRewardBalance();
             resolve(data);
           }
         },
         fetchPolicy: 'network-only',
       });
     });
-
-    @action
-    getUserRewardBalance = () => {
-      this.details = graphql({
-        client,
-        query: getUserRewardBalance,
-        variables: {
-          userId: this.userId,
-          // dateFilterStart,
-          // dateFilterStop,
-        },
-        fetchPolicy: 'network-only',
-      });
-    }
 
     @action
     validateInvestmentAmountInOffering = () => {
@@ -219,7 +205,7 @@ export class InvestmentStore {
         variables: {
           investmentAmount: this.investmentAmount,
           offeringId: campaign.id,
-          userId: this.userId,
+          userId: userDetailsStore.currentUserId,
           accountId: this.getSelectedAccountTypeId,
         },
         fetchPolicy: 'network-only',
@@ -232,7 +218,7 @@ export class InvestmentStore {
         client,
         query: validateInvestmentAmount,
         variables: {
-          userId: this.userId,
+          userId: userDetailsStore.currentUserId,
           // accountId,
           // offeringId,
           // investmentAmount,
@@ -249,42 +235,13 @@ export class InvestmentStore {
         client,
         query: getInvestorInFlightCash,
         variables: {
-          userId: this.userId,
+          userId: userDetailsStore.currentUserId,
           // accountId,
           // isAutoDraft,
         },
         fetchPolicy: 'network-only',
       });
     }
-
-  @action
-  addFunds = () => {
-    uiStore.setProgress();
-    return new Promise((resolve) => {
-      client
-        .mutate({
-          mutation: addFunds,
-          variables: {
-            userId: this.userId,
-            // accountId,
-            // amount,
-            // description,
-            // agreementId,
-          },
-          // refetchQueries: [{ query: getBusinessApplications }],
-        })
-        .then((result) => {
-          resolve(result);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
 
   @action
   generateAgreement = () => {
@@ -294,7 +251,7 @@ export class InvestmentStore {
         .mutate({
           mutation: generateAgreement,
           variables: {
-            userId: this.userId,
+            userId: userDetailsStore.currentUserId,
             // accountId,
             // offeringId,
             // investmentAmount,
@@ -323,7 +280,7 @@ export class InvestmentStore {
         .mutate({
           mutation: finishInvestment,
           variables: {
-            userId: this.userId,
+            userId: userDetailsStore.currentUserId,
             // accountId,
             // offeringId,
             // investmentAmount,
@@ -352,7 +309,7 @@ export class InvestmentStore {
         .mutate({
           mutation: transferFundsForInvestment,
           variables: {
-            userId: this.userId,
+            userId: userDetailsStore.currentUserId,
             // accountId,
             // transferAmount,
           },

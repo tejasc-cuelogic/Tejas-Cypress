@@ -12,9 +12,9 @@ export const getAmountInvestedInCampaign = gql`
 
 export const getInvestorAvailableCash = gql`
   query _getInvestorAvailableCash(
-    $userId: String, $accountId: String, $includeInFlight: String,
-    $includeInterest: String, $includeReferralCredit: String, $dateFilterStart: String
-    $dateFilterStop: String, $txOnly: String,
+    $userId: ID!, $accountId: ID!, $includeInFlight: Boolean,
+    $includeInterest: Boolean, $includeReferralCredit: Boolean, $dateFilterStart: String
+    $dateFilterStop: String, $txOnly: Boolean,
     ){ 
     getInvestorAvailableCash(
       userId: $userId
@@ -26,16 +26,6 @@ export const getInvestorAvailableCash = gql`
       dateFilterStop: $dateFilterStop
       txOnly: $txOnly
     )
-  }
-`;
-
-export const getUserRewardBalance = gql`
-  query _getUserRewardBalance($userId: String, $dateFilterStart: String, $dateFilterStop: String){
-    getUserRewardBalance(
-      userId: $userId
-      dateFilterStart: $dateFilterStart
-      dateFilterStop: $dateFilterStop
-    ) 
   }
 `;
 
@@ -72,18 +62,6 @@ export const getInvestorInFlightCash = gql`
       userId: $userId
       accountId: $accountId
       isAutoDraft: $isAutoDraft
-    )
-  }
-`;
-
-export const addFunds = gql`
-  mutation _addFunds($userId: String, $accountId: String, $amount: Float, $accountId: String, $agreementId: Int){
-    addFunds(
-      userId: $userId
-      accountId: $accountId
-      amount: $amount
-      description: $description
-      agreementId: $agreementId
     )
   }
 `;

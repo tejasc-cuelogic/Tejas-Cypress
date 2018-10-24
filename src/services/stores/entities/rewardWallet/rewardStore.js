@@ -1,20 +1,27 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { GqlClient as client } from '../../../../api/gcoolApi';
-import { allRewards } from '../../queries/rewards';
+import { GqlClient as coolClient } from '../../../../api/gcoolApi';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { allRewards, getUserRewardBalance } from '../../queries/rewards';
+import { userDetailsStore } from '../../index';
 
 export class RewardStore {
   @observable data = [];
   @observable option = false;
-
+  @observable creditAvailable = 0;
   @action
   initRequest = () => {
-    this.data = graphql({ client, query: allRewards });
+    this.data = graphql({ client: coolClient, query: allRewards });
   }
 
   @computed get allData() {
     return this.data;
+  }
+
+  @computed get getCurrCreditAvailable() {
+    return (this.creditAvailable && parseInt(this.creditAvailable.data.getUserRewardBalance, 10))
+    || 0;
   }
 
   @computed get rewards() {
@@ -26,6 +33,18 @@ export class RewardStore {
       return filtered;
     }) :
       offerings;
+  }
+
+  @action
+  getUserRewardBalance = () => {
+    this.creditAvailable = graphql({
+      client,
+      query: getUserRewardBalance,
+      variables: {
+        userId: userDetailsStore.currentUserId,
+      },
+      fetchPolicy: 'network-only',
+    });
   }
 
   @action

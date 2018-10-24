@@ -34,6 +34,10 @@ export class UserDetailsStore {
     this[field] = value;
   }
 
+  @computed get currentUserId() {
+    return (this.userDetails && this.userDetails.id) || null;
+  }
+
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
     return details;

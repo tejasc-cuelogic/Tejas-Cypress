@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Form, Popup, Icon, Divider, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore', 'campaignStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
 @observer
 class FinancialInfo extends Component {
   render() {
@@ -17,20 +18,19 @@ class FinancialInfo extends Component {
       validBonusRewards,
       validateInvestmentAmountInOffering,
     } = this.props.investmentStore;
-    const { userDetails } = this.props.userDetailsStore;
+    const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
     return (
       <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
         <Header as="h4" textAlign="center">
-          Your investment limit: ${(userDetails && userDetails.limits &&
-            userDetails.limits.limit) || 0}
+          Your investment limit: ${(getCurrentLimitForAccount) || 0}
           <Popup
             wide
-            trigger={<Icon name="help circle" color="green" />}
+            trigger={<Icon className="ns-help-circle" color="green" />}
             content="This calculates"
             position="top center"
           />
-          <Button className="link-button">Update</Button>
+          <Link to="/" className="link"><small>Update</small></Link>
         </Header>
         <Form error size="huge">
           <MaskedInput
