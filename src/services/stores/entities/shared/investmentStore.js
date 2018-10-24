@@ -5,7 +5,7 @@ import { INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DET
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore } from '../../index';
+import { uiStore, userDetailsStore, campaignStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash, getUserRewardBalance,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
@@ -13,7 +13,7 @@ import {
 } from '../../queries/investNow';
 
 export class InvestmentStore {
-    @observable userId = (userDetailsStore.userDetaiils && userDetailsStore.userDetaiils.id)
+    @observable userId = (userDetailsStore.userDetails && userDetailsStore.userDetails.id)
     || null;
     @observable currentInvestmentLimit = (userDetailsStore.userDetails &&
       userDetailsStore.userDetails.limits && userDetailsStore.userDetails.limits.limit) || 0
@@ -26,8 +26,8 @@ export class InvestmentStore {
     @observable offeringMetaData = {
       campaignType: 0,
       rate: 5,
-      rateMin: 2,
-      rateMax: 8,
+      rateMin: campaignStore.campaign.keyTerms.minInvestAmt,
+      rateMax: campaignStore.campaign.keyTerms.maxInvestAmt,
       annualReturn: 1000,
       targetTerm: 5000,
     }
@@ -38,7 +38,7 @@ export class InvestmentStore {
       const accType = this.investAccTypes.value;
       userDetailsStore.setFieldValue('currentActiveAccount', accType);
       const selectedAccount = userDetailsStore.currentActiveAccountDetails;
-      return selectedAccount;
+      return selectedAccount.details.accountId;
     }
 
     @action
@@ -212,14 +212,15 @@ export class InvestmentStore {
 
     @action
     validateInvestmentAmountInOffering = () => {
+      const { campaign } = campaignStore;
       this.details = graphql({
         client,
         query: validateInvestmentAmountInOffering,
         variables: {
-          // investmentAmount,
-          // offeringId,
+          investmentAmount: this.investmentAmount,
+          offeringId: campaign.id,
           userId: this.userId,
-          // accountId,
+          accountId: this.getSelectedAccountTypeId,
         },
         fetchPolicy: 'network-only',
       });
@@ -368,6 +369,21 @@ export class InvestmentStore {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  @computed get validBonusRewards() {
+    const { campaign } = campaignStore;
+    const bonusRewards = [];
+    campaign.bonusRewards.map((reward) => {
+      reward.tiers.map((tier) => {
+        if (this.investmentAmount >= tier.amount) {
+          bonusRewards.push(reward);
+        }
+        return null;
+      });
+      return null;
+    });
+    return bonusRewards;
   }
 }
 
