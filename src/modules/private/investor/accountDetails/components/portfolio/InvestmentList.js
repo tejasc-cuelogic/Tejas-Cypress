@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import moment from 'moment';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
@@ -33,7 +32,7 @@ const InvestmentList = (props) => {
                 <Table.Row>
                   {
                     listHeader.map(cell => (
-                      <Table.HeaderCell key={cell.split(' ')[0]} textAlign={cell === 'Invested Amount' ? 'right' : ''}>{cell}</Table.HeaderCell>
+                      <Table.HeaderCell key={cell.split(' ')[0]}>{cell}</Table.HeaderCell>
                     ))
                   }
                   <Table.HeaderCell />
@@ -49,19 +48,22 @@ const InvestmentList = (props) => {
                       </Table.Cell>
                       <Table.Cell>{data.location}</Table.Cell>
                       <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
-                      <Table.Cell textAlign="right">{Helper.CurrencyFormat(data.investedAmount)}</Table.Cell>
+                      <Table.Cell>
+                        {Helper.CurrencyFormat(data.investedAmount)}
+                        <p className="date-stamp">02/10/2018</p>
+                      </Table.Cell>
                       <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
                       <Table.Cell collapsing>{props.listOf === 'pending' ? `${calculateDateDiff(data.offering.keyTerms.terminationDate)} days` : moment(data.closeDate).format('MM/DD/YYYY')}</Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
-                          <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="green" className="ghost-button">View Details</Button>
+                          <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
                         :
-                          <Aux>
-                            <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="green" className="ghost-button">Change</Button>
+                          <Button.Group size="mini" compact>
+                            <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary content="Change" />
                             {calculateDateDiff(data.daysToClose) > 2 &&
-                            <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} size="tiny" color="red" className="ghost-button">Cancel</Button>
+                              <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} color="red" content="Cancel" />
                             }
-                          </Aux>
+                          </Button.Group>
                         }
                       </Table.Cell>
                     </Table.Row>
@@ -72,7 +74,7 @@ const InvestmentList = (props) => {
                 <Table.Row>
                   <Table.HeaderCell colSpan="2" />
                   <Table.HeaderCell>Total:</Table.HeaderCell>
-                  <Table.HeaderCell textAlign="right">{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0)}</Table.HeaderCell>
+                  <Table.HeaderCell>{Helper.CurrencyFormat(investments && investments.length ? Helper.getTotal(investments, 'investedAmount') : 0)}</Table.HeaderCell>
                   <Table.HeaderCell colSpan="3" />
                 </Table.Row>
               </Table.Footer>
