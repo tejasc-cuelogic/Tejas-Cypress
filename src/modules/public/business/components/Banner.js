@@ -1,5 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
 import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 
 const isTablet = document.documentElement.clientWidth >= 768
@@ -13,11 +14,11 @@ const Banner = () => (
           <Header as="h1">
           Accelerate your<br />
           growth with the<br />
-          power of the crowd
+          power of the crowd.
           </Header>
           <Button.Group className={!isTablet && 'mt-30'}>
-            <Button secondary content="Business Application" />
-            <Button secondary content="CRE Application" />
+            <Button secondary content="Business Application" as={Link} to="/business-application/business" />
+            <Button secondary content="CRE Application" as={Link} to="/business-application/commercial-real-estate" />
           </Button.Group>
         </div>
       </Responsive>

@@ -15,6 +15,9 @@ class InvestorSignup extends Component {
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
   }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     authActions.register()
@@ -41,7 +44,8 @@ class InvestorSignup extends Component {
       <Modal
         size="mini"
         open
-        closeOnRootNodeClick={false}
+        closeOnDimmerClick={false}
+        closeIcon
         onClose={
           () => {
             reset('SIGNUP');
@@ -57,18 +61,11 @@ class InvestorSignup extends Component {
           </Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <Form>
-            <Button color="facebook" size="large" fluid>
-              Sign up with Facebook
-            </Button>
+            <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
           </Form>
           <Divider horizontal section>or</Divider>
-          <Form onSubmit={this.handleSubmitForm}>
+          <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
               {
                 ['givenName', 'familyName'].map(field => (
@@ -117,13 +114,18 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
             <div className="center-align mt-30">
-              <Button fluid secondary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Already have an account? <Link to="/auth/login">Log in</Link></p>
+          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

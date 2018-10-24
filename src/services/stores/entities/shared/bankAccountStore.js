@@ -136,6 +136,25 @@ export class BankAccountStore {
     this.depositMoneyNow = true;
     this.showAddFunds = false;
   }
+
+  @action
+  resetFormData(form) {
+    const resettedForm = Validator.resetFormData(this[form]);
+    this[form] = resettedForm;
+  }
+
+  @action
+  resetStoreData = () => {
+    this.resetFormData('formBankSearch');
+    this.resetFormData('formAddFunds');
+    this.resetFormData('formLinkBankManually');
+    this.bankLinkInterface = 'list';
+    this.plaidAccDetails = {};
+    this.plaidBankDetails = {};
+    this.bankListing = undefined;
+    this.depositMoneyNow = true;
+    this.showAddFunds = false;
+  }
 }
 
 export default new BankAccountStore();

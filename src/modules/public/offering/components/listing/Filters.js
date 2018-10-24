@@ -21,20 +21,18 @@ export default class Filters extends Component {
       { content: 'Other', iconName: 'ellipsis horizontal' },
     ],
     MoreOptions: {
-      content: 'Funded Campaigns',
+      content: 'Show Funded Deals',
       color: null,
       iconName: 'eye',
     },
     InvestmentTypes: [
-      { label: 'Revenue Sharing', checkStatus: true },
+      { label: 'Revenue Sharing Note', checkStatus: true },
       { label: 'Term Note', checkStatus: true },
-      { label: 'Equity', checkStatus: false },
-      { label: 'Convertible Note', checkStatus: false },
+      { label: 'Preferred Equity', checkStatus: false },
     ],
     FundingTypes: [
       { label: 'Regulation Crowdfunding', checkStatus: false },
-      { label: 'Regulation A+', checkStatus: false },
-      { label: 'Regulation D', checkStatus: false },
+      { label: '506(c)', checkStatus: false },
     ],
   }
 
@@ -104,7 +102,7 @@ export default class Filters extends Component {
   render() {
     const BusinessTypesComp = (
       <Aux>
-        <Header as="h6" dividing>Business Type</Header>
+        <Header as="h6" dividing className="text-uppercase">Business Type</Header>
         <List relaxed="very">
           {this.state.BusinessTypes.map((item, index) => (
             <List.Item key={item.content} onClick={() => this.toggleColor(index)}>
@@ -116,8 +114,8 @@ export default class Filters extends Component {
       </Aux>);
     const InvestAndFundingTypeComp = (
       <Aux>
-        <Header as="h6" dividing>
-          Investment Type
+        <Header as="h6" dividing className="text-uppercase">
+          Investment Options
         </Header>
         <div className="checkbox-group">
           <Form>
@@ -134,7 +132,7 @@ export default class Filters extends Component {
             ))}
           </Form>
         </div>
-        <Header as="h6" dividing>
+        <Header as="h6" dividing className={`${!isMobile && 'mt-80'} text-uppercase`}>
           Funding Type
         </Header>
         <div className="checkbox-group">
@@ -156,7 +154,7 @@ export default class Filters extends Component {
       </Aux>);
     const OtherFiltersComp = (
       <Aux>
-        <Header as="h6" dividing>
+        <Header as="h6" dividing className={`${isMobile && 'mt-80'} text-uppercase`}>
           More Options
         </Header>
         <List relaxed="very">
@@ -180,10 +178,11 @@ export default class Filters extends Component {
               </Menu.Item>
               {this.props.status ? (
                 <Menu.Menu position="right">
-                  <Menu.Item name="clear all" onClick={this.clearAll}>
-                    CLEAR ALL
-                  </Menu.Item>
-                  {!isMobile &&
+                  {isMobile ?
+                    <Menu.Item name="clear all" onClick={this.clearAll}>
+                      CLEAR ALL
+                    </Menu.Item>
+                  :
                     <Menu.Item name="clear all">
                       <Image src={`${ASSETS_URL}images/icons/icon_close.png`} className="closeIcon" onClick={this.props.toggleFilters} />
                     </Menu.Item>
@@ -209,6 +208,10 @@ export default class Filters extends Component {
                       </Grid.Column>
                       <Grid.Column>
                         {OtherFiltersComp}
+                        <Button.Group>
+                          <Button primary>Update</Button>
+                          <Button basic onClick={this.clearAll}>Clear All</Button>
+                        </Button.Group>
                       </Grid.Column>
                     </Grid> :
                     <div className="carousel">
@@ -236,9 +239,9 @@ export default class Filters extends Component {
                             <Button
                               onClick={this.done}
                               floated="right"
-                              className="link-button"
+                              className="link-button highlight-text"
                             >
-                              DONE
+                              UPDATE
                             </Button>
                           </Button.Group> :
                           <Button.Group>

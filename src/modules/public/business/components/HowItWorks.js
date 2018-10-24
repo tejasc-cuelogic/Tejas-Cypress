@@ -15,38 +15,43 @@ const settings = {
   dots: false,
 };
 const businesses = [
-  {
-    title: 'Breweries & Distilleries',
-    image: `${ASSETS_URL}images/business/img-2.png`,
-    description: 'Wichita Falls Brewery raised $125,000 to build out a new taproom',
-  },
-  {
-    title: 'Restaurants & Bars',
-    image: `${ASSETS_URL}images/business/img.png`,
-    description: 'PORTERS raised $500,000 to open a new steakhouse.',
-  },
-  {
-    title: 'Fitness Studios',
-    image: `${ASSETS_URL}images/business/img-1.png`,
-    description: 'Alkalign Studios raised $100,000 to expand franchising opportunities.',
-  },
-  {
-    title: 'Health & Wellness',
-    image: `${ASSETS_URL}images/business/img-5.png`,
-    description: 'Healing Waters raised $110,000 to open a new floatation spa.',
-  },
-  {
-    title: 'Hospitality',
-    image: `${ASSETS_URL}images/business/img-3.png`,
-    description: 'The Native raised $396,500 to open a boutique hostel and bar.',
-  },
-  {
-    title: 'Co-working',
-    image: `${ASSETS_URL}images/business/img-4.png`,
-    description: 'The Annex HTX raised $230,500 to build a co-working and retail space.',
-  },
+  [
+    {
+      title: 'Breweries & Distilleries',
+      image: `${ASSETS_URL}images/business/img-2.png`,
+      description: 'Wichita Falls Brewery raised $125,000 to build out a new taproom',
+    },
+    {
+      title: 'Restaurants & Bars',
+      image: `${ASSETS_URL}images/business/img.png`,
+      description: 'PORTERS raised $500,000 to open a new steakhouse.',
+    },
+    {
+      title: 'Fitness Studios',
+      image: `${ASSETS_URL}images/business/img-1.png`,
+      description: 'Alkalign Studios raised $100,000 to expand franchising opportunities.',
+    },
+  ],
+  [
+    {
+      title: 'Health & Wellness',
+      image: `${ASSETS_URL}images/business/img-5.png`,
+      description: 'Healing Waters raised $110,000 to open a new floatation spa.',
+    },
+    {
+      title: 'Hospitality',
+      image: `${ASSETS_URL}images/business/img-3.png`,
+      description: 'The Native raised $396,500 to open a boutique hostel and bar.',
+    },
+    {
+      title: 'Office',
+      image: `${ASSETS_URL}images/business/img-4.png`,
+      description: 'The Annex HTX raised $230,500 to build a co-working and retail space.',
+    },
+  ],
 ];
 const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 992;
 
 const HowItWorks = () => (
   <Aux>
@@ -56,8 +61,8 @@ const HowItWorks = () => (
           <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
           <div className="center-align">
             <Button.Group>
-              <Button secondary content="Business Application" />
-              <Button secondary content="CRE Application" />
+              <Button as={Link} to="business-application/business" secondary content="Business Application" />
+              <Button as={Link} to="business-application/commercial-real-estate" secondary content="CRE Application" />
             </Button.Group>
           </div>
           <Divider section />
@@ -128,33 +133,39 @@ const HowItWorks = () => (
       </Container>
       {!isMobile ?
         <Container>
-          <Grid centered stackable columns={3} className="vertical-gutter">
-            {
-              businesses.map(b => (
-                <Grid.Column textAlign="center">
-                  <Image src={b.image} centered />
-                  <Header as="h5">{b.title}</Header>
-                  <p>{b.description}</p>
-                </Grid.Column>
-              ))
-            }
+          <Grid centered stackable className="vertical-gutter">
+            {businesses.map(row => (
+              <Grid.Row>
+                {
+                  row.map(b => (
+                    <Grid.Column textAlign="center" width={4}>
+                      <Image src={b.image} centered />
+                      <Header as="h5">{b.title}</Header>
+                      <p>{b.description}</p>
+                    </Grid.Column>
+                  ))
+                }
+              </Grid.Row>
+            ))
+          }
           </Grid>
         </Container>
       :
         <Aux>
           <Container>
             <NsCarousel {...settings}>
-              {
-                businesses.map(b => (
-                  <div key={b}>
+              {businesses.map(row => (
+                row.map(b => (
+                  <Grid.Row>
                     <Grid.Column className="center-align">
                       <Image src={b.image} centered />
                       <Header as="h5">{b.title}</Header>
                       <p>{b.description}</p>
                     </Grid.Column>
-                  </div>
+                  </Grid.Row>
                 ))
-              }
+              ))
+            }
             </NsCarousel>
           </Container>
         </Aux>
@@ -191,14 +202,14 @@ const HowItWorks = () => (
     <Divider fitted as={Container} />
     <section className="proven-result-section">
       <Container>
-        <Grid columns={2} stackable>
+        <Grid columns={2} stackable relaxed={!isTablet && 'very'}>
           <Grid.Column>
             <Header as="h2">Data so far.</Header>
             <p className="mb-30">
               Every day, entrepreneurs like you are raising capital on
               NextSeed to bring their concepts to life.
             </p>
-            <Grid columns={2} stackable>
+            <Grid columns={2} stackable relaxed={!isTablet && 'very'}>
               <Grid.Row>
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
@@ -217,7 +228,7 @@ const HowItWorks = () => (
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>90%+</Statistic.Value>
-                    <Statistic.Label>Campaigns successfully raise their minimum</Statistic.Label>
+                    <Statistic.Label>Campaigns successfully raised their minimum</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>

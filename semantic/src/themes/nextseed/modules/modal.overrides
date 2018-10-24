@@ -176,9 +176,6 @@
     @media only screen and (min-width:@tabletBreakpoint){
         width:665px;
     }
-    a{
-        color:@primary-two;
-    }
     >.close{
         // position:fixed;      commented to resolve issue on iphone
         top:@7px;
@@ -211,7 +208,6 @@
         p{
             font-size:@14px;
             font-weight:@normal;
-            color:@neutral-middark;
         }
     }
     // h4.ui.header{
@@ -235,6 +231,12 @@
                 }
                 .sub.header{
                     font-weight:@normal;
+                }
+                &.success-msg>.icon{
+                    display:block;
+                    margin:0 auto @14px;
+                    font-size:@44px;
+                    line-height:1;
                 }
             }
             .user-type{
@@ -344,11 +346,15 @@
             text-align:center;
             border:none;
             background-color:@white;
-            > p{
-                font-weight:@fontMedium;
-            }
             @media only screen and (max-width:@largestMobileScreen){
                 padding-bottom:@21px !important;
+            }
+            .link-button{
+                font-weight:@normal;
+                color:@primary-one;
+                &:hover{
+                    text-decoration:underline
+                }
             }
         }
     }
@@ -438,6 +444,7 @@
     input[type=tel].display-only:not(:read-only),
     input[type=email].display-only:not(:read-only){
         background-color:@white;
+        border-radius:0;
         &:focus{
             border-color:@primary-one;
             outline:none;
@@ -458,6 +465,7 @@
         margin:0;
         background:@white;
         border-radius:@15px;
+        position:fixed;
         top:1rem;
         right:1rem;
         @media only screen and (max-width:@largestTabletScreen){

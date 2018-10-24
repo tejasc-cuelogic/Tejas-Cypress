@@ -91,8 +91,8 @@ export const AGREEMENT_DETAILS_INFO = {
         Other Regulation Crowdfunding investments made in other platforms. Note: This does
         not include any donation/rewards crowdfunding platforms (e.g. Kickstarter) or investments
         made in offerings under other sets of regulations (e.g. Reg D, Reg A). If you have any
-        questions about what constitutes other crowdfunding investments, please contact
-        <a href="/">support@nextseed.com</a>
+        questions about what constitutes other crowdfunding investments, please
+        contact <a href="/">support@nextseed.com</a>
       </Aux>),
   },
   checkboxesLeft: {

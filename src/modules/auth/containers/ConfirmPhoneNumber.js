@@ -3,10 +3,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
-// import { MaskedInput } from '../../../theme/form';
-// import { ListErrors } from '../../../theme/shared';
+import { MaskedInput } from '../../../theme/form';
+import { ListErrors } from '../../../theme/shared';
 
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
@@ -37,10 +37,9 @@ export default class ConfirmPhoneNumber extends Component {
         Helper.toast('Phone number is confirmed.', 'success');
         this.props.history.push('/app/summary/establish-profile');
       })
-        .catch(() => {});
+        .catch(() => { });
     }
   }
-
   handleChangePhoneNumber = () => {
     if (!this.props.newPhoneNumber) {
       this.props.uiStore.setEditMode(true);
@@ -48,7 +47,6 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.clearErrors();
     }
   }
-
   startPhoneVerification = () => {
     this.props.identityStore.setReSendVerificationCode(true);
     this.props.identityStore.startPhoneVerification();
@@ -56,7 +54,6 @@ export default class ConfirmPhoneNumber extends Component {
       this.props.uiStore.setEditMode(false);
     }
   }
-
   handleCloseModal = () => {
     if (this.props.refLink) {
       this.props.history.replace(this.props.refLink);
@@ -66,16 +63,15 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
-
   render() {
     const {
       ID_VERIFICATION_FRM,
-      // personalInfoMaskedChange,
+      personalInfoMaskedChange,
       ID_PHONE_VERIFICATION,
       phoneVerificationChange,
       reSendVerificationCode,
     } = this.props.identityStore;
-    const { editMode } = this.props.uiStore;
+    const { errors, editMode } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -85,48 +81,39 @@ export default class ConfirmPhoneNumber extends Component {
             increase the security of your NextSeed account
           </p>
           <Divider section />
-          <p>
-            Please confirm the 6-digit verification code sent to<br />
-            <b className="positive-text">{ID_VERIFICATION_FRM.fields.phoneNumber.value}</b>
-          </p>
-          {editMode ?
-            <p>
-              <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
-                <b>Confirm Phone number</b>
-              </Link>
-            </p> :
-            <p>
-              <Link
-                to={this.props.refLink ? this.props.refLink : this.props.match.url}
-                onClick={this.handleChangePhoneNumber}
-              >
-                <b>Change phone number</b>
-              </Link>
-            </p>
-          }
+          <p>Please confirm the 6-digit verification code sent to your phone number</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {/* {errors &&
             <Message error>
               <ListErrors errors={errors.message ? [errors.message] : [errors]} />
             </Message>
+          } */}
+          <MaskedInput
+            hidelabel
+            value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
+            type="tel"
+            name="phoneNumber"
+            fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+            format="###-###-####"
+            readOnly={!editMode}
+            displayMode={!editMode}
+            changed={personalInfoMaskedChange}
+            containerclassname="display-only"
+            className="display-only"
+            phoneNumberDisplayMode
+          />
+          {editMode ?
+            <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
+              Confirm Phone number
+            </Link> :
+            <Link
+              to={this.props.refLink ? this.props.refLink : this.props.match.url}
+              onClick={this.handleChangePhoneNumber}
+            >
+              Change phone number
+            </Link>
           }
-          <Form>
-            <MaskedInput
-              hidelabel
-              value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
-              type="tel"
-              name="phoneNumber"
-              fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
-              format="###-###-####"
-              readOnly={!editMode}
-              displayMode={!editMode}
-              changed={personalInfoMaskedChange}
-              containerclassname="display-only"
-              className="display-only"
-              phoneNumber
-            />
-          </Form> */}
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
@@ -139,17 +126,22 @@ export default class ConfirmPhoneNumber extends Component {
                 onChange={phoneVerificationChange}
               />
             </Form.Field>
+            {errors &&
+              <Message error textAlign="left" className="mb-40">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            {/* <Header as="h3">
-              <Icon className="ns-check-circle" color="green" /><br />
+            {/* <Header as="h3" className="success-msg mb-60">
+              <Icon className="ns-check-circle" color="green" />
               Your phone number has been confirmed.
             </Header> */}
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            <Button secondary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p><Link to="/" onClick={() => this.handleResendCode()}>Resend the code to my phone</Link></p>
+          <Button type="button" className="link-button" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
         </Modal.Actions>
       </Modal>
     );

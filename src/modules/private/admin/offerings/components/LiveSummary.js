@@ -19,14 +19,14 @@ const rightSummary = offer => [
   { title: 'Email', content: 'jdoe234@gmail.com' },
   { title: 'Phone', content: '235-343-6453' },
 ];
-const LiveSummary = ({ offer }) => (
+const LiveSummary = ({ offer, refLink }) => (
   <Grid columns="equal">
     <Grid.Row>
       <Grid.Column>
         <Card fluid className="ba-info-card">
           <Card.Header>
             Information
-            <small className="pull-right"><Link to="/"><Icon className="ns-pencil" />Edit</Link></small>
+            <small className="pull-right"><Link to={`${refLink}/editOffering`}><Icon className="ns-pencil" />Edit</Link></small>
           </Card.Header>
           <Card.Content>
             <Grid columns={3}>

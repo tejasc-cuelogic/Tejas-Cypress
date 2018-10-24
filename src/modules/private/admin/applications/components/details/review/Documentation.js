@@ -67,7 +67,7 @@ export default class Documentation extends Component {
           }
           <Divider section />
           <Header as="h5">
-            Prior Six Months Back Statements (Existing)
+            Prior Six Months Bank Statements (Existing)
           </Header>
           {
             ['consistentBalance', 'unusualMovements'].map(field => (
