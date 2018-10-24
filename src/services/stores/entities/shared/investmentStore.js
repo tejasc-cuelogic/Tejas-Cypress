@@ -22,8 +22,8 @@ export class InvestmentStore {
     @observable offeringMetaData = {
       campaignType: 0,
       rate: 5,
-      rateMin: 2,
-      rateMax: 8,
+      rateMin: campaignStore.campaign.keyTerms.minInvestAmt,
+      rateMax: campaignStore.campaign.keyTerms.maxInvestAmt,
       annualReturn: 1000,
       targetTerm: 5000,
     }
@@ -208,14 +208,15 @@ export class InvestmentStore {
 
     @action
     validateInvestmentAmountInOffering = () => {
+      const { campaign } = campaignStore;
       this.details = graphql({
         client,
         query: validateInvestmentAmountInOffering,
         variables: {
-          // investmentAmount,
-          // offeringId,
+          investmentAmount: this.investmentAmount,
+          offeringId: campaign.id,
           userId: userDetailsStore.currentUserId,
-          // accountId,
+          accountId: this.getSelectedAccountTypeId,
         },
         fetchPolicy: 'network-only',
       });
@@ -334,6 +335,21 @@ export class InvestmentStore {
           uiStore.setProgress(false);
         });
     });
+  }
+
+  @computed get validBonusRewards() {
+    const { campaign } = campaignStore;
+    const bonusRewards = [];
+    campaign.bonusRewards.map((reward) => {
+      reward.tiers.map((tier) => {
+        if (this.investmentAmount >= tier.amount) {
+          bonusRewards.push(reward);
+        }
+        return null;
+      });
+      return null;
+    });
+    return bonusRewards;
   }
 }
 

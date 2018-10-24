@@ -30,7 +30,7 @@ export const getInvestorAvailableCash = gql`
 `;
 
 export const validateInvestmentAmountInOffering = gql`
-  query _validateInvestmentAmountInOffering($investmentAmount: Float, $offeringId: String, $userId: String, $accountId: String){
+  query _validateInvestmentAmountInOffering($investmentAmount: Float!, $offeringId: String!, $userId: String!, $accountId: String!){
     validateInvestmentAmountInOffering(
       investmentAmount: $investmentAmount
       offeringId: $offeringId
