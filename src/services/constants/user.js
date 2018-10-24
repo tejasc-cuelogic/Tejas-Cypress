@@ -41,7 +41,7 @@ export const USER_IDENTITY = {
     key: 'title',
     value: '',
     label: 'Title',
-    placeHolder: 'Mrs',
+    placeHolder: 'Select',
     error: undefined,
     rule: 'string',
     customErrors: {
