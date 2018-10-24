@@ -7,7 +7,9 @@ query getOfferingList($filters: OfferingFilterInputType){
       stage
       media {
         tombstoneImage {
-        url
+          url
+          isPublic
+          fileName
         }
       }
       offering {
