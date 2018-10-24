@@ -15,11 +15,13 @@ class FinancialInfo extends Component {
       estReturnVal,
       calculateEstimatedReturn,
     } = this.props.investmentStore;
+    const { userDetails } = this.props.userDetailsStore;
     return (
       <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
         <Header as="h4" textAlign="center">
-          Your investment limit: $8,000
+          Your investment limit: ${(userDetails && userDetails.limits &&
+            userDetails.limits.limit) || 0}
           <Popup
             wide
             trigger={<Icon className="ns-help-circle" color="green" />}
@@ -30,6 +32,7 @@ class FinancialInfo extends Component {
         </Header>
         <Form error size="huge">
           <MaskedInput
+            hidelabel
             name="investmentAmount"
             currency
             prefix="$ "
