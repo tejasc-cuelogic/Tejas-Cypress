@@ -195,7 +195,7 @@ const HowItWorks = () => (
       }
     </section>
     <Divider fitted as={Container} />
-    <section>
+    <section className="testimonial">
       <Container>
         <NsCarousel {...settings}>
           {testimonial.map(t => (
