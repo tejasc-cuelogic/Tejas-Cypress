@@ -536,7 +536,7 @@ footer{
     &.left.inverted {
         .item {
             text-transform: uppercase;
-            &.active{
+            &.really{
                 background-color: @primary-one !important;
                 color: @white !important;
             }
