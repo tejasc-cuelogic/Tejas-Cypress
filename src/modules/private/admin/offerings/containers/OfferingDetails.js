@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, Link } from 'react-router-dom';
+import moment from 'moment';
 import Aux from 'react-aux';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -31,7 +32,6 @@ export default class OfferingDetails extends Component {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
     const { offer, offerLoading } = offeringsStore;
-
     if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }
