@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
-import { InlineLoader } from '../../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
 function calculateDateDiff(terminationDate) {
   const d1 = moment().format('MM/DD/YYYY');
@@ -19,7 +19,7 @@ const InvestmentList = (props) => {
   const { investments } = props;
   return (
     <Accordion fluid styled className="card-style">
-      <Accordion.Title active>
+      <Accordion.Title active className="text-capitalize">
         <Icon className="ns-chevron-up" />
         {props.listOf}
       </Accordion.Title>
@@ -44,16 +44,22 @@ const InvestmentList = (props) => {
                     <Table.Row key={data.name}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[data.offering.keyTerms.industry]} offering-icon`} />
-                        <Link to={`${props.match.url}/investment-details/1`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
+                        {props.listOf === 'pending' ? data.offering.keyTerms.shorthandBusinessName : (
+                          <Link to={`${props.match.url}/investment-details/${data.offering.id}`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
+                        )}
                       </Table.Cell>
                       <Table.Cell>{data.location}</Table.Cell>
                       <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.investedAmount)}
-                        <p className="date-stamp">02/10/2018</p>
+                        <p className="date-stamp">
+                        <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                        </p>
                       </Table.Cell>
                       <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
-                      <Table.Cell collapsing>{props.listOf === 'pending' ? `${calculateDateDiff(data.offering.keyTerms.terminationDate)} days` : moment(data.closeDate).format('MM/DD/YYYY')}</Table.Cell>
+                      <Table.Cell collapsing>
+                        {props.listOf === 'pending' ? `${calculateDateDiff(data.offering.keyTerms.terminationDate)} days` : <DateTimeFormat format="MM/DD/YYYY" datetime={data.closeDate} />}
+                      </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
                           <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
