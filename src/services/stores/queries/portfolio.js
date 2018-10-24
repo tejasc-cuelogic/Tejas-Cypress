@@ -87,3 +87,11 @@ export const cancelAgreement = gql`
   mutation cancelAgreement($agreementId: Int!) {
     cancelAgreement(agreementId: $agreementId)
   }`;
+export const withdrawFunds = gql`
+  mutation withdrawFunds($amount:  Float!, $accountId: String! ) {
+    withdrawFunds(amount: $amount, accountId: $accountId)
+  }`;
+export const addFunds = gql`
+  mutation addFunds($amount:  Float!, $accountId: String! ) {
+    addFunds(amount: $amount, accountId: $accountId)
+  }`;
