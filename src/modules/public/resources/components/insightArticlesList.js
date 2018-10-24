@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Grid, Image, Card } from 'semantic-ui-react';
+import { Grid, Card } from 'semantic-ui-react';
 import { inject } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { InlineLoader } from '../../../../theme/shared';
+import { InlineLoader, Image64 } from '../../../../theme/shared';
 
 @inject('articleStore')
 class InsightArticlesList extends Component {
@@ -20,8 +20,10 @@ class InsightArticlesList extends Component {
         InsightArticles.map(article => (
           <Grid.Column mobile={16} tablet={8} computer={4}>
             <Card className="campaign insights" fluid as={Link} to={`/resources/insights/${article.id}`}>
-              <Image
-                src={article.featuredImage}
+              <Image64
+                centered
+                srcUrl={article.featuredImage ? article.featuredImage : null
+                }
               />
               <Card.Content>
                 <div className="tags">

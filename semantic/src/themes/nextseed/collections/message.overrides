@@ -2,6 +2,7 @@
          Theme Overrides
 *******************************/
 .ui.message{
+    font-size:@12px;
     &.toast{
         position:fixed;
         top:-180px;
