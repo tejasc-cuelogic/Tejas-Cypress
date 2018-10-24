@@ -36,13 +36,13 @@ export default class General extends Component {
       confirmModal,
       confirmModalName,
     } = this.props.offeringCreationStore;
-    const { getOfferingById } = this.props.offeringsStore.offerData.data;
+    const { offer } = this.props.offeringsStore;
     const formName = 'GENERAL_FRM';
     const {
       shorthandBusinessName,
       minOfferingAmount,
       maxOfferingAmount,
-    } = getOfferingById.keyTerms;
+    } = offer.keyTerms;
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const isApproved = false;
