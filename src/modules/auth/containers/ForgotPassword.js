@@ -35,16 +35,11 @@ export default class ForgotPassword extends Component {
           <Header as="h3">Reset your password</Header>
           <p>
             Please enter the email address associated with your account.
-            We&#39;ll send you a verification code to reset your password.
+            We&#39;ll send you a link to reset your password.
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
-          }
-          <Form onSubmit={this.onSubmit}>
+          <Form error onSubmit={this.onSubmit}>
             {
               Object.keys(FORGOT_PASS_FRM.fields).map(field => (
                 <FormInput
@@ -56,8 +51,13 @@ export default class ForgotPassword extends Component {
                 />
               ))
             }
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
+            }
             <div className="mt-30 center-align">
-              <Button secondary size="large" className="very relaxed" content="Send verification code" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
+              <Button primary size="large" className="very relaxed" content="Send the link" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
