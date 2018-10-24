@@ -1,11 +1,11 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Form, Popup, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import ReactPasswordStrength from 'react-password-strength';
 import { FieldError } from '../../shared';
-
+@inject('authStore')
 @observer
 export default class FormPasswordStrength extends Component {
   state = { showError: false };
@@ -14,6 +14,9 @@ export default class FormPasswordStrength extends Component {
   }
   render() {
     const { props } = this;
+    const {
+      togglePasswordType,
+    } = this.props.authStore;
     const {
       label,
       error,
@@ -64,6 +67,7 @@ export default class FormPasswordStrength extends Component {
           changeCallback={(e) => { props.changed(e); this.triggerError(false); }}
           onBlur={() => this.triggerError(true)}
         />
+        <Icon className="ns-view" onClick={togglePasswordType()} />
         {error && this.state.showError &&
           <FieldError error={error} />
         }

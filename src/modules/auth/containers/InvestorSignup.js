@@ -34,7 +34,6 @@ class InvestorSignup extends Component {
       .catch(() => { });
   };
   render() {
-    // togglePasswordType
     const {
       SIGNUP_FRM, signupChange, pwdInputType, reset,
     } = this.props.authStore;
