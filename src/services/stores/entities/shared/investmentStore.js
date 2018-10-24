@@ -5,7 +5,7 @@ import { INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DET
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, campaignStore, rewardStore } from '../../index';
+import { uiStore, userDetailsStore, rewardStore, campaignStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
@@ -13,7 +13,6 @@ import {
 } from '../../queries/investNow';
 
 export class InvestmentStore {
-    @observable currentInvestmentLimit = 0;
     @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
     @observable TRANSFER_REQ_FORM = Validator.prepareFormObject(TRANSFER_REQ_INFO);
     @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
@@ -39,12 +38,23 @@ export class InvestmentStore {
       return selectedAccount.details.accountId;
     }
     @computed get getCurrCashAvailable() {
-      return (this.cashAvailable && parseInt(this.cashAvailable.data.getInvestorAvailableCash, 10))
+      return (this.cashAvailable && parseFloat(this.cashAvailable.data.getInvestorAvailableCash, 2))
       || 0;
     }
     @computed get getTransferRequestAmount() {
       return this.investmentAmount -
       (this.getCurrCashAvailable + rewardStore.getCurrCreditAvailable);
+    }
+    @computed get getSpendCreditValue() {
+      let spendAmount = 0;
+      if (this.getCurrCashAvailable < this.investmentAmount) {
+        const lowValue = (this.investmentAmount - this.getCurrCashAvailable);
+        if (rewardStore.getCurrCreditAvailable > 0) {
+          spendAmount = rewardStore.getCurrCreditAvailable > lowValue ?
+            lowValue : rewardStore.getCurrCreditAvailable;
+        }
+      }
+      return parseFloat(spendAmount, 2);
     }
     @action
     setDisableNextbtn = () => {
@@ -110,7 +120,7 @@ export class InvestmentStore {
     }
     @computed get investmentAmount() {
       const val = this.INVESTMONEY_FORM.fields.investmentAmount.value;
-      return parseInt(val || 0, 10);
+      return parseFloat(val || 0, 2);
     }
 
     @computed get investmentLimitsChecked() {
@@ -230,11 +240,10 @@ export class InvestmentStore {
         query: validateInvestmentAmount,
         variables: {
           userId: userDetailsStore.currentUserId,
-          // accountId,
-          // offeringId,
-          // investmentAmount,
-          // autoDraftDeposit,
-          // creditToSpend,
+          accountId: this.getSelectedAccountTypeId,
+          offeringId: campaignStore.getOfferingId,
+          investmentAmount: this.investmentAmount,
+          creditToSpend: this.getSpendCreditValue,
         },
         fetchPolicy: 'network-only',
       });

@@ -67,6 +67,10 @@ export class CampaignStore {
       toJS(this.details.data.getOfferingDetailsById)) || [];
   }
 
+  @computed get getOfferingId() {
+    return (this.campaign && this.campaign.id);
+  }
+
   @computed get loading() {
     return this.allData.loading;
   }

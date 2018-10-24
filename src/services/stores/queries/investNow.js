@@ -42,7 +42,7 @@ export const validateInvestmentAmountInOffering = gql`
 
 export const validateInvestmentAmount = gql`
   query validateInvestmentAmount(
-    $userId: Float, $accountId: String, $offeringId: String, $investmentAmount: String,
+    $userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!,
     $autoDraftDeposit: Float, $creditToSpend: Float,
     ){
     validateInvestmentAmount(
@@ -67,7 +67,7 @@ export const getInvestorInFlightCash = gql`
 `;
 
 export const generateAgreement = gql`
-  mutation _generateAgreement($userId: String, $accountId: String, $offeringId: String, $investmentAmount: Float, $transferAmount: Float){
+  mutation _generateAgreement($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $transferAmount: Float){
     generateAgreement(
       userId: $userId
       accountId: $accountId
@@ -84,7 +84,7 @@ export const generateAgreement = gql`
 `;
 
 export const finishInvestment = gql`
-  mutation _finishInvestment($userId: String, $accountId: String, $offeringId: String, $investmentAmount: Float, $agreementId: String){
+  mutation _finishInvestment($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $agreementId: String!){
     finishInvestment(
       userId: $userId
       accountId: $accountId
@@ -96,7 +96,7 @@ export const finishInvestment = gql`
 `;
 
 export const transferFundsForInvestment = gql`
-  mutation _transferFundsForInvestment($userId: String, $accountId: String, $transferAmount: Float){
+  mutation _transferFundsForInvestment($userId: String!, $accountId: String!, $transferAmount: Float!){
     transferFundsForInvestment(
       userId: $userId
       accountId: $accountId
