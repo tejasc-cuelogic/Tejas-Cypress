@@ -20,7 +20,7 @@ export class RewardStore {
   }
 
   @computed get getCurrCreditAvailable() {
-    return (this.creditAvailable && parseInt(this.creditAvailable.data.getUserRewardBalance, 10))
+    return (this.creditAvailable && parseFloat(this.creditAvailable.data.getUserRewardBalance, 2))
     || 0;
   }
 
