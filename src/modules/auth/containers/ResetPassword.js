@@ -53,12 +53,6 @@ export default class ResetPassword extends Component {
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
             }
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            <p className="center-align mb-60">
-              If you entered your email correctly then we just sent you a link to reset your
-              password. Please check your inbox and follow the instructions in the email.
-            </p>
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
             <div className="mt-30 center-align">
               <Button primary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
             </div>

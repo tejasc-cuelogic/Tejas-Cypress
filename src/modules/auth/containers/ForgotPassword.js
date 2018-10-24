@@ -56,6 +56,12 @@ export default class ForgotPassword extends Component {
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
             }
+            {/* THIS MESSAGE WILL BE VISIBLE AFTER SUCCESS */}
+            {/* <p className="center-align mb-60">
+              If you entered your email correctly then we just sent you a link to reset your
+              password. Please check your inbox and follow the instructions in the email.
+            </p> */}
+            {/* THIS MESSAGE WILL BE VISIBLE AFTER SUCCESS */}
             <div className="mt-30 center-align">
               <Button primary size="large" className="very relaxed" content="Send the link" loading={inProgress} disabled={!FORGOT_PASS_FRM.meta.isValid} />
             </div>
