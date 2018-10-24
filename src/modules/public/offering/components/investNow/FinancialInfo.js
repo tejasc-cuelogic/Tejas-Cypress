@@ -4,7 +4,7 @@ import { Header, Form, Popup, Icon, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore')
+@inject('investmentStore', 'investmentLimitStore')
 @observer
 class FinancialInfo extends Component {
   render() {
@@ -14,13 +14,12 @@ class FinancialInfo extends Component {
       estReturnVal,
       calculateEstimatedReturn,
     } = this.props.investmentStore;
-    const { userDetails } = this.props.userDetailsStore;
+    const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
     return (
       <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
         <Header as="h4" textAlign="center">
-          Your investment limit: ${(userDetails && userDetails.limits &&
-            userDetails.limits.limit) || 0}
+          Your investment limit: ${(getCurrentLimitForAccount) || 0}
           <Popup
             wide
             trigger={<Icon name="help circle" color="green" />}

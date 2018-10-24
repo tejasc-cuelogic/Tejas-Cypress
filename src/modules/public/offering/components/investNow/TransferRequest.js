@@ -1,24 +1,22 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Table, Form, Divider, Popup, Icon } from 'semantic-ui-react';
+import { Header, Button, Table, Divider, Popup, Icon } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
-import { MaskedInput } from '../../../../../theme/form';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'userDetailsStore')
+@inject('investmentStore', 'userDetailsStore', 'rewardStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
   componentWillMount() {
     const {
-      cashAvailable,
-      investmentAmount,
+      getTransferRequestAmount,
       setStepToBeRendered,
     } = this.props.investmentStore;
-    if (cashAvailable > investmentAmount) {
-      this.props.history.push('agreement');
-    } else {
+    if (getTransferRequestAmount > 0) {
       setStepToBeRendered(2);
+    } else {
+      this.props.history.push('agreement');
     }
   }
   componentDidMount() {
@@ -33,12 +31,13 @@ class TransferRequest extends Component {
     }
   }
   render() {
+    const { rewardStore, investmentStore } = this.props;
     const {
-      cashAvailable,
-      availableCreditsChange,
+      getTransferRequestAmount,
+      getCurrCashAvailable,
       investmentAmount,
-      TRANSFER_REQ_FORM,
-    } = this.props.investmentStore;
+    } = investmentStore;
+    const { getCurrCreditAvailable } = rewardStore;
     return (
       <div className="center-align">
         <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
@@ -47,7 +46,7 @@ class TransferRequest extends Component {
             <Table.Row>
               <Table.Cell>Investment Amount:</Table.Cell>
               <Table.Cell collapsing>
-                {investmentAmount && Helper.CurrencyFormat(investmentAmount, 'number')}
+                {Helper.CurrencyFormat(investmentAmount, 'number')}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -61,37 +60,26 @@ class TransferRequest extends Component {
                 />
               </Table.Cell>
               <Table.Cell collapsing>
-                ({cashAvailable && Helper.CurrencyFormat(cashAvailable, 'number')})
+                {Helper.CurrencyFormat(getCurrCashAvailable, 'number')}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
-              <Table.Cell>Available Credit ($100): </Table.Cell>
+              <Table.Cell>Available Credit: </Table.Cell>
               <Table.Cell collapsing>
-                <Form>
-                  <Form.Group>
-                    <MaskedInput
-                      hidelabel
-                      prefix=" $"
-                      name="availableCredits"
-                      currency
-                      fielddata={TRANSFER_REQ_FORM.fields.availableCredits}
-                      changed={values => availableCreditsChange(values, 'availableCredits')}
-                    />
-                  </Form.Group>
-                </Form>
+                {Helper.CurrencyFormat(getCurrCreditAvailable, 'number')}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-              <Table.HeaderCell className="positive-text" collapsing>$9,180.99</Table.HeaderCell>
+              <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(getTransferRequestAmount, 'number')}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>
         <Divider hidden />
         <Button.Group>
-          <Button primary content="Confirm" onClick={this.props.confirm} disabled={!TRANSFER_REQ_FORM.meta.isValid} />
+          <Button primary content="Confirm" onClick={this.props.confirm} />
           <Button onClick={this.props.cancel}>Cancel</Button>
         </Button.Group>
         <p className="mt-50">

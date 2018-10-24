@@ -7,7 +7,7 @@ import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 
-@inject('uiStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore')
+@inject('uiStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -43,10 +43,20 @@ export default class InvestNow extends React.Component {
       this.props.history.push('agreement');
     }, 2000);
   }
+  multiClickHandler = (step) => {
+    if (step.name === 'Financial Info') {
+      this.props.investmentStore.getInvestorAvailableCash().then(() => {
+        this.handleStepChange(step.stepToBeRendered);
+      });
+    } else if (step.name === 'Account Type') {
+      this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
+        this.handleStepChange(step.stepToBeRendered);
+      });
+    }
+  }
 
   render() {
     const { signupStatus } = this.props.userDetailsStore;
-    const { investAccTypes } = this.props.investmentStore;
     const {
       inProgress,
       isEnterPressed,
@@ -60,12 +70,14 @@ export default class InvestNow extends React.Component {
         component: <AccountType UserAccounts={signupStatus.activeAccounts} />,
         isValid: '',
         stepToBeRendered: 1,
+        isDirty: true,
       },
       {
         name: 'Financial Info',
         component: <FinancialInfo />,
         isValid: '',
         stepToBeRendered: 2,
+        isDirty: true,
       },
       {
         name: 'TransferRequest',
@@ -77,7 +89,7 @@ export default class InvestNow extends React.Component {
     return (
       <div className="step-progress" >
         {!this.state.submitLoading ?
-          <MultiStep setIsEnterPressed={setIsEnterPressed} disableNxtbtn={investAccTypes.value !== '' && this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+          <MultiStep createAccount={this.multiClickHandler} setIsEnterPressed={setIsEnterPressed} disableNxtbtn={this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
           :
           <Dimmer active>
             <Loader>
