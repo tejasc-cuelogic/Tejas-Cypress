@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
-import { FormInput } from '../../../theme/form';
+import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 
 @inject('authStore', 'uiStore')
@@ -12,17 +12,14 @@ export default class ChangePassword extends Component {
   }
   onSubmit = (e) => {
     e.preventDefault();
-    authActions.updatePassword()
+    const method = this.props.refModule && this.props.refModule === 'security' ?
+      'changeMyPassword' : 'updatePassword';
+    authActions[method](this.props.refModule)
       .then(() => {
         this.props.history.goBack();
       })
       .catch((err) => {
         console.log(err);
-        // this.props.authStore.forceSetError(
-        //   'CHANGE_PASS_FRM',
-        //   'oldPasswd',
-        //   'Entered password is incorrect, please try again.',
-        // );
       });
   }
   handleCloseModal = (e) => {
@@ -42,14 +39,30 @@ export default class ChangePassword extends Component {
           <Form onSubmit={this.onSubmit}>
             {
               ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
-                <FormInput
-                  key={field}
-                  type={pwdInputType}
-                  icon={(field === 'oldPasswd') ? togglePasswordType() : null}
-                  name={field}
-                  fielddata={CHANGE_PASS_FRM.fields[field]}
-                  changed={changePassChange}
-                />
+                (field === 'newPasswd') ?
+                  <FormPasswordStrength
+                    key="newPasswd"
+                    name="newPasswd"
+                    type="password"
+                    minLength={8}
+                    minScore={4}
+                    tooShortWord="Weak"
+                    scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                    inputProps={{
+                      name: 'newPasswd', autoComplete: 'off', placeholder: 'New Password', key: 'newPasswd',
+                    }}
+                    changed={changePassChange}
+                    fielddata={CHANGE_PASS_FRM.fields[field]}
+                  />
+                  :
+                  <FormInput
+                    key={field}
+                    type={pwdInputType}
+                    icon={(field === 'oldPasswd') ? togglePasswordType() : null}
+                    name={field}
+                    fielddata={CHANGE_PASS_FRM.fields[field]}
+                    changed={changePassChange}
+                  />
               ))
             }
             <div className="mt-30 center-align">

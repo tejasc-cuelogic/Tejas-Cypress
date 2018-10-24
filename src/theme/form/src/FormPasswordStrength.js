@@ -54,7 +54,7 @@ export default class FormPasswordStrength extends Component {
           <input style={{ opacity: 0, position: 'absolute', width: 0 }} tabIndex={-1} value="something" />
         }
         <ReactPasswordStrength
-          key="password"
+          key={props.key}
           className="ui input"
           minLength={props.minLength}
           minScore={props.minScore}

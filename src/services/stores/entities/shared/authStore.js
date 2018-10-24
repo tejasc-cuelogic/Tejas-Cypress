@@ -76,7 +76,7 @@ export class AuthStore {
   signupChange = (e, result) => {
     if (e.password || e.password === '') {
       this.SIGNUP_FRM =
-      Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
+        Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
     } else {
       this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
     }
@@ -102,7 +102,18 @@ export class AuthStore {
 
   @action
   changePassChange = (e, res) => {
-    this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
+    if (e.password || e.password === '') {
+      const ojbNew = {
+        isValid: 'isValid',
+        password: 'newPasswd',
+        score: 'score',
+      };
+      const newObj = this.renameKeys(ojbNew, e);
+      this.CHANGE_PASS_FRM =
+        Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValuesForCangePassword(newObj, res));
+    } else {
+      this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
+    }
   };
 
   @action
@@ -112,7 +123,12 @@ export class AuthStore {
 
   @action
   resetPassChange = (e, res) => {
-    this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, Validator.pullValues(e, res));
+    if (e.password || e.password === '') {
+      this.RESET_PASS_FRM =
+        Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
+    } else {
+      this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, Validator.pullValues(e, res));
+    }
   };
 
   @action
@@ -276,6 +292,13 @@ export class AuthStore {
         });
     });
   }
+
+  renameKeys = (keysMap, obj) => Object
+    .keys(obj)
+    .reduce((acc, key) => ({
+      ...acc,
+      ...{ [keysMap[key] || key]: obj[key] },
+    }), {});
 }
 
 export default new AuthStore();

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../theme/form';
+import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
@@ -44,17 +44,31 @@ export default class ResetPassword extends Component {
           <Form onSubmit={this.onSubmit}>
             {
               ['password', 'verify', 'code'].map(field => (
-                <FormInput
-                  key={field}
-                  type="password"
-                  name={field}
-                  fielddata={RESET_PASS_FRM.fields[field]}
-                  changed={resetPassChange}
-                />
+                (field === 'password') ?
+                  <FormPasswordStrength
+                    key="password"
+                    name="password"
+                    type="password"
+                    minLength={8}
+                    minScore={4}
+                    tooShortWord="Weak"
+                    scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                    inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+                    changed={resetPassChange}
+                    fielddata={RESET_PASS_FRM.fields[field]}
+                  />
+                  :
+                  <FormInput
+                    key={field}
+                    type="password"
+                    name={field}
+                    fielddata={RESET_PASS_FRM.fields[field]}
+                    changed={resetPassChange}
+                  />
               ))
             }
             <div className="mt-30 center-align">
-              <Button fluid secondary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
+              <Button fluid primary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
