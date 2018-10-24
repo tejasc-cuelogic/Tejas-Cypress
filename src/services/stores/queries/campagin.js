@@ -274,23 +274,19 @@ export const campaignDetailsQuery = gql`
       }
       isEarlyBirdOnly
       notificationSent {
-        id
         by
         date
         to
       }
       approved {
-        id
         by
         date
       }
       updated {
-        id
         by
         date
       }
       deleted {
-        id
         by
         date
       }
@@ -390,23 +386,19 @@ query getOfferingById($id: ID) {
       }
       isEarlyBirdOnly
       notificationSent {
-        id
         by
         date
         to
       }
       approved {
-        id
         by
         date
       }
       updated {
-        id
         by
         date
       }
       deleted {
-        id
         by
         date
       }

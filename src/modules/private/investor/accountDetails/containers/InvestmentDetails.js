@@ -25,10 +25,8 @@ class InvestmentDetails extends Component {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
     const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
-    this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id)
-      .then(() => {
-        this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
-      });
+    this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
+    this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
