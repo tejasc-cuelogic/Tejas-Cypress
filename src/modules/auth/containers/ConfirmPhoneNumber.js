@@ -21,6 +21,9 @@ export default class ConfirmPhoneNumber extends Component {
       }
     }
   }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
     this.props.identityStore.setReSendVerificationCode(false);

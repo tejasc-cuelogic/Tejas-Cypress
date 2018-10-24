@@ -92,7 +92,7 @@ export default class MaskedInput extends Component {
             <NumberFormat readOnly={displayMode} type="tel" format="#################" placeholder={placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
           ) : props.routingNumber ? (
             <NumberFormat readOnly={displayMode} type="tel" format="#########" placeholder={placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
-          ) : <NumberFormat readOnly={displayMode} placeholder={placeHolder} format="(###)-###-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+          ) : <NumberFormat readOnly={displayMode} placeholder={placeHolder} format="(###) ###-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
         }
         {((error && this.state.showError && !props.showErrorOnField) ||
         (error && props.showerror && !props.showErrorOnField))

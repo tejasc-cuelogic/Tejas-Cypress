@@ -53,7 +53,7 @@ export default class ChangePassword extends Component {
               ))
             }
             <div className="mt-30 center-align">
-              <Button loading={this.props.uiStore.inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} primary size="large">Set new password</Button>
+              <Button primary size="large" className="very relaxed" content="Set new password" loading={this.props.uiStore.inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
