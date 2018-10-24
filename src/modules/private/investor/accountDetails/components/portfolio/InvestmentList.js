@@ -53,7 +53,7 @@ const InvestmentList = (props) => {
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.investedAmount)}
                         <p className="date-stamp">
-                        <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
+                          <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
                         </p>
                       </Table.Cell>
                       <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
