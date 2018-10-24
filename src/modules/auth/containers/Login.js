@@ -51,11 +51,6 @@ class Login extends Component {
           <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[customError]} />
-            </Message>
-          }
           <Form>
             <Button color="facebook" size="large" fluid>
               Log in with Facebook
@@ -79,7 +74,12 @@ class Login extends Component {
             <Form.Field>
               <Link to="/auth/forgot-password">Forgot password?</Link>
             </Form.Field>
-            <div className="center-align mt-40">
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={[customError]} />
+              </Message>
+            }
+            <div className="center-align mt-30">
               <Button fluid primary size="large" className="very relaxed" content="Log in" loading={inProgress} disabled={!LOGIN_FRM.meta.isValid} />
             </div>
           </Form>
