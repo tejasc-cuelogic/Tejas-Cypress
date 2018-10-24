@@ -130,7 +130,7 @@ const LegalDetails = observer(({
       </Form>
     </Modal.Content>
     <Modal.Actions className="signup-actions">
-      <p><Link to="/" onClick={close}>I’ll finish this later</Link></p>
+      <p><Link to="/app/summary" onClick={close}>I’ll finish this later</Link></p>
     </Modal.Actions>
   </Modal>
 ));
