@@ -12,7 +12,7 @@ const OfferingInvestDetails = props => (
       content="This calculates"
       position="top center"
     />
-    <Link to={this.props.match.url} className="link" onClick={() => props.setStepToBeRendered(4)}><small>Update</small></Link>
+    <Link to={props.match.url} className="link" onClick={() => props.setStepToBeRendered(4)}><small>Update</small></Link>
   </Header>
 );
 

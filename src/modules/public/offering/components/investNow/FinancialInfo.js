@@ -5,7 +5,7 @@ import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
-
+import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
 
 @withRouter
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
@@ -26,7 +26,13 @@ class FinancialInfo extends Component {
     return (
       <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
+        <OfferingInvestDetails
+          match={this.props.match}
+          getCurrentLimitForAccount={getCurrentLimitForAccount}
+          setStepToBeRendered={setStepToBeRendered}
+        />
         <InvestmentLimit
+          match={this.props.match}
           getCurrentLimitForAccount={getCurrentLimitForAccount}
           setStepToBeRendered={setStepToBeRendered}
         />

@@ -20,8 +20,8 @@ class TransferRequest extends Component {
     }
   }
   componentDidMount() {
-    const { setStepToBeRendered, setDisableNextbtn } = this.props.investmentStore;
-    setDisableNextbtn();
+    const { setStepToBeRendered, setFieldValue } = this.props.investmentStore;
+    setFieldValue('disableNextbtn', true);
     setStepToBeRendered(2);
   }
   componentWillUnmount() {
