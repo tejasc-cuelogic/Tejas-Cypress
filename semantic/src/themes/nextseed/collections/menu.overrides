@@ -559,6 +559,11 @@ footer{
                         color: @white !important;
                     }
                 }
+                &.disabled {
+                    pointer-events: auto;
+                    opacity: 1;
+                    color: @white !important;
+                }
             }
         }
         .public-footer-nav .item{
