@@ -25,7 +25,7 @@ const userVerifiedDetails = ({ email, legalDetails, isUserVerified }) => {
         <dt>SSN</dt>
         <dd>{Helper.cryptedSSNNumber(legalDetails.ssn)}</dd>
         <dt>DOB</dt>
-        <dd>{moment(legalDetails.dateOfBirth).format('MM-DD-YYYY')}</dd>
+        <dd>{moment(legalDetails.dateOfBirth, 'MM/DD/YYYY').format('MM-DD-YYYY')}</dd>
         <dt>Legal Address</dt>
         <dd>{`${legalDetails.legalAddress.street}, ${legalDetails.legalAddress.city}, ${legalDetails.legalAddress.state}, ${legalDetails.legalAddress.zipCode}`}
         </dd>
