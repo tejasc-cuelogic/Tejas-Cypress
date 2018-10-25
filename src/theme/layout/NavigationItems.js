@@ -46,7 +46,7 @@ export class NavItems extends Component {
             ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
             `}
             name={item.to}
-            disabled={item.title === 'How NextSeed Works'}
+            disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : this.doNothing}
             text={
               <Aux>
