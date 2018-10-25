@@ -559,6 +559,21 @@ footer{
                         color: @white !important;
                     }
                 }
+                &.disabled {
+                    pointer-events: auto;
+                    opacity: 1;
+                    color: @white !important;
+                }
+                &.really{
+                    background-color: @primary-one !important;
+                    color: @white !important;
+                }
+                .menu.transition .item {
+                    &.active, &:hover, &:focus {
+                        background-color: @primary-one-darken!important;
+                        color: @white !important;
+                    }
+                }
             }
         }
         .public-footer-nav .item{

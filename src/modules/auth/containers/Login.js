@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
+import cookie from 'react-cookies';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
@@ -45,6 +46,12 @@ class Login extends Component {
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
+    if (errors && errors.code === 'UserNotConfirmedException') {
+      const { email, password } = this.props.authStore.LOGIN_FRM.fields;
+      const userCredentials = { email: email.value, password: btoa(password.value) };
+      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+      this.props.history.push('/auth/confirm-email');
+    }
     return (
       <Modal size="mini" open closeIcon closeOnDimmerClick={false} onClose={this.handleCloseModal}>
         <Modal.Header className="center-align signup-header">

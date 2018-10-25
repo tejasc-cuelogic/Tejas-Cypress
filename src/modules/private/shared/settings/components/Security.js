@@ -15,7 +15,7 @@ export default class Security extends Component {
     const { match } = this.props;
     return (
       <div>
-        <Route exact path={`${match.url}/change-password`} component={ChangePassword} />
+        <Route exact path={`${match.url}/change-password`} render={props => <ChangePassword refModule="security" {...props} />} />
         <Route exact path={`${match.url}/mfa`} component={ManageMultiFactorAuth} />
         <Header as="h4">Security</Header>
         <p className="intro-text">
