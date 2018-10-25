@@ -80,7 +80,12 @@ class InvestmentDetails extends Component {
               <Route exact path={match.url} component={getModule(navItems[0].component)} />
               {
                 navItems.map(item => (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+                  <Route
+                    key={item.to}
+                    path={`${match.url}/${item.to}`}
+                    component={getModule(item.component)}
+                    // render={() => `<${getModule(item.component)} ${campaign} />`}
+                  />
                 ))
               }
             </Switch>
