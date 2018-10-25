@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
-import ReactCodeInput from 'react-code-input';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
@@ -39,20 +38,8 @@ export default class ResetPassword extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>
-            <div className="center-align">
-              <div className="field"><label>Enter verification code here:</label></div>
-              <ReactCodeInput
-                fields={6}
-                type="number"
-                filterChars
-                name="code"
-                className="otp-field"
-                fielddata={RESET_PASS_FRM.fields.code}
-                onChange={resetPassChange}
-              />
-            </div>
             {
-              ['password', 'verify'].map(field => (
+              ['password', 'verify', 'code'].map(field => (
                 <FormInput
                   key={field}
                   type="password"

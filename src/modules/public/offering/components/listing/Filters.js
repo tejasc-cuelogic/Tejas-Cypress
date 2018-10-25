@@ -80,8 +80,9 @@ export default class Filters extends Component {
     FundingTypes.forEach((item, index) => {
       FundingTypes[index].checkStatus = false;
     });
-    MoreOptions.color = null;
-
+    MoreOptions.forEach((item, index) => {
+      MoreOptions[index].checkStatus = false;
+    });
     this.setState({
       BusinessTypes,
       MoreOptions,

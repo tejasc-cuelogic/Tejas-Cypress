@@ -107,7 +107,7 @@ export class AuthStore {
 
   @action
   resetPassChange = (e, res) => {
-    this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, typeof e === 'string' ? { name: 'code', value: e } : Validator.pullValues(e, res));
+    this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, Validator.pullValues(e, res));
   };
 
   @action
