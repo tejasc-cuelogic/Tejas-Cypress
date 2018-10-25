@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize } from 'lodash';
+import { capitalize, orderBy } from 'lodash';
 import graphql from 'mobx-apollo';
 import { INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
 import { FormValidator as Validator } from '../../../../helper';
@@ -23,14 +23,20 @@ export class InvestmentStore {
     @observable offeringMetaData = {
       campaignType: 0,
       rate: 5,
-      rateMin: campaignStore.campaign.keyTerms.minInvestAmt,
-      rateMax: campaignStore.campaign.keyTerms.maxInvestAmt,
+      rateMin: campaignStore.minInvestAmt,
+      rateMax: campaignStore.maxInvestAmt,
       annualReturn: 1000,
       targetTerm: 5000,
     }
     @observable estReturnVal = '-';
     @observable disableNextbtn = true;
     @observable isValidInvestAmtInOffering = false;
+    @observable matchedTierAmount = 0;
+
+    @action
+    setMatchedTierAmount = (amount) => {
+      this.matchedTierAmount = amount;
+    }
 
     @action
     setFieldValue = (field, value) => {
@@ -79,6 +85,7 @@ export class InvestmentStore {
 
     @action
     investMoneyChange = (values, field) => {
+      this.setMatchedTierAmount(0);
       this.INVESTMONEY_FORM = Validator.onChange(this.INVESTMONEY_FORM, {
         name: field,
         value: values.floatValue,
@@ -367,8 +374,11 @@ export class InvestmentStore {
     const { campaign } = campaignStore;
     let bonusRewards = [];
     campaign.bonusRewards.map((reward) => {
-      reward.tiers.map((tier) => {
-        if (this.investmentAmount >= tier.amount) {
+      const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
+      tiersArray.map((tier) => {
+        if (this.investmentAmount >= tier.amount &&
+          (tier.amount === 0 || tier.amount === this.matchedTierAmount)) {
+          this.setMatchedTierAmount(tier.amount);
           bonusRewards.push(reward);
         }
         return null;
