@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
+import Helper from '../../../../../helper/utility';
 
+
+@withRouter
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
 @observer
 class FinancialInfo extends Component {
@@ -17,20 +20,21 @@ class FinancialInfo extends Component {
       calculateEstimatedReturn,
       validBonusRewards,
       validateInvestmentAmountInOffering,
+      setStepToBeRendered,
     } = this.props.investmentStore;
     const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
     return (
       <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
         <Header as="h4" textAlign="center">
-          Your investment limit: ${(getCurrentLimitForAccount) || 0}
+          Your investment limit: {Helper.CurrencyFormat(getCurrentLimitForAccount || 0)}
           <Popup
             wide
             trigger={<Icon className="ns-help-circle" color="green" />}
             content="This calculates"
             position="top center"
           />
-          <Link to="/" className="link"><small>Update</small></Link>
+          <Link to={this.props.match.url} className="link" onClick={() => setStepToBeRendered(4)}><small>Update</small></Link>
         </Header>
         <Form error size="huge">
           <MaskedInput
@@ -46,6 +50,7 @@ class FinancialInfo extends Component {
         <Divider hidden />
         {
           isValidInvestAmtInOffering &&
+          this.investmentAmount &&
           <p>
             <b>Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}</b>
             <Popup
