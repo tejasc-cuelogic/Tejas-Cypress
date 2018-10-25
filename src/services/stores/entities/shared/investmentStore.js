@@ -373,18 +373,18 @@ export class InvestmentStore {
   @computed get validBonusRewards() {
     const { campaign } = campaignStore;
     let bonusRewards = [];
-    campaign.bonusRewards.map((reward) => {
-      const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
-      tiersArray.map((tier) => {
-        if (this.investmentAmount >= tier.amount &&
-          (tier.amount === 0 || tier.amount === this.matchedTierAmount)) {
-          this.setMatchedTierAmount(tier.amount);
-          bonusRewards.push(reward);
-        }
+    if (campaign && campaign.bonusRewards && campaign.bonusRewards.length) {
+      campaign.bonusRewards.map((reward) => {
+        const tiersArray = orderBy(reward.tiers, ['amount'], ['asc']);
+        tiersArray.map((tier) => {
+          if (this.investmentAmount >= tier.amount) {
+            bonusRewards.push(reward);
+          }
+          return null;
+        });
         return null;
       });
-      return null;
-    });
+    }
     bonusRewards = [...new Set(toJS(bonusRewards))];
     return bonusRewards;
   }
