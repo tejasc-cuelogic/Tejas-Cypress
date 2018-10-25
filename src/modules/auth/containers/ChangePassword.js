@@ -44,6 +44,7 @@ export default class ChangePassword extends Component {
                     key="newPasswd"
                     name="newPasswd"
                     type="password"
+                    iconDisplay={false}
                     minLength={8}
                     minScore={4}
                     tooShortWord="Weak"

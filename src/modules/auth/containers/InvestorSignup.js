@@ -101,6 +101,7 @@ class InvestorSignup extends Component {
               type="password"
               minLength={8}
               minScore={4}
+              iconDisplay
               tooShortWord="Weak"
               scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
               inputProps={{

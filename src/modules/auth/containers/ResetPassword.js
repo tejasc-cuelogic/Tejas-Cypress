@@ -44,6 +44,7 @@ export default class ResetPassword extends Component {
                     key="password"
                     name="password"
                     type="password"
+                    iconDisplay={false}
                     minLength={8}
                     minScore={4}
                     tooShortWord="Weak"

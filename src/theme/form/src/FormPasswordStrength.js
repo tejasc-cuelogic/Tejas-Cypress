@@ -25,9 +25,6 @@ export default class FormPasswordStrength extends Component {
       error,
       tooltip,
     } = props.fielddata;
-    // const maxlength = props.fielddata.maxLength ? props.fielddata.maxLength : (
-    //   props.maxLength ? props.maxLength : false
-    // );
     const { displayMode } = props;
     const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
     return (
@@ -66,12 +63,14 @@ export default class FormPasswordStrength extends Component {
           minScore={props.minScore}
           tooShortWord={props.tooShortWord}
           scoreWords={props.scoreWords}
-          // inputProps={props.inputProps}
           inputProps={{ ...props.inputProps, type: pwdInputType }}
           changeCallback={(e) => { props.changed(e); this.triggerError(false); }}
           onBlur={() => this.triggerError(true)}
         />
-        <Icon {...togglePasswordType()} onClick={() => setPwdVisibilityStatus()} />
+        {props.iconDisplay ?
+          <Icon {...togglePasswordType()} onClick={() => setPwdVisibilityStatus()} />
+          :
+          ''}
         {error && this.state.showError &&
           <FieldError error={error} />
         }
