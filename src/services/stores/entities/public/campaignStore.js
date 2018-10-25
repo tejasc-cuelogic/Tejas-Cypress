@@ -97,6 +97,14 @@ export class CampaignStore {
     newReadLessStatus[index] = !this.selectedReadLess[index];
     this.selectedReadLess = newReadLessStatus;
   }
+
+  @computed get minInvestAmt() {
+    return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.minInvestAmt : null;
+  }
+
+  @computed get maxInvestAmt() {
+    return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.maxInvestAmt : null;
+  }
 }
 
 export default new CampaignStore();
