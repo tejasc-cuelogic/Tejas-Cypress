@@ -17,6 +17,7 @@ export class InvestmentStore {
     @observable TRANSFER_REQ_FORM = Validator.prepareFormObject(TRANSFER_REQ_INFO);
     @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
     @observable cashAvailable = 0;
+    @observable agreementDetails = null;
     @observable investAccTypes = { ...INVEST_ACCOUNT_TYPES };
     @observable stepToBeRendered = 0;
     @observable offeringMetaData = {
@@ -35,6 +36,11 @@ export class InvestmentStore {
     @action
     setMatchedTierAmount = (amount) => {
       this.matchedTierAmount = amount;
+    }
+
+    @action
+    setFieldValue = (field, value) => {
+      this[field] = value;
     }
 
     @computed get getSelectedAccountTypeId() {
@@ -206,8 +212,9 @@ export class InvestmentStore {
         },
         onFetch: (data) => {
           if (data) {
-            rewardStore.getUserRewardBalance();
-            resolve(data);
+            rewardStore.getUserRewardBalance().then(() => {
+              resolve(data);
+            });
           }
         },
         fetchPolicy: 'network-only',
@@ -241,8 +248,8 @@ export class InvestmentStore {
     }
 
     @action
-    validateInvestmentAmount = () => {
-      this.details = graphql({
+    validateInvestmentAmount = () => new Promise((resolve) => {
+      graphql({
         client,
         query: validateInvestmentAmount,
         variables: {
@@ -252,9 +259,14 @@ export class InvestmentStore {
           investmentAmount: this.investmentAmount,
           creditToSpend: this.getSpendCreditValue,
         },
+        onFetch: (data) => {
+          if (data) {
+            resolve(data.validateInvestmentAmount);
+          }
+        },
         fetchPolicy: 'network-only',
       });
-    }
+    });
 
     @action
     getInvestorInFlightCash = () => {
@@ -279,15 +291,16 @@ export class InvestmentStore {
           mutation: generateAgreement,
           variables: {
             userId: userDetailsStore.currentUserId,
-            // accountId,
-            // offeringId,
-            // investmentAmount,
-            // transferAmount,
+            accountId: this.getSelectedAccountTypeId,
+            offeringId: campaignStore.getOfferingId,
+            investmentAmount: this.investmentAmount,
+            creditToSpend: this.getSpendCreditValue,
           },
           // refetchQueries: [{ query: getBusinessApplications }],
         })
-        .then((result) => {
-          resolve(result);
+        .then((data) => {
+          this.setFieldValue('agreementDetails', data.data.generateAgreement);
+          resolve(data.data.generateAgreement);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
@@ -301,31 +314,34 @@ export class InvestmentStore {
 
   @action
   finishInvestment = () => {
-    uiStore.setProgress();
-    return new Promise((resolve) => {
-      client
-        .mutate({
-          mutation: finishInvestment,
-          variables: {
-            userId: userDetailsStore.currentUserId,
-            // accountId,
-            // offeringId,
-            // investmentAmount,
-            // agreementId,
-          },
-          // refetchQueries: [{ query: getBusinessApplications }],
-        })
-        .then((result) => {
-          resolve(result);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
+    if (this.agreementDetails) {
+      uiStore.setProgress();
+      return new Promise((resolve) => {
+        client
+          .mutate({
+            mutation: finishInvestment,
+            variables: {
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+              offeringId: campaignStore.getOfferingId,
+              investmentAmount: this.investmentAmount,
+              agreementId: this.agreementDetails.agreementId,
+            },
+            // refetchQueries: [{ query: getBusinessApplications }],
+          })
+          .then((data) => {
+            resolve(data.data.finishInvestment);
+          })
+          .catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      });
+    }
+    return false;
   }
 
   @action
@@ -337,13 +353,12 @@ export class InvestmentStore {
           mutation: transferFundsForInvestment,
           variables: {
             userId: userDetailsStore.currentUserId,
-            // accountId,
-            // transferAmount,
+            accountId: this.getSelectedAccountTypeId,
+            transferAmount: this.getSpendCreditValue,
           },
-          // refetchQueries: [{ query: getBusinessApplications }],
         })
-        .then((result) => {
-          resolve(result);
+        .then((data) => {
+          resolve(data.data.transferFundsForInvestment);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');

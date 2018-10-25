@@ -36,16 +36,21 @@ export class RewardStore {
   }
 
   @action
-  getUserRewardBalance = () => {
+  getUserRewardBalance = () => new Promise((resolve) => {
     this.creditAvailable = graphql({
       client,
       query: getUserRewardBalance,
       variables: {
         userId: userDetailsStore.currentUserId,
       },
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
       fetchPolicy: 'network-only',
     });
-  }
+  });
 
   @action
   activeOnly = () => {
