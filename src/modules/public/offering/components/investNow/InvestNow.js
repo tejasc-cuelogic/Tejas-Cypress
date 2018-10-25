@@ -6,6 +6,7 @@ import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
+import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 
 @inject('uiStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
 @observer
@@ -23,14 +24,18 @@ export default class InvestNow extends React.Component {
   handleMultiStepModalclose = () => {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.history.push('overview');
+    this.props.investmentStore.resetData();
   }
   handleStepChange = (step) => {
-    this.props.investmentStore.ResetDisableNextbtn();
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
+    if (step === 1) {
+      this.props.investmentStore.setFieldValue('disableNextbtn', false);
+    }
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleCancel = () => {
     this.props.investmentStore.setStepToBeRendered(0);
-    this.props.investmentStore.ResetDisableNextbtn();
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
     this.props.history.push('invest-now');
   }
 
@@ -106,6 +111,12 @@ export default class InvestNow extends React.Component {
         name: 'TransferRequest',
         component: <TransferRequest confirm={this.handleConfirm} cancel={this.handleCancel} />,
         stepToBeRendered: 3,
+        isValid: '',
+      },
+      {
+        name: 'Change Investment Limit',
+        component: <ChangeInvestmentLimit />,
+        stepToBeRendered: 4,
         isValid: '',
       },
     ];

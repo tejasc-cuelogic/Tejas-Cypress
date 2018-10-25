@@ -31,12 +31,6 @@ export class InvestmentStore {
     @observable estReturnVal = '-';
     @observable disableNextbtn = true;
     @observable isValidInvestAmtInOffering = false;
-    @observable matchedTierAmount = 0;
-
-    @action
-    setMatchedTierAmount = (amount) => {
-      this.matchedTierAmount = amount;
-    }
 
     @action
     setFieldValue = (field, value) => {
@@ -68,15 +62,6 @@ export class InvestmentStore {
       }
       return parseFloat(spendAmount, 2);
     }
-    @action
-    setDisableNextbtn = () => {
-      this.disableNextbtn = false;
-    }
-
-    @action
-    ResetDisableNextbtn = () => {
-      this.disableNextbtn = true;
-    }
 
     @action
     setStepToBeRendered = (step) => {
@@ -85,7 +70,6 @@ export class InvestmentStore {
 
     @action
     investMoneyChange = (values, field) => {
-      this.setMatchedTierAmount(0);
       this.INVESTMONEY_FORM = Validator.onChange(this.INVESTMONEY_FORM, {
         name: field,
         value: values.floatValue,
@@ -234,6 +218,11 @@ export class InvestmentStore {
         },
         onFetch: (res) => {
           this.isValidInvestAmtInOffering = res.validateInvestmentAmountInOffering;
+          if (this.isValidInvestAmtInOffering) {
+            this.setFieldValue('disableNextbtn', true);
+          } else {
+            this.setFieldValue('disableNextbtn', false);
+          }
           const errMsg = 'This amount exceeds your current investment limit. Update your income and net worth, or lower your investment amount.';
           if (!res.validateInvestmentAmountInOffering) {
             this.INVESTMONEY_FORM.fields.investmentAmount.error = errMsg;
@@ -387,9 +376,14 @@ export class InvestmentStore {
         });
         return null;
       });
+      bonusRewards = [...new Set(toJS(bonusRewards))];
     }
-    bonusRewards = [...new Set(toJS(bonusRewards))];
     return bonusRewards;
+  }
+
+  @action
+  resetData = () => {
+    Validator.resetFormData(this.INVESTMONEY_FORM);
   }
 }
 
