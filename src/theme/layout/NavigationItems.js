@@ -154,7 +154,7 @@ export class NavigationItems extends Component {
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
             <Menu.Item>
               <Button.Group>
-                <Button as={Link} to="/" inverted color="red">Cancel</Button>
+                <Button as={Link} to="/business/how-it-works" inverted color="red">Cancel</Button>
                 {isPrequalQulify &&
                 <SubmitButton
                   canSubmitApp={canSubmitApp}

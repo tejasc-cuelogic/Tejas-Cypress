@@ -37,7 +37,8 @@ class InvestorSignup extends Component {
       SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType, reset,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
-
+    const customError = errors && errors.code === 'UsernameExistsException'
+      ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
       <Modal
         size="mini"
@@ -103,7 +104,7 @@ class InvestorSignup extends Component {
             />
             {errors &&
               <Message error textAlign="left" className="mt-30">
-                <ListErrors errors={[errors.message]} />
+                <ListErrors errors={[customError]} />
               </Message>
             }
             <div className="center-align mt-30">
