@@ -238,7 +238,7 @@ export default class BusinessDetails extends Component {
                         placeholderText={owner.dateOfService.placeHolder}
                         fielddata={owner.dateOfService}
                         selected={owner.dateOfService.value ?
-                          moment(owner.dateOfService.value) : null}
+                          moment(owner.dateOfService.value, 'MM-DD-YYYY') : null}
                         changed={date => businessDetailsDateChange('dateOfService', date, index)}
                       />
                       <MaskedInput
