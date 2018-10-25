@@ -81,6 +81,7 @@ export default class InvestNow extends React.Component {
 
   render() {
     const { signupStatus } = this.props.userDetailsStore;
+    const { isValidInvestAmtInOffering } = this.props.investmentStore;
     const {
       inProgress,
       isEnterPressed,
@@ -101,7 +102,7 @@ export default class InvestNow extends React.Component {
         component: <FinancialInfo />,
         isValid: '',
         stepToBeRendered: 2,
-        isDirty: true,
+        isDirty: isValidInvestAmtInOffering,
       },
       {
         name: 'TransferRequest',

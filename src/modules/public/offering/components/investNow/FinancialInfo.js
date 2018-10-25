@@ -10,7 +10,7 @@ import { MaskedInput } from '../../../../../theme/form';
 class FinancialInfo extends Component {
   render() {
     const {
-      investmentAmount,
+      isValidInvestAmtInOffering,
       INVESTMONEY_FORM,
       investMoneyChange,
       estReturnVal,
@@ -45,7 +45,7 @@ class FinancialInfo extends Component {
         </Form>
         <Divider hidden />
         {
-          investmentAmount &&
+          isValidInvestAmtInOffering &&
           <p>
             <b>Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}</b>
             <Popup
@@ -57,6 +57,7 @@ class FinancialInfo extends Component {
           </p>
         }
         {
+          isValidInvestAmtInOffering &&
           validBonusRewards.map(reward => (
             // <p>+ 2 Private VIP Launch Party Invitations</p>
             <p>+ {reward.title}</p>
