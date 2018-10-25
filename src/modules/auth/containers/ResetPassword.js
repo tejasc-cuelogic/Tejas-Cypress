@@ -22,7 +22,7 @@ export default class ResetPassword extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.push(this.props.uiStore.authRef || '/');
   }
   render() {
     const { RESET_PASS_FRM, resetPassChange } = this.props.authStore;
