@@ -9,13 +9,16 @@ import { FieldError } from '../../shared';
 @observer
 export default class FormPasswordStrength extends Component {
   state = { showError: false };
+  componentWillMount() {
+    this.props.authStore.setDefaultPwdType();
+  }
   triggerError = (val) => {
     this.setState({ showError: val });
   }
   render() {
     const { props } = this;
     const {
-      togglePasswordType,
+      togglePasswordType, setPwdVisibilityStatus, pwdInputType,
     } = this.props.authStore;
     const {
       label,
@@ -63,11 +66,12 @@ export default class FormPasswordStrength extends Component {
           minScore={props.minScore}
           tooShortWord={props.tooShortWord}
           scoreWords={props.scoreWords}
-          inputProps={props.inputProps}
+          // inputProps={props.inputProps}
+          inputProps={{ ...props.inputProps, type: pwdInputType }}
           changeCallback={(e) => { props.changed(e); this.triggerError(false); }}
           onBlur={() => this.triggerError(true)}
         />
-        <Icon className="ns-view" onClick={togglePasswordType()} />
+        <Icon {...togglePasswordType()} onClick={() => setPwdVisibilityStatus()} />
         {error && this.state.showError &&
           <FieldError error={error} />
         }
