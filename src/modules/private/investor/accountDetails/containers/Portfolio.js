@@ -9,6 +9,10 @@ import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
 import InvestmentDetails from './InvestmentDetails';
 import { InlineLoader } from '../../../../../theme/shared';
+import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
+import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
+import DocSign from '../../../../public/offering/components/investNow/agreement/components/DocSign';
+import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 
 @inject('portfolioStore')
 @observer
@@ -41,7 +45,6 @@ export default class Portfolio extends Component {
         },
       ],
     };
-    console.log(calculateInvestmentType);
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
@@ -79,6 +82,13 @@ export default class Portfolio extends Component {
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
         />
+        <Route
+          path={`${match.url}/:offeringId/invest-now`}
+          render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
+        />
+        <Route path={`${match.url}/:offeringId/agreement`} component={Agreement} />
+        <Route path={`${match.url}/:offeringId/doc-sign`} component={DocSign} />
+        <Route path={`${match.url}/:offeringId/congratulation`} component={Congratulation} />
       </Aux>
     );
   }

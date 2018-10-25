@@ -12,8 +12,8 @@ export const getAmountInvestedInCampaign = gql`
 
 export const getInvestorAvailableCash = gql`
   query _getInvestorAvailableCash(
-    $userId: ID!, $accountId: ID!, $includeInFlight: Boolean,
-    $includeInterest: Boolean, $includeReferralCredit: Boolean, $dateFilterStart: String
+    $userId: String!, $accountId: String!, $includeInFlight: Boolean,
+    $includeInterest: Boolean, $dateFilterStart: String
     $dateFilterStop: String, $txOnly: Boolean,
     ){ 
     getInvestorAvailableCash(
@@ -21,7 +21,6 @@ export const getInvestorAvailableCash = gql`
       accountId: $accountId
       includeInFlight: $includeInFlight
       includeInterest: $includeInterest
-      includeReferralCredit: $includeReferralCredit
       dateFilterStart: $dateFilterStart
       dateFilterStop: $dateFilterStop
       txOnly: $txOnly

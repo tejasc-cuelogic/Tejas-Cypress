@@ -8,7 +8,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 
-@inject('uiStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
+@inject('uiStore', 'campaignStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -18,6 +18,10 @@ export default class InvestNow extends React.Component {
     if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
       this.props.history.push('/auth/login');
+    }
+    if (this.props.changeInvest) {
+      const { offeringId } = this.props.match.params;
+      this.props.campaignStore.getCampaignDetails(offeringId);
     }
   }
 
@@ -84,38 +88,46 @@ export default class InvestNow extends React.Component {
   }
 
   render() {
-    const { signupStatus } = this.props.userDetailsStore;
+    const { changeInvest, uiStore, userDetailsStore } = this.props;
+    const { signupStatus } = userDetailsStore;
     const {
       inProgress,
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
-    } = this.props.uiStore;
+    } = uiStore;
     const steps =
     [
       {
         name: 'Account Type',
-        component: <AccountType UserAccounts={signupStatus.activeAccounts} />,
+        component: <AccountType
+          changeInvest={changeInvest}
+          UserAccounts={signupStatus.activeAccounts}
+        />,
         isValid: '',
         stepToBeRendered: 1,
         isDirty: true,
       },
       {
         name: 'Financial Info',
-        component: <FinancialInfo />,
+        component: <FinancialInfo changeInvest={changeInvest} />,
         isValid: '',
         stepToBeRendered: 2,
         isDirty: true,
       },
       {
         name: 'TransferRequest',
-        component: <TransferRequest confirm={this.handleConfirm} cancel={this.handleCancel} />,
+        component: <TransferRequest
+          changeInvest={changeInvest}
+          confirm={this.handleConfirm}
+          cancel={this.handleCancel}
+        />,
         stepToBeRendered: 3,
         isValid: '',
       },
       {
         name: 'Change Investment Limit',
-        component: <ChangeInvestmentLimit />,
+        component: <ChangeInvestmentLimit changeInvest={changeInvest} />,
         stepToBeRendered: 4,
         isValid: '',
       },

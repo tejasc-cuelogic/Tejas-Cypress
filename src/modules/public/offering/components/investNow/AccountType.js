@@ -1,18 +1,25 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { includes } from 'lodash';
 import { Header, Form, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
 @observer
 class AccountType extends Component {
   componentWillMount() {
     const { setStepToBeRendered } = this.props.investmentStore;
     const { UserAccounts } = this.props;
-    if (UserAccounts && UserAccounts.length === 1) {
-      setStepToBeRendered(2);
+    if (this.props.changeInvest) {
+      const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+      this.props.investmentStore.accTypeChanged(null, { value: accountType });
+      this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
+        setStepToBeRendered(1);
+      });
+    } else if ((UserAccounts && UserAccounts.length === 1)) {
+      setStepToBeRendered(1);
     }
   }
   componentDidMount() {
