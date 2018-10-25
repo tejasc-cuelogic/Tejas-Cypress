@@ -7,8 +7,10 @@ import Helper from '../../../../../../../helper/utility';
 @observer
 export default class Agreement extends React.Component {
   componentWillMount() {
-    const { stepToBeRendered, setStepToBeRendered } = this.props.investmentStore;
-    if (stepToBeRendered === 2) {
+    const { stepToBeRendered, setStepToBeRendered, investAccTypes } = this.props.investmentStore;
+    if (investAccTypes.value === '') {
+      this.props.history.push('invest-now');
+    } else if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
   }
