@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
-import Helper from '../../../../../helper/utility';
+import InvestmentLimit from './financialInfo/InvestmentLimit';
 
 
 @withRouter
@@ -26,16 +26,10 @@ class FinancialInfo extends Component {
     return (
       <Aux>
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
-        <Header as="h4" textAlign="center">
-          Your investment limit: {Helper.CurrencyFormat(getCurrentLimitForAccount || 0)}
-          <Popup
-            wide
-            trigger={<Icon className="ns-help-circle" color="green" />}
-            content="This calculates"
-            position="top center"
-          />
-          <Link to={this.props.match.url} className="link" onClick={() => setStepToBeRendered(4)}><small>Update</small></Link>
-        </Header>
+        <InvestmentLimit
+          getCurrentLimitForAccount={getCurrentLimitForAccount}
+          setStepToBeRendered={setStepToBeRendered}
+        />
         <Form error size="huge">
           <MaskedInput
             hidelabel
