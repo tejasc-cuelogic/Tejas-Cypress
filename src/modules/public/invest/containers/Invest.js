@@ -24,6 +24,11 @@ class Invest extends Component {
       this.props.history.replace(`${this.props.match.url}/why-nextseed`);
     }
   }
+  componentWillUpdate() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
+    }
+  }
   module = name => DataFormatter.upperCamelCase(name);
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
@@ -31,7 +36,7 @@ class Invest extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
-        {location.pathname === '/invest/why-nextseed' ? <Banner /> :
+        {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner /> :
         <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
         }
         <Visibility
