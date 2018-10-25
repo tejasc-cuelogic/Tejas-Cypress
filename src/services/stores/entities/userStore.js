@@ -74,6 +74,10 @@ export class UserStore {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('issuer');
   }
+  getUserEmailAddress() {
+    const emailDetails = (this.currentUser && toJS(this.currentUser.email)) || null;
+    return emailDetails;
+  }
 }
 
 export default new UserStore();
