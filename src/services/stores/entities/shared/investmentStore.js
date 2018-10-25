@@ -197,6 +197,9 @@ export class InvestmentStore {
           userId: userDetailsStore.currentUserId,
           // accountId,
         },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        },
         fetchPolicy: 'network-only',
       });
     }
@@ -216,6 +219,9 @@ export class InvestmentStore {
               resolve(data);
             });
           }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
         },
         fetchPolicy: 'network-only',
       });
@@ -243,6 +249,9 @@ export class InvestmentStore {
             this.INVESTMONEY_FORM.meta.isValid = true;
           }
         },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        },
         fetchPolicy: 'network-only',
       });
     }
@@ -264,6 +273,9 @@ export class InvestmentStore {
             resolve(data.validateInvestmentAmount);
           }
         },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+        },
         fetchPolicy: 'network-only',
       });
     });
@@ -277,6 +289,9 @@ export class InvestmentStore {
           userId: userDetailsStore.currentUserId,
           // accountId,
           // isAutoDraft,
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
         },
         fetchPolicy: 'network-only',
       });
