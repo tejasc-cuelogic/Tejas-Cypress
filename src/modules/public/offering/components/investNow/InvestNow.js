@@ -40,9 +40,8 @@ export default class InvestNow extends React.Component {
       if (isValid) {
         this.props.investmentStore.transferFundsForInvestment().then((status) => {
           if (status) {
-            this.props.investmentStore.generateAgreement().then((agreementObj) => {
+            this.props.investmentStore.generateAgreement().then(() => {
               Helper.toast('Transfer request is in process!', 'success');
-              console.log(agreementObj);
               this.props.investmentStore.setStepToBeRendered(0);
               this.setState({ submitLoading: !this.state.submitLoading });
               this.props.history.push('agreement');
