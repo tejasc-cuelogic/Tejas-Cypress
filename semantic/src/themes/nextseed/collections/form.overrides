@@ -7,6 +7,9 @@
         .ui.input.ReactPasswordStrength{
             flex-direction:column;
             border:none;
+            >input[type=password]{
+                padding-right:@28px;
+            }
             .ReactPasswordStrength-strength-bar{
                 margin:@6px 0;
                 top:0;
@@ -37,6 +40,19 @@
             }
             &.is-strength-4 .ReactPasswordStrength-strength-bar{
                 width:~"calc(100% - 52px)";
+            }
+            ~ i.icon.ns-view{
+                width:30px;
+                height:auto;
+                margin:0;
+                padding:@8px 0;
+                position:absolute;
+                right:0;
+                background-color:@white;
+                text-align:right;
+                &.active{
+                    color:@primary-one;
+                }
             }
         }
         &.dropdown-field{
