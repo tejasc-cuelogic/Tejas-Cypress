@@ -467,7 +467,7 @@ class FormValidator {
   }
   // evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
 
-  evalDateObj = date => moment(date).toISOString();
+  evalDateObj = date => moment(date, 'MM/DD/YYYY').toISOString();
 
   evaluateFormData = (fields) => {
     let inputData = {};
