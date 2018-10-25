@@ -1,9 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../theme/form';
+import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
@@ -34,7 +35,7 @@ class InvestorSignup extends Component {
   };
   render() {
     const {
-      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType, reset,
+      SIGNUP_FRM, signupChange, pwdInputType, reset,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.code === 'UsernameExistsException'
@@ -87,13 +88,28 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
             />
-            <FormInput
+            {/* <FormInput
               key="password"
               name="password"
               type={pwdInputType}
               icon={togglePasswordType()}
               fielddata={SIGNUP_FRM.fields.password}
               changed={signupChange}
+            /> */}
+            <FormPasswordStrength
+              key="password"
+              name="password"
+              type="password"
+              minLength={8}
+              minScore={4}
+              iconDisplay
+              tooShortWord="Weak"
+              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              inputProps={{
+                name: 'password', autoComplete: 'off', placeholder: 'Password',
+              }}
+              changed={signupChange}
+              fielddata={SIGNUP_FRM.fields.password}
             />
             <FormInput
               key="verify"

@@ -310,17 +310,61 @@ export class Auth {
       });
   }
 
+  changeMyPassword(refModule) {
+    console.log('refModule=>', refModule);
+    uiStore.reset();
+    uiStore.setProgress();
+    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+    const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+    const userEmail = userStore.getUserEmailAddress();
+    const authenticationDetails = new AWSCognito.AuthenticationDetails({
+      Username: loginData.email || userEmail,
+      Password: loginData.password || passData.oldPasswd,
+    });
+    this.cognitoUser = new AWSCognito.CognitoUser({
+      Username: loginData.email || userEmail,
+      Pool: this.userPool,
+    });
+    return new Promise((res, rej) => {
+      this.cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: () => {
+          this.cognitoUser.changePassword(
+            passData.oldPasswd, passData.newPasswd,
+            (err, resultObtained) => {
+              if (err) {
+                rej(err.message || JSON.stringify(err));
+              }
+              res(resultObtained);
+            },
+          );
+        },
+      });
+    })
+      .then(() => {
+        Helper.toast('Password changed successfully', 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
   updatePassword() {
     uiStore.reset();
     uiStore.setProgress();
     const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
     const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+    const userEmail = userStore.getUserEmailAddress();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: loginData.email,
-      Password: loginData.password,
+      Username: loginData.email || userEmail,
+      Password: loginData.password || passData.oldPasswd,
     });
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: loginData.email,
+      Username: loginData.email || userEmail,
       Pool: this.userPool,
     });
     return new Promise((res, rej) => {
