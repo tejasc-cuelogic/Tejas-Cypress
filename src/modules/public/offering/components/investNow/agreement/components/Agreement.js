@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Button, Grid, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { MaskedInput, FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
-@inject('investmentStore', 'userDetailsStore')
+@inject('investmentStore')
 @observer
 export default class Agreement extends React.Component {
   componentWillMount() {
@@ -16,8 +16,11 @@ export default class Agreement extends React.Component {
     this.props.history.push('overview');
   }
   submit = () => {
-    const { notePurchaseAgrChecked } = this.props.investmentStore;
-    this.props.history.push(notePurchaseAgrChecked ? 'doc-sign' : 'congratulation');
+    this.props.investmentStore.finishInvestment().then((investmentStatus) => {
+      if (investmentStatus) {
+        this.props.history.push('congratulation');
+      }
+    });
   }
 
   render() {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Popup, List } from 'semantic-ui-react';
 
@@ -147,7 +148,7 @@ export const AGREEMENT_DETAILS_INFO = {
       {
         label: (
           <Aux>
-            I have reviewed and agree to the terms of the <a href="/">Note Purchase Agreement</a>.
+            I have reviewed and agree to the terms of the <Link to="doc-sign">Note Purchase Agreement</Link>.
           </Aux>
         ),
         value: '5',

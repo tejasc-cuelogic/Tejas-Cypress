@@ -36,17 +36,41 @@ export default class InvestNow extends React.Component {
 
   handleConfirm = () => {
     this.setState({ submitLoading: !this.state.submitLoading });
-    Helper.toast('Transfer request is in process!', 'success');
-    setTimeout(() => {
-      this.props.investmentStore.setStepToBeRendered(0);
-      this.setState({ submitLoading: !this.state.submitLoading });
-      this.props.history.push('agreement');
-    }, 2000);
+    this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
+      if (isValid) {
+        this.props.investmentStore.transferFundsForInvestment().then((status) => {
+          if (status) {
+            this.props.investmentStore.generateAgreement().then((agreementObj) => {
+              Helper.toast('Transfer request is in process!', 'success');
+              console.log(agreementObj);
+              this.props.investmentStore.setStepToBeRendered(0);
+              this.setState({ submitLoading: !this.state.submitLoading });
+              this.props.history.push('agreement');
+            });
+          }
+        });
+      }
+    });
   }
   multiClickHandler = (step) => {
     if (step.name === 'Financial Info') {
       this.props.investmentStore.getInvestorAvailableCash().then(() => {
-        this.handleStepChange(step.stepToBeRendered);
+        const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
+        if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
+          this.handleStepChange(step.stepToBeRendered);
+        } else {
+          this.setState({ submitLoading: !this.state.submitLoading });
+          this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
+            if (isValid) {
+              this.props.investmentStore.generateAgreement().then(() => {
+                Helper.toast('Transfer request is in process!', 'success');
+                this.props.investmentStore.setStepToBeRendered(0);
+                this.setState({ submitLoading: !this.state.submitLoading });
+                this.props.history.push('agreement');
+              });
+            }
+          });
+        }
       });
     } else if (step.name === 'Account Type') {
       this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
