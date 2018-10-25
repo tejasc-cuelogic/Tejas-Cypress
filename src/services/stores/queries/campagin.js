@@ -351,6 +351,7 @@ query getOfferingById($id: ID) {
         targetDate
       }
     }
+    earlyBirdsCount
     bonusRewards{
       id
       offeringId
@@ -414,7 +415,10 @@ query getOfferingById($id: ID) {
         }
       }
     }
-  
+    rewardsTierIds {
+      amount
+      earlyBirdQuantity
+    }
   }
 }
 `;

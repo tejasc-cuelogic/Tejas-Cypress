@@ -18,14 +18,11 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('campaignStore')
 @observer
 class UpdateDetails extends Component {
-  componentWillMount() {
-    this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
-  }
   render() {
     const indexId = this.props.match.params.id ? this.props.match.params.id : 0;
     const { campaign } = this.props.campaignStore;
     const updatesDetails = campaign && campaign.updates;
-    const updates = updatesDetails && updatesDetails.length ? updatesDetails[indexId] : [];
+    const updates = updatesDetails && updatesDetails.length ? updatesDetails[indexId] : null;
     return (
       updates ?
         <Aux>

@@ -84,7 +84,6 @@ class InvestmentDetails extends Component {
                     key={item.to}
                     path={`${match.url}/${item.to}`}
                     component={getModule(item.component)}
-                    // render={() => `<${getModule(item.component)} ${campaign} />`}
                   />
                 ))
               }
