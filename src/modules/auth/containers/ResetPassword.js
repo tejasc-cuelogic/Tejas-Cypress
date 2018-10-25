@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import ReactCodeInput from 'react-code-input';
 import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
@@ -37,32 +39,38 @@ export default class ResetPassword extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>
-            {
-              ['password', 'verify', 'code'].map(field => (
-                (field === 'password') ?
-                  <FormPasswordStrength
-                    key="password"
-                    name="password"
-                    type="password"
-                    iconDisplay
-                    minLength={8}
-                    minScore={4}
-                    tooShortWord="Weak"
-                    scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                    inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-                    changed={resetPassChange}
-                    fielddata={RESET_PASS_FRM.fields[field]}
-                  />
-                  :
-                  <FormInput
-                    key={field}
-                    type={pwdInputType}
-                    name={field}
-                    fielddata={RESET_PASS_FRM.fields[field]}
-                    changed={resetPassChange}
-                  />
-              ))
-            }
+            <div className="center-align">
+              <div className="field"><label>Enter verification code here:</label></div>
+              <ReactCodeInput
+                fields={6}
+                type="number"
+                filterChars
+                name="code"
+                className="otp-field"
+                fielddata={RESET_PASS_FRM.fields.code}
+                onChange={resetPassChange}
+              />
+            </div>
+            <FormPasswordStrength
+              key="password"
+              name="password"
+              type="password"
+              iconDisplay
+              minLength={8}
+              minScore={4}
+              tooShortWord="Weak"
+              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+              changed={resetPassChange}
+              fielddata={RESET_PASS_FRM.fields.password}
+            />
+            <FormInput
+              key="verify"
+              type={pwdInputType}
+              name="verify"
+              fielddata={RESET_PASS_FRM.fields.verify}
+              changed={resetPassChange}
+            />
             {errors &&
               <Message error textAlign="left" className="mt-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
