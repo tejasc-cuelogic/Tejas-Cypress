@@ -27,8 +27,9 @@ export default class ChangePassword extends Component {
     this.props.history.goBack();
   }
   render() {
+    // togglePasswordType
     const {
-      CHANGE_PASS_FRM, changePassChange, togglePasswordType, pwdInputType,
+      CHANGE_PASS_FRM, changePassChange, pwdInputType,
     } = this.props.authStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
@@ -44,7 +45,7 @@ export default class ChangePassword extends Component {
                     key="newPasswd"
                     name="newPasswd"
                     type="password"
-                    iconDisplay={false}
+                    iconDisplay
                     minLength={8}
                     minScore={4}
                     tooShortWord="Weak"
@@ -59,7 +60,7 @@ export default class ChangePassword extends Component {
                   <FormInput
                     key={field}
                     type={pwdInputType}
-                    icon={(field === 'oldPasswd') ? togglePasswordType() : null}
+                    // icon={(field === 'oldPasswd') ? togglePasswordType() : null}
                     name={field}
                     fielddata={CHANGE_PASS_FRM.fields[field]}
                     changed={changePassChange}

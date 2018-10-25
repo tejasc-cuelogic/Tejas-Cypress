@@ -24,7 +24,7 @@ export default class ResetPassword extends Component {
     this.props.history.goBack();
   }
   render() {
-    const { RESET_PASS_FRM, resetPassChange } = this.props.authStore;
+    const { RESET_PASS_FRM, resetPassChange, pwdInputType } = this.props.authStore;
     const { errors } = this.props.uiStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
@@ -44,7 +44,7 @@ export default class ResetPassword extends Component {
                     key="password"
                     name="password"
                     type="password"
-                    iconDisplay={false}
+                    iconDisplay
                     minLength={8}
                     minScore={4}
                     tooShortWord="Weak"
@@ -56,7 +56,7 @@ export default class ResetPassword extends Component {
                   :
                   <FormInput
                     key={field}
-                    type="password"
+                    type={pwdInputType}
                     name={field}
                     fielddata={RESET_PASS_FRM.fields[field]}
                     changed={resetPassChange}
