@@ -36,12 +36,7 @@ export default class ResetPassword extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
-          }
-          <Form onSubmit={this.onSubmit}>
+          <Form error onSubmit={this.onSubmit}>
             {
               ['password', 'verify', 'code'].map(field => (
                 (field === 'password') ?
@@ -67,8 +62,13 @@ export default class ResetPassword extends Component {
                   />
               ))
             }
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
+            }
             <div className="mt-30 center-align">
-              <Button fluid primary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
+              <Button primary size="large" className="very relaxed" content="Set a new password" loading={this.props.uiStore.inProgress} disabled={!RESET_PASS_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
