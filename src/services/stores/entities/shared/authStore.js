@@ -183,21 +183,6 @@ export class AuthStore {
   }
 
   @action
-  reset = (form) => {
-    switch (form) {
-      case 'LOGIN':
-        this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
-        break;
-      case 'CONFIRM':
-        this.CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
-        break;
-      case 'SIGNUP':
-        this.SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
-        break;
-      default: this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
-    }
-  }
-  @action
   resetForm = (form) => {
     Validator.resetFormData(this[form]);
   }

@@ -25,7 +25,7 @@ export default class NewEmailAddress extends Component {
   handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.authStore.reset();
+    this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.history.push('/app/profile-settings/profile-data');
   }
   render() {

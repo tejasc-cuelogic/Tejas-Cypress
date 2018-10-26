@@ -28,7 +28,7 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           const { roles } = this.props.userStore.currentUser;
-          this.props.authStore.reset();
+          this.props.authStore.resetForm('LOGIN_FRM');
           this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
             `/app/${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
         }
