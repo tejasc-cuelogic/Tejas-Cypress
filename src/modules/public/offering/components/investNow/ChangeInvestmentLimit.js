@@ -45,7 +45,7 @@ class ChangeInvestmentLimit extends Component {
                       position="top center"
                     />
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell width={5} textAlign="right">
                     <MaskedInput
                       name="netWorth"
                       fielddata={INVESTMENT_LIMITS_FORM.fields.netWorth}
@@ -58,7 +58,7 @@ class ChangeInvestmentLimit extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>
-                        Annual Income:
+                    Annual Income:
                     <Popup
                       wide
                       trigger={<Icon name="help circle" color="green" />}
@@ -66,7 +66,7 @@ class ChangeInvestmentLimit extends Component {
                       position="top center"
                     />
                   </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell textAlign="right">
                     <MaskedInput
                       name="annualIncome"
                       fielddata={INVESTMENT_LIMITS_FORM.fields.annualIncome}
@@ -78,8 +78,8 @@ class ChangeInvestmentLimit extends Component {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Other Reg CF Investments: </Table.Cell>
-                  <Table.Cell>
+                  <Table.Cell>Other Reg CF Investments:</Table.Cell>
+                  <Table.Cell textAlign="right">
                     <MaskedInput
                       name="cfInvestments"
                       fielddata={INVESTMENT_LIMITS_FORM.fields.cfInvestments}
@@ -93,13 +93,13 @@ class ChangeInvestmentLimit extends Component {
               </Table.Body>
               <Table.Footer>
                 <Table.Row>
-                  <Table.HeaderCell>Your Investment Limit: </Table.HeaderCell>
-                  <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(changedInvestmentLimit)}</Table.HeaderCell>
+                  <Table.HeaderCell>Your Investment Limit:</Table.HeaderCell>
+                  <Table.HeaderCell textAlign="right" className="positive-text">{Helper.CurrencyFormat(changedInvestmentLimit)}</Table.HeaderCell>
                 </Table.Row>
               </Table.Footer>
             </Table>
             <Divider hidden />
-            <p>
+            <p className="center-align mb-40">
               By clicking the “Confirm” button, I authorize the transfer from
               my <Link to={this.props.match.url}>Banco do Brasil account (x-1923)</Link>
               to my NextSeed account in the amount equal to the Transfer Requested above.

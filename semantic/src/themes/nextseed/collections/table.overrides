@@ -190,6 +190,9 @@
     &.confirm-transfer-table {
         tr td {
             border-top: 0;
+            &.right.aligned input{
+                text-align:right;
+            }
         }
     }
     &:not(.unstackable) tr>td {
