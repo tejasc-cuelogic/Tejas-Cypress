@@ -16,6 +16,9 @@ import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
+    if (this.props.refLink) {
+      this.props.uiStore.setAuthRef(this.props.refLink);
+    }
     this.props.authStore.resetForm('CONFIRM_FRM');
     const credentials = cookie.load('USER_CREDENTIALS');
     if (credentials) {
