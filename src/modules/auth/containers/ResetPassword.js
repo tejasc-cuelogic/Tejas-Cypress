@@ -13,6 +13,7 @@ export default class ResetPassword extends Component {
   componentWillMount() {
     const { FORGOT_PASS_FRM, RESET_PASS_FRM } = this.props.authStore;
     RESET_PASS_FRM.fields.email.value = FORGOT_PASS_FRM.fields.email.value;
+    this.props.authStore.resetForm('RESET_PASS_FRM');
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();

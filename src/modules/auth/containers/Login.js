@@ -13,7 +13,7 @@ import { ListErrors } from '../../../theme/shared';
 class Login extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset('LOGIN');
+    this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
   }
   componentWillUnmount() {
@@ -28,7 +28,7 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           const { roles } = this.props.userStore.currentUser;
-          this.props.authStore.reset();
+          this.props.authStore.resetForm('LOGIN_FRM');
           this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
             `/app/${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
         }
@@ -36,7 +36,6 @@ class Login extends Component {
   };
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.authStore.reset('LOGIN');
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
   render() {

@@ -27,7 +27,7 @@ export default class OfferingDetails extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.offeringCreationStore.resetOfferingId();
-    this.props.history.push(this.props.refLink);
+    this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
   };
   render() {
     const { match, offeringsStore, navStore } = this.props;
