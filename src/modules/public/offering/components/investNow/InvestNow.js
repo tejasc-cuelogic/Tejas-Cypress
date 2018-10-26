@@ -110,7 +110,10 @@ export default class InvestNow extends React.Component {
       },
       {
         name: 'Financial Info',
-        component: <FinancialInfo changeInvest={changeInvest} />,
+        component: <FinancialInfo
+          refLink={this.props.refLink}
+          changeInvest={changeInvest}
+        />,
         isValid: '',
         stepToBeRendered: 2,
         isDirty: true,
