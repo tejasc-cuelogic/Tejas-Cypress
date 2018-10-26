@@ -1,7 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Button, Grid, Form, Popup, Icon, Divider } from 'semantic-ui-react';
-import { MaskedInput, FormCheckbox } from '../../../../../../../theme/form';
+import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
+import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 @inject('investmentStore')
 @observer
@@ -27,10 +27,8 @@ export default class Agreement extends React.Component {
 
   render() {
     const {
-      investmentLimitsChecked,
       AGREEMENT_DETAILS_FORM,
       investmentAmount,
-      agreementInfoChange,
       setCheckbox,
     } = this.props.investmentStore;
     return (
@@ -40,33 +38,12 @@ export default class Agreement extends React.Component {
             Let&#39;s confirm your investment.<br />You are investing
             <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in Pour Behavior.
           </Header>
+          {!AGREEMENT_DETAILS_FORM.meta.isValid &&
+            <Message error textAlign="left" className="mt-30">
+              All boxes must be checked to confirm your investment.
+            </Message>
+          }
           <Form error size="huge">
-            {investmentLimitsChecked ?
-              <Grid divided doubling columns={4} className="agreement-details">
-                {['netWorth', 'annualIncome', 'OtherRegCfInvestments'].map(field => (
-                  <Grid.Column>
-                    <MaskedInput
-                      hoverable
-                      currency
-                      prefix="$ "
-                      fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
-                      changed={values => agreementInfoChange(values, field)}
-                    />
-                  </Grid.Column>
-                  ))
-                  }
-                <Grid.Column verticalAlign="middle">
-                  <p className="note"><i>Why do I need to provide this information?</i>
-                    <Popup
-                      trigger={<Icon color="green" name="help circle" />}
-                      content="If you invest more than $2,200 in a 12-month period, we are required by law to ask for your net worth and annual income."
-                      position="top center"
-                    />
-                  </p>
-                </Grid.Column>
-              </Grid>
-           : null
-            }
             <Grid stackable>
               <Grid.Row>
                 {['checkboxesLeft', 'checkboxesRight'].map(field => (
@@ -85,7 +62,12 @@ export default class Agreement extends React.Component {
           </Form>
           <Divider hidden />
           <div className="center-align">
-            <Button primary onClick={this.submit}>Invest</Button>
+            <Button primary disabled={!AGREEMENT_DETAILS_FORM.meta.isValid} onClick={this.submit}>
+            Invest
+            </Button>
+            <Button color="gray" onClick={this.submit}>
+            Cancel
+            </Button>
           </div>
         </Modal.Content>
       </Modal>

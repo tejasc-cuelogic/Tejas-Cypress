@@ -5,6 +5,7 @@ import { GqlClient as coolClient } from '../../../../api/gcoolApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { allRewards, getUserRewardBalance } from '../../queries/rewards';
 import { userDetailsStore } from '../../index';
+import Helper from '../../../../helper/utility';
 
 export class RewardStore {
   @observable data = [];
@@ -47,6 +48,9 @@ export class RewardStore {
         if (data) {
           resolve(data);
         }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
       fetchPolicy: 'network-only',
     });

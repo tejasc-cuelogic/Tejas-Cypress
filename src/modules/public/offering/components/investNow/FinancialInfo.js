@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link, withRouter, Route } from 'react-router-dom';
+
+import { Route, withRouter } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
-import Helper from '../../../../../helper/utility';
+import InvestmentLimit from './financialInfo/InvestmentLimit';
+import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 
 @withRouter
@@ -19,6 +21,7 @@ class FinancialInfo extends Component {
       estReturnVal,
       calculateEstimatedReturn,
       validBonusRewards,
+      setStepToBeRendered,
       validateInvestmentAmountInOffering,
     } = this.props.investmentStore;
     const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
@@ -27,16 +30,16 @@ class FinancialInfo extends Component {
       <Aux>
         <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
-        <Header as="h4" textAlign="center">
-          Your investment limit: {Helper.CurrencyFormat(getCurrentLimitForAccount || 0)}
-          <Popup
-            wide
-            trigger={<Icon className="ns-help-circle" color="green" />}
-            content="This calculates"
-            position="top center"
-          />
-          <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
-        </Header>
+        <OfferingInvestDetails
+          match={this.props.match}
+          getCurrentLimitForAccount={getCurrentLimitForAccount}
+          setStepToBeRendered={setStepToBeRendered}
+        />
+        <InvestmentLimit
+          match={this.props.match}
+          getCurrentLimitForAccount={getCurrentLimitForAccount}
+          setStepToBeRendered={setStepToBeRendered}
+        />
         <Form error size="huge">
           <MaskedInput
             hidelabel

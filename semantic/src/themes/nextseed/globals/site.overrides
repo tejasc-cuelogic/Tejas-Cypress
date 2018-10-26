@@ -581,6 +581,10 @@ p i.icon {
 		margin-bottom:0;
 	}
 }
+.featured-section.investment-details{
+	margin:@21px 0;
+	padding:@20px @40px;
+}
 .learn-more {
 	background-color: @secondary-color;
 	color: @white;

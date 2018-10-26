@@ -61,41 +61,6 @@ export const INVEST_ACCOUNT_TYPES = {
 };
 
 export const AGREEMENT_DETAILS_INFO = {
-  netWorth: {
-    placeHolder: '$ 0',
-    value: '500',
-    label: 'Net Worth',
-    error: undefined,
-    rule: 'optional',
-    tooltip: (<Aux>You can see how to calculate your net worth <a href="">here</a>.</Aux>),
-  },
-  annualIncome: {
-    error: undefined,
-    rule: 'optional',
-    placeHolder: '$ 0',
-    value: '500',
-    label: 'Annual Income',
-    tooltip: (
-      <Aux>
-        You can include ancillary sources of income (including from side jobs,
-        rental income and capital gains) and your spouse’s income.
-      </Aux>),
-  },
-  OtherRegCfInvestments: {
-    error: undefined,
-    rule: 'optional',
-    placeHolder: '$ 0',
-    value: '500',
-    label: 'Other Reg CF Investments',
-    tooltip: (
-      <Aux>
-        Other Regulation Crowdfunding investments made in other platforms. Note: This does
-        not include any donation/rewards crowdfunding platforms (e.g. Kickstarter) or investments
-        made in offerings under other sets of regulations (e.g. Reg D, Reg A). If you have any
-        questions about what constitutes other crowdfunding investments, please
-        contact <a href="/">support@nextseed.com</a>
-      </Aux>),
-  },
   checkboxesLeft: {
     value: [],
     values: [
@@ -140,7 +105,7 @@ export const AGREEMENT_DETAILS_INFO = {
       },
     ],
     error: undefined,
-    rule: 'array',
+    rule: 'required|min:4',
   },
   checkboxesRight: {
     value: [],
@@ -168,7 +133,7 @@ export const AGREEMENT_DETAILS_INFO = {
       },
     ],
     error: undefined,
-    rule: 'array',
+    rule: 'required|min:2',
   },
 };
 
