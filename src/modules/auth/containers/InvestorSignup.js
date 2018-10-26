@@ -35,7 +35,7 @@ class InvestorSignup extends Component {
   };
   render() {
     const {
-      SIGNUP_FRM, signupChange, pwdInputType, reset,
+      SIGNUP_FRM, signupChange, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.code === 'UsernameExistsException'
@@ -48,8 +48,8 @@ class InvestorSignup extends Component {
         closeIcon
         onClose={
           () => {
-            reset('SIGNUP');
             // this.props.history.push('/');
+            this.props.authStore.resetForm('SIGNUP_FRM');
             this.props.history.push(this.props.uiStore.authRef || '/');
           }
         }

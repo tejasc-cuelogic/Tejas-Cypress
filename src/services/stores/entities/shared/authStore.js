@@ -197,7 +197,10 @@ export class AuthStore {
       default: this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
     }
   }
-
+  @action
+  resetForm = (form) => {
+    Validator.resetFormData(this[form]);
+  }
   @computed
   get canSubmitConfirmEmail() {
     return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error &&

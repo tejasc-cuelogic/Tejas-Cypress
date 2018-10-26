@@ -338,6 +338,7 @@ export class Auth {
             },
           );
         },
+        onFailure: err => rej(err),
       });
     })
       .then(() => {

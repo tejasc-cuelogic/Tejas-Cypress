@@ -16,6 +16,7 @@ import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
+    this.props.authStore.resetForm('CONFIRM_FRM');
     const credentials = cookie.load('USER_CREDENTIALS');
     if (credentials) {
       this.props.authStore.setCredentials(credentials);
@@ -40,7 +41,6 @@ export default class ConfirmEmailAddress extends Component {
     } else {
       authActions.confirmCode()
         .then(() => {
-          this.props.authStore.reset('CONFIRM');
           const { roles } = this.props.userStore.currentUser;
           const redirectUrl = !roles ? '/auth/login' :
             SIGNUP_REDIRECT_ROLEWISE.find(user =>
@@ -52,7 +52,6 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.authStore.reset('CONFIRM');
     this.props.history.push(this.props.uiStore.authRef || '/');
     this.props.uiStore.clearErrors();
   }
@@ -79,6 +78,9 @@ export default class ConfirmEmailAddress extends Component {
       canSubmitConfirmEmail,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    if (errors && errors.code === 'NotAuthorizedException') {
+      this.props.history.push('/auth/login');
+    }
     return (
       <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">

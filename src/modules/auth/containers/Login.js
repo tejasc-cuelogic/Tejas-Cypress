@@ -13,7 +13,7 @@ import { ListErrors } from '../../../theme/shared';
 class Login extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset('LOGIN');
+    this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
   }
   componentWillUnmount() {
@@ -36,7 +36,6 @@ class Login extends Component {
   };
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.authStore.reset('LOGIN');
     this.props.history.push(this.props.uiStore.authRef || '/');
   }
   render() {
