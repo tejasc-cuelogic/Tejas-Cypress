@@ -113,7 +113,7 @@ export default class Miscellaneous extends Component {
       review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
     const approved = (review && review.miscellaneous && review.miscellaneous &&
       review.miscellaneous.approved) ? review.miscellaneous.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>

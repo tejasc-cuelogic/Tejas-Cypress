@@ -56,7 +56,7 @@ export default class BusinessPlan extends Component {
       review.businessPlan.submitted) ? review.businessPlan.submitted : null;
     const approved = (review && review.businessPlan && review.businessPlan &&
       review.businessPlan.approved) ? review.businessPlan.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>

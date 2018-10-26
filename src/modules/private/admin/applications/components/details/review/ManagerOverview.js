@@ -15,8 +15,7 @@ export default class ManagerOverview extends Component {
     } = this.props;
     const { inProgress } = uiStore;
     return (
-      <Aux>
-        {((!isManager && isReadonly && approved && approved.status) || isManager) &&
+      ((!isManager && isReadonly && approved && approved.status) || isManager) ?
         <Aux>
           <Header as="h4">
             Manager
@@ -35,6 +34,7 @@ export default class ManagerOverview extends Component {
             {!isReadonly && isManager &&
               <Button.Group floated="right" size="mini">
                 <Button loading={inProgress} disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button loading={inProgress} disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed">Save</Button>
                 <Button loading={inProgress} disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>{title || 'Approve'}</Button>
               </Button.Group>
             }
@@ -47,9 +47,7 @@ export default class ManagerOverview extends Component {
             containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
           />
           <Divider section />
-        </Aux>
-        }
-      </Aux>
+        </Aux> : null
     );
   }
 }

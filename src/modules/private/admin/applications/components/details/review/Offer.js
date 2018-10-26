@@ -47,8 +47,8 @@ export default class Offer extends Component {
     const { offers, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
-    && !isManager) || (isManager && approved && approved.status));
+    const isReadonly = ((((approved && approved.status) || (submitted))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form onSubmit={this.submit}>

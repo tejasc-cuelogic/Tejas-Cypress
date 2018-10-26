@@ -41,7 +41,7 @@ export default class PreQual extends Component {
       ? review.preQualification.submitted : null;
     const approved = (review && review.preQualification && review.preQualification.approved)
       ? review.preQualification.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>

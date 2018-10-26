@@ -99,7 +99,7 @@ export default class Contingencies extends Component {
       review.contingencies.submitted) ? review.contingencies.submitted : null;
     const approved = (review && review.contingencies && review.contingencies &&
       review.contingencies.approved) ? review.contingencies.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>

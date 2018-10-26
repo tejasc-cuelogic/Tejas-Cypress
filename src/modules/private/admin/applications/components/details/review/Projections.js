@@ -38,7 +38,7 @@ export default class Projections extends Component {
       review.projections.submitted) ? review.projections.submitted : false;
     const approved = (review && review.projections && review.projections &&
       review.projections.approved) ? review.projections.approved : false;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     return (
       <div>

@@ -42,8 +42,8 @@ export default class Overview extends Component {
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
     const approved = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
-    && !isManager) || (isManager && approved && approved.status));
+    const isReadonly = ((((approved && approved.status) || (submitted))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form onSubmit={this.submit}>
