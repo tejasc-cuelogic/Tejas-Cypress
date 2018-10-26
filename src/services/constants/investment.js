@@ -8,7 +8,7 @@ export const INVESTMENT_INFO = {
   investmentAmount: {
     label: 'Investment Amount',
     key: 'investmentAmount',
-    value: '500',
+    value: '',
     error: undefined,
     customErrors: {
       required: '* required.',
@@ -137,3 +137,23 @@ export const AGREEMENT_DETAILS_INFO = {
   },
 };
 
+export const INVESTMENT_LIMITS = {
+  netWorth: {
+    value: '',
+    label: 'Net Worth',
+    error: undefined,
+    rule: 'numeric|required',
+  },
+  annualIncome: {
+    value: '',
+    label: 'Annual Income',
+    error: undefined,
+    rule: 'numeric|required',
+  },
+  cfInvestments: {
+    value: '',
+    label: 'Other Reg CF Investments:',
+    error: undefined,
+    rule: 'numeric|required',
+  },
+};

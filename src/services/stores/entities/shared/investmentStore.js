@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy } from 'lodash';
+import { capitalize, orderBy, min, max, floor } from 'lodash';
 import graphql from 'mobx-apollo';
-import { INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
+import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -9,13 +9,14 @@ import { uiStore, userDetailsStore, rewardStore, campaignStore } from '../../ind
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
-  generateAgreement, finishInvestment, transferFundsForInvestment,
+  generateAgreement, finishInvestment, transferFundsForInvestment, updateInvestmentLimits,
 } from '../../queries/investNow';
 
 export class InvestmentStore {
     @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
     @observable TRANSFER_REQ_FORM = Validator.prepareFormObject(TRANSFER_REQ_INFO);
     @observable AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
+    @observable INVESTMENT_LIMITS_FORM = Validator.prepareFormObject(INVESTMENT_LIMITS);
     @observable cashAvailable = 0;
     @observable agreementDetails = null;
     @observable investAccTypes = { ...INVEST_ACCOUNT_TYPES };
@@ -115,6 +116,15 @@ export class InvestmentStore {
       this.AGREEMENT_DETAILS_FORM =
       Validator.onChange(this.AGREEMENT_DETAILS_FORM, Validator.pullValues(e, res), 'checkbox');
     }
+
+    @action
+    investmentLimitChange = (values, field) => {
+      this.INVESTMENT_LIMITS_FORM = Validator.onChange(this.INVESTMENT_LIMITS_FORM, {
+        name: field,
+        value: values.floatValue,
+      });
+    };
+
     @computed get investmentAmount() {
       const val = this.INVESTMONEY_FORM.fields.investmentAmount.value;
       return parseFloat(val || 0, 2);
@@ -397,8 +407,70 @@ export class InvestmentStore {
   }
 
   @action
+  updateInvestmentLimits = () => {
+    const { fields } = this.INVESTMENT_LIMITS_FORM;
+    uiStore.setProgress();
+    return new Promise((resolve) => {
+      client
+        .mutate({
+          mutation: updateInvestmentLimits,
+          variables: {
+            userId: userDetailsStore.currentUserId,
+            accountId: this.getSelectedAccountTypeId,
+            annualIncome: fields.annualIncome.value,
+            netWorth: fields.netWorth.value,
+            otherRegCfInvestments: fields.cfInvestments.value,
+          },
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
   resetData = () => {
     Validator.resetFormData(this.INVESTMONEY_FORM);
+    Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
+  }
+
+  @computed get changedInvestmentLimit() {
+    const { fields } = this.INVESTMENT_LIMITS_FORM;
+    const annualIncome = fields.annualIncome.value;
+    const netWorth = fields.netWorth.value;
+    const otherInvestments = fields.cfInvestments.value;
+    const annualInvestmentLimitFloor = 2200;
+    const annualInvestmentLimit = 107000;
+    const annualIncomeLimitHighPct = 0.10;
+    const nsInvestments = 0;
+    let annualInvestmentLimitLowPct = 0;
+    let remaining = 0;
+    let limit = null;
+
+    if (this.INVESTMENT_LIMITS_FORM.meta.isValid) {
+      annualInvestmentLimitLowPct = 0.05;
+
+      limit = floor(annualIncomeLimitHighPct * min([annualIncome, netWorth]));
+      if (annualIncome < annualInvestmentLimit || netWorth < annualInvestmentLimit) {
+        limit = max([
+          annualInvestmentLimitFloor,
+          floor(annualInvestmentLimitLowPct * min([annualIncome, netWorth]))]);
+      }
+      limit = min([limit, annualInvestmentLimit]);
+      remaining = max([0, (limit - nsInvestments - otherInvestments)]);
+      if (nsInvestments + otherInvestments >= annualInvestmentLimit) {
+        remaining = 0;
+      }
+      remaining -= remaining % 100;
+    }
+    return remaining;
   }
 }
 

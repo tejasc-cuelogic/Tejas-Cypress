@@ -14,7 +14,7 @@ const InvestmentLimit = props => (
         content="This calculates"
         position="top center"
       />
-      <Link to={props.match.url} className="link" onClick={() => props.setStepToBeRendered(4)}><small>Update</small></Link>
+      <Link to={`${props.match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
     </Header>
     {props.changeInvest &&
     <p>Your investment will be decreased by - <span className="negative-text">{Helper.CurrencyFormat(12000)}</span></p>

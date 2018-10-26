@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { withRouter } from 'react-router-dom';
+
+import { Route, withRouter } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
 import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
+import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 
 @withRouter
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore')
@@ -19,14 +21,16 @@ class FinancialInfo extends Component {
       estReturnVal,
       calculateEstimatedReturn,
       validBonusRewards,
-      validateInvestmentAmountInOffering,
       setStepToBeRendered,
       investAccTypes,
+      validateInvestmentAmountInOffering,
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
+    const { match } = this.props;
     return (
       <Aux>
+        <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your investment amount' : 'How much would you like to invest?'}</Header>
         {this.props.changeInvest &&
         <OfferingInvestDetails
