@@ -39,18 +39,18 @@ export default class ResetPassword extends Component {
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>
-            <div className="center-align">
-              <div className="field"><label>Enter verification code here:</label></div>
+            <Form.Field className="otp-wrap center-align mt-10">
+              <label>Enter verification code here:</label>
               <ReactCodeInput
                 fields={6}
                 type="number"
                 filterChars
                 name="code"
-                className="otp-field"
+                className="otp-field mt-10"
                 fielddata={RESET_PASS_FRM.fields.code}
                 onChange={resetPassChange}
               />
-            </div>
+            </Form.Field>
             <FormPasswordStrength
               key="password"
               name="password"
