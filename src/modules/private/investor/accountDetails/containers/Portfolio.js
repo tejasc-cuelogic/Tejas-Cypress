@@ -51,18 +51,18 @@ export default class Portfolio extends Component {
         <SummaryHeader details={summaryDetails} />
         <PortfolioAllocations pieChart={calculateInvestmentType} />
         <Header as="h4">My Investments</Header>
-        {getInvestorAccounts && getInvestorAccounts.investments.pending.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.active.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.active.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.completed.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.completed.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
-          !getInvestorAccounts.investments.active.length &&
-          !getInvestorAccounts.investments.completed.length &&
+        !getInvestorAccounts.investments.active.length &&
+        !getInvestorAccounts.investments.completed.length ?
           <Aux>
             <p>No investments or reservations pending.</p>
             <Grid>
@@ -77,7 +77,7 @@ export default class Portfolio extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-          </Aux>
+          </Aux> : null
         }
         <Route
           path={`${match.url}/investment-details/:id`}
