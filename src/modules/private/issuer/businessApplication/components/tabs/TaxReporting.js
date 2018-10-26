@@ -16,7 +16,7 @@ const GeneralConditions = () => (
       interest payment made for the calendar year. You can provide this  information to your
       accountant for your tax filings.
     </p>
-    <p><b>Satisfactory Legal Diligence</b><br />
+    <p><b>If you are considering a revenue sharing structure:</b><br />
       Under the Internal Revenue Code, you agree to file a statement with your federal income tax
       return classifying the revenue sharing note as debt. For more information, please seek advice
       from your tax accountant.
