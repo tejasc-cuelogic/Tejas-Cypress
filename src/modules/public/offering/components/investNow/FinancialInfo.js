@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, Route } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 import Helper from '../../../../../helper/utility';
-
+import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 
 @withRouter
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
@@ -20,11 +20,12 @@ class FinancialInfo extends Component {
       calculateEstimatedReturn,
       validBonusRewards,
       validateInvestmentAmountInOffering,
-      setStepToBeRendered,
     } = this.props.investmentStore;
     const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
+    const { match } = this.props;
     return (
       <Aux>
+        <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
         <Header as="h3" textAlign="center">How much would you like to invest?</Header>
         <Header as="h4" textAlign="center">
           Your investment limit: {Helper.CurrencyFormat(getCurrentLimitForAccount || 0)}
@@ -34,7 +35,7 @@ class FinancialInfo extends Component {
             content="This calculates"
             position="top center"
           />
-          <Link to={this.props.match.url} className="link" onClick={() => setStepToBeRendered(4)}><small>Update</small></Link>
+          <Link to={`${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
         </Header>
         <Form error size="huge">
           <MaskedInput

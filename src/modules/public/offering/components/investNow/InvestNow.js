@@ -6,7 +6,6 @@ import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
-import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 
 @inject('uiStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
 @observer
@@ -111,12 +110,6 @@ export default class InvestNow extends React.Component {
         name: 'TransferRequest',
         component: <TransferRequest confirm={this.handleConfirm} cancel={this.handleCancel} />,
         stepToBeRendered: 3,
-        isValid: '',
-      },
-      {
-        name: 'Change Investment Limit',
-        component: <ChangeInvestmentLimit />,
-        stepToBeRendered: 4,
         isValid: '',
       },
     ];

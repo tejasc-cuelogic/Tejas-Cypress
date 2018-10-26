@@ -19,10 +19,10 @@ class AccountType extends Component {
     const {
       investAccTypes,
       setStepToBeRendered,
-      setDisableNextbtn,
+      setFieldValue,
     } = this.props.investmentStore;
     if (investAccTypes.values.length === 0) {
-      setDisableNextbtn();
+      setFieldValue('disableNextbtn', true);
       setStepToBeRendered(1);
     }
   }
