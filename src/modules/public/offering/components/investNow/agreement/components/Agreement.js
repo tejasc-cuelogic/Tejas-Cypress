@@ -39,7 +39,7 @@ export default class Agreement extends React.Component {
             <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in Pour Behavior.
           </Header>
           {!AGREEMENT_DETAILS_FORM.meta.isValid &&
-            <Message error textAlign="left" className="mt-30">
+            <Message error textAlign="left" className="mb-40">
               All boxes must be checked to confirm your investment.
             </Message>
           }
