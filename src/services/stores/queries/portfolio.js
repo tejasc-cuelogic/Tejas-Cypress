@@ -15,13 +15,12 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
     investments {
       pending {
         agreementId
-        location
         investmentDate
         investedAmount
-        status
         offering {
           id
           offeringStatus
+          stage
           keyTerms {
             shorthandBusinessName
             securities
@@ -31,34 +30,36 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         }
       }
       active {
-        location
         investedAmount
         investmentDate
-        status
-        closeDate
         offering {
           id
           offeringStatus
+          stage
           keyTerms {
             shorthandBusinessName
             securities
             industry
           }
+          closureSummary {
+            disbursementDate
+          }
         }
       }
       completed {
-        location
         investedAmount
         investmentDate
-        status
-        closeDate
         offering {
           id
           offeringStatus
+          stage
           keyTerms {
             shorthandBusinessName
             securities
             industry
+          }
+          closureSummary {
+            disbursementDate
           }
         }
       }
