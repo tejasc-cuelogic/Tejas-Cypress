@@ -21,7 +21,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         status
         offering {
           id
-          offeringStatus
           keyTerms {
             shorthandBusinessName
             securities
@@ -37,7 +36,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         closeDate
         offering {
           id
-          offeringStatus
           keyTerms {
             shorthandBusinessName
             securities
@@ -53,7 +51,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         closeDate
         offering {
           id
-          offeringStatus
           keyTerms {
             shorthandBusinessName
             securities

@@ -6,11 +6,17 @@ import moment from 'moment';
 import { includes } from 'lodash';
 import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
-import { InlineLoader } from '../../../../../theme/shared';
+import { InlineLoader, Spinner } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { CAMPAIGN_OFFERING_STATUS } from '../../../../../constants/offering';
 import NotFound from '../../../../shared/NotFound';
 
+const getModule = component => Loadable({
+  loader: () => import(`../components/portfolio/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 const navItems = [
   { title: 'Overview', to: 'overview', component: 'Overview' },
   { title: 'Transactions', to: 'transactions', component: 'Transactions' },
@@ -35,8 +41,8 @@ class InvestmentDetails extends Component {
 
   render() {
     const { match, portfolioStore } = this.props;
-    const { getInvestor, investmentDetails } = portfolioStore;
-    const { campaign } = this.props.campaignStore;
+    const { getInvestor } = portfolioStore;
+    const { campaign, details } = this.props.campaignStore;
 
     const summaryDetails = {
       accountType: 'individual',
@@ -60,14 +66,10 @@ class InvestmentDetails extends Component {
         },
       ],
     };
-    const getModule = component => Loadable({
-      loader: () => import(`../components/portfolio/${component}`),
-      loading() {
-        return <InlineLoader />;
-      },
-    });
-    if (investmentDetails && investmentDetails.data &&
-      !investmentDetails.data.getInvestmentDetailsOverview) {
+    if (!details || details.loading) {
+      return <Spinner loaderMessage="Loading.." />;
+    }
+    if (details && details.data && !details.data.getOfferingDetailsById) {
       return <NotFound />;
     }
     return (
@@ -77,7 +79,11 @@ class InvestmentDetails extends Component {
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
             <Switch>
-              <Route exact path={match.url} component={getModule(navItems[0].component)} />
+              <Route
+                exact
+                path={match.url}
+                component={getModule(navItems[0].component)}
+              />
               {
                 navItems.map(item => (
                   <Route
