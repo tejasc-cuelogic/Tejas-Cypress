@@ -48,7 +48,8 @@ export class InvestmentStore {
       const accType = this.investAccTypes.value;
       userDetailsStore.setFieldValue('currentActiveAccount', accType);
       const selectedAccount = userDetailsStore.currentActiveAccountDetails;
-      return selectedAccount.details.accountId;
+      return (selectedAccount && selectedAccount.details) ?
+        selectedAccount.details.accountId : null;
     }
     @computed get getCurrCashAvailable() {
       return (this.cashAvailable && parseFloat(this.cashAvailable.data.getInvestorAvailableCash, 2))
@@ -447,13 +448,13 @@ export class InvestmentStore {
     const { fields } = this.INVESTMENT_LIMITS_FORM;
     const annualIncome = fields.annualIncome.value;
     const netWorth = fields.netWorth.value;
-    const otherInvestments = fields.cfInvestments.value;
+    // const otherInvestments = fields.cfInvestments.value;
     const annualInvestmentLimitFloor = 2200;
     const annualInvestmentLimit = 107000;
     const annualIncomeLimitHighPct = 0.10;
-    const nsInvestments = 0;
+    // const nsInvestments = 0;
     let annualInvestmentLimitLowPct = 0;
-    let remaining = 0;
+    // let remaining = 0;
     let limit = null;
 
     if (this.INVESTMENT_LIMITS_FORM.meta.isValid) {
@@ -466,13 +467,8 @@ export class InvestmentStore {
           floor(annualInvestmentLimitLowPct * min([annualIncome, netWorth]))]);
       }
       limit = min([limit, annualInvestmentLimit]);
-      remaining = max([0, (limit - nsInvestments - otherInvestments)]);
-      if (nsInvestments + otherInvestments >= annualInvestmentLimit) {
-        remaining = 0;
-      }
-      remaining -= remaining % 100;
     }
-    return remaining;
+    return limit;
   }
 }
 
