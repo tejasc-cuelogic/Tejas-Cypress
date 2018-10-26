@@ -39,13 +39,8 @@ export default class ChangePassword extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Change your Password</Header>
         </Modal.Header>
-        {errors &&
-          <Message error textAlign="left" className="mt-30">
-            <ListErrors errors={['Incorrect old password']} />
-          </Message>
-        }
         <Modal.Content className="signup-content">
-          <Form onSubmit={this.onSubmit}>
+          <Form error onSubmit={this.onSubmit}>
             {
               ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
                 (field === 'newPasswd') ?
@@ -74,6 +69,11 @@ export default class ChangePassword extends Component {
                     changed={changePassChange}
                   />
               ))
+            }
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={['Incorrect old password']} />
+              </Message>
             }
             <div className="mt-30 center-align">
               <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} />
