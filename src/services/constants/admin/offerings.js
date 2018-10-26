@@ -617,6 +617,7 @@ export const CONTINGENCY_META = {
     error: undefined,
     rule: 'optional',
     objRefOutput2: 'accepted',
+    skipField: true,
   },
 };
 

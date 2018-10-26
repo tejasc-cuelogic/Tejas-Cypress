@@ -167,7 +167,6 @@ export default class Filters extends Component {
                   checked={item.checkStatus}
                   onChange={() => this.togglecheckbox('MoreOptions', index)}
                 />
-                <Popup trigger={<Icon color="green" name="help circle" className="pull-right" />} content="Lorem Ipsum" position="top center" />
               </Form.Field>
             ))
             }

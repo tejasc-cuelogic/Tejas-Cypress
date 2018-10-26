@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
+import { ListErrors } from '../../../theme/shared';
 
 @inject('authStore', 'uiStore')
 @observer
 export default class ChangePassword extends Component {
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
+    this.props.authStore.resetForm('CHANGE_PASS_FRM');
   }
   onSubmit = (e) => {
     e.preventDefault();
@@ -31,13 +33,14 @@ export default class ChangePassword extends Component {
     const {
       CHANGE_PASS_FRM, changePassChange, pwdInputType,
     } = this.props.authStore;
+    const { errors, inProgress } = this.props.uiStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Change your Password</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form onSubmit={this.onSubmit}>
+          <Form error onSubmit={this.onSubmit}>
             {
               ['oldPasswd', 'newPasswd', 'retypePasswd'].map(field => (
                 (field === 'newPasswd') ?
@@ -67,8 +70,13 @@ export default class ChangePassword extends Component {
                   />
               ))
             }
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={['Incorrect old password']} />
+              </Message>
+            }
             <div className="mt-30 center-align">
-              <Button primary size="large" className="very relaxed" content="Set new password" loading={this.props.uiStore.inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} />
+              <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
