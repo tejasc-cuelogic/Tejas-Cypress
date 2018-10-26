@@ -48,7 +48,6 @@ class InvestorSignup extends Component {
         closeIcon
         onClose={
           () => {
-            // this.props.history.push('/');
             this.props.authStore.resetForm('SIGNUP_FRM');
             this.props.history.push(this.props.uiStore.authRef || '/');
           }
@@ -88,14 +87,6 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
             />
-            {/* <FormInput
-              key="password"
-              name="password"
-              type={pwdInputType}
-              icon={togglePasswordType()}
-              fielddata={SIGNUP_FRM.fields.password}
-              changed={signupChange}
-            /> */}
             <FormPasswordStrength
               key="password"
               name="password"

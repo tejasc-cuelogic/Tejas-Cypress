@@ -310,8 +310,7 @@ export class Auth {
       });
   }
 
-  changeMyPassword(refModule) {
-    console.log('refModule=>', refModule);
+  changeMyPassword() {
     uiStore.reset();
     uiStore.setProgress();
     const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
