@@ -6,7 +6,7 @@ import moment from 'moment';
 import { includes } from 'lodash';
 import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
-import { InlineLoader, Spinner } from '../../../../../theme/shared';
+import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { CAMPAIGN_OFFERING_STATUS } from '../../../../../constants/offering';
 import NotFound from '../../../../shared/NotFound';
@@ -67,7 +67,7 @@ class InvestmentDetails extends Component {
       ],
     };
     if (!details || details.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <InlineLoader />;
     }
     if (details && details.data && !details.data.getOfferingDetailsById) {
       return <NotFound />;
