@@ -233,12 +233,8 @@ export class InvestmentStore {
           accountId: this.getSelectedAccountTypeId,
         },
         onFetch: (res) => {
-          this.isValidInvestAmtInOffering = res.validateInvestmentAmountInOffering;
-          if (this.isValidInvestAmtInOffering) {
-            this.setFieldValue('disableNextbtn', true);
-          } else {
-            this.setFieldValue('disableNextbtn', false);
-          }
+          this.setFieldValue('isValidInvestAmtInOffering', res.validateInvestmentAmountInOffering);
+          this.setFieldValue('disableNextbtn', res.validateInvestmentAmountInOffering);
           const errMsg = 'This amount exceeds your current investment limit. Update your income and net worth, or lower your investment amount.';
           if (!res.validateInvestmentAmountInOffering) {
             this.INVESTMONEY_FORM.fields.investmentAmount.error = errMsg;
