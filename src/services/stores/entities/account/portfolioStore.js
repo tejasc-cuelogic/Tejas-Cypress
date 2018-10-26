@@ -9,6 +9,12 @@ export class PortfolioStore {
   @observable investmentLists = null;
   @observable pieChartDataEval = null;
   @observable pieChartData = null;
+  @observable currentOfferingId = null;
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   resetPiechartValues = () => {
@@ -79,6 +85,16 @@ export class PortfolioStore {
     return (this.investmentLists && this.investmentLists.data &&
       this.investmentLists.data.getInvestorAccountPortfolio &&
       toJS(this.investmentLists.data.getInvestorAccountPortfolio)) || null;
+  }
+
+  @computed get getInvestorAccountById() {
+    const accounts = this.getInvestorAccounts;
+    let offering = null;
+    if (accounts) {
+      offering =
+      accounts.investments.pending.find(acc => acc.offering.id === this.currentOfferingId);
+    }
+    return offering;
   }
 
   @computed get loading() {

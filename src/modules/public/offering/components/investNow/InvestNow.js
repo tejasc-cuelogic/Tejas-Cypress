@@ -8,7 +8,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 
-@inject('uiStore', 'campaignStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -21,6 +21,7 @@ export default class InvestNow extends React.Component {
     }
     if (this.props.changeInvest) {
       const { offeringId } = this.props.match.params;
+      this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       this.props.campaignStore.getCampaignDetails(offeringId);
     }
   }

@@ -8,7 +8,7 @@ import InvestmentLimit from './financialInfo/InvestmentLimit';
 import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
 
 @withRouter
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore')
 @observer
 class FinancialInfo extends Component {
   render() {
@@ -21,21 +21,31 @@ class FinancialInfo extends Component {
       validBonusRewards,
       validateInvestmentAmountInOffering,
       setStepToBeRendered,
+      investAccTypes,
     } = this.props.investmentStore;
+    const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">How much would you like to invest?</Header>
+        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your investment amount' : 'How much would you like to invest?'}</Header>
+        {this.props.changeInvest &&
         <OfferingInvestDetails
+          offering={getInvestorAccountById}
+          accType={investAccTypes.value}
+          changeInvest={this.props.changeInvest}
           match={this.props.match}
           getCurrentLimitForAccount={getCurrentLimitForAccount}
           setStepToBeRendered={setStepToBeRendered}
         />
+        }
+        {!this.props.changeInvest &&
         <InvestmentLimit
+          changeInvest={this.props.changeInvest}
           match={this.props.match}
           getCurrentLimitForAccount={getCurrentLimitForAccount}
           setStepToBeRendered={setStepToBeRendered}
         />
+        }
         <Form error size="huge">
           <MaskedInput
             hidelabel
@@ -47,6 +57,14 @@ class FinancialInfo extends Component {
             onblur={validateInvestmentAmountInOffering}
           />
         </Form>
+        {this.props.changeInvest &&
+        <InvestmentLimit
+          changeInvest={this.props.changeInvest}
+          match={this.props.match}
+          getCurrentLimitForAccount={getCurrentLimitForAccount}
+          setStepToBeRendered={setStepToBeRendered}
+        />
+        }
         <Divider hidden />
         {
           isValidInvestAmtInOffering &&
