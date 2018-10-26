@@ -5,7 +5,7 @@ import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, rewardStore, campaignStore } from '../../index';
+import { uiStore, userDetailsStore, rewardStore, campaignStore, investmentLimitStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
@@ -36,6 +36,12 @@ export class InvestmentStore {
     @action
     setFieldValue = (field, value) => {
       this[field] = value;
+    }
+
+    @computed get getDiffInvestmentLimitAmount() {
+      const oldLimit = parseFloat(investmentLimitStore.getCurrentLimitForAccount, 2);
+      const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
+      return currentLimit - oldLimit;
     }
 
     @computed get getSelectedAccountTypeId() {
@@ -233,12 +239,8 @@ export class InvestmentStore {
           accountId: this.getSelectedAccountTypeId,
         },
         onFetch: (res) => {
-          this.isValidInvestAmtInOffering = res.validateInvestmentAmountInOffering;
-          if (this.isValidInvestAmtInOffering) {
-            this.setFieldValue('disableNextbtn', true);
-          } else {
-            this.setFieldValue('disableNextbtn', false);
-          }
+          this.setFieldValue('isValidInvestAmtInOffering', res.validateInvestmentAmountInOffering);
+          this.setFieldValue('disableNextbtn', res.validateInvestmentAmountInOffering);
           const errMsg = 'This amount exceeds your current investment limit. Update your income and net worth, or lower your investment amount.';
           if (!res.validateInvestmentAmountInOffering) {
             this.INVESTMONEY_FORM.fields.investmentAmount.error = errMsg;
