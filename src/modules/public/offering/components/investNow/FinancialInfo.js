@@ -25,6 +25,7 @@ class FinancialInfo extends Component {
       setStepToBeRendered,
       investAccTypes,
       validateInvestmentAmountInOffering,
+      getDiffInvestmentLimitAmount,
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
@@ -50,6 +51,7 @@ class FinancialInfo extends Component {
           refLink={refLink}
           getCurrentLimitForAccount={getCurrentLimitForAccount}
           setStepToBeRendered={setStepToBeRendered}
+          diffLimitAmount={getDiffInvestmentLimitAmount}
         />
         }
         <Form error size="huge">
@@ -69,6 +71,7 @@ class FinancialInfo extends Component {
           match={this.props.match}
           getCurrentLimitForAccount={getCurrentLimitForAccount}
           setStepToBeRendered={setStepToBeRendered}
+          diffLimitAmount={getDiffInvestmentLimitAmount}
         />
         }
         <Divider hidden />
