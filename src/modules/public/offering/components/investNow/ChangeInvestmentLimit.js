@@ -16,7 +16,11 @@ class ChangeInvestmentLimit extends Component {
     this.handleCloseModal();
   }
   handleCloseModal = () => {
-    this.props.history.push(this.props.refLink);
+    if (this.props.changeInvestment) {
+      this.props.history.push(`${this.props.refLink}/${this.props.match.params.offeringId}/invest-now`);
+    } else {
+      this.props.history.push(this.props.refLink);
+    }
   }
   render() {
     const {

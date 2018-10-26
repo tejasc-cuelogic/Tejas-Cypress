@@ -28,7 +28,7 @@ class FinancialInfo extends Component {
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
     const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
-    const { match } = this.props;
+    const { match, refLink } = this.props;
     return (
       <Aux>
         <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
@@ -47,6 +47,7 @@ class FinancialInfo extends Component {
         <InvestmentLimit
           changeInvest={this.props.changeInvest}
           match={this.props.match}
+          refLink={refLink}
           getCurrentLimitForAccount={getCurrentLimitForAccount}
           setStepToBeRendered={setStepToBeRendered}
           diffLimitAmount={getDiffInvestmentLimitAmount}

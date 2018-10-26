@@ -14,6 +14,7 @@ import InvestNow from '../../../../public/offering/components/investNow/InvestNo
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
 import DocSign from '../../../../public/offering/components/investNow/agreement/components/DocSign';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
+import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 
 @inject('portfolioStore')
 @observer
@@ -90,6 +91,7 @@ export default class Portfolio extends Component {
         <Route path={`${match.url}/:offeringId/agreement`} component={Agreement} />
         <Route path={`${match.url}/:offeringId/doc-sign`} component={DocSign} />
         <Route path={`${match.url}/:offeringId/congratulation`} component={Congratulation} />
+        <Route path={`${match.url}/:offeringId/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={match.url} {...props} />} />
         <Route
           path={`${match.url}/cancel-investment/:id`}
           render={props => <CancelInvestment refLink={match.url} {...props} />}
