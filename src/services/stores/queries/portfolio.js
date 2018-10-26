@@ -5,7 +5,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
   getInvestorAccountPortfolio(
     userId: $userId,
     accountId: $accountId,
-    InFlight: $InFlight,
+    includeInFlight: $InFlight,
     includeInterest: $includeInterest,
   ) {
     totalBalance
