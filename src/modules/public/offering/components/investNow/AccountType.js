@@ -12,14 +12,12 @@ class AccountType extends Component {
   componentWillMount() {
     const { setStepToBeRendered } = this.props.investmentStore;
     const { UserAccounts } = this.props;
-    if (this.props.changeInvest) {
+    if (this.props.changeInvest || (UserAccounts && UserAccounts.length === 1)) {
       const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
       this.props.investmentStore.accTypeChanged(null, { value: accountType });
       this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
         setStepToBeRendered(1);
       });
-    } else if ((UserAccounts && UserAccounts.length === 1)) {
-      setStepToBeRendered(1);
     }
   }
   componentDidMount() {
