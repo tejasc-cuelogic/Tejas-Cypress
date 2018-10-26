@@ -73,7 +73,7 @@ class InvestmentDetails extends Component {
       return <NotFound />;
     }
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+      <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <SummaryHeader details={summaryDetails} />
           <Card fluid>

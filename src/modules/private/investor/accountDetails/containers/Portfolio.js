@@ -8,6 +8,7 @@ import SummaryHeader from '../components/portfolio/SummaryHeader';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
 import InvestmentDetails from './InvestmentDetails';
+import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
@@ -89,6 +90,10 @@ export default class Portfolio extends Component {
         <Route path={`${match.url}/:offeringId/agreement`} component={Agreement} />
         <Route path={`${match.url}/:offeringId/doc-sign`} component={DocSign} />
         <Route path={`${match.url}/:offeringId/congratulation`} component={Congratulation} />
+        <Route
+          path={`${match.url}/cancel-investment/:id`}
+          render={props => <CancelInvestment refLink={match.url} {...props} />}
+        />
       </Aux>
     );
   }
