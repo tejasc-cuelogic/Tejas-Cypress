@@ -8,6 +8,7 @@ import SummaryHeader from '../components/portfolio/SummaryHeader';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
 import InvestmentDetails from './InvestmentDetails';
+import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
@@ -51,18 +52,18 @@ export default class Portfolio extends Component {
         <SummaryHeader details={summaryDetails} />
         <PortfolioAllocations pieChart={calculateInvestmentType} />
         <Header as="h4">My Investments</Header>
-        {getInvestorAccounts && getInvestorAccounts.investments.pending.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.active.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.active.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.completed.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.completed.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
-          !getInvestorAccounts.investments.active.length &&
-          !getInvestorAccounts.investments.completed.length &&
+        !getInvestorAccounts.investments.active.length &&
+        !getInvestorAccounts.investments.completed.length ?
           <Aux>
             <p>No investments or reservations pending.</p>
             <Grid>
@@ -77,7 +78,7 @@ export default class Portfolio extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-          </Aux>
+          </Aux> : null
         }
         <Route
           path={`${match.url}/investment-details/:id`}
@@ -91,6 +92,10 @@ export default class Portfolio extends Component {
         <Route path={`${match.url}/:offeringId/doc-sign`} component={DocSign} />
         <Route path={`${match.url}/:offeringId/congratulation`} component={Congratulation} />
         <Route path={`${match.url}/:offeringId/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={match.url} {...props} />} />
+        <Route
+          path={`${match.url}/cancel-investment/:id`}
+          render={props => <CancelInvestment refLink={match.url} {...props} />}
+        />
       </Aux>
     );
   }
