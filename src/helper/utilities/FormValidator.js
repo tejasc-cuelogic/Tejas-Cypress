@@ -319,12 +319,15 @@ class FormValidator {
           if (fields[key].objType === 'FileObjectType') {
             if (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
               fields[key] && Array.isArray(toJS(fields[key].value))) {
-              if (tempRef[key].length) {
+              if (tempRef[key].length > 0) {
                 tempRef[key].map((item) => {
                   fields[key].value.push(item.fileName);
                   fields[key].fileId.push(item.fileId);
                   return false;
                 });
+              } else {
+                fields[key].value = [];
+                fields[key].fileId = [];
               }
             } else {
               fields[key].value = Array.isArray(toJS(tempRef[key])) ?
@@ -362,12 +365,15 @@ class FormValidator {
         } else if (fields[key].objType === 'FileObjectType') {
           if (data[key] && Array.isArray(toJS(data[key])) &&
             fields[key] && Array.isArray(toJS(fields[key].value))) {
-            if (data[key].length) {
+            if (data[key].length > 0) {
               data[key].map((item) => {
                 fields[key].value.push(item.fileName);
                 fields[key].fileId.push(item.fileId);
                 return false;
               });
+            } else {
+              fields[key].value = [];
+              fields[key].fileId = [];
             }
           } else {
             fields[key].value = data && typeof data === 'string' ? data : Array.isArray(toJS(data[key])) ? data[key][0].fileName : data[key].fileName;

@@ -10,12 +10,16 @@ import { DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 @observer
 export default class GenerateDocs extends Component {
   componentWillMount() {
-    const { currentOfferingId, getOfferingFilingList } = this.props.offeringCreationStore;
+    const {
+      currentOfferingId,
+      getOfferingFilingList,
+      setFormData,
+    } = this.props.offeringCreationStore;
     getOfferingFilingList(currentOfferingId);
-    this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
-    this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
-    this.props.offeringCreationStore.setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
-    this.props.offeringCreationStore.setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
+    setFormData('GENERAL_FRM', 'legal.general');
+    setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+    setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
   onFileDrop = (files, field, stepName) => {
     this.props.offeringCreationStore.setFileUploadData('ADMIN_DOCUMENTATION_FRM', field, files, '', null, stepName, true);

@@ -773,8 +773,7 @@ export class OfferingCreationStore {
     if (keyName) {
       if (keyName === 'legal') {
         payloadData[keyName] = {};
-        const generalInfo = Validator.evaluateFormData(this.GENERAL_FRM.fields);
-        payloadData[keyName].general = generalInfo;
+        payloadData[keyName].general = Validator.evaluateFormData(this.GENERAL_FRM.fields);
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
         payloadData[keyName].documentation = {};
         payloadData[keyName].documentation.issuer = {};
