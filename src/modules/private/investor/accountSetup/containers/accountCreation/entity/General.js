@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { US_STATES } from '../../../../../../../constants/account';
+import { US_STATES_FOR_INVESTOR } from '../../../../../../../constants/account';
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../theme/form';
 
@@ -57,7 +57,7 @@ export default class General extends Component {
               <FormDropDown
                 name="state"
                 fielddata={GEN_INFO_FRM.fields.state}
-                options={US_STATES}
+                options={US_STATES_FOR_INVESTOR}
                 search
                 selection
                 compact

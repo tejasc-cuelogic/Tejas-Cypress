@@ -9,9 +9,9 @@ import { ListErrors } from '../../../../../theme/shared';
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
-  componentDidMount() {
-    this.props.individualAccountStore.setStepToBeRendered(1);
-  }
+  // componentDidMount() {
+  //   this.props.individualAccountStore.setStepToBeRendered(1);
+  // }
   componentWillUnmount() {
     this.props.bankAccountStore.resetShowAddFunds();
   }
@@ -30,6 +30,11 @@ export default class AddFunds extends Component {
   renderStep = () => {
     if (this.props.accountStore.investmentAccType === 'individual') {
       const individualSteps = AccCreationHelper.individualSteps();
+      const currentStep = {
+        name: 'Add funds',
+        stepToBeRendered: 2,
+      };
+      this.props.individualAccountStore.createAccount(currentStep);
       this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
     }
     if (this.props.accountStore.investmentAccType === 'entity') {

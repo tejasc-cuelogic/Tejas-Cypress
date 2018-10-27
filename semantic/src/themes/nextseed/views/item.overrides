@@ -267,3 +267,8 @@
         }
     }
 }
+.testimonial .ui.items>.item>.image>img{
+    @media only screen and (max-width : @largestMobileScreen){
+        height: 180px;
+    }
+}

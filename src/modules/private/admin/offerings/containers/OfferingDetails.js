@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, Link } from 'react-router-dom';
+import moment from 'moment';
 import Aux from 'react-aux';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -21,17 +22,17 @@ export default class OfferingDetails extends Component {
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
     this.props.offeringsStore.getOne(this.props.match.params.offeringid);
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
+    this.props.offeringCreationStore.resetInitLoad();
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.offeringCreationStore.resetOfferingId();
-    this.props.history.push(this.props.refLink);
+    this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
   };
   render() {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
     const { offer, offerLoading } = offeringsStore;
-
     if (offerLoading || (offer && !offer.stage)) {
       return <InlineLoader />;
     }

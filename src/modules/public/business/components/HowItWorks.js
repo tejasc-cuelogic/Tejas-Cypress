@@ -50,6 +50,29 @@ const businesses = [
     },
   ],
 ];
+const testimonial = [
+  {
+    title: 'Real Success Stories.',
+    description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
+    name: 'Brian Ching | Pitch 25',
+    investment: '$549,900 from 392 investors',
+    image: `${ASSETS_URL}images/business/lian.png`,
+  },
+  {
+    title: 'Real Success Stories.',
+    description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
+    name: 'Jess Hughes | Citizen Pilates',
+    investment: '$100,000 from 75 investors',
+    image: `${ASSETS_URL}images/business/jess.png`,
+  },
+  {
+    title: 'Real Success Stories.',
+    description: 'Your patrons get to be part of what you’re creating. It’s the best way to access this many investors while retaining 100% ownership.',
+    name: 'Michael Dickson, Native Hostel',
+    investment: '$396,500 from 227 investors',
+    image: `${ASSETS_URL}images/business/michael.png`,
+  },
+];
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
 
@@ -61,8 +84,8 @@ const HowItWorks = () => (
           <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
           <div className="center-align">
             <Button.Group>
-              <Button secondary content="Business Application" />
-              <Button secondary content="CRE Application" />
+              <Button as={Link} to="business-application/business" secondary content="Business Application" />
+              <Button as={Link} to="business-application/commercial-real-estate" secondary content="CRE Application" />
             </Button.Group>
           </div>
           <Divider section />
@@ -133,12 +156,12 @@ const HowItWorks = () => (
       </Container>
       {!isMobile ?
         <Container>
-          <Grid centered stackable className="vertical-gutter">
+          <Grid centered stackable relaxed={isTablet ? '' : 'very'}>
             {businesses.map(row => (
               <Grid.Row>
                 {
                   row.map(b => (
-                    <Grid.Column textAlign="center" width={4}>
+                    <Grid.Column textAlign="center" width={isTablet ? 5 : 4}>
                       <Image src={b.image} centered />
                       <Header as="h5">{b.title}</Header>
                       <p>{b.description}</p>
@@ -172,28 +195,25 @@ const HowItWorks = () => (
       }
     </section>
     <Divider fitted as={Container} />
-    <section>
+    <section className="testimonial">
       <Container>
         <NsCarousel {...settings}>
-          {
-            [1, 2, 3].map(i => (
-              <Item.Group key={i}>
-                <Item>
-                  <Item.Image size="medium" src={`${ASSETS_URL}images/business/lian.png`} circular />
-                  <Item.Content verticalAlign="middle">
-                    <Item.Header as="h2">Real sucess stories {i}.</Item.Header>
-                    <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
-                      “The NextSeed process was extremely smooth and allowed me to focus on
-                      getting Pitch 25 up and running. The amount of community buzz that we
-                      got through this process gave our business a huge boost.”
-                    </Item.Description>
-                    <Item.Extra className="testimonial-user-details">
-                      <p><b>Brian Ching | Pitch 25</b></p>
-                      <span>$549,900 from 392 investors</span>
-                    </Item.Extra>
-                  </Item.Content>
-                </Item>
-              </Item.Group>
+          {testimonial.map(t => (
+            <Item.Group key={t}>
+              <Item>
+                <Item.Image size="medium" src={t.image} circular />
+                <Item.Content verticalAlign="middle">
+                  <Item.Header as="h2">{t.title}</Item.Header>
+                  <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
+                    “{t.description}”
+                  </Item.Description>
+                  <Item.Extra className="testimonial-user-details">
+                    <p><b>{t.name}</b></p>
+                    <span>{t.investment}</span>
+                  </Item.Extra>
+                </Item.Content>
+              </Item>
+            </Item.Group>
             ))
           }
         </NsCarousel>

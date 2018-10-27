@@ -168,6 +168,9 @@ h6{
 .intro-text, .note{
 	color:@neutral-middark !important;
 }
+.primary-two-text {
+	color: @primary-two !important;
+}
 .caption-note{
 	font-size:@13px;
 	font-style:italic;
@@ -1903,9 +1906,6 @@ svg:not(:root).recharts-surface{
 			font-size:@14px;
 			line-height:18px;
 			font-weight:@normal;
-			> a{
-				font-weight:700;
-			}
 		}
 	}
 	>h3.ui.header{

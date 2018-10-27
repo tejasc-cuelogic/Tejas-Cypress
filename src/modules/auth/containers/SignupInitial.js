@@ -18,18 +18,12 @@ const GetBtn = ({ type }) => {
 class signupInitial extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset('SIGNUP');
+    this.props.authStore.resetForm('SIGNUP_FRM');
     console.log(this.props.uiStore.authRef);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.push(this.props.uiStore.authRef || '/');
-  }
-  handleCloseModal = (e) => {
-    e.stopPropagation();
-    // this.props.history.goBack();
-    this.props.history.push('/');
-    console.log('History obj==>', this.props.history);
   }
   render() {
     const userTypes = USER_TYPES_META.slice();
