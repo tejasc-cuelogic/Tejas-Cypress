@@ -8,12 +8,11 @@ import ButtonGroup from '../ButtonGroup';
 @observer
 export default class Documentation extends Component {
   componentWillMount() {
-    const { initLoad, setFormData } = this.props.offeringCreationStore;
+    const { setFormData } = this.props.offeringCreationStore;
     setFormData('GENERAL_FRM', 'legal.general');
     setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
-    if (!initLoad.includes('DOCUMENTATION_FRM')) {
-      setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
-    }
+    setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    setFormData('ADMIN_DOCUMENTATION_FRM', 'legal.documentation.admin');
   }
   onCorporateFormationDocDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DOCUMENTATION_FRM', '', 'corpFormation', files, 'DOCUMENTS_LEGAL_CORPORATE_FORMATION_DOCS');

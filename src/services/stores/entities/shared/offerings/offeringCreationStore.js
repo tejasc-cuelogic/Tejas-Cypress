@@ -6,7 +6,8 @@ import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY } from '../../../../constants/admin/offerings';
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
+  ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -58,6 +59,7 @@ export class OfferingCreationStore {
   @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
+  @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -497,7 +499,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null, stepName) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false) => {
     if (stepName) {
       uiStore.setProgress();
       const file = files[0];
@@ -519,7 +521,11 @@ export class OfferingCreationStore {
           );
         }
         fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
-          .then(() => { })
+          .then(() => {
+            if (updateOnUpload) {
+              this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} uploaded successfully.`);
+            }
+          })
           .catch((err) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -546,7 +552,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedData = (form, subForm = 'data', field, index = null, stepName) => {
+  removeUploadedData = (form, subForm = 'data', field, index = null, stepName, updateOnRemove = false) => {
     if (stepName) {
       const currentStep = { name: stepName };
       const { fileId } = this[form].fields[field];
@@ -557,6 +563,9 @@ export class OfferingCreationStore {
         );
         this[form].fields[field].fileId = '';
         this[form].fields[field].preSignedUrl = '';
+        if (updateOnRemove) {
+          this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} Removed successfully.`);
+        }
         this.createAccount(currentStep, 'draft', true, field);
       }))
         .catch(() => { });
@@ -667,6 +676,7 @@ export class OfferingCreationStore {
       ISSUER_FRM: { isMultiForm: false },
       RISK_FACTORS_FRM: { isMultiForm: false },
       DOCUMENTATION_FRM: { isMultiForm: false },
+      ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -770,6 +780,9 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.issuer = {};
         payloadData[keyName].documentation.issuer =
         Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation.admin = {};
+        payloadData[keyName].documentation.admin =
+        Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
