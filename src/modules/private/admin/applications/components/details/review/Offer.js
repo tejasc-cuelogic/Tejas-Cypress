@@ -52,7 +52,7 @@ export default class Offer extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" submitted={submitted} isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
           <Header as="h4">
             Offers
             {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&

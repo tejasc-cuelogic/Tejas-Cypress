@@ -61,7 +61,7 @@ export default class BusinessPlan extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}

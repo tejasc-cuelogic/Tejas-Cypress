@@ -43,7 +43,7 @@ export default class Projections extends Component {
     return (
       <div>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={PROJECTIONS_FRM.meta.isValid} formName="PROJECTIONS_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={PROJECTIONS_FRM.meta.isValid} formName="PROJECTIONS_FRM" />
           {
             ['reasonableHistoricals', 'projectionsComplete', 'revenueCheck'].map((field, index) => (
               <Aux>

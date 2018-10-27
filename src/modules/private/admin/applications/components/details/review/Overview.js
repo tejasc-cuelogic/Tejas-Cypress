@@ -47,7 +47,7 @@ export default class Overview extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} formName="OVERVIEW_FRM" isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} formName="OVERVIEW_FRM" submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={OVERVIEW_FRM.meta.isValid} />
           <Header as="h4">
             Overview
             {!isReadonly && OVERVIEW_FRM.fields.description.length < 5 &&

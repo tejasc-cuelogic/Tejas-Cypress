@@ -46,7 +46,7 @@ export default class PreQual extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
             Justifications
             {!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length < 5 &&

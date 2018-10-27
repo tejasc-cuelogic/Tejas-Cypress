@@ -104,7 +104,7 @@ export default class Contingencies extends Component {
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
           <Header as="h5">
             Launch
           </Header>

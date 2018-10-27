@@ -118,7 +118,7 @@ export default class Miscellaneous extends Component {
     return (
       <Aux>
         <Form size="small" onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
           <SectionHeader header="Social Media" />
           <Table basic compact className="form-table">
             <TableHeader isReadonly={isReadonly} labels={['Label', 'URL']} />
