@@ -35,6 +35,7 @@ export default class InsightsDetails extends Component {
                 srcUrl={ArticlesDetails.featuredImage}
                 className="mb-30 mt-30"
               />
+              <br />
               <div dangerouslySetInnerHTML={{ __html: ArticlesDetails.content }} />
             </Grid.Column>
           </Grid>

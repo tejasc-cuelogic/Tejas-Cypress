@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Grid, Icon, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { DataFormatter } from '../../../../../helper';
 
 const leftSummary = offer => [
   {
@@ -10,8 +11,8 @@ const leftSummary = offer => [
         (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
       )),
   },
-  { title: 'Launch Date', content: '3/15/18' },
-  { title: 'Date Till Close', content: '34 days' },
+  { title: 'Launch Date', content: offer && offer.offering && offer.offering.launch && offer.offering.launch.targetDate },
+  { title: 'Days Till Close', content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A' },
 ];
 
 const rightSummary = offer => [

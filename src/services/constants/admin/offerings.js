@@ -10,6 +10,20 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
+
+export const STAGES = {
+  CREATION: { ref: 'creation', accessKey: 1, label: '' },
+  LIVE: { ref: 'live', accessKey: 2, label: 'Live' },
+  LOCK: { ref: 'live', accessKey: 2, label: 'Live' },
+  PROCESSING: { ref: 'engagement', accessKey: 3, label: 'Processing' },
+  STARTUP_PERIOD: { ref: 'engagement', accessKey: 3, label: 'Startup Period' },
+  IN_REPAYMENT: { ref: 'engagement', accessKey: 3, label: 'Payment' },
+  FAILED: { ref: 'completed', accessKey: 4, label: '' },
+  TERMINATED: { ref: 'completed', accessKey: 4, label: '' },
+  COMPLETE: { ref: 'completed', accessKey: 4, label: 'Completed' },
+  DEFAULT: { ref: 'completed', accessKey: 4, label: 'Default' },
+};
+
 export const KEY_TERMS = {
   legalBusinessName: {
     value: '',
@@ -139,7 +153,7 @@ export const KEY_TERMS = {
   },
   offeringExpTarget: {
     value: null,
-    label: 'Offering Expense Target',
+    label: 'Offering Expense Min',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
@@ -617,6 +631,7 @@ export const CONTINGENCY_META = {
     error: undefined,
     rule: 'optional',
     objRefOutput2: 'accepted',
+    skipField: true,
   },
 };
 

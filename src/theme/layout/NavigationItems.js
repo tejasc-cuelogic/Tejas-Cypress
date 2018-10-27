@@ -13,8 +13,10 @@ import { SubmitButton } from '../../modules/shared/businessApplication/component
 export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
-    const newState = this.state.active === name ? '' : name;
-    this.setState({ active: newState });
+    if (this.props.refLoc !== 'public') {
+      const newState = this.state.active === name ? '' : name;
+      this.setState({ active: newState });
+    }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
@@ -40,10 +42,11 @@ export class NavItems extends Component {
           <Dropdown
             item
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active' : ''}
+            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''}
             ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
             `}
             name={item.to}
+            disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : this.doNothing}
             text={
               <Aux>
@@ -151,7 +154,7 @@ export class NavigationItems extends Component {
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
             <Menu.Item>
               <Button.Group>
-                <Button as={Link} to="/" inverted color="red">Cancel</Button>
+                <Button as={Link} to="/business/how-it-works" inverted color="red">Cancel</Button>
                 {isPrequalQulify &&
                 <SubmitButton
                   canSubmitApp={canSubmitApp}

@@ -2,7 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import { isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
+import { concat, isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
@@ -46,7 +46,7 @@ export class UserDetailsStore {
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.details && account.details.status === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details.status === 'FULL');
     }
     return accDetails;
   }
@@ -249,9 +249,10 @@ export class UserDetailsStore {
   @computed
   get validAccTypes() {
     const validPanes = [];
-    const { inActiveAccounts } = this.signupStatus;
+    const { inActiveAccounts, partialAccounts } = this.signupStatus;
+    const remainingAccounts = concat(partialAccounts, inActiveAccounts);
     const accTypesValues = accountStore.INVESTMENT_ACC_TYPES.fields.accType.values;
-    inActiveAccounts.map((key) => {
+    remainingAccounts.map((key) => {
       const acc = find(accTypesValues, { accType: key });
       if (acc) {
         validPanes.push(acc);

@@ -55,6 +55,7 @@ class IndividualAccountStore {
             Helper.toast('Individual account created successfully.', 'success');
             this.submited = true;
           } else if (currentStep) {
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           } else {
             Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');

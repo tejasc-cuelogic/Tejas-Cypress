@@ -24,7 +24,6 @@ export class CampaignStore {
         client: clientPublic,
         query: allOfferings,
         variables: { filters: { stage } },
-        fetchPolicy: 'network-only',
       });
   }
 

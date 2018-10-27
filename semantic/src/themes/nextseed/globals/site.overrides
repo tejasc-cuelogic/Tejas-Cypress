@@ -168,6 +168,9 @@ h6{
 .intro-text, .note{
 	color:@neutral-middark !important;
 }
+.primary-two-text {
+	color: @primary-two !important;
+}
 .caption-note{
 	font-size:@13px;
 	font-style:italic;
