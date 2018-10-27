@@ -11,6 +11,7 @@ export class PortfolioStore {
   @observable pieChartDataEval = null;
   @observable pieChartData = null;
   @observable currentOfferingId = null;
+  @observable isCancelShowLink = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -95,7 +96,7 @@ export class PortfolioStore {
     let offering = null;
     if (accounts) {
       offering =
-      accounts.investments.pending.find(acc => acc.offering.id === this.currentOfferingId);
+        accounts.investments.pending.find(acc => acc.offering.id === this.currentOfferingId);
     }
     return offering;
   }
@@ -132,8 +133,8 @@ export class PortfolioStore {
   }
 
   @action
-  cancelAgreement = () => {
-    uiStore.setProgress();
+  cancelAgreement = (agreementId) => {
+    uiStore.setProgress(true);
     const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
@@ -141,7 +142,7 @@ export class PortfolioStore {
         .mutate({
           mutation: cancelAgreement,
           variables: {
-            agreementId: '',
+            agreementId,
           },
           refetchQueries: [{
             query: getInvestorAccountPortfolio,
@@ -152,17 +153,23 @@ export class PortfolioStore {
           }],
         })
         .then(() => {
+          this.setInitialLinkValue(true);
           resolve();
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          this.setInitialLinkValue(false);
           reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
         });
     });
+  }
+  @action
+  setInitialLinkValue = (boolValue) => {
+    this.isCancelShowLink = boolValue;
   }
 }
 

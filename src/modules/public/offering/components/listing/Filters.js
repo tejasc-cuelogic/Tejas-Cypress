@@ -20,11 +20,10 @@ export default class Filters extends Component {
       { content: 'Office', iconName: 'fax' },
       { content: 'Other', iconName: 'ellipsis horizontal' },
     ],
-    MoreOptions: {
-      content: 'Show Funded Deals',
-      color: null,
-      iconName: 'eye',
-    },
+    MoreOptions: [{
+      label: 'Show Funded Deals',
+      checkStatus: true,
+    }],
     InvestmentTypes: [
       { label: 'Revenue Sharing Note', checkStatus: true },
       { label: 'Term Note', checkStatus: true },
@@ -81,8 +80,9 @@ export default class Filters extends Component {
     FundingTypes.forEach((item, index) => {
       FundingTypes[index].checkStatus = false;
     });
-    MoreOptions.color = null;
-
+    MoreOptions.forEach((item, index) => {
+      MoreOptions[index].checkStatus = false;
+    });
     this.setState({
       BusinessTypes,
       MoreOptions,
@@ -157,15 +157,21 @@ export default class Filters extends Component {
         <Header as="h6" dividing className={`${isMobile && 'mt-80'} text-uppercase`}>
           More Options
         </Header>
-        <List relaxed="very">
-          <List.Item onClick={() => this.toggleColor2()}>
-            <List.Icon
-              color={this.state.MoreOptions.color}
-              name={this.state.MoreOptions.iconName}
-            />
-            <List.Content>{this.state.MoreOptions.content}</List.Content>
-          </List.Item>
-        </List>
+        <div className="checkbox-group">
+          <Form>
+            {this.state.MoreOptions.map((item, index) => (
+              <Form.Field>
+                <Checkbox
+                  key={item.label}
+                  label={item.label}
+                  checked={item.checkStatus}
+                  onChange={() => this.togglecheckbox('MoreOptions', index)}
+                />
+              </Form.Field>
+            ))
+            }
+          </Form>
+        </div>
       </Aux>);
     return (
       <Aux>

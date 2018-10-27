@@ -6,7 +6,7 @@ import { USER_TITLE } from '../../../../../../services/constants/user';
 import { FormInput, FormSelect, AutoComplete, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
 
-import { US_STATES } from '../../../../../../constants/account';
+import { US_STATES_FOR_INVESTOR } from '../../../../../../constants/account';
 
 const LegalDetails = observer(({
   form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange,
@@ -75,7 +75,7 @@ const LegalDetails = observer(({
           <FormDropDown
             name="state"
             fielddata={form.fields.state}
-            options={US_STATES}
+            options={US_STATES_FOR_INVESTOR}
             search
             selection
             compact
@@ -130,7 +130,7 @@ const LegalDetails = observer(({
       </Form>
     </Modal.Content>
     <Modal.Actions className="signup-actions">
-      <p><Link to="/" onClick={close}>I’ll finish this later</Link></p>
+      <p><Link to="/app/summary" onClick={close}>I’ll finish this later</Link></p>
     </Modal.Actions>
   </Modal>
 ));

@@ -7,7 +7,9 @@ query getOfferingList($filters: OfferingFilterInputType){
       stage
       media {
         tombstoneImage {
-        url
+          url
+          isPublic
+          fileName
         }
       }
       offering {
@@ -337,7 +339,6 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
-    offeringStatus
     keyTerms {
       legalBusinessName
       shorthandBusinessName

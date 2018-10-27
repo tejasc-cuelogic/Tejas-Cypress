@@ -4,8 +4,8 @@ import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
 import isEmpty from 'lodash/isEmpty';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
-import { FormSelect, FormInput, MaskedInput, AutoComplete } from '../../../../../theme/form';
-import { US_STATES } from '../../../../../constants/account';
+import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../theme/form';
+import { US_STATES_FOR_INVESTOR } from '../../../../../constants/account';
 
 import UserVerifiedDetails from '../../../investor/settings/components/UserVerifiedDetails';
 import NewPhoneNumber from './profileSettings/NewPhoneNumber';
@@ -118,11 +118,15 @@ export default class ProfileData extends Component {
                   fielddata={ID_PROFILE_INFO.fields.city}
                   changed={profileInfoChange}
                 />
-                <FormSelect
+                <FormDropDown
                   name="state"
                   fielddata={ID_PROFILE_INFO.fields.state}
-                  options={US_STATES}
-                  changed={profileInfoChange}
+                  options={US_STATES_FOR_INVESTOR}
+                  search
+                  selection
+                  compact
+                  placeholder="NY"
+                  onChange={profileInfoChange}
                 />
                 <MaskedInput
                   name="zipCode"

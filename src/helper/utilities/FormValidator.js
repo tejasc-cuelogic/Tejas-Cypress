@@ -28,6 +28,10 @@ class FormValidator {
     name: 'password',
     value: e.password,
   });
+  pullValuesForCangePassword = e => ({
+    name: 'newPasswd',
+    value: e.newPasswd,
+  });
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
@@ -463,7 +467,7 @@ class FormValidator {
   }
   // evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
 
-  evalDateObj = date => moment(date).toISOString();
+  evalDateObj = date => moment(date, 'MM/DD/YYYY').toISOString();
 
   evaluateFormData = (fields) => {
     let inputData = {};

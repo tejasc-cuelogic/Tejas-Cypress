@@ -139,7 +139,7 @@ export const KEY_TERMS = {
   },
   offeringExpTarget: {
     value: null,
-    label: 'Offering Expense Target',
+    label: 'Offering Expense Min',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
@@ -617,6 +617,7 @@ export const CONTINGENCY_META = {
     error: undefined,
     rule: 'optional',
     objRefOutput2: 'accepted',
+    skipField: true,
   },
 };
 

@@ -622,6 +622,7 @@ export class OfferingCreationStore {
   */
   @action
   setFormData = (form, ref, keepAtLeastOne) => {
+    this.resetForm(form);
     const { offer } = offeringsStore;
     if (!offer) {
       return false;
@@ -1400,6 +1401,10 @@ export class OfferingCreationStore {
     form.fields[dataKey][index].contingency.value = fields.contingency.value;
     form.fields[dataKey][index].acceptance.value = fields.acceptance.value;
     form.fields[dataKey][index].comment.value = fields.comment.value;
+  }
+
+  @action resetInitLoad() {
+    this.initLoad = [];
   }
 }
 
