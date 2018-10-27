@@ -90,7 +90,7 @@ export default class ConfirmEmailAddress extends Component {
           <Header as="h3">Confirm your email address</Header>
           <p>
             We&#39;re introducing Multi-Factor Authentication (MFA) to
-            increase the security of your NextSeed account.
+            increase the security of your NextSeed account
           </p>
           <Divider section />
           <p>Please confirm the 6-digit verification code sent to your email address</p>
