@@ -1,7 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
+import { pickBy, mapValues, values } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
+import { STAGES } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails,
 } from '../../../queries/offerings/manage';
@@ -13,7 +15,7 @@ export class OfferingsStore {
   @observable filters = false;
   @observable offerData = {};
   @observable offerLoading = false;
-  @observable phases = ['CREATION', 'LIVE', 'ENGAGEMENT', 'CLOSE', 'COMPLETE', 'FAILED', 'TERMINATED'];
+  @observable phases = STAGES;
   @observable subTabs = {
     creation: 35,
     live: 34,
@@ -30,7 +32,7 @@ export class OfferingsStore {
   @action
   initRequest = (props) => {
     const stageMap = {
-      completed: ['CLOSE', 'COMPLETE', 'FAILED', 'TERMINATED'],
+      completed: pickBy(STAGES, s => s.ref === 'completed'),
       active: ['CREATION', 'LIVE', 'ENGAGEMENT'],
     };
     const {
@@ -47,7 +49,8 @@ export class OfferingsStore {
     this.requestState.skip = skip || this.requestState.skip;
     this.requestState.stage = stage || this.requestState.stage;
     const params = {
-      stage: stageMap[stage] || [stage.toUpperCase()],
+      stage: stage === 'active' ? stageMap.active :
+        Object.keys(pickBy(STAGES, s => s.ref === stage)),
       first: first || this.requestState.perPage,
       skip,
     };
@@ -103,7 +106,7 @@ export class OfferingsStore {
   }
 
   @computed get allPhases() {
-    return this.phases;
+    return values(mapValues(this.phases, s => s.ref.toUpperCase()));
   }
 
   @computed get totalRecords() {
