@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy, kebabCase } from 'lodash';
+import { map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
@@ -14,7 +14,7 @@ import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering,
   generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 
@@ -751,6 +751,7 @@ export class OfferingCreationStore {
       });
   }
 
+  @action
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined, isApproved, fromS3 = false,
@@ -760,6 +761,7 @@ export class OfferingCreationStore {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
     if (keyName) {
       if (keyName === 'legal') {
         payloadData[keyName] = {};
@@ -770,6 +772,14 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.issuer = {};
         payloadData[keyName].documentation.issuer =
         Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        if (isApproved !== null) {
+          payloadData[keyName][subKey].approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: isApproved,
+          };
+        }
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -782,27 +792,6 @@ export class OfferingCreationStore {
         };
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
-        // const mediaObj = {};
-        // payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
-        //   const mediaItem = toJS(payloadData[keyName][k].url);
-        //   mediaObj[k] = Array.isArray(mediaItem) ?
-        //     mediaItem.map((item, index) => {
-        //       const itemOfMedia = {
-        //         id: 1, url: item,
-        // fileName: payloadData[keyName][k].fileName[index], isPublic: true,
-        //       };
-        //       return itemOfMedia;
-        //     }) : payloadData[keyName][k].fileName &&
-        //     {
-        //       id: 1,
-        //       url: k === 'heroVideo' ?
-        // payloadData[keyName][k].fileName : payloadData[keyName][k].url,
-        //       fileName: payloadData[keyName][k].fileName,
-        //       isPublic: true,
-        //     };
-        //   return mediaObj;
-        // });
-        // payloadData[keyName] = mediaObj;
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
@@ -824,6 +813,7 @@ export class OfferingCreationStore {
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
+    payloadData = merge(getOfferingById, payloadData);
     uiStore.setProgress();
     client
       .mutate({

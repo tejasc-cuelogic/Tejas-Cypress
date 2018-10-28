@@ -45,9 +45,16 @@ export default class General extends Component {
     } = offer.keyTerms;
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
-    const isApproved = false;
-    const isReadonly = isApproved;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.legal && offer.legal.general &&
+      offer.legal.general.submitted) ? offer.legal.general.submitted : null;
+    const approved = (offer && offer.legal && offer.legal.general && offer.legal.general.approved) ?
+      offer.legal.general.approved : null;
+    const issuerSubmitted = (offer && offer.legal && offer.legal.general &&
+      offer.legal.general.issuerSubmitted) ? offer.legal.general.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager) ||
+      (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>
@@ -371,10 +378,13 @@ export default class General extends Component {
           }
           <Divider hidden />
           <ButtonGroup
-            isManager={access.asManager}
+            isIssuer={isIssuer}
+            submitted={submitted}
+            isManager={isManager}
             formValid={GENERAL_FRM.meta.isValid}
-            isApproved={isApproved}
+            approved={approved}
             updateOffer={this.handleFormSubmit}
+            issuerSubmitted={issuerSubmitted}
           />
         </Form>
         <Confirm
