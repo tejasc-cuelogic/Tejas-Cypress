@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Form, Header, Divider, Step, Label, Button, Progress, Icon } from 'semantic-ui-react';
+import { Form, Header, Divider, Step, Label, Button, Progress, Icon, Grid } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
 import Actions from './overview/Actions';
 import { MaskedInput, FormCheckbox } from '../../../../../theme/form';
@@ -98,9 +98,13 @@ export default class Close extends Component {
               It may take a moment, please complete the form below while processing.
             </Header.Subheader>
           </Header>
-          <Progress percent={10} size="tiny" color="green" className="campaign-close-progress">
-            34 of 420 investors processed...
-          </Progress>
+          <Grid>
+            <Grid.Column width={7}>
+              <Progress percent={10} size="tiny" color="green" className="campaign-close-progress">
+              34 of 420 investors processed...
+              </Progress>
+            </Grid.Column>
+          </Grid>
           <Divider hidden clearing />
           <Divider section clearing />
           <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
@@ -133,7 +137,7 @@ export default class Close extends Component {
               <Icon className="ns-envelope-line" />
               Send Test Close Mail
             </Button>
-            <Button as="span" className="time-stamp">You cannot close the offering if envelopes are still being processed</Button>
+            <Button as="span" className="time-stamp note">You cannot close the offering if envelopes are still being processed</Button>
           </Button.Group>
           <Divider className="doubled" />
           <Contingency
