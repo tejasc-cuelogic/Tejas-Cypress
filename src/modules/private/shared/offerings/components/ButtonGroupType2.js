@@ -1,37 +1,45 @@
 import React from 'react';
 import Aux from 'react-aux';
+import moment from 'moment';
 import { Button, Icon } from 'semantic-ui-react';
 
 const ButtonGroupType2 = ({
-  formValid, isManager, isSubmitted, isApproved, updateFunction,
+  formValid, isManager, approved, updateOffer, submitted,
 }) => (
   <Aux>
-    <div className="clearfix mb-20">
-      {isManager ?
-        <Button.Group floated="right">
-          <Button onClick={() => updateFunction(false)} inverted content="Decline" color="red" />
-          <Button disabled={!formValid} secondary content="Generate Report" />
-          <Button onClick={() => updateFunction(true)} disabled={!formValid} primary content="Approve" color="green" />
-        </Button.Group>
-      :
-        <Aux>
-          <div className="clearfix mb-20 right-align">
-            <Button onClick={updateFunction} color={isSubmitted ? 'gray' : ''} secondary={!isSubmitted} content={isSubmitted ? 'Awaiting Manager Approval' : 'Submit for Approval'} disabled={!(formValid && !isSubmitted)} />
-          </div>
-        </Aux>
-      }
-    </div>
-    {isApproved &&
-    <div className="clearfix">
+    <div className="clearfix sticky-actions">
+      <Button.Group vertical icon className="time-stamp">
+        {submitted &&
+          <Button as="span" className="time-stamp">
+            <Icon className="ns-check-circle" color="green" />{' '}
+            Submitted by {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
+          </Button>
+        }
+        {approved && approved.status &&
+          <Button as="span" className="time-stamp">
+            <Icon className="ns-check-circle" color="green" />{' '}
+            Approved by {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
+          </Button>
+        }
+      </Button.Group>
       <Button.Group floated="right">
-        <Button secondary content="Generate Report" disabled={!formValid} />
-        <Button as="span" className="time-stamp">
-          <Icon className="ns-check-circle" color="green" />
-          Approved by Manager on 2/3/2018
-        </Button>
+        {isManager && submitted ? (
+          <Aux>
+            <Button inverted onClick={() => updateOffer({ isApproved: true, status: false })} color="red" content="Decline" disabled={!formValid} />
+            {approved && !approved.status &&
+            <Button color="green" onClick={() => updateOffer({ isApproved: true, status: true })} className="relaxed" disabled={!formValid}>Approve</Button>
+            }
+          </Aux>
+        ) : (!approved || (approved && !approved.status)) && (
+          <Aux>
+            {!submitted &&
+            <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
+            }
+            <Button primary={!submitted} onClick={() => updateOffer({ submitted: true })} className="relaxed" disabled={!formValid || submitted}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+          </Aux>
+        )}
       </Button.Group>
     </div>
-    }
   </Aux>
 );
 

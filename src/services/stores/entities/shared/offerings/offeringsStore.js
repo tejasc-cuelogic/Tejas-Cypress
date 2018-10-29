@@ -86,12 +86,14 @@ export class OfferingsStore {
   }
 
   @action
-  getOne = (id) => {
-    this.offerLoading = true;
+  getOne = (id, loading = true) => {
+    if (loading) {
+      this.offerLoading = true;
+    }
     this.offerData = graphql({
       client,
       query: getOfferingDetails,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: () => {
         this.offerLoading = false;
