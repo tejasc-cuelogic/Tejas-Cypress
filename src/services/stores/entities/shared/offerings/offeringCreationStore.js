@@ -810,52 +810,59 @@ export class OfferingCreationStore {
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-
-    let payLoadDataOld = keyName ? subKey ? payloadData[keyName][subKey] :
-      payloadData[keyName] : payloadData;
-    let offeringData = keyName ? subKey ? getOfferingById[keyName][subKey] :
-      getOfferingById[keyName] : getOfferingById;
-    payLoadDataOld = subKey === 'documentation' ? payLoadDataOld.issuer : payLoadDataOld;
-    offeringData = subKey === 'documentation' ? offeringData.issuer : offeringData;
-    payLoadDataOld =
-      merge(offeringData, payLoadDataOld);
-    if (approvedObj !== null && approvedObj.isApproved) {
-      payLoadDataOld.approved = {
-        id: userDetailsStore.userDetails.id,
-        by: `${firstName} ${lastName}`,
-        date: moment().toISOString(),
-        status: approvedObj.status,
-      };
-      if (!approvedObj.status && !approvedObj.edit) {
-        payLoadDataOld.submitted = null;
-        if (payLoadDataOld.issuerSubmitted) {
-          payLoadDataOld.issuerSubmitted = '';
+    if (keyName !== 'contingencies') {
+      let payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
+        payloadData[keyName] : payloadData;
+      const offeringData = keyName ? subKey ? subKey === 'issuer' ? getOfferingById[keyName].documentation[subKey] : getOfferingById[keyName][subKey] :
+        getOfferingById[keyName] : getOfferingById;
+      payLoadDataOld = merge(offeringData, payLoadDataOld);
+      if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: approvedObj.status,
+        };
+        if (!approvedObj.status && !approvedObj.edit) {
+          payLoadDataOld.submitted = null;
+          if (payLoadDataOld.issuerSubmitted) {
+            payLoadDataOld.issuerSubmitted = '';
+          }
         }
+      } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
+        payLoadDataOld.submitted = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+        };
+      } else if (approvedObj !== null && approvedObj && approvedObj.isIssuer) {
+        payLoadDataOld.issuerSubmitted = moment().toISOString();
       }
-    } else if (approvedObj !== null && approvedObj.submitted) {
-      payLoadDataOld.submitted = {
-        id: userDetailsStore.userDetails.id,
-        by: `${firstName} ${lastName}`,
-        date: moment().toISOString(),
-      };
-    } else if (approvedObj !== null && approvedObj.isIssuer) {
-      payLoadDataOld.issuerSubmitted = moment().toISOString();
-    }
-    payLoadDataOld = omitDeep(payLoadDataOld, '__typename');
-    payLoadDataOld = recursiveOmitBy(payLoadDataOld, isNull);
+      payLoadDataOld = omitDeep(payLoadDataOld, '__typename');
+      payLoadDataOld = recursiveOmitBy(payLoadDataOld, ({
+        parent, node, key, path, deep,
+      }) => node === null || node === {});
 
-    if (keyName) {
-      if (subKey) {
-        if (subKey === 'documentation') {
-          payloadData[keyName][subKey].documentation = payLoadDataOld;
+      if (keyName) {
+        if (subKey) {
+          if (subKey === 'issuer') {
+            payloadData[keyName].documentation[subKey] = payLoadDataOld;
+          } else {
+            payloadData[keyName][subKey] = payLoadDataOld;
+          }
         } else {
-          payloadData[keyName][subKey] = payLoadDataOld;
+          payloadData[keyName] = payLoadDataOld;
         }
       } else {
-        payloadData[keyName] = payLoadDataOld;
+        payloadData = payLoadDataOld;
       }
-    } else {
-      payloadData = payLoadDataOld;
+      if (keyName) {
+        payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
+        payloadData[keyName] = omitDeep(payloadData[keyName], '__typename');
+        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+          parent, node, key, path, deep,
+        }) => node === null);
+      }
     }
     uiStore.setProgress();
     client

@@ -9,7 +9,7 @@ const ButtonGroup = ({
   <Aux>
     <div className="right-align sticky-actions">
       <Button.Group>
-        {isIssuer && issuerSubmitted &&
+        {!isIssuer && issuerSubmitted &&
           <Button as="span" className="time-stamp">
             <Icon className="ns-check-circle" color="green" />
             Submitted by USER_NAME on {moment(issuerSubmitted).format('MM/DD/YYYY')}

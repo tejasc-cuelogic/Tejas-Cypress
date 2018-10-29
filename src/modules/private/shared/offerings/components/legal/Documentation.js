@@ -36,7 +36,7 @@ export default class Documentation extends Component {
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, DOCUMENTATION_FRM.fields, 'legal', 'documentation', true, undefined, isApproved);
+    updateOffering(currentOfferingId, DOCUMENTATION_FRM.fields, 'legal', 'issuer', true, undefined, isApproved);
   }
   render() {
     const { isIssuer } = this.props.userStore;
@@ -46,11 +46,14 @@ export default class Documentation extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const submitted = (offer && offer.legal && offer.legal.documentation &&
-      offer.legal.documentation.submitted) ? offer.legal.documentation.submitted : null;
+      offer.legal.documentation.issuer && offer.legal.documentation.issuer.submitted)
+      ? offer.legal.documentation.issuer.submitted : null;
     const approved = (offer && offer.legal && offer.legal.documentation &&
-      offer.legal.documentation.approved) ? offer.legal.documentation.approved : null;
+      offer.legal.documentation.issuer &&
+      offer.legal.documentation.issuer.approved) ? offer.legal.documentation.issuer.approved : null;
     const issuerSubmitted = (offer && offer.legal && offer.legal.documentation &&
-      offer.legal.documentation.issuerSubmitted) ? offer.legal.documentation.issuerSubmitted : null;
+      offer.legal.documentation.issuer && offer.legal.documentation.issuer.issuerSubmitted)
+      ? offer.legal.documentation.issuer.issuerSubmitted : null;
     const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
       (isManager && approved && approved.status));
     return (
