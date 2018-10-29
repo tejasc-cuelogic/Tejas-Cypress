@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { isNull, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
+import { isObject, isEmpty, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep-lodash';
@@ -811,11 +811,13 @@ export class OfferingCreationStore {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
     if (keyName !== 'contingencies') {
-      let payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
+      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         payloadData[keyName] : payloadData;
-      const offeringData = keyName ? subKey ? subKey === 'issuer' ? getOfferingById[keyName].documentation[subKey] : getOfferingById[keyName][subKey] :
-        getOfferingById[keyName] : getOfferingById;
-      payLoadDataOld = merge(offeringData, payLoadDataOld);
+      // const offeringData = keyName ? subKey ? subKey === 'issuer' ?
+      // getOfferingById[keyName] && getOfferingById[keyName].documentation[subKey] :
+      // getOfferingById[keyName] && getOfferingById[keyName][subKey] :
+      //   getOfferingById[keyName] : getOfferingById;
+      // payLoadDataOld = merge(offeringData, payLoadDataOld);
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
         payLoadDataOld.approved = {
           id: userDetailsStore.userDetails.id,
@@ -838,10 +840,10 @@ export class OfferingCreationStore {
       } else if (approvedObj !== null && approvedObj && approvedObj.isIssuer) {
         payLoadDataOld.issuerSubmitted = moment().toISOString();
       }
-      payLoadDataOld = omitDeep(payLoadDataOld, '__typename');
-      payLoadDataOld = recursiveOmitBy(payLoadDataOld, ({
-        parent, node, key, path, deep,
-      }) => node === null || node === {});
+      // payLoadDataOld = omitDeep(payLoadDataOld, ['__typename', 'fileHandle']);
+      // payLoadDataOld = recursiveOmitBy(payLoadDataOld, ({
+      //   parent, node, key, path, deep,
+      // }) => node === null || isEmpty(node));
 
       if (keyName) {
         if (subKey) {
@@ -858,10 +860,10 @@ export class OfferingCreationStore {
       }
       if (keyName) {
         payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
-        payloadData[keyName] = omitDeep(payloadData[keyName], '__typename');
+        payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
           parent, node, key, path, deep,
-        }) => node === null);
+        }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
       }
     }
     uiStore.setProgress();
