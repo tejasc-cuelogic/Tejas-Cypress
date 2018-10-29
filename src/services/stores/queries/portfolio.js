@@ -24,7 +24,11 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             shorthandBusinessName
             securities
             industry
-            terminationDate
+          }
+          offering {
+            launch {
+              terminationDate
+            }
           }
         }
       }

@@ -47,7 +47,7 @@ export default class CancelInvestment extends Component {
     const pendingList = getInvestorAccounts && getInvestorAccounts.investments &&
       getInvestorAccounts.investments.pending ? getInvestorAccounts.investments.pending : [];
     const investmentOfferingDetails =
-     find(pendingList, { agreementId: toInteger(this.props.match.params.id) });
+      find(pendingList, { agreementId: toInteger(this.props.match.params.id) });
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -63,13 +63,14 @@ export default class CancelInvestment extends Component {
           <OfferingInvestDetails
             offering={investmentOfferingDetails || null}
             accType="individual"
+            disabledClass={isCancelShowLink ? 'disabled' : ''}
           />
           <Divider hidden />
           {!isCancelShowLink ?
             <Form error onSubmit={this.submit}>
               <div className="center-align mt-30">
-                <Button color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
-                <Button loading={inProgress} color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
+                <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
+                <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
               </div>
             </Form>
             :

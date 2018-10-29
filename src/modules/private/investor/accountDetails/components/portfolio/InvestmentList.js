@@ -23,7 +23,7 @@ const InvestmentList = (props) => {
     <Accordion fluid styled className="card-style">
       <Accordion.Title active className="text-capitalize">
         <Icon className="ns-chevron-up" />
-        {props.listOf}
+        {`${props.listOf} (${props.listOfCount})`}
       </Accordion.Title>
       <Accordion.Content active>
         {!investments || !investments.length ?
@@ -60,11 +60,16 @@ const InvestmentList = (props) => {
                       </Table.Cell>
                       <Table.Cell className="text-capitalize">
                         {data && data.offering && data.offering.stage ?
-                          STAGES[data.offering.stage].label : 'NA'
+                          STAGES[data.offering.stage].label : '-'
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        {props.listOf === 'pending' ? `${calculateDateDiff(data.offering.keyTerms.terminationDate)} days` : <DateTimeFormat format="MM/DD/YYYY" datetime={data.closeDate} />}
+                        {props.listOf === 'pending' ? `${calculateDateDiff(data && data.offering && data.offering.offering &&
+                          data.offering.offering.launch &&
+                           data.offering.offering.launch.terminationDate ?
+                           data.offering.offering.launch.terminationDate : null)} days`
+                          :
+                        <DateTimeFormat format="MM/DD/YYYY" datetime={data.closeDate} />}
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
