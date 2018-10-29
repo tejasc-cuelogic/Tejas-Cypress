@@ -14,6 +14,8 @@ const calcSmartProgress = (milestones, amount) => {
       (100 / (milestones.length - 1)));
 };
 
+const calMargin = milestones => 50 / milestones.length;
+
 @inject('portfolioStore', 'campaignStore')
 @observer
 class InvestmentTimeline extends Component {
@@ -25,23 +27,25 @@ class InvestmentTimeline extends Component {
     const bonusRewards = campaign && campaign.bonusRewards &&
       campaign.bonusRewards.length && campaign.bonusRewards;
     const investBoanusReward = filter(rewardsTiers, tier => tier.earlyBirdQuantity <= 0);
-    const earlyBirdtBoanusAmount = filter(rewardsTiers, tier => tier.earlyBirdQuantity > 0);
+    // const investBoanusRewardLastIndex = findLastIndex(investBoanusReward);
+    // const earlyBirdtBoanusAmount = filter(rewardsTiers, tier => tier.earlyBirdQuantity > 0);
     const progress = investBoanusReward.length ? calcSmartProgress(investBoanusReward, getInvestor
       && getInvestor.totalRaisedAmount) : 0;
+    const calculatedMargin = calMargin(investBoanusReward);
     return (
       rewardsTiers && rewardsTiers.length ?
         <Aux>
           <Header as="h4">{this.props.title}</Header>
           <Grid columns="equal" textAlign="center" className="investment-scale">
-            <div className="invested">
+            <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
               <span className="investment-progress" style={{ width: `${progress}%` }} />
               <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(getInvestor && getInvestor.totalRaisedAmount)}</span></div>
             </div>
             <Grid.Row>
-              {rewardsTiers.map(tier => (
+              {rewardsTiers.map((tier, index) => (
                 tier.earlyBirdQuantity <= 0 ?
                   <Grid.Column
-                    className={`${(earlyBirdtBoanusAmount.length && tier.amount === earlyBirdtBoanusAmount[0].amount) ? 'crossed' : ''}`}
+                    className={`${((rewardsTiers[index + 1] && rewardsTiers[index].amount <= getInvestor.totalRaisedAmount && rewardsTiers[index + 1].amount >= getInvestor.totalRaisedAmount) || rewardsTiers[index].amount === toInteger(getInvestor.totalRaisedAmount)) ? 'crossed' : ''}`}
                     key={`m_${tier.amount}`}
                   >
                     <Popup
