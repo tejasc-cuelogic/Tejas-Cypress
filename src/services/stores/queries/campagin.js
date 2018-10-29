@@ -128,7 +128,9 @@ export const campaignDetailsQuery = gql`
         expectedOpsDate
         issuerApprovedDate
       }
-      misc
+      misc {
+        additionalBonusRewardsContent
+      }
     }
     leadership {
       firstName
