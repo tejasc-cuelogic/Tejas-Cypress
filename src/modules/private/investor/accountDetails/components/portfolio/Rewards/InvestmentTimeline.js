@@ -5,44 +5,12 @@ import { Grid, Popup, Header, List } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 
 const data = {
-  invested: 7500,
+  invested: 10000,
   milestones: [
     {
-      amount: 500,
+      amount: 7689,
       reward: {
-        head: 'Invest $500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 1000,
-      reward: {
-        head: 'Invest $1000 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 2500,
-      reward: {
-        head: 'Invest $2500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 5000,
-      reward: {
-        head: 'Invest $5000 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 10000,
-      reward: {
-        head: 'Invest $500 or more',
+        head: 'Invest $7689 or more',
         subHead: 'Cooking Class',
         highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
       },
@@ -50,15 +18,7 @@ const data = {
     {
       amount: 25000,
       reward: {
-        head: 'Invest $500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 50000,
-      reward: {
-        head: 'Invest $500 or more',
+        head: 'Invest $25000 or more',
         subHead: 'Cooking Class',
         highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
       },
@@ -71,7 +31,7 @@ const calcSmartProgress = (milestones, amount) => {
   return ((pIndex / (milestones.length - 1)) * 100) +
     (((amount - milestones[pIndex].amount) /
       (milestones[pIndex + 1].amount - milestones[pIndex].amount)) *
-        (100 / (milestones.length - 1)));
+      (100 / (milestones.length - 1)));
 };
 
 const InvestmentTimeline = (props) => {

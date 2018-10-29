@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import { find, toInteger } from 'lodash';
-import { Modal, Button, Header, Form, Divider, Message, Icon } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message, Icon } from 'semantic-ui-react';
 import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
 import { ListErrors } from '../../../../../../theme/shared';
 
