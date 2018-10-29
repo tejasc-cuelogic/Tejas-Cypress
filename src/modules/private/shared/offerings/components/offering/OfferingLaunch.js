@@ -67,7 +67,7 @@ export default class OfferingLaunch extends Component {
         <Header as="h4">Escrow Key</Header>
         <Form.Group widths="equal">
           {
-            ['escrowKey', 'escrowNumber'].map(field => (
+            ['escrowKey', 'escrowNumber', 'gsFees'].map(field => (
               <FormInput
                 displayMode={isReadonly}
                 name={field}
