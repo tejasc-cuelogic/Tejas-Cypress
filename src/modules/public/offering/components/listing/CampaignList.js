@@ -13,9 +13,6 @@ import { ASSETS_URL } from '../../../../../constants/aws';
 @observer
 export default class CampaignList extends Component {
   state = { filters: false };
-  // componentWillMount() {
-  //   this.props.campaignStore.initRequest(this.props.type);
-  // }
   toggleFilters = () => {
     const { filters } = this.state;
     this.setState({ filters: filters === false });
@@ -79,7 +76,7 @@ export default class CampaignList extends Component {
                           </List.Item>
                         </List>
                       </Card.Content>
-                      {this.props.locked === offering.id && (
+                      {offering.stage === 'LOCK' && (
                         <Card.Content className="card-hidden">
                           <div className="lock-image">
                             <Image src={`${ASSETS_URL}images/icon_lock.png`} />

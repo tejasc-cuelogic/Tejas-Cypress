@@ -31,10 +31,6 @@ export class OfferingsStore {
 
   @action
   initRequest = (props) => {
-    const stageMap = {
-      completed: pickBy(STAGES, s => s.ref === 'completed'),
-      active: ['CREATION', 'LIVE', 'ENGAGEMENT'],
-    };
     const {
       first, skip, page, stage,
     } = props ||
@@ -49,8 +45,7 @@ export class OfferingsStore {
     this.requestState.skip = skip || this.requestState.skip;
     this.requestState.stage = stage || this.requestState.stage;
     const params = {
-      stage: stage === 'active' ? stageMap.active :
-        Object.keys(pickBy(STAGES, s => s.ref === stage)),
+      stage: Object.keys(pickBy(STAGES, s => s.ref === stage)),
       first: first || this.requestState.perPage,
       skip,
     };
