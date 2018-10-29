@@ -7,9 +7,9 @@ const ButtonGroup = ({
   formValid, isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted,
 }) => (
   <Aux>
-    <div className="clearfix">
-      <Button.Group floated="right">
-        {!isIssuer && issuerSubmitted &&
+    <div className="right-align sticky-actions">
+      <Button.Group>
+        {isIssuer && issuerSubmitted &&
           <Button as="span" className="time-stamp">
             <Icon className="ns-check-circle" color="green" />
             Submitted by USER_NAME on {moment(issuerSubmitted).format('MM/DD/YYYY')}

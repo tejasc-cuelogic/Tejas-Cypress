@@ -852,17 +852,15 @@ p i.icon {
 			}
 		}
 	}
-	.team-overlay {
-		h4.ui.header {
-			.sub.header {
-				font-size: @13px;
-				line-height: 20px;
-				color: @neutral-middark;
-				font-weight: @normal;
-			}
-			.icon:only-child {
-				margin-right: @5px;
-			}
+	.team-overlay h4.ui.header {
+		.sub.header {
+			font-size: @13px;
+			line-height: 20px;
+			color: @neutral-middark;
+			font-weight: @normal;
+		}
+		.icon:only-child {
+			margin-right: @5px;
 		}
 	}
 }
@@ -880,11 +878,9 @@ p i.icon {
 		}
 	}
 }
-address {
-	p {
-		margin: 0;
-		font-style: normal;	
-	}
+address p{
+	margin: 0;
+	font-style: normal;	
 }
 .press-list {
 	padding: @20px @50px;
@@ -1165,6 +1161,25 @@ a.icon-link:hover {
 .business-application .content-spacer{
 	padding:@50px 0px;
 }
+// .sticy-sidebar{
+// 	position:sticky;
+// 	top:0;
+// }
+// .sticky-actions{
+// 	position:sticky;
+// 	padding:@10px 0 0;
+// 	bottom:0;
+// 	background-color:@white;
+// 	&:after{
+// 		content:"";
+// 		height:14px;
+// 		width:100%;
+// 		background-color:@white;
+// 		display:block;
+// 		position:absolute;
+// 		bottom:-14px;
+// 	}
+// }
 .inner-content-spacer{
 	padding:@20px !important;
 	+ .inner-content-spacer{
