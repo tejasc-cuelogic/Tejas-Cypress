@@ -12,7 +12,7 @@ Validator.register(
 
 
 export const STAGES = {
-  CREATION: { ref: 'creation', accessKey: 1, label: '' },
+  CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
   LIVE: {
     ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
   },

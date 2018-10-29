@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
+
 
 function calculateDateDiff(terminationDate) {
   const d1 = moment().format('MM/DD/YYYY');
@@ -56,14 +58,18 @@ const InvestmentList = (props) => {
                           <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
                         </p>
                       </Table.Cell>
-                      <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
+                      <Table.Cell className="text-capitalize">
+                        {data && data.offering && data.offering.stage ?
+                          STAGES[data.offering.stage].label : 'NA'
+                        }
+                      </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' ? `${calculateDateDiff(data.offering.keyTerms.terminationDate)} days` : <DateTimeFormat format="MM/DD/YYYY" datetime={data.closeDate} />}
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
                           <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
-                        :
+                          :
                           <Button.Group size="mini" compact>
                             <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary content="Change" />
                             <Button as={Link} to={`${props.match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
@@ -87,7 +93,7 @@ const InvestmentList = (props) => {
               </Table.Footer>
             </Table>
           </div>
-      }
+        }
       </Accordion.Content>
     </Accordion>
   );
