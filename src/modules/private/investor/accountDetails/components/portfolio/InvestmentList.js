@@ -77,9 +77,8 @@ const InvestmentList = (props) => {
                           :
                           <Button.Group size="mini" compact>
                             <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary content="Change" />
-                            <Button as={Link} to={`${props.match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             {calculateDateDiff(data.daysToClose) > 2 &&
-                              <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} color="red" content="Cancel" />
+                              <Button as={Link} to={`${props.match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" /> 
                             }
                           </Button.Group>
                         }
