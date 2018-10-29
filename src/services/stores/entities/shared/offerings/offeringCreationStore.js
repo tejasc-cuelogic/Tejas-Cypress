@@ -780,6 +780,8 @@ export class OfferingCreationStore {
             status: isApproved,
           };
         }
+        payloadData[keyName][subKey] =
+          merge(getOfferingById[keyName][subKey], payloadData[keyName][subKey]);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -813,7 +815,6 @@ export class OfferingCreationStore {
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    payloadData = merge(getOfferingById, payloadData);
     uiStore.setProgress();
     client
       .mutate({

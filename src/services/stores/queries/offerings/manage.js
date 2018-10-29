@@ -370,27 +370,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             corpFormation {
@@ -398,27 +377,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             issuerFinancials {
@@ -426,27 +384,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             leaseAgreement {
@@ -454,27 +391,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             issuerSubmitted
@@ -496,27 +412,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             resolutionOfBorrowing {
@@ -524,27 +419,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             formC {
@@ -552,27 +426,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             npa {
@@ -580,27 +433,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             disclosure {
@@ -608,27 +440,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             securityAgreement {
@@ -636,27 +447,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             personalGuarantee {
@@ -664,27 +454,6 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
-                boxFileId
-                fileExtension
-                fileStatus
-                fileType
-                stepName
-                userId
-                created {
-                  id
-                  by
-                  date
-                }
-                updated {
-                  id
-                  by
-                  date
-                }
-                deleted {
-                  id
-                  by
-                  date
-                }
               }
             }
             edgar

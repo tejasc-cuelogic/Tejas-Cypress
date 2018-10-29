@@ -53,7 +53,7 @@ export default class General extends Component {
       offer.legal.general.approved : null;
     const issuerSubmitted = (offer && offer.legal && offer.legal.general &&
       offer.legal.general.issuerSubmitted) ? offer.legal.general.issuerSubmitted : null;
-    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager) ||
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
       (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
