@@ -686,6 +686,7 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
       id
       by
       date
+      status
       reportGeneratedDate
     }
     created{

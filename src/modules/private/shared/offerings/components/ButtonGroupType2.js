@@ -25,7 +25,7 @@ const ButtonGroupType2 = ({
       <Button.Group floated="right">
         {isManager && submitted ? (
           <Aux>
-            <Button inverted onClick={() => updateOffer({ isApproved: true, status: false })} color="red" content="Decline" disabled={!formValid} />
+            <Button inverted onClick={() => updateOffer({ isApproved: true, status: false })} color="red" content="Decline" />
             {approved && !approved.status &&
             <Button color="green" onClick={() => updateOffer({ isApproved: true, status: true })} className="relaxed" disabled={!formValid}>Approve</Button>
             }

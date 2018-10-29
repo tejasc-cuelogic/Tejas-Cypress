@@ -23,14 +23,17 @@ export default class Issuer extends Component {
     createOrUpdateOfferingBac('ISSUER', ISSUER_FRM.fields, undefined, undefined, undefined, isApproved);
   }
   render() {
-    const { ISSUER_FRM, formChange } = this.props.offeringCreationStore;
+    const { ISSUER_FRM, formChange, issuerOfferingBacData } = this.props.offeringCreationStore;
     const formName = 'ISSUER_FRM';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const isApproved = false;
-    const isSubmitted = false;
-    const isReadonly = isApproved;
+    const isManager = access.asManager;
+    const submitted = (issuerOfferingBacData && issuerOfferingBacData.length &&
+      issuerOfferingBacData[0].submitted) ? issuerOfferingBacData[0].submitted : null;
+    const approved = (issuerOfferingBacData && issuerOfferingBacData.length &&
+      issuerOfferingBacData[0].approved) ? issuerOfferingBacData[0].approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
         <Form>
@@ -94,11 +97,11 @@ export default class Issuer extends Component {
           }
           <Divider hidden />
           <ButtonGroupType2
-            isSubmitted={isSubmitted}
+            submitted={submitted}
             isManager={access.asManager}
             formValid={ISSUER_FRM.meta.isValid}
-            isApproved={isApproved}
-            updateFunction={this.handleSubmitIssuer}
+            approved={approved}
+            updateOffer={this.handleSubmitIssuer}
           />
         </Form>
       </div>

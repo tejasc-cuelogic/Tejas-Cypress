@@ -813,11 +813,6 @@ export class OfferingCreationStore {
     if (keyName !== 'contingencies') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         payloadData[keyName] : payloadData;
-      // const offeringData = keyName ? subKey ? subKey === 'issuer' ?
-      // getOfferingById[keyName] && getOfferingById[keyName].documentation[subKey] :
-      // getOfferingById[keyName] && getOfferingById[keyName][subKey] :
-      //   getOfferingById[keyName] : getOfferingById;
-      // payLoadDataOld = merge(offeringData, payLoadDataOld);
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
         payLoadDataOld.approved = {
           id: userDetailsStore.userDetails.id,
@@ -840,11 +835,6 @@ export class OfferingCreationStore {
       } else if (approvedObj !== null && approvedObj && approvedObj.isIssuer) {
         payLoadDataOld.issuerSubmitted = moment().toISOString();
       }
-      // payLoadDataOld = omitDeep(payLoadDataOld, ['__typename', 'fileHandle']);
-      // payLoadDataOld = recursiveOmitBy(payLoadDataOld, ({
-      //   parent, node, key, path, deep,
-      // }) => node === null || isEmpty(node));
-
       if (keyName) {
         if (subKey) {
           if (subKey === 'issuer') {
@@ -915,6 +905,11 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed get issuerOfferingBacData() {
+    return (this.issuerOfferingBac && this.issuerOfferingBac.data &&
+      toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
+  }
+
   @action
   getAffiliatedIssuerOfferingBac = (offeringId, bacType) => {
     this.affiliatedIssuerOfferingBac = graphql({
@@ -928,6 +923,11 @@ export class OfferingCreationStore {
         }
       },
     });
+  }
+
+  @computed get affiliatedIssuerOfferingBacData() {
+    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data &&
+      toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
@@ -950,12 +950,18 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed get leaderShipOfferingBacData() {
+    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data &&
+      toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
+  }
+
   createOrUpdateOfferingBac = (
     bacType,
     fields,
     issuerNumber = undefined,
     leaderNumber = undefined,
     afIssuerId,
+    approvedObj,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -1009,6 +1015,37 @@ export class OfferingCreationStore {
         };
       }
     }
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
+    const payLoadDataOld = {};
+    if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+      payLoadDataOld.approved = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+        status: approvedObj.status,
+      };
+      if (!approvedObj.status) {
+        payLoadDataOld.submitted = null;
+      }
+    } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
+      payLoadDataOld.submitted = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+      };
+    }
+
+    variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
+    // if (keyName) {
+    //   payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
+    //   payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
+    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+    //     parent, node, key, path, deep,
+    //   }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
+    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+    //     parent, node, key, path, deep,
+    //   }) => (isObject(node) && isEmpty(node)));
+    // }
     uiStore.setProgress();
     client
       .mutate({

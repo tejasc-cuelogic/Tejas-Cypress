@@ -82,6 +82,7 @@ export default class OfferingLaunch extends Component {
             ))
           }
           <MaskedInput
+            displayMode={isReadonly}
             name="gsFees"
             fielddata={COMPANY_LAUNCH_FRM.fields.gsFees}
             changed={(values, name) => maskChange(values, formName, name)}
