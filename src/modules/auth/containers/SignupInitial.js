@@ -18,7 +18,7 @@ const GetBtn = ({ type }) => {
 class signupInitial extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
-    this.props.authStore.reset('SIGNUP');
+    this.props.authStore.resetForm('SIGNUP_FRM');
     console.log(this.props.uiStore.authRef);
   }
   handleCloseModal = (e) => {

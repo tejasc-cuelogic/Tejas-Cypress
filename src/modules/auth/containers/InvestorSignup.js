@@ -35,7 +35,7 @@ class InvestorSignup extends Component {
   };
   render() {
     const {
-      SIGNUP_FRM, signupChange, pwdInputType, reset,
+      SIGNUP_FRM, signupChange, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.code === 'UsernameExistsException'
@@ -48,18 +48,17 @@ class InvestorSignup extends Component {
         closeIcon
         onClose={
           () => {
-            reset('SIGNUP');
-            // this.props.history.push('/');
+            this.props.authStore.resetForm('SIGNUP_FRM');
             this.props.history.push(this.props.uiStore.authRef || '/');
           }
         }
       >
         <Modal.Header className="center-align signup-header">
-          <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h3">
             Sign up as {' '}
             {(SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
+          <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form>
@@ -88,14 +87,6 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
             />
-            {/* <FormInput
-              key="password"
-              name="password"
-              type={pwdInputType}
-              icon={togglePasswordType()}
-              fielddata={SIGNUP_FRM.fields.password}
-              changed={signupChange}
-            /> */}
             <FormPasswordStrength
               key="password"
               name="password"
