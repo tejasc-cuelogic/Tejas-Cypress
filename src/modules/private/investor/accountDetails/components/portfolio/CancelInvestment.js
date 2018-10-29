@@ -52,7 +52,6 @@ export default class CancelInvestment extends Component {
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Do you want to cancel this investment?</Header>
-          <Divider hidden />
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&
@@ -65,16 +64,15 @@ export default class CancelInvestment extends Component {
             accType="individual"
             disabledClass={isCancelShowLink ? 'disabled' : ''}
           />
-          <Divider hidden />
           {!isCancelShowLink ?
             <Form error onSubmit={this.submit}>
-              <div className="center-align mt-30">
+              <div className="center-align mt-40">
                 <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
                 <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
               </div>
             </Form>
             :
-            <div className="center-align mt-30">
+            <div className="center-align mt-40">
               <Link to="/app/account-details/individual/portfolio" className="back-link"><Icon className="ns-arrow-right" />Go to My Dashboard</Link>
             </div>
           }
