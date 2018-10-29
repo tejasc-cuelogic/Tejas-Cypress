@@ -41,7 +41,7 @@ class InvestmentTimeline extends Component {
               {rewardsTiers.map(tier => (
                 tier.earlyBirdQuantity <= 0 ?
                   <Grid.Column
-                    className={`${(tier.amount === earlyBirdtBoanusAmount[0].amount) ? 'crossed' : ''}`}
+                    className={`${(earlyBirdtBoanusAmount.length && tier.amount === earlyBirdtBoanusAmount[0].amount) ? 'crossed' : ''}`}
                     key={`m_${tier.amount}`}
                   >
                     <Popup
