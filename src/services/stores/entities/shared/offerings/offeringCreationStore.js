@@ -776,32 +776,6 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.issuer = {};
         payloadData[keyName].documentation.issuer =
         Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
-        if (approvedObj !== null && approvedObj.isApproved) {
-          payloadData[keyName][subKey].approved = {
-            id: userDetailsStore.userDetails.id,
-            by: `${firstName} ${lastName}`,
-            date: moment().toISOString(),
-            status: approvedObj.status,
-          };
-          if (!approvedObj.status) {
-            payloadData[keyName][subKey].submitted = null;
-            if (!approvedObj.edit) {
-              payloadData[keyName][subKey].issuerSubmitted = '';
-            }
-          }
-        } else if (approvedObj !== null && approvedObj.submitted) {
-          payloadData[keyName][subKey].submitted = {
-            id: userDetailsStore.userDetails.id,
-            by: `${firstName} ${lastName}`,
-            date: moment().toISOString(),
-          };
-        } else if (approvedObj !== null && approvedObj.isIssuer) {
-          payloadData[keyName][subKey].issuerSubmitted = moment().toISOString();
-        }
-        payloadData[keyName][subKey] =
-          merge(getOfferingById[keyName][subKey], payloadData[keyName][subKey]);
-        payloadData[keyName][subKey] = omitDeep(payloadData[keyName][subKey], '__typename');
-        payloadData[keyName][subKey] = recursiveOmitBy(payloadData[keyName][subKey], isNull);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -834,6 +808,53 @@ export class OfferingCreationStore {
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
+    }
+
+    let payLoadDataOld = keyName ? subKey ? payloadData[keyName][subKey] :
+      payloadData[keyName] : payloadData;
+    let offeringData = keyName ? subKey ? getOfferingById[keyName][subKey] :
+      getOfferingById[keyName] : getOfferingById;
+    payLoadDataOld = subKey === 'documentation' ? payLoadDataOld.issuer : payLoadDataOld;
+    offeringData = subKey === 'documentation' ? offeringData.issuer : offeringData;
+    payLoadDataOld =
+      merge(offeringData, payLoadDataOld);
+    if (approvedObj !== null && approvedObj.isApproved) {
+      payLoadDataOld.approved = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+        status: approvedObj.status,
+      };
+      if (!approvedObj.status && !approvedObj.edit) {
+        payLoadDataOld.submitted = null;
+        if (payLoadDataOld.issuerSubmitted) {
+          payLoadDataOld.issuerSubmitted = '';
+        }
+      }
+    } else if (approvedObj !== null && approvedObj.submitted) {
+      payLoadDataOld.submitted = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+      };
+    } else if (approvedObj !== null && approvedObj.isIssuer) {
+      payLoadDataOld.issuerSubmitted = moment().toISOString();
+    }
+    payLoadDataOld = omitDeep(payLoadDataOld, '__typename');
+    payLoadDataOld = recursiveOmitBy(payLoadDataOld, isNull);
+
+    if (keyName) {
+      if (subKey) {
+        if (subKey === 'documentation') {
+          payloadData[keyName][subKey].documentation = payLoadDataOld;
+        } else {
+          payloadData[keyName][subKey] = payLoadDataOld;
+        }
+      } else {
+        payloadData[keyName] = payLoadDataOld;
+      }
+    } else {
+      payloadData = payLoadDataOld;
     }
     uiStore.setProgress();
     client

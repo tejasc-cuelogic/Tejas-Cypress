@@ -200,7 +200,6 @@ export const getOfferingDetails = gql`
         }
       }
       offering {
-        misc
         overview {
           elevatorPitch
           tombstoneDescription
