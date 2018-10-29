@@ -67,7 +67,7 @@ export default class OfferingLaunch extends Component {
         <Header as="h4">Escrow Key</Header>
         <Form.Group widths="equal">
           {
-            ['escrowKey', 'escrowNumber', 'gsFees'].map(field => (
+            ['escrowKey', 'escrowNumber'].map(field => (
               <FormInput
                 displayMode={isReadonly}
                 name={field}
@@ -76,6 +76,13 @@ export default class OfferingLaunch extends Component {
               />
             ))
           }
+          <MaskedInput
+            name="gsFees"
+            fielddata={COMPANY_LAUNCH_FRM.fields.gsFees}
+            changed={(values, name) => maskChange(values, formName, name)}
+            currency
+            prefix="$"
+          />
         </Form.Group>
         <Header as="h4">Edgar Link</Header>
         <FormInput

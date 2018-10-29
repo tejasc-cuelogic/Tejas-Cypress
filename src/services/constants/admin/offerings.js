@@ -312,8 +312,9 @@ export const BUSINESS_TYPE_VALUES = [
 ];
 
 export const REGULATION_VALUES = [
-  { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
-  { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
+  { key: '506(c)', value: 'REGULATION_506C', text: '506(c)' },
+  { key: 'Reg CF 506(c)', value: 'REGULATION_CF_506C', text: 'Reg CF 506(c)' },
+  { key: 'Reg CF', value: 'REGULATION_CF', text: 'Reg CF' },
 ];
 
 export const OFFERING_OVERVIEW = {
@@ -498,7 +499,7 @@ export const OFFERING_COMPANY = {
 };
 
 export const MISC = {
-  misc: {
+  additionalBonusRewardsContent: {
     value: '',
     label: '',
     error: undefined,
