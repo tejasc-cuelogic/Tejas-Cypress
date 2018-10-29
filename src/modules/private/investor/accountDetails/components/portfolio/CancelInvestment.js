@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
+import { find, toInteger } from 'lodash';
 import { Modal, Button, Header, Form, Divider, Message, Icon } from 'semantic-ui-react';
 import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
 import { ListErrors } from '../../../../../../theme/shared';
@@ -13,9 +14,6 @@ export default class CancelInvestment extends Component {
     btnCancel: '',
   }
   componentWillMount() {
-    if (this.props.location.query && this.props.location.query.offeringDetails) {
-      this.props.investmentOfferingDetails = this.props.location.query.investmentOfferingDetails;
-    }
     const { setInitialLinkValue } = this.props.portfolioStore;
     setInitialLinkValue(false);
     this.props.uiStore.clearErrors();
@@ -45,10 +43,11 @@ export default class CancelInvestment extends Component {
 
   render() {
     const { inProgress, errors } = this.props.uiStore;
-    const { isCancelShowLink } = this.props.portfolioStore;
-    // const { investAccTypes } = this.props.investmentStore;
-    // const { getInvestorAccountById } = this.props.portfolioStore;
-    // const { } = this.props.beneficiaryStore;
+    const { isCancelShowLink, getInvestorAccounts } = this.props.portfolioStore;
+    const pendingList = getInvestorAccounts && getInvestorAccounts.investments &&
+      getInvestorAccounts.investments.pending ? getInvestorAccounts.investments.pending : [];
+    const investmentOfferingDetails =
+     find(pendingList, { agreementId: toInteger(this.props.match.params.id) });
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -62,16 +61,8 @@ export default class CancelInvestment extends Component {
             </Message>
           }
           <OfferingInvestDetails
-            offering={this.props && this.props.location && this.props.location.query &&
-              this.props.location.query.investmentOfferingDetails ?
-              this.props.location.query.investmentOfferingDetails : null
-            }
-            // accType={investAccTypes.value}
+            offering={investmentOfferingDetails || null}
             accType="individual"
-          // changeInvest={this.props.changeInvest}
-          // match={this.props.match}
-          // getCurrentLimitForAccount={getCurrentLimitForAccount}
-          // setStepToBeRendered={setStepToBeRendered}
           />
           <Divider hidden />
           {!isCancelShowLink ?
