@@ -44,11 +44,14 @@ export class OfferingsStore {
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
     this.requestState.stage = stage || this.requestState.stage;
+    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === stage));
     const params = {
-      stage: Object.keys(pickBy(STAGES, s => s.ref === stage)),
       first: first || this.requestState.perPage,
       skip,
     };
+    if (reqStages.length > 0) {
+      params.stage = reqStages;
+    }
     this.data = graphql({
       client,
       query: stage === 'active' ? allOfferingsCompact : allOfferings,

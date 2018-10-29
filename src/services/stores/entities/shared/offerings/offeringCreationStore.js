@@ -779,6 +779,11 @@ export class OfferingCreationStore {
             date: moment().toISOString(),
             status: isApproved,
           };
+          payloadData[keyName][subKey].submitted = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
         }
         payloadData[keyName][subKey] =
           merge(getOfferingById[keyName][subKey], payloadData[keyName][subKey]);

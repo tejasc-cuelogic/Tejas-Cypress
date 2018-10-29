@@ -27,13 +27,15 @@ const ButtonGroup = ({
           Approved by {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
         </Button>
       }
-        {isManager ? (
+        {isManager && submitted ? (
           <Aux>
             <Button inverted onClick={() => updateOffer(false)} color="red" content="Decline" disabled={!formValid} />
             <Button color="green" onClick={() => updateOffer(approved && approved.status ? !approved.status : true)} className="relaxed" disabled={!formValid}>{approved && approved.status ? 'Edit' : 'Approve'}</Button>
           </Aux>
-        ) : (
+        ) : isIssuer ? (
           <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
+        ) : (
+          <Button primary={submitted} onClick={updateOffer} className="relaxed" disabled={!formValid || submitted}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
         )}
       </Button.Group>
     </div>
