@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Divider, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../services/constants/admin/offerings';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 
 @inject('offeringCreationStore', 'uiStore')
@@ -55,17 +55,19 @@ export default class KeyTerms extends Component {
               changed={(values, name) => maskChange(values, formName, name)}
               number
             />
+            <FormDropDown
+              fielddata={KEY_TERMS_FRM.fields.regulation}
+              selection
+              containerclassname="dropdown-field"
+              value={KEY_TERMS_FRM.fields.regulation.value}
+              name="regulation"
+              options={REGULATION_VALUES}
+              onChange={(e, result) => formChange(e, result, formName)}
+            />
             <FormInput
               name="frequencyOfPayments"
               fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}
               changed={(e, result) => formChange(e, result, formName)}
-            />
-            <MaskedInput
-              name="terminationDate"
-              fielddata={KEY_TERMS_FRM.fields.terminationDate}
-              format="##-##-####"
-              changed={(values, field) => maskChange(values, formName, field)}
-              dateOfBirth
             />
             <div className="field">
               <FormDropDown
@@ -171,7 +173,7 @@ export default class KeyTerms extends Component {
             }
           </Form.Group>
           {
-            ['revShareSummary', 'nsFeeCalcDescription'].map(field => (
+            ['investmentMultipleSummary', 'revShareSummary', 'nsFeeCalcDescription'].map(field => (
               <FormTextarea
                 key={field}
                 name={field}
