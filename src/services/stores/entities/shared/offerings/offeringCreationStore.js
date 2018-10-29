@@ -864,6 +864,9 @@ export class OfferingCreationStore {
         payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
           parent, node, key, path, deep,
         }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
+        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+          parent, node, key, path, deep,
+        }) => (isObject(node) && isEmpty(node)));
       }
     }
     uiStore.setProgress();
