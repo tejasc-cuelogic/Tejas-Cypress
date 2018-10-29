@@ -189,19 +189,20 @@ class FormValidator {
     Object.keys(currentForm.fields).map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
+        if (currentForm.fields[field].objType === 'FileObjectType') {
+          currentForm.fields[field].fileId = [];
+          currentForm.fields[field].fileData = [];
+          currentForm.fields[field].preSignedUrl = [];
+        }
       } else {
         currentForm.fields[field].value = '';
+        if (currentForm.fields[field].objType === 'FileObjectType') {
+          currentForm.fields[field].fileId = '';
+          currentForm.fields[field].fileData = '';
+          currentForm.fields[field].preSignedUrl = '';
+        }
       }
       currentForm.fields[field].error = undefined;
-      if (currentForm.fields[field].fileId) {
-        currentForm.fields[field].fileId = '';
-      }
-      if (currentForm.fields[field].fileData) {
-        currentForm.fields[field].fileData = '';
-      }
-      if (currentForm.fields[field].preSignedUrl) {
-        currentForm.fields[field].preSignedUrl = '';
-      }
       return true;
     });
     currentForm.meta.isValid = false;

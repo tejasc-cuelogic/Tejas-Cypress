@@ -504,6 +504,9 @@ export class OfferingCreationStore {
       uiStore.setProgress();
       const file = files[0];
       const fileData = Helper.getFormattedFileData(file);
+      if (this[form].fields[field].showLoader !== undefined) {
+        this[form].fields[field].showLoader = true;
+      }
       fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then(action((result) => {
         const { fileId, preSignedUrl } = result.data.createUploadEntry;
         this[form].fields[field].fileId = fileId;
@@ -530,9 +533,12 @@ export class OfferingCreationStore {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
           })
-          .finally(() => {
+          .finally(action(() => {
             uiStore.setProgress(false);
-          });
+            if (this[form].fields[field].showLoader !== undefined) {
+              this[form].fields[field].showLoader = false;
+            }
+          }));
       }));
     } else {
       const file = files[0];
@@ -556,6 +562,9 @@ export class OfferingCreationStore {
     if (stepName) {
       const currentStep = { name: stepName };
       const { fileId } = this[form].fields[field];
+      if (this[form].fields[field].showLoader !== undefined) {
+        this[form].fields[field].showLoader = true;
+      }
       fileUpload.removeUploadedData(fileId).then(action(() => {
         this[form] = Validator.onChange(
           this[form],
@@ -568,7 +577,13 @@ export class OfferingCreationStore {
         }
         this.createAccount(currentStep, 'draft', true, field);
       }))
-        .catch(() => { });
+        .catch(() => { })
+        .finally(action(() => {
+          uiStore.setProgress(false);
+          if (this[form].fields[field].showLoader !== undefined) {
+            this[form].fields[field].showLoader = false;
+          }
+        }));
     } else if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
