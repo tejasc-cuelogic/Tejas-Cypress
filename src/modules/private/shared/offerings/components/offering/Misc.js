@@ -28,10 +28,10 @@ export default class Misc extends Component {
         <Header as="h4">Additional Bonus Rewards Content</Header>
         <HtmlEditor
           changed={rtEditorChange}
-          name="misc"
+          name="additionalBonusRewardsContent"
           form={formName}
           overrides={{ height: '244px' }}
-          content={OFFERING_MISC_FRM.fields.misc.value}
+          content={OFFERING_MISC_FRM.fields.additionalBonusRewardsContent.value}
         />
         <Divider hidden />
         <ButtonGroup
