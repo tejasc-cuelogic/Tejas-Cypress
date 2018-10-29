@@ -5,7 +5,7 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, MISC, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
@@ -25,6 +25,7 @@ export class OfferingCreationStore {
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
   @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+  @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
   @observable CLOSING_CONTITNGENCIES_FRM =
@@ -654,6 +655,7 @@ export class OfferingCreationStore {
       KEY_TERMS_FRM: { isMultiForm: false },
       OFFERING_OVERVIEW_FRM: { isMultiForm: true },
       OFFERING_COMPANY_FRM: { isMultiForm: true },
+      OFFERING_MISC_FRM: { isMultiForm: false },
       COMPANY_LAUNCH_FRM: { isMultiForm: false },
       LAUNCH_CONTITNGENCIES_FRM: { isMultiForm: true },
       CLOSING_CONTITNGENCIES_FRM: { isMultiForm: true },

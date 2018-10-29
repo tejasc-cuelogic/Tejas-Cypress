@@ -67,7 +67,6 @@ export const getOfferingDetails = gql`
         industry
         maturity
         frequencyOfPayments
-        terminationDate
         securities
         securityInterest
         securitiesOwnershipPercentage
@@ -80,7 +79,6 @@ export const getOfferingDetails = gql`
         legalBusinessType
         nsMinFees
         nsMaxFees
-        gsFees
         stateOfFormation
         city
         state
@@ -179,6 +177,9 @@ export const getOfferingDetails = gql`
           businessModel
           locationAnalysis
         }
+        misc {
+          additionalBonusRewardsContent
+        }
         launch {
           targetDate
           terminationDate
@@ -187,7 +188,7 @@ export const getOfferingDetails = gql`
           escrowKey
           escrowNumber
           edgarLink
-          
+          gsFees
         }
       }
       legal {
