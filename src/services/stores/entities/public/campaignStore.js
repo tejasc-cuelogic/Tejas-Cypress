@@ -1,7 +1,9 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
+import { pickBy } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery } from '../../queries/campagin';
+import { STAGES } from '../../../constants/admin/offerings';
 
 export class CampaignStore {
   @observable data = [];
@@ -18,7 +20,8 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (stage) => {
+  initRequest = (publicRef) => {
+    const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
     this.data =
       graphql({
         client: clientPublic,
@@ -59,6 +62,16 @@ export class CampaignStore {
   @computed get OfferingList() {
     return (this.allData.data && this.allData.data.getOfferingList &&
       toJS(this.allData.data.getOfferingList)) || [];
+  }
+
+  @computed get active() {
+    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active'))
+      .includes(o.stage));
+  }
+
+  @computed get completed() {
+    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed'))
+      .includes(o.stage));
   }
 
   @computed get campaign() {
