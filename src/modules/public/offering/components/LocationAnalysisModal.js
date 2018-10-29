@@ -33,7 +33,7 @@ class LocationAnalysisModal extends Component {
                     <Image64 srcUrl={campaign.media.location[0].url} />
                     :
                     <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
-              }
+                }
               </Grid.Column>
               <Grid.Column computer={10} tablet={10} mobile={16}>
                 {
