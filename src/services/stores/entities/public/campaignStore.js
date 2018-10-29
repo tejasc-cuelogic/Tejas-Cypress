@@ -79,6 +79,10 @@ export class CampaignStore {
       toJS(this.details.data.getOfferingDetailsById)) || [];
   }
 
+  @computed get getOfferingId() {
+    return (this.campaign && this.campaign.id);
+  }
+
   @computed get loading() {
     return this.allData.loading;
   }
@@ -104,6 +108,14 @@ export class CampaignStore {
     const newReadLessStatus = [...this.selectedReadLess];
     newReadLessStatus[index] = !this.selectedReadLess[index];
     this.selectedReadLess = newReadLessStatus;
+  }
+
+  @computed get minInvestAmt() {
+    return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.minInvestAmt : null;
+  }
+
+  @computed get maxInvestAmt() {
+    return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.maxInvestAmt : null;
   }
 }
 
