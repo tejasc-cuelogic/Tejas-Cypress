@@ -65,19 +65,19 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  regulation: {
+    value: '',
+    label: 'Regulation',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
   frequencyOfPayments: {
     value: '',
     label: 'Frequency of Payments',
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter here',
-  },
-  terminationDate: {
-    value: '',
-    label: 'Offering Termination Date',
-    error: undefined,
-    rule: 'date',
-    placeHolder: 'MM-DD-YYYY',
   },
   securities: {
     value: '',
@@ -219,6 +219,13 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
+  investmentMultipleSummary: {
+    value: '',
+    label: 'Investment Multiple Summary',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
   revShareSummary: {
     value: '',
     label: 'Revenue Sharing Summary',
@@ -293,6 +300,7 @@ export const BUSINESS_INDUSTRIES = [
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
+  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity 506C' },
 ];
 
 export const BUSINESS_TYPE_VALUES = [
@@ -301,6 +309,11 @@ export const BUSINESS_TYPE_VALUES = [
   { key: 'Limited Liability Company', value: 'LLC', text: 'Limited Liability Company' },
   { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
   { key: 'Other', value: 'OTHER', text: 'Other' },
+];
+
+export const REGULATION_VALUES = [
+  { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
+  { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
 ];
 
 export const OFFERING_OVERVIEW = {
@@ -484,6 +497,16 @@ export const OFFERING_COMPANY = {
   },
 };
 
+export const MISC = {
+  additionalBonusRewardsContent: {
+    value: '',
+    label: '',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Tell us about why you started the company/why you`re expanding, what your vision is and walk us through your space.',
+  },
+};
+
 export const COMPANY_LAUNCH = {
   targetDate: {
     value: '',
@@ -518,6 +541,13 @@ export const COMPANY_LAUNCH = {
     label: 'Escrow Number',
     error: undefined,
     rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  gsFees: {
+    value: '',
+    label: 'GoldStar Fees',
+    error: undefined,
+    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   edgarLink: {
@@ -1045,7 +1075,7 @@ export const GENERAL = {
     label: 'Employment Identification Number',
     value: '',
     error: undefined,
-    rule: 'numeric',
+    rule: 'string',
     placeHolder: 'Enter here',
   },
   numOfEmployees: {

@@ -26,6 +26,7 @@ export default class Offering extends Component {
     const navItems = [
       { title: 'Overview', to: 'overview', component: 'OfferingOverview' },
       { title: 'About the Company', to: 'about-company', component: 'OfferingCompany' },
+      { title: 'Misc', to: 'misc', component: 'Misc' },
       { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
     ];
     const { match } = this.props;
