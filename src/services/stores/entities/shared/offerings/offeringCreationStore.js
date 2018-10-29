@@ -165,10 +165,12 @@ export class OfferingCreationStore {
   resetFormField = (form, field, fileObj, RemoveIndex) => {
     if (fileObj && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.push(fileObj.location);
+      this.MEDIA_FRM.fields[field].fileId.push(`${Date.now()}_${fileObj.fileName}`);
       this.MEDIA_FRM.fields[field].value.push(fileObj.fileName);
     } else if (fileObj) {
       this.MEDIA_FRM.fields[field].preSignedUrl = fileObj.location;
       this.MEDIA_FRM.fields[field].value = fileObj.fileName;
+      this.MEDIA_FRM.fields[field].fileId = `${Date.now()}_${fileObj.fileName}`;
     } else if (RemoveIndex > -1 && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.splice(RemoveIndex, 1);
       this.MEDIA_FRM.fields[field].value.splice(RemoveIndex, 1);
@@ -232,7 +234,7 @@ export class OfferingCreationStore {
         Helper.toast('file uploaded successfully', 'success');
         this[form].fields[key][index][name].value = res.fileName;
         this[form].fields[key][index][name].preSignedUrl = res.location;
-        this[form].fields[key][index][name].id = `${res.fileName}${Date.now()}`;
+        this[form].fields[key][index][name].fileId = `${res.fileName}${Date.now()}`;
         this[form].fields[key][index][name].fileName = `${res.fileName}${Date.now()}`;
       }))
       .catch((err) => {

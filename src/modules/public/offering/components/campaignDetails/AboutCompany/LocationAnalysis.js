@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { ASSETS_URL } from '../../../../../../constants/aws';
+import { Image64 } from '../../../../../../theme/shared';
 
 class LocationAnalysis extends Component {
   render() {
@@ -19,13 +20,12 @@ class LocationAnalysis extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          <Image
-            src={
-              campaign && campaign.media && campaign.media.location &&
+          {campaign && campaign.media && campaign.media.location &&
               campaign.media.location.length && campaign.media.location[0].url ?
-              campaign.media.location[0].url : `${ASSETS_URL}images/gallery-placeholder.jpg`
-            }
-          />
+                <Image64 srcUrl={campaign.media.location[0].url} />
+                :
+                <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
+          }
         </Segment>
       </Grid.Column>
     );

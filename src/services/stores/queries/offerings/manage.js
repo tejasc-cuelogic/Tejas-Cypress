@@ -106,31 +106,37 @@ export const getOfferingDetails = gql`
       }
       media {
         heroImage {
+          id
           url
           isPublic
           fileName
         }
         tombstoneImage {
+          id
           url
           isPublic
           fileName
         }
         location {
+          id
           url
           isPublic
           fileName
         }
         gallery {
+          id
           url
           isPublic
           fileName
         }
         logo {
+          id
           url
           isPublic
           fileName
         }
         heroVideo {
+          id
           url
           isPublic
           fileName
