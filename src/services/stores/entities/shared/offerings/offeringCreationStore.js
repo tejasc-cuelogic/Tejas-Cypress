@@ -1,8 +1,10 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
+import { isNull, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
+import omitDeep from 'omit-deep-lodash';
+import recursiveOmitBy from 'recursive-omit-by';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
@@ -754,7 +756,7 @@ export class OfferingCreationStore {
   @action
   updateOffering = (
     id,
-    fields, keyName, subKey, notify = true, successMsg = undefined, isApproved, fromS3 = false,
+    fields, keyName, subKey, notify = true, successMsg = undefined, approvedObj, fromS3 = false,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -772,21 +774,32 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.issuer = {};
         payloadData[keyName].documentation.issuer =
         Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
-        if (isApproved !== null) {
+        if (approvedObj !== null && approvedObj.isApproved) {
           payloadData[keyName][subKey].approved = {
             id: userDetailsStore.userDetails.id,
             by: `${firstName} ${lastName}`,
             date: moment().toISOString(),
-            status: isApproved,
+            status: approvedObj.status,
           };
+          if (!approvedObj.status) {
+            payloadData[keyName][subKey].submitted = null;
+            if (!approvedObj.edit) {
+              payloadData[keyName][subKey].issuerSubmitted = '';
+            }
+          }
+        } else if (approvedObj !== null && approvedObj.submitted) {
           payloadData[keyName][subKey].submitted = {
             id: userDetailsStore.userDetails.id,
             by: `${firstName} ${lastName}`,
             date: moment().toISOString(),
           };
+        } else if (approvedObj !== null && approvedObj.isIssuer) {
+          payloadData[keyName][subKey].issuerSubmitted = moment().toISOString();
         }
         payloadData[keyName][subKey] =
           merge(getOfferingById[keyName][subKey], payloadData[keyName][subKey]);
+        payloadData[keyName][subKey] = omitDeep(payloadData[keyName][subKey], '__typename');
+        payloadData[keyName][subKey] = recursiveOmitBy(payloadData[keyName][subKey], isNull);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
