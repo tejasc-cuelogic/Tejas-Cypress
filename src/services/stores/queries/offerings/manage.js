@@ -67,7 +67,6 @@ export const getOfferingDetails = gql`
         industry
         maturity
         frequencyOfPayments
-        terminationDate
         securities
         securityInterest
         securitiesOwnershipPercentage
@@ -80,7 +79,6 @@ export const getOfferingDetails = gql`
         legalBusinessType
         nsMinFees
         nsMaxFees
-        gsFees
         stateOfFormation
         city
         state
@@ -249,6 +247,9 @@ export const getOfferingDetails = gql`
             status
           }
         }
+        misc {
+          additionalBonusRewardsContent
+        }
         launch {
           targetDate
           terminationDate
@@ -268,6 +269,7 @@ export const getOfferingDetails = gql`
             date
             status
           }
+          gsFees
         }
       }
       legal {
