@@ -1,33 +1,28 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { filter } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Container } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
-import { OFFERING_STAGE } from '../../../../services/constants/offering';
 
 @inject('campaignStore')
 @observer
 class Offering extends Component {
   componentWillMount() {
-    this.props.campaignStore.initRequest([OFFERING_STAGE.LIVE, OFFERING_STAGE.COMPLETE]);
+    this.props.campaignStore.initRequest(['active', 'completed']);
   }
   componentWillReceiveProps() {
-    this.props.campaignStore.initRequest([OFFERING_STAGE.LIVE, OFFERING_STAGE.COMPLETE]);
+    this.props.campaignStore.initRequest(['active', 'completed']);
   }
   render() {
-    const { OfferingList, loading } = this.props.campaignStore;
-    const liveCampaign = filter(OfferingList, ele => ele.stage === OFFERING_STAGE.LIVE);
-    const completedCampaign = filter(OfferingList, ele => ele.stage === OFFERING_STAGE.COMPLETE);
+    const { active, completed, loading } = this.props.campaignStore;
     return (
       <Aux>
         <Banner />
         <CampaignList
           loading={loading}
-          campaigns={liveCampaign}
-          locked="cjk9pj4250d0f0123n0lng1qr"
+          campaigns={active}
           filters
           heading={<Header as="h2" textAlign="center" caption className="mb-50">Active Campaigns</Header>}
         />
@@ -43,7 +38,7 @@ class Offering extends Component {
         </section>
         <CampaignList
           loading={loading}
-          campaigns={completedCampaign}
+          campaigns={completed}
           locked={3}
           heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
         />
