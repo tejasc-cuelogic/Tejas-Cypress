@@ -549,6 +549,17 @@ class FormValidator {
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
+            } else if (fields[key].refSelector !== undefined
+              && fields[fields[key].refSelector].value !== undefined) {
+              let val = '';
+              if (fields[fields[key].refSelector].value) {
+                if (fields[key].value !== '' && fields[key].value !== undefined) {
+                  val = objValue;
+                } else {
+                  val = fields[key].defaultValue;
+                }
+              }
+              inputData = { ...inputData, [key]: val };
             } else {
               inputData = { ...inputData, [key]: objValue };
             }
