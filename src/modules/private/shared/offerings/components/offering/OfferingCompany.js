@@ -52,6 +52,7 @@ export default class OfferingCompany extends Component {
       <Form>
         <Header as="h4">About the Company</Header>
         <HtmlEditor
+          readOnly={isReadonly}
           changed={this.editorChange}
           name="theCompany"
           form="OFFERING_COMPANY_FRM"
@@ -91,6 +92,7 @@ export default class OfferingCompany extends Component {
               <Divider section />
               <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
               <HtmlEditor
+                readOnly={isReadonly}
                 changed={rtEditorChange}
                 name={field}
                 form="OFFERING_COMPANY_FRM"

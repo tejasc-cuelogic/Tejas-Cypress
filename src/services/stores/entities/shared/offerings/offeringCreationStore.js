@@ -827,9 +827,9 @@ export class OfferingCreationStore {
         };
         if (!approvedObj.status && !approvedObj.edit) {
           payLoadDataOld.submitted = null;
-          if (payLoadDataOld.issuerSubmitted) {
-            payLoadDataOld.issuerSubmitted = '';
-          }
+          payLoadDataOld.issuerSubmitted = '';
+        } else if (!approvedObj.status) {
+          payLoadDataOld.submitted = null;
         }
       } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
         payLoadDataOld.submitted = {
@@ -877,10 +877,11 @@ export class OfferingCreationStore {
           id,
           offeringDetails: payloadData,
         },
-        refetchQueries: [{
-          query: getOfferingDetails,
-          variables: { id: getOfferingById.id },
-        }],
+        // refetchQueries: [{
+        //   query: getOfferingDetails,
+        //   variables: { id: getOfferingById.id },
+        //   fetchPolicy: 'no-cache',
+        // }],
       })
       .then(() => {
         this.removeUploadedFiles(fromS3);
@@ -889,6 +890,7 @@ export class OfferingCreationStore {
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
+        offeringsStore.getOne(getOfferingById.id, false);
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
