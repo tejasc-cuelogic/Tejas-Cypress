@@ -13,14 +13,26 @@ Validator.register(
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: '' },
-  LIVE: { ref: 'live', accessKey: 2, label: 'Live' },
-  LOCK: { ref: 'live', accessKey: 2, label: 'Live' },
-  PROCESSING: { ref: 'engagement', accessKey: 3, label: 'Processing' },
-  STARTUP_PERIOD: { ref: 'engagement', accessKey: 3, label: 'Startup Period' },
-  IN_REPAYMENT: { ref: 'engagement', accessKey: 3, label: 'Payment' },
-  FAILED: { ref: 'completed', accessKey: 4, label: '' },
-  TERMINATED: { ref: 'completed', accessKey: 4, label: '' },
-  COMPLETE: { ref: 'completed', accessKey: 4, label: 'Completed' },
+  LIVE: {
+    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
+  },
+  LOCK: {
+    ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
+  },
+  PROCESSING: {
+    ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
+  },
+  FAILED: { ref: 'live', accessKey: 4, label: '' },
+  TERMINATED: { ref: 'live', accessKey: 4, label: '' },
+  STARTUP_PERIOD: {
+    ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
+  },
+  IN_REPAYMENT: {
+    ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Payment',
+  },
+  COMPLETE: {
+    ref: 'completed', publicRef: 'completed', accessKey: 4, label: 'Completed',
+  },
   DEFAULT: { ref: 'completed', accessKey: 4, label: 'Default' },
 };
 
