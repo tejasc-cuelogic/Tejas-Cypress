@@ -498,7 +498,7 @@ export const OFFERING_COMPANY = {
 };
 
 export const MISC = {
-  misc: {
+  additionalBonusRewardsContent: {
     value: '',
     label: '',
     error: undefined,
