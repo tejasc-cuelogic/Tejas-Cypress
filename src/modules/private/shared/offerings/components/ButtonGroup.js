@@ -7,26 +7,28 @@ const ButtonGroup = ({
   formValid, isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted,
 }) => (
   <Aux>
-    <div className="right-align sticky-actions">
-      <Button.Group>
+    <div className="clearfix sticky-actions">
+      <Button.Group vertical icon className="time-stamp">
         {isIssuer && issuerSubmitted &&
           <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
+            <Icon className="ns-check-circle" color="green" />{' '}
             Submitted by USER_NAME on {moment(issuerSubmitted).format('MM/DD/YYYY')}
           </Button>
         }
         {!isIssuer && submitted &&
-        <Button as="span" className="time-stamp">
-          <Icon className="ns-check-circle" color="green" />
-          Submitted by {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
-        </Button>
+          <Button as="span" className="time-stamp">
+            <Icon className="ns-check-circle" color="green" />{' '}
+            Submitted by {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
+          </Button>
         }
         {approved && approved.status &&
-        <Button as="span" className="time-stamp">
-          <Icon className="ns-check-circle" color="green" />
-          Approved by {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
-        </Button>
-      }
+          <Button as="span" className="time-stamp">
+            <Icon className="ns-check-circle" color="green" />{' '}
+            Approved by {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
+          </Button>
+        }
+      </Button.Group>
+      <Button.Group floated="right">
         {isManager && submitted ? (
           <Aux>
             <Button inverted onClick={() => updateOffer({ isApproved: true, status: false })} color="red" content="Decline" disabled={!formValid} />
