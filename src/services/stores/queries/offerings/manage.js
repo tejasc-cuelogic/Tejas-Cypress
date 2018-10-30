@@ -398,6 +398,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             corpFormation {
@@ -405,6 +413,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             issuerFinancials {
@@ -412,6 +428,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             leaseAgreement {
@@ -419,6 +443,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             issuerSubmitted
@@ -440,6 +472,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             resolutionOfBorrowing {
@@ -447,6 +487,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             formC {
@@ -454,6 +502,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             npa {
@@ -461,6 +517,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             disclosure {
@@ -468,6 +532,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             securityAgreement {
@@ -475,6 +547,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             personalGuarantee {
@@ -482,6 +562,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             edgar

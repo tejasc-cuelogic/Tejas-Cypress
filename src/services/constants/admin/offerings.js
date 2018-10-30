@@ -560,52 +560,6 @@ export const COMPANY_LAUNCH = {
   },
 };
 
-export const SIGNED_LEGAL_DOCS = {
-  data: [{
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  ],
-};
-
 export const OFFER_CLOSE = {
   checkboxes: {
     value: [],
