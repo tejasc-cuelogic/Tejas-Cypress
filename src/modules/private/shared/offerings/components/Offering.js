@@ -23,13 +23,21 @@ export default class Offering extends Component {
     }
   }
   render() {
-    const navItems = [
+    const { isIssuer } = this.props.userStore;
+    let navItems = [
       { title: 'Overview', to: 'overview', component: 'OfferingOverview' },
       { title: 'About the Company', to: 'about-company', component: 'OfferingCompany' },
-      { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
     ];
+    if (!isIssuer) {
+      navItems = [
+        ...navItems,
+        ...[
+          { title: 'Misc', to: 'misc', component: 'Misc' },
+          { title: 'Launch', to: 'launch', component: 'OfferingLaunch' },
+        ],
+      ];
+    }
     const { match } = this.props;
-    const { isIssuer } = this.props.userStore;
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>

@@ -39,7 +39,7 @@ const FormData = observer(({
   </div>
 ));
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class RiskFactors extends Component {
   componentWillMount() {
@@ -62,9 +62,17 @@ export default class RiskFactors extends Component {
     const formName = 'RISK_FACTORS_FRM';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
+    const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const isApproved = false;
-    const isReadonly = isApproved;
+    const isManager = access.asManager;
+    const submitted = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.submitted) ? offer.legal.riskFactors.submitted : null;
+    const approved = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.approved) ? offer.legal.riskFactors.approved : null;
+    const issuerSubmitted = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.issuerSubmitted) ? offer.legal.riskFactors.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -83,10 +91,13 @@ export default class RiskFactors extends Component {
           }
           <Divider hidden />
           <ButtonGroup
-            isManager={access.asManager}
+            isIssuer={isIssuer}
+            submitted={submitted}
+            isManager={isManager}
             formValid={RISK_FACTORS_FRM.meta.isValid}
-            isApproved={isApproved}
+            approved={approved}
             updateOffer={this.handleFormSubmit}
+            issuerSubmitted={issuerSubmitted}
           />
         </Form>
       </div>

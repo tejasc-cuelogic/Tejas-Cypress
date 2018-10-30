@@ -11,7 +11,7 @@ const leftSummary = offer => [
         (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
       )),
   },
-  { title: 'Launch Date', content: offer && offer.offering && offer.offering.launch && offer.offering.launch.targetDate },
+  { title: 'Launch Date', content: offer && offer.offering && offer.offering.launch && DataFormatter.formatedDate(offer.offering.launch.targetDate) },
   { title: 'Days Till Close', content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A' },
 ];
 

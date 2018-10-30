@@ -47,12 +47,12 @@ export default class Offer extends Component {
     const { offers, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
-    && !isManager) || (isManager && approved && approved.status));
+    const isReadonly = ((((approved && approved.status) || (submitted))
+      && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} title="Submit offer" submitted={submitted} isManager={isManager} formName="OFFERS_FRM" approved={approved} isReadonly={isReadonly} isValid={OFFERS_FRM.meta.isValid} />
           <Header as="h4">
             Offers
             {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&

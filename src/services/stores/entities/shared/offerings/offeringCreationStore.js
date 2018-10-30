@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy, kebabCase } from 'lodash';
+import { isObject, isEmpty, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
+import omitDeep from 'omit-deep';
+import cleanDeep from 'clean-deep';
+import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
@@ -15,7 +17,7 @@ import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering,
   generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 
@@ -24,8 +26,8 @@ export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
-  @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+  @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
   @observable CLOSING_CONTITNGENCIES_FRM =
@@ -295,7 +297,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form, isArr = true) => {
+  formChange = (e, result, form, isArr = true, type = undefined) => {
     if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
         this[form],
@@ -308,6 +310,7 @@ export class OfferingCreationStore {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),
+        type,
       );
     }
   }
@@ -680,6 +683,7 @@ export class OfferingCreationStore {
       KEY_TERMS_FRM: { isMultiForm: false },
       OFFERING_OVERVIEW_FRM: { isMultiForm: true },
       OFFERING_COMPANY_FRM: { isMultiForm: true },
+      OFFERING_MISC_FRM: { isMultiForm: false },
       COMPANY_LAUNCH_FRM: { isMultiForm: false },
       LAUNCH_CONTITNGENCIES_FRM: { isMultiForm: true },
       CLOSING_CONTITNGENCIES_FRM: { isMultiForm: true },
@@ -778,15 +782,50 @@ export class OfferingCreationStore {
       });
   }
 
+  @action
+  updateOfferingMutation = (
+    id,
+    payload, keyName, notify = true,
+    successMsg = undefined, fromS3 = false,
+  ) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables: {
+          id,
+          offeringDetails: payload,
+        },
+      })
+      .then(() => {
+        this.removeUploadedFiles(fromS3);
+        if (successMsg) {
+          Helper.toast(`${successMsg}`, 'success');
+        } else if (notify) {
+          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+        }
+        offeringsStore.getOne(id, false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+  @action
   updateOffering = (
     id,
-    fields, keyName, subKey, notify = true, successMsg = undefined, isApproved, fromS3 = false,
+    fields, keyName, subKey, notify = true, successMsg = undefined,
+    approvedObj, fromS3 = false, leaderIndex,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
     if (keyName) {
       if (keyName === 'legal') {
         payloadData[keyName] = {};
@@ -803,6 +842,7 @@ export class OfferingCreationStore {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
         payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
         payloadData[keyName].overview =
           Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
         payloadData[keyName].overview = {
@@ -811,27 +851,6 @@ export class OfferingCreationStore {
         };
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
-        // const mediaObj = {};
-        // payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
-        //   const mediaItem = toJS(payloadData[keyName][k].url);
-        //   mediaObj[k] = Array.isArray(mediaItem) ?
-        //     mediaItem.map((item, index) => {
-        //       const itemOfMedia = {
-        //         id: 1, url: item,
-        // fileName: payloadData[keyName][k].fileName[index], isPublic: true,
-        //       };
-        //       return itemOfMedia;
-        //     }) : payloadData[keyName][k].fileName &&
-        //     {
-        //       id: 1,
-        //       url: k === 'heroVideo' ?
-        // payloadData[keyName][k].fileName : payloadData[keyName][k].url,
-        //       fileName: payloadData[keyName][k].fileName,
-        //       isPublic: true,
-        //     };
-        //   return mediaObj;
-        // });
-        // payloadData[keyName] = mediaObj;
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
@@ -853,34 +872,75 @@ export class OfferingCreationStore {
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: updateOffering,
-        variables: {
-          id,
-          offeringDetails: payloadData,
-        },
-        refetchQueries: [{
-          query: getOfferingDetails,
-          variables: { id: getOfferingById.id },
-        }],
-      })
-      .then(() => {
-        this.removeUploadedFiles(fromS3);
-        if (successMsg) {
-          Helper.toast(`${successMsg}`, 'success');
-        } else if (notify) {
-          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+    if (keyName !== 'contingencies') {
+      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
+        keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
+      if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+        if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: approvedObj.status === 'manager_approved',
+          };
+        } else if (approvedObj.status === 'support_submitted') {
+          payLoadDataOld.submitted = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
+          if ((!payLoadDataOld.issuerSubmitted || payLoadDataOld.issuerSubmitted === '') && !approvedObj.isAdminOnly) {
+            payLoadDataOld.issuerSubmitted = moment().toISOString();
+          }
+        } else if (approvedObj.status === 'issuer_submitted') {
+          payLoadDataOld.issuerSubmitted = moment().toISOString();
+        } else if (approvedObj.status === 'support_decline') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: false,
+          };
+          payLoadDataOld.submitted = null;
+        } else if (approvedObj.status === 'issuer_decline') {
+          payLoadDataOld.issuerSubmitted = '';
         }
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+      }
+      if (keyName) {
+        if (subKey) {
+          if (subKey === 'issuer') {
+            payloadData[keyName].documentation[subKey] = payLoadDataOld;
+          } else {
+            payloadData[keyName][subKey] = payLoadDataOld;
+          }
+        } else if (keyName === 'leadership') {
+          payloadData[keyName][leaderIndex] = payLoadDataOld;
+        } else {
+          payloadData[keyName] = payLoadDataOld;
+        }
+      } else {
+        payloadData = payLoadDataOld;
+      }
+      if (keyName) {
+        if (keyName === 'leadership') {
+          const leaders = [];
+          forEach(payloadData[keyName], (ele, index) => {
+            if (!this.removeIndex || this.removeIndex !== index) {
+              leaders.push(merge(
+                toJS(getOfferingById[keyName][index]),
+                payloadData[keyName][index],
+              ));
+            }
+          });
+          payloadData[keyName] = leaders;
+        } else {
+          payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
+        }
+        payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
+        payloadData[keyName] = cleanDeep(payloadData[keyName]);
+      }
+    }
+    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
   }
 
   @action
@@ -897,6 +957,11 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed get issuerOfferingBacData() {
+    return (this.issuerOfferingBac && this.issuerOfferingBac.data &&
+      toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
+  }
+
   @action
   getAffiliatedIssuerOfferingBac = (offeringId, bacType) => {
     this.affiliatedIssuerOfferingBac = graphql({
@@ -910,6 +975,11 @@ export class OfferingCreationStore {
         }
       },
     });
+  }
+
+  @computed get affiliatedIssuerOfferingBacData() {
+    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data &&
+      toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
@@ -932,12 +1002,18 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed get leaderShipOfferingBacData() {
+    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data &&
+      toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
+  }
+
   createOrUpdateOfferingBac = (
     bacType,
     fields,
     issuerNumber = undefined,
     leaderNumber = undefined,
     afIssuerId,
+    approvedObj,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -991,6 +1067,26 @@ export class OfferingCreationStore {
         };
       }
     }
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
+    const payLoadDataOld = {};
+    if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+      payLoadDataOld.approved = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+        status: approvedObj.status,
+      };
+      if (!approvedObj.status) {
+        payLoadDataOld.submitted = null;
+      }
+    } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
+      payLoadDataOld.submitted = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+      };
+    }
+    variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
     uiStore.setProgress();
     client
       .mutate({

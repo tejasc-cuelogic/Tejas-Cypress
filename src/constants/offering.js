@@ -3,6 +3,11 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
 };
 
+export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
+  TERM_NOTE: 'TERM_NOTE',
+  REVENUE_SHARING_NOTE: 'REVENUE_SHARING_NOTE',
+};
+
 export const INDUSTRY_TYPES = {
   FASHION_AND_MERCHANDISING: 'Fashion and Merchandising',
   BEAUTY_AND_SPA: 'Beauty and Spa',
@@ -41,4 +46,9 @@ export const CAMPAIGN_OFFERING_STATUS = {
   PRE_OPENING: 'Pre opening',
   IN_REPAYMENT: 'In repayment',
   IN_DEFAULT: 'In default',
+};
+export const CAMPAIGN_KEYTERMS_REGULATION = {
+  REGULATION_506C: 'Regulation 506C',
+  REGULATION_CF_506C: 'Reulation CF 506C',
+  REGULATION_CF: 'REGULATION CF',
 };
