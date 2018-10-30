@@ -36,7 +36,15 @@ export default class Close extends Component {
     this.setState({ open: false });
   }
   handleCloseOffering = () => {
-    console.log('closed');
+    const {
+      updateOfferingMutation,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    updateOfferingMutation(
+      currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
+      true, 'Offering Closed successfully.',
+    );
+    this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
   }
   render() {
     const {
