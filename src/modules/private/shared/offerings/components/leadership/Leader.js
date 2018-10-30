@@ -64,11 +64,11 @@ export default class Leader extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
-    const submitted = (offer && offer.leadership[index] &&
+    const submitted = (offer && offer.leadership && offer.leadership[index] &&
       offer.leadership[index].submitted) ? offer.leadership[index].submitted : null;
-    const approved = (offer && offer.leadership[index] &&
+    const approved = (offer && offer.leadership && offer.leadership[index] &&
       offer.leadership[index].approved) ? offer.leadership[index].approved : null;
-    const issuerSubmitted = (offer && offer.leadership[index] &&
+    const issuerSubmitted = (offer && offer.leadership && offer.leadership[index] &&
       offer.leadership[index].issuerSubmitted) ? offer.leadership[index].issuerSubmitted : null;
     const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
       (isManager && approved && approved.status));
