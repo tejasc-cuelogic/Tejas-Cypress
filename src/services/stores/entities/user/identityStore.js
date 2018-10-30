@@ -12,6 +12,7 @@ import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import apiService from '../../../../api/restApi';
+import { US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -110,6 +111,7 @@ export class IdentityStore {
   @computed
   get formattedUserInfo() {
     const { fields } = this.ID_VERIFICATION_FRM;
+    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
     const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       legalName: {
@@ -122,7 +124,7 @@ export class IdentityStore {
       legalAddress: {
         street: fields.residentalStreet.value,
         city: fields.city.value,
-        state: fields.state.value,
+        state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
       },
     };
