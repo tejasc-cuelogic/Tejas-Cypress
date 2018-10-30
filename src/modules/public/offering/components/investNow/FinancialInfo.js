@@ -15,6 +15,7 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 class FinancialInfo extends Component {
   render() {
     const {
+      investmentAmount,
       isValidInvestAmtInOffering,
       INVESTMONEY_FORM,
       investMoneyChange,
@@ -76,7 +77,7 @@ class FinancialInfo extends Component {
         <Divider hidden />
         {
           isValidInvestAmtInOffering &&
-          this.investmentAmount &&
+          investmentAmount &&
           <p>
             <b>Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}</b>
             <Popup

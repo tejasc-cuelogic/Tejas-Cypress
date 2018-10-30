@@ -14,7 +14,7 @@ export const INVESTMENT_INFO = {
       required: '* required.',
     },
     rule: 'required',
-    placeHolder: '$0',
+    placeHolder: '$ 0',
     maxLength: 15,
   },
 
