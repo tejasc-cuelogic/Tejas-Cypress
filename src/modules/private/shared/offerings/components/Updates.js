@@ -44,7 +44,7 @@ export default class BonusRewards extends Component {
                 more="no"
                 addon={
                   <Grid.Column width={5} textAlign="right">
-                    <Modal dimmer="inverted" onClose={this.close} size="large" trigger={<Button as="a" color="green" size="small">Add new Update</Button>} closeIcon >
+                    <Modal dimmer="inverted" onClose={this.close} size="large" trigger={<Button color="green" size="small">Add new Update</Button>} closeIcon >
                       <NewUpdate match={match} />
                     </Modal>
                   </Grid.Column>
