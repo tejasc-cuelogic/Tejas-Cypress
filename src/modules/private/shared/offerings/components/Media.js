@@ -7,8 +7,9 @@ import { Image64 } from '../../../../../theme/shared';
 import {
   PROFILE_PHOTO_BYTES, PROFILE_PHOTO_EXTENSIONS,
 } from '../../../../../services/constants/user';
+import ButtonGroup from './ButtonGroup';
 
-@inject('offeringCreationStore', 'uiStore', 'userStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Media extends Component {
@@ -64,14 +65,25 @@ export default class Media extends Component {
   handleRemoveCancel = () => {
     this.setState({ ConfirmModal: false, index: undefined });
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const { MEDIA_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, MEDIA_FRM.fields, 'media');
+    updateOffering(currentOfferingId, MEDIA_FRM.fields, 'media', null, true, undefined, isApproved);
   }
   render() {
     const { MEDIA_FRM, formChange } = this.props.offeringCreationStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.media &&
+      offer.media.submitted) ? offer.media.submitted : null;
+    const approved = (offer && offer.media &&
+      offer.media.approved) ? offer.media.approved : null;
+    const issuerSubmitted = (offer && offer.media &&
+      offer.media.issuerSubmitted) ? offer.media.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : 'ui card fluid form-card'}>
         <Grid columns={2} stackable>
@@ -85,6 +97,7 @@ export default class Media extends Component {
                 </div>
               ) : (
                 <ImageCropper
+                  disabled={isReadonly}
                   fieldData={MEDIA_FRM.fields.heroImage}
                   setData={(attr, value) => this.setData(attr, value, 'heroImage')}
                   verifySize={this.handleVerifyFileSize}
@@ -104,6 +117,7 @@ export default class Media extends Component {
             <Form className="comment-input video-url" onSubmit={this.handleFormSubmit}>
               <Header as="h4">Hero Video</Header>
               <Input
+                readOnly={isReadonly}
                 name="heroVideo"
                 onChange={(e, result) => formChange(e, result, 'MEDIA_FRM')}
                 value={MEDIA_FRM.fields.heroVideo.value}
@@ -132,6 +146,7 @@ export default class Media extends Component {
             </div>
           ) : (
             <ImageCropper
+              disabled={isReadonly}
               fieldData={MEDIA_FRM.fields.tombstoneImage}
               setData={(attr, value) => this.setData(attr, value, 'tombstoneImage')}
               verifySize={this.handleVerifyFileSize}
@@ -162,6 +177,7 @@ export default class Media extends Component {
             ))}
             <List.Item>
               <ImageCropper
+                disabled={isReadonly}
                 fieldData={MEDIA_FRM.fields.location}
                 setData={(attr, value) => this.setData(attr, value, 'location')}
                 verifySize={this.handleVerifyFileSize}
@@ -193,6 +209,7 @@ export default class Media extends Component {
             ))}
             <List.Item>
               <ImageCropper
+                disabled={isReadonly}
                 fieldData={MEDIA_FRM.fields.gallery}
                 setData={(attr, value) => this.setData(attr, value, 'gallery')}
                 verifySize={this.handleVerifyFileSize}
@@ -223,6 +240,7 @@ export default class Media extends Component {
             ))}
             <List.Item>
               <ImageCropper
+                disabled={isReadonly}
                 fieldData={MEDIA_FRM.fields.logo}
                 setData={(attr, value) => this.setData(attr, value, 'logo')}
                 verifySize={this.handleVerifyFileSize}
@@ -237,6 +255,15 @@ export default class Media extends Component {
               />
             </List.Item>
           </List>
+          <ButtonGroup
+            isIssuer={isIssuer}
+            submitted={submitted}
+            isManager={isManager}
+            formValid={MEDIA_FRM.meta.isValid}
+            approved={approved}
+            updateOffer={this.handleFormSubmit}
+            issuerSubmitted={issuerSubmitted}
+          />
         </Form>
         <Confirm
           content="Are you sure you want to remove this media file?"
