@@ -104,31 +104,37 @@ export const getOfferingDetails = gql`
       }
       media {
         heroImage {
+          id
           url
           isPublic
           fileName
         }
         tombstoneImage {
+          id
           url
           isPublic
           fileName
         }
         location {
+          id
           url
           isPublic
           fileName
         }
         gallery {
+          id
           url
           isPublic
           fileName
         }
         logo {
+          id
           url
           isPublic
           fileName
         }
         heroVideo {
+          id
           url
           isPublic
           fileName
@@ -275,6 +281,36 @@ export const getOfferingDetails = gql`
               fileName
             }
             leaseAgreement {
+              fileId
+              fileName
+            }
+          }
+          admin {
+            escrow {
+              fileId
+              fileName
+            }
+            resolutionOfBorrowing {
+              fileId
+              fileName
+            }
+            formC {
+              fileId
+              fileName
+            }
+            npa {
+              fileId
+              fileName
+            }
+            disclosure {
+              fileId
+              fileName
+            }
+            securityAgreement {
+              fileId
+              fileName
+            }
+            personalGuarantee {
               fileId
               fileName
             }

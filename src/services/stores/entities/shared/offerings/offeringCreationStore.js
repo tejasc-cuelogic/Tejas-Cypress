@@ -6,7 +6,8 @@ import moment from 'moment';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, MISC, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY } from '../../../../constants/admin/offerings';
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
+  ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -59,6 +60,7 @@ export class OfferingCreationStore {
   @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
+  @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -164,10 +166,12 @@ export class OfferingCreationStore {
   resetFormField = (form, field, fileObj, RemoveIndex) => {
     if (fileObj && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.push(fileObj.location);
+      this.MEDIA_FRM.fields[field].fileId.push(`${Date.now()}_${fileObj.fileName}`);
       this.MEDIA_FRM.fields[field].value.push(fileObj.fileName);
     } else if (fileObj) {
       this.MEDIA_FRM.fields[field].preSignedUrl = fileObj.location;
       this.MEDIA_FRM.fields[field].value = fileObj.fileName;
+      this.MEDIA_FRM.fields[field].fileId = `${Date.now()}_${fileObj.fileName}`;
     } else if (RemoveIndex > -1 && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.splice(RemoveIndex, 1);
       this.MEDIA_FRM.fields[field].value.splice(RemoveIndex, 1);
@@ -231,7 +235,7 @@ export class OfferingCreationStore {
         Helper.toast('file uploaded successfully', 'success');
         this[form].fields[key][index][name].value = res.fileName;
         this[form].fields[key][index][name].preSignedUrl = res.location;
-        this[form].fields[key][index][name].id = `${res.fileName}${Date.now()}`;
+        this[form].fields[key][index][name].fileId = `${res.fileName}${Date.now()}`;
         this[form].fields[key][index][name].fileName = `${res.fileName}${Date.now()}`;
       }))
       .catch((err) => {
@@ -498,11 +502,14 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null, stepName) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false) => {
     if (stepName) {
       uiStore.setProgress();
       const file = files[0];
       const fileData = Helper.getFormattedFileData(file);
+      if (this[form].fields[field].showLoader !== undefined) {
+        this[form].fields[field].showLoader = true;
+      }
       fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then(action((result) => {
         const { fileId, preSignedUrl } = result.data.createUploadEntry;
         this[form].fields[field].fileId = fileId;
@@ -520,14 +527,21 @@ export class OfferingCreationStore {
           );
         }
         fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
-          .then(() => { })
+          .then(() => {
+            if (updateOnUpload) {
+              this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} uploaded successfully.`);
+            }
+          })
           .catch((err) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
           })
-          .finally(() => {
+          .finally(action(() => {
             uiStore.setProgress(false);
-          });
+            if (this[form].fields[field].showLoader !== undefined) {
+              this[form].fields[field].showLoader = false;
+            }
+          }));
       }));
     } else {
       const file = files[0];
@@ -547,10 +561,13 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedData = (form, subForm = 'data', field, index = null, stepName) => {
+  removeUploadedData = (form, subForm = 'data', field, index = null, stepName, updateOnRemove = false) => {
     if (stepName) {
       const currentStep = { name: stepName };
       const { fileId } = this[form].fields[field];
+      if (this[form].fields[field].showLoader !== undefined) {
+        this[form].fields[field].showLoader = true;
+      }
       fileUpload.removeUploadedData(fileId).then(action(() => {
         this[form] = Validator.onChange(
           this[form],
@@ -558,9 +575,18 @@ export class OfferingCreationStore {
         );
         this[form].fields[field].fileId = '';
         this[form].fields[field].preSignedUrl = '';
+        if (updateOnRemove) {
+          this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} Removed successfully.`);
+        }
         this.createAccount(currentStep, 'draft', true, field);
       }))
-        .catch(() => { });
+        .catch(() => { })
+        .finally(action(() => {
+          uiStore.setProgress(false);
+          if (this[form].fields[field].showLoader !== undefined) {
+            this[form].fields[field].showLoader = false;
+          }
+        }));
     } else if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -669,6 +695,7 @@ export class OfferingCreationStore {
       ISSUER_FRM: { isMultiForm: false },
       RISK_FACTORS_FRM: { isMultiForm: false },
       DOCUMENTATION_FRM: { isMultiForm: false },
+      ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -765,13 +792,15 @@ export class OfferingCreationStore {
     if (keyName) {
       if (keyName === 'legal') {
         payloadData[keyName] = {};
-        const generalInfo = Validator.evaluateFormData(this.GENERAL_FRM.fields);
-        payloadData[keyName].general = generalInfo;
+        payloadData[keyName].general = Validator.evaluateFormData(this.GENERAL_FRM.fields);
         payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
         payloadData[keyName].documentation = {};
         payloadData[keyName].documentation.issuer = {};
         payloadData[keyName].documentation.issuer =
         Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation.admin = {};
+        payloadData[keyName].documentation.admin =
+        Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
