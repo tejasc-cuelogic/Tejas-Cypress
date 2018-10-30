@@ -30,14 +30,15 @@ class AccountType extends Component {
   }
   componentDidMount() {
     const {
-      investAccTypes,
+      // investAccTypes,
       setStepToBeRendered,
       setFieldValue,
       byDefaultRender,
     } = this.props.investmentStore;
+    const { UserAccounts } = this.props;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (investAccTypes.value !== '') {
+    } else if (UserAccounts && UserAccounts.length === 1) {
       setFieldValue('disableNextbtn', false);
       setStepToBeRendered(1);
     }
@@ -69,7 +70,7 @@ class AccountType extends Component {
             </Aux>
             :
             <div className="center-align">
-              <p>Investment Accounts are not yet Created!</p>
+              <p>Investment accounts are not yet created!</p>
               <Link to="/app/summary" className="text-link">
                 <Icon className="ns-arrow-right" color="green" />
                 Go to My Accounts
