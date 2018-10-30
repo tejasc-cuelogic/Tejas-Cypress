@@ -189,19 +189,20 @@ class FormValidator {
     Object.keys(currentForm.fields).map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
+        if (currentForm.fields[field].objType === 'FileObjectType') {
+          currentForm.fields[field].fileId = [];
+          currentForm.fields[field].fileData = [];
+          currentForm.fields[field].preSignedUrl = [];
+        }
       } else {
         currentForm.fields[field].value = '';
+        if (currentForm.fields[field].objType === 'FileObjectType') {
+          currentForm.fields[field].fileId = '';
+          currentForm.fields[field].fileData = '';
+          currentForm.fields[field].preSignedUrl = '';
+        }
       }
       currentForm.fields[field].error = undefined;
-      if (currentForm.fields[field].fileId) {
-        currentForm.fields[field].fileId = '';
-      }
-      if (currentForm.fields[field].fileData) {
-        currentForm.fields[field].fileData = '';
-      }
-      if (currentForm.fields[field].preSignedUrl) {
-        currentForm.fields[field].preSignedUrl = '';
-      }
       return true;
     });
     currentForm.meta.isValid = false;
@@ -319,12 +320,15 @@ class FormValidator {
           if (fields[key].objType === 'FileObjectType') {
             if (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
               fields[key] && Array.isArray(toJS(fields[key].value))) {
-              if (tempRef[key].length) {
+              if (tempRef[key].length > 0) {
                 tempRef[key].map((item) => {
                   fields[key].value.push(item.fileName);
                   fields[key].fileId.push(item.fileId);
                   return false;
                 });
+              } else {
+                fields[key].value = [];
+                fields[key].fileId = [];
               }
             } else {
               fields[key].value = Array.isArray(toJS(tempRef[key])) ?
@@ -362,12 +366,15 @@ class FormValidator {
         } else if (fields[key].objType === 'FileObjectType') {
           if (data[key] && Array.isArray(toJS(data[key])) &&
             fields[key] && Array.isArray(toJS(fields[key].value))) {
-            if (data[key].length) {
+            if (data[key].length > 0) {
               data[key].map((item) => {
                 fields[key].value.push(item.fileName);
                 fields[key].fileId.push(item.fileId);
                 return false;
               });
+            } else {
+              fields[key].value = [];
+              fields[key].fileId = [];
             }
           } else {
             fields[key].value = data && typeof data === 'string' ? data : Array.isArray(toJS(data[key])) ? data[key][0].fileName : data[key].fileName;
@@ -438,14 +445,14 @@ class FormValidator {
     if (Array.isArray(fileObj.preSignedUrl)) {
       fileObjOutput =
         map(fileObj.preSignedUrl, (file, index) => ({
-          id: 1,
+          id: fileObj.fileId[index] || 1,
           isPublic: true,
           url: file,
           fileName: fileObj.value[index],
         }));
     } else {
       fileObjOutput = fileObj.value ? {
-        id: fileObj.id || 1,
+        id: fileObj.fileId || 1,
         url: fileObj.preSignedUrl || fileObj.value,
         fileName: fileObj.value,
         isPublic: true,
@@ -542,6 +549,17 @@ class FormValidator {
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
+            } else if (fields[key].refSelector !== undefined
+              && fields[fields[key].refSelector].value !== undefined) {
+              let val = '';
+              if (fields[fields[key].refSelector].value) {
+                if (fields[key].value !== '' && fields[key].value !== undefined) {
+                  val = objValue;
+                } else {
+                  val = fields[key].defaultValue;
+                }
+              }
+              inputData = { ...inputData, [key]: val };
             } else {
               inputData = { ...inputData, [key]: objValue };
             }
