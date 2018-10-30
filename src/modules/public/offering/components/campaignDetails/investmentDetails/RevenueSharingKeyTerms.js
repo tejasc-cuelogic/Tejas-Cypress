@@ -17,7 +17,7 @@ class RevenueSharingKeyTerms extends Component {
             <p><b>Securities</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Offering Amount</b><br />{`Min. $${KeyTerms.minOfferingAmount}, to max. $${KeyTerms.maxOfferingAmount}`}</p>
+            <p><b>Offering Amount</b><br />{`Min. $${Helper.CurrencyFormat(KeyTerms.minOfferingAmount)}, to max. $${Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)}`}</p>
           </Grid.Column>
         </Grid>
         <Divider />
@@ -132,7 +132,7 @@ class RevenueSharingKeyTerms extends Component {
               <Table.Cell>
                 {KeyTerms && KeyTerms.maturity ?
                   <p>
-                    <b>{KeyTerms.maturity} Months,</b>
+                    <b>{KeyTerms.maturity} Months,</b>{' '}
                     including a 6 month startup period for ramp up
                   </p>
                   :
@@ -177,7 +177,7 @@ class RevenueSharingKeyTerms extends Component {
               <Table.Cell>
                 {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
                   <p>
-                    <b>{KeyTerms.securitiesOwnershipPercentage} %.</b>
+                    <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
                     Investors will not receive any equity interests in the Issuer or
                     any voting or management rights with respect to the Issuer as a result of
                     an investment in Securities.

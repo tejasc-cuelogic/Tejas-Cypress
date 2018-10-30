@@ -46,7 +46,7 @@ export default class CampaignList extends Component {
                         <Icon name="heart" /> {/* change name to "heart outline" for unliked campaigns */}
                         <Card.Content>
                           <div className="tags mb-10">
-                            {offering && offering.keyTerms && capitalize(offering.keyTerms.industry.split('_').join(' '))}
+                            {offering && offering.keyTerms && offering.keyTerms.industry && capitalize(offering.keyTerms.industry.split('_').join(' '))}
                             <span className="pull-right">
                               {offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}
                             </span>
@@ -70,7 +70,7 @@ export default class CampaignList extends Component {
                                 offering.offering.about.theCompany : '',
                             }}
                           />
-                          <p><b>{offering && offering.keyTerms && capitalize(offering.keyTerms.securities.split('_').join(' '))}</b></p>
+                          <p><b>{offering && offering.keyTerms && offering.keyTerms.securities && capitalize(offering.keyTerms.securities.split('_').join(' '))}</b></p>
                           <List divided horizontal>
                             <List.Item>Raised $1,000,000</List.Item>
                             <List.Item>

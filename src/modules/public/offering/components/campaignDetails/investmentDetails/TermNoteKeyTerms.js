@@ -69,7 +69,7 @@ class TermNoteKeyTerms extends Component {
               <Table.Cell>
                 {KeyTerms && KeyTerms.interestRate ?
                   <p>
-                    <b>{KeyTerms.interestRate} Months,</b>
+                    <b>{KeyTerms.interestRate} Months</b>
                   </p>
                   :
                   'NA'
@@ -87,7 +87,7 @@ class TermNoteKeyTerms extends Component {
               <Table.Cell>
                 {KeyTerms && KeyTerms.maturity ?
                   <p>
-                    <b>{KeyTerms.maturity} Months,</b>
+                    <b>{KeyTerms.maturity} Months</b>
                   </p>
                   :
                   'NA'
@@ -131,7 +131,7 @@ class TermNoteKeyTerms extends Component {
               <Table.Cell>
                 {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
                   <p>
-                    <b>{KeyTerms.securitiesOwnershipPercentage} %.</b>
+                    <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
                     Investors will not receive any equity interests in the Issuer or
                     any voting or management rights with respect to the Issuer as a result of
                     an investment in Securities.
