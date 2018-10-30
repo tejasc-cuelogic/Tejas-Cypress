@@ -922,7 +922,20 @@ export class OfferingCreationStore {
         payloadData = payLoadDataOld;
       }
       if (keyName) {
-        payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
+        if (keyName === 'leadership') {
+          const leaders = [];
+          forEach(payloadData[keyName], (ele, index) => {
+            if (!this.removeIndex || this.removeIndex !== index) {
+              leaders.push(merge(
+                toJS(getOfferingById[keyName][index]),
+                payloadData[keyName][index],
+              ));
+            }
+          });
+          payloadData[keyName] = leaders;
+        } else {
+          payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
+        }
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }

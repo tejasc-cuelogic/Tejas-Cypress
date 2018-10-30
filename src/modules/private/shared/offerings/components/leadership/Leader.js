@@ -37,7 +37,7 @@ export default class Leader extends Component {
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
   removeData = (confirmModalName, arrayName = 'leadership') => {
-    this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
+    // this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
     if (arrayName === 'leadership') {
       this.props.history.push(`${this.props.refLink}/leader/1`);
       this.handleFormSubmit(null, 'Leader has been deleted successfully.');
