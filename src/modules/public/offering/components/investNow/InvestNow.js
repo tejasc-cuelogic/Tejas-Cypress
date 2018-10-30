@@ -62,7 +62,10 @@ export default class InvestNow extends React.Component {
           }
         });
       }
-    });
+    })
+      .finally(() => {
+        this.setState({ submitLoading: !this.state.submitLoading });
+      });
   }
   multiClickHandler = (step) => {
     if (step.name === 'Financial Info') {
