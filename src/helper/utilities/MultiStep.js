@@ -173,10 +173,10 @@ export default class MultiStep extends React.Component {
           </Aux>
           }
           <Modal.Content className="multistep">
+            {this.props.steps[this.state.compState].component}
             <Dimmer active={this.props.inProgress}>
               <Loader active={this.props.inProgress} />
             </Dimmer>
-            {this.props.steps[this.state.compState].component}
             <Button
               circular
               icon={{ className: 'ns-arrow-left' }}

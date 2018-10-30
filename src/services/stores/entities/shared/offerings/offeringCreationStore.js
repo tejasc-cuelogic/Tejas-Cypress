@@ -1,13 +1,14 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy, kebabCase } from 'lodash';
+import { isObject, isEmpty, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
+import omitDeep from 'omit-deep-lodash';
+import recursiveOmitBy from 'recursive-omit-by';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, MISC, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY, ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -15,7 +16,7 @@ import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering,
   generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 
@@ -780,15 +781,17 @@ export class OfferingCreationStore {
       });
   }
 
+  @action
   updateOffering = (
     id,
-    fields, keyName, subKey, notify = true, successMsg = undefined, isApproved, fromS3 = false,
+    fields, keyName, subKey, notify = true, successMsg = undefined, approvedObj, fromS3 = false,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
     };
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
     if (keyName) {
       if (keyName === 'legal') {
         payloadData[keyName] = {};
@@ -814,27 +817,6 @@ export class OfferingCreationStore {
         };
       } else if (keyName === 'media') {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
-        // const mediaObj = {};
-        // payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
-        //   const mediaItem = toJS(payloadData[keyName][k].url);
-        //   mediaObj[k] = Array.isArray(mediaItem) ?
-        //     mediaItem.map((item, index) => {
-        //       const itemOfMedia = {
-        //         id: 1, url: item,
-        // fileName: payloadData[keyName][k].fileName[index], isPublic: true,
-        //       };
-        //       return itemOfMedia;
-        //     }) : payloadData[keyName][k].fileName &&
-        //     {
-        //       id: 1,
-        //       url: k === 'heroVideo' ?
-        // payloadData[keyName][k].fileName : payloadData[keyName][k].url,
-        //       fileName: payloadData[keyName][k].fileName,
-        //       isPublic: true,
-        //     };
-        //   return mediaObj;
-        // });
-        // payloadData[keyName] = mediaObj;
       } else if (keyName === 'leadership') {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
@@ -856,6 +838,55 @@ export class OfferingCreationStore {
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
+    if (keyName !== 'contingencies') {
+      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
+        payloadData[keyName] : payloadData;
+      if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: approvedObj.status,
+        };
+        if (!approvedObj.status && !approvedObj.edit) {
+          payLoadDataOld.submitted = null;
+          payLoadDataOld.issuerSubmitted = '';
+        } else if (!approvedObj.status) {
+          payLoadDataOld.submitted = null;
+        }
+      } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
+        payLoadDataOld.submitted = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+        };
+      } else if (approvedObj !== null && approvedObj && approvedObj.isIssuer) {
+        payLoadDataOld.issuerSubmitted = moment().toISOString();
+      }
+      if (keyName) {
+        if (subKey) {
+          if (subKey === 'issuer') {
+            payloadData[keyName].documentation[subKey] = payLoadDataOld;
+          } else {
+            payloadData[keyName][subKey] = payLoadDataOld;
+          }
+        } else {
+          payloadData[keyName] = payLoadDataOld;
+        }
+      } else {
+        payloadData = payLoadDataOld;
+      }
+      if (keyName) {
+        payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
+        payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
+        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+          parent, node, key, path, deep,
+        }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
+        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+          parent, node, key, path, deep,
+        }) => (isObject(node) && isEmpty(node)));
+      }
+    }
     uiStore.setProgress();
     client
       .mutate({
@@ -864,10 +895,11 @@ export class OfferingCreationStore {
           id,
           offeringDetails: payloadData,
         },
-        refetchQueries: [{
-          query: getOfferingDetails,
-          variables: { id: getOfferingById.id },
-        }],
+        // refetchQueries: [{
+        //   query: getOfferingDetails,
+        //   variables: { id: getOfferingById.id },
+        //   fetchPolicy: 'no-cache',
+        // }],
       })
       .then(() => {
         this.removeUploadedFiles(fromS3);
@@ -876,6 +908,7 @@ export class OfferingCreationStore {
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
+        offeringsStore.getOne(getOfferingById.id, false);
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -900,6 +933,11 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed get issuerOfferingBacData() {
+    return (this.issuerOfferingBac && this.issuerOfferingBac.data &&
+      toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
+  }
+
   @action
   getAffiliatedIssuerOfferingBac = (offeringId, bacType) => {
     this.affiliatedIssuerOfferingBac = graphql({
@@ -913,6 +951,11 @@ export class OfferingCreationStore {
         }
       },
     });
+  }
+
+  @computed get affiliatedIssuerOfferingBacData() {
+    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data &&
+      toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
@@ -935,12 +978,18 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed get leaderShipOfferingBacData() {
+    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data &&
+      toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
+  }
+
   createOrUpdateOfferingBac = (
     bacType,
     fields,
     issuerNumber = undefined,
     leaderNumber = undefined,
     afIssuerId,
+    approvedObj,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -994,6 +1043,37 @@ export class OfferingCreationStore {
         };
       }
     }
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
+    const payLoadDataOld = {};
+    if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+      payLoadDataOld.approved = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+        status: approvedObj.status,
+      };
+      if (!approvedObj.status) {
+        payLoadDataOld.submitted = null;
+      }
+    } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
+      payLoadDataOld.submitted = {
+        id: userDetailsStore.userDetails.id,
+        by: `${firstName} ${lastName}`,
+        date: moment().toISOString(),
+      };
+    }
+
+    variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
+    // if (keyName) {
+    //   payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
+    //   payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
+    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+    //     parent, node, key, path, deep,
+    //   }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
+    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
+    //     parent, node, key, path, deep,
+    //   }) => (isObject(node) && isEmpty(node)));
+    // }
     uiStore.setProgress();
     client
       .mutate({

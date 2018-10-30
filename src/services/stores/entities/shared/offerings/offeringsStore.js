@@ -44,11 +44,14 @@ export class OfferingsStore {
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
     this.requestState.stage = stage || this.requestState.stage;
+    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === stage));
     const params = {
-      stage: Object.keys(pickBy(STAGES, s => s.ref === stage)),
       first: first || this.requestState.perPage,
       skip,
     };
+    if (reqStages.length > 0) {
+      params.stage = reqStages;
+    }
     this.data = graphql({
       client,
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
@@ -83,12 +86,14 @@ export class OfferingsStore {
   }
 
   @action
-  getOne = (id) => {
-    this.offerLoading = true;
+  getOne = (id, loading = true) => {
+    if (loading) {
+      this.offerLoading = true;
+    }
     this.offerData = graphql({
       client,
       query: getOfferingDetails,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: () => {
         this.offerLoading = false;

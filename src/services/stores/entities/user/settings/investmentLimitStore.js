@@ -1,10 +1,12 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { mapValues, filter, find, map } from 'lodash';
+import graphql from 'mobx-apollo';
+import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as client2 } from '../../../../../api/gcoolApi';
-import { uiStore, userDetailsStore } from '../../../index';
+import { uiStore, userDetailsStore, investmentStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateFinLimit } from '../../../queries/investementLimits';
+import { updateFinLimit, getInvestorInvestmentLimit } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 
 export class InvestmentLimitStore {
@@ -21,6 +23,28 @@ export class InvestmentLimitStore {
       return account.name === 'individual' ? !find(this.activeAccounts, acc => acc.name === 'ira') : true;
     });
     return toJS({ accountList: accList, isIndAccExist: isIndividualAccount });
+  }
+
+  @action
+  getInvestorInvestmentLimit = () => new Promise((resolve) => {
+    this.currentLimit = graphql({
+      client,
+      query: getInvestorInvestmentLimit,
+      variables: {
+        userId: userDetailsStore.currentUserId,
+        accountId: investmentStore.getSelectedAccountTypeId,
+      },
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
+      fetchPolicy: 'network-only',
+    });
+  });
+
+  @computed get getCurrentLimitForAccount() {
+    return (this.currentLimit.data && this.currentLimit.data.getInvestorInvestmentLimit) || 0;
   }
 
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
