@@ -29,7 +29,6 @@ export default class CancelInvestment extends Component {
       const location = `${this.props.refLink}/preview`;
       this.props.history.push(location);
     }
-    // this.props.beneficiaryStore.setShareModalData(true);
   }
 
   handleCloseModal = (e) => {
