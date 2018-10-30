@@ -83,7 +83,7 @@ export const generateAgreement = gql`
 `;
 
 export const finishInvestment = gql`
-  mutation _finishInvestment($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $agreementId: String!){
+  mutation _finishInvestment($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $agreementId: Int!){
     finishInvestment(
       userId: $userId
       accountId: $accountId

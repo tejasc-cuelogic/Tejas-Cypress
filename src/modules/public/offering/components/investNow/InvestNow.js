@@ -60,8 +60,12 @@ export default class InvestNow extends React.Component {
               this.props.investmentStore.setStepToBeRendered(0);
               this.setState({ submitLoading: !this.state.submitLoading });
               this.props.history.push('agreement');
+            }).finally(() => {
+              this.setState({ submitLoading: !this.state.submitLoading });
             });
           }
+        }).finally(() => {
+          this.setState({ submitLoading: !this.state.submitLoading });
         });
       }
     })
