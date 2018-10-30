@@ -30,14 +30,30 @@ class TransferRequest extends Component {
       setStepToBeRendered(0);
     }
   }
+  handleShowTransferErrRequest = () => {
+    this.props.investmentStore.setShowTransferRequestErr(false);
+  }
   render() {
     const { rewardStore, investmentStore } = this.props;
     const {
       getTransferRequestAmount,
       getCurrCashAvailable,
+      showTransferRequestErr,
       investmentAmount,
     } = investmentStore;
     const { getCurrCreditAvailable } = rewardStore;
+    if (showTransferRequestErr) {
+      return (
+        <div className="center-align">
+          <Header as="h3" textAlign="center">Your investment transaction was not processed.</Header>
+          <p className="mt-30 mb-30">This may have happened because your session expired or your network connection dropped.
+            We did not complete your investment transaction. Please check your account, and
+            try again to complete your investment.
+          </p>
+          <Button primary content="Try Again" onClick={this.handleShowTransferErrRequest} />
+        </div>
+      );
+    }
     return (
       <div className="center-align">
         <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
@@ -80,7 +96,7 @@ class TransferRequest extends Component {
         <Divider hidden />
         <Button.Group>
           <Button primary content="Confirm" onClick={this.props.confirm} />
-          <Button onClick={this.props.cancel}>Cancel</Button>
+          <Button type="button" onClick={this.props.cancel}>Cancel</Button>
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from
