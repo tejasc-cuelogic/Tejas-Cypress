@@ -1844,6 +1844,9 @@ i.icon[class*="ns-"]{
 .ns-chevron-up-compact:before{
     content:@ns-chevron-up-compact;
 }
+.ns-circle:before{
+    content:@ns-circle; 
+}
 .ns-circle-line:before{
     content:@ns-circle-line;
 }

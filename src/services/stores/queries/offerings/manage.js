@@ -497,6 +497,36 @@ export const getOfferingDetails = gql`
               status
             }
           }
+          admin {
+            escrow {
+              fileId
+              fileName
+            }
+            resolutionOfBorrowing {
+              fileId
+              fileName
+            }
+            formC {
+              fileId
+              fileName
+            }
+            npa {
+              fileId
+              fileName
+            }
+            disclosure {
+              fileId
+              fileName
+            }
+            securityAgreement {
+              fileId
+              fileName
+            }
+            personalGuarantee {
+              fileId
+              fileName
+            }
+          }
         }
       }
       leadership {

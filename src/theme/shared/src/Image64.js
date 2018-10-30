@@ -15,7 +15,7 @@ class Image64 extends React.Component {
     }
   }
   render() {
-    return <Image src={this.state.data} />;
+    return <Image {...this.props} src={this.state.data} />;
   }
 }
 

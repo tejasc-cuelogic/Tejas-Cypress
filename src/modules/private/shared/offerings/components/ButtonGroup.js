@@ -11,13 +11,13 @@ const ButtonGroup = ({
       <Button.Group vertical icon className="time-stamp">
         {!isIssuer && issuerSubmitted &&
           <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />{' '}
+            <Icon className="ns-circle-line" color="green" />{' '}
             Submitted by Issuer on {moment(issuerSubmitted).format('MM/DD/YYYY')}
           </Button>
         }
         {!isIssuer && submitted &&
           <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />{' '}
+            <Icon className="ns-circle" color="green" />{' '}
             Submitted by {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
           </Button>
         }
