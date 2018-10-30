@@ -3,8 +3,8 @@ import { observable, toJS, action, computed } from 'mobx';
 import { isObject, isEmpty, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import omitDeep from 'omit-deep-lodash';
-import recursiveOmitBy from 'recursive-omit-by';
+import omitDeep from 'omit-deep';
+import cleanDeep from 'clean-deep';
 import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, MISC, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
@@ -877,14 +877,9 @@ export class OfferingCreationStore {
         payloadData = payLoadDataOld;
       }
       if (keyName) {
-        payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
+        payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
-        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-          parent, node, key, path, deep,
-        }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
-        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-          parent, node, key, path, deep,
-        }) => (isObject(node) && isEmpty(node)));
+        payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
     }
     uiStore.setProgress();
