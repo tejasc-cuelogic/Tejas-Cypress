@@ -84,7 +84,7 @@ export default class InvestNow extends React.Component {
           });
         }
       });
-    } else if (step.name === 'Account Type') {
+    } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
       this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
         this.handleStepChange(step.stepToBeRendered);
       });

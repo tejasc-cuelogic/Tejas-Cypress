@@ -10,14 +10,16 @@ import { FormRadioGroup } from '../../../../../theme/form';
 @observer
 class AccountType extends Component {
   componentWillMount() {
-    const { setStepToBeRendered } = this.props.investmentStore;
+    const { setStepToBeRendered, getSelectedAccountTypeId } = this.props.investmentStore;
     const { UserAccounts } = this.props;
     if (this.props.changeInvest || (UserAccounts && UserAccounts.length === 1)) {
       const accountType = this.props.changeInvest ? includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity' : UserAccounts[0];
       this.props.investmentStore.accTypeChanged(null, { value: accountType });
-      this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
-        setStepToBeRendered(1);
-      });
+      if (getSelectedAccountTypeId) {
+        this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
+          setStepToBeRendered(1);
+        });
+      }
     }
   }
   componentDidMount() {
@@ -26,8 +28,8 @@ class AccountType extends Component {
       setStepToBeRendered,
       setFieldValue,
     } = this.props.investmentStore;
-    if (investAccTypes.values.length === 0) {
-      setFieldValue('disableNextbtn', true);
+    if (investAccTypes.value !== '') {
+      setFieldValue('disableNextbtn', false);
       setStepToBeRendered(1);
     }
   }
