@@ -1,13 +1,12 @@
 import React from 'react';
 import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
-import ConfirmCancellation from './ConfirmCancellation';
 
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
@@ -32,6 +31,7 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.history.push('overview');
     this.props.investmentStore.resetData();
+    this.props.investmentStore.setByDefaultRender(true);
   }
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
@@ -41,13 +41,14 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleCancel = () => {
-    // this.props.investmentStore.setStepToBeRendered(0);
-    // this.props.investmentStore.setFieldValue('disableNextbtn', true);
-    this.props.history.push(`${this.props.match.url}/confirm-cancellation`);
-    // this.props.history.push('invest-now');
+    this.props.investmentStore.setStepToBeRendered(0);
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
+    // this.props.history.push(`${this.props.match.url}/confirm-cancellation`);
+    this.props.history.push('invest-now');
   }
 
   handleConfirm = () => {
+    this.props.investmentStore.setByDefaultRender(false);
     this.setState({ submitLoading: !this.state.submitLoading });
     this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
       if (isValid) {
@@ -103,7 +104,6 @@ export default class InvestNow extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
     } = uiStore;
-    const { match } = this.props;
     const steps =
     [
       {
@@ -133,13 +133,11 @@ export default class InvestNow extends React.Component {
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
         />,
-        stepToBeRendered: 3,
         isValid: '',
       },
     ];
     return (
       <div className="step-progress" >
-        <Route path={`${match.url}/confirm-cancellation`} render={props => <ConfirmCancellation refLink={match.url} {...props} />} />
         {!this.state.submitLoading ?
           <MultiStep createAccount={this.multiClickHandler} setIsEnterPressed={setIsEnterPressed} disableNxtbtn={this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
           :

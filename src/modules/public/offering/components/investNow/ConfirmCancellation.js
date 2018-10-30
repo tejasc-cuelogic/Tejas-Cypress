@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 
-@inject('investmentStore')
+@inject('investmentStore', 'portfolioStore')
 @withRouter
 @observer
 export default class ConfirmCancellation extends Component {
@@ -11,6 +11,9 @@ export default class ConfirmCancellation extends Component {
     this.props.history.push(this.props.refLink);
   }
   handleConfirm = () => {
+    const { agreementDetails } = this.props.investmentStore;
+    const { cancelAgreement } = this.props.portfolioStore;
+    cancelAgreement(agreementDetails.agreementId);
     this.props.history.push(this.props.refLink);
   }
   render() {

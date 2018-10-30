@@ -1,8 +1,12 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { Route, withRouter } from 'react-router-dom';
 import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
+import ConfirmCancellation from '../../ConfirmCancellation';
+
+@withRouter
 @inject('investmentStore')
 @observer
 export default class Agreement extends React.Component {
@@ -24,15 +28,20 @@ export default class Agreement extends React.Component {
       }
     });
   }
-
+  handleCancelAgreement = () => {
+    const { match } = this.props;
+    this.props.history.push(`${match.url}/confirm-cancellation`);
+  }
   render() {
     const {
       AGREEMENT_DETAILS_FORM,
       investmentAmount,
       setCheckbox,
     } = this.props.investmentStore;
+    const { match } = this.props;
     return (
       <Modal size="large" open closeIcon closeOnRo otNodeClick={false} onClose={() => this.handleCloseModal()}>
+        <Route path={`${match.url}/confirm-cancellation`} render={props => <ConfirmCancellation refLink={match.url} {...props} />} />
         <Modal.Content className="signup-header">
           <Header as="h3" className="mb-40">
             Let&#39;s confirm your investment.<br />You are investing
@@ -65,7 +74,7 @@ export default class Agreement extends React.Component {
             <Button primary disabled={!AGREEMENT_DETAILS_FORM.meta.isValid} onClick={this.submit}>
             Invest
             </Button>
-            <Button color="gray" onClick={this.submit}>
+            <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
             Cancel
             </Button>
           </div>

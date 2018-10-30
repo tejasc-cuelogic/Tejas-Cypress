@@ -32,6 +32,19 @@ export class InvestmentStore {
     @observable estReturnVal = '-';
     @observable disableNextbtn = true;
     @observable isValidInvestAmtInOffering = false;
+    @observable byDefaultRender = true;
+    @observable showTransferRequestErr = false;
+
+    @action
+    setShowTransferRequestErr = (status) => {
+      this.showTransferRequestErr = status;
+      this.setFieldValue('disableNextbtn', !status);
+    }
+
+    @action
+    setByDefaultRender = (status) => {
+      this.byDefaultRender = status;
+    }
 
     @action
     setFieldValue = (field, value) => {
@@ -274,9 +287,13 @@ export class InvestmentStore {
           if (data) {
             resolve(data.validateInvestmentAmount);
           }
+          if (!data.validateInvestmentAmount) {
+            this.setShowTransferRequestErr(true);
+          }
         },
         onError: () => {
           Helper.toast('Something went wrong, please try again later.', 'error');
+          this.setShowTransferRequestErr(true);
         },
         fetchPolicy: 'network-only',
       });
@@ -321,6 +338,7 @@ export class InvestmentStore {
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
+          this.setShowTransferRequestErr(true);
           uiStore.setErrors(error.message);
         })
         .finally(() => {
