@@ -21,6 +21,7 @@ class AboutPhotoGallery extends Component {
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: true,
+      adaptiveHeight: true,
     };
     const galleryArray = campaign && campaign.media && campaign.media.gallery &&
       campaign.media.gallery.length ? campaign.media.gallery : [];

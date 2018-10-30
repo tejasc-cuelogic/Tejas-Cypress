@@ -1,123 +1,83 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Aux from 'react-aux';
-import findLastIndex from 'lodash/findLastIndex';
-import { Grid, Popup, Header, List } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+import { intersectionBy, orderBy, findLastIndex, filter, toInteger } from 'lodash';
+import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
-
-const data = {
-  invested: 7500,
-  milestones: [
-    {
-      amount: 500,
-      reward: {
-        head: 'Invest $500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 1000,
-      reward: {
-        head: 'Invest $1000 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 2500,
-      reward: {
-        head: 'Invest $2500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 5000,
-      reward: {
-        head: 'Invest $5000 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 10000,
-      reward: {
-        head: 'Invest $500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 25000,
-      reward: {
-        head: 'Invest $500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-    {
-      amount: 50000,
-      reward: {
-        head: 'Invest $500 or more',
-        subHead: 'Cooking Class',
-        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
-      },
-    },
-  ],
-};
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const calcSmartProgress = (milestones, amount) => {
-  const pIndex = findLastIndex(milestones, m => m.amount <= amount);
+  const pIndex = findLastIndex(milestones, m => toInteger(m.amount) < toInteger(amount));
   return ((pIndex / (milestones.length - 1)) * 100) +
     (((amount - milestones[pIndex].amount) /
       (milestones[pIndex + 1].amount - milestones[pIndex].amount)) *
-        (100 / (milestones.length - 1)));
+      (100 / (milestones.length - 1)));
 };
 
-const InvestmentTimeline = (props) => {
-  const progress = calcSmartProgress(data.milestones, data.invested);
-  return (
-    <Aux>
-      <Header as="h4">{props.title}</Header>
-      <Grid columns="equal" textAlign="center" className="investment-scale">
-        <div className="invested">
-          <span className="investment-progress" style={{ width: `${progress}%` }} />
-          <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(data.invested)}</span></div>
-        </div>
-        <Grid.Row>
-          {
-            data.milestones.map((milestone, index) => (
-              <Grid.Column
-                className={`${(data.milestones[index].amount <= data.invested && data.milestones[index + 1].amount >= data.invested) ? 'crossed' : ''}`}
-                key={`m_${milestone.amount}`}
-              >
-                <Popup
-                  trigger={<span>{Helper.CurrencyFormat(milestone.amount)}</span>}
-                  position="bottom center"
-                  className="reward-info"
-                  wide
-                >
-                  <Popup.Content>
-                    <Header as="h4" className="mb-half">
-                      {milestone.reward.head}
-                      <Header.Subheader>{milestone.reward.subHead}</Header.Subheader>
-                    </Header>
-                    <List bulleted>
-                      {
-                        milestone.reward.highlights.map(h => (
-                          <List.Item key={`m_${h}`}>{h}</List.Item>
+const calMargin = milestones => 50 / milestones.length;
+
+@inject('portfolioStore', 'campaignStore')
+@observer
+class InvestmentTimeline extends Component {
+  render() {
+    const { campaign } = this.props.campaignStore;
+    const { getInvestor } = this.props.portfolioStore;
+    const rewardsTiers = campaign && campaign.rewardsTierIds &&
+      campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+    const bonusRewards = campaign && campaign.bonusRewards &&
+      campaign.bonusRewards.length && campaign.bonusRewards;
+    const investBoanusReward = filter(rewardsTiers, tier => tier.earlyBirdQuantity <= 0);
+    // const investBoanusRewardLastIndex = findLastIndex(investBoanusReward);
+    // const earlyBirdtBoanusAmount = filter(rewardsTiers, tier => tier.earlyBirdQuantity > 0);
+    const progress = investBoanusReward.length ? calcSmartProgress(investBoanusReward, getInvestor
+      && getInvestor.totalRaisedAmount) : 0;
+    const calculatedMargin = calMargin(investBoanusReward);
+    return (
+      rewardsTiers && rewardsTiers.length ?
+        <Aux>
+          <Header as="h4">{this.props.title}</Header>
+          <Grid columns="equal" textAlign="center" className="investment-scale">
+            <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
+              <span className="investment-progress" style={{ width: `${progress}%` }} />
+              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(getInvestor && getInvestor.totalRaisedAmount)}</span></div>
+            </div>
+            <Grid.Row>
+              {rewardsTiers.map((tier, index) => (
+                tier.earlyBirdQuantity <= 0 ?
+                  <Grid.Column
+                    className={`${((rewardsTiers[index + 1] && rewardsTiers[index].amount <= getInvestor.totalRaisedAmount && rewardsTiers[index + 1].amount >= getInvestor.totalRaisedAmount) || rewardsTiers[index].amount === toInteger(getInvestor.totalRaisedAmount)) ? 'crossed' : ''}`}
+                    key={`m_${tier.amount}`}
+                  >
+                    <Popup
+                      trigger={<span>{Helper.CurrencyFormat(tier.amount)}</span>}
+                      position="bottom center"
+                      className="reward-info"
+                      wide
+                    >
+                      {bonusRewards &&
+                        bonusRewards.map(reward => (
+                          (intersectionBy([tier], (reward && reward.tiers), (tier.earlyBirdQuantity > 0 ? 'earlyBirdQuantity' : 'amount')).length > 0) &&
+                          <Popup.Content>
+                            <Header as="h4" className="mb-half">
+                              {reward.title}
+                              {/* <Header.Subheader>{reward.title}</Header.Subheader> */}
+                            </Header>
+                            <p className="detail-section" dangerouslySetInnerHTML={{ __html: reward.description }} />
+                          </Popup.Content>
                         ))
                       }
-                    </List>
-                  </Popup.Content>
-                </Popup>
-              </Grid.Column>
-            ))
-          }
-        </Grid.Row>
-      </Grid>
-    </Aux>
-  );
-};
+                    </Popup>
+                  </Grid.Column>
+                  :
+                  ''
+              ))}
+            </Grid.Row>
+          </Grid>
+        </Aux>
+        :
+        <InlineLoader text="Data not found." />
+    );
+  }
+}
 
 export default InvestmentTimeline;

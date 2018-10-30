@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
+
 
 function calculateDateDiff(terminationDate) {
   const d1 = moment().format('MM/DD/YYYY');
@@ -21,7 +23,7 @@ const InvestmentList = (props) => {
     <Accordion fluid styled className="card-style">
       <Accordion.Title active className="text-capitalize">
         <Icon className="ns-chevron-up" />
-        {props.listOf}
+        {`${props.listOf} (${props.listOfCount})`}
       </Accordion.Title>
       <Accordion.Content active>
         {!investments || !investments.length ?
@@ -56,18 +58,27 @@ const InvestmentList = (props) => {
                           <DateTimeFormat format="MM/DD/YYYY" datetime={data.investmentDate} />
                         </p>
                       </Table.Cell>
-                      <Table.Cell className="text-capitalize">{data.status}</Table.Cell>
+                      <Table.Cell className="text-capitalize">
+                        {data && data.offering && data.offering.stage ?
+                          STAGES[data.offering.stage].label : '-'
+                        }
+                      </Table.Cell>
                       <Table.Cell collapsing>
-                        {props.listOf === 'pending' ? `${calculateDateDiff(data.offering.keyTerms.terminationDate)} days` : <DateTimeFormat format="MM/DD/YYYY" datetime={data.closeDate} />}
+                        {props.listOf === 'pending' ? `${calculateDateDiff(data && data.offering && data.offering.offering &&
+                          data.offering.offering.launch &&
+                           data.offering.offering.launch.terminationDate ?
+                           data.offering.offering.launch.terminationDate : null)} days`
+                          :
+                        <DateTimeFormat format="MM/DD/YYYY" datetime={data.closeDate} />}
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
                           <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
-                        :
+                          :
                           <Button.Group size="mini" compact>
                             <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary content="Change" />
                             {calculateDateDiff(data.daysToClose) > 2 &&
-                              <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} color="red" content="Cancel" />
+                              <Button as={Link} to={`${props.match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             }
                           </Button.Group>
                         }
@@ -86,7 +97,7 @@ const InvestmentList = (props) => {
               </Table.Footer>
             </Table>
           </div>
-      }
+        }
       </Accordion.Content>
     </Accordion>
   );

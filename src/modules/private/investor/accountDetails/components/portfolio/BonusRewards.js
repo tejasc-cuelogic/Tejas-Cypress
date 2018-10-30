@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import { Route } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import InvestmentTimeline from './Rewards/InvestmentTimeline';
 import RewardList from './Rewards/RewardList';
 import Redeem from '../../../rewardsWallet/components/Redeem';
@@ -17,13 +18,21 @@ const list = [
   },
 ];
 
-const BonusRewards = ({ match }) => (
-  <div className="inner-content-spacer">
-    <InvestmentTimeline title="Your investment" />
-    <Header as="h4">Your rewards</Header>
-    <RewardList title="Your investment" match={match} list={list} />
-    <Route exact path={`${match.url}/redeem/:id`} component={Redeem} />
-  </div>
-);
+// const BonusRewards = ({ match }) => (
+@inject('campaignStore')
+@observer
+class BonusRewards extends Component {
+  render() {
+    const { props } = this;
+    return (
+      <div className="inner-content-spacer">
+        <InvestmentTimeline title="Your investment" {...props} />
+        <Header as="h4">Your rewards</Header>
+        <RewardList title="Your investment" match={props.match} list={list} />
+        <Route exact path={`${props.match.url}/redeem/:id`} component={Redeem} />
+      </div>
+    );
+  }
+}
 
 export default BonusRewards;
