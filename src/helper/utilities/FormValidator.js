@@ -445,14 +445,14 @@ class FormValidator {
     if (Array.isArray(fileObj.preSignedUrl)) {
       fileObjOutput =
         map(fileObj.preSignedUrl, (file, index) => ({
-          id: fileObj.fileId[index] || 1,
+          id: fileObj.fileId[index] || Helper.guid(),
           isPublic: true,
           url: file,
           fileName: fileObj.value[index],
         }));
     } else {
       fileObjOutput = fileObj.value ? {
-        id: fileObj.fileId || 1,
+        id: fileObj.fileId || Helper.guid(),
         url: fileObj.preSignedUrl || fileObj.value,
         fileName: fileObj.value,
         isPublic: true,

@@ -783,6 +783,38 @@ export class OfferingCreationStore {
   }
 
   @action
+  updateOfferingMutation = (
+    id,
+    payload, keyName, notify = true,
+    successMsg = undefined, fromS3 = false,
+  ) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables: {
+          id,
+          offeringDetails: payload,
+        },
+      })
+      .then(() => {
+        this.removeUploadedFiles(fromS3);
+        if (successMsg) {
+          Helper.toast(`${successMsg}`, 'success');
+        } else if (notify) {
+          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+        }
+        offeringsStore.getOne(id, false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+  @action
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
@@ -895,36 +927,7 @@ export class OfferingCreationStore {
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
     }
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: updateOffering,
-        variables: {
-          id,
-          offeringDetails: payloadData,
-        },
-        // refetchQueries: [{
-        //   query: getOfferingDetails,
-        //   variables: { id: getOfferingById.id },
-        //   fetchPolicy: 'no-cache',
-        // }],
-      })
-      .then(() => {
-        this.removeUploadedFiles(fromS3);
-        if (successMsg) {
-          Helper.toast(`${successMsg}`, 'success');
-        } else if (notify) {
-          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
-        }
-        offeringsStore.getOne(getOfferingById.id, false);
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
   }
 
   @action

@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Button, Icon } from 'semantic-ui-react';
 
 const ButtonGroupType2 = ({
-  isManager, approved, updateOffer, submitted,
+  isManager, approved, updateOffer, submitted, launch,
 }) => (
   <Aux>
     <div className="clearfix sticky-actions">
@@ -30,6 +30,7 @@ const ButtonGroupType2 = ({
             <Button primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
             }
             <Button color="green" onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed">{approved && approved.status ? 'Edit' : 'Approve'}</Button>
+            {launch && approved && approved.status && <Button onClick={launch} color="green"className="relaxed">Launch</Button>}
           </Aux>
         ) : (!approved || (approved && !approved.status)) && (
           <Aux>
