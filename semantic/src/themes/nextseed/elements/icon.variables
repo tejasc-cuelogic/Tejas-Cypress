@@ -147,6 +147,7 @@
 @ns-chevron-right-compact: "\e919";
 @ns-chevron-up: "\e91a";
 @ns-chevron-up-compact: "\e91b";
+@ns-circle: "\e996";
 @ns-circle-line: "\e91c";
 @ns-clear-formating: "\e98f";
 @ns-clipboard-check: "\e96b";

@@ -143,6 +143,14 @@
 	> .value, > .label{
 		text-align:inherit;
 	}
+	>.value .icon{
+		margin:0 !important;
+		height:auto;
+		vertical-align:bottom;
+	}
+	&.disabled{
+		opacity:.5 !important;
+	}
 }
 .ui.statistics.vertical{
 	margin:0;

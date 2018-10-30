@@ -15,6 +15,9 @@ const actions = {
 @withRouter
 @observer
 export default class Listing extends Component {
+  componentWillMount() {
+    this.props.offeringsStore.resetInitLoad();
+  }
   handleAction = (action, offeringId) => {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offeringId);

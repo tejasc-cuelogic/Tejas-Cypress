@@ -38,7 +38,10 @@ export default class HtmlEditor extends React.Component {
     this.props.changed(this.props.name, content, this.props.form);
   }
   render() {
-    const { keyStart } = this.props;
+    const { keyStart, readOnly } = this.props;
+    if (readOnly) {
+      return <div dangerouslySetInnerHTML={{ __html: this.props.content }} />;
+    }
     return (
       <FroalaEditor
         tag="textarea"

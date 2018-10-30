@@ -62,12 +62,23 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       keyTerms {
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
         legalBusinessName
         shorthandBusinessName
         industry
         maturity
+        regulation
         frequencyOfPayments
-        terminationDate
         securities
         securityInterest
         securitiesOwnershipPercentage
@@ -80,7 +91,6 @@ export const getOfferingDetails = gql`
         legalBusinessType
         nsMinFees
         nsMaxFees
-        gsFees
         stateOfFormation
         city
         state
@@ -101,6 +111,27 @@ export const getOfferingDetails = gql`
           fileName
           fileHandle {
             id
+            boxFileId
+            fileExtension
+            fileStatus
+            fileType
+            stepName
+            userId
+            created {
+              id
+              by
+              date
+            }
+            updated {
+              id
+              by
+              date
+            }
+            deleted {
+              id
+              by
+              date
+            }
           }
         }
       }
@@ -112,6 +143,12 @@ export const getOfferingDetails = gql`
           fileName
         }
         tombstoneImage {
+          id
+          url
+          isPublic
+          fileName
+        }
+        locationHeroImage {
           id
           url
           isPublic
@@ -141,12 +178,26 @@ export const getOfferingDetails = gql`
           isPublic
           fileName
         }
+        issuerSubmitted
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
       }
       contingencies {
         launch {
           contingency
           acceptance
           accepted {
+            status
+            id
             by
             date
             comment
@@ -156,6 +207,8 @@ export const getOfferingDetails = gql`
           contingency
           acceptance
           accepted {
+            id
+            status
             date
             by
             comment
@@ -175,6 +228,18 @@ export const getOfferingDetails = gql`
             blurb
           }
           issuerWebsite
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
         }
         about {
           theCompany
@@ -184,6 +249,32 @@ export const getOfferingDetails = gql`
           }
           businessModel
           locationAnalysis
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+        }
+        misc {
+          additionalBonusRewardsContent
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
         }
         launch {
           targetDate
@@ -193,7 +284,18 @@ export const getOfferingDetails = gql`
           escrowKey
           escrowNumber
           edgarLink
-          
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+          gsFees
         }
       }
       legal {
@@ -250,6 +352,18 @@ export const getOfferingDetails = gql`
             amountTransaction
             description
           }
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
         }
         riskFactors {
           businessRisk
@@ -264,24 +378,211 @@ export const getOfferingDetails = gql`
           laborSupplyRisk
           privacyRisk
           otherRisk
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
         }
         documentation {
           issuer {
             formID {
               fileId
               fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
             }
             corpFormation {
               fileId
               fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
             }
             issuerFinancials {
               fileId
               fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
             }
             leaseAgreement {
               fileId
               fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            issuerSubmitted
+            submitted {
+              id
+              by
+              date
+            }
+            approved {
+              id
+              by
+              date
+              status
+            }
+          }
+          admin {
+            escrow {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            resolutionOfBorrowing {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            formC {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            npa {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            disclosure {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            securityAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            personalGuarantee {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            edgar
+            submitted {
+              id
+              by
+              date
+            }
+            approved {
+              id
+              by
+              date
+              status
             }
           }
           admin {
@@ -331,6 +632,7 @@ export const getOfferingDetails = gql`
         leaderBacId
         phone {
           number
+          countryCode
         }
         dob
         ssn
@@ -373,6 +675,18 @@ export const getOfferingDetails = gql`
         }
         otherEntities
         promoters
+        issuerSubmitted
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
       }
       closureSummary {
         disbursementDate
@@ -388,22 +702,31 @@ export const getOfferingDetails = gql`
         description
         rewardStatus
         expirationDate
-        tiers{
+        tiers {
           amount
           earlyBirdQuantity
+          created {
+            id
+            by
+            date
+          }
         }
-        created{
+        created {
           id
           by
           date
         }
-        updated{
+        updated {
+          id
+          by
+          date
+        }
+        deleted {
           id
           by
           date
         }
       }
-  
       applicationId
       issuerId
       lead {
@@ -422,14 +745,17 @@ export const getOfferingDetails = gql`
       }
       created{
         id
+        by
         date
       }
       updated{
         id
+        by
         date
       }
       deleted{
         id
+        by
         date
       }
     }
@@ -494,6 +820,7 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
       id
       by
       date
+      status
       reportGeneratedDate
     }
     created{

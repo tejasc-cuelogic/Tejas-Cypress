@@ -18,10 +18,11 @@ export default class OfferingDetails extends Component {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
+    if (!this.props.offeringsStore.initLoad.includes('getOne')) {
+      this.props.offeringsStore.getOne(this.props.match.params.offeringid);
+    }
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
-    this.props.offeringsStore.getOne(this.props.match.params.offeringid);
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
-    this.props.offeringCreationStore.resetInitLoad();
   }
   handleCloseModal = (e) => {
     e.stopPropagation();

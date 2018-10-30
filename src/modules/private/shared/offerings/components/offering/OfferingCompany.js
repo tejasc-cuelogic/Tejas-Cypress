@@ -7,7 +7,7 @@ import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingCompany extends Component {
   componentWillMount() {
@@ -35,14 +35,24 @@ export default class OfferingCompany extends Component {
       formArrayChange,
       rtEditorChange,
     } = this.props.offeringCreationStore;
-    const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const isApproved = false;
-    const isReadonly = isApproved;
     const formName = 'OFFERING_COMPANY_FRM';
+    const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.offering && offer.offering.about &&
+      offer.offering.about.submitted) ? offer.offering.about.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.about &&
+      offer.offering.about.approved) ? offer.offering.about.approved : null;
+    const issuerSubmitted = (offer && offer.offering && offer.offering.about &&
+      offer.offering.about.issuerSubmitted) ? offer.offering.about.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
       <Form>
         <Header as="h4">About the Company</Header>
         <HtmlEditor
+          readOnly={isReadonly}
           changed={this.editorChange}
           name="theCompany"
           form="OFFERING_COMPANY_FRM"
@@ -82,6 +92,7 @@ export default class OfferingCompany extends Component {
               <Divider section />
               <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
               <HtmlEditor
+                readOnly={isReadonly}
                 changed={rtEditorChange}
                 name={field}
                 form="OFFERING_COMPANY_FRM"
@@ -93,10 +104,13 @@ export default class OfferingCompany extends Component {
         }
         <Divider hidden />
         <ButtonGroup
-          isManager={access.asManager}
+          isIssuer={isIssuer}
+          submitted={submitted}
+          isManager={isManager}
           formValid={OFFERING_COMPANY_FRM.meta.isValid}
-          isApproved={isApproved}
+          approved={approved}
           updateOffer={this.handleFormSubmit}
+          issuerSubmitted={issuerSubmitted}
         />
       </Form>
     );

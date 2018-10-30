@@ -76,6 +76,9 @@
                     text-decoration: underline;
                 }
             }
+            &.icon .icon {
+                margin-right: 5px!important;
+            }
         }
         &.ghost-button{
             background-color:transparent;
@@ -122,11 +125,20 @@
             &:last-child{
                 padding-right:0;
             }
+            &.note {
+                font-weight: @normal;
+            }
         }
     }
-    &.vertical.buttons .button{
-        + .button{
-            margin:@7px 0 0 0 !important;
+    &.vertical.buttons{
+        .button{
+            + .button{
+                margin:@7px 0 0 0 !important;
+            }
+        }
+        &.time-stamp .time-stamp{
+            padding:@14px 0;
+            text-align:left;
         }
     }
 }
