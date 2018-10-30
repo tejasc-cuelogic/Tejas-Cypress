@@ -53,13 +53,13 @@ export default class Portfolio extends Component {
         <PortfolioAllocations pieChart={calculateInvestmentType} />
         <Header as="h4">My Investments</Header>
         {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
-          <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} /> : null
+          <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
         }
         {getInvestorAccounts && getInvestorAccounts.investments.active.length ?
-          <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} /> : null
+          <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" listOfCount={getInvestorAccounts.investments.active.length} match={match} /> : null
         }
         {getInvestorAccounts && getInvestorAccounts.investments.completed.length ?
-          <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} /> : null
+          <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" listOfCount={getInvestorAccounts.investments.completed.length} match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
         !getInvestorAccounts.investments.active.length &&

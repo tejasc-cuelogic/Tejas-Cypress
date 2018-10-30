@@ -6,12 +6,6 @@ import moment from 'moment';
 import UpdatesTimeline from './UpdatesComponents/UpdatesTimeline';
 import UpdateDetails from './UpdatesComponents/UpdateDetails';
 
-// const summary = [
-//   { id: 4, date: 'Jan 23rd 2018' },
-//   { id: 3, date: 'Dec 17th 2017' },
-//   { id: 2, date: 'Aug 28th 2017' },
-//   { id: 1, date: 'Mar 01st 2017' },
-// ];
 @inject('campaignStore')
 @observer
 class Updates extends Component {
@@ -27,7 +21,6 @@ class Updates extends Component {
           moment(updates[index].updated.date).format('ll') : null;
         return summary.push(dateObj);
       });
-      console.log('summary', summary);
     }
     return (
       <Grid padded relaxed="very">
@@ -36,8 +29,16 @@ class Updates extends Component {
         </Grid.Column>
         <Grid.Column width={1} only="computer" />
         <Grid.Column width={12} computer={10} className="update-details">
-          <Route exact path={this.props.match.url} component={UpdateDetails} />
-          <Route path={`${this.props.match.url}/:id`} component={UpdateDetails} />
+          <Route
+            exact
+            path={this.props.match.url}
+            // component={UpdateDetails}
+            render={props => <UpdateDetails {...props} />}
+          />
+          <Route
+            path={`${this.props.match.url}/:id`}
+            render={props => <UpdateDetails {...props} />}
+          />
         </Grid.Column>
       </Grid>
     );

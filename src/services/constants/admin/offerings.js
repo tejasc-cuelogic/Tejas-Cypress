@@ -12,7 +12,7 @@ Validator.register(
 
 
 export const STAGES = {
-  CREATION: { ref: 'creation', accessKey: 1, label: '' },
+  CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
   LIVE: {
     ref: 'live', publicRef: 'active', accessKey: 2, label: 'Live',
   },
@@ -22,8 +22,8 @@ export const STAGES = {
   PROCESSING: {
     ref: 'live', publicRef: 'active', accessKey: 3, label: 'Processing',
   },
-  FAILED: { ref: 'live', accessKey: 4, label: '' },
-  TERMINATED: { ref: 'live', accessKey: 4, label: '' },
+  FAILED: { ref: 'live', accessKey: 4, label: 'Failed' },
+  TERMINATED: { ref: 'live', accessKey: 4, label: 'Terminated' },
   STARTUP_PERIOD: {
     ref: 'engagement', publicRef: 'completed', accessKey: 3, label: 'Startup Period',
   },
@@ -560,53 +560,23 @@ export const COMPANY_LAUNCH = {
   },
 };
 
-export const SIGNED_LEGAL_DOCS = {
-  data: [{
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  ],
-};
-
 export const OFFER_CLOSE = {
+  checkboxes: {
+    value: [],
+    values: [
+      {
+        label: '5/10 split agreed', value: '1',
+      },
+      {
+        label: 'Closing contigencies Sign-Off', value: '2',
+      },
+      {
+        label: 'Escrow funded Propetly', value: '3',
+      },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
   disbursementDate: {
     value: '',
     label: 'Disbursement Date',
@@ -1993,3 +1963,4 @@ export const ADMIN_DOCUMENTATION = {
     lastModifiedDate: '',
   },
 };
+
