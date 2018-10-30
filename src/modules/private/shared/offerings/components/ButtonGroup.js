@@ -46,7 +46,7 @@ const ButtonGroup = ({
           </Aux>
         ) : (!approved || (approved && !approved.status)) && (
           <Aux>
-            {issuerSubmitted &&
+            {issuerSubmitted && !submitted &&
               <Button inverted onClick={() => updateOffer({ isApproved: true, status: 'issuer_decline' })} color="red" content="Unlock for Issuer" disabled={!formValid} />
             }
             {!submitted &&
