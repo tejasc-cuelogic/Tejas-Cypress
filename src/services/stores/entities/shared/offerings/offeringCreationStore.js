@@ -927,11 +927,13 @@ export class OfferingCreationStore {
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
               leaders.push(merge(
-                toJS(getOfferingById[keyName][index]),
+                toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
+                  index ? getOfferingById[keyName][index] : {}),
                 payloadData[keyName][index],
               ));
             }
           });
+          this.removeIndex = null;
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
