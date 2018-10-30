@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Segment, Item, Divider, Header, Label, Icon, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import Aux from 'react-aux';
 import { UserAvatar } from '../../../../../../theme/shared';
 
 class LatestUpdates extends Component {
@@ -24,11 +25,19 @@ class LatestUpdates extends Component {
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
           <Header as="h4">
-            <Link to={`${refLink}/updates`}>
-              Updates
-              <Label circular horizontal color="blue">{(updates && updates.length) || 0}</Label>
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
+            {updates && updates.length ?
+              <Link to={`${refLink}/updates`}>
+                Updates
+                <Label circular horizontal color="blue">{(updates && updates.length) || 0}</Label>
+                <Icon className="ns-chevron-right" color="green" />
+              </Link>
+              :
+              <Aux>
+                Updates
+                <Label circular horizontal color="blue">{(updates && updates.length) || 0}</Label>
+                <Icon className="ns-chevron-right" color="green" />
+              </Aux>
+            }
           </Header>
           {update ?
             <Item.Group className="campaign-updates">
@@ -50,7 +59,7 @@ class LatestUpdates extends Component {
                 </Item.Content>
               </Item>
             </Item.Group>
-          : <p>No Updates are available</p>
+            : <p>No Updates are available</p>
           }
         </Segment>
       </Grid.Column>
