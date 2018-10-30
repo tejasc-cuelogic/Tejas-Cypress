@@ -69,7 +69,7 @@ export default class Portfolio extends Component {
             <Grid>
               <Grid.Row>
                 <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
-                  <Card className="form-card">
+                  <Card className="form-card" fluid>
                     <Card.Content>
                       <Header as="h4">Browse the latest investment opportunities.</Header>
                       <Button as={Link} to="/offerings" size="medium" color="green">Start investing now</Button>
