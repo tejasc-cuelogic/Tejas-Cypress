@@ -16,7 +16,7 @@ const ButtonGroup = ({
         }
         {submitted &&
           <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
+            <Icon className="ns-circle" color="green" />
             Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
           </Button>
         }
