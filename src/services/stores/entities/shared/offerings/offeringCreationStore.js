@@ -884,7 +884,7 @@ export class OfferingCreationStore {
         payloadData = payLoadDataOld;
       }
       if (keyName) {
-        payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
+        payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
