@@ -26,12 +26,13 @@ class DataFormatter {
   getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
 
   diffDays = (timeStamp2) => {
-    const date = new Date();
-    const timeStamp1 = date.getTime();
-    const convertedtimeStamp2 = new Date(timeStamp2);
-    const difference = timeStamp1 - convertedtimeStamp2.getTime();
-    const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-    return daysDifference;
+    const d1 = moment().format('MM/DD/YYYY');
+    const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
+    const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
+    if (diff <= 0) {
+      return 0;
+    }
+    return diff;
   }
 
   formatedDate = date => moment(date).format('MM/DD/YYYY');
