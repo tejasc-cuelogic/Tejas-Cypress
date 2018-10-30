@@ -142,11 +142,26 @@ class Overview extends Component {
               <Statistic.Group size="mini" className="vertical">
                 <Statistic>
                   <Statistic.Label>Open date</Statistic.Label>
-                  <Statistic.Value>Sep 6<sup>th</sup>, 2016</Statistic.Value>
+                  <Statistic.Value>
+                    {campaign && campaign.offering &&
+                      campaign.offering.launch &&
+                      campaign.offering.launch.targetDate ?
+                      moment(campaign.offering.launch.targetDate).format('MMM Do YYYY')
+                      :
+                      'NA'
+                    }
+                  </Statistic.Value>
                 </Statistic>
                 <Statistic>
                   <Statistic.Label>Months to Maturity</Statistic.Label>
-                  <Statistic.Value>38 months</Statistic.Value>
+                  <Statistic.Value>
+                    {campaign && campaign.keyTerms &&
+                      campaign.keyTerms.maturity ?
+                      `${campaign.keyTerms.maturity} months`
+                      :
+                      'NA'
+                    }
+                  </Statistic.Value>
                 </Statistic>
               </Statistic.Group>
             </Grid.Column>

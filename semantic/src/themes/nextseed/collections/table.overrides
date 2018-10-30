@@ -143,6 +143,11 @@
             i.offering-icon{
                 color:@border-color;
             }
+            p.date-stamp{
+                font-size:@12px;
+                font-weight:@normal;
+                color:@border-color;
+            }
         }
         i.ns-individual-line, i.ns-ira-line, i.ns-entity-line{
             font-size:@20px;
@@ -185,6 +190,9 @@
     &.confirm-transfer-table {
         tr td {
             border-top: 0;
+            &.right.aligned input{
+                text-align:right;
+            }
         }
     }
     &:not(.unstackable) tr>td {
