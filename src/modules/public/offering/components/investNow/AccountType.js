@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { includes } from 'lodash';
 import { Header, Form, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
 @observer
 class AccountType extends Component {
   componentWillMount() {
     const { setStepToBeRendered } = this.props.investmentStore;
     const { UserAccounts } = this.props;
-    if (UserAccounts && UserAccounts.length === 1) {
-      setStepToBeRendered(2);
+    if (this.props.changeInvest || (UserAccounts && UserAccounts.length === 1)) {
+      const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+      this.props.investmentStore.accTypeChanged(null, { value: accountType });
+      this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
+        setStepToBeRendered(1);
+      });
     }
   }
   componentDidMount() {
     const {
       investAccTypes,
       setStepToBeRendered,
-      setDisableNextbtn,
+      setFieldValue,
     } = this.props.investmentStore;
     if (investAccTypes.values.length === 0) {
-      setDisableNextbtn();
+      setFieldValue('disableNextbtn', true);
       setStepToBeRendered(1);
     }
   }
@@ -41,8 +46,17 @@ class AccountType extends Component {
       <Aux>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
         <Form error className="account-type-tab">
-          {investAccTypes.values[0] ?
-            <p className="center-align">Choose an account type</p> :
+          {investAccTypes.values.length ?
+            <Aux>
+              <p className="center-align">Choose an account type</p>
+              <FormRadioGroup
+                name="investAccountType"
+                containerclassname="button-radio center-align"
+                fielddata={investAccTypes}
+                changed={accTypeChanged}
+              />
+            </Aux>
+            :
             <div className="center-align">
               <p>Investment Accounts are not yet Created!</p>
               <Link to="/app/summary" className="text-link">
@@ -51,12 +65,6 @@ class AccountType extends Component {
               </Link>
             </div>
           }
-          <FormRadioGroup
-            name="investAccountType"
-            containerclassname="button-radio center-align"
-            fielddata={investAccTypes}
-            changed={accTypeChanged}
-          />
         </Form>
       </Aux>
     );

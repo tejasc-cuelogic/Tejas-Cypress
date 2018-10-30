@@ -5,7 +5,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
   getInvestorAccountPortfolio(
     userId: $userId,
     accountId: $accountId,
-    InFlight: $InFlight,
+    includeInFlight: $InFlight,
     includeInterest: $includeInterest,
   ) {
     totalBalance
@@ -15,49 +15,51 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
     investments {
       pending {
         agreementId
-        location
         investmentDate
         investedAmount
-        status
         offering {
           id
           offeringStatus
+          stage
           keyTerms {
             shorthandBusinessName
             securities
             industry
+            terminationDate
           }
         }
       }
       active {
-        location
         investedAmount
         investmentDate
-        status
-        closeDate
         offering {
           id
           offeringStatus
+          stage
           keyTerms {
             shorthandBusinessName
             securities
             industry
           }
+          closureSummary {
+            disbursementDate
+          }
         }
       }
       completed {
-        location
         investedAmount
         investmentDate
-        status
-        closeDate
         offering {
           id
           offeringStatus
+          stage
           keyTerms {
             shorthandBusinessName
             securities
             industry
+          }
+          closureSummary {
+            disbursementDate
           }
         }
       }
@@ -82,12 +84,14 @@ query getInvestmentDetailsOverview($userId: String!, $accountId: String!, $offer
 }
 `;
 
+export const cancelAgreement = gql`
+  mutation cancelAgreement($agreementId: Int!) {
+    cancelAgreement(agreementId: $agreementId)
+  }`;
 export const withdrawFunds = gql`
   mutation withdrawFunds($amount:  Float!, $accountId: String! ) {
     withdrawFunds(amount: $amount, accountId: $accountId)
-  }
-`;
-
+  }`;
 export const addFunds = gql`
   mutation addFunds($amount:  Float!, $accountId: String! ) {
     addFunds(amount: $amount, accountId: $accountId)

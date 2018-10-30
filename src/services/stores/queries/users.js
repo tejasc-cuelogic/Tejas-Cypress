@@ -40,6 +40,12 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      limits {
+        income
+        netWorth
+        otherContributions
+        limit
+      }
       info {
         firstName
         lastName

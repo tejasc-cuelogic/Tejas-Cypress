@@ -8,7 +8,13 @@ import SummaryHeader from '../components/portfolio/SummaryHeader';
 import PortfolioAllocations from '../components/portfolio/PortfolioAllocations';
 import InvestmentList from '../components/portfolio/InvestmentList';
 import InvestmentDetails from './InvestmentDetails';
+import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader } from '../../../../../theme/shared';
+import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
+import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
+import DocSign from '../../../../public/offering/components/investNow/agreement/components/DocSign';
+import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
+import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
 
 @inject('portfolioStore')
 @observer
@@ -41,24 +47,23 @@ export default class Portfolio extends Component {
         },
       ],
     };
-    console.log(calculateInvestmentType);
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
         <PortfolioAllocations pieChart={calculateInvestmentType} />
         <Header as="h4">My Investments</Header>
-        {getInvestorAccounts && getInvestorAccounts.investments.pending.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.active.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.active.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.active} listOf="active" match={match} /> : null
         }
-        {getInvestorAccounts && getInvestorAccounts.investments.completed.length &&
-        <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} />
+        {getInvestorAccounts && getInvestorAccounts.investments.completed.length ?
+          <InvestmentList investments={getInvestorAccounts.investments.completed} listOf="completed" match={match} /> : null
         }
         {getInvestorAccounts && !getInvestorAccounts.investments.pending.length &&
-          !getInvestorAccounts.investments.active.length &&
-          !getInvestorAccounts.investments.completed.length &&
+        !getInvestorAccounts.investments.active.length &&
+        !getInvestorAccounts.investments.completed.length ?
           <Aux>
             <p>No investments or reservations pending.</p>
             <Grid>
@@ -73,11 +78,23 @@ export default class Portfolio extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-          </Aux>
+          </Aux> : null
         }
         <Route
           path={`${match.url}/investment-details/:id`}
           render={props => <InvestmentDetails refLink={match.url} {...props} />}
+        />
+        <Route
+          path={`${match.url}/:offeringId/invest-now`}
+          render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
+        />
+        <Route path={`${match.url}/:offeringId/agreement`} component={Agreement} />
+        <Route path={`${match.url}/:offeringId/doc-sign`} component={DocSign} />
+        <Route path={`${match.url}/:offeringId/congratulation`} component={Congratulation} />
+        <Route path={`${match.url}/:offeringId/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={match.url} {...props} />} />
+        <Route
+          path={`${match.url}/cancel-investment/:id`}
+          render={props => <CancelInvestment refLink={match.url} {...props} />}
         />
       </Aux>
     );
