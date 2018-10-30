@@ -43,6 +43,7 @@ export default class OfferingLaunch extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
+    const stage = offer ? offer.stage : '';
     const submitted = (offer && offer.offering && offer.offering.launch &&
       offer.offering.launch.submitted) ? offer.offering.launch.submitted : null;
     const approved = (offer && offer.offering && offer.offering.launch &&
@@ -115,7 +116,7 @@ export default class OfferingLaunch extends Component {
           formValid={COMPANY_LAUNCH_FRM.meta.isValid}
           approved={approved}
           updateOffer={this.handleFormSubmit}
-          launch={this.launch}
+          launch={stage === 'CREATION' ? this.launch : false}
         />
       </Form>
     );
