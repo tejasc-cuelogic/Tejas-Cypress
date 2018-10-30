@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 class RevenueSharingKeyTerms extends Component {
@@ -27,7 +28,12 @@ class RevenueSharingKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>$250,000</p>
+                <p>
+                  {KeyTerms && KeyTerms.minOfferingAmount ?
+                    Helper.CurrencyFormat(KeyTerms.minOfferingAmount)
+                    :
+                    'NA'}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -35,7 +41,12 @@ class RevenueSharingKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>$1,000,000</p>
+                <p>
+                  {KeyTerms && KeyTerms.maxOfferingAmount ?
+                    Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)
+                    :
+                    'NA'}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -43,7 +54,12 @@ class RevenueSharingKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>$100</p>
+                <p>
+                  {KeyTerms && KeyTerms.minInvestAmt ?
+                    Helper.CurrencyFormat(KeyTerms.minInvestAmt)
+                    :
+                    'NA'}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -51,7 +67,12 @@ class RevenueSharingKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $XXX within YY months. A 1.0% service fee is deducted from each payment." position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p><b>{KeyTerms.investmentMultiple}</b></p>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.investmentMultiple ?
+                      `${KeyTerms.investmentMultiple}` : 'NA'}
+                  </b>
+                </p>
                 <p>
                   If the final offering amount raised is less than or equal to $600,000,
                   the investment multiple will be 1.70x.
@@ -69,6 +90,12 @@ class RevenueSharingKeyTerms extends Component {
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Revenue Sharing Percentage</b></Table.Cell>
               <Table.Cell>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.revSharePercentage ?
+                      `${KeyTerms.revSharePercentage}` : 'NA'}
+                  </b>
+                </p>
                 <p>
                   Buffbrew Taproom&apos;s revenue streams will come from tap sales, restaurant
                   sales, beer garden sales and facility tour and event sales.
@@ -103,10 +130,14 @@ class RevenueSharingKeyTerms extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                <p>
-                  <b>{KeyTerms.maturity} Months,</b>
-                  including a 6 month startup period for ramp up
-                </p>
+                {KeyTerms && KeyTerms.maturity ?
+                  <p>
+                    <b>{KeyTerms.maturity} Months,</b>
+                    including a 6 month startup period for ramp up
+                  </p>
+                  :
+                  'NA'
+                }
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top" >
@@ -118,7 +149,12 @@ class RevenueSharingKeyTerms extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                <p><b>{KeyTerms.frequencyOfPayments}</b></p>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.frequencyOfPayments ?
+                      `${KeyTerms.frequencyOfPayments}` : 'NA'}
+                  </b>
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -126,7 +162,12 @@ class RevenueSharingKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>{KeyTerms.securityInterest}</p>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.securityInterest ?
+                      `${KeyTerms.securityInterest}` : 'NA'}
+                  </b>
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -134,12 +175,16 @@ class RevenueSharingKeyTerms extends Component {
                 <b>Ownership % Represented by Securities</b>
               </Table.Cell>
               <Table.Cell>
-                <p>
-                  <b>{KeyTerms.securitiesOwnershipPercentage}%.</b>
-                  Investors will not receive any equity interests in the Issuer or
-                  any voting or management rights with respect to the Issuer as a result of
-                  an investment in Securities.
-                </p>
+                {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
+                  <p>
+                    <b>{KeyTerms.securitiesOwnershipPercentage} %.</b>
+                    Investors will not receive any equity interests in the Issuer or
+                    any voting or management rights with respect to the Issuer as a result of
+                    an investment in Securities.
+                  </p>
+                  :
+                  'NA'
+                }
               </Table.Cell>
             </Table.Row>
           </Table.Body>
