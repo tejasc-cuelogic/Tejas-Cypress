@@ -66,6 +66,7 @@ export const getOfferingDetails = gql`
         shorthandBusinessName
         industry
         maturity
+        regulation
         frequencyOfPayments
         securities
         securityInterest
