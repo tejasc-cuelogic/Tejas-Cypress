@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
-import { Grid, Header, Segment, Image, Responsive } from 'semantic-ui-react';
-import { ASSETS_URL } from '../../../../../constants/aws';
-// import businessModel from '../../../../../assets/images/investment-1.jpg';
+import { Grid, Header, Segment, Responsive } from 'semantic-ui-react';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
-import { InlineLoader } from '../../../../../theme/shared';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import { InlineLoader, Image64 } from '../../../../../theme/shared';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -23,11 +21,12 @@ class InvestmentDetails extends Component {
             <Responsive maxWidth={767} as={Aux}>
               <Grid.Column tablet={16}>
                 <Segment padded>
-                  <Image
-                    src={campaign && campaign.keyTerms &&
-                      campaign.keyTerms.securities && campaign.keyTerms.securities ===
-                      CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ? `${ASSETS_URL}images/investment-2.jpg` : `${ASSETS_URL}images/investment-1.jpg`}
-                    fluid
+                  <Image64
+                    srcUrl={campaign && campaign.media &&
+                      campaign.media.heroImage &&
+                      campaign.media.heroImage.url ?
+                      campaign.media.heroImage.url : null
+                    }
                   />
                 </Segment>
               </Grid.Column>
@@ -64,14 +63,12 @@ class InvestmentDetails extends Component {
             <Responsive minWidth={768} as={Aux}>
               <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
                 <Segment padded>
-                  <Image
-                    src={campaign && campaign.keyTerms &&
-                      campaign.keyTerms.securities &&
-                      campaign.keyTerms.securities ===
-                      CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
-                      `${ASSETS_URL}images/investment-2.jpg` : `${ASSETS_URL}images/investment-1.jpg`
+                  <Image64
+                    srcUrl={campaign && campaign.media &&
+                      campaign.media.heroImage &&
+                      campaign.media.heroImage.url ?
+                      campaign.media.heroImage.url : null
                     }
-                    fluid
                   />
                 </Segment>
               </Grid.Column>
@@ -80,7 +77,7 @@ class InvestmentDetails extends Component {
           {campaign && campaign.keyTerms &&
             campaign.keyTerms.securities &&
             campaign.keyTerms.securities ===
-            CAMPAIGN_KEYTERMS_SECURITIES.REVENUE_SHARING_NOTE ?
+            CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
               <RevenueSharingDetails
                 refLink={this.props.refLink}
                 KeyTerms={campaign.keyTerms}
