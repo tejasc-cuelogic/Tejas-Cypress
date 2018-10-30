@@ -4,7 +4,32 @@ import { inject, observer } from 'mobx-react';
 import { intersectionBy, orderBy, findLastIndex, filter, toInteger } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
+<<<<<<< HEAD
 import { InlineLoader } from '../../../../../../../theme/shared';
+=======
+
+const data = {
+  invested: 10000,
+  milestones: [
+    {
+      amount: 7689,
+      reward: {
+        head: 'Invest $7689 or more',
+        subHead: 'Cooking Class',
+        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
+      },
+    },
+    {
+      amount: 25000,
+      reward: {
+        head: 'Invest $25000 or more',
+        subHead: 'Cooking Class',
+        highlights: ['$50 Gift Card', 'Invitation for 2 to the Launch Party'],
+      },
+    },
+  ],
+};
+>>>>>>> origin/522-transactions-investnow-changeinvestment-api-integration
 
 const calcSmartProgress = (milestones, amount) => {
   const pIndex = findLastIndex(milestones, m => toInteger(m.amount) < toInteger(amount));
