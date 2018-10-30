@@ -25,17 +25,18 @@ const ButtonGroupType2 = ({
       <Button.Group floated="right">
         {isManager && submitted ? (
           <Aux>
-            <Button inverted onClick={() => updateOffer({ isApproved: true, status: false })} color="red" content="Decline" />
-            {approved && !approved.status &&
-            <Button color="green" onClick={() => updateOffer({ isApproved: true, status: true })} className="relaxed" disabled={!formValid}>Approve</Button>
+            <Button inverted onClick={() => updateOffer({ isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
+            {(!approved || (approved && !approved.status)) &&
+            <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
             }
+            <Button color="green" onClick={() => updateOffer({ isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed" disabled={!formValid}>{approved && approved.status ? 'Edit' : 'Approve'}</Button>
           </Aux>
         ) : (!approved || (approved && !approved.status)) && (
           <Aux>
             {!submitted &&
             <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
             }
-            <Button primary={!submitted} onClick={() => updateOffer({ submitted: true })} className="relaxed" disabled={!formValid || submitted}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+            <Button primary={!submitted} onClick={() => updateOffer({ isApproved: true, status: 'support_submitted' })} className="relaxed" disabled={!formValid || submitted}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
           </Aux>
         )}
       </Button.Group>
