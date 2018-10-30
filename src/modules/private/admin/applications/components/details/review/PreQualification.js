@@ -41,12 +41,12 @@ export default class PreQual extends Component {
       ? review.preQualification.submitted : null;
     const approved = (review && review.preQualification && review.preQualification.approved)
       ? review.preQualification.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
             Justifications
             {!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length < 5 &&

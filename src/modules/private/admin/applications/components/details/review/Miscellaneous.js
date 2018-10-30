@@ -113,12 +113,12 @@ export default class Miscellaneous extends Component {
       review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
     const approved = (review && review.miscellaneous && review.miscellaneous &&
       review.miscellaneous.approved) ? review.miscellaneous.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form size="small" onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
           <SectionHeader header="Social Media" />
           <Table basic compact className="form-table">
             <TableHeader isReadonly={isReadonly} labels={['Label', 'URL']} />

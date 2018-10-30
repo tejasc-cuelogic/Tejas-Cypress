@@ -16,3 +16,14 @@ export const allRewards = gql`
     }
   }
 `;
+
+
+export const getUserRewardBalance = gql`
+  query _getUserRewardBalance($userId: String!, $dateFilterStart: String, $dateFilterStop: String){
+    getUserRewardBalance(
+      userId: $userId
+      dateFilterStart: $dateFilterStart
+      dateFilterStop: $dateFilterStop
+    ) 
+  }
+`;

@@ -30,3 +30,9 @@ export const updateFinLimit = gql`
   }
 `;
 
+export const getInvestorInvestmentLimit = gql`
+  query getInvestorInvestmentLimit($userId: ID!, $accountId: ID!) {
+    getInvestorInvestmentLimit(userId: $userId, accountId: $accountId)
+  }
+`;
+

@@ -1,22 +1,28 @@
 import React from 'react';
-import { Modal, Button, Divider } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+import { Modal, Divider } from 'semantic-ui-react';
 
+@inject('investmentStore')
+@observer
 export default class DocSign extends React.Component {
-  handleCloseModal = () => {
-    this.props.history.push('overview');
+  componentWillMount() {
+    const { investAccTypes } = this.props.investmentStore;
+    if (investAccTypes.value === '') {
+      this.props.history.push('invest-now');
+    }
   }
-  submit = () => {
-    this.props.history.push('congratulation');
+  handleCloseModal = () => {
+    this.props.history.push('agreement');
   }
   render() {
+    const { agreementDetails } = this.props.investmentStore;
     return (
-      <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+      <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={this.handleCloseModal}>
         <Modal.Content className="signup-content center-align">
           <div className="pdf-viewer">
-            <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/investor-statements-mock/offeringpageignited.pdf" type="application/pdf">failed to load..</object>
+            <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
           </div>
           <Divider hidden />
-          <Button primary onClick={this.submit} >Submit</Button>
         </Modal.Content>
       </Modal>
     );
