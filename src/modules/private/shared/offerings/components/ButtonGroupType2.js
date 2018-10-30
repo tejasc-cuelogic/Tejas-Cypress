@@ -4,7 +4,7 @@ import moment from 'moment';
 import { Button, Icon } from 'semantic-ui-react';
 
 const ButtonGroupType2 = ({
-  formValid, isManager, approved, updateOffer, submitted,
+  isManager, approved, updateOffer, submitted, launch,
 }) => (
   <Aux>
     <div className="clearfix sticky-actions">
@@ -25,18 +25,19 @@ const ButtonGroupType2 = ({
       <Button.Group floated="right">
         {isManager && submitted ? (
           <Aux>
-            <Button inverted onClick={() => updateOffer({ isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
+            <Button inverted onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
             {(!approved || (approved && !approved.status)) &&
-            <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
+            <Button primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
             }
-            <Button color="green" onClick={() => updateOffer({ isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed" disabled={!formValid}>{approved && approved.status ? 'Edit' : 'Approve'}</Button>
+            <Button color="green" onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed">{approved && approved.status ? 'Edit' : 'Approve'}</Button>
+            {launch && approved && approved.status && <Button onClick={launch} color="green"className="relaxed">Launch</Button>}
           </Aux>
         ) : (!approved || (approved && !approved.status)) && (
           <Aux>
             {!submitted &&
-            <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
+            <Button primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
             }
-            <Button primary={!submitted} onClick={() => updateOffer({ isApproved: true, status: 'support_submitted' })} className="relaxed" disabled={!formValid || submitted}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+            <Button primary={!submitted} onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
           </Aux>
         )}
       </Button.Group>

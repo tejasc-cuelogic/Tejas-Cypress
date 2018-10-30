@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
 
 const HeaderWithTooltip = ({ header, tooltip }) => (
   <Header as="h4">
@@ -18,7 +19,7 @@ const HeaderWithTooltip = ({ header, tooltip }) => (
   </Header>
 );
 
-@inject('offeringCreationStore', 'uiStore', 'userStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @withRouter
 @observer
 export default class Leader extends Component {
@@ -44,7 +45,7 @@ export default class Leader extends Component {
   }
   handleFormSubmit = (isApproved = null, successMsg) => {
     const { LEADERSHIP_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true);
+    updateOffering(currentOfferingId, LEADERSHIP_FRM.fields, 'leadership', null, true, successMsg, isApproved, true, this.props.index || 0);
   }
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
@@ -60,19 +61,23 @@ export default class Leader extends Component {
     } = this.props.offeringCreationStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
-    const isApproved = false;
-    const isReadonly = isApproved;
+    const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.leadership[index] &&
+      offer.leadership[index].submitted) ? offer.leadership[index].submitted : null;
+    const approved = (offer && offer.leadership[index] &&
+      offer.leadership[index].approved) ? offer.leadership[index].approved : null;
+    const issuerSubmitted = (offer && offer.leadership[index] &&
+      offer.leadership[index].issuerSubmitted) ? offer.leadership[index].issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
       <Aux>
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
             <Button.Group size="mini" floated="right">
-              {access.asManager ?
-                <Button secondary className="relaxed" content={isApproved ? 'Edit' : 'Approve'} onClick={() => this.handleFormSubmit(true)} disabled={!(LEADERSHIP_FRM.meta.isValid && LEADERSHIP_EXP_FRM.meta.isValid)} />
-              : <Button secondary className="relaxed" content="Save" onClick={this.handleFormSubmit} disabled={!(LEADERSHIP_FRM.meta.isValid && LEADERSHIP_EXP_FRM.meta.isValid)} />
-              }
               <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
             </Button.Group>
           </Header>
@@ -287,20 +292,14 @@ export default class Leader extends Component {
             ))
           }
           <Divider hidden />
-          <div className="clearfix mb-20">
-            <Button as="span" className="time-stamp">
-              <Icon className="ns-check-circle" color="green" />
-              Submitted by ISSUER_NAME on 2/3/2018
-            </Button>
-          </div>
-          {isApproved &&
-          <div className="clearfix">
-            <Button as="span" className="time-stamp">
-              <Icon className="ns-check-circle" color="green" />
-              Approved by MANAGER_NAME on 2/3/2018
-            </Button>
-          </div>
-          }
+          <ButtonGroup
+            isIssuer={isIssuer}
+            submitted={submitted}
+            isManager={isManager}
+            approved={approved}
+            updateOffer={this.handleFormSubmit}
+            issuerSubmitted={issuerSubmitted}
+          />
         </Form>
         <Confirm
           header="Confirm"

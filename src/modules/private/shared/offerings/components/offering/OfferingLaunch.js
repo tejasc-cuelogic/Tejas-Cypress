@@ -21,6 +21,17 @@ export default class OfferingLaunch extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, undefined, isApproved);
   }
+  launch = () => {
+    const {
+      updateOfferingMutation,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    updateOfferingMutation(
+      currentOfferingId, { stage: 'LIVE' }, false,
+      true, 'Offering Launched successfully.',
+    );
+    this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+  }
   render() {
     const {
       COMPANY_LAUNCH_FRM,
@@ -104,6 +115,7 @@ export default class OfferingLaunch extends Component {
           formValid={COMPANY_LAUNCH_FRM.meta.isValid}
           approved={approved}
           updateOffer={this.handleFormSubmit}
+          launch={this.launch}
         />
       </Form>
     );

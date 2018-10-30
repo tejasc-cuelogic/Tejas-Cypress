@@ -783,9 +783,42 @@ export class OfferingCreationStore {
   }
 
   @action
+  updateOfferingMutation = (
+    id,
+    payload, keyName, notify = true,
+    successMsg = undefined, fromS3 = false,
+  ) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables: {
+          id,
+          offeringDetails: payload,
+        },
+      })
+      .then(() => {
+        this.removeUploadedFiles(fromS3);
+        if (successMsg) {
+          Helper.toast(`${successMsg}`, 'success');
+        } else if (notify) {
+          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+        }
+        offeringsStore.getOne(id, false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+  @action
   updateOffering = (
     id,
-    fields, keyName, subKey, notify = true, successMsg = undefined, approvedObj, fromS3 = false,
+    fields, keyName, subKey, notify = true, successMsg = undefined,
+    approvedObj, fromS3 = false, leaderIndex,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -841,7 +874,7 @@ export class OfferingCreationStore {
     }
     if (keyName !== 'contingencies') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
-        payloadData[keyName] : payloadData;
+        keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
         if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
           payLoadDataOld.approved = {
@@ -856,6 +889,9 @@ export class OfferingCreationStore {
             by: `${firstName} ${lastName}`,
             date: moment().toISOString(),
           };
+          if ((!payLoadDataOld.issuerSubmitted || payLoadDataOld.issuerSubmitted === '') && !approvedObj.isAdminOnly) {
+            payLoadDataOld.issuerSubmitted = moment().toISOString();
+          }
         } else if (approvedObj.status === 'issuer_submitted') {
           payLoadDataOld.issuerSubmitted = moment().toISOString();
         } else if (approvedObj.status === 'support_decline') {
@@ -877,6 +913,8 @@ export class OfferingCreationStore {
           } else {
             payloadData[keyName][subKey] = payLoadDataOld;
           }
+        } else if (keyName === 'leadership') {
+          payloadData[keyName][leaderIndex] = payLoadDataOld;
         } else {
           payloadData[keyName] = payLoadDataOld;
         }
@@ -889,36 +927,7 @@ export class OfferingCreationStore {
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
     }
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: updateOffering,
-        variables: {
-          id,
-          offeringDetails: payloadData,
-        },
-        // refetchQueries: [{
-        //   query: getOfferingDetails,
-        //   variables: { id: getOfferingById.id },
-        //   fetchPolicy: 'no-cache',
-        // }],
-      })
-      .then(() => {
-        this.removeUploadedFiles(fromS3);
-        if (successMsg) {
-          Helper.toast(`${successMsg}`, 'success');
-        } else if (notify) {
-          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
-        }
-        offeringsStore.getOne(getOfferingById.id, false);
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
   }
 
   @action
@@ -1064,18 +1073,7 @@ export class OfferingCreationStore {
         date: moment().toISOString(),
       };
     }
-
     variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
-    // if (keyName) {
-    //   payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
-    //   payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
-    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-    //     parent, node, key, path, deep,
-    //   }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
-    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-    //     parent, node, key, path, deep,
-    //   }) => (isObject(node) && isEmpty(node)));
-    // }
     uiStore.setProgress();
     client
       .mutate({
