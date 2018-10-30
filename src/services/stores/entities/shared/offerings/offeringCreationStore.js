@@ -814,26 +814,32 @@ export class OfferingCreationStore {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
-        payLoadDataOld.approved = {
-          id: userDetailsStore.userDetails.id,
-          by: `${firstName} ${lastName}`,
-          date: moment().toISOString(),
-          status: approvedObj.status,
-        };
-        if (!approvedObj.status && !approvedObj.edit) {
+        if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: approvedObj.status === 'manager_approved',
+          };
+        } else if (approvedObj.status === 'support_submitted') {
+          payLoadDataOld.submitted = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
+        } else if (approvedObj.status === 'issuer_submitted') {
+          payLoadDataOld.issuerSubmitted = moment().toISOString();
+        } else if (approvedObj.status === 'support_decline') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: false,
+          };
           payLoadDataOld.submitted = null;
+        } else if (approvedObj.status === 'issuer_decline') {
           payLoadDataOld.issuerSubmitted = '';
-        } else if (!approvedObj.status) {
-          payLoadDataOld.submitted = null;
         }
-      } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
-        payLoadDataOld.submitted = {
-          id: userDetailsStore.userDetails.id,
-          by: `${firstName} ${lastName}`,
-          date: moment().toISOString(),
-        };
-      } else if (approvedObj !== null && approvedObj && approvedObj.isIssuer) {
-        payLoadDataOld.issuerSubmitted = moment().toISOString();
       }
       if (keyName) {
         if (subKey) {
@@ -851,12 +857,10 @@ export class OfferingCreationStore {
       if (keyName) {
         payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
-        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-          parent, node, key, path, deep,
-        }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
-        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-          parent, node, key, path, deep,
-        }) => (isObject(node) && isEmpty(node)));
+        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({ node }) =>
+          (node === null || (isObject(node) && isEmpty(node)) || node === ''));
+        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({ node }) =>
+          (isObject(node) && isEmpty(node)));
       }
     }
     uiStore.setProgress();
