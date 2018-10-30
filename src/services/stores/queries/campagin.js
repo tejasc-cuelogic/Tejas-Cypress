@@ -278,23 +278,19 @@ export const campaignDetailsQuery = gql`
       }
       isEarlyBirdOnly
       notificationSent {
-        id
         by
         date
         to
       }
       approved {
-        id
         by
         date
       }
       updated {
-        id
         by
         date
       }
       deleted {
-        id
         by
         date
       }
@@ -341,7 +337,6 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
-    offeringStatus
     keyTerms {
       legalBusinessName
       shorthandBusinessName
@@ -359,6 +354,7 @@ query getOfferingById($id: ID) {
         targetDate
       }
     }
+    earlyBirdsCount
     bonusRewards{
       id
       offeringId
@@ -394,23 +390,19 @@ query getOfferingById($id: ID) {
       }
       isEarlyBirdOnly
       notificationSent {
-        id
         by
         date
         to
       }
       approved {
-        id
         by
         date
       }
       updated {
-        id
         by
         date
       }
       deleted {
-        id
         by
         date
       }
@@ -426,7 +418,10 @@ query getOfferingById($id: ID) {
         }
       }
     }
-  
+    rewardsTierIds {
+      amount
+      earlyBirdQuantity
+    }
   }
 }
 `;

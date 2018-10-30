@@ -11,6 +11,12 @@ import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { CAMPAIGN_OFFERING_STATUS } from '../../../../../constants/offering';
 import NotFound from '../../../../shared/NotFound';
 
+const getModule = component => Loadable({
+  loader: () => import(`../components/portfolio/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
 const navItems = [
   { title: 'Overview', to: 'overview', component: 'Overview' },
   { title: 'Transactions', to: 'transactions', component: 'Transactions' },
@@ -25,10 +31,8 @@ class InvestmentDetails extends Component {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
     const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
-    this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id)
-      .then(() => {
-        this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
-      });
+    this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
+    this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
@@ -37,8 +41,8 @@ class InvestmentDetails extends Component {
 
   render() {
     const { match, portfolioStore } = this.props;
-    const { getInvestor, investmentDetails } = portfolioStore;
-    const { campaign } = this.props.campaignStore;
+    const { getInvestor } = portfolioStore;
+    const { campaign, details } = this.props.campaignStore;
 
     const summaryDetails = {
       accountType: 'individual',
@@ -62,27 +66,31 @@ class InvestmentDetails extends Component {
         },
       ],
     };
-    const getModule = component => Loadable({
-      loader: () => import(`../components/portfolio/${component}`),
-      loading() {
-        return <InlineLoader />;
-      },
-    });
-    if (investmentDetails && investmentDetails.data &&
-      !investmentDetails.data.getInvestmentDetailsOverview) {
+    if (!details || details.loading) {
+      return <InlineLoader />;
+    }
+    if (details && details.data && !details.data.getOfferingDetailsById) {
       return <NotFound />;
     }
     return (
-      <Modal closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
+      <Modal closeOnDimmerClick={false} closeIcon size="large" dimmer="inverted" open onClose={this.handleCloseModal} centered={false}>
         <Modal.Content className="transaction-details">
           <SummaryHeader details={summaryDetails} />
           <Card fluid>
             <SecondaryMenu match={match} navItems={navItems} />
             <Switch>
-              <Route exact path={match.url} component={getModule(navItems[0].component)} />
+              <Route
+                exact
+                path={match.url}
+                component={getModule(navItems[0].component)}
+              />
               {
                 navItems.map(item => (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} component={getModule(item.component)} />
+                  <Route
+                    key={item.to}
+                    path={`${match.url}/${item.to}`}
+                    component={getModule(item.component)}
+                  />
                 ))
               }
             </Switch>

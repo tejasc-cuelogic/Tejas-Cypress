@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
-import ButtonGroup from '../ButtonGroup';
+import ButtonGroupType2 from '../ButtonGroupType2';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingLaunch extends Component {
   componentWillMount() {
@@ -29,9 +29,14 @@ export default class OfferingLaunch extends Component {
       maskChange,
     } = this.props.offeringCreationStore;
     const formName = 'COMPANY_LAUNCH_FRM';
+    const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const isApproved = false;
-    const isReadonly = isApproved;
+    const isManager = access.asManager;
+    const submitted = (offer && offer.offering && offer.offering.launch &&
+      offer.offering.launch.submitted) ? offer.offering.launch.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.launch &&
+      offer.offering.launch.approved) ? offer.offering.launch.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
       <Form>
         <Header as="h4">Launch Timeline</Header>
@@ -77,6 +82,7 @@ export default class OfferingLaunch extends Component {
             ))
           }
           <MaskedInput
+            displayMode={isReadonly}
             name="gsFees"
             fielddata={COMPANY_LAUNCH_FRM.fields.gsFees}
             changed={(values, name) => maskChange(values, formName, name)}
@@ -92,10 +98,11 @@ export default class OfferingLaunch extends Component {
           changed={(e, result) => formChange(e, result, formName)}
         />
         <Divider hidden />
-        <ButtonGroup
-          isManager={access.asManager}
+        <ButtonGroupType2
+          submitted={submitted}
+          isManager={isManager}
           formValid={COMPANY_LAUNCH_FRM.meta.isValid}
-          isApproved={isApproved}
+          approved={approved}
           updateOffer={this.handleFormSubmit}
         />
       </Form>
