@@ -5,7 +5,7 @@ import { Form, Divider, Header, Button } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingOverview extends Component {
   componentWillMount() {
@@ -30,9 +30,18 @@ export default class OfferingOverview extends Component {
       formArrayChange,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
+    const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
-    const isApproved = false;
-    const isReadonly = isApproved;
+    const isManager = access.asManager;
+    const submitted = (offer && offer.offering && offer.offering.overview &&
+      offer.offering.overview.submitted) ? offer.offering.overview.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.overview &&
+      offer.offering.overview.approved) ? offer.offering.overview.approved : null;
+    const issuerSubmitted = (offer && offer.offering && offer.offering.overview &&
+      offer.offering.overview.issuerSubmitted) ? offer.offering.overview.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
       <Form>
         {
@@ -131,10 +140,13 @@ export default class OfferingOverview extends Component {
         />
         <Divider hidden />
         <ButtonGroup
-          isManager={access.asManager}
+          isIssuer={isIssuer}
+          submitted={submitted}
+          isManager={isManager}
           formValid={OFFERING_OVERVIEW_FRM.meta.isValid}
-          isApproved={isApproved}
+          approved={approved}
           updateOffer={this.handleFormSubmit}
+          issuerSubmitted={issuerSubmitted}
         />
       </Form>
     );

@@ -41,6 +41,7 @@ export default class AfIssuer extends Component {
       AFFILIATED_ISSUER_FRM,
       formArrayChange,
       confirmModal,
+      affiliatedIssuerOfferingBacData,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
@@ -49,9 +50,14 @@ export default class AfIssuer extends Component {
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     const afIssuerId = AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].id.value;
-    const isApproved = false;
-    const isSubmitted = false;
-    const isReadonly = isApproved;
+    const isManager = access.asManager;
+    const submitted = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length &&
+      affiliatedIssuerOfferingBacData[issuerNumber].submitted) ?
+      affiliatedIssuerOfferingBacData[issuerNumber].submitted : null;
+    const approved = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length &&
+      affiliatedIssuerOfferingBacData[issuerNumber].approved) ?
+      affiliatedIssuerOfferingBacData[issuerNumber].approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
       <Aux>
         <Form className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
@@ -112,11 +118,11 @@ export default class AfIssuer extends Component {
           }
           <Divider hidden />
           <ButtonGroupType2
-            isSubmitted={isSubmitted}
+            submitted={submitted}
             isManager={access.asManager}
             formValid={AFFILIATED_ISSUER_FRM.meta.isValid}
-            isApproved={isApproved}
-            updateFunction={approved => this.handleSubmitIssuer(afIssuerId, approved)}
+            approved={approved}
+            updateOffer={approved1 => this.handleSubmitIssuer(afIssuerId, approved1)}
           />
         </Form>
         <Confirm

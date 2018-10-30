@@ -312,8 +312,9 @@ export const BUSINESS_TYPE_VALUES = [
 ];
 
 export const REGULATION_VALUES = [
-  { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
-  { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
+  { key: '506(c)', value: 'REGULATION_506C', text: '506(c)' },
+  { key: 'Reg CF 506(c)', value: 'REGULATION_CF_506C', text: 'Reg CF 506(c)' },
+  { key: 'Reg CF', value: 'REGULATION_CF', text: 'Reg CF' },
 ];
 
 export const OFFERING_OVERVIEW = {
@@ -559,53 +560,23 @@ export const COMPANY_LAUNCH = {
   },
 };
 
-export const SIGNED_LEGAL_DOCS = {
-  data: [{
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  {
-    document: {
-      fileName: 'form35453.pdf',
-      attachedDate: '4/3/18 ',
-      label: 'Form C Certificate',
-    },
-  },
-  ],
-};
-
 export const OFFER_CLOSE = {
+  checkboxes: {
+    value: [],
+    values: [
+      {
+        label: '5/10 split agreed', value: '1',
+      },
+      {
+        label: 'Closing contigencies Sign-Off', value: '2',
+      },
+      {
+        label: 'Escrow funded Propetly', value: '3',
+      },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
   disbursementDate: {
     value: '',
     label: 'Disbursement Date',
@@ -1992,3 +1963,4 @@ export const ADMIN_DOCUMENTATION = {
     lastModifiedDate: '',
   },
 };
+

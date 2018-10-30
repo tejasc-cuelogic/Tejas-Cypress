@@ -29,6 +29,7 @@ export default class Leader extends Component {
       LEADER_FRM,
       formArrayChange,
       leaderShipOfferingBac,
+      leaderShipOfferingBacData,
     } = this.props.offeringCreationStore;
     const issuerNumber = this.props.index;
     const index = issuerNumber || 0;
@@ -36,9 +37,14 @@ export default class Leader extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
-    const isApproved = false;
-    const isSubmitted = false;
-    const isReadonly = isApproved;
+    const isManager = access.asManager;
+    const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
+      leaderShipOfferingBacData[index].submitted) ?
+      leaderShipOfferingBacData[index].submitted : null;
+    const approved = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
+      leaderShipOfferingBacData[index].approved) ?
+      leaderShipOfferingBacData[index].approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     let leaderId = '';
     if (leaderShipOfferingBac.loading) {
       return <InlineLoader />;
@@ -91,11 +97,11 @@ export default class Leader extends Component {
         }
         <Divider hidden />
         <ButtonGroupType2
-          isSubmitted={isSubmitted}
+          submitted={submitted}
           isManager={access.asManager}
           formValid={LEADER_FRM.meta.isValid}
-          isApproved={isApproved}
-          updateFunction={approved => this.handleSubmitIssuer(leaderId, approved)}
+          approved={approved}
+          updateOffer={approved1 => this.handleSubmitIssuer(leaderId, approved1)}
         />
       </Form>
     );
