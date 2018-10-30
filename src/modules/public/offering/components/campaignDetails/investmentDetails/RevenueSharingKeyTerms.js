@@ -17,7 +17,7 @@ class RevenueSharingKeyTerms extends Component {
             <p><b>Securities</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Offering Amount</b><br />{`Min. $${Helper.CurrencyFormat(KeyTerms.minOfferingAmount)}, to max. $${Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)}`}</p>
+            <p><b>Offering Amount</b><br />{`Min.${Helper.CurrencyFormat(KeyTerms.minOfferingAmount)}, to max.${Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)}`}</p>
           </Grid.Column>
         </Grid>
         <Divider />
