@@ -55,15 +55,17 @@ export default class KeyTerms extends Component {
               changed={(values, name) => maskChange(values, formName, name)}
               number
             />
-            <FormDropDown
-              fielddata={KEY_TERMS_FRM.fields.regulation}
-              selection
-              containerclassname="dropdown-field"
-              value={KEY_TERMS_FRM.fields.regulation.value}
-              name="regulation"
-              options={REGULATION_VALUES}
-              onChange={(e, result) => formChange(e, result, formName)}
-            />
+            <div className="field">
+              <FormDropDown
+                fielddata={KEY_TERMS_FRM.fields.regulation}
+                selection
+                containerclassname="dropdown-field"
+                value={KEY_TERMS_FRM.fields.regulation.value}
+                name="regulation"
+                options={REGULATION_VALUES}
+                onChange={(e, result) => formChange(e, result, formName)}
+              />
+            </div>
             <FormInput
               name="frequencyOfPayments"
               fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}

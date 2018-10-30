@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Route, Link } from 'react-router-dom';
-import { Form, Grid, Button } from 'semantic-ui-react';
+import { Route } from 'react-router-dom';
+import { Form, Grid, Button, Modal } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { InlineLoader } from '../../../../../theme/shared';
 import Listing from './updates/Listing';
@@ -20,7 +20,9 @@ export default class BonusRewards extends Component {
     }
   }
   render() {
-    const { updateStore, match } = this.props;
+    const {
+      updateStore, match,
+    } = this.props;
     const {
       updates, loading, requestState, filters,
     } = updateStore;
@@ -42,9 +44,9 @@ export default class BonusRewards extends Component {
                 more="no"
                 addon={
                   <Grid.Column width={5} textAlign="right">
-                    <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
-                      Add new Update
-                    </Button>
+                    <Modal dimmer="inverted" onClose={this.close} size="large" trigger={<Button color="green" size="small">Add new Update</Button>} closeIcon >
+                      <NewUpdate match={match} />
+                    </Modal>
                   </Grid.Column>
                 }
               />
