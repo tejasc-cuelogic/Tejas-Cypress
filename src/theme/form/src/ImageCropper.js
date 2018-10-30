@@ -121,7 +121,7 @@ export default class ImageCropper extends Component {
 
   render() {
     // const { profilePhoto } = this.props.fieldData.fields;
-    const { field, cropInModal } = this.props;
+    const { field, cropInModal, disabled } = this.props;
     return (
       <Aux>
         { field.src && !field.error ? cropInModal ?
@@ -156,7 +156,7 @@ export default class ImageCropper extends Component {
               <div className="file-uploader-inner">
                 <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
               </div>
-              <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
+              <input disabled={disabled} type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             </div>
             {field.error &&
               <FieldError error={field.error} />

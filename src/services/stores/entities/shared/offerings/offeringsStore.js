@@ -28,6 +28,7 @@ export class OfferingsStore {
     perPage: 10,
     skip: 0,
   };
+  @observable initLoad = [];
 
   @action
   initRequest = (props) => {
@@ -87,6 +88,7 @@ export class OfferingsStore {
 
   @action
   getOne = (id, loading = true) => {
+    this.initLoad.push('getOne');
     if (loading) {
       this.offerLoading = true;
     }
@@ -101,6 +103,7 @@ export class OfferingsStore {
         setFormData('OFFERING_DETAILS_FRM', false);
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
+        offeringCreationStore.resetInitLoad();
       },
     });
   }
@@ -124,6 +127,9 @@ export class OfferingsStore {
 
   @computed get loading() {
     return this.data.loading;
+  }
+  @action resetInitLoad() {
+    this.initLoad = [];
   }
 }
 

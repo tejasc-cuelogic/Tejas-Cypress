@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Icon, Grid, Segment, Popup, Statistic } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 class KeyTerms extends Component {
   render() {
@@ -18,6 +19,7 @@ class KeyTerms extends Component {
             <Grid.Column>
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Investment Type</b>{' '}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities] : ''}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
                     content="Lorem Ipsum"

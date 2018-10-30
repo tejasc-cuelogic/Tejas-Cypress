@@ -62,6 +62,17 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       keyTerms {
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
         legalBusinessName
         shorthandBusinessName
         industry
@@ -168,23 +179,25 @@ export const getOfferingDetails = gql`
           fileName
         }
         issuerSubmitted
-          submitted {
-            id
-            by
-            date
-          }
-          approved {
-            id
-            by
-            date
-            status
-          }
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
       }
       contingencies {
         launch {
           contingency
           acceptance
           accepted {
+            status
+            id
             by
             date
             comment
@@ -194,6 +207,8 @@ export const getOfferingDetails = gql`
           contingency
           acceptance
           accepted {
+            id
+            status
             date
             by
             comment

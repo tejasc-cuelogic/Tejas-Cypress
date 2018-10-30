@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Icon, Grid, Segment, Popup } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
-import { INDUSTRY_TYPES } from '../../../../../../constants/offering';
+import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 
 class AboutTheCompany extends Component {
   render() {
@@ -33,7 +33,7 @@ class AboutTheCompany extends Component {
               <b>Industry: </b>
               {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
               <b>Investment Type: </b>
-              {campaign && campaign.selectedOffer && campaign.selectedOffer.structure}
+              {campaign && campaign.keyTerms && campaign.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities] : ''}
               <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <a target="blank" href="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor">See some examples</a>.</span>)} />
             </p>
             <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
