@@ -607,6 +607,22 @@ export const SIGNED_LEGAL_DOCS = {
 };
 
 export const OFFER_CLOSE = {
+  checkboxes: {
+    value: [],
+    values: [
+      {
+        label: '5/10 split agreed', value: '1',
+      },
+      {
+        label: 'Closing contigencies Sign-Off', value: '2',
+      },
+      {
+        label: 'Escrow funded Propetly', value: '3',
+      },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
   disbursementDate: {
     value: '',
     label: 'Disbursement Date',
@@ -1993,3 +2009,4 @@ export const ADMIN_DOCUMENTATION = {
     lastModifiedDate: '',
   },
 };
+

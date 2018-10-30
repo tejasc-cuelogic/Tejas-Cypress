@@ -297,7 +297,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form, isArr = true) => {
+  formChange = (e, result, form, isArr = true, type = undefined) => {
     if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
         this[form],
@@ -310,6 +310,7 @@ export class OfferingCreationStore {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),
+        type,
       );
     }
   }
