@@ -1110,6 +1110,9 @@ a.icon-link:hover {
 					color: @neutral;
 					font-size: @15px;
 				}
+				img {
+					width: 100%;
+				}
 			}
 		}
 		.vertical-timeline-element-date {
