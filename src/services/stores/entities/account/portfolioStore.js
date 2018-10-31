@@ -12,6 +12,7 @@ export class PortfolioStore {
   @observable pieChartData = null;
   @observable currentOfferingId = null;
   @observable isCancelShowLink = false;
+  @observable investmentDetails = null;
 
   @action
   setFieldValue = (field, value) => {
@@ -48,7 +49,8 @@ export class PortfolioStore {
     };
   }
 
-  @computed get calculateInvestmentType() {
+  @action
+  calculateInvestmentType() {
     this.resetPiechartValues();
     const investmentData = this.getInvestorAccounts;
     if (investmentData) {
@@ -66,9 +68,12 @@ export class PortfolioStore {
         }
       });
     });
-    return toJS(this.pieChartData);
   }
-  @observable investmentDetails = null;
+
+  @computed get getPieChartData() {
+    return (this.pieChartData && toJS(this.pieChartData)) || null;
+  }
+
   @action
   getInvestorAccountPortfolio = (accountType) => {
     userDetailsStore.setFieldValue('currentActiveAccount', accountType);
@@ -79,7 +84,7 @@ export class PortfolioStore {
       query: getInvestorAccountPortfolio,
       variables: {
         userId: userDetails.id,
-        accountId: account.details.accountId,
+        accountId: (account && account.details) ? account.details.accountId : null,
       },
       fetchPolicy: 'network-only',
     });

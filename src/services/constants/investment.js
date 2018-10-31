@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Popup, List } from 'semantic-ui-react';
 
@@ -113,19 +112,20 @@ export const AGREEMENT_DETAILS_INFO = {
       {
         label: (
           <Aux>
-            I have reviewed and agree to the terms of the <Link to="doc-sign">Note Purchase Agreement</Link>.
+            I have reviewed and agree to the terms of the Note Purchase Agreement.
           </Aux>
         ),
         value: '5',
+        customLabel: true,
       },
       {
         label: (
           <Aux>
             I have reviewed NextSeed’s <a href="/">educational materials</a>, understand that
             the entire amount of my investment may be lost, and confirm that I am in a
-            financial condiiton to bear the loss. I have read and agree to the terms of
+            financial condition to bear the loss. I have read and agree to the terms of
             the <a href="/">CrowdPay Custodial Account Agreement</a>,
-            the <a href="/">Substitute IRS Form W-9 Certificaiton</a>,
+            the <a href="/">Substitute IRS Form W-9 Certification</a>,
             and <a href="/">NextSeed Investor Membership Agreement</a>.
           </Aux>
         ),

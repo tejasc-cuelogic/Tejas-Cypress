@@ -11,6 +11,7 @@ import {
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment, updateInvestmentLimits,
 } from '../../queries/investNow';
+import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
     @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
@@ -32,6 +33,19 @@ export class InvestmentStore {
     @observable estReturnVal = '-';
     @observable disableNextbtn = true;
     @observable isValidInvestAmtInOffering = false;
+    @observable byDefaultRender = true;
+    @observable showTransferRequestErr = false;
+
+    @action
+    setShowTransferRequestErr = (status) => {
+      this.showTransferRequestErr = status;
+      this.setFieldValue('disableNextbtn', !status);
+    }
+
+    @action
+    setByDefaultRender = (status) => {
+      this.byDefaultRender = status;
+    }
 
     @action
     setFieldValue = (field, value) => {
@@ -116,6 +130,9 @@ export class InvestmentStore {
         });
         const val = this.investAccTypes.values[0].value;
         this.investAccTypes.value = val;
+      }
+      if (this.investAccTypes.values.length === 0) {
+        this.setFieldValue('disableNextbtn', false);
       }
     }
     @action
@@ -213,6 +230,7 @@ export class InvestmentStore {
         variables: {
           userId: userDetailsStore.currentUserId,
           accountId: this.getSelectedAccountTypeId,
+          includeInFlight: true,
         },
         onFetch: (data) => {
           if (data) {
@@ -259,7 +277,7 @@ export class InvestmentStore {
     }
 
     @action
-    validateInvestmentAmount = () => new Promise((resolve) => {
+    validateInvestmentAmount = () => new Promise((resolve, reject) => {
       graphql({
         client,
         query: validateInvestmentAmount,
@@ -268,15 +286,21 @@ export class InvestmentStore {
           accountId: this.getSelectedAccountTypeId,
           offeringId: campaignStore.getOfferingId,
           investmentAmount: this.investmentAmount,
+          autoDraftDeposit: this.getTransferRequestAmount,
           creditToSpend: this.getSpendCreditValue,
         },
         onFetch: (data) => {
           if (data) {
             resolve(data.validateInvestmentAmount);
           }
+          if (!data.validateInvestmentAmount) {
+            this.setShowTransferRequestErr(true);
+          }
         },
         onError: () => {
           Helper.toast('Something went wrong, please try again later.', 'error');
+          this.setShowTransferRequestErr(true);
+          reject();
         },
         fetchPolicy: 'network-only',
       });
@@ -302,7 +326,7 @@ export class InvestmentStore {
   @action
   generateAgreement = () => {
     uiStore.setProgress();
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: generateAgreement,
@@ -321,7 +345,9 @@ export class InvestmentStore {
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
+          this.setShowTransferRequestErr(true);
           uiStore.setErrors(error.message);
+          reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
@@ -343,6 +369,7 @@ export class InvestmentStore {
               offeringId: campaignStore.getOfferingId,
               investmentAmount: this.investmentAmount,
               agreementId: this.agreementDetails.agreementId,
+              transferAmount: this.getTransferRequestAmount,
             },
             // refetchQueries: [{ query: getBusinessApplications }],
           })
@@ -424,6 +451,13 @@ export class InvestmentStore {
             netWorth: fields.netWorth.value,
             otherRegCfInvestments: fields.cfInvestments.value,
           },
+          refetchQueries: [{
+            query: getInvestorInvestmentLimit,
+            variables: {
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+            },
+          }],
         })
         .then(() => {
           resolve();
@@ -444,17 +478,19 @@ export class InvestmentStore {
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
   }
 
+  @action
+  resetForm = (form) => {
+    Validator.resetFormData(form);
+  }
+
   @computed get changedInvestmentLimit() {
     const { fields } = this.INVESTMENT_LIMITS_FORM;
     const annualIncome = fields.annualIncome.value;
     const netWorth = fields.netWorth.value;
-    // const otherInvestments = fields.cfInvestments.value;
     const annualInvestmentLimitFloor = 2200;
     const annualInvestmentLimit = 107000;
     const annualIncomeLimitHighPct = 0.10;
-    // const nsInvestments = 0;
     let annualInvestmentLimitLowPct = 0;
-    // let remaining = 0;
     let limit = null;
 
     if (this.INVESTMENT_LIMITS_FORM.meta.isValid) {

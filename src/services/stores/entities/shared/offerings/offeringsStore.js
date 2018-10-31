@@ -75,13 +75,24 @@ export class OfferingsStore {
 
   @action
   deleteOffering = (id) => {
+    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === this.requestState.stage));
+    const params = {
+      first: this.requestState.perPage,
+      skip: this.requestState.skip,
+    };
+    if (reqStages.length > 0) {
+      params.stage = reqStages;
+    }
     client
       .mutate({
         mutation: deleteOffering,
         variables: {
           id,
         },
-        refetchQueries: [{ query: allOfferings }],
+        refetchQueries: [{
+          query: allOfferings,
+          variables: { ...params, ...{ issuerId: userStore.currentUser.sub } },
+        }],
       })
       .then(() => Helper.toast('Offering deleted successfully.', 'success'))
       .catch(() => Helper.toast('Error while deleting offering', 'error'));

@@ -70,8 +70,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
 `;
 
 export const getInvestorDetailsById = gql`
-query getInvestmentDetailsOverview($userId: String!, $accountId: String!, $offeringId: String!) {
-  getInvestmentDetailsOverview(
+query getInvestmentDetails($userId: String!, $accountId: String!, $offeringId: String!) {
+  getInvestmentDetails(
     userId: $userId,
     accountId: $accountId,
     offeringId: $offeringId,

@@ -21,6 +21,8 @@ class ChangeInvestmentLimit extends Component {
     } else {
       this.props.history.push(this.props.refLink);
     }
+    const { resetForm, INVESTMENT_LIMITS_FORM } = this.props.investmentStore;
+    resetForm(INVESTMENT_LIMITS_FORM);
   }
   render() {
     const {

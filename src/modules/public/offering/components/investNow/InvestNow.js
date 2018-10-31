@@ -1,13 +1,12 @@
 import React from 'react';
 import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
 import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
-import ConfirmCancellation from './ConfirmCancellation';
 
 @withRouter
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
@@ -33,6 +32,7 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.history.push('overview');
     this.props.investmentStore.resetData();
+    this.props.investmentStore.setByDefaultRender(true);
   }
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
@@ -42,14 +42,15 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleCancel = () => {
-    // this.props.investmentStore.setStepToBeRendered(0);
-    // this.props.investmentStore.setFieldValue('disableNextbtn', true);
-    this.props.history.push(`${this.props.match.url}/confirm-cancellation`);
-    // this.props.history.push('invest-now');
+    this.props.investmentStore.setStepToBeRendered(0);
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
+    // this.props.history.push(`${this.props.match.url}/confirm-cancellation`);
+    this.props.history.push('invest-now');
   }
 
   handleConfirm = () => {
-    this.setState({ submitLoading: !this.state.submitLoading });
+    this.props.investmentStore.setByDefaultRender(false);
+    this.setState({ submitLoading: true });
     this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
       if (isValid) {
         this.props.investmentStore.transferFundsForInvestment().then((status) => {
@@ -57,12 +58,18 @@ export default class InvestNow extends React.Component {
             this.props.investmentStore.generateAgreement().then(() => {
               Helper.toast('Transfer request is in process!', 'success');
               this.props.investmentStore.setStepToBeRendered(0);
-              this.setState({ submitLoading: !this.state.submitLoading });
+              this.setState({ submitLoading: false });
               this.props.history.push('agreement');
+            }).finally(() => {
+              this.setState({ submitLoading: false });
             });
           }
+        }).catch(() => {
+          this.setState({ submitLoading: false });
         });
       }
+    }).catch(() => {
+      this.setState({ submitLoading: false });
     });
   }
   multiClickHandler = (step) => {
@@ -72,20 +79,24 @@ export default class InvestNow extends React.Component {
         if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
           this.handleStepChange(step.stepToBeRendered);
         } else {
-          this.setState({ submitLoading: !this.state.submitLoading });
+          this.setState({ submitLoading: true });
           this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
             if (isValid) {
               this.props.investmentStore.generateAgreement().then(() => {
                 Helper.toast('Transfer request is in process!', 'success');
                 this.props.investmentStore.setStepToBeRendered(0);
-                this.setState({ submitLoading: !this.state.submitLoading });
+                this.setState({ submitLoading: false });
                 this.props.history.push('agreement');
+              }).finally(() => {
+                this.setState({ submitLoading: false });
               });
             }
+          }).catch(() => {
+            this.setState({ submitLoading: false });
           });
         }
       });
-    } else if (step.name === 'Account Type') {
+    } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
       this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
         this.handleStepChange(step.stepToBeRendered);
       });
@@ -101,7 +112,6 @@ export default class InvestNow extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
     } = uiStore;
-    const { match } = this.props;
     const steps =
     [
       {
@@ -131,13 +141,11 @@ export default class InvestNow extends React.Component {
           confirm={this.handleConfirm}
           cancel={this.handleCancel}
         />,
-        stepToBeRendered: 3,
         isValid: '',
       },
     ];
     return (
       <div className="step-progress" >
-        <Route path={`${match.url}/confirm-cancellation`} render={props => <ConfirmCancellation refLink={match.url} {...props} />} />
         {!this.state.submitLoading ?
           <MultiStep createAccount={this.multiClickHandler} setIsEnterPressed={setIsEnterPressed} disableNxtbtn={this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
           :

@@ -3,15 +3,18 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 
-@inject('investmentStore')
+@inject('investmentStore', 'portfolioStore')
 @withRouter
 @observer
 export default class ConfirmCancellation extends Component {
   handleBack = () => {
-    this.props.history.push(this.props.refLink);
+    this.props.history.push('agreement');
   }
   handleConfirm = () => {
-    this.props.history.push(this.props.refLink);
+    const { agreementDetails } = this.props.investmentStore;
+    const { cancelAgreement } = this.props.portfolioStore;
+    cancelAgreement(agreementDetails.agreementId);
+    this.props.history.push('invest-now');
   }
   render() {
     return (

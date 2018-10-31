@@ -277,6 +277,20 @@ export const getOfferingDetails = gql`
             status
           }
         }
+        misc {
+          additionalBonusRewardsContent
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+        }
         launch {
           targetDate
           terminationDate

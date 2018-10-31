@@ -1,24 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
 import { INDUSTRY_TYPES_ICONS } from '../../../../../../constants/offering';
 import { DateTimeFormat, InlineLoader } from '../../../../../../theme/shared';
 
-
-function calculateDateDiff(terminationDate) {
-  const d1 = moment().format('MM/DD/YYYY');
-  const d2 = terminationDate ? moment(terminationDate).format('MM/DD/YYYY') : null;
-  const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
-  return diff;
-}
-
 const investmentsMeta = ['Offering', 'Location', 'Investment Type', 'Invested Amount', 'Status'];
 const InvestmentList = (props) => {
   const listHeader = [...investmentsMeta, ...(props.listOf === 'pending' ? ['Days to close'] : ['Close Date'])];
-  const { investments } = props;
+  const { investments, match } = props;
   return (
     <Accordion fluid styled className="card-style">
       <Accordion.Title active className="text-capitalize">
@@ -47,7 +39,7 @@ const InvestmentList = (props) => {
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[data.offering.keyTerms.industry]} offering-icon`} />
                         {props.listOf === 'pending' ? data.offering.keyTerms.shorthandBusinessName : (
-                          <Link to={`${props.match.url}/investment-details/${data.offering.id}`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
+                          <Link to={`${match.url}/investment-details/${data.offering.id}`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
                         )}
                       </Table.Cell>
                       <Table.Cell>{data.location}</Table.Cell>
@@ -64,7 +56,7 @@ const InvestmentList = (props) => {
                         }
                       </Table.Cell>
                       <Table.Cell collapsing>
-                        {props.listOf === 'pending' ? `${calculateDateDiff(data && data.offering && data.offering.offering &&
+                        {props.listOf === 'pending' ? `${DataFormatter.diffDays(data && data.offering && data.offering.offering &&
                           data.offering.offering.launch &&
                            data.offering.offering.launch.terminationDate ?
                            data.offering.offering.launch.terminationDate : null)} days`
@@ -73,12 +65,15 @@ const InvestmentList = (props) => {
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
-                          <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
+                          <Button as={Link} to={`${match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
                           :
                           <Button.Group size="mini" compact>
-                            <Button as={Link} to={`${props.match.url}/investment-details/${data.offering.id}`} primary content="Change" />
-                            {calculateDateDiff(data.daysToClose) > 2 &&
-                              <Button as={Link} to={`${props.match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
+                            <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
+                            {DataFormatter.diffDays(data && data.offering &&
+                            data.offering.offering && data.offering.offering.launch &&
+                            data.offering.offering.launch.terminationDate ?
+                            data.offering.offering.launch.terminationDate : null) > 2 &&
+                              <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
                             }
                           </Button.Group>
                         }

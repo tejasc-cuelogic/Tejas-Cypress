@@ -30,3 +30,9 @@ mutation CreateTransaction($transactionType: String!, $description: String!, $am
     }
   } 
 `;
+
+export const addFunds = gql`
+  mutation addFunds($userId: String!, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int!) {
+    addFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId)
+  }
+`;
