@@ -50,7 +50,7 @@ export default class CancelInvestment extends Component {
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3"> {!isCancelShowLink ? 'Do you want to cancel this investment?' : 'Investment has been canceled.' }</Header>
+          <Header as="h3"> {!isCancelShowLink ? 'Do you want to cancel this investment?' : 'Investment has been canceled.'}</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&
@@ -58,11 +58,14 @@ export default class CancelInvestment extends Component {
               <ListErrors errors={[errors]} />
             </Message>
           }
-          <OfferingInvestDetails
-            offering={investmentOfferingDetails || null}
-            accType="individual"
-            disabledClass={isCancelShowLink ? 'disabled' : ''}
-          />
+          {!isCancelShowLink ?
+            <OfferingInvestDetails
+              offering={investmentOfferingDetails || null}
+              accType="individual"
+              disabledClass={isCancelShowLink ? 'disabled' : ''}
+            />
+            :
+            null}
           {!isCancelShowLink ?
             <Form error onSubmit={this.submit}>
               <div className="center-align mt-40">
