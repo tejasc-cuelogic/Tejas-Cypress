@@ -956,6 +956,23 @@ export class OfferingCreationStore {
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
+    } else {
+      forEach(payloadData.contingencies.launch, (con, index) => {
+        payloadData.contingencies.launch[index].accepted = {
+          ...payloadData.contingencies.launch[index].accepted,
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+        };
+      });
+      forEach(payloadData.contingencies.close, (con, index) => {
+        payloadData.contingencies.close[index].accepted = {
+          ...payloadData.contingencies.close[index].accepted,
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+        };
+      });
     }
     this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
   }
