@@ -218,6 +218,14 @@ a{
 			color:@neutral;
 		}
 	}
+	&.grey-link{
+		font-size:@13px;
+		color:@neutral-offdark;
+		text-decoration:none !important;
+		&:hover, &:active, &.active{
+			color:@neutral-middark;
+		}
+	}
 }
 .invisible{
 	opacity:0 !important;
@@ -233,6 +241,9 @@ a{
 }
 .primary-block {
 	background-color: @primary-two;
+}
+i.icon.right {
+	margin-left: 0.25rem;
 }
 //	Helper Classes Ends
 
