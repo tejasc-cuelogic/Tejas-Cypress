@@ -12,15 +12,15 @@ import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
-import DocSign from '../../../../public/offering/components/investNow/agreement/components/DocSign';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
+import ConfirmCancellation from '../../../../public/offering/components/investNow/ConfirmCancellation';
 
 @inject('portfolioStore')
 @observer
 export default class Portfolio extends Component {
   componentWillMount() {
-    const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
   }
   render() {
@@ -30,7 +30,7 @@ export default class Portfolio extends Component {
     }
     const { getInvestorAccounts, calculateInvestmentType } = portfolioStore;
     const summaryDetails = {
-      accountType: includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity',
+      accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
       summary: [
         {
@@ -89,7 +89,7 @@ export default class Portfolio extends Component {
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
         />
         <Route path={`${match.url}/:offeringId/agreement`} component={Agreement} />
-        <Route path={`${match.url}/:offeringId/doc-sign`} component={DocSign} />
+        <Route path={`${match.url}/confirm-cancellation`} component={ConfirmCancellation} />
         <Route path={`${match.url}/:offeringId/congratulation`} component={Congratulation} />
         <Route path={`${match.url}/:offeringId/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={match.url} {...props} />} />
         <Route

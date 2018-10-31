@@ -50,7 +50,7 @@ export default class InvestNow extends React.Component {
 
   handleConfirm = () => {
     this.props.investmentStore.setByDefaultRender(false);
-    this.setState({ submitLoading: !this.state.submitLoading });
+    this.setState({ submitLoading: true });
     this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
       if (isValid) {
         this.props.investmentStore.transferFundsForInvestment().then((status) => {
@@ -58,20 +58,19 @@ export default class InvestNow extends React.Component {
             this.props.investmentStore.generateAgreement().then(() => {
               Helper.toast('Transfer request is in process!', 'success');
               this.props.investmentStore.setStepToBeRendered(0);
-              this.setState({ submitLoading: !this.state.submitLoading });
+              this.setState({ submitLoading: false });
               this.props.history.push('agreement');
             }).finally(() => {
-              this.setState({ submitLoading: !this.state.submitLoading });
+              this.setState({ submitLoading: false });
             });
           }
-        }).finally(() => {
-          this.setState({ submitLoading: !this.state.submitLoading });
+        }).catch(() => {
+          this.setState({ submitLoading: false });
         });
       }
-    })
-      .finally(() => {
-        this.setState({ submitLoading: !this.state.submitLoading });
-      });
+    }).catch(() => {
+      this.setState({ submitLoading: false });
+    });
   }
   multiClickHandler = (step) => {
     if (step.name === 'Financial Info') {
@@ -80,16 +79,20 @@ export default class InvestNow extends React.Component {
         if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
           this.handleStepChange(step.stepToBeRendered);
         } else {
-          this.setState({ submitLoading: !this.state.submitLoading });
+          this.setState({ submitLoading: true });
           this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
             if (isValid) {
               this.props.investmentStore.generateAgreement().then(() => {
                 Helper.toast('Transfer request is in process!', 'success');
                 this.props.investmentStore.setStepToBeRendered(0);
-                this.setState({ submitLoading: !this.state.submitLoading });
+                this.setState({ submitLoading: false });
                 this.props.history.push('agreement');
+              }).finally(() => {
+                this.setState({ submitLoading: false });
               });
             }
+          }).catch(() => {
+            this.setState({ submitLoading: false });
           });
         }
       });

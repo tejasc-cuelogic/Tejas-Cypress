@@ -76,6 +76,14 @@
                     text-decoration: underline;
                 }
             }
+            &.grey{
+                font-weight:@normal;
+                color:@neutral-offdark;
+                text-decoration:none !important;
+                &:hover, &:active, &.active{
+                    color:@neutral-middark;
+                }
+            }
             &.icon .icon {
                 margin-right: 5px!important;
             }

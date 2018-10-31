@@ -3,10 +3,11 @@ import Aux from 'react-aux';
 import { includes } from 'lodash';
 import { Header, Form, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../theme/form';
 
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
+@withRouter
 @observer
 class AccountType extends Component {
   componentWillMount() {
@@ -19,22 +20,23 @@ class AccountType extends Component {
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (this.props.changeInvest || (UserAccounts && UserAccounts.length === 1)) {
-      const accountType = this.props.changeInvest ? includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity' : UserAccounts[0];
+      const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : UserAccounts[0];
       this.props.investmentStore.accTypeChanged(null, { value: accountType });
       if (getSelectedAccountTypeId) {
-        this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
-          setStepToBeRendered(1);
-        });
+        setStepToBeRendered(1);
       }
     }
   }
   componentDidMount() {
     const {
-      // investAccTypes,
       setStepToBeRendered,
       setFieldValue,
       byDefaultRender,
+      getSelectedAccountTypeId,
     } = this.props.investmentStore;
+    if (getSelectedAccountTypeId) {
+      this.props.investmentLimitStore.getInvestorInvestmentLimit();
+    }
     const { UserAccounts } = this.props;
     if (!byDefaultRender) {
       setStepToBeRendered(2);

@@ -9,6 +9,7 @@ const FormCheckbox = observer((props) => {
   const {
     label, values, tooltip, value,
   } = props.fielddata;
+  const { customLabel } = props;
   return (
     <div className={props.containerclassname || false}>
       {
@@ -21,7 +22,8 @@ const FormCheckbox = observer((props) => {
                 value={c.value}
                 {...props}
                 label={
-                  <label>{c.label}
+                  <label>
+                    {c.customLabel ? customLabel : c.label}
                     {c.tooltip &&
                       <Popup trigger={<Icon className="ns-help-circle" />} content={c.tooltip} position="top center" wide />
                     }
@@ -36,7 +38,7 @@ const FormCheckbox = observer((props) => {
                   {c.icon &&
                     <Icon className={c.icon} />
                   }
-                  {c.label}
+                  {c.customLabel ? customLabel : c.label}
                   {tooltip &&
                     <Popup
                       trigger={<Icon className="ns-help-circle" />}

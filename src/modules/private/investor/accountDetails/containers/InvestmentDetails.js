@@ -30,7 +30,7 @@ class InvestmentDetails extends Component {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
-    const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
     this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
   }
