@@ -90,6 +90,8 @@ export default class InvestNow extends React.Component {
                 this.props.history.push('agreement');
               });
             }
+          }).finally(() => {
+            this.setState({ submitLoading: !this.state.submitLoading });
           });
         }
       });
