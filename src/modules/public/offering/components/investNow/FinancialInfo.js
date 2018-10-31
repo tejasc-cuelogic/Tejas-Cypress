@@ -13,12 +13,6 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore')
 @observer
 class FinancialInfo extends Component {
-  componentWillMount() {
-    const { getSelectedAccountTypeId } = this.props.investmentStore;
-    if (getSelectedAccountTypeId) {
-      this.props.investmentLimitStore.getInvestorInvestmentLimit();
-    }
-  }
   render() {
     const {
       investmentAmount,
