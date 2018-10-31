@@ -938,6 +938,7 @@ export class OfferingCreationStore {
                 toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
                   index ? getOfferingById[keyName][index] : {}),
                 payloadData[keyName][index],
+                this.mergeCustomize,
               ));
             }
           });
