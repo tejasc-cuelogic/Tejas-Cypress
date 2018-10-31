@@ -62,6 +62,7 @@ export default class OfferingLaunch extends Component {
               <MaskedInput
                 displayMode={isReadonly}
                 name={field}
+                placeHolder={isReadonly ? '' : COMPANY_LAUNCH_FRM.fields[field].placeHolder}
                 fielddata={COMPANY_LAUNCH_FRM.fields[field]}
                 changed={(values, name) => maskChange(values, formName, name)}
                 dateOfBirth

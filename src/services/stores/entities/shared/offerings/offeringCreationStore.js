@@ -231,6 +231,7 @@ export class OfferingCreationStore {
 
   @action
   uploadFileToS3 = (form, name, files, key, index) => {
+    this[form].fields[key][index][name].showLoader = true;
     fileUpload.uploadToS3(files[0])
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
@@ -239,10 +240,14 @@ export class OfferingCreationStore {
         this[form].fields[key][index][name].fileId = `${res.fileName}${Date.now()}`;
         this[form].fields[key][index][name].fileName = `${res.fileName}${Date.now()}`;
       }))
-      .catch((err) => {
+      .catch(action((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        this[form].fields[key][index][name].showLoader = false;
         console.log(err);
-      });
+      }))
+      .finally(action(() => {
+        this[form].fields[key][index][name].showLoader = false;
+      }));
   }
 
   @action

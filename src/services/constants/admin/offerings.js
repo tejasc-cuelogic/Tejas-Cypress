@@ -274,6 +274,7 @@ export const KEY_TERMS = {
     label: 'Upload Pro Formas',
     value: '',
     error: undefined,
+    showLoader: false,
     rule: 'optional',
     preSignedUrl: '',
     fileId: '',
