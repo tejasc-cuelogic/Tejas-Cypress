@@ -748,7 +748,7 @@ export const LEADERSHIP_EXP = {
       rule: 'date',
       placeHolder: 'MM-DD-YYYY',
       objType: 'DATE',
-      customErrors: { date: '* required.' },
+      customErrors: { date: 'Dates of Service is not a valid date format.' },
     },
   }],
 };
@@ -806,6 +806,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'date',
       placeHolder: 'MM/DD/YYYY',
+      customErrors: {
+        date: 'DOB is not a valid date format.',
+      },
     },
     ssn: {
       value: '',
@@ -842,6 +845,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'date',
       placeHolder: 'MM-DD-YYYY',
+      customErrors: {
+        date: 'Start Date of Service is not a valid date format.',
+      },
       tooltip: 'If you had left the company previously and are returning, enter the start date of your current employment position.',
     },
     street: {
@@ -1819,6 +1825,9 @@ export const ADD_NEW_BONUS_REWARD = {
     value: '',
     error: undefined,
     rule: 'date',
+    customErrors: {
+      date: 'Expiration Date is not a valid date format.',
+    },
     placeHolder: '3/4/2018',
     objType: 'DATE',
   },

@@ -426,12 +426,13 @@ export class OfferingCreationStore {
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
+          }).finally(() => {
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           });
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        }).finally(() => {
           this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+          uiStore.setErrors(error.message);
         });
       });
     }
@@ -943,6 +944,7 @@ export class OfferingCreationStore {
             }
           });
           this.removeIndex = null;
+          this.confirmModal = null;
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(
