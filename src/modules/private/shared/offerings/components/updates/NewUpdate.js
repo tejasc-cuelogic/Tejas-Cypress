@@ -12,6 +12,7 @@ import Status from './Status';
 export default class NewUpdate extends Component {
   componentWillMount() {
     this.initiateFlow(this.props.match);
+    this.props.updateStore.reset();
   }
   componentWillReceiveProps(nextProps) {
     this.initiateFlow(nextProps.match);
