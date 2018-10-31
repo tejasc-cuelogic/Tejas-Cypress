@@ -79,7 +79,7 @@ export class PortfolioStore {
       query: getInvestorAccountPortfolio,
       variables: {
         userId: userDetails.id,
-        accountId: account.details.accountId,
+        accountId: (account && account.details) ? account.details.accountId : null,
       },
       fetchPolicy: 'network-only',
     });

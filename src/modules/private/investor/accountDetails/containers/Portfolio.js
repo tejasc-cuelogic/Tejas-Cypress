@@ -20,7 +20,7 @@ import ChangeInvestmentLimit from '../../../../public/offering/components/invest
 @observer
 export default class Portfolio extends Component {
   componentWillMount() {
-    const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
   }
   render() {
@@ -30,7 +30,7 @@ export default class Portfolio extends Component {
     }
     const { getInvestorAccounts, calculateInvestmentType } = portfolioStore;
     const summaryDetails = {
-      accountType: includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity',
+      accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
       summary: [
         {

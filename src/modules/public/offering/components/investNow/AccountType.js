@@ -19,7 +19,7 @@ class AccountType extends Component {
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (this.props.changeInvest || (UserAccounts && UserAccounts.length === 1)) {
-      const accountType = this.props.changeInvest ? includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity' : UserAccounts[0];
+      const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : UserAccounts[0];
       this.props.investmentStore.accTypeChanged(null, { value: accountType });
       if (getSelectedAccountTypeId) {
         this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
