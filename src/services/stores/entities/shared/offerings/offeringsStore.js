@@ -14,6 +14,7 @@ export class OfferingsStore {
   @observable data = [];
   @observable filters = false;
   @observable offerData = {};
+  @observable oldOfferData = {};
   @observable offerLoading = false;
   @observable phases = STAGES;
   @observable subTabs = {
@@ -91,6 +92,9 @@ export class OfferingsStore {
     this.initLoad.push('getOne');
     if (loading) {
       this.offerLoading = true;
+      this.oldOfferData = {};
+    } else {
+      this.oldOfferData = { ...this.offerData };
     }
     this.offerData = graphql({
       client,
@@ -99,6 +103,7 @@ export class OfferingsStore {
       variables: { id },
       onFetch: () => {
         this.offerLoading = false;
+        this.oldOfferData = {};
         const { setFormData } = offeringCreationStore;
         setFormData('OFFERING_DETAILS_FRM', false);
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
@@ -123,6 +128,10 @@ export class OfferingsStore {
 
   @computed get offer() {
     return (this.offerData.data && toJS(this.offerData.data.getOfferingById)) || {};
+  }
+
+  @computed get offerOld() {
+    return (this.oldOfferData.data && toJS(this.oldOfferData.data.getOfferingById)) || {};
   }
 
   @computed get loading() {
