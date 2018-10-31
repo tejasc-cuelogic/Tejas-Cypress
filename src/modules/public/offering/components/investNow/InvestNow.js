@@ -19,6 +19,7 @@ export default class InvestNow extends React.Component {
     const { currentUser } = this.props.userStore;
     if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
       this.props.uiStore.setRedirectURL(this.props.history.location);
+      this.props.uiStore.setAuthRef(this.props.refLink);
       this.props.history.push('/auth/login');
     }
     if (this.props.changeInvest) {

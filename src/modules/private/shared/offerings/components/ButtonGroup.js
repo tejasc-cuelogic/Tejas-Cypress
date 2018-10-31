@@ -4,20 +4,20 @@ import moment from 'moment';
 import { Button, Icon } from 'semantic-ui-react';
 
 const ButtonGroup = ({
-  formValid, isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted,
+  isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted,
 }) => (
   <Aux>
     <div className="clearfix sticky-actions">
       <Button.Group vertical icon className="time-stamp">
         {!isIssuer && issuerSubmitted &&
           <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />{' '}
-            Submitted by USER_NAME on {moment(issuerSubmitted).format('MM/DD/YYYY')}
+            <Icon className="ns-circle-line" color="green" />{' '}
+            Submitted by Issuer on {moment(issuerSubmitted).format('MM/DD/YYYY')}
           </Button>
         }
         {!isIssuer && submitted &&
           <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />{' '}
+            <Icon className="ns-circle" color="green" />{' '}
             Submitted by {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
           </Button>
         }
@@ -31,22 +31,28 @@ const ButtonGroup = ({
       <Button.Group floated="right">
         {isManager && submitted ? (
           <Aux>
-            <Button inverted onClick={() => updateOffer({ isApproved: true, status: false })} color="red" content="Decline" disabled={!formValid} />
-            <Button color="green" onClick={() => updateOffer({ isApproved: true, status: approved && approved.status ? !approved.status : true, edit: approved && approved.status ? approved.status : false })} className="relaxed" disabled={!formValid}>{approved && approved.status ? 'Edit' : 'Approve'}</Button>
+            <Button inverted onClick={() => updateOffer({ isApproved: true, status: 'support_decline' })} color="red" content="Decline to NS Support" />
+            {(!approved || (approved && !approved.status)) &&
+            <Button primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+            }
+            <Button color="green" onClick={() => updateOffer({ isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed">{approved && approved.status ? 'Edit' : 'Approve'}</Button>
           </Aux>
         ) : isIssuer && (!approved || (approved && !approved.status)) ? (
           <Aux>
             {!issuerSubmitted &&
-            <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
+            <Button primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
             }
-            <Button primary={!issuerSubmitted} onClick={() => updateOffer({ isIssuer: true })} className="relaxed" disabled={!formValid || issuerSubmitted}>{issuerSubmitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+            <Button primary={!issuerSubmitted} onClick={() => updateOffer({ isApproved: true, status: 'issuer_submitted' })} className="relaxed">{issuerSubmitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
           </Aux>
         ) : (!approved || (approved && !approved.status)) && (
           <Aux>
-            {!submitted &&
-            <Button primary onClick={updateOffer} color="green" className="relaxed" disabled={!formValid}>Save</Button>
+            {issuerSubmitted && !submitted &&
+              <Button inverted onClick={() => updateOffer({ isApproved: true, status: 'issuer_decline' })} color="red" content="Unlock for Issuer" />
             }
-            <Button primary={!submitted} onClick={() => updateOffer({ submitted: true })} className="relaxed" disabled={!formValid || submitted}>{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+            {!submitted &&
+            <Button primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+            }
+            <Button primary={!submitted} onClick={() => updateOffer({ isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
           </Aux>
         )}
       </Button.Group>

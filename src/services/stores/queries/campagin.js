@@ -53,6 +53,7 @@ export const campaignDetailsQuery = gql`
       structure
     }
     keyTerms {
+      regulation
       legalBusinessName
       shorthandBusinessName
       maturity
@@ -338,6 +339,7 @@ query getOfferingById($id: ID) {
     id
     offeringSlug
     keyTerms {
+      regulation
       legalBusinessName
       shorthandBusinessName
       maturity

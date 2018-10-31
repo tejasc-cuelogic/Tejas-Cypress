@@ -3,12 +3,13 @@ import { observable, toJS, action, computed } from 'mobx';
 import { isObject, isEmpty, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import omitDeep from 'omit-deep-lodash';
-import recursiveOmitBy from 'recursive-omit-by';
-import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
+import omitDeep from 'omit-deep';
+import cleanDeep from 'clean-deep';
+import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, MISC, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY, ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
+  ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -25,7 +26,6 @@ export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
-  @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
   @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
@@ -297,7 +297,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form, isArr = true) => {
+  formChange = (e, result, form, isArr = true, type = undefined) => {
     if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
         this[form],
@@ -310,6 +310,7 @@ export class OfferingCreationStore {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),
+        type,
       );
     }
   }
@@ -782,9 +783,42 @@ export class OfferingCreationStore {
   }
 
   @action
+  updateOfferingMutation = (
+    id,
+    payload, keyName, notify = true,
+    successMsg = undefined, fromS3 = false,
+  ) => {
+    uiStore.setProgress();
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables: {
+          id,
+          offeringDetails: payload,
+        },
+      })
+      .then(() => {
+        this.removeUploadedFiles(fromS3);
+        if (successMsg) {
+          Helper.toast(`${successMsg}`, 'success');
+        } else if (notify) {
+          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
+        }
+        offeringsStore.getOne(id, false);
+      })
+      .catch((err) => {
+        uiStore.setErrors(DataFormatter.getSimpleErr(err));
+        Helper.toast('Something went wrong.', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
+  }
+  @action
   updateOffering = (
     id,
-    fields, keyName, subKey, notify = true, successMsg = undefined, approvedObj, fromS3 = false,
+    fields, keyName, subKey, notify = true, successMsg = undefined,
+    approvedObj, fromS3 = false, leaderIndex,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -840,28 +874,37 @@ export class OfferingCreationStore {
     }
     if (keyName !== 'contingencies') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
-        payloadData[keyName] : payloadData;
+        keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
-        payLoadDataOld.approved = {
-          id: userDetailsStore.userDetails.id,
-          by: `${firstName} ${lastName}`,
-          date: moment().toISOString(),
-          status: approvedObj.status,
-        };
-        if (!approvedObj.status && !approvedObj.edit) {
+        if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: approvedObj.status === 'manager_approved',
+          };
+        } else if (approvedObj.status === 'support_submitted') {
+          payLoadDataOld.submitted = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
+          if ((!payLoadDataOld.issuerSubmitted || payLoadDataOld.issuerSubmitted === '') && !approvedObj.isAdminOnly) {
+            payLoadDataOld.issuerSubmitted = moment().toISOString();
+          }
+        } else if (approvedObj.status === 'issuer_submitted') {
+          payLoadDataOld.issuerSubmitted = moment().toISOString();
+        } else if (approvedObj.status === 'support_decline') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: false,
+          };
           payLoadDataOld.submitted = null;
+        } else if (approvedObj.status === 'issuer_decline') {
           payLoadDataOld.issuerSubmitted = '';
-        } else if (!approvedObj.status) {
-          payLoadDataOld.submitted = null;
         }
-      } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
-        payLoadDataOld.submitted = {
-          id: userDetailsStore.userDetails.id,
-          by: `${firstName} ${lastName}`,
-          date: moment().toISOString(),
-        };
-      } else if (approvedObj !== null && approvedObj && approvedObj.isIssuer) {
-        payLoadDataOld.issuerSubmitted = moment().toISOString();
       }
       if (keyName) {
         if (subKey) {
@@ -870,6 +913,8 @@ export class OfferingCreationStore {
           } else {
             payloadData[keyName][subKey] = payLoadDataOld;
           }
+        } else if (keyName === 'leadership') {
+          payloadData[keyName][leaderIndex] = payLoadDataOld;
         } else {
           payloadData[keyName] = payLoadDataOld;
         }
@@ -877,46 +922,27 @@ export class OfferingCreationStore {
         payloadData = payLoadDataOld;
       }
       if (keyName) {
-        payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
+        if (keyName === 'leadership') {
+          const leaders = [];
+          forEach(payloadData[keyName], (ele, index) => {
+            if (!this.removeIndex || this.removeIndex !== index) {
+              leaders.push(merge(
+                toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
+                  index ? getOfferingById[keyName][index] : {}),
+                payloadData[keyName][index],
+              ));
+            }
+          });
+          this.removeIndex = null;
+          payloadData[keyName] = leaders;
+        } else {
+          payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
+        }
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
-        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-          parent, node, key, path, deep,
-        }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
-        payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-          parent, node, key, path, deep,
-        }) => (isObject(node) && isEmpty(node)));
+        payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
     }
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: updateOffering,
-        variables: {
-          id,
-          offeringDetails: payloadData,
-        },
-        // refetchQueries: [{
-        //   query: getOfferingDetails,
-        //   variables: { id: getOfferingById.id },
-        //   fetchPolicy: 'no-cache',
-        // }],
-      })
-      .then(() => {
-        this.removeUploadedFiles(fromS3);
-        if (successMsg) {
-          Helper.toast(`${successMsg}`, 'success');
-        } else if (notify) {
-          Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
-        }
-        offeringsStore.getOne(getOfferingById.id, false);
-      })
-      .catch((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
   }
 
   @action
@@ -1062,18 +1088,7 @@ export class OfferingCreationStore {
         date: moment().toISOString(),
       };
     }
-
     variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
-    // if (keyName) {
-    //   payloadData[keyName] = merge(getOfferingById[keyName], payloadData[keyName]);
-    //   payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
-    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-    //     parent, node, key, path, deep,
-    //   }) => (node === null || (isObject(node) && isEmpty(node)) || node === ''));
-    //   payloadData[keyName] = recursiveOmitBy(payloadData[keyName], ({
-    //     parent, node, key, path, deep,
-    //   }) => (isObject(node) && isEmpty(node)));
-    // }
     uiStore.setProgress();
     client
       .mutate({

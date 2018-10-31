@@ -62,6 +62,17 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       keyTerms {
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
         legalBusinessName
         shorthandBusinessName
         industry
@@ -168,23 +179,25 @@ export const getOfferingDetails = gql`
           fileName
         }
         issuerSubmitted
-          submitted {
-            id
-            by
-            date
-          }
-          approved {
-            id
-            by
-            date
-            status
-          }
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
       }
       contingencies {
         launch {
           contingency
           acceptance
           accepted {
+            status
+            id
             by
             date
             comment
@@ -194,6 +207,8 @@ export const getOfferingDetails = gql`
           contingency
           acceptance
           accepted {
+            id
+            status
             date
             by
             comment
@@ -383,6 +398,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             corpFormation {
@@ -390,6 +413,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             issuerFinancials {
@@ -397,6 +428,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             leaseAgreement {
@@ -404,6 +443,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             issuerSubmitted
@@ -425,6 +472,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             resolutionOfBorrowing {
@@ -432,6 +487,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             formC {
@@ -439,6 +502,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             npa {
@@ -446,6 +517,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             disclosure {
@@ -453,6 +532,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             securityAgreement {
@@ -460,6 +547,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             personalGuarantee {
@@ -467,6 +562,14 @@ export const getOfferingDetails = gql`
               fileName
               fileHandle {
                 id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
               }
             }
             edgar
