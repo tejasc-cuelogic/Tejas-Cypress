@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { intersectionBy, orderBy, findLastIndex, filter, toInteger } from 'lodash';
+import { intersectionBy, orderBy, findLastIndex, filter, toInteger, sortedIndexBy } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
 const calcSmartProgress = (milestones, amount) => {
-  const pIndex = findLastIndex(milestones, m => toInteger(m.amount) < toInteger(amount));
+  const pIndex = findLastIndex(milestones, m => toInteger(m.amount) < toInteger(amount)) > 0 ?
+    findLastIndex(milestones, m => toInteger(m.amount) < toInteger(amount)) : 0;
   return ((pIndex / (milestones.length - 1)) * 100) +
     (((amount - milestones[pIndex].amount) /
       (milestones[pIndex + 1].amount - milestones[pIndex].amount)) *
@@ -24,13 +25,21 @@ class InvestmentTimeline extends Component {
     const { getInvestor } = this.props.portfolioStore;
     const rewardsTiers = campaign && campaign.rewardsTierIds &&
       campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+    const totalRaisedAmount =
+      getInvestor && getInvestor.totalRaisedAmount ? getInvestor.totalRaisedAmount : 0;
+    if (totalRaisedAmount < rewardsTiers[0].amount) {
+      rewardsTiers.splice(sortedIndexBy(
+        rewardsTiers,
+        { amount: totalRaisedAmount },
+      ), 0, { amount: totalRaisedAmount, earlyBirdQuantity: 0 });
+    }
     const bonusRewards = campaign && campaign.bonusRewards &&
       campaign.bonusRewards.length && campaign.bonusRewards;
     const investBoanusReward = filter(rewardsTiers, tier => tier.earlyBirdQuantity <= 0);
     // const investBoanusRewardLastIndex = findLastIndex(investBoanusReward);
     // const earlyBirdtBoanusAmount = filter(rewardsTiers, tier => tier.earlyBirdQuantity > 0);
-    const progress = investBoanusReward.length ? calcSmartProgress(investBoanusReward, getInvestor
-      && getInvestor.totalRaisedAmount) : 0;
+    const progress =
+      investBoanusReward.length ? calcSmartProgress(investBoanusReward, totalRaisedAmount) : 0;
     const calculatedMargin = calMargin(investBoanusReward);
     return (
       rewardsTiers && rewardsTiers.length ?
@@ -39,13 +48,13 @@ class InvestmentTimeline extends Component {
           <Grid columns="equal" textAlign="center" className="investment-scale">
             <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
               <span className="investment-progress" style={{ width: `${progress}%` }} />
-              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(getInvestor && getInvestor.totalRaisedAmount)}</span></div>
+              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(totalRaisedAmount)}</span></div>
             </div>
             <Grid.Row>
               {rewardsTiers.map((tier, index) => (
                 tier.earlyBirdQuantity <= 0 ?
                   <Grid.Column
-                    className={`${((rewardsTiers[index + 1] && rewardsTiers[index].amount <= getInvestor.totalRaisedAmount && rewardsTiers[index + 1].amount >= getInvestor.totalRaisedAmount) || rewardsTiers[index].amount === toInteger(getInvestor.totalRaisedAmount)) ? 'crossed' : ''}`}
+                    className={`${((rewardsTiers[index + 1] && rewardsTiers[index].amount <= totalRaisedAmount && rewardsTiers[index + 1].amount >= totalRaisedAmount) || rewardsTiers[index].amount === toInteger(totalRaisedAmount)) ? 'crossed' : ''}`}
                     key={`m_${tier.amount}`}
                   >
                     <Popup
