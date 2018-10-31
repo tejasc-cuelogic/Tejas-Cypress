@@ -7,7 +7,7 @@ import omitDeep from 'omit-deep';
 import cleanDeep from 'clean-deep';
 import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
@@ -26,7 +26,6 @@ export class OfferingCreationStore {
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
-  @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
   @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
@@ -298,7 +297,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form, isArr = true) => {
+  formChange = (e, result, form, isArr = true, type = undefined) => {
     if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
         this[form],
@@ -311,6 +310,7 @@ export class OfferingCreationStore {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),
+        type,
       );
     }
   }
@@ -935,11 +935,13 @@ export class OfferingCreationStore {
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
               leaders.push(merge(
-                toJS(getOfferingById[keyName][index]),
+                toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
+                  index ? getOfferingById[keyName][index] : {}),
                 payloadData[keyName][index],
               ));
             }
           });
+          this.removeIndex = null;
           payloadData[keyName] = leaders;
         } else {
           payloadData[keyName] = mergeWith(

@@ -19,13 +19,16 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         investedAmount
         offering {
           id
-          offeringStatus
           stage
           keyTerms {
             shorthandBusinessName
             securities
             industry
-            terminationDate
+          }
+          offering {
+            launch {
+              terminationDate
+            }
           }
         }
       }
@@ -34,7 +37,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         investmentDate
         offering {
           id
-          offeringStatus
           stage
           keyTerms {
             shorthandBusinessName
@@ -51,7 +53,6 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         investmentDate
         offering {
           id
-          offeringStatus
           stage
           keyTerms {
             shorthandBusinessName
