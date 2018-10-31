@@ -57,7 +57,7 @@ export default class Documentation extends Component {
       (isManager && approved && approved.status));
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
-        <Header as="h3">Form ID</Header>
+        <Header as="h4">Form ID</Header>
         <Form>
           <DropZone
             disabled={isReadonly}
@@ -68,7 +68,7 @@ export default class Documentation extends Component {
             onremove={field => this.handleDelDoc(field)}
             uploadtitle="Upload"
           />
-          <Header as="h3">Corporate Formation Documents</Header>
+          <Header as="h4">Corporate Formation Documents</Header>
           <DropZone
             disabled={isReadonly}
             multiple
@@ -79,7 +79,7 @@ export default class Documentation extends Component {
             onremove={(field, index) => this.handleDelDoc(field, index)}
             uploadtitle="Upload"
           />
-          <Header as="h3">Issuer Financials</Header>
+          <Header as="h4">Issuer Financials</Header>
           <DropZone
             disabled={isReadonly}
             multiple
@@ -90,7 +90,7 @@ export default class Documentation extends Component {
             onremove={(field, index) => this.handleDelDoc(field, index)}
             uploadtitle="Upload"
           />
-          <Header as="h3">Lease Agreement or Letter of Intent(LOI)</Header>
+          <Header as="h4">Lease Agreement or Letter of Intent(LOI)</Header>
           <DropZone
             disabled={isReadonly}
             multiple

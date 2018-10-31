@@ -77,7 +77,7 @@ export default class NavBarMobile extends Component {
             )
             }
             {investBtn && (
-              <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">
+              <Button fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
                 Invest Now
               </Button>
             )}

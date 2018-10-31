@@ -86,7 +86,7 @@ class offerDetails extends Component {
                 );
               })
             }
-            <Route path={`${match.url}/invest-now`} component={InvestNow} />
+            <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
             <Route path={`${match.url}/agreement`} component={Agreement} />
             <Route path={`${match.url}/doc-sign`} component={DocSign} />
             <Route path={`${match.url}/congratulation`} component={Congratulation} />

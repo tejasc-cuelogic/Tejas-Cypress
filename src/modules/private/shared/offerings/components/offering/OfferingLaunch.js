@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
+import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../theme/form';
@@ -21,10 +23,21 @@ export default class OfferingLaunch extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, undefined, isApproved);
   }
+  launch = () => {
+    const {
+      updateOfferingMutation,
+      currentOfferingId,
+    } = this.props.offeringCreationStore;
+    updateOfferingMutation(
+      currentOfferingId, { stage: 'LIVE' }, false,
+      true, 'Offering Launched successfully.',
+    );
+    this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+  }
   render() {
     const {
       COMPANY_LAUNCH_FRM,
-      SIGNED_LEGAL_DOCS_FRM,
+      ADMIN_DOCUMENTATION_FRM,
       formChange,
       maskChange,
     } = this.props.offeringCreationStore;
@@ -32,11 +45,14 @@ export default class OfferingLaunch extends Component {
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
+    const stage = offer ? offer.stage : '';
     const submitted = (offer && offer.offering && offer.offering.launch &&
       offer.offering.launch.submitted) ? offer.offering.launch.submitted : null;
     const approved = (offer && offer.offering && offer.offering.launch &&
       offer.offering.launch.approved) ? offer.offering.launch.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
+    const legalDocs = offer && offer.legal && offer.legal.documentation &&
+    offer.legal.documentation.admin;
     return (
       <Form>
         <Header as="h4">Launch Timeline</Header>
@@ -57,13 +73,22 @@ export default class OfferingLaunch extends Component {
         <Header as="h4">Signed Legal Documents</Header>
         <Form.Group widths={3}>
           {
-            SIGNED_LEGAL_DOCS_FRM.fields.data.map(document => (
+            ['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'disclosure', 'securityAgreement', 'personalGuarantee'].map(document => (
               <div className="field display-only" >
-                <Label>{document.document.label}</Label>
-                <div className="display-only">
-                  <Link to={this.props.match.url}><Icon className="ns-file" /><b>{document.document.fileName}</b></Link>
-                </div>
-                <p>signed on {document.document.attachedDate}</p>
+                <Label>{ADMIN_DOCUMENTATION_FRM.fields[document].label}</Label>
+                {legalDocs && legalDocs[document] && legalDocs[document].fileName ?
+                  <Aux>
+                    <div className="display-only">
+                      <Link to={this.props.match.url}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
+                    </div>
+                    <p>signed on{' '}
+                      {
+                        moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
+                      }
+                    </p>
+                  </Aux> :
+                  <div>Not Uploaded</div>
+                }
               </div>
             ))
           }
@@ -104,6 +129,7 @@ export default class OfferingLaunch extends Component {
           formValid={COMPANY_LAUNCH_FRM.meta.isValid}
           approved={approved}
           updateOffer={this.handleFormSubmit}
+          launch={stage === 'CREATION' ? this.launch : false}
         />
       </Form>
     );

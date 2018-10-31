@@ -88,7 +88,7 @@ export default class CampaignSideBar extends Component {
               </Statistic>
             </Statistic.Group>
             <Divider hidden />
-            <Button compact fluid={isMobile} as={Link} to="invest-now" secondary>Invest Now</Button>
+            <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
             <p>
               ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
               || 0} min investment
