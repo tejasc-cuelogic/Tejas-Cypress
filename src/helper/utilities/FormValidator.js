@@ -553,7 +553,7 @@ class FormValidator {
               && fields[fields[key].refSelector].value !== undefined) {
               let val = '';
               if (fields[fields[key].refSelector].value) {
-                if (fields[key].value !== '' && fields[key].value !== undefined) {
+                if (fields[key].value !== '' && fields[key].value !== undefined && fields[key].value !== null) {
                   val = objValue;
                 } else {
                   val = fields[key].defaultValue;
