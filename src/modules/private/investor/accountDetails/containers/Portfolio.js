@@ -22,13 +22,14 @@ export default class Portfolio extends Component {
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
+    this.props.portfolioStore.calculateInvestmentType();
   }
   render() {
     const { match, portfolioStore } = this.props;
     if (portfolioStore.loading) {
       return <InlineLoader />;
     }
-    const { getInvestorAccounts, calculateInvestmentType } = portfolioStore;
+    const { getInvestorAccounts, getPieChartData } = portfolioStore;
     const summaryDetails = {
       accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
@@ -50,7 +51,7 @@ export default class Portfolio extends Component {
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
-        <PortfolioAllocations pieChart={calculateInvestmentType} />
+        <PortfolioAllocations pieChart={getPieChartData} />
         <Header as="h4">My Investments</Header>
         {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
           <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
