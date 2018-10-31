@@ -1085,21 +1085,31 @@ export class OfferingCreationStore {
     const { firstName, lastName } = userDetailsStore.userDetails.info;
     const payLoadDataOld = {};
     if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
-      payLoadDataOld.approved = {
-        id: userDetailsStore.userDetails.id,
-        by: `${firstName} ${lastName}`,
-        date: moment().toISOString(),
-        status: approvedObj.status,
-      };
-      if (!approvedObj.status) {
+      if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: approvedObj.status === 'manager_approved',
+        };
+      } else if (approvedObj.status === 'support_submitted') {
+        payLoadDataOld.submitted = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+        };
+        if ((!payLoadDataOld.issuerSubmitted || payLoadDataOld.issuerSubmitted === '') && !approvedObj.isAdminOnly) {
+          payLoadDataOld.issuerSubmitted = moment().toISOString();
+        }
+      } else if (approvedObj.status === 'support_decline') {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: false,
+        };
         payLoadDataOld.submitted = null;
       }
-    } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
-      payLoadDataOld.submitted = {
-        id: userDetailsStore.userDetails.id,
-        by: `${firstName} ${lastName}`,
-        date: moment().toISOString(),
-      };
     }
     variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
     uiStore.setProgress();
