@@ -107,17 +107,14 @@ export default class ConfirmPhoneNumber extends Component {
             phoneNumberDisplayMode
           />
           {editMode ?
-            <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
+            <Link className="grey-link" to={this.props.match.url} onClick={this.startPhoneVerification}>
               Confirm Phone number
             </Link> :
-            <Link
-              to={this.props.refLink ? this.props.refLink : this.props.match.url}
-              onClick={this.handleChangePhoneNumber}
-            >
+            <Link className="grey-link" to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
               Change phone number
             </Link>
           }
-          <Form error onSubmit={this.handleConfirmPhoneNumber}>
+          <Form className="mb-20" error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -128,6 +125,7 @@ export default class ConfirmPhoneNumber extends Component {
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
+              <Button type="button" size="small" color="grey" className="link-button" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
             </Form.Field>
             {errors &&
               <Message error textAlign="left" className="mb-40">
@@ -143,9 +141,12 @@ export default class ConfirmPhoneNumber extends Component {
             <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
           </Form>
         </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <Button type="button" className="link-button" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
-        </Modal.Actions>
+        {/* <Modal.Actions className="signup-actions">
+          <Button type="button" className="link-button"
+          content="Resend the code to my phone"
+          loading={reSendVerificationCode && this.props.uiStore.inProgress}
+          onClick={() => this.startPhoneVerification()} />
+        </Modal.Actions> */}
       </Modal>
     );
   }

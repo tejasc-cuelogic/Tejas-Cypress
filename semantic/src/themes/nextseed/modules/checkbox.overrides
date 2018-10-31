@@ -28,6 +28,10 @@
 	content: '\e801';
 }
 
+/* Disabled */
+.ui.disabled.checkbox {
+    pointer-events: none;
+}
 
 /*  UTF Reference
 .check:before { content: '\e800'; }
