@@ -1,11 +1,10 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
-import ConfirmCancellation from '../../ConfirmCancellation';
 
 @withRouter
 @inject('investmentStore')
@@ -30,8 +29,7 @@ export default class Agreement extends React.Component {
     });
   }
   handleCancelAgreement = () => {
-    const { match } = this.props;
-    this.props.history.push(`${match.url}/confirm-cancellation`);
+    this.props.history.push('confirm-cancellation');
   }
   render() {
     const {
@@ -40,10 +38,8 @@ export default class Agreement extends React.Component {
       setCheckbox,
       agreementDetails,
     } = this.props.investmentStore;
-    const { match } = this.props;
     return (
-      <Modal size="large" open closeIcon closeOnRo otNodeClick={false} onClose={() => this.handleCloseModal()}>
-        <Route path={`${match.url}/confirm-cancellation`} render={props => <ConfirmCancellation refLink={match.url} {...props} />} />
+      <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Content className="signup-header">
           <Aux style={{ display: 'none' }}>
             <div className="pdf-viewer">

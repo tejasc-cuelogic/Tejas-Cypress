@@ -21,3 +21,10 @@
         }
     }
 }
+.ui.progress.campaign-close-progress {
+    >.label {
+        text-align: left;
+        font-weight: @normal;
+        margin-top: @10px;
+    }
+}

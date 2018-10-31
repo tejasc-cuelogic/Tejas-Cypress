@@ -20,7 +20,7 @@ import ChangeInvestmentLimit from '../../../../public/offering/components/invest
 @observer
 export default class Portfolio extends Component {
   componentWillMount() {
-    const accountType = includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity';
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
   }
   render() {
@@ -30,7 +30,7 @@ export default class Portfolio extends Component {
     }
     const { getInvestorAccounts, calculateInvestmentType } = portfolioStore;
     const summaryDetails = {
-      accountType: includes(this.props.location, 'individual') ? 'individual' : includes(this.props.location, 'ira') ? 'ira' : 'entity',
+      accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
       summary: [
         {
@@ -69,7 +69,7 @@ export default class Portfolio extends Component {
             <Grid>
               <Grid.Row>
                 <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
-                  <Card className="form-card">
+                  <Card className="form-card" fluid>
                     <Card.Content>
                       <Header as="h4">Browse the latest investment opportunities.</Header>
                       <Button as={Link} to="/offerings" size="medium" color="green">Start investing now</Button>
