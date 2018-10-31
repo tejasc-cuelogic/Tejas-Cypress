@@ -187,7 +187,7 @@ export default class KeyTerms extends Component {
               ))
             }
             {
-              ['minInvestAmt', 'maxInvestAmt'].map(field => (
+              ['minInvestAmt', 'maxInvestAmt', 'appendixATitle'].map(field => (
                 <MaskedInput
                   displayMode={isReadonly}
                   name={field}

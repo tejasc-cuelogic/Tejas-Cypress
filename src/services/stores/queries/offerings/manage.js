@@ -96,6 +96,7 @@ export const getOfferingDetails = gql`
         state
         minInvestAmt
         maxInvestAmt
+        appendixATitle
         investmentMultipleSummary
         stockType
         offeringExpTarget

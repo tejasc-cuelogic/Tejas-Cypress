@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { isObject, isEmpty, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
+import { map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -9,7 +9,7 @@ import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -426,12 +426,13 @@ export class OfferingCreationStore {
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
+          }).finally(() => {
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           });
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        }).finally(() => {
           this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+          uiStore.setErrors(error.message);
         });
       });
     }
@@ -814,6 +815,14 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
+
+  // eslint-disable-next-line consistent-return
+  mergeCustomize = (objValue, srcValue, key, object, source, stack) => {
+    if (OFFERING_CREATION_ARRAY_KEY_LIST.includes(key)) {
+      return srcValue;
+    }
+  };
+
   @action
   updateOffering = (
     id,
@@ -926,21 +935,38 @@ export class OfferingCreationStore {
           const leaders = [];
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
-              leaders.push(merge(
+              leaders.push(mergeWith(
                 toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
                   index ? getOfferingById[keyName][index] : {}),
                 payloadData[keyName][index],
+                this.mergeCustomize,
               ));
             }
           });
           this.removeIndex = null;
+          this.confirmModal = null;
           payloadData[keyName] = leaders;
         } else {
-          payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
+          payloadData[keyName] = mergeWith(
+            toJS(getOfferingById[keyName]),
+            payloadData[keyName],
+            this.mergeCustomize,
+          );
         }
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
+    } else {
+      ['launch', 'close'].forEach((c) => {
+        forEach(payloadData.contingencies[c], (con, index) => {
+          payloadData.contingencies[c][index].accepted = {
+            ...payloadData.contingencies[c][index].accepted,
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
+        });
+      });
     }
     this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
   }
@@ -1072,21 +1098,31 @@ export class OfferingCreationStore {
     const { firstName, lastName } = userDetailsStore.userDetails.info;
     const payLoadDataOld = {};
     if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
-      payLoadDataOld.approved = {
-        id: userDetailsStore.userDetails.id,
-        by: `${firstName} ${lastName}`,
-        date: moment().toISOString(),
-        status: approvedObj.status,
-      };
-      if (!approvedObj.status) {
+      if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: approvedObj.status === 'manager_approved',
+        };
+      } else if (approvedObj.status === 'support_submitted') {
+        payLoadDataOld.submitted = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+        };
+        if ((!payLoadDataOld.issuerSubmitted || payLoadDataOld.issuerSubmitted === '') && !approvedObj.isAdminOnly) {
+          payLoadDataOld.issuerSubmitted = moment().toISOString();
+        }
+      } else if (approvedObj.status === 'support_decline') {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: false,
+        };
         payLoadDataOld.submitted = null;
       }
-    } else if (approvedObj !== null && approvedObj && approvedObj.submitted) {
-      payLoadDataOld.submitted = {
-        id: userDetailsStore.userDetails.id,
-        by: `${firstName} ${lastName}`,
-        date: moment().toISOString(),
-      };
     }
     variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
     uiStore.setProgress();
