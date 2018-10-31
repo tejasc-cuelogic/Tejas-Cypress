@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { isObject, isEmpty, map, startCase, filter, forEach, find, orderBy, kebabCase, merge } from 'lodash';
+import { map, startCase, filter, forEach, find, orderBy, kebabCase, merge, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -9,7 +9,7 @@ import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION } from '../../../../constants/admin/offerings';
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -814,6 +814,14 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
+
+  // eslint-disable-next-line consistent-return
+  mergeCustomize = (objValue, srcValue, key, object, source, stack) => {
+    if (OFFERING_CREATION_ARRAY_KEY_LIST.includes(key)) {
+      return srcValue;
+    }
+  };
+
   @action
   updateOffering = (
     id,
@@ -934,7 +942,11 @@ export class OfferingCreationStore {
           });
           payloadData[keyName] = leaders;
         } else {
-          payloadData[keyName] = merge(toJS(getOfferingById[keyName]), payloadData[keyName]);
+          payloadData[keyName] = mergeWith(
+            toJS(getOfferingById[keyName]),
+            payloadData[keyName],
+            this.mergeCustomize,
+          );
         }
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = cleanDeep(payloadData[keyName]);

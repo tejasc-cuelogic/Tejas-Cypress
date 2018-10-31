@@ -10,6 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['security'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: '' },
