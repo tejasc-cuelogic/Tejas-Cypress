@@ -131,6 +131,7 @@
     .otp-field{
         min-width:300px;
         margin-top:@28px;
+        margin-bottom:@7px;
         label{
             font-size:@14px;
         }

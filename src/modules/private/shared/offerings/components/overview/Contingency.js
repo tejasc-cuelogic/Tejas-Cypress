@@ -29,8 +29,10 @@ export default class Contingency extends Component {
     updateOffering(currentOfferingId, fields, 'contingencies', '', true, successMsg);
   }
   formArrayChange = (e, result, formName, dataKey, index) => {
-    if (result && !result.checked) {
+    if (result) {
       this.props.formArrayChange(e, result, formName, dataKey, index);
+    }
+    if (result && !result.checked) {
       const {
         updateOffering,
         currentOfferingId,
@@ -102,7 +104,7 @@ export default class Contingency extends Component {
       <Aux>
         <Header as="h4">
           {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
-          {this.props.hideAddNewBtn && <Icon className="ns-chevron-up-compact" color="blue" />}
+          {this.props.hideAddNewBtn && <Icon className="ns-chevron-up-compact right" color="blue" />}
           {access.asManager ?
             <Modal size="small" trigger={!this.props.hideAddNewBtn && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.setContingencyForm()}>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Button>} closeIcon >
               <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
@@ -180,8 +182,8 @@ export default class Contingency extends Component {
                   </Aux>
                 }
                 <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null)} />
-                {contingenciesData[dataKey] && contingenciesData[dataKey][index].accepted &&
-                contingenciesData[dataKey][index].accepted.status &&
+                {contingenciesData && contingenciesData[dataKey] && contingenciesData[dataKey][index] &&
+                contingenciesData[dataKey][index].accepted && contingenciesData[dataKey][index].accepted.status &&
                 <Button as="span" className="time-stamp">
                   <Icon className="ns-check-circle" color="green" />
                   Submitted by {contingenciesData[dataKey][index].accepted.by} on {moment(contingenciesData[dataKey][index].accepted.date).format('MM/DD/YYYY')}
