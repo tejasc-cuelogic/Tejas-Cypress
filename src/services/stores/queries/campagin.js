@@ -69,6 +69,7 @@ export const campaignDetailsQuery = gql`
       industry
       minInvestAmt
       maxInvestAmt
+      appendixATitle
       revShareSummary
       investmentMultipleSummary
       locationRiskFactors

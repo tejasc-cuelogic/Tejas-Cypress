@@ -220,6 +220,13 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
+  appendixATitle: {
+    value: null,
+    label: 'Appendix A Title (Disclosure)',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
   investmentMultipleSummary: {
     value: '',
     label: 'Investment Multiple Summary',
