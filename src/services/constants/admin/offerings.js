@@ -10,6 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
@@ -635,16 +636,18 @@ export const CONTINGENCY_META = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter comment here...',
-    refSelector: 'isAccepted',
+    // refSelector: 'isAccepted',
     objRef: 'accepted',
     objRefOutput2: 'accepted',
   },
-  isAccepted: {
+  status: {
+    label: '',
     value: false,
     error: undefined,
     rule: 'optional',
+    objRef: 'accepted',
     objRefOutput2: 'accepted',
-    skipField: true,
+    // skipField: true,
   },
 };
 
