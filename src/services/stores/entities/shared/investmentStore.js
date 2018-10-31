@@ -277,7 +277,7 @@ export class InvestmentStore {
     }
 
     @action
-    validateInvestmentAmount = () => new Promise((resolve) => {
+    validateInvestmentAmount = () => new Promise((resolve, reject) => {
       graphql({
         client,
         query: validateInvestmentAmount,
@@ -300,6 +300,7 @@ export class InvestmentStore {
         onError: () => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           this.setShowTransferRequestErr(true);
+          reject();
         },
         fetchPolicy: 'network-only',
       });
@@ -325,7 +326,7 @@ export class InvestmentStore {
   @action
   generateAgreement = () => {
     uiStore.setProgress();
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: generateAgreement,
@@ -346,6 +347,7 @@ export class InvestmentStore {
           Helper.toast('Something went wrong, please try again later.', 'error');
           this.setShowTransferRequestErr(true);
           uiStore.setErrors(error.message);
+          reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
