@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy, kebabCase, merge, mergeWith } from 'lodash';
+import { map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -934,7 +934,7 @@ export class OfferingCreationStore {
           const leaders = [];
           forEach(payloadData[keyName], (ele, index) => {
             if (!this.removeIndex || this.removeIndex !== index) {
-              leaders.push(merge(
+              leaders.push(mergeWith(
                 toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
                   index ? getOfferingById[keyName][index] : {}),
                 payloadData[keyName][index],
@@ -955,21 +955,15 @@ export class OfferingCreationStore {
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
     } else {
-      forEach(payloadData.contingencies.launch, (con, index) => {
-        payloadData.contingencies.launch[index].accepted = {
-          ...payloadData.contingencies.launch[index].accepted,
-          id: userDetailsStore.userDetails.id,
-          by: `${firstName} ${lastName}`,
-          date: moment().toISOString(),
-        };
-      });
-      forEach(payloadData.contingencies.close, (con, index) => {
-        payloadData.contingencies.close[index].accepted = {
-          ...payloadData.contingencies.close[index].accepted,
-          id: userDetailsStore.userDetails.id,
-          by: `${firstName} ${lastName}`,
-          date: moment().toISOString(),
-        };
+      ['launch', 'close'].forEach((c) => {
+        forEach(payloadData.contingencies[c], (con, index) => {
+          payloadData.contingencies[c][index].accepted = {
+            ...payloadData.contingencies[c][index].accepted,
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
+        });
       });
     }
     this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);

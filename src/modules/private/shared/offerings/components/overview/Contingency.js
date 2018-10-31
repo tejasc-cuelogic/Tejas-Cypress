@@ -102,7 +102,7 @@ export default class Contingency extends Component {
       <Aux>
         <Header as="h4">
           {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
-          {this.props.hideAddNewBtn && <Icon className="ns-chevron-up-compact" color="blue" />}
+          {this.props.hideAddNewBtn && <Icon className="ns-chevron-up-compact right" color="blue" />}
           {access.asManager ?
             <Modal size="small" trigger={!this.props.hideAddNewBtn && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.setContingencyForm()}>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Button>} closeIcon >
               <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
