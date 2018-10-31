@@ -50,7 +50,7 @@ export default class CancelInvestment extends Component {
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Do you want to cancel this investment?</Header>
+          <Header as="h3"> {!isCancelShowLink ? 'Do you want to cancel this investment?' : 'Investment has been canceled.' }</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
           {errors &&
