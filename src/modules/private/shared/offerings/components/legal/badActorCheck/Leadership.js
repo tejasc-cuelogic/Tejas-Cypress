@@ -27,7 +27,7 @@ export default class Leadership extends Component {
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
     if (navItems.length === 0) {
-      return <p className="center-align">No Leaders to Display!</p>;
+      return <p className="center-align mt-40">No Leaders to Display!</p>;
     }
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid'}>
