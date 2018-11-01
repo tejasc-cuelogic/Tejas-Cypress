@@ -82,8 +82,8 @@ export const FILTER_META = {
     { text: 'Activity', value: ACTIVITY_HISTORY_TYPES.ACTIVITY },
     { text: 'Upload', value: ACTIVITY_HISTORY_TYPES.UPLOAD },
     { text: 'Rating', value: ACTIVITY_HISTORY_TYPES.RATING },
-    { text: 'Cf limit', value: ACTIVITY_HISTORY_TYPES.CF_LIMIT },
-    { text: 'Accreditation', value: ACTIVITY_HISTORY_TYPES.ACCREDITATION },
+    // { text: 'Cf limit', value: ACTIVITY_HISTORY_TYPES.CF_LIMIT },
+    // { text: 'Accreditation', value: ACTIVITY_HISTORY_TYPES.ACCREDITATION },
     { text: 'Access', value: ACTIVITY_HISTORY_TYPES.ACCESS },
     { text: 'Admin Activity', value: ACTIVITY_HISTORY_TYPES.ADMIN_ACTIVITY },
     { text: 'MFA', value: ACTIVITY_HISTORY_TYPES.MFA },
@@ -91,7 +91,7 @@ export const FILTER_META = {
   ],
   activityUserType: [
     { text: 'Admin', value: ACTIVITY_HISTORY_SCOPE.ADMIN },
-    { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER },
+    // { text: 'Issuer', value: ACTIVITY_HISTORY_SCOPE.ISSUER },
     { text: 'Investor', value: ACTIVITY_HISTORY_SCOPE.INVESTOR },
   ],
 };

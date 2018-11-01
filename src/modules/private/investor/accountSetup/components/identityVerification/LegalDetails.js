@@ -11,7 +11,7 @@ import { US_STATES_FOR_INVESTOR } from '../../../../../../constants/account';
 const LegalDetails = observer(({
   form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange,
 }) => (
-  <Modal size="mini" open closeIcon onClose={close} closeOnDimmerClick={false}>
+  <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">Welcome {name}</Header>
       <p>Let’s create your NextSeed investment account.</p>
