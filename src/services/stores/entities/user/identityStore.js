@@ -426,7 +426,7 @@ export class IdentityStore {
           if (!response.body.errorMessage) {
             this.setProfilePhoto('responseUrl', response.body.fileFullPath);
             this.updateUserProfileData().then(() => {
-              userDetailsStore.setProfilePhoto(response.body.fileFullPath);
+              userDetailsStore.setProfilePhoto(response.body.fileFullPath, response.body.name);
               Helper.toast('Profile photo updated successfully', 'success');
               this.resetProfilePhoto();
               resolve(response);
