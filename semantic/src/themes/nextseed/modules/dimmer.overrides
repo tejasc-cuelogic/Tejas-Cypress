@@ -1,3 +1,11 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.dimmer{
+  &.fullscreen{
+    position:fixed;
+  }
+  .ui.header{
+    color:@white;
+  }
+}
