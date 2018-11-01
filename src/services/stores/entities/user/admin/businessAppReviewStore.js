@@ -336,7 +336,7 @@ export class BusinessAppReviewStore {
     } else {
       formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
     }
-    formInputData[key] = cleanDeep(formInputData[key]);
+    formInputData[key] = formName === 'OVERVIEW_FRM' ? formInputData[key] : cleanDeep(formInputData[key]);
     let actionType = this.getActionType(formName);
     let applicationReviewAction = '';
     if (approveOrSubmitted !== '') {
