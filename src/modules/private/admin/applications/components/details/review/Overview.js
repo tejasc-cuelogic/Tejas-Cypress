@@ -32,7 +32,7 @@ export default class Overview extends Component {
   render() {
     const {
       OVERVIEW_FRM, formChangeWithIndex, confirmModal, toggleConfirmModal,
-      removeData, confirmModalName,
+      removeData, confirmModalName, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
@@ -69,6 +69,7 @@ export default class Overview extends Component {
             ))
           }
           <ButtonGroup
+            inProgress={inProgress}
             formName="OVERVIEW_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

@@ -36,11 +36,12 @@ const navItems = [
   { title: 'Offer', to: 'offer' },
 ];
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore')
 @withRouter
 @observer
 export default class Review extends Component {
   componentWillMount() {
+    this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', false);
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/${navItems[0].to}`);
     }
@@ -54,7 +55,8 @@ export default class Review extends Component {
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
-      subNavPresentation, updateStatuses, paBoxFolderId, generatePortalAgreement,
+      subNavPresentation, updateStatuses, paBoxFolderId,
+      generatePortalAgreement, showGeneratePA, inProgress,
     } = businessAppReviewStore;
     updateStatuses(navItems);
     return (
@@ -69,12 +71,14 @@ export default class Review extends Component {
               navItems={navItems}
             />
             <Divider hidden />
+            {showGeneratePA &&
             <Button.Group size="mini">
-              <Button color="blue" loading={this.props.uiStore.inProgress} type="button" onClick={generatePortalAgreement} >Generate PA</Button>
+              <Button color="blue" loading={inProgress === 'GENERATE_PA'} type="button" onClick={generatePortalAgreement} >Generate PA</Button>
               {paBoxFolderId &&
               <Button color="blue" className="link-button" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')}>PA BOX Link</Button>
               }
             </Button.Group>
+            }
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>

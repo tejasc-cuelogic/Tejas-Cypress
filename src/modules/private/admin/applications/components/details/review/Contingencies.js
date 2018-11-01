@@ -89,7 +89,7 @@ export default class Contingencies extends Component {
   render() {
     const {
       CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
-      toggleConfirmModal, removeData,
+      toggleConfirmModal, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
@@ -120,6 +120,7 @@ export default class Contingencies extends Component {
             <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="close" fields={CONTINGENCY_FRM.fields.close} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <ButtonGroup
+            inProgress={inProgress}
             formName="CONTINGENCY_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

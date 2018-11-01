@@ -203,13 +203,13 @@ export const PRIVATE_NAV = [
       { title: 'FAQ', to: 'faq', component: 'Faq' },
     ],
   },
-  {
-    icon: 'calendar',
-    title: 'Events',
-    to: 'events',
-    path: 'issuer/events',
-    accessibleTo: ['issuer'],
-  },
+  // {
+  //   icon: 'calendar',
+  //   title: 'Events',
+  //   to: 'events',
+  //   path: 'issuer/events',
+  //   accessibleTo: ['issuer'],
+  // },
   {
     icon: 'legal',
     title: 'Edgar',

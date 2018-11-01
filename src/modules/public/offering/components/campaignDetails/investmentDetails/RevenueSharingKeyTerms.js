@@ -73,18 +73,13 @@ class RevenueSharingKeyTerms extends Component {
                       `${KeyTerms.investmentMultiple}` : 'NA'}
                   </b>
                 </p>
-                <p>
-                  If the final offering amount raised is less than or equal to $600,000,
-                  the investment multiple will be 1.70x.
-                </p>
-                <p>
-                  If the final offering amount raised is greater than $600,000 but
-                  less than or equal to $800,000, the investment multiple will be 1.80x.
-                </p>
-                <p>
-                  If the final offering amount raised is greater than $800,000 but less
-                  than or equal to $1,000,000, the investment multiple will be 1.90x.
-                </p>
+                <p dangerouslySetInnerHTML={{
+                  __html: KeyTerms && KeyTerms.investmentMultipleSummary ?
+                    KeyTerms.investmentMultipleSummary
+                    :
+                    null,
+                }}
+                />
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -96,29 +91,13 @@ class RevenueSharingKeyTerms extends Component {
                       `${KeyTerms.revSharePercentage}` : 'NA'}
                   </b>
                 </p>
-                <p>
-                  Buffbrew Taproom&apos;s revenue streams will come from tap sales, restaurant
-                  sales, beer garden sales and facility tour and event sales.
-                </p>
-                <p>
-                  If the final offering amount raised is less than or equal to $400,000, then
-                  4% of monthly gross revenue will be shared.
-                </p>
-                <p>
-                  If the final offering amount raised is greater than $400,000 but less than
-                  or equal to $600,000, then 4% of monthly gross revenue will be shared
-                  during the first 12 months of operation, then 7% thereafter.
-                </p>
-                <p>
-                  If the final offering amount raised is greater than $600,000 but less than
-                  or equal to $800,000, then 4% of monthly gross revenue will be shared
-                  during the first 12 months of operation, then 10.25% thereafter.
-                </p>
-                <p>
-                  If the final offering amount raised is greater than $800,000 but less than
-                  or equal to $1,000,000, then 4% of monthly gross revenue will be shared
-                  during the first 12 months of operation, then 13.5% thereafter.
-                </p>
+                <p dangerouslySetInnerHTML={{
+                  __html: KeyTerms && KeyTerms.revShareSummary ?
+                    KeyTerms.revShareSummary
+                    :
+                    null,
+                }}
+                />
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">

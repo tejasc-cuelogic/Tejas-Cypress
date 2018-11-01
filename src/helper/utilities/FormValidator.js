@@ -184,9 +184,10 @@ class FormValidator {
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) =>
     (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
       mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
-  resetFormData = (form) => {
+  resetFormData = (form, targetedFields) => {
     const currentForm = form;
-    Object.keys(currentForm.fields).map((field) => {
+    const fieldsToReset = targetedFields || Object.keys(currentForm.fields);
+    fieldsToReset.map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
         if (currentForm.fields[field].objType === 'FileObjectType') {
@@ -354,7 +355,7 @@ class FormValidator {
               fields[key].preSignedUrl = tempRef[key].url;
             }
           } else if (fields[key].objType === 'DATE') {
-            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
+            fields[key].value = tempRef[key] ? moment(tempRef[key]).format('MM/DD/YYYY') : '';
           } else {
             const fieldRef = key.split('_');
             fields[key].value = fields[key].find ?
@@ -394,7 +395,7 @@ class FormValidator {
             fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
           }
         } else if (fields[key].objType === 'DATE') {
-          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
+          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : data[key] ? moment(data[key]).format('MM/DD/YYYY') : '';
         } else {
           fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data;
         }

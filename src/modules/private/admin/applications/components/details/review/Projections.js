@@ -29,7 +29,7 @@ export default class Projections extends Component {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
-    const { PROJECTIONS_FRM, formChange } = this.props.businessAppReviewStore;
+    const { PROJECTIONS_FRM, formChange, inProgress } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
     const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
@@ -106,6 +106,7 @@ export default class Projections extends Component {
             changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
           />
           <ButtonGroup
+            inProgress={inProgress}
             formName="PROJECTIONS_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

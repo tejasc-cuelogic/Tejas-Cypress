@@ -12,7 +12,7 @@ const leftSummary = offer => [
       )),
   },
   { title: 'Launch Date', content: offer && offer.offering && offer.offering.launch && DataFormatter.formatedDate(offer.offering.launch.targetDate) },
-  { title: 'Days Till Close', content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A' },
+  { title: offer.offering && offer.offering.launch && offer.offering.launch.terminationDate && DataFormatter.diffDays(offer.offering.launch.terminationDate, true) <= 0 ? 'Close Date' : 'Days Till Close', content: (offer.offering && offer.offering.launch && offer.offering.launch.terminationDate && DataFormatter.diffDays(offer.offering.launch.terminationDate, true) >= 0) ? `${DataFormatter.diffDays(offer.offering.launch.terminationDate)} days` : offer.offering.launch.terminationDate ? offer.offering.launch.terminationDate : 'N/A' },
 ];
 
 const rightSummary = offer => [
