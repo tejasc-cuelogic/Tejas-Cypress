@@ -2,6 +2,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { map, forEach, filter, get } from 'lodash';
 import graphql from 'mobx-apollo';
+import cleanDeep from 'clean-deep';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -37,6 +38,8 @@ export class BusinessAppReviewStore {
   @observable paBoxFolderId = null;
   @observable signPortalAgreementURL = '';
   @observable removeFileIdsList = [];
+  @observable showGeneratePA = false;
+  @observable inProgress = false;
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
@@ -324,7 +327,7 @@ export class BusinessAppReviewStore {
     if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
       const data = map(formInputData[key], value => value[key]);
-      formInputData = { [key]: data };
+      formInputData = { [key]: cleanDeep(data) };
       formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
     }
     const key = Object.keys(formInputData)[0];
@@ -333,6 +336,7 @@ export class BusinessAppReviewStore {
     } else {
       formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
     }
+    formInputData[key] = cleanDeep(formInputData[key]);
     let actionType = this.getActionType(formName);
     let applicationReviewAction = '';
     if (approveOrSubmitted !== '') {
@@ -340,9 +344,12 @@ export class BusinessAppReviewStore {
       applicationReviewAction = this.getActionType(formName);
     }
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
-    uiStore.setProgress();
     let payload = {
       [payloadKey]: formInputData,
+      // [payloadKey]: cleanDeep(
+      //   formInputData,
+      //   [{ emptyArrays: false }, { emptyObjects: false }, { nullValues: false }],
+      // ),
       actionType,
       applicationId,
       userId,
@@ -359,6 +366,8 @@ export class BusinessAppReviewStore {
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
+    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
+    this.setFieldvalue('inProgress', progressButton);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -378,7 +387,7 @@ export class BusinessAppReviewStore {
           reject(error);
         })
         .finally(() => {
-          uiStore.setProgress(false);
+          this.setFieldvalue('inProgress', false);
         });
     });
   }
@@ -512,7 +521,7 @@ export class BusinessAppReviewStore {
       applicationType: 'APPLICATION_COMPLETED',
       userId,
     };
-    uiStore.setProgress();
+    this.setFieldvalue('inProgress', 'GENERATE_PA');
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -534,7 +543,7 @@ export class BusinessAppReviewStore {
           reject(error);
         })
         .finally(() => {
-          uiStore.setProgress(false);
+          this.setFieldvalue('inProgress', false);
         });
     });
   };

@@ -12,6 +12,7 @@ import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 @observer
 export default class Offer extends Component {
   componentWillMount() {
+    this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', true);
     this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'offers.managerOverview');
   }
@@ -38,7 +39,7 @@ export default class Offer extends Component {
   render() {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
-      confirmModalName, removeData,
+      confirmModalName, removeData, inProgress,
       // checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
@@ -108,6 +109,7 @@ export default class Offer extends Component {
             </Table.Body>
           </Table>
           <ButtonGroup
+            inProgress={inProgress}
             formName="OFFERS_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

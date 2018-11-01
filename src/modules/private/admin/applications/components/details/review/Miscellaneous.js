@@ -103,7 +103,7 @@ export default class Miscellaneous extends Component {
   render() {
     const {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
-      confirmModalName, removeData,
+      confirmModalName, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
@@ -229,6 +229,7 @@ export default class Miscellaneous extends Component {
             </Item.Group>
           </div>
           <ButtonGroup
+            inProgress={inProgress}
             formName="MISCELLANEOUS_FRM"
             isReadonly={isReadonly}
             isManager={isManager}
