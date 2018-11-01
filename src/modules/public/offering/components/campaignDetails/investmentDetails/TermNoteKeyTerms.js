@@ -69,7 +69,7 @@ class TermNoteKeyTerms extends Component {
               <Table.Cell>
                 {KeyTerms && KeyTerms.interestRate ?
                   <p>
-                    <b>{KeyTerms.interestRate} Months</b>
+                    <b>{KeyTerms.interestRate}%</b>
                   </p>
                   :
                   'NA'
