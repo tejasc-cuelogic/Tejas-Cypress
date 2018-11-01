@@ -129,8 +129,8 @@ class Success extends Component {
           </Grid.Column>
         </Grid>
         <Dimmer active className="fullscreen">
-          <Loader>
-            <Header as="h4">
+          <Loader size="large">
+            <Header as="h3">
               Please wait...
               <Header.Subheader>
                 we are creating an user and processing your business application.
