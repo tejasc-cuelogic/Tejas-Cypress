@@ -10,6 +10,9 @@ import Helper from '../../../../helper/utility';
 @inject('businessAppStore', 'authStore', 'userStore', 'uiStore')
 @observer
 class Success extends Component {
+  state = {
+    showProgressLoader: false,
+  }
   componentWillMount() {
     if (this.props.isPublic) {
       const { fields } = this.props.businessAppStore.BUSINESS_APP_FRM_BASIC;
@@ -22,6 +25,7 @@ class Success extends Component {
       userExists, currentApplicationType, applicationId, setFieldvalue,
     } = this.props.businessAppStore;
     if (this.props.isPublic) {
+      this.setState({ showProgressLoader: true });
       if (!userExists) {
         authActions.register()
           .then(() => {
@@ -34,9 +38,15 @@ class Success extends Component {
                 setFieldvalue('applicationId', appId);
                 this.proceedLoginIn(currentApplicationType, appId);
               })
-              .catch(er => Helper.toast(er.message, 'error'));
+              .catch((er) => {
+                this.setState({ showProgressLoader: false });
+                Helper.toast(er.message, 'error');
+              });
           })
-          .catch(er => Helper.toast(er.message, 'error'));
+          .catch((er) => {
+            this.setState({ showProgressLoader: false });
+            Helper.toast(er.message, 'error');
+          });
       } else {
         this.proceedLoginIn(currentApplicationType, applicationId);
       }
@@ -48,12 +58,16 @@ class Success extends Component {
   proceedLoginIn = (currentApplicationType, applicationId) => {
     authActions.login()
       .then(() => {
+        this.setState({ showProgressLoader: false });
         const { roles } = this.props.userStore.currentUser;
         this.props.authStore.resetForm('LOGIN_FRM');
         if (roles && roles.includes('issuer')) {
           const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
         }
+      }).catch(() => {
+        this.setState({ showProgressLoader: false });
+        Helper.toast('Something went wrong while saving filer information, Please try again.', 'error');
       });
   }
 
@@ -100,7 +114,7 @@ class Success extends Component {
                           :
                           <FormInput
                             key={field}
-                            disabled={field === 'email'}
+                            displayMode={field === 'email'}
                             // icon={field !== 'email' ? togglePasswordType(field) : null}
                             type={field !== 'email' ? pwdInputType : 'text'}
                             name={field}
@@ -114,7 +128,7 @@ class Success extends Component {
                           icon={field === 'password' ? togglePasswordType(field) : null}
                           type={field === 'password' ? pwdInputType : 'text'}
                           name={field}
-                          disabled={field === 'email'}
+                          displayMode={field === 'email'}
                           fielddata={LOGIN_FRM.fields[field]}
                           changed={LoginChange}
                         />
@@ -128,17 +142,18 @@ class Success extends Component {
             <Button loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists)} size="large" color="green" className="very relaxed">Proceed</Button>
           </Grid.Column>
         </Grid>
+        {this.state.showProgressLoader &&
         <Dimmer active className="fullscreen">
           <Loader>
             <Header as="h4">
               Please wait...
               <Header.Subheader>
-                we are creating an user and processing your business application.
-                This can take up to a minute.
+                We are processing your business application.
               </Header.Subheader>
             </Header>
           </Loader>
         </Dimmer>
+        }
       </Aux>
     );
   }

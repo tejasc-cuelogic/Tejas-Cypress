@@ -12,7 +12,7 @@ export default class ManagerOverview extends Component {
   render() {
     const { formChange, MANAGERS_FRM, saveReviewForms } = this.props.businessAppReviewStore;
     const {
-      isReadonly, approved, formName, isManager, submitted, stepStatus,
+      isReadonly, approved, formName, isManager, submitted,
       uiStore, title, applicationStatus,
     } = this.props;
     const { inProgress } = uiStore;
@@ -24,7 +24,7 @@ export default class ManagerOverview extends Component {
             {approved && approved.status && submitted &&
             <Button.Group floated="right" size="mini">
               <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
+                <Icon className="ns-circle" color="green" />
                 Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
               </Button>
               <Button as="span" className="time-stamp">
@@ -41,13 +41,13 @@ export default class ManagerOverview extends Component {
               <Button.Group floated="right" size="mini">
                 {submitted &&
                   <Button as="span" className="time-stamp">
-                    <Icon className="ns-check-circle" color="green" />
+                    <Icon className="ns-circle" color="green" />
                     Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
                   </Button>
                 }
-                <Button loading={inProgress} disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
-                <Button loading={inProgress} disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed">Save</Button>
-                <Button loading={inProgress} disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>{title || 'Approve'}</Button>
+                <Button loading={inProgress} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button loading={inProgress} primary className="relaxed">Save</Button>
+                <Button loading={inProgress} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>{title || 'Approve'}</Button>
               </Button.Group>
             }
           </Header>

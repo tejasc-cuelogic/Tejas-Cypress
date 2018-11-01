@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import moment from 'moment';
 import { Link, withRouter } from 'react-router-dom';
 import { Icon, Form, Button, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -59,8 +60,8 @@ export default class PreQualification extends Component {
   }
   render() {
     const {
-      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC,
-      businessAppEleChange, isPrequalQulify, currentApplicationType,
+      BUSINESS_APP_FRM, BUSINESS_APP_FRM_BASIC, preQualFormDisabled, businessAppEleChange,
+      isPrequalQulify, currentApplicationType, fetchBusinessApplicationsDataById,
     } = this.props.businessAppStore;
     const { hideFields, match } = this.props;
     const { params } = match;
@@ -131,15 +132,22 @@ export default class PreQualification extends Component {
           {!hideFields &&
           <Aux>
             <Divider hidden />
-            <Button
-              loading={this.props.uiStore.inProgress}
-              disabled={!BUSINESS_APP_FRM.meta.isValid}
-              size="large"
-              color="green"
-              className="very relaxed"
-            >
-              Submit
-            </Button>
+            {!preQualFormDisabled ?
+              <Button
+                loading={this.props.uiStore.inProgress}
+                disabled={!BUSINESS_APP_FRM.meta.isValid}
+                size="large"
+                color="green"
+                className="very relaxed"
+              >
+                Submit
+              </Button>
+            : fetchBusinessApplicationsDataById &&
+              <Button as="span" className="time-stamp">
+                <Icon className="ns-check-circle" color="green" />
+                Submitted on {moment(fetchBusinessApplicationsDataById.created && fetchBusinessApplicationsDataById.created.date).format('MM/DD/YYYY')}
+              </Button>
+            }
           </Aux>
           }
         </Form>

@@ -60,7 +60,7 @@ export default class FormInput extends Component {
           autoComplete="nope"
           maxLength={maxlength || false}
           type={props.type || 'text'}
-          placeholder={displayMode ? '' : placeHolder}
+          placeholder={(props.readOnly || displayMode) ? '' : placeHolder}
           defaultValue={defaultValue}
           onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
           onBlur={() => this.triggerError(true)}
