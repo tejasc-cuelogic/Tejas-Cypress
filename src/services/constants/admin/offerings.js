@@ -224,7 +224,7 @@ export const KEY_TERMS = {
     value: null,
     label: 'Appendix A Title (Disclosure)',
     error: undefined,
-    rule: 'numeric',
+    rule: 'string',
     placeHolder: 'Enter here',
   },
   investmentMultipleSummary: {
