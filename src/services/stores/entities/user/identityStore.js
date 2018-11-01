@@ -103,8 +103,8 @@ export class IdentityStore {
   };
 
   @action
-  resetFormData(form) {
-    const resettedForm = FormValidator.resetFormData(this[form]);
+  resetFormData(form, targetedFields = []) {
+    const resettedForm = FormValidator.resetFormData(this[form], targetedFields);
     this[form] = resettedForm;
   }
 
