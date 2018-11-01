@@ -514,37 +514,42 @@ export class BusinessAppReviewStore {
 
   @action
   generatePortalAgreement = () => {
-    const { businessApplicationDetailsAdmin } = businessAppStore;
-    const { applicationId, userId } = businessApplicationDetailsAdmin;
-    const reFetchPayLoad = {
-      applicationId,
-      applicationType: 'APPLICATION_COMPLETED',
-      userId,
-    };
-    this.setFieldvalue('inProgress', 'GENERATE_PA');
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: generatePortalAgreement,
-          variables: {
-            applicationId,
-            userId,
-          },
-          refetchQueries:
-            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
-        })
-        .then((result) => {
-          Helper.toast('Portal agreement generated successfully.', 'success');
-          resolve(result);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
-          this.setFieldvalue('inProgress', false);
-        });
+    this.saveReviewForms('OFFERS_FRM').then(() => {
+      const { businessApplicationDetailsAdmin } = businessAppStore;
+      const { applicationId, userId } = businessApplicationDetailsAdmin;
+      const reFetchPayLoad = {
+        applicationId,
+        applicationType: 'APPLICATION_COMPLETED',
+        userId,
+      };
+      this.setFieldvalue('inProgress', 'GENERATE_PA');
+      return new Promise((resolve, reject) => {
+        client
+          .mutate({
+            mutation: generatePortalAgreement,
+            variables: {
+              applicationId,
+              userId,
+            },
+            refetchQueries:
+              [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+          })
+          .then((result) => {
+            Helper.toast('Portal agreement generated successfully.', 'success');
+            resolve(result);
+          })
+          .catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+            reject(error);
+          })
+          .finally(() => {
+            this.setFieldvalue('inProgress', false);
+          });
+      });
+    }).catch(() => {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+      this.setFieldvalue('inProgress', false);
     });
   };
 
