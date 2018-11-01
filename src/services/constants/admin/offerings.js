@@ -522,14 +522,16 @@ export const COMPANY_LAUNCH = {
     value: '',
     label: 'Target Launch Date',
     error: undefined,
-    rule: 'optional',
+    rule: 'date',
+    customErrors: { date: 'Target Launch Date is not a valid date format.' },
     placeHolder: '4/3/2018',
   },
   terminationDate: {
     value: '',
     label: 'Termination Date',
     error: undefined,
-    rule: 'optional',
+    rule: 'date',
+    customErrors: { date: 'Termination Date is not a valid date format.' },
     placeHolder: '4/3/2018',
   },
   expectedOpsDate: {

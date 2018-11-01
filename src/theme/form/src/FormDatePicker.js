@@ -31,7 +31,7 @@ const FormDatePicker = observer(props =>
         dateFormat="MM/DD/YYYY"
         onClick={props.changed}
         customInput={<NumberFormat format="##/##/####" />}
-        placeholderText={props.placeholder}
+        placeholderText={(props.displayMode || props.readOnly) ? '' : props.placeholder}
         onChange={props.changed}
         disabled={props.isdisabled}
         maxDate={props.maxdate}

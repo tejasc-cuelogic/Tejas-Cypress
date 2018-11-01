@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
+import { observer } from 'mobx-react';
 import { Table, Icon, Button, Grid, Card } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../services/constants/admin/businessApplication';
 
+@observer
 export default class OffersPanel extends Component {
   formChangeWithIndex = (e, result, form, arrayName, index) => {
     this.props.formChangeWithIndex(e, result, form, arrayName, index);
