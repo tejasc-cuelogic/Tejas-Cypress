@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Grid, Icon, Header, Divider, Button, Form } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { FormInput, FormPasswordStrength } from '../../../../theme/form';
@@ -63,69 +64,82 @@ class Success extends Component {
     const { userExists } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
     return (
-      <Grid container>
-        <Grid.Column className="issuer-signup">
-          <Icon className="ns-paper-plane" size="massive" color="green" />
-          <Header as="h1">Congratulations!</Header>
-          <p>
-            <b>You have been pre-qualified for a NextSeed campaign.</b>
-          </p>
-          <p>
-            In the meantime, please begin filling out the rest of the application and submitting the
-            necessary paperwork. Our step-by-step guide will walk you through the steps and keep
-            the process organized.
-          </p>
-          {this.props.isPublic &&
-            <Form>
-              <Grid>
-                <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
-                  {!userExists ?
-                    ['email', 'password', 'verify'].map(field => (
-                      (field === 'password') ?
-                        <FormPasswordStrength
-                          key="password"
-                          name="password"
-                          type="password"
-                          iconDisplay
-                          minLength={8}
-                          minScore={4}
-                          tooShortWord="Weak"
-                          scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                          inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-                          changed={signupChange}
-                          fielddata={fields[field]}
-                        />
-                        :
+      <Aux>
+        <Grid container>
+          <Grid.Column className="issuer-signup">
+            <Icon className="ns-paper-plane" size="massive" color="green" />
+            <Header as="h1">Congratulations!</Header>
+            <p>
+              <b>You have been pre-qualified for a NextSeed campaign.</b>
+            </p>
+            <p>
+              In the meantime, please begin filling out the rest of the application and
+              submitting the necessary paperwork. Our step-by-step guide will walk you
+              through the steps and keep the process organized.
+            </p>
+            {this.props.isPublic &&
+              <Form>
+                <Grid>
+                  <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
+                    {!userExists ?
+                      ['email', 'password', 'verify'].map(field => (
+                        (field === 'password') ?
+                          <FormPasswordStrength
+                            key="password"
+                            name="password"
+                            type="password"
+                            iconDisplay
+                            minLength={8}
+                            minScore={4}
+                            tooShortWord="Weak"
+                            scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                            inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
+                            changed={signupChange}
+                            fielddata={fields[field]}
+                          />
+                          :
+                          <FormInput
+                            key={field}
+                            disabled={field === 'email'}
+                            // icon={field !== 'email' ? togglePasswordType(field) : null}
+                            type={field !== 'email' ? pwdInputType : 'text'}
+                            name={field}
+                            fielddata={fields[field]}
+                            changed={signupChange}
+                          />
+                      )) :
+                      ['email', 'password'].map(field => (
                         <FormInput
                           key={field}
-                          disabled={field === 'email'}
-                          // icon={field !== 'email' ? togglePasswordType(field) : null}
-                          type={field !== 'email' ? pwdInputType : 'text'}
+                          icon={field === 'password' ? togglePasswordType(field) : null}
+                          type={field === 'password' ? pwdInputType : 'text'}
                           name={field}
-                          fielddata={fields[field]}
-                          changed={signupChange}
+                          disabled={field === 'email'}
+                          fielddata={LOGIN_FRM.fields[field]}
+                          changed={LoginChange}
                         />
-                    )) :
-                    ['email', 'password'].map(field => (
-                      <FormInput
-                        key={field}
-                        icon={field === 'password' ? togglePasswordType(field) : null}
-                        type={field === 'password' ? pwdInputType : 'text'}
-                        name={field}
-                        disabled={field === 'email'}
-                        fielddata={LOGIN_FRM.fields[field]}
-                        changed={LoginChange}
-                      />
-                    ))
-                  }
-                </Grid.Column>
-              </Grid>
-            </Form>
-          }
-          <Divider section hidden />
-          <Button loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists)} size="large" color="green" className="very relaxed">Proceed</Button>
-        </Grid.Column>
-      </Grid>
+                      ))
+                    }
+                  </Grid.Column>
+                </Grid>
+              </Form>
+            }
+            <Divider section hidden />
+            <Button loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists)} size="large" color="green" className="very relaxed">Proceed</Button>
+          </Grid.Column>
+        </Grid>
+        <Dimmer active className="fullscreen">
+          <Loader size="large">
+            <Header as="h3">
+              Please wait...
+              <Header.Subheader>
+                we are creating an user and processing your business application.
+                This can take up to a minute.
+              </Header.Subheader>
+            </Header>
+          </Loader>
+        </Dimmer>
+      </Aux>
     );
   }
 }
