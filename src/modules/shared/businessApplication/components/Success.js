@@ -144,8 +144,8 @@ class Success extends Component {
         </Grid>
         {this.state.showProgressLoader &&
         <Dimmer active className="fullscreen">
-          <Loader>
-            <Header as="h4">
+          <Loader size="large">
+            <Header as="h3">
               Please wait...
               <Header.Subheader>
                 We are processing your business application.

@@ -5,7 +5,11 @@
   &.fullscreen{
     position:fixed;
   }
-  .ui.header{
+  .ui.loader .ui.header{
     color:@white;
+    .sub.header{
+      font-size:.75em;
+      margin-top:@7px;
+    }
   }
 }
