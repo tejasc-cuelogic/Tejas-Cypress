@@ -26,6 +26,7 @@ export const allOfferings = gql`
       offering {
         launch {
           targetDate
+          terminationDate
         }
       }
       applicationId

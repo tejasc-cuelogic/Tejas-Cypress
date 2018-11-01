@@ -25,13 +25,19 @@ class DataFormatter {
 
   getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
 
-  diffDays = (timeStamp2) => {
+  diffDays = (timeStamp2, inHours = false) => {
     const date = new Date();
     const timeStamp1 = date.getTime();
     const convertedtimeStamp2 = new Date(timeStamp2);
-    const difference = timeStamp1 - convertedtimeStamp2.getTime();
+    const difference = convertedtimeStamp2.getTime() - timeStamp1;
     const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-    return daysDifference;
+    if (inHours) {
+      return Math.floor(difference / 1000 / 60 / 60);
+    }
+    if (Number.isNaN(daysDifference)) {
+      return '-';
+    }
+    return daysDifference + 1;
   }
 
   formatedDate = date => moment(date).format('MM/DD/YYYY');
