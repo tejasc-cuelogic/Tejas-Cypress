@@ -183,8 +183,8 @@ export class AuthStore {
   }
 
   @action
-  resetForm = (form) => {
-    Validator.resetFormData(this[form]);
+  resetForm = (form, targetedFields = []) => {
+    Validator.resetFormData(this[form], targetedFields);
   }
   @computed
   get canSubmitConfirmEmail() {

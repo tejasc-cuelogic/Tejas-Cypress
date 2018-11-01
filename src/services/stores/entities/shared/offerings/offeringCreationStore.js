@@ -880,13 +880,27 @@ export class OfferingCreationStore {
           ...payloadData,
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
         };
+        payloadData.keyTerms = mergeWith(
+          toJS(getOfferingById.keyTerms),
+          payloadData.keyTerms,
+          this.mergeCustomize,
+        );
+        payloadData.offering = mergeWith(
+          toJS(getOfferingById.offering),
+          payloadData.offering,
+          this.mergeCustomize,
+        );
+        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
+        payloadData.offering = cleanDeep(payloadData.offering);
+        payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
+        payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    if (keyName !== 'contingencies') {
+    if (keyName !== 'contingencies' && keyName !== 'editForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
@@ -961,7 +975,7 @@ export class OfferingCreationStore {
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
-    } else {
+    } else if (keyName === 'contingencies') {
       ['launch', 'close'].forEach((c) => {
         forEach(payloadData.contingencies[c], (con, index) => {
           payloadData.contingencies[c][index].accepted = {

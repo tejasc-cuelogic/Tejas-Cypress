@@ -15,6 +15,7 @@ export default class AutoComplete extends Component {
     const {
       label, error, value, placeHolder,
     } = props.fielddata;
+    const { displayMode, readOnly } = props;
     return (
       <Form.Field error={(!!error && this.state.showError) || (!!error && props.showerror)} className={props.containerclassname || ''}>
         <label>{label}</label>
@@ -24,7 +25,7 @@ export default class AutoComplete extends Component {
             props.onplaceselected(place);
           }}
           value={value}
-          placeHolder={placeHolder}
+          placeholder={(displayMode || readOnly) ? '' : placeHolder}
           types={['address']}
           onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
           onBlur={() => this.triggerError(true)}

@@ -6,16 +6,17 @@ import { Header, Button, Divider, Icon } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import { BUSINESS_APPLICATION_STATUS } from '../../../../../../../services/constants/businessApplication';
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore')
 @observer
 export default class ManagerOverview extends Component {
   render() {
-    const { formChange, MANAGERS_FRM, saveReviewForms } = this.props.businessAppReviewStore;
     const {
-      isReadonly, approved, formName, isManager, submitted, stepStatus,
-      uiStore, title, applicationStatus,
+      formChange, MANAGERS_FRM, saveReviewForms, inProgress,
+    } = this.props.businessAppReviewStore;
+    const {
+      isReadonly, approved, formName, isManager, submitted,
+      title, applicationStatus,
     } = this.props;
-    const { inProgress } = uiStore;
     return (
       ((!isManager && isReadonly && approved && approved.status) || (isManager && submitted)) ?
         <Aux>
@@ -24,7 +25,7 @@ export default class ManagerOverview extends Component {
             {approved && approved.status && submitted &&
             <Button.Group floated="right" size="mini">
               <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
+                <Icon className="ns-circle" color="green" />
                 Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
               </Button>
               <Button as="span" className="time-stamp">
@@ -33,7 +34,7 @@ export default class ManagerOverview extends Component {
               </Button>
               {isManager && approved && approved.status && applicationStatus
               !== BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL &&
-              <Button className="relaxed" loading={inProgress} inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+              <Button className="relaxed" loading={inProgress === 'REVIEW_DECLINED'} inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
               }
             </Button.Group>
             }
@@ -41,13 +42,13 @@ export default class ManagerOverview extends Component {
               <Button.Group floated="right" size="mini">
                 {submitted &&
                   <Button as="span" className="time-stamp">
-                    <Icon className="ns-check-circle" color="green" />
+                    <Icon className="ns-circle" color="green" />
                     Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
                   </Button>
                 }
-                <Button loading={inProgress} disabled={!MANAGERS_FRM.meta.isValid || !this.props.isValid} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
-                <Button loading={inProgress} disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed">Save</Button>
-                <Button loading={inProgress} disabled={stepStatus || !MANAGERS_FRM.meta.isValid || !this.props.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>{title || 'Approve'}</Button>
+                <Button loading={inProgress === 'REVIEW_DECLINED'} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button loading={inProgress === 'SAVE'} primary className="relaxed">Save</Button>
+                <Button loading={inProgress === 'REVIEW_APPROVED'} disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>{title || 'Approve'}</Button>
               </Button.Group>
             }
           </Header>
