@@ -7,8 +7,8 @@ import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import ConfirmCancellation from '../../ConfirmCancellation';
 
-@withRouter
 @inject('investmentStore')
+@withRouter
 @observer
 export default class Agreement extends React.Component {
   state = {
@@ -23,16 +23,22 @@ export default class Agreement extends React.Component {
     }
   }
   handleCloseModal = () => {
-    this.props.history.push(`${this.props.refLink}/overview`);
+    if (this.props.changeInvestment) {
+      const { offeringId } = this.props.match.params;
+      this.props.history.push(`${this.props.refLink}/${offeringId}`);
+    } else {
+      this.props.history.push(`${this.props.refLink}/overview`);
+    }
   }
   submit = () => {
     this.props.investmentStore.finishInvestment().then((investmentStatus) => {
       if (investmentStatus) {
-        this.props.history.push(`${this.props.refLink}/congratulation`);
+        this.props.history.push('congratulation');
       }
     });
   }
-  handleCancelAgreement = () => {
+  handleCancelAgreement = (e) => {
+    e.preventDefault();
     const { match } = this.props;
     this.props.history.push(`${match.url}/confirm-cancellation`);
   }
