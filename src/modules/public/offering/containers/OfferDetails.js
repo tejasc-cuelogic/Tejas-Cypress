@@ -13,7 +13,6 @@ import DocSign from '../components/investNow/agreement/components/DocSign';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
-import ConfirmCancellation from '../components/investNow/ConfirmCancellation';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -89,7 +88,6 @@ class offerDetails extends Component {
             }
             <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
             <Route path={`${match.url}/agreement`} component={Agreement} />
-            <Route path={`${match.url}/confirm-cancellation`} component={ConfirmCancellation} />
             <Route path={`${match.url}/doc-sign`} component={DocSign} />
             <Route path={`${match.url}/congratulation`} component={Congratulation} />
           </Switch>

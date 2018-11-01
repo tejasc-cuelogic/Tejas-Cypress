@@ -18,9 +18,9 @@ export default class ConfirmCancellation extends Component {
   }
   render() {
     return (
-      <Modal closeOnDimmerClick={false}>
-        <Modal.Content>
-          <Header as="h3" textAlign="center">Confirm cancellation</Header>
+      <Modal open closeOnDimmerClick={false} size="mini">
+        <Modal.Content className="center-align">
+          <Header as="h3">Confirm cancellation</Header>
           <p>By canceling this reservation, you will not be invested in this offering.</p>
           <div className="center-align">
             <Button.Group>

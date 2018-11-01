@@ -73,6 +73,7 @@ export default class InvestNow extends React.Component {
         this.setState({ submitLoading: !this.state.submitLoading });
       });
   }
+
   multiClickHandler = (step) => {
     if (step.name === 'Financial Info') {
       this.props.investmentStore.getInvestorAvailableCash().then(() => {

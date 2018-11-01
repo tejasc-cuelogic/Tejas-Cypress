@@ -1,9 +1,11 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
+import ConfirmCancellation from '../../ConfirmCancellation';
 
 @withRouter
 @inject('investmentStore')
@@ -28,7 +30,8 @@ export default class Agreement extends React.Component {
     });
   }
   handleCancelAgreement = () => {
-    this.props.history.push('confirm-cancellation');
+    const { match } = this.props;
+    this.props.history.push(`${match.url}/confirm-cancellation`);
   }
   render() {
     const {
@@ -36,46 +39,50 @@ export default class Agreement extends React.Component {
       investmentAmount,
       setCheckbox,
     } = this.props.investmentStore;
+    const { match } = this.props;
     return (
-      <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
-        <Modal.Content className="signup-header">
-          <Header as="h3" className="mb-40">
+      <Aux>
+        <Route exact path={`${match.url}/confirm-cancellation`} component={ConfirmCancellation} />
+        <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+          <Modal.Content className="signup-header">
+            <Header as="h3" className="mb-40">
             Let&#39;s confirm your investment.<br />You are investing
-            <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in Pour Behavior.
-          </Header>
-          {!AGREEMENT_DETAILS_FORM.meta.isValid &&
+              <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in Pour Behavior.
+            </Header>
+            {!AGREEMENT_DETAILS_FORM.meta.isValid &&
             <Message error textAlign="left" className="mb-40">
               All boxes must be checked to confirm your investment.
             </Message>
           }
-          <Form error size="huge">
-            <Grid stackable>
-              <Grid.Row>
-                {['checkboxesLeft', 'checkboxesRight'].map(field => (
-                  <Grid.Column width={8}>
-                    <FormCheckbox
-                      defaults
-                      fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
-                      name={field}
-                      containerclassname="ui very relaxed list"
-                      changed={setCheckbox}
-                    />
-                  </Grid.Column>
+            <Form error size="huge">
+              <Grid stackable>
+                <Grid.Row>
+                  {['checkboxesLeft', 'checkboxesRight'].map(field => (
+                    <Grid.Column width={8}>
+                      <FormCheckbox
+                        defaults
+                        fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
+                        name={field}
+                        containerclassname="ui very relaxed list"
+                        changed={setCheckbox}
+                      />
+                    </Grid.Column>
               ))}
-              </Grid.Row>
-            </Grid>
-          </Form>
-          <Divider hidden />
-          <div className="center-align">
-            <Button primary disabled={!AGREEMENT_DETAILS_FORM.meta.isValid} onClick={this.submit}>
+                </Grid.Row>
+              </Grid>
+            </Form>
+            <Divider hidden />
+            <div className="center-align">
+              <Button primary disabled={!AGREEMENT_DETAILS_FORM.meta.isValid} onClick={this.submit}>
             Invest
-            </Button>
-            <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
+              </Button>
+              <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
             Cancel
-            </Button>
-          </div>
-        </Modal.Content>
-      </Modal>
+              </Button>
+            </div>
+          </Modal.Content>
+        </Modal>
+      </Aux>
     );
   }
 }
