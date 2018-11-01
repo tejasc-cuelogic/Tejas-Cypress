@@ -11,6 +11,7 @@ const FormLabelInput = observer((props) => {
     tooltip,
     placeHolder,
   } = props.fielddata;
+  const { displayMode, readOnly } = props;
   return (
     <Form.Field>
       <label>
@@ -32,7 +33,7 @@ const FormLabelInput = observer((props) => {
         label={false}
         type={props.type || 'text'}
         error={!!error}
-        placeholder={placeHolder}
+        placeholder={(displayMode || readOnly) ? '' : placeHolder}
         onChange={props.changed}
       />
       {error &&

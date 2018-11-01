@@ -20,7 +20,7 @@ export default class FormTextarea extends Component {
       defaultValue,
       value,
     } = props.fielddata;
-
+    const { displayMode, readOnly } = props;
     return (
       <Form.Field className={props.containerclassname || ''} error={(!!error && this.state.showError)}>
         {!props.hidelabel && label !== '' &&
@@ -48,7 +48,7 @@ export default class FormTextarea extends Component {
             {...props}
             value={value === '' ? undefined : value}
             label={label}
-            placeholder={placeHolder}
+            placeholder={(displayMode || readOnly) ? '' : placeHolder}
             defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
             onChange={(e) => { props.changed(e); this.triggerError(false); }}
             onBlur={() => this.triggerError(true)}
