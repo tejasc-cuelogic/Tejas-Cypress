@@ -57,9 +57,8 @@ class Success extends Component {
   }
 
   render() {
-    // togglePasswordType
     const {
-      signupChange, SIGNUP_FRM, LoginChange, LOGIN_FRM, pwdInputType,
+      signupChange, togglePasswordType, SIGNUP_FRM, LoginChange, LOGIN_FRM, pwdInputType,
     } = this.props.authStore;
     const { userExists } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
@@ -108,30 +107,15 @@ class Success extends Component {
                         />
                     )) :
                     ['email', 'password'].map(field => (
-                      (field === 'password') ?
-                        <FormPasswordStrength
-                          key="password"
-                          name="password"
-                          type="password"
-                          iconDisplay
-                          minLength={8}
-                          minScore={4}
-                          tooShortWord="Weak"
-                          scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
-                          inputProps={{ name: 'password', autoComplete: 'off', placeholder: 'Password' }}
-                          changed={LoginChange}
-                          fielddata={LOGIN_FRM.fields[field]}
-                        />
-                        :
-                        <FormInput
-                          key={field}
-                          // icon={field === 'password' ? togglePasswordType(field) : null}
-                          type={field === 'password' ? pwdInputType : 'text'}
-                          name={field}
-                          disabled={field === 'email'}
-                          fielddata={LOGIN_FRM.fields[field]}
-                          changed={LoginChange}
-                        />
+                      <FormInput
+                        key={field}
+                        icon={field === 'password' ? togglePasswordType(field) : null}
+                        type={field === 'password' ? pwdInputType : 'text'}
+                        name={field}
+                        disabled={field === 'email'}
+                        fielddata={LOGIN_FRM.fields[field]}
+                        changed={LoginChange}
+                      />
                     ))
                   }
                 </Grid.Column>
