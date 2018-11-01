@@ -107,8 +107,8 @@ export default class ConfirmEmailAddress extends Component {
             displayMode
             className="display-only"
           />
-          <p><Link to={changeEmailAddressLink}>Change email address</Link></p>
-          <Form onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
+          <Link to={changeEmailAddressLink} className="grey-link">Change email address</Link>
+          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -119,6 +119,7 @@ export default class ConfirmEmailAddress extends Component {
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
+              <Button type="button" size="small" color="grey" className="link-button" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
             </Form.Field>
             {errors &&
               <Message error textAlign="left" className="mb-40">
@@ -134,9 +135,10 @@ export default class ConfirmEmailAddress extends Component {
             <Button primary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
           </Form>
         </Modal.Content>
-        <Modal.Actions className="signup-actions">
-          <Button type="button" className="link-button" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
-        </Modal.Actions>
+        {/* <Modal.Actions className="signup-actions">
+          <Button type="button" className="link-button"
+          content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+        </Modal.Actions> */}
       </Modal>
     );
   }

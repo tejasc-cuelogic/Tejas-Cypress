@@ -69,6 +69,7 @@ export const campaignDetailsQuery = gql`
       industry
       minInvestAmt
       maxInvestAmt
+      appendixATitle
       revShareSummary
       investmentMultipleSummary
       locationRiskFactors
@@ -343,10 +344,21 @@ query getOfferingById($id: ID) {
       legalBusinessName
       shorthandBusinessName
       maturity
+      frequencyOfPayments
       securities
       securityInterest
       securitiesOwnershipPercentage
+      investmentMultiple
+      revSharePercentage
       interestRate
+      minOfferingAmount
+      maxOfferingAmount
+      industry
+      minInvestAmt
+      maxInvestAmt
+      revShareSummary
+      investmentMultipleSummary
+      locationRiskFactors
       isTX
       state
       city

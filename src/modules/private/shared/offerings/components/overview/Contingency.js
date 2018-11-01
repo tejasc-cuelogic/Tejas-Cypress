@@ -1,13 +1,14 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import moment from 'moment';
 import { observer, inject } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Checkbox, Confirm, Icon, Modal, Form } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
 
 @withRouter
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Contingency extends Component {
   setContingencyForm = () => {
@@ -26,6 +27,21 @@ export default class Contingency extends Component {
     } = this.props.offeringCreationStore;
     const fields = { ...LAUNCH_CONTITNGENCIES_FRM.fields, ...CLOSING_CONTITNGENCIES_FRM.fields };
     updateOffering(currentOfferingId, fields, 'contingencies', '', true, successMsg);
+  }
+  formArrayChange = (e, result, formName, dataKey, index) => {
+    if (result) {
+      this.props.formArrayChange(e, result, formName, dataKey, index);
+    }
+    if (result && !result.checked) {
+      const {
+        updateOffering,
+        currentOfferingId,
+        LAUNCH_CONTITNGENCIES_FRM,
+        CLOSING_CONTITNGENCIES_FRM,
+      } = this.props.offeringCreationStore;
+      const fields = { ...LAUNCH_CONTITNGENCIES_FRM.fields, ...CLOSING_CONTITNGENCIES_FRM.fields };
+      updateOffering(currentOfferingId, fields, 'contingencies', '', true);
+    }
   }
   handleSubmitForm = () => {
     const {
@@ -79,14 +95,16 @@ export default class Contingency extends Component {
       EDIT_CONTINGENCY_FRM,
     } = this.props.offeringCreationStore;
     const {
-      form, formName, formArrayChange, addon,
+      form, formName, addon,
     } = this.props;
     const dataKey = formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'launch' : 'close';
+    const { offer } = this.props.offeringsStore;
+    const contingenciesData = offer && offer.contingencies;
     return (
       <Aux>
         <Header as="h4">
           {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
-          {this.props.hideAddNewBtn && <Icon className="ns-chevron-up-compact" color="blue" />}
+          {this.props.hideAddNewBtn && <Icon className="ns-chevron-up-compact right" color="blue" />}
           {access.asManager ?
             <Modal size="small" trigger={!this.props.hideAddNewBtn && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.setContingencyForm()}>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Button>} closeIcon >
               <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
@@ -116,7 +134,7 @@ export default class Contingency extends Component {
         form.fields[dataKey].map((contingency, index) => (
           <div className="featured-section collapsed-checkbox">
             <Checkbox
-              name="isAccepted"
+              name="status"
               label={
                 <label>
                   <Header as="h4">
@@ -127,15 +145,15 @@ export default class Contingency extends Component {
                   </Header>
                 </label>
               }
-              checked={form.fields[dataKey][index].isAccepted.value}
-              onChange={(e, result) => formArrayChange(e, result, formName, dataKey, index)}
+              checked={form.fields[dataKey][index].status.value}
+              onChange={(e, result) => this.formArrayChange(e, result, formName, dataKey, index)}
             />
             <div className="checkbox-description">
               <FormTextarea
                 fielddata={contingency.comment}
                 name="comment"
                 containerclassname="secondary"
-                changed={(e, result) => formArrayChange(e, result, formName, dataKey, index)}
+                changed={(e, result) => this.formArrayChange(e, result, formName, dataKey, index)}
               />
               <Button.Group compact size="small">
                 {access.asManager &&
@@ -164,10 +182,14 @@ export default class Contingency extends Component {
                   </Aux>
                 }
                 <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null)} />
+                {contingenciesData && contingenciesData[dataKey] &&
+                contingenciesData[dataKey][index] && contingenciesData[dataKey][index].accepted &&
+                contingenciesData[dataKey][index].accepted.status &&
                 <Button as="span" className="time-stamp">
                   <Icon className="ns-check-circle" color="green" />
-                  Submitted by USER_NAME on 2/3/2018
+                  Submitted by {contingenciesData[dataKey][index].accepted.by} on {moment(contingenciesData[dataKey][index].accepted.date).format('MM/DD/YYYY')}
                 </Button>
+                }
               </Button.Group>
             </div>
           </div>

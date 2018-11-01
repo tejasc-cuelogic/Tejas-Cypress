@@ -14,6 +14,7 @@ export class OfferingsStore {
   @observable data = [];
   @observable filters = false;
   @observable offerData = {};
+  @observable oldOfferData = {};
   @observable offerLoading = false;
   @observable phases = STAGES;
   @observable subTabs = {
@@ -74,13 +75,24 @@ export class OfferingsStore {
 
   @action
   deleteOffering = (id) => {
+    const reqStages = Object.keys(pickBy(STAGES, s => s.ref === this.requestState.stage));
+    const params = {
+      first: this.requestState.perPage,
+      skip: this.requestState.skip,
+    };
+    if (reqStages.length > 0) {
+      params.stage = reqStages;
+    }
     client
       .mutate({
         mutation: deleteOffering,
         variables: {
           id,
         },
-        refetchQueries: [{ query: allOfferings }],
+        refetchQueries: [{
+          query: allOfferings,
+          variables: { ...params, ...{ issuerId: userStore.currentUser.sub } },
+        }],
       })
       .then(() => Helper.toast('Offering deleted successfully.', 'success'))
       .catch(() => Helper.toast('Error while deleting offering', 'error'));
@@ -91,6 +103,9 @@ export class OfferingsStore {
     this.initLoad.push('getOne');
     if (loading) {
       this.offerLoading = true;
+      this.oldOfferData = {};
+    } else {
+      this.oldOfferData = { ...this.offerData };
     }
     this.offerData = graphql({
       client,
@@ -99,6 +114,7 @@ export class OfferingsStore {
       variables: { id },
       onFetch: () => {
         this.offerLoading = false;
+        this.oldOfferData = {};
         const { setFormData } = offeringCreationStore;
         setFormData('OFFERING_DETAILS_FRM', false);
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
@@ -123,6 +139,10 @@ export class OfferingsStore {
 
   @computed get offer() {
     return (this.offerData.data && toJS(this.offerData.data.getOfferingById)) || {};
+  }
+
+  @computed get offerOld() {
+    return (this.oldOfferData.data && toJS(this.oldOfferData.data.getOfferingById)) || {};
   }
 
   @computed get loading() {

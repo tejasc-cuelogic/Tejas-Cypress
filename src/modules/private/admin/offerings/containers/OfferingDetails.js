@@ -32,8 +32,10 @@ export default class OfferingDetails extends Component {
   render() {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;
-    const { offer, offerLoading } = offeringsStore;
-    if (offerLoading || (offer && !offer.stage)) {
+    const { offerLoading, offerOld } = offeringsStore;
+    let { offer } = offeringsStore;
+    offer = !offerLoading && offerOld.stage ? offerOld : offer;
+    if (offerLoading || (offerLoading && offer && !offer.stage)) {
       return <InlineLoader />;
     }
     navItems = navStore.filterByAccess(
@@ -50,7 +52,7 @@ export default class OfferingDetails extends Component {
                 (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
               ))}
               <Header.Subheader className="mt-10">
-                <Link target="_blank" to={`/offerings/preview/${offer.id}`}>
+                <Link target="_blank" to={`/offerings/preview/${offer.id}/overview`}>
                   <Icon className="ns-view" /><b>Preview the offering page</b>
                 </Link>
               </Header.Subheader>

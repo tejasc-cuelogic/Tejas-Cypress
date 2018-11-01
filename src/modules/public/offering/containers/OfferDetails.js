@@ -9,7 +9,6 @@ import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shar
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import InvestNow from '../components/investNow/InvestNow';
 import Agreement from '../components/investNow/agreement/components/Agreement';
-import DocSign from '../components/investNow/agreement/components/DocSign';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
@@ -87,9 +86,8 @@ class offerDetails extends Component {
               })
             }
             <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
-            <Route path={`${match.url}/agreement`} component={Agreement} />
-            <Route path={`${match.url}/doc-sign`} component={DocSign} />
-            <Route path={`${match.url}/congratulation`} component={Congratulation} />
+            <Route path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+            <Route path={`${match.url}/congratulation`} render={Congratulation} />
           </Switch>
         </div>
       </div>

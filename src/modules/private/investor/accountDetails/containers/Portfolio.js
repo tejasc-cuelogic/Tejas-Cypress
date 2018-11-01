@@ -12,9 +12,9 @@ import CancelInvestment from '../components/portfolio/CancelInvestment';
 import { InlineLoader } from '../../../../../theme/shared';
 import InvestNow from '../../../../public/offering/components/investNow/InvestNow';
 import Agreement from '../../../../public/offering/components/investNow/agreement/components/Agreement';
-import DocSign from '../../../../public/offering/components/investNow/agreement/components/DocSign';
 import Congratulation from '../../../../public/offering/components/investNow/agreement/components/Congratulation';
 import ChangeInvestmentLimit from '../../../../public/offering/components/investNow/ChangeInvestmentLimit';
+import ConfirmCancellation from '../../../../public/offering/components/investNow/ConfirmCancellation';
 
 @inject('portfolioStore')
 @observer
@@ -22,13 +22,14 @@ export default class Portfolio extends Component {
   componentWillMount() {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorAccountPortfolio(accountType);
+    this.props.portfolioStore.calculateInvestmentType();
   }
   render() {
     const { match, portfolioStore } = this.props;
     if (portfolioStore.loading) {
       return <InlineLoader />;
     }
-    const { getInvestorAccounts, calculateInvestmentType } = portfolioStore;
+    const { getInvestorAccounts, getPieChartData } = portfolioStore;
     const summaryDetails = {
       accountType: includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity',
       className: 'investment-summary',
@@ -50,7 +51,7 @@ export default class Portfolio extends Component {
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
-        <PortfolioAllocations pieChart={calculateInvestmentType} />
+        <PortfolioAllocations pieChart={getPieChartData} />
         <Header as="h4">My Investments</Header>
         {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
           <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
@@ -89,7 +90,7 @@ export default class Portfolio extends Component {
           render={props => <InvestNow changeInvest refLink={match.url} {...props} />}
         />
         <Route path={`${match.url}/:offeringId/agreement`} component={Agreement} />
-        <Route path={`${match.url}/:offeringId/doc-sign`} component={DocSign} />
+        <Route path={`${match.url}/confirm-cancellation`} component={ConfirmCancellation} />
         <Route path={`${match.url}/:offeringId/congratulation`} component={Congratulation} />
         <Route path={`${match.url}/:offeringId/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={match.url} {...props} />} />
         <Route

@@ -5,7 +5,7 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
 import { AccTypeTitle } from '../../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 
 @inject('portfolioStore', 'campaignStore')
@@ -13,6 +13,9 @@ import PayOffChart from './PayOffChart';
 class Overview extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
+    const { keyTerms, offering } = campaign;
+    const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities &&
+      campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     return (
       <Aux>
         <div className="inner-content-spacer bg-offwhite">
@@ -35,9 +38,8 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell width={5}>Issuer</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.keyTerms &&
-                          campaign.keyTerms.shorthandBusinessName ?
-                          campaign.keyTerms.shorthandBusinessName
+                        {keyTerms && keyTerms.shorthandBusinessName ?
+                          keyTerms.shorthandBusinessName
                           :
                           'NA'
                         }
@@ -46,21 +48,19 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Entity Type</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.keyTerms &&
-                          campaign.keyTerms.legalBusinessType ?
-                          campaign.keyTerms.legalBusinessType
+                        {keyTerms && keyTerms.legalBusinessType ?
+                          keyTerms.legalBusinessType
                           :
                           'NA'
                         }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>Anticipated Opening</Table.Cell>
+                      <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.offering &&
-                          campaign.offering.launch &&
-                          campaign.offering.launch.targetDate ?
-                          moment(campaign.offering.launch.targetDate).format('ll')
+                        {offering && offering.launch &&
+                          offering.launch.targetDate ?
+                          moment(offering.launch.targetDate).format('ll')
                           :
                           'NA'
                         }
@@ -69,9 +69,8 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Maturity</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.keyTerms &&
-                          campaign.keyTerms.maturity ?
-                          `${campaign.keyTerms.maturity} Months to Offering Summary`
+                        {keyTerms && keyTerms.maturity ?
+                          `${keyTerms.maturity} Months to Offering Summary`
                           :
                           'NA'
                         }
@@ -84,20 +83,25 @@ class Overview extends Component {
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Security Interest</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.keyTerms &&
-                          campaign.keyTerms.securityInterest ?
-                          campaign.keyTerms.securityInterest
+                        {keyTerms && keyTerms.securityInterest ?
+                          keyTerms.securityInterest
                           :
                           'NA'
                         }
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>Ownership %</Table.Cell>
+                      <Table.Cell>Payments</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.keyTerms &&
-                          campaign.keyTerms.securitiesOwnershipPercentage ?
-                          `${campaign.keyTerms.securitiesOwnershipPercentage}% 
+                        {keyTerms && keyTerms.frequencyOfPayments ?
+                          keyTerms.frequencyOfPayments : 'NA'}
+                      </Table.Cell>
+                    </Table.Row>
+                    <Table.Row verticalAlign="top">
+                      <Table.Cell>Ownership % Represented by Securities</Table.Cell>
+                      <Table.Cell>
+                        {keyTerms && keyTerms.securitiesOwnershipPercentage ?
+                          `${keyTerms.securitiesOwnershipPercentage}% 
                           Investors will not receive any equity interests in
                           the Issuer or any voting or management rights with respect
                           to the Issuer as a result of an investment in Securities.`
@@ -107,22 +111,57 @@ class Overview extends Component {
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>Interest Rate</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.keyTerms &&
-                          campaign.keyTerms.interestRate ?
-                          campaign.keyTerms.interestRate
+                        {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
+                          'Investment Multiple'
                           :
-                          'NA'
+                          'Interest Rate'
                         }
                       </Table.Cell>
+                      {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
+                        <Table.Cell>
+                          {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'NA'}{' '}
+                          <p dangerouslySetInnerHTML={{
+                            __html: keyTerms && keyTerms.investmentMultipleSummary ?
+                              keyTerms.investmentMultipleSummary
+                              :
+                              null,
+                          }}
+                          />
+                        </Table.Cell>
+                        :
+                        <Table.Cell>
+                          {keyTerms && keyTerms.interestRate ?
+                            `${keyTerms.interestRate}%` : 'NA'
+                            }
+                        </Table.Cell>
+                      }
                     </Table.Row>
+                    {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
+                      <Table.Row verticalAlign="top">
+                        <Table.Cell>Revenue Sharing Percentage</Table.Cell>
+                        <Table.Cell>
+                          {keyTerms && keyTerms.revSharePercentage ?
+                            keyTerms.revSharePercentage
+                            :
+                            'NA'}
+                          <p dangerouslySetInnerHTML={{
+                            __html: keyTerms && keyTerms.revShareSummary ?
+                              keyTerms.revShareSummary
+                              :
+                              null,
+                          }}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                      :
+                      null
+                    }
                     <Table.Row verticalAlign="top">
                       <Table.Cell>Securities</Table.Cell>
                       <Table.Cell>
-                        {campaign && campaign.keyTerms &&
-                          campaign.keyTerms.securities ?
-                          CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
+                        {keyTerms && keyTerms.securities ?
+                          CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
                           :
                           'NA'
                         }
@@ -143,10 +182,9 @@ class Overview extends Component {
                 <Statistic>
                   <Statistic.Label>Open date</Statistic.Label>
                   <Statistic.Value>
-                    {campaign && campaign.offering &&
-                      campaign.offering.launch &&
-                      campaign.offering.launch.targetDate ?
-                      moment(campaign.offering.launch.targetDate).format('MMM Do YYYY')
+                    {offering && offering.launch &&
+                      offering.launch.targetDate ?
+                      moment(offering.launch.targetDate).format('MMM Do YYYY')
                       :
                       'NA'
                     }
@@ -155,9 +193,8 @@ class Overview extends Component {
                 <Statistic>
                   <Statistic.Label>Months to Maturity</Statistic.Label>
                   <Statistic.Value>
-                    {campaign && campaign.keyTerms &&
-                      campaign.keyTerms.maturity ?
-                      `${campaign.keyTerms.maturity} months`
+                    {keyTerms && keyTerms.maturity ?
+                      `${keyTerms.maturity} months`
                       :
                       'NA'
                     }

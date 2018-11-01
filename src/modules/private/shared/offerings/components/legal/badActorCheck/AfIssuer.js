@@ -52,9 +52,11 @@ export default class AfIssuer extends Component {
     const afIssuerId = AFFILIATED_ISSUER_FRM.fields.getOfferingBac[index].id.value;
     const isManager = access.asManager;
     const submitted = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length &&
+      affiliatedIssuerOfferingBacData[issuerNumber] &&
       affiliatedIssuerOfferingBacData[issuerNumber].submitted) ?
       affiliatedIssuerOfferingBacData[issuerNumber].submitted : null;
     const approved = (affiliatedIssuerOfferingBacData && affiliatedIssuerOfferingBacData.length &&
+      affiliatedIssuerOfferingBacData[issuerNumber] &&
       affiliatedIssuerOfferingBacData[issuerNumber].approved) ?
       affiliatedIssuerOfferingBacData[issuerNumber].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));

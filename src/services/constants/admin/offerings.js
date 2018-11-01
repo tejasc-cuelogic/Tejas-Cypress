@@ -10,6 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
@@ -219,6 +220,13 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
+  appendixATitle: {
+    value: null,
+    label: 'Appendix A Title (Disclosure)',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
   investmentMultipleSummary: {
     value: '',
     label: 'Investment Multiple Summary',
@@ -273,6 +281,7 @@ export const KEY_TERMS = {
     label: 'Upload Pro Formas',
     value: '',
     error: undefined,
+    showLoader: false,
     rule: 'optional',
     preSignedUrl: '',
     fileId: '',
@@ -635,16 +644,18 @@ export const CONTINGENCY_META = {
     error: undefined,
     rule: 'optional',
     placeHolder: 'Enter comment here...',
-    refSelector: 'isAccepted',
+    // refSelector: 'isAccepted',
     objRef: 'accepted',
     objRefOutput2: 'accepted',
   },
-  isAccepted: {
+  status: {
+    label: '',
     value: false,
     error: undefined,
     rule: 'optional',
+    objRef: 'accepted',
     objRefOutput2: 'accepted',
-    skipField: true,
+    // skipField: true,
   },
 };
 
@@ -747,7 +758,7 @@ export const LEADERSHIP_EXP = {
       rule: 'date',
       placeHolder: 'MM-DD-YYYY',
       objType: 'DATE',
-      customErrors: { date: '* required.' },
+      customErrors: { date: 'Dates of Service is not a valid date format.' },
     },
   }],
 };
@@ -805,6 +816,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'date',
       placeHolder: 'MM/DD/YYYY',
+      customErrors: {
+        date: 'DOB is not a valid date format.',
+      },
     },
     ssn: {
       value: '',
@@ -841,6 +855,9 @@ export const LEADERSHIP = {
       error: undefined,
       rule: 'date',
       placeHolder: 'MM-DD-YYYY',
+      customErrors: {
+        date: 'Start Date of Service is not a valid date format.',
+      },
       tooltip: 'If you had left the company previously and are returning, enter the start date of your current employment position.',
     },
     street: {
@@ -1818,6 +1835,9 @@ export const ADD_NEW_BONUS_REWARD = {
     value: '',
     error: undefined,
     rule: 'date',
+    customErrors: {
+      date: 'Expiration Date is not a valid date format.',
+    },
     placeHolder: '3/4/2018',
     objType: 'DATE',
   },

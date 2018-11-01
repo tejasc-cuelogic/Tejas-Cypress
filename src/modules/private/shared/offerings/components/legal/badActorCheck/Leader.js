@@ -39,10 +39,10 @@ export default class Leader extends Component {
     const { isIssuer } = this.props.userStore;
     const isManager = access.asManager;
     const submitted = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
-      leaderShipOfferingBacData[index].submitted) ?
+      leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].submitted) ?
       leaderShipOfferingBacData[index].submitted : null;
     const approved = (leaderShipOfferingBacData && leaderShipOfferingBacData.length &&
-      leaderShipOfferingBacData[index].approved) ?
+      leaderShipOfferingBacData[index] && leaderShipOfferingBacData[index].approved) ?
       leaderShipOfferingBacData[index].approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     let leaderId = '';
