@@ -141,6 +141,7 @@
             font-size:@22px;
             padding:@12px 0;
             text-align:center;
+            border-width:2px !important;
             background-color:@neutral-offwhite !important;
         }
     }
