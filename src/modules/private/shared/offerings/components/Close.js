@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
+import moment from 'moment';
 import Aux from 'react-aux';
 import { Form, Header, Divider, Step, Label, Button, Icon, Confirm } from 'semantic-ui-react';
 import Contingency from './overview/Contingency';
@@ -56,12 +57,13 @@ export default class Close extends Component {
     const formName = 'OFFERING_CLOSE_FRM';
     const { offer } = this.props.offeringsStore;
     const { stage } = offer;
+    const closeDate = offer.offering && offer.offering.launch && offer.offering.launch.targetDate ? moment(offer.offering.launch.targetDate, 'MM-DD-YYYY').format('MMM D, YYYY') : 'N/A';
     return (
       <Form>
         <div className="inner-content-spacer">
           <Header as="h4">
             {stage === 'LIVE' ?
-              <Aux>This campaing is still live, set to close <span className="highlight-text"> Oct 28, 2018 </span>
+              <Aux>This campaing is still live, set to close <span className="highlight-text"> {closeDate} </span>
               </Aux> : <Aux>This campaing <span className="highlight-text">has succeed</span></Aux>
             }
           </Header>

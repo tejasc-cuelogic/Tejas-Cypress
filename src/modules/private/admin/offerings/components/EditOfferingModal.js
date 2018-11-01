@@ -34,8 +34,8 @@ export default class EditOffering extends React.Component {
           <Modal.Content>
             <Form onSubmit={() => this.handleSubmitForm()}>
               <FormInput
-                name="legalBusinessName"
-                fielddata={KEY_TERMS_FRM.fields.legalBusinessName}
+                name="shorthandBusinessName"
+                fielddata={KEY_TERMS_FRM.fields.shorthandBusinessName}
                 label="Business Name"
                 changed={(e, result) => formChange(e, result, 'KEY_TERMS_FRM')}
               />
