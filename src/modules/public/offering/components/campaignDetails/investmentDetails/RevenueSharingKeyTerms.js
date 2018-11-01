@@ -74,8 +74,8 @@ class RevenueSharingKeyTerms extends Component {
                   </b>
                 </p>
                 <p dangerouslySetInnerHTML={{
-                  __html: keyTerms && keyTerms.investmentMultipleSummary ?
-                    keyTerms.investmentMultipleSummary
+                  __html: KeyTerms && KeyTerms.investmentMultipleSummary ?
+                    KeyTerms.investmentMultipleSummary
                     :
                     null,
                 }}
@@ -92,8 +92,8 @@ class RevenueSharingKeyTerms extends Component {
                   </b>
                 </p>
                 <p dangerouslySetInnerHTML={{
-                  __html: keyTerms && keyTerms.revShareSummary ?
-                    keyTerms.revShareSummary
+                  __html: KeyTerms && KeyTerms.revShareSummary ?
+                    KeyTerms.revShareSummary
                     :
                     null,
                 }}
