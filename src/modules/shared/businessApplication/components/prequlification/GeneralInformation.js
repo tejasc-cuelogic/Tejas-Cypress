@@ -5,6 +5,7 @@ import FormElementWrap from '../FormElementWrap';
 
 const GeneralInformation = props => (
   <FormElementWrap hideFields={props.hideFields} header="General Information">
+    <div className="application-scroll" />
     <Grid>
       <Grid.Column widescreen={8} largeScreen={8} computer={8} tablet={16} mobile={16}>
         <div className="field-wrap">
@@ -23,7 +24,7 @@ const GeneralInformation = props => (
             ))
           }
           <MaskedInput
-            containerclassname={props.preQualFormDisabled ? 'display-only' : ''}
+            containerclassname={props.preQualFormDisabled ? 'display-only' : 'cre-scroll'}
             readOnly={props.preQualFormDisabled}
             name="phoneNumber"
             fielddata={props.fields.phoneNumber}

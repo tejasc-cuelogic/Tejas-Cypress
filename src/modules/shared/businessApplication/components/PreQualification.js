@@ -50,10 +50,17 @@ export default class PreQualification extends Component {
   }
   prequalBasicSubmit = (e) => {
     e.preventDefault();
+    const { params } = this.props.match;
     if (this.props.isPublic) {
       this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
         .then(() => {
           this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+          const sel = params.applicationType === 'commercial-real-estate' ? 'cre-scroll' :
+            'application-scroll';
+          document.querySelector(`.${sel}`).scrollIntoView({
+            top: 0,
+            behavior: 'smooth',
+          });
         });
     }
   }
