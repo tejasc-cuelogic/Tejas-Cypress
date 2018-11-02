@@ -476,6 +476,7 @@ export class InvestmentStore {
   resetData = () => {
     Validator.resetFormData(this.INVESTMONEY_FORM);
     Validator.resetFormData(this.INVESTMENT_LIMITS_FORM);
+    Validator.resetFormData(this.AGREEMENT_DETAILS_FORM);
   }
 
   @action

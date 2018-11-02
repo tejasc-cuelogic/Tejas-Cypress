@@ -1,16 +1,24 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import Firework from './FireworkAnimation';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('investmentStore')
+@inject('investmentStore', 'uiStore')
+@withRouter
 @observer
 export default class Congratulation extends React.Component {
   state = {
-    showFireworks: true,
+    showFireworks: false,
+  }
+  componentWillMount() {
+    if (this.props.changeInvestment) {
+      this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
+    } else {
+      this.setState({ showFireworks: true });
+    }
   }
   handleCloseModal = () => {
     this.props.history.push('overview');
@@ -18,7 +26,11 @@ export default class Congratulation extends React.Component {
   render() {
     const { investmentAmount } = this.props.investmentStore;
     setTimeout(() => {
-      this.setState({ showFireworks: false });
+      if (this.props.changeInvestment) {
+        this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
+      } else {
+        this.setState({ showFireworks: false });
+      }
     }, 8500);
     return (
       <Aux>

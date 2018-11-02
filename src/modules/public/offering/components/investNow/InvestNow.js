@@ -13,6 +13,7 @@ import Helper from '../../../../../helper/utility';
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
+
   componentWillMount() {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
@@ -72,6 +73,7 @@ export default class InvestNow extends React.Component {
       this.setState({ submitLoading: false });
     });
   }
+
   multiClickHandler = (step) => {
     if (step.name === 'Financial Info') {
       this.props.investmentStore.getInvestorAvailableCash().then(() => {

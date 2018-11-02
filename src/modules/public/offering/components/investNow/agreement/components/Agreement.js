@@ -1,13 +1,14 @@
 import React from 'react';
-import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { withRouter, Link } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { withRouter, Route, Link } from 'react-router-dom';
 import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
+import ConfirmCancellation from '../../ConfirmCancellation';
 
-@withRouter
 @inject('investmentStore')
+@withRouter
 @observer
 export default class Agreement extends React.Component {
   state = {
@@ -16,13 +17,18 @@ export default class Agreement extends React.Component {
   componentWillMount() {
     const { stepToBeRendered, setStepToBeRendered, investAccTypes } = this.props.investmentStore;
     if (investAccTypes.value === '') {
-      this.props.history.push('invest-now');
+      this.props.history.push(`${this.props.refLink}/invest-now`);
     } else if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
   }
   handleCloseModal = () => {
-    this.props.history.push('overview');
+    if (this.props.changeInvestment) {
+      const { offeringId } = this.props.match.params;
+      this.props.history.push(`${this.props.refLink}/${offeringId}`);
+    } else {
+      this.props.history.push(`${this.props.refLink}/overview`);
+    }
   }
   submit = () => {
     this.props.investmentStore.finishInvestment().then((investmentStatus) => {
@@ -31,8 +37,10 @@ export default class Agreement extends React.Component {
       }
     });
   }
-  handleCancelAgreement = () => {
-    this.props.history.push('confirm-cancellation');
+  handleCancelAgreement = (e) => {
+    e.preventDefault();
+    const { match } = this.props;
+    this.props.history.push(`${match.url}/confirm-cancellation`);
   }
   docuSignHandeler = (event, state) => {
     event.preventDefault();
@@ -45,8 +53,10 @@ export default class Agreement extends React.Component {
       setCheckbox,
       agreementDetails,
     } = this.props.investmentStore;
+    const { match } = this.props;
     return (
       <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+        <Route exact path={`${match.url}/confirm-cancellation`} render={() => <ConfirmCancellation refLink={this.props.refLink} />} />
         <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
           <div className="pdf-viewer">
             <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
