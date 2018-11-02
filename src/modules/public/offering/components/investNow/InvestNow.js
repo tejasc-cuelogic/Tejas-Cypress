@@ -13,7 +13,6 @@ import Helper from '../../../../../helper/utility';
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
-
   componentWillMount() {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
