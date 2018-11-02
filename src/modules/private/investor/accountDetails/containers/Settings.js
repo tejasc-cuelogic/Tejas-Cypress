@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Header, Table, Grid, Card } from 'semantic-ui-react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import { includes } from 'lodash';
 import Helper from '../../../../../helper/utility';
 
-
 @inject('settingStore')
+@withRouter
+@observer
 export default class Settings extends Component {
+  componentWillMount() {
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    const { setSettingsInfo } = this.props.settingStore;
+    setSettingsInfo(accountType);
+  }
   render() {
     const { settingsInfo } = this.props.settingStore;
+    const { match } = this.props;
     return (
       <div>
         <Header as="h4">Settings</Header>
@@ -23,7 +31,7 @@ export default class Settings extends Component {
                         <Table.Row>
                           <Table.Cell><b>{row.label}</b></Table.Cell>
                           <Table.Cell>
-                            {(row.label === 'Annual Income') || (row.label === 'Net Worth') ?
+                            {(row.label === 'Annual Income') || (row.label === 'Net Worth') || (row.label === 'Entity net assets') || (row.label === 'Other CF Investments') ?
                               (Helper.CurrencyFormat(row.value)) : (row.value)}
                           </Table.Cell>
                         </Table.Row>
@@ -42,7 +50,7 @@ export default class Settings extends Component {
                   <p>If any of this information needs to be updated.
                   please contact support through the message center.
                   </p>
-                  <p><Link to="/">Contact us now</Link></p>
+                  <p><Link to={match.url}>Contact us now</Link></p>
                 </Card.Description>
               </Card.Content>
             </Card>
