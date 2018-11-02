@@ -87,6 +87,11 @@ export class PortfolioStore {
         accountId: (account && account.details) ? account.details.accountId : null,
       },
       fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          this.calculateInvestmentType();
+        }
+      },
     });
   }
 
