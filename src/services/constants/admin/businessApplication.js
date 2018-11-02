@@ -541,7 +541,7 @@ export const OFFERS = {
     },
     amount: {
       value: '',
-      label: 'Max Offering Amount ($)',
+      label: 'Max Offering Amount',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'required',
@@ -551,7 +551,7 @@ export const OFFERS = {
     },
     minimumAmount: {
       value: '',
-      label: 'Min Offering Amount ($)',
+      label: 'Min Offering Amount',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'required',
@@ -565,6 +565,17 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'numeric|required',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+        required: '* required.',
+      },
+    },
+    mthRevenueSharing: {
+      value: '',
+      label: 'Mth Revenue Shareing %',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'required',
       customErrors: {
         numeric: 'Allowed numbers only.',
         required: '* required.',
@@ -592,6 +603,28 @@ export const OFFERS = {
         required: '* required.',
       },
     },
+    multiple: {
+      value: '',
+      label: 'Multiple on Principal to Pay',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'string|required_if:data.*.structure,REVENUE_SHARING_NOTE',
+      customErrors: {
+        string: 'Allowed string only.',
+        required_if: '* required.',
+      },
+    },
+    totalCapital: {
+      value: 0,
+      label: 'Total Capital Returned',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'numeric|required_if:data.*.structure,REVENUE_SHARING_NOTE',
+      customErrors: {
+        numeric: 'Allowed numbers only.',
+        required_if: '* required.',
+      },
+    },
     personalGuarantee: {
       value: '',
       label: 'Personal Guarantee',
@@ -615,7 +648,7 @@ export const OFFERS = {
     },
     expirationDate: {
       value: '',
-      label: 'Expiration Date',
+      label: 'Campaign Approval Exp. Date',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'date|required',
@@ -623,28 +656,6 @@ export const OFFERS = {
       customErrors: {
         date: 'Date format is invalid.',
         required: '* required.',
-      },
-    },
-    multiple: {
-      value: '',
-      label: 'Multiple on Principal to Pay',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'string|required_if:data.*.structure,REVENUE_SHARING_NOTE',
-      customErrors: {
-        string: 'Allowed string only.',
-        required_if: '* required.',
-      },
-    },
-    totalCapital: {
-      value: 0,
-      label: 'Total Capital Returned',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'numeric|required_if:data.*.structure,REVENUE_SHARING_NOTE',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required_if: '* required.',
       },
     },
   }],
