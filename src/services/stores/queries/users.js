@@ -130,6 +130,9 @@ export const userDetailsQuery = gql`
               routingNumber
               plaidAccessToken
             }
+            created {
+              date
+            }
             status
           }
         }

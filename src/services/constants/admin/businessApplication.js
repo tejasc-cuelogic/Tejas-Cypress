@@ -25,12 +25,8 @@ export const OVERVIEW = {
       value: '',
       label: 'Critical Point',
       error: undefined,
-      rule: 'string|required',
+      rule: 'optional',
       placeHolder: 'Enter here...',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
     },
   }],
 };
@@ -41,11 +37,8 @@ export const JUSTIFICATIONS = {
       value: '',
       label: 'Justification',
       error: undefined,
-      rule: 'required',
+      rule: 'optional',
       placeHolder: 'Enter here...',
-      customErrors: {
-        required: '* required.',
-      },
     },
   }],
 };
@@ -56,7 +49,7 @@ export const DOCUMENTATION = {
     label: 'Do the Tax Returns for Control Owners Reveal Any Negative Information?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   matchHistoricals: {
@@ -64,7 +57,7 @@ export const DOCUMENTATION = {
     label: 'Do the Tax Returns for Business Match Historical Financials?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   backupProof: {
@@ -72,7 +65,7 @@ export const DOCUMENTATION = {
     label: 'If Providing PG, Does It Generally Back up Proof of Income and Certain Assets?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   profitable: {
@@ -80,7 +73,7 @@ export const DOCUMENTATION = {
     label: 'Has the Business Been Profitable and Meet Our Margin Requirements?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   questionableItems: {
@@ -88,7 +81,7 @@ export const DOCUMENTATION = {
     label: 'Are There Any Questionable Items on the Balance Sheet or Other Statements?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   negativeTrends: {
@@ -96,7 +89,7 @@ export const DOCUMENTATION = {
     label: 'Are There Any Negative Trends?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   consistentBalance: {
@@ -104,7 +97,7 @@ export const DOCUMENTATION = {
     label: 'Have the Balances Been Relatively Consistent and is There Any Cushion for Incidentals?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   unusualMovements: {
@@ -112,7 +105,7 @@ export const DOCUMENTATION = {
     label: 'Are there any unusual movements or one-off large deposits/withdrawals that warrant an explanation?',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   leaseOrMortgage: {
@@ -120,7 +113,7 @@ export const DOCUMENTATION = {
     label: 'LOI/Lease or Mortgage',
     error: undefined,
     objRefOutput: 'documentation',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
 };
@@ -131,7 +124,7 @@ export const PROJECTIONS = {
     label: 'If Existing Business, Compare Historical for Reasonabless',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   projectionsComplete: {
@@ -139,7 +132,7 @@ export const PROJECTIONS = {
     label: 'Are the Projections Complete (length of time, standard line items, etc.)?',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   revenueCheck: {
@@ -147,7 +140,7 @@ export const PROJECTIONS = {
     label: 'Revenue Check (Calculations)',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   revenueCheckUpload: {
@@ -155,7 +148,7 @@ export const PROJECTIONS = {
     value: '',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     preSignedUrl: '',
     showLoader: false,
     fileId: '',
@@ -167,7 +160,7 @@ export const PROJECTIONS = {
     label: 'Opex Major Line Litems (e.g. Rent, Salaries)',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   rent: {
@@ -175,7 +168,7 @@ export const PROJECTIONS = {
     label: 'Rent/NNN Ties to Lease Agreement',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   benchmark: {
@@ -183,7 +176,7 @@ export const PROJECTIONS = {
     label: 'Benchmark and Print Comps',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   benchmarkUpload: {
@@ -192,7 +185,7 @@ export const PROJECTIONS = {
     error: undefined,
     objRefOutput: 'projections',
     showLoader: false,
-    rule: 'required',
+    rule: 'optional',
     preSignedUrl: '',
     fileId: '',
     fileData: '',
@@ -203,7 +196,7 @@ export const PROJECTIONS = {
     label: 'Existing Debt/Equity Terms and Other Cash Flow Requirements',
     error: undefined,
     objRefOutput: 'projections',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
 };
@@ -214,80 +207,58 @@ export const CONTROL_PERSONS = {
     label: 'Name',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'required|string',
+    rule: 'optional',
     placeHolder: 'John Doe',
-    customErrors: {
-      required: '* required.',
-      string: 'Allowed string only.',
-    },
   },
   ownership: {
     value: '',
     label: 'Ownership %',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: '10.0%',
-    customErrors: {
-      required: '* required.',
-    },
   },
   derogatoryMarks: {
     value: '',
     label: 'Derogatory Marks',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here',
-    customErrors: {
-      required: '* required.',
-    },
   },
   experience: {
     value: '',
     label: 'Experience',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Experience Comment',
-    customErrors: {
-      required: '* required.',
-    },
   },
   creditScore: {
     value: '',
     label: 'Credit Score',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Credit Score Comment',
-    customErrors: {
-      required: '* required.',
-    },
   },
   experienceUpload: {
     label: '',
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     showLoader: false,
     preSignedUrl: '',
     fileId: '',
     fileData: '',
     objType: 'FileObjectType',
-    customErrors: {
-      required: '* required.',
-    },
   },
   creditUpload: {
     label: '',
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     showLoader: false,
     preSignedUrl: '',
     fileId: '',
     fileData: '',
     objType: 'FileObjectType',
-    customErrors: {
-      required: '* required.',
-    },
   },
 };
 
@@ -297,21 +268,13 @@ export const SOURCES = {
     label: '',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'required|string',
-    customErrors: {
-      string: 'Allowed string only.',
-      required: '* required.',
-    },
+    rule: 'optional',
   },
   amount: {
     value: '',
     label: '',
     error: undefined,
-    rule: 'numeric|required',
-    customErrors: {
-      numeric: 'Allowed numbers only.',
-      required: '* required.',
-    },
+    rule: 'optional',
   },
 };
 
@@ -321,21 +284,13 @@ export const USES = {
     label: '',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'string|required',
-    customErrors: {
-      string: 'Allowed string only.',
-      required: '* required.',
-    },
+    rule: 'optional',
   },
   amount: {
     value: '',
     label: '',
     error: undefined,
-    rule: 'numeric|required',
-    customErrors: {
-      numeric: 'Allowed numbers only.',
-      required: '* required.',
-    },
+    rule: 'optional',
   },
 };
 
@@ -346,7 +301,7 @@ export const BUSINESS_PLAN = {
     label: 'Location feasibility',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   timingOfOperation: {
@@ -354,7 +309,7 @@ export const BUSINESS_PLAN = {
     label: 'Timing of Operations',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   financialToProjection: {
@@ -362,7 +317,7 @@ export const BUSINESS_PLAN = {
     label: 'Does the Financial Write-up Tie to Projections?',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   isPlanAdequate: {
@@ -370,7 +325,7 @@ export const BUSINESS_PLAN = {
     label: 'Is the Operations/Marketing Plan Adequate?',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'required',
+    rule: 'optional',
     placeHolder: 'Enter here...',
   },
   dateOfIncorporation: {
@@ -379,7 +334,7 @@ export const BUSINESS_PLAN = {
     placeHolder: '12-02-1989',
     error: undefined,
     objRefOutput: 'businessPlan',
-    rule: 'required|date',
+    rule: 'date',
     objType: 'DATE',
   },
   sources: [{ ...SOURCES }],
@@ -396,23 +351,15 @@ export const LAUNCH = {
     label: '',
     error: undefined,
     objRefOutput: 'contingencies',
-    rule: 'string|required',
+    rule: 'optional',
     placeHolder: 'Enter contingency here...',
-    customErrors: {
-      string: 'Allowed string only.',
-      required: '* required.',
-    },
   },
   acceptance: {
     value: '',
     label: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'optional',
     placeHolder: 'Enter acceptance criteria here...',
-    customErrors: {
-      string: 'Allowed string only.',
-      required: '* required.',
-    },
   },
 };
 
@@ -422,23 +369,15 @@ export const CLOSE = {
     label: '',
     error: undefined,
     objRefOutput: 'contingencies',
-    rule: 'string|required',
+    rule: 'optional',
     placeHolder: 'Enter contingency here...',
-    customErrors: {
-      string: 'Allowed string only.',
-      required: '* required.',
-    },
   },
   acceptance: {
     value: '',
     label: '',
     error: undefined,
-    rule: 'string|required',
+    rule: 'optional',
     placeHolder: 'Enter acceptance criteria here...',
-    customErrors: {
-      string: 'Allowed string only.',
-      required: '* required.',
-    },
   },
 };
 
@@ -455,21 +394,14 @@ export const SOCIAL_MEDIA = {
     error: undefined,
     showLoader: false,
     objRefOutput: 'miscellaneous',
-    rule: 'string|required',
-    customErrors: {
-      string: 'Allowed string only.',
-      required: '* required.',
-    },
+    rule: 'optional',
   },
   url: {
     value: '',
     label: '',
     placeHolder: 'Enter here...',
     error: undefined,
-    rule: 'required',
-    customErrors: {
-      required: '* required.',
-    },
+    rule: 'optional',
   },
 };
 
@@ -534,117 +466,87 @@ export const OFFERS = {
       label: 'Structure',
       placeHolder: 'Choose',
       error: undefined,
-      rule: 'required',
-      customErrors: {
-        required: '* required.',
-      },
+      rule: 'optional',
     },
     amount: {
       value: '',
-      label: 'Max Offering Amount ($)',
+      label: 'Max Offering Amount',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'required',
-      customErrors: {
-        required: '* required.',
-      },
+      rule: 'optional',
     },
     minimumAmount: {
       value: '',
-      label: 'Min Offering Amount ($)',
+      label: 'Min Offering Amount',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'required',
-      customErrors: {
-        required: '* required.',
-      },
+      rule: 'optional',
     },
     maturity: {
       value: '',
       label: 'Maturity (# of Months)',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric|required',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required: '* required.',
-      },
+      rule: 'optional',
+    },
+    mthRevenueSharing: {
+      value: '',
+      label: 'Mth Revenue Shareing %',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
     },
     interestRate: {
       value: '',
       label: 'Annualized Interest Rate',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric|required',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required: '* required.',
-      },
+      rule: 'optional',
     },
     amortizationAmount: {
       value: '',
       label: 'Monthly Amortization Amount',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric|required',
-      customErrors: {
-        numeric: 'Allowed numbers only.',
-        required: '* required.',
-      },
-    },
-    personalGuarantee: {
-      value: '',
-      label: 'Personal Guarantee',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'required',
-      customErrors: {
-        required: '* required.',
-      },
-    },
-    businessBlanket: {
-      value: '',
-      label: 'Business Blanket',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'string|required',
-      customErrors: {
-        string: 'Allowed string only.',
-        required: '* required.',
-      },
-    },
-    expirationDate: {
-      value: '',
-      label: 'Expiration Date',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'date|required',
-      objType: 'DATE',
-      customErrors: {
-        date: 'Date format is invalid.',
-        required: '* required.',
-      },
+      rule: 'optional',
     },
     multiple: {
       value: '',
       label: 'Multiple on Principal to Pay',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'string|required_if:data.*.structure,REVENUE_SHARING_NOTE',
-      customErrors: {
-        string: 'Allowed string only.',
-        required_if: '* required.',
-      },
+      rule: 'optional',
     },
     totalCapital: {
       value: 0,
       label: 'Total Capital Returned',
       placeHolder: 'Enter here',
       error: undefined,
-      rule: 'numeric|required_if:data.*.structure,REVENUE_SHARING_NOTE',
+      rule: 'optional',
+    },
+    personalGuarantee: {
+      value: '',
+      label: 'Personal Guarantee',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+    },
+    businessBlanket: {
+      value: '',
+      label: 'Business Blanket',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+    },
+    expirationDate: {
+      value: '',
+      label: 'Campaign Approval Exp. Date',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'date',
+      objType: 'DATE',
       customErrors: {
-        numeric: 'Allowed numbers only.',
-        required_if: '* required.',
+        date: 'Date format is invalid.',
       },
     },
   }],
@@ -652,7 +554,7 @@ export const OFFERS = {
     label: '',
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     preSignedUrl: '',
     fileId: '',
     fileData: '',
@@ -660,15 +562,12 @@ export const OFFERS = {
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
-    customErrors: {
-      required: '* required.',
-    },
   },
   rev: {
     label: '',
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
     preSignedUrl: '',
     fileId: '',
     fileData: '',
@@ -676,10 +575,63 @@ export const OFFERS = {
     objRef: 'portalAgreementUpload',
     objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
-    customErrors: {
-      required: '* required.',
+  },
+  expectedAnnualRevenue: [{
+    label: {
+      value: 'Year 1',
+      rule: 'optional',
+      error: undefined,
+    },
+    year: {
+      value: null,
+      label: '',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
     },
   },
+  {
+    label: {
+      value: 'Year 2',
+      rule: 'optional',
+      error: undefined,
+    },
+    year: {
+      value: null,
+      label: '',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+    },
+  },
+  {
+    label: {
+      value: 'Year 3',
+      rule: 'optional',
+      error: undefined,
+    },
+    year: {
+      value: null,
+      label: '',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+    },
+  },
+  {
+    label: {
+      value: 'Year 4',
+      rule: 'optional',
+      error: undefined,
+    },
+    year: {
+      value: null,
+      label: '',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+    },
+  }],
 };
 
 export const STRUCTURE_TYPES = [

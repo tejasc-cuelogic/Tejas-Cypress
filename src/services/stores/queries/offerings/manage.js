@@ -388,12 +388,32 @@ export const getOfferingDetails = gql`
           reputationalRisk
           competitionRisk
           marketRisk
-          terrorismRisk
+          workStoppagesRisks
           managementRisk
           personnelRisk
           laborSupplyRisk
           privacyRisk
-          otherRisk
+          realEstateRisks
+          supplyRisks
+          foodSafetyRisks
+          nutritionalDisclosureRisks
+          foodRisks
+          alcoholSalesRisks
+          alcoholInvestmentRisks
+          industryRisks
+          healthcareRisks
+          legalRisks
+          environmentalRisks
+          itRisks
+          accountingRisks
+          ipRisks
+          regulatoryRisks
+          regulatoryFoodRisks
+          taxRisks
+          limitedRepaymentRisks
+          relatingForecastsRisks
+          debtFinancingRisks
+          conflictOfInterestRisks
           issuerSubmitted
           submitted {
             id
