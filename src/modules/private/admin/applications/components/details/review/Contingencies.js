@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const TableHeader = ({ isReadonly }) => (
   <Table.Header>
@@ -93,7 +94,9 @@ export default class Contingencies extends Component {
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.contingencies && review.contingencies &&
       review.contingencies.submitted) ? review.contingencies.submitted : null;
@@ -101,6 +104,9 @@ export default class Contingencies extends Component {
       review.contingencies.approved) ? review.contingencies.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>

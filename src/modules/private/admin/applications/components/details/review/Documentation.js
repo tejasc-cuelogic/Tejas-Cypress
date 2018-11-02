@@ -4,6 +4,7 @@ import { Form, Header, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -22,7 +23,9 @@ export default class Documentation extends Component {
     const { DOCUMENTATION_FRM, formChange, inProgress } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.documentation && review.documentation &&
       review.documentation.submitted) ? review.documentation.submitted : null;
@@ -30,6 +33,9 @@ export default class Documentation extends Component {
       review.documentation.approved) ? review.documentation.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <div>
         <Form onSubmit={this.submit}>

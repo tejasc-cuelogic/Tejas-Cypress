@@ -7,6 +7,7 @@ import { Form, Header, Confirm } from 'semantic-ui-react';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -36,7 +37,9 @@ export default class Overview extends Component {
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
@@ -44,6 +47,9 @@ export default class Overview extends Component {
       review.overview.criticalPoint.approved) ? review.overview.criticalPoint.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>
