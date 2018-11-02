@@ -101,6 +101,10 @@ export class BusinessAppReviewStore {
   @action
   addMore = (formName, arrayName = 'data') => {
     this[formName] = Validator.addMoreRecordToSubSection(this[formName], arrayName);
+    if (arrayName === 'expectedAnnualRevenue') {
+      const index = this[formName].fields[arrayName].length;
+      this[formName].fields[arrayName][index - 1].label.value = `Year ${index}`;
+    }
   }
 
   @action
@@ -346,10 +350,6 @@ export class BusinessAppReviewStore {
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     let payload = {
       [payloadKey]: formInputData,
-      // [payloadKey]: cleanDeep(
-      //   formInputData,
-      //   [{ emptyArrays: false }, { emptyObjects: false }, { nullValues: false }],
-      // ),
       actionType,
       applicationId,
       userId,
@@ -568,19 +568,5 @@ export class BusinessAppReviewStore {
     }
     return false;
   }
-
-  // @action
-  // resetForms = () => {
-  //   this.OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
-  //   this.MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
-  //   this.JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
-  //   this.DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
-  //   this.PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
-  //   this.BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
-  //   this.CONTINGENCY_FRM = Validator.prepareFormObject(CONTINGENCY);
-  //   this.MISCELLANEOUS_FRM = Validator.prepareFormObject(MISCELLANEOUS);
-  //   this.UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
-  //   this.OFFERS_FRM = Validator.prepareFormObject(OFFERS);
-  // }
 }
 export default new BusinessAppReviewStore();

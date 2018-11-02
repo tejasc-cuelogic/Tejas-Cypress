@@ -426,7 +426,7 @@ mutation updateApplicationData(
   $review: BusinessApplicationReviewInput
   $offers: OffersReviewInput
   $comments: [BusinessApplicationCommentInput]
-  $approvedStatus: Boolean
+  $approvedStatus: ApprovedStatusEnum
 ) {
   updateApplicationStatusAndReview(
     applicationId: $applicationId
