@@ -187,7 +187,7 @@ export default class KeyTerms extends Component {
               ))
             }
             {
-              ['minInvestAmt', 'maxInvestAmt', 'appendixATitle'].map(field => (
+              ['minInvestAmt', 'maxInvestAmt'].map(field => (
                 <MaskedInput
                   displayMode={isReadonly}
                   name={field}
@@ -198,6 +198,13 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
+            <FormInput
+              displayMode={isReadonly}
+              key="appendixATitle"
+              name="appendixATitle"
+              fielddata={KEY_TERMS_FRM.fields.appendixATitle}
+              changed={(e, result) => formChange(e, result, formName)}
+            />
           </Form.Group>
           {
             ['investmentMultipleSummary', 'revShareSummary', 'nsFeeCalcDescription'].map(field => (

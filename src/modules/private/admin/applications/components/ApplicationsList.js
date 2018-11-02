@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
@@ -96,9 +96,11 @@ export default class ApplicationsList extends Component {
                       <Table.Row verticalAlign="top">
                         <Table.Cell singleLine>
                           <Header as="h6">
-                            {application.prequalDetails ?
-                            application.prequalDetails.businessGeneralInfo.businessName
-                              : application.businessGeneralInfo.businessName}
+                            <Link to={`${match.url}/view/${application.applicationId || application.id}/${application.userId || 'new'}`}>
+                              {application.prequalDetails ?
+                              application.prequalDetails.businessGeneralInfo.businessName
+                                : application.businessGeneralInfo.businessName}
+                            </Link>
                             <AppStatusLabel application={application} />
                           </Header>
                           <div className="table-info-wrap">

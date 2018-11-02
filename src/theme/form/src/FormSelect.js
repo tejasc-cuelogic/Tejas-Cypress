@@ -15,6 +15,7 @@ const FormSelect = observer((props) => {
   if (props.containerwidth) {
     width = props.containerwidth;
   }
+  const { displayMode, readOnly } = props;
   return (
     <Form.Field width={width}>
       <label>
@@ -35,7 +36,7 @@ const FormSelect = observer((props) => {
         value={value}
         error={!!error}
         onChange={props.changed}
-        placeholder={placeHolder}
+        placeholder={(displayMode || readOnly) ? '' : placeHolder}
       />
       <div className="dropdown-effect">{props.fielddata.label}</div>
       {error &&

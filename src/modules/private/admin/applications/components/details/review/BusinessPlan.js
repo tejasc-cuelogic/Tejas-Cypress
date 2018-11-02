@@ -46,7 +46,7 @@ export default class BusinessPlan extends Component {
   render() {
     const {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
-      maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
+      maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
@@ -317,6 +317,7 @@ export default class BusinessPlan extends Component {
             dateOfBirth
           />
           <ButtonGroup
+            inProgress={inProgress}
             formName="BUSINESS_PLAN_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

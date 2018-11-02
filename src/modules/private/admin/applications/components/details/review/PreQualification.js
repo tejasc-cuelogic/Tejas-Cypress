@@ -31,7 +31,7 @@ export default class PreQual extends Component {
   render() {
     const {
       JUSTIFICATIONS_FRM, toggleConfirmModal, confirmModal, confirmModalName,
-      formChangeWithIndex, removeData,
+      formChangeWithIndex, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
@@ -70,6 +70,7 @@ export default class PreQual extends Component {
             ))
           }
           <ButtonGroup
+            inProgress={inProgress}
             formName="JUSTIFICATIONS_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -20,6 +20,7 @@ import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
+import { INDUSTRY_TYPES } from '../../../../../constants/offering';
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
@@ -677,10 +678,31 @@ export class OfferingCreationStore {
         );
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
+    } else if (form === 'RISK_FACTORS_FRM') {
+      this.stringTemplateFormatting(
+        'RISK_FACTORS_FRM',
+        {
+          location: offer && offer.keyTerms ? `${offer.keyTerms.city || ''} ${offer.keyTerms.state || ''}` : '',
+          industry: offer && offer.keyTerms ? `${INDUSTRY_TYPES[offer.keyTerms.industry] || ''}` : '',
+          shorthand_name: offer && offer.keyTerms ? `${offer.keyTerms.shorthandBusinessName || ''}` : '',
+          state_of_formation: offer && offer.keyTerms ? `${offer.keyTerms.stateOfFormation || ''}` : '',
+        },
+      );
     }
     const multiForm = this.getActionType(form, 'isMultiForm');
     this.checkFormValid(form, multiForm, false);
     return false;
+  }
+
+  @action
+  stringTemplateFormatting = (form, data) => {
+    const currentForm = this[form];
+    forEach(currentForm.fields, (field, key) => {
+      if (has(field, 'defaultValue') && form === 'RISK_FACTORS_FRM') {
+        this[form].fields[key].defaultValue =
+          DataFormatter.stringTemplateFormatting(field.defaultValue, data);
+      }
+    });
   }
 
   getActionType = (formName, getField = 'actionType') => {
@@ -880,13 +902,27 @@ export class OfferingCreationStore {
           ...payloadData,
           keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
         };
+        payloadData.keyTerms = mergeWith(
+          toJS(getOfferingById.keyTerms),
+          payloadData.keyTerms,
+          this.mergeCustomize,
+        );
+        payloadData.offering = mergeWith(
+          toJS(getOfferingById.offering),
+          payloadData.offering,
+          this.mergeCustomize,
+        );
+        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
+        payloadData.offering = cleanDeep(payloadData.offering);
+        payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
+        payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    if (keyName !== 'contingencies') {
+    if (keyName !== 'contingencies' && keyName !== 'editForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
@@ -961,7 +997,7 @@ export class OfferingCreationStore {
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
-    } else {
+    } else if (keyName === 'contingencies') {
       ['launch', 'close'].forEach((c) => {
         forEach(payloadData.contingencies[c], (con, index) => {
           payloadData.contingencies[c][index].accepted = {

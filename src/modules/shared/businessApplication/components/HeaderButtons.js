@@ -17,7 +17,8 @@ export const SubmitButton = props => (
 
 export const HeaderButtons = props => (
   <Aux>
-    {!props.showSubNav && !props.preQualPage ?
+    {!props.disabled ?
+    (!props.showSubNav && !props.preQualPage ?
       <Button.Group>
         <Button inverted onClick={props.saveContinue} disabled={props.isFileUploading || props.disabled} color="green">{props.isFileUploading ? 'File operation in process' : 'Save and Continue later'}</Button>
         <SubmitButton
@@ -34,6 +35,10 @@ export const HeaderButtons = props => (
           click={props.preQualSubmit}
           canSubmitApp={props.isValid}
         />
+      </Button.Group>
+    ) :
+      <Button.Group>
+        <Button as={Link} to="/app/dashboard" inverted color="red">Back to Dashboard</Button>
       </Button.Group>
     }
   </Aux>

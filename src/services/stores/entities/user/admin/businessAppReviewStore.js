@@ -2,6 +2,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { map, forEach, filter, get } from 'lodash';
 import graphql from 'mobx-apollo';
+import cleanDeep from 'clean-deep';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -37,6 +38,8 @@ export class BusinessAppReviewStore {
   @observable paBoxFolderId = null;
   @observable signPortalAgreementURL = '';
   @observable removeFileIdsList = [];
+  @observable showGeneratePA = false;
+  @observable inProgress = false;
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
@@ -98,6 +101,10 @@ export class BusinessAppReviewStore {
   @action
   addMore = (formName, arrayName = 'data') => {
     this[formName] = Validator.addMoreRecordToSubSection(this[formName], arrayName);
+    if (arrayName === 'expectedAnnualRevenue') {
+      const index = this[formName].fields[arrayName].length;
+      this[formName].fields[arrayName][index - 1].label.value = `Year ${index}`;
+    }
   }
 
   @action
@@ -324,7 +331,7 @@ export class BusinessAppReviewStore {
     if (formName === 'OVERVIEW_FRM' || formName === 'JUSTIFICATIONS_FRM') {
       const key = formName === 'OVERVIEW_FRM' ? 'description' : 'justifications';
       const data = map(formInputData[key], value => value[key]);
-      formInputData = { [key]: data };
+      formInputData = { [key]: cleanDeep(data) };
       formInputData = formName === 'OVERVIEW_FRM' ? { overview: { criticalPoint: formInputData } } : { preQualification: formInputData };
     }
     const key = Object.keys(formInputData)[0];
@@ -333,6 +340,7 @@ export class BusinessAppReviewStore {
     } else {
       formInputData = managerFormInputData !== '' ? formInputData = { ...formInputData, [key]: { ...formInputData[key], ...managerFormInputData } } : formInputData;
     }
+    formInputData[key] = formName === 'OVERVIEW_FRM' ? formInputData[key] : cleanDeep(formInputData[key]);
     let actionType = this.getActionType(formName);
     let applicationReviewAction = '';
     if (approveOrSubmitted !== '') {
@@ -340,7 +348,6 @@ export class BusinessAppReviewStore {
       applicationReviewAction = this.getActionType(formName);
     }
     const applicationSource = applicationStatus === BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
-    uiStore.setProgress();
     let payload = {
       [payloadKey]: formInputData,
       actionType,
@@ -359,6 +366,8 @@ export class BusinessAppReviewStore {
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
+    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
+    this.setFieldvalue('inProgress', progressButton);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -378,7 +387,7 @@ export class BusinessAppReviewStore {
           reject(error);
         })
         .finally(() => {
-          uiStore.setProgress(false);
+          this.setFieldvalue('inProgress', false);
         });
     });
   }
@@ -505,37 +514,42 @@ export class BusinessAppReviewStore {
 
   @action
   generatePortalAgreement = () => {
-    const { businessApplicationDetailsAdmin } = businessAppStore;
-    const { applicationId, userId } = businessApplicationDetailsAdmin;
-    const reFetchPayLoad = {
-      applicationId,
-      applicationType: 'APPLICATION_COMPLETED',
-      userId,
-    };
-    uiStore.setProgress();
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation: generatePortalAgreement,
-          variables: {
-            applicationId,
-            userId,
-          },
-          refetchQueries:
-            [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
-        })
-        .then((result) => {
-          Helper.toast('Portal agreement generated successfully.', 'success');
-          resolve(result);
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-          reject(error);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
+    this.saveReviewForms('OFFERS_FRM').then(() => {
+      const { businessApplicationDetailsAdmin } = businessAppStore;
+      const { applicationId, userId } = businessApplicationDetailsAdmin;
+      const reFetchPayLoad = {
+        applicationId,
+        applicationType: 'APPLICATION_COMPLETED',
+        userId,
+      };
+      this.setFieldvalue('inProgress', 'GENERATE_PA');
+      return new Promise((resolve, reject) => {
+        client
+          .mutate({
+            mutation: generatePortalAgreement,
+            variables: {
+              applicationId,
+              userId,
+            },
+            refetchQueries:
+              [{ query: getBusinessApplicationsDetailsAdmin, variables: reFetchPayLoad }],
+          })
+          .then((result) => {
+            Helper.toast('Portal agreement generated successfully.', 'success');
+            resolve(result);
+          })
+          .catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+            reject(error);
+          })
+          .finally(() => {
+            this.setFieldvalue('inProgress', false);
+          });
+      });
+    }).catch(() => {
+      Helper.toast('Something went wrong, please try again later.', 'error');
+      this.setFieldvalue('inProgress', false);
     });
   };
 
@@ -554,19 +568,5 @@ export class BusinessAppReviewStore {
     }
     return false;
   }
-
-  // @action
-  // resetForms = () => {
-  //   this.OVERVIEW_FRM = Validator.prepareFormObject(OVERVIEW);
-  //   this.MANAGERS_FRM = Validator.prepareFormObject(MANAGERS);
-  //   this.JUSTIFICATIONS_FRM = Validator.prepareFormObject(JUSTIFICATIONS);
-  //   this.DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
-  //   this.PROJECTIONS_FRM = Validator.prepareFormObject(PROJECTIONS);
-  //   this.BUSINESS_PLAN_FRM = Validator.prepareFormObject(BUSINESS_PLAN);
-  //   this.CONTINGENCY_FRM = Validator.prepareFormObject(CONTINGENCY);
-  //   this.MISCELLANEOUS_FRM = Validator.prepareFormObject(MISCELLANEOUS);
-  //   this.UPLOADED_DOCUMENTS_FRM = Validator.prepareFormObject(UPLOADED_DOCUMENTS);
-  //   this.OFFERS_FRM = Validator.prepareFormObject(OFFERS);
-  // }
 }
 export default new BusinessAppReviewStore();
