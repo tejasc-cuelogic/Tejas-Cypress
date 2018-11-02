@@ -29,7 +29,7 @@ export default class OffersPanel extends Component {
                 <Card.Header>
                   Offer {String.fromCharCode('A'.charCodeAt() + index)}
                   {!isReadonly && OFFERS_FRM.fields.offer.length > 1 &&
-                  <Link to={match.url} onClick={e => toggleConfirmModal(e, index)} className="pull-right">
+                  <Link to={match.url} onClick={e => toggleConfirmModal(e, index, 'offer')} className="pull-right">
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
                   }
