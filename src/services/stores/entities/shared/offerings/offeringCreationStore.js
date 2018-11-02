@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -20,6 +20,7 @@ import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
+import { INDUSTRY_TYPES } from '../../../../../constants/offering';
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
@@ -677,10 +678,31 @@ export class OfferingCreationStore {
         );
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
+    } else if (form === 'RISK_FACTORS_FRM') {
+      this.stringTemplateFormatting(
+        'RISK_FACTORS_FRM',
+        {
+          location: offer && offer.keyTerms ? `${offer.keyTerms.city || ''} ${offer.keyTerms.state || ''}` : '',
+          industry: offer && offer.keyTerms ? `${INDUSTRY_TYPES[offer.keyTerms.industry] || ''}` : '',
+          shorthand_name: offer && offer.keyTerms ? `${offer.keyTerms.shorthandBusinessName || ''}` : '',
+          state_of_formation: offer && offer.keyTerms ? `${offer.keyTerms.stateOfFormation || ''}` : '',
+        },
+      );
     }
     const multiForm = this.getActionType(form, 'isMultiForm');
     this.checkFormValid(form, multiForm, false);
     return false;
+  }
+
+  @action
+  stringTemplateFormatting = (form, data) => {
+    const currentForm = this[form];
+    forEach(currentForm.fields, (field, key) => {
+      if (has(field, 'defaultValue') && form === 'RISK_FACTORS_FRM') {
+        this[form].fields[key].defaultValue =
+          DataFormatter.stringTemplateFormatting(field.defaultValue, data);
+      }
+    });
   }
 
   getActionType = (formName, getField = 'actionType') => {
