@@ -77,7 +77,7 @@ class IndividualAccountStore {
   populateData = (userData) => {
     if (!isEmpty(userData) && !this.formStatus) {
       const account = find(userData.roles, { name: 'individual' });
-      if (account) {
+      if (account && account.details) {
         if (account.details.linkedBank.plaidItemId) {
           const plaidAccDetails = account.details.linkedBank;
           bankAccountStore.setPlaidAccDetails(plaidAccDetails);
