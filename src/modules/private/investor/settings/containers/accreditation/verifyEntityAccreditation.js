@@ -2,18 +2,18 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Button, Grid } from 'semantic-ui-react';
-import { ACCREDITATION_METHODS_META } from './../../../../../../services/constants/investmentLimit';
+import { ENTITY_ACCREDITATION_METHODS_META } from './../../../../../../services/constants/investmentLimit';
 
 @inject('uiStore', 'accreditationStore')
 @observer
-export default class VerifyAccreditation extends Component {
+export default class VerifyEntityAccreditation extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
   }
   render() {
-    const accreditationMethods = ACCREDITATION_METHODS_META.slice();
-    const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
+    const accreditationMethods = ENTITY_ACCREDITATION_METHODS_META.slice();
+    const { ENTITY_ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
         <Modal open onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick>
@@ -30,9 +30,9 @@ export default class VerifyAccreditation extends Component {
               <Grid.Row columns={2}>
                 {accreditationMethods.map(method => (
                   <Grid.Column
-                    onClick={e => accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'accreditationMethods', value: method.value })}
+                    onClick={e => accreditationMethodChange(e, 'ENTITY_ACCREDITATION_FORM', { name: 'accreditationMethods', value: method.value })}
                   >
-                    <div className={`user-type ${(ACCREDITATION_FORM.fields.accreditationMethods.value === method.value ? 'active' : '')}`}>
+                    <div className={`user-type ${(ENTITY_ACCREDITATION_FORM.fields.accreditationMethods.value === method.value ? 'active' : '')}`}>
                       <Header as="h4">{method.header}</Header>
                       <p>
                         {method.desc}
@@ -47,7 +47,7 @@ export default class VerifyAccreditation extends Component {
               icon={{ className: 'ns-arrow-right' }}
               className="multistep__btn next active"
               as={Link}
-              to={`${this.props.match.url}/${ACCREDITATION_FORM.fields.accreditationMethods.value}`}
+              to={`${this.props.match.url}/income`}
             />
           </Modal.Content>
         </Modal>

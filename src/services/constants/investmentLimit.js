@@ -56,6 +56,39 @@ export const ACCREDITATION_METHODS_META = [
   },
 ];
 
+export const ENTITY_ACCREDITATION_METHODS_META = [
+  {
+    value: '25000000CA',
+    desc: '$25,000,000 in company assets',
+  },
+  {
+    value: '5000000CA',
+    desc: '$5,000,000 in company assets',
+  },
+  {
+    value: 'asInvestor',
+    desc: 'All owners are accredited investors',
+  },
+  {
+    value: 'qualPurchase',
+    desc: 'All equity owners are qualified purchasers',
+  },
+];
+
+export const ENTITY_ACCREDITATION_METHODS = {
+  accreditationMethods: {
+    value: '25000000CA',
+    values: [
+      { value: '25000000CA' },
+      { value: '5000000CA' },
+      { value: 'asInvestor' },
+      { value: 'qualPurchase' },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 export const ACCREDITATION_METHODS = {
   accreditationMethods: {
     value: 'income',
