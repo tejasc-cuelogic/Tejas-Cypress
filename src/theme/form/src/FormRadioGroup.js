@@ -28,6 +28,37 @@ const FormRadioGroup = observer((props) => {
           }
         </div>
       );
+    } else if (props.withtooltip) {
+      return (
+        <div className={props.containerclassname || false}>
+          <Form.Group className="vertical">
+            {
+              values.map(radio => (
+                <Form.Field>
+                  <div className={`ui radio checkbox ${value === radio.value ? 'checked' : ''}`}>
+                    <input type="radio" value={radio.value} checked={value === radio.value} onChange={props.changed} {...props} />
+                    <label>
+                      {radio.icon &&
+                        <Icon className={radio.icon} />
+                      }
+                      {radio.label}
+                      {radio.tooltip &&
+                        <Popup
+                          trigger={<Icon className="ns-help-circle" />}
+                          content={radio.tooltip}
+                          position="top center"
+                          className="center-align"
+                          wide
+                        />
+                      }
+                    </label>
+                  </div>
+                </Form.Field>
+              ))
+            }
+          </Form.Group>
+        </div>
+      );
     }
     return (
       <Form.Group inline className={props.containerclassname || false}>
