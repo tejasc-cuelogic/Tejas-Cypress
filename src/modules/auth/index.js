@@ -1,7 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Route, withRouter, Switch } from 'react-router-dom';
-import Banner from '../public/home/components/Banner';
 import Login from './containers/Login';
 import SignupInitial from './containers/SignupInitial';
 import InvestorSignup from './containers/InvestorSignup';
@@ -15,7 +14,7 @@ export default class Auth extends React.Component {
   render() {
     return (
       <Aux>
-        <Banner />
+        <section className="modalbg-banner" />
         <Switch>
           <Route path="/auth/login" component={Login} />
           <Route path="/auth/register" component={SignupInitial} />
