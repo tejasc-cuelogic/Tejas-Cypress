@@ -335,6 +335,9 @@ export const ENTITY_GEN_INFO = {
   taxId: {
     key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'e.g. 12345',
   },
+  entityType: {
+    key: 'entityType', value: '', label: 'Entity Type', error: undefined, rule: 'required|string', placeHolder: 'Select one',
+  },
   street: {
     key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
@@ -348,6 +351,16 @@ export const ENTITY_GEN_INFO = {
     key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
   },
 };
+
+export const ENTITY_TYPES = [
+  { key: 'LLC', value: 'LLC', text: 'LLC' },
+  { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+  { key: 'S-Corporation', value: 'S_CORPORATION', text: 'S-Corporation' },
+  { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
+  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
+  { key: 'Estate', value: 'ESTATE', text: 'Estate' },
+  { key: 'Exempt Organization', value: 'EXEMPT_ORGANIZATION', text: 'Exempt Organization' },
+];
 
 export const ENTITY_TRUST_INFO = {
   isTrust: {
