@@ -5,6 +5,7 @@ import { Form, Divider } from 'semantic-ui-react';
 import { FormTextarea, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -32,7 +33,9 @@ export default class Projections extends Component {
     const { PROJECTIONS_FRM, formChange, inProgress } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.projections && review.projections &&
       review.projections.submitted) ? review.projections.submitted : false;
@@ -40,6 +43,9 @@ export default class Projections extends Component {
       review.projections.approved) ? review.projections.approved : false;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <div>
         <Form onSubmit={this.submit}>

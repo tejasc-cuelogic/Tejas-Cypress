@@ -475,6 +475,10 @@ export class BusinessAppStore {
     ) || null;
   }
 
+  @computed get applicationReviewLoading() {
+    return this.businessApplicationsDataById.loading;
+  }
+
   @computed get fetchPrequalBusinessApplicationsDataById() {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.getPreQualificationById
@@ -1032,7 +1036,10 @@ export class BusinessAppStore {
         .mutate({
           mutation: mutationQuery,
           variables: variableData,
-          refetchQueries: [{ query: getBusinessApplications }],
+          refetchQueries: [
+            { query: getBusinessApplicationsById, variables: { id: this.currentApplicationId } },
+            { query: getBusinessApplications },
+          ],
         })
         .then((result) => {
           this.setAppStepsStatus(key, 'status', stepStatus);
