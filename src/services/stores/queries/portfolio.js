@@ -98,3 +98,20 @@ export const addFunds = gql`
     addFunds(amount: $amount, accountId: $accountId)
   }
 `;
+
+export const getUserAccountSummary = gql`
+  query _getUserAccountSummary($userId: String!) {
+    getUserAccountSummary (userId: $userId) {
+      totalInvested
+      pendingInvestments
+      paidToDate
+      tnar
+      cashMovement {
+        payment
+        invested
+        paidToDate
+        yearMonth
+      }
+    }
+  }
+`;
