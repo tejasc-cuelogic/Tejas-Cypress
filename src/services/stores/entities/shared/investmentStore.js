@@ -5,7 +5,7 @@ import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, rewardStore, campaignStore, investmentLimitStore } from '../../index';
+import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
@@ -53,7 +53,7 @@ export class InvestmentStore {
     }
 
     @computed get getDiffInvestmentLimitAmount() {
-      const oldLimit = parseFloat(investmentLimitStore.getCurrentLimitForAccount, 2);
+      const oldLimit = parseFloat(portfolioStore.getInvestorAccountById.investedAmount, 2);
       const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
       return currentLimit - oldLimit;
     }
@@ -116,9 +116,10 @@ export class InvestmentStore {
     };
 
     @action
-    accTypeChanged = (e, res) => {
+    accTypeChanged = (e, res) => new Promise((resolve) => {
       this.investAccTypes.value = res.value;
-    }
+      resolve(res.value);
+    });
 
     @action
     prepareAccountTypes = (UserAccounts) => {

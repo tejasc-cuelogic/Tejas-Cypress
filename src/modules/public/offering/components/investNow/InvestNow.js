@@ -9,7 +9,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'userDetailsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -106,8 +106,7 @@ export default class InvestNow extends React.Component {
   }
 
   render() {
-    const { changeInvest, uiStore, userDetailsStore } = this.props;
-    const { signupStatus } = userDetailsStore;
+    const { changeInvest, uiStore } = this.props;
     const {
       inProgress,
       isEnterPressed,
@@ -119,8 +118,8 @@ export default class InvestNow extends React.Component {
       {
         name: 'Account Type',
         component: <AccountType
+          refLink={this.props.refLink}
           changeInvest={changeInvest}
-          UserAccounts={signupStatus.activeAccounts}
         />,
         isValid: '',
         stepToBeRendered: 1,

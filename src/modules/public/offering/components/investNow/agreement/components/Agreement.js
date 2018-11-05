@@ -7,7 +7,7 @@ import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import ConfirmCancellation from '../../ConfirmCancellation';
 
-@inject('investmentStore')
+@inject('investmentStore', 'uiStore')
 @withRouter
 @observer
 export default class Agreement extends React.Component {
@@ -53,7 +53,8 @@ export default class Agreement extends React.Component {
       setCheckbox,
       agreementDetails,
     } = this.props.investmentStore;
-    const { match } = this.props;
+    const { match, uiStore } = this.props;
+    const { inProgress } = uiStore;
     return (
       <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Route exact path={`${match.url}/confirm-cancellation`} render={() => <ConfirmCancellation refLink={this.props.refLink} />} />
@@ -101,7 +102,12 @@ export default class Agreement extends React.Component {
           </Form>
           <Divider hidden />
           <div className="center-align">
-            <Button primary disabled={!AGREEMENT_DETAILS_FORM.meta.isValid} onClick={this.submit}>
+            <Button
+              primary
+              loading={inProgress}
+              disabled={!AGREEMENT_DETAILS_FORM.meta.isValid}
+              onClick={this.submit}
+            >
             Invest
             </Button>
             <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
