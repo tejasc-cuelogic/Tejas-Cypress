@@ -1036,7 +1036,10 @@ export class BusinessAppStore {
         .mutate({
           mutation: mutationQuery,
           variables: variableData,
-          refetchQueries: [{ query: getBusinessApplications }],
+          refetchQueries: [
+            { query: getBusinessApplicationsById, variables: { id: this.currentApplicationId } },
+            { query: getBusinessApplications },
+          ],
         })
         .then((result) => {
           this.setAppStepsStatus(key, 'status', stepStatus);
