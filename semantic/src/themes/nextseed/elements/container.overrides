@@ -127,6 +127,13 @@ section{
             background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat / cover;
         }
     }
+    &.modalbg-banner{
+        height:100vh;
+        margin-top:-58px;
+        background:@neutral-offdark;
+        position:relative;
+        z-index:101;
+    }
 }
 .public-pusher>section.banner{
     @media only screen and (max-width : @largestMobileScreen){
