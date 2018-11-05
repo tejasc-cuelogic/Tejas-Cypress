@@ -1,31 +1,26 @@
-import About from './about/containers/About';
-import Agreements from './agreements/containers/Agreements';
-import Blog from './blog/containers/Blog';
-import Business from '../modules/business/containers/Business';
-import ChangePassword from '../modules/auth/ChangePassword';
-import Confirm from '../modules/auth/Confirm';
-import EdgarForm from '../modules/business/containers/EdgarForm';
-import ForgotPassword from '../modules/auth/ForgotPassword';
-import Home from './home/containers/Home';
-import Invest from './invest/containers/Invest';
-import Login from '../modules/auth/Login';
-import Offering from './offering/containers/Offering';
-import Register from '../modules/auth/Register';
-import ResetPassword from '../modules/auth/ResetPassword';
-import Settings from './../modules/settings/containers/Settings';
-import CaseStudies from './caseStudies/containers/CaseStudies';
-import BonusRewardFulfillment from './bonusRewardFulfillment/containers/BonusRewardFulfillment';
-import Banking from './banking/containers/Banking';
-import Messages from './messages/containers/Messages';
-import Dashboard from './dashboard/containers/Dashboard';
-import Users from './users/containers/Users';
-import XmlForm from './business/containers/XmlForm';
-import BusinessDetails from './business/containers/BusinessDetails';
+import About from './public/about/containers/About';
+import Agreements from './public/agreements/containers/Agreements';
+import Blog from './public/blog/containers/Blog';
+import Home from './public/home/containers/Home';
+import Invest from './public/invest/containers/Invest';
+import Offering from './public/offering/containers/Offering';
+import OfferDetails from './public/offering/containers/OfferDetails';
+import CaseStudies from './public/caseStudies/containers/CaseStudies';
+import BusinessSignup from './public/businessSignup/containers/Signup';
+import Business from './public/business/containers/Business';
+import Resources from './public/resources';
+
+import Edgar from './private/admin/edgar/containers/Business';
+import EdgarForm from './private/admin/edgar/containers/EdgarForm';
+import XmlForm from './private/admin/edgar/containers/XmlForm';
+import BusinessDetails from './private/admin/edgar/containers/BusinessDetails';
+import UserManagement from './private/admin/userManagement';
+
 import {
   AdminAuthorization,
   BusinessAuthorization,
-  UserAuthorization,
-} from '../components/common/Authorization';
+  // UserAuthorization,
+} from '../modules/shared/Authorization';
 
 export const publicRoutes = [
   {
@@ -34,11 +29,16 @@ export const publicRoutes = [
     exact: true,
   },
   {
+    path: '/subscribe/newsletter',
+    component: Home,
+    exact: true,
+  },
+  {
     path: '/agreements/:section',
     component: Agreements,
   },
   {
-    path: '/about/:section',
+    path: '/about',
     component: About,
   },
   {
@@ -62,116 +62,67 @@ export const publicRoutes = [
     component: CaseStudies,
   },
   {
-    path: '/offerings/:offerId',
-    component: Offering,
+    path: '/offerings/preview/:id',
+    component: OfferDetails,
+  },
+  {
+    path: '/offerings/:id',
+    component: OfferDetails,
   },
   {
     path: '/offerings',
     component: Offering,
   },
   {
-    path: '/confirm',
-    component: Confirm,
-    exact: true,
+    path: '/business',
+    component: Business,
   },
   {
-    path: '/login',
-    component: Login,
-    exact: true,
+    path: '/resources',
+    component: Resources,
   },
   {
-    path: '/register',
-    component: Register,
-    exact: true,
-  },
-  {
-    path: '/forgot-password',
-    component: ForgotPassword,
-    exact: true,
-  },
-  {
-    path: '/reset-password',
-    component: ResetPassword,
-    exact: true,
-  },
-  {
-    path: '/change-password',
-    component: ChangePassword,
-    exact: true,
+    path: '/business-application',
+    component: BusinessSignup,
+    // exact: true,
   },
 ];
 
 export const privateRoutes = [
   {
-    path: '/app/business/:businessId/edgar/:filingId',
+    path: '/app/edgar/:offeringId/edgar/:filingId',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/:businessId/edgar',
+    path: '/app/edgar/:offeringId/edgar',
     component: EdgarForm,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business/:businessId/filing/:filingId/xml/:xmlId',
+    path: '/app/edgar/:offeringId/filing/:filingId/xml/:xmlId',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/business/:businessId/filing/:filingId/xml',
+    path: '/app/edgar/:offeringId/filing/:filingId/xml',
     component: XmlForm,
     auth: AdminAuthorization,
   },
   {
-    path: '/app/business/:businessId',
+    path: '/app/edgar/:offeringId',
     component: BusinessDetails,
     auth: BusinessAuthorization,
   },
   {
-    path: '/app/business',
-    component: Business,
+    path: '/app/edgar',
+    component: Edgar,
     auth: BusinessAuthorization,
     exact: true,
-  },
-  {
-    path: '/app/users/:userId/:section',
-    component: Users,
-    auth: BusinessAuthorization,
-  },
-  {
-    path: '/app/users/new',
-    component: Users,
-    auth: BusinessAuthorization,
   },
   {
     path: '/app/users',
-    component: Users,
-    auth: BusinessAuthorization,
-  },
-  {
-    path: '/app/settings',
-    component: Settings,
-    auth: UserAuthorization,
-  },
-  {
-    path: '/app/messages',
-    component: Messages,
-    auth: UserAuthorization,
-  },
-  {
-    path: '/app/bonus-reward-fulfillment',
-    component: BonusRewardFulfillment,
-    auth: UserAuthorization,
-  },
-  {
-    path: '/app/banking',
-    component: Banking,
-    auth: UserAuthorization,
-  },
-  {
-    path: '/app/dashboard',
-    component: Dashboard,
-    exact: true,
-    auth: UserAuthorization,
+    component: UserManagement,
+    auth: AdminAuthorization,
   },
 ];

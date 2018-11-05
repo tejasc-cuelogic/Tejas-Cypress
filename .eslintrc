@@ -9,6 +9,7 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "import/prefer-default-export": "off",
+    "no-nested-ternary": "off",
     "no-bitwise": "off",
     "react/prop-types": "off",
     "react/prefer-stateless-function": "off",
@@ -20,6 +21,6 @@
         "aspects": ["noHref", "invalidHref", "preferButton"]
       }
     ],
-    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
+    "no-underscore-dangle": ["error", { "allow": ["_id", "_allUsersMeta"] }]
   }
 }

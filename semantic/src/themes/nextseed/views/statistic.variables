@@ -24,26 +24,26 @@
 --------------------*/
 
 /* Value */
-@valueFont:@boldFont;
-@valueFontWeight:normal;
+// @valueFont:@boldFont;
+@valueFontWeight:@fontMedium;
 @valueLineHeight:1.2em;
-@valueColor:@dark-bg-color;
-@valueTextTransform: uppercase;
+@valueColor:@fullBlack;
+@valueTextTransform: none;
 
 /* Label */
-@labelSize: @relativeMedium;
+@labelSize: @relativeSmall;
 @topLabelDistance: 0rem;
 @bottomLabelDistance: 0rem;
 @labelFont:@pageFont;
-@labelFontWeight:500;
-@labelColor:@tertiary-text;
+@labelFontWeight:@normal;
+@labelColor:@neutral-middark;
 @labelLineHeight: @relativeLarge;
 @labelTextTransform: none;
 
 /* Text */
 @textValueLineHeight: 1em;
 @textValueMinHeight: 2em;
-@textValueFontWeight: bold;
+@textValueFontWeight: @bold;
 
 /* Label Image */
 @imageHeight: 3rem;

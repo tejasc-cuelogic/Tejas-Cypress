@@ -1,0 +1,73 @@
+import React, { Component } from 'react';
+import { Route, Switch } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import Loadable from 'react-loadable';
+import { Visibility, Responsive } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { DataFormatter } from '../../../../helper';
+import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
+import Banner from '../components/Banner';
+import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
+
+const getModule = component => Loadable({
+  loader: () => import(`../components/${component}`),
+  loading() {
+    return <InlineLoader />;
+  },
+});
+
+@inject('navStore', 'userStore')
+@observer
+class Invest extends Component {
+  componentWillMount() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
+    }
+  }
+  componentWillUpdate() {
+    if (this.props.match.isExact) {
+      this.props.history.replace(`${this.props.match.url}/why-nextseed`);
+    }
+  }
+  module = name => DataFormatter.upperCamelCase(name);
+  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
+  render() {
+    const { match, location, navStore } = this.props;
+    const navItems = GetNavMeta(match.url, [], true).subNavigations;
+    return (
+      <Aux>
+        {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner /> :
+        <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
+        }
+        <Visibility
+          onUpdate={this.handleUpdate}
+          continuous
+          className={`slide-down ${location.pathname.split('/')[2]}`}
+        >
+          <PublicSubNav
+            navStatus={navStore.navStatus}
+            stepInRoute={navStore.stepInRoute}
+            location={location}
+            currentUser={this.props.userStore.currentUser}
+            navItems={navItems}
+            title="Investing"
+          />
+          <Switch>
+            <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
+            {
+              navItems.map(item => (
+                <Route
+                  key={item.to}
+                  path={`${match.url}/${item.to}`}
+                  component={getModule(this.module(item.title))}
+                />
+              ))
+            }
+          </Switch>
+        </Visibility>
+      </Aux>
+    );
+  }
+}
+
+export default Invest;

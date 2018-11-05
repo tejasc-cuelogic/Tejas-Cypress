@@ -131,8 +131,7 @@ strong {
 
 b,
 strong {
-  // font-weight: bolder;
-  font-family:@boldFont;
+  font-weight:500;
 }
 
 /**
@@ -161,7 +160,7 @@ dfn {
 
 mark {
   background-color: #ff0;
-  color: #000;
+  color: #000; 
 }
 
 /**

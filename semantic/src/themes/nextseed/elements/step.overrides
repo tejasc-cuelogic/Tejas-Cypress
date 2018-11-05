@@ -14,3 +14,58 @@
   font-family: 'Step';
   content: '\e800'; /* '' */
 }
+
+/*******************************
+		Custom for NS V.2
+*******************************/
+.ui.steps {
+  &.campaign-close {
+    border: 0;
+    border-radius: 0;
+    .step {
+      border-right: 0;
+      padding: @15px;
+      margin-right: 53px;
+      &:first-child {
+        padding-left: 0;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
+      &.active {
+        background: transparent;
+        .title {
+          color: @neutral;
+          font-weight: @bold;
+        }
+      }
+      &:after {
+        height: 1px;
+        width: 53px;
+        background: @neutral-offdark;
+        border: 0;
+        transform: none;
+        right: -53px;
+      }
+      .ui.label {
+        margin-right: @10px;
+        &.grey {
+          background-color: @neutral-darkwhite !important;
+          border-color: @neutral-darkwhite !important;
+          color: fade(@neutral-middark, 60%) !important;
+        }
+      }
+      .title {
+        font-size: @13px;
+        font-weight: @normal;
+      }
+    }
+  }
+  .step .title{
+    margin-bottom:0;
+  }
+}
+.ui.steps .step.tab-error,
+.ui.steps .step.active.tab-error .title{
+  color:@highlight-primary !important;
+}

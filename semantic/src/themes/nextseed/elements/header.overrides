@@ -3,20 +3,21 @@
 *******************************/
 
 .header-wrap{
-	height:58px;
+    height:58px;
+    &.large{
+        height:80px;
+    }
     .ui.menu{
         box-shadow:0px 0px 5px fade(@fullBlack, 8%);
         &.large{
-            height:58px;
-            font-size:1rem;
+            font-size:@14px;
         }
         .menu .item{
-            // font-weight:700;
-            color:@primary-text;
+            color:@neutral;
             padding:@13px @30px;
             &.active{
-                color:@inverse-text;
-                background-color:@theme-primary;
+                color:@white;
+                background-color:@primary-one;
             }
             &.notification{
                 position:relative;
@@ -30,8 +31,7 @@
                     padding:0 5px;
                     border-radius:10px;
                     font-size:@12px;
-                    // font-weight:500;
-                    color:@inverse-text;
+                    color:@white;
                     line-height:@18px;
                     display:block;
                     text-align:center;
@@ -45,10 +45,69 @@
         .ui.dropdown{
             .menu{
                 >.item{
-                    // font-weight:700 !important;
                     padding:@11px @30px !important;
                 }
             }
         }
     }
+}
+
+.ui.header + .ui.header{
+    margin-top:@7px;
+}
+
+.ui.header{
+    > .icon{
+        height:auto;
+        vertical-align:top;
+        display:inline-block;
+        &.ns-help-circle{
+            font-size:@14px;
+            margin:0 0 0 @5px;
+        }
+        &.right {
+            margin-right: 0;
+        }
+    }
+    a.link{
+        margin-left:@10px;
+        >small{
+            font-size:@13px;
+        }
+    }
+}
+
+.notification-panel{
+	h4.ui.header{
+		margin:0;
+        padding:@14px;
+        position:relative;
+        background-color:@darken-bg-color;
+        .sub.header{
+            font-size:@12px !important;
+            color:@neutral-middark;
+            position:absolute;
+            right:0;
+            top:0;
+        }
+	}
+}
+
+// .ui.header{
+//     .sub.header{
+//         font-weight:inherit;
+//     }
+// }
+h6.ui.header{
+    .sub.header{
+        font-size:@relative12px;
+        font-weight:@normal;
+        line-height:@22px;
+        color:@neutral-middark;
+    }
+}
+.ui.top.attached.header {
+    padding-left: 0;
+    padding-right: 0;
+    border: 0;
 }

@@ -2,18 +2,18 @@
             Checkbox
 *******************************/
 
-@checkboxSize: 17px;
+@checkboxSize: 20px;
 @checkboxColor: @textColor;
 @checkboxLineHeight: @checkboxSize;
 
 
 /* Label */
-@labelDistance: 1.85714em; /* 26px @ 14/em */
+@labelDistance: 2.142857em; /* 30px @ 14/em */
 
 /* Checkbox */
 @checkboxBackground: @white;
-@checkboxBorder: 1px solid @solidBorderColor;
-@checkboxBorderRadius: @3px;
+@checkboxBorder: 2px solid @neutral-middark;
+@checkboxBorderRadius: @4px;
 @checkboxTransition:
   border @defaultDuration @defaultEasing,
   opacity @defaultDuration @defaultEasing,
@@ -22,7 +22,7 @@
 ;
 
 /* Checkmark */
-@checkboxCheckFontSize: 14px;
+@checkboxCheckFontSize: 16px;
 @checkboxCheckTop: 0px;
 @checkboxCheckLeft: 0px;
 @checkboxCheckSize: @checkboxSize;
@@ -38,32 +38,32 @@
 
 /* Hover */
 @checkboxHoverBackground: @checkboxBackground;
-@checkboxHoverBorderColor: @selectedBorderColor;
+@checkboxHoverBorderColor: @primary-one-lighten;
 @labelHoverColor: @hoveredTextColor;
 
 /* Pressed */
-@checkboxPressedBackground: @offWhite;
-@checkboxPressedBorderColor: @selectedBorderColor;
-@checkboxPressedColor: @selectedTextColor;
+@checkboxPressedBackground: @primary-one;
+@checkboxPressedBorderColor: @primary-one-lighten;
+@checkboxPressedColor: @white;
 @labelPressedColor: @selectedTextColor;
 
 /* Focus */
 @checkboxFocusBackground: @white;
-@checkboxFocusBorderColor: @focusedFormMutedBorderColor;
+@checkboxFocusBorderColor: @neutral-middark;
 @checkboxFocusCheckColor: @selectedTextColor;
 @labelFocusColor: @selectedTextColor;
 
 /* Active */
-@labelActiveColor: @selectedTextColor;
-@checkboxActiveBackground: @white;
-@checkboxActiveBorderColor: @selectedBorderColor;
-@checkboxActiveCheckColor: @selectedTextColor;
+@labelActiveColor: @textColor;
+@checkboxActiveBackground: @primary-one;
+@checkboxActiveBorderColor: @primary-one;
+@checkboxActiveCheckColor: @white;
 @checkboxActiveCheckOpacity: 1;
 
 /* Active Focus */
-@checkboxActiveFocusBackground: @white;
-@checkboxActiveFocusBorderColor: @checkboxFocusBorderColor;
-@checkboxActiveFocusCheckColor: @selectedTextColor;
+@checkboxActiveFocusBackground: @primary-one;
+@checkboxActiveFocusBorderColor: @primary-one;
+@checkboxActiveFocusCheckColor: @white;
 
 /* Indeterminate */
 @checkboxIndeterminateBackground: @checkboxActiveBackground;
@@ -82,25 +82,25 @@
 /* Radio */
 /* Uses px to avoid rounding issues with circles */
 
-@radioSize: 15px;
-@radioTop: 1px;
+@radioSize: 16px;
+@radioTop: 2px;
 @radioLeft: 0px;
 @radioLabelDistance: @labelDistance;
 
-@bulletTop: 1px;
+@bulletTop: 2px;
 @bulletLeft: 0px;
 @bulletScale: (7 / 15); /* 7px as unitless value from radio size */
-@bulletColor: @textColor;
+@bulletColor: @primary-one;
 @bulletRadius: @circularRadius;
 
-@radioFocusBackground: @checkboxFocusBackground;
-@radioFocusBulletColor: @checkboxFocusCheckColor;
+@radioFocusBackground: @white;
+@radioFocusBulletColor: @primary-one;
 
-@radioActiveBackground: @checkboxActiveBackground;
-@radioActiveBulletColor: @checkboxActiveCheckColor;
+@radioActiveBackground: @white;
+@radioActiveBulletColor: @primary-one;
 
-@radioActiveFocusBackground: @checkboxActiveFocusBackground;
-@radioActiveFocusBulletColor: @checkboxActiveFocusCheckColor;
+@radioActiveFocusBackground: @white;
+@radioActiveFocusBulletColor: @primary-one;
 
 /* Slider & Toggle Handle */
 @handleBackground: @white @subtleGradient;

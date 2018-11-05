@@ -16,9 +16,9 @@
 
 /* Text */
 @letterSpacing: 0.05em;
-@fontWeight: bold;
+@fontWeight: @normal;
 @color: @darkTextColor;
-@textTransform: uppercase;
+@textTransform:none;
 
 /*-------------------
        Coupling

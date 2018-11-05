@@ -34,33 +34,133 @@
 /* Accordion Title */
 .ui.accordion{
 	.title:not(.ui){
+		margin:0;
 		position:relative;
 		padding-right:30px;
+		font-weight:@fontMedium;
+	}
+	&.faq-accordion {
+		box-shadow: none;
+		.title:not(.ui) {
+			color: @neutral;
+			font-weight: @fontMedium;
+			border-bottom: @border-light 1px solid;
+			padding: @14px 0;
+			font-size: @20px;
+			.ns-chevron-down.icon {
+				color:@neutral-middark;
+				font-size: @15px;
+			}
+			~.content:not(.ui) {
+				padding-bottom: 0;
+			}
+		}
+		.active.content {
+			background: @white !important;
+		}
+		.accordion {
+			border-bottom: @border-light 1px solid;
+			margin-top: 0;
+			.title:not(.ui) {
+				border-bottom: 0;
+				font-weight: @normal;
+				font-size: @15px;
+				&.active {
+					font-weight: @bold;
+				}
+				i.icon{
+					margin-right: @14px;
+				}
+				~.content:not(.ui) {
+					padding-bottom: @14px;
+				}
+			}
+		}
 	}
 }
 
 /* Dropdown Icon */
-.ui.accordion,
-.ui.accordion .accordion{
+.ui.accordion:not(.styled),
+.ui.accordion .accordion:not(.styled){
 	.title{
-		.angle.icon {
+		.ns-chevron-down.icon {
 			margin:0;
-			height:19px;
-			font-size:@22px;
-			color:@theme-primary;
-			line-height:@19px;
+			height:@21px;
+			color:@primary-one;
+			line-height:@21px;
 			position:absolute;
 			right:0;
-			top:7px;
+			top:50%;
+			margin-top:-.75rem;
 		}
 		&.active{
-			.angle.icon{
+			.ns-chevron-down.icon{
 				transform:rotate(180deg);
+			}
+		}
+		.ns-chevron-up.icon{
+			height:auto;
+			transform:rotate(180deg);
+		}
+		&.active .ns-chevron-up.icon{
+			transform:rotate(0deg);
+		}
+	}
+	//	FAQ UI
+	&.splitted{
+		.title{
+			font-size:@18px;
+			color:@fullBlack;
+			padding:@14px @40px @14px @20px;
+			background-color:@white;
+			box-shadow:@noTopShadow;
+			border-bottom:@border-light 1px solid;
+			position:relative;
+			overflow:hidden;
+			&:first-of-type{
+				box-shadow:@allSideShadow;
+				border-radius:@6px @6px 0 0;
+			}
+			&:nth-last-child(2){
+				border-radius:0 0 @6px @6px;
+			}
+			>.icon{
+				font-size:@14px;
+				color:@link-color;
+				right:10px;
+			}
+			~ .content:not(.ui){
+				padding:@20px @20px @30px;
+				&.active + .title{
+					border-top-left-radius:@6px;
+					border-top-right-radius:@6px;
+					box-shadow:@allSideShadow;
+				}
+			}
+			&.active{
+				border-bottom-right-radius:@6px;
+				border-bottom-left-radius:@6px;
+				&:before{
+					content:"";
+					width:6px;
+					position:absolute;
+					left:0;
+					top:0;
+					bottom:0;
+					background-color:@primary-one;
+				}
+			}
+		}
+		.list a.item{
+			color:@fullBlack;
+			&:hover, &:focus, &.active{
+				color:@link-color;
 			}
 		}
 	}
 }
 .ui.styled.accordion, .ui.styled.accordion .accordion{
+	//	Edgar Filing List UI
 	&.filing-list{
 		background:none;
 		box-shadow:none;
@@ -71,10 +171,9 @@
 		.title{
 			border:@borderColor 1px solid;
 			&.active{
-				background-color:#F8F8F8;
+				background-color:@neutral-offdark;
 			}
 			time{
-				font-family:@regularFont;
 				font-size:@12px;
 				margin-left:@5px;
 				color:@tertiary-text;
@@ -87,33 +186,150 @@
 				border-top:none;
 			}
 		}
-		.actions{
-			position:relative;
-			float:right;
-			z-index:99;
-			a, .ui.button, .ui.buttons .button{
-				font-family:@pageFont;
-				font-size:@13px;
-				font-weight:400;
-				text-transform:none;
-				margin:0;
-				padding:0 @8px;
-				border-right:@borderColor 1px solid;
-				&:last-child{
-					border:none;
-					padding-right:0;
-				}
-			}
-		}
+		// .actions{
+		// 	position:relative;
+		// 	float:right;
+		// 	z-index:99;
+		// 	a, .ui.button, .ui.buttons .button{
+		// 		font-size:@13px;
+		// 		font-weight:@fontMedium;
+		// 		text-transform:none;
+		// 		margin:0;
+		// 		padding:0 @8px;
+		// 		border-right:@borderColor 1px solid;
+		// 		&:last-child{
+		// 			border:none;
+		// 			padding-right:0;
+		// 		}
+		// 	}
+		// }
 		a{
 			&:hover, &:focus, &:active{
 				text-decoration:none;
 			}
 		}
 	}
+	&.card-style{
+		border-radius:@6px;
+		box-shadow:0 0 10px rgba(0,0,0,.1);
+		overflow:hidden;
+		&:not(:last-child){
+			margin-bottom:@35px;
+		}
+		.title{
+			font-weight:700;
+			color:@fullBlack;
+			&.active{
+				border-bottom:@border-light 1px solid;
+			}
+			> .icon{
+				margin-right:@14px;
+				color:@link-color;
+			}
+		}
+		.content{
+			padding:0;
+		}
+	}
 }
-// .ui.styled.accordion, .ui.styled.accordion .accordion{
-// 	.active.title, .active.content{
-// 		background-color:@lighten-bg-color;
-// 	}
-// }
+
+//	Knowledge Base UI
+.ui.accordion.feed-view{
+	.title{
+		padding:@12px 0;
+		font-weight:400;
+		color:@neutral-middark;
+		border-top:@border-light 1px solid;
+		&:first-of-type{
+			border:none;
+		}
+		>span{
+			display:block;
+			color:@fullBlack;
+		}
+		&.active > span{
+			color:@link-color;
+		}
+	}
+}
+
+
+//education-center
+.edu-center {
+	.ui.accordion {
+		.active.content {
+			background: @neutral-offwhite;
+		}
+	}
+	.ui.accordion:not(.styled).splitted  {
+		.title {
+			box-shadow: none;
+			font-weight: normal;
+			color: @neutral-middark;
+			background: @neutral-offwhite;
+			font-size: @14px;
+			&.active {
+				border-radius: 0;
+				background: @secondary-color;
+				color: @white;
+				&::before{
+					display: none;
+				}
+				.ns-chevron-down.icon {
+					color: @white;
+				}
+			}
+			&:first-of-type {
+				border-radius: 0;
+			}
+			>.icon {
+				color: @neutral-middark;
+			}
+			~.content:not(.ui).active+.title {
+				box-shadow: none;
+				border-top: #e0e0e0 1px solid;
+				border-radius: 0;
+			}
+		}
+		a.title {
+			display: block;
+			text-decoration: none;
+		}
+		.list a.item {
+			border-top: 0;
+			color: @neutral-middark;
+			background: @neutral-offwhite;
+			&.active {
+				color: @primary-one;
+				font-weight: @bold;
+			}
+		}
+		//Business compare section mobile start
+		&.compare-section {
+			.title {
+				font-weight: @bold;
+				border: 0 !important;
+			}
+			.content {
+				padding: 0;
+				margin-bottom: @25px;
+			}
+			.title .ns-chevron-down.icon {
+				right: 20px;
+			}
+			.ui.table tr {
+				th {
+					border:0;
+				}
+				td {
+					font-size: @13px;
+					color: @neutral-middark;
+					&:first-child {
+						font-weight: bold;
+						color: @neutral;
+					}
+				}
+			}
+		}
+	}
+}

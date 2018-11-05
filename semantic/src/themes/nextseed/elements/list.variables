@@ -17,7 +17,7 @@
 @itemVerticalPadding: @relative3px;
 @itemHorizontalPadding: 0em;
 @itemPadding: @itemVerticalPadding @itemHorizontalPadding;
-@itemLineHeight: @relativeLarge;
+@itemLineHeight: @18px;
 
 /* Sub List */
 @childListPadding: 0.75em 0em 0.25em 0.5em;
@@ -52,11 +52,11 @@
 
 /* Header */
 @itemHeaderFontFamily: @headerFont;
-@itemHeaderFontWeight: 500;
-@itemHeaderColor: @quaternary-text;
+@itemHeaderFontWeight: @bold;
+@itemHeaderColor: @neutral;
 
 /* Description */
-@itemDescriptionColor: rgba(0, 0, 0, 0.7);
+@itemDescriptionColor:@neutral-middark;
 
 /* Link */
 @itemLinkColor: @linkColor;
@@ -128,11 +128,11 @@
 /* Selection List States */
 @selectionListBackground: transparent;
 @selectionListColor: @unselectedTextColor;
-@selectionListHoverBackground: @subtleTransparentBlack;
+@selectionListHoverBackground:@neutral-offwhite;
 @selectionListHoverColor: @hoveredTextColor;
 @selectionListDownBackground: @transparentBlack;
 @selectionListDownColor: @pressedTextColor;
-@selectionListActiveBackground: @transparentBlack;
+@selectionListActiveBackground:@neutral-offwhite;
 @selectionListActiveColor: @selectedTextColor;
 
 /* Inverted Selection List */

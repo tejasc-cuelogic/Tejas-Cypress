@@ -14,56 +14,24 @@
        Fonts
 --------------------*/
 
-@fontName: 'SF Pro Display Regular';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCRegular: url("@{fontPath}/@{fontFileName}-Regular.eot");
-@srcRegular:
- url("@{fontPath}/@{fontFileName}-Regular.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Regular.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Regular.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Regular.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Regular.svg#SFProDisplay-Regular") format('svg')
-;
+@fontName          : 'Roboto';
+@fontSmoothing     : antialiased;
 
-@fontName: 'SF Pro Display Medium';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCMedium: url("@{fontPath}/@{fontFileName}-Medium.eot");
-@srcMedium:
- url("@{fontPath}/@{fontFileName}-Medium.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Medium.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Medium.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Medium.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Medium.svg#SFProDisplay-Medium") format('svg')
-;
+@headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
-@fontName: 'SF Pro Display Bold';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCBold: url("@{fontPath}/@{fontFileName}-Bold.eot");
-@srcBold:
- url("@{fontPath}/@{fontFileName}-Bold.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Bold.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Bold.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Bold.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Bold.svg#SFProDisplay-Bold") format('svg')
-;
+@googleFontName    : @fontName;
+@importGoogleFonts : true;
+@googleFontSizes   : '400,500,700,400italic,500italic,700italic';
+@googleSubset      : 'latin';
 
-@fontName: 'SF Pro Display Heavy';
-@fontFileName: 'SFProDisplay';
-@fallbackSRCHeavy: url("@{fontPath}/@{fontFileName}-Heavy.eot");
-@srcHeavy:
- url("@{fontPath}/@{fontFileName}-Heavy.eot?#iefix") format('embedded-opentype'),
- url("@{fontPath}/@{fontFileName}-Heavy.woff2") format('woff2'),
- url("@{fontPath}/@{fontFileName}-Heavy.woff") format('woff'),
- url("@{fontPath}/@{fontFileName}-Heavy.ttf") format('truetype'),
- url("@{fontPath}/@{fontFileName}-Heavy.svg#SFProDisplay-Heavy") format('svg')
-;
+@googleProtocol    : 'https://';
+@googleFontRequest : '@{googleFontName}:@{googleFontSizes}&subset=@{googleSubset}';
 
-@headerFont 	:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@pageFont   	:"SF Pro Display Medium", 'Helvetica Neue', Arial, Helvetica, sans-serif;
 
-@regularFont	:"SF Pro Display Regular", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@boldFont		:"SF Pro Display Bold", 'Helvetica Neue', Arial, Helvetica, sans-serif;
-@heavyFont		:"SF Pro Display Heavy", 'Helvetica Neue', Arial, Helvetica, sans-serif;
+@bold              : 700;
+@fontMedium        : 500;
+@normal            : 400;
 
 /*-------------------
       Base Sizes
@@ -92,8 +60,8 @@
     Brand Colors
 --------------------*/
 
-@primaryColor        : @blue;
-@secondaryColor      : @black;
+@primaryColor        : @primary-one;
+@secondaryColor      : @primary-two;
 
 @lightPrimaryColor   : @lightBlue;
 @lightSecondaryColor : @lightBlack;
@@ -102,30 +70,30 @@
   Page Heading
 ---------------*/
 
-@headerFontWeight : 500;
+@headerFontWeight : @fontMedium;
 @headerLineHeight : unit((18 / 14), em);
 
-@h1 : unit((28 / 14), rem);
-@h2 : unit((24 / 14), rem);
-@h3 : unit((18 / 14), rem);
-@h4 : unit((15 / 14), rem);
-@h5 : unit((14 / 14), rem);
-@h6 : unit((13 / 14), rem);
+@h1 : unit((60 / 14), rem);
+@h2 : unit((40 / 14), rem);
+@h3 : unit((28 / 14), rem);
+@h4 : unit((20 / 14), rem);
+@h5 : unit((16 / 14), rem);
+@h6 : unit((15 / 14), rem);
 
 /*--------------
    Form Input
 ---------------*/
 
 /* This adjusts the default form input across all elements */
-@inputBackground        : @white;
+@inputBackground        : transparent;
 @inputVerticalPadding   : @relative11px;
-@inputHorizontalPadding : @relative14px;
+@inputHorizontalPadding : 0;
 @inputPadding           : @inputVerticalPadding @inputHorizontalPadding;
 
 /* Input Text Color */
 @inputColor: @textColor;
-@inputPlaceholderColor: lighten(@inputColor, 75);
-@inputPlaceholderFocusColor: lighten(@inputColor, 45);
+@inputPlaceholderColor: lighten(@inputColor, 60);
+@inputPlaceholderFocusColor: lighten(@inputColor, 35);
 
 /* Line Height Default For Inputs in Browser (Descendors are 17px at 14px base em) */
 @inputLineHeight: unit((17 / 14), em);
@@ -167,7 +135,7 @@
 @pageOverflowX       : hidden;
 
 @lineHeight          : 1.571428em;
-@textColor           : @primary-text;
+@textColor           : @neutral;
 
 /*-------------------
       Paragraph
@@ -180,10 +148,10 @@
        Links
 --------------------*/
 
-@linkColor           : @theme-primary;
+@linkColor           : @primary-one;
 @linkUnderline       : none;
-@linkHoverColor      : @theme-primary-darken;
-@linkHoverUnderline  : @linkUnderline;
+@linkHoverColor      : @primary-one;
+@linkHoverUnderline  : underline;
 
 /*-------------------
     Scroll Bars
@@ -254,6 +222,7 @@
 @mobileBreakpoint            : 320px;
 @tabletBreakpoint            : 768px;
 @computerBreakpoint          : 992px;
+@monitorBreakpoint           : 1024px;
 @largeMonitorBreakpoint      : 1200px;
 @widescreenMonitorBreakpoint : 1920px;
 
@@ -262,18 +231,18 @@
 --------------------*/
 
 /*---  Colors  ---*/
-@red              : #DB2828;
-@orange           : #F2711C;
+@red              : @highlight-primary;
+@orange           : @highlight-secondary;
 @yellow           : #FBBD08;
 @olive            : #B5CC18;
-@green            : #21BA45;
-@teal             : #00B5AD;
-@blue             : #2185D0;
+@green            : @primary-one;
+@teal             : @highlight-tertiary;
+@blue             : @primary-two;
 @violet           : #6435C9;
 @purple           : #A333C8;
 @pink             : #E03997;
 @brown            : #A5673F;
-@grey             : #767676;
+@grey             : @neutral-offdark;
 @black            : #1B1C1D;
 
 /*---  Light Colors  ---*/
@@ -281,9 +250,9 @@
 @lightOrange      : #FF851B;
 @lightYellow      : #FFE21F;
 @lightOlive       : #D9E778;
-@lightGreen       : #2ECC40;
+@lightGreen       : @primary-one;
 @lightTeal        : #6DFFFF;
-@lightBlue        : #54C8FF;
+@lightBlue        : @primary-two-lighten;
 @lightViolet      : #A291FB;
 @lightPurple      : #DC73FF;
 @lightPink        : #FF8EDF;
@@ -400,7 +369,7 @@
 @negativeBackgroundColor : #FFF6F6;
 @negativeBorderColor     : #E0B4B4;
 @negativeHeaderColor     : #912D2B;
-@negativeTextColor       : #9F3A38;
+@negativeTextColor       : @highlight-primary;
 
 /* Info */
 @infoColor              : #31CCEC;
@@ -540,7 +509,7 @@
 
 /* Header Spacing */
 @headerTopMargin    : ~"calc(2rem - "@headerLineHeightOffset~")";
-@headerBottomMargin : 1.5rem;
+@headerBottomMargin : 1rem;
 @headerMargin       : @headerTopMargin 0em @headerBottomMargin;
 
 /* Minimum Mobile Width */
@@ -563,6 +532,7 @@
 /* Responsive */
 @largestMobileScreen : (@tabletBreakpoint - 1px);
 @largestTabletScreen : (@computerBreakpoint - 1px);
+@smallMonitorScreen  : (@monitorBreakpoint - 1px);
 @largestSmallMonitor : (@largeMonitorBreakpoint - 1px);
 @largestLargeMonitor : (@widescreenMonitorBreakpoint - 1px);
 
@@ -645,6 +615,7 @@
 @63px : unit( (63 / @emSize), rem);
 @64px : unit( (64 / @emSize), rem);
 @70px : unit( (70 / @emSize), rem);
+@80px : unit( (80 / @emSize), rem);
 
 @relative1px  : unit( (1 / @emSize), em);
 @relative2px  : unit( (2 / @emSize), em);
@@ -770,20 +741,20 @@
 ;
 
 /*---  Colors  ---*/
-@primaryColorHover    : saturate(darken(@primaryColor, 5), 10, relative);
-@secondaryColorHover  : saturate(lighten(@secondaryColor, 5), 10, relative);
+@primaryColorHover    : @primary-one-darken;
+@secondaryColorHover  : @primary-two-darken;
 
-@redHover             : saturate(darken(@red, 5), 10, relative);
-@orangeHover          : saturate(darken(@orange, 5), 10, relative);
-@yellowHover          : saturate(darken(@yellow, 5), 10, relative);
-@oliveHover           : saturate(darken(@olive, 5), 10, relative);
-@greenHover           : saturate(darken(@green, 5), 10, relative);
-@tealHover            : saturate(darken(@teal, 5), 10, relative);
-@blueHover            : saturate(darken(@blue, 5), 10, relative);
-@violetHover          : saturate(darken(@violet, 5), 10, relative);
-@purpleHover          : saturate(darken(@purple, 5), 10, relative);
-@pinkHover            : saturate(darken(@pink, 5), 10, relative);
-@brownHover           : saturate(darken(@brown, 5), 10, relative);
+@redHover             : darken(@red, 10);
+@orangeHover          : darken(@orange, 10);
+@yellowHover          : darken(@yellow, 10);
+@oliveHover           : darken(@olive, 10);
+@greenHover           : darken(@green, 10);
+@tealHover            : darken(@teal, 10);
+@blueHover            : darken(@blue, 10);
+@violetHover          : darken(@violet, 10);
+@purpleHover          : darken(@purple, 10);
+@pinkHover            : darken(@pink, 10);
+@brownHover           : darken(@brown, 10);
 
 @lightRedHover        : saturate(darken(@lightRed, 5), 10, relative);
 @lightOrangeHover     : saturate(darken(@lightOrange, 5), 10, relative);
@@ -831,17 +802,17 @@
 @primaryColorFocus    : saturate(darken(@primaryColor, 8), 20, relative);
 @secondaryColorFocus  : saturate(lighten(@secondaryColor, 8), 20, relative);
 
-@redFocus             : saturate(darken(@red, 8), 20, relative);
-@orangeFocus          : saturate(darken(@orange, 8), 20, relative);
-@yellowFocus          : saturate(darken(@yellow, 8), 20, relative);
-@oliveFocus           : saturate(darken(@olive, 8), 20, relative);
-@greenFocus           : saturate(darken(@green, 8), 20, relative);
-@tealFocus            : saturate(darken(@teal, 8), 20, relative);
-@blueFocus            : saturate(darken(@blue, 8), 20, relative);
-@violetFocus          : saturate(darken(@violet, 8), 20, relative);
-@purpleFocus          : saturate(darken(@purple, 8), 20, relative);
-@pinkFocus            : saturate(darken(@pink, 8), 20, relative);
-@brownFocus           : saturate(darken(@brown, 8), 20, relative);
+@redFocus             : darken(@red, 13);
+@orangeFocus          : darken(@orange, 13);
+@yellowFocus          : darken(@yellow, 13);
+@oliveFocus           : darken(@olive, 13);
+@greenFocus           : darken(@green, 13);
+@tealFocus            : darken(@teal, 13);
+@blueFocus            : darken(@blue, 13);
+@violetFocus          : darken(@violet, 13);
+@purpleFocus          : darken(@purple, 13);
+@pinkFocus            : darken(@pink, 13);
+@brownFocus           : darken(@brown, 13);
 
 @lightRedFocus        : saturate(darken(@lightRed, 8), 20, relative);
 @lightOrangeFocus     : saturate(darken(@lightOrange, 8), 20, relative);
@@ -1005,28 +976,57 @@
 -------------------------------*/
 
 //  THEME BASE COLORS
-@theme-primary:#A9D943;
-@theme-primary-darken:darken(@theme-primary, 15%);					//  #81AD23 ~ 85B02B
+@primary-one:#20C86D;
+@primary-one-darken:#189652;
+@primary-one-lighten:#58D692;
+
+@primary-two:#1781FB;
+@primary-two-darken:#0073E6;
+@primary-two-lighten:#55A2FB;
+
+@secondary-color:#263E64;
+@secondary-color-darken:#1C2E4B;
+@secondary-color-lighten:#5C6E8B;
+
+@neutral:#31333D;
+@neutral-middark:#676A73;
+@neutral-offdark:#CDCDD1;             //  @neutral-light
+@neutral-darkwhite:#E6E6E8;           //  @neutral-lighter
+@neutral-midwhite:#E9ECF0;            //  @neutral-lightest
+@neutral-offwhite:#F7F8FC;            //  @neutral-lighten
+
+@commonShadow:0px 1px 1px @thumbInactiveBackground;
+@nav-hover:#3A4048;                   //  campaign navigation hover
+
+/* --------------------------------------------
+      OLD VARIABLE VALUES TO BE REMOVED
+-------------------------------------------- */
+// @theme-primary:#98CE23;
+// @theme-primary-darken:darken(@theme-primary, 8%);					//  #81AD23 ~ 85B02B
 
 //  BACKGROUND COLORS
 @dark-bg-color:#424242;
 @darken-bg-color:darken(@dark-bg-color, 4%);				    		//  #383838           (when base = 424242)
 @darker-bg-color:darken(@dark-bg-color, 11%);			    			//  #262626           (when base = 424242)
 
-@light-bg-color:#F7F7F7;
-@lighten-bg-color:lighten(@light-bg-color, 1%);			  			//  #FAFAFA           (when base = F7F7F7)
-@lighter-bg-color:lighten(@light-bg-color, 4%);			  			//  #FFFFFF           (when base = F7F7F7)
+// @light-bg-color:#F7F7F7;
+// @lighten-bg-color:lighten(@light-bg-color, 1%);			  			//  #FAFAFA           (when base = F7F7F7)
+// @lighter-bg-color:lighten(@light-bg-color, 4%);			  			//  #FFFFFF           (when base = F7F7F7)
 
 //  TEXT COLORS
-@primary-text:#303030;
-@secondary-text:lighten(@primary-text, 12%);			    			//  #4F4F4F           (when base = 303030)
-@tertiary-text:lighten(@primary-text, 32%);					     		//  #828282           (when base = 303030)
-@quaternary-text:lighten(@primary-text, 41%);				     		//  #999999 ~ 989898  (when base = 303030)
-@inverse-text:#FFFFFF;
-@inverse-secondary-text:darken(@inverse-text, 51%);					//  #7D7D7D           (when base = 303030)
+// @primary-text:#242424;
+// @secondary-text:#383838;
+@tertiary-text:#4F4F4F;
+// @quaternary-text:#989898;
+// @inverse-text:#FFFFFF;
+// @inverse-secondary-text:darken(@inverse-text, 51%);				     //  #7D7D7D           (when base = FFFFFF)
+// @inverse-darken:darken(@inverse-text, 5%);                     //  #F2F2F2         (when base = FFFFFF)
 
-@border-color:lighten(@primary-text, 69%);                  //  #E0E0E0           (when base = 303030)
-@border-light:lighten(@primary-text, 76%);                  //  #F2F2F2           (when base = 303030)
+@link-color:@primary-one;
+@link-color-darken:darken(@link-color, 10%);
+
+@border-color:#BDBDBD;
+@border-light:#E0E0E0;
 
 //  HIGHLIGHT COLORS
 @highlight-primary:#EB5757;										          	//  Red

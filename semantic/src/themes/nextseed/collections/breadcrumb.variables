@@ -9,6 +9,8 @@
 @verticalMargin: 0em;
 @display: inline-block;
 @verticalAlign: middle;
+@linkColor:@neutral-middark;
+@linkHoverColor:@neutral-middark;
 
 @dividerSpacing: @3px;
 @dividerOpacity: 0.7;
@@ -30,4 +32,4 @@
        States
 --------------------*/
 
-@activeFontWeight: bold;
+@activeFontWeight: @bold;

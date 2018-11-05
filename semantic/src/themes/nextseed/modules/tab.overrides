@@ -7,9 +7,8 @@
         height:100%;
         min-height:~"calc(100vh - 205px)";
         border:none;
-        background:@inverse-text;
+        background:@white;
         .item{
-            font-family:@boldFont;
             padding:@18px @20px;
             border-radius:0 !important;
             border-left:none;
@@ -19,7 +18,7 @@
                 margin-right:@18px;
             }
             &.active{
-                background:@lighten-bg-color;
+                background:@neutral-offwhite;
             }
         }
     }
@@ -46,9 +45,8 @@
             position:absolute;
             right:@30px;
             top:0;
-            font-family:@boldFont;
-            font-size:@12px;
-            text-transform:uppercase;
+            font-size:@14px;
+            font-weight:700;
             > a{
                 color:@highlight-primary;
                 &:hover, &:focus, &:active{
@@ -58,10 +56,13 @@
         }
     }
 }
-
 .account-type-tab{
+    margin:@36px 0;
+    &:last-child{
+        margin-bottom:0;
+    }
     > .ui.item.menu.secondary{
-        margin: 0 -1rem 1rem !important;
+        margin: 0 -1rem 2rem !important;
         width: auto !important;
         a.item{
             margin-top:1rem;
@@ -69,7 +70,6 @@
             .account-tab{
                 width:100%;
                 padding:1rem;
-                font-family:@boldFont;
                 font-size:@16px;
                 border:@borderColor 1px solid;
                 border-radius:@defaultBorderRadius * 1.5;
@@ -79,17 +79,40 @@
             }
             &.active{
                 .account-tab{
-                    border-color:@theme-primary;
+                    border-color:@primary-one;
                     .account-type{
-                        color:@theme-primary;
-                        border-color:@theme-primary;
+                        color:@primary-one;
+                        border-color:@primary-one;
                     }
                 }
             }
         }
     }
     .tab{
-        font-family:@regularFont;
-        font-size:@16px;
+        font-size:@14px;
     }
+}
+
+.ui.tabular.menu {
+    border-bottom: 2px solid @primary-two;
+    .item {
+        background: @neutral-offwhite;
+        padding: @15px @22px;
+        border-left-width: 1px;
+        border-right-width: 1px;
+        border-top-width: 0;
+        border-color: @white;
+        &.active {
+            background: @primary-two;
+            color: @white;
+            font-weight: @bold;
+            border-radius: 0 !important;
+            border-color: @primary-two;
+        }
+    }
+}
+.ui.segment.tab.active {
+    box-shadow: none;
+    border: 0;
+    border-radius: 0;
 }

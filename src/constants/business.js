@@ -4,16 +4,23 @@ import shortid from 'shortid';
 export const FORM_VALUES = [
   { name: 'name_of_business', placeholder: 'Business Name' },
   { name: 'shorthand_name', placeholder: 'Shorthand Name' },
-  { name: 'type_of_business', placeholder: 'Business Type' },
+  { name: 'type_of_business', placeholder: 'Business Type (legal types)' },
   { name: 'state_of_formation', placeholder: 'State of Formation' },
-  { name: 'investment_multiple', placeholder: 'Investment Multiple' },
-  { name: 'revenue_share_percentage', placeholder: 'Percent Share in revenue' },
+  { name: 'investment_multiple', placeholder: 'Investment Multiple (Rev Share Only)' },
+  { name: 'revenue_share_percentage', placeholder: 'Revenue Share Percentage (Rev Share Only)' },
   { name: 'minimum_offering_amount', placeholder: 'Minimum offering amount' },
   { name: 'offering_amount', placeholder: 'Offering Amount' },
   { name: 'maturity_date', placeholder: 'Maturity Date' },
   { name: 'termination_date', placeholder: 'Termination Date' },
   { name: 'offer_date', placeholder: 'Offer Date' },
-  { name: 'interest_rate', placeholder: 'Interest Rate' },
+  { name: 'interest_rate', placeholder: 'Interest Rate (Term Only)' },
+  { name: 'entity_name', placeholder: 'Entity Name' },
+  { name: 'name_of_investor_sig', placeholder: 'Name of investor sig' },
+  { name: 'investor_address_1', placeholder: 'Investor address 1' },
+  { name: 'investor_address_2', placeholder: 'Investor address 2' },
+  { name: 'investor_address_3', placeholder: 'Investor address 3' },
+  { name: 'principal', placeholder: 'Principal' },
+  { name: 'ivsdate', placeholder: 'Investor date' },
 ];
 
 export const DOCFILE_TYPES = [];
@@ -44,6 +51,13 @@ export const TEMPLATE_VARIABLES = {
   state_of_formation: '',
   type_of_business: '',
   termination_date: '',
+  entity_name: '',
+  name_of_investor_sig: '',
+  investor_address_1: '',
+  investor_address_2: '',
+  investor_address_3: '',
+  principal: '',
+  ivsdate: '',
 };
 
 export const PERSONAL_SIGNATURE = {
@@ -54,6 +68,9 @@ export const PERSONAL_SIGNATURE = {
     rule: 'required|max:150',
     key: 'personSignature',
     label: 'Signature',
+    customErrors: {
+      required: 'The Signature field is required.',
+    },
   },
   personTitle: {
     value: '',
@@ -61,83 +78,148 @@ export const PERSONAL_SIGNATURE = {
     rule: 'required|max:256',
     key: 'personTitle',
     label: 'Title',
+    customErrors: {
+      required: 'The Title field is required.',
+    },
   },
   signatureDate: {
     value: moment(),
     error: undefined,
     rule: 'required',
     key: 'signatureDate',
-    label: 'Date',
+    label: 'Signature Date',
+    customErrors: {
+      required: 'The Date field is required.',
+    },
   },
 };
 
 export const FILER_INFORMATION = {
+  offeringUrl: {
+    value: '',
+    key: 'offeringUrl',
+    label: 'Website URL',
+    error: undefined,
+    rule: 'required|url',
+    placeHolder: 'Website URL',
+    tooltip: 'Please enter URL of page, for which screenshot will be generated',
+    customErrors: {
+      required: 'The Website URL field is required.',
+      url: 'Provide valid Website URL',
+    },
+  },
   filerCik: {
     value: '',
     key: 'filerCik',
+    placeHolder: 'Filer Cik',
+    label: 'Filer Cik',
     error: undefined,
     rule: 'required|max:10',
     content: 'Please enter CIK of filer',
+    customErrors: {
+      required: 'The Filer Cik field is required.',
+      max: 'The Filer Cik is too long. Max length is :max.',
+    },
   },
   filerCcc: {
     value: '',
     key: 'filerCcc',
+    placeHolder: 'Filer Ccc',
+    label: 'Filer Ccc',
     error: undefined,
     rule: 'required|max:8',
+    customErrors: {
+      required: 'The Filer Ccc field is required.',
+      max: 'The Filer Ccc is too long. Max length is :max.',
+    },
   },
   fileNumber: {
     value: '',
     key: 'fileNumber',
+    placeHolder: 'File number',
+    label: 'File number',
     error: undefined,
     rule: 'max:17',
   },
   liveTestFlag: {
     value: 'TEST',
     key: 'liveTestFlag',
+    values: [{ label: 'Live', value: 'LIVE' }, { label: 'Test', value: 'TEST' }],
+    label: 'Live Test Flag',
     error: undefined,
     rule: 'required|in:LIVE,TEST',
   },
   confirmingCopyFlag: {
     value: false,
     key: 'confirmingCopyFlag',
+    label: 'Confirming Copy Flag',
     error: undefined,
     rule: 'required|boolean',
+    customErrors: {
+      required: 'The Confirming Copy Flag field is required.',
+    },
   },
   returnCopyFlag: {
     value: false,
     key: 'returnCopyFlag',
+    label: 'Return Copy Flag',
     error: undefined,
     rule: 'required|boolean',
-  },
-  overrideInternetFlag: {
-    value: false,
-    key: 'overrideInternetFlag',
-    error: undefined,
-    rule: 'required|boolean',
+    customErrors: {
+      required: 'The Return Copy Flag field is required.',
+    },
   },
   contactName: {
     value: '',
     key: 'contactName',
+    placeHolder: 'Name',
+    label: 'Name',
     error: undefined,
     rule: 'required|max:30',
+    customErrors: {
+      required: 'The Contact Name field is required.',
+    },
   },
   contactPhone: {
     value: '',
     key: 'contactPhone',
+    placeHolder: 'Phone Number',
+    label: 'Phone Number',
     error: undefined,
     rule: 'required|max:20',
+    customErrors: {
+      required: 'The Phone Number field is required.',
+    },
   },
   contactEmail: {
     value: '',
     key: 'contactEmail',
+    placeHolder: 'Email',
+    label: 'Email',
     error: undefined,
     rule: 'required|email|max:80',
+    customErrors: {
+      required: 'The Email field is required.',
+      email: 'Email is not valid',
+    },
+  },
+  overrideInternetFlag: {
+    value: false,
+    key: 'overrideInternetFlag',
+    label: 'overrideInternetFlag',
+    error: undefined,
+    rule: 'required|boolean',
   },
   notificationEmail: {
-    value: '',
+    value: [],
     key: 'notificationEmail',
+    placeHolder: 'Enter notification email',
+    label: 'Enter notification email',
     error: undefined,
-    rule: 'email|max:80',
+    rule: 'required_if:overrideInternetFlag,true|array|max:3',
+    customErrors: {
+      max: 'You can\'t add more than 3 notification emails.',
+    },
   },
 };
 
@@ -145,174 +227,331 @@ export const ISSUER_INFORMATION = {
   nameOfIssuer: {
     value: '',
     key: 'nameOfIssuer',
+    placeHolder: 'Name of Issuer',
+    label: 'Name of Issuer',
     error: undefined,
     rule: 'required|max:150',
+    customErrors: {
+      required: 'The Name of Issuer field is required.',
+      max: 'The Name of Issuer is too long. Max length is :max.',
+    },
   },
   legalStatusForm: {
     value: '',
     key: 'legalStatusForm',
+    placeHolder: 'Please select',
+    label: 'Form',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The Legal Status of Issuer field is required.',
+    },
   },
   legalStatusOtherDesc: {
     value: '',
     key: 'legalStatusOtherDesc',
+    placeHolder: 'Other Description',
+    label: 'Other Description',
     error: undefined,
     rule: 'required_if:legalStatusForm,Other|max:256',
+    customErrors: {
+      required_if: 'The Other Description field is required when Form is Other.',
+      max: 'The Other Description is too long. Max length is :max.',
+    },
   },
   jurisdictionOrganization: {
     value: '',
     key: 'jurisdictionOrganization',
+    placeHolder: 'Please select',
+    label: 'Jurisdiction of Incorporation/Organization',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The Jurisdiction of Incorporation/Organization field is required.',
+    },
   },
   dateIncorporation: {
     value: moment(),
     key: 'dateIncorporation',
+    placeHolder: 'Date of Incorporation/Organization',
+    label: 'Date of Incorporation/Organization',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The Date of Incorporation/Organization field is required.',
+    },
   },
   street1: {
     value: '',
     key: 'street1',
+    placeHolder: 'Address Line 1',
+    label: 'Address Line 1',
     error: undefined,
     rule: 'required|max:40',
+    customErrors: {
+      required: 'The Address Line 1 field is required.',
+      max: 'The Address Line 1 is too long. Max length is :max.',
+    },
   },
   street2: {
     value: '',
     key: 'street2',
+    placeHolder: 'Address Line 2',
+    label: 'Address Line 2',
     error: undefined,
     rule: 'max:40',
+    customErrors: {
+      max: 'The Address Line 2 is too long. Max length is :max.',
+    },
   },
   city: {
     value: '',
     key: 'city',
+    placeHolder: 'City',
+    label: 'City',
     error: undefined,
     rule: 'required|max:30',
+    customErrors: {
+      required: 'The City field is required.',
+      max: 'The City is too long. Max length is :max.',
+    },
   },
   stateOrCountry: {
     value: '',
     key: 'stateOrCountry',
+    placeHolder: 'State/Country',
+    label: 'State/Country',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The State/Country field is required.',
+    },
   },
   zipCode: {
     value: '',
     key: 'zipCode',
+    placeHolder: 'Zip',
+    label: 'Zip',
     error: undefined,
     rule: 'required|max:10',
+    customErrors: {
+      required: 'The Zip field is required.',
+      max: 'The Zip is too long. Max length is :max.',
+    },
   },
   issuerWebsite: {
     value: '',
     key: 'issuerWebsite',
+    placeHolder: 'Website of Issuer',
+    label: 'Website of Issuer',
     error: undefined,
     rule: 'required|max:256',
+    customErrors: {
+      required: 'The Website of Issuer field is required.',
+      max: 'The Website of Issuer is too long. Max length is :max.',
+    },
   },
   companyName: {
     value: 'NextSeed US LLC',
     key: 'companyName',
+    placeHolder: 'Company Name',
+    label: 'Company Name',
     error: undefined,
     rule: 'required|max:150',
+    customErrors: {
+      required: 'The Company Name field is required.',
+      max: 'The Company Name is too long. Max length is :max.',
+    },
   },
   commissionCik: {
     value: '0001667892',
     key: 'commissionCik',
+    placeHolder: 'CIK Number of Intermediary',
+    label: 'CIK',
     error: undefined,
     rule: 'required|max:10',
+    customErrors: {
+      required: 'The CIK field is required.',
+      max: 'The CIK is too long. Max length is :max.',
+    },
   },
   commissionFileNumber: {
     value: '007-00023',
     key: 'commissionFileNumber',
+    placeHolder: 'Commission File Number',
+    label: 'Commission File Number',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The Commission File Number field is required.',
+    },
   },
   crdNumber: {
     value: '283225',
     key: 'crdNumber',
+    placeHolder: 'CRD Number',
+    label: 'CRD Number',
     error: undefined,
     rule: 'max:9',
+    customErrors: {
+      max: 'The CRD Number is too long. Max length is :max.',
+    },
   },
 };
 
 export const OFFERING_INFORMATION = {
   compensationAmount: {
     value: '',
+    placeHolder: 'Add text here',
+    label: 'Amount of compensation to be paid to the intermediary,' +
+      'whether as a dollar amount or a percentage of the offering amount, ' +
+      'or a good faith estimate if the exact amount is not available at the' +
+      'time of the filing, for conducting the offering, including the amount' +
+      'of referral and any other fees associated with the offering',
     key: 'compensationAmount',
     error: undefined,
     rule: 'required|max:256',
+    customErrors: {
+      required: 'This field is required',
+      max: 'This is too long. Max length is :max.',
+    },
   },
   financialInterest: {
     value: '',
+    placeHolder: 'Add text here',
+    label: 'Any other financial interest in the issuer held by the intermediary, ' +
+      'or any arrangement for the intermediary to acquire such an interest',
     key: 'financialInterest',
     error: undefined,
     rule: 'required|max:256',
+    customErrors: {
+      required: 'This field is required',
+      max: 'This is too long. Max length is :max.',
+    },
   },
   securityOfferedType: {
     value: '',
+    placeholder: 'Security Type',
+    label: 'Type of Security Offered',
     key: 'securityOfferedType',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The Type of Security Offered field is required',
+    },
   },
   securityOfferedOtherDesc: {
     value: '',
+    placeHolder: 'Other Description',
+    label: 'Other Description',
     key: 'securityOfferedOtherDesc',
     error: undefined,
     rule: 'max:256|required_if:securityOfferedType,Other',
+    customErrors: {
+      max: 'The Other Description is too long. Max length is :max.',
+      required_if: 'The Other Description field is required when Type of Security Offered is Other.',
+    },
   },
   noOfSecurityOffered: {
     value: '',
+    placeHolder: '0.00',
+    label: 'No. of securities offered',
     key: 'noOfSecurityOffered',
     error: undefined,
-    rule: 'required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|' +
-    'required_if:securityOfferedType,Preferred Stock|max:9999999999|numeric',
+    rule: 'numeric|required_if:securityOfferedType,Other|required_if:securityOfferedType,Common Stock|' +
+      'required_if:securityOfferedType,Preferred Stock|max:9999999999',
+    customErrors: {
+      numeric: 'Please provide numeric values.',
+      max: 'The No. of securities offered is too long. Max length is :max.',
+    },
   },
   price: {
     value: '',
+    placeHolder: '0.00000',
+    label: 'Price',
     key: 'price',
     error: undefined,
     rule: 'numeric|max:999999|regex:/[\\+\\-]?\\d{0,7}\\.\\d{5}/',
+    customErrors: {
+      numeric: 'Please provide numeric values.',
+    },
   },
   priceDeterminationMethod: {
     value: '',
+    placeHolder: '0.00',
+    label: 'Price (or Method for Determining Price)',
     key: 'priceDeterminationMethod',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The Price (or Method for Determining Price) field is required',
+    },
   },
   offeringAmount: {
     value: '',
+    placeHolder: '0.00',
+    label: 'Target Offering Amount',
     key: 'offeringAmount',
     error: undefined,
     rule: 'required|numeric|max:9999999|regex:/[\\+\\-]?\\d{0,7}\\.\\d\\d/',
+    customErrors: {
+      required: 'The Target Offering Amount field is required',
+      numeric: 'Please provide numeric values.',
+    },
   },
   overSubscriptionAccepted: {
     value: 'Y',
+    label: 'Yes',
+    values: [{ label: 'Yes', value: 'Y' }, { label: 'No', value: 'N' }],
     key: 'overSubscriptionAccepted',
     error: undefined,
     rule: 'required',
+    customErrors: {},
   },
   overSubscriptionAllocationType: {
     value: '',
+    placeHolder: 'Select options',
+    label: 'If yes, disclose how oversubscriptions will be allocated',
     key: 'overSubscriptionAllocationType',
     error: undefined,
     rule: 'required_if:overSubscriptionAccepted,Y',
+    customErrors: {
+      required_if: 'If yes, disclose how oversubscriptions will be allocated is required when Over subscriptions Accepted is Yes.',
+    },
   },
   descOverSubscription: {
     value: '',
+    placeHolder: 'Other Description',
+    label: 'Other Description',
     key: 'descOverSubscription',
     error: undefined,
     rule: 'required_if:overSubscriptionAllocationType,Other|max:256',
+    customErrors: {
+      required_if: 'The Other Description field is required when oversubscriptions will be allocated is Other.',
+    },
   },
   maximumOfferingAmount: {
     value: '',
+    placeHolder: '0.00',
+    label: 'Maximum Offering Amount (if different from Target Offering Amount)',
     key: 'maximumOfferingAmount',
     error: undefined,
     rule: 'required_if:overSubscriptionAccepted,Y|numeric|max:9999999|regex:/[\\+\\-]?\\d{0,7}\\.\\d\\d/',
+    customErrors: {
+      required_if: 'The Maximum Offering Amount (if different from Target Offering Amount) field is required when Over subscriptions Accepted is Yes.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   deadlineDate: {
     value: moment(),
+    placeHolder: 'Deadline Date',
+    label: 'Deadline Date',
     key: 'deadlineDate',
     error: undefined,
     rule: 'required',
+    customErrors: {
+      required: 'The Deadline Date field is required.',
+    },
   },
 };
 
@@ -323,133 +562,208 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     rule: 'required|numeric|max:9999999|min:0',
     key: 'currentEmployees',
     label: 'Current Number of Employees',
-
+    customErrors: {
+      required: 'The Current Number of Employees field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   totalAssetMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'totalAssetMostRecentFiscalYear',
-    label: 'Total Assets Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   totalAssetPriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'totalAssetPriorFiscalYear',
-    label: 'Total Assets Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   cashEquiMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'cashEquiMostRecentFiscalYear',
-    label: 'Cash and Cash Equivalents Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   cashEquiPriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'cashEquiPriorFiscalYear',
-    label: 'Cash and Cash Equivalents Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   actReceivedMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'actReceivedMostRecentFiscalYear',
-    label: 'Accounts Receivable Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   actReceivedPriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'actReceivedPriorFiscalYear',
-    label: 'Accounts Receivable Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   shortTermDebtMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'shortTermDebtMostRecentFiscalYear',
-    label: 'Short-term Debt Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   shortTermDebtPriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'shortTermDebtPriorFiscalYear',
-    label: 'Short-term Debt Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   longTermDebtMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'longTermDebtMostRecentFiscalYear',
-    label: 'Long-term Debt Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   longTermDebtPriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'longTermDebtPriorFiscalYear',
-    label: 'Long-term Debt Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   revenueMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'revenueMostRecentFiscalYear',
-    label: 'Revenue/Sales Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   revenuePriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'revenuePriorFiscalYear',
-    label: 'Revenue/Sales Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   costGoodsSoldMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'costGoodsSoldMostRecentFiscalYear',
-    label: 'Cost of Goods Sold Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   costGoodsSoldPriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'costGoodsSoldPriorFiscalYear',
-    label: 'Cost of Goods Sold Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   taxPaidMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'taxPaidMostRecentFiscalYear',
-    label: 'Taxes Paid Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   taxPaidPriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'taxPaidPriorFiscalYear',
-    label: 'Taxes Paid Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   netIncomeMostRecentFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'netIncomeMostRecentFiscalYear',
-    label: 'Net Income Most Recent Fiscal Year-end',
+    label: 'Most Recent Fiscal Year-end',
+    customErrors: {
+      required: 'The Most Recent Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   netIncomePriorFiscalYear: {
     value: '0.00',
     error: undefined,
     rule: 'required|numeric|max:99999999999999.99|regex:/[\\+\\-]?\\d{0,14}\\.\\d{2}/',
     key: 'netIncomePriorFiscalYear',
-    label: 'Net Income Prior Fiscal Year-end',
+    label: 'Prior Fiscal Year-end',
+    customErrors: {
+      required: 'The Prior Fiscal Year-end field is required.',
+      numeric: 'Please provide numeric values.',
+    },
   },
   issueJurisdictionSecuritiesOffering: {
     value: '',
@@ -457,6 +771,9 @@ export const ANNUAL_REPORT_REQUIREMENTS = {
     rule: 'required|max:53',
     key: 'issueJurisdictionSecuritiesOffering',
     label: 'Using the list below, select the jurisdictions in which the issuer intends to offer the securities',
+    customErrors: {
+      required: 'The States And Jurisdictions field is required.',
+    },
   },
 };
 
@@ -467,6 +784,9 @@ export const SIGNATURE = {
     rule: 'required|max:150',
     key: 'issuer',
     label: 'Issuer',
+    customErrors: {
+      required: 'The Issuer field is required.',
+    },
   },
   issuerSignature: {
     value: '',
@@ -474,6 +794,9 @@ export const SIGNATURE = {
     rule: 'required|max:150',
     key: 'issuerSignature',
     label: 'Signature',
+    customErrors: {
+      required: 'The Signature field is required.',
+    },
   },
   issuerTitle: {
     value: '',
@@ -481,6 +804,9 @@ export const SIGNATURE = {
     rule: 'required|max:256',
     key: 'issuerTitle',
     label: 'Title',
+    customErrors: {
+      required: 'The Title field is required.',
+    },
   },
   signaturePersons: [PERSONAL_SIGNATURE],
 };
@@ -904,6 +1230,7 @@ export const NEW_OFFERING_INFORMATION = {
 };
 
 export const XML_STATUSES = {
+  draft: 'DRAFT',
   created: 'CREATED',
   completed: 'COMPLETED',
   errored: null,
@@ -914,3 +1241,401 @@ export const EDGAR_URL = '/edgar/publish';
 export const XML_URL = '/edgar/primary-data';
 
 export const GRAPHQL = '/graphql';
+
+export const XML_SUBMISSION_TABS = [{
+  name: 'filer',
+  label: 'Filer Information',
+  errorClass: '',
+}, {
+  name: 'issuer',
+  label: 'Issuer Information',
+  errorClass: '',
+}, {
+  name: 'offering',
+  label: 'Offering Information',
+  errorClass: '',
+}, {
+  name: 'annual',
+  label: 'Annual Report Disclosure Requirements',
+  errorClass: '',
+}, {
+  name: 'signature',
+  label: 'Signature',
+  errorClass: '',
+}, {
+  name: 'doc',
+  label: 'Documents',
+  errorClass: '',
+}];
+
+export const LENDING_PARTNER_LENDIO = {
+  yrsInBusiness: [
+    {
+      key: 'NOT_IN_BUSINESS',
+      value: 'NOT_IN_BUSINESS',
+      text: 'Not yet in business, still in planning stages',
+    },
+    {
+      key: 'LOOKING_BUY_BUSINESS',
+      value: 'LOOKING_BUY_BUSINESS',
+      text: 'Looking to buy an existing business',
+    },
+    {
+      key: 'DURATION_0_2_MONTHS',
+      value: 'DURATION_0_2_MONTHS',
+      text: '0-2 months',
+    },
+    {
+      key: 'DURATION_3_5_MONTHS',
+      value: 'DURATION_3_5_MONTHS',
+      text: '3-5 months',
+    },
+    {
+      key: 'DURATION_6_11_MONTHS',
+      value: 'DURATION_6_11_MONTHS',
+      text: '6-11 months',
+    },
+    {
+      key: 'DURATION_1_2_YEARS',
+      value: 'DURATION_1_2_YEARS',
+      text: '1-2 years',
+    },
+    {
+      key: 'DURATION_2_3_YEARS',
+      value: 'DURATION_2_3_YEARS',
+      text: '2-3 years',
+    },
+    {
+      key: 'DURATION_3_5_YEARS',
+      value: 'DURATION_3_5_YEARS',
+      text: '3-5 years',
+    },
+    {
+      key: 'DURATION_5_OR_MORE_YEARS',
+      value: 'DURATION_5_OR_MORE_YEARS',
+      text: '5 or more years',
+    },
+  ],
+  avgSales: [
+    {
+      key: 'NO_REVENUES',
+      value: 'NO_REVENUES',
+      text: '$0, No revenues',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_1_4000',
+      value: 'AVERAGE_MONTHLY_SALES_1_4000',
+      text: '$1 - $4,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_4001_8000',
+      value: 'AVERAGE_MONTHLY_SALES_4001_8000',
+      text: '$4,001 - $8,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_8001_15000',
+      value: 'AVERAGE_MONTHLY_SALES_8001_15000',
+      text: '$8,001 - $15,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_15001_20000',
+      value: 'AVERAGE_MONTHLY_SALES_15001_20000',
+      text: '$15,001 - $20,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_20001_40000',
+      value: 'AVERAGE_MONTHLY_SALES_20001_40000',
+      text: '$20,001 - $40,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_40001_80000',
+      value: 'AVERAGE_MONTHLY_SALES_40001_80000',
+      text: '$40,001 - $80,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_80001_200000',
+      value: 'AVERAGE_MONTHLY_SALES_80001_200000',
+      text: '$80,001 - $200,000',
+    },
+    {
+      key: 'AVERAGE_MONTHLY_SALES_200001_400000',
+      value: 'AVERAGE_MONTHLY_SALES_200001_400000',
+      text: '$200,001 - $400,000',
+    },
+    {
+      key: 'GREATER_THAN_400000',
+      value: 'GREATER_THAN_400000',
+      text: 'More than $400,000',
+    },
+  ],
+  personalCreditRating: [
+    {
+      key: 'POOR',
+      value: 'POOR',
+      text: '(499 or Below) Poor',
+    },
+    {
+      key: 'NOT_SO_GOOD',
+      value: 'NOT_SO_GOOD',
+      text: '(500 - 599) Not so good',
+    },
+    {
+      key: 'OKAY',
+      value: 'OKAY',
+      text: '(600 - 649) Okay',
+    },
+    {
+      key: 'GOOD',
+      value: 'GOOD',
+      text: '(650 - 679) Good',
+    },
+    {
+      key: 'GREAT',
+      value: 'GREAT',
+      text: '(680 - 719) Great',
+    },
+    {
+      key: 'EXCELLENT',
+      value: 'EXCELLENT',
+      text: '(720 or Higher) Excellent',
+    },
+  ],
+  industry: [
+    {
+      key: 'ISTRATIVE_SUPPORT_SERVICES',
+      value: 'ISTRATIVE_SUPPORT_SERVICES',
+      text: 'Administrative and support services',
+    },
+    {
+      key: 'AGRICULTURE',
+      value: 'AGRICULTURE',
+      text: 'Agriculture',
+    },
+    {
+      key: 'ARTS_ENTERTAINMENT_RECREATION',
+      value: 'ARTS_ENTERTAINMENT_RECREATION',
+      text: 'Arts, entertainment, and recreation',
+    },
+    {
+      key: 'AUTOMOBILE_DEALERS',
+      value: 'AUTOMOBILE_DEALERS',
+      text: 'Automobile dealers',
+    },
+    {
+      key: 'AUTOMOTIVE_REPAIR_MAINTENANCE',
+      value: 'AUTOMOTIVE_REPAIR_MAINTENANCE',
+      text: 'Automotive repair and maintenance',
+    },
+    {
+      key: 'BUSINESS_SERVICES',
+      value: 'BUSINESS_SERVICES',
+      text: 'Business services',
+    },
+    {
+      key: 'CONSTRUCTION',
+      value: 'CONSTRUCTION',
+      text: 'Construction',
+    },
+    {
+      key: 'EDUCATIONAL_SERVICES',
+      value: 'EDUCATIONAL_SERVICES',
+      text: 'Educational services',
+    },
+    {
+      key: 'FINANCE_INSURANCE',
+      value: 'FINANCE_INSURANCE',
+      text: 'Finance and insurance',
+    },
+    {
+      key: 'FORESTRY_FISHING_HUNTING',
+      value: 'FORESTRY_FISHING_HUNTING',
+      text: 'Forestry, fishing, and hunting',
+    },
+    {
+      key: 'FREIGHT_TRUCKING',
+      value: 'FREIGHT_TRUCKING',
+      text: 'Freight trucking',
+    },
+    {
+      key: 'GAMBLING_INDUSTRIES',
+      value: 'GAMBLING_INDUSTRIES',
+      text: 'Gambling industries',
+    },
+    {
+      key: 'GAS_STATIONS',
+      value: 'GAS_STATIONS',
+      text: 'Gas stations',
+    },
+    {
+      key: 'GREENHOUSE_NURSERY_FLORICULTURE',
+      value: 'GREENHOUSE_NURSERY_FLORICULTURE',
+      text: 'Greenhouse, nursery, and floriculture',
+    },
+    {
+      key: 'HEALTHCARE_SOCIAL_ASSISTANCE',
+      value: 'HEALTHCARE_SOCIAL_ASSISTANCE',
+      text: 'Healthcare and social assistance',
+    },
+    {
+      key: 'HOTELS_TRAVEL_ACCOMODATIONS',
+      value: 'HOTELS_TRAVEL_ACCOMODATIONS',
+      text: 'Hotels and travel accomodations',
+    },
+    {
+      key: 'INFORMATION_TECHNOLOGY',
+      value: 'INFORMATION_TECHNOLOGY',
+      text: 'Information and technology',
+    },
+    {
+      key: 'LEGAL_SERVICES',
+      value: 'LEGAL_SERVICES',
+      text: 'Legal services',
+    },
+    {
+      key: 'MANAGEMENT_COMPANIES',
+      value: 'MANAGEMENT_COMPANIES',
+      text: 'Management of companies',
+    },
+    {
+      key: 'MANUFACTURING',
+      value: 'MANUFACTURING',
+      text: 'Manufacturing',
+    },
+    {
+      key: 'MINING1068',
+      value: 'MINING1068',
+      text: 'Mining',
+    },
+    {
+      key: 'NON_PROFIT_ORGANIZATIONS',
+      value: 'NON_PROFIT_ORGANIZATIONS',
+      text: 'Non-Profit organizations',
+    },
+    {
+      key: 'OTHER_SERVICES',
+      value: 'OTHER_SERVICES',
+      text: 'Other services',
+    },
+    {
+      key: 'PERSONAL_CARE_SERVICES',
+      value: 'PERSONAL_CARE_SERVICES',
+      text: 'Personal care services',
+    },
+    {
+      key: 'PHYSICIAN_DENTIST_HEALTH_PRACTITIONER',
+      value: 'PHYSICIAN_DENTIST_HEALTH_PRACTITIONER',
+      text: 'Physician, dentist, or health practitioner',
+    },
+    {
+      key: 'PUBLIC_ADMINISTRATION',
+      value: 'PUBLIC_ADMINISTRATION',
+      text: 'Public administration',
+    },
+    {
+      key: 'REAL_ESTATE',
+      value: 'REAL_ESTATE',
+      text: 'Real estate',
+    },
+    {
+      key: 'RELIGIOUS_INSTITUTIONS',
+      value: 'RELIGIOUS_INSTITUTIONS',
+      text: 'Religious institutions',
+    },
+    {
+      key: 'RENTAL_LEASING',
+      value: 'RENTAL_LEASING',
+      text: 'Rental and leasing',
+    },
+    {
+      key: 'RESTAURANTS_FOOD_SERVICES',
+      value: 'RESTAURANTS_FOOD_SERVICES',
+      text: 'Restaurants and food services',
+    },
+    {
+      key: 'RETAIL_STORES',
+      value: 'RETAIL_STORES',
+      text: 'Retail stores',
+    },
+    {
+      key: 'TRANSPORTATION',
+      value: 'TRANSPORTATION',
+      text: 'Transportation',
+    },
+    {
+      key: 'UTILITIES2',
+      value: 'UTILITIES2',
+      text: 'Utilities',
+    },
+    {
+      key: 'VETERINARIANS',
+      value: 'VETERINARIANS',
+      text: 'Veterinarians',
+    },
+    {
+      key: 'WAREHOUSING_STORAGE',
+      value: 'WAREHOUSING_STORAGE',
+      text: 'Warehousing and storage',
+    },
+    {
+      key: 'WASTE_MANAGEMENT_REMEDIATION_SERVICES',
+      value: 'WASTE_MANAGEMENT_REMEDIATION_SERVICES',
+      text: 'Waste management & remediation services',
+    },
+    {
+      key: 'WHOLESALE_TRADE',
+      value: 'WHOLESALE_TRADE',
+      text: 'Wholesale trade',
+    },
+    {
+      key: 'PROFESSIONAL_SCIENTIFIC_TECHNICAL_SERVICES',
+      value: 'PROFESSIONAL_SCIENTIFIC_TECHNICAL_SERVICES',
+      text: 'Professional, scientific, and technical services',
+    },
+  ],
+  raiseAmount: [
+    {
+      key: 'AMT_1_5000',
+      value: 'AMT_1_5000',
+      text: '$1 - $5,000',
+    },
+    {
+      key: 'AMT_5001_25000',
+      value: 'AMT_5001_25000',
+      text: '$5,001 - $25,000',
+    },
+    {
+      key: 'AMT_25001_50000',
+      value: 'AMT_25001_50000',
+      text: '$25,001 - $50,000',
+    },
+    {
+      key: 'AMT_50001_100000',
+      value: 'AMT_50001_100000',
+      text: '$50,001 - $100,000',
+    },
+    {
+      key: 'AMT_100001_250000',
+      value: 'AMT_100001_250000',
+      text: '$100,001 - $250,000',
+    },
+    {
+      key: 'AMT_250001_500000',
+      value: 'AMT_250001_500000',
+      text: '$250,001 - $500,000',
+    },
+    {
+      key: 'AMT_500001_1M',
+      value: 'AMT_500001_1M',
+      text: '$500,001 - $1M',
+    },
+    {
+      key: 'GREATER_THAN_1M',
+      value: 'GREATER_THAN_1M',
+      text: 'Over $1M',
+    },
+  ],
+};
+
+export const TARGETED_INVESTOR_IRR = {
+  OPPORTUNISTIC: 15, VALUE_ADD: 11, CORE_PLUS: 7, CORE: 5,
+};

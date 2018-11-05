@@ -24,7 +24,7 @@
 /* Sub Heading */
 @subHeadingDistance: @2px;
 @subHeadingFontSize: @relativeTiny;
-@subHeadingFontWeight: bold;
+@subHeadingFontWeight: @bold;
 @subHeadingTextTransform: uppercase;
 @subHeadingColor: '';
 
@@ -35,11 +35,11 @@
 /* Sub Header */
 @subHeaderMargin: 0em;
 @subHeaderLineHeight: 1.2em;
-@subHeaderColor: @mutedTextColor;
+@subHeaderColor: inherit;
 
 /* Icon */
 @iconOpacity: 1;
-@iconSize: 1.5em;
+@iconSize: 1em;
 @iconOffset: 0em;
 @iconMargin: 0.75rem;
 @iconAlignment: middle;
@@ -79,7 +79,7 @@
 @h1SubHeaderFontSize: @large;
 @h2SubHeaderFontSize: @large;
 @h3SubHeaderFontSize: @medium;
-@h4SubHeaderFontSize: @medium;
+@h4SubHeaderFontSize: 0.75em;
 @h5SubHeaderFontSize: @small;
 
 @hugeSubHeaderFontSize  : @h1SubHeaderFontSize;

@@ -7,3 +7,12 @@ export const LIST_LIMIT = 10;
 export const STATUSES = {
   deleted: 'DELETED',
 };
+
+export const UPLOADS_CONFIG = {
+  region: AWS_REGION || 'ap-south-1',
+  bucket: process.env.REACT_APP_UPLOADS_BUCKET,
+  accessKey: process.env.REACT_APP_UPLOADS_ACCESS_KEY,
+  secretKey: process.env.REACT_APP_UPLOADS_SECRET_KEY,
+};
+
+export const ASSETS_URL = `https://s3.amazonaws.com/${process.env.REACT_APP_UPLOADS_BUCKET}/assets/`;

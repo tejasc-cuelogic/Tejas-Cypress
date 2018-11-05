@@ -1,3 +1,40 @@
 /*******************************
          Theme Overrides
 *******************************/
+.ui.comments {
+    .comment {
+        &:first-child {
+            border-top: 0;
+        }
+        .author {
+            line-height: 24px;
+        }
+        .text {
+            line-height: 24px;
+            margin-bottom: 0;
+        }
+        .content {
+            position: relative;
+        }
+        .actions {
+            opacity: 1 !important;
+            a {
+                font-weight: @fontMedium;
+                line-height: 24px;
+            }
+        }
+        .ui.blue.label {
+            margin: 0 0 0 @10px;
+            vertical-align: top;
+        }
+    }
+    &.comments-modal {
+        .comment {
+            background: @nestedCommentBackground;
+            padding: @30px;
+            border-radius: 4px;
+        }
+    }
+} 
+
+

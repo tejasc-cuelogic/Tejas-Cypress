@@ -24,3 +24,11 @@ src/assets/semantic/*
 .eslintrc
 
 .env
+
+.env.local
+
+package-lock.json
+*.js.map
+
+# ignore vscode folder
+.vscode

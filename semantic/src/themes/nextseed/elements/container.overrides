@@ -1,391 +1,186 @@
 /*******************************
          Theme Overrides
 *******************************/
-
-.content-wrapper{
-	min-height:~"calc(100vh - 58px)";
+section{
+    &.banner { 
+        height:710px;
+        @media only screen and (max-width : @computerBreakpoint) {
+            height:400px;
+            padding-top: 80px;
+            padding-bottom: @30px;
+        }
+        @media only screen and (max-width : @largestMobileScreen){
+            height:380px;
+            margin-top:0px;
+            padding: 0;
+        }
+        background-position: top center;
+        padding-top:118px;
+        margin-top:-58px;
+        >.ui.container{
+            display: flex;
+            height: 100%;
+            flex-direction: column;
+            justify-content: flex-end;
+            .banner-caption {
+                flex-grow: 1;
+                display: flex;
+                justify-content: center;
+                flex-direction: column;
+                align-items: flex-start;
+                h1.ui.header{
+                    @media only screen and (max-width : @computerBreakpoint) {
+                        font-size: 38px;
+                        line-height: 46px;
+                    }
+                    span {
+                        margin-top: @14px;
+                        display: inline-block;
+                    }
+                }
+            }
+            .banner-meta {
+                align-self: baseline;
+                color: @neutral;
+                @media only screen and (max-width: @largestMobileScreen) {
+                    background: fade(@neutral-darkwhite, 90%);
+                    width: ~"calc(100% + "(@relative28px)~")";
+                    margin: 0 -@relative14px;
+                    padding: @relative14px;
+                }
+            }
+        }
+        &.home-banner{
+            background:url(../../assets/images/banners/home-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                background:url(../../assets/images/banners/home-banner-mobile.jpg) center center no-repeat / cover;
+            }
+        }
+        &.mission-banner{
+            background:url(../../assets/images/banners/mission-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                background:url(../../assets/images/banners/mission-banner-mobile.jpg) center center no-repeat / cover;
+            }
+        }
+        &.campaign-list-banner{
+            height:435px;
+            background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @computerBreakpoint) {
+                height:260px;
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                height:226px;
+                background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat / cover;
+            }
+        }
+        &.business-banner{
+            background:url(../../assets/images/banners/how-it-works-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                background:url(../../assets/images/banners/how-it-works-banner-mobile.jpg) center center no-repeat / cover;
+            }
+        }
+        &.invest-banner{
+            background:url(../../assets/images/banners/why-us-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @largestMobileScreen){
+                background:url(../../assets/images/banners/why-us-banner-mobile.jpg) center center no-repeat / cover;
+            }
+        }
+        &.resources-banner {
+            height:435px;
+            background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat / cover;  
+            @media only screen and (max-width : @computerBreakpoint) {
+                height:260px;
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                height: 380px; 
+                background:url(../../assets/images/banners/resources-banner-mobile.jpg) center center no-repeat / cover;
+            }
+        }
+        &.edu-center-business-banner {
+            height:435px;
+            background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @computerBreakpoint) {
+                height:260px;
+            }
+        }
+        &.edu-center-investor-banner {
+            height:435px;
+            background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat / cover;
+            @media only screen and (max-width : @computerBreakpoint) {
+                height:260px;
+            }
+        }
+        &.account-types {
+            background:url(../../assets/images/investors/account_types_mobile.jpg) center center no-repeat / cover;
+        }
+        &.security {
+            background:url(../../assets/images/investors/security_mobile.jpg) center center no-repeat / cover;
+        }
+        &.track {
+            background:url(../../assets/images/investors/laptop_mobile.png) center center no-repeat / contain;
+            height: 160px;
+        }
+        &.process {
+            background:url(../../assets/images/business/process_mobile.jpg) center center no-repeat / cover;
+        }
+        &.all-inclusive {
+            background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat / cover;
+        }
+    }
+    &.modalbg-banner{
+        height:100vh;
+        margin-top:-58px;
+        background:@neutral-offdark;
+        position:relative;
+        z-index:101;
+    }
 }
-.ui.segment.vertical{
-    &.content{
-        padding:50px 0;
-		min-height:~"calc(100vh - 344px)";
-		&.banner-img{
-			background:url('@{imagePath}/banner_raise.jpg') center center no-repeat;
-			background-size:cover;
-		}
-	}
+.public-pusher>section.banner{
+    @media only screen and (max-width : @largestMobileScreen){
+        margin-top:-58px;
+        &.funding-options, &.how-it-works, &.track {
+            height: auto;
+            margin-top: 0;
+        }
+        &.track{
+            background: none;
+        }
+    }
 }
-.content-spacer{
-	position:relative;
-	padding:@52px @70px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-		padding:@20px;
+// business and invest pages
+.slide-down{
+    min-height:~"calc(100vh - 98px)";
+	&.process{
+        background:url(../../assets/images/business/process.png) 0% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
 	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
-		padding:@20px @10px;
-	}
-}
-.overlay{
-	position:absolute;
-	top:0;
-	right:0;
-	bottom:0;
-	left:0;
-	background-color:fade(@primary-text, 30%);
-	transform:scale(0);
-	&.editing{
-		transform:scale(1);
-		z-index:1;
-	}
-}
-.webcontent-spacer{
-	padding:@40px @70px @14px;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-		padding:@20px;
-	}
-	@media only screen and (max-width : (@tabletBreakpoint - 1px)){
-		padding:@20px @10px;
-	}
-}
-
-div.login-form {
-	height: 100%;
-	.column{
-		max-width:380px;
-	}
-	h1.header{
-		margin-bottom:@20px;
-		>span{
-			font-size:@18px;
-			color:@tertiary-text;
-		}
-	}
-	.note{
-		text-align:center;
-		color:@tertiary-text;
-	}
-	ul.error-messages{
-		list-style-type:none;
-		padding:0;
-		text-align:left;
-	}
-}
-.pull-left{
-	float:left !important;
-}
-.pull-right{
-	float:right !important;
-}
-.left-align{
-	text-align:left !important;
-}
-.right-align{
-	text-align:right !important;
-}
-.center-align{
-	text-align:center !important;
-}
-
-//	Admin Page Content Styles	//
-
-//	Page Header Styles
-.page-header-section{
-	min-height:132px;
-	background-color:@dark-bg-color;
-	position:relative;
-	@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-		min-height:auto;
-	}
-	h1{
-		// @include fontBold;
-		color:@inverse-text;
-		font-size:@30px;
-		// font-weight: bold;
-		a.back-link{
-			position:absolute;
-			left:-35px;
-			color:@theme-primary;
-			> i.icon, i.icons{
-				font-size:@28px;
-			}
-			&:hover, &:active, &:focus{
-				color:darken(@theme-primary, 8%);
-			}
-		}
-	}
-	p{
-		font-family:@regularFont;
-		color:@inverse-text;
-	}
-	span.filter-count{
-		height:19px;
-		min-width:19px;
-		padding:0 4px;
-		margin-right:1rem;
-		background:@theme-primary;
-		display:inline-block;
-		font-size:@11px;
-		line-height:@19px;
-		font-weight:700;
-		color:@dark-bg-color;
-		text-align:center;
-		border-radius:3px;
-	}
-	.ui.button.link-button{
-		padding:@11px 0;
-	}
-	.search-filters{
-		background-color:@secondary-text;
-		&.webcontent-spacer{
-			padding:@14px @70px;
-			@media only screen and (max-width : (@largeMonitorBreakpoint - 1px)){
-				padding:@7px @20px @14px;
-			}
-			@media only screen and (max-width : (@tabletBreakpoint - 1px)){
-				padding:@7px @10px @14px;
-			}
-		}
-		h5{
-			// font-size:0.857142em;
-			font-family:@pageFont;
-			color:@quaternary-text;
-			margin:0 0 @7px;
-		}
-	}
-	.sticky-notification{
-		position:fixed;
-		width:50%;
-		right:5rem;
-		top:3rem;
-		z-index:9;
-	}
-	.actions{
-		font-size:@20px;
-		margin-left:@20px;
-		display:inline-block;
-		vertical-align:middle;
-	}
-}
-// .actions{
-// 	font-size:@16px;
-// 	a{
-// 		color:@inverse-secondary-text;
-// 		&:hover{
-// 			color:lighten(@inverse-secondary-text, 15%);
-// 		}
-// 		&.danger{
-// 			color:@highlight-primary;
-// 			&:hover{
-// 				color:darken(@highlight-primary, 15%);
-// 			}
-// 		}
-// 	}
-// }
-
-//	Notification panel
-.notification-panel{
-	width:330px;
-    height:~"calc(100vh - 58px)";
-	padding:@20px 0 @7px @20px;
-	background:@darken-bg-color;
-	color:@inverse-text;
-	overflow:auto;
-    position:fixed;
-    right:-350px;
-    top:0;
-	z-index:2;
-	transition:all 500ms ease-in-out;
-	&.slide-in{
-		right:0px;
-	}
-	h3{
-		margin-bottom:1rem;
-		letter-spacing:1px;
-	}
-	p.title{
-		font-size:@13px;
-		color:@inverse-secondary-text;
-	}
-}
-.notification-box{
-	padding:@14px;
-	margin-bottom:@18px;
-	border-radius:5px 0 0 5px;
-	background-color:@dark-bg-color;
-	box-shadow:0 0 20px fade(@fullBlack, 32%);
-	.timestamp{
-		font-size:@13px;
-		color:@inverse-secondary-text;
-	}
-	h4.amount{
-		font-size:@20px;
-		font-weight:900;
-		color:@theme-primary;
-	}
-}
-
-//	Web Footer Style
-.ui.segment,
-.ui.primary.segment{
-	&.inverted{
-		&.footer{
-			padding:@28px;
-			background-color:@darken-bg-color;
-		}
-	}
-}
-.footer{
-	.ui.header{
-		font-weight:400;
-	}
-}
-
-//	Account type symbols
-.account-type{
-	display:inline-block;
-	font-family:@pageFont;
-	text-align:center;
-	line-height:1.5;
-	border-radius:4px;
-	border-style:solid;
-	border-color:@quaternary-text;
-	color:@quaternary-text;
-	position:relative;
-	+ .account-type{
-		margin-left:@6px;
-	}
-	&.accredited:after{
-		content:"A";
-		display:block;
-		border-radius:10px;
-		text-align:center;
-		color:@inverse-text;
-		position:absolute;
-	}
-	&.admin{
-		color:@fullBlack;
-		border-color:@fullBlack;
-		&.accredited:after{
-			background-color:@fullBlack;
-		}
-	}
-	&.full{
-		color:@highlight-tertiary;
-		border-color:@highlight-tertiary;
-		&.accredited:after{
-			background-color:@highlight-tertiary;
-		}
-	}
-	&.partial{
-		color:@highlight-secondary;
-		border-color:@highlight-secondary;
-		&.accredited:after{
-			background-color:@highlight-secondary;
-		}
-	}
-	&.locked{
-		color:@highlight-primary;
-		border-color:@highlight-primary;
-		&.accredited:after{
-			background-color:@highlight-primary;
-		}
-	}
-	&.small{
-		width:24px;
-		height:24px;
-		font-size:@15px;
-		border-width:1px;
-		&.accredited:after{
-			font-size:@8px;
-			width:13px;
-			height:13px;
-			top:-6px;
-			right:-6px;
-		}
-	}
-	&.medium{
-		width:36px;
-		height:36px;
-		font-size:@22px;
-		border-width:2px;
-		&.accredited:after{
-			font-size:@11px;
-			width:16px;
-			height:16px;
-			top:-8px;
-			right:-8px;
-		}
-	}
-}
-
-//	Toast message Styles
-.toast-message{
-	> div{
-		min-height:54px;
-		padding:0.7em 1em;
-		font-family:@regularFont;
-		border-radius:@absoluteBorderRadius;
-		button{
-			font-size:@12px;
-			font-weight:400;
-		}
-		&.success{
-			background-color:lighten(@highlight-tertiary, 5%);
-		}
-		&.error{
-			background-color:lighten(@highlight-primary, 5%);
-		}
-		&.info{
-			background-color:lighten(@highlight-quaternary, 5%);
-		}
-		&.warning{
-			background-color:lighten(@highlight-secondary, 5%);
-		}
-	}
-}
-.field-error-message{
-	background-color:@negativeBackgroundColor;
-	border:@negativeBorderColor 1px solid;
-	color:@negativeTextColor;
-	border-radius:@4px;
-	max-height: 100px;
-	overflow-y: auto;
-	position: fixed;
-	padding: @10px;
-    display: inline-block;
-	left: 50%;
-	top: 10px;
-	z-index:99;
-    transform: translate(-50%,0);
-}
-a.disabled, a.disabled:hover, a.disabled:focus{
-	cursor:default;
-	opacity:.45 !important;
-	pointer-events:none !important;
-}
-//	Meta Data
-.meta-data{
-	font-family:@regularFont;
-	font-size:@13px;
-	font-weight:400;
-	color:@quaternary-text;
-	margin-left:@40px;
-	> span + span{
-		margin-left:@40px;
-	}
-}
-.full-account{
-	color:@highlight-tertiary;
-}
-
-//	Check List
-.check-list{
-	.item{
-		i.icon{
-			color:@border-color;
-			&.check.circle{
-				color:@theme-primary;
-			}
-		}
-	}
+	&.all-inclusive{
+        background:url(../../assets/images/business/inclusive.png) 100% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
+    }
+    &.account-types {
+        background:url(../../assets/images/investors/account_types.png) 100% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
+    } 
+    &.security{
+        background:url(../../assets/images/investors/security.png) 0% center no-repeat;
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
+    } 
+    &.track{
+        background:url(../../assets/images/investors/laptop.png) 100% center no-repeat;
+        @media only screen and (min-width: @tabletBreakpoint) and (max-width: @largestTabletScreen ) {
+            background-size: contain;
+        }
+        @media only screen and (max-width : @largestMobileScreen){
+            background:none;
+        }
+    } 
 }

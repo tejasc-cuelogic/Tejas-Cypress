@@ -1,27 +1,46 @@
 /*******************************
          Theme Overrides
 *******************************/
+//  Public page Starts
+.ui.button{
+    &:hover{
+        box-shadow:@buttonHoverShadow;
+    }
+    &.basic {
+        border: 1px solid @thumbBackground;
+        box-shadow: none !important;
+    }
+}
+.offering-side-menu {
+    // .ui.secondary.button {
+    //     margin: @20px auto 0;
+    // }
+    @media only screen and (min-width : @tabletBreakpoint){
+        .ui.buttons{
+            padding:@20px @26px @20px @16px;
+            position: fixed;
+            width: 280px;
+            bottom: 0;
+            background-color: @neutral;
+        }
+    }
+    @media only screen and (max-width : @largestMobileScreen){
+        .ui.buttons{
+            padding-right:@10px;
+        }
+    }
+    .ui.compact.button {
+        padding: @10px;
+    }
+}
+//  Public Page Ends
+
+
 //  Buttons style CSS
 .ui{
     &.button, &.buttons .button{
-        text-transform:uppercase;
-        // font-weight:500;
-        // letter-spacing:1px;
-        // text-transform:uppercase;
-        // &.basic{
-        //     font-weight:500;
-        // }
-        &.rounded{
-            border-radius:20px;
-        }
-        &.green{
-            background-color:@theme-primary;
-            &:hover, &:focus, &:active{
-                background-color:darken(@theme-primary, 8%);
-            }
-        }
         + .button{
-            margin-left:@10px;
+            margin-left:@10px !important;
         }
         &.link-button{
             padding:0;
@@ -30,16 +49,19 @@
             &:hover, &:focus, &:active{
                 box-shadow:none !important;
             }
-            &.basic{
-                color:@quaternary-text !important;
-                &:hover, &:focus, &:active{
-                    color:lighten(@quaternary-text, 13%) !important;
-                }
+            &.padded{
+                padding:@14px @21px;
             }
             &.green{
-                color:@theme-primary;
+                color:@primary-one;
                 &:hover, &:focus, &:active{
-                    color:darken(@theme-primary, 8%);
+                    color:@primary-one;
+                }
+            }
+            &.blue{
+                color:@primary-two;
+                &:hover, &:focus, &:active{
+                    color:@primary-two;
                 }
             }
             &.red{
@@ -48,31 +70,130 @@
                     color:darken(@highlight-primary, 10%);
                 }
             }
-        }
-    }
-    &.inverted{
-        &.button, &.buttons .button{
-            text-transform:none;
-        }
-        &.red.buttons .button, &.red.button{
-            color:@highlight-primary;
-            box-shadow: 0px 0px 0px @invertedBorderSize @highlight-primary inset !important;
-            &:hover, &:focus, &:active, &.active{
-                background-color:@highlight-primary;
+            &.black{
+                color:@neutral;
+                &:hover, &:focus, &:active{
+                    text-decoration: underline;
+                }
+            }
+            &.grey{
+                font-weight:@normal;
+                color:@neutral-offdark;
+                text-decoration:none !important;
+                &:hover, &:active, &.active{
+                    color:@neutral-middark;
+                }
+            }
+            &.icon .icon {
+                margin-right: 5px!important;
             }
         }
-        &.green.buttons .button, &.green.button{
-            color:@theme-primary;
-            box-shadow: 0px 0px 0px @invertedBorderSize @theme-primary inset !important;
-            &:hover, &:focus, &:active, &.active{
-                background-color:@theme-primary;
+        &.ghost-button{
+            background-color:transparent;
+            box-shadow:none;
+            &.tiny{
+                font-size:@13px;
+            }
+            &.mini{
+                font-size:@14px;
+            }
+            &.mini, &.tiny{
+                padding:0.5em 1em;
+            }
+            &.green{
+                color:@primary-one;
+                &:hover, &:focus, &:active{
+                    color:@white;
+                    background-color:@primary-one;
+                }
+            }
+            &.red{
+                color:@highlight-primary;
+                &:hover, &:focus, &:active{
+                    color:@white;
+                    background-color:@highlight-primary;
+                }
+            }
+            &.violet{
+                color:@violet;
+                &:hover, &:focus, &:active{
+                    color:darken(@violet, 10%);
+                    background-color:transparent;
+                }
+            }
+        }
+        &.time-stamp{
+            background-color:transparent;
+            box-shadow:none !important;
+            color:@neutral;
+            cursor:default;
+            &:first-child{
+                padding-left:0;
+            }
+            &:last-child{
+                padding-right:0;
+            }
+            &.note {
+                font-weight: @normal;
             }
         }
     }
-    &.red.button, &.red.buttons .button{
-        background-color:@highlight-primary;
-        &:hover, &:focus, &:active{
-            background-color:darken(desaturate(spin(@highlight-primary, 0.0997), 7.0155), 4.9020);
+    &.vertical.buttons{
+        .button{
+            + .button{
+                margin:@7px 0 0 0 !important;
+            }
+        }
+        &.time-stamp .time-stamp{
+            padding:@14px 0;
+            text-align:left;
+        }
+    }
+}
+
+.ui.button, .ui.buttons .button{
+    &.relaxed{
+        padding-left:@42px;
+        padding-right:@42px;
+        &.very{
+            padding-left:@64px;
+            padding-right:@64px;
+        }
+    }
+}
+
+.ui.buttons{
+    .ui.button{
+        border-radius:6px;
+    }
+}
+
+.ui.button.multistep__btn{
+    background:@white;
+    color:@primary-one;
+    letter-spacing:0;
+    box-shadow:0 0 16px 2px fade(@fullBlack, 15%) !important;
+    margin:0;
+    position:absolute;
+    top:50%;
+    &.disabled{
+        background:@border-light;
+        color:@border-color;
+        opacity:1 !important;
+    }
+    >.icon{
+        width:auto;
+    }
+    &.prev{
+        left:0;
+        transform:translate(-50%, -50%);
+    }
+    &.next{
+        right:0;
+        transform:translate(50%, -50%);
+        &.active{
+            background:@primary-one;
+            color:@white;
         }
     }
 }

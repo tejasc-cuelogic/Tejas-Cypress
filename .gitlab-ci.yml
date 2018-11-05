@@ -5,38 +5,25 @@ variables:
 
 stages:
   - build
+  - version
   - deploy
   - cleanup
-
-#---------------------------------Review----------------------------------------  
-#Building code
-build:review:
-  cache:
-    paths:
-    - node_modules/
-  only:
-    refs:
-      - branches
-  except:
-    - master
-    - develop
-    - qa
+#---------------------------------Anchors--------------------------------------
+.build_template: &build_definition
   tags:
     - ns-client
   stage: build
-  script:
-    - bash scripts/cicd/s3BucketCreationScript.sh ${CI_COMMIT_REF_SLUG} us-east-1
-    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 dev
-    - npm install
-    - npm run build
-
   artifacts:
     paths:
     - build/
-    - scripts/cicd/
     expire_in: 1 day
 
-deploy:review:
+.deploy_template: &deploy_defination
+  tags:
+    - ns-client
+  stage: deploy
+
+.review_template: &review_defination
   only:
     refs:
       - branches
@@ -44,155 +31,205 @@ deploy:review:
     - master
     - develop
     - qa
-  environment:
-    name: $CI_COMMIT_REF_NAME
-    url: http://$CI_COMMIT_REF_SLUG.s3-website-us-east-1.amazonaws.com
-    on_stop: delete:review
+    - demo
   tags:
     - ns-client
+
+.before_script_template: &before_script_defination
+  before_script:
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
+    
+    
+#---------------------------------Review----------------------------------------  
+#Building code
+build:review:
+  <<: *build_definition
+  <<: *review_defination
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+    - node_modules/
+  <<: *before_script_defination
+  script:
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
+    - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
+    - sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME
+    - npm install
+    - npm run build 
+  
+#Deploying code to s3 bucket
+deploy:review:
+  <<: *review_defination
   stage: deploy
+  environment:
+    name: $CI_COMMIT_REF_NAME
+    url: http://$CI_COMMIT_REF_SLUG.s3-website-$REGION.amazonaws.com
+    on_stop: delete:review
   script: 
-    - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://${CI_COMMIT_REF_SLUG}/ --recursive
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - sh deployApp.sh $CI_COMMIT_REF_SLUG
   dependencies:
     - build:review
 
+#Deleting S3 bucket
 delete:review:
-  only:
-    refs:
-      - branches
-  except:
-    - master
-    - develop
-    - qa
+  <<: *review_defination
   stage: deploy
   variables:
     GIT_STRATEGY: none
-  tags:
-    - ns-client
   script:
-    - chmod +x scripts/cicd/emptyBucket.py 
-    - python scripts/cicd/emptyBucket.py -b ${CI_COMMIT_REF_SLUG}
-    - aws s3api delete-bucket --bucket ${CI_COMMIT_REF_SLUG} --region us-east-1
+    - aws s3 rb s3://$CI_COMMIT_REF_SLUG --force  
   when: manual
   environment:
     name: $CI_COMMIT_REF_NAME
     action: stop
-  
-
+  dependencies: []
+ 
 #---------------------------------Dev-------------------------------------------
 
 #Building code
 build:dev:
-  cache:
-    paths:
-    - node_modules/
+  <<: *build_definition
+  only:
+    refs:
+      - develop
+  <<: *before_script_defination
+  script:
+    - sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME
+    - npm install
+    - npm run build
+
+#Bump version code to patch 
+version:dev:
   only:
     refs:
       - develop
   tags:
     - ns-client
-  stage: build
-  script:
-    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 dev
-    - npm install
-    - npm run build
-  artifacts:
-    paths:
-    - build/
-    expire_in: 1 day
+  stage: version
+  script: 
+    # Make a folder for the changelog utility
+    - mkdir changelog && cd changelog
+    # Clone the changelog.js file from the ops repo
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fchangelog%2Findex%2Ejs/raw?ref=master > index.js"
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fchangelog%2Fpackage%2Ejson/raw?ref=master > package.json"
+    # Install conventional-changelog-cli for CHANGELOG.md generation
+    - npm i && cd ..
+    # Config git to avoid first usage questions. Set the identity
+    - git config --global user.email ${CI_USER_EMAIL} && git config --global user.name ${CI_USER_NAME}
+    # Fetch existing tags
+    - git fetch --tags
+    # Create/update the CHANGELOG.md file
+    - node ./changelog/index.js --preset angular --infile CHANGELOG.md --same-file --release-count 0
+    # Stage the changes 
+    - git add CHANGELOG.md
+    # Commit the changes
+    - git commit -m "Updated CHANGELOG.md [skip ci]"
+    # Push the changes back to the develop branch
+    - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
+  dependencies:
+    - build:dev
 
 #Deploying code to s3 bucket
 deploy:dev:
+  <<: *deploy_defination
   only:
     refs:
       - develop
   environment:
     name: dev
-    url:  http://dev.nextseed.qa.s3-website-us-east-1.amazonaws.com
-  tags:
-    - ns-client
-  stage: deploy
+    url: http://$DEV_URL
   script: 
-    - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://dev.nextseed.qa/ --recursive
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - sh deployApp.sh $DEV_URL
   dependencies:
     - build:dev
+
+
 
 #---------------------------------Qa--------------------------------------------
 
 #Building code
 build:qa:
-  cache:
-    paths:
-    - node_modules/
+  <<: *build_definition
   only:
     refs:
       - qa
-  tags:
-    - ns-client
-  stage: build
-  script: 
-    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 qa
+  <<: *before_script_defination
+  script:
+    - sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME
     - npm install
-    - npm run build
-  artifacts:
-    paths:
-    - build/
-    expire_in: 1 day
+    - npm run build  
 
 #Deploying code to s3 bucket
 deploy:qa:
+  <<: *deploy_defination
   only:
     refs:
       - qa
   environment:
     name: qa
-    url:  http://qa.nextseed.qa.s3-website-us-east-1.amazonaws.com
-  tags:
-    - ns-client
-  stage: deploy
+    url: http://$QA_URL
   script: 
-    - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://qa.nextseed.qa/ --recursive
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - sh deployApp.sh $QA_URL
   dependencies:
     - build:qa
+
+#---------------------------------Demo--------------------------------------------
+
+#Building code
+build:demo:
+  <<: *build_definition
+  only:
+    refs:
+      - demo
+  <<: *before_script_defination
+  script:
+    - sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME
+    - npm install
+    - npm run build  
+
+#Deploying code to s3 bucket
+deploy:demo:
+  <<: *deploy_defination
+  only:
+    refs:
+      - demo
+  environment:
+    name: demo
+    url: http://$DEMO_URL
+  script: 
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - sh deployApp.sh $DEMO_URL
+  dependencies:
+    - build:demo
 
 #---------------------------------Production------------------------------------
 
 #Building code
 build:prod:
-  cache:
-    paths:
-    - node_modules/
+  <<: *build_definition
   only:
     refs:
       - master
-  tags:
-    - ns-client
-  stage: build
+  <<: *before_script_defination
   script: 
-    - bash scripts/cicd/setEnvironmentVariables.sh us-east-1 prod
+    - sh setEnvironmentVariables.sh $REGION prod $CI_COMMIT_REF_NAME
     - npm install
     - npm run build
-  artifacts:
-    paths:
-    - build/
-    expire_in: 1 day
-
 #Deploying code to s3 bucket
 deploy:prod:
+  <<: *deploy_defination
   only:
     refs:
       - master
   environment:
     name: prod
-    url:  http://ns-client-prod.s3-website-us-east-1.amazonaws.com
-  tags:
-    - ns-client
-  stage: deploy
+    url: http://$PROD_URL
   script: 
-    - echo "deploy to s3 bucket"
-    - aws s3 cp build/ s3://ns-client-prod/ --recursive
+    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - sh deployApp.sh ns-client-prod
   dependencies:
     - build:prod

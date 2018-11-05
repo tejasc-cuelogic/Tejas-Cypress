@@ -1,98 +1,103 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Sidebar, Menu, Icon, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
+import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
+import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
-import uiStore from '../../stores/uiStore';
-import Randavatar from './../../components/common/Randavatar';
+import { SidebarNav, GetNavItem } from './SidebarNav';
+import { UserAvatar, Logo } from '../shared';
+import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
 @inject('uiStore')
 @observer
 class SidebarLeftPush extends Component {
-  toggleVisibility = () => uiStore.updateLayoutState('leftPanel');
-
+  toggle = () => this.props.uiStore.updateLayoutState('leftPanel');
+  toggleMobile = () => this.props.uiStore.updateLayoutState('leftPanelMobile');
   render() {
-    const sidebarItems = [
-      { icon: 'block layout', displayName: 'Home', to: 'dashboard' },
-      { icon: 'gift', displayName: 'Bonus Rewards Fulfillment', to: 'bonus-reward-fulfillment' },
-      { icon: 'users', displayName: 'User Management', to: 'users' },
-      { icon: 'mail', displayName: 'Messages', to: 'messages' },
-      { icon: 'money', displayName: 'Banking', to: 'banking' },
-      { icon: 'settings', displayName: 'Settings', to: 'settings' },
-    ];
-
+    const { layoutState, showFireworkAnimation } = this.props.uiStore;
     return (
-      <Sidebar.Pushable>
-        <Sidebar as={Menu} animation="push" width="thin" visible={uiStore.layoutState.leftPanel} icon="labeled" vertical inverted>
-          <div className="user-picture">
-            <Randavatar name={this.props.UserInfo.fullname} avatarKey={this.props.UserInfo.avatarKey} size="small" />
-            <h2>{this.props.UserInfo.fullname}</h2>
-            <h3>Regular User</h3>
-          </div>
-          {
-            sidebarItems.map(item => (
-              <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>
-                <Icon name={item.icon} />
-                <span>{item.displayName}</span>
-              </Menu.Item>
-            ))
-          }
-          <Button onClick={this.toggleVisibility} className="item collapseIcon">
-            <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
-            <span>Collapse</span>
-          </Button>
-        </Sidebar>
-        <Sidebar.Pusher>
-          {this.props.children}
-        </Sidebar.Pusher>
-        <NotificationPanel status={uiStore.layoutState.notificationPanel} />
-      </Sidebar.Pushable>
-      //  BELOW CODE IS FOR RESPONSIVE MENU
-      // <div>
-      //   <Responsive minWidth={992}>
-      //   </Responsive>
-      //   <Responsive maxWidth={991}>
-      //     <Button onClick={this.toggleVisibility} className="item collapseIcon pull-right">
-      //       <i className={`angle ${(uiStore.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
-      //       <span>Collapse</span>
-      //     </Button>
-      //     <Sidebar.Pushable>
-      //       <Sidebar
-      //         as={Menu}
-      //         animation="overlay"
-      //         width="thin"
-      //         visible={uiStore.layoutState.leftPanel}
-      //         icon="labeled"
-      //         vertical
-      //         inverted
-      //       >
-      //         <div className="user-picture">
-      //           <Randavatar
-      //             name={this.props.UserInfo.fullname}
-      //             avatarKey={this.props.UserInfo.avatarKey}
-      //             size="small"
-      //           />
-      //           <h2>{this.props.UserInfo.fullname}</h2>
-      //           <h3>Mobile User</h3>
-      //         </div>
-      //         {
-      //           sidebarItems.map(item => (
-      //             <Menu.Item key={item.to} name="home" as={NavLink} to={`/app/${item.to}`}>
-      //               <Icon name={item.icon} />
-      //               <span>{item.displayName}</span>
-      //             </Menu.Item>
-      //           ))
-      //         }
-      //       </Sidebar>
-      //       <Sidebar.Pusher>
-      //         {this.props.children}
-      //       </Sidebar.Pusher>
-      //       <NotificationPanel status={uiStore.layoutState.notificationPanel} />
-      //     </Sidebar.Pushable>
-      //   </Responsive>
-      // </div>
+      <Aux>
+        {showFireworkAnimation &&
+        <FireworksAnimation />
+        }
+        <Responsive minWidth={1200}>
+          <MySidebar layoutState={layoutState} toggle={this.toggle} desktop {...this.props} />
+        </Responsive>
+        <Responsive maxWidth={1199}>
+          <MySidebar layoutState={layoutState} toggle={this.toggleMobile} mobile {...this.props} />
+        </Responsive>
+      </Aux>
     );
   }
 }
-
 export default SidebarLeftPush;
+
+const MySidebar = observer(props => (
+  <Sidebar.Pushable>
+    {!props.match.url.includes('/business-application') ? (
+      <Aux>
+        <Sidebar
+          as={Menu}
+          animation={props.desktop ? 'push' : 'overlay'}
+          width="thin"
+          visible={
+            props.desktop ? props.layoutState.leftPanel : props.layoutState.leftPanelMobile
+          }
+          icon
+          vertical
+          inverted={(props.UserInfo.roles[0] !== 'investor')}
+          className={props.UserInfo.roles[0]}
+        >
+          <Scrollbars
+            className="ns-scrollbar"
+            renderTrackVertical={p => <div {...p} className="track-vertical" />}
+            renderThumbVertical={p => <div {...p} className="thumb-vertical" />}
+            renderTrackHorizontal={p => <div {...p} className="track-horizontal" />}
+            renderThumbHorizontal={p => <div {...p} className="thumb-horizontal" />}
+            renderView={p => <div {...p} className="view" />}
+          >
+            <Link to="/">
+              <Logo
+                className="logo"
+                dataSrc={((props.layoutState.leftPanel) ?
+                  (props.UserInfo.roles[0] !== 'investor' ? 'LogoWhiteGreen' : 'LogoColor') :
+                  'LogoSmall')}
+              />
+            </Link>
+            {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
+            <div className="user-picture">
+              <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
+              <h2>{props.UserInfo.fullname}</h2>
+              {GetNavItem('profile-settings', props.UserInfo.roles)}
+            </div>
+            <SidebarNav handleLogOut={props.handleLogOut} roles={props.UserInfo.roles} />
+          </Scrollbars>
+        </Sidebar>
+        {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
+          props.signupStatus && props.signupStatus.activeAccounts.length > 0 &&
+          !props.signupStatus.finalStatus &&
+          <Link className="add-account" to="/app/summary/account-creation">
+            <Icon name="add circle" />
+            <span>Add New Account</span>
+          </Link>
+        }
+        {props.desktop &&
+          <Button onClick={props.toggle} className="item collapseIcon">
+            <i className={`angle ${(props.layoutState.leftPanel) ? 'left' : 'right'} icon`} />
+            <span>Collapse</span>
+          </Button>
+        }
+      </Aux>
+    ) : <SidebarNav roles={props.UserInfo.roles} onlyMount />
+    }
+    <Sidebar.Pusher
+      className={`${props.match.url.includes('/business-application') ?
+        'business-application' : ''} ${props.uiStore.devBanner ? 'banner' : ''}`}
+    >
+      {props.mobile && <Icon onClick={props.toggle} className="hamburger content" />}
+      {props.children}
+    </Sidebar.Pusher>
+    <NotificationPanel status={props.layoutState.notificationPanel} />
+  </Sidebar.Pushable>
+));
