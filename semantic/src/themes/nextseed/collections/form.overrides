@@ -166,6 +166,25 @@
             margin:0 !important;
         }
     }
+    .button-radio .fields.vertical{
+        flex-direction:column;
+        .ui.radio.checkbox{
+            display:block;
+            label{
+                height:auto;
+                pointer-events:none;
+                > .icon{
+                    pointer-events:all;
+                }
+            }
+            input[type=radio]{
+                z-index:unset;
+            }
+            input:checked~label > .icon{
+                color:@white;
+            }
+        }
+    }
     .error:not(.field){
         color:@negativeTextColor;
     }

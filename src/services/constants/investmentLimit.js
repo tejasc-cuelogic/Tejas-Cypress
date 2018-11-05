@@ -175,6 +175,7 @@ export const NET_WORTH = {
         {
           label: '$1,000,000',
           value: '$1,000,000',
+          tooltip: 'demo from field data',
         },
       ],
     error: undefined,
