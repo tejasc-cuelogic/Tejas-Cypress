@@ -14,8 +14,8 @@ export default class NetWorth extends Component {
         <p className="center-align">My net worth is at least</p>
         <Form error className="account-type-tab">
           <FormRadioGroup
-            // vertical
-            withtooltip
+            vertical
+            // withtooltip
             fielddata={NET_WORTH_FORM.fields.netWorth}
             name="netWorth"
             changed={netWorthChange}
