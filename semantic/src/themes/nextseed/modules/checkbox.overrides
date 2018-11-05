@@ -61,7 +61,7 @@
 			min-width:160px;
 			padding:15px;
 			text-align:center;
-			font-weight:700;
+			font-weight:@fontMedium;
 			border:@border-color 1px solid;
 			border-radius:@6px;
 			&:before, &:after{
