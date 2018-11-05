@@ -295,7 +295,7 @@
                 }
             }
             &.active p{
-                max-height:60px;
+                max-height:120px;
             }
         }
         .ui{

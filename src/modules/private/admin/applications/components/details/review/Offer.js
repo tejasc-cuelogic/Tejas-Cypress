@@ -6,7 +6,8 @@ import { Header, Form, Confirm, Divider, Table } from 'semantic-ui-react';
 import OffersPanel from '../../../../../shared/offerings/components/shared/OffersPanel';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
-import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
+import { DropZoneConfirm as DropZone, MaskedInput } from '../../../../../../../theme/form';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -22,19 +23,22 @@ export default class Offer extends Component {
   handleDelDoc = (field) => {
     this.props.businessAppReviewStore.removeUploadedData('OFFERS_FRM', field);
   }
-  toggleConfirmModal = (e, index) => {
+  toggleConfirmModal = (e, index, modalName) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.toggleConfirmModal(index, 'OFFERS_FRM');
+    this.props.businessAppReviewStore.toggleConfirmModal(index, modalName);
   }
-  addNewOffer = (e) => {
+  addMore = (e, array) => {
     e.preventDefault();
-    this.props.businessAppReviewStore.addMore('OFFERS_FRM', 'offer');
+    this.props.businessAppReviewStore.addMore('OFFERS_FRM', array);
   }
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OFFERS_FRM');
   }
   submitWithApproval = (form, action) => {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
+  }
+  maskChangeWithIndex = (values, form, arrayName, field, index) => {
+    this.props.businessAppReviewStore.maskChangeWithIndex(values, form, arrayName, field, index);
   }
   render() {
     const {
@@ -44,12 +48,17 @@ export default class Offer extends Component {
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { offers, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>
@@ -57,7 +66,7 @@ export default class Offer extends Component {
           <Header as="h4">
             Offers
             {!isReadonly && OFFERS_FRM.fields.offer.length < 4 &&
-            <Link to={this.props.match.url} className="link pull-right" onClick={this.addNewOffer}><small>+ Add new offer</small></Link>
+            <Link to={this.props.match.url} className="link pull-right" onClick={e => this.addMore(e, 'offer')}><small>+ Add new offer</small></Link>
             }
           </Header>
           <Divider hidden />
@@ -108,6 +117,35 @@ export default class Offer extends Component {
               </Table.Row>
             </Table.Body>
           </Table>
+          <Divider hidden />
+          <Header as="h4">
+            Expected Annual Revenue
+            {!isReadonly &&
+            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'expectedAnnualRevenue')}><small>+ Add Another Year</small></Link>
+            }
+          </Header>
+          <div className="bg-offwhite">
+            <Form.Group widths={2}>
+              {
+                OFFERS_FRM.fields.expectedAnnualRevenue.map((expectedAnnualRevenue, index) => (
+                  <Aux>
+                    <MaskedInput
+                      removed={(!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > 4 && (OFFERS_FRM.fields.expectedAnnualRevenue.length - 1 === index)) ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
+                      containerclassname={isReadonly ? 'display-only' : ''}
+                      readOnly={isReadonly}
+                      prefix="$"
+                      currency
+                      name="year"
+                      linkto="/"
+                      label={expectedAnnualRevenue.label.value}
+                      fielddata={expectedAnnualRevenue.year}
+                      changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'expectedAnnualRevenue', field, index)}
+                    />
+                  </Aux>
+              ))
+            }
+            </Form.Group>
+          </div>
           <ButtonGroup
             inProgress={inProgress}
             formName="OFFERS_FRM"
@@ -121,10 +159,10 @@ export default class Offer extends Component {
         </Form>
         <Confirm
           header="Confirm"
-          content="Are you sure you want to remove this offer?"
+          content={`Are you sure you want to remove this ${confirmModalName === 'offer' ? 'offer' : 'year'}?`}
           open={confirmModal}
           onCancel={this.toggleConfirmModal}
-          onConfirm={() => removeData(confirmModalName, 'offer')}
+          onConfirm={() => removeData('OFFERS_FRM', confirmModalName)}
           size="mini"
           className="deletion"
         />

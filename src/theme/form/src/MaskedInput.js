@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Button } from 'semantic-ui-react';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
+import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
 // const MaskedInput = observer((props) => {
@@ -45,6 +46,11 @@ export default class MaskedInput extends Component {
                   {tooltip}
                 </Popup.Content>
               </Popup>
+            }
+            {props.removed &&
+              <Link to={props.linkto} onClick={e => props.removed(e)}>
+                <Icon className="ns-close-circle" color="grey" />
+              </Link>
             }
           </label>
         }

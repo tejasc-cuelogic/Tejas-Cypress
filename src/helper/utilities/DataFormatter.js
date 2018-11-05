@@ -1,5 +1,6 @@
 import { camelCase, upperFirst } from 'lodash';
 import moment from 'moment';
+import Handlebars from 'handlebars';
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -50,6 +51,11 @@ class DataFormatter {
       result[pairVal[0]] = decodeURIComponent(pairVal[1] || '');
     });
     return JSON.parse(JSON.stringify(result));
+  }
+  /** reference https://www.npmjs.com/package/handlebars */
+  stringTemplateFormatting = (string, data) => {
+    const template = Handlebars.compile(string);
+    return template(data);
   }
 }
 

@@ -34,7 +34,10 @@ export default class ManagerOverview extends Component {
               </Button>
               {isManager && approved && approved.status && applicationStatus
               !== BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL &&
-              <Button className="relaxed" loading={inProgress === 'REVIEW_DECLINED'} inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+              <Aux>
+                <Button className="relaxed" loading={inProgress === 'REVIEW_DECLINED'} inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'SUPPORT_DECLINE')}>Decline</Button>
+                <Button loading={inProgress === 'REVIEW_APPROVED'} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_EDIT')}>Edit</Button>
+              </Aux>
               }
             </Button.Group>
             }
@@ -46,9 +49,9 @@ export default class ManagerOverview extends Component {
                     Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
                   </Button>
                 }
-                <Button loading={inProgress === 'REVIEW_DECLINED'} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', false)}>Decline</Button>
+                <Button loading={inProgress === 'REVIEW_DECLINED'} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'SUPPORT_DECLINE')}>Decline</Button>
                 <Button loading={inProgress === 'SAVE'} primary className="relaxed">Save</Button>
-                <Button loading={inProgress === 'REVIEW_APPROVED'} disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED')}>{title || 'Approve'}</Button>
+                <Button loading={inProgress === 'REVIEW_APPROVED'} disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_APPROVE')}>{title || 'Approve'}</Button>
               </Button.Group>
             }
           </Header>

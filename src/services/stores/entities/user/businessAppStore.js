@@ -475,6 +475,10 @@ export class BusinessAppStore {
     ) || null;
   }
 
+  @computed get applicationReviewLoading() {
+    return this.businessApplicationsDataById.loading;
+  }
+
   @computed get fetchPrequalBusinessApplicationsDataById() {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.getPreQualificationById
