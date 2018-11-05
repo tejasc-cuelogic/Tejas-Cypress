@@ -18,17 +18,25 @@ class KeyTerms extends Component {
           <Grid columns={3} doubling divided className="vertical-gutter">
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label><b>Investment Type</b>{' '}
-                  {campaign && campaign.keyTerms && campaign.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities] : ''}
+                <Statistic.Label><b>Investment Type </b>
+                  {campaign && campaign.keyTerms &&
+                     campaign.keyTerms.securities ?
+                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
+                     :
+                     ''}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
                     content="Lorem Ipsum"
                     position="top center"
                   />
                 </Statistic.Label>
-                <Statistic.Value>
-                  {campaign && campaign.selectedOffer && campaign.selectedOffer.structure}
-                </Statistic.Value>
+                {/* <Statistic.Value>
+                  {campaign && campaign.selectedOffer &&
+                     campaign.selectedOffer.structure ?
+                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.selectedOffer.structure]
+                     :
+                     ''}
+                </Statistic.Value> */}
               </Statistic>
             </Grid.Column>
             <Grid.Column>
