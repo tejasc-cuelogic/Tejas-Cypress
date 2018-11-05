@@ -25,6 +25,7 @@ export class UserDetailsStore {
   @observable detailsOfUser = {};
   @observable editCard = 0;
   @observable deleting = 0;
+  @observable isCipExpired = true;
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);

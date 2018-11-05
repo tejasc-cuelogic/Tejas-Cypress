@@ -6,14 +6,20 @@ import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore', 'bankAccountStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class Summary extends Component {
   handleCreateAccount = () => {
-    this.props.iraAccountStore.createAccount('Summary', 'submit').then(() => {
-      this.props.history.push('/app/summary');
-    });
+    const { isCipExpired, signupStatus } = this.props.userDetailsStore;
+    if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
+      this.props.history.push('/app/summary/identity-verification/0');
+      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+    } else {
+      this.props.iraAccountStore.createAccount('Summary', 'submit').then(() => {
+        this.props.history.push('/app/summary');
+      });
+    }
   }
   render() {
     const {

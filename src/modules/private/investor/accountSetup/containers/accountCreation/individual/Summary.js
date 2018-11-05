@@ -5,15 +5,21 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { ListErrors } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
   handleCreateAccount = () => {
-    this.props.individualAccountStore.createAccount('Summary', 'submit').then(() => {
-      this.props.history.push('summary');
-    })
-      .catch(() => {});
+    const { isCipExpired, signupStatus } = this.props.userDetailsStore;
+    if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
+      this.props.history.push('/app/summary/identity-verification/0');
+      Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+    } else {
+      this.props.individualAccountStore.createAccount('Summary', 'submit').then(() => {
+        this.props.history.push('summary');
+      })
+        .catch(() => {});
+    }
   }
   render() {
     const { errors } = this.props.uiStore;
