@@ -2,14 +2,15 @@ import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement } from '../../queries/portfolio';
-import { userDetailsStore, uiStore } from '../../index';
+import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary } from '../../queries/portfolio';
+import { userDetailsStore, userStore, uiStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class PortfolioStore {
   @observable investmentLists = null;
   @observable pieChartDataEval = null;
   @observable pieChartData = null;
+  @observable accSummary = null;
   @observable currentOfferingId = null;
   @observable isCancelShowLink = false;
   @observable investmentDetails = null;
@@ -50,6 +51,15 @@ export class PortfolioStore {
   }
 
   @action
+  getSummary = () => {
+    this.accSummary = graphql({
+      client,
+      query: getUserAccountSummary,
+      variables: { userId: userStore.currentUser.sub },
+    });
+  }
+
+  @action
   calculateInvestmentType() {
     this.resetPiechartValues();
     const investmentData = this.getInvestorAccounts;
@@ -68,6 +78,14 @@ export class PortfolioStore {
         }
       });
     });
+  }
+
+  @computed get summary() {
+    return (this.accSummary.data && toJS(this.accSummary.data.getUserAccountSummary)) || {};
+  }
+
+  @computed get summaryLoading() {
+    return this.accSummary.loading;
   }
 
   @computed get getPieChartData() {
