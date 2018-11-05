@@ -1,4 +1,4 @@
-# 0.0.0 (2018-11-02)
+# 0.0.0 (2018-11-05)
 
 
 ### Bug Fixes
@@ -29,11 +29,13 @@
 * **Admin-offering-media[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - Admin-offering-media]:** Adding upload media page UI ([543f94d](https://chaos.ns.team/nsv2/ns-client/commits/543f94d))
 * **Admin[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin-offerings-creation-listing-tab]:** Done changes for offering-listing - edit and delete, Edit - internal Overview, Key Terms and Offerings tab. ([666bcdb](https://chaos.ns.team/nsv2/ns-client/commits/666bcdb))
 * **Admin[Issue [544](https://chaos.ns.team/nsv2/ns-ops/issues/544) - admin-application-review-and-offering-refinements]:** admin application review refinement ([7583d88](https://chaos.ns.team/nsv2/ns-client/commits/7583d88))
+* **Admin[Issue [544](https://chaos.ns.team/nsv2/ns-ops/issues/544) - admin-application-review-and-offering-refinements]:** admin offering risk factors refinment ([8a0ca1b](https://chaos.ns.team/nsv2/ns-client/commits/8a0ca1b))
 * **Agreements for Investor[Issue [293](https://chaos.ns.team/nsv2/ns-ops/issues/293) - Agreements for Investor]:** Agreements for Investor ([d873f6c](https://chaos.ns.team/nsv2/ns-client/commits/d873f6c))
 * **applicationOffering[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - applicationOffering]:** applicationOffering ([4a8c87f](https://chaos.ns.team/nsv2/ns-client/commits/4a8c87f))
 * **Auth[Issue [386](https://chaos.ns.team/nsv2/ns-ops/issues/386) - Cookie reference to show Signup/Login]:** Cookie based reference to show Signup/Login ([4105b0b](https://chaos.ns.team/nsv2/ns-client/commits/4105b0b))
 * **Business Application[Issue [<ISSUE_NUMBER>](https://chaos.ns.team/nsv2/ns-ops/issues/<ISSUE_NUMBER>) - Lendio prequalification from email url]:** Lendio prequalification from email url ([189f4c0](https://chaos.ns.team/nsv2/ns-client/commits/189f4c0))
 * **Business Application[Issue [229](https://chaos.ns.team/nsv2/ns-ops/issues/229) - Business Application form]:** Business Application form ([ea453a9](https://chaos.ns.team/nsv2/ns-client/commits/ea453a9))
+* **Business Application[Issue [581](https://chaos.ns.team/nsv2/ns-ops/issues/581) - business-application-refinement]:** business application on documentation step cta changes as per feedback ([6e78d07](https://chaos.ns.team/nsv2/ns-client/commits/6e78d07))
 * **campaign details page[Issue [236](https://chaos.ns.team/nsv2/ns-ops/issues/236) - public pages campaign details pages ui updates]:** completed ui changes on campaign details page ([af97def](https://chaos.ns.team/nsv2/ns-client/commits/af97def))
 * **Campaign Listing[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - admin offerings creation listing tab]:** Done changes for campaign listing on public page ([0c00237](https://chaos.ns.team/nsv2/ns-client/commits/0c00237))
 * **Changelog [Issue [134](https://chaos.ns.team/nsv2/ns-ops/issues/134) - Maintain change logs/versioning]:** enabled changelog generation ([769ae41](https://chaos.ns.team/nsv2/ns-client/commits/769ae41))
@@ -47,8 +49,8 @@
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([5fee3f3](https://chaos.ns.team/nsv2/ns-client/commits/5fee3f3))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([b3873e6](https://chaos.ns.team/nsv2/ns-client/commits/b3873e6))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([aa0af42](https://chaos.ns.team/nsv2/ns-client/commits/aa0af42))
-* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([ad48da8](https://chaos.ns.team/nsv2/ns-client/commits/ad48da8))
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([fa14c89](https://chaos.ns.team/nsv2/ns-client/commits/fa14c89))
+* **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([ad48da8](https://chaos.ns.team/nsv2/ns-client/commits/ad48da8))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([16a38ce](https://chaos.ns.team/nsv2/ns-client/commits/16a38ce))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))

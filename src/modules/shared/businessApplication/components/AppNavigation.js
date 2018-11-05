@@ -37,13 +37,25 @@ export default class AppNavigation extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessApplicationSubmitAction().then(() => {
-      Helper.toast('Business application submitted successfully!', 'success');
-      this.props.history.push('/app/dashboard');
-    });
+    const {
+      checkFormisValid, currentApplicationId,
+      currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction,
+    } = this.props.businessAppStore;
+    if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
+      businessAppParitalSubmit().then((result) => {
+        if (result && this.props.businessAppStore.canSubmitApp) {
+          businessApplicationSubmitAction().then(() => {
+            Helper.toast('Business application submitted successfully!', 'success');
+            this.props.history.push('/app/dashboard');
+          });
+        } else {
+          this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step].to}`);
+        }
+      });
+    }
   }
   render() {
-    const { isFileUploading, canSubmitApp, formReadOnlyMode } = this.props.businessAppStore;
+    const { isFileUploading, formReadOnlyMode } = this.props.businessAppStore;
     const { inProgress } = this.props.uiStore;
     return (
       <Aux>
@@ -70,7 +82,7 @@ export default class AppNavigation extends Component {
                   ) :
                     <Aux>
                       <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
-                      <Button loading={inProgress} onClick={this.submit} disabled={!canSubmitApp} primary className="very relaxed" content="Submit" />
+                      <Button loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content="Submit" />
                     </Aux>
                   }
                 </div>
