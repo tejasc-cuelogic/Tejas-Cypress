@@ -53,7 +53,8 @@ export class InvestmentStore {
     }
 
     @computed get getDiffInvestmentLimitAmount() {
-      const oldLimit = parseFloat(portfolioStore.getInvestorAccountById.investedAmount, 2);
+      const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
+        portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
       const currentLimit = parseFloat(this.INVESTMONEY_FORM.fields.investmentAmount.value, 2);
       return currentLimit - oldLimit;
     }
