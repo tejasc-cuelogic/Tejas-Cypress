@@ -155,8 +155,8 @@ class InvestorProfileStore {
         }
         formPayload = {
           investmentExperienceInfo: {
-            investmentExperienceLevel:
-            this.INVESTMENT_EXP_FORM.fields.investmentExperienceLevel.value,
+            experienceLevel:
+            this.INVESTMENT_EXP_FORM.fields.experienceLevel.value,
             readyForRisksInvolved: readyForRisksInvolvedValue,
             readyInvestingInLimitedLiquiditySecurities: liquiditySecurities,
           },

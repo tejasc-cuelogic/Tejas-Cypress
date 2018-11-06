@@ -479,8 +479,8 @@ export const PUBLIC_COMPANY_REL = {
 };
 
 export const EMPLOYMENT = {
-  status: {
-    key: 'status',
+  employmentStatus: {
+    key: 'employmentStatus',
     value: '',
     values:
       [
@@ -499,16 +499,16 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_if:status,EMPLOYED',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'Type employer name',
     objRef: 'employmentStatusInfo',
   },
-  position: {
-    key: 'position',
+  currentPosition: {
+    key: 'currentPosition',
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_if:status,EMPLOYED',
+    rule: 'required_if:employmentStatus,EMPLOYED',
     placeHolder: 'E.g. CEO',
     objRef: 'employmentStatusInfo',
   },
@@ -596,7 +596,7 @@ export const FINANCES = {
 };
 
 export const INVESTMENT_EXPERIENCE = {
-  investmentExperienceLevel: {
+  experienceLevel: {
     value: '',
     values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
