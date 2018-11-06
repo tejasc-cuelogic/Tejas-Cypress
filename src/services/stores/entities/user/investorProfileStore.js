@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, isNull } from 'lodash';
+import { isEmpty } from 'lodash';
 import {
   EMPLOYMENT,
   INVESTOR_PROFILE,
@@ -212,47 +212,52 @@ class InvestorProfileStore {
 
   @action
   setFormData = (form, investorProfileData) => {
+    console.log(investorProfileData);
     Object.keys(this[form].fields).map((f) => {
-      switch (form) {
-        case 'EMPLOYMENT_FORM':
-          this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employmentStatusInfo[f];
-          break;
-        case 'FINANCES_FORM':
-          this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
-          if (investorProfileData.financialInfo.directorShareHolderOfCompany !== null) {
-            this.FINANCES_FORM.fields.checkbox1.value = 'iamadirector';
-          } else {
-            this.FINANCES_FORM.fields.checkbox1.value = [];
-          }
-          if (investorProfileData.financialInfo.employedOrAssoWithFINRAFirmName !== null) {
-            this.FINANCES_FORM.fields.checkbox2.value = 'iamamember';
-          } else {
-            this.FINANCES_FORM.fields.checkbox2.value = [];
-          }
-          break;
-        case 'INVESTOR_PROFILE_FORM':
-          if (!isNull(investorProfileData.investorProfileType)) {
-            this.INVESTOR_PROFILE_FORM.fields[f].value =
-            investorProfileData.investorProfileType;
-          }
-          break;
-        case 'INVESTMENT_EXP_FORM':
-          if (f !== 'readyInvestingInLimitedLiquiditySecurities' && f !== 'readyForRisksInvolved') {
-            if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
-              this.INVESTMENT_EXP_FORM.fields[f].value =
-              investorProfileData.investmentExperienceInfo[f];
-            }
-          } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
-          investorProfileData.investmentExperienceInfo[f]) {
-            this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value = 'checked';
-          } else if (f === 'readyForRisksInvolved' &&
-          investorProfileData.investmentExperienceInfo[f]) {
-            this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value = 'checked';
-          }
-          break;
-        default:
-          break;
-      }
+      console.log(1);
+      // switch (form) {
+      // case 'EMPLOYMENT_FORM':
+      //   if (investorProfileData.employment) {
+      //     this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employment[f];
+      //   }
+      //   break;
+      // case 'FINANCES_FORM':
+      //   this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
+      //   if (investorProfileData.financialInfo.directorShareHolderOfCompany !== null) {
+      //     this.FINANCES_FORM.fields.checkbox1.value = 'iamadirector';
+      //   } else {
+      //     this.FINANCES_FORM.fields.checkbox1.value = [];
+      //   }
+      //   if (investorProfileData.financialInfo.employedOrAssoWithFINRAFirmName !== null) {
+      //     this.FINANCES_FORM.fields.checkbox2.value = 'iamamember';
+      //   } else {
+      //     this.FINANCES_FORM.fields.checkbox2.value = [];
+      //   }
+      //   break;
+      // case 'INVESTOR_PROFILE_FORM':
+      //   if (!isNull(investorProfileData.investorProfileType)) {
+      //     this.INVESTOR_PROFILE_FORM.fields[f].value =
+      //     investorProfileData.investorProfileType;
+      //   }
+      //   break;
+      // case 'INVESTMENT_EXP_FORM':
+      //   if (f !== 'readyInvestingInLimitedLiquiditySecurities' && !== 'readyForRisksInvolved') {
+      //     if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
+      //       this.INVESTMENT_EXP_FORM.fields[f].value =
+      //       investorProfileData.investmentExperienceInfo[f];
+      //     }
+      //   } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
+      //   investorProfileData.investmentExperienceInfo[f]) {
+      //     this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value =
+      // 'checked';
+      //   } else if (f === 'readyForRisksInvolved' &&
+      //   investorProfileData.investmentExperienceInfo[f]) {
+      //     this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value = 'checked';
+      //   }
+      //   break;
+      // default:
+      //   break;
+      // }
       return this[form].fields[f];
     });
     FormValidator.onChange(this[form], '', '');
@@ -271,8 +276,6 @@ class InvestorProfileStore {
     this.resetFormData('FINANCES_FORM');
     this.resetFormData('INVESTMENT_EXP_FORM');
     this.stepToBeRendered = 0;
-    console.log(this.FINANCES_FORM);
-    console.log(this.INVESTMENT_EXP_FORM);
   }
 }
 
