@@ -22,7 +22,7 @@ export default class Employment extends Component {
           {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' &&
           <div className="field-wrap">
             <Form.Group widths="equal">{
-              ['employer', 'currentPosition'].map(field => (
+              ['employer', 'position'].map(field => (
                 <FormInput
                   key={field}
                   fielddata={EMPLOYMENT_FORM.fields[field]}
