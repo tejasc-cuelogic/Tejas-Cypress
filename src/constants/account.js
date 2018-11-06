@@ -466,14 +466,14 @@ export const PUBLIC_COMPANY_REL = {
         { label: 'No', value: 'no' },
       ],
     error: undefined,
-    rule: 'required',
+    rule: 'optional',
   },
   publicCompanyTicker: {
     key: 'publicCompanyTicker',
     value: '',
     label: 'Ticker symbol',
     error: undefined,
-    rule: 'required',
+    rule: 'required_if:publicCompanyRel,yes',
     placeHolder: 'E.g. GOOG',
   },
 };
@@ -556,54 +556,17 @@ export const FINANCES = {
     placeHolder: '$60,000',
     objRef: 'financialInfo',
   },
-  // checkbox1: {
-  //   value: [],
-  //   values: [
-  //     {
-  //    label: `I am (or a member of my immediate family is) a director, 10% shareholder,
-  //    or senior officer of a publicity traded company.`,
-  //       value: 'iamadirector',
-  //     },
-  //   ],
-  //   error: undefined,
-  //   rule: 'alpha',
-  // },
-  // checkbox2: {
-  //   value: [],
-  //   values: [
-  //     {
-  //       label: `I am (or a member of my immediate family is) employed by or
-  // associated with a member firm,
-  // a stock exchange or FINRA.`,
-  //       value: 'iamamember',
-  //     },
-  //   ],
-  //   error: undefined,
-  //   rule: 'alpha',
-  // },
-  // directorShareHolderOfCompany: {
-  //   value: '',
-  //   label: 'Company Name',
-  //   error: undefined,
-  //   rule: 'string',
-  // },
-  // employedOrAssoWithFINRAFirmName: {
-  //   value: '',
-  //   label: 'Firm Name',
-  //   error: undefined,
-  //   rule: 'string',
-  // },
 };
 
 export const INVESTMENT_EXPERIENCE = {
   experienceLevel: {
     value: '',
-    values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
+    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
     objRef: 'investmentExperienceInfo',
   },
-  readyInvestingInLimitedLiquiditySecurities: {
+  isComfortable: {
     value: [],
     values: [
       {
@@ -612,9 +575,9 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
   },
-  readyForRisksInvolved: {
+  isRiskTaker: {
     value: [],
     values: [
       {
@@ -623,7 +586,7 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
   },
 };
 

@@ -126,8 +126,17 @@ class InvestorProfileStore {
           { employmentStatusInfo: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
+        if (fields.brokerageEmployment.value === 'no') {
+          fields.brokerageFirmName.value = '';
+        } else {
+          fields.brokerageFirmName.value = fields.brokerageFirmName.value;
+        }
         formPayload =
           { brokerageFirmName: fields.brokerageFirmName.value };
+      } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
+        const { fields } = this.PUBLIC_COMPANY_REL_FORM;
+        formPayload =
+          { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
           financialInfo: {
@@ -146,21 +155,11 @@ class InvestorProfileStore {
           },
         };
       } else if (currentStep.form === 'INVESTMENT_EXP_FORM') {
-        let readyForRisksInvolvedValue = false;
-        let liquiditySecurities = false;
-        if (this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value[0] === 'checked') {
-          readyForRisksInvolvedValue = true;
-        }
-        if (this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value[0] === 'checked') {
-          liquiditySecurities = true;
-        }
+        const { fields } = this.INVESTMENT_EXP_FORM;
         formPayload = {
-          investmentExperienceInfo: {
-            experienceLevel:
-            this.INVESTMENT_EXP_FORM.fields.experienceLevel.value,
-            readyForRisksInvolved: readyForRisksInvolvedValue,
-            readyInvestingInLimitedLiquiditySecurities: liquiditySecurities,
-          },
+          experienceLevel: fields.experienceLevel.value,
+          isComfortable: fields.isComfortable.value.length > 0,
+          isRiskTaker: fields.isRiskTaker.value.length > 0,
         };
       }
       formPayload.isPartialProfile = !this.isValidInvestorProfileForm;
@@ -199,6 +198,7 @@ class InvestorProfileStore {
       if (investorProfileData) {
         this.setFormData('EMPLOYMENT_FORM', investorProfileData);
         this.setFormData('BROKERAGE_EMPLOYMENT_FORM', investorProfileData);
+        this.setFormData('PUBLIC_COMPANY_REL_FORM', investorProfileData);
         this.setFormData('FINANCES_FORM', investorProfileData);
         this.setFormData('INVESTOR_PROFILE_FORM', investorProfileData);
         this.setFormData('INVESTMENT_EXP_FORM', investorProfileData);
@@ -241,6 +241,37 @@ class InvestorProfileStore {
             } else {
               fields.brokerageEmployment.value = 'no';
             }
+          }
+          break;
+        case 'PUBLIC_COMPANY_REL_FORM':
+          if (investorProfileData.publicCompanyTicker) {
+            const { fields } = this.PUBLIC_COMPANY_REL_FORM;
+            fields.publicCompanyTicker.value = investorProfileData.publicCompanyTicker;
+            if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== '') {
+              fields.publicCompanyRel.value = 'yes';
+            } else {
+              fields.publicCompanyRel.value = 'no';
+            }
+          }
+          break;
+        case 'INVESTMENT_EXP_FORM':
+          if (investorProfileData.experienceLevel) {
+            const { fields } = this.INVESTMENT_EXP_FORM;
+            fields.experienceLevel.value = investorProfileData.experienceLevel;
+          }
+          if (investorProfileData.isRiskTaker) {
+            const { fields } = this.INVESTMENT_EXP_FORM;
+            fields.isRiskTaker.value.push('checked');
+          } else {
+            const { fields } = this.INVESTMENT_EXP_FORM;
+            fields.isRiskTaker.value = [];
+          }
+          if (investorProfileData.isComfortable) {
+            const { fields } = this.INVESTMENT_EXP_FORM;
+            fields.isComfortable.value.push('checked');
+          } else {
+            const { fields } = this.INVESTMENT_EXP_FORM;
+            fields.isComfortable.value = [];
           }
           break;
         // case 'FINANCES_FORM':

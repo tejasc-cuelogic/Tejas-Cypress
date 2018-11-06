@@ -46,7 +46,7 @@ class Helper {
   });
 
   establishProfileSteps = () => ({
-    EMPLOYMENT_FORM: 0,
+    EMPLOYMENT_FORM: 1,
     BROKERAGE_EMPLOYMENT_FORM: 2,
     PUBLIC_COMPANY_REL_FORM: 3,
     INVESTOR_PROFILE_FORM: 1,

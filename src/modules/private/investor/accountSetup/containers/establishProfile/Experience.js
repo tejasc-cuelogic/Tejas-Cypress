@@ -24,15 +24,15 @@ export default class Experience extends Component {
             containerclassname="button-radio center-align mb-50"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities}
-            name="readyInvestingInLimitedLiquiditySecurities"
+            fielddata={INVESTMENT_EXP_FORM.fields.isComfortable}
+            name="isComfortable"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.readyForRisksInvolved}
-            name="readyForRisksInvolved"
+            fielddata={INVESTMENT_EXP_FORM.fields.isRiskTaker}
+            name="isRiskTaker"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
