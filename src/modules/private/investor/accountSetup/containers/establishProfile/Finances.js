@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
+import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
 import FieldsForm from '../../components/establishProfile/FieldsForm';
 @inject('investorProfileStore', 'uiStore')
 @withRouter
@@ -29,10 +29,12 @@ export default class Finances extends Component {
   render() {
     const {
       FINANCES_FORM,
+      INVESTOR_PROFILE_FORM,
       financesChange,
       canSubmitFieldsForm,
       chkboxTicked,
       financesInputChange,
+      investorProfileChange,
     } = this.props.investorProfileStore;
     const { modalStatus } = this.props.uiStore;
     return (
@@ -53,6 +55,12 @@ export default class Finances extends Component {
           we can determine which investments we are allowed to show you
         </p>
         <Form error>
+          <FormRadioGroup
+            fielddata={INVESTOR_PROFILE_FORM.fields.investorProfileType}
+            name="investorProfileType"
+            changed={investorProfileChange}
+            containerclassname="button-radio center-align"
+          />
           <MaskedInput
             name="netWorth"
             currency
@@ -74,7 +82,7 @@ export default class Finances extends Component {
             ))
             }
           </Form.Group>
-          <FormCheckbox
+          {/* <FormCheckbox
             fielddata={FINANCES_FORM.fields.checkbox1}
             name="checkbox1"
             changed={this.handleTick}
@@ -83,7 +91,8 @@ export default class Finances extends Component {
           { FINANCES_FORM.fields.directorShareHolderOfCompany.value ?
             <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
               The name of the company is{' '}
-              <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
+              <span style={{ textDecoration: 'underline' }}>
+              {FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
             </p>
             : <p />
           }
@@ -96,10 +105,11 @@ export default class Finances extends Component {
           { FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value ?
             <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
               The name of firm is{' '}
-              <span style={{ textDecoration: 'underline' }}>{FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
+              <span style={{ textDecoration: 'underline' }}>
+              {FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
             </p>
           : <p />
-          }
+          } */}
         </Form>
       </div>
     );

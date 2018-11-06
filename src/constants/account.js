@@ -556,40 +556,43 @@ export const FINANCES = {
     placeHolder: '$60,000',
     objRef: 'financialInfo',
   },
-  checkbox1: {
-    value: [],
-    values: [
-      {
-        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company.',
-        value: 'iamadirector',
-      },
-    ],
-    error: undefined,
-    rule: 'alpha',
-  },
-  checkbox2: {
-    value: [],
-    values: [
-      {
-        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm, a stock exchange or FINRA.',
-        value: 'iamamember',
-      },
-    ],
-    error: undefined,
-    rule: 'alpha',
-  },
-  directorShareHolderOfCompany: {
-    value: '',
-    label: 'Company Name',
-    error: undefined,
-    rule: 'string',
-  },
-  employedOrAssoWithFINRAFirmName: {
-    value: '',
-    label: 'Firm Name',
-    error: undefined,
-    rule: 'string',
-  },
+  // checkbox1: {
+  //   value: [],
+  //   values: [
+  //     {
+  //    label: `I am (or a member of my immediate family is) a director, 10% shareholder,
+  //    or senior officer of a publicity traded company.`,
+  //       value: 'iamadirector',
+  //     },
+  //   ],
+  //   error: undefined,
+  //   rule: 'alpha',
+  // },
+  // checkbox2: {
+  //   value: [],
+  //   values: [
+  //     {
+  //       label: `I am (or a member of my immediate family is) employed by or
+  // associated with a member firm,
+  // a stock exchange or FINRA.`,
+  //       value: 'iamamember',
+  //     },
+  //   ],
+  //   error: undefined,
+  //   rule: 'alpha',
+  // },
+  // directorShareHolderOfCompany: {
+  //   value: '',
+  //   label: 'Company Name',
+  //   error: undefined,
+  //   rule: 'string',
+  // },
+  // employedOrAssoWithFINRAFirmName: {
+  //   value: '',
+  //   label: 'Firm Name',
+  //   error: undefined,
+  //   rule: 'string',
+  // },
 };
 
 export const INVESTMENT_EXPERIENCE = {
