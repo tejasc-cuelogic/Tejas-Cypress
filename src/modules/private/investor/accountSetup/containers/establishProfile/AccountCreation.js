@@ -5,7 +5,6 @@ import { MultiStep } from '../../../../../../helper';
 import Employment from './Employment';
 import BrokerageEmployment from './BrokerageEmployment';
 import PublicCompanyRelations from './PublicCompanyRel';
-import InvestorProfile from './InvestorProfile';
 import Overview from './overview';
 import Finances from './Finances';
 import Experience from './Experience';
@@ -34,7 +33,6 @@ export default class AccountCreation extends React.Component {
       setIsEnterPressed,
     } = this.props.uiStore;
     const {
-      INVESTOR_PROFILE_FORM,
       INVESTMENT_EXP_FORM,
       EMPLOYMENT_FORM,
       BROKERAGE_EMPLOYMENT_FORM,
@@ -78,20 +76,12 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 4,
       },
       {
-        name: 'Investor Profile',
-        component: <InvestorProfile />,
-        isValid: INVESTOR_PROFILE_FORM.meta.isFieldValid ? '' : 'error',
-        isDirty: INVESTOR_PROFILE_FORM.meta.isDirty,
-        form: 'INVESTOR_PROFILE_FORM',
-        stepToBeRendered: 5,
-      },
-      {
         name: 'Finances',
         component: <Finances />,
         isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
-        stepToBeRendered: 6,
+        stepToBeRendered: 5,
       },
       {
         name: 'Experience',
@@ -99,7 +89,7 @@ export default class AccountCreation extends React.Component {
         isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 7,
+        stepToBeRendered: 6,
       },
     ];
 

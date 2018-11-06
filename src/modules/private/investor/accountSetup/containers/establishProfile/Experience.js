@@ -18,8 +18,8 @@ export default class Experience extends Component {
         </p>
         <Form error>
           <FormRadioGroup
-            fielddata={INVESTMENT_EXP_FORM.fields.investmentExperienceLevel}
-            name="investmentExperienceLevel"
+            fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
+            name="experienceLevel"
             changed={experiencesChange}
             containerclassname="button-radio center-align mb-50"
           />

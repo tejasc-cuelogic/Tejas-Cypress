@@ -63,9 +63,9 @@ export default class InvestorProfile extends Component {
         <Header as="h6">Experience</Header>
         <Form.Group widths={3}>
           <FormInput
-            key="investmentExperienceLevel"
-            name="investmentExperienceLevel"
-            fielddata={USER_INVESTOR_PROFILE.fields.investmentExperienceLevel}
+            key="experienceLevel"
+            name="experienceLevel"
+            fielddata={USER_INVESTOR_PROFILE.fields.experienceLevel}
             changed={(e, result) => formChange(e, result, formName)}
             displayMode={displayMode}
           />

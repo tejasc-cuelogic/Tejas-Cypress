@@ -14,15 +14,15 @@ export default class Employment extends Component {
         <p className="center-align mb-50">Please indicate your current employment status</p>
         <Form error>
           <FormRadioGroup
-            fielddata={EMPLOYMENT_FORM.fields.status}
-            name="status"
+            fielddata={EMPLOYMENT_FORM.fields.employmentStatus}
+            name="employmentStatus"
             changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
             containerclassname="button-radio center-align"
           />
-          {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' &&
+          {EMPLOYMENT_FORM.fields.employmentStatus.value === 'EMPLOYED' &&
           <div className="field-wrap">
             <Form.Group widths="equal">{
-              ['employer', 'position'].map(field => (
+              ['employer', 'currentPosition'].map(field => (
                 <FormInput
                   key={field}
                   fielddata={EMPLOYMENT_FORM.fields[field]}
