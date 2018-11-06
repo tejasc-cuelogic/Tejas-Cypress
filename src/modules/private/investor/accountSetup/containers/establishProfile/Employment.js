@@ -16,7 +16,7 @@ export default class Employment extends Component {
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.employmentStatus}
             name="employmentStatus"
-            changed={employmentChange}
+            changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
             containerclassname="button-radio center-align"
           />
           {EMPLOYMENT_FORM.fields.employmentStatus.value === 'EMPLOYED' &&
@@ -27,7 +27,7 @@ export default class Employment extends Component {
                   key={field}
                   fielddata={EMPLOYMENT_FORM.fields[field]}
                   name={field}
-                  changed={employmentChange}
+                  changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
                 />
               ))}
             </Form.Group>

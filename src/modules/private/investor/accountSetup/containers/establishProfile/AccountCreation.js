@@ -5,6 +5,7 @@ import { MultiStep } from '../../../../../../helper';
 import Employment from './Employment';
 import BrokerageEmployment from './BrokerageEmployment';
 import PublicCompanyRelations from './PublicCompanyRel';
+import Overview from './overview';
 import Finances from './Finances';
 import Experience from './Experience';
 
@@ -43,12 +44,20 @@ export default class AccountCreation extends React.Component {
     const steps =
     [
       {
+        name: 'Overview',
+        component: <Overview />,
+        isValid: false,
+        isDirty: false,
+        form: '',
+        stepToBeRendered: 1,
+      },
+      {
         name: 'Employment',
         component: <Employment />,
         isValid: EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: EMPLOYMENT_FORM.meta.isDirty,
         form: 'EMPLOYMENT_FORM',
-        stepToBeRendered: 1,
+        stepToBeRendered: 2,
       },
       {
         name: 'Brokerage Employment',
@@ -56,7 +65,7 @@ export default class AccountCreation extends React.Component {
         isValid: BROKERAGE_EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: BROKERAGE_EMPLOYMENT_FORM.meta.isDirty,
         form: 'BROKERAGE_EMPLOYMENT_FORM',
-        stepToBeRendered: 2,
+        stepToBeRendered: 3,
       },
       {
         name: 'Public Company Relations',
@@ -64,7 +73,7 @@ export default class AccountCreation extends React.Component {
         isValid: PUBLIC_COMPANY_REL_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: PUBLIC_COMPANY_REL_FORM.meta.isDirty,
         form: 'PUBLIC_COMPANY_REL_FORM',
-        stepToBeRendered: 3,
+        stepToBeRendered: 4,
       },
       {
         name: 'Finances',
@@ -72,7 +81,7 @@ export default class AccountCreation extends React.Component {
         isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
-        stepToBeRendered: 4,
+        stepToBeRendered: 5,
       },
       {
         name: 'Experience',
@@ -80,7 +89,7 @@ export default class AccountCreation extends React.Component {
         isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 5,
+        stepToBeRendered: 6,
       },
     ];
 
