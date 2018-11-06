@@ -434,6 +434,50 @@ export const ACC_TYPE = {
   },
 };
 
+export const BROKERAGE_EMPLOYMENT = {
+  brokerageEmployment: {
+    key: 'brokerageEmployment',
+    value: '',
+    values:
+      [
+        { label: 'Yes', value: 'yes' },
+        { label: 'No', value: 'no' },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+  brokerageFirmName: {
+    key: 'brokerageFirmName',
+    value: '',
+    label: 'Member Firm Name',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
+};
+
+export const PUBLIC_COMPANY_REL = {
+  publicCompanyRel: {
+    key: 'publicCompanyRel',
+    value: '',
+    values:
+      [
+        { label: 'Yes', value: 'yes' },
+        { label: 'No', value: 'no' },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+  publicCompanyTicker: {
+    key: 'publicCompanyTicker',
+    value: '',
+    label: 'Ticker symbol',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'E.g. GOOG',
+  },
+};
+
 export const EMPLOYMENT = {
   employmentStatus: {
     key: 'employmentStatus',

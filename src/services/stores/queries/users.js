@@ -169,7 +169,7 @@ export const userDetailsQuery = gql`
         }
         status
       }
-      investorProfile {
+      investorProfileData {
         isPartialProfile
         employment {
           status
@@ -184,11 +184,6 @@ export const userDetailsQuery = gql`
           annualIncomeCurrentYear
           directorShareHolderOfCompany
           employedOrAssoWithFINRAFirmName
-        }
-        investmentExperienceInfo {
-          investmentExperienceLevel
-          readyInvestingInLimitedLiquiditySecurities
-          readyForRisksInvolved
         }
       }
       mfaMode

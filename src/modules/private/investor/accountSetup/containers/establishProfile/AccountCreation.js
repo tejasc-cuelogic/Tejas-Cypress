@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../../helper';
 import Employment from './Employment';
+import BrokerageEmployment from './BrokerageEmployment';
 import InvestorProfile from './InvestorProfile';
 import Finances from './Finances';
 import Experience from './Experience';
@@ -34,11 +35,12 @@ export default class AccountCreation extends React.Component {
       INVESTOR_PROFILE_FORM,
       INVESTMENT_EXP_FORM,
       EMPLOYMENT_FORM,
+      BROKERAGE_EMPLOYMENT,
       FINANCES_FORM,
       updateInvestorProfileData,
       stepToBeRendered,
     } = this.props.investorProfileStore;
-    const steps =
+    const steps = // BrokerageEmployment
     [
       {
         name: 'Employment',
@@ -49,12 +51,20 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 1,
       },
       {
+        name: 'BrokerageEmployment',
+        component: <BrokerageEmployment />,
+        isValid: BROKERAGE_EMPLOYMENT.meta.isFieldValid ? '' : 'error',
+        isDirty: BROKERAGE_EMPLOYMENT.meta.isDirty,
+        form: 'BROKERAGE_EMPLOYMENT',
+        stepToBeRendered: 2,
+      },
+      {
         name: 'Investor Profile',
         component: <InvestorProfile />,
         isValid: INVESTOR_PROFILE_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTOR_PROFILE_FORM.meta.isDirty,
         form: 'INVESTOR_PROFILE_FORM',
-        stepToBeRendered: 2,
+        stepToBeRendered: 3,
       },
       {
         name: 'Finances',
@@ -62,7 +72,7 @@ export default class AccountCreation extends React.Component {
         isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
-        stepToBeRendered: 3,
+        stepToBeRendered: 4,
       },
       {
         name: 'Experience',
@@ -70,7 +80,7 @@ export default class AccountCreation extends React.Component {
         isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 3,
+        stepToBeRendered: 5,
       },
     ];
 
