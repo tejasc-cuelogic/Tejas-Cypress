@@ -22,7 +22,7 @@ export default class Overview extends Component {
         <div className="center-align mt-30">
           <Button primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
         </div>
-        <div className="signup-actions">
+        <div className="center-align mt-30">
           <p><Link to="/app/summary">I’ll do it later</Link></p>
         </div>
       </div>
