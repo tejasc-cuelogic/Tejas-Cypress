@@ -177,16 +177,6 @@ export const userDetailsQuery = gql`
           position
         }
         brokerageFirmName
-<<<<<<< HEAD
-        financialInfo {
-          netWorth
-          annualIncomeThirdLastYear
-          annualIncomeLastYear
-          annualIncomeCurrentYear
-          directorShareHolderOfCompany
-          employedOrAssoWithFINRAFirmName
-        }
-=======
         publicCompanyTicker
         taxFilingAs
         netWorth
@@ -197,7 +187,6 @@ export const userDetailsQuery = gql`
         experienceLevel
         isRiskTaker
         isComfortable
->>>>>>> b4fe8d0753eeb50a5daef417ce83344cd9b5d8f3
       }
       mfaMode
     }
