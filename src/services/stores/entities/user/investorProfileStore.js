@@ -130,20 +130,20 @@ class InvestorProfileStore {
           { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
-          financialInfo: {
-            netWorth: this.FINANCES_FORM.fields.netWorth.value !== '' ? this.FINANCES_FORM.fields.netWorth.value : null,
-            annualIncomeThirdLastYear: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.value !== '' ? this.FINANCES_FORM.fields.annualIncomeThirdLastYear.value : null,
-            annualIncomeLastYear:
-            this.FINANCES_FORM.fields.annualIncomeLastYear.value !== '' ?
-              this.FINANCES_FORM.fields.annualIncomeLastYear.value : null,
-            annualIncomeCurrentYear:
-              this.FINANCES_FORM.fields.annualIncomeCurrentYear.value !== '' ?
-                this.FINANCES_FORM.fields.annualIncomeCurrentYear.value : null,
-            directorShareHolderOfCompany: this.FINANCES_FORM.fields.directorShareHolderOfCompany.value !== '' ?
-              this.FINANCES_FORM.fields.directorShareHolderOfCompany.value : null,
-            employedOrAssoWithFINRAFirmName: this.FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value !== '' ?
-              this.FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value : null,
+          taxFilingAs: this.INVESTOR_PROFILE_FORM.fields.investorProfileType.value,
+          annualIncome: [{
+            year: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.year,
+            income: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.value,
           },
+          {
+            year: this.FINANCES_FORM.fields.annualIncomeLastYear.year,
+            income: this.FINANCES_FORM.fields.annualIncomeLastYear.value,
+          },
+          {
+            year: this.FINANCES_FORM.fields.annualIncomeCurrentYear.year,
+            income: this.FINANCES_FORM.fields.annualIncomeCurrentYear.value,
+          }],
+          netWorth: this.FINANCES_FORM.fields.netWorth.value,
         };
       } else if (currentStep.form === 'INVESTMENT_EXP_FORM') {
         let readyForRisksInvolvedValue = false;
@@ -243,9 +243,18 @@ class InvestorProfileStore {
             }
           }
           break;
-        // case 'FINANCES_FORM':
-        //   this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
-        //   break;
+        case 'FINANCES_FORM':
+          this.FINANCES_FORM.fields.netWorth.value = investorProfileData.netWorth;
+          this.INVESTOR_PROFILE_FORM.fields.investorProfileType.value =
+          investorProfileData.taxFilingAs;
+          if (investorProfileData.annualIncome) {
+            ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
+              this.FINANCES_FORM.fields[item].value =
+              investorProfileData.annualIncome[index].income;
+              return true;
+            });
+          }
+          break;
         // case 'INVESTMENT_EXP_FORM':
         //   if (f !== 'readyInvestingInLimitedLiquiditySecurities' &&
         // !== 'readyForRisksInvolved') {

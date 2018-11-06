@@ -1,17 +1,18 @@
 import React from 'react';
 import { Modal, Button } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 @inject('uiStore', 'offeringsStore', 'offeringCreationStore')
 @observer
+@withRouter
 export default class ConfirmCancelModal extends React.Component {
     handleCloseModal = () => {
       this.props.history.push('/app/summary/establish-profile');
     }
     render() {
       return (
-        <Modal size="small" open >
+        <Modal size="mini" open >
           <Modal.Content>
             <p className="center-align mb-50">
                 In order to make new investments on the platform, you will need to complete
