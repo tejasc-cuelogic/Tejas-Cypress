@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Divider, Button } from 'semantic-ui-react';
 
 @inject('investorProfileStore')
+@withRouter
 @observer
 export default class Overview extends Component {
   handleChangeStep = () => {
@@ -23,7 +24,7 @@ export default class Overview extends Component {
           <Button primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
         </div>
         <div className="center-align mt-30">
-          <p><Link to="/app/summary">I’ll do it later</Link></p>
+          <p><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
         </div>
       </div>
     );
