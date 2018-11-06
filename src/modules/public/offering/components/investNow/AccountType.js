@@ -25,8 +25,6 @@ class AccountType extends Component {
           setStepToBeRendered(1);
         }
       });
-    } else {
-      this.props.history.push(`${this.props.refLink}/overview`);
     }
   }
   componentDidMount() {
