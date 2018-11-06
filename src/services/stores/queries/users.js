@@ -169,7 +169,7 @@ export const userDetailsQuery = gql`
         }
         status
       }
-      investorProfile {
+      investorProfileData {
         isPartialProfile
         employment {
           status
@@ -187,11 +187,6 @@ export const userDetailsQuery = gql`
         experienceLevel
         isRiskTaker
         isComfortable
-        investmentExperienceInfo {
-          investmentExperienceLevel
-          readyInvestingInLimitedLiquiditySecurities
-          readyForRisksInvolved
-        }
       }
       mfaMode
     }

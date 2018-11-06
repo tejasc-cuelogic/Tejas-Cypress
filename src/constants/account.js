@@ -435,8 +435,8 @@ export const ACC_TYPE = {
 };
 
 export const EMPLOYMENT = {
-  employmentStatus: {
-    key: 'employmentStatus',
+  status: {
+    key: 'status',
     value: '',
     values:
       [
@@ -455,16 +455,16 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_if:employmentStatus,EMPLOYED',
+    rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Type employer name',
     objRef: 'employmentStatusInfo',
   },
-  currentPosition: {
-    key: 'currentPosition',
+  position: {
+    key: 'position',
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_if:employmentStatus,EMPLOYED',
+    rule: 'required_if:status,EMPLOYED',
     placeHolder: 'E.g. CEO',
     objRef: 'employmentStatusInfo',
   },
