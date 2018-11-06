@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { isEmpty } from 'lodash';
 import {
   EMPLOYMENT,
@@ -113,7 +113,8 @@ class InvestorProfileStore {
   @computed
   get isValidInvestorProfileForm() {
     return this.EMPLOYMENT_FORM.meta.isValid && this.INVESTOR_PROFILE_FORM.meta.isValid
-    && this.FINANCES_FORM.meta.isValid && this.INVESTMENT_EXP_FORM.meta.isValid;
+    && this.FINANCES_FORM.meta.isValid && this.INVESTMENT_EXP_FORM.meta.isValid
+    && this.BROKERAGE_EMPLOYMENT_FORM.meta.isValid && this.PUBLIC_COMPANY_REL_FORM.meta.isValid;
   }
 
   @action
@@ -127,7 +128,7 @@ class InvestorProfileStore {
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         if (fields.brokerageEmployment.value === 'no') {
-          fields.brokerageFirmName.value = '';
+          fields.brokerageFirmName.value = null;
         } else {
           fields.brokerageFirmName.value = fields.brokerageFirmName.value;
         }
@@ -135,6 +136,11 @@ class InvestorProfileStore {
           { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
+        if (fields.publicCompanyTicker.value === 'no') {
+          fields.publicCompanyTicker.value = null;
+        } else {
+          fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
+        }
         formPayload =
           { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
@@ -260,14 +266,20 @@ class InvestorProfileStore {
           }
           if (investorProfileData.isRiskTaker) {
             const { fields } = this.INVESTMENT_EXP_FORM;
-            fields.isRiskTaker.value.push('checked');
+            if ((Array.isArray(toJS(fields.isRiskTaker.value)) &&
+            fields.isRiskTaker.value.length === 0)) {
+              fields.isRiskTaker.value.push('checked');
+            }
           } else {
             const { fields } = this.INVESTMENT_EXP_FORM;
             fields.isRiskTaker.value = [];
           }
           if (investorProfileData.isComfortable) {
             const { fields } = this.INVESTMENT_EXP_FORM;
-            fields.isComfortable.value.push('checked');
+            if ((Array.isArray(toJS(fields.isComfortable.value)) &&
+              fields.isComfortable.value.length === 0)) {
+              fields.isComfortable.value.push('checked');
+            }
           } else {
             const { fields } = this.INVESTMENT_EXP_FORM;
             fields.isComfortable.value = [];
@@ -306,6 +318,7 @@ class InvestorProfileStore {
     this.resetFormData('PUBLIC_COMPANY_REL_FORM');
     this.resetFormData('FINANCES_FORM');
     this.resetFormData('INVESTMENT_EXP_FORM');
+    this.resetFormData('INVESTOR_PROFILE_FORM');
     this.stepToBeRendered = 0;
   }
 }

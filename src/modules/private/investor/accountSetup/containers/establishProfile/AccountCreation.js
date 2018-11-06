@@ -9,7 +9,7 @@ import Overview from './overview';
 import Finances from './Finances';
 import Experience from './Experience';
 
-@inject('uiStore', 'investorProfileStore', 'userDetailsStore')
+@inject('uiStore', 'investorProfileStore', 'userDetailsStore', 'userStore')
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
@@ -18,6 +18,7 @@ export default class AccountCreation extends React.Component {
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/summary');
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   handleStepChange = (step) => {
     this.props.investorProfileStore.setStepToBeRendered(step);
