@@ -373,7 +373,6 @@ export class InvestmentStore {
               agreementId: this.agreementDetails.agreementId,
               transferAmount: this.getTransferRequestAmount,
             },
-            // refetchQueries: [{ query: getBusinessApplications }],
           })
           .then((data) => {
             resolve(data.data.finishInvestment);
