@@ -45,8 +45,8 @@ class InvestorProfileStore {
   }
 
   @action
-  employmentChange = (e, result) => {
-    this.formChange(e, result, 'EMPLOYMENT_FORM');
+  employmentChange = (e, form, result) => {
+    this.formChange(e, result, form);
   }
 
   @action

@@ -19,7 +19,7 @@ export default class BrokerageEmployment extends Component {
           <FormRadioGroup
             fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
             name="brokerageEmployment"
-            changed={employmentChange}
+            changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
             containerclassname="button-radio center-align"
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes' &&
@@ -29,7 +29,7 @@ export default class BrokerageEmployment extends Component {
                 key="brokerageFirmName"
                 fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
                 name="brokerageFirmName"
-                changed={employmentChange}
+                changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
               />
             </Form.Group>
           </div>

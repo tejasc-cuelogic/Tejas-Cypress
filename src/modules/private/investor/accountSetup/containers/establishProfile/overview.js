@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import { Header, Divider, Button } from 'semantic-ui-react';
 
+@inject('investorProfileStore')
+@observer
 export default class Overview extends Component {
+  handleChangeStep = () => {
+    this.props.investorProfileStore.setStepToBeRendered(1);
+  }
   render() {
     return (
       <div>
@@ -14,7 +20,7 @@ export default class Overview extends Component {
           questions to complete your investor profile.
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="very relaxed" content="Continue" />
+          <Button primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
         </div>
         <div className="signup-actions">
           <p><Link to="/app/summary">I’ll do it later</Link></p>
