@@ -1,42 +1,43 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
-import {
-  FormInput, FormSelect, AutoComplete, MaskedInput,
-} from '../../../../../../theme/form';
+import { FormInput, FormSelect, AutoComplete, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
-import { US_STATES } from '../../../../../../constants/account';
+
+import { US_STATES_FOR_INVESTOR } from '../../../../../../constants/account';
 
 const LegalDetails = observer(({
   form, change, close, autoComplete, name, inProgress, errors, onSubmit, maskChange,
 }) => (
-  <Modal size="mini" open closeIcon onClose={close}>
+  <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
       <Header as="h3">Welcome {name}</Header>
-      <p>Let’s get you set up with a NextSeed investment <br /> account.</p>
-      <Divider />
+      <p>Let’s create your NextSeed investment account.</p>
+      <Divider section />
       <p>
-        Federal regulations require us to verify your legal<br />
-        identity. We use state-of-the-art security measures<br /> to protect your information.
+        Federal regulations require us to verify your legal identity.
+        We use state-of-the-art security measures to protect your information.
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
       {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-      }
+      <Message error textAlign="left">
+        <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+      </Message>
+        }
       {form.response.qualifiers &&
-        <Message error>
-          <CipErrors errorsList={form.response.qualifiers} />
-        </Message>
-      }
+      <Message error>
+        <CipErrors errorsList={form.response.qualifiers} />
+      </Message>
+        }
       <Form onSubmit={onSubmit}>
         <Form.Group widths="equal">
           <FormSelect
             containerwidth={8}
             name="title"
+            placeholder="Select"
             fielddata={form.fields.title}
             options={USER_TITLE}
             changed={change}
@@ -49,6 +50,7 @@ const LegalDetails = observer(({
                 name={field}
                 fielddata={form.fields[field]}
                 changed={change}
+                showerror
               />
             ))
           }
@@ -59,31 +61,38 @@ const LegalDetails = observer(({
           onplaceselected={autoComplete}
           changed={change}
           placeHolder="Street Address, City, State, Zip"
+          showerror
         />
-        <Form.Group widths="equal">
+        <Form.Group widths={2}>
           <FormInput
             key="city"
             type="text"
             name="city"
             fielddata={form.fields.city}
             changed={change}
+            showerror
           />
-          <FormSelect
-            key="state"
+          <FormDropDown
             name="state"
             fielddata={form.fields.state}
-            options={US_STATES}
-            changed={change}
+            options={US_STATES_FOR_INVESTOR}
+            search
+            selection
+            compact
+            placeholder="NY"
+            // onChange={(e, res) => userEleChange(e, res, 'dropdown')}
+            onChange={change}
           />
+        </Form.Group>
+        <Form.Group widths={2}>
           <MaskedInput
             key="zipCode"
             name="zipCode"
             fielddata={form.fields.zipCode}
             changed={maskChange}
             zipCode
+            showerror
           />
-        </Form.Group>
-        <Form.Group widths="equal">
           <MaskedInput
             name="phoneNumber"
             type="tel"
@@ -91,29 +100,38 @@ const LegalDetails = observer(({
             format="###-###-####"
             changed={maskChange}
             phoneNumber
+            showerror
           />
+        </Form.Group>
+        <Form.Group widths={2}>
           <MaskedInput
             name="dateOfBirth"
             fielddata={form.fields.dateOfBirth}
             format="##/##/####"
             changed={maskChange}
             dateOfBirth
+            showerror
+          />
+          <MaskedInput
+            name="ssn"
+            fielddata={form.fields.ssn}
+            ssn
+            changed={maskChange}
+            showerror
           />
         </Form.Group>
-        <MaskedInput
-          name="ssn"
-          fielddata={form.fields.ssn}
-          ssn
-          changed={maskChange}
-        />
-        <div className="center-align">
-          <Button.Group vertical>
-            <Button loading={inProgress} size="large" color="green" className="relaxed" >Verify my identity</Button>
-            <Button type="button" className="link-button cancel-link" onClick={close}>I’ll finish this later</Button>
-          </Button.Group>
+        <div className="center-align mt-30">
+          <Button primary size="large" className="very relaxed" content="Verify my identity" loading={inProgress} />
+          {/* <Button.Group vertical>
+            <Button type="button" className="link-button cancel-link"
+            onClick={close}>I’ll finish this later</Button>
+          </Button.Group> */}
         </div>
       </Form>
     </Modal.Content>
+    <Modal.Actions className="signup-actions">
+      <p><Link to="/app/summary" onClick={close}>I’ll finish this later</Link></p>
+    </Modal.Actions>
   </Modal>
 ));
 

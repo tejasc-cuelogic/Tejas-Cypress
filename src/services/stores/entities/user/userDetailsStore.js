@@ -2,7 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import { isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
+import { concat, isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
@@ -21,12 +21,22 @@ import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
+  @observable currentActiveAccount = null;
   @observable detailsOfUser = {};
   @observable editCard = 0;
   @observable deleting = 0;
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
+
+  @computed get currentUserId() {
+    return (this.userDetails && this.userDetails.id) || null;
+  }
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
@@ -36,15 +46,22 @@ export class UserDetailsStore {
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.details.status === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details && account.details.status === 'FULL');
     }
     return accDetails;
   }
 
+  @computed get currentActiveAccountDetails() {
+    const activeAccounts = this.getActiveAccounts;
+    return find(activeAccounts, acc => acc.name === this.currentActiveAccount);
+  }
+
   @action
-  setProfilePhoto(url) {
+  setProfilePhoto(url, name) {
     if (this.currentUser && this.currentUser.data.user.info.avatar) {
       this.currentUser.data.user.info.avatar.url = url;
+    } else if (url && name) {
+      this.currentUser.data.user.info.avatar = { name, url };
     }
   }
 
@@ -96,6 +113,7 @@ export class UserDetailsStore {
       variables: { userId },
       onFetch: () => {
         identityStore.setProfileInfo(this.userDetails);
+        accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         res();
       },
     });
@@ -233,9 +251,10 @@ export class UserDetailsStore {
   @computed
   get validAccTypes() {
     const validPanes = [];
-    const { inActiveAccounts } = this.signupStatus;
+    const { inActiveAccounts, partialAccounts } = this.signupStatus;
+    const remainingAccounts = concat(partialAccounts, inActiveAccounts);
     const accTypesValues = accountStore.INVESTMENT_ACC_TYPES.fields.accType.values;
-    inActiveAccounts.map((key) => {
+    remainingAccounts.map((key) => {
       const acc = find(accTypesValues, { accType: key });
       if (acc) {
         validPanes.push(acc);
@@ -271,6 +290,11 @@ export class UserDetailsStore {
         Validator.pullValues(e, result),
       );
     }
+  }
+
+  @action
+  resetStoreData = () => {
+    this.currentUser = {};
   }
 }
 

@@ -1,5 +1,6 @@
 import { camelCase, upperFirst } from 'lodash';
 import moment from 'moment';
+import Handlebars from 'handlebars';
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -25,13 +26,20 @@ class DataFormatter {
 
   getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
 
-  diffDays = (timeStamp2) => {
-    const date = new Date();
-    const timeStamp1 = date.getTime();
-    const convertedtimeStamp2 = new Date(timeStamp2);
-    const difference = timeStamp1 - convertedtimeStamp2.getTime();
-    const daysDifference = Math.floor(difference / 1000 / 60 / 60 / 24);
-    return daysDifference;
+  diffDays = (timeStamp2, inHours = false) => {
+    const d1 = moment().format('MM/DD/YYYY');
+    const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
+    const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
+    if (inHours) {
+      const date = new Date();
+      const convertedtimeStamp2 = new Date(timeStamp2);
+      const difference = convertedtimeStamp2.getTime() - date.getTime();
+      return Math.floor(difference / 1000 / 60 / 60);
+    }
+    if (diff <= 0) {
+      return 0;
+    }
+    return diff;
   }
 
   formatedDate = date => moment(date).format('MM/DD/YYYY');
@@ -43,6 +51,11 @@ class DataFormatter {
       result[pairVal[0]] = decodeURIComponent(pairVal[1] || '');
     });
     return JSON.parse(JSON.stringify(result));
+  }
+  /** reference https://www.npmjs.com/package/handlebars */
+  stringTemplateFormatting = (string, data) => {
+    const template = Handlebars.compile(string);
+    return template(data);
   }
 }
 

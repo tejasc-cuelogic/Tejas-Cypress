@@ -60,9 +60,13 @@
     > .icon{
         height:auto;
         vertical-align:top;
+        display:inline-block;
         &.ns-help-circle{
             font-size:@14px;
             margin:0 0 0 @5px;
+        }
+        &.right {
+            margin-right: 0;
         }
     }
     a.link{

@@ -16,6 +16,9 @@ const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
 @inject('uiStore')
 @observer
 export default class NavBarMobile extends Component {
+  setAuthRef = () => {
+    this.props.uiStore.setAuthRef(this.props.location.pathname);
+  }
   render() {
     const {
       onPusherClick, onToggle, visible,
@@ -61,7 +64,7 @@ export default class NavBarMobile extends Component {
             {/* <Icon className="ns-nextseed-icon hamburger" /> */}
             <Header as="h5" inverted>{navTitle}</Header>
             {!currentUser ? (
-              <Link to={`/auth/${stepInRoute.to}`} className="sign-in">
+              <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in">
                 {stepInRoute.title}
               </Link>
             ) : (
@@ -74,7 +77,7 @@ export default class NavBarMobile extends Component {
             )
             }
             {investBtn && (
-              <Button fluid={isMobile} as={Link} to="invest-now" secondary className="fixed-button">
+              <Button fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
                 Invest Now
               </Button>
             )}

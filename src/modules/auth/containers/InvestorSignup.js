@@ -1,9 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
-import { FormInput } from '../../../theme/form';
+import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
@@ -13,6 +14,9 @@ import { ListErrors } from '../../../theme/shared';
 class InvestorSignup extends Component {
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
+  }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
@@ -31,42 +35,37 @@ class InvestorSignup extends Component {
   };
   render() {
     const {
-      SIGNUP_FRM, signupChange, togglePasswordType, pwdInputType, reset,
+      SIGNUP_FRM, signupChange, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
-
+    const customError = errors && errors.code === 'UsernameExistsException'
+      ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
       <Modal
         size="mini"
         open
-        closeOnRootNodeClick={false}
+        closeOnDimmerClick={false}
+        closeIcon
         onClose={
           () => {
-            reset('SIGNUP');
-            this.props.history.push('/');
+            this.props.authStore.resetForm('SIGNUP_FRM');
+            this.props.history.push(this.props.uiStore.authRef || '/');
           }
         }
       >
         <Modal.Header className="center-align signup-header">
-          <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
           <Header as="h3">
             Sign up as {' '}
             {(SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
+          <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <Form>
-            <Button color="facebook" size="large" fluid>
-              Sign up with Facebook
-            </Button>
+            <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
           </Form>
-          <Divider horizontal section>Or</Divider>
-          <Form onSubmit={this.handleSubmitForm}>
+          <Divider horizontal section>or</Divider>
+          <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
               {
                 ['givenName', 'familyName'].map(field => (
@@ -88,13 +87,20 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
             />
-            <FormInput
+            <FormPasswordStrength
               key="password"
               name="password"
-              type={pwdInputType}
-              icon={togglePasswordType()}
-              fielddata={SIGNUP_FRM.fields.password}
+              type="password"
+              minLength={8}
+              minScore={4}
+              iconDisplay
+              tooShortWord="Weak"
+              scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+              inputProps={{
+                name: 'password', autoComplete: 'off', placeholder: 'Password',
+              }}
               changed={signupChange}
+              fielddata={SIGNUP_FRM.fields.password}
             />
             <FormInput
               key="verify"
@@ -103,13 +109,18 @@ class InvestorSignup extends Component {
               fielddata={SIGNUP_FRM.fields.verify}
               changed={signupChange}
             />
-            <div className="center-align">
-              <Button primary size="large" className="very relaxed" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid}>Register</Button>
+            {errors &&
+              <Message error textAlign="left" className="mt-30">
+                <ListErrors errors={[customError]} />
+              </Message>
+            }
+            <div className="center-align mt-30">
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid} />
             </div>
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <p>Already have an account? <Link to="/auth/login">Log in</Link></p>
+          <p><b>Already have an account?</b> <Link to="/auth/login">Log in</Link></p>
         </Modal.Actions>
       </Modal>
     );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Image, Container } from 'semantic-ui-react';
 import { NsCarousel, Image64 } from '../../../../../theme/shared';
-import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const isTablet = document.documentElement.clientWidth < 1024;
 @inject('campaignStore')
@@ -21,6 +21,7 @@ class AboutPhotoGallery extends Component {
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: true,
+      adaptiveHeight: true,
     };
     const galleryArray = campaign && campaign.media && campaign.media.gallery &&
       campaign.media.gallery.length ? campaign.media.gallery : [];
@@ -50,7 +51,7 @@ class AboutPhotoGallery extends Component {
                     <Image64 srcUrl={data.url} />
                   ))
                   :
-                  <Image src={emptyHeroImagePlaceholder} />
+                  <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
               }
             </NsCarousel>
           </Container>

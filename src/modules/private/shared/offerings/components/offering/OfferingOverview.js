@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Header, Button, Icon } from 'semantic-ui-react';
+import { Form, Divider, Header, Button } from 'semantic-ui-react';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingOverview extends Component {
   componentWillMount() {
@@ -16,12 +17,12 @@ export default class OfferingOverview extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore('OFFERING_OVERVIEW_FRM', 'highlight');
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const {
       OFFERING_OVERVIEW_FRM,
       currentOfferingId, updateOffering,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview');
+    updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview', true, undefined, isApproved);
   }
   render() {
     const {
@@ -29,14 +30,26 @@ export default class OfferingOverview extends Component {
       formArrayChange,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
+    const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.offering && offer.offering.overview &&
+      offer.offering.overview.submitted) ? offer.offering.overview.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.overview &&
+      offer.offering.overview.approved) ? offer.offering.overview.approved : null;
+    const issuerSubmitted = (offer && offer.offering && offer.offering.overview &&
+      offer.offering.overview.issuerSubmitted) ? offer.offering.overview.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
-      <Form onSubmit={this.handleFormSubmit}>
+      <Form>
         {
           ['elevatorPitch', 'tombstoneDescription'].map(field => (
             <Aux>
               <Header as="h4">{OFFERING_OVERVIEW_FRM.fields[field].label}</Header>
               <FormTextarea
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
@@ -52,6 +65,7 @@ export default class OfferingOverview extends Component {
         {
           OFFERING_OVERVIEW_FRM.fields.highlight.map((highlights, index) => (
             <FormInput
+              displayMode={isReadonly}
               name="highlight"
               label={`Bullet ${index + 1}`}
               fielddata={highlights.highlight}
@@ -69,6 +83,7 @@ export default class OfferingOverview extends Component {
         {
           ['facebook_url', 'linkedin_url', 'twitter_url', 'instagram_url', 'yelp_url'].map(field => (
             <FormInput
+              displayMode={isReadonly}
               key={field}
               name={field}
               fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
@@ -84,11 +99,13 @@ export default class OfferingOverview extends Component {
         </Header>
         <Header as="h6">Facebook</Header>
         <FormInput
+          displayMode={isReadonly}
           name="facebook_shareLink"
           fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
           changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <FormTextarea
+          readOnly={isReadonly}
           name="facebook_blurb"
           fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_blurb}
           changed={(e, result) => formArrayChange(e, result, formName)}
@@ -96,11 +113,13 @@ export default class OfferingOverview extends Component {
         />
         <Header as="h6">Twitter</Header>
         <FormInput
+          displayMode={isReadonly}
           name="twitter_shareLink"
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
           changed={(e, result) => formArrayChange(e, result, formName)}
         />
         <FormTextarea
+          readOnly={isReadonly}
           name="twitter_blurb"
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_blurb}
           changed={(e, result) => formArrayChange(e, result, formName)}
@@ -113,37 +132,22 @@ export default class OfferingOverview extends Component {
           </Header.Subheader>
         </Header>
         <FormTextarea
+          readOnly={isReadonly}
           name="googleMeta"
           fielddata={OFFERING_OVERVIEW_FRM.fields.googleMeta}
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
-        <Divider section />
-        <Header as="h4">Issuer Website
-          <Header.Subheader>Links to Issuer’s company website</Header.Subheader>
-        </Header>
-        <FormInput
-          name="issuerWebsite"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.issuerWebsite}
-          changed={(e, result) => formArrayChange(e, result, formName)}
-        />
         <Divider hidden />
-        <div className="clearfix">
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Submitted by USER_NAME on 2/3/2018
-          </Button>
-          <Button.Group floated="right">
-            {access.asManager ? (
-              <Aux>
-                <Button inverted color="red" content="Decline" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid} />
-                <Button color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Approve</Button>
-              </Aux>
-            ) : (
-              <Button primary color="green" className="relaxed" disabled={!OFFERING_OVERVIEW_FRM.meta.isValid}>Save</Button>
-            )}
-          </Button.Group>
-        </div>
+        <ButtonGroup
+          isIssuer={isIssuer}
+          submitted={submitted}
+          isManager={isManager}
+          formValid={OFFERING_OVERVIEW_FRM.meta.isValid}
+          approved={approved}
+          updateOffer={this.handleFormSubmit}
+          issuerSubmitted={issuerSubmitted}
+        />
       </Form>
     );
   }

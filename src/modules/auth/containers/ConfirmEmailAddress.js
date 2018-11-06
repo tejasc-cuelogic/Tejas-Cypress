@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message, Divider } from 'semantic-ui-react';
 import { authActions, validationActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
@@ -16,6 +16,10 @@ import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 @observer
 export default class ConfirmEmailAddress extends Component {
   componentWillMount() {
+    if (this.props.refLink) {
+      this.props.uiStore.setAuthRef(this.props.refLink);
+    }
+    this.props.authStore.resetForm('CONFIRM_FRM');
     const credentials = cookie.load('USER_CREDENTIALS');
     if (credentials) {
       this.props.authStore.setCredentials(credentials);
@@ -23,6 +27,7 @@ export default class ConfirmEmailAddress extends Component {
   }
   componentWillUnmount() {
     cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
+    this.props.uiStore.clearErrors();
   }
   handleInputChange = (e, { name, value }) =>
     validationActions.validateLoginField(name, value);
@@ -39,7 +44,6 @@ export default class ConfirmEmailAddress extends Component {
     } else {
       authActions.confirmCode()
         .then(() => {
-          this.props.authStore.reset('CONFIRM');
           const { roles } = this.props.userStore.currentUser;
           const redirectUrl = !roles ? '/auth/login' :
             SIGNUP_REDIRECT_ROLEWISE.find(user =>
@@ -51,8 +55,7 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.authStore.reset('CONFIRM');
-    this.props.history.push(this.props.refLink || '/');
+    this.props.history.push(this.props.uiStore.authRef || '/');
     this.props.uiStore.clearErrors();
   }
 
@@ -61,8 +64,10 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.authStore.requestEmailChange().then(() => {
         Helper.toast('Re-sent the verification code', 'success');
+        this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
+        this.props.uiStore.clearErrors();
       })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       authActions.resendConfirmationCode();
     }
@@ -78,12 +83,19 @@ export default class ConfirmEmailAddress extends Component {
       canSubmitConfirmEmail,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    if (errors && errors.code === 'NotAuthorizedException') {
+      this.props.history.push('/auth/login');
+    }
     return (
       <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
-          <Divider />
-          <p>Please confirm the 6-digit verification code sent to your email</p>
+          <p>
+            We&#39;re introducing Multi-Factor Authentication (MFA) to
+            increase the security of your NextSeed account
+          </p>
+          <Divider section />
+          <p>Please confirm the 6-digit verification code sent to your email address</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
@@ -97,13 +109,8 @@ export default class ConfirmEmailAddress extends Component {
             displayMode
             className="display-only"
           />
-          <p><Link to={changeEmailAddressLink}>Change email address</Link></p>
-          {errors &&
-            <Message error textAlign="left">
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
-          <Form onSubmit={this.handleSubmitForm}>
+          <Link to={changeEmailAddressLink} className="grey-link">Change email address</Link>
+          <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -114,13 +121,26 @@ export default class ConfirmEmailAddress extends Component {
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
+              <Button type="button" size="small" color="grey" className="link-button" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
             </Form.Field>
-            <Button.Group vertical>
-              <Button primary size="large" className="very relaxed" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))}>Confirm</Button>
-              <Button type="button" className="link-button cancel-link" loading={confirmProgress === 'resend' && inProgress} onClick={() => this.handleResendCode()}>Resend the code to my email</Button>
-            </Button.Group>
+            {errors &&
+              <Message error textAlign="left" className="mb-40">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
+            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
+            {/* <Header as="h3" className="success-msg mb-60">
+              <Icon className="ns-check-circle" color="green" />
+              Your e-mail address has been confirmed.
+            </Header> */}
+            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
+            <Button primary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
           </Form>
         </Modal.Content>
+        {/* <Modal.Actions className="signup-actions">
+          <Button type="button" className="link-button"
+          content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+        </Modal.Actions> */}
       </Modal>
     );
   }

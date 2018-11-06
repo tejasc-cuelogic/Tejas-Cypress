@@ -2,8 +2,9 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [String], $accountStatus: [String], $search: String, $page: Int) {
-    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, page: $page) {
+  query listUsers($accountType: [String], $accountStatus: [String], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
+    listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page) {
+      resultCount
       users {
         id
         email {
@@ -39,6 +40,12 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      limits {
+        income
+        netWorth
+        otherContributions
+        limit
+      }
       info {
         firstName
         lastName
@@ -122,6 +129,9 @@ export const userDetailsQuery = gql`
               accountNumber
               routingNumber
               plaidAccessToken
+            }
+            created {
+              date
             }
             status
           }

@@ -26,6 +26,7 @@ export const allOfferings = gql`
       offering {
         launch {
           targetDate
+          terminationDate
         }
       }
       applicationId
@@ -59,18 +60,30 @@ export const getOfferingDetails = gql`
   query _getOfferingById($id: String!) {
     getOfferingById(id: $id) {
       id
-      offeringUrl
+      offeringSlug
       referralCode
       keyTerms {
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
         legalBusinessName
         shorthandBusinessName
         industry
         maturity
+        regulation
         frequencyOfPayments
-        terminationDate
         securities
         securityInterest
         securitiesOwnershipPercentage
+        locationRiskFactors
         investmentMultiple
         revSharePercentage
         interestRate
@@ -79,12 +92,13 @@ export const getOfferingDetails = gql`
         legalBusinessType
         nsMinFees
         nsMaxFees
-        gsFees
         stateOfFormation
         city
         state
         minInvestAmt
         maxInvestAmt
+        appendixATitle
+        investmentMultipleSummary
         stockType
         offeringExpTarget
         offeringExpMax
@@ -96,53 +110,107 @@ export const getOfferingDetails = gql`
         isAlcohol
         uploadProformas {
           fileId
-          url
           fileName
-          isPublic
+          fileHandle {
+            id
+            boxFileId
+            fileExtension
+            fileStatus
+            fileType
+            stepName
+            userId
+            created {
+              id
+              by
+              date
+            }
+            updated {
+              id
+              by
+              date
+            }
+            deleted {
+              id
+              by
+              date
+            }
+          }
         }
       }
       media {
         heroImage {
+          id
           url
           isPublic
+          fileName
         }
         tombstoneImage {
+          id
           url
           isPublic
+          fileName
+        }
+        locationHeroImage {
+          id
+          url
+          isPublic
+          fileName
         }
         location {
+          id
           url
           isPublic
+          fileName
         }
         gallery {
+          id
           url
           isPublic
+          fileName
         }
         logo {
+          id
           url
           isPublic
+          fileName
         }
         heroVideo {
+          id
           url
           isPublic
+          fileName
+        }
+        issuerSubmitted
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
         }
       }
       contingencies {
         launch {
-          index
           contingency
           acceptance
           accepted {
+            status
+            id
             by
+            date
             comment
           }
         }
         close {
-          index
           contingency
           acceptance
           accepted {
             id
+            status
             date
             by
             comment
@@ -162,6 +230,18 @@ export const getOfferingDetails = gql`
             blurb
           }
           issuerWebsite
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
         }
         about {
           theCompany
@@ -171,6 +251,46 @@ export const getOfferingDetails = gql`
           }
           businessModel
           locationAnalysis
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+        }
+        misc {
+          additionalBonusRewardsContent
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+        }
+        misc {
+          additionalBonusRewardsContent
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
         }
         launch {
           targetDate
@@ -180,7 +300,18 @@ export const getOfferingDetails = gql`
           escrowKey
           escrowNumber
           edgarLink
-          
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+          gsFees
         }
       }
       legal {
@@ -237,6 +368,18 @@ export const getOfferingDetails = gql`
             amountTransaction
             description
           }
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
         }
         riskFactors {
           businessRisk
@@ -245,12 +388,269 @@ export const getOfferingDetails = gql`
           reputationalRisk
           competitionRisk
           marketRisk
-          terrorismRisk
+          workStoppagesRisks
           managementRisk
           personnelRisk
           laborSupplyRisk
           privacyRisk
-          otherRisk
+          realEstateRisks
+          supplyRisks
+          foodSafetyRisks
+          nutritionalDisclosureRisks
+          foodRisks
+          alcoholSalesRisks
+          alcoholInvestmentRisks
+          industryRisks
+          healthcareRisks
+          legalRisks
+          environmentalRisks
+          itRisks
+          accountingRisks
+          ipRisks
+          regulatoryRisks
+          regulatoryFoodRisks
+          taxRisks
+          limitedRepaymentRisks
+          relatingForecastsRisks
+          debtFinancingRisks
+          conflictOfInterestRisks
+          issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+        }
+        documentation {
+          issuer {
+            formID {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            corpFormation {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            issuerFinancials {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            leaseAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            issuerSubmitted
+            submitted {
+              id
+              by
+              date
+            }
+            approved {
+              id
+              by
+              date
+              status
+            }
+          }
+          admin {
+            escrow {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            resolutionOfBorrowing {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            formC {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            npa {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            disclosure {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            securityAgreement {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            personalGuarantee {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
+            edgar
+            submitted {
+              id
+              by
+              date
+            }
+            approved {
+              id
+              by
+              date
+              status
+            }
+          }
+          admin {
+            escrow {
+              fileId
+              fileName
+            }
+            resolutionOfBorrowing {
+              fileId
+              fileName
+            }
+            formC {
+              fileId
+              fileName
+            }
+            npa {
+              fileId
+              fileName
+            }
+            disclosure {
+              fileId
+              fileName
+            }
+            securityAgreement {
+              fileId
+              fileName
+            }
+            personalGuarantee {
+              fileId
+              fileName
+            }
+          }
         }
       }
       leadership {
@@ -268,6 +668,7 @@ export const getOfferingDetails = gql`
         leaderBacId
         phone {
           number
+          countryCode
         }
         dob
         ssn
@@ -284,16 +685,22 @@ export const getOfferingDetails = gql`
         bio
         uploads {
           headshot {
-            fileId
+            id
+            url
             fileName
+            isPublic
           }
           heroImage {
-            fileId
+            id
+            url
             fileName
+            isPublic
           }
           license {
-            fileId
+            id
+            url
             fileName
+            isPublic
           }
         }
         social {
@@ -304,6 +711,18 @@ export const getOfferingDetails = gql`
         }
         otherEntities
         promoters
+        issuerSubmitted
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
       }
       closureSummary {
         disbursementDate
@@ -319,22 +738,31 @@ export const getOfferingDetails = gql`
         description
         rewardStatus
         expirationDate
-        tiers{
+        tiers {
           amount
           earlyBirdQuantity
+          created {
+            id
+            by
+            date
+          }
         }
-        created{
+        created {
           id
           by
           date
         }
-        updated{
+        updated {
+          id
+          by
+          date
+        }
+        deleted {
           id
           by
           date
         }
       }
-  
       applicationId
       issuerId
       lead {
@@ -353,14 +781,17 @@ export const getOfferingDetails = gql`
       }
       created{
         id
+        by
         date
       }
       updated{
         id
+        by
         date
       }
       deleted{
         id
+        by
         date
       }
     }
@@ -370,6 +801,14 @@ export const getOfferingDetails = gql`
 export const updateOffering = gql`
 mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
   updateOffering(id: $id offeringDetails: $offeringDetails) {
+    id
+  }
+}
+`;
+
+export const upsertOffering = gql`
+mutation upsertOffering($id: String, $offeringDetails: OfferingInputType!) {
+  upsertOffering(id: $id, offeringDetails: $offeringDetails) {
     id
   }
 }
@@ -417,6 +856,7 @@ query _getOfferingBac($offeringId: String! $bacType: OfferingBacTypeEnumType){
       id
       by
       date
+      status
       reportGeneratedDate
     }
     created{

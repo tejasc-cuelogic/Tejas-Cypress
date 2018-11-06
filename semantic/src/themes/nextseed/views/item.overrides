@@ -159,7 +159,7 @@
         }
     }
     &.campaign-updates >.item{
-        img {
+        .ui.image img {
             border-radius: 50%;
         }
         .content>.header:not(.ui) {
@@ -171,6 +171,9 @@
             line-height: 20px;
             margin: 0;
         }
+        img {
+            width: 100%;
+        }
     }
 }
 .horizontal-items {
@@ -180,12 +183,11 @@
 		margin-left: -@14px;
 		margin-right: -@14px;
 		>.item {
-            width: 50%;
+            width: 43%;
             @media only screen and (max-width : @largestMobileScreen){
                 width: 100%;
             }
-			margin-top: 0;
-			margin-bottom: @30px;
+            margin: 0 auto @30px;
 			padding-left: @14px;
 			padding-right: @14px;
 			.ui.mini.image {
@@ -263,5 +265,10 @@
         .description {
             color: @neutral;
         }
+    }
+}
+.testimonial .ui.items>.item>.image>img{
+    @media only screen and (max-width : @largestMobileScreen){
+        height: 180px;
     }
 }

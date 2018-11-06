@@ -12,6 +12,7 @@ import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import apiService from '../../../../api/restApi';
+import { US_STATES_FOR_INVESTOR } from '../../../../constants/account';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -102,14 +103,15 @@ export class IdentityStore {
   };
 
   @action
-  resetFormData(form) {
-    const resettedForm = FormValidator.resetFormData(this[form]);
+  resetFormData(form, targetedFields = []) {
+    const resettedForm = FormValidator.resetFormData(this[form], targetedFields);
     this[form] = resettedForm;
   }
 
   @computed
   get formattedUserInfo() {
     const { fields } = this.ID_VERIFICATION_FRM;
+    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
     const { phone } = userDetailsStore.userDetails;
     const userInfo = {
       legalName: {
@@ -122,7 +124,7 @@ export class IdentityStore {
       legalAddress: {
         street: fields.residentalStreet.value,
         city: fields.city.value,
-        state: fields.state.value,
+        state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
       },
     };
@@ -424,7 +426,7 @@ export class IdentityStore {
           if (!response.body.errorMessage) {
             this.setProfilePhoto('responseUrl', response.body.fileFullPath);
             this.updateUserProfileData().then(() => {
-              userDetailsStore.setProfilePhoto(response.body.fileFullPath);
+              userDetailsStore.setProfilePhoto(response.body.fileFullPath, response.body.name);
               Helper.toast('Profile photo updated successfully', 'success');
               this.resetProfilePhoto();
               resolve(response);
@@ -567,7 +569,7 @@ export class IdentityStore {
 
   @computed
   get canUpdateProfilePhoto() {
-    return this.ID_PROFILE_INFO.fields.profilePhoto.value !== '';
+    return this.ID_PROFILE_INFO.fields.profilePhoto.fileName !== '';
   }
 
   @action
@@ -583,6 +585,13 @@ export class IdentityStore {
       },
     });
   })
+
+  @action
+  resetStoreData = () => {
+    this.resetFormData('ID_VERIFICATION_FRM');
+    this.resetFormData('ID_VERIFICATION_DOCS_FRM');
+    this.resetFormData('ID_PHONE_VERIFICATION');
+  }
 }
 
 export default new IdentityStore();

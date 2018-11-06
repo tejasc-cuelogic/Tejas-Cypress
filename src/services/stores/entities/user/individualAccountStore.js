@@ -45,14 +45,17 @@ class IndividualAccountStore {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (result.data.createInvestorAccount) {
-            bankAccountStore.setPlaidAccDetails(result.data.createInvestorAccount.accountDetails);
+            const { linkedBank } = result.data.createInvestorAccount;
+            bankAccountStore.setPlaidAccDetails(linkedBank);
           } else {
-            bankAccountStore.setPlaidAccDetails(result.data.updateInvestorAccount.accountDetails);
+            const { linkedBank } = result.data.updateInvestorAccount;
+            bankAccountStore.setPlaidAccDetails(linkedBank);
           }
           if (formStatus === 'submit') {
             Helper.toast('Individual account created successfully.', 'success');
             this.submited = true;
           } else if (currentStep) {
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           } else {
             Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
@@ -74,7 +77,7 @@ class IndividualAccountStore {
   populateData = (userData) => {
     if (!isEmpty(userData) && !this.formStatus) {
       const account = find(userData.roles, { name: 'individual' });
-      if (account) {
+      if (account && account.details) {
         if (account.details.linkedBank.plaidItemId) {
           const plaidAccDetails = account.details.linkedBank;
           bankAccountStore.setPlaidAccDetails(plaidAccDetails);

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Modal, Image, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../theme/shared';
-import interiorView from '../../../../assets/images/interior-view-patio-garden.jpg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 @inject('campaignStore')
 @observer
@@ -25,7 +25,7 @@ class BusinessModal extends Component {
         <Modal.Content image scrolling>
           <Grid stackable doubling>
             <Grid.Column computer={7} tablet={7} mobile={16}>
-              <Image src={interiorView} wrapped />
+              <Image src={`${ASSETS_URL}images/interior-view-patio-garden.jpg`} wrapped />
             </Grid.Column>
             <Grid.Column computer={9} tablet={9} mobile={16}>
               {

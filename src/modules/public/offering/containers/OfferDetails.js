@@ -9,9 +9,9 @@ import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shar
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import InvestNow from '../components/investNow/InvestNow';
 import Agreement from '../components/investNow/agreement/components/Agreement';
-import DocSign from '../components/investNow/agreement/components/DocSign';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
+import NotFound from '../../../shared/NotFound';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -62,6 +62,9 @@ class offerDetails extends Component {
     if (!details || details.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
+    if (details && details.data && !details.data.getOfferingDetailsById) {
+      return <NotFound />;
+    }
     return (
       <div className="offer-details">
         <Responsive minWidth={768} as={Aux}>
@@ -79,12 +82,11 @@ class offerDetails extends Component {
                 const CurrentComponent = getModule(item.component);
                 return (
                   <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
-              );
+                );
               })
             }
-            <Route path={`${match.url}/invest-now`} component={InvestNow} />
-            <Route path={`${match.url}/agreement`} component={Agreement} />
-            <Route path={`${match.url}/doc-sign`} component={DocSign} />
+            <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
+            <Route path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
             <Route path={`${match.url}/congratulation`} component={Congratulation} />
           </Switch>
         </div>

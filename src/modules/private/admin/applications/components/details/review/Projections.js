@@ -5,6 +5,7 @@ import { Form, Divider } from 'semantic-ui-react';
 import { FormTextarea, DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -29,21 +30,26 @@ export default class Projections extends Component {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
-    const { PROJECTIONS_FRM, formChange } = this.props.businessAppReviewStore;
+    const { PROJECTIONS_FRM, formChange, inProgress } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.projections && review.projections &&
       review.projections.submitted) ? review.projections.submitted : false;
     const approved = (review && review.projections && review.projections &&
       review.projections.approved) ? review.projections.approved : false;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <div>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={PROJECTIONS_FRM.meta.isValid} formName="PROJECTIONS_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={PROJECTIONS_FRM.meta.isValid} formName="PROJECTIONS_FRM" />
           {
             ['reasonableHistoricals', 'projectionsComplete', 'revenueCheck'].map((field, index) => (
               <Aux>
@@ -106,6 +112,7 @@ export default class Projections extends Component {
             changed={(e, result) => formChange(e, result, 'PROJECTIONS_FRM')}
           />
           <ButtonGroup
+            inProgress={inProgress}
             formName="PROJECTIONS_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

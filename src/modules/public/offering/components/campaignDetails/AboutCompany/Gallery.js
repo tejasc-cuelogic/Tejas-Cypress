@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Breadcrumb, Grid, Segment, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { NsCarousel, Image64 } from '../../../../../../theme/shared';
-import emptyHeroImagePlaceholder from '../../../../../../assets/images/gallery-placeholder.jpg';
+import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class Gallery extends Component {
   render() {
@@ -28,7 +28,7 @@ class Gallery extends Component {
                     <Image64 srcUrl={data.url} />
                   ))
                   :
-                  <Image src={emptyHeroImagePlaceholder} />
+                  <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
               }
             </NsCarousel>
           </div>

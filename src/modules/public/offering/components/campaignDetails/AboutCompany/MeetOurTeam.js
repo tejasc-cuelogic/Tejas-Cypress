@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
 import { InlineLoader } from '../../../../../../theme/shared';
-import defaultLeaderProfile from '../../../../../../assets/images/leader-placeholder.jpg';
+import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class MeetOurTeam extends Component {
   render() {
@@ -21,10 +22,14 @@ class MeetOurTeam extends Component {
           <Header as="h4">
             {meetTeamOjb.length ?
               <Link to={`${meetOurTeamUrl}/meetourteam`}>
-                Meet our team
+                Meet Our Team
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
-              : <p>Meet our team</p>
+              :
+              <Aux>
+                Meet Our Team
+                <Icon className="ns-chevron-right" color="green" />
+              </Aux>
             }
           </Header>
           {
@@ -45,7 +50,7 @@ class MeetOurTeam extends Component {
                               src={
                                 data && data.uploads && data.uploads.headshot &&
                                   data.uploads.headshot.url ?
-                                  data.uploads.headshot.url : defaultLeaderProfile
+                                  data.uploads.headshot.url : `${ASSETS_URL}images/leader-placeholder.jpg`
                               }
                               circular
                             />

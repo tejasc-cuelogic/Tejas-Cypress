@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Modal, Header, List, Icon, Image, Divider } from 'semantic-ui-react';
-import emptyHeroImagePlaceholder from '../../../../../assets/images/gallery-placeholder.jpg';
+import { Image64 } from '../../../../../theme/shared';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 // import videoPoster from '../../../../../assets/images/636206632.jpg';
 
@@ -58,16 +59,12 @@ class CompanyDescriptionModal extends Component {
                 :
                   <p>{emptyStatement}</p>
             }
-            <Image
-              src={
-                campaign && campaign.media && campaign.media.heroImage
+            {campaign && campaign.media && campaign.media.heroImage
                   && campaign.media.heroImage.url ?
-                  campaign.media.heroImage.url : emptyHeroImagePlaceholder
+                    <Image64 fluid centered className="mt-30" srcUrl={campaign.media.heroImage.url} />
+                    :
+                    <Image fluid centered className="mt-30" src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
               }
-              fluid
-              centered
-              className="mt-30"
-            />
           </Aux>
           <Divider section />
           <div className="history-section">

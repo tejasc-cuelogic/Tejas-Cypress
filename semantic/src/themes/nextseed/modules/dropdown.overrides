@@ -137,9 +137,22 @@
             display:none;
         }
     }
+    > .text{
+        width:100%;
+    }
 }
-.ui.dropdown.inverted>.text{
-	color:@white;
+.ui.dropdown{
+    >.text{
+        overflow:hidden;
+        white-space:nowrap;
+        text-overflow:ellipsis;
+    }
+    &.inverted>.text{
+        color:@white;
+    }
+}
+.ui.vertical.menu .ui.dropdown.item > .text{
+    max-width:~"calc(100% - 20px)";
 }
 .notification-box{
 	.ui.dropdown .icon.dropdown{

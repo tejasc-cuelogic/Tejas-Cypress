@@ -84,58 +84,58 @@ export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {
 
 export const BUSINESS_DETAILS_EDIT_META = {
   businessName: {
-    value: '', label: 'Business Name', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
+    value: '', label: 'Business Name', error: undefined, rule: 'required', placeHolder: 'e.g. NextBrewery', customErrors: { required: 'required' },
   },
   signupCode: {
-    value: '', label: 'Sign-Up Code', error: undefined, rule: 'optional', placeHolder: 'e.g.  JB-123',
+    value: '', label: 'Sign-Up Code', error: undefined, rule: 'optional', placeHolder: 'e.g. JB-123',
   },
 };
 
 export const NEED_HELP = {
   name: {
-    value: '', label: 'Name', error: undefined, rule: 'required', placeHolder: 'e.g.  Jhon', customErrors: { required: 'required' },
+    value: '', label: 'Name', error: undefined, rule: 'required', placeHolder: 'e.g. John', customErrors: { required: 'required' },
   },
   email: {
-    value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g abc@xyz.com', customErrors: { required: 'required' },
+    value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g. abc@xyz.com', customErrors: { required: 'required' },
   },
   phone: {
-    value: '', label: 'Phone', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123)-456-7890', customErrors: { required: 'required', maskedField: 'required' },
+    value: '', label: 'Phone', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123) 456-7890', customErrors: { required: 'required', maskedField: 'required' },
   },
   question: {
-    value: '', label: 'Question', error: undefined, rule: 'required', placeHolder: 'e.g.  Enter your question here', customErrors: { required: 'required' },
+    value: '', label: 'Question', error: undefined, rule: 'required', placeHolder: 'e.g. Enter your question here', customErrors: { required: 'required' },
   },
 };
 
 export const BUSINESS_PRE_QUALIFICATION_BASIC = {
   firstName: {
-    value: '', label: 'First Name', error: undefined, rule: 'required', placeHolder: 'e.g.  Jhon', customErrors: { required: 'required' },
+    value: '', label: 'First Name', error: undefined, rule: 'required', placeHolder: 'e.g. John', customErrors: { required: 'required' },
   },
   lastName: {
-    value: '', label: 'Last Name', error: undefined, rule: 'required', placeHolder: 'e.g.  Smith', customErrors: { required: 'required' },
+    value: '', label: 'Last Name', error: undefined, rule: 'required', placeHolder: 'e.g. Smith', customErrors: { required: 'required' },
   },
   email: {
-    value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g abc@xyz.com', customErrors: { required: 'required' },
+    value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g. abc@xyz.com', customErrors: { required: 'required' },
   },
 };
 
 const BUSINESS_PREQUAL_COMMON = {
   businessName: {
-    value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
+    value: '', label: 'Business Name', error: undefined, rule: 'required|string', placeHolder: 'e.g. NextBrewery', customErrors: { required: 'required' },
   },
   website: {
-    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g.  http://nextbrewery.com', customErrors: { required: 'required' },
+    value: '', label: 'Website', error: undefined, rule: 'required', placeHolder: 'e.g. http://nextbrewery.com', customErrors: { required: 'required' },
   },
   phoneNumber: {
-    value: '', label: 'Phone Number', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123)-456-7890', customErrors: { required: 'required', maskedField: 'required' },
+    value: '', label: 'Phone Number', error: undefined, rule: 'required|maskedField:10', placeHolder: '(123) 456-7890', customErrors: { required: 'required', maskedField: 'required' },
   },
   street: {
-    value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g.  NextBrewery', customErrors: { required: 'required' },
+    value: '', label: 'Street', error: undefined, rule: 'required', placeHolder: 'e.g. Baker Street 221B', customErrors: { required: 'required' },
   },
   city: {
-    value: '', label: 'City', error: undefined, rule: 'required', placeHolder: 'e.g.  NY', customErrors: { required: 'required' },
+    value: '', label: 'City', error: undefined, rule: 'required', placeHolder: 'e.g. New York', customErrors: { required: 'required' },
   },
   state: {
-    value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g.  NY', customErrors: { required: 'required' },
+    value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g. NY', customErrors: { required: 'required' },
   },
   zipCode: {
     value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6, customErrors: { required: 'required' },
@@ -585,7 +585,7 @@ export const LENDIO_PRE_QUAL = {
     label: 'Business Name (or anticipated name)',
     error: undefined,
     rule: 'required|string',
-    placeHolder: 'e.g.  NextBrewery',
+    placeHolder: 'e.g. NextBrewery',
   },
   businessOwnerName: {
     value: '', label: 'Business Owner\'s Full Name', error: undefined, rule: 'required', placeHolder: 'e.g. John Doe',
@@ -594,7 +594,7 @@ export const LENDIO_PRE_QUAL = {
     value: '', label: 'Email Address', error: undefined, rule: 'required|email', placeHolder: 'e.g.next.brewery@contact.com',
   },
   phoneNumber: {
-    value: '', label: 'Best Contact Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456 789',
+    value: '', label: 'Best Contact Phone Number', error: undefined, rule: 'required', placeHolder: '(123) 456-7890',
   },
   comments: {
     value: '', label: 'Comments (Optional)', error: undefined, rule: 'optional', placeHolder: 'Add your comments here',

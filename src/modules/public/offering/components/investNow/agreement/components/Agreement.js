@@ -1,67 +1,84 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Button, Grid, Form, Popup, Icon, Divider } from 'semantic-ui-react';
-import { MaskedInput, FormCheckbox } from '../../../../../../../theme/form';
+import { withRouter, Route, Link } from 'react-router-dom';
+import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
+import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
-@inject('investmentStore', 'userDetailsStore')
+import ConfirmCancellation from '../../ConfirmCancellation';
+
+@inject('investmentStore', 'uiStore')
+@withRouter
 @observer
 export default class Agreement extends React.Component {
+  state = {
+    showDocuSign: false,
+  }
   componentWillMount() {
-    const { stepToBeRendered, setStepToBeRendered } = this.props.investmentStore;
-    if (stepToBeRendered === 2) {
+    const { stepToBeRendered, setStepToBeRendered, investAccTypes } = this.props.investmentStore;
+    if (investAccTypes.value === '') {
+      this.props.history.push(`${this.props.refLink}/invest-now`);
+    } else if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
   }
   handleCloseModal = () => {
-    this.props.history.push('overview');
+    if (this.props.changeInvestment) {
+      const { offeringId } = this.props.match.params;
+      this.props.history.push(`${this.props.refLink}/${offeringId}`);
+    } else {
+      this.props.history.push(`${this.props.refLink}/overview`);
+    }
   }
   submit = () => {
-    const { notePurchaseAgrChecked } = this.props.investmentStore;
-    this.props.history.push(notePurchaseAgrChecked ? 'doc-sign' : 'congratulation');
+    this.props.investmentStore.finishInvestment().then((investmentStatus) => {
+      if (investmentStatus) {
+        this.props.history.push('congratulation');
+      }
+    });
   }
-
+  handleCancelAgreement = (e) => {
+    e.preventDefault();
+    const { match } = this.props;
+    this.props.history.push(`${match.url}/confirm-cancellation`);
+  }
+  docuSignHandeler = (event, state) => {
+    event.preventDefault();
+    this.setState({ showDocuSign: state });
+  }
   render() {
     const {
-      investmentLimitsChecked,
       AGREEMENT_DETAILS_FORM,
       investmentAmount,
-      agreementInfoChange,
       setCheckbox,
+      agreementDetails,
     } = this.props.investmentStore;
+    const { match, uiStore } = this.props;
+    const { inProgress } = uiStore;
     return (
-      <Modal size="large" open closeIcon closeOnRo otNodeClick={false} onClose={() => this.handleCloseModal()}>
-        <Modal.Content className="signup-header">
-          <Header as="h3">
+      <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+        <Route exact path={`${match.url}/confirm-cancellation`} render={() => <ConfirmCancellation refLink={this.props.refLink} />} />
+        <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
+          <div className="pdf-viewer">
+            <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+          </div>
+          <div className="center-align mt-20">
+            <Button type="button" primary onClick={e => this.docuSignHandeler(e, false)}>
+            Go Back
+            </Button>
+          </div>
+        </Modal.Content>
+        <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'none' : 'block' }}>
+          <Header as="h3" className="mb-40">
             Let&#39;s confirm your investment.<br />You are investing
             <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in Pour Behavior.
           </Header>
+          {!AGREEMENT_DETAILS_FORM.meta.isValid &&
+            <Message error textAlign="left" className="mb-40">
+              All boxes must be checked to confirm your investment.
+            </Message>
+          }
           <Form error size="huge">
-            {investmentLimitsChecked ?
-              <Grid divided doubling columns={4} className="agreement-details">
-                {['netWorth', 'annualIncome', 'OtherRegCfInvestments'].map(field => (
-                  <Grid.Column>
-                    <MaskedInput
-                      hoverable
-                      currency
-                      prefix="$ "
-                      fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
-                      changed={values => agreementInfoChange(values, field)}
-                    />
-                  </Grid.Column>
-                  ))
-                  }
-                <Grid.Column verticalAlign="middle">
-                  <p className="note"><i>Why do I need to provide this information?</i>
-                    <Popup
-                      trigger={<Icon color="green" name="help circle" />}
-                      content="If you invest more than $2,200 in a 12-month period, we are required by law to ask for your net worth and annual income."
-                      position="top center"
-                    />
-                  </p>
-                </Grid.Column>
-              </Grid>
-           : null
-            }
             <Grid stackable>
               <Grid.Row>
                 {['checkboxesLeft', 'checkboxesRight'].map(field => (
@@ -72,6 +89,11 @@ export default class Agreement extends React.Component {
                       name={field}
                       containerclassname="ui very relaxed list"
                       changed={setCheckbox}
+                      customLabel={(
+                        <Aux>
+                          I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
+                        </Aux>
+                      )}
                     />
                   </Grid.Column>
               ))}
@@ -80,7 +102,17 @@ export default class Agreement extends React.Component {
           </Form>
           <Divider hidden />
           <div className="center-align">
-            <Button primary onClick={this.submit}>Invest</Button>
+            <Button
+              primary
+              loading={inProgress}
+              disabled={!AGREEMENT_DETAILS_FORM.meta.isValid}
+              onClick={this.submit}
+            >
+            Invest
+            </Button>
+            <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
+            Cancel
+            </Button>
           </div>
         </Modal.Content>
       </Modal>

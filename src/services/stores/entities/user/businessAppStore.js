@@ -475,6 +475,10 @@ export class BusinessAppStore {
     ) || null;
   }
 
+  @computed get applicationReviewLoading() {
+    return this.businessApplicationsDataById.loading;
+  }
+
   @computed get fetchPrequalBusinessApplicationsDataById() {
     return (this.businessApplicationsDataById && this.businessApplicationsDataById.data
       && this.businessApplicationsDataById.data.getPreQualificationById
@@ -1032,7 +1036,10 @@ export class BusinessAppStore {
         .mutate({
           mutation: mutationQuery,
           variables: variableData,
-          refetchQueries: [{ query: getBusinessApplications }],
+          refetchQueries: [
+            { query: getBusinessApplicationsById, variables: { id: this.currentApplicationId } },
+            { query: getBusinessApplications },
+          ],
         })
         .then((result) => {
           this.setAppStepsStatus(key, 'status', stepStatus);
@@ -1116,11 +1123,13 @@ export class BusinessAppStore {
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
+          }).finally(() => {
+            this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
+            this.setFieldvalue('isFileUploading', false);
           });
         }).catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-        }).finally(() => {
           this.setFormFileArray(formName, fieldName, 'showLoader', false, index);
           this.setFieldvalue('isFileUploading', false);
         });

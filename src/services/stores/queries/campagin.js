@@ -7,7 +7,9 @@ query getOfferingList($filters: OfferingFilterInputType){
       stage
       media {
         tombstoneImage {
-        url
+          url
+          isPublic
+          fileName
         }
       }
       offering {
@@ -45,12 +47,13 @@ export const campaignDetailsQuery = gql`
     stage
     applicationId
     issuerId
-    offeringUrl
+    offeringSlug
     referralCode
     selectedOffer {
       structure
     }
     keyTerms {
+      regulation
       legalBusinessName
       shorthandBusinessName
       maturity
@@ -66,6 +69,7 @@ export const campaignDetailsQuery = gql`
       industry
       minInvestAmt
       maxInvestAmt
+      appendixATitle
       revShareSummary
       investmentMultipleSummary
       locationRiskFactors
@@ -80,7 +84,6 @@ export const campaignDetailsQuery = gql`
     offering {
       overview {
         elevatorPitch
-        slug
         tombstoneDescription
         highlight
         social {
@@ -127,7 +130,9 @@ export const campaignDetailsQuery = gql`
         expectedOpsDate
         issuerApprovedDate
       }
-      misc
+      misc {
+        additionalBonusRewardsContent
+      }
     }
     leadership {
       firstName
@@ -136,19 +141,19 @@ export const campaignDetailsQuery = gql`
       isPublic
       uploads {
         headshot {
-          fileId
+          id
           fileName
           url
           isPublic
         }
         heroImage {
-          fileId
+          id
           fileName
           url
           isPublic
         }
         license {
-          fileId
+          id
           fileName
           url
           isPublic
@@ -169,12 +174,10 @@ export const campaignDetailsQuery = gql`
     }
     media {
       heroImage {
-        id
         url
         isPublic
       }
       heroVideo {
-        id
         url
         isPublic
       }
@@ -277,23 +280,19 @@ export const campaignDetailsQuery = gql`
       }
       isEarlyBirdOnly
       notificationSent {
-        id
         by
         date
         to
       }
       approved {
-        id
         by
         date
       }
       updated {
-        id
         by
         date
       }
       deleted {
-        id
         by
         date
       }
@@ -331,6 +330,111 @@ export const campaignDetailsQuery = gql`
         by
         date
       }
+    }
+  }
+}
+`;
+export const campaignDetailsForInvestmentQuery = gql`
+query getOfferingById($id: ID) {
+  getOfferingDetailsById (id: $id) {
+    id
+    offeringSlug
+    keyTerms {
+      regulation
+      legalBusinessName
+      shorthandBusinessName
+      maturity
+      frequencyOfPayments
+      securities
+      securityInterest
+      securitiesOwnershipPercentage
+      investmentMultiple
+      revSharePercentage
+      interestRate
+      minOfferingAmount
+      maxOfferingAmount
+      industry
+      minInvestAmt
+      maxInvestAmt
+      revShareSummary
+      investmentMultipleSummary
+      locationRiskFactors
+      isTX
+      state
+      city
+    }
+    offering {
+      launch {
+        targetDate
+      }
+    }
+    earlyBirdsCount
+    bonusRewards{
+      id
+      offeringId
+      title
+      rewardStatus
+      description
+      expirationDate
+      tiers{
+        amount
+        earlyBirdQuantity
+      }
+      created {
+        id
+        by
+        date
+      }
+      updated {
+        id
+        by
+        date
+      }
+    }
+    updates {
+      id
+      offeringId
+      title
+      content
+      status
+      scope
+      tiers {
+        amount
+        earlyBirdQuantity
+      }
+      isEarlyBirdOnly
+      notificationSent {
+        by
+        date
+        to
+      }
+      approved {
+        by
+        date
+      }
+      updated {
+        by
+        date
+      }
+      deleted {
+        by
+        date
+      }
+      actingUserInfo {
+        id
+        info {
+          firstName
+          lastName
+          avatar {
+            url
+            name
+          }
+        }
+      }
+    }
+    rewardsTierIds {
+      amount
+      earlyBirdQuantity
     }
   }
 }

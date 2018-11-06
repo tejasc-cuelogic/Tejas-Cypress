@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Header, Form, Divider, Button, Confirm } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES } from '../../../../../services/constants/admin/offerings';
-import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZone } from '../../../../../theme/form';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
+import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import ButtonGroupType2 from './ButtonGroupType2';
 
-@inject('offeringCreationStore', 'uiStore')
+@inject('offeringCreationStore', 'uiStore', 'offeringsStore', 'userStore')
 @observer
 export default class KeyTerms extends Component {
   componentWillMount() {
@@ -13,33 +14,33 @@ export default class KeyTerms extends Component {
   onProFormasDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'KEY_TERMS_PROFORMAS');
   }
-  confirmRemoveDoc = (e, name) => {
-    e.preventDefault();
-    this.props.uiStore.setConfirmBox(name);
-  }
-  handleDelCancel = () => {
-    this.props.uiStore.setConfirmBox('');
-  }
   handleDelDoc = (field) => {
-    this.props.offeringCreationStore.removeUploadedData('KEY_TERMS_FRM', '', field, null, 'KEY_TERMS_PROFORMAS');
-    this.props.uiStore.setConfirmBox('');
+    this.props.offeringCreationStore.removeUploadedDataMultiple('KEY_TERMS_FRM', field, null, '');
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const { KEY_TERMS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, KEY_TERMS_FRM.fields, 'keyTerms');
+    updateOffering(currentOfferingId, KEY_TERMS_FRM.fields, 'keyTerms', null, true, undefined, isApproved);
   }
   render() {
     const { KEY_TERMS_FRM, formChange, maskChange } = this.props.offeringCreationStore;
-    const { confirmBox } = this.props.uiStore;
     const formName = 'KEY_TERMS_FRM';
+    const { offer } = this.props.offeringsStore;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.keyTerms && offer.keyTerms.submitted) ?
+      offer.keyTerms.submitted : null;
+    const approved = (offer && offer.keyTerms && offer.keyTerms.approved) ?
+      offer.keyTerms.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
       <div className="inner-content-spacer">
         <Header as="h4">Basic</Header>
-        <Form onSubmit={this.handleFormSubmit}>
+        <Form>
           <Form.Group widths="3">
             {
             ['legalBusinessName', 'shorthandBusinessName'].map(field => (
               <FormInput
+                displayMode={isReadonly}
                 key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
@@ -49,6 +50,7 @@ export default class KeyTerms extends Component {
             }
             <div className="field">
               <FormDropDown
+                disabled={isReadonly}
                 fielddata={KEY_TERMS_FRM.fields.industry}
                 selection
                 containerclassname="dropdown-field"
@@ -58,25 +60,34 @@ export default class KeyTerms extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </div>
-            {
-            ['maturity', 'frequencyOfPayments'].map(field => (
-              <MaskedInput
-                name={field}
-                fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(values, name) => maskChange(values, formName, name)}
-                number
-              />
-            ))
-            }
             <MaskedInput
-              name="terminationDate"
-              fielddata={KEY_TERMS_FRM.fields.terminationDate}
-              format="##-##-####"
-              changed={(values, field) => maskChange(values, formName, field)}
-              dateOfBirth
+              displayMode={isReadonly}
+              name="maturity"
+              fielddata={KEY_TERMS_FRM.fields.maturity}
+              changed={(values, name) => maskChange(values, formName, name)}
+              number
             />
             <div className="field">
               <FormDropDown
+                disabled={isReadonly}
+                fielddata={KEY_TERMS_FRM.fields.regulation}
+                selection
+                containerclassname="dropdown-field"
+                value={KEY_TERMS_FRM.fields.regulation.value}
+                name="regulation"
+                options={REGULATION_VALUES}
+                onChange={(e, result) => formChange(e, result, formName)}
+              />
+            </div>
+            <FormInput
+              displayMode={isReadonly}
+              name="frequencyOfPayments"
+              fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}
+              changed={(e, result) => formChange(e, result, formName)}
+            />
+            <div className="field">
+              <FormDropDown
+                disabled={isReadonly}
                 fielddata={KEY_TERMS_FRM.fields.securities}
                 selection
                 containerclassname="dropdown-field"
@@ -86,36 +97,34 @@ export default class KeyTerms extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </div>
-            {
-              ['securityInterest', 'securitiesOwnershipPercentage'].map(field => (
-                <MaskedInput
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  percentage
-                />
-              ))
-            }
             <FormInput
-              key="investmentMultiple"
-              name="investmentMultiple"
-              fielddata={KEY_TERMS_FRM.fields.investmentMultiple}
+              displayMode={isReadonly}
+              name="securityInterest"
+              fielddata={KEY_TERMS_FRM.fields.securityInterest}
               changed={(e, result) => formChange(e, result, formName)}
             />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="securitiesOwnershipPercentage"
+              fielddata={KEY_TERMS_FRM.fields.securitiesOwnershipPercentage}
+              changed={(values, name) => maskChange(values, formName, name)}
+              percentage
+            />
             {
-              ['revSharePercentage', 'interestRate'].map(field => (
-                <MaskedInput
+              ['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
+                <FormInput
+                  displayMode={isReadonly}
+                  key={field}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  percentage={field !== 'investmentMuliple'}
-                  number={field === 'investmentMuliple'}
+                  changed={(e, result) => formChange(e, result, formName)}
                 />
               ))
             }
             {
               ['minOfferingAmount', 'maxOfferingAmount'].map(field => (
                 <MaskedInput
+                  displayMode={isReadonly}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
                   changed={(values, name) => maskChange(values, formName, name)}
@@ -126,6 +135,7 @@ export default class KeyTerms extends Component {
             }
             <div className="field">
               <FormDropDown
+                disabled={isReadonly}
                 fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
                 selection
                 containerclassname="dropdown-field"
@@ -136,8 +146,27 @@ export default class KeyTerms extends Component {
               />
             </div>
             {
-              ['nsMinFees', 'nsMaxFees', 'gsFees'].map(field => (
+              ['nsMinFees', 'nsMaxFees'].map(field => (
                 <MaskedInput
+                  displayMode={isReadonly}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(values, name) => maskChange(values, formName, name)}
+                  currency
+                  prefix="$"
+                />
+              ))
+            }
+            <FormInput
+              displayMode={isReadonly}
+              name="stockType"
+              fielddata={KEY_TERMS_FRM.fields.stockType}
+              changed={(e, result) => formChange(e, result, formName)}
+            />
+            {
+              ['offeringExpTarget', 'offeringExpMax'].map(field => (
+                <MaskedInput
+                  displayMode={isReadonly}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
                   changed={(values, name) => maskChange(values, formName, name)}
@@ -147,8 +176,9 @@ export default class KeyTerms extends Component {
               ))
             }
             {
-              ['stateOfFormation', 'city', 'state'].map(field => (
+              ['locationRiskFactors', 'city', 'state', 'stateOfFormation'].map(field => (
                 <FormInput
+                  displayMode={isReadonly}
                   key={field}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
@@ -159,6 +189,7 @@ export default class KeyTerms extends Component {
             {
               ['minInvestAmt', 'maxInvestAmt'].map(field => (
                 <MaskedInput
+                  displayMode={isReadonly}
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
                   changed={(values, name) => maskChange(values, formName, name)}
@@ -168,25 +199,17 @@ export default class KeyTerms extends Component {
               ))
             }
             <FormInput
-              name="stockType"
-              fielddata={KEY_TERMS_FRM.fields.stockType}
+              displayMode={isReadonly}
+              key="appendixATitle"
+              name="appendixATitle"
+              fielddata={KEY_TERMS_FRM.fields.appendixATitle}
               changed={(e, result) => formChange(e, result, formName)}
             />
-            {
-              ['offeringExpTarget', 'offeringExpMax'].map(field => (
-                <MaskedInput
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              ))
-            }
           </Form.Group>
           {
-            ['revShareSummary', 'nsFeeCalcDescription'].map(field => (
+            ['investmentMultipleSummary', 'revShareSummary', 'nsFeeCalcDescription'].map(field => (
               <FormTextarea
+                readOnly={isReadonly}
                 key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
@@ -202,6 +225,7 @@ export default class KeyTerms extends Component {
                   <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
                   <Form.Group inline>
                     <FormRadioGroup
+                      disabled={isReadonly}
                       fielddata={KEY_TERMS_FRM.fields[field]}
                       name={field}
                       changed={(e, result) => formChange(e, result, formName)}
@@ -212,26 +236,22 @@ export default class KeyTerms extends Component {
             }
           </Form.Group>
           <DropZone
+            disabled={isReadonly}
             name="uploadProformas"
             fielddata={KEY_TERMS_FRM.fields.uploadProformas}
-            ondrop={this.onProFormasDrop}
-            onremove={this.confirmRemoveDoc}
+            ondrop={(files, name) => this.onProFormasDrop(files, name)}
+            onremove={fieldName => this.handleDelDoc(fieldName)}
             uploadtitle="Upload a file"
+            containerclassname="field"
           />
           <Divider hidden />
-          <div className="clearfix">
-            <Button primary floated="right" className="very relaxed" content="Save" disabled={!KEY_TERMS_FRM.meta.isValid} />
-          </div>
+          <ButtonGroupType2
+            submitted={submitted}
+            isManager={isManager}
+            approved={approved}
+            updateOffer={this.handleFormSubmit}
+          />
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'uploadProformas'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
-          size="mini"
-          className="deletion"
-        />
       </div>
     );
   }

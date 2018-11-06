@@ -23,11 +23,11 @@ const userVerifiedDetails = ({ email, legalDetails, isUserVerified }) => {
         <dt>Legal Last Name</dt>
         <dd>{legalDetails.legalName.lastLegalName}</dd>
         <dt>SSN</dt>
-        <dd>{Helper.cryptedSSNNumber(legalDetails.ssn)}</dd>
+        <dd>{Helper.cryptedSSNNumber(legalDetails.ssn) || '-'}</dd>
         <dt>DOB</dt>
-        <dd>{moment(legalDetails.dateOfBirth).format('MM-DD-YYYY')}</dd>
+        <dd>{legalDetails.dateOfBirth ? moment(legalDetails.dateOfBirth, 'MM/DD/YYYY').format('MM-DD-YYYY') : '-'}</dd>
         <dt>Legal Address</dt>
-        <dd>{`${legalDetails.legalAddress.street}, ${legalDetails.legalAddress.city}, ${legalDetails.legalAddress.state}, ${legalDetails.legalAddress.zipCode}`}
+        <dd>{legalDetails.legalAddress ? `${legalDetails.legalAddress.street}, ${legalDetails.legalAddress.city}, ${legalDetails.legalAddress.state}, ${legalDetails.legalAddress.zipCode}` : 'N/A'}
         </dd>
         <dt>Email Address</dt>
         <dd>{email.address}</dd>

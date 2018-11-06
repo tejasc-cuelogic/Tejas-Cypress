@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
-import { Link, NavLink, withRouter } from 'react-router-dom';
+import { Link, NavLink, withRouter, matchPath } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
@@ -13,8 +13,10 @@ import { SubmitButton } from '../../modules/shared/businessApplication/component
 export class NavItems extends Component {
   state = { active: '' };
   navClick = (e, { name }) => {
-    const newState = this.state.active === name ? '' : name;
-    this.setState({ active: newState });
+    if (this.props.refLoc !== 'public') {
+      const newState = this.state.active === name ? '' : name;
+      this.setState({ active: newState });
+    }
     if (this.props.refLoc !== 'public' && e.target.getAttribute('role') !== 'option') {
       this.props.history.replace(`/app/${name}`);
     }
@@ -40,10 +42,11 @@ export class NavItems extends Component {
           <Dropdown
             item
             key={item.to}
-            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active' : ''}
+            className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''}
             ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
             `}
             name={item.to}
+            disabled={isMobile && item.title === 'How NextSeed Works'}
             onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : this.doNothing}
             text={
               <Aux>
@@ -99,15 +102,19 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (path.includes('offerings') ? 'LogoColor' : (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
+  (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoColor' :
+    (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 
 
-@inject('navStore')
+@inject('navStore', 'uiStore')
 @observer
 export class NavigationItems extends Component {
+  setAuthRef = () => {
+    this.props.uiStore.setAuthRef(this.props.location.pathname);
+  }
   render() {
     const {
       stepInRoute, location, currentUser, loading,
@@ -118,7 +125,7 @@ export class NavigationItems extends Component {
       <Menu
         stackable
         borderless
-        inverted={!location.pathname.includes('/offerings')}
+        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' })}
         fixed="top"
         // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
@@ -147,7 +154,7 @@ export class NavigationItems extends Component {
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
             <Menu.Item>
               <Button.Group>
-                <Button as={Link} to="/" inverted color="red">Cancel</Button>
+                <Button as={Link} to="/business/how-it-works" inverted color="red">Cancel</Button>
                 {isPrequalQulify &&
                 <SubmitButton
                   canSubmitApp={canSubmitApp}
@@ -159,7 +166,7 @@ export class NavigationItems extends Component {
           : !location.pathname.includes('/business-application') &&
             (
             !currentUser ? (
-              <Menu.Item as={Link} to={`/auth/${stepInRoute.to}`}>
+              <Menu.Item as={Link} onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`}>
                 <Button secondary compact>{stepInRoute.title}</Button>
               </Menu.Item>
           ) : (

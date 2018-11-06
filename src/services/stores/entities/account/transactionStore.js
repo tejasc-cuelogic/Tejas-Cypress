@@ -4,8 +4,10 @@ import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
 import { GqlClient as client } from '../../../../api/gcoolApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { allTransactions } from '../../queries/transaction';
+import { allTransactions, addFunds } from '../../queries/transaction';
 import { TRANSFER_FUND } from '../../../constants/transaction';
+import { userDetailsStore, uiStore } from '../../index';
+import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
@@ -44,7 +46,7 @@ export class TransactionStore {
 
   @computed get getAllTransactions() {
     return (this.data && this.data.data.allTransactions &&
-        toJS(this.data.data.allTransactions)) || [];
+      toJS(this.data.data.allTransactions)) || [];
   }
 
   @computed get totalRecords() {
@@ -84,9 +86,43 @@ export class TransactionStore {
   }
 
   @action
-  TransferChange = (e, result) => {
-    this.TRANSFER_FRM = Validator.onChange(this.TRANSFER_FRM, Validator.pullValues(e, result));
+  TransferChange = (values, field, formName = 'TRANSFER_FRM') => {
+    this[formName] = Validator.onChange(
+      this[formName],
+      { name: field, value: values.floatValue },
+    );
   };
+
+  @action
+  addFunds = (amount, agreementId, accountId) => {
+    uiStore.setProgress(true);
+    // const account = userDetailsStore.currentActiveAccountDetails;
+    const { userDetails } = userDetailsStore;
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: addFunds,
+          variables: {
+            userId: userDetails.id,
+            accountId,
+            agreementId,
+            amount,
+            description: 'new record',
+          },
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
 }
 
 export default new TransactionStore();

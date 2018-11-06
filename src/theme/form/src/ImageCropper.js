@@ -32,7 +32,7 @@ export default class ImageCropper extends Component {
     const { files } = (e.dataTransfer) ? e.dataTransfer : e.target;
 
     this.setState({ imageType: files[0].type });
-    this.props.setData('value', files[0].name);
+    this.props.setData('fileName', files[0].name);
     this.props.setData('meta', { type: files[0].type });
     this.props.verifySize(files[0].size, this.props.name);
     this.props.verifyExtension(files[0].type.split('/')[1]);
@@ -108,8 +108,8 @@ export default class ImageCropper extends Component {
     this.props.handelReset();
   }
 
-  modalUpload = (name) => {
-    this.props.modalUploadAction(name);
+  modalUpload = (name, field) => {
+    this.props.modalUploadAction(name, field);
     this.handleCloseModal();
   }
 
@@ -121,7 +121,7 @@ export default class ImageCropper extends Component {
 
   render() {
     // const { profilePhoto } = this.props.fieldData.fields;
-    const { field, cropInModal } = this.props;
+    const { field, cropInModal, disabled } = this.props;
     return (
       <Aux>
         { field.src && !field.error ? cropInModal ?
@@ -138,7 +138,7 @@ export default class ImageCropper extends Component {
               />
             </Modal.Content>
             <Modal.Actions>
-              <Button primary content="Upload" onClick={() => this.modalUpload(this.props.name)} />
+              <Button primary content="Upload" onClick={() => this.modalUpload(this.props.name, field)} />
             </Modal.Actions>
           </Modal>
           :
@@ -156,7 +156,7 @@ export default class ImageCropper extends Component {
               <div className="file-uploader-inner">
                 <Icon className="ns-upload" /> Choose a file&nbsp;<span>or drag it here</span>
               </div>
-              <input type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
+              <input disabled={disabled} type="file" onChange={this.onChange} accept=".jpg, .jpeg, .png" />
             </div>
             {field.error &&
               <FieldError error={field.error} />

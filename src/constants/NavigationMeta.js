@@ -35,13 +35,13 @@ export const PRIVATE_NAV = [
       },
     ],
   },
-  {
-    icon: 'ns-envelope',
-    title: 'Messages',
-    to: 'messages',
-    accessibleTo: [],
-    path: 'shared/messages/containers/Messages',
-  },
+  // {
+  //   icon: 'ns-envelope',
+  //   title: 'Messages',
+  //   to: 'messages',
+  //   accessibleTo: [],
+  //   path: 'shared/messages/containers/Messages',
+  // },
   {
     icon: 'ns-dashboard',
     title: 'Dashboard',
@@ -203,13 +203,13 @@ export const PRIVATE_NAV = [
       { title: 'FAQ', to: 'faq', component: 'Faq' },
     ],
   },
-  {
-    icon: 'calendar',
-    title: 'Events',
-    to: 'events',
-    path: 'issuer/events',
-    accessibleTo: ['issuer'],
-  },
+  // {
+  //   icon: 'calendar',
+  //   title: 'Events',
+  //   to: 'events',
+  //   path: 'issuer/events',
+  //   accessibleTo: ['issuer'],
+  // },
   {
     icon: 'legal',
     title: 'Edgar',
@@ -218,7 +218,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin', 'manager', 'support'],
   },
   {
-    icon: 'ns-users',
+    icon: 'bullhorn',
     title: 'Offerings',
     capability: 'OFFERINGS_ANY',
     heading: 'Offerings',
@@ -305,14 +305,6 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin', 'manager', 'support'],
   },
   {
-    icon: 'bullhorn',
-    title: 'Campaigns',
-    capability: 'CAMPAIGN_ANY',
-    to: 'campaigns',
-    path: 'admin/campaigns',
-    accessibleTo: ['admin', 'manager', 'support'],
-  },
-  {
     icon: 'dollar',
     title: 'CrowdPay',
     capability: 'CROWD_PAY_ANY',
@@ -390,7 +382,7 @@ export const PUBLIC_NAV = [
       { title: 'Team', to: 'team' },
       { title: 'Careers', to: 'careers' },
       // { title: 'Impact', to: 'impact' },
-      { title: 'Press', to: 'press' },
+      // { title: 'Press', to: 'press' },
     ],
   },
   {

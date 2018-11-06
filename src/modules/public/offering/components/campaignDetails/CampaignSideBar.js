@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import moment from 'moment';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
 import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
+import { DataFormatter } from '../../../../../helper';
 import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
-import videoPoster from '../../../../../assets/images/636206632.jpg';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const nsvideos = {
   embed: '218642510',
@@ -28,9 +28,7 @@ export default class CampaignSideBar extends Component {
      campaign.updates.length ? campaign.updates : [];
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const d1 = moment().format('MM/DD/YYYY');
-    const d2 = terminationDate ? moment(terminationDate).format('MM/DD/YYYY') : null;
-    const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
+    const diff = DataFormatter.diffDays(terminationDate);
     return (
       <Aux>
         <div className={`${className} offering-side-menu`}>
@@ -38,7 +36,7 @@ export default class CampaignSideBar extends Component {
             {isMobile &&
               <Embed
                 id={nsvideos.embed}
-                placeholder={videoPoster}
+                placeholder={`${ASSETS_URL}images/636206632.jpg`}
                 source="vimeo"
                 icon="ns-play"
               />
@@ -88,7 +86,7 @@ export default class CampaignSideBar extends Component {
               </Statistic>
             </Statistic.Group>
             <Divider hidden />
-            <Button compact fluid={isMobile} as={Link} to="invest-now" secondary>Invest Now</Button>
+            <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
             <p>
               ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
               || 0} min investment

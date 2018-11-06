@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Modal, Button, Header, Form, Divider } from 'semantic-ui-react';
-import { FormInput } from '../../../../../../theme/form';
+import { MaskedInput } from '../../../../../../theme/form';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
@@ -18,13 +18,18 @@ export default class AddWithdrawFund extends Component {
     Helper.toast('Transaction successful.', 'success');
     this.goBack();
   }
+  handleSubmitForm = (e) => {
+    e.preventDefault();
+    // const { addFunds } = this.props.transactionStore;
+    // addFunds();
+  }
   render() {
     const {
       match, location, transactionStore,
     } = this.props;
     const { TRANSFER_FRM, TransferChange } = transactionStore;
     return (
-      <Modal dimmer open size="mini" closeIcon onClose={this.goBack} className="reward-modal">
+      <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false} className="reward-modal">
         <Modal.Header>
           <Header as="h3"><AccTypeTitle noText /> {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds</Header>
         </Modal.Header>
@@ -34,13 +39,15 @@ export default class AddWithdrawFund extends Component {
             Bank of America ...7545 <Link to={location}>Change</Link>
           </Header>
           <Form error onSubmit={this.handleSubmitForm}>
-            <FormInput
+            <MaskedInput
+              hoverable
               key="amount"
-              type="text"
+              prefix="$ "
               name="amount"
-              label={`Amount you want to ${(match.params.action === 'add' ? 'deposit' : 'withdraw')}`}
+              currency
+              value={TRANSFER_FRM.fields.amount}
               fielddata={TRANSFER_FRM.fields.amount}
-              changed={TransferChange}
+              changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
             />
             <Divider hidden />
             <div className="center-align">

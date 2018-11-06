@@ -30,7 +30,7 @@
 @headerHorizontalPadding:3rem;
 @headerPadding: @headerVerticalPadding @headerHorizontalPadding;
 @headerBackground: @white;
-@headerColor: @darkTextColor;
+@headerColor: @neutral;
 @headerFontSize: @huge;
 @headerBoxShadow: none;
 @headerFontWeight: @bold;
@@ -59,7 +59,7 @@
 @actionPadding:1.5rem;
 @actionAlign:right;
 
-@buttonDistance: 0.75em;
+@buttonDistance: 0;
 
 /* Inner Close Position (Tablet/Mobile) */
 @innerCloseTop: (@headerVerticalPadding - @closeHitBoxOffset + (@lineHeight - 1em));

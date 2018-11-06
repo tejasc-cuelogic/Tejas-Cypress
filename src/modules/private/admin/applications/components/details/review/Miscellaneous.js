@@ -7,6 +7,7 @@ import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../../the
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const SectionHeader = ({ header, subheader }) => (
   <Aux>
@@ -103,22 +104,27 @@ export default class Miscellaneous extends Component {
   render() {
     const {
       UPLOADED_DOCUMENTS_FRM, MISCELLANEOUS_FRM, formChangeWithIndex, confirmModal,
-      confirmModalName, removeData,
+      confirmModalName, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.miscellaneous && review.miscellaneous &&
       review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
     const approved = (review && review.miscellaneous && review.miscellaneous &&
       review.miscellaneous.approved) ? review.miscellaneous.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form size="small" onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={MISCELLANEOUS_FRM.meta.isValid} formName="MISCELLANEOUS_FRM" />
           <SectionHeader header="Social Media" />
           <Table basic compact className="form-table">
             <TableHeader isReadonly={isReadonly} labels={['Label', 'URL']} />
@@ -229,6 +235,7 @@ export default class Miscellaneous extends Component {
             </Item.Group>
           </div>
           <ButtonGroup
+            inProgress={inProgress}
             formName="MISCELLANEOUS_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

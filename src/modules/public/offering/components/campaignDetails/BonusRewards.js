@@ -3,11 +3,7 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { intersectionBy, orderBy } from 'lodash';
 import { Header, Grid, Segment, Label, List, Image } from 'semantic-ui-react';
-import noEarlyBird from '../../../../../assets/images/illustration.png';
-import card1 from '../../../../../assets/images/cards/pour_cards_black.jpg';
-import card2 from '../../../../../assets/images/cards/pour_cards_gold.jpg';
-import card3 from '../../../../../assets/images/cards/pour_cards_plat.jpg';
-import card4 from '../../../../../assets/images/cards/pour_cards_silver.jpg';
+import { ASSETS_URL } from '../../../../../constants/aws';
 import { InlineLoader } from '../../../../../theme/shared';
 
 const isTablet = document.documentElement.clientWidth >= 768
@@ -32,15 +28,15 @@ class BonusRewards extends Component {
             <Header as="h3">Bonus Rewards</Header>
           </Grid.Column>
         </Grid>
-        <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
-          {rewardsTiers ?
-            rewardsTiers.map(tier => (
+        {rewardsTiers && rewardsTiers.length ?
+          <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
+            {rewardsTiers.map(tier => (
               <Grid.Column>
                 <Segment padded className="reward-block">
                   {tier.earlyBirdQuantity > 0 ?
                     <Aux>
                       <Header as="h6">Early Bird Reward
-                        <Image src={noEarlyBird} floated="right" />
+                        <Image src={`${ASSETS_URL}images/illustration.png`} floated="right" />
                         <Header.Subheader>
                           <Label size="small" color="green" className="text-uppercase">{earlyBirdsCount} remaining</Label>
                         </Header.Subheader>
@@ -67,15 +63,15 @@ class BonusRewards extends Component {
                   </List>
                 </Segment>
               </Grid.Column>
-            )) : <InlineLoader text="No bonus rewards are available." />
-          }
-        </Grid>
+            ))}
+          </Grid> : <InlineLoader text="No bonus rewards are available." />
+        }
         <Grid stackable>
           <Grid.Column>
             <Segment padded>
               <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
                 <Grid.Column>
-                  <Image src={card1} />
+                  <Image src={`${ASSETS_URL}images/cards/pour_cards_black.jpg`} />
                   <Header as="h5">Black Card</Header>
                   <p>
                     One Premium bottle per year, VIP/Supercar Parking (with advanced notice), 25%
@@ -84,7 +80,7 @@ class BonusRewards extends Component {
                   </p>
                 </Grid.Column>
                 <Grid.Column>
-                  <Image src={card3} />
+                  <Image src={`${ASSETS_URL}images/cards/pour_cards_plat.jpg`} />
                   <Header as="h5">Platinum Card</Header>
                   <p>
                     0% discount every visit and Skip the Line for you and up to 9 guests (Fridays
@@ -92,7 +88,7 @@ class BonusRewards extends Component {
                   </p>
                 </Grid.Column>
                 <Grid.Column>
-                  <Image src={card2} />
+                  <Image src={`${ASSETS_URL}images/cards/pour_cards_gold.jpg`} />
                   <Header as="h5">Gold Card</Header>
                   <p>
                     15% discount every visit and Skip the Line for you and up to 9 guests (Fridays
@@ -100,7 +96,7 @@ class BonusRewards extends Component {
                   </p>
                 </Grid.Column>
                 <Grid.Column>
-                  <Image src={card4} />
+                  <Image src={`${ASSETS_URL}images/cards/pour_cards_silver.jpg`} />
                   <Header as="h5">Silver Card</Header>
                   <p>10% discount every visit</p>
                 </Grid.Column>

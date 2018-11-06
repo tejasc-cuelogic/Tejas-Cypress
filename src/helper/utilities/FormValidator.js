@@ -24,7 +24,14 @@ class FormValidator {
     name: typeof data === 'undefined' ? e.target.name : data.name,
     value: typeof data === 'undefined' ? e.target.value : data.value,
   });
-
+  pullValuesForPassword = e => ({
+    name: 'password',
+    value: e.password,
+  });
+  pullValuesForCangePassword = e => ({
+    name: 'newPasswd',
+    value: e.newPasswd,
+  });
   onChange = (form, element, type, isDirty = true, checked = undefined) => {
     CustomValidations.loadCustomValidations(form);
     const currentForm = form;
@@ -124,52 +131,52 @@ class FormValidator {
   }
 
   onArrayFieldChange =
-  (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
-    CustomValidations.loadCustomValidations(form);
-    const currentForm = form;
-    let currentFormRelative;
-    let fieldName = element.name;
-    let customErrMsg = {};
-    if (formIndex > -1 && formName) {
-      currentFormRelative = currentForm.fields[formName][formIndex];
-      fieldName = `${formName}.${formIndex}.${element.name}`;
-    } else if (formName) {
-      currentFormRelative = currentForm.fields[formName];
-      fieldName = `${formName}.${element.name}`;
-    } else {
-      currentFormRelative = currentForm.fields;
-    }
-    if (element.name) {
-      if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
-        const index = currentFormRelative[element.name]
-          .value.indexOf(element.value);
-        if (index === -1) {
-          currentFormRelative[element.name].value.push(element.value);
-        } else {
-          currentFormRelative[element.name].value.splice(index, 1);
-        }
-      } else if (checked) {
-        currentFormRelative[element.name].value = checked.value;
+    (form, element, formName = null, formIndex = -1, type, checked = undefined) => {
+      CustomValidations.loadCustomValidations(form);
+      const currentForm = form;
+      let currentFormRelative;
+      let fieldName = element.name;
+      let customErrMsg = {};
+      if (formIndex > -1 && formName) {
+        currentFormRelative = currentForm.fields[formName][formIndex];
+        fieldName = `${formName}.${formIndex}.${element.name}`;
+      } else if (formName) {
+        currentFormRelative = currentForm.fields[formName];
+        fieldName = `${formName}.${element.name}`;
       } else {
-        currentFormRelative[element.name].value = element.value;
+        currentFormRelative = currentForm.fields;
       }
-      customErrMsg = (currentFormRelative[element.name] &&
-        currentFormRelative[element.name].customErrors) ?
-        currentFormRelative[element.name].customErrors : {};
+      if (element.name) {
+        if (type === 'checkbox' || (Array.isArray(toJS(currentFormRelative[element.name].value)) && type !== 'dropdown')) {
+          const index = currentFormRelative[element.name]
+            .value.indexOf(element.value);
+          if (index === -1) {
+            currentFormRelative[element.name].value.push(element.value);
+          } else {
+            currentFormRelative[element.name].value.splice(index, 1);
+          }
+        } else if (checked) {
+          currentFormRelative[element.name].value = checked.value;
+        } else {
+          currentFormRelative[element.name].value = element.value;
+        }
+        customErrMsg = (currentFormRelative[element.name] &&
+          currentFormRelative[element.name].customErrors) ?
+          currentFormRelative[element.name].customErrors : {};
+      }
+      const formData = this.ExtractFormValues(toJS(currentForm.fields));
+      const formRules = this.ExtractFormRules(toJS(currentForm.fields));
+      const validation = new Validator(
+        formData,
+        formRules,
+        customErrMsg,
+      );
+      currentForm.meta.isValid = validation.passes();
+      if (element && element.name) {
+        currentFormRelative[element.name].error = validation.errors.first(fieldName);
+      }
+      return currentForm;
     }
-    const formData = this.ExtractFormValues(toJS(currentForm.fields));
-    const formRules = this.ExtractFormRules(toJS(currentForm.fields));
-    const validation = new Validator(
-      formData,
-      formRules,
-      customErrMsg,
-    );
-    currentForm.meta.isValid = validation.passes();
-    if (element && element.name) {
-      currentFormRelative[element.name].error = validation.errors.first(fieldName);
-    }
-    return currentForm;
-  }
   ExtractValues = fields => mapValues(fields, f => f.value);
   ExtractFormValues = fields => mapValues(fields, f =>
     (isArray(f) ? toArray(mapValues(f, d => mapValues(d, s => s.value))) :
@@ -177,10 +184,25 @@ class FormValidator {
   ExtractFormRules = fields => reduce(mapValues(fields, (f, key) =>
     (isArray(f) ? mapKeys(mapValues(f[0], k => k.rule), (s, v) => `${key}.*.${v}`) :
       mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
-  resetFormData = (form) => {
+  resetFormData = (form, targetedFields) => {
     const currentForm = form;
-    Object.keys(currentForm.fields).map((field) => {
-      currentForm.fields[field].value = '';
+    const fieldsToReset = targetedFields || Object.keys(currentForm.fields);
+    fieldsToReset.map((field) => {
+      if (Array.isArray(toJS(currentForm.fields[field].value))) {
+        currentForm.fields[field].value = [];
+        if (currentForm.fields[field].objType === 'FileObjectType') {
+          currentForm.fields[field].fileId = [];
+          currentForm.fields[field].fileData = [];
+          currentForm.fields[field].preSignedUrl = [];
+        }
+      } else {
+        currentForm.fields[field].value = '';
+        if (currentForm.fields[field].objType === 'FileObjectType') {
+          currentForm.fields[field].fileId = '';
+          currentForm.fields[field].fileData = '';
+          currentForm.fields[field].preSignedUrl = '';
+        }
+      }
       currentForm.fields[field].error = undefined;
       return true;
     });
@@ -280,9 +302,9 @@ class FormValidator {
           const tempRef = toJS(fields[key])[0].objRef ?
             this.getRefFromObjRef(fields[key][0].objRef, data) : false;
           if ((data && data[key] && data[key].length > 0) ||
-          (tempRef && tempRef[key] && tempRef[key].length > 0)) {
+            (tempRef && tempRef[key] && tempRef[key].length > 0)) {
             const addRec = ((data[key] && data[key].length) ||
-            (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
+              (tempRef[key] && tempRef[key].length)) - toJS(fields[key]).length;
             fields[key] = this.addMoreFields(fields[key], addRec);
             (data[key] || tempRef[key]).forEach((record, index) => {
               fields[key][index] = this.setDataForLevel(
@@ -297,12 +319,43 @@ class FormValidator {
         } else if (fields[key].objRef) {
           const tempRef = this.getRefFromObjRef(fields[key].objRef, data);
           if (fields[key].objType === 'FileObjectType') {
-            fields[key].value = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
-            tempRef[key].length) ? tempRef[key][0].fileName : tempRef[key].fileName;
-            fields[key].fileId = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
-            tempRef[key].length) ? tempRef[key][0].fileId : tempRef[key].fileId;
+            if (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
+              fields[key] && Array.isArray(toJS(fields[key].value))) {
+              if (tempRef[key].length > 0) {
+                tempRef[key].map((item) => {
+                  fields[key].value.push(item.fileName);
+                  fields[key].fileId.push(item.fileId);
+                  return false;
+                });
+              } else {
+                fields[key].value = [];
+                fields[key].fileId = [];
+              }
+            } else {
+              fields[key].value = Array.isArray(toJS(tempRef[key])) ?
+                tempRef[key][0].fileName : tempRef[key].fileName;
+              fields[key].fileId = Array.isArray(toJS(tempRef[key])) ?
+                tempRef[key][0].fileId : tempRef[key].fileId;
+            }
+            // fields[key].value = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
+            // tempRef[key].length) ? tempRef[key][0].fileName : tempRef[key].fileName;
+            // fields[key].fileId = (tempRef[key] && Array.isArray(toJS(tempRef[key])) &&
+            // tempRef[key].length) ? tempRef[key][0].fileId : tempRef[key].fileId;
+          } else if (fields[key].objType === 's3File') {
+            if (fields[key] && Array.isArray(fields[key])) {
+              if (fields[key].length) {
+                tempRef[key].map((item) => {
+                  fields[key].preSignedUrl.push(item.url);
+                  fields[key].value.push(item.fileName);
+                  return false;
+                });
+              }
+            } else {
+              fields[key].value = tempRef[key].fileName;
+              fields[key].preSignedUrl = tempRef[key].url;
+            }
           } else if (fields[key].objType === 'DATE') {
-            fields[key].value = moment(tempRef[key]).format('MM/DD/YYYY');
+            fields[key].value = tempRef[key] ? moment(tempRef[key]).format('MM/DD/YYYY') : '';
           } else {
             const fieldRef = key.split('_');
             fields[key].value = fields[key].find ?
@@ -312,30 +365,45 @@ class FormValidator {
         } else if (key === 'value') {
           fields[key] = data && typeof data === 'string' ? data : data[key];
         } else if (fields[key].objType === 'FileObjectType') {
-          if (data[key] && Array.isArray(toJS(data[key])) && data[key].length) {
-            fields[key].value = data[key][0].fileName;
-            fields[key].fileId = data[key][0].fileId;
+          if (data[key] && Array.isArray(toJS(data[key])) &&
+            fields[key] && Array.isArray(toJS(fields[key].value))) {
+            if (data[key].length > 0) {
+              data[key].map((item) => {
+                fields[key].value.push(item.fileName);
+                fields[key].fileId.push(item.fileId);
+                return false;
+              });
+            } else {
+              fields[key].value = [];
+              fields[key].fileId = [];
+            }
           } else {
-            fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
-            fields[key].fileId = data && typeof data === 'string' ? data : data[key].fileId;
+            fields[key].value = data && typeof data === 'string' ? data : Array.isArray(toJS(data[key])) ? data[key][0].fileName : data[key].fileName;
+            fields[key].fileId = data && typeof data === 'string' ? data : Array.isArray(toJS(data[key])) ? data[key][0].fileId : data[key].fileId;
           }
         } else if (fields[key].objType === 's3File') {
-          if (Array.isArray(data[key])) {
-            data[key].map(item => fields[key].preSignedUrl.push(item.url));
-          } else if (fields[key].preSignedUrl !== undefined) {
-            fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
+          if (data[key] && Array.isArray(data[key])) {
+            if (data[key].length) {
+              data[key].map((item) => {
+                fields[key].preSignedUrl.push(item.url);
+                fields[key].value.push(item.fileName);
+                return false;
+              });
+            }
           } else {
-            fields[key].value = data && typeof data === 'string' ? data : data[key].url;
+            fields[key].value = data && typeof data === 'string' ? data : data[key].fileName;
+            fields[key].preSignedUrl = data && typeof data === 'string' ? data : data[key].url;
           }
         } else if (fields[key].objType === 'DATE') {
-          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : moment(data[key]).format('MM/DD/YYYY');
+          fields[key].value = data && typeof data === 'string' ? moment(data).format('MM/DD/YYYY') : data[key] ? moment(data[key]).format('MM/DD/YYYY') : '';
         } else {
-          // fields[key].value = data && typeof data === 'object' ? data[key] : data;
-          fields[key].value = data && typeof data === 'object' ? data[key] ? data[key] : fields[key].value : data;
+          fields[key].value = data && typeof data === 'object' ? (data[key] !== null && data[key] !== '' && data[key] !== undefined) ? data[key] : fields[key].value : data;
         }
         if (fields[key].refSelector) {
           fields[key].refSelectorValue = fields[key].value !== '';
-          fields[fields[key].refSelector].value = (fields[key].value !== null && fields[key].value !== '');
+          if (fields[key].value !== undefined) {
+            fields[fields[key].refSelector].value = (fields[key].value !== null && fields[key].value !== '');
+          }
         }
       } catch (e) {
         // do nothing
@@ -372,9 +440,42 @@ class FormValidator {
     return tempRef;
   }
 
-  evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
+  evalS3FileObj = (fileData) => {
+    const fileObj = toJS(fileData);
+    let fileObjOutput;
+    if (Array.isArray(fileObj.preSignedUrl)) {
+      fileObjOutput =
+        map(fileObj.preSignedUrl, (file, index) => ({
+          id: fileObj.fileId[index] || Helper.guid(),
+          isPublic: true,
+          url: file,
+          fileName: fileObj.value[index],
+        }));
+    } else {
+      fileObjOutput = fileObj.value ? {
+        id: fileObj.fileId || Helper.guid(),
+        url: fileObj.preSignedUrl || fileObj.value,
+        fileName: fileObj.value,
+        isPublic: true,
+      } : null;
+    }
+    return fileObjOutput;
+  }
 
-  evalDateObj = date => moment(date).toISOString();
+  evalFileObj = (fileData) => {
+    const fileObj = toJS(fileData);
+    let fileObjOutput;
+    if (Array.isArray(fileObj.fileId)) {
+      fileObjOutput =
+        map(fileObj.fileId, (file, index) => ({ fileId: file, fileName: fileObj.value[index] }));
+    } else {
+      fileObjOutput = { fileId: fileData.fileId ? fileData.fileId : '', fileName: fileData.value ? fileData.value : '' };
+    }
+    return fileObjOutput;
+  }
+  // evalFileObj = fileData => ({ fileId: fileData.fileId, fileName: fileData.value });
+
+  evalDateObj = date => moment(date, 'MM/DD/YYYY').toISOString();
 
   evaluateFormData = (fields) => {
     let inputData = {};
@@ -401,12 +502,20 @@ class FormValidator {
                     }
                     if (field[keyRef1].objType && field[keyRef1].objType === 'FileObjectType') {
                       reference2Val = this.evalFileObj(field[keyRef1]);
+                    } else if (field[keyRef1].objType && field[keyRef1].objType === 's3File') {
+                      reference2Val = this.evalS3FileObj(field[keyRef1]);
+                      // {
+                      //   id: 1,
+                      //   url: field[keyRef1].preSignedUrl,
+                      //   fileName: field[keyRef1].value,
+                      //   isPublic: true,
+                      // };
                     } else if (field[keyRef1].objType && field[keyRef1].objType === 'DATE') {
                       reference2Val = this.evalDateObj(field[keyRef1].value);
                     }
                     if (reference2) {
                       arrayFields =
-                      this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
+                        this.evaluateObjectRef(reference2, arrayFields, [keyRef1], reference2Val);
                     } else {
                       arrayFields = { ...arrayFields, [keyRef1]: reference2Val };
                     }
@@ -431,14 +540,27 @@ class FormValidator {
             } else if (fields[key].objType && fields[key].objType === 'DATE') {
               objValue = this.evalDateObj(fields[key].value);
             } else if (fields[key].objType && fields[key].objType === 's3File') {
-              if (fields[key].preSignedUrl) {
-                objValue = fields[key].preSignedUrl;
-              } else {
-                objValue = fields[key].value;
-              }
+              objValue = this.evalS3FileObj(fields[key]);
+              // {
+              //   id: 1,
+              //   url: fields[key].preSignedUrl,
+              //   fileName: fields[key].value,
+              //   isPublic: true,
+              // };
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
+            } else if (fields[key].refSelector !== undefined
+              && fields[fields[key].refSelector].value !== undefined) {
+              let val = '';
+              if (fields[fields[key].refSelector].value) {
+                if (fields[key].value !== '' && fields[key].value !== undefined && fields[key].value !== null) {
+                  val = objValue;
+                } else {
+                  val = fields[key].defaultValue;
+                }
+              }
+              inputData = { ...inputData, [key]: val };
             } else {
               inputData = { ...inputData, [key]: objValue };
             }

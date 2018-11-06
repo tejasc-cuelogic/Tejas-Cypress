@@ -80,6 +80,9 @@ h6{
 .mb-50 {
 	margin-bottom: @50px !important;
 }
+.mb-60{
+	margin-bottom:@60px !important;
+}
 .mb-80 {
 	margin-bottom: 80px !important;
 }
@@ -144,7 +147,9 @@ h6{
 .text-uppercase {
 	text-transform: uppercase !important;
 }
-
+.text-capitalize {
+	text-transform:capitalize !important;
+}
 .inverse-text{
 	color:@white !important;
 }
@@ -162,6 +167,9 @@ h6{
 }
 .intro-text, .note{
 	color:@neutral-middark !important;
+}
+.primary-two-text {
+	color: @primary-two !important;
 }
 .caption-note{
 	font-size:@13px;
@@ -190,6 +198,12 @@ a:not(.item), a:not(.ui.button){
 	img.ui.image {
 		height: 52px;
 	}
+	&.home-summary {
+		margin: 0 @35px;
+	}
+	&.campaign img.ui.image {
+		height: auto !important;
+	}
 }
 a{
 	&.inverted{
@@ -202,6 +216,14 @@ a{
 		color:@neutral;
 		&:hover, &:active, &.active{
 			color:@neutral;
+		}
+	}
+	&.grey-link{
+		font-size:@13px;
+		color:@neutral-offdark;
+		text-decoration:none !important;
+		&:hover, &:active, &.active{
+			color:@neutral-middark;
 		}
 	}
 }
@@ -219,6 +241,9 @@ a{
 }
 .primary-block {
 	background-color: @primary-two;
+}
+i.icon.right {
+	margin-left: 0.25rem;
 }
 //	Helper Classes Ends
 
@@ -266,6 +291,10 @@ footer{
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
 				max-width: 480px;
 			}
+			a {
+				color: @neutral-middark;
+				text-decoration: underline;
+			}
 		}
 	}
 }
@@ -288,8 +317,7 @@ footer{
 	.offer-filter-container {
 		background-color: @white;
 		width: 100%;
-		height: 500px;
-		padding: @17px 0 0; 
+		padding: @17px 0 @50px; 
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
@@ -319,8 +347,13 @@ footer{
 		.slick-slider {
 			padding-bottom: @30px;
 		}
+		.ui.buttons {
+			position: absolute;
+			bottom: 60px;
+		}
 		.filter-buttons .ui.buttons {
 			display: block;
+			position: static;
 			.ui.button {
 				height: 14px;
 				font-size: @14px;
@@ -454,6 +487,9 @@ footer{
 					flex: 1;
 				}
 			}
+			.ui.padded.segment h6.ui.header {
+				margin: @7px 0;
+			}
 		}
 		.campaign-right-sidebar {
 			padding: @30px @30px @30px 0;
@@ -558,6 +594,10 @@ p i.icon {
 	&:last-child{
 		margin-bottom:0;
 	}
+}
+.featured-section.investment-details{
+	margin:@21px 0;
+	padding:@20px @40px;
 }
 .learn-more {
 	background-color: @secondary-color;
@@ -812,20 +852,26 @@ p i.icon {
 			padding: 0 !important;
 			&:last-child {
 				padding: @20px !important;
+				a {
+					text-decoration: none;
+					.icon {
+						margin: 0 0 0 @10px;
+						vertical-align: middle;
+     					line-height: 1;
+					}
+				}
 			}
 		}
 	}
-	.team-overlay {
-		h4.ui.header {
-			.sub.header {
-				font-size: @13px;
-				line-height: 20px;
-				color: @neutral-middark;
-				font-weight: @normal;
-			}
-			.icon:only-child {
-				margin-right: @5px;
-			}
+	.team-overlay h4.ui.header {
+		.sub.header {
+			font-size: @13px;
+			line-height: 20px;
+			color: @neutral-middark;
+			font-weight: @normal;
+		}
+		.icon:only-child {
+			margin-right: @5px;
 		}
 	}
 }
@@ -843,11 +889,9 @@ p i.icon {
 		}
 	}
 }
-address {
-	p {
-		margin: 0;
-		font-style: normal;	
-	}
+address p{
+	margin: 0;
+	font-style: normal;	
 }
 .press-list {
 	padding: @20px @50px;
@@ -1077,6 +1121,9 @@ a.icon-link:hover {
 					color: @neutral;
 					font-size: @15px;
 				}
+				img {
+					width: 100%;
+				}
 			}
 		}
 		.vertical-timeline-element-date {
@@ -1128,6 +1175,25 @@ a.icon-link:hover {
 .business-application .content-spacer{
 	padding:@50px 0px;
 }
+// .sticy-sidebar{
+// 	position:sticky;
+// 	top:0;
+// }
+// .sticky-actions{
+// 	position:sticky;
+// 	padding:@10px 0 0;
+// 	bottom:0;
+// 	background-color:@white;
+// 	&:after{
+// 		content:"";
+// 		height:14px;
+// 		width:100%;
+// 		background-color:@white;
+// 		display:block;
+// 		position:absolute;
+// 		bottom:-14px;
+// 	}
+// }
 .inner-content-spacer{
 	padding:@20px !important;
 	+ .inner-content-spacer{
@@ -1489,8 +1555,9 @@ div.login-form {
 		position:absolute;
 	}
 	&.admin{
-		color:@fullBlack;
-		border-color:@fullBlack;
+		background-color:@primary-one;
+		border-color:@primary-one;
+		color:@white;
 		&.accredited:after{
 			background-color:@fullBlack;
 		}
@@ -1501,6 +1568,11 @@ div.login-form {
 		&.accredited:after{
 			background-color:@primary-one-darken;
 		}
+	}
+	&.issuer{
+		background-color:@primary-two;
+		border-color:@primary-two;
+		color:@white;
 	}
 	&.full{
 		color:@highlight-tertiary;
@@ -1867,9 +1939,6 @@ svg:not(:root).recharts-surface{
 			font-size:@14px;
 			line-height:18px;
 			font-weight:@normal;
-			> a{
-				font-weight:700;
-			}
 		}
 	}
 	>h3.ui.header{
@@ -2289,6 +2358,14 @@ p.check-extra-info{
 			border-radius: 6px;
 			padding: @6px;
 			box-shadow: inset @commonShadow;
+		}
+	}
+}
+//Homepage featured on section logos - mobile
+.featured-logos {
+	img.ui.image {
+		@media only screen and (max-width : @largestMobileScreen){
+			transform: scale(0.8, 0.8);
 		}
 	}
 }

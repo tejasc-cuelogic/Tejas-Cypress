@@ -7,7 +7,18 @@ import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
 } from '../../../constants/aws';
 import {
-  userStore, userDetailsStore, authStore, commonStore, adminStore, uiStore,
+  userStore,
+  userDetailsStore,
+  authStore,
+  commonStore,
+  adminStore,
+  uiStore,
+  accountStore,
+  identityStore,
+  investorProfileStore,
+  iraAccountStore,
+  entityAccountStore,
+  bankAccountStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -299,17 +310,61 @@ export class Auth {
       });
   }
 
+  changeMyPassword() {
+    uiStore.reset();
+    uiStore.setProgress();
+    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+    const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+    const userEmail = userStore.getUserEmailAddress();
+    const authenticationDetails = new AWSCognito.AuthenticationDetails({
+      Username: loginData.email || userEmail,
+      Password: loginData.password || passData.oldPasswd,
+    });
+    this.cognitoUser = new AWSCognito.CognitoUser({
+      Username: loginData.email || userEmail,
+      Pool: this.userPool,
+    });
+    return new Promise((res, rej) => {
+      this.cognitoUser.authenticateUser(authenticationDetails, {
+        onSuccess: () => {
+          this.cognitoUser.changePassword(
+            passData.oldPasswd, passData.newPasswd,
+            (err, resultObtained) => {
+              if (err) {
+                rej(err.message || JSON.stringify(err));
+              }
+              res(resultObtained);
+            },
+          );
+        },
+        onFailure: err => rej(err),
+      });
+    })
+      .then(() => {
+        Helper.toast('Password changed successfully', 'success');
+      })
+      .catch((err) => {
+        uiStore.setErrors(this.simpleErr(err));
+        throw err;
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+        uiStore.clearLoaderMessage();
+      });
+  }
+
   updatePassword() {
     uiStore.reset();
     uiStore.setProgress();
     const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
     const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+    const userEmail = userStore.getUserEmailAddress();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
-      Username: loginData.email,
-      Password: loginData.password,
+      Username: loginData.email || userEmail,
+      Password: loginData.password || passData.oldPasswd,
     });
     this.cognitoUser = new AWSCognito.CognitoUser({
-      Username: loginData.email,
+      Username: loginData.email || userEmail,
       Pool: this.userPool,
     });
     return new Promise((res, rej) => {
@@ -488,6 +543,13 @@ export class Auth {
       this.cognitoUser.signOut();
       AWS.config.clear();
       authStore.setUserLoggedIn(false);
+      accountStore.resetStoreData();
+      identityStore.resetStoreData();
+      investorProfileStore.resetStoreData();
+      userDetailsStore.resetStoreData();
+      iraAccountStore.resetStoreData();
+      entityAccountStore.resetStoreData();
+      bankAccountStore.resetStoreData();
       res();
     })
     // Clear all AWS credentials

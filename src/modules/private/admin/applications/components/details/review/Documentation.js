@@ -4,6 +4,7 @@ import { Form, Header, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -19,10 +20,12 @@ export default class Documentation extends Component {
     this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   render() {
-    const { DOCUMENTATION_FRM, formChange } = this.props.businessAppReviewStore;
+    const { DOCUMENTATION_FRM, formChange, inProgress } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.documentation && review.documentation &&
       review.documentation.submitted) ? review.documentation.submitted : null;
@@ -30,10 +33,13 @@ export default class Documentation extends Component {
       review.documentation.approved) ? review.documentation.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted && !approved))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <div>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_FRM" approved={approved} isReadonly={isReadonly} />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} isValid={DOCUMENTATION_FRM.meta.isValid} formName="DOCUMENTATION_FRM" approved={approved} isReadonly={isReadonly} />
           <Header as="h5">
             Prior Two Years Tax Returns for Control Owners or Three Years for Existing Business
           </Header>
@@ -67,7 +73,7 @@ export default class Documentation extends Component {
           }
           <Divider section />
           <Header as="h5">
-            Prior Six Months Back Statements (Existing)
+            Prior Six Months Bank Statements (Existing)
           </Header>
           {
             ['consistentBalance', 'unusualMovements'].map(field => (
@@ -93,6 +99,7 @@ export default class Documentation extends Component {
             hidelabel
           />
           <ButtonGroup
+            inProgress={inProgress}
             formName="DOCUMENTATION_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

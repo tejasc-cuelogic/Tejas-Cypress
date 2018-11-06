@@ -1,27 +1,46 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
+import { includes } from 'lodash';
 import { Header, Form, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
+@withRouter
 @observer
 class AccountType extends Component {
   componentWillMount() {
-    const { setStepToBeRendered } = this.props.investmentStore;
-    const { UserAccounts } = this.props;
-    if (UserAccounts && UserAccounts.length === 1) {
+    const {
+      byDefaultRender,
+      setStepToBeRendered,
+    } = this.props.investmentStore;
+    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    if (!byDefaultRender) {
       setStepToBeRendered(2);
+    } else if (this.props.changeInvest || (activeAccounts && activeAccounts.length === 1)) {
+      const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
+      this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
+        if (this.props.investmentStore.getSelectedAccountTypeId) {
+          setStepToBeRendered(1);
+        }
+      });
     }
   }
   componentDidMount() {
     const {
-      investAccTypes,
       setStepToBeRendered,
-      setDisableNextbtn,
+      setFieldValue,
+      byDefaultRender,
     } = this.props.investmentStore;
-    if (investAccTypes.values.length === 0) {
-      setDisableNextbtn();
+    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    if (this.props.investmentStore.getSelectedAccountTypeId) {
+      this.props.investmentLimitStore.getInvestorInvestmentLimit();
+    }
+    if (!byDefaultRender) {
+      setStepToBeRendered(2);
+    } else if (activeAccounts && activeAccounts.length === 1) {
+      setFieldValue('disableNextbtn', false);
       setStepToBeRendered(1);
     }
   }
@@ -29,35 +48,38 @@ class AccountType extends Component {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
   }
   render() {
-    const { UserAccounts } = this.props;
+    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     const {
       accTypeChanged,
       investAccTypes,
       prepareAccountTypes,
     } = this.props.investmentStore;
-    prepareAccountTypes(UserAccounts);
+    prepareAccountTypes(activeAccounts);
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
-        {investAccTypes.values[0] ?
-          <p className="center-align">Choose an account type</p> :
-          <div className="center-align">
-            <p>Investment Accounts are not yet Created!</p>
-            <Link to="/app/summary" className="text-link">
-              <Icon className="ns-arrow-right" color="green" />
-              Go to My Accounts
-            </Link>
-          </div>
-        }
         <Form error className="account-type-tab">
-          <FormRadioGroup
-            name="investAccountType"
-            containerclassname="button-radio center-align"
-            fielddata={investAccTypes}
-            changed={accTypeChanged}
-          />
+          {investAccTypes.values.length ?
+            <Aux>
+              <p className="center-align">Choose an account type</p>
+              <FormRadioGroup
+                name="investAccountType"
+                containerclassname="button-radio center-align"
+                fielddata={investAccTypes}
+                changed={accTypeChanged}
+              />
+            </Aux>
+            :
+            <div className="center-align">
+              <p>Investment accounts are not yet created!</p>
+              <Link to="/app/summary" className="text-link">
+                <Icon className="ns-arrow-right" color="green" />
+                Go to My Accounts
+              </Link>
+            </div>
+          }
         </Form>
-      </div>
+      </Aux>
     );
   }
 }

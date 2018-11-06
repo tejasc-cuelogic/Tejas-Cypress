@@ -20,7 +20,7 @@ class VideoModal extends Component {
               <Embed
                 // url={videoUrl.url}
                 active
-                id={videoUrl.url}
+                id={videoUrl}
                 source="vimeo"
               // icon="ns-play"
               /> : <InlineLoader text="No video is uploaded." />

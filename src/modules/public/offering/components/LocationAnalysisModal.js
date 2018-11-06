@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Modal, Grid, Image } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../theme/shared';
-import emptyHeroImagePlaceholder from '../../../../assets/images/gallery-placeholder.jpg';
+import { InlineLoader, Image64 } from '../../../../theme/shared';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -28,13 +28,12 @@ class LocationAnalysisModal extends Component {
           <Grid>
             <Grid.Row>
               <Grid.Column computer={6} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
-                <Image
-                  src={
-                    campaign && campaign.media && campaign.media.locationHeroImage &&
-                    campaign.media.locationHeroImage.url ?
-                      campaign.media.locationHeroImage.url : emptyHeroImagePlaceholder
-                  }
-                />
+                {campaign && campaign.media && campaign.media.location &&
+                  campaign.media.location.length && campaign.media.location[0].url ?
+                    <Image64 srcUrl={campaign.media.location[0].url} />
+                    :
+                    <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
+              }
               </Grid.Column>
               <Grid.Column computer={10} tablet={10} mobile={16}>
                 {

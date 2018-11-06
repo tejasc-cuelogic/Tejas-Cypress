@@ -28,6 +28,10 @@
 	content: '\e801';
 }
 
+/* Disabled */
+.ui.disabled.checkbox {
+    pointer-events: none;
+}
 
 /*  UTF Reference
 .check:before { content: '\e800'; }
@@ -57,7 +61,7 @@
 			min-width:160px;
 			padding:15px;
 			text-align:center;
-			font-weight:700;
+			font-weight:@fontMedium;
 			border:@border-color 1px solid;
 			border-radius:@6px;
 			&:before, &:after{
@@ -69,7 +73,9 @@
 			height:100%;
 		}
 		input:checked ~ label{
+			background-color:@primary-one;
 			border-color:@primary-one;
+			color:@white;
 		}
 	}
 }

@@ -45,6 +45,10 @@ const ProgressCard = props => (
         }
         const verificationStatus =
         props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification);
+        const pathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.route}` :
+        `${props.match.url}/${currentCard.route}`;
+        const altPathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.altRoute}` :
+        `${props.match.url}/${currentCard.altRoute}`;
         return (
           <Card fluid className={`verification ${status === 2 ? 'done' : status === 0 ? 'disabled' : ''}`}>
             <Card.Content>
@@ -62,10 +66,10 @@ const ProgressCard = props => (
                     content={currentCard.step === 2 ? 'Create' : 'Continue'}
                     onClick={() =>
                       (currentCard.step !== 0 ?
-                        props.history.push(`${props.match.url}${currentCard.route}`) :
+                        props.history.push(`${pathToRender}`) :
                         !verificationStatus
-                          ? props.history.push(`${props.match.url}${currentCard.route}`) :
-                          props.history.push(`${props.match.url}${currentCard.altRoute}`))
+                          ? props.history.push(`${pathToRender}`) :
+                          props.history.push(`${altPathToRender}`))
                     }
                   /> :
                   ''
@@ -107,6 +111,7 @@ const ProgressCard = props => (
     }
     {props.signupStatus.partialAccounts.length === 0 &&
     !isEmpty(props.signupStatus.roles) &&
+    props.signupStatus.roles.length > 1 &&
     props.signupStatus.inActiveAccounts.length > 0 &&
       <Card fluid className={props.getStepStatus('accounts') === 'disable' ? 'verification disabled' : 'verification'}>
         <Card.Content>

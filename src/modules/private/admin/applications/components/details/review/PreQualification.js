@@ -6,6 +6,7 @@ import { Form, Header, Confirm } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -31,22 +32,27 @@ export default class PreQual extends Component {
   render() {
     const {
       JUSTIFICATIONS_FRM, toggleConfirmModal, confirmModal, confirmModalName,
-      formChangeWithIndex, removeData,
+      formChangeWithIndex, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.preQualification && review.preQualification.submitted)
       ? review.preQualification.submitted : null;
     const approved = (review && review.preQualification && review.preQualification.approved)
       ? review.preQualification.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} formName="JUSTIFICATIONS_FRM" isValid={JUSTIFICATIONS_FRM.meta.isValid} />
           <Header as="h4">
             Justifications
             {!isReadonly && JUSTIFICATIONS_FRM.fields.justifications.length < 5 &&
@@ -70,6 +76,7 @@ export default class PreQual extends Component {
             ))
           }
           <ButtonGroup
+            inProgress={inProgress}
             formName="JUSTIFICATIONS_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

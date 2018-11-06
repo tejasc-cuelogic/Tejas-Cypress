@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Form, Divider, Button, Header, Icon } from 'semantic-ui-react';
+import { Form, Divider, Header } from 'semantic-ui-react';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { FormTextarea, FormInput } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class OfferingCompany extends Component {
   componentWillMount() {
@@ -18,13 +19,13 @@ export default class OfferingCompany extends Component {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const {
       OFFERING_COMPANY_FRM,
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about');
+    updateOffering(currentOfferingId, OFFERING_COMPANY_FRM.fields, 'offering', 'about', true, undefined, isApproved);
   }
   editorChange =
   (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
@@ -34,12 +35,24 @@ export default class OfferingCompany extends Component {
       formArrayChange,
       rtEditorChange,
     } = this.props.offeringCreationStore;
-    const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const formName = 'OFFERING_COMPANY_FRM';
+    const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.offering && offer.offering.about &&
+      offer.offering.about.submitted) ? offer.offering.about.submitted : null;
+    const approved = (offer && offer.offering && offer.offering.about &&
+      offer.offering.about.approved) ? offer.offering.about.approved : null;
+    const issuerSubmitted = (offer && offer.offering && offer.offering.about &&
+      offer.offering.about.issuerSubmitted) ? offer.offering.about.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
-      <Form onSubmit={this.handleFormSubmit}>
+      <Form>
         <Header as="h4">About the Company</Header>
         <HtmlEditor
+          readOnly={isReadonly}
           changed={this.editorChange}
           name="theCompany"
           form="OFFERING_COMPANY_FRM"
@@ -57,11 +70,13 @@ export default class OfferingCompany extends Component {
               <Header as="h6">{`Milestone ${index + 1}`}</Header>
               <div className="featured-section">
                 <FormInput
+                  displayMode={isReadonly}
                   name="date"
                   fielddata={history.date}
                   changed={(e, result) => formArrayChange(e, result, formName, 'history', index)}
                 />
                 <FormTextarea
+                  readOnly={isReadonly}
                   name="description"
                   fielddata={history.description}
                   changed={(e, result) => formArrayChange(e, result, formName, 'history', index)}
@@ -77,6 +92,7 @@ export default class OfferingCompany extends Component {
               <Divider section />
               <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
               <HtmlEditor
+                readOnly={isReadonly}
                 changed={rtEditorChange}
                 name={field}
                 form="OFFERING_COMPANY_FRM"
@@ -87,22 +103,15 @@ export default class OfferingCompany extends Component {
           ))
         }
         <Divider hidden />
-        <div className="clearfix">
-          <Button as="span" className="time-stamp">
-            <Icon className="ns-check-circle" color="green" />
-            Submitted by USER_NAME on 2/3/2018
-          </Button>
-          <Button.Group floated="right">
-            {access.asManager ? (
-              <Aux>
-                <Button inverted color="red" content="Decline" disabled={!OFFERING_COMPANY_FRM.meta.isValid} />
-                <Button color="green" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid}>Approve</Button>
-              </Aux>
-            ) : (
-              <Button primary color="green" className="relaxed" disabled={!OFFERING_COMPANY_FRM.meta.isValid}>Save</Button>
-            )}
-          </Button.Group>
-        </div>
+        <ButtonGroup
+          isIssuer={isIssuer}
+          submitted={submitted}
+          isManager={isManager}
+          formValid={OFFERING_COMPANY_FRM.meta.isValid}
+          approved={approved}
+          updateOffer={this.handleFormSubmit}
+          issuerSubmitted={issuerSubmitted}
+        />
       </Form>
     );
   }

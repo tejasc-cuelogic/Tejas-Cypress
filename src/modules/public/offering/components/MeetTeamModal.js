@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { filter } from 'lodash';
 import { Header, Modal, Grid, Image, Icon, Responsive } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../theme/shared';
-import emptyHeroImagePlaceholder from '../../../../assets/images/gallery-placeholder.jpg';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 @inject('campaignStore')
 @observer
@@ -40,7 +40,7 @@ class MeetTeamModal extends Component {
                           src={
                             data && data.uploads && data.uploads.heroImage &&
                               data.uploads.heroImage.url ?
-                              data.uploads.heroImage.url : emptyHeroImagePlaceholder
+                              data.uploads.heroImage.url : `${ASSETS_URL}images/gallery-placeholder.jpg`
                           }
                           fluid
                         />
@@ -63,7 +63,7 @@ class MeetTeamModal extends Component {
                       </Grid.Column>
                       <Responsive maxWidth={767} as={Aux}>
                         <Grid.Column>
-                          <Image src={emptyHeroImagePlaceholder} fluid />
+                          <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} fluid />
                         </Grid.Column>
                       </Responsive>
                     </Aux>
@@ -91,7 +91,7 @@ class MeetTeamModal extends Component {
                             src={
                               data.uploads.heroImage.isPublic === true &&
                                 data.uploads.heroImage.url != null ?
-                                data.uploads.heroImage.url : emptyHeroImagePlaceholder
+                                data.uploads.heroImage.url : `${ASSETS_URL}images/gallery-placeholder.jpg`
                             }
                             fluid
                           />

@@ -1,9 +1,9 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import { Header, Checkbox, Form, Divider, Button, Icon } from 'semantic-ui-react';
+import { Header, Checkbox, Form, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
 
 const FormData = observer(({
   form,
@@ -11,9 +11,11 @@ const FormData = observer(({
   formChange,
   checkboxField,
   descriptionField,
+  isReadonly,
 }) => (
   <div className="featured-section collapsed-checkbox">
     <Checkbox
+      disabled={isReadonly}
       name={checkboxField}
       label={
         <label>
@@ -26,6 +28,7 @@ const FormData = observer(({
     <div className="checkbox-description">
       <p>{form.fields[descriptionField].label}</p>
       <FormTextarea
+        readOnly={isReadonly}
         fielddata={form.fields[descriptionField]}
         name={descriptionField}
         containerclassname="secondary"
@@ -36,34 +39,48 @@ const FormData = observer(({
   </div>
 ));
 
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class RiskFactors extends Component {
   componentWillMount() {
     this.props.offeringCreationStore.setFormData('GENERAL_FRM', 'legal.general');
     this.props.offeringCreationStore.setFormData('RISK_FACTORS_FRM', 'legal.riskFactors');
+    if (!this.props.offeringCreationStore.initLoad.includes('DOCUMENTATION_FRM')) {
+      this.props.offeringCreationStore.setFormData('DOCUMENTATION_FRM', 'legal.documentation.issuer');
+    }
   }
-  handleFormSubmit = () => {
+  handleFormSubmit = (isApproved = null) => {
     const {
       RISK_FACTORS_FRM,
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors');
+    updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors', true, undefined, isApproved);
   }
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
     const formName = 'RISK_FACTORS_FRM';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
+    const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const submitted = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.submitted) ? offer.legal.riskFactors.submitted : null;
+    const approved = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.approved) ? offer.legal.riskFactors.approved : null;
+    const issuerSubmitted = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.issuerSubmitted) ? offer.legal.riskFactors.issuerSubmitted : null;
+    const isReadonly = ((isIssuer && issuerSubmitted) || (submitted && !isManager && !isIssuer) ||
+      (isManager && approved && approved.status));
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
-        <Form onSubmit={this.handleFormSubmit}>
+        <Form>
           {
             Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
             .map(field => (
               <FormData
+                isReadonly={isReadonly}
                 formName={formName}
                 form={RISK_FACTORS_FRM}
                 formChange={formChange}
@@ -73,22 +90,15 @@ export default class RiskFactors extends Component {
             ))
           }
           <Divider hidden />
-          <div className="clearfix">
-            <Button as="span" className="time-stamp">
-              <Icon className="ns-check-circle" color="green" />
-              Submitted by USER_NAME on 2/3/2018
-            </Button>
-            <Button.Group floated="right">
-              {access.asManager ? (
-                <Aux>
-                  <Button inverted color="red" content="Decline" disabled={!RISK_FACTORS_FRM.meta.isValid} />
-                  <Button color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid}>Approve</Button>
-                </Aux>
-              ) : (
-                <Button primary color="green" className="relaxed" disabled={!RISK_FACTORS_FRM.meta.isValid}>Save</Button>
-              )}
-            </Button.Group>
-          </div>
+          <ButtonGroup
+            isIssuer={isIssuer}
+            submitted={submitted}
+            isManager={isManager}
+            formValid={RISK_FACTORS_FRM.meta.isValid}
+            approved={approved}
+            updateOffer={this.handleFormSubmit}
+            issuerSubmitted={issuerSubmitted}
+          />
         </Form>
       </div>
     );

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FormInput } from '../../../../../../../theme/form';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const TableHeader = ({ isReadonly }) => (
   <Table.Header>
@@ -89,22 +90,27 @@ export default class Contingencies extends Component {
   render() {
     const {
       CONTINGENCY_FRM, confirmModal, confirmModalName, addMore, formChangeWithIndex,
-      toggleConfirmModal, removeData,
+      toggleConfirmModal, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.contingencies && review.contingencies &&
       review.contingencies.submitted) ? review.contingencies.submitted : null;
     const approved = (review && review.contingencies && review.contingencies &&
       review.contingencies.approved) ? review.contingencies.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} formName="CONTINGENCY_FRM" approved={approved} isReadonly={isReadonly} isValid={CONTINGENCY_FRM.meta.isValid} />
           <Header as="h5">
             Launch
           </Header>
@@ -120,6 +126,7 @@ export default class Contingencies extends Component {
             <TableBody isReadonly={isReadonly} match={this.props.match} arrayName="close" fields={CONTINGENCY_FRM.fields.close} formName="CONTINGENCY_FRM" onchange={formChangeWithIndex} addMore={addMore} toggleConfirmModal={this.toggleConfirmModal} />
           </Table>
           <ButtonGroup
+            inProgress={inProgress}
             formName="CONTINGENCY_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

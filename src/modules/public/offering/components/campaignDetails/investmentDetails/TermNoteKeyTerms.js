@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
+import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 class TermNoteKeyTerms extends Component {
@@ -13,10 +14,10 @@ class TermNoteKeyTerms extends Component {
             <p><b>Issuer</b><br />{KeyTerms.shorthandBusinessName}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Regulation</b><br />506(c)</p>
+            <p><b>Regulation</b><br />{KeyTerms && KeyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Security</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
+            <p><b>Security</b><br />{KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
           </Grid.Column>
         </Grid>
         <Divider />
@@ -27,7 +28,12 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>${KeyTerms.minOfferingAmount}</p>
+                <p>
+                  {KeyTerms && KeyTerms.minOfferingAmount ?
+                    Helper.CurrencyFormat(KeyTerms.minOfferingAmount)
+                    :
+                    'NA'}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -35,7 +41,12 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>${KeyTerms.maxOfferingAmount}</p>
+                <p>
+                  {KeyTerms && KeyTerms.maxOfferingAmount ?
+                    Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)
+                    :
+                    'NA'}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -43,7 +54,12 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>$100</p>
+                <p>
+                  {KeyTerms && KeyTerms.minInvestAmt ?
+                    Helper.CurrencyFormat(KeyTerms.minInvestAmt)
+                    :
+                    'NA'}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -51,7 +67,13 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p><b>{KeyTerms.interestRate}%</b></p>
+                {KeyTerms && KeyTerms.interestRate ?
+                  <p>
+                    <b>{KeyTerms.interestRate}%</b>
+                  </p>
+                  :
+                  'NA'
+                }
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -63,7 +85,13 @@ class TermNoteKeyTerms extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                <p><b>{KeyTerms.maturity} Months</b></p>
+                {KeyTerms && KeyTerms.maturity ?
+                  <p>
+                    <b>{KeyTerms.maturity} Months</b>
+                  </p>
+                  :
+                  'NA'
+                }
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -75,7 +103,12 @@ class TermNoteKeyTerms extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                <p><b>{KeyTerms.frequencyOfPayments}</b></p>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.frequencyOfPayments ?
+                      `${KeyTerms.frequencyOfPayments}` : 'NA'}
+                  </b>
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -83,7 +116,12 @@ class TermNoteKeyTerms extends Component {
                 <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
               </Table.Cell>
               <Table.Cell>
-                <p>{KeyTerms.securityInterest}%</p>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.securityInterest ?
+                      `${KeyTerms.securityInterest}` : 'NA'}
+                  </b>
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -91,18 +129,22 @@ class TermNoteKeyTerms extends Component {
                 <b>Ownership % Represented by Securities</b>
               </Table.Cell>
               <Table.Cell>
-                <p>
-                  <b>{KeyTerms.securitiesOwnershipPercentage}%.
-                  </b> Investors will not receive any equity interests in the Issuer or
-                  any voting or management rights with respect to the Issuer as a result of
-                  an investment in Securities.
-                </p>
+                {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
+                  <p>
+                    <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
+                    Investors will not receive any equity interests in the Issuer or
+                    any voting or management rights with respect to the Issuer as a result of
+                    an investment in Securities.
+                  </p>
+                  :
+                  'NA'
+                }
               </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
         {!isMobile &&
-        <Divider />
+          <Divider />
         }
         <Header as="h5" className="center-align">
           <a href="https://www.sec.gov/Archives/edgar/data/1735180/000173518018000003/0001735180-18-000003-index.htm" target="blank">

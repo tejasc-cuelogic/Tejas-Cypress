@@ -1,18 +1,26 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Button } from 'semantic-ui-react';
+import moment from 'moment';
+import { Button, Icon } from 'semantic-ui-react';
 
 const ButtonGroup = ({
-  formValid, formName, isManager, approved, submitted, submitWithApproval,
+  formName, submitted, approved, isManager, submitWithApproval, inProgress,
 }) => (
   <Aux>
-    {!isManager && (!approved || (approved && !approved.status)) &&
+    {((isManager && !submitted) ||
+    (!isManager && (!approved || (approved && !approved.status)))) &&
     <div className="right-align mt-30">
       <Button.Group>
-        {((approved && !approved.status) || !submitted) &&
-        <Button disabled={!formValid} secondary className="relaxed">Save</Button>
+        {((isManager && !submitted) || (!isManager && !submitted)) &&
+        <Button loading={inProgress === 'SAVE'} secondary className="relaxed">Save</Button>
         }
-        <Button onClick={() => submitWithApproval(formName, 'REVIEW_SUBMITTED')} disabled={!(formValid) || !((approved && !approved.status) || !submitted)} primary={((approved && !approved.status) || !submitted)} type="button">{((approved && !approved.status) || !submitted) ? 'Submit for Approval' : 'Awaiting Manager Approval'}</Button>
+        {submitted &&
+          <Button as="span" className="time-stamp">
+            <Icon className="ns-circle" color="green" />
+            Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
+          </Button>
+        }
+        <Button loading={inProgress === 'REVIEW_SUBMITTED'} onClick={() => submitWithApproval(formName, 'REVIEW_SUBMITTED')} disabled={!((isManager && !submitted) || (!isManager && !submitted))} primary={((isManager && !submitted) || (!isManager && !submitted))} type="button">{((isManager && !submitted) || (!isManager && !submitted)) ? 'Submit for Approval' : 'Awaiting Manager Approval'}</Button>
       </Button.Group>
     </div>
     }

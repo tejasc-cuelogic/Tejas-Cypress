@@ -8,6 +8,7 @@ import { FormTextarea, MaskedInput, FormInput, DropZoneConfirm as DropZone } fro
 import ManagerOverview from './ManagerOverview';
 import Helper from '../../../../../../../helper/utility';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const AddMore = ({
   addMore, formName, arrayName, title,
@@ -46,22 +47,27 @@ export default class BusinessPlan extends Component {
   render() {
     const {
       BUSINESS_PLAN_FRM, formChangeWithIndex, controlPersonMaskChange, totalSourcesAmount,
-      maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData,
+      maskChangeWithIndex, totalUsesAmount, confirmModal, confirmModalName, removeData, inProgress,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.businessPlan && review.businessPlan &&
       review.businessPlan.submitted) ? review.businessPlan.submitted : null;
     const approved = (review && review.businessPlan && review.businessPlan &&
       review.businessPlan.approved) ? review.businessPlan.approved : null;
-    const isReadonly = ((((approved && approved.status) || (submitted && !approved))
+    const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>
-          <ManagerOverview applicationStatus={applicationStatus} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
+          <ManagerOverview applicationStatus={applicationStatus} submitted={submitted} isManager={isManager} approved={approved} isReadonly={isReadonly} isValid={BUSINESS_PLAN_FRM.meta.isValid} formName="BUSINESS_PLAN_FRM" />
           <Header as="h4">Location feasibility</Header>
           <FormTextarea
             containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
@@ -317,6 +323,7 @@ export default class BusinessPlan extends Component {
             dateOfBirth
           />
           <ButtonGroup
+            inProgress={inProgress}
             formName="BUSINESS_PLAN_FRM"
             isReadonly={isReadonly}
             isManager={isManager}

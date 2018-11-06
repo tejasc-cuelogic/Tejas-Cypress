@@ -8,21 +8,21 @@ class Helper {
         label: 'Verify Identity',
         action: false,
         successMsg: 'Complete',
-        route: '/identity-verification/0',
-        altRoute: '/identity-verification/3',
+        route: 'identity-verification/0',
+        altRoute: 'identity-verification/3',
       },
       'cash-dollar': {
         step: 1,
         label: 'Establish Investor Profile',
         action: false,
         successMsg: 'Complete',
-        route: '/establish-profile',
+        route: 'establish-profile',
       },
       'bar-line-chart': {
         step: 2,
         label: 'Create Investment Account',
         action: false,
-        route: '/account-creation',
+        route: 'account-creation',
       },
     };
     return metaData;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Divider, List, Container, Grid, Image, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import Secure from '../../../../assets/images/secure-horizontal.png';
+import { ASSETS_URL } from '../../../../constants/aws';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Security = () => (
@@ -22,16 +22,21 @@ const Security = () => (
                   </p>
                   <Header as="h5">Keep your information protected.</Header>
                   <p>We safeguard your information with bank-level security measures</p>
-                  <Responsive as={Image} minWidth={768} src={Secure} />
+                  <Responsive as={Image} minWidth={768} src={`${ASSETS_URL}images/secure-horizontal.png`} />
                 </Grid.Column>
                 <Grid.Column>
-                  <Header as="h5">SEC-registered broker-dealer</Header>
+                  <Header as="h5">SEC-registered broker-dealer and funding portal</Header>
                   <p>
-                    NextSeed Securities LLC operates as a broker-dealer registered with the
-                    Securities & Exchange Commission and is a member of the Financial Industry
-                    Regulatory Authority (FINRA). The team behind NextSeed created the first
-                    registered funding portal with the SEC and closed the first-ever
-                    regulation crowdfunding offering in the country.
+                    All securities-related activity is conducted by NextSeed Securities, LLC,
+                    an affiliate of NextSeed, and a registered broker dealer, and member of{' '}
+                    <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
+                    {' '}and SIPC (checkout our background on{' '}
+                    <a href="https://brokercheck.finra.org/" target="_blank" rel="noopener noreferrer">BrokerCheck</a>
+                    ) or NextSeed US
+                    LLC, a registered funding portal and member of{' '}
+                    <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
+                    {' '}NextSeed US LLC was the first registered funding portal with the SEC and closed the
+                    first-ever Regulation Crowdfunding offering.
                   </p>
                 </Grid.Column>
               </Grid>

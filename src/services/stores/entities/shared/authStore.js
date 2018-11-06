@@ -74,7 +74,12 @@ export class AuthStore {
 
   @action
   signupChange = (e, result) => {
-    this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
+    if (e.password || e.password === '') {
+      this.SIGNUP_FRM =
+        Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
+    } else {
+      this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
+    }
   };
 
   @action
@@ -97,7 +102,18 @@ export class AuthStore {
 
   @action
   changePassChange = (e, res) => {
-    this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
+    if (e.password || e.password === '') {
+      const ojbNew = {
+        isValid: 'isValid',
+        password: 'newPasswd',
+        score: 'score',
+      };
+      const newObj = this.renameKeys(ojbNew, e);
+      this.CHANGE_PASS_FRM =
+        Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValuesForCangePassword(newObj, res));
+    } else {
+      this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
+    }
   };
 
   @action
@@ -107,7 +123,12 @@ export class AuthStore {
 
   @action
   resetPassChange = (e, res) => {
-    this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, Validator.pullValues(e, res));
+    if (e.password || e.password === '') {
+      this.RESET_PASS_FRM =
+        Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
+    } else {
+      this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, typeof e === 'string' ? { name: 'code', value: e } : Validator.pullValues(e, res));
+    }
   };
 
   @action
@@ -162,25 +183,13 @@ export class AuthStore {
   }
 
   @action
-  reset = (form) => {
-    switch (form) {
-      case 'LOGIN':
-        this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
-        break;
-      case 'CONFIRM':
-        this.CONFIRM_FRM = Validator.prepareFormObject(CONFIRM);
-        break;
-      case 'SIGNUP':
-        this.SIGNUP_FRM = Validator.prepareFormObject(SIGNUP);
-        break;
-      default: this.LOGIN_FRM = Validator.prepareFormObject(LOGIN);
-    }
+  resetForm = (form, targetedFields = []) => {
+    Validator.resetFormData(this[form], targetedFields);
   }
-
   @computed
   get canSubmitConfirmEmail() {
     return !isEmpty(this.CONFIRM_FRM.fields.email.value) && !this.CONFIRM_FRM.fields.email.error &&
-    !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
+      !isEmpty(this.CONFIRM_FRM.fields.code.value) && !this.CONFIRM_FRM.fields.code.error;
   }
 
   @action
@@ -271,6 +280,13 @@ export class AuthStore {
         });
     });
   }
+
+  renameKeys = (keysMap, obj) => Object
+    .keys(obj)
+    .reduce((acc, key) => ({
+      ...acc,
+      ...{ [keysMap[key] || key]: obj[key] },
+    }), {});
 }
 
 export default new AuthStore();

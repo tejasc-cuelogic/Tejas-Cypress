@@ -4,8 +4,7 @@ import Aux from 'react-aux';
 import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup, List, Button } from 'semantic-ui-react';
 // import BusinessType from './BusinessType';
 import Slider from 'react-slick';
-import filterIcon from '../../../../../assets/images/icons/icon_filter.png';
-import closeIcon from '../../../../../assets/images/icons/icon_close.png';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const isMobile = document.documentElement.clientWidth < 768;
 export default class Filters extends Component {
@@ -21,21 +20,18 @@ export default class Filters extends Component {
       { content: 'Office', iconName: 'fax' },
       { content: 'Other', iconName: 'ellipsis horizontal' },
     ],
-    MoreOptions: {
-      content: 'Funded Campaigns',
-      color: null,
-      iconName: 'eye',
-    },
+    MoreOptions: [{
+      label: 'Show Funded Deals',
+      checkStatus: true,
+    }],
     InvestmentTypes: [
-      { label: 'Revenue Sharing', checkStatus: true },
+      { label: 'Revenue Sharing Note', checkStatus: true },
       { label: 'Term Note', checkStatus: true },
-      { label: 'Equity', checkStatus: false },
-      { label: 'Convertible Note', checkStatus: false },
+      { label: 'Preferred Equity', checkStatus: false },
     ],
     FundingTypes: [
       { label: 'Regulation Crowdfunding', checkStatus: false },
-      { label: 'Regulation A+', checkStatus: false },
-      { label: 'Regulation D', checkStatus: false },
+      { label: '506(c)', checkStatus: false },
     ],
   }
 
@@ -84,8 +80,9 @@ export default class Filters extends Component {
     FundingTypes.forEach((item, index) => {
       FundingTypes[index].checkStatus = false;
     });
-    MoreOptions.color = null;
-
+    MoreOptions.forEach((item, index) => {
+      MoreOptions[index].checkStatus = false;
+    });
     this.setState({
       BusinessTypes,
       MoreOptions,
@@ -105,7 +102,7 @@ export default class Filters extends Component {
   render() {
     const BusinessTypesComp = (
       <Aux>
-        <Header as="h6" dividing>Business Type</Header>
+        <Header as="h6" dividing className="text-uppercase">Business Type</Header>
         <List relaxed="very">
           {this.state.BusinessTypes.map((item, index) => (
             <List.Item key={item.content} onClick={() => this.toggleColor(index)}>
@@ -117,8 +114,8 @@ export default class Filters extends Component {
       </Aux>);
     const InvestAndFundingTypeComp = (
       <Aux>
-        <Header as="h6" dividing>
-          Investment Type
+        <Header as="h6" dividing className="text-uppercase">
+          Investment Options
         </Header>
         <div className="checkbox-group">
           <Form>
@@ -135,7 +132,7 @@ export default class Filters extends Component {
             ))}
           </Form>
         </div>
-        <Header as="h6" dividing>
+        <Header as="h6" dividing className={`${!isMobile && 'mt-80'} text-uppercase`}>
           Funding Type
         </Header>
         <div className="checkbox-group">
@@ -157,18 +154,24 @@ export default class Filters extends Component {
       </Aux>);
     const OtherFiltersComp = (
       <Aux>
-        <Header as="h6" dividing>
+        <Header as="h6" dividing className={`${isMobile && 'mt-80'} text-uppercase`}>
           More Options
         </Header>
-        <List relaxed="very">
-          <List.Item onClick={() => this.toggleColor2()}>
-            <List.Icon
-              color={this.state.MoreOptions.color}
-              name={this.state.MoreOptions.iconName}
-            />
-            <List.Content>{this.state.MoreOptions.content}</List.Content>
-          </List.Item>
-        </List>
+        <div className="checkbox-group">
+          <Form>
+            {this.state.MoreOptions.map((item, index) => (
+              <Form.Field>
+                <Checkbox
+                  key={item.label}
+                  label={item.label}
+                  checked={item.checkStatus}
+                  onChange={() => this.togglecheckbox('MoreOptions', index)}
+                />
+              </Form.Field>
+            ))
+            }
+          </Form>
+        </div>
       </Aux>);
     return (
       <Aux>
@@ -176,23 +179,21 @@ export default class Filters extends Component {
           <Container>
             <Menu text>
               <Menu.Item name="filter" onClick={this.props.toggleFilters} className="text-uppercase">
-                <Image src={filterIcon} className="filterIcon" />
+                <Image src={`${ASSETS_URL}images/icons/icon_filter.png`} className="filterIcon" />
                  Filter
               </Menu.Item>
               {this.props.status ? (
                 <Menu.Menu position="right">
-                  <Menu.Item name="clear all" onClick={this.clearAll}>
-                    CLEAR ALL
-                  </Menu.Item>
-                  {!isMobile &&
+                  {isMobile ?
+                    <Menu.Item name="clear all" onClick={this.clearAll}>CLEAR ALL</Menu.Item> :
                     <Menu.Item name="clear all">
-                      <Image src={closeIcon} className="closeIcon" onClick={this.props.toggleFilters} />
+                      <Image src={`${ASSETS_URL}images/icons/icon_close.png`} className="closeIcon" onClick={this.props.toggleFilters} />
                     </Menu.Item>
                   }
                 </Menu.Menu>
-              ) : (
-                <Menu.Item name="3 Results Found" position="right" />
-              )
+                ) : (
+                  <Menu.Item name="3 Results Found" position="right" />
+                )
               }
             </Menu>
           </Container>
@@ -210,6 +211,10 @@ export default class Filters extends Component {
                       </Grid.Column>
                       <Grid.Column>
                         {OtherFiltersComp}
+                        <Button.Group>
+                          <Button primary>Update</Button>
+                          <Button basic onClick={this.clearAll}>Clear All</Button>
+                        </Button.Group>
                       </Grid.Column>
                     </Grid> :
                     <div className="carousel">
@@ -237,9 +242,9 @@ export default class Filters extends Component {
                             <Button
                               onClick={this.done}
                               floated="right"
-                              className="link-button"
+                              className="link-button highlight-text"
                             >
-                              DONE
+                              UPDATE
                             </Button>
                           </Button.Group> :
                           <Button.Group>

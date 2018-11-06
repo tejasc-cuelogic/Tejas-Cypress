@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import { Modal, Header, Divider, Button, Message, Form, Statistic } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
@@ -36,7 +36,11 @@ export default class UpdateInvestmentLimits extends Component {
             <Header as="h3">Update Investment limits</Header>
             <Divider />
             <p>
-              Pellentesque facilisis. Nulla imperdiet sit amet magna. Vestibulum dapibus,
+              Ensure that your 12-month Investment Limit for Regulation Crowdfunding is up to date
+              by providing your most recent Annual Income and Net Worth.&nbsp;
+              <Link target="_blank" to="/app/resources/faq">
+                See FAQ on how your investment limit is calculated
+              </Link>
             </p>
           </Modal.Header>
           <Modal.Content>

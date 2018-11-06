@@ -39,49 +39,51 @@ export default class NsPagination extends Component {
     } = this.state;
     return (
       <Menu pagination text {...this.props}>
-        {recPerPage &&
-          <Select
-            value={first}
-            options={stateOptions}
-            onChange={this.changeRecordsPerPage}
-          />
-        }
-        <Menu.Item
-          onClick={() => this.goToPage(1)}
-          className={currentPageNo === 1 && 'disabled'}
-        >
-          <Icon className="ns-arrow-double-left" color="green" />
-        </Menu.Item>
-        <Menu.Item
-          icon
-          onClick={() => this.goToPage(currentPageNo - 1)}
-          className={currentPageNo === 1 && 'disabled'}
-        >
-          <Icon className="ns-chevron-left" color="green" />
-        </Menu.Item>
-        <Menu.Item>
-          <Input
-            value={currentPageNo || null}
-            onKeyPress={this.jumpToPage}
-            onChange={this.pageChangeHandler}
-          />
-        </Menu.Item>
-        <Menu.Item>of</Menu.Item>
-        <Menu.Item>{totalPages}</Menu.Item>
-        <Menu.Item
-          icon
-          onClick={() => this.goToPage(currentPageNo + 1)}
-          className={currentPageNo === totalPages && 'disabled'}
-        >
-          <Icon className="ns-chevron-right" color="green" />
-        </Menu.Item>
-        <Menu.Item
-          icon
-          onClick={() => this.goToPage(totalPages)}
-          className={currentPageNo === totalPages && 'disabled'}
-        >
-          <Icon className="ns-arrow-double-right" color="green" />
-        </Menu.Item>
+        <Menu.Menu position="right">
+          {recPerPage &&
+            <Select
+              value={first}
+              options={stateOptions}
+              onChange={this.changeRecordsPerPage}
+            />
+          }
+          <Menu.Item
+            onClick={() => this.goToPage(1)}
+            className={currentPageNo === 1 && 'disabled'}
+          >
+            <Icon className="ns-arrow-double-left" color="green" />
+          </Menu.Item>
+          <Menu.Item
+            icon
+            onClick={() => this.goToPage(currentPageNo - 1)}
+            className={currentPageNo === 1 && 'disabled'}
+          >
+            <Icon className="ns-chevron-left" color="green" />
+          </Menu.Item>
+          <Menu.Item>
+            <Input
+              value={currentPageNo || null}
+              onKeyPress={this.jumpToPage}
+              onChange={this.pageChangeHandler}
+            />
+          </Menu.Item>
+          <Menu.Item>of</Menu.Item>
+          <Menu.Item>{totalPages}</Menu.Item>
+          <Menu.Item
+            icon
+            onClick={() => this.goToPage(currentPageNo + 1)}
+            className={currentPageNo === totalPages && 'disabled'}
+          >
+            <Icon className="ns-chevron-right" color="green" />
+          </Menu.Item>
+          <Menu.Item
+            icon
+            onClick={() => this.goToPage(totalPages)}
+            className={currentPageNo === totalPages && 'disabled'}
+          >
+            <Icon className="ns-arrow-double-right" color="green" />
+          </Menu.Item>
+        </Menu.Menu>
       </Menu>
     );
   }

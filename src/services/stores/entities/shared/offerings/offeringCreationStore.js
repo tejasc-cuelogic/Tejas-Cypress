@@ -1,30 +1,34 @@
 /* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { map, startCase, filter, forEach, find, orderBy } from 'lodash';
+import { has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { DEFAULT_TIERS, ADD_NEW_TIER, AFFILIATED_ISSUER, LEADER, MEDIA,
+import omitDeep from 'omit-deep';
+import cleanDeep from 'clean-deep';
+import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
-  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, SIGNED_LEGAL_DOCS, KEY_TERMS, OFFERING_OVERVIEW,
-  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION } from '../../../../constants/admin/offerings';
+  ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
+  OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
   getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, createOffer } from '../../../queries/offerings/manage';
+  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
+import { INDUSTRY_TYPES } from '../../../../../constants/offering';
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
   @observable KEY_TERMS_FRM = Validator.prepareFormObject(KEY_TERMS);
   @observable OFFERING_OVERVIEW_FRM = Validator.prepareFormObject(OFFERING_OVERVIEW);
   @observable OFFERING_COMPANY_FRM = Validator.prepareFormObject(OFFERING_COMPANY);
-  @observable SIGNED_LEGAL_DOCS_FRM = Validator.prepareFormObject(SIGNED_LEGAL_DOCS);
   @observable COMPANY_LAUNCH_FRM = Validator.prepareFormObject(COMPANY_LAUNCH);
+  @observable OFFERING_MISC_FRM = Validator.prepareFormObject(MISC);
   @observable LAUNCH_CONTITNGENCIES_FRM =
     Validator.prepareFormObject({ launch: [] }, false, true, false, { launch: CONTINGENCIES.data });
   @observable CLOSING_CONTITNGENCIES_FRM =
@@ -57,6 +61,8 @@ export class OfferingCreationStore {
   @observable ADD_NEW_TIER_FRM = Validator.prepareFormObject(ADD_NEW_TIER);
   @observable ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
+  @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
+  @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -81,6 +87,8 @@ export class OfferingCreationStore {
   @observable requestState = {
     search: {},
   };
+  @observable removeFileIdsList = [];
+  @observable removeFileNamesList = [];
 
   @action
   setTierToBeUnlinked = (tier) => {
@@ -141,7 +149,7 @@ export class OfferingCreationStore {
 
   @action
   resetProfilePhoto = (field) => {
-    const attributes = ['src', 'error', 'value', 'meta'];
+    const attributes = ['src', 'error', 'meta'];
     attributes.forEach((val) => {
       if ((typeof this.MEDIA_FRM.fields[field][val] === 'object') && (this.MEDIA_FRM.fields[field][val] !== null)) {
         this.MEDIA_FRM.fields[field][val] = {};
@@ -157,20 +165,25 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetFormField = (form, field, url, RemoveIndex) => {
-    if (url && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
-      this.MEDIA_FRM.fields[field].preSignedUrl.push(url);
-    } else if (url) {
-      this.MEDIA_FRM.fields[field].preSignedUrl = url;
+  resetFormField = (form, field, fileObj, RemoveIndex) => {
+    if (fileObj && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
+      this.MEDIA_FRM.fields[field].preSignedUrl.push(fileObj.location);
+      this.MEDIA_FRM.fields[field].fileId.push(`${Date.now()}_${fileObj.fileName}`);
+      this.MEDIA_FRM.fields[field].value.push(fileObj.fileName);
+    } else if (fileObj) {
+      this.MEDIA_FRM.fields[field].preSignedUrl = fileObj.location;
+      this.MEDIA_FRM.fields[field].value = fileObj.fileName;
+      this.MEDIA_FRM.fields[field].fileId = `${Date.now()}_${fileObj.fileName}`;
     } else if (RemoveIndex > -1 && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.splice(RemoveIndex, 1);
+      this.MEDIA_FRM.fields[field].value.splice(RemoveIndex, 1);
     } else if (RemoveIndex === undefined) {
       this.MEDIA_FRM.fields[field].preSignedUrl = '';
+      this.MEDIA_FRM.fields[field].value = '';
     }
     this[form].fields[field] = {
       ...this.MEDIA_FRM.fields[field],
       ...{
-        value: '',
         src: '',
         meta: {},
       },
@@ -181,13 +194,11 @@ export class OfferingCreationStore {
   removeMedia = (name, index = undefined) => {
     let filename = '';
     if (index === undefined) {
-      const splitted = this.MEDIA_FRM.fields[name].preSignedUrl.split('/');
-      filename = splitted[splitted.length - 1];
+      filename = this.MEDIA_FRM.fields[name].value;
     } else {
-      const splitted = this.MEDIA_FRM.fields[name].preSignedUrl[index].split('/');
-      filename = splitted[splitted.length - 1];
+      filename = this.MEDIA_FRM.fields[name].value[index];
     }
-    fileUpload.deleteFromS3(filename)
+    fileUpload.deleteFromS3(this.MEDIA_FRM.fields[name].value)
       .then((res) => {
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
         this.resetFormField('MEDIA_FRM', name, undefined, index);
@@ -206,34 +217,38 @@ export class OfferingCreationStore {
     const fileObj = {
       obj: this.MEDIA_FRM.fields[name].base64String,
       type: this.MEDIA_FRM.fields[name].meta.type,
-      name: this.MEDIA_FRM.fields[name].value,
+      name: this.MEDIA_FRM.fields[name].fileName,
     };
     fileUpload.uploadToS3(fileObj)
       .then((res) => {
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} uploaded successfully.`, 'success');
-        this.resetFormField('MEDIA_FRM', name, res.location);
+        this.resetFormField('MEDIA_FRM', name, res);
         this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
       })
       .catch((err) => {
         console.log(err);
       });
   }
+
   @action
   uploadFileToS3 = (form, name, files, key, index) => {
+    this[form].fields[key][index][name].showLoader = true;
     fileUpload.uploadToS3(files[0])
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
-        this[form].fields[key][index][name].fileId = `${files[0].name}${Date.now()}`;
-        this[form].fields[key][index][name].fileName = files[0].name;
-        this[form].fields[key][index][name].fileData = files[0].name;
-        this[form].fields[key][index][name].value = files[0].name;
-        this[form].fields[key][index][name].isPublic = true;
+        this[form].fields[key][index][name].value = res.fileName;
         this[form].fields[key][index][name].preSignedUrl = res.location;
+        this[form].fields[key][index][name].fileId = `${res.fileName}${Date.now()}`;
+        this[form].fields[key][index][name].fileName = `${res.fileName}${Date.now()}`;
       }))
-      .catch((err) => {
+      .catch(action((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
+        this[form].fields[key][index][name].showLoader = false;
         console.log(err);
-      });
+      }))
+      .finally(action(() => {
+        this[form].fields[key][index][name].showLoader = false;
+      }));
   }
 
   @action
@@ -241,9 +256,9 @@ export class OfferingCreationStore {
     fileUpload.deleteFromS3(this[form].fields[key][index][name].fileName)
       .then(action((res) => {
         ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
-          this[form].fields[key][index][name].subKey = '';
-          Helper.toast('file Deleted successfully', 'success');
+          this[form].fields[key][index][name][subKey] = '';
         });
+        Helper.toast('file Deleted successfully', 'success');
       }))
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -277,7 +292,18 @@ export class OfferingCreationStore {
   }
 
   @action
-  formChange = (e, result, form, isArr = true) => {
+  offerCreateChange = (formName, field) => {
+    if (field !== 'offeringSlug') {
+      const { value } = this[formName].fields[field];
+      if (field === 'legalBusinessName') {
+        this[formName].fields.shorthandBusinessName.value = value;
+      }
+      this[formName].fields.offeringSlug.value = kebabCase(value);
+    }
+  }
+
+  @action
+  formChange = (e, result, form, isArr = true, type = undefined) => {
     if (result && (result.type === 'checkbox') && !isArr) {
       this[form] = Validator.onChange(
         this[form],
@@ -290,6 +316,7 @@ export class OfferingCreationStore {
       this[form] = Validator.onChange(
         this[form],
         Validator.pullValues(e, result),
+        type,
       );
     }
   }
@@ -371,13 +398,127 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null, stepName) => {
+  setFormFileArray = (formName, arrayName, field, getField, value, index = undefined) => {
+    if (index !== undefined && arrayName) {
+      this[formName].fields[arrayName][index][field][getField] = value;
+    } else if (index !== null) {
+      if (getField === 'error' || getField === 'showLoader') {
+        this[formName].fields[field][getField] = value;
+      } else {
+        this[formName].fields[field][getField].splice(index, 1);
+      }
+    } else if (Array.isArray(toJS(this[formName].fields[field][getField]))) {
+      this[formName].fields[field][getField].push(value);
+    } else {
+      this[formName].fields[field][getField] = value;
+    }
+  }
+
+  @action
+  setFileUploadDataMulitple = (form, arrayName, field, files, stepName, index = null) => {
+    if (typeof files !== 'undefined' && files.length) {
+      forEach(files, (file) => {
+        const fileData = Helper.getFormattedFileData(file);
+        this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+        fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
+          const { fileId, preSignedUrl } = result.data.createUploadEntry;
+          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+            this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+            this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+            this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+            this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+            this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+            this.checkFormValid(form);
+          }).catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            uiStore.setErrors(error.message);
+          }).finally(() => {
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+          });
+        }).catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+          uiStore.setErrors(error.message);
+        });
+      });
+    }
+  }
+
+  @action
+  removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false) => {
+    if (fromS3) {
+      let removeFileNames = '';
+      if (index !== null && arrayName) {
+        const { value } = this[form].fields[arrayName][index][field];
+        removeFileNames = value;
+      } else if (index !== null) {
+        const { value } = this[form].fields[field];
+        removeFileNames = value[index];
+      } else {
+        const { value } = this[form].fields[field];
+        removeFileNames = value;
+      }
+      this.removeFileNamesList = [...this.removeFileNamesList, removeFileNames];
+      this.setFormFileArray(form, arrayName, field, 'fileName', '', index);
+    } else {
+      let removeFileIds = '';
+      if (index !== null && arrayName) {
+        const { fileId } = this[form].fields[arrayName][index][field];
+        removeFileIds = fileId;
+      } else if (index !== null) {
+        const filesId = this[form].fields[field].fileId;
+        removeFileIds = filesId[index];
+      } else {
+        const { fileId } = this[form].fields[field];
+        removeFileIds = fileId;
+      }
+      this.removeFileIdsList = [...this.removeFileIdsList, removeFileIds];
+      this.setFormFileArray(form, arrayName, field, 'fileId', '', index);
+    }
+    this.setFormFileArray(form, arrayName, field, 'fileData', '', index);
+    this.setFormFileArray(form, arrayName, field, 'value', '', index);
+    this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+    this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+    this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
+    this.checkFormValid(form, form === 'LEADERSHIP_FRM');
+  }
+
+  @action
+  removeUploadedFiles = (fromS3) => {
+    if (fromS3) {
+      const fileList = toJS(this.removeFileNamesList);
+      if (fileList.length) {
+        forEach(fileList, (fileName) => {
+          fileUpload.deleteFromS3(fileName).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
+        });
+        this.removeFileNamesList = [];
+      }
+    } else {
+      const fileList = toJS(this.removeFileIdsList);
+      if (fileList.length) {
+        forEach(fileList, (fileId) => {
+          fileUpload.removeUploadedData(fileId).then(() => {
+          }).catch((error) => {
+            uiStore.setErrors(error.message);
+          });
+        });
+        this.removeFileIdsList = [];
+      }
+    }
+  }
+
+  @action
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false) => {
     if (stepName) {
-      const { getOfferingById } = offeringsStore.offerData.data;
-      const { applicationId, issuerId } = getOfferingById;
       uiStore.setProgress();
       const file = files[0];
       const fileData = Helper.getFormattedFileData(file);
+      if (this[form].fields[field].showLoader !== undefined) {
+        this[form].fields[field].showLoader = true;
+      }
       fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then(action((result) => {
         const { fileId, preSignedUrl } = result.data.createUploadEntry;
         this[form].fields[field].fileId = fileId;
@@ -395,14 +536,21 @@ export class OfferingCreationStore {
           );
         }
         fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
-          .then(() => { })
+          .then(() => {
+            if (updateOnUpload) {
+              this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} uploaded successfully.`);
+            }
+          })
           .catch((err) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
           })
-          .finally(() => {
+          .finally(action(() => {
             uiStore.setProgress(false);
-          });
+            if (this[form].fields[field].showLoader !== undefined) {
+              this[form].fields[field].showLoader = false;
+            }
+          }));
       }));
     } else {
       const file = files[0];
@@ -422,10 +570,13 @@ export class OfferingCreationStore {
   }
 
   @action
-  removeUploadedData = (form, subForm = 'data', field, index = null, stepName) => {
+  removeUploadedData = (form, subForm = 'data', field, index = null, stepName, updateOnRemove = false) => {
     if (stepName) {
       const currentStep = { name: stepName };
       const { fileId } = this[form].fields[field];
+      if (this[form].fields[field].showLoader !== undefined) {
+        this[form].fields[field].showLoader = true;
+      }
       fileUpload.removeUploadedData(fileId).then(action(() => {
         this[form] = Validator.onChange(
           this[form],
@@ -433,9 +584,18 @@ export class OfferingCreationStore {
         );
         this[form].fields[field].fileId = '';
         this[form].fields[field].preSignedUrl = '';
+        if (updateOnRemove) {
+          this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} Removed successfully.`);
+        }
         this.createAccount(currentStep, 'draft', true, field);
       }))
-        .catch(() => { });
+        .catch(() => { })
+        .finally(action(() => {
+          uiStore.setProgress(false);
+          if (this[form].fields[field].showLoader !== undefined) {
+            this[form].fields[field].showLoader = false;
+          }
+        }));
     } else if (index !== null) {
       this[form] = Validator.onArrayFieldChange(
         this[form],
@@ -498,9 +658,13 @@ export class OfferingCreationStore {
   */
   @action
   setFormData = (form, ref, keepAtLeastOne) => {
+    this.resetForm(form);
     const { offer } = offeringsStore;
     if (!offer) {
       return false;
+    }
+    if (form === 'MEDIA_FRM') {
+      this.MEDIA_FRM = Validator.prepareFormObject(MEDIA);
     }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     this.initLoad.push(form);
@@ -514,8 +678,61 @@ export class OfferingCreationStore {
         );
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
+    } else if (form === 'RISK_FACTORS_FRM') {
+      this.stringTemplateFormatting(
+        'RISK_FACTORS_FRM',
+        {
+          location: offer && offer.keyTerms ? `${offer.keyTerms.city || ''} ${offer.keyTerms.state || ''}` : '',
+          industry: offer && offer.keyTerms ? `${INDUSTRY_TYPES[offer.keyTerms.industry] || ''}` : '',
+          shorthand_name: offer && offer.keyTerms ? `${offer.keyTerms.shorthandBusinessName || ''}` : '',
+          state_of_formation: offer && offer.keyTerms ? `${offer.keyTerms.stateOfFormation || ''}` : '',
+        },
+      );
     }
+    const multiForm = this.getActionType(form, 'isMultiForm');
+    this.checkFormValid(form, multiForm, false);
     return false;
+  }
+
+  @action
+  stringTemplateFormatting = (form, data) => {
+    const currentForm = this[form];
+    forEach(currentForm.fields, (field, key) => {
+      if (has(field, 'defaultValue') && form === 'RISK_FACTORS_FRM') {
+        this[form].fields[key].defaultValue =
+          DataFormatter.stringTemplateFormatting(field.defaultValue, data);
+      }
+    });
+  }
+
+  getActionType = (formName, getField = 'actionType') => {
+    const metaDataMapping = {
+      MEDIA_FRM: { isMultiForm: false },
+      KEY_TERMS_FRM: { isMultiForm: false },
+      OFFERING_OVERVIEW_FRM: { isMultiForm: true },
+      OFFERING_COMPANY_FRM: { isMultiForm: true },
+      OFFERING_MISC_FRM: { isMultiForm: false },
+      COMPANY_LAUNCH_FRM: { isMultiForm: false },
+      LAUNCH_CONTITNGENCIES_FRM: { isMultiForm: true },
+      CLOSING_CONTITNGENCIES_FRM: { isMultiForm: true },
+      OFFERING_DETAILS_FRM: { isMultiForm: false },
+      OFFERING_CLOSE_FRM: { isMultiForm: false },
+      LEADERSHIP_FRM: { isMultiForm: true },
+      LEADERSHIP_EXP_FRM: { isMultiForm: true },
+      AFFILIATED_ISSUER_FRM: { isMultiForm: true },
+      LEADER_FRM: { isMultiForm: true },
+      GENERAL_FRM: { isMultiForm: true },
+      ISSUER_FRM: { isMultiForm: false },
+      RISK_FACTORS_FRM: { isMultiForm: false },
+      DOCUMENTATION_FRM: { isMultiForm: false },
+      ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
+    };
+    return metaDataMapping[formName][getField];
+  }
+
+  @action
+  checkFormValid = (form, multiForm, showErrors) => {
+    this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
   }
 
   @action
@@ -573,12 +790,12 @@ export class OfferingCreationStore {
   }
 
   addNewOffer = () => {
-    const params = {};
+    const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
     uiStore.setProgress();
     client
       .mutate({
-        mutation: createOffer,
-        variables: params,
+        mutation: upsertOffering,
+        variables: { offeringDetails },
         refetchQueries: [{
           query: allOfferings,
           variables: { stage: ['CREATION'] },
@@ -592,77 +809,30 @@ export class OfferingCreationStore {
         uiStore.setProgress(false);
       });
   }
-  updateOffering = (id, fields, keyName, subKey, notify = true, successMsg = undefined) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
-    let payloadData = {
-      applicationId: getOfferingById.applicationId,
-      issuerId: getOfferingById.issuerId,
-    };
-    if (keyName) {
-      if (keyName === 'legal') {
-        payloadData[keyName] = {};
-        const generalInfo = Validator.evaluateFormData(this.GENERAL_FRM.fields);
-        if (generalInfo.websiteUrl) {
-          payloadData[keyName].general = generalInfo;
-        }
-        payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
-      } else if (keyName === 'offering') {
-        payloadData[keyName] = {};
-        payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
-        payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
-        payloadData[keyName].overview =
-          Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
-        payloadData[keyName].overview = {
-          ...payloadData[keyName].overview,
-          ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
-        };
-      } else if (keyName === 'media') {
-        payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
-        const mediaObj = {};
-        payloadData[keyName] = Object.keys(payloadData[keyName]).map((k) => {
-          const mediaItem = toJS(payloadData[keyName][k]);
-          mediaObj[k] = Array.isArray(mediaItem) ?
-            mediaItem.map((item) => {
-              const itemOfMedia = { id: 1, url: item, isPublic: true };
-              return itemOfMedia;
-            }) :
-            { id: 1, url: payloadData[keyName][k], isPublic: true };
-          return mediaObj;
-        });
-        payloadData[keyName] = mediaObj;
-      } else if (keyName === 'leadership') {
-        let leadershipFields = Validator.evaluateFormData(fields);
-        leadershipFields = leadershipFields.leadership.map((leadership, index) => {
-          const employer =
-          Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
-          return { ...leadership, ...{ employer: employer.employer } };
-        });
-        payloadData = { ...payloadData, [keyName]: leadershipFields };
-      } else {
-        payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
-      }
-    } else {
-      payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
-    }
+
+  @action
+  updateOfferingMutation = (
+    id,
+    payload, keyName, notify = true,
+    successMsg = undefined, fromS3 = false,
+  ) => {
     uiStore.setProgress();
     client
       .mutate({
         mutation: updateOffering,
         variables: {
           id,
-          offeringDetails: payloadData,
+          offeringDetails: payload,
         },
-        refetchQueries: [{
-          query: getOfferingDetails,
-          variables: { id: getOfferingById.id },
-        }],
       })
       .then(() => {
+        this.removeUploadedFiles(fromS3);
         if (successMsg) {
           Helper.toast(`${successMsg}`, 'success');
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
+        offeringsStore.getOne(id, false);
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -671,6 +841,175 @@ export class OfferingCreationStore {
       .finally(() => {
         uiStore.setProgress(false);
       });
+  }
+
+  // eslint-disable-next-line consistent-return
+  mergeCustomize = (objValue, srcValue, key, object, source, stack) => {
+    if (OFFERING_CREATION_ARRAY_KEY_LIST.includes(key)) {
+      return srcValue;
+    }
+  };
+
+  @action
+  updateOffering = (
+    id,
+    fields, keyName, subKey, notify = true, successMsg = undefined,
+    approvedObj, fromS3 = false, leaderIndex,
+  ) => {
+    const { getOfferingById } = offeringsStore.offerData.data;
+    let payloadData = {
+      applicationId: getOfferingById.applicationId,
+      issuerId: getOfferingById.issuerId,
+    };
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
+    if (keyName) {
+      if (keyName === 'legal') {
+        payloadData[keyName] = {};
+        payloadData[keyName].general = Validator.evaluateFormData(this.GENERAL_FRM.fields);
+        payloadData[keyName].riskFactors = Validator.evaluateFormData(this.RISK_FACTORS_FRM.fields);
+        payloadData[keyName].documentation = {};
+        payloadData[keyName].documentation.issuer = {};
+        payloadData[keyName].documentation.issuer =
+        Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+        payloadData[keyName].documentation.admin = {};
+        payloadData[keyName].documentation.admin =
+        Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+      } else if (keyName === 'offering') {
+        payloadData[keyName] = {};
+        payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
+        payloadData[keyName].launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData[keyName].misc = Validator.evaluateFormData(this.OFFERING_MISC_FRM.fields);
+        payloadData[keyName].overview =
+          Validator.evaluateFormData(this.OFFERING_OVERVIEW_FRM.fields);
+        payloadData[keyName].overview = {
+          ...payloadData[keyName].overview,
+          ...this.evaluateFormFieldToArray(this.OFFERING_OVERVIEW_FRM.fields),
+        };
+      } else if (keyName === 'media') {
+        payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
+      } else if (keyName === 'leadership') {
+        let leadershipFields = Validator.evaluateFormData(fields);
+        leadershipFields = leadershipFields.leadership.map((leadership, index) => {
+          const employer =
+          Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
+          return { ...leadership, ...{ employer: employer.employer } };
+        });
+        payloadData = { ...payloadData, [keyName]: leadershipFields };
+      } else if (keyName === 'editForm') {
+        payloadData.offering = {};
+        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData = {
+          ...payloadData,
+          keyTerms: Validator.evaluateFormData(this.KEY_TERMS_FRM.fields),
+        };
+        payloadData.keyTerms = mergeWith(
+          toJS(getOfferingById.keyTerms),
+          payloadData.keyTerms,
+          this.mergeCustomize,
+        );
+        payloadData.offering = mergeWith(
+          toJS(getOfferingById.offering),
+          payloadData.offering,
+          this.mergeCustomize,
+        );
+        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
+        payloadData.offering = cleanDeep(payloadData.offering);
+        payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
+        payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
+      } else {
+        payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
+      }
+    } else {
+      payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
+    }
+    if (keyName !== 'contingencies' && keyName !== 'editForm') {
+      const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
+        keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
+      if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+        if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: approvedObj.status === 'manager_approved',
+          };
+        } else if (approvedObj.status === 'support_submitted') {
+          payLoadDataOld.submitted = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
+          if ((!payLoadDataOld.issuerSubmitted || payLoadDataOld.issuerSubmitted === '') && !approvedObj.isAdminOnly) {
+            payLoadDataOld.issuerSubmitted = moment().toISOString();
+          }
+        } else if (approvedObj.status === 'issuer_submitted') {
+          payLoadDataOld.issuerSubmitted = moment().toISOString();
+        } else if (approvedObj.status === 'support_decline') {
+          payLoadDataOld.approved = {
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+            status: false,
+          };
+          payLoadDataOld.submitted = null;
+        } else if (approvedObj.status === 'issuer_decline') {
+          payLoadDataOld.issuerSubmitted = '';
+        }
+      }
+      if (keyName) {
+        if (subKey) {
+          if (subKey === 'issuer') {
+            payloadData[keyName].documentation[subKey] = payLoadDataOld;
+          } else {
+            payloadData[keyName][subKey] = payLoadDataOld;
+          }
+        } else if (keyName === 'leadership') {
+          payloadData[keyName][leaderIndex] = payLoadDataOld;
+        } else {
+          payloadData[keyName] = payLoadDataOld;
+        }
+      } else {
+        payloadData = payLoadDataOld;
+      }
+      if (keyName) {
+        if (keyName === 'leadership') {
+          const leaders = [];
+          forEach(payloadData[keyName], (ele, index) => {
+            if (!this.removeIndex || this.removeIndex !== index) {
+              leaders.push(mergeWith(
+                toJS(getOfferingById[keyName] && getOfferingById[keyName].length >
+                  index ? getOfferingById[keyName][index] : {}),
+                payloadData[keyName][index],
+                this.mergeCustomize,
+              ));
+            }
+          });
+          this.removeIndex = null;
+          this.confirmModal = null;
+          payloadData[keyName] = leaders;
+        } else {
+          payloadData[keyName] = mergeWith(
+            toJS(getOfferingById[keyName]),
+            payloadData[keyName],
+            this.mergeCustomize,
+          );
+        }
+        payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
+        payloadData[keyName] = cleanDeep(payloadData[keyName]);
+      }
+    } else if (keyName === 'contingencies') {
+      ['launch', 'close'].forEach((c) => {
+        forEach(payloadData.contingencies[c], (con, index) => {
+          payloadData.contingencies[c][index].accepted = {
+            ...payloadData.contingencies[c][index].accepted,
+            id: userDetailsStore.userDetails.id,
+            by: `${firstName} ${lastName}`,
+            date: moment().toISOString(),
+          };
+        });
+      });
+    }
+    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
   }
 
   @action
@@ -685,6 +1024,11 @@ export class OfferingCreationStore {
         }
       },
     });
+  }
+
+  @computed get issuerOfferingBacData() {
+    return (this.issuerOfferingBac && this.issuerOfferingBac.data &&
+      toJS(this.issuerOfferingBac.data.getOfferingBac)) || null;
   }
 
   @action
@@ -702,9 +1046,14 @@ export class OfferingCreationStore {
     });
   }
 
+  @computed get affiliatedIssuerOfferingBacData() {
+    return (this.affiliatedIssuerOfferingBac && this.affiliatedIssuerOfferingBac.data &&
+      toJS(this.affiliatedIssuerOfferingBac.data.getOfferingBac)) || null;
+  }
+
   @action
   getLeadershipOfferingBac = (offeringId, bacType) => {
-    this.affiliatedIssuerOfferingBac = graphql({
+    this.leaderShipOfferingBac = graphql({
       client,
       fetchPolicy: 'network-only',
       query: getOfferingBac,
@@ -713,12 +1062,18 @@ export class OfferingCreationStore {
         if (res && res.getOfferingBac) {
           this.setBacFormData('LEADER_FRM', res || {}, false);
           const leadersCount = this.LEADERSHIP_FRM.fields.leadership.length;
-          if (!this.initLoad.includes('LEADERS_ADDED') && (leadersCount - 1 !== 0)) {
+          if (leadersCount !==
+            this.LEADER_FRM.fields.getOfferingBac.length && (leadersCount - 1 !== 0)) {
             this.addMore('LEADER_FRM', 'getOfferingBac', leadersCount - 1);
           }
         }
       },
     });
+  }
+
+  @computed get leaderShipOfferingBacData() {
+    return (this.leaderShipOfferingBac && this.leaderShipOfferingBac.data &&
+      toJS(this.leaderShipOfferingBac.data.getOfferingBac)) || null;
   }
 
   createOrUpdateOfferingBac = (
@@ -727,6 +1082,7 @@ export class OfferingCreationStore {
     issuerNumber = undefined,
     leaderNumber = undefined,
     afIssuerId,
+    approvedObj,
   ) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     const issuerBacId = getOfferingById.legal && getOfferingById.legal.issuerBacId;
@@ -780,6 +1136,36 @@ export class OfferingCreationStore {
         };
       }
     }
+    const { firstName, lastName } = userDetailsStore.userDetails.info;
+    const payLoadDataOld = {};
+    if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
+      if (approvedObj.status === 'manager_approved' || approvedObj.status === 'manager_edit') {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: approvedObj.status === 'manager_approved',
+        };
+      } else if (approvedObj.status === 'support_submitted') {
+        payLoadDataOld.submitted = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+        };
+        if ((!payLoadDataOld.issuerSubmitted || payLoadDataOld.issuerSubmitted === '') && !approvedObj.isAdminOnly) {
+          payLoadDataOld.issuerSubmitted = moment().toISOString();
+        }
+      } else if (approvedObj.status === 'support_decline') {
+        payLoadDataOld.approved = {
+          id: userDetailsStore.userDetails.id,
+          by: `${firstName} ${lastName}`,
+          date: moment().toISOString(),
+          status: false,
+        };
+        payLoadDataOld.submitted = null;
+      }
+    }
+    variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
     uiStore.setProgress();
     client
       .mutate({
@@ -800,6 +1186,8 @@ export class OfferingCreationStore {
         ],
       })
       .then(() => {
+        this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
+        // this.getAffiliatedIssuerOfferingBac(this.currentOfferingId, 'AFFILIATED_ISSUER');
         Helper.toast('Offering has been saved successfully.', 'success');
       })
       .catch((err) => {
@@ -832,11 +1220,11 @@ export class OfferingCreationStore {
         }],
       })
       .then(action((() => {
-        Validator.validateForm(this.AFFILIATED_ISSUER_FRM, true, false, false);
         this.confirmModal = !this.confirmModal;
         this.confirmModalName = null;
         this.removeIndex = null;
         uiStore.setConfirmBox('');
+        this.initLoad.splice(this.initLoad.indexOf('AFFILIATED_ISSUER_FRM'), 1);
         Helper.toast('Affiliated Issuer has been deleted successfully.', 'success');
       })))
       .catch(action((err) => {
@@ -1201,6 +1589,26 @@ export class OfferingCreationStore {
       .finally(() => {
         uiStore.setProgress(false);
       });
+  }
+
+  @action
+  setDataForEditContingency = (form, dataKey, index) => {
+    const { fields } = this.EDIT_CONTINGENCY_FRM;
+    fields.contingency.value = form.fields[dataKey][index].contingency.value;
+    fields.acceptance.value = form.fields[dataKey][index].acceptance.value;
+    fields.comment.value = form.fields[dataKey][index].comment.value;
+  }
+
+  @action
+  setDataForFormAfterEdit = (form, dataKey, index) => {
+    const { fields } = this.EDIT_CONTINGENCY_FRM;
+    form.fields[dataKey][index].contingency.value = fields.contingency.value;
+    form.fields[dataKey][index].acceptance.value = fields.acceptance.value;
+    form.fields[dataKey][index].comment.value = fields.comment.value;
+  }
+
+  @action resetInitLoad() {
+    this.initLoad = [];
   }
 }
 
