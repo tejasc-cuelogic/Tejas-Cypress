@@ -123,6 +123,7 @@ class EntityAccountStore {
           state: this.GEN_INFO_FRM.fields.state.value,
           zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
         };
+        this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
         break;
 
       case 'Entity info':
@@ -197,6 +198,7 @@ class EntityAccountStore {
       taxId: this.GEN_INFO_FRM.fields.taxId.value,
       isTrust: this.TRUST_INFO_FRM.fields.isTrust.value,
       trustDate: this.TRUST_INFO_FRM.fields.trustDate.value,
+      entityType: this.GEN_INFO_FRM.fields.entityType.value,
       address: {
         street: this.GEN_INFO_FRM.fields.street.value,
         city: this.GEN_INFO_FRM.fields.city.value,
