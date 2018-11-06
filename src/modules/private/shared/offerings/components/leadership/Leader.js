@@ -314,4 +314,3 @@ export default class Leader extends Component {
     );
   }
 }
-
