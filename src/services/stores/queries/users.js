@@ -169,14 +169,14 @@ export const userDetailsQuery = gql`
         }
         status
       }
-      investorProfileData {
+      investorProfile {
         isPartialProfile
-        employmentStatusInfo {
-          employmentStatus
+        employment {
+          status
           employer
-          currentPosition
+          position
         }
-        investorProfileType
+        brokerageFirmName
         financialInfo {
           netWorth
           annualIncomeThirdLastYear
