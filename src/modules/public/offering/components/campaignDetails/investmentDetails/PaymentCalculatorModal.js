@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Modal, Grid, Statistic } from 'semantic-ui-react';
-import { inject, observer } from 'mobx-react';
 import PaymentCalculator from './PaymentCalculator';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('updatesStore')
-@observer
+
 class PaymentCalculatorModal extends Component {
   handleClose = () => this.props.history.goBack();
   render() {

@@ -66,6 +66,7 @@ export class Utility {
   CurrencyFormat = (amount, f) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: typeof (f) === 'number' ? f : 2 }).format(amount)
 
   cryptedSSNNumber = (ssnNumber) => {
+    if (!ssnNumber) return null;
     const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
     return formattedSSNNumber;

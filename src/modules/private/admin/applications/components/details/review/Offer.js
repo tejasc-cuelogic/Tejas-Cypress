@@ -7,6 +7,7 @@ import OffersPanel from '../../../../../shared/offerings/components/shared/Offer
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
 import { DropZoneConfirm as DropZone, MaskedInput } from '../../../../../../../theme/form';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
@@ -47,12 +48,17 @@ export default class Offer extends Component {
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { offers, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (offers && offers.submitted) ? offers.submitted : null;
     const approved = (offers && offers.approved) ? offers.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>
@@ -124,7 +130,7 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.expectedAnnualRevenue.map((expectedAnnualRevenue, index) => (
                   <Aux>
                     <MaskedInput
-                      removed={!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > 4 && OFFERS_FRM.fields.expectedAnnualRevenue.length - index ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
+                      removed={(!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > 4 && (OFFERS_FRM.fields.expectedAnnualRevenue.length - 1 === index)) ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
                       containerclassname={isReadonly ? 'display-only' : ''}
                       readOnly={isReadonly}
                       prefix="$"

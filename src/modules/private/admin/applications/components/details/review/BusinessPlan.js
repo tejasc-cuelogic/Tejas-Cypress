@@ -8,6 +8,7 @@ import { FormTextarea, MaskedInput, FormInput, DropZoneConfirm as DropZone } fro
 import ManagerOverview from './ManagerOverview';
 import Helper from '../../../../../../../helper/utility';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const AddMore = ({
   addMore, formName, arrayName, title,
@@ -50,7 +51,9 @@ export default class BusinessPlan extends Component {
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.businessPlan && review.businessPlan &&
       review.businessPlan.submitted) ? review.businessPlan.submitted : null;
@@ -58,6 +61,9 @@ export default class BusinessPlan extends Component {
       review.businessPlan.approved) ? review.businessPlan.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form onSubmit={this.submit}>

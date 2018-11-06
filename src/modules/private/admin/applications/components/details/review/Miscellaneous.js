@@ -7,6 +7,7 @@ import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../../the
 import { SOCIAL_MEDIA_LABELS } from '../../../../../../../services/constants/admin/businessApplication';
 import ManagerOverview from './ManagerOverview';
 import ButtonGroup from './ButtonGroup';
+import { InlineLoader } from '../../../../../../../theme/shared';
 
 const SectionHeader = ({ header, subheader }) => (
   <Aux>
@@ -107,7 +108,9 @@ export default class Miscellaneous extends Component {
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
     const isManager = access.asManager;
-    const { businessApplicationDetailsAdmin } = this.props.businessAppStore;
+    const {
+      businessApplicationDetailsAdmin, applicationReviewLoading,
+    } = this.props.businessAppStore;
     const { review, applicationStatus } = businessApplicationDetailsAdmin;
     const submitted = (review && review.miscellaneous && review.miscellaneous &&
       review.miscellaneous.submitted) ? review.miscellaneous.submitted : null;
@@ -115,6 +118,9 @@ export default class Miscellaneous extends Component {
       review.miscellaneous.approved) ? review.miscellaneous.approved : null;
     const isReadonly = ((((approved && approved.status) || (submitted))
       && !isManager) || (isManager && approved && approved.status));
+    if (applicationReviewLoading) {
+      return <InlineLoader />;
+    }
     return (
       <Aux>
         <Form size="small" onSubmit={this.submit}>

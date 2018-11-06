@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Grid } from 'semantic-ui-react';
 import FinancialInfo from '../components/investmentLimits/FinancialInfo';
 import VerifyAccreditation from './accreditation/VerifyAccreditation';
+import VerifyEntityAccreditation from './accreditation/verifyEntityAccreditation';
 import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestmentLimits';
 import AssetsAccreditation from './accreditation/assets/Accreditation';
 import IncomeAccreditation from './accreditation/income/Accreditation';
@@ -31,6 +32,9 @@ export default class InvestmentLimits extends Component {
     return (
       <div>
         <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} component={VerifyEntityAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/income`} component={IncomeAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/income`} component={IncomeAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/assets`} component={AssetsAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />

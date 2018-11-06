@@ -14,17 +14,19 @@ class AccountType extends Component {
     const {
       byDefaultRender,
       setStepToBeRendered,
-      getSelectedAccountTypeId,
     } = this.props.investmentStore;
-    const { UserAccounts } = this.props;
+    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (this.props.changeInvest || (UserAccounts && UserAccounts.length === 1)) {
-      const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : UserAccounts[0];
-      this.props.investmentStore.accTypeChanged(null, { value: accountType });
-      if (getSelectedAccountTypeId) {
-        setStepToBeRendered(1);
-      }
+    } else if (this.props.changeInvest || (activeAccounts && activeAccounts.length === 1)) {
+      const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
+      this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
+        if (this.props.investmentStore.getSelectedAccountTypeId) {
+          setStepToBeRendered(1);
+        }
+      });
+    } else {
+      this.props.history.push(`${this.props.refLink}/overview`);
     }
   }
   componentDidMount() {
@@ -32,15 +34,14 @@ class AccountType extends Component {
       setStepToBeRendered,
       setFieldValue,
       byDefaultRender,
-      getSelectedAccountTypeId,
     } = this.props.investmentStore;
-    if (getSelectedAccountTypeId) {
+    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    if (this.props.investmentStore.getSelectedAccountTypeId) {
       this.props.investmentLimitStore.getInvestorInvestmentLimit();
     }
-    const { UserAccounts } = this.props;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (UserAccounts && UserAccounts.length === 1) {
+    } else if (activeAccounts && activeAccounts.length === 1) {
       setFieldValue('disableNextbtn', false);
       setStepToBeRendered(1);
     }
@@ -49,13 +50,13 @@ class AccountType extends Component {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
   }
   render() {
-    const { UserAccounts } = this.props;
+    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     const {
       accTypeChanged,
       investAccTypes,
       prepareAccountTypes,
     } = this.props.investmentStore;
-    prepareAccountTypes(UserAccounts);
+    prepareAccountTypes(activeAccounts);
     return (
       <Aux>
         <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>

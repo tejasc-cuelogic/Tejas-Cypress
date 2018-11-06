@@ -1,35 +1,15 @@
 import React, { Component } from 'react';
 import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { InlineLoader } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
-
-const data = [
-  { name: 'Jan 2018', Payment: 250, 'Paid to date': 350 },
-  {
-    name: 'Feb 2018', Invested: 2000, Payment: 150, 'Paid to date': 900,
-  },
-  {
-    name: 'Mar 2018', Invested: 2000, Payment: 200, 'Paid to date': 1200,
-  },
-  {
-    name: 'April 2018', Invested: 2000, Payment: 300, 'Paid to date': 1500,
-  },
-  {
-    name: 'May 2018', Invested: 2000, Payment: 150, 'Paid to date': 2050,
-  },
-  {
-    name: 'June 2018', Invested: 2000, Payment: 500, 'Paid to date': 2250,
-  },
-  { name: 'July 2018', Payment: 50, 'Paid to date': 2800 },
-  { name: 'Aug 2018', Payment: 1150, 'Paid to date': 3550 },
-  { name: 'Sept 2018', Payment: 750, 'Paid to date': 4000 },
-  { name: 'Oct 2018', Payment: 950, 'Paid to date': 4500 },
-  { name: 'Nov 2018', Payment: 1150, 'Paid to date': 6000 },
-  { name: 'Dec 2018', Payment: 1050, 'Paid to date': 7000 },
-];
 
 export default class CashMovement extends Component {
   formatY = item => Helper.CurrencyFormat(item);
   render() {
+    const { data } = this.props;
+    if (!data || data.length === 0) {
+      return <InlineLoader text="No data" />;
+    }
     return (
       <ResponsiveContainer height={320}>
         <ComposedChart
