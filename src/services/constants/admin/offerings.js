@@ -2265,4 +2265,3 @@ export const ADMIN_DOCUMENTATION = {
     lastModifiedDate: '',
   },
 };
-
