@@ -124,9 +124,10 @@ class InvestorProfileStore {
       if (currentStep.form === 'EMPLOYMENT_FORM') {
         formPayload =
           { employmentStatusInfo: FormValidator.ExtractValues(this.EMPLOYMENT_FORM.fields) };
-      } else if (currentStep.form === 'INVESTOR_PROFILE_FORM') {
+      } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
+        const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         formPayload =
-        { investorProfileType: this.INVESTOR_PROFILE_FORM.fields.investorProfileType.value };
+          { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
           financialInfo: {
@@ -197,12 +198,17 @@ class InvestorProfileStore {
       const { investorProfileData } = userData;
       if (investorProfileData) {
         this.setFormData('EMPLOYMENT_FORM', investorProfileData);
+        this.setFormData('BROKERAGE_EMPLOYMENT_FORM', investorProfileData);
         this.setFormData('FINANCES_FORM', investorProfileData);
         this.setFormData('INVESTOR_PROFILE_FORM', investorProfileData);
         this.setFormData('INVESTMENT_EXP_FORM', investorProfileData);
         const getProfileStep = AccCreationHelper.establishProfileSteps();
         if (!this.EMPLOYMENT_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.EMPLOYMENT_FORM);
+        } else if (!this.BROKERAGE_EMPLOYMENT_FORM.meta.isValid) {
+          this.setStepToBeRendered(getProfileStep.BROKERAGE_EMPLOYMENT_FORM);
+        } else if (!this.PUBLIC_COMPANY_REL_FORM.meta.isValid) {
+          this.setStepToBeRendered(getProfileStep.PUBLIC_COMPANY_REL_FORM);
         } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.INVESTOR_PROFILE_FORM);
         } else if (!this.FINANCES_FORM.meta.isValid) {
@@ -220,50 +226,45 @@ class InvestorProfileStore {
   setFormData = (form, investorProfileData) => {
     console.log(investorProfileData);
     Object.keys(this[form].fields).map((f) => {
-      console.log(1);
-      // switch (form) {
-      // case 'EMPLOYMENT_FORM':
-      //   if (investorProfileData.employment) {
-      //     this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employment[f];
-      //   }
-      //   break;
-      // case 'FINANCES_FORM':
-      //   this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
-      //   if (investorProfileData.financialInfo.directorShareHolderOfCompany !== null) {
-      //     this.FINANCES_FORM.fields.checkbox1.value = 'iamadirector';
-      //   } else {
-      //     this.FINANCES_FORM.fields.checkbox1.value = [];
-      //   }
-      //   if (investorProfileData.financialInfo.employedOrAssoWithFINRAFirmName !== null) {
-      //     this.FINANCES_FORM.fields.checkbox2.value = 'iamamember';
-      //   } else {
-      //     this.FINANCES_FORM.fields.checkbox2.value = [];
-      //   }
-      //   break;
-      // case 'INVESTOR_PROFILE_FORM':
-      //   if (!isNull(investorProfileData.investorProfileType)) {
-      //     this.INVESTOR_PROFILE_FORM.fields[f].value =
-      //     investorProfileData.investorProfileType;
-      //   }
-      //   break;
-      // case 'INVESTMENT_EXP_FORM':
-      //   if (f !== 'readyInvestingInLimitedLiquiditySecurities' && !== 'readyForRisksInvolved') {
-      //     if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
-      //       this.INVESTMENT_EXP_FORM.fields[f].value =
-      //       investorProfileData.investmentExperienceInfo[f];
-      //     }
-      //   } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
-      //   investorProfileData.investmentExperienceInfo[f]) {
-      //     this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value =
-      // 'checked';
-      //   } else if (f === 'readyForRisksInvolved' &&
-      //   investorProfileData.investmentExperienceInfo[f]) {
-      //     this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value = 'checked';
-      //   }
-      //   break;
-      // default:
-      //   break;
-      // }
+      switch (form) {
+        case 'EMPLOYMENT_FORM':
+          if (investorProfileData.employment) {
+            this.EMPLOYMENT_FORM.fields[f].value = investorProfileData.employment[f];
+          }
+          break;
+        case 'BROKERAGE_EMPLOYMENT_FORM':
+          if (investorProfileData.brokerageFirmName) {
+            const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
+            fields.brokerageFirmName.value = investorProfileData.brokerageFirmName;
+            if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '') {
+              fields.brokerageEmployment.value = 'yes';
+            } else {
+              fields.brokerageEmployment.value = 'no';
+            }
+          }
+          break;
+        // case 'FINANCES_FORM':
+        //   this.FINANCES_FORM.fields[f].value = investorProfileData.financialInfo[f];
+        //   break;
+        // case 'INVESTMENT_EXP_FORM':
+        //   if (f !== 'readyInvestingInLimitedLiquiditySecurities' &&
+        // !== 'readyForRisksInvolved') {
+        //     if (!isNull(investorProfileData.investmentExperienceInfo[f])) {
+        //       this.INVESTMENT_EXP_FORM.fields[f].value =
+        //       investorProfileData.investmentExperienceInfo[f];
+        //     }
+        //   } else if (f === 'readyInvestingInLimitedLiquiditySecurities' &&
+        //   investorProfileData.investmentExperienceInfo[f]) {
+        //     this.INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities.value =
+        // 'checked';
+        //   } else if (f === 'readyForRisksInvolved' &&
+        //   investorProfileData.investmentExperienceInfo[f]) {
+        //     this.INVESTMENT_EXP_FORM.fields.readyForRisksInvolved.value = 'checked';
+        //   }
+        //   break;
+        default:
+          break;
+      }
       return this[form].fields[f];
     });
     FormValidator.onChange(this[form], '', '');
@@ -278,7 +279,8 @@ class InvestorProfileStore {
   @action
   resetStoreData = () => {
     this.resetFormData('EMPLOYMENT_FORM');
-    this.resetFormData('INVESTOR_PROFILE_FORM');
+    this.resetFormData('BROKERAGE_EMPLOYMENT_FORM');
+    this.resetFormData('PUBLIC_COMPANY_REL_FORM');
     this.resetFormData('FINANCES_FORM');
     this.resetFormData('INVESTMENT_EXP_FORM');
     this.stepToBeRendered = 0;
