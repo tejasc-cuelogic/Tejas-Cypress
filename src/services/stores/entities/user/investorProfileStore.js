@@ -5,6 +5,8 @@ import {
   INVESTOR_PROFILE,
   FINANCES,
   INVESTMENT_EXPERIENCE,
+  BROKERAGE_EMPLOYMENT,
+  PUBLIC_COMPANY_REL,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { updateInvestorProfileData } from '../../queries/account';
@@ -15,6 +17,10 @@ import { uiStore } from '../../index';
 
 class InvestorProfileStore {
   @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT, true);
+  @observable BROKERAGE_EMPLOYMENT_FORM =
+  FormValidator.prepareFormObject(BROKERAGE_EMPLOYMENT, true);
+  @observable PUBLIC_COMPANY_REL_FORM =
+  FormValidator.prepareFormObject(PUBLIC_COMPANY_REL, true);
   @observable INVESTOR_PROFILE_FORM = FormValidator.prepareFormObject(INVESTOR_PROFILE, true);
   @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES);
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);

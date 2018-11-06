@@ -7,7 +7,7 @@ import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 @observer
 export default class PublicCompanyRel extends Component {
   render() {
-    const { PUBLIC_COMPANY_REL, employmentChange } = this.props.investorProfileStore;
+    const { PUBLIC_COMPANY_REL_FORM, employmentChange } = this.props.investorProfileStore;
     return (
       <div>
         <Header as="h3" textAlign="center">Public Company Relations</Header>
@@ -19,17 +19,17 @@ export default class PublicCompanyRel extends Component {
         </p>
         <Form error>
           <FormRadioGroup
-            fielddata={PUBLIC_COMPANY_REL.fields.publicCompanyRel}
+            fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel}
             name="publicCompanyRel"
             changed={employmentChange}
             containerclassname="button-radio center-align"
           />
-          {PUBLIC_COMPANY_REL.fields.publicCompanyRel.value === 'yes' &&
+          {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes' &&
           <div className="field-wrap">
             <Form.Group widths="equal">
               <FormInput
                 key="publicCompanyTicker"
-                fielddata={PUBLIC_COMPANY_REL.fields.publicCompanyTicker}
+                fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyTicker}
                 name="publicCompanyTicker"
                 changed={employmentChange}
               />

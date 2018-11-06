@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../../helper';
 import Employment from './Employment';
 import BrokerageEmployment from './BrokerageEmployment';
+import PublicCompanyRelations from './PublicCompanyRel';
 import InvestorProfile from './InvestorProfile';
 import Finances from './Finances';
 import Experience from './Experience';
@@ -35,9 +36,10 @@ export default class AccountCreation extends React.Component {
       INVESTOR_PROFILE_FORM,
       INVESTMENT_EXP_FORM,
       EMPLOYMENT_FORM,
-      BROKERAGE_EMPLOYMENT,
+      BROKERAGE_EMPLOYMENT_FORM,
       FINANCES_FORM,
       updateInvestorProfileData,
+      PUBLIC_COMPANY_REL_FORM,
       stepToBeRendered,
     } = this.props.investorProfileStore;
     const steps = // BrokerageEmployment
@@ -51,12 +53,20 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 1,
       },
       {
-        name: 'BrokerageEmployment',
+        name: 'Brokerage Employment',
         component: <BrokerageEmployment />,
-        isValid: BROKERAGE_EMPLOYMENT.meta.isFieldValid ? '' : 'error',
-        isDirty: BROKERAGE_EMPLOYMENT.meta.isDirty,
-        form: 'BROKERAGE_EMPLOYMENT',
+        isValid: BROKERAGE_EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: BROKERAGE_EMPLOYMENT_FORM.meta.isDirty,
+        form: 'BROKERAGE_EMPLOYMENT_FORM',
         stepToBeRendered: 2,
+      }, // PublicCompanyRelations
+      {
+        name: 'Public Company Relations',
+        component: <PublicCompanyRelations />,
+        isValid: PUBLIC_COMPANY_REL_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: PUBLIC_COMPANY_REL_FORM.meta.isDirty,
+        form: 'PUBLIC_COMPANY_REL_FORM',
+        stepToBeRendered: 3,
       },
       {
         name: 'Investor Profile',
@@ -64,7 +74,7 @@ export default class AccountCreation extends React.Component {
         isValid: INVESTOR_PROFILE_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTOR_PROFILE_FORM.meta.isDirty,
         form: 'INVESTOR_PROFILE_FORM',
-        stepToBeRendered: 3,
+        stepToBeRendered: 4,
       },
       {
         name: 'Finances',
@@ -72,7 +82,7 @@ export default class AccountCreation extends React.Component {
         isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
-        stepToBeRendered: 4,
+        stepToBeRendered: 5,
       },
       {
         name: 'Experience',
@@ -80,7 +90,7 @@ export default class AccountCreation extends React.Component {
         isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 5,
+        stepToBeRendered: 6,
       },
     ];
 
