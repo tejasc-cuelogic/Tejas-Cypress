@@ -25,7 +25,6 @@ export class UserDetailsStore {
   @observable detailsOfUser = {};
   @observable editCard = 0;
   @observable deleting = 0;
-  @observable isCipExpired = true;
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
@@ -296,6 +295,18 @@ export class UserDetailsStore {
   @action
   resetStoreData = () => {
     this.currentUser = {};
+  }
+
+  @computed get isCipExpired() {
+    if (this.userDetails) {
+      const { expiration } = this.userDetails.cip;
+      const expirationDate = new Date(expiration);
+      const currentDate = new Date();
+      if (expirationDate < currentDate) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 

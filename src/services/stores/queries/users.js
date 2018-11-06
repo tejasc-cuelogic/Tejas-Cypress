@@ -40,6 +40,9 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      cip {
+        expiration
+      }
       limits {
         income
         netWorth
