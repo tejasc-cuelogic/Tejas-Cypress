@@ -177,14 +177,16 @@ export const userDetailsQuery = gql`
           position
         }
         brokerageFirmName
-        financialInfo {
-          netWorth
-          annualIncomeThirdLastYear
-          annualIncomeLastYear
-          annualIncomeCurrentYear
-          directorShareHolderOfCompany
-          employedOrAssoWithFINRAFirmName
+        publicCompanyTicker
+        taxFilingAs
+        netWorth
+        annualIncome {
+          year
+          income
         }
+        experienceLevel
+        isRiskTaker
+        isComfortable
         investmentExperienceInfo {
           investmentExperienceLevel
           readyInvestingInLimitedLiquiditySecurities
