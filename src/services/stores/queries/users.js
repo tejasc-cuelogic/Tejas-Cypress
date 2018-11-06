@@ -40,6 +40,9 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      cip {
+        expiration
+      }
       limits {
         income
         netWorth
@@ -168,25 +171,22 @@ export const userDetailsQuery = gql`
       }
       investorProfileData {
         isPartialProfile
-        employmentStatusInfo {
-          employmentStatus
+        employment {
+          status
           employer
-          currentPosition
+          position
         }
-        investorProfileType
-        financialInfo {
-          netWorth
-          annualIncomeThirdLastYear
-          annualIncomeLastYear
-          annualIncomeCurrentYear
-          directorShareHolderOfCompany
-          employedOrAssoWithFINRAFirmName
+        brokerageFirmName
+        publicCompanyTicker
+        taxFilingAs
+        netWorth
+        annualIncome {
+          year
+          income
         }
-        investmentExperienceInfo {
-          investmentExperienceLevel
-          readyInvestingInLimitedLiquiditySecurities
-          readyForRisksInvolved
-        }
+        experienceLevel
+        isRiskTaker
+        isComfortable
       }
       mfaMode
     }

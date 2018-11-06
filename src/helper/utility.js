@@ -107,6 +107,14 @@ export class Utility {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     return maskPhoneNumber;
   }
+
+  getDaysfromNow = (days) => {
+    const d = new Date();
+    let daysFromNow = d.setDate(d.getDate() + days);
+    daysFromNow = new Date(daysFromNow).toISOString();
+    console.log(daysFromNow);
+    return daysFromNow;
+  }
 }
 
 export default new Utility();

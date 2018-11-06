@@ -1,6 +1,6 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed } from 'mobx';
-import { mapValues, keyBy, find, flatMap, map } from 'lodash';
+import { mapValues, keyBy, find, flatMap, map, omit } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
@@ -109,7 +109,7 @@ export class IdentityStore {
   }
 
   @computed
-  get formattedUserInfo() {
+  get formattedUserInfoForCip() {
     const { fields } = this.ID_VERIFICATION_FRM;
     const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
     const { phone } = userDetailsStore.userDetails;
@@ -146,6 +146,64 @@ export class IdentityStore {
   }
 
   @computed
+  get formattedUserInfo() {
+    const { fields, response } = this.ID_VERIFICATION_FRM;
+    const cip = {};
+    if (response.key === 'id.error') {
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = 'ERROR_NO_REQUEST_ID';
+    } else if (response.message === 'PASS' || (response.summary && response.summary === 'pass')) {
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.passId;
+    } else if (response.message === 'FAIL' && response.questions) {
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.softFailId;
+      cip.failType = 'FAIL_WITH_QUESTIONS';
+      // omitDeep, cleanDeep
+      cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+    } else {
+      cip.expiration = Helper.getDaysfromNow(21);
+      cip.requestId = response.hardFailId;
+      cip.failType = 'FAIL_WITH_UPLOADS';
+      if (response.qualifiers !== null) {
+        cip.failReason = [omit(response.qualifiers && response.qualifiers[0], ['__typename'])];
+      }
+    }
+    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
+    const { phone } = userDetailsStore.userDetails;
+    const userInfo = {
+      legalName: {
+        firstLegalName: fields.firstLegalName.value,
+        lastLegalName: fields.lastLegalName.value,
+      },
+      status: this.userCipStatus,
+      dateOfBirth: fields.dateOfBirth.value,
+      ssn: fields.ssn.value,
+      legalAddress: {
+        street: fields.residentalStreet.value,
+        city: fields.city.value,
+        state: selectedState ? selectedState.key : null,
+        zipCode: fields.zipCode.value,
+      },
+    };
+    const { photoId, proofOfResidence } = this.ID_VERIFICATION_DOCS_FRM.fields;
+    const verificationDocs = {
+      idProof: {
+        fileId: photoId.fileId,
+        fileName: photoId.value,
+      },
+      addressProof: {
+        fileId: proofOfResidence.fileId,
+        fileName: proofOfResidence.value,
+      },
+    };
+    userInfo.verificationDocs = this.userCipStatus === 'MANUAL_VERIFICATION_PENDING' ? verificationDocs : null;
+    const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
+    const phoneDetails = { number };
+    return { userInfo, phoneDetails, cip };
+  }
+
+  @computed
   get cipStatus() {
     const { key, questions } = this.ID_VERIFICATION_FRM.response;
     const cipStatus = identityHelper.getCipStatus(key, questions);
@@ -161,7 +219,7 @@ export class IdentityStore {
           mutation: verifyCIPUser,
           variables: {
             userId: userStore.currentUser.sub,
-            user: this.formattedUserInfo.userInfo,
+            user: this.formattedUserInfoForCip.userInfo,
           },
         })
         .then((data) => {
@@ -260,7 +318,7 @@ export class IdentityStore {
         .mutate({
           mutation: startUserPhoneVerification,
           variables: {
-            phoneDetails: this.formattedUserInfo.phoneDetails,
+            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
             method: 'sms',
           },
         })
@@ -336,7 +394,7 @@ export class IdentityStore {
         .mutate({
           mutation: checkUserPhoneVerificationCode,
           variables: {
-            phoneDetails: this.formattedUserInfo.phoneDetails,
+            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
@@ -361,7 +419,7 @@ export class IdentityStore {
         .mutate({
           mutation: checkUserPhoneVerificationCode,
           variables: {
-            phoneDetails: this.formattedUserInfo.phoneDetails,
+            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
@@ -386,6 +444,7 @@ export class IdentityStore {
         variables: {
           user: this.formattedUserInfo.userInfo,
           phoneDetails: this.formattedUserInfo.phoneDetails,
+          cip: this.formattedUserInfo.cip,
         },
       })
       .then((data) => {

@@ -18,21 +18,21 @@ export default class Experience extends Component {
         </p>
         <Form error>
           <FormRadioGroup
-            fielddata={INVESTMENT_EXP_FORM.fields.investmentExperienceLevel}
-            name="investmentExperienceLevel"
+            fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
+            name="experienceLevel"
             changed={experiencesChange}
             containerclassname="button-radio center-align mb-50"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities}
-            name="readyInvestingInLimitedLiquiditySecurities"
+            fielddata={INVESTMENT_EXP_FORM.fields.isComfortable}
+            name="isComfortable"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.readyForRisksInvolved}
-            name="readyForRisksInvolved"
+            fielddata={INVESTMENT_EXP_FORM.fields.isRiskTaker}
+            name="isRiskTaker"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"

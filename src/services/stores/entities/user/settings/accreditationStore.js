@@ -1,10 +1,12 @@
 import { observable, action } from 'mobx';
-import { INCOME_EVIDENCE, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH } from '../../../../constants/investmentLimit';
+import { INCOME_EVIDENCE, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS } from '../../../../constants/investmentLimit';
 import { FormValidator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class AccreditationStore {
   @observable ACCREDITATION_FORM = FormValidator.prepareFormObject(ACCREDITATION_METHODS);
+  @observable ENTITY_ACCREDITATION_FORM =
+  FormValidator.prepareFormObject(ENTITY_ACCREDITATION_METHODS);
   @observable INCOME_EVIDENCE_FORM = FormValidator.prepareFormObject(INCOME_EVIDENCE);
   @observable VERIFICATION_REQUEST_FORM = FormValidator.prepareFormObject(VERIFICATION_REQUEST);
   @observable INCOME_UPLOAD_DOC_FORM = FormValidator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
@@ -26,9 +28,9 @@ export class AccreditationStore {
   }
 
   @action
-  accreditationMethodChange = (e, result) => {
-    this.ACCREDITATION_FORM =
-      FormValidator.onChange(this.ACCREDITATION_FORM, FormValidator.pullValues(e, result));
+  accreditationMethodChange = (e, form, result) => {
+    this[form] =
+      FormValidator.onChange(this[form], FormValidator.pullValues(e, result));
   }
 
   @action

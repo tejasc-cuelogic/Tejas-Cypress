@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import AccountCreation from './AccountCreation';
+import ConfirmCancelModal from './ConfirmCancelModal';
 
 @inject('investorProfileStore')
 @withRouter
@@ -25,6 +26,7 @@ export default class EstablishProfile extends Component {
           close={this.handleCloseModal}
           {...this.props}
         />
+        <Route path={`${this.props.match.url}/confirm`} render={() => <ConfirmCancelModal refLink={this.props.match.url} />} />
       </div>
     );
   }

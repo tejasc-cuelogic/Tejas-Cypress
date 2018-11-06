@@ -3,16 +3,22 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../../helper';
 import Employment from './Employment';
-import InvestorProfile from './InvestorProfile';
+import BrokerageEmployment from './BrokerageEmployment';
+import PublicCompanyRelations from './PublicCompanyRel';
+import Overview from './overview';
 import Finances from './Finances';
 import Experience from './Experience';
 
-@inject('uiStore', 'investorProfileStore')
+@inject('uiStore', 'investorProfileStore', 'userDetailsStore', 'userStore')
 @withRouter
 @observer
 export default class AccountCreation extends React.Component {
+  componentWillMount() {
+    this.props.userDetailsStore.setUserAccDetails();
+  }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/summary');
+    this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   handleStepChange = (step) => {
     this.props.investorProfileStore.setStepToBeRendered(step);
@@ -31,30 +37,47 @@ export default class AccountCreation extends React.Component {
       setIsEnterPressed,
     } = this.props.uiStore;
     const {
-      INVESTOR_PROFILE_FORM,
       INVESTMENT_EXP_FORM,
       EMPLOYMENT_FORM,
+      BROKERAGE_EMPLOYMENT_FORM,
       FINANCES_FORM,
       updateInvestorProfileData,
+      PUBLIC_COMPANY_REL_FORM,
       stepToBeRendered,
     } = this.props.investorProfileStore;
     const steps =
     [
+      {
+        name: 'Overview',
+        component: <Overview />,
+        isValid: false,
+        isDirty: false,
+        form: '',
+        stepToBeRendered: 1,
+      },
       {
         name: 'Employment',
         component: <Employment />,
         isValid: EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: EMPLOYMENT_FORM.meta.isDirty,
         form: 'EMPLOYMENT_FORM',
-        stepToBeRendered: 1,
+        stepToBeRendered: 2,
       },
       {
-        name: 'Investor Profile',
-        component: <InvestorProfile />,
-        isValid: INVESTOR_PROFILE_FORM.meta.isFieldValid ? '' : 'error',
-        isDirty: INVESTOR_PROFILE_FORM.meta.isDirty,
-        form: 'INVESTOR_PROFILE_FORM',
-        stepToBeRendered: 2,
+        name: 'Brokerage Employment',
+        component: <BrokerageEmployment />,
+        isValid: BROKERAGE_EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: BROKERAGE_EMPLOYMENT_FORM.meta.isDirty,
+        form: 'BROKERAGE_EMPLOYMENT_FORM',
+        stepToBeRendered: 3,
+      },
+      {
+        name: 'Public Company Relations',
+        component: <PublicCompanyRelations />,
+        isValid: PUBLIC_COMPANY_REL_FORM.meta.isFieldValid ? '' : 'error',
+        isDirty: PUBLIC_COMPANY_REL_FORM.meta.isDirty,
+        form: 'PUBLIC_COMPANY_REL_FORM',
+        stepToBeRendered: 4,
       },
       {
         name: 'Finances',
@@ -62,7 +85,7 @@ export default class AccountCreation extends React.Component {
         isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
-        stepToBeRendered: 3,
+        stepToBeRendered: 5,
       },
       {
         name: 'Experience',
@@ -70,7 +93,7 @@ export default class AccountCreation extends React.Component {
         isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 3,
+        stepToBeRendered: 6,
       },
     ];
 

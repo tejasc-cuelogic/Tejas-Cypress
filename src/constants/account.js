@@ -335,6 +335,9 @@ export const ENTITY_GEN_INFO = {
   taxId: {
     key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'e.g. 12345',
   },
+  entityType: {
+    key: 'entityType', value: '', label: 'Entity Type', error: undefined, rule: 'required|string', placeHolder: 'Select one',
+  },
   street: {
     key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
   },
@@ -348,6 +351,16 @@ export const ENTITY_GEN_INFO = {
     key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
   },
 };
+
+export const ENTITY_TYPES = [
+  { key: 'LLC', value: 'LLC', text: 'LLC' },
+  { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+  { key: 'S-Corporation', value: 'S_CORPORATION', text: 'S-Corporation' },
+  { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
+  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
+  { key: 'Estate', value: 'ESTATE', text: 'Estate' },
+  { key: 'Exempt Organization', value: 'EXEMPT_ORGANIZATION', text: 'Exempt Organization' },
+];
 
 export const ENTITY_TRUST_INFO = {
   isTrust: {
@@ -421,9 +434,53 @@ export const ACC_TYPE = {
   },
 };
 
+export const BROKERAGE_EMPLOYMENT = {
+  brokerageEmployment: {
+    key: 'brokerageEmployment',
+    value: '',
+    values:
+      [
+        { label: 'Yes', value: 'yes' },
+        { label: 'No', value: 'no' },
+      ],
+    error: undefined,
+    rule: 'optional',
+  },
+  brokerageFirmName: {
+    key: 'brokerageFirmName',
+    value: '',
+    label: 'Member Firm Name',
+    error: undefined,
+    rule: 'required_if:brokerageEmployment,yes',
+    placeHolder: 'Enter here',
+  },
+};
+
+export const PUBLIC_COMPANY_REL = {
+  publicCompanyRel: {
+    key: 'publicCompanyRel',
+    value: '',
+    values:
+      [
+        { label: 'Yes', value: 'yes' },
+        { label: 'No', value: 'no' },
+      ],
+    error: undefined,
+    rule: 'optional',
+  },
+  publicCompanyTicker: {
+    key: 'publicCompanyTicker',
+    value: '',
+    label: 'Ticker symbol',
+    error: undefined,
+    rule: 'required_if:publicCompanyRel,yes',
+    placeHolder: 'E.g. GOOG',
+  },
+};
+
 export const EMPLOYMENT = {
-  employmentStatus: {
-    key: 'employmentStatus',
+  status: {
+    key: 'status',
     value: '',
     values:
       [
@@ -442,16 +499,16 @@ export const EMPLOYMENT = {
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_if:employmentStatus,EMPLOYED',
+    rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Type employer name',
     objRef: 'employmentStatusInfo',
   },
-  currentPosition: {
-    key: 'currentPosition',
+  position: {
+    key: 'position',
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_if:employmentStatus,EMPLOYED',
+    rule: 'required_if:status,EMPLOYED',
     placeHolder: 'E.g. CEO',
     objRef: 'employmentStatusInfo',
   },
@@ -480,6 +537,7 @@ export const FINANCES = {
     label: 'Annual Income 2016',
     error: undefined,
     rule: 'required',
+    year: '2016',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
   },
@@ -488,6 +546,7 @@ export const FINANCES = {
     label: 'Annual Income 2017',
     error: undefined,
     rule: 'required',
+    year: '2017',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
   },
@@ -496,54 +555,21 @@ export const FINANCES = {
     label: 'Annual Income 2018',
     error: undefined,
     rule: 'required',
+    year: '2018',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
-  },
-  checkbox1: {
-    value: [],
-    values: [
-      {
-        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company.',
-        value: 'iamadirector',
-      },
-    ],
-    error: undefined,
-    rule: 'alpha',
-  },
-  checkbox2: {
-    value: [],
-    values: [
-      {
-        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm, a stock exchange or FINRA.',
-        value: 'iamamember',
-      },
-    ],
-    error: undefined,
-    rule: 'alpha',
-  },
-  directorShareHolderOfCompany: {
-    value: '',
-    label: 'Company Name',
-    error: undefined,
-    rule: 'string',
-  },
-  employedOrAssoWithFINRAFirmName: {
-    value: '',
-    label: 'Firm Name',
-    error: undefined,
-    rule: 'string',
   },
 };
 
 export const INVESTMENT_EXPERIENCE = {
-  investmentExperienceLevel: {
+  experienceLevel: {
     value: '',
-    values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
+    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
     objRef: 'investmentExperienceInfo',
   },
-  readyInvestingInLimitedLiquiditySecurities: {
+  isComfortable: {
     value: [],
     values: [
       {
@@ -552,9 +578,9 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
   },
-  readyForRisksInvolved: {
+  isRiskTaker: {
     value: [],
     values: [
       {
@@ -563,7 +589,7 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
   },
 };
 

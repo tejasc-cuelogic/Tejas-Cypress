@@ -296,6 +296,18 @@ export class UserDetailsStore {
   resetStoreData = () => {
     this.currentUser = {};
   }
+
+  @computed get isCipExpired() {
+    if (this.userDetails) {
+      const { expiration } = this.userDetails.cip;
+      const expirationDate = new Date(expiration);
+      const currentDate = new Date();
+      if (expirationDate < currentDate) {
+        return true;
+      }
+    }
+    return false;
+  }
 }
 
 export default new UserDetailsStore();

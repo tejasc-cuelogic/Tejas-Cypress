@@ -39,39 +39,20 @@ export const updateAccount = gql`
   }`;
 
 export const updateInvestorProfileData = gql`
-  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employmentStatusInfo: EmploymentStatusInput $investorProfileType: InvestorProfileTypeEnum $financialInfo: InvestorFinInfoInput $investmentExperienceInfo: InvestmentExperienceInput) {
+  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employmentStatusInfo: EmploymentStatusInput $brokerageFirmName: String $publicCompanyTicker: String $netWorth: Int $annualIncome: [InvestorAnnualIncome] $experienceLevel: InvestorExperienceLevelTypeEnum $isRiskTaker: Boolean $isComfortable: Boolean $taxFilingAs: InvestorProfileTypeEnum) {
     createInvestorProfile(
       employmentStatusInfo: $employmentStatusInfo
-      investorProfileType: $investorProfileType
-      financialInfo: $financialInfo
-      investmentExperienceInfo: $investmentExperienceInfo
+      brokerageFirmName: $brokerageFirmName
+      publicCompanyTicker: $publicCompanyTicker
+      netWorth: $netWorth
+      annualIncome: $annualIncome
+      experienceLevel: $experienceLevel
+      isRiskTaker: $isRiskTaker
+      isComfortable: $isComfortable
+      taxFilingAs: $taxFilingAs
       isPartialProfile: $isPartialProfile
     ) {
       id
-      investorProfileData {
-        isPartialProfile
-        employmentStatusInfo {
-          employmentStatus
-          employer
-          currentPosition
-        }
-
-        investorProfileType
-        financialInfo {
-          netWorth
-          annualIncomeThirdLastYear
-          annualIncomeLastYear
-          annualIncomeCurrentYear
-          directorShareHolderOfCompany
-          employedOrAssoWithFINRAFirmName
-        }
-
-        investmentExperienceInfo {
-          investmentExperienceLevel
-          readyInvestingInLimitedLiquiditySecurities
-          readyForRisksInvolved
-        }
-      }
     }
   }`;
 
