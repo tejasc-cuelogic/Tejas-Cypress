@@ -80,12 +80,12 @@ class InvestmentDetails extends Component {
             CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
               <RevenueSharingDetails
                 refLink={this.props.refLink}
-                KeyTerms={campaign.keyTerms}
+                KeyTerms={campaign && campaign.keyTerms}
                 {...this.props}
               /> :
               <TermNoteDetails
                 refLink={this.props.refLink}
-                KeyTerms={campaign.keyTerms}
+                KeyTerms={campaign && campaign.keyTerms}
                 {...this.props}
               />
           }

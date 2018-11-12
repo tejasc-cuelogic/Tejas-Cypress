@@ -6,7 +6,8 @@ import Helper from '../../../../../../helper/utility';
 const isMobile = document.documentElement.clientWidth < 768;
 class RevenueSharingKeyTerms extends Component {
   render() {
-    const { KeyTerms } = this.props;
+    const { KeyTerms, launch } = this.props;
+    const edgarLink = launch && launch.edgarLink;
     return (
       <Modal.Content scrolling>
         <Grid columns={3} divided stackable className="vertical-gutter">
@@ -172,7 +173,7 @@ class RevenueSharingKeyTerms extends Component {
           <Divider />
         }
         <Header as="h5" className="center-align">
-          <a href="/https://www.sec.gov/Archives/edgar/data/1735180/000173518018000003/0001735180-18-000003-index.htm" target="blank">
+          <a href={edgarLink} target="blank">
             View the Issuer&apos;s SEC Form C filing
           </a>
         </Header>

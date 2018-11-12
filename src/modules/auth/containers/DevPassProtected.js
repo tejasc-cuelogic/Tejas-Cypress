@@ -48,6 +48,7 @@ class DevPassProtected extends Component {
                 label="Password"
                 value={this.state.password}
                 type="password"
+                autoFocus
                 name="password"
                 error={this.state.error}
               />

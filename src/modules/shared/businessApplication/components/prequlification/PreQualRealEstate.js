@@ -10,6 +10,7 @@ import GeneralInformation from './GeneralInformation';
 import Experience from './Experience';
 import EntityAndLegal from './EntityAndLegal';
 
+// const isMobile = document.documentElement.clientWidth < 768;
 @inject('businessAppStore')
 @observer
 export default class PreQualRealEstate extends Component {
@@ -91,7 +92,7 @@ export default class PreQualRealEstate extends Component {
             fielddata={fields.ownOrOperateProperty}
             name="ownOrOperateProperty"
             changed={businessAppEleChange}
-            containerclassname="button-radio"
+            containerclassname="button-radio mobile-radio-button"
           />
         </FormElementWrap>
         <FormElementWrap hideFields={hideFields} header="Target">

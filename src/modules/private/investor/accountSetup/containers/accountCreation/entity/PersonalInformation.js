@@ -29,8 +29,8 @@ export default class PersonalInformation extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Complete personal info about Entity</Header>
-        <p className="center-align">Enter the Authorized Signatory Information</p>
+        <Header as="h3" textAlign="center">Authorized Signatory Informaiton</Header>
+        <p className="center-align">Please provide your title and a copy of your photo ID.</p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -38,18 +38,20 @@ export default class PersonalInformation extends Component {
         }
         <Form error>
           <div className="field-wrap">
-            <Form.Input
-              label="Authorized Signatory’s First Legal Name"
-              value={currentUser.givenName}
-              className="readonly"
-              readOnly
-            />
-            <Form.Input
-              label="Authorized Signatory’s Last Legal Name"
-              value={currentUser.familyName}
-              className="readonly"
-              readOnly
-            />
+            <Form.Group widths="equal">
+              <Form.Input
+                label="First Name (Legal)"
+                value={currentUser.givenName}
+                className="readonly"
+                readOnly
+              />
+              <Form.Input
+                label="Last Name (Legal)"
+                value={currentUser.familyName}
+                className="readonly"
+                readOnly
+              />
+            </Form.Group>
             <FormInput
               name="title"
               fielddata={PERSONAL_INFO_FRM.fields.title}
@@ -58,18 +60,14 @@ export default class PersonalInformation extends Component {
           </div>
           <Grid verticalAlign="middle">
             <Grid.Row>
-              <Grid.Column width={7}>
-                <Header as="h5">
-                  Upload a Photo ID
-                  <Header.Subheader>Drivers License or Passport</Header.Subheader>
-                </Header>
-              </Grid.Column>
-              <Grid.Column width={9}>
+              <Grid.Column width={16}>
                 <DropZone
                   name="legalDocUrl"
                   fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
                   ondrop={this.onLegalDocUrlDrop}
                   onremove={this.confirmRemoveDoc}
+                  uploadtitle="Choose a file or drag it here"
+                  containerclassname="fluid"
                 />
               </Grid.Column>
             </Grid.Row>
