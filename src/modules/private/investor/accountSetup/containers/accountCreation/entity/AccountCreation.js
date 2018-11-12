@@ -69,7 +69,7 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 2,
       },
       {
-        name: 'Entity info',
+        name: 'Trust Status',
         component: <FinancilInfo />,
         isValid: TRUST_INFO_FRM.meta.isFieldValid ? '' : 'error',
         isDirty: TRUST_INFO_FRM.meta.isDirty,

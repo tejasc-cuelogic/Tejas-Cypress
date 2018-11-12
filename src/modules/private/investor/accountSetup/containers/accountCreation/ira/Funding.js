@@ -27,23 +27,23 @@ export default class Funding extends Component {
           <div className="option-details">
             {
               FUNDING_FRM.fields.fundingType.value === 0 ?
-                <p>
+                <p className="mt-20">
                   Set up a new self-directed IRA with
                   an initial deposit from an external checking account.
                   Annual contribution limits apply.
-                  <a target="_blank" rel="noopener noreferrer" href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">Check the IRS website for the latest rules</a>
+                  {/* <a target="_blank" rel="noopener noreferrer" href="https://www.irs.gov/retirement-plans/plan-participant-employee/retirement-topics-ira-contribution-limits">Check the IRS website for the latest rules</a> */}
                 </p>
                 :
                 FUNDING_FRM.fields.fundingType.value === 1 ?
-                  <p>
+                  <p className="mt-20">
                     You can transfer funds from your current [Traditional/Roth] IRA
-                    to set up your [Traditional/Roth]IRA account at NextSeed.
-                    Note: With a transfer, funds can only be moved between like-types of IRAs.”
+                    to set up your [Traditional/Roth]IRA account at NextSeed.<br /><br />
+                    Note: With a transfer, funds can only be moved between like-types of IRAs.
                   </p>
                 :
                 FUNDING_FRM.fields.fundingType.value === 2 ?
-                  <p>
-                    Roll over funds from your 401(k), 403(b), or another qualified account
+                  <p className="mt-20" >
+                    {'"'}Roll over funds from your 401(k), 403(b), or another qualified account
                     to fund your NextSeed self-directed IRA
                   </p>
                 :

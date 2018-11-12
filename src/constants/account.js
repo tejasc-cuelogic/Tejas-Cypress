@@ -147,8 +147,8 @@ export const IND_LINK_BANK_MANUALLY = {
     error: undefined,
     rule: 'required|numeric|digits:9',
     placeHolder: '123456789',
-    label: 'Bank routing number',
-    tooltip: 'Put your 9 digit bank routing number',
+    label: 'Bank Routing Number',
+    // tooltip: 'Put your 9 digit bank routing number',
     maxLength: 9,
   },
   accountNumber: {
@@ -157,8 +157,8 @@ export const IND_LINK_BANK_MANUALLY = {
     error: undefined,
     placeHolder: '123456789',
     rule: 'required|minAcnum',
-    label: 'Bank account number',
-    tooltip: 'Put your 4 to 17 digit bank account number',
+    label: 'Bank Account Number',
+    // tooltip: 'Put your 4 to 17 digit bank account number',
     maxLength: 17,
   },
 };
@@ -233,7 +233,7 @@ export const IRA_ACC_TYPES = {
       {
         label: 'Roth',
         value: 1,
-        description: 'Earnings from investments on a Roth Individual Retirement Account grow tax-free. ',
+        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
         rawValue: 'roth',
       },
     ],
@@ -339,7 +339,7 @@ export const ENTITY_GEN_INFO = {
     key: 'entityType', value: '', label: 'Entity Type', error: undefined, rule: 'required|string', placeHolder: 'Select one',
   },
   street: {
-    key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
+    key: 'street', value: '', label: 'Street Address', error: undefined, rule: 'required|string',
   },
   city: {
     key: 'city', value: '', placeHolder: 'New York', label: 'City', error: undefined, rule: 'required|string',
@@ -377,10 +377,10 @@ export const ENTITY_TRUST_INFO = {
 
 export const ENTITY_PERSONAL_INFO = {
   title: {
-    key: 'title', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
+    key: 'title', value: '', error: undefined, rule: 'required', label: 'Title with the Entity', placeHolder: 'e.g. CEO',
   },
   legalDocUrl: {
-    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Drivers Livense or Passport)', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 
@@ -389,7 +389,7 @@ export const ENTITY_FORMATION_DOCS = {
     key: 'formationDoc', label: 'Entity Formation Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   operatingAgreementDoc: {
-    key: 'operatingAgreementDoc', label: 'Entity Operating Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'operatingAgreementDoc', label: 'Entity Operating Agreement', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   einVerificationDoc: {
     key: 'einVerificationDoc', label: 'EIN Verification', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
@@ -488,7 +488,7 @@ export const EMPLOYMENT = {
         { label: 'Self Employed', value: 'SELF_EMPLOYED' },
         { label: 'Retired', value: 'RETIRED' },
         { label: 'Student', value: 'STUDENT' },
-        { label: 'Not Employee', value: 'NOT_EMPLOYED' },
+        { label: 'Not Employed', value: 'NOT_EMPLOYED' },
       ],
     error: undefined,
     rule: 'required',
@@ -552,7 +552,7 @@ export const FINANCES = {
   },
   annualIncomeCurrentYear: {
     value: '',
-    label: 'Annual Income 2018',
+    label: 'Annual Income 2018 (Expected)',
     error: undefined,
     rule: 'required',
     year: '2018',

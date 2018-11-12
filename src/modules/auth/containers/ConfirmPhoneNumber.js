@@ -82,8 +82,8 @@ export default class ConfirmPhoneNumber extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your phone number</Header>
           <p>
-            We&#39;re introducing Multi-Factor Authentication (MFA) to
-            increase the security of your NextSeed account
+            We use Multi-Factor Authentication (MFA) to increase the security of your NextSeed
+            investment account.
           </p>
           <Divider section />
           <p>Please confirm the 6-digit verification code sent to your phone number</p>
