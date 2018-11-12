@@ -56,7 +56,7 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 1,
       },
       {
-        name: 'Employment',
+        name: 'Employment Status',
         component: <Employment />,
         isValid: EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: EMPLOYMENT_FORM.meta.isDirty,
@@ -80,7 +80,7 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 4,
       },
       {
-        name: 'Finances',
+        name: 'Financial Information',
         component: <Finances />,
         isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: FINANCES_FORM.meta.isDirty,
@@ -88,7 +88,7 @@ export default class AccountCreation extends React.Component {
         stepToBeRendered: 5,
       },
       {
-        name: 'Experience',
+        name: 'Investment Experience',
         component: <Experience />,
         isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,

@@ -39,7 +39,7 @@ export default class ManualForm extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Link bank manually</Header>
-        <p className="center-align">Enter your bank`s routing number and your checking account number.</p>
+        <p className="center-align">Enter your bank{"'"}s routing number and your checking account number.</p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -48,25 +48,25 @@ export default class ManualForm extends Component {
         <Form error onSubmit={this.handleSubmitForm}>
           <div className="field-wrap">
             <MaskedInput
-              name="routingNumber"
-              fielddata={formLinkBankManually.fields.routingNumber}
-              changed={linkBankManuallyChange}
-              routingNumber
-            />
-            <MaskedInput
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
               changed={linkBankManuallyChange}
               accountNumber
             />
+            <MaskedInput
+              name="routingNumber"
+              fielddata={formLinkBankManually.fields.routingNumber}
+              changed={linkBankManuallyChange}
+              routingNumber
+            />
           </div>
           <div className="center-align">
-            <Button.Group vertical>
-              <Button primary size="large" className="relaxed" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
-              <Button type="button" className="link-button cancel-link" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
-            </Button.Group>
+            <Button primary size="large" className="relaxed" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
           </div>
         </Form>
+        <div className="center-align mt-20">
+          <Button type="button" color="green" className="link-button" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
+        </div>
       </div>
     );
   }

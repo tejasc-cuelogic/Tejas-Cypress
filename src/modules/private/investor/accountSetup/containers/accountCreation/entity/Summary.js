@@ -43,35 +43,35 @@ export default class Summary extends Component {
         }
         <div className="field-wrap">
           <div className="table-wrapper">
-            <Table unstackable compact basic fixed>
+            <Table unstackable basic fixed>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell><b>Entity net assets</b></Table.Cell>
+                  <Table.Cell>Entity net assets</Table.Cell>
                   <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value ?
                       FIN_INFO_FRM.fields.netAssets.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell><b>Other CF Investments</b></Table.Cell>
+                  <Table.Cell>Other CF Investments</Table.Cell>
                   <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.cfInvestment.value ?
                       FIN_INFO_FRM.fields.cfInvestment.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell><b>Entity`s name</b></Table.Cell>
+                  <Table.Cell>Entity{"'"}s name</Table.Cell>
                   <Table.Cell>{GEN_INFO_FRM.fields.name.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell><b>Tax ID</b></Table.Cell>
+                  <Table.Cell>Tax ID</Table.Cell>
                   <Table.Cell>{GEN_INFO_FRM.fields.taxId.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row verticalAlign="top">
-                  <Table.Cell><b>Entity Address</b></Table.Cell>
+                  <Table.Cell>Entity Address</Table.Cell>
                   <Table.Cell>{GEN_INFO_FRM.fields.street.value}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell><b>Is Entity a trust?</b></Table.Cell>
+                  <Table.Cell>Is Entity a trust?</Table.Cell>
                   <Table.Cell>{TRUST_INFO_FRM.fields.isTrust.value}
                     {TRUST_INFO_FRM.fields.isTrust.value &&
                       'Yes, since '
@@ -85,25 +85,25 @@ export default class Summary extends Component {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell><b>Title with the Entity</b></Table.Cell>
+                  <Table.Cell>Title with the Entity</Table.Cell>
                   <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell><b>Bank account</b></Table.Cell>
+                  <Table.Cell>Bank account</Table.Cell>
                   <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
           </div>
         </div>
-        <p className="center-align mb-30">
+        <div className="center-align">
+          <Button primary size="large" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm}>Confirm</Button>
+        </div>
+        <p className="center-align mt-30 grey-text">
           By continuing, I acknowledge that I have read and agree to the
           terms of the <Link to="/app/summary/account-creation/entity" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/app/summary/account-creation/entity" className="link">Substitute IRS Form W-9 Certification</Link>,
           and the <Link to="/app/summary/account-creation/entity" className="link">NextSeed Membership Agreement</Link>.
         </p>
-        <div className="center-align">
-          <Button primary size="large" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm}>Create Entity account</Button>
-        </div>
       </div>
     );
   }

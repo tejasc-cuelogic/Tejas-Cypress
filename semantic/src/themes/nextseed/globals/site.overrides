@@ -171,6 +171,9 @@ h6{
 .primary-two-text {
 	color: @primary-two !important;
 }
+.grey-text {
+	color: @neutral-offdark;
+}
 .caption-note{
 	font-size:@13px;
 	font-style:italic;
@@ -2367,5 +2370,13 @@ p.check-extra-info{
 		@media only screen and (max-width : @largestMobileScreen){
 			transform: scale(0.8, 0.8);
 		}
+	}
+}
+// IRA account creation 
+.promitional-offer-block {
+	border: 1px solid @primary-one;
+	padding: @10px;
+	h5.ui.header {
+		margin: 0; 
 	}
 }
