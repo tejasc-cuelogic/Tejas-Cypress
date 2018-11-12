@@ -129,6 +129,21 @@ export const campaignDetailsQuery = gql`
         terminationDate
         expectedOpsDate
         issuerApprovedDate
+        escrowKey
+        escrowNumber
+        edgarLink
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+          status
+        }
+        gsFees
       }
       misc {
         additionalBonusRewardsContent
