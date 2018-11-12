@@ -91,11 +91,13 @@ export default class ConfirmEmailAddress extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <p>
-            We&#39;re introducing Multi-Factor Authentication (MFA) to
-            increase the security of your NextSeed account
+            We use Multi-Factor Authentication (MFA) to increase the security of your
+            NextSeed investment account.
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code sent to your email address</p>
+          <p>
+            Please confirm the 6-digit verification code in the text message sent to your e-mail
+          </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput

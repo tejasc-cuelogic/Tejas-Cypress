@@ -45,6 +45,7 @@ export default class FormationDocumemts extends Component {
             ondrop={this.onFormationDocDrop}
             onremove={this.confirmRemoveDoc}
             containerclassname="fluid"
+            uploadtitle="Choose a file or drag it here"
           />
           <DropZone
             name="operatingAgreementDoc"
@@ -52,6 +53,7 @@ export default class FormationDocumemts extends Component {
             ondrop={this.onOperatingAgreementDocDrop}
             onremove={this.confirmRemoveDoc}
             containerclassname="fluid"
+            uploadtitle="Choose a file or drag it here"
           />
           <DropZone
             name="einVerificationDoc"
@@ -59,6 +61,7 @@ export default class FormationDocumemts extends Component {
             ondrop={this.onEinVerificationDocDrop}
             onremove={this.confirmRemoveDoc}
             containerclassname="fluid"
+            uploadtitle="Choose a file or drag it here"
           />
         </Form>
         <Confirm
