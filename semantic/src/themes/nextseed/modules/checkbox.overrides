@@ -47,6 +47,16 @@
 		flex-wrap:wrap;
 		.field{
 			padding-top:@relative14px;
+			@media only screen and (max-width : @largestMobileScreen){
+				width: 50%;
+			}
+		}
+		&.mobile-radio-button {
+			.field {
+				@media only screen and (max-width : @largestMobileScreen){
+					margin-bottom: @10px !important;
+				}
+			}
 		}
 	}
 }

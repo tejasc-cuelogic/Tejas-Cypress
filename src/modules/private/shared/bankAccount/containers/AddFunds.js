@@ -72,12 +72,12 @@ export default class AddFunds extends Component {
             />
           </div>
           <div className="center-align">
-            <Button.Group vertical>
-              <Button primary size="large" className="relaxed" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
-              <Button type="button" className="link-button cancel-link" onClick={() => this.doNotDepositMoneyNow()}>I will do this later</Button>
-            </Button.Group>
+            <Button primary size="large" className="relaxed" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
           </div>
         </Form>
+        <div className="center-align mt-20">
+          <Button type="button" color="green" className="link-button" onClick={() => this.doNotDepositMoneyNow()}>I don’t want to deposit any money now</Button>
+        </div>
       </div>
     );
   }

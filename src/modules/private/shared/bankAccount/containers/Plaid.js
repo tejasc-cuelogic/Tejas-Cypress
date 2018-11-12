@@ -31,8 +31,11 @@ export default class Plaid extends Component {
     }
     return (
       <div>
-        <Header as="h3" textAlign="center">Link Bank Account</Header>
-        <Header as="h6" textAlign="center">Select your bank from the list</Header>
+        <Header as="h3" textAlign="center">What is your employment status?</Header>
+        <p className="center-align mb-30">
+          In order to make your first investment, you will need to link your bank and
+          add funds into your account. Please choose the bank below.
+        </p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />

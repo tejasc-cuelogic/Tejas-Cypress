@@ -11,7 +11,7 @@ export default class FinancialInformation extends React.Component {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Your financial information</Header>
+        <Header as="h3" textAlign="center">Caculating your investment limit</Header>
         <p className="center-align">Your net worth and annual income are used to determine your 12-month investment limit. <Link className="link" to="/app/summary/account-creation/ira">How is this calculated?</Link></p>
         <Form error>
           <div className="field-wrap">

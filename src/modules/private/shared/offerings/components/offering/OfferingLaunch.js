@@ -82,7 +82,7 @@ export default class OfferingLaunch extends Component {
                     <div className="display-only">
                       <Link to={this.props.match.url}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
-                    <p>signed on{' '}
+                    <p>uploaded on{' '}
                       {
                         moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
                       }

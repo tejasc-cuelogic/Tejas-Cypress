@@ -129,6 +129,18 @@ export const campaignDetailsQuery = gql`
         terminationDate
         expectedOpsDate
         issuerApprovedDate
+        edgarLink
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+        }
+        gsFees
       }
       misc {
         additionalBonusRewardsContent

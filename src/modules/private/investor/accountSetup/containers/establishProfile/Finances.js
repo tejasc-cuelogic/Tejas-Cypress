@@ -51,25 +51,39 @@ export default class Finances extends Component {
         />
         <Header as="h3" textAlign="center">Financial Information</Header>
         <p className="center-align mb-50">
-          Please provide the following information so that
-          we can determine which investments we are allowed to show you
+          Provide your financial information to access the right investments for you.
+          Your information is encrypted and securely transmitted.
         </p>
         <Form error>
           <FormRadioGroup
             fielddata={INVESTOR_PROFILE_FORM.fields.investorProfileType}
             name="investorProfileType"
             changed={investorProfileChange}
-            containerclassname="button-radio center-align"
+            containerclassname="button-radio center-align mb-50"
           />
-          <MaskedInput
+          {/* <MaskedInput
             name="netWorth"
             currency
             fielddata={FINANCES_FORM.fields.netWorth}
             changed={financesChange}
             prefix="$ "
-          />
+          /> */}
           <Form.Group widths="equal">
-            {['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
+            {['netWorth', 'annualIncomeThirdLastYear'].map(field => (
+              <MaskedInput
+                type="tel"
+                key={field}
+                name={field}
+                currency
+                fielddata={FINANCES_FORM.fields[field]}
+                changed={financesChange}
+                prefix="$ "
+              />
+            ))
+            }
+          </Form.Group>
+          <Form.Group widths="equal">
+            {['annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
               <MaskedInput
                 type="tel"
                 key={field}

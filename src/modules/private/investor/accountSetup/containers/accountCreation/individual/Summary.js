@@ -44,32 +44,32 @@ export default class Summary extends React.Component {
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">
-              <Table unstackable compact basic fixed singleLine>
+              <Table unstackable basic fixed singleLine>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell><b>Investor Name</b></Table.Cell>
+                    <Table.Cell>Investor: </Table.Cell>
                     <Table.Cell>{currentUser.givenName}</Table.Cell>
                   </Table.Row>
                   {!isEmpty(plaidAccDetails) &&
                   <Table.Row>
-                    <Table.Cell><b>Bank Name</b></Table.Cell>
+                    <Table.Cell>Bank: </Table.Cell>
                     <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
                   </Table.Row>
                   }
                   <Table.Row>
-                    <Table.Cell><b>Bank Account</b></Table.Cell>
+                    <Table.Cell>Bank Account Number: </Table.Cell>
                     <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
                   </Table.Row>
                   {formLinkBankManually.fields.routingNumber.value &&
                   <Table.Row>
-                    <Table.Cell><b>Routing Number</b></Table.Cell>
+                    <Table.Cell>Routing Number</Table.Cell>
                     <Table.Cell>
                       {formLinkBankManually.fields.routingNumber.value}
                     </Table.Cell>
                   </Table.Row>
                   }
                   <Table.Row>
-                    <Table.Cell><b>Your initial deposit</b></Table.Cell>
+                    <Table.Cell>Your initial deposit</Table.Cell>
                     <Table.Cell>
                       {!depositMoneyNow ?
                       Helper.CurrencyFormat(0) :

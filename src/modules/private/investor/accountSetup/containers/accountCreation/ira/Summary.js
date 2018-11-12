@@ -51,30 +51,30 @@ export default class Summary extends Component {
         <div className="summary-wrap">
           <div className="field-wrap">
             <div className="table-wrapper">
-              <Table unstackable compact basic>
+              <Table unstackable basic>
                 <Table.Body>
                   <Table.Row>
-                    <Table.Cell><b>Type</b></Table.Cell>
+                    <Table.Cell>Type:</Table.Cell>
                     <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Funding Option</b></Table.Cell>
+                    <Table.Cell>Funding Option:</Table.Cell>
                     <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Net Worth</b></Table.Cell>
+                    <Table.Cell>Net Worth:</Table.Cell>
                     <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
                       FIN_INFO_FRM.fields.netWorth.value : 0)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Annual Income</b></Table.Cell>
+                    <Table.Cell>Annual Income:</Table.Cell>
                     <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value ?
                       FIN_INFO_FRM.fields.annualIncome.value : 0)}
                     </Table.Cell>
                   </Table.Row>
                   <Table.Row>
-                    <Table.Cell><b>Identification</b></Table.Cell>
+                    <Table.Cell>Identification:</Table.Cell>
                     <Table.Cell>
                       {IDENTITY_FRM.fields.identityDoc.value ?
                         <span className="positive-text"><b>Uploaded</b></span> :
@@ -83,7 +83,7 @@ export default class Summary extends Component {
                   </Table.Row>
                   {fundingOption && fundingOption.value === 0 &&
                     <Table.Row>
-                      <Table.Cell><b>Bank account</b></Table.Cell>
+                      <Table.Cell>Bank account:</Table.Cell>
                       <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
                     </Table.Row>
                   }
@@ -92,14 +92,16 @@ export default class Summary extends Component {
             </div>
           </div>
         </div>
-        <p className="center-align mb-30">
-          By continuing, I acknowledge that I have read and agree to the
-          terms of the <Link to="/app/summary/account-creation/ira" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/app/summary/account-creation/ira" className="link">Substitute IRS Form W-9 Certification</Link>,
-          and the <Link to="/app/summary/account-creation/ira" className="link">NextSeed Membership Agreement</Link>.
-        </p>
         <div className="center-align">
           <Button primary size="large" onClick={() => this.handleCreateAccount()} className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>
         </div>
+        <p className="center-align mt-30">
+          <b>
+            By continuing, I acknowledge that I have read and agree to the
+            terms of the <Link to="/app/summary/account-creation/ira" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/app/summary/account-creation/ira" className="link">Substitute IRS Form W-9 Certification</Link>,
+            and the <Link to="/app/summary/account-creation/ira" className="link">NextSeed Membership Agreement</Link>.
+          </b>
+        </p>
       </div>
     );
   }

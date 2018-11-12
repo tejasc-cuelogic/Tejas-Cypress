@@ -12,9 +12,8 @@ export default class Experience extends Component {
       <div>
         <Header as="h3" textAlign="center">Investment Experience</Header>
         <p className="center-align mb-50">
-          We are collecting the information below to better understand yout investment experience.
-          We recognize your responses may change over time as you work with us.
-          Please check the box that best descrives your investment experience to date
+          Confirm your experience and understanding of the investment risks on NextSeed.
+          Select the box that best describes your investment experience to date:
         </p>
         <Form error>
           <FormRadioGroup
