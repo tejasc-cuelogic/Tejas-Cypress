@@ -21,17 +21,18 @@ class KeyTerms extends Component {
         closeIcon
       >
         <Modal.Header>Key Terms</Modal.Header>
-        {campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
+        {campaign && campaign.keyTerms && campaign.keyTerms.securities ===
+        CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
           <RevenueSharingKeyTerms
             refLink={refLink}
             KeyTerms={campaign.keyTerms}
-            launch={campaign.launch}
+            launch={campaign.offering.launch}
           />
           :
           <TermNoteKeyTerms
             refLink={refLink}
-            KeyTerms={campaign.keyTerms}
-            launch={campaign.launch}
+            KeyTerms={campaign && campaign.keyTerms}
+            launch={campaign && campaign.offering.launch}
           />
           }
       </Modal>

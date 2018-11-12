@@ -89,7 +89,7 @@ export default class OffersPanel extends Component {
                         </Table.Row>
                       </Aux> :
                       <Table.Row>
-                        <Table.Cell>Offering Amount</Table.Cell>
+                        <Table.Cell>Maximum Offering Amount</Table.Cell>
                         <Table.Cell>{`$${offer.minimumAmount.value} - $${offer.amount.value}`}</Table.Cell>
                       </Table.Row>
                       }

@@ -129,8 +129,6 @@ export const campaignDetailsQuery = gql`
         terminationDate
         expectedOpsDate
         issuerApprovedDate
-        escrowKey
-        escrowNumber
         edgarLink
         submitted {
           id
@@ -141,7 +139,6 @@ export const campaignDetailsQuery = gql`
           id
           by
           date
-          status
         }
         gsFees
       }

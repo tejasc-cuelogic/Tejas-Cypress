@@ -148,7 +148,7 @@ class TermNoteKeyTerms extends Component {
           <Divider />
         }
         <Header as="h5" className="center-align">
-          <a href={`/${edgarLink}`} target="blank">
+          <a href={edgarLink} target="blank">
             View the Issuer&apos;s SEC Form C filing
           </a>
         </Header>
