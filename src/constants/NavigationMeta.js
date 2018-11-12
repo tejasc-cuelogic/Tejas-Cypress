@@ -27,9 +27,9 @@ export const PRIVATE_NAV = [
         title: 'Investment limits', to: 'investment-limits', component: 'InvestmentLimits', accessibleTo: ['investor'],
       },
       { title: 'Security', to: 'security', component: 'Security' },
-      {
-        title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries', accessibleTo: ['investor'],
-      },
+      // {
+      //   title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries', accessibleTo: ['investor'],
+      // },
       {
         title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
       },
