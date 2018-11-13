@@ -165,7 +165,7 @@
 
 .ui.statistic:not(.basic){
     position:relative;
-    padding-left:@relative16px;
+    padding-left:@18px;
     &:before{
         content:"";
         width:3px;
