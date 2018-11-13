@@ -78,6 +78,11 @@ export class Utility {
     return encryptedNumber;
   }
 
+  encryptNumberWithX = (number) => {
+    const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
+    return encryptedNumber;
+  }
+
   getFormattedFileData = (file) => {
     const fileData = {};
     if (file) {
