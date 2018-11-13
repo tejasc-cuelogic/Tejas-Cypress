@@ -46,7 +46,7 @@ export default class Summary extends Component {
             <Table unstackable basic fixed>
               <Table.Body>
                 <Table.Row>
-                  <Table.Cell>Entity net assets</Table.Cell>
+                  <Table.Cell>Entity Net Assets</Table.Cell>
                   <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netAssets.value ?
                       FIN_INFO_FRM.fields.netAssets.value : 0)}
                   </Table.Cell>
@@ -58,7 +58,7 @@ export default class Summary extends Component {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Entity{"'"}s name</Table.Cell>
+                  <Table.Cell>Entity{"'"}s Name</Table.Cell>
                   <Table.Cell>{GEN_INFO_FRM.fields.name.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
@@ -71,7 +71,7 @@ export default class Summary extends Component {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Is Entity a trust?</Table.Cell>
+                  <Table.Cell>Is Entity a Trust?</Table.Cell>
                   <Table.Cell>{TRUST_INFO_FRM.fields.isTrust.value}
                     {TRUST_INFO_FRM.fields.isTrust.value &&
                       'Yes, since '
@@ -85,11 +85,11 @@ export default class Summary extends Component {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Title with the Entity</Table.Cell>
+                  <Table.Cell>Title With the Entity</Table.Cell>
                   <Table.Cell>{PERSONAL_INFO_FRM.fields.title.value}</Table.Cell>
                 </Table.Row>
                 <Table.Row>
-                  <Table.Cell>Bank account</Table.Cell>
+                  <Table.Cell>Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
                 </Table.Row>
               </Table.Body>
