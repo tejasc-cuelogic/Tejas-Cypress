@@ -330,25 +330,25 @@ export const ENTITY_FIN_INFO = {
 
 export const ENTITY_GEN_INFO = {
   name: {
-    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
+    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'Enter Here',
   },
   taxId: {
-    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'e.g. 12345',
+    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'XX-XXXXXX',
   },
   entityType: {
     key: 'entityType', value: '', label: 'Entity Type', error: undefined, rule: 'required|string', placeHolder: 'Select one',
   },
   street: {
-    key: 'street', value: '', label: 'Street Address', error: undefined, rule: 'required|string',
+    key: 'street', value: '', label: 'Street Address', error: undefined, rule: 'required|string', placeHolder: 'Enter Here',
   },
   city: {
-    key: 'city', value: '', placeHolder: 'New York', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', placeHolder: 'Enter Here', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    key: 'state', value: '', placeHolder: 'NY', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', placeHolder: 'Select', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|numeric',
   },
 };
 
