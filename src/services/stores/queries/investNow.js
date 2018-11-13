@@ -106,7 +106,7 @@ export const transferFundsForInvestment = gql`
 `;
 
 export const updateInvestmentLimits = gql`
-  mutation _updateInvestmentLimits($userId: String, $accountId: String, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
+  mutation _updateInvestmentLimits($userId: String, $accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
     updateInvestmentLimits(
       userId: $userId
       accountId: $accountId
