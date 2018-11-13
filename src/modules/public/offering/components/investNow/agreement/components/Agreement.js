@@ -7,7 +7,7 @@ import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 import ConfirmCancellation from '../../ConfirmCancellation';
 
-@inject('investmentStore', 'uiStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore')
 @withRouter
 @observer
 export default class Agreement extends React.Component {
@@ -15,7 +15,10 @@ export default class Agreement extends React.Component {
     showDocuSign: false,
   }
   componentWillMount() {
-    const { stepToBeRendered, setStepToBeRendered, investAccTypes } = this.props.investmentStore;
+    const {
+      stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm,
+    } = this.props.investmentStore;
+    resetAggrementForm();
     if (investAccTypes.value === '') {
       this.props.history.push(`${this.props.refLink}/invest-now`);
     } else if (stepToBeRendered === 2) {
@@ -55,6 +58,8 @@ export default class Agreement extends React.Component {
     } = this.props.investmentStore;
     const { match, uiStore } = this.props;
     const { inProgress } = uiStore;
+    const { getInvestorAccountById } = this.props.portfolioStore;
+    const { campaign } = this.props.campaignStore;
     return (
       <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Route exact path={`${match.url}/confirm-cancellation`} render={() => <ConfirmCancellation refLink={this.props.refLink} />} />
@@ -71,7 +76,9 @@ export default class Agreement extends React.Component {
         <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'none' : 'block' }}>
           <Header as="h3" className="mb-40">
             Let&#39;s confirm your investment.<br />You are investing
-            <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in Pour Behavior.
+            <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in
+            {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
+                    getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
           </Header>
           {!AGREEMENT_DETAILS_FORM.meta.isValid &&
             <Message error textAlign="left" className="mb-40">

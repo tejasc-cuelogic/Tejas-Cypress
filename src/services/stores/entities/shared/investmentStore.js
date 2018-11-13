@@ -52,6 +52,11 @@ export class InvestmentStore {
       this[field] = value;
     }
 
+    @action
+    resetAggrementForm = () => {
+      this.AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
+    }
+
     @computed get getDiffInvestmentLimitAmount() {
       const oldLimit = parseFloat((portfolioStore.getInvestorAccountById &&
         portfolioStore.getInvestorAccountById.investedAmount) || 0, 2);
@@ -71,8 +76,9 @@ export class InvestmentStore {
       || 0;
     }
     @computed get getTransferRequestAmount() {
-      return this.investmentAmount -
+      const transferAmount = this.investmentAmount -
       (this.getCurrCashAvailable + rewardStore.getCurrCreditAvailable);
+      return transferAmount < 0 ? 0 : transferAmount;
     }
     @computed get getSpendCreditValue() {
       let spendAmount = 0;
