@@ -599,3 +599,10 @@ export const INV_PROFILE = {
   ...FINANCES,
   ...INVESTMENT_EXPERIENCE,
 };
+
+export const VARIFY_ROLES = [
+  { key: 'Investment Adviser (SEC-registered)', value: 'Investment Adviser (SEC-registered)', text: 'Investment Adviser (SEC-registered)' },
+  { key: 'Broker-Dealer (SEC-registered)', value: 'Broker-Dealer (SEC-registered)', text: 'Broker-Dealer (SEC-registered)' },
+  { key: 'Accountant (must be CPA)', value: 'Accountant (must be CPA)', text: 'Accountant (must be CPA)' },
+  { key: 'Personal Attorney (properly licensed)', value: 'Personal Attorney (properly licensed)', text: 'Personal Attorney (properly licensed)' },
+];
