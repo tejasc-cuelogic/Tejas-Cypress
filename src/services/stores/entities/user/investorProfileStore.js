@@ -22,7 +22,7 @@ class InvestorProfileStore {
   @observable PUBLIC_COMPANY_REL_FORM =
   FormValidator.prepareFormObject(PUBLIC_COMPANY_REL, true);
   @observable INVESTOR_PROFILE_FORM = FormValidator.prepareFormObject(INVESTOR_PROFILE, true);
-  @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES);
+  @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES, true);
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
   @observable chkboxTicked = null;
   @observable stepToBeRendered = 0;

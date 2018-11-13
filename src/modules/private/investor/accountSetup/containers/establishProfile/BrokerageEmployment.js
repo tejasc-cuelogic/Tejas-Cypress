@@ -30,6 +30,7 @@ export default class BrokerageEmployment extends Component {
                 fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
                 name="brokerageFirmName"
                 changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
+                showerror
               />
             </Form.Group>
           </div>
