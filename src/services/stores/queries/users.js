@@ -75,6 +75,7 @@ export const userDetailsQuery = gql`
           ... on Investor {
             name
             taxId
+            entityType
             address {
               street
               city
