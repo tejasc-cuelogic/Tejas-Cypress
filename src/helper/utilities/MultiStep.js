@@ -110,7 +110,7 @@ export default class MultiStep extends React.Component {
   }
 
   next() {
-    if (this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience') {
+    if (this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Investment Experience') {
       this.props.createAccount(this.props.steps[this.state.compState]);
       this.props.actionOnNextBtn();
     } else if (!this.props.steps[this.state.compState].isDirty) {
@@ -187,7 +187,7 @@ export default class MultiStep extends React.Component {
               type="submit"
               circular
               icon={{ className: 'ns-arrow-right' }}
-              className={(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience' ? 'multistep__btn next active' : this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
+              className={(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Investment Experience' ? 'multistep__btn next active' : this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
               onClick={this.next}
             />
           </Modal.Content>
