@@ -2,11 +2,13 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
-import { GqlClient as client } from '../../../../api/gcoolApi';
+// import { GqlClient as client } from '../../../../api/gcoolApi';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
-import { allTransactions, addFunds } from '../../queries/transaction';
-import { TRANSFER_FUND } from '../../../constants/transaction';
-import { userDetailsStore, uiStore } from '../../index';
+import { allTransactions, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
+import { getInvestorAvailableCash } from '../../queries/investNow';
+import { TRANSFER_FUND, VERIFY_OTP } from '../../../constants/transaction';
+import { uiStore, userDetailsStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
@@ -19,8 +21,12 @@ export class TransactionStore {
     skip: 0,
   };
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
-  @observable cash = 9743.33;
-
+  @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
+  @observable cash = null;
+  @observable showConfirmPreview = false;
+  @observable reSendVerificationCode = null;
+  @observable transactionOtpRequestId = null;
+  @observable transactionDisplayPhoneNumber = null;
   @action
   initRequest = (props) => {
     const { first, skip, page } = props ||
@@ -64,8 +70,13 @@ export class TransactionStore {
 
   @action
   transact = (amount, operation) => {
-    this.cash = this.cash + parseFloat(operation === 'add' ? amount : -amount);
-    this.TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
+    if (operation) {
+      this.cash = this.cash + parseFloat(operation === 'add' ? amount : -amount);
+      this.cash = !this.cash ? 0.00 : this.cash;
+    } else {
+      this.cash = parseFloat(amount);
+      this.cash = !this.cash ? 0.00 : this.cash;
+    }
   }
 
   @action
@@ -94,33 +105,147 @@ export class TransactionStore {
   };
 
   @action
-  addFunds = (amount, agreementId, accountId) => {
+  addFunds = (amount, description) => {
     uiStore.setProgress(true);
-    // const account = userDetailsStore.currentActiveAccountDetails;
+    const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: addFunds,
+          mutation: addFundMutation,
           variables: {
             userId: userDetails.id,
-            accountId,
-            agreementId,
             amount,
-            description: 'new record',
+            accountId: account.details.accountId,
+            description,
           },
         })
         .then(() => {
+          this.setInitialLinkValue(true);
+          this.transact(amount, 'add');
           resolve();
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          this.setInitialLinkValue(false);
           reject();
         })
         .finally(() => {
           uiStore.setProgress(false);
         });
+    });
+  }
+  @action
+  setInitialLinkValue = (boolValue) => {
+    this.showConfirmPreview = boolValue;
+  }
+  @action
+  setInitialFundValue = () => {
+    Validator.resetFormData(this.TRANSFER_FRM);
+  }
+  @action
+  verifyVerificationCodeChange = (value) => {
+    this.OTP_VERIFY_META = Validator.onChange(
+      this.OTP_VERIFY_META,
+      { name: 'code', value },
+    );
+  };
+  @action
+  setReSendVerificationCode(value) {
+    this.reSendVerificationCode = value;
+  }
+  @action
+  requestOtpForManageTransactions = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: requestOptForTransaction,
+          variables: {
+            scopeType: 'TRANSFER',
+            method: 'sms',
+          },
+        })
+        .then((result) => {
+          this.transactionOtpRequestId = result.data.requestOtp.requestId;
+          this.setPhoneNumber(result.data.requestOtp.phoneNumber);
+          resolve();
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+  @action
+  resetFormData(form) {
+    this[form] = Validator.resetFormData(this[form]);
+  }
+  @action
+  setPhoneNumber(phoneNumberVal) {
+    this.transactionDisplayPhoneNumber = phoneNumberVal;
+  }
+  @action
+  withdrawFunds = (amount, description) => {
+    uiStore.setProgress(true);
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const { userDetails } = userDetailsStore;
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: withdrawFundMutation,
+          variables: {
+            userId: userDetails.id,
+            amount,
+            accountId: account.details.accountId,
+            description,
+          },
+        })
+        .then(() => {
+          this.setInitialLinkValue(true);
+          this.transact(amount, 'withdraw');
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          this.setInitialLinkValue(false);
+          reject();
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+  @action
+  getInvestorAvailableCash = () => {
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const { userDetails } = userDetailsStore;
+    return new Promise((resolve, reject) => {
+      this.cashAvailable = graphql({
+        client,
+        query: getInvestorAvailableCash,
+        variables: {
+          userId: userDetails.id,
+          accountId: account.details.accountId,
+          includeInFlight: true,
+        },
+        onFetch: (data) => {
+          if (data) {
+            this.transact(data.getInvestorAvailableCash, null);
+            resolve(data);
+          }
+        },
+        onError: () => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          reject();
+        },
+        fetchPolicy: 'network-only',
+      });
     });
   }
 }

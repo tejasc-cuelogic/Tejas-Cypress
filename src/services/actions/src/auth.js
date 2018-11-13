@@ -97,10 +97,7 @@ export class Auth {
             }
             res();
           }))
-        .then(() => {
-          Helper.toast('Successfully loaded user data', 'success');
-        })
-        // Empty method needed to avoid warning.
+        .then(() => { })
         .catch(() => { })
         .finally(() => {
           commonStore.setAppLoaded();
