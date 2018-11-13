@@ -444,7 +444,7 @@ export const BROKERAGE_EMPLOYMENT = {
         { label: 'No', value: 'no' },
       ],
     error: undefined,
-    rule: 'optional',
+    rule: 'required',
   },
   brokerageFirmName: {
     key: 'brokerageFirmName',
@@ -466,7 +466,7 @@ export const PUBLIC_COMPANY_REL = {
         { label: 'No', value: 'no' },
       ],
     error: undefined,
-    rule: 'optional',
+    rule: 'required',
   },
   publicCompanyTicker: {
     key: 'publicCompanyTicker',

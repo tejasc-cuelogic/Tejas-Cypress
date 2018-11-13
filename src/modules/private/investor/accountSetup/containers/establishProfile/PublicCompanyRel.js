@@ -32,6 +32,7 @@ export default class PublicCompanyRel extends Component {
                 fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyTicker}
                 name="publicCompanyTicker"
                 changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
+                showerror
               />
             </Form.Group>
           </div>
