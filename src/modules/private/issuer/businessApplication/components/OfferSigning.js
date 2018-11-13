@@ -42,7 +42,7 @@ export default class OfferSigning extends Component {
               <Grid.Column className="welcome-packet">
                 <div className="pdf-viewer">
                   {this.props.uiStore.inProgress ? <InlineLoader /> :
-                  <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
+                  <iframe id="docuSignIframe" onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
                   }
                 </div>
                 <div className="mt-20 center-align">
