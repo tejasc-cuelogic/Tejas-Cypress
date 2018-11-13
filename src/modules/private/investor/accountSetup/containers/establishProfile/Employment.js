@@ -28,6 +28,7 @@ export default class Employment extends Component {
                   fielddata={EMPLOYMENT_FORM.fields[field]}
                   name={field}
                   changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
+                  showerror
                 />
               ))}
             </Form.Group>

@@ -183,7 +183,7 @@ export class AuthStore {
   }
 
   @action
-  resetForm = (form, targetedFields = []) => {
+  resetForm = (form, targetedFields = undefined) => {
     Validator.resetFormData(this[form], targetedFields);
   }
   @computed

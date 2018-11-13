@@ -78,6 +78,7 @@ export default class Finances extends Component {
                 fielddata={FINANCES_FORM.fields[field]}
                 changed={financesChange}
                 prefix="$ "
+                showerror
               />
             ))
             }
@@ -92,6 +93,7 @@ export default class Finances extends Component {
                 fielddata={FINANCES_FORM.fields[field]}
                 changed={financesChange}
                 prefix="$ "
+                showerror
               />
             ))
             }
