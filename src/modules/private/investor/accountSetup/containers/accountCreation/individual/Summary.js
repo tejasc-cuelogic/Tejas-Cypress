@@ -69,7 +69,7 @@ export default class Summary extends React.Component {
                   </Table.Row>
                   }
                   <Table.Row>
-                    <Table.Cell>Your initial deposit</Table.Cell>
+                    <Table.Cell>Your Initial Deposit</Table.Cell>
                     <Table.Cell>
                       {!depositMoneyNow ?
                       Helper.CurrencyFormat(0) :
