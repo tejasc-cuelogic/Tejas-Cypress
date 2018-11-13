@@ -1,15 +1,28 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Grid } from 'semantic-ui-react';
-import { FaqWidget } from '../../../../../theme/shared';
+import { withRouter } from 'react-router-dom';
+import { includes } from 'lodash';
+import { FaqWidget, InlineLoader } from '../../../../../theme/shared';
 import AvailableCashTransfer from '../components/transferFunds/AvailableCashTransfer';
 
-@inject('educationStore', 'transactionStore')
+@inject('educationStore', 'transactionStore', 'userDetailsStore', 'uiStore')
+@withRouter
 @observer
 export default class TransferFunds extends Component {
+  componentWillMount() {
+    const { setFieldValue } = this.props.userDetailsStore;
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    setFieldValue('currentActiveAccount', accountType);
+    this.props.transactionStore.getInvestorAvailableCash();
+    this.props.uiStore.clearErrors();
+  }
   render() {
     const { faqsOfModule } = this.props.educationStore;
     const { cash } = this.props.transactionStore;
+    if (!Number.isFinite(cash)) {
+      return <InlineLoader />;
+    }
     return (
       <div>
         <Header as="h4">Transfer funds</Header>

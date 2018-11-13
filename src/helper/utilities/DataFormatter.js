@@ -57,6 +57,7 @@ class DataFormatter {
     const template = Handlebars.compile(string);
     return template(data);
   }
+  fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
 }
 
 export default new DataFormatter();
