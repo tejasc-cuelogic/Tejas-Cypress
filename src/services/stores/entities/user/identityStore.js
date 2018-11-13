@@ -103,8 +103,8 @@ export class IdentityStore {
   };
 
   @action
-  resetFormData(form, targetedFields = []) {
-    const resettedForm = FormValidator.resetFormData(this[form], targetedFields);
+  resetFormData(form) {
+    const resettedForm = FormValidator.resetFormData(this[form]);
     this[form] = resettedForm;
   }
 
@@ -650,6 +650,7 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_FRM');
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
+    this.resetFormData('ID_VERIFICATION_QUESTIONS');
   }
 }
 

@@ -287,6 +287,17 @@ export class AuthStore {
       ...acc,
       ...{ [keysMap[key] || key]: obj[key] },
     }), {});
+
+  @action
+  resetStoreData = () => {
+    this.resetForm('SIGNUP_FRM', null);
+    this.resetForm('LOGIN_FRM', null);
+    this.resetForm('CONFIRM_FRM', null);
+    this.resetForm('CHANGE_PASS_FRM', null);
+    this.resetForm('FORGOT_PASS_FRM', null);
+    this.resetForm('RESET_PASS_FRM', null);
+    this.resetForm('NEWSLETTER_FRM', null);
+  }
 }
 
 export default new AuthStore();

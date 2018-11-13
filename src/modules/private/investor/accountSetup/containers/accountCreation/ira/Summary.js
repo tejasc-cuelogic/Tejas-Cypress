@@ -83,7 +83,7 @@ export default class Summary extends Component {
                   </Table.Row>
                   {fundingOption && fundingOption.value === 0 &&
                     <Table.Row>
-                      <Table.Cell>Bank account:</Table.Cell>
+                      <Table.Cell>Bank Account:</Table.Cell>
                       <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
                     </Table.Row>
                   }

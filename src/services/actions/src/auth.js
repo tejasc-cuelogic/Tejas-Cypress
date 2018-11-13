@@ -543,6 +543,7 @@ export class Auth {
       this.cognitoUser.signOut();
       AWS.config.clear();
       authStore.setUserLoggedIn(false);
+      authStore.resetStoreData();
       accountStore.resetStoreData();
       identityStore.resetStoreData();
       investorProfileStore.resetStoreData();
@@ -550,6 +551,7 @@ export class Auth {
       iraAccountStore.resetStoreData();
       entityAccountStore.resetStoreData();
       bankAccountStore.resetStoreData();
+      uiStore.clearErrors();
       res();
     })
     // Clear all AWS credentials
