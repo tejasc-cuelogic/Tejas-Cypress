@@ -26,13 +26,13 @@ class KeyTerms extends Component {
           <RevenueSharingKeyTerms
             refLink={refLink}
             KeyTerms={campaign.keyTerms}
-            launch={campaign.offering.launch}
+            launch={campaign.offering && campaign.offering.launch}
           />
           :
           <TermNoteKeyTerms
             refLink={refLink}
             KeyTerms={campaign && campaign.keyTerms}
-            launch={campaign && campaign.offering.launch}
+            launch={campaign && campaign.offering && campaign.offering.launch}
           />
           }
       </Modal>
