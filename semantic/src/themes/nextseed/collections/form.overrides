@@ -61,7 +61,7 @@
             padding:0 @14px;
         }
         >label{
-            display:inline-block;
+            // display:inline-block;
             line-height:@18px;
         }
         > .ui.label{
@@ -120,6 +120,25 @@
             max-height:80px;
             border-radius:@4px;
             border:@neutral-offdark 1px solid;
+        }
+        &.fund-amount{
+            padding-left:@18px;
+            &:before{
+                content:"";
+                width:3px;
+                height:100%;
+                position:absolute;
+                left:0;
+                background-color:@primary-one;
+            }
+            > label{
+                opacity:0.4;
+            }
+            input[type=text]{
+                padding:0;
+                border:none;
+                font-weight:@fontMedium;
+            }
         }
     }
     .otp-wrap{
