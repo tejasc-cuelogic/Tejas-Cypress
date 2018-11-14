@@ -91,7 +91,7 @@ class IndividualAccountStore {
         if (bankAccountStore.formLinkBankManually.meta.isValid ||
           !isEmpty(bankAccountStore.plaidAccDetails)) {
           const getIndividualStep = AccCreationHelper.individualSteps();
-          this.setStepToBeRendered(getIndividualStep.formLinkBankManually);
+          this.setStepToBeRendered(getIndividualStep.summary);
         }
       }
     }

@@ -358,7 +358,7 @@ export const ENTITY_GEN_INFO = {
 export const ENTITY_TYPES = [
   { key: 'LLC', value: 'LLC', text: 'LLC' },
   { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
-  { key: 'S-Corporation', value: 'S_CORPORATION', text: 'S-Corporation' },
+  { key: 'S-Corporation', value: 'SCORP', text: 'S-Corporation' },
   { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
   { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
   { key: 'Estate', value: 'ESTATE', text: 'Estate' },

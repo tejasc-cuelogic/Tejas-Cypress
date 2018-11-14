@@ -13,7 +13,7 @@ import { updateInvestorProfileData } from '../../queries/account';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { uiStore } from '../../index';
+import { uiStore, userStore, userDetailsStore } from '../../index';
 
 class InvestorProfileStore {
   @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT, true);
@@ -193,6 +193,9 @@ class InvestorProfileStore {
           Helper.toast('Investor profile updated successfully.', 'success');
           FormValidator.setIsDirty(this[currentStep.form], false);
           this.setStepToBeRendered(currentStep.stepToBeRendered);
+          if (this.isValidInvestorProfileForm) {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
