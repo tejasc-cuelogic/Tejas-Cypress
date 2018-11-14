@@ -17,7 +17,7 @@ export default class Details extends Component {
     const details = (selected ? (
       <Aux>
         <Header as="h3">{selected.title}</Header>
-        <p dangerouslySetInnerHTML={{ __html: selected.content }} />
+        <pre className="migrated-content" dangerouslySetInnerHTML={{ __html: selected.content }} />
       </Aux>
     ) : <div>Nothing to display !</div>);
     if (this.props.marketing) {

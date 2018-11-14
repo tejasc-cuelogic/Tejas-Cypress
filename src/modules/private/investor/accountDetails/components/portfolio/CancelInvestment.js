@@ -61,7 +61,7 @@ export default class CancelInvestment extends Component {
           {!isCancelShowLink ?
             <OfferingInvestDetails
               offering={investmentOfferingDetails || null}
-              accType="individual"
+              accType={this.props.accType}
               disabledClass={isCancelShowLink ? 'disabled' : ''}
             />
             :

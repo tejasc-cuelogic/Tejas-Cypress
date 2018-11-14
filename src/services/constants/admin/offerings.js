@@ -2264,4 +2264,17 @@ export const ADMIN_DOCUMENTATION = {
     stepName: 'DOCUMENTS_LEGAL_PERSONAL_GUARANTEE',
     lastModifiedDate: '',
   },
+  promissoryNote: {
+    value: '',
+    label: 'Promissory Note',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_PROMISSORY_NOTE',
+    lastModifiedDate: '',
+  },
 };
