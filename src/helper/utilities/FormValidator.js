@@ -290,7 +290,7 @@ class FormValidator {
           },
         };
       } else {
-        fields[key].value = typeof fields[key].value === 'number' ? 0 : '';
+        fields[key].value = typeof fields[key].value === 'number' ? 0 : fields[key].default ? fields[key].default : '';
       }
     });
     return fields;

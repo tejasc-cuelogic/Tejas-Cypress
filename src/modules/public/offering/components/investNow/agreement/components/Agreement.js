@@ -2,10 +2,9 @@ import React from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Modal, Header, Button, Grid, Form, Divider, Message, Confirm } from 'semantic-ui-react';
+import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
-// import ConfirmCancellation from '../../ConfirmCancellation';
 
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore')
 @withRouter
@@ -17,7 +16,7 @@ export default class Agreement extends React.Component {
   }
   componentWillMount() {
     const {
-      stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm,
+      stepToBeRendered, setStepToBeRendered, investAccTypes, resetAggrementForm, setFieldValue,
     } = this.props.investmentStore;
     resetAggrementForm();
     if (investAccTypes.value === '') {
@@ -25,6 +24,7 @@ export default class Agreement extends React.Component {
     } else if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
+    setFieldValue('investmentFlowErrorMessage', null);
   }
   handleCloseModal = () => {
     if (this.props.changeInvestment) {
@@ -43,8 +43,6 @@ export default class Agreement extends React.Component {
   }
   handleCancelAgreement = (e) => {
     e.preventDefault();
-    // const { match } = this.props;
-    // this.props.history.push(`${match.url}/confirm-cancellation`);
     this.setState({ open: true });
   }
   handleCancel = () => {
@@ -68,6 +66,7 @@ export default class Agreement extends React.Component {
       investmentAmount,
       setCheckbox,
       agreementDetails,
+      investmentFlowErrorMessage,
     } = this.props.investmentStore;
     const { uiStore } = this.props;
     const { inProgress } = uiStore;
@@ -75,17 +74,22 @@ export default class Agreement extends React.Component {
     const { campaign } = this.props.campaignStore;
     return (
       <Aux>
-        <Confirm
-          className="center-align"
-          header="Confirm cancellation"
-          open={this.state.open}
-          content="By canceling this reservation, you will not be invested in this offering."
-          cancelButton="Back"
-          confirmButton="Confirm"
-          onCancel={this.handleCancel}
-          onConfirm={this.handleConfirm}
-          size="mini"
-        />
+        <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
+          <Modal.Content className="center-align">
+            <Header as="h3">Confirm cancellation</Header>
+            {this.props.changeInvestment ?
+              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(investmentAmount)} in this offering will remain in place.`}</p>
+              :
+              <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
+            }
+            <div className="center-align">
+              <Button.Group>
+                <Button primary content="Back" onClick={this.handleCancel} />
+                <Button color="gray" content="Confirm" onClick={this.handleConfirm} />
+              </Button.Group>
+            </div>
+          </Modal.Content>
+        </Modal>
         <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
           <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
             <div className="pdf-viewer">
@@ -104,6 +108,11 @@ export default class Agreement extends React.Component {
               {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                 getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
             </Header>
+            {investmentFlowErrorMessage &&
+              <Message error textAlign="left" className="mb-40">
+                {investmentFlowErrorMessage}
+              </Message>
+            }
             {!AGREEMENT_DETAILS_FORM.meta.isValid &&
               <Message error textAlign="left" className="mb-40">
                 All boxes must be checked to confirm your investment.
