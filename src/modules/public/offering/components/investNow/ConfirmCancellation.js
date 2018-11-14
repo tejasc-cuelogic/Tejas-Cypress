@@ -8,7 +8,7 @@ import { withRouter } from 'react-router-dom';
 @observer
 export default class ConfirmCancellation extends Component {
   handleBack = () => {
-    this.props.history.push('agreement');
+    this.props.history.push(`${this.props.refLink}/agreement`);
   }
   handleConfirm = () => {
     const { agreementDetails } = this.props.investmentStore;

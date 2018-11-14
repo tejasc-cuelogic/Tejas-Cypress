@@ -13,10 +13,10 @@
         &:hover {
             text-decoration: none;
         }
-        .ui.image {
-            max-height: 200px;
-            height: 200px;
-        }
+        // .ui.image {
+        //     max-height: 200px;
+        //     // height: 200px;
+        // }
         .ui.label{
             border:none;
             text-transform:uppercase;

@@ -21,7 +21,7 @@ const summaryDetails = ({
         title: 'Total Invested', content: totalInvested, type: 1, info: 'Total Invested as of today',
       },
       {
-        title: 'Pending Investment', content: pendingInvestments, type: 0, info: 'Pending Investment',
+        title: 'Pending Investment', content: pendingInvestments, type: 1, info: 'Pending Investment',
       },
       {
         title: 'Paid to Date', content: paidToDate, type: 1, info: 'Paid to Date',
