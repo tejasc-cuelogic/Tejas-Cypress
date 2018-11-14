@@ -564,7 +564,7 @@ export const FINANCES = {
 export const INVESTMENT_EXPERIENCE = {
   experienceLevel: {
     value: '',
-    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I’m an expert', value: 'EXPERT' }],
+    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
     objRef: 'investmentExperienceInfo',

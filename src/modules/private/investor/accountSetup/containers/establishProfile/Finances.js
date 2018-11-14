@@ -61,13 +61,6 @@ export default class Finances extends Component {
             changed={investorProfileChange}
             containerclassname="button-radio center-align mb-50"
           />
-          {/* <MaskedInput
-            name="netWorth"
-            currency
-            fielddata={FINANCES_FORM.fields.netWorth}
-            changed={financesChange}
-            prefix="$ "
-          /> */}
           <Form.Group widths="equal">
             {['netWorth', 'annualIncomeThirdLastYear'].map(field => (
               <MaskedInput
@@ -98,34 +91,6 @@ export default class Finances extends Component {
             ))
             }
           </Form.Group>
-          {/* <FormCheckbox
-            fielddata={FINANCES_FORM.fields.checkbox1}
-            name="checkbox1"
-            changed={this.handleTick}
-            defaults
-          />
-          { FINANCES_FORM.fields.directorShareHolderOfCompany.value ?
-            <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
-              The name of the company is{' '}
-              <span style={{ textDecoration: 'underline' }}>
-              {FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
-            </p>
-            : <p />
-          }
-          <FormCheckbox
-            fielddata={FINANCES_FORM.fields.checkbox2}
-            name="checkbox2"
-            changed={this.handleTick}
-            defaults
-          />
-          { FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value ?
-            <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
-              The name of firm is{' '}
-              <span style={{ textDecoration: 'underline' }}>
-              {FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
-            </p>
-          : <p />
-          } */}
         </Form>
       </div>
     );
