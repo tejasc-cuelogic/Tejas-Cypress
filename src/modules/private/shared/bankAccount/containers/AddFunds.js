@@ -5,6 +5,7 @@ import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../theme/form';
 import AccCreationHelper from '../../../investor/accountSetup/containers/accountCreation/helper';
 import { ListErrors } from '../../../../../theme/shared';
+import { validationActions } from '../../../../../services/actions';
 
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
@@ -38,6 +39,12 @@ export default class AddFunds extends Component {
       this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
+      const currentStep = {
+        name: 'Link bank',
+        stepToBeRendered: 6,
+        validate: validationActions.validateLinkBankForm,
+      };
+      this.props.entityAccountStore.createAccount(currentStep);
       this.props.entityAccountStore.setStepToBeRendered(AccCreationHelper.entitySteps().summary);
     }
     if (this.props.accountStore.investmentAccType === 'ira') {
