@@ -19,7 +19,7 @@ export const INVESTEMENT_LIMIT = {
       required: 'required.',
     },
   },
-  otherInvestments: {
+  cfInvestments: {
     value: '',
     label: 'Other Regulation Crowdfunding investments made in prior 12 months',
     error: undefined,

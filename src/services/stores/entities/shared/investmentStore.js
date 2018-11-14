@@ -1,17 +1,17 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, min, max, floor } from 'lodash';
+import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
 import graphql from 'mobx-apollo';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
-import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore } from '../../index';
+import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
-  generateAgreement, finishInvestment, transferFundsForInvestment, updateInvestmentLimits,
+  generateAgreement, finishInvestment, transferFundsForInvestment,
 } from '../../queries/investNow';
-import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
+// import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
     @observable INVESTMONEY_FORM = Validator.prepareFormObject(INVESTMENT_INFO);
@@ -444,40 +444,12 @@ export class InvestmentStore {
   }
 
   @action
-  updateInvestmentLimits = () => {
-    const { fields } = this.INVESTMENT_LIMITS_FORM;
-    uiStore.setProgress();
-    return new Promise((resolve) => {
-      client
-        .mutate({
-          mutation: updateInvestmentLimits,
-          variables: {
-            userId: userDetailsStore.currentUserId,
-            accountId: this.getSelectedAccountTypeId,
-            annualIncome: fields.annualIncome.value,
-            netWorth: fields.netWorth.value,
-            otherRegCfInvestments: fields.cfInvestments.value,
-          },
-          refetchQueries: [{
-            query: getInvestorInvestmentLimit,
-            variables: {
-              userId: userDetailsStore.currentUserId,
-              accountId: this.getSelectedAccountTypeId,
-            },
-          }],
-        })
-        .then(() => {
-          resolve();
-        })
-        .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
-  }
+  updateInvestmentLimits = () => new Promise((resolve) => {
+    const data = mapValues(this.INVESTMENT_LIMITS_FORM, f => parseInt(f.value, 10));
+    investmentLimitStore
+      .updateInvestmentLimits(data, this.getSelectedAccountTypeId, userDetailsStore.currentUserId)
+      .then(() => resolve());
+  })
 
   @action
   resetData = () => {

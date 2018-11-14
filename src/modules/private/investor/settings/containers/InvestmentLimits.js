@@ -38,7 +38,7 @@ export default class InvestmentLimits extends Component {
         <Route exact path={`${this.props.match.url}/verify-accreditation/income`} component={IncomeAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/assets`} component={AssetsAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
-        <Route exact path={`${this.props.match.url}/update`} component={UpdateInvestmentLimits} />
+        <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
         <Grid columns={1} stackable>
           <FinancialInfo />
         </Grid>

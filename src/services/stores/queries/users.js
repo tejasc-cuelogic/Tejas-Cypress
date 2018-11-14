@@ -73,6 +73,12 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            limits {
+              income
+              netWorth
+              otherContributions
+              limit
+            }
             name
             taxId
             address {

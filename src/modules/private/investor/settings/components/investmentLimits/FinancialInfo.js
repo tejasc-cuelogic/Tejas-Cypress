@@ -12,13 +12,16 @@ import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
+  componentWillMount() {
+    this.props.investmentLimitStore.setAccountsLimits();
+  }
   submit = (e) => {
     e.preventDefault();
     this.props.investmentLimitStore.updateFinInfo();
   }
-  handleUpdateInvestmentLimit =(e, accountType) => {
+  handleUpdateInvestmentLimit =(e, accountType, accountId) => {
     e.preventDefault();
-    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType);
+    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType, accountId);
     this.props.history.push(`${this.props.match.url}/update`);
   }
   handleVerifyAccreditation = (name) => {
@@ -30,10 +33,9 @@ export default class FinancialInfo extends Component {
   }
   render() {
     const {
-      INVESTEMENT_LIMIT_META, getActiveAccountList,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
     } = this.props.investmentLimitStore;
     const { currentUser } = this.props.userDetailsStore;
-    const { fields } = INVESTEMENT_LIMIT_META;
     if (currentUser.loading) {
       return <InlineLoader />;
     }
@@ -86,11 +88,11 @@ export default class FinancialInfo extends Component {
                             />
                           </Statistic.Label>
                           <Statistic.Value>
-                            {Helper.CurrencyFormat(account.name === 'entity' ? fields.currentLimitEntity.value : fields.currentLimitIndividualOrIra.value)}
+                            {Helper.CurrencyFormat(account.name === 'entity' ? entityCurrentLimit : individualIRACurrentLimit)}
                           </Statistic.Value>
                         </Statistic>
                         <Divider clearing hidden />
-                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name)} inverted color="green" content="Update investment limits" />
+                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name, account.details.accountId)} inverted color="green" content="Update investment limits" />
                       </Card.Content>
                     </Grid.Column>
                     <Grid.Column width={8}>
