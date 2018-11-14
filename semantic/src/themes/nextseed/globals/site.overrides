@@ -1739,11 +1739,14 @@ ol.progtrckr{
 	list-style-type:none;
 	text-align:center;
 	li{
-		margin:0 @10px @14px;
 		min-width:60px;
+		max-width:100px;
+		margin:0 @7px @14px;
+		padding-bottom:@14px;
 		display:inline-block;
-		font-size:@13px;
-		line-height:2rem;
+		font-size:@12px;
+		font-weight:@fontMedium;
+		line-height:@16px;
 		text-align:center;
 		cursor:pointer;
 		position:relative;
@@ -1756,6 +1759,7 @@ ol.progtrckr{
 			background:@neutral-offdark;
 			position:absolute;
 			left:50%;
+			bottom:0;
 			transform:translate(-50%, 0%);
 		}
 		&.progtrckr-todo{
@@ -1786,7 +1790,6 @@ ol.progtrckr{
 		}
 	}
 }
-
 .update-details{
 	.ui.embed{
 		margin-bottom:@28px;
