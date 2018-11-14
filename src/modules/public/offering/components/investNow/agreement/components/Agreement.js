@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Modal, Header, Button, Grid, Form, Divider, Message, Confirm } from 'semantic-ui-react';
+import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -74,17 +74,18 @@ export default class Agreement extends React.Component {
     const { campaign } = this.props.campaignStore;
     return (
       <Aux>
-        <Confirm
-          className="center-align"
-          header="Confirm cancellation"
-          open={this.state.open}
-          content="By canceling this reservation, you will not be invested in this offering."
-          cancelButton="Back"
-          confirmButton="Confirm"
-          onCancel={this.handleCancel}
-          onConfirm={this.handleConfirm}
-          size="mini"
-        />
+        <Modal open={this.state.open} closeOnDimmerClick={false} size="mini">
+          <Modal.Content className="center-align">
+            <Header as="h3">Confirm cancellation</Header>
+            <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
+            <div className="center-align">
+              <Button.Group>
+                <Button primary content="Back" onClick={this.handleCancel} />
+                <Button color="gray" content="Confirm" onClick={this.handleConfirm} />
+              </Button.Group>
+            </div>
+          </Modal.Content>
+        </Modal>
         <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
           <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
             <div className="pdf-viewer">
