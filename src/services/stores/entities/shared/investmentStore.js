@@ -52,7 +52,6 @@ export class InvestmentStore {
   setFieldValue = (field, value) => {
     this[field] = value;
   }
-
   @action
   resetAggrementForm = () => {
     this.AGREEMENT_DETAILS_FORM = Validator.prepareFormObject(AGREEMENT_DETAILS_INFO);
