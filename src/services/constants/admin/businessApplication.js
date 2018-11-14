@@ -466,6 +466,7 @@ export const OFFERS = {
       label: 'Structure',
       error: undefined,
       rule: 'optional',
+      default: 'TERM_NOTE',
     },
     amount: {
       value: '',

@@ -31,12 +31,10 @@ export default class InsightsDetails extends Component {
             <Grid.Column computer={12} tablet={16} mobile={16}>
               <Header as="h2">{ArticlesDetails.title}</Header>
               <Image64
-                centered
                 srcUrl={ArticlesDetails.featuredImage}
                 className="mb-30 mt-30"
               />
-              <br />
-              <div dangerouslySetInnerHTML={{ __html: ArticlesDetails.content }} />
+              <pre className="migrated-content" dangerouslySetInnerHTML={{ __html: ArticlesDetails.content }} />
             </Grid.Column>
           </Grid>
         </section>
