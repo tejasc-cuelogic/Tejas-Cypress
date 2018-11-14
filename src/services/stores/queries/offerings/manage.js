@@ -608,6 +608,21 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            promissoryNote {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             edgar
             submitted {
               id
