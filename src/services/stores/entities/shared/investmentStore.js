@@ -256,32 +256,34 @@ export class InvestmentStore {
 
     @action
     validateInvestmentAmountInOffering = () => {
-      this.details = graphql({
-        client,
-        query: validateInvestmentAmountInOffering,
-        variables: {
-          investmentAmount: this.investmentAmount,
-          offeringId: campaignStore.getOfferingId,
-          userId: userDetailsStore.currentUserId,
-          accountId: this.getSelectedAccountTypeId,
-        },
-        onFetch: (res) => {
-          this.setFieldValue('isValidInvestAmtInOffering', res.validateInvestmentAmountInOffering);
-          this.setFieldValue('disableNextbtn', res.validateInvestmentAmountInOffering);
-          const errMsg = 'This amount exceeds your current investment limit. Update your income and net worth, or lower your investment amount.';
-          if (!res.validateInvestmentAmountInOffering) {
-            this.INVESTMONEY_FORM.fields.investmentAmount.error = errMsg;
-            this.INVESTMONEY_FORM.meta.isValid = false;
-          } else {
-            this.INVESTMONEY_FORM.fields.investmentAmount.error = undefined;
-            this.INVESTMONEY_FORM.meta.isValid = true;
-          }
-        },
-        onError: () => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-        fetchPolicy: 'network-only',
-      });
+      if (this.investmentAmount) {
+        this.details = graphql({
+          client,
+          query: validateInvestmentAmountInOffering,
+          variables: {
+            investmentAmount: this.investmentAmount,
+            offeringId: campaignStore.getOfferingId,
+            userId: userDetailsStore.currentUserId,
+            accountId: this.getSelectedAccountTypeId,
+          },
+          onFetch: (res) => {
+            this.setFieldValue('isValidInvestAmtInOffering', res.validateInvestmentAmountInOffering);
+            this.setFieldValue('disableNextbtn', res.validateInvestmentAmountInOffering);
+            const errMsg = 'This amount exceeds your current investment limit. Update your income and net worth, or lower your investment amount.';
+            if (!res.validateInvestmentAmountInOffering) {
+              this.INVESTMONEY_FORM.fields.investmentAmount.error = errMsg;
+              this.INVESTMONEY_FORM.meta.isValid = false;
+            } else {
+              this.INVESTMONEY_FORM.fields.investmentAmount.error = undefined;
+              this.INVESTMONEY_FORM.meta.isValid = true;
+            }
+          },
+          onError: () => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          },
+          fetchPolicy: 'network-only',
+        });
+      }
     }
 
     @action

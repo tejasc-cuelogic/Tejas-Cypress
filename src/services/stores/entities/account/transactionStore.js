@@ -2,7 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
-// import { GqlClient as client } from '../../../../api/gcoolApi';
+import { GqlClient as clientStub } from '../../../../api/gcoolApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { allTransactions, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
@@ -44,7 +44,7 @@ export class TransactionStore {
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
     this.data = graphql({
-      client,
+      client: clientStub,
       query: allTransactions,
       variables: { filters: params, first: first || this.requestState.perPage, skip },
     });
