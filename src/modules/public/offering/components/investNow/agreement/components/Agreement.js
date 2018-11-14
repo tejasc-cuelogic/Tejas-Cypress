@@ -78,7 +78,7 @@ export default class Agreement extends React.Component {
           <Modal.Content className="center-align">
             <Header as="h3">Confirm cancellation</Header>
             {this.props.changeInvestment ?
-              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of $ ${Helper.CurrencyFormat(investmentAmount)} in this offering will remain in place.`}</p>
+              <p className="mt-30 mb-30">{`By canceling this request, your prior investment of ${Helper.CurrencyFormat(investmentAmount)} in this offering will remain in place.`}</p>
               :
               <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
             }
