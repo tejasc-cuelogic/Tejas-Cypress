@@ -90,7 +90,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Bank Account</Table.Cell>
-                  <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
+                  <Table.Cell>{bankAccountNumber ? Helper.encryptNumberWithX(bankAccountNumber) : ''}</Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>
