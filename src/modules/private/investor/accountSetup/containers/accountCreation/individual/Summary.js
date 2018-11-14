@@ -58,7 +58,7 @@ export default class Summary extends React.Component {
                   }
                   <Table.Row>
                     <Table.Cell>Bank Account Number: </Table.Cell>
-                    <Table.Cell>{bankAccountNumber ? Helper.encryptNumber(bankAccountNumber) : ''}</Table.Cell>
+                    <Table.Cell>{bankAccountNumber ? Helper.encryptNumberWithX(bankAccountNumber) : ''}</Table.Cell>
                   </Table.Row>
                   {formLinkBankManually.fields.routingNumber.value &&
                   <Table.Row>

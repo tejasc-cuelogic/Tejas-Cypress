@@ -102,10 +102,11 @@ export default class ConfirmPhoneNumber extends Component {
             phoneNumberDisplayMode
           />
           {editMode ?
-            <Link to={this.props.match.url} onClick={this.startPhoneVerification}>
+            <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>
               Confirm Phone number
             </Link> :
             <Link
+              className="grey-link green-hover"
               to={this.props.refLink ? this.props.refLink : this.props.match.url}
               onClick={this.handleChangePhoneNumber}
             >
@@ -139,7 +140,7 @@ export default class ConfirmPhoneNumber extends Component {
           </Form>
         </Modal.Content>
         <Modal.Actions className="signup-actions">
-          <Button type="button" className="link-button" content="Resend the code to my phone" loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
+          <Button type="button" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
         </Modal.Actions>
       </Modal>
     );

@@ -13,7 +13,7 @@ import { updateInvestorProfileData } from '../../queries/account';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { uiStore } from '../../index';
+import { uiStore, userStore, userDetailsStore } from '../../index';
 
 class InvestorProfileStore {
   @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT, true);
@@ -26,6 +26,7 @@ class InvestorProfileStore {
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
   @observable chkboxTicked = null;
   @observable stepToBeRendered = 0;
+  @observable isInvestmentExperienceValid = true;
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -70,6 +71,7 @@ class InvestorProfileStore {
   @action
   experiencesChange = (e, result) => {
     this.formChange(e, result, 'INVESTMENT_EXP_FORM');
+    this.validateInvestmentExperience();
   }
 
   @computed
@@ -161,6 +163,7 @@ class InvestorProfileStore {
           netWorth: this.FINANCES_FORM.fields.netWorth.value,
         };
       } else if (currentStep.form === 'INVESTMENT_EXP_FORM') {
+        this.validateInvestmentExperience();
         const { fields } = this.INVESTMENT_EXP_FORM;
         formPayload = {
           experienceLevel: fields.experienceLevel.value,
@@ -169,7 +172,11 @@ class InvestorProfileStore {
         };
       }
       formPayload.isPartialProfile = !this.isValidInvestorProfileForm;
-      this.submitForm(currentStep, formPayload);
+      if (currentStep.form === 'INVESTMENT_EXP_FORM' && this.isInvestmentExperienceValid) {
+        this.submitForm(currentStep, formPayload);
+      } else if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
+        this.submitForm(currentStep, formPayload);
+      }
     }
   }
 
@@ -186,6 +193,9 @@ class InvestorProfileStore {
           Helper.toast('Investor profile updated successfully.', 'success');
           FormValidator.setIsDirty(this[currentStep.form], false);
           this.setStepToBeRendered(currentStep.stepToBeRendered);
+          if (this.isValidInvestorProfileForm) {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -320,6 +330,19 @@ class InvestorProfileStore {
     this.resetFormData('INVESTMENT_EXP_FORM');
     this.resetFormData('INVESTOR_PROFILE_FORM');
     this.stepToBeRendered = 0;
+  }
+
+  @action
+  validateInvestmentExperience = () => {
+    const { isComfortable, isRiskTaker, experienceLevel } = this.INVESTMENT_EXP_FORM.fields;
+    if ((Array.isArray(toJS(isComfortable.value)) && isComfortable.value.length === 0) ||
+    (Array.isArray(toJS(isRiskTaker.value)) && isRiskTaker.value.length === 0) ||
+    (experienceLevel.value === 'NONE' || experienceLevel.value === 'SOME')
+    ) {
+      this.isInvestmentExperienceValid = false;
+    } else {
+      this.isInvestmentExperienceValid = true;
+    }
   }
 }
 

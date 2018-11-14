@@ -168,9 +168,12 @@ export const IND_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'required|numeric|min:100',
     label: 'Deposit Amount',
     maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least 100.',
+    },
   },
 };
 
@@ -355,7 +358,7 @@ export const ENTITY_GEN_INFO = {
 export const ENTITY_TYPES = [
   { key: 'LLC', value: 'LLC', text: 'LLC' },
   { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
-  { key: 'S-Corporation', value: 'S_CORPORATION', text: 'S-Corporation' },
+  { key: 'S-Corporation', value: 'SCORP', text: 'S-Corporation' },
   { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
   { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
   { key: 'Estate', value: 'ESTATE', text: 'Estate' },
@@ -564,7 +567,7 @@ export const FINANCES = {
 export const INVESTMENT_EXPERIENCE = {
   experienceLevel: {
     value: '',
-    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I’m an expert', value: 'EXPERT' }],
+    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
     objRef: 'investmentExperienceInfo',
