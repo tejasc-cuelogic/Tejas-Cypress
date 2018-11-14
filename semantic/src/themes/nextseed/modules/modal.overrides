@@ -359,6 +359,9 @@
                 &:hover{
                     text-decoration:underline
                 }
+                &.grey {
+                    color:@neutral-offdark;
+                }
             }
         }
     }
