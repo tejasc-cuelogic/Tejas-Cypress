@@ -966,6 +966,23 @@ address p{
 		}
 	}
 }
+pre.migrated-content{
+	margin:0;
+	font-family:@pageFont;
+	line-height:24px;
+	white-space:pre-wrap;
+	strong{
+		color:@neutral;
+	}
+	ul{
+		padding-left:@25px !important;
+		margin:0;
+		white-space:normal;
+		>li{
+			padding:@3px 0;
+		}
+	}
+}
 //Insight
 .insight-post{
 	min-height:~"calc(100vh - 98px)";
@@ -997,6 +1014,7 @@ a.icon-link:hover {
 	width: 100%; 
 	height: 100%; 
 	z-index: 9999;
+	pointer-events:none;
 }
 // Vertical Timeline
 .updates-modal {
