@@ -48,6 +48,12 @@ export default class AddFunds extends Component {
       this.props.entityAccountStore.setStepToBeRendered(AccCreationHelper.entitySteps().summary);
     }
     if (this.props.accountStore.investmentAccType === 'ira') {
+      const currentStep = {
+        name: 'Link bank',
+        validate: validationActions.validateLinkBankForm,
+        stepToBeRendered: 4,
+      };
+      this.props.iraAccountStore.createAccount(currentStep);
       this.props.iraAccountStore.setStepToBeRendered(AccCreationHelper.iraSteps().summary);
     }
   }
