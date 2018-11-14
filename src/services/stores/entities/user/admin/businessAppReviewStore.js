@@ -159,15 +159,16 @@ export class BusinessAppReviewStore {
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
             this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           }).catch((error) => {
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
           });
         }).catch((error) => {
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-        }).finally(() => {
-          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
         });
       });
     }
