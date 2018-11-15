@@ -1,6 +1,7 @@
 import React from 'react';
 import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import { MultiStep } from './../../../../../../helper';
 import NetWorth from './assets/NetWorth';
 import IncomeEvidence from './shared/IncomeEvidence';
@@ -9,6 +10,7 @@ import AccreditationMethod from './shared/AccreditationMethod';
 // import Helper from '../../../../../../helper/utility';
 
 @inject('uiStore', 'accreditationStore')
+@withRouter
 @observer
 export default class Accreditation extends React.Component {
   state = { submitLoading: false };
@@ -27,14 +29,16 @@ export default class Accreditation extends React.Component {
   }
   multiClickHandler = (step) => {
     const { params } = this.props.match;
-    this.props.accreditationStore
-      .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
-      .then(() => {
-        this.handleStepChange(step.stepToBeRendered);
-        this.setState({ submitLoading: false });
-      }).catch(() => {
-        this.setState({ submitLoading: false });
-      });
+    if (step.formName !== 'VERIFICATION_REQUEST_FORM' || step.formName !== 'INCOME_UPLOAD_DOC_FORM' || step.formName !== 'ASSETS_UPLOAD_DOC_FORM') {
+      this.props.accreditationStore
+        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
+        .then(() => {
+          this.handleStepChange(step.stepToBeRendered);
+          this.setState({ submitLoading: false });
+        }).catch(() => {
+          this.setState({ submitLoading: false });
+        });
+    }
   }
   render() {
     const {
@@ -76,7 +80,7 @@ export default class Accreditation extends React.Component {
           component: <Verification params={this.props.match.params} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
-          stepToBeRendered: 4,
+          isDirty: true,
         },
       ]
       :
@@ -95,7 +99,6 @@ export default class Accreditation extends React.Component {
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           formName: 'INCOME_EVIDENCE_FORM',
-          isDirty: true,
           stepToBeRendered: 2,
         },
         {
@@ -103,7 +106,7 @@ export default class Accreditation extends React.Component {
           component: <Verification params={this.props.match.params} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
-          stepToBeRendered: 3,
+          isDirty: true,
         },
       ];
     const {

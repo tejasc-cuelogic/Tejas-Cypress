@@ -58,16 +58,6 @@ export class AccreditationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files) => {
-    const file = files[0];
-    const fileData = Helper.getFormattedFileData(file);
-    this[form] = Validator.onChange(
-      this[form],
-      { name: field, value: fileData.fileName },
-    );
-  }
-
-  @action
   checkFormValid = (form, multiForm, showErrors) => {
     this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
   }
