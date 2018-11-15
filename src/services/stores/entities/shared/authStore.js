@@ -118,6 +118,9 @@ export class AuthStore {
     } else {
       this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
     }
+    if (e.score !== undefined) {
+      this.currentScore = e.score;
+    }
   };
 
   @action
@@ -132,6 +135,9 @@ export class AuthStore {
         Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
     } else {
       this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, typeof e === 'string' ? { name: 'code', value: e } : Validator.pullValues(e, res));
+    }
+    if (e.score !== undefined) {
+      this.currentScore = e.score;
     }
   };
 

@@ -106,7 +106,7 @@ export default class ConfirmPhoneNumber extends Component {
               Confirm Phone number
             </Link> :
             <Link
-              to={this.props.refLink ? this.props.refLink : this.props.match.url}
+              to="/app/profile-settings/profile-data/new-phone-number"
               onClick={this.handleChangePhoneNumber}
             >
               Change phone number
