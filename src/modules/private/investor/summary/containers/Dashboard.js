@@ -8,6 +8,8 @@ import PrivateLayout from '../../../shared/PrivateLayout';
 import CashMovement from '../components/CashMovement';
 import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
 import AccountCreation from './../../accountSetup/containers/accountCreation';
+import IdentityVerification from './../../accountSetup/containers/identityVerification';
+import EstablishProfile from './../../accountSetup/containers/establishProfile';
 
 const summaryDetails = ({
   totalInvested, pendingInvestments, paidToDate, tnar,
@@ -47,6 +49,8 @@ export default class Dashboard extends Component {
     return (
       <Aux>
         <Route path="/app/summary/account-creation" component={AccountCreation} />
+        <Route exact path="/app/summary/identity-verification/:step" component={IdentityVerification} />
+        <Route path="/app/summary/establish-profile" component={EstablishProfile} />
         <PrivateLayout
           {...this.props}
         >

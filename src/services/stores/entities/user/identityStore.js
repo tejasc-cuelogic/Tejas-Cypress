@@ -669,7 +669,11 @@ export class IdentityStore {
       }
       if (legalDetails && legalDetails.legalAddress) {
         fields.city.value = legalDetails.legalAddress.city;
-        fields.state.value = legalDetails.legalAddress.state;
+        const selectedState =
+        find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
+        if (selectedState) {
+          fields.state.value = selectedState.value;
+        }
         fields.residentalStreet.value = legalDetails.legalAddress.street;
         fields.zipCode.value = legalDetails.legalAddress.zipCode;
       }
