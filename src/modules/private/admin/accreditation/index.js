@@ -8,6 +8,9 @@ import Filters from './components/Filters';
 @inject('accreditationStore')
 @observer
 export default class CrowdPay extends Component {
+  componentWillMount() {
+    this.props.accreditationStore.initRequest();
+  }
   setSearchParam = (e, { name, value }) =>
     this.props.accreditationStore.setInitiateSrch(name, value);
   toggleSearch = () => this.props.accreditationStore.toggleSearch();
@@ -29,10 +32,9 @@ export default class CrowdPay extends Component {
   }
   render() {
     // match
-    const { accreditationStore } = this.props;
     const {
       requestState, filters, FILTER_FRM,
-    } = accreditationStore;
+    } = this.props.accreditationStore;
     return (
       <PrivateLayout
         {...this.props}

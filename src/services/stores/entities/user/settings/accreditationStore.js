@@ -1,4 +1,4 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS } from '../../../../constants/investmentLimit';
 import { FormValidator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
@@ -18,11 +18,32 @@ export class AccreditationStore {
   @observable stepToBeRendered = '';
   @observable filters = false;
   @observable requestState = {
-    search: {},
+    filters: false,
+    search: {
+
+    },
   };
   @observable data = [];
   @action
-  initRequest = () => {
+  initRequest = (reqParams) => {
+    const {
+      keyword, method, type, startDate, endDate,
+    } = this.requestState.search;
+    const filters = toJS({ ...this.requestState.search });
+    delete filters.keyword;
+    let params = {
+      search: keyword,
+      method,
+      type,
+      page: reqParams ? reqParams.page : 1,
+    };
+    this.requestState.page = params.page;
+    if (startDate && endDate) {
+      params = {
+        ...params,
+        ...{ accountCreateFromDate: startDate, accountCreateToDate: endDate },
+      };
+    }
     this.data = [
       {
         id: 1,
@@ -110,7 +131,7 @@ export class AccreditationStore {
   @action
   setInitiateSrch = (name, value) => {
     this.requestState.search[name] = value;
-    // this.initRequest({ ...this.requestState.search });
+    this.initRequest({ ...this.requestState.search });
   }
   @action
   toggleSearch = () => {
