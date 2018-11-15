@@ -21,13 +21,13 @@ export default class VerificationForm extends Component {
         <Form error>
           <div className="field-wrap">
             <FormInput
-              name="verifierRole"
-              fielddata={VERIFICATION_REQUEST_FORM.fields.verifierRole}
+              name="role"
+              fielddata={VERIFICATION_REQUEST_FORM.fields.role}
               changed={verificationFormChange}
             />
             <FormInput
-              name="verifierEmail"
-              fielddata={VERIFICATION_REQUEST_FORM.fields.verifierEmail}
+              name="email"
+              fielddata={VERIFICATION_REQUEST_FORM.fields.email}
               changed={verificationFormChange}
             />
           </div>

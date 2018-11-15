@@ -46,12 +46,12 @@ export const INVESTEMENT_LIMIT = {
 export const ACCREDITATION_METHODS_META = [
   {
     header: 'Income',
-    value: 'income',
+    value: 'INCOME',
     desc: 'Income of $200k, or $300k with spouse, in each of past 2 years and expecting same or more this year',
   },
   {
     header: 'Assets',
-    value: 'assets',
+    value: 'ASSETS',
     desc: 'Net worth of $1M individually or joint with spouse, excluding your primary residence',
   },
 ];
@@ -91,16 +91,16 @@ export const ENTITY_ACCREDITATION_METHODS = {
 
 export const ACCREDITATION_METHODS = {
   accreditationMethods: {
-    value: 'income',
+    value: 'INCOME',
     values:
       [
         {
           label: 'have an income of $200,000 or more (or $300,000 or more with my spouse) in each of the past 2 years and am expecting the same or more this year.',
-          value: 'income',
+          value: 'INCOME',
         },
         {
           label: 'I have a net worth of $1M or more (individually or with my spouse), exclusing my primary residence.',
-          value: 'assets',
+          value: 'ASSETS',
         },
       ],
     error: undefined,
@@ -142,20 +142,22 @@ export const INCOME_EVIDENCE = {
 };
 
 export const VERIFICATION_REQUEST = {
-  verifierRole: {
+  role: {
     value: '',
     error: undefined,
     rule: 'required',
     placeHolder: 'Choose verifier role',
     label: 'Verifier role',
     tooltip: 'Lawyer, CPA, investment advisor or investment broker',
+    objRefOutput: 'verifier',
   },
-  verifierEmail: {
+  email: {
     value: '',
     error: undefined,
     placeHolder: 'johndoe@contact.com',
     rule: 'required|email',
     label: 'Verifier e-mail address',
+    objRefOutput: 'verifier',
   },
 };
 
@@ -171,7 +173,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     fileData: '',
     customErrors: { required: 'required' },
     // objRef: 'portalAgreementUpload',
-    // objRefOutput: 'portalAgreementUpload',
+    objRefOutput: 'assetsUpload',
     objType: 'FileObjectType',
   },
   incomeDocLastYear: {
@@ -184,7 +186,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     fileId: '',
     fileData: '',
     customErrors: { required: 'required' },
-    // objRef: 'portalAgreementUpload',
+    objRefOutput: 'assetsUpload',
     // objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
   },
@@ -201,7 +203,7 @@ export const ASSETS_UPLOAD_DOCUMENTS = {
     fileId: [],
     fileData: [],
     customErrors: { required: 'required' },
-    // objRef: 'portalAgreementUpload',
+    objRefOutput: 'assetsUpload',
     // objRefOutput: 'portalAgreementUpload',
     objType: 'FileObjectType',
   },
@@ -209,20 +211,20 @@ export const ASSETS_UPLOAD_DOCUMENTS = {
 
 export const NET_WORTH = {
   netWorth: {
-    value: '$1,000,000',
+    value: 'ONE_MILLION',
     values:
       [
         {
           label: '$5,000,000',
-          value: '$5,000,000',
+          value: 'FIVE_MILLION',
         },
         {
-          label: '$2,100,000',
-          value: '$2,100,000',
+          label: '$2,000,000',
+          value: 'TWO_MILLION',
         },
         {
           label: '$1,000,000',
-          value: '$1,000,000',
+          value: 'ONE_MILLION',
         },
       ],
     error: undefined,
