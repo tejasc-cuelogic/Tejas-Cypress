@@ -1196,25 +1196,26 @@ a.icon-link:hover {
 .business-application .content-spacer{
 	padding:@50px 0px;
 }
-// .sticy-sidebar{
-// 	position:sticky;
-// 	top:0;
-// }
-// .sticky-actions{
-// 	position:sticky;
-// 	padding:@10px 0 0;
-// 	bottom:0;
-// 	background-color:@white;
-// 	&:after{
-// 		content:"";
-// 		height:14px;
-// 		width:100%;
-// 		background-color:@white;
-// 		display:block;
-// 		position:absolute;
-// 		bottom:-14px;
-// 	}
-// }
+.sticy-sidebar{
+	position:sticky;
+	top:0;
+}
+.sticky-actions{
+	position:sticky;
+	padding:@14px 0 0;
+	border-top:@neutral-offdark 1px solid;
+	bottom:0;
+	background-color:@white;
+	&:after{
+		content:"";
+		height:14px;
+		width:100%;
+		background-color:@white;
+		display:block;
+		position:absolute;
+		bottom:-14px;
+	}
+}
 .inner-content-spacer{
 	padding:@20px !important;
 	+ .inner-content-spacer{
