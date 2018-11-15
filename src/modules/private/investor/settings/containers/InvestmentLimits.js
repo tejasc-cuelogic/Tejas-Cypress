@@ -30,10 +30,11 @@ export default class InvestmentLimits extends Component {
   render() {
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/verify-accreditation`} render={() => <VerifyAccreditation refLink={this.props.match.url} />} />
+        <Route exact path={`${this.props.match.url}/verify-accreditation/:accountId/:accountType`} render={() => <VerifyAccreditation refLink={this.props.match.url} />} />
         <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} render={() => <VerifyEntityAccreditation refLink={this.props.match.url} />} />
         <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation`} render={() => <VerifyTrustEntityAccreditation refLink={this.props.match.url} />} />
         <Route exact path={`${this.props.match.url}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} component={VerifyEntityAccreditation} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
         <Grid columns={1} stackable>
           <FinancialInfo />

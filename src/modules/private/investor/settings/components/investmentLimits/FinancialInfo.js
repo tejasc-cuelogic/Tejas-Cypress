@@ -24,12 +24,12 @@ export default class FinancialInfo extends Component {
     this.props.investmentLimitStore.setInvestmentLimitInfo(accountType, accountId);
     this.props.history.push(`${this.props.match.url}/update`);
   }
-  handleVerifyAccreditation = (name) => {
-    if (name === 'entity') {
+  handleVerifyAccreditation = (e, accountType, accountId) => {
+    if (accountType === 'entity') {
       // this.props.history.push(`${this.props.match.url}/verify-entity-accreditation`);
       this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation`);
     } else {
-      this.props.history.push(`${this.props.match.url}/verify-accreditation`);
+      this.props.history.push(`${this.props.match.url}/verify-accreditation/${accountId}/${accountType}`);
     }
   }
   render() {
@@ -102,7 +102,7 @@ export default class FinancialInfo extends Component {
                         <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
                         <Divider hidden />
                         <Card.Description>
-                          <Button onClick={() => this.handleVerifyAccreditation(account.name)} primary content="Verify accreditation" />
+                          <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify accreditation" />
                         </Card.Description>
                       </Card.Content>
                     </Grid.Column>
