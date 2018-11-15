@@ -6,7 +6,7 @@ import FinancialInfo from '../components/investmentLimits/FinancialInfo';
 import VerifyAccreditation from './accreditation/VerifyAccreditation';
 import VerifyEntityAccreditation from './accreditation/verifyEntityAccreditation';
 import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestmentLimits';
-import IncomeAccreditation from './accreditation/income/Accreditation';
+// import IncomeAccreditation from './accreditation/income/Accreditation';
 import ThanksNote from '../components/investmentLimits/accreditation/ThanksNote';
 
 @inject('investmentLimitStore', 'accreditationStore')
@@ -32,7 +32,8 @@ export default class InvestmentLimits extends Component {
       <div>
         <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} component={VerifyEntityAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/income`} component={IncomeAccreditation} />
+        {/* <Route exact path={`${this.props.match.url}/verify-entity-accreditation/income`}
+      component={IncomeAccreditation} /> */}
         <Route exact path={`${this.props.match.url}/verify-entity-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
