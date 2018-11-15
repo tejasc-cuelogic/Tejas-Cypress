@@ -7,14 +7,23 @@ import IncomeUploadDocument from '../income/UploadDocument';
 @inject('accreditationStore')
 @observer
 export default class Verification extends Component {
+  submit = (form) => {
+    const { params } = this.props;
+    this.props.accreditationStore
+      .updateAccreditation(form, params.accountId, params.accountType.toUpperCase())
+      .then(() => {
+        this.props.history.push(`${this.props.match.url}/success`);
+      }).catch(() => {
+      });
+  }
   render() {
     const { ACCREDITATION_FORM, INCOME_EVIDENCE_FORM } = this.props.accreditationStore;
     return (
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ?
-        <VerificationForm refLink={this.props.refLink} /> :
-        ACCREDITATION_FORM.fields.accreditationMethods.value === 'income' ?
-          <IncomeUploadDocument refLink={this.props.refLink} /> :
-          <AssetsUploadDocument refLink={this.props.refLink} />
+        <VerificationForm clicked={this.submit} /> :
+        ACCREDITATION_FORM.fields.method.value === 'income' ?
+          <IncomeUploadDocument clicked={this.submit} /> :
+          <AssetsUploadDocument clicked={this.submit} />
     );
   }
 }

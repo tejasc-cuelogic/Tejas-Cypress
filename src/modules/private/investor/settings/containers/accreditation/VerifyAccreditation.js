@@ -15,7 +15,8 @@ import AccreditationMethod from './shared/AccreditationMethod';
 export default class Accreditation extends React.Component {
   state = { submitLoading: false };
   componentWillMount() {
-    this.props.accreditationStore.setAccreditationMethod('assets');
+    this.props.accreditationStore.setStepToBeRendered(0);
+    this.props.accreditationStore.setAccreditationMethod('ASSETS');
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');
@@ -28,16 +29,14 @@ export default class Accreditation extends React.Component {
   }
   multiClickHandler = (step) => {
     const { params } = this.props.match;
-    if (step.formName !== 'INCOME_EVIDENCE_FORM') {
-      this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
-        .then(() => {
-          this.handleStepChange(step.stepToBeRendered);
-          this.setState({ submitLoading: false });
-        }).catch(() => {
-          this.setState({ submitLoading: false });
-        });
-    }
+    this.props.accreditationStore
+      .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
+      .then(() => {
+        this.handleStepChange(step.stepToBeRendered);
+        this.setState({ submitLoading: false });
+      }).catch(() => {
+        this.setState({ submitLoading: false });
+      });
   }
   render() {
     const {
@@ -48,7 +47,7 @@ export default class Accreditation extends React.Component {
       ACCREDITATION_FORM,
       INCOME_UPLOAD_DOC_FORM,
     } = this.props.accreditationStore;
-    const steps = ACCREDITATION_FORM.fields.accreditationMethods.value === 'ASSETS' ?
+    const steps = ACCREDITATION_FORM.fields.method.value === 'ASSETS' ?
       [
         {
           name: '',
@@ -72,15 +71,13 @@ export default class Accreditation extends React.Component {
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           formName: 'INCOME_EVIDENCE_FORM',
-          isDirty: true,
           stepToBeRendered: 3,
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} />,
+          component: <Verification params={this.props.match.params} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
-          isDirty: true,
           stepToBeRendered: 4,
         },
       ]
@@ -105,10 +102,9 @@ export default class Accreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} />,
+          component: <Verification params={this.props.match.params} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
-          isDirty: true,
           stepToBeRendered: 3,
         },
       ];
@@ -132,6 +128,7 @@ export default class Accreditation extends React.Component {
             inProgress={inProgress}
             handleMultiStepModalclose={this.handleMultiStepModalclose}
             setStepTobeRendered={this.handleStepChange}
+            stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
           /> :
           <Dimmer active>
             <Loader>

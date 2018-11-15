@@ -20,9 +20,6 @@ export default class UploadDocument extends Component {
   handleDelDoc = (field, index) => {
     this.props.accreditationStore.removeUploadedData('ASSETS_UPLOAD_DOC_FORM', field, index);
   }
-  showThanksNote = () => {
-    this.props.history.push(`${this.props.refLink}/success`);
-  }
 
   render() {
     const { ASSETS_UPLOAD_DOC_FORM } = this.props.accreditationStore;
@@ -42,7 +39,7 @@ export default class UploadDocument extends Component {
           />
           <Divider hidden />
           <div className="center-align">
-            <Button onClick={this.showThanksNote} primary size="large" disabled={!ASSETS_UPLOAD_DOC_FORM.meta.isValid}>Confirm</Button>
+            <Button onClick={() => this.props.clicked('ASSETS_UPLOAD_DOC_FORM')} primary size="large" disabled={!ASSETS_UPLOAD_DOC_FORM.meta.isValid}>Confirm</Button>
           </div>
         </Form>
       </div>

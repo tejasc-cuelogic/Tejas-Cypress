@@ -9,10 +9,6 @@ import { VARIFY_ROLES } from '../../../../../../../constants/account';
 @withRouter
 @observer
 export default class VerificationForm extends Component {
-  showThanksNote = () => {
-    this.props.history.push(`${this.props.refLink}/success`);
-  }
-
   render() {
     const { VERIFICATION_REQUEST_FORM, verificationFormChange } = this.props.accreditationStore;
     return (
@@ -37,7 +33,7 @@ export default class VerificationForm extends Component {
             />
           </div>
           <div className="center-align">
-            <Button onClick={this.showThanksNote} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Confirm</Button>
+            <Button onClick={() => this.props.clicked('VERIFICATION_REQUEST_FORM')} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Confirm</Button>
           </div>
         </Form>
       </div>
