@@ -81,7 +81,7 @@ export class AccreditationStore {
         const fileData = Helper.getFormattedFileData(file);
         const stepName = this.getFileUploadEnum(field);
         this.setFormFileArray(form, field, 'showLoader', true);
-        fileUpload.setFileUploadData('', fileData, stepName, 'ISSUER').then((result) => {
+        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR').then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
             this.setFormFileArray(form, field, 'fileData', file);
@@ -158,15 +158,15 @@ export class AccreditationStore {
   }
 
   @action
-  updateInvestmentLimits = (accountId, accountType) => {
+  updateAccreditation = (form, accountId, accountType) => {
     uiStore.setProgress();
-    const userAccreditationDetails = '';
+    const userAccreditationDetails = Validator.evaluateFormData(this[form].fields);
     return new Promise((resolve) => {
       client
         .mutate({
           mutation: updateAccreditation,
           variables: {
-            userId: userDetailsStore.currentUserId,
+            id: userDetailsStore.currentUserId,
             accountId,
             accountType,
             userAccreditationDetails,

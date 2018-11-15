@@ -30,7 +30,7 @@ export default class InvestmentLimits extends Component {
     const { accreditationMethods } = this.props.accreditationStore.ACCREDITATION_FORM.fields;
     return (
       <div>
-        <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-accreditation/:accountId/:accountType`} component={VerifyAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} component={VerifyEntityAccreditation} />
         {/* <Route exact path={`${this.props.match.url}/verify-entity-accreditation/income`}
       component={IncomeAccreditation} /> */}
