@@ -121,6 +121,39 @@ export const INCOME_EVIDENCE_META = [
   },
 ];
 
+export const VERIFY_ACC_WITH_META = [
+  {
+    header: 'Trusts Assets',
+    value: 'trustsAssets',
+    desc: 'My trust is irrevocable and has more than $5,000,000 in assets.',
+  },
+  {
+    header: 'My trust is revocable and I am accredited',
+    value: 'RevocableAndAccredited',
+    desc: 'Grantor must provide evidence of revocability and accreditation.',
+  },
+];
+
+
+export const TRUST_ENTITY_ACCREDITATION = {
+  trustEntityAccMethods: {
+    value: 'trustsAssets',
+    values:
+      [
+        {
+          label: 'Trusts Assets',
+          value: 'trustsAssets',
+        },
+        {
+          label: 'My trust is revocable and I am accredited',
+          value: 'RevocableAndAccredited',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
 export const INCOME_EVIDENCE = {
   incEvidenceMethods: {
     value: 'verificationrequest',

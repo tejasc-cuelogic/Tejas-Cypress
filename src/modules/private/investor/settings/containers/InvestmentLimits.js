@@ -8,6 +8,7 @@ import VerifyEntityAccreditation from './accreditation/verifyEntityAccreditation
 import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestmentLimits';
 import AssetsAccreditation from './accreditation/assets/Accreditation';
 import IncomeAccreditation from './accreditation/income/Accreditation';
+import VerifyTrustEntityAccreditation from './accreditation/VerifyTrustEntityAccreditation';
 import ThanksNote from '../components/investmentLimits/accreditation/ThanksNote';
 
 @inject('investmentLimitStore', 'accreditationStore')
@@ -32,12 +33,19 @@ export default class InvestmentLimits extends Component {
     return (
       <div>
         <Route exact path={`${this.props.match.url}/verify-accreditation`} component={VerifyAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} component={VerifyEntityAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/income`} component={IncomeAccreditation} />
-        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/income`} component={IncomeAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/assets`} component={AssetsAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
+
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} component={VerifyEntityAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/income`} component={IncomeAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
+
+        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/verify`} component={VerifyAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation`} component={VerifyTrustEntityAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/verify/income`} component={IncomeAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/verify/assets`} component={AssetsAccreditation} />
+        <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/verify/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
         <Grid columns={1} stackable>
           <FinancialInfo />
