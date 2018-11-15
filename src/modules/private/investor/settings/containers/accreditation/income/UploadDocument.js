@@ -21,7 +21,7 @@ export default class UploadDocument extends Component {
     this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field);
   }
   showThanksNote = () => {
-    this.props.history.push(`${this.props.match.url}/success`);
+    this.props.history.push(`${this.props.refLink}/success`);
   }
 
   render() {

@@ -11,10 +11,10 @@ export default class Verification extends Component {
     const { ACCREDITATION_FORM, INCOME_EVIDENCE_FORM } = this.props.accreditationStore;
     return (
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ?
-        <VerificationForm /> :
+        <VerificationForm refLink={this.props.refLink} /> :
         ACCREDITATION_FORM.fields.accreditationMethods.value === 'income' ?
-          <IncomeUploadDocument /> :
-          <AssetsUploadDocument />
+          <IncomeUploadDocument refLink={this.props.refLink} /> :
+          <AssetsUploadDocument refLink={this.props.refLink} />
     );
   }
 }

@@ -1,56 +1,158 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Header, Form, Grid, Modal, Button } from 'semantic-ui-react';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { VERIFY_ACC_WITH_META } from './../../../../../../services/constants/investmentLimit';
+import { MultiStep } from './../../../../../../helper';
+import NetWorth from './assets/NetWorth';
+import IncomeEvidence from './shared/IncomeEvidence';
+import Verification from './shared/Verification';
+import AccreditationMethod from './shared/AccreditationMethod';
+import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMethod';
 
-@inject('accreditationStore')
+@inject('uiStore', 'accreditationStore')
 @observer
-export default class IncomeEvidence extends Component {
-  handleCloseModal = (e) => {
-    e.stopPropagation();
-    this.props.history.goBack();
+export default class VerifyTrustEntityAccreditation extends React.Component {
+  componentWillMount() {
+    this.props.accreditationStore.setAccreditationMethod('assets');
+  }
+  handleMultiStepModalclose = () => {
+    this.props.history.push('/app/profile-settings/investment-limits');
+    const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;
+    this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
+    this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
+  }
+  handleStepChange = (step) => {
+    this.props.accreditationStore.setStepToBeRendered(step);
   }
   render() {
     const {
+      NET_WORTH_FORM,
+      INCOME_EVIDENCE_FORM,
+      VERIFICATION_REQUEST_FORM,
+      ASSETS_UPLOAD_DOC_FORM,
+      ACCREDITATION_FORM,
+      INCOME_UPLOAD_DOC_FORM,
       TRUST_ENTITY_ACCREDITATION_FRM,
-      accreditationMethodChange,
     } = this.props.accreditationStore;
-    const trustEntityAccMethods = VERIFY_ACC_WITH_META.slice();
+    const steps = TRUST_ENTITY_ACCREDITATION_FRM.fields.trustEntityAccMethods.value === 'trustsAssets' ?
+      [
+        {
+          name: '',
+          component: <TrustEntityAccreditationMethod />,
+          isHideLabel: true,
+          isValid: TRUST_ENTITY_ACCREDITATION_FRM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 1,
+        },
+        {
+          name: 'Net worth',
+          component: <NetWorth />,
+          isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 2,
+        },
+        {
+          name: 'Inc. evidence',
+          component: <IncomeEvidence />,
+          isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 3,
+        },
+        {
+          name: 'Verification',
+          component: <Verification refLink={this.props.refLink} />,
+          isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
+          isDirty: true,
+          stepToBeRendered: 4,
+        },
+      ]
+      : ACCREDITATION_FORM.fields.accreditationMethods.value === 'INCOME' ? [
+        {
+          name: '',
+          component: <TrustEntityAccreditationMethod />,
+          isHideLabel: true,
+          isValid: TRUST_ENTITY_ACCREDITATION_FRM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 1,
+        },
+        {
+          name: '',
+          component: <AccreditationMethod />,
+          isHideLabel: true,
+          isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 2,
+        },
+        {
+          name: 'Net worth',
+          component: <NetWorth />,
+          isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 3,
+        },
+        {
+          name: 'Inc. evidence',
+          component: <IncomeEvidence />,
+          isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 4,
+        },
+        {
+          name: 'Verification',
+          component: <Verification refLink={this.props.refLink} />,
+          isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
+          isDirty: true,
+          stepToBeRendered: 5,
+        },
+      ]
+        :
+        [
+          {
+            name: '',
+            component: <TrustEntityAccreditationMethod />,
+            isValid: TRUST_ENTITY_ACCREDITATION_FRM.meta.isFieldValid ? '' : 'error',
+            isDirty: true,
+            stepToBeRendered: 1,
+          },
+          {
+            name: '',
+            component: <AccreditationMethod />,
+            isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
+            isDirty: true,
+            stepToBeRendered: 2,
+          },
+          {
+            name: 'Inc. evidence',
+            component: <IncomeEvidence />,
+            isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
+            isDirty: true,
+            stepToBeRendered: 3,
+          },
+          {
+            name: 'Verification',
+            component: <Verification refLink={this.props.refLink} />,
+            isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
+            isDirty: true,
+            stepToBeRendered: 4,
+          },
+        ];
+    const {
+      inProgress,
+      isEnterPressed,
+      resetIsEnterPressed,
+      setIsEnterPressed,
+    } = this.props.uiStore;
+
     return (
-      <div>
-        <Modal open onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick>
-          <Modal.Header className="center-align signup-header">
-            <Header as="h3" textAlign="center">Verify accreditaton with</Header>
-            <p className="center-align">To invest in Regulation D or 506(c) offerings, you will need to verify that your entity is eligible for accreditation. </p>
-            <p className="center-align">Please confirm which of the following is applicable for you:</p>
-          </Modal.Header>
-          <Modal.Content>
-            <Form error className="account-type-tab">
-              <Grid columns={1}>
-                {trustEntityAccMethods.map(method => (
-                  <Grid.Column
-                    onClick={e => accreditationMethodChange(e, 'TRUST_ENTITY_ACCREDITATION_FRM', { name: 'trustEntityAccMethods', value: method.value })}
-                  >
-                    <div className={`user-type ${(TRUST_ENTITY_ACCREDITATION_FRM.fields.trustEntityAccMethods.value === method.value ? 'active' : '')}`}>
-                      <Header as="h6">{method.header}</Header>
-                      <p>
-                        {method.desc}
-                      </p>
-                    </div>
-                  </Grid.Column>
-                ))}
-              </Grid>
-            </Form>
-            <Button
-              circular
-              icon={{ className: 'ns-arrow-right' }}
-              className="multistep__btn next active"
-              as={Link}
-              to={TRUST_ENTITY_ACCREDITATION_FRM.fields.trustEntityAccMethods.value === 'RevocableAndAccredited' ? `${this.props.match.url}/verify` : `${this.props.match.url}/verify/assets`}
-            />
-          </Modal.Content>
-        </Modal>
+      <div className="step-progress">
+        <MultiStep
+          steps={steps}
+          formTitle="Verify your accreditation"
+          setIsEnterPressed={setIsEnterPressed}
+          isEnterPressed={isEnterPressed}
+          resetEnterPressed={resetIsEnterPressed}
+          inProgress={inProgress}
+          handleMultiStepModalclose={this.handleMultiStepModalclose}
+          setStepTobeRendered={this.handleStepChange}
+        />
       </div>
     );
   }

@@ -10,7 +10,7 @@ import { VARIFY_ROLES } from '../../../../../../../constants/account';
 @observer
 export default class VerificationForm extends Component {
   showThanksNote = () => {
-    this.props.history.push(`${this.props.match.url}/success`);
+    this.props.history.push(`${this.props.refLink}/success`);
   }
 
   render() {
