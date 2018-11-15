@@ -22,17 +22,17 @@ export default class VerificationForm extends Component {
         <Form error>
           <div className="field-wrap">
             <FormDropDown
-              fielddata={VERIFICATION_REQUEST_FORM.fields.verifierRole}
+              fielddata={VERIFICATION_REQUEST_FORM.fields.role}
               selection
               containerclassname="dropdown-field"
-              name="verifierRole"
+              name="role"
               options={VARIFY_ROLES}
               placeholder="Choose verifier role"
               onChange={(e, result) => verificationFormChange(e, result)}
             />
             <FormInput
-              name="verifierEmail"
-              fielddata={VERIFICATION_REQUEST_FORM.fields.verifierEmail}
+              name="email"
+              fielddata={VERIFICATION_REQUEST_FORM.fields.email}
               changed={verificationFormChange}
             />
           </div>
