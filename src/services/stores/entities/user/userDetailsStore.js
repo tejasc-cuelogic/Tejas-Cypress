@@ -298,7 +298,7 @@ export class UserDetailsStore {
   }
 
   @computed get isCipExpired() {
-    if (this.userDetails) {
+    if (this.userDetails && this.userDetails.cip) {
       const { expiration } = this.userDetails.cip;
       const expirationDate = new Date(expiration);
       const currentDate = new Date();

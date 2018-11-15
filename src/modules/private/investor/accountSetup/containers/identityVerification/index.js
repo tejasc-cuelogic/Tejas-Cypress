@@ -13,6 +13,9 @@ import { NS_SITE_EMAIL_SUPPORT } from '../../../../../../constants/common';
 @withRouter
 @observer
 export default class IdentityVerification extends Component {
+  componentWillMount() {
+    this.props.identityStore.setCipDetails();
+  }
   onPhotoIdDrop = (files) => {
     this.props.identityStore.setFileUploadData('photoId', files);
   }

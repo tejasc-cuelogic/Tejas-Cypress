@@ -657,6 +657,33 @@ export class IdentityStore {
     this.resetFormData('ID_PHONE_VERIFICATION');
     this.resetFormData('ID_VERIFICATION_QUESTIONS');
   }
+
+  @action
+  setCipDetails = () => {
+    const { legalDetails, phone } = userDetailsStore.userDetails;
+    const { fields } = this.ID_VERIFICATION_FRM;
+    if (userDetailsStore.isCipExpired) {
+      if (legalDetails && legalDetails.legalName) {
+        fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
+        fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
+      }
+      if (legalDetails && legalDetails.legalAddress) {
+        fields.city.value = legalDetails.legalAddress.city;
+        fields.state.value = legalDetails.legalAddress.state;
+        fields.residentalStreet.value = legalDetails.legalAddress.street;
+        fields.zipCode.value = legalDetails.legalAddress.zipCode;
+      }
+      if (legalDetails && legalDetails.dateOfBirth) {
+        fields.dateOfBirth.value = legalDetails.dateOfBirth;
+      }
+      if (legalDetails && legalDetails.ssn) {
+        fields.ssn.value = legalDetails.ssn;
+      }
+      if (legalDetails && phone && phone.number) {
+        fields.phoneNumber.value = phone.number;
+      }
+    }
+  }
 }
 
 export default new IdentityStore();

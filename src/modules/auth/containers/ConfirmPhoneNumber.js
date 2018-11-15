@@ -38,7 +38,11 @@ export default class ConfirmPhoneNumber extends Component {
     } else {
       this.props.identityStore.confirmPhoneNumber().then(() => {
         Helper.toast('Phone number is confirmed.', 'success');
-        this.props.history.push('/app/summary/establish-profile');
+        if (this.props.userDetailsStore.isCipExpired) {
+          this.props.history.push(`/app/${this.props.userDetailsStore.pendingStep}`);
+        } else {
+          this.props.history.push('/app/summary/establish-profile');
+        }
       })
         .catch(() => { });
     }
