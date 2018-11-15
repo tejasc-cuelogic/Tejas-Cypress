@@ -130,7 +130,7 @@ class InvestorProfileStore {
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         if (fields.brokerageEmployment.value === 'no') {
-          fields.brokerageFirmName.value = null;
+          fields.brokerageFirmName.value = 'false';
         } else {
           fields.brokerageFirmName.value = fields.brokerageFirmName.value;
         }
@@ -138,8 +138,8 @@ class InvestorProfileStore {
           { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
-        if (fields.publicCompanyTicker.value === 'no') {
-          fields.publicCompanyTicker.value = null;
+        if (fields.publicCompanyRel.value === 'no') {
+          fields.publicCompanyTicker.value = 'false';
         } else {
           fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
         }
@@ -250,8 +250,13 @@ class InvestorProfileStore {
         case 'BROKERAGE_EMPLOYMENT_FORM':
           if (investorProfileData.brokerageFirmName) {
             const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
-            fields.brokerageFirmName.value = investorProfileData.brokerageFirmName;
-            if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '') {
+            if (investorProfileData.brokerageFirmName !== 'false') {
+              fields.brokerageFirmName.value = investorProfileData.brokerageFirmName;
+            } else {
+              fields.brokerageFirmName.value = '';
+            }
+            if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '' &&
+            investorProfileData.brokerageFirmName !== 'false') {
               fields.brokerageEmployment.value = 'yes';
             } else {
               fields.brokerageEmployment.value = 'no';
@@ -261,8 +266,13 @@ class InvestorProfileStore {
         case 'PUBLIC_COMPANY_REL_FORM':
           if (investorProfileData.publicCompanyTicker) {
             const { fields } = this.PUBLIC_COMPANY_REL_FORM;
-            fields.publicCompanyTicker.value = investorProfileData.publicCompanyTicker;
-            if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== '') {
+            if (investorProfileData.publicCompanyTicker !== 'false') {
+              fields.publicCompanyTicker.value = investorProfileData.publicCompanyTicker;
+            } else {
+              fields.publicCompanyTicker.value = '';
+            }
+            if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== '' &&
+            investorProfileData.publicCompanyTicker !== 'false') {
               fields.publicCompanyRel.value = 'yes';
             } else {
               fields.publicCompanyRel.value = 'no';

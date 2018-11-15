@@ -456,6 +456,9 @@ export const BROKERAGE_EMPLOYMENT = {
     error: undefined,
     rule: 'required_if:brokerageEmployment,yes',
     placeHolder: 'Enter here',
+    customErrors: {
+      required_if: 'required',
+    },
   },
 };
 
@@ -478,6 +481,9 @@ export const PUBLIC_COMPANY_REL = {
     error: undefined,
     rule: 'required_if:publicCompanyRel,yes',
     placeHolder: 'E.g. GOOG',
+    customErrors: {
+      required_if: 'required',
+    },
   },
 };
 
