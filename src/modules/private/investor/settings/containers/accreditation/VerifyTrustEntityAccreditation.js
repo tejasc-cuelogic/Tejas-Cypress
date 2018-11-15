@@ -1,5 +1,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
+import { Loader, Dimmer } from 'semantic-ui-react';
 import { MultiStep } from './../../../../../../helper';
 import NetWorth from './assets/NetWorth';
 import IncomeEvidence from './shared/IncomeEvidence';
@@ -9,7 +11,9 @@ import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMet
 
 @inject('uiStore', 'accreditationStore')
 @observer
+@withRouter
 export default class VerifyTrustEntityAccreditation extends React.Component {
+  state = { submitLoading: false };
   componentWillMount() {
     this.props.accreditationStore.setAccreditationMethod('assets');
   }
@@ -21,6 +25,19 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
   }
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
+  }
+  multiClickHandler = (step) => {
+    const { params } = this.props.match;
+    if (step.formName !== 'INCOME_EVIDENCE_FORM') {
+      this.props.accreditationStore
+        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
+        .then(() => {
+          this.handleStepChange(step.stepToBeRendered);
+          this.setState({ submitLoading: false });
+        }).catch(() => {
+          this.setState({ submitLoading: false });
+        });
+    }
   }
   render() {
     const {
@@ -41,6 +58,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: TRUST_ENTITY_ACCREDITATION_FRM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 1,
+          formName: 'TRUST_ENTITY_ACCREDITATION_FRM',
         },
         {
           name: 'Net worth',
@@ -48,6 +66,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 2,
+          formName: 'NET_WORTH_FORM',
         },
         {
           name: 'Inc. evidence',
@@ -55,6 +74,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 3,
+          formName: 'INCOME_EVIDENCE_FORM',
         },
         {
           name: 'Verification',
@@ -62,6 +82,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           stepToBeRendered: 4,
+          formName: 'VERIFICATION_REQUEST_FORM',
         },
       ]
       : ACCREDITATION_FORM.fields.accreditationMethods.value === 'INCOME' ? [
@@ -72,6 +93,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: TRUST_ENTITY_ACCREDITATION_FRM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 1,
+          formName: 'TRUST_ENTITY_ACCREDITATION_FRM',
         },
         {
           name: '',
@@ -80,6 +102,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 2,
+          formName: 'ACCREDITATION_FORM',
         },
         {
           name: 'Net worth',
@@ -87,6 +110,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 3,
+          formName: 'NET_WORTH_FORM',
         },
         {
           name: 'Inc. evidence',
@@ -94,6 +118,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 4,
+          formName: 'INCOME_EVIDENCE_FORM',
         },
         {
           name: 'Verification',
@@ -101,6 +126,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           stepToBeRendered: 5,
+          formName: 'VERIFICATION_REQUEST_FORM',
         },
       ]
         :
@@ -111,6 +137,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             isValid: TRUST_ENTITY_ACCREDITATION_FRM.meta.isFieldValid ? '' : 'error',
             isDirty: true,
             stepToBeRendered: 1,
+            formName: 'ACCREDITATION_FORM',
           },
           {
             name: '',
@@ -118,6 +145,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
             isDirty: true,
             stepToBeRendered: 2,
+            formName: 'ACCREDITATION_FORM',
           },
           {
             name: 'Inc. evidence',
@@ -125,6 +153,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
             isDirty: true,
             stepToBeRendered: 3,
+            formName: 'ACCREDITATION_FORM',
           },
           {
             name: 'Verification',
@@ -132,6 +161,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
             isDirty: true,
             stepToBeRendered: 4,
+            formName: 'ACCREDITATION_FORM',
           },
         ];
     const {
@@ -143,16 +173,25 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MultiStep
-          steps={steps}
-          formTitle="Verify your accreditation"
-          setIsEnterPressed={setIsEnterPressed}
-          isEnterPressed={isEnterPressed}
-          resetEnterPressed={resetIsEnterPressed}
-          inProgress={inProgress}
-          handleMultiStepModalclose={this.handleMultiStepModalclose}
-          setStepTobeRendered={this.handleStepChange}
-        />
+        {!this.state.submitLoading ?
+          <MultiStep
+            createAccount={this.multiClickHandler}
+            steps={steps}
+            formTitle="Verify your accreditation"
+            setIsEnterPressed={setIsEnterPressed}
+            isEnterPressed={isEnterPressed}
+            resetEnterPressed={resetIsEnterPressed}
+            inProgress={inProgress}
+            handleMultiStepModalclose={this.handleMultiStepModalclose}
+            setStepTobeRendered={this.handleStepChange}
+          /> :
+          <Dimmer active>
+            <Loader>
+              Please wait...<br /><br />
+              We are generating your agreement. This can take up to a minute.
+            </Loader>
+          </Dimmer>
+        }
       </div>
     );
   }

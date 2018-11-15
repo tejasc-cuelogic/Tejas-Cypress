@@ -1,6 +1,7 @@
 import React from 'react';
 import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import { MultiStep } from './../../../../../../helper';
 import NetWorth from './assets/NetWorth';
 import IncomeEvidence from './shared/IncomeEvidence';
@@ -9,6 +10,7 @@ import AccreditationMethod from './shared/AccreditationMethod';
 // import Helper from '../../../../../../helper/utility';
 
 @inject('uiStore', 'accreditationStore')
+@withRouter
 @observer
 export default class Accreditation extends React.Component {
   state = { submitLoading: false };
