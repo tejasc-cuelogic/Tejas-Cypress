@@ -12,11 +12,11 @@ export default class Experience extends Component {
     const {
       validateInvestmentExperience,
       INVESTMENT_EXP_FORM,
-      isInvestmentExperienceValid,
       updateInvestorProfileData,
     } = this.props.investorProfileStore;
     validateInvestmentExperience();
-    if (INVESTMENT_EXP_FORM.meta.isValid && isInvestmentExperienceValid) {
+    if (INVESTMENT_EXP_FORM.meta.isValid &&
+      this.props.investorProfileStore.isInvestmentExperienceValid) {
       const currentStep = {
         form: 'INVESTMENT_EXP_FORM',
         stepToBeRendered: 6,
