@@ -5,7 +5,7 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { ListErrors } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -23,7 +23,6 @@ export default class Summary extends React.Component {
   }
   render() {
     const { errors } = this.props.uiStore;
-    const { currentUser } = this.props.userStore;
     const {
       formAddFunds,
       plaidAccDetails,
@@ -31,6 +30,7 @@ export default class Summary extends React.Component {
       formLinkBankManually,
       depositMoneyNow,
     } = this.props.bankAccountStore;
+    const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     return (
@@ -48,7 +48,7 @@ export default class Summary extends React.Component {
                 <Table.Body>
                   <Table.Row>
                     <Table.Cell>Investor: </Table.Cell>
-                    <Table.Cell>{currentUser.givenName}</Table.Cell>
+                    <Table.Cell>{`${userDetails.info.firstName} ${userDetails.info.lastName}`}</Table.Cell>
                   </Table.Row>
                   {!isEmpty(plaidAccDetails) &&
                   <Table.Row>
