@@ -30,6 +30,7 @@ export class AuthStore {
   @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
   @observable confirmProgress = false;
   @observable pwdInputType = 'password';
+  @observable currentScore = 0;
 
 
   @action
@@ -79,6 +80,9 @@ export class AuthStore {
         Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
     } else {
       this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
+    }
+    if (e.score !== undefined) {
+      this.currentScore = e.score;
     }
   };
 
