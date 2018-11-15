@@ -27,15 +27,15 @@ export default class InvestmentLimits extends Component {
   }
 
   render() {
-    const { accreditationMethods } = this.props.accreditationStore.ACCREDITATION_FORM.fields;
+    const { method } = this.props.accreditationStore.ACCREDITATION_FORM.fields;
     return (
       <div>
         <Route exact path={`${this.props.match.url}/verify-accreditation/:accountId/:accountType`} component={VerifyAccreditation} />
         <Route exact path={`${this.props.match.url}/verify-entity-accreditation`} component={VerifyEntityAccreditation} />
         {/* <Route exact path={`${this.props.match.url}/verify-entity-accreditation/income`}
       component={IncomeAccreditation} /> */}
-        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
-        <Route exact path={`${this.props.match.url}/verify-accreditation/${accreditationMethods.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
+        <Route exact path={`${this.props.match.url}/verify-entity-accreditation/${method.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
+        <Route exact path={`${this.props.match.url}/verify-accreditation/${method.value}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
         <Grid columns={1} stackable>
           <FinancialInfo />

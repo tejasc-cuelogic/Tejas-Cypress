@@ -154,7 +154,7 @@ export class AccreditationStore {
   @action
   setAccreditationMethod = (value) => {
     this.ACCREDITATION_FORM =
-        Validator.onChange(this.ACCREDITATION_FORM, { name: 'accreditationMethods', value });
+        Validator.onChange(this.ACCREDITATION_FORM, { name: 'method', value });
   }
 
   @action

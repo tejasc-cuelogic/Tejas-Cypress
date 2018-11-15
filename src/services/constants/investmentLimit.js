@@ -76,7 +76,7 @@ export const ENTITY_ACCREDITATION_METHODS_META = [
 ];
 
 export const ENTITY_ACCREDITATION_METHODS = {
-  accreditationMethods: {
+  method: {
     value: '25000000CA',
     values: [
       { value: '25000000CA' },
@@ -90,7 +90,7 @@ export const ENTITY_ACCREDITATION_METHODS = {
 };
 
 export const ACCREDITATION_METHODS = {
-  accreditationMethods: {
+  method: {
     value: 'INCOME',
     values:
       [
