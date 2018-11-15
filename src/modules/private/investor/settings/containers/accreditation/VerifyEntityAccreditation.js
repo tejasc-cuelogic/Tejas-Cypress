@@ -13,7 +13,8 @@ import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 export default class VerifyEntityAccreditation extends React.Component {
   state = { submitLoading: false };
   componentWillMount() {
-    this.props.accreditationStore.setAccreditationMethod('assets');
+    this.props.accreditationStore.setStepToBeRendered(0);
+    this.props.accreditationStore.setAccreditationMethod('ASSETS');
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');
@@ -25,17 +26,15 @@ export default class VerifyEntityAccreditation extends React.Component {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
   multiClickHandler = (step) => {
-    const { params } = this.props.match;
-    if (step.formName !== 'INCOME_EVIDENCE_FORM') {
-      this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
-        .then(() => {
-          this.handleStepChange(step.stepToBeRendered);
-          this.setState({ submitLoading: false });
-        }).catch(() => {
-          this.setState({ submitLoading: false });
-        });
-    }
+    this.handleStepChange(step.stepToBeRendered);
+    // const { params } = this.props.match;
+    // this.props.accreditationStore
+    //   .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
+    //   .then(() => {
+    //     this.setState({ submitLoading: false });
+    //   }).catch(() => {
+    //     this.setState({ submitLoading: false });
+    //   });
   }
   render() {
     const {
@@ -92,6 +91,7 @@ export default class VerifyEntityAccreditation extends React.Component {
             inProgress={inProgress}
             handleMultiStepModalclose={this.handleMultiStepModalclose}
             setStepTobeRendered={this.handleStepChange}
+            stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
           /> :
           <Dimmer active>
             <Loader>
