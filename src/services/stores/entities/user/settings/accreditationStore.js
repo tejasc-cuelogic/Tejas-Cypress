@@ -1,19 +1,47 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS } from '../../../../constants/investmentLimit';
 import { FormValidator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
+import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
   @observable ACCREDITATION_FORM = FormValidator.prepareFormObject(ACCREDITATION_METHODS);
   @observable ENTITY_ACCREDITATION_FORM =
-  FormValidator.prepareFormObject(ENTITY_ACCREDITATION_METHODS);
+    FormValidator.prepareFormObject(ENTITY_ACCREDITATION_METHODS);
   @observable INCOME_EVIDENCE_FORM = FormValidator.prepareFormObject(INCOME_EVIDENCE);
   @observable VERIFICATION_REQUEST_FORM = FormValidator.prepareFormObject(VERIFICATION_REQUEST);
   @observable INCOME_UPLOAD_DOC_FORM = FormValidator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
   @observable ASSETS_UPLOAD_DOC_FORM = FormValidator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
   @observable NET_WORTH_FORM = FormValidator.prepareFormObject(NET_WORTH);
+  @observable FILTER_FRM = FormValidator.prepareFormObject(FILTER_META);
+  @observable CONFIRM_ACCREDITATION_FRM = FormValidator.prepareFormObject(CONFIRM_ACCREDITATION);
   @observable stepToBeRendered = '';
-
+  @observable filters = false;
+  @observable requestState = {
+    search: {},
+  };
+  @observable data = [];
+  @action
+  initRequest = () => {
+    this.data = [
+      {
+        id: 1,
+        name: 'Alexandra Smith',
+        createdAt: '7/12/2018',
+        type: 'Asset',
+        method: 'Verifier',
+        boxLink: 'https://www.nextseed.com/',
+      },
+      {
+        id: 2,
+        name: 'Alexandra Smith',
+        createdAt: '7/12/2018',
+        type: 'Asset',
+        method: 'Verifier',
+        boxLink: 'https://www.nextseed.com/',
+      },
+    ];
+  }
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -36,7 +64,7 @@ export class AccreditationStore {
   @action
   incomeEvidenceChange = (e, result) => {
     this.INCOME_EVIDENCE_FORM =
-    FormValidator.onChange(this.INCOME_EVIDENCE_FORM, FormValidator.pullValues(e, result));
+      FormValidator.onChange(this.INCOME_EVIDENCE_FORM, FormValidator.pullValues(e, result));
   }
 
   @action
@@ -76,7 +104,24 @@ export class AccreditationStore {
   @action
   setAccreditationMethod = (value) => {
     this.ACCREDITATION_FORM =
-        FormValidator.onChange(this.ACCREDITATION_FORM, { name: 'accreditationMethods', value });
+      FormValidator.onChange(this.ACCREDITATION_FORM, { name: 'accreditationMethods', value });
+  }
+
+  @action
+  setInitiateSrch = (name, value) => {
+    this.requestState.search[name] = value;
+    // this.initRequest({ ...this.requestState.search });
+  }
+  @action
+  toggleSearch = () => {
+    this.filters = !this.filters;
+  }
+
+  @computed get loading() {
+    return this.data.loading;
+  }
+  @computed get accreditations() {
+    return (this.data) || [];
   }
 }
 export default new AccreditationStore();

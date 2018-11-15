@@ -310,7 +310,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'dollar',
     title: 'CrowdPay',
-    capability: 'CROWD_PAY_ANY',
+    // capability: 'CROWD_PAY_ANY',
     to: 'crowdPay',
     heading: 'Manage Crowdpay Accounts',
     path: 'admin/crowdPay',
@@ -365,6 +365,14 @@ export const PRIVATE_NAV = [
     capability: 'DEPLOYMENTS_ANY',
     to: 'deployments',
     path: 'admin/deployments',
+    accessibleTo: ['admin', 'manager', 'support'],
+  },
+  {
+    icon: 'payment',
+    title: 'Accreditation Requests',
+    // capability: 'ACCREDITATION_ANY',
+    to: 'accreditation',
+    path: 'admin/accreditation',
     accessibleTo: ['admin', 'manager', 'support'],
   },
 ];
