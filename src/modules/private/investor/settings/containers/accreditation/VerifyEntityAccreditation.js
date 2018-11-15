@@ -1,18 +1,16 @@
 import React from 'react';
-import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { Loader, Dimmer } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from './../../../../../../helper';
-import NetWorth from './assets/NetWorth';
 import IncomeEvidence from './shared/IncomeEvidence';
 import Verification from './shared/Verification';
-import AccreditationMethod from './shared/AccreditationMethod';
-// import Helper from '../../../../../../helper/utility';
+import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
 @observer
-export default class Accreditation extends React.Component {
+export default class VerifyEntityAccreditation extends React.Component {
   state = { submitLoading: false };
   componentWillMount() {
     this.props.accreditationStore.setStepToBeRendered(0);
@@ -28,85 +26,49 @@ export default class Accreditation extends React.Component {
     this.props.accreditationStore.setStepToBeRendered(step);
   }
   multiClickHandler = (step) => {
-    const { params } = this.props.match;
-    if (step.formName !== 'VERIFICATION_REQUEST_FORM' || step.formName !== 'INCOME_UPLOAD_DOC_FORM' || step.formName !== 'ASSETS_UPLOAD_DOC_FORM') {
-      this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
-        .then(() => {
-          this.handleStepChange(step.stepToBeRendered);
-          this.setState({ submitLoading: false });
-        }).catch(() => {
-          this.setState({ submitLoading: false });
-        });
-    }
+    this.handleStepChange(step.stepToBeRendered);
+    // const { params } = this.props.match;
+    // this.props.accreditationStore
+    //   .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
+    //   .then(() => {
+    //     this.setState({ submitLoading: false });
+    //   }).catch(() => {
+    //     this.setState({ submitLoading: false });
+    //   });
   }
   render() {
     const {
-      NET_WORTH_FORM,
       INCOME_EVIDENCE_FORM,
       VERIFICATION_REQUEST_FORM,
       ASSETS_UPLOAD_DOC_FORM,
-      ACCREDITATION_FORM,
-      INCOME_UPLOAD_DOC_FORM,
+      ENTITY_ACCREDITATION_FORM,
     } = this.props.accreditationStore;
-    const steps = ACCREDITATION_FORM.fields.method.value === 'ASSETS' ?
+    const steps =
       [
         {
           name: '',
-          component: <AccreditationMethod />,
+          component: <EntityAccreditationMethod />,
           isHideLabel: true,
-          isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
-          formName: 'ACCREDITATION_FORM',
+          isValid: ENTITY_ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 1,
-        },
-        {
-          name: 'Net worth',
-          component: <NetWorth />,
-          isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
-          formName: 'NET_WORTH_FORM',
-          isDirty: true,
-          stepToBeRendered: 2,
+          formName: 'ENTITY_ACCREDITATION_FORM',
         },
         {
           name: 'Inc. evidence',
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
+          isDirty: true,
+          stepToBeRendered: 2,
           formName: 'INCOME_EVIDENCE_FORM',
-          stepToBeRendered: 3,
         },
         {
           name: 'Verification',
-          component: <Verification params={this.props.match.params} refLink={this.props.refLink} />,
+          component: <Verification refLink={this.props.refLink} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
+          isDirty: true,
+          stepToBeRendered: 3,
           formName: 'VERIFICATION_REQUEST_FORM',
-          isDirty: true,
-        },
-      ]
-      :
-      [
-        {
-          name: '',
-          component: <AccreditationMethod />,
-          isHideLabel: true,
-          isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
-          formName: 'ACCREDITATION_FORM',
-          isDirty: true,
-          stepToBeRendered: 1,
-        },
-        {
-          name: 'Inc. evidence',
-          component: <IncomeEvidence />,
-          isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
-          formName: 'INCOME_EVIDENCE_FORM',
-          stepToBeRendered: 2,
-        },
-        {
-          name: 'Verification',
-          component: <Verification params={this.props.match.params} refLink={this.props.refLink} />,
-          isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
-          formName: 'VERIFICATION_REQUEST_FORM',
-          isDirty: true,
         },
       ];
     const {

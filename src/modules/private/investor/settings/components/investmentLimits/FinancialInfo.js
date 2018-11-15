@@ -25,9 +25,9 @@ export default class FinancialInfo extends Component {
     this.props.history.push(`${this.props.match.url}/update`);
   }
   handleVerifyAccreditation = (e, accountType, accountId) => {
-    e.preventDefault();
     if (accountType === 'entity') {
-      this.props.history.push(`${this.props.match.url}/verify-entity-accreditation`);
+      // this.props.history.push(`${this.props.match.url}/verify-entity-accreditation`);
+      this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountId}/${accountType}`);
     } else {
       this.props.history.push(`${this.props.match.url}/verify-accreditation/${accountId}/${accountType}`);
     }
