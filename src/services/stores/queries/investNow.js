@@ -36,6 +36,10 @@ export const validateInvestmentAmountInOffering = gql`
       userId: $userId
       accountId: $accountId
     )
+    {
+      status
+      message
+    }
   }
 `;
 
@@ -52,6 +56,10 @@ export const validateInvestmentAmount = gql`
       autoDraftDeposit: $autoDraftDeposit
       creditToSpend: $creditToSpend
     )
+    {
+      status
+      message
+    }
   }
 `;
 
@@ -92,6 +100,10 @@ export const finishInvestment = gql`
       agreementId: $agreementId
       transferAmount: $transferAmount
     )
+    {
+      status
+      message
+    }
   }
 `;
 

@@ -11,12 +11,19 @@ import { FormTextarea, FormInput } from '../../../../../../theme/form';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class Contingency extends Component {
+  state = {
+    visibilityStatus: true,
+  }
   setContingencyForm = () => {
     const { formName, offeringCreationStore } = this.props;
     offeringCreationStore.setContingencyFormSelected(formName);
   }
   setDataForEditContingency = (form, dataKey, index) => {
     this.props.offeringCreationStore.setDataForEditContingency(form, dataKey, index);
+  }
+  toggleVisibilityStatus = () => {
+    const currStatus = this.state.visibilityStatus;
+    this.setState({ visibilityStatus: !currStatus });
   }
   handleSubmitComment = (successMsg) => {
     const {
@@ -104,9 +111,9 @@ export default class Contingency extends Component {
       <Aux>
         <Header as="h4">
           {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch Contingencies' : 'Closing Contingencies'}
-          {this.props.hideAddNewBtn && <Icon className="ns-chevron-up-compact right" color="blue" />}
+          {this.props.OfferingClose && <Icon onClick={this.toggleVisibilityStatus} className={`ns-chevron-${this.state.visibilityStatus === true ? 'up' : 'down'}-compact right`} color="blue" />}
           {access.asManager ?
-            <Modal size="small" trigger={!this.props.hideAddNewBtn && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.setContingencyForm()}>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Button>} closeIcon >
+            <Modal size="small" trigger={!this.props.OfferingClose && <Button as="a" color="green" size="small" className="link link-button" onClick={() => this.setContingencyForm()}>+ Add {formName === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Button>} closeIcon >
               <Modal.Header>Add New {contingencyFormSelected === 'LAUNCH_CONTITNGENCIES_FRM' ? 'Launch' : 'Closing'} Contingency</Modal.Header>
               <Modal.Content>
                 <Form>
@@ -129,7 +136,7 @@ export default class Contingency extends Component {
           null}
           {addon}
         </Header>
-        {
+        {this.state.visibilityStatus &&
         form.fields[dataKey] && form.fields[dataKey].length > 0 ?
         form.fields[dataKey].map((contingency, index) => (
           <div className="featured-section collapsed-checkbox">
@@ -194,9 +201,13 @@ export default class Contingency extends Component {
             </div>
           </div>
         )) :
-        <div className="featured-section collapsed-checkbox">
-          No data found
-        </div>
+        <Aux>
+          {!this.props.OfferingClose &&
+            <div className="featured-section collapsed-checkbox">
+              No data found
+            </div>
+          }
+        </Aux>
       }
         <Confirm
           header="Confirm"
