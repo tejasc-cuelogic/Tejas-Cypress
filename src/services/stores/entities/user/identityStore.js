@@ -203,6 +203,11 @@ export class IdentityStore {
     return { userInfo, phoneDetails, cip };
   }
 
+  @action
+  setStateValue = (stateValue) => {
+    this.ID_PROFILE_INFO.fields.state.value = stateValue;
+  }
+
   @computed
   get cipStatus() {
     const { key, questions } = this.ID_VERIFICATION_FRM.response;
