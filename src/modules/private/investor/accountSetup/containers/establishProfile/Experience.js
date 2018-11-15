@@ -44,6 +44,7 @@ export default class Experience extends Component {
             name="experienceLevel"
             changed={experiencesChange}
             containerclassname="button-radio center-align mb-50"
+            showerror
           />
           <FormCheckbox
             fielddata={INVESTMENT_EXP_FORM.fields.isComfortable}

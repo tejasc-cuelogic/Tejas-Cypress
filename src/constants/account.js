@@ -505,6 +505,9 @@ export const EMPLOYMENT = {
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Type employer name',
     objRef: 'employmentStatusInfo',
+    customErrors: {
+      required_if: 'required',
+    },
   },
   position: {
     key: 'position',
@@ -514,6 +517,9 @@ export const EMPLOYMENT = {
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'E.g. CEO',
     objRef: 'employmentStatusInfo',
+    customErrors: {
+      required_if: 'required',
+    },
   },
 };
 
@@ -534,6 +540,9 @@ export const FINANCES = {
     rule: 'required',
     placeHolder: 'Net Worth',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeThirdLastYear: {
     value: '',
@@ -543,6 +552,9 @@ export const FINANCES = {
     year: '2016',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeLastYear: {
     value: '',
@@ -552,6 +564,9 @@ export const FINANCES = {
     year: '2017',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeCurrentYear: {
     value: '',
@@ -561,6 +576,9 @@ export const FINANCES = {
     year: '2018',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
 };
 

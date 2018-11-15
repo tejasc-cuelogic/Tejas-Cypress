@@ -18,6 +18,8 @@ export default class Employment extends Component {
             name="status"
             changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
             containerclassname="button-radio center-align"
+            classname="center-align"
+            showerror
           />
           {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' &&
           <div className="field-wrap">
