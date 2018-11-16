@@ -1,7 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Loader, Dimmer } from 'semantic-ui-react';
 import { MultiStep } from './../../../../../../helper';
 import NetWorth from './assets/NetWorth';
 import IncomeEvidence from './shared/IncomeEvidence';
@@ -13,7 +12,6 @@ import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMet
 @observer
 @withRouter
 export default class VerifyTrustEntityAccreditation extends React.Component {
-  state = { submitLoading: false };
   componentWillMount() {
     // this.props.accreditationStore.setStepToBeRendered(0);
     this.props.accreditationStore.setAccreditationMethod('ASSETS');
@@ -33,9 +31,8 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
     // this.props.accreditationStore
     //   .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
     //   .then(() => {
-    //     this.setState({ submitLoading: false });
+    // this.handleStepChange(step.stepToBeRendered);
     //   }).catch(() => {
-    //     this.setState({ submitLoading: false });
     //   });
   }
   render() {
@@ -48,7 +45,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       INCOME_UPLOAD_DOC_FORM,
       TRUST_ENTITY_ACCREDITATION_FRM,
     } = this.props.accreditationStore;
-    const steps = TRUST_ENTITY_ACCREDITATION_FRM.fields.trustEntityAccMethods.value === 'trustsAssets' ?
+    const steps = TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'ASSETS' ?
       [
         {
           name: '',
@@ -174,26 +171,18 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
 
     return (
       <div className="step-progress">
-        {!this.state.submitLoading ?
-          <MultiStep
-            createAccount={this.multiClickHandler}
-            steps={steps}
-            formTitle="Verify your accreditation"
-            setIsEnterPressed={setIsEnterPressed}
-            isEnterPressed={isEnterPressed}
-            resetEnterPressed={resetIsEnterPressed}
-            inProgress={inProgress}
-            handleMultiStepModalclose={this.handleMultiStepModalclose}
-            setStepTobeRendered={this.handleStepChange}
-            stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
-          /> :
-          <Dimmer active>
-            <Loader>
-              Please wait...<br /><br />
-              We are generating your agreement. This can take up to a minute.
-            </Loader>
-          </Dimmer>
-        }
+        <MultiStep
+          createAccount={this.multiClickHandler}
+          steps={steps}
+          formTitle="Verify your accreditation"
+          setIsEnterPressed={setIsEnterPressed}
+          isEnterPressed={isEnterPressed}
+          resetEnterPressed={resetIsEnterPressed}
+          inProgress={inProgress}
+          handleMultiStepModalclose={this.handleMultiStepModalclose}
+          setStepTobeRendered={this.handleStepChange}
+          // stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
+        />
       </div>
     );
   }
