@@ -139,11 +139,11 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
-      return (
+      return !this.props.steps[i].isHideLabel ? (
         <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
           {this.props.steps[i].name}
         </li>
-      );
+      ) : null;
     });
   }
 
@@ -168,7 +168,9 @@ export default class MultiStep extends React.Component {
           <Aux>
             <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
             <ol className="progtrckr">
-              {this.renderSteps()}
+              {!this.props.steps[this.state.compState].isHideLabel &&
+                this.renderSteps()
+              }
             </ol>
           </Aux>
           }

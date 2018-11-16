@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Divider, Button, Confirm, Grid } from 'semantic-ui-react';
+import { Header, Form, Divider, Button, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { DropZone } from '../../../../../../../theme/form';
+import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
@@ -19,15 +19,10 @@ export default class UploadDocument extends Component {
   }
   handleDelDoc = (field) => {
     this.props.accreditationStore.removeUploadedData('INCOME_UPLOAD_DOC_FORM', field);
-    this.props.uiStore.setConfirmBox('');
-  }
-  showThanksNote = () => {
-    this.props.history.push(`${this.props.match.url}/success`);
   }
 
   render() {
     const { INCOME_UPLOAD_DOC_FORM } = this.props.accreditationStore;
-    const { confirmBox } = this.props.uiStore;
     return (
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
@@ -42,7 +37,7 @@ export default class UploadDocument extends Component {
                     name={field}
                     fielddata={INCOME_UPLOAD_DOC_FORM.fields[field]}
                     ondrop={this.onFileDrop}
-                    onremove={this.confirmRemoveDoc}
+                    onremove={this.handleDelDoc}
                     containerclassname="fluid"
                   />
                 </Grid.Column>
@@ -51,18 +46,9 @@ export default class UploadDocument extends Component {
           </Grid>
           <Divider hidden />
           <div className="center-align">
-            <Button onClick={this.showThanksNote} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Confirm</Button>
+            <Button onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Confirm</Button>
           </div>
         </Form>
-        <Confirm
-          header="Confirm"
-          content="Are you sure you want to remove this file?"
-          open={confirmBox.entity === 'incomeDocSecondLastYear' || confirmBox.entity === 'incomeDocLastYear'}
-          onCancel={this.handleDelCancel}
-          onConfirm={() => this.handleDelDoc(confirmBox.entity)}
-          size="mini"
-          className="deletion"
-        />
       </div>
     );
   }
