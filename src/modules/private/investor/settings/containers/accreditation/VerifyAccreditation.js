@@ -67,7 +67,7 @@ export default class Accreditation extends React.Component {
           stepToBeRendered: 2,
         },
         {
-          name: 'Inc. evidence',
+          name: 'Evidence',
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           formName: 'INCOME_EVIDENCE_FORM',
@@ -80,6 +80,7 @@ export default class Accreditation extends React.Component {
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
           isDirty: true,
+          disableNextButton: true,
         },
       ]
       :
@@ -94,7 +95,7 @@ export default class Accreditation extends React.Component {
           stepToBeRendered: 1,
         },
         {
-          name: 'Inc. evidence',
+          name: 'Evidence',
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           formName: 'INCOME_EVIDENCE_FORM',
@@ -107,6 +108,7 @@ export default class Accreditation extends React.Component {
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
           isDirty: true,
+          disableNextButton: true,
         },
       ];
     const {

@@ -133,6 +133,12 @@ export class UserDetailsStore {
     this.detailsOfUser.data.user.accountStatus = status;
   }
 
+  @computed get isEntityTrust() {
+    const Accdetails = this.currentUser.data.user.roles.find(obj => obj.name === 'entity');
+
+    return (Accdetails && Accdetails.details && Accdetails.details.isTrust) || false;
+  }
+
   @action
   toggleState = (id, accountStatus) => {
     const params = { status: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCK', id };

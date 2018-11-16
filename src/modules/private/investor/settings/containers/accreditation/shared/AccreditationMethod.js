@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Grid } from 'semantic-ui-react';
 import { ACCREDITATION_METHODS_META } from '../../../../../../../services/constants/investmentLimit';
+import { FormInput } from '../../../../../../../theme/form';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
@@ -28,6 +29,15 @@ export default class AccreditationMethod extends Component {
         </p>
         <p>Please confirm which of the following is applicable for you:</p>
         <Form error className="account-type-tab">
+          {this.props.isTrust &&
+          <div className="field-wrap">
+            <FormInput
+              name="grantorName"
+              fielddata={ACCREDITATION_FORM.fields.grantorName}
+              changed={(e, result) => accreditationMethodChange(e, 'ACCREDITATION_FORM', result)}
+            />
+          </div>
+          }
           <Grid stackable textAlign="center">
             <Grid.Row columns={2}>
               {accreditationMethods.map(method => (

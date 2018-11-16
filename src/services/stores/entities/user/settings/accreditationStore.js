@@ -253,6 +253,11 @@ export class AccreditationStore {
   }
 
   @action
+  changeFormObject = (formObj, formArray) => {
+    this[formObj] = Validator.prepareFormObject(formArray);
+  }
+
+  @action
   updateAccreditation = (form, accountId, accountType) => {
     uiStore.setProgress();
     const userAccreditationDetails = Validator.evaluateFormData(this[form].fields);

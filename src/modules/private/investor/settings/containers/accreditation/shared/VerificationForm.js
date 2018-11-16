@@ -18,7 +18,8 @@ export default class VerificationForm extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Send verification request</Header>
-        <p className="center-align">Your lawyer, CPA, investment advisor or investment broker can verify that they have seen evidence of your accredited status.No documentation is required</p>
+        <p className="center-align">Your lawyer, CPA, investment advisor or investment broker can verify that they have seen evidence of your accredited status.</p>
+        <p className="center-align"> No documentation is required</p>
         <Form error>
           <div className="field-wrap">
             <FormDropDown
@@ -37,7 +38,7 @@ export default class VerificationForm extends Component {
             />
           </div>
           <div className="center-align">
-            <Button onClick={() => this.props.clicked('VERIFICATION_REQUEST_FORM')} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Confirm</Button>
+            <Button onClick={() => this.props.clicked('VERIFICATION_REQUEST_FORM')} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Send verification request</Button>
           </div>
         </Form>
       </div>

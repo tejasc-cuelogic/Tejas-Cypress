@@ -15,7 +15,7 @@ export default class IncomeEvidence extends Component {
     const incEvidenceMethods = INCOME_EVIDENCE_META.slice();
     return (
       <div>
-        <Header as="h3" textAlign="center">{ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income evidence' : 'Assets' }</Header>
+        <Header as="h3" textAlign="center">{this.props.isEntity ? 'Provide evidence of accreditation' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income evidence' : 'Assets' }</Header>
         <p className="center-align">You can provide evidence of accreditation either through the verification of a professional advisor or by uploading the required documents.</p>
         <Form error className="account-type-tab">
           <Grid columns={1}>
