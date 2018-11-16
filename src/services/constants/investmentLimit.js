@@ -153,7 +153,7 @@ export const TRUST_ENTITY_ACCREDITATION = {
       [
         {
           label: 'Trusts Assets',
-          value: 'trustsAssets',
+          value: 'ASSETS',
         },
         {
           label: 'My trust is revocable and I am accredited',
