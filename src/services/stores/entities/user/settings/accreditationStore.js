@@ -77,6 +77,27 @@ export class AccreditationStore {
     this.stepToBeRendered = step;
   }
 
+  isAllFormValidCheck = (type) => {
+    const forms = {
+      ACCREDITATION_FORM: [1, 2, 3],
+      NET_WORTH_FORM: [1, 2, 3],
+      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6],
+      VERIFICATION_REQUEST_FORM: [1, 4],
+      ASSETS_UPLOAD_DOC_FORM: [2, 5],
+      INCOME_UPLOAD_DOC_FORM: [3, 6],
+      ENTITY_ACCREDITATION_FORM: [4, 5, 6],
+      TRUST_ENTITY_ACCREDITATION_FRM: [7],
+    };
+    const formList = [];
+    forEach(forms, (form, key) => {
+      if (form.includes(type)) {
+        formList.push(key);
+      }
+    });
+    const notOkForms = formList.filter(form => !this[form].meta.isValid);
+    return notOkForms.length === 0;
+  }
+
   @action
   formChange = (e, result, form) => {
     this[form] = Validator.onChange(
@@ -192,9 +213,9 @@ export class AccreditationStore {
   }
 
   @action
-  setAccreditationMethod = (value) => {
-    this.ACCREDITATION_FORM =
-        Validator.onChange(this.ACCREDITATION_FORM, { name: 'method', value });
+  setAccreditationMethod = (form, value) => {
+    this[form] =
+        Validator.onChange(this[form], { name: 'method', value });
   }
   @action
   initiateSearch = (srchParams) => {
@@ -275,6 +296,19 @@ export class AccreditationStore {
         })
         .finally(() => uiStore.setProgress(false));
     });
+  }
+
+  @action
+  setFormData = (form, ref, accountType) => {
+    const { userDetails } = userDetailsStore;
+    const entityAccreditation = userDetails && userDetails.roles &&
+    userDetails.roles.find(role => role.name === accountType);
+    const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
+    if (!appData) {
+      return false;
+    }
+    this[form] = Validator.setFormData(this[form], appData, ref);
+    return false;
   }
 }
 export default new AccreditationStore();

@@ -13,8 +13,8 @@ import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 export default class VerifyEntityAccreditation extends React.Component {
   state = { submitLoading: false };
   componentWillMount() {
-    this.props.accreditationStore.setStepToBeRendered(0);
-    this.props.accreditationStore.setAccreditationMethod('ASSETS');
+    // this.props.accreditationStore.setStepToBeRendered(0);
+    // this.props.accreditationStore.setAccreditationMethod('ASSETS');
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');

@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { VERIFY_ACC_WITH_META } from './../../../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
+@withRouter
 @observer
 export default class TrustEntityAccreditationMethod extends Component {
+  componentWillMount() {
+    // const { accountType } = this.props.match.params;
+    // this.props.accreditationStore.setFormData
+    // ('ACCREDITATION_FORM', 'accreditation', accountType);
+  }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
@@ -18,7 +25,7 @@ export default class TrustEntityAccreditationMethod extends Component {
     const trustEntityAccMethods = VERIFY_ACC_WITH_META.slice();
     return (
       <div>
-        <Header as="h3" textAlign="center">Verify accreditaton with</Header>
+        <Header as="h3" textAlign="center">Verify accreditation with</Header>
         <p className="center-align">To invest in Regulation D or 506(c) offerings, you will need to verify that your entity is eligible for accreditation. </p>
         <p className="center-align">Please confirm which of the following is applicable for you:</p>
         <Form error className="account-type-tab">

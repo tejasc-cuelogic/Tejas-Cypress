@@ -194,6 +194,7 @@ export const VERIFICATION_REQUEST = {
     label: 'Verifier role',
     tooltip: 'Lawyer, CPA, investment advisor or investment broker',
     objRefOutput: 'verifier',
+    objRef: 'verifier',
   },
   email: {
     value: '',
@@ -202,6 +203,7 @@ export const VERIFICATION_REQUEST = {
     rule: 'required|email',
     label: 'Verifier e-mail address',
     objRefOutput: 'verifier',
+    objRef: 'verifier',
   },
 };
 
@@ -216,7 +218,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     fileId: '',
     fileData: '',
     customErrors: { required: 'required' },
-    // objRef: 'portalAgreementUpload',
+    objRef: 'assetsUpload',
     objRefOutput: 'assetsUpload',
     objType: 'FileObjectType',
   },
@@ -231,7 +233,7 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     fileData: '',
     customErrors: { required: 'required' },
     objRefOutput: 'assetsUpload',
-    // objRefOutput: 'portalAgreementUpload',
+    objRef: 'assetsUpload',
     objType: 'FileObjectType',
   },
 };
@@ -248,7 +250,7 @@ export const ASSETS_UPLOAD_DOCUMENTS = {
     fileData: [],
     customErrors: { required: 'required' },
     objRefOutput: 'assetsUpload',
-    // objRefOutput: 'portalAgreementUpload',
+    objRef: 'assetsUpload',
     objType: 'FileObjectType',
   },
 };
