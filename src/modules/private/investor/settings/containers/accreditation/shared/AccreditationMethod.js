@@ -8,6 +8,10 @@ import { ACCREDITATION_METHODS_META } from '../../../../../../../services/consta
 @withRouter
 @observer
 export default class AccreditationMethod extends Component {
+  componentWillMount() {
+    const { accountType } = this.props.match.params;
+    this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+  }
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
