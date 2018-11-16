@@ -367,6 +367,14 @@ export const PRIVATE_NAV = [
     path: 'admin/deployments',
     accessibleTo: ['admin', 'manager', 'support'],
   },
+  {
+    icon: 'payment',
+    title: 'Accreditation Requests',
+    // capability: 'ACCREDITATION_ANY',
+    to: 'accreditation',
+    path: 'admin/accreditation',
+    accessibleTo: ['admin', 'manager', 'support'],
+  },
 ];
 
 export const PUBLIC_NAV = [
