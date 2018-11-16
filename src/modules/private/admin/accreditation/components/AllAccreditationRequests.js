@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import { Card, Table } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader } from './../../../../../theme/shared';
 import Actions from './Actions';
@@ -48,7 +48,9 @@ export default class AllAccreditationRequests extends Component {
                     <Table.Cell>
                       <p>{accreditation.method}</p>
                     </Table.Cell>
-                    <Table.Cell><p>{accreditation.boxLink}</p></Table.Cell>
+                    <Table.Cell>
+                      <Link to={accreditation.boxLink} className="action" target="_blank" >{accreditation.boxLink}</Link>
+                    </Table.Cell>
                     <Actions {...this.props} />
                   </Table.Row>
                 ))

@@ -310,7 +310,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'dollar',
     title: 'CrowdPay',
-    // capability: 'CROWD_PAY_ANY',
+    capability: 'CROWD_PAY_ANY',
     to: 'crowdPay',
     heading: 'Manage Crowdpay Accounts',
     path: 'admin/crowdPay',
