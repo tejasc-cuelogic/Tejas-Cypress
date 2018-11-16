@@ -14,7 +14,7 @@ const ThanksNote = props => (
       <Divider section />
       <p>
         We are processing your <b>Accreditation</b>
-        request and we will notify you about status changes.
+        {' '}request and we will notify you about status changes.
       </p>
       <Divider hidden />
     </Modal.Header>
