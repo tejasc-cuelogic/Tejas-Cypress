@@ -1,5 +1,5 @@
-import { observable, action, toJS } from 'mobx';
-import { forEach } from 'lodash';
+import { observable, action, toJS, computed } from 'mobx';
+import { forEach, isArray } from 'lodash';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -9,9 +9,12 @@ import { updateAccreditation } from '../../../queries/accreditation';
 import { userDetailsQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
+import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
   @observable ACCREDITATION_FORM = Validator.prepareFormObject(ACCREDITATION_METHODS);
+  @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+  @observable CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
   @observable ENTITY_ACCREDITATION_FORM =
   Validator.prepareFormObject(ENTITY_ACCREDITATION_METHODS);
   @observable INCOME_EVIDENCE_FORM = Validator.prepareFormObject(INCOME_EVIDENCE);
@@ -21,9 +24,54 @@ export class AccreditationStore {
   @observable INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
   @observable ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
   @observable NET_WORTH_FORM = Validator.prepareFormObject(NET_WORTH);
-  @observable stepToBeRendered = '';
   @observable removeFileIdsList = [];
-
+  @observable stepToBeRendered = '';
+  @observable filters = false;
+  @observable requestState = {
+    filters: false,
+    search: {
+    },
+  };
+  @observable data = [];
+  @action
+  initRequest = (reqParams) => {
+    const {
+      keyword, method, type, startDate, endDate,
+    } = this.requestState.search;
+    const filters = toJS({ ...this.requestState.search });
+    delete filters.keyword;
+    let params = {
+      search: keyword,
+      method,
+      type,
+      page: reqParams ? reqParams.page : 1,
+    };
+    this.requestState.page = params.page;
+    if (startDate && endDate) {
+      params = {
+        ...params,
+        ...{ accountCreateFromDate: startDate, accountCreateToDate: endDate },
+      };
+    }
+    this.data = [
+      {
+        id: 1,
+        name: 'Alexandra Smith',
+        createdAt: '7/12/2018',
+        type: 'Asset',
+        method: 'Verifier',
+        boxLink: 'https://www.nextseed.com/',
+      },
+      {
+        id: 2,
+        name: 'Alexandra Smith',
+        createdAt: '7/12/2018',
+        type: 'Asset',
+        method: 'Verifier',
+        boxLink: 'https://www.nextseed.com/',
+      },
+    ];
+  }
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -168,6 +216,40 @@ export class AccreditationStore {
   setAccreditationMethod = (form, value) => {
     this[form] =
         Validator.onChange(this[form], { name: 'method', value });
+  }
+  @action
+  initiateSearch = (srchParams) => {
+    this.requestState.search = srchParams;
+    this.initRequest();
+  }
+  @action
+  setInitiateSrch = (name, value) => {
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value;
+      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
+    } else {
+      const srchParams = { ...this.requestState.search };
+      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
+    }
+  }
+  @action
+  toggleSearch = () => {
+    this.filters = !this.filters;
+  }
+
+  @computed get loading() {
+    return this.data.loading;
+  }
+  @computed get accreditations() {
+    return (this.data) || [];
   }
 
   @action
