@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Grid } from 'semantic-ui-react';
+import { Header, Grid, Popup, Icon } from 'semantic-ui-react';
 import { ENTITY_ACCREDITATION_METHODS_META } from './../../../../../../../services/constants/investmentLimit';
 
 @inject('uiStore', 'accreditationStore')
@@ -12,11 +12,11 @@ export default class VerifyEntityAccreditation extends Component {
     return (
       <div>
         <Header as="h3">How are you accredited?</Header>
-        <p>
-            To invest in Regulation D or 506(c) offerings, you will need to verify that
-            you are an accredited investor.
+        <p className="center-align">
+        To invest in Regulation D 506(c) offerings via an entity, the entity itself must be
+        verified as an accredited investor.
         </p>
-        <p>Please confirm which of the following is applicable for you:</p>
+        <p className="center-align">Please confirm which of the following is applicable for your entity.</p>
         <Grid stackable textAlign="center">
           <Grid.Row columns={2}>
             {accreditationMethods.map(method => (
@@ -27,6 +27,16 @@ export default class VerifyEntityAccreditation extends Component {
                   <Header as="h4">{method.header}</Header>
                   <p>
                     {method.desc}
+                    {method.tooltip &&
+                      <Popup
+                        hoverable
+                        trigger={<Icon color="green" name="help circle" />}
+                        content={method.tooltip}
+                        position="top center"
+                        className="center-align"
+                        wide
+                      />
+                    }
                   </p>
                 </div>
               </Grid.Column>

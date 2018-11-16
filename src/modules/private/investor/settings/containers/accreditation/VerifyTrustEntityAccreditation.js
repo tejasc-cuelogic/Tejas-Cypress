@@ -65,7 +65,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           formName: 'NET_WORTH_FORM',
         },
         {
-          name: 'Inc. evidence',
+          name: 'Evidence',
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           // isDirty: true,
@@ -79,6 +79,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           // isDirty: true,
           stepToBeRendered: 4,
           formName: 'VERIFICATION_REQUEST_FORM',
+          disableNextButton: true,
         },
       ]
       : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? [
@@ -109,7 +110,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           formName: 'NET_WORTH_FORM',
         },
         {
-          name: 'Inc. evidence',
+          name: 'Evidence',
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           // isDirty: true,
@@ -123,6 +124,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           // isDirty: true,
           stepToBeRendered: 5,
           formName: 'VERIFICATION_REQUEST_FORM',
+          disableNextButton: true,
         },
       ]
         :
@@ -146,7 +148,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             formName: 'ACCREDITATION_FORM',
           },
           {
-            name: 'Inc. evidence',
+            name: 'Evidence',
             component: <IncomeEvidence />,
             isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
             // isDirty: true,
@@ -160,6 +162,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             // isDirty: true,
             stepToBeRendered: 4,
             formName: 'ACCREDITATION_FORM',
+            disableNextButton: true,
           },
         ];
     const {

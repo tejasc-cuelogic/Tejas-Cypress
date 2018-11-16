@@ -55,7 +55,7 @@ export default class VerifyEntityAccreditation extends React.Component {
           formName: 'ENTITY_ACCREDITATION_FORM',
         },
         {
-          name: 'Inc. evidence',
+          name: 'Evidence',
           component: <IncomeEvidence />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
@@ -69,6 +69,7 @@ export default class VerifyEntityAccreditation extends React.Component {
           isDirty: true,
           stepToBeRendered: 3,
           formName: 'VERIFICATION_REQUEST_FORM',
+          disableNextButton: true,
         },
       ];
     const {

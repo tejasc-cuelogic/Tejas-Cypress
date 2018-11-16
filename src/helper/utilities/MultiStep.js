@@ -185,13 +185,15 @@ export default class MultiStep extends React.Component {
               className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
               onClick={this.previous}
             />
-            <Button
-              type="submit"
-              circular
-              icon={{ className: 'ns-arrow-right' }}
-              className={(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience' ? 'multistep__btn next active' : this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
-              onClick={this.next}
-            />
+            {!this.props.steps[this.state.compState].disableNextButton &&
+              <Button
+                type="submit"
+                circular
+                icon={{ className: 'ns-arrow-right' }}
+                className={(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience' ? 'multistep__btn next active' : this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
+                onClick={this.next}
+              />
+            }
           </Modal.Content>
         </Modal>
       </div>

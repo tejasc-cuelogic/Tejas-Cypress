@@ -46,7 +46,7 @@ export default class UploadDocument extends Component {
           </Grid>
           <Divider hidden />
           <div className="center-align">
-            <Button onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Confirm</Button>
+            <Button onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
           </div>
         </Form>
       </div>

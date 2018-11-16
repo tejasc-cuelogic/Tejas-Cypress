@@ -72,6 +72,7 @@ export const ENTITY_ACCREDITATION_METHODS_META = [
   {
     value: 'qualPurchase',
     desc: 'All equity owners are qualified purchasers',
+    tooltip: 'In order to be a qualified purchase you must have over $5 million in investmetns.',
   },
 ];
 
@@ -110,14 +111,14 @@ export const ACCREDITATION_METHODS = {
 
 export const INCOME_EVIDENCE_META = [
   {
-    header: 'Send verification request to my lawyer, CPA, investment adviser or broker',
+    header: 'Send verification request to my lawyer, CPA, registered investment adviser or broker dealer',
     value: 'verificationrequest',
-    desc: 'They’ll be asked to confirm that they have seen evidence of your claimed status. No documentation required',
+    desc: 'They`ll be asked to confirm in writing that they have reviewed and confirmed the evidence of your accredited investor status.',
   },
   {
     header: 'Upload document',
     value: 'uploaddocument',
-    desc: 'W2, 1040, other IRS or foregin tax authority document containing salary for the past 2 years (2016 and 2017), or a letter from your lawyer accountatn, investment advisor or investment broker',
+    desc: 'W2, 1040, or other official IRS or foreign tax authority document containing salary information for the past 2 years; or a letter from your lawyer, CPA, registered investment advisor or broker-dealer.',
   },
 ];
 
