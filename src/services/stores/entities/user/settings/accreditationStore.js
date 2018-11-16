@@ -1,5 +1,6 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray } from 'lodash';
+import cleanDeep from 'clean-deep';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -260,7 +261,14 @@ export class AccreditationStore {
   @action
   updateAccreditation = (form, accountId, accountType) => {
     uiStore.setProgress();
-    const userAccreditationDetails = Validator.evaluateFormData(this[form].fields);
+    let userAccreditationDetails = '';
+    if (form === 'ENTITY_ACCREDITATION_FORM') {
+      const accreForm = Validator.evaluateFormData(this.ACCREDITATION_FORM.fields);
+      const networthForm = Validator.evaluateFormData(this.NET_WORTH_FORM.fields);
+      userAccreditationDetails = cleanDeep({ ...accreForm, ...networthForm });
+    } else {
+      userAccreditationDetails = Validator.evaluateFormData(this[form].fields);
+    }
     if (form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM') {
       const fileUploadData = userAccreditationDetails.assetsUpload;
       userAccreditationDetails.assetsUpload = [];
@@ -299,6 +307,26 @@ export class AccreditationStore {
   }
 
   @action
+  setFileFormData = (filesData) => {
+    if (filesData && filesData.length) {
+      this.INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
+      this.ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
+      forEach(filesData, (file) => {
+        const field = file.type === 'ASSETS' ? 'statementDoc' : file.type === 'INCOME_2017' ? 'incomeDocLastYear' : 'incomeDocSecondLastYear';
+        if (file.fileInfo) {
+          if (file.type === 'ASSETS') {
+            this.ASSETS_UPLOAD_DOC_FORM.fields[field].fileId.push(file.fileInfo.fileId);
+            this.ASSETS_UPLOAD_DOC_FORM.fields[field].value.push(file.fileInfo.fileName);
+          } else {
+            this.INCOME_UPLOAD_DOC_FORM.fields[field].fileId = file.fileInfo.fileId;
+            this.INCOME_UPLOAD_DOC_FORM.fields[field].value = file.fileInfo.fileName;
+          }
+        }
+      });
+    }
+  }
+
+  @action
   setFormData = (form, ref, accountType) => {
     const { userDetails } = userDetailsStore;
     const entityAccreditation = userDetails && userDetails.roles &&
@@ -307,7 +335,11 @@ export class AccreditationStore {
     if (!appData) {
       return false;
     }
-    this[form] = Validator.setFormData(this[form], appData, ref);
+    if (form !== 'INCOME_UPLOAD_DOC_FORM' && form !== 'ASSETS_UPLOAD_DOC_FORM') {
+      this[form] = Validator.setFormData(this[form], appData, ref);
+    } else {
+      this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
+    }
     return false;
   }
 }

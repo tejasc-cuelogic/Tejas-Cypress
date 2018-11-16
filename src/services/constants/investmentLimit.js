@@ -58,19 +58,19 @@ export const ACCREDITATION_METHODS_META = [
 
 export const ENTITY_ACCREDITATION_METHODS_META = [
   {
-    value: '25000000CA',
+    value: 'TWENTY_FIVE_MILLION',
     desc: '$25,000,000 in company assets',
   },
   {
-    value: '5000000CA',
+    value: 'FIVE_MILLION',
     desc: '$5,000,000 in company assets',
   },
   {
-    value: 'asInvestor',
+    value: 'OWNERS_ACCREDITATED',
     desc: 'All owners are accredited investors',
   },
   {
-    value: 'qualPurchase',
+    value: 'OWNERS_QUALIFIED',
     desc: 'All equity owners are qualified purchasers',
     tooltip: 'In order to be a qualified purchase you must have over $5 million in investmetns.',
   },
@@ -78,12 +78,12 @@ export const ENTITY_ACCREDITATION_METHODS_META = [
 
 export const ENTITY_ACCREDITATION_METHODS = {
   method: {
-    value: '25000000CA',
+    value: 'TWENTY_FIVE_MILLION',
     values: [
-      { value: '25000000CA' },
-      { value: '5000000CA' },
-      { value: 'asInvestor' },
-      { value: 'qualPurchase' },
+      { value: 'TWENTY_FIVE_MILLION' },
+      { value: 'FIVE_MILLION' },
+      { value: 'OWNERS_ACCREDITATED' },
+      { value: 'OWNERS_QUALIFIED' },
     ],
     error: undefined,
     rule: 'required',
