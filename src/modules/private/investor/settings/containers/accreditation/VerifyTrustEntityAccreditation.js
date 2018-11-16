@@ -9,8 +9,8 @@ import AccreditationMethod from './shared/AccreditationMethod';
 import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMethod';
 
 @inject('uiStore', 'accreditationStore')
-@observer
 @withRouter
+@observer
 export default class VerifyTrustEntityAccreditation extends React.Component {
   componentWillMount() {
     // this.props.accreditationStore.setStepToBeRendered(0);
@@ -58,7 +58,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         },
         {
           name: 'Net worth',
-          component: <NetWorth />,
+          component: <NetWorth isTrust />,
           isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
           // isDirty: true,
           stepToBeRendered: 2,
@@ -94,7 +94,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         },
         {
           name: '',
-          component: <AccreditationMethod />,
+          component: <AccreditationMethod isTrust />,
           isHideLabel: true,
           isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
           // isDirty: true,
@@ -140,7 +140,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           },
           {
             name: '',
-            component: <AccreditationMethod />,
+            component: <AccreditationMethod isTrust />,
             isHideLabel: true,
             isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
             // isDirty: true,

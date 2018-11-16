@@ -11,7 +11,7 @@ export default class VerifyEntityAccreditation extends Component {
     const { ENTITY_ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>
-        <Header as="h3">How are you accredited?</Header>
+        <Header as="h3" className="center-align">How are you accredited?</Header>
         <p className="center-align">
         To invest in Regulation D 506(c) offerings via an entity, the entity itself must be
         verified as an accredited investor.

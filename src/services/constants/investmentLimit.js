@@ -91,6 +91,16 @@ export const ENTITY_ACCREDITATION_METHODS = {
 };
 
 export const ACCREDITATION_METHODS = {
+  grantorName: {
+    value: '',
+    label: 'Grantor Name',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'required.',
+    },
+  },
   method: {
     value: 'INCOME',
     values:
@@ -259,6 +269,24 @@ export const NET_WORTH = {
         {
           label: '$1,000,000',
           value: 'ONE_MILLION',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+export const ENTITY_TRUST_NET_WORTH = {
+  netWorth: {
+    value: 'FIVE_MILLION',
+    values:
+      [
+        {
+          label: '$5,000,000',
+          value: 'FIVE_MILLION',
+        },
+        {
+          label: '$25,000,000',
+          value: 'TWENTIY_FIVE_MILLION',
         },
       ],
     error: undefined,

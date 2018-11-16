@@ -56,7 +56,7 @@ export default class VerifyEntityAccreditation extends React.Component {
         },
         {
           name: 'Evidence',
-          component: <IncomeEvidence />,
+          component: <IncomeEvidence isEntity />,
           isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
           isDirty: true,
           stepToBeRendered: 2,
@@ -64,7 +64,7 @@ export default class VerifyEntityAccreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} />,
+          component: <Verification refLink={this.props.refLink} isEntity />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           stepToBeRendered: 3,

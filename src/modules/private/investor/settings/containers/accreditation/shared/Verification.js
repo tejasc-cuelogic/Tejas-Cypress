@@ -19,12 +19,13 @@ export default class Verification extends Component {
   }
   render() {
     const { ACCREDITATION_FORM, INCOME_EVIDENCE_FORM } = this.props.accreditationStore;
+    const { isEntity } = this.props;
     return (
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ?
         <VerificationForm clicked={this.submit} /> :
-        ACCREDITATION_FORM.fields.method.value === 'INCOME' ?
+        (ACCREDITATION_FORM.fields.method.value === 'INCOME') ?
           <IncomeUploadDocument clicked={this.submit} /> :
-          <AssetsUploadDocument clicked={this.submit} />
+          <AssetsUploadDocument clicked={this.submit} isEntity={isEntity} />
     );
   }
 }
