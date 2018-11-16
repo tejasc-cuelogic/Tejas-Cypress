@@ -5,7 +5,7 @@ import { VERIFY_ACC_WITH_META } from './../../../../../../../services/constants/
 
 @inject('accreditationStore')
 @observer
-export default class IncomeEvidence extends Component {
+export default class TrustEntityAccreditationMethod extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
@@ -25,9 +25,9 @@ export default class IncomeEvidence extends Component {
           <Grid columns={1}>
             {trustEntityAccMethods.map(method => (
               <Grid.Column
-                onClick={e => accreditationMethodChange(e, 'TRUST_ENTITY_ACCREDITATION_FRM', { name: 'trustEntityAccMethods', value: method.value })}
+                onClick={e => accreditationMethodChange(e, 'TRUST_ENTITY_ACCREDITATION_FRM', { name: 'method', value: method.value })}
               >
-                <div className={`user-type ${(TRUST_ENTITY_ACCREDITATION_FRM.fields.trustEntityAccMethods.value === method.value ? 'active' : '')}`}>
+                <div className={`user-type ${(TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === method.value ? 'active' : '')}`}>
                   <Header as="h6">{method.header}</Header>
                   <p>
                     {method.desc}

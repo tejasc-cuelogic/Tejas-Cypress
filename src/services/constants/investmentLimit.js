@@ -124,20 +124,20 @@ export const INCOME_EVIDENCE_META = [
 export const VERIFY_ACC_WITH_META = [
   {
     header: 'Trusts Assets',
-    value: 'trustsAssets',
+    value: 'ASSETS',
     desc: 'My trust is irrevocable and has more than $5,000,000 in assets.',
   },
   {
     header: 'My trust is revocable and I am accredited',
-    value: 'RevocableAndAccredited',
+    value: 'REVOCABLE_TRUST',
     desc: 'Grantor must provide evidence of revocability and accreditation.',
   },
 ];
 
 
 export const TRUST_ENTITY_ACCREDITATION = {
-  trustEntityAccMethods: {
-    value: 'trustsAssets',
+  method: {
+    value: 'ASSETS',
     values:
       [
         {
@@ -146,7 +146,7 @@ export const TRUST_ENTITY_ACCREDITATION = {
         },
         {
           label: 'My trust is revocable and I am accredited',
-          value: 'RevocableAndAccredited',
+          value: 'REVOCABLE_TRUST',
         },
       ],
     error: undefined,

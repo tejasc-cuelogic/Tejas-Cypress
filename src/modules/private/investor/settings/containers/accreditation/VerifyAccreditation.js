@@ -1,5 +1,4 @@
 import React from 'react';
-import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from './../../../../../../helper';
@@ -13,7 +12,6 @@ import AccreditationMethod from './shared/AccreditationMethod';
 @withRouter
 @observer
 export default class Accreditation extends React.Component {
-  state = { submitLoading: false };
   componentWillMount() {
     this.props.accreditationStore.setStepToBeRendered(0);
     this.props.accreditationStore.setAccreditationMethod('ASSETS');
@@ -34,9 +32,6 @@ export default class Accreditation extends React.Component {
         .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
         .then(() => {
           this.handleStepChange(step.stepToBeRendered);
-          this.setState({ submitLoading: false });
-        }).catch(() => {
-          this.setState({ submitLoading: false });
         });
     }
   }
@@ -77,7 +72,7 @@ export default class Accreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification params={this.props.match.params} refLink={this.props.refLink} />,
+          component: <Verification step={3} refLink={this.props.refLink} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
           isDirty: true,
@@ -103,7 +98,7 @@ export default class Accreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification params={this.props.match.params} refLink={this.props.refLink} />,
+          component: <Verification step={2} refLink={this.props.refLink} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
           isDirty: true,
@@ -118,26 +113,18 @@ export default class Accreditation extends React.Component {
 
     return (
       <div className="step-progress">
-        {!this.state.submitLoading ?
-          <MultiStep
-            createAccount={this.multiClickHandler}
-            steps={steps}
-            formTitle="Verify your accreditation"
-            setIsEnterPressed={setIsEnterPressed}
-            isEnterPressed={isEnterPressed}
-            resetEnterPressed={resetIsEnterPressed}
-            inProgress={inProgress}
-            handleMultiStepModalclose={this.handleMultiStepModalclose}
-            setStepTobeRendered={this.handleStepChange}
-            stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
-          /> :
-          <Dimmer active>
-            <Loader>
-              Please wait...<br /><br />
-              We are generating your agreement. This can take up to a minute.
-            </Loader>
-          </Dimmer>
-        }
+        <MultiStep
+          createAccount={this.multiClickHandler}
+          steps={steps}
+          formTitle="Verify your accreditation"
+          setIsEnterPressed={setIsEnterPressed}
+          isEnterPressed={isEnterPressed}
+          resetEnterPressed={resetIsEnterPressed}
+          inProgress={inProgress}
+          handleMultiStepModalclose={this.handleMultiStepModalclose}
+          setStepTobeRendered={this.handleStepChange}
+          stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
+        />
       </div>
     );
   }

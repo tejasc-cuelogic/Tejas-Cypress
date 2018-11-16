@@ -235,7 +235,17 @@ export class AccreditationStore {
   updateAccreditation = (form, accountId, accountType) => {
     uiStore.setProgress();
     const userAccreditationDetails = Validator.evaluateFormData(this[form].fields);
-    return new Promise((resolve) => {
+    if (form === 'INCOME_UPLOAD_DOC_FORM' || form === 'ASSETS_UPLOAD_DOC_FORM') {
+      const fileUploadData = userAccreditationDetails.assetsUpload;
+      userAccreditationDetails.assetsUpload = [];
+      forEach(fileUploadData, (file, key) => {
+        const fileObj = {};
+        fileObj.type = key === 'statementDoc' ? 'ASSETS' : key === 'incomeDocLastYear' ? 'INCOME_2017' : 'INCOME_2016';
+        fileObj.fileInfo = file;
+        userAccreditationDetails.assetsUpload.push(fileObj);
+      });
+    }
+    return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateAccreditation,
@@ -256,6 +266,7 @@ export class AccreditationStore {
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          reject();
         })
         .finally(() => uiStore.setProgress(false));
     });
