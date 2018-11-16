@@ -29,7 +29,6 @@ export default class Finances extends Component {
   render() {
     const {
       FINANCES_FORM,
-      INVESTOR_PROFILE_FORM,
       financesChange,
       canSubmitFieldsForm,
       chkboxTicked,
@@ -56,41 +55,30 @@ export default class Finances extends Component {
         </p>
         <Form error>
           <FormRadioGroup
-            fielddata={INVESTOR_PROFILE_FORM.fields.investorProfileType}
+            fielddata={FINANCES_FORM.fields.investorProfileType}
             name="investorProfileType"
             changed={investorProfileChange}
-            containerclassname="button-radio center-align mb-50"
+            containerclassname="button-radio center-align"
+            classname="center-align"
+            showerror
           />
-          <Form.Group widths="equal">
-            {['netWorth', 'annualIncomeThirdLastYear'].map(field => (
-              <MaskedInput
-                type="tel"
-                key={field}
-                name={field}
-                currency
-                fielddata={FINANCES_FORM.fields[field]}
-                changed={financesChange}
-                prefix="$ "
-                showerror
-              />
-            ))
-            }
-          </Form.Group>
-          <Form.Group widths="equal">
-            {['annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
-              <MaskedInput
-                type="tel"
-                key={field}
-                name={field}
-                currency
-                fielddata={FINANCES_FORM.fields[field]}
-                changed={financesChange}
-                prefix="$ "
-                showerror
-              />
-            ))
-            }
-          </Form.Group>
+          <div className="field-wrap">
+            <Form.Group widths={2}>
+              {['netWorth', 'annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
+                <MaskedInput
+                  type="tel"
+                  key={field}
+                  name={field}
+                  currency
+                  fielddata={FINANCES_FORM.fields[field]}
+                  changed={financesChange}
+                  prefix="$ "
+                  showerror
+                />
+              ))
+              }
+            </Form.Group>
+          </div>
         </Form>
       </div>
     );

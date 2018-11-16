@@ -539,9 +539,18 @@ export const INVESTOR_PROFILE = {
 };
 
 export const FINANCES = {
+  investorProfileType: {
+    value: '',
+    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: 'required',
+    },
+  },
   netWorth: {
     value: '',
-    label: 'Net Worth (Excluding Primary Residence)',
+    label: 'Net Worth',
     error: undefined,
     rule: 'required',
     placeHolder: 'Net Worth',

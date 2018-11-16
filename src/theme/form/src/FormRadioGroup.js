@@ -81,7 +81,7 @@ const FormRadioGroup = observer((props) => {
           }
         </Form.Group>
         {error && props.showerror &&
-          <FieldError classname={props.classname || false} error={error} />
+          <FieldError className={props.classname || false} error={error} />
         }
       </Aux>
     );

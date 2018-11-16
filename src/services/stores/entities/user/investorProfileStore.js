@@ -2,7 +2,6 @@ import { observable, action, computed, toJS } from 'mobx';
 import { isEmpty } from 'lodash';
 import {
   EMPLOYMENT,
-  INVESTOR_PROFILE,
   FINANCES,
   INVESTMENT_EXPERIENCE,
   BROKERAGE_EMPLOYMENT,
@@ -21,7 +20,6 @@ class InvestorProfileStore {
   FormValidator.prepareFormObject(BROKERAGE_EMPLOYMENT, true);
   @observable PUBLIC_COMPANY_REL_FORM =
   FormValidator.prepareFormObject(PUBLIC_COMPANY_REL, true);
-  @observable INVESTOR_PROFILE_FORM = FormValidator.prepareFormObject(INVESTOR_PROFILE, true);
   @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES, true);
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
   @observable chkboxTicked = null;
@@ -52,7 +50,7 @@ class InvestorProfileStore {
 
   @action
   investorProfileChange = (e, result) => {
-    this.formChange(e, result, 'INVESTOR_PROFILE_FORM');
+    this.formChange(e, result, 'FINANCES_FORM');
   }
 
   @action
@@ -114,7 +112,7 @@ class InvestorProfileStore {
 
   @computed
   get isValidInvestorProfileForm() {
-    return this.EMPLOYMENT_FORM.meta.isValid && this.INVESTOR_PROFILE_FORM.meta.isValid
+    return this.EMPLOYMENT_FORM.meta.isValid
     && this.FINANCES_FORM.meta.isValid && this.INVESTMENT_EXP_FORM.meta.isValid
     && this.BROKERAGE_EMPLOYMENT_FORM.meta.isValid && this.PUBLIC_COMPANY_REL_FORM.meta.isValid;
   }
@@ -147,7 +145,7 @@ class InvestorProfileStore {
           { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
-          taxFilingAs: this.INVESTOR_PROFILE_FORM.fields.investorProfileType.value,
+          taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
           annualIncome: [{
             year: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.year,
             income: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.value,
@@ -172,6 +170,9 @@ class InvestorProfileStore {
         };
       }
       formPayload.isPartialProfile = !this.isValidInvestorProfileForm;
+      if (formPayload.isPartialProfile === false && currentStep.form !== 'INVESTMENT_EXP_FORM') {
+        formPayload.isPartialProfile = true;
+      }
       if (currentStep.form === 'INVESTMENT_EXP_FORM' && this.isInvestmentExperienceValid) {
         this.submitForm(currentStep, formPayload);
       } else if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
@@ -216,7 +217,6 @@ class InvestorProfileStore {
         this.setFormData('BROKERAGE_EMPLOYMENT_FORM', investorProfileData);
         this.setFormData('PUBLIC_COMPANY_REL_FORM', investorProfileData);
         this.setFormData('FINANCES_FORM', investorProfileData);
-        this.setFormData('INVESTOR_PROFILE_FORM', investorProfileData);
         this.setFormData('INVESTMENT_EXP_FORM', investorProfileData);
         const getProfileStep = AccCreationHelper.establishProfileSteps();
         if (!this.EMPLOYMENT_FORM.meta.isValid) {
@@ -225,8 +225,6 @@ class InvestorProfileStore {
           this.setStepToBeRendered(getProfileStep.BROKERAGE_EMPLOYMENT_FORM);
         } else if (!this.PUBLIC_COMPANY_REL_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.PUBLIC_COMPANY_REL_FORM);
-        } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid) {
-          this.setStepToBeRendered(getProfileStep.INVESTOR_PROFILE_FORM);
         } else if (!this.FINANCES_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.FINANCES_FORM);
         } else if (!this.INVESTMENT_EXP_FORM.meta.isValid) {
@@ -307,7 +305,7 @@ class InvestorProfileStore {
           break;
         case 'FINANCES_FORM':
           this.FINANCES_FORM.fields.netWorth.value = investorProfileData.netWorth;
-          this.INVESTOR_PROFILE_FORM.fields.investorProfileType.value =
+          this.FINANCES_FORM.fields.investorProfileType.value =
           investorProfileData.taxFilingAs;
           if (investorProfileData.annualIncome) {
             ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
@@ -338,7 +336,6 @@ class InvestorProfileStore {
     this.resetFormData('PUBLIC_COMPANY_REL_FORM');
     this.resetFormData('FINANCES_FORM');
     this.resetFormData('INVESTMENT_EXP_FORM');
-    this.resetFormData('INVESTOR_PROFILE_FORM');
     this.stepToBeRendered = 0;
   }
 
