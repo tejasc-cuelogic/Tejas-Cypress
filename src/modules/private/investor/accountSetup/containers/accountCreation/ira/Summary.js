@@ -15,9 +15,11 @@ export default class Summary extends Component {
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else if (isCipExpired) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
+      this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {
       this.props.iraAccountStore.createAccount('Summary', 'submit').then(() => {
         this.props.history.push('/app/summary');
