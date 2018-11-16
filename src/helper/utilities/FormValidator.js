@@ -186,7 +186,8 @@ class FormValidator {
       mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
   resetFormData = (form, targetedFields) => {
     const currentForm = form;
-    const fieldsToReset = targetedFields || Object.keys(currentForm.fields);
+    const fieldsToReset = (targetedFields && targetedFields.length && targetedFields)
+    || Object.keys(currentForm.fields);
     fieldsToReset.map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
@@ -290,7 +291,7 @@ class FormValidator {
           },
         };
       } else {
-        fields[key].value = typeof fields[key].value === 'number' ? 0 : '';
+        fields[key].value = typeof fields[key].value === 'number' ? 0 : fields[key].default ? fields[key].default : '';
       }
     });
     return fields;

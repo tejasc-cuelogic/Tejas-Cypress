@@ -181,7 +181,7 @@ export default class Close extends Component {
             form={CLOSING_CONTITNGENCIES_FRM}
             formName="CLOSING_CONTITNGENCIES_FRM"
             refTab="close"
-            hideAddNewBtn
+            OfferingClose
           />
         </div>
         <Confirm

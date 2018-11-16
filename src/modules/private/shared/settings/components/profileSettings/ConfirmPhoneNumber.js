@@ -107,7 +107,7 @@ export default class ConfirmPhoneNumber extends Component {
             </Link> :
             <Link
               className="grey-link green-hover"
-              to={this.props.refLink ? this.props.refLink : this.props.match.url}
+              to="/app/profile-settings/profile-data/new-phone-number"
               onClick={this.handleChangePhoneNumber}
             >
               Change phone number

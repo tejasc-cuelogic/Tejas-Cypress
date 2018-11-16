@@ -47,7 +47,7 @@ class InvestmentDetails extends Component {
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
-      businessName: 'The Brewers Table',
+      businessName: campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName,
       summary: [
         {
           title: 'Total invested amount', content: getInvestor && getInvestor.totalRaisedAmount, type: 1, info: 'Your Total invested amount as of today',

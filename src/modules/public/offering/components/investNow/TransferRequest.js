@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Table, Divider, Popup, Icon } from 'semantic-ui-react';
+import { Header, Button, Table, Divider, Popup, Icon, Message } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
@@ -12,12 +12,14 @@ class TransferRequest extends Component {
     const {
       getTransferRequestAmount,
       setStepToBeRendered,
+      setFieldValue,
     } = this.props.investmentStore;
     if (getTransferRequestAmount > 0) {
       setStepToBeRendered(2);
     } else {
       this.props.history.push('agreement');
     }
+    setFieldValue('investmentFlowErrorMessage', null);
   }
   componentDidMount() {
     const { setStepToBeRendered, setFieldValue } = this.props.investmentStore;
@@ -40,6 +42,7 @@ class TransferRequest extends Component {
       getCurrCashAvailable,
       showTransferRequestErr,
       investmentAmount,
+      investmentFlowErrorMessage,
     } = investmentStore;
     const { getCurrCreditAvailable } = rewardStore;
     if (showTransferRequestErr) {
@@ -57,6 +60,11 @@ class TransferRequest extends Component {
     return (
       <div className="center-align">
         <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
+        {investmentFlowErrorMessage &&
+          <Message error textAlign="left" className="mb-40">
+            {investmentFlowErrorMessage}
+          </Message>
+        }
         <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>

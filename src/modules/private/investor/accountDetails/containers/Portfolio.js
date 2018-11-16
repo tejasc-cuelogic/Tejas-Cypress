@@ -93,7 +93,7 @@ export default class Portfolio extends Component {
         <Route path={`${match.url}/:offeringId/change-investment-limit`} render={props => <ChangeInvestmentLimit changeInvestment refLink={match.url} {...props} />} />
         <Route
           path={`${match.url}/cancel-investment/:id`}
-          render={props => <CancelInvestment refLink={match.url} {...props} />}
+          render={props => <CancelInvestment accType={includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity'} refLink={match.url} {...props} />}
         />
       </Aux>
     );

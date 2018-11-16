@@ -55,7 +55,7 @@ export default class AppNavigation extends Component {
     }
   }
   render() {
-    const { isFileUploading, formReadOnlyMode } = this.props.businessAppStore;
+    const { isFileUploading, formReadOnlyMode, ButtonTextToggle } = this.props.businessAppStore;
     const { inProgress } = this.props.uiStore;
     return (
       <Aux>
@@ -81,8 +81,10 @@ export default class AppNavigation extends Component {
                     </Aux>
                   ) :
                     <Aux>
-                      <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : 'Save'} />
-                      <Button loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content="Submit" />
+                      {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
+                    primary className="very relaxed" content={isFileUploading
+                    ? 'File operation in process' : 'Save'} /> */}
+                      <Button loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
                     </Aux>
                   }
                 </div>
