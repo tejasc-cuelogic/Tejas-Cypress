@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -25,6 +25,7 @@ export default class Summary extends Component {
     }
   }
   render() {
+    const { ccAgreementId, irsCertificationId, membershipAgreementId } = this.props.agreementsStore;
     const {
       FIN_INFO_FRM,
       PERSONAL_INFO_FRM,
@@ -104,8 +105,9 @@ export default class Summary extends Component {
         </div>
         <p className="center-align mt-30 grey-text">
           By continuing, I acknowledge that I have read and agree to the
-          terms of the <Link to="/app/summary/account-creation/entity" className="link">CrowdPay Custodial Account Agreement</Link>, <Link to="/app/summary/account-creation/entity" className="link">Substitute IRS Form W-9 Certification</Link>,
-          and the <Link to="/app/summary/account-creation/entity" className="link">NextSeed Membership Agreement</Link>.
+          terms of the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${ccAgreementId}`}>CrowdPay Custodial Account Agreement</a>,
+          <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${irsCertificationId}`}>Substitute IRS Form W-9 Certification</a>,
+          and the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${membershipAgreementId}`}>NextSeed Membership Agreement</a>.
         </p>
       </div>
     );

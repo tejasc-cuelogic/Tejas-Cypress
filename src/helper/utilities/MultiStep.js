@@ -180,7 +180,7 @@ export default class MultiStep extends React.Component {
               className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
               onClick={this.previous}
             />
-            {!(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Investment Experience') &&
+            {!this.props.steps[this.state.compState].disableNextButton &&
             <Button
               type="submit"
               circular
