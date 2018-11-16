@@ -23,11 +23,10 @@ export default class AccreditationMethod extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">How are you accredited?</Header>
-        <p>
-          To invest in Regulation D or 506(c) offerings, you will need to verify that
-          you are an accredited investor.
+        <p className="center-align">
+          {ACCREDITATION_FORM.fields.method.value === 'ASSETS' ? 'To invest in Regulation D on the NextSeed platform via 506(c) offerings, we are required to obtain proof of accreditation from you that meets the stringent standard the SEC has put in place.' : 'To invest in Regulation D or 506(c) offerings, you will need to verify that you are an accredited investor'}
         </p>
-        <p>Please confirm which of the following is applicable for you:</p>
+        <p className="center-align">Please confirm which of the following is applicable for you:</p>
         <Form error className="account-type-tab">
           {this.props.isTrust &&
           <div className="field-wrap">

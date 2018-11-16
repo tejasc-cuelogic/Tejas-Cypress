@@ -23,6 +23,7 @@ export default class InvestmentLimits extends Component {
     const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;
     this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
     this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
+    this.props.accreditationStore.setStepToBeRendered(0);
     this.props.history.push(this.props.match.url);
   }
 

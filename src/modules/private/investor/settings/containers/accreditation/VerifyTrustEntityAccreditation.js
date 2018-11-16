@@ -40,6 +40,14 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       this.handleStepChange(step.stepToBeRendered);
     }
   }
+  handleformTitle = () => {
+    if (this.props.accreditationStore.stepToBeRendered === '' || this.props.accreditationStore.stepToBeRendered === 0) {
+      return 'How is your trust accreditated?';
+    } else if (this.props.accreditationStore.stepToBeRendered === 1 && this.props.accreditationStore.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'ASSETS') {
+      return 'How is your trust accreditated?';
+    }
+    return 'Verify your accreditation';
+  }
   render() {
     const {
       NET_WORTH_FORM,
@@ -175,13 +183,13 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
     } = this.props.uiStore;
-
+    const formTitle = this.handleformTitle();
     return (
       <div className="step-progress">
         <MultiStep
           createAccount={this.multiClickHandler}
           steps={steps}
-          formTitle="Verify your accreditation"
+          formTitle={formTitle}
           setIsEnterPressed={setIsEnterPressed}
           isEnterPressed={isEnterPressed}
           resetEnterPressed={resetIsEnterPressed}
