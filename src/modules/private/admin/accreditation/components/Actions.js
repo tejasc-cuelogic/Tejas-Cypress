@@ -4,7 +4,7 @@ import { Table, Button } from 'semantic-ui-react';
 
 const actions = {
   approve: { label: 'Approve', color: 'green', actionValue: 'approved' },
-  decline: { label: 'Decline', color: 'red inverted', actionValue: 'declined' },
+  decline: { label: 'Decline', color: 'red', actionValue: 'declined' },
 };
 export default class Actions extends Component {
   render() {

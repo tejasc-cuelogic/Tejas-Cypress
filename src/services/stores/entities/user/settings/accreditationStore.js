@@ -1,4 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
+import isArray from 'lodash/isArray';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS } from '../../../../constants/investmentLimit';
 import { FormValidator } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
@@ -127,11 +128,28 @@ export class AccreditationStore {
     this.ACCREDITATION_FORM =
       FormValidator.onChange(this.ACCREDITATION_FORM, { name: 'accreditationMethods', value });
   }
-
+  @action
+  initiateSearch = (srchParams) => {
+    this.requestState.search = srchParams;
+    this.initRequest();
+  }
   @action
   setInitiateSrch = (name, value) => {
-    this.requestState.search[name] = value;
-    this.initRequest({ ...this.requestState.search });
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value;
+      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
+    } else {
+      const srchParams = { ...this.requestState.search };
+      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
+    }
   }
   @action
   toggleSearch = () => {
