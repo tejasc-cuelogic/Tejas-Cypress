@@ -35,7 +35,7 @@ class InvestorSignup extends Component {
   };
   render() {
     const {
-      SIGNUP_FRM, signupChange, pwdInputType,
+      SIGNUP_FRM, signupChange, pwdInputType, currentScore,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.code === 'UsernameExistsException'
@@ -114,7 +114,7 @@ class InvestorSignup extends Component {
               </Message>
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
             </div>
           </Form>
         </Modal.Content>

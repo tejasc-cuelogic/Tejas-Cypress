@@ -30,6 +30,7 @@ export class AuthStore {
   @observable NEWSLETTER_FRM = Validator.prepareFormObject(NEWSLETTER);
   @observable confirmProgress = false;
   @observable pwdInputType = 'password';
+  @observable currentScore = 0;
 
 
   @action
@@ -80,6 +81,9 @@ export class AuthStore {
     } else {
       this.SIGNUP_FRM = Validator.onChange(this.SIGNUP_FRM, Validator.pullValues(e, result));
     }
+    if (e.score !== undefined) {
+      this.currentScore = e.score;
+    }
   };
 
   @action
@@ -114,6 +118,9 @@ export class AuthStore {
     } else {
       this.CHANGE_PASS_FRM = Validator.onChange(this.CHANGE_PASS_FRM, Validator.pullValues(e, res));
     }
+    if (e.score !== undefined) {
+      this.currentScore = e.score;
+    }
   };
 
   @action
@@ -128,6 +135,9 @@ export class AuthStore {
         Validator.onChange(this.RESET_PASS_FRM, Validator.pullValuesForPassword(e, res));
     } else {
       this.RESET_PASS_FRM = Validator.onChange(this.RESET_PASS_FRM, typeof e === 'string' ? { name: 'code', value: e } : Validator.pullValues(e, res));
+    }
+    if (e.score !== undefined) {
+      this.currentScore = e.score;
     }
   };
 
