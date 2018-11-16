@@ -63,6 +63,10 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       keyTerms {
+        minOfferingAmtExpense
+        maxOfferingAmtExpense
+        useOfProceedFootnote
+        currentFinancialStatements
         submitted {
           id
           by

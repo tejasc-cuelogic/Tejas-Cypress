@@ -288,6 +288,34 @@ export const KEY_TERMS = {
     fileData: '',
     objType: 'FileObjectType',
   },
+  minOfferingAmtExpense: {
+    value: '',
+    label: 'Min Offering Amount Expense',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  maxOfferingAmtExpense: {
+    value: '',
+    label: 'Max Offering Amount Expense',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  useOfProceedFootnote: {
+    value: '',
+    label: 'Use of Proceeds Calculation Footnote',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  currentFinancialStatements: {
+    value: '',
+    label: 'Current Financial Statemetns (New Business)',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
