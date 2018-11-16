@@ -34,9 +34,9 @@ export default class KeyTerms extends Component {
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     return (
       <div className="inner-content-spacer">
-        <Header as="h4">General</Header>
         <Form>
-          <Form.Group widths="3">
+          <Header as="h4">General</Header>
+          <Form.Group widths={3}>
             {
             ['legalBusinessName', 'shorthandBusinessName'].map(field => (
               <FormInput
@@ -111,10 +111,8 @@ export default class KeyTerms extends Component {
               />
             </div>
           </Form.Group>
-        </Form>
-        <Header as="h4">Key Terms</Header>
-        <Form>
-          <Form.Group widths="3">
+          <Header as="h4">Key Terms</Header>
+          <Form.Group widths={3}>
             <MaskedInput
               displayMode={isReadonly}
               name="maturity"
@@ -174,7 +172,7 @@ export default class KeyTerms extends Component {
               percentage
             />
           </Form.Group>
-          <Form.Group widths="2">
+          <Form.Group widths={2}>
             {
             ['investmentMultipleSummary', 'revShareSummary'].map(field => (
               <FormTextarea
@@ -188,10 +186,8 @@ export default class KeyTerms extends Component {
             ))
           }
           </Form.Group>
-        </Form>
-        <Header as="h4">Legal</Header>
-        <Form>
-          <Form.Group widths="3">
+          <Header as="h4">Legal</Header>
+          <Form.Group widths={3}>
             {
               ['locationRiskFactors', 'stateOfFormation', 'appendixATitle'].map(field => (
                 <FormInput
@@ -234,7 +230,7 @@ export default class KeyTerms extends Component {
               ))
             }
           </Form.Group>
-          <Form.Group widths="2">
+          <Form.Group widths={2}>
             {['nsFeeCalcDescription', 'currentFinancialStatements', 'minOfferingAmtExpense', 'maxOfferingAmtExpense', 'useOfProceedFootnote'].map(field => (
               <FormTextarea
                 readOnly={isReadonly}
@@ -247,9 +243,33 @@ export default class KeyTerms extends Component {
             ))
           }
           </Form.Group>
-          <Form.Group widths="2">
+          <Form.Group widths={3}>
             {
-              ['isNewBusiness', 'isHealthcare', 'isFood', 'isAlcohol'].map(field => (
+              ['isNewBusiness', 'isHealthcare'].map(field => (
+                <div className="field">
+                  <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
+                  <Form.Group inline>
+                    <FormRadioGroup
+                      disabled={isReadonly}
+                      fielddata={KEY_TERMS_FRM.fields[field]}
+                      name={field}
+                      changed={(e, result) => formChange(e, result, formName)}
+                    />
+                  </Form.Group>
+                </div>
+              ))
+            }
+            <DropZone
+              disabled={isReadonly}
+              name="uploadProformas"
+              fielddata={KEY_TERMS_FRM.fields.uploadProformas}
+              ondrop={(files, name) => this.onProFormasDrop(files, name)}
+              onremove={fieldName => this.handleDelDoc(fieldName)}
+              uploadtitle="Upload a file"
+              containerclassname="field"
+            />
+            {
+              ['isAlcohol', 'isFood'].map(field => (
                 <div className="field">
                   <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
                   <Form.Group inline>
@@ -264,15 +284,6 @@ export default class KeyTerms extends Component {
               ))
             }
           </Form.Group>
-          <DropZone
-            disabled={isReadonly}
-            name="uploadProformas"
-            fielddata={KEY_TERMS_FRM.fields.uploadProformas}
-            ondrop={(files, name) => this.onProFormasDrop(files, name)}
-            onremove={fieldName => this.handleDelDoc(fieldName)}
-            uploadtitle="Upload a file"
-            containerclassname="field"
-          />
           <Divider hidden />
           <ButtonGroupType2
             submitted={submitted}
