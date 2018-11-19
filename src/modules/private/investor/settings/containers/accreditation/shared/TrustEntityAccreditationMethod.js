@@ -12,10 +12,6 @@ export default class TrustEntityAccreditationMethod extends Component {
     const { accountType } = this.props.match.params;
     this.props.accreditationStore.setFormData('TRUST_ENTITY_ACCREDITATION_FRM', 'accreditation', accountType);
   }
-  handleCloseModal = (e) => {
-    e.stopPropagation();
-    this.props.history.goBack();
-  }
   render() {
     const {
       TRUST_ENTITY_ACCREDITATION_FRM,

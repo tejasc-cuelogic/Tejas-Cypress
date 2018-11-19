@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import moment from 'moment';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
@@ -40,6 +41,7 @@ export default class FinancialInfo extends Component {
       getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
     } = this.props.investmentLimitStore;
     const { currentUser } = this.props.userDetailsStore;
+    const isSubmitted = true;
     if (currentUser.loading) {
       return <InlineLoader />;
     }
@@ -100,14 +102,29 @@ export default class FinancialInfo extends Component {
                       </Card.Content>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                      <Card.Content>
-                        <Header as="h4">Accreditation</Header>
-                        <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
-                        <Divider hidden />
-                        <Card.Description>
-                          <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify accreditation" />
-                        </Card.Description>
-                      </Card.Content>
+                      {isSubmitted ?
+                        <Card.Content>
+                          <Header as="h4">
+                            Accreditation
+                            {'  '}<Button className="link-button" color="green" onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)}>Update accreditation</Button>
+                          </Header>
+                          <dl className="dl-horizontal">
+                            <dt>Status :</dt>
+                            <dd className="negative-text">Failed</dd>
+                            <dt>Date :</dt>
+                            <dd>{moment(new Date()).format('MM/DD/YYYY')}</dd>
+                          </dl>
+                        </Card.Content>
+                        :
+                        <Card.Content>
+                          <Header as="h4">Reg D 506(c) Investor Accreditation</Header>
+                          <p className="intro-text">In order to participate in Reg D offerings, the SEC requires NextSeed to verify your Accredited Investor status</p>
+                          <Divider hidden />
+                          <Card.Description>
+                            <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify accreditation" />
+                          </Card.Description>
+                        </Card.Content>
+                      }
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>

@@ -18,10 +18,7 @@ export default class Accreditation extends React.Component {
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');
-    const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;
-    this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
-    this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
-    this.props.accreditationStore.setStepToBeRendered(0);
+    this.props.accreditationStore.resetAllForms();
   }
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);

@@ -20,10 +20,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');
-    const { INCOME_EVIDENCE_FORM, VERIFICATION_REQUEST_FORM } = this.props.accreditationStore;
-    this.props.accreditationStore.resetAccreditation(VERIFICATION_REQUEST_FORM);
-    this.props.accreditationStore.resetAccreditation(INCOME_EVIDENCE_FORM);
-    this.props.accreditationStore.setStepToBeRendered(0);
+    this.props.accreditationStore.resetAllForms();
   }
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
@@ -44,7 +41,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
     if (this.props.accreditationStore.stepToBeRendered === '' || this.props.accreditationStore.stepToBeRendered === 0) {
       return 'How is your trust accreditated?';
     } else if (this.props.accreditationStore.stepToBeRendered === 1 && this.props.accreditationStore.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'ASSETS') {
-      return 'How is your trust accreditated?';
+      return 'What is your trust net worth??';
     }
     return 'Verify your accreditation';
   }
@@ -90,7 +87,6 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           component: <Verification refLink={this.props.refLink} type={3} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
-          stepToBeRendered: 4,
           formName: 'VERIFICATION_REQUEST_FORM',
           disableNextButton: true,
         },
@@ -135,7 +131,6 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           component: <Verification refLink={this.props.refLink} type={3} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
-          stepToBeRendered: 5,
           formName: 'VERIFICATION_REQUEST_FORM',
           disableNextButton: true,
         },
@@ -149,7 +144,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             isValid: TRUST_ENTITY_ACCREDITATION_FRM.meta.isFieldValid ? '' : 'error',
             isDirty: true,
             stepToBeRendered: 1,
-            formName: 'ACCREDITATION_FORM',
+            formName: 'TRUST_ENTITY_ACCREDITATION_FRM',
           },
           {
             name: '',
@@ -166,14 +161,15 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
             isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
             stepToBeRendered: 3,
             isDirty: true,
-            formName: 'ACCREDITATION_FORM',
+            formName: 'INCOME_EVIDENCE_FORM',
           },
           {
             name: 'Verification',
             component: <Verification refLink={this.props.refLink} type={3} />,
             isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
             isDirty: true,
-            formName: 'ACCREDITATION_FORM',
+            formName: 'VERIFICATION_REQUEST_FORM',
+            stepToBeRendered: 4,
             disableNextButton: true,
           },
         ];

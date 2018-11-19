@@ -15,10 +15,6 @@ export default class AccreditationMethod extends Component {
       this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
     }
   }
-  handleCloseModal = (e) => {
-    e.stopPropagation();
-    this.props.history.goBack();
-  }
   render() {
     const accreditationMethods = this.props.isTrust ?
       ENTITY_TRUST_ACCREDITATION_METHODS_META.slice() : ACCREDITATION_METHODS_META.slice();
