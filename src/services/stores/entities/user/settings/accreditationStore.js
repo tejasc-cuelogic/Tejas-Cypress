@@ -28,6 +28,7 @@ export class AccreditationStore {
   @observable removeFileIdsList = [];
   @observable stepToBeRendered = '';
   @observable filters = false;
+  @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
     filters: false,
     search: {
@@ -452,12 +453,15 @@ export class AccreditationStore {
     return false;
   }
 
-  accrediationStatus = (accountType) => {
+  @action
+  initiateAccreditation = () => {
     const { userDetails } = userDetailsStore;
     const entityAccreditation = userDetails && userDetails.roles &&
-    userDetails.roles.find(role => role.name === accountType);
-    const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
-    return (appData && appData.accreditation && appData.accreditation.status) || false;
+    userDetails.roles.find(role => role.name === 'entity');
+    this.accreditationData.individual = userDetails && userDetails.accreditation;
+    this.accreditationData.ira = userDetails && userDetails.accreditation;
+    this.accreditationData.entity = entityAccreditation && entityAccreditation.details &&
+    entityAccreditation.details.accreditation;
   }
 }
 export default new AccreditationStore();

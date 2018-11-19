@@ -7,7 +7,7 @@ import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
-
+import { ACCREDITATION_STATUS_ENUMS, ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constants/investmentLimit';
 
 @inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
 @withRouter
@@ -15,6 +15,7 @@ import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
 export default class FinancialInfo extends Component {
   componentWillMount() {
     this.props.investmentLimitStore.setAccountsLimits();
+    this.props.accreditationStore.initiateAccreditation();
   }
   submit = (e) => {
     e.preventDefault();
@@ -40,7 +41,7 @@ export default class FinancialInfo extends Component {
     const {
       getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
     } = this.props.investmentLimitStore;
-    const { accrediationStatus } = this.props.accreditationStore;
+    const { accreditationData } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
     if (currentUser.loading) {
       return <InlineLoader />;
@@ -102,7 +103,9 @@ export default class FinancialInfo extends Component {
                       </Card.Content>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                      {accrediationStatus(account.name) ?
+                      {accreditationData[account.name] &&
+                      accreditationData[account.name].status ===
+                      ACCREDITATION_STATUS_ENUMS.REQUESTED ?
                         <Card.Content>
                           <Header as="h4">
                             Accreditation
@@ -110,9 +113,9 @@ export default class FinancialInfo extends Component {
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <dd className="negative-text">Failed</dd>
+                            <dd className="negative-text">{accreditationData[account.name] && accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]}</dd>
                             <dt>Date :</dt>
-                            <dd>{moment(new Date()).format('MM/DD/YYYY')}</dd>
+                            <dd>{accreditationData[account.name] && accreditationData[account.name].requestDate ? moment(accreditationData[account.name].requestDate).format('MM/DD/YYYY') : '-'}</dd>
                           </dl>
                         </Card.Content>
                         :

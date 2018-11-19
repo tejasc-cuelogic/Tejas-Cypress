@@ -1,3 +1,15 @@
+export const ACCREDITATION_STATUS_LABEL = {
+  REQUESTED: 'Requested',
+  APPROVED: 'Approved',
+  DECLINED: 'Declined',
+};
+
+export const ACCREDITATION_STATUS_ENUMS = {
+  REQUESTED: 'REQUESTED',
+  APPROVED: 'APPROVED',
+  DECLINED: 'DECLINED',
+};
+
 export const INVESTEMENT_LIMIT = {
   annualIncome: {
     value: '',
