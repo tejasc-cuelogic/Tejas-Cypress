@@ -44,7 +44,8 @@ const ProgressCard = props => (
           return null;
         }
         const verificationStatus =
-        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification);
+        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification) ||
+        props.signupStatus.isMigratedFullAccount;
         const pathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.route}` :
         `${props.match.url}/${currentCard.route}`;
         const altPathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.altRoute}` :
