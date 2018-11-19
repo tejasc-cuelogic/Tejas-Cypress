@@ -213,6 +213,16 @@ export class AccreditationStore {
   }
 
   @action
+  resetAllForms = () => {
+    const forms = ['ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
+    forms.forEach((formName) => {
+      Validator.resetFormData(this[formName]);
+    });
+    this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = 'verificationrequest';
+    this.setStepToBeRendered(0);
+  }
+
+  @action
   setAccreditationMethod = (form, value) => {
     this[form] =
         Validator.onChange(this[form], { name: 'method', value });
