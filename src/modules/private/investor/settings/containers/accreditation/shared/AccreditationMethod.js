@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Grid } from 'semantic-ui-react';
-import { ACCREDITATION_METHODS_META } from '../../../../../../../services/constants/investmentLimit';
+import { ACCREDITATION_METHODS_META, ENTITY_TRUST_ACCREDITATION_METHODS_META } from '../../../../../../../services/constants/investmentLimit';
 import { FormInput } from '../../../../../../../theme/form';
 
 @inject('uiStore', 'accreditationStore')
@@ -10,11 +10,14 @@ import { FormInput } from '../../../../../../../theme/form';
 @observer
 export default class AccreditationMethod extends Component {
   componentWillMount() {
-    const { accountType } = this.props.match.params;
-    this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+    if (!this.props.isTrust) {
+      const { accountType } = this.props.match.params;
+      this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+    }
   }
   render() {
-    const accreditationMethods = ACCREDITATION_METHODS_META.slice();
+    const accreditationMethods = this.props.isTrust ?
+      ENTITY_TRUST_ACCREDITATION_METHODS_META.slice() : ACCREDITATION_METHODS_META.slice();
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
     return (
       <div>

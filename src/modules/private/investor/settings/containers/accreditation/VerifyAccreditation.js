@@ -73,7 +73,7 @@ export default class Accreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification step={3} refLink={this.props.refLink} />,
+          component: <Verification step={3} refLink={this.props.refLink} type={1} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
           isDirty: true,
@@ -101,7 +101,7 @@ export default class Accreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification step={2} refLink={this.props.refLink} />,
+          component: <Verification step={2} refLink={this.props.refLink} type={1} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           formName: 'VERIFICATION_REQUEST_FORM',
           isDirty: true,

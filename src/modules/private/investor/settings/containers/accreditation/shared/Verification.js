@@ -12,7 +12,12 @@ export default class Verification extends Component {
   submit = (form) => {
     const { params } = this.props.match;
     this.props.accreditationStore
-      .updateAccreditation(form, params.accountId, params.accountType.toUpperCase())
+      .updateAccreditation(
+        form,
+        params.accountId,
+        params.accountType.toUpperCase(),
+        this.props.type || 0,
+      )
       .then(() => {
         this.props.history.push(`${this.props.refLink}/success`);
       }).catch(() => this.props.accreditationStore.setStepToBeRendered(this.props.step));

@@ -84,7 +84,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} />,
+          component: <Verification refLink={this.props.refLink} type={3} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           formName: 'VERIFICATION_REQUEST_FORM',
@@ -128,7 +128,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} />,
+          component: <Verification refLink={this.props.refLink} type={3} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           formName: 'VERIFICATION_REQUEST_FORM',
@@ -165,7 +165,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           },
           {
             name: 'Verification',
-            component: <Verification refLink={this.props.refLink} />,
+            component: <Verification refLink={this.props.refLink} type={3} />,
             isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
             isDirty: true,
             formName: 'VERIFICATION_REQUEST_FORM',

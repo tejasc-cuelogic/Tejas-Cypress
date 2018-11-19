@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { INCOME_EVIDENCE_META } from './../../../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
+@withRouter
 @observer
 export default class IncomeEvidence extends Component {
+  componentWillMount() {
+    // this.props.accreditationStore.checkFormValid('INCOME_EVIDENCE_FORM', false, false);
+    const { accountType } = this.props.match.params;
+    this.props.accreditationStore.setFormData('INCOME_EVIDENCE_FORM', 'accreditation', accountType);
+  }
   render() {
     const {
       ACCREDITATION_FORM,
