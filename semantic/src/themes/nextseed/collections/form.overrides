@@ -111,6 +111,7 @@
             p.commet-area{
                 font-weight:500;
                 color:@neutral;
+                word-break:break-all;
             }
         }
         &.secondary textarea{
