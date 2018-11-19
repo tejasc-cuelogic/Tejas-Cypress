@@ -1,9 +1,9 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty } from 'lodash';
+import { isEmpty, isArray } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { accountStore } from '../../index';
 import {
-  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND,
+  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
 
 export class BankAccountStore {
@@ -16,6 +16,13 @@ export class BankAccountStore {
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
+  @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+  @observable filters = false;
+  @observable requestState = {
+    filters: false,
+    search: {
+    },
+  };
 
   @action
   setDepositMoneyNow(status) {
@@ -135,6 +142,61 @@ export class BankAccountStore {
     }
     this.depositMoneyNow = true;
     this.showAddFunds = false;
+  }
+
+  @action
+  initRequest = () => {
+    this.data = [
+      {
+        id: 1,
+        name: 'Alexandra Smith',
+        createdAt: '7/12/2018',
+        type: 'Plaid',
+        transaction: '2424024249',
+      },
+      {
+        id: 2,
+        name: 'Johny Kaka',
+        createdAt: '7/12/2018',
+        type: 'Manual',
+        transaction: '2534535435',
+      },
+    ];
+  }
+
+  @action
+  initiateSearch = (srchParams) => {
+    this.requestState.search = srchParams;
+    this.initRequest();
+  }
+  @action
+  setInitiateSrch = (name, value) => {
+    if (name === 'startDate' || name === 'endDate') {
+      this.requestState.search[name] = value;
+      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
+        const srchParams = { ...this.requestState.search };
+        this.initiateSearch(srchParams);
+      }
+    } else {
+      const srchParams = { ...this.requestState.search };
+      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+        srchParams[name] = value;
+      } else {
+        delete srchParams[name];
+      }
+      this.initiateSearch(srchParams);
+    }
+  }
+  @action
+  toggleSearch = () => {
+    this.filters = !this.filters;
+  }
+
+  @computed get loading() {
+    return this.data.loading;
+  }
+  @computed get changeRequests() {
+    return (this.data) || [];
   }
 
   @action

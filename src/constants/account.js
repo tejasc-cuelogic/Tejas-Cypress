@@ -599,3 +599,26 @@ export const INV_PROFILE = {
   ...FINANCES,
   ...INVESTMENT_EXPERIENCE,
 };
+
+export const FILTER_META = {
+  method: {
+    value: [],
+    values: [
+      { text: 'All', value: 'all' },
+      { text: 'Verifier', value: 'verifier' },
+      { text: 'Upload', value: 'upload' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
+  type: {
+    value: [],
+    values: [
+      { text: 'All', value: 'all' },
+      { text: 'Plaid', value: 'plaid' },
+      { text: 'Manual', value: 'manual' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
+};
