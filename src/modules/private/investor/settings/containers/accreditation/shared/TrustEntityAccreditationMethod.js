@@ -9,9 +9,8 @@ import { VERIFY_ACC_WITH_META } from './../../../../../../../services/constants/
 @observer
 export default class TrustEntityAccreditationMethod extends Component {
   componentWillMount() {
-    // const { accountType } = this.props.match.params;
-    // this.props.accreditationStore.setFormData
-    // ('ACCREDITATION_FORM', 'accreditation', accountType);
+    const { accountType } = this.props.match.params;
+    this.props.accreditationStore.setFormData('TRUST_ENTITY_ACCREDITATION_FRM', 'accreditation', accountType);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();

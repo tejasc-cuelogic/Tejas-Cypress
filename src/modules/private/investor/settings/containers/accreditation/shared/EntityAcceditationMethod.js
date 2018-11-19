@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
 import { Header, Grid, Popup, Icon } from 'semantic-ui-react';
 import { ENTITY_ACCREDITATION_METHODS_META } from './../../../../../../../services/constants/investmentLimit';
 
 @inject('uiStore', 'accreditationStore')
+@withRouter
 @observer
 export default class VerifyEntityAccreditation extends Component {
+  componentWillMount() {
+    const { accountType } = this.props.match.params;
+    this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+    this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
+  }
   render() {
     const accreditationMethods = ENTITY_ACCREDITATION_METHODS_META.slice();
-    const { ENTITY_ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
+    const {
+      NET_WORTH_FORM,
+      accreditationMethodChange,
+      ACCREDITATION_FORM,
+    } = this.props.accreditationStore;
     return (
       <div>
         <Header as="h3" className="center-align">How are you accredited?</Header>
@@ -21,9 +32,9 @@ export default class VerifyEntityAccreditation extends Component {
           <Grid.Row columns={2}>
             {accreditationMethods.map(method => (
               <Grid.Column
-                onClick={e => accreditationMethodChange(e, 'ENTITY_ACCREDITATION_FORM', { name: 'method', value: method.value })}
+                onClick={(e) => { accreditationMethodChange(e, 'NET_WORTH_FORM', { name: 'netWorth', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? method.value : null }); accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? 'ASSETS' : method.value }); }}
               >
-                <div className={`user-type ${(ENTITY_ACCREDITATION_FORM.fields.method.value === method.value ? 'active' : '')}`}>
+                <div className={`user-type ${((NET_WORTH_FORM.fields.netWorth.value === method.value || ACCREDITATION_FORM.fields.method.value === method.value) ? 'active' : '')}`}>
                   <Header as="h4">{method.header}</Header>
                   <p>
                     {method.desc}
