@@ -7,7 +7,7 @@ const ButtonGroup = ({
   isManager, approved, updateOffer, isIssuer, submitted, issuerSubmitted,
 }) => (
   <div className="sticky-actions">
-    <Button.Group vertical icon className="time-stamp">
+    <Button.Group vertical icon size="tiny" className="time-stamp">
       {!isIssuer && issuerSubmitted &&
         <Button as="span" className="time-stamp">
           <Icon className="ns-circle-line" color="green" />{' '}
@@ -27,7 +27,7 @@ const ButtonGroup = ({
         </Button>
       }
     </Button.Group>
-    <Button.Group floated="right">
+    <Button.Group>
       {isManager && submitted ? (
         <Aux>
           <Button inverted onClick={() => updateOffer({ isApproved: true, status: 'support_decline' })} color="red" content="Decline to NS Support" />
@@ -55,7 +55,6 @@ const ButtonGroup = ({
         </Aux>
       )}
     </Button.Group>
-    <div className="clearfix" />
   </div>
 );
 

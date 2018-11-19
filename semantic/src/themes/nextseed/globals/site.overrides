@@ -1221,6 +1221,12 @@ a.icon-link:hover {
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
+	.sticy-sidebar{
+		top:30px;
+	}
+	.sticky-actions{
+		bottom:14px;
+	}
 }
 .business-application .content-spacer{
 	padding:@50px 0px;
@@ -1235,6 +1241,17 @@ a.icon-link:hover {
 	border-top:@neutral-offdark 1px solid;
 	bottom:0;
 	background-color:@white;
+	display:flex;
+	align-items:center;
+	&:before{
+		content:"";
+		width:100%;
+		height:40px;
+		background:linear-gradient(transparent, @white);
+		position:absolute;
+		top:-41px;
+		pointer-events:none;
+	}
 	&:after{
 		content:"";
 		height:14px;

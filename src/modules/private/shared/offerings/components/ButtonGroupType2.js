@@ -14,15 +14,15 @@ export default class ButtonGroupType2 extends Component {
     const { canLaunch } = this.state;
     return (
       <Aux>
-        <div className="clearfix sticky-actions">
-          {launch && approved && approved.status && (
-            <div className="mb-10">
-              <Checkbox
-                label="Launch Sign-Off"
-                onClick={() => this.setState({ canLaunch: !canLaunch })}
-              />
-            </div>
-          )}
+        {launch && approved && approved.status && (
+          <div className="mb-10">
+            <Checkbox
+              label="Launch Sign-Off"
+              onClick={() => this.setState({ canLaunch: !canLaunch })}
+            />
+          </div>
+        )}
+        <div className="sticky-actions">
           <Button.Group vertical icon className="time-stamp">
             {submitted &&
               <Button as="span" className="time-stamp">
@@ -37,7 +37,7 @@ export default class ButtonGroupType2 extends Component {
               </Button>
             }
           </Button.Group>
-          <Button.Group floated="right">
+          <Button.Group>
             {isManager && submitted ? (
               <Aux>
                 <Button inverted onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
