@@ -235,6 +235,7 @@ a{
 }
 .bg-offwhite {
 	background-color: @neutral-offwhite;
+	padding:@14px @20px;
 }
 .green-block {
 	background-color: @primary-one;
@@ -1243,9 +1244,10 @@ a.icon-link:hover {
 	background-color:@white;
 	display:flex;
 	align-items:center;
+	z-index:9;
 	&:before{
 		content:"";
-		width:100%;
+		width:~"calc(100% + 1px)";
 		height:40px;
 		background:linear-gradient(transparent, @white);
 		position:absolute;
@@ -1266,6 +1268,10 @@ a.icon-link:hover {
 	padding:@20px !important;
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
+	}
+	.fr-box.html-editor{
+		box-shadow:none;
+		border:@neutral-darkwhite 1px solid;
 	}
 	.slick-slider.offers-carousel.slick-slider{
 		@media only screen and (min-width : @tabletBreakpoint) {

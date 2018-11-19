@@ -23,7 +23,7 @@ export default class ButtonGroupType2 extends Component {
           </div>
         )}
         <div className="sticky-actions">
-          <Button.Group vertical icon className="time-stamp">
+          <Button.Group vertical icon size="tiny" className="time-stamp">
             {submitted &&
               <Button as="span" className="time-stamp">
                 <Icon className="ns-circle" color="green" />{' '}
