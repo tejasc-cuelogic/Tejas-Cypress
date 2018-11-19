@@ -32,7 +32,7 @@ export default class VerifyEntityAccreditation extends Component {
           <Grid.Row columns={2}>
             {accreditationMethods.map(method => (
               <Grid.Column
-                onClick={(e) => { accreditationMethodChange(e, 'NET_WORTH_FORM', { name: 'netWorth', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? method.value : null }); accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? 'ASSETS' : method.value }); }}
+                onClick={(e) => { accreditationMethodChange(e, 'NET_WORTH_FORM', { name: 'netWorth', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? method.value : 'NONE' }); accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? 'ASSETS' : method.value }); }}
               >
                 <div className={`user-type ${((NET_WORTH_FORM.fields.netWorth.value === method.value || ACCREDITATION_FORM.fields.method.value === method.value) ? 'active' : '')}`}>
                   <Header as="h4">{method.header}</Header>

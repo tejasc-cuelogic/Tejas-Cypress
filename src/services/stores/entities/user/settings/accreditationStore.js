@@ -249,14 +249,14 @@ export class AccreditationStore {
 
   isAllFormValidCheck = (type) => {
     const forms = {
-      ACCREDITATION_FORM: [1, 2, 3, 4],
-      NET_WORTH_FORM: [3, 4],
-      INCOME_EVIDENCE_FORM: [1, 2, 3, 4],
-      VERIFICATION_REQUEST_FORM: [1, 3],
-      ASSETS_UPLOAD_DOC_FORM: [4],
-      INCOME_UPLOAD_DOC_FORM: [2],
+      ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12],
+      NET_WORTH_FORM: [3, 4, 7, 8, 11, 12],
+      INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      VERIFICATION_REQUEST_FORM: [1, 3, 5, 7, 9, 11],
+      ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10],
+      INCOME_UPLOAD_DOC_FORM: [2, 12],
       ENTITY_ACCREDITATION_FORM: [],
-      TRUST_ENTITY_ACCREDITATION_FRM: [],
+      TRUST_ENTITY_ACCREDITATION_FRM: [7, 8, 9, 10, 11, 12],
     };
     const formList = [];
     forEach(forms, (form, key) => {
@@ -271,19 +271,49 @@ export class AccreditationStore {
   formType = (accreditationType) => {
     let formType = 1;
     if (this.ACCREDITATION_FORM.fields.method.value === 'INCOME' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
-      formType = 1;
+      if (accreditationType === 1) {
+        formType = 1;
+      } else if (accreditationType === 3) {
+        if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') {
+          formType = 11;
+        }
+      }
     } else if (this.ACCREDITATION_FORM.fields.method.value === 'INCOME' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
-      formType = 2;
+      if (accreditationType === 1) {
+        formType = 2;
+      } else if (accreditationType === 3) {
+        if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') {
+          formType = 12;
+        }
+      }
     } else if (this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
       if (accreditationType === 1) {
         formType = 3;
       } else if (accreditationType === 2) {
         formType = 5;
+      } else if (accreditationType === 3) {
+        if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'ASSETS') {
+          formType = 7;
+        } else if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') {
+          formType = 9;
+        }
       }
     } else if (this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
       if (accreditationType === 1) {
         formType = 4;
       } else if (accreditationType === 2) {
+        formType = 6;
+      } else if (accreditationType === 3) {
+        if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'ASSETS') {
+          formType = 8;
+        } else if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') {
+          formType = 10;
+        }
+      }
+    } else if (this.ACCREDITATION_FORM.fields.method.value === 'OWNERS_ACCREDITATED' || this.ACCREDITATION_FORM.fields.method.value === 'OWNERS_QUALIFIED') {
+      if (this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
+        formType = 5;
+      } else if (this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
         formType = 6;
       }
     }
@@ -293,6 +323,7 @@ export class AccreditationStore {
   @action
   updateAccreditation = (form, accountId, accountType, formType = 0) => {
     uiStore.setProgress();
+    let hasVerifier = null;
     let userAccreditationDetails = '';
     if (form === 'ENTITY_ACCREDITATION_FORM') {
       const accreForm = Validator.evaluateFormData(this.ACCREDITATION_FORM.fields);
@@ -311,26 +342,30 @@ export class AccreditationStore {
         userAccreditationDetails.assetsUpload.push(fileObj);
       });
       this.VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
-      userAccreditationDetails.hasVerifier = false;
+      hasVerifier = false;
     } else if (form === 'VERIFICATION_REQUEST_FORM') {
       this.INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
       this.ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
-      userAccreditationDetails.hasVerifier = true;
+      hasVerifier = true;
     }
     if (formType) {
       userAccreditationDetails.isPartialProfile =
       !this.isAllFormValidCheck(this.formType(formType));
     }
+    const payLoad = {
+      id: userDetailsStore.currentUserId,
+      accountId,
+      accountType,
+      userAccreditationDetails,
+    };
+    if (hasVerifier !== null) {
+      payLoad.hasVerifier = hasVerifier;
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
           mutation: updateAccreditation,
-          variables: {
-            id: userDetailsStore.currentUserId,
-            accountId,
-            accountType,
-            userAccreditationDetails,
-          },
+          variables: payLoad,
           refetchQueries: [{
             query: userDetailsQuery,
             variables: {
@@ -380,7 +415,7 @@ export class AccreditationStore {
       if (data.method === 'ASSETS') {
         this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'ASSETS';
       } else {
-        this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'REVOCABLE_TRUST';
+        this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'REVOCABLE_TRUST_ASSETS';
         this.ACCREDITATION_FORM.fields.method.value = data.method === 'REVOCABLE_TRUST_ASSETS' ? 'REVOCABLE_TRUST_ASSETS' : 'REVOCABLE_TRUST_INCOME';
         this.ACCREDITATION_FORM.fields.grantorName.value = data.grantorName;
       }
