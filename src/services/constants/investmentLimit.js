@@ -104,16 +104,6 @@ export const ENTITY_ACCREDITATION_METHODS = {
 };
 
 export const ACCREDITATION_METHODS = {
-  grantorName: {
-    value: '',
-    label: 'Grantor Name',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Enter here',
-    customErrors: {
-      required: 'required.',
-    },
-  },
   method: {
     value: 'INCOME',
     values:

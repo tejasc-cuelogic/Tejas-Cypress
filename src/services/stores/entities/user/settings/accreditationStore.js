@@ -270,23 +270,19 @@ export class AccreditationStore {
 
   formType = (accreditationType) => {
     let formType = 1;
-    if (this.ACCREDITATION_FORM.fields.method.value === 'INCOME' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
+    if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
       if (accreditationType === 1) {
         formType = 1;
       } else if (accreditationType === 3) {
-        if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') {
-          formType = 11;
-        }
+        formType = 11;
       }
-    } else if (this.ACCREDITATION_FORM.fields.method.value === 'INCOME' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
       if (accreditationType === 1) {
         formType = 2;
       } else if (accreditationType === 3) {
-        if (this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') {
-          formType = 12;
-        }
+        formType = 12;
       }
-    } else if (this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
       if (accreditationType === 1) {
         formType = 3;
       } else if (accreditationType === 2) {
@@ -298,7 +294,7 @@ export class AccreditationStore {
           formType = 9;
         }
       }
-    } else if (this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
       if (accreditationType === 1) {
         formType = 4;
       } else if (accreditationType === 2) {

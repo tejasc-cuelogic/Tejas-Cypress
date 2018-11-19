@@ -27,7 +27,7 @@ export default class Accreditation extends React.Component {
     const { params } = this.props.match;
     if (step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
+        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 1)
         .then(() => {
           this.handleStepChange(step.stepToBeRendered);
         });

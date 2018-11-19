@@ -29,7 +29,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
     const { params } = this.props.match;
     if ((step.formName === 'TRUST_ENTITY_ACCREDITATION_FRM' && this.props.accreditationStore.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === 'ASSETS') || (step.formName !== 'TRUST_ENTITY_ACCREDITATION_FRM' && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM')) {
       this.props.accreditationStore
-        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
+        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 3)
         .then(() => {
           this.handleStepChange(step.stepToBeRendered);
         });
