@@ -30,7 +30,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
   }
   multiClickHandler = (step) => {
     const { params } = this.props.match;
-    if (step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
+    if (step.formName !== 'TRUST_ENTITY_ACCREDITATION_FRM' && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
         .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase())
         .then(() => {
@@ -87,7 +87,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} />,
+          component: <Verification refLink={this.props.refLink} type={3} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           stepToBeRendered: 4,
@@ -132,7 +132,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} />,
+          component: <Verification refLink={this.props.refLink} type={3} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           stepToBeRendered: 5,
@@ -170,7 +170,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           },
           {
             name: 'Verification',
-            component: <Verification refLink={this.props.refLink} />,
+            component: <Verification refLink={this.props.refLink} type={3} />,
             isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
             isDirty: true,
             formName: 'ACCREDITATION_FORM',

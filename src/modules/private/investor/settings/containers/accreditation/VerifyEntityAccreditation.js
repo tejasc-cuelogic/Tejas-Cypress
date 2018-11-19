@@ -64,7 +64,7 @@ export default class VerifyEntityAccreditation extends React.Component {
         },
         {
           name: 'Verification',
-          component: <Verification refLink={this.props.refLink} isEntity />,
+          component: <Verification refLink={this.props.refLink} isEntity type={2} />,
           isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
           isDirty: true,
           formName: 'VERIFICATION_REQUEST_FORM',

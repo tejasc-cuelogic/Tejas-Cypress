@@ -5,7 +5,6 @@ import cookie from 'react-cookies';
 import { withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
-import { validationActions } from '../../../../../../services/actions';
 import Helper from '../../../../../../helper/utility';
 
 @inject('authStore', 'uiStore')
@@ -22,7 +21,6 @@ export default class NewEmailAddress extends Component {
     })
       .catch(() => {});
   }
-  handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.authStore.resetForm('CONFIRM_FRM');

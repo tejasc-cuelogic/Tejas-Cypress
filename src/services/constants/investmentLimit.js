@@ -56,6 +56,19 @@ export const ACCREDITATION_METHODS_META = [
   },
 ];
 
+export const ENTITY_TRUST_ACCREDITATION_METHODS_META = [
+  {
+    header: 'Income',
+    value: 'REVOCABLE_TRUST_INCOME',
+    desc: 'Income of $200k, or $300k with spouse, in each of past 2 years and expecting same or more this year',
+  },
+  {
+    header: 'Assets',
+    value: 'REVOCABLE_TRUST_ASSETS',
+    desc: 'Net worth of $1M individually or joint with spouse, excluding your primary residence',
+  },
+];
+
 export const ENTITY_ACCREDITATION_METHODS_META = [
   {
     value: 'TWENTY_FIVE_MILLION',
@@ -112,6 +125,35 @@ export const ACCREDITATION_METHODS = {
         {
           label: 'I have a net worth of $1M or more (individually or with my spouse), exclusing my primary residence.',
           value: 'ASSETS',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const ACCREDITATION_METHODS_ENTITY = {
+  grantorName: {
+    value: '',
+    label: 'Grantor Name',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required: 'required.',
+    },
+  },
+  method: {
+    value: 'REVOCABLE_TRUST_INCOME',
+    values:
+      [
+        {
+          label: 'Income of $200k, or $300k with spouse, in each of past 2 years and expecting same or more this year',
+          value: 'REVOCABLE_TRUST_INCOME',
+        },
+        {
+          label: 'Net worth of $1M individually or joint with spouse, excluding your primary residence',
+          value: 'REVOCABLE_TRUST_ASSETS',
         },
       ],
     error: undefined,
@@ -288,7 +330,7 @@ export const ENTITY_TRUST_NET_WORTH = {
         },
         {
           label: '$25,000,000',
-          value: 'TWENTIY_FIVE_MILLION',
+          value: 'TWENTY_FIVE_MILLION',
         },
       ],
     error: undefined,
