@@ -455,5 +455,13 @@ export class AccreditationStore {
     this.checkFormValid(form, false, false);
     return false;
   }
+
+  accrediationStatus = (accountType) => {
+    const { userDetails } = userDetailsStore;
+    const entityAccreditation = userDetails && userDetails.roles &&
+    userDetails.roles.find(role => role.name === accountType);
+    const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
+    return (appData && appData.accreditation && appData.accreditation.status) || false;
+  }
 }
 export default new AccreditationStore();

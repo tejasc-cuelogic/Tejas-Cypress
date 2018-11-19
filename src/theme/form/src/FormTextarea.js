@@ -50,7 +50,10 @@ export default class FormTextarea extends Component {
             label={label}
             placeholder={(displayMode || readOnly) ? '' : placeHolder}
             defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
-            onChange={(e) => { props.changed(e); this.triggerError(false); }}
+            onChange={(e) => {
+              props.changed(e, { name: e.target.name, value: e.target.value });
+              this.triggerError(false);
+            }}
             onBlur={() => this.triggerError(true)}
           />
         }

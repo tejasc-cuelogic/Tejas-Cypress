@@ -9,7 +9,7 @@ import Helper from '../../../../../../helper/utility';
 import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
 
 
-@inject('investmentLimitStore', 'uiStore', 'userDetailsStore')
+@inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
@@ -40,8 +40,8 @@ export default class FinancialInfo extends Component {
     const {
       getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
     } = this.props.investmentLimitStore;
+    const { accrediationStatus } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    const isSubmitted = true;
     if (currentUser.loading) {
       return <InlineLoader />;
     }
@@ -102,7 +102,7 @@ export default class FinancialInfo extends Component {
                       </Card.Content>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                      {isSubmitted ?
+                      {accrediationStatus(account.name) ?
                         <Card.Content>
                           <Header as="h4">
                             Accreditation
