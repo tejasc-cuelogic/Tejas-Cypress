@@ -11,7 +11,7 @@ import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -83,6 +83,7 @@ export default class ConfirmEmailAddress extends Component {
       canSubmitConfirmEmail,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/auth/login');
     }
@@ -111,7 +112,9 @@ export default class ConfirmEmailAddress extends Component {
             displayMode
             className="display-only"
           />
-          <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+          {!isMigratedUser &&
+            <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+          }
           <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
