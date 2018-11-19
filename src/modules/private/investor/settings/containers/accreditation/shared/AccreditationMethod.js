@@ -13,10 +13,6 @@ export default class AccreditationMethod extends Component {
     const { accountType } = this.props.match.params;
     this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
   }
-  handleCloseModal = (e) => {
-    e.stopPropagation();
-    this.props.history.goBack();
-  }
   render() {
     const accreditationMethods = ACCREDITATION_METHODS_META.slice();
     const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
