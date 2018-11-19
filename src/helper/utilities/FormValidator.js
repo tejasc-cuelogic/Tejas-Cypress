@@ -85,8 +85,8 @@ class FormValidator {
         mapValues(currentForm.fields, f => f.value),
         mapValues(currentForm.fields, f => f.rule),
         {
-          required: 'Required.',
-          required_if: 'Required.',
+          required: 'required',
+          required_if: 'required',
         },
       );
     } else {
@@ -95,7 +95,7 @@ class FormValidator {
       if (isBusinessPlanRequired) {
         formRules = {
           ...formRules,
-          businessPlan: 'Required.',
+          businessPlan: 'required',
         };
       } else {
         formRules = {
@@ -106,7 +106,7 @@ class FormValidator {
         formData,
         formRules,
         {
-          required: 'Required.',
+          required: 'required',
         },
       );
     }

@@ -457,7 +457,7 @@ export const BROKERAGE_EMPLOYMENT = {
     rule: 'required_if:brokerageEmployment,yes',
     placeHolder: 'Enter here',
     customErrors: {
-      required_if: 'Required.',
+      required_if: 'required',
     },
   },
 };
@@ -512,7 +512,7 @@ export const EMPLOYMENT = {
     placeHolder: 'Type employer name',
     objRef: 'employmentStatusInfo',
     customErrors: {
-      required_if: 'Required.',
+      required_if: 'required',
     },
   },
   position: {
@@ -524,7 +524,7 @@ export const EMPLOYMENT = {
     placeHolder: 'E.g. CEO',
     objRef: 'employmentStatusInfo',
     customErrors: {
-      required_if: 'Required.',
+      required_if: 'required',
     },
   },
 };
@@ -534,7 +534,7 @@ export const INVESTOR_PROFILE = {
     value: '',
     values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
     error: undefined,
-    rule: 'Required.',
+    rule: 'required',
   },
 };
 
@@ -545,7 +545,7 @@ export const FINANCES = {
     error: undefined,
     rule: 'required',
     customErrors: {
-      required: 'Required.',
+      required: 'required',
     },
   },
   netWorth: {
@@ -556,7 +556,7 @@ export const FINANCES = {
     placeHolder: 'Net Worth',
     objRef: 'financialInfo',
     customErrors: {
-      required: 'Required.',
+      required: 'required',
     },
   },
   annualIncomeThirdLastYear: {
@@ -568,7 +568,7 @@ export const FINANCES = {
     placeHolder: '$60,000',
     objRef: 'financialInfo',
     customErrors: {
-      required: 'Required.',
+      required: 'required',
     },
   },
   annualIncomeLastYear: {
@@ -580,7 +580,7 @@ export const FINANCES = {
     placeHolder: '$60,000',
     objRef: 'financialInfo',
     customErrors: {
-      required: 'Required.',
+      required: 'required',
     },
   },
   annualIncomeCurrentYear: {
@@ -592,7 +592,7 @@ export const FINANCES = {
     placeHolder: '$60,000',
     objRef: 'financialInfo',
     customErrors: {
-      required: 'Required.',
+      required: 'required',
     },
   },
 };
