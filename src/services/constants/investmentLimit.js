@@ -182,7 +182,7 @@ export const VERIFY_ACC_WITH_META = [
   },
   {
     header: 'My trust is revocable and I am accredited',
-    value: 'REVOCABLE_TRUST',
+    value: 'REVOCABLE_TRUST_ASSETS',
     desc: 'Grantor must provide evidence of revocability and accreditation.',
   },
 ];
@@ -199,7 +199,7 @@ export const TRUST_ENTITY_ACCREDITATION = {
         },
         {
           label: 'My trust is revocable and I am accredited',
-          value: 'REVOCABLE_TRUST',
+          value: 'REVOCABLE_TRUST_ASSETS',
         },
       ],
     error: undefined,

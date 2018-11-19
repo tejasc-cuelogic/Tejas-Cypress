@@ -28,7 +28,7 @@ export default class Verification extends Component {
     return (
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ?
         <VerificationForm clicked={this.submit} /> :
-        (ACCREDITATION_FORM.fields.method.value === 'INCOME') ?
+        ((ACCREDITATION_FORM.fields.method.value === 'INCOME' || ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME')) ?
           <IncomeUploadDocument clicked={this.submit} /> :
           <AssetsUploadDocument clicked={this.submit} isEntity={isEntity} />
     );
