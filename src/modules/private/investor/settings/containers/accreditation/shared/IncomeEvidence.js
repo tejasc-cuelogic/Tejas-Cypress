@@ -8,11 +8,6 @@ import { INCOME_EVIDENCE_META } from './../../../../../../../services/constants/
 @withRouter
 @observer
 export default class IncomeEvidence extends Component {
-  componentWillMount() {
-    // this.props.accreditationStore.checkFormValid('INCOME_EVIDENCE_FORM', false, false);
-    const { accountType } = this.props.match.params;
-    this.props.accreditationStore.setFormData('INCOME_EVIDENCE_FORM', 'accreditation', accountType);
-  }
   render() {
     const {
       ACCREDITATION_FORM,

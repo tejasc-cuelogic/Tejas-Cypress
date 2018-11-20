@@ -1,4 +1,5 @@
 import React from 'react';
+import { findIndex, map } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from './../../../../../../helper';
@@ -6,15 +7,27 @@ import NetWorth from './assets/NetWorth';
 import IncomeEvidence from './shared/IncomeEvidence';
 import Verification from './shared/Verification';
 import AccreditationMethod from './shared/AccreditationMethod';
-// import Helper from '../../../../../../helper/utility';
+import { NET_WORTH } from './../../../../../../services/constants/investmentLimit';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
 @observer
 export default class Accreditation extends React.Component {
+  state = { firstInit: '' };
   componentWillMount() {
-    // this.props.accreditationStore.setStepToBeRendered(0);
-    // this.props.accreditationStore.setAccreditationMethod('ACCREDITATION_FORM', 'ASSETS');
+    const { accreditationStore, match } = this.props;
+    const { accountType } = match.params;
+    const { setFormData, changeFormObject } = accreditationStore;
+    setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+    changeFormObject('NET_WORTH_FORM', NET_WORTH);
+    setFormData('NET_WORTH_FORM', 'accreditation', accountType);
+    setFormData('INCOME_EVIDENCE_FORM', 'accreditation', accountType);
+    setFormData('VERIFICATION_REQUEST_FORM', 'accreditation', accountType);
+    setFormData('INCOME_UPLOAD_DOC_FORM', 'accreditation', accountType);
+    setFormData('ASSETS_UPLOAD_DOC_FORM', 'accreditation', accountType);
+    if (this.state.firstInit === '') {
+      this.setState({ firstInit: true });
+    }
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');
@@ -43,6 +56,7 @@ export default class Accreditation extends React.Component {
       ASSETS_UPLOAD_DOC_FORM,
       ACCREDITATION_FORM,
       INCOME_UPLOAD_DOC_FORM,
+      formValidCheck,
     } = this.props.accreditationStore;
     const steps = ACCREDITATION_FORM.fields.method.value === 'ASSETS' ?
       [
@@ -50,7 +64,7 @@ export default class Accreditation extends React.Component {
           name: '',
           component: <AccreditationMethod />,
           isHideLabel: true,
-          isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
+          disableNxtBtn: !ACCREDITATION_FORM.meta.isValid,
           formName: 'ACCREDITATION_FORM',
           isDirty: true,
           stepToBeRendered: 1,
@@ -58,7 +72,8 @@ export default class Accreditation extends React.Component {
         {
           name: 'Net worth',
           component: <NetWorth />,
-          isValid: NET_WORTH_FORM.meta.isFieldValid ? '' : 'error',
+          isValid: NET_WORTH_FORM.meta.isValid ? '' : 'error',
+          disableNxtBtn: !NET_WORTH_FORM.meta.isValid,
           formName: 'NET_WORTH_FORM',
           isDirty: true,
           stepToBeRendered: 2,
@@ -66,7 +81,8 @@ export default class Accreditation extends React.Component {
         {
           name: 'Evidence',
           component: <IncomeEvidence />,
-          isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
+          isValid: INCOME_EVIDENCE_FORM.meta.isValid ? '' : 'error',
+          disableNxtBtn: !INCOME_EVIDENCE_FORM.meta.isValid,
           formName: 'INCOME_EVIDENCE_FORM',
           isDirty: true,
           stepToBeRendered: 3,
@@ -74,8 +90,10 @@ export default class Accreditation extends React.Component {
         {
           name: 'Verification',
           component: <Verification step={3} refLink={this.props.refLink} type={1} />,
-          isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
-          formName: 'VERIFICATION_REQUEST_FORM',
+          isValid: (INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? !VERIFICATION_REQUEST_FORM.meta.isValid : !ASSETS_UPLOAD_DOC_FORM.meta.isValid) ? 'error' : '',
+          disableNxtBtn: INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? !VERIFICATION_REQUEST_FORM.meta.isValid :
+            !ASSETS_UPLOAD_DOC_FORM.meta.isValid,
+          formName: INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? 'VERIFICATION_REQUEST_FORM' : 'ASSETS_UPLOAD_DOC_FORM',
           isDirty: true,
           disableNextButton: true,
         },
@@ -86,7 +104,7 @@ export default class Accreditation extends React.Component {
           name: '',
           component: <AccreditationMethod />,
           isHideLabel: true,
-          isValid: ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error',
+          disableNxtBtn: !ACCREDITATION_FORM.meta.isValid,
           formName: 'ACCREDITATION_FORM',
           isDirty: true,
           stepToBeRendered: 1,
@@ -94,7 +112,8 @@ export default class Accreditation extends React.Component {
         {
           name: 'Evidence',
           component: <IncomeEvidence />,
-          isValid: INCOME_EVIDENCE_FORM.meta.isFieldValid ? '' : 'error',
+          isValid: INCOME_EVIDENCE_FORM.meta.isValid ? '' : 'error',
+          disableNxtBtn: !INCOME_EVIDENCE_FORM.meta.isValid,
           formName: 'INCOME_EVIDENCE_FORM',
           isDirty: true,
           stepToBeRendered: 2,
@@ -102,8 +121,10 @@ export default class Accreditation extends React.Component {
         {
           name: 'Verification',
           component: <Verification step={2} refLink={this.props.refLink} type={1} />,
-          isValid: !VERIFICATION_REQUEST_FORM.meta.isFieldValid || !INCOME_UPLOAD_DOC_FORM.meta.isFieldValid ? 'error' : '',
-          formName: 'VERIFICATION_REQUEST_FORM',
+          disableNxtBtn: INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? !VERIFICATION_REQUEST_FORM.meta.isValid :
+            !INCOME_UPLOAD_DOC_FORM.meta.isValid,
+          isValid: (INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? !VERIFICATION_REQUEST_FORM.meta.isValid : !INCOME_UPLOAD_DOC_FORM.meta.isValid) ? 'error' : '',
+          formName: INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? 'VERIFICATION_REQUEST_FORM' : 'INCOME_UPLOAD_DOC_FORM',
           isDirty: true,
           disableNextButton: true,
         },
@@ -114,7 +135,15 @@ export default class Accreditation extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
     } = this.props.uiStore;
-
+    if (this.state.firstInit) {
+      const forms = map(steps, step => step.formName);
+      const invalidForms = formValidCheck(forms);
+      if (invalidForms && invalidForms.length) {
+        const index = findIndex(steps, step => step.formName === invalidForms[0]);
+        this.handleStepChange(index);
+      }
+      this.setState({ firstInit: false });
+    }
     return (
       <div className="step-progress">
         <MultiStep

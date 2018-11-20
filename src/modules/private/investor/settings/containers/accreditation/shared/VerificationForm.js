@@ -9,10 +9,6 @@ import { VARIFY_ROLES } from '../../../../../../../constants/account';
 @withRouter
 @observer
 export default class VerificationForm extends Component {
-  componentWillMount() {
-    const { accountType } = this.props.match.params;
-    this.props.accreditationStore.setFormData('VERIFICATION_REQUEST_FORM', 'accreditation', accountType);
-  }
   render() {
     const { VERIFICATION_REQUEST_FORM, verificationFormChange } = this.props.accreditationStore;
     return (

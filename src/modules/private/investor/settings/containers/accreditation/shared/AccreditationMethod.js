@@ -9,12 +9,6 @@ import { FormInput } from '../../../../../../../theme/form';
 @withRouter
 @observer
 export default class AccreditationMethod extends Component {
-  componentWillMount() {
-    // if (!this.props.isTrust) {
-    const { accountType } = this.props.match.params;
-    this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
-    // }
-  }
   render() {
     const accreditationMethods = this.props.isTrust ?
       ENTITY_TRUST_ACCREDITATION_METHODS_META.slice() : ACCREDITATION_METHODS_META.slice();

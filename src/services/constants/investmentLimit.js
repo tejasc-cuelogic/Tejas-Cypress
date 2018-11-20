@@ -103,7 +103,7 @@ export const ENTITY_ACCREDITATION_METHODS_META = [
 
 export const ENTITY_ACCREDITATION_METHODS = {
   method: {
-    value: 'TWENTY_FIVE_MILLION',
+    value: '',
     values: [
       { value: 'TWENTY_FIVE_MILLION' },
       { value: 'FIVE_MILLION' },
@@ -117,7 +117,7 @@ export const ENTITY_ACCREDITATION_METHODS = {
 
 export const ACCREDITATION_METHODS = {
   method: {
-    value: 'INCOME',
+    value: '',
     values:
       [
         {
@@ -146,7 +146,7 @@ export const ACCREDITATION_METHODS_ENTITY = {
     },
   },
   method: {
-    value: 'REVOCABLE_TRUST_INCOME',
+    value: '',
     values:
       [
         {
@@ -192,7 +192,7 @@ export const VERIFY_ACC_WITH_META = [
 
 export const TRUST_ENTITY_ACCREDITATION = {
   method: {
-    value: 'ASSETS',
+    value: '',
     values:
       [
         {
@@ -211,7 +211,7 @@ export const TRUST_ENTITY_ACCREDITATION = {
 
 export const INCOME_EVIDENCE = {
   incEvidenceMethods: {
-    value: 'verificationrequest',
+    value: '',
     values:
       [
         {
@@ -301,7 +301,7 @@ export const ASSETS_UPLOAD_DOCUMENTS = {
 
 export const NET_WORTH = {
   netWorth: {
-    value: 'ONE_MILLION',
+    value: '',
     values:
       [
         {
@@ -323,7 +323,7 @@ export const NET_WORTH = {
 };
 export const ENTITY_TRUST_NET_WORTH = {
   netWorth: {
-    value: 'FIVE_MILLION',
+    value: '',
     values:
       [
         {

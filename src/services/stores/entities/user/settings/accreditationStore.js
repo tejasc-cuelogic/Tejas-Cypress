@@ -190,7 +190,6 @@ export class AccreditationStore {
   @action
   resetAccreditation = (form) => {
     Validator.resetFormData(form);
-    this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = 'verificationrequest';
   }
 
   @action
@@ -199,7 +198,6 @@ export class AccreditationStore {
     forms.forEach((formName) => {
       Validator.resetFormData(this[formName]);
     });
-    this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = 'verificationrequest';
     this.setStepToBeRendered(0);
   }
 
@@ -248,6 +246,11 @@ export class AccreditationStore {
     this[formObj] = Validator.prepareFormObject(formArray);
   }
 
+  formValidCheck = (forms) => {
+    const notOkForms = forms.filter(form => !this[form].meta.isValid);
+    return notOkForms;
+  }
+
   isAllFormValidCheck = (type) => {
     const forms = {
       ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12],
@@ -265,12 +268,12 @@ export class AccreditationStore {
         formList.push(key);
       }
     });
-    const notOkForms = formList.filter(form => !this[form].meta.isValid);
-    return notOkForms.length === 0;
+    const notOkForms = this.formValidCheck(formList);
+    return formList.length > 0 && notOkForms.length === 0;
   }
 
   formType = (accreditationType) => {
-    let formType = 1;
+    let formType = 0;
     if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
       if (accreditationType === 1) {
         formType = 1;
@@ -412,8 +415,10 @@ export class AccreditationStore {
       if (data.method === 'ASSETS') {
         this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'ASSETS';
       } else {
-        this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'REVOCABLE_TRUST_ASSETS';
-        this.ACCREDITATION_FORM.fields.method.value = data.method === 'REVOCABLE_TRUST_ASSETS' ? 'REVOCABLE_TRUST_ASSETS' : 'REVOCABLE_TRUST_INCOME';
+        if (data.method === 'REVOCABLE_TRUST_ASSETS' || data.method === 'REVOCABLE_TRUST_INCOME') {
+          this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'REVOCABLE_TRUST_ASSETS';
+          this.ACCREDITATION_FORM.fields.method.value = data.method === 'REVOCABLE_TRUST_ASSETS' ? 'REVOCABLE_TRUST_ASSETS' : 'REVOCABLE_TRUST_INCOME';
+        }
         this.ACCREDITATION_FORM.fields.grantorName.value = data.grantorName;
       }
     }
@@ -422,7 +427,7 @@ export class AccreditationStore {
   @action
   setIncomeEvidenceData = (data) => {
     if (data) {
-      this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = (data.assetsUpload && data.assetsUpload.length) ? 'uploaddocument' : 'verificationrequest';
+      this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value = (data.assetsUpload && data.assetsUpload.length) ? 'uploaddocument' : (data.verifier && data.verifier.role) ? 'verificationrequest' : '';
     }
   }
 

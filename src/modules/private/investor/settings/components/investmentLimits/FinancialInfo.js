@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import moment from 'moment';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
-import { ACCREDITATION_STATUS_ENUMS, ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constants/investmentLimit';
+import { ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constants/investmentLimit';
 
 @inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
 @withRouter
@@ -104,8 +104,7 @@ export default class FinancialInfo extends Component {
                     </Grid.Column>
                     <Grid.Column width={8}>
                       {accreditationData[account.name] &&
-                      accreditationData[account.name].status ===
-                      ACCREDITATION_STATUS_ENUMS.REQUESTED ?
+                      accreditationData[account.name].status ?
                         <Card.Content>
                           <Header as="h4">
                             Accreditation
@@ -113,9 +112,9 @@ export default class FinancialInfo extends Component {
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <dd className="negative-text">{accreditationData[account.name] && accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]}</dd>
+                            <dd className="negative-text">{accreditationData[account.name] ? (accreditationData[account.name].expiration && DataFormatter.diffDays(DataFormatter.formatedDate(accreditationData[account.name].expiration)) < 0) ? 'Expired' : (accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]) : '-'}</dd>
                             <dt>Date :</dt>
-                            <dd>{accreditationData[account.name] && accreditationData[account.name].requestDate ? moment(accreditationData[account.name].requestDate).format('MM/DD/YYYY') : '-'}</dd>
+                            <dd>{accreditationData[account.name] && accreditationData[account.name].requestDate ? DataFormatter.formatedDate(accreditationData[account.name].requestDate) : '-'}</dd>
                           </dl>
                         </Card.Content>
                         :

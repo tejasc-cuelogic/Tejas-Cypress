@@ -3,21 +3,11 @@ import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../../../theme/form';
-import { ENTITY_TRUST_NET_WORTH, NET_WORTH } from './../../../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
 @withRouter
 @observer
 export default class NetWorth extends Component {
-  componentWillMount() {
-    const { accountType } = this.props.match.params;
-    if (this.props.isTrust) {
-      this.props.accreditationStore.changeFormObject('NET_WORTH_FORM', ENTITY_TRUST_NET_WORTH);
-    } else {
-      this.props.accreditationStore.changeFormObject('NET_WORTH_FORM', NET_WORTH);
-    }
-    this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
-  }
   render() {
     const {
       NET_WORTH_FORM,

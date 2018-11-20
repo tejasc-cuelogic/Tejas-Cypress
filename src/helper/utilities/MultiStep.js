@@ -35,10 +35,17 @@ export default class MultiStep extends React.Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
   }
-
+  componentWillMount() {
+    if (this.state.compState > -1) {
+      this.setState({ showNextBtn: !this.props.steps[this.state.compState].disableNxtBtn });
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
       this.setNavState(nextProps.stepToBeRendered);
+    }
+    if (this.state.compState > -1) {
+      this.setState({ showNextBtn: !nextProps.steps[this.state.compState].disableNxtBtn });
     }
     if (typeof nextProps.disableNxtbtn !== 'undefined') {
       this.setState({ showNextBtn: nextProps.disableNxtbtn });

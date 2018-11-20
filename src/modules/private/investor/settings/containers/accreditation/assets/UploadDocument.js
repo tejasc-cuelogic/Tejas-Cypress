@@ -8,10 +8,6 @@ import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 @withRouter
 @observer
 export default class UploadDocument extends Component {
-  componentWillMount() {
-    const { accountType } = this.props.match.params;
-    this.props.accreditationStore.setFormData('ASSETS_UPLOAD_DOC_FORM', 'accreditation', accountType);
-  }
   onFileDrop = (files, field) => {
     this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files);
   }
