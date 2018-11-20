@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import moment from 'moment';
-import { Button, Icon, Checkbox } from 'semantic-ui-react';
+import { Button, Icon, Checkbox, Divider } from 'semantic-ui-react';
 
 
 export default class ButtonGroupType2 extends Component {
@@ -14,16 +14,19 @@ export default class ButtonGroupType2 extends Component {
     const { canLaunch } = this.state;
     return (
       <Aux>
-        <div className="clearfix sticky-actions">
-          {launch && approved && approved.status && (
+        {launch && approved && approved.status && (
+          <Aux>
             <div className="mb-10">
               <Checkbox
                 label="Launch Sign-Off"
                 onClick={() => this.setState({ canLaunch: !canLaunch })}
               />
             </div>
-          )}
-          <Button.Group vertical icon className="time-stamp">
+            <Divider hidden />
+          </Aux>
+        )}
+        <div className="sticky-actions">
+          <Button.Group vertical icon size="tiny" className="time-stamp">
             {submitted &&
               <Button as="span" className="time-stamp">
                 <Icon className="ns-circle" color="green" />{' '}
@@ -37,7 +40,7 @@ export default class ButtonGroupType2 extends Component {
               </Button>
             }
           </Button.Group>
-          <Button.Group floated="right">
+          <Button.Group>
             {isManager && submitted ? (
               <Aux>
                 <Button inverted onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_decline' })} color="red" content="Decline" />
