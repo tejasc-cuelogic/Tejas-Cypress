@@ -31,7 +31,7 @@ export default class ChangePassword extends Component {
   render() {
     // togglePasswordType
     const {
-      CHANGE_PASS_FRM, changePassChange, pwdInputType,
+      CHANGE_PASS_FRM, changePassChange, pwdInputType, currentScore,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     return (
@@ -76,7 +76,7 @@ export default class ChangePassword extends Component {
               </Message>
             }
             <div className="mt-30 center-align">
-              <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid} />
+              <Button primary size="large" className="very relaxed" content="Set new password" loading={inProgress} disabled={!CHANGE_PASS_FRM.meta.isValid || !currentScore} />
             </div>
           </Form>
         </Modal.Content>

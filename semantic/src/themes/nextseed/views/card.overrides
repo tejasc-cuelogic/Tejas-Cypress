@@ -395,6 +395,9 @@
         .extra{
             color:@neutral;
         }
+        span.ui.button.time-stamp{
+            font-weight:@normal;
+        }
     }
 }
 .ui{

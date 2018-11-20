@@ -713,9 +713,9 @@ p i.icon {
 			font-size: @30px;
 			color: @neutral-middark;
 		}
-		@media only screen and (max-width : @largestMobileScreen){
-			top: 25%;
-		}
+		// @media only screen and (max-width : @largestMobileScreen){
+		// 	top: 25%;
+		// }
 	}
 	.slick-prev {
 		left: -40px;
@@ -810,6 +810,35 @@ p i.icon {
 			// 	max-height:90px;
 			// 	width:auto !important;
 			// }
+		}
+	}
+	&.offers-carousel{
+		@media only screen and (min-width : @tabletBreakpoint) {
+			margin:0 -@14px;
+			.slick-slide{
+				padding:0 @14px;
+			}
+			.slick-prev, .slick-next{
+				width:20px;
+				z-index:9;
+			}
+			.slick-prev{
+				left:-16px;
+			}
+			.slick-next{
+				right:-16px;
+			}
+		}
+		@media only screen and (max-width : @largestMobileScreen) {
+			.slick-slide{
+				padding:0 @28px;
+			}
+			.slick-prev{
+				left:-20px;
+			}
+			.slick-next{
+				right:-20px;
+			}
 		}
 	}
 }
@@ -1219,6 +1248,16 @@ a.icon-link:hover {
 	padding:@20px !important;
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
+	}
+	.slick-slider.offers-carousel.slick-slider{
+		@media only screen and (min-width : @tabletBreakpoint) {
+			.slick-prev{
+				left:-6px;
+			}
+			.slick-next{
+				right:-6px;
+			}
+		}
 	}
 	// .featured-section{
 	// 	padding: @14px @20px;

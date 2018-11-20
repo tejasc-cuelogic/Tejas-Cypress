@@ -606,3 +606,25 @@ export const VARIFY_ROLES = [
   { key: 'Accountant (must be CPA)', value: 'Accountant (must be CPA)', text: 'Accountant (must be CPA)' },
   { key: 'Personal Attorney (properly licensed)', value: 'Personal Attorney (properly licensed)', text: 'Personal Attorney (properly licensed)' },
 ];
+export const FILTER_META = {
+  method: {
+    value: [],
+    values: [
+      { text: 'All', value: 'all' },
+      { text: 'Verifier', value: 'verifier' },
+      { text: 'Upload', value: 'upload' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
+  type: {
+    value: [],
+    values: [
+      { text: 'All', value: 'all' },
+      { text: 'Plaid', value: 'plaid' },
+      { text: 'Manual', value: 'manual' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
+};

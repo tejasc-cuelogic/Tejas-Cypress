@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Modal, Header, Card, Menu, Button } from 'semantic-ui-react';
+import { Modal, Header, Card, Menu, Button, Statistic } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -32,25 +32,35 @@ export default class ChooseOffer extends Component {
       this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers', 'appReviewStore');
     });
   }
+  getBusinessName = res => ((res && res.prequalDetails) ? res.prequalDetails.businessGeneralInfo.businessName : '');
   signPortalAgreement = () => {
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.signPortalAgreement().then(() => {
       this.props.history.push(`/app/dashboard/${match.params.applicationId}/offers/offersSigning`);
     });
   }
+  module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = () => {
     this.props.history.push('/app/dashboard');
   }
-  module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, setFieldvalue, selectedOfferIndex,
-      offerLoading,
+      offerLoading, fetchBusinessApplicationOffers,
     } = businessAppReviewStore;
+
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal} size="large" closeOnDimmerClick={false}>
+      <Modal open closeIcon onClose={this.handleCloseModal} size="extra large" closeOnDimmerClick={false}>
         <Modal.Content>
+          <Header as="h3" className="text-capitalize">{this.getBusinessName(fetchBusinessApplicationOffers)} Portal Agreement</Header>
+          <Statistic size="tiny">
+            <Statistic.Value>Congratulations!</Statistic.Value>
+            <Statistic.Label>
+              We are pleased to inform you that your crowdfunding campaign application is
+              approved. Please review the terms below
+            </Statistic.Label>
+          </Statistic>
           <Header as="h4">Choose from campaign offers</Header>
           <p>Please read more about offer details and choose one to sign in and proceed.</p>
           <p>You have one month from the date of this Approval Letter to accept your Approved

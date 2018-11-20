@@ -195,11 +195,15 @@
             }
         }
     }
-    &:not(.unstackable) tr>td {
-        @media only screen and (max-width : @largestMobileScreen){
-            padding-left: 0 !important;
+    &[class*="very basic"]:not(.unstackable){
+        td, th{
+            @media only screen and (max-width : @largestMobileScreen){
+                padding-left: 0 !important;
+            }
         }
     }
+    // &:not(.unstackable) tr>td {
+    // }
     &.basic.form-table {
         background: @neutral-offwhite;
         padding-bottom: @7px;
