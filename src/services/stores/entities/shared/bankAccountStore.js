@@ -110,6 +110,10 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
+    const isValidAddFunds = this.formAddFunds.meta.isValid;
+    if (isValidAddFunds) {
+      accountAttributes.initialDepositAmount = this.formAddFunds.value.value;
+    }
     return accountAttributes;
   }
 

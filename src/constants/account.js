@@ -168,7 +168,7 @@ export const IND_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'required|numeric|min:100',
+    rule: 'optional|numeric|min:100',
     label: 'Deposit Amount',
     maxLength: 15,
     customErrors: {

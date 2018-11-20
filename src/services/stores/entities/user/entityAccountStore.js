@@ -256,6 +256,11 @@ class EntityAccountStore {
       }
     }
 
+    const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
+    if (isValidAddFunds) {
+      payload.initialDepositAmount = bankAccountStore.formAddFunds.value.value;
+    }
+
     return payload;
   }
 
@@ -362,6 +367,10 @@ class EntityAccountStore {
             };
             accountAttributes.linkedBank = plaidBankDetails;
           }
+        }
+        const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
+        if (isValidAddFunds) {
+          accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.value.value;
         }
         this.submitForm(currentStep, formStatus, accountAttributes)
           .then(() => res()).catch(() => rej());
@@ -525,6 +534,7 @@ class EntityAccountStore {
         if (account.details.linkedBank &&
           account.details.linkedBank.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositValue;
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -538,6 +548,7 @@ class EntityAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositValue;
         }
         this.renderAfterPopulate();
       }

@@ -78,6 +78,7 @@ class IndividualAccountStore {
     if (!isEmpty(userData) && !this.formStatus) {
       const account = find(userData.roles, { name: 'individual' });
       if (account && account.details) {
+        bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositValue;
         if (account.details.linkedBank.plaidItemId) {
           const plaidAccDetails = account.details.linkedBank;
           bankAccountStore.setPlaidAccDetails(plaidAccDetails);
