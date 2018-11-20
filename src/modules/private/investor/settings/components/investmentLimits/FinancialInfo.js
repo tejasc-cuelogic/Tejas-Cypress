@@ -112,7 +112,7 @@ export default class FinancialInfo extends Component {
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <dd className="negative-text">{accreditationData[account.name] ? (accreditationData[account.name].expiration && DataFormatter.diffDays(DataFormatter.formatedDate(accreditationData[account.name].expiration)) < 0) ? 'Expired' : (accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]) : '-'}</dd>
+                            <dd className="negative-text">{accreditationData[account.name] ? (accreditationData[account.name].expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accreditationData[account.name].expiration)) === 0)) ? 'Expired' : (accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]) : '-'}</dd>
                             <dt>Date :</dt>
                             <dd>{accreditationData[account.name] && accreditationData[account.name].requestDate ? DataFormatter.formatedDate(accreditationData[account.name].requestDate) : '-'}</dd>
                           </dl>
