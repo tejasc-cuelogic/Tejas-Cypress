@@ -43,9 +43,16 @@ const ProgressCard = props => (
         if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
           return null;
         }
+        /*
+        * Condition added for migrated-user
+        */
         const verificationStatus =
         props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification) ||
-        props.signupStatus.isMigratedFullAccount;
+        (props.signupStatus.isMigratedFullAccount &&
+        (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null));
+        /*
+        * Condition added for migrated-user
+        */
         const pathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.route}` :
         `${props.match.url}/${currentCard.route}`;
         const altPathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.altRoute}` :

@@ -23,6 +23,12 @@ export class IdentityStore {
   @observable submitVerificationsDocs = false;
   @observable reSendVerificationCode = false;
   @observable userCipStatus = 'FAIL';
+  @observable confirmMigratedUserPhoneNumber = false;
+
+  @action
+  setConfirmMigratedUserPhoneNumber = (status) => {
+    this.confirmMigratedUserPhoneNumber = status;
+  }
 
   @action setCipStatus = (status) => {
     this.userCipStatus = status;

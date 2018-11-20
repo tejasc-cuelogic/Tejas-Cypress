@@ -7,6 +7,7 @@ import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react
 import Helper from '../../../helper/utility';
 import { MaskedInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
+import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
 @inject('uiStore', 'identityStore', 'userDetailsStore')
 @withRouter
@@ -80,8 +81,13 @@ export default class ConfirmPhoneNumber extends Component {
       ID_PHONE_VERIFICATION,
       phoneVerificationChange,
       reSendVerificationCode,
+      confirmMigratedUserPhoneNumber,
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
+    const { signupStatus } = this.props.userDetailsStore;
+    if (signupStatus.isMigratedUser && !confirmMigratedUserPhoneNumber) {
+      return <MigratedUserPhoneNumber />;
+    }
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">

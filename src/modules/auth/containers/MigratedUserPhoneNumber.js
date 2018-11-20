@@ -1,0 +1,52 @@
+import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
+import { withRouter } from 'react-router-dom';
+import { Modal, Header, Form, Divider, Button } from 'semantic-ui-react';
+import { MaskedInput } from '../../../theme/form';
+
+@inject('identityStore', 'uiStore')
+@withRouter
+@observer
+export default class MigratedUserPhoneNumber extends Component {
+  handlePhoneNumberConfirmation = () => {
+    this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
+  }
+  handleCloseModal = () => {
+    this.props.history.push('/app/summary');
+    this.props.uiStore.clearErrors();
+    this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
+  }
+  render() {
+    const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
+    return (
+      <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
+        <Modal.Header className="center-align signup-header">
+          <Header as="h3">Confirm your phone number</Header>
+          <p>
+            {`We're introducing Multi-Factor Authentication (MFA) to
+            increase the security of your NextSeed account`}
+          </p>
+          <Divider section />
+          <p>We will send you a verification code to the phone number you enter below</p>
+        </Modal.Header>
+        <Modal.Content className="signup-content center-align">
+          <Form onSubmit={this.handlePhoneNumberConfirmation}>
+            <MaskedInput
+              hidelabel
+              value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
+              type="tel"
+              name="phoneNumber"
+              fielddata={ID_VERIFICATION_FRM.fields.phoneNumber}
+              format="###-###-####"
+              changed={personalInfoMaskedChange}
+              className="display-only"
+              phoneNumberDisplayMode
+            />
+            <Divider hidden />
+            <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary size="large" className="very relaxed" content="Confirm" loading={this.props.uiStore.inProgress} />
+          </Form>
+        </Modal.Content>
+      </Modal>
+    );
+  }
+}
