@@ -205,6 +205,7 @@ export class AccreditationStore {
       Validator.resetFormData(this[formName]);
     });
     this.setStepToBeRendered(0);
+    this.firstInit = '';
   }
 
   @action

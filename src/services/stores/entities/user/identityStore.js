@@ -103,8 +103,8 @@ export class IdentityStore {
   };
 
   @action
-  resetFormData(form, targetedFields = []) {
-    const resettedForm = FormValidator.resetFormData(this[form], targetedFields);
+  resetFormData(form) {
+    const resettedForm = FormValidator.resetFormData(this[form]);
     this[form] = resettedForm;
   }
 
@@ -201,6 +201,11 @@ export class IdentityStore {
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
     const phoneDetails = { number };
     return { userInfo, phoneDetails, cip };
+  }
+
+  @action
+  setStateValue = (stateValue) => {
+    this.ID_PROFILE_INFO.fields.state.value = stateValue;
   }
 
   @computed
@@ -650,6 +655,38 @@ export class IdentityStore {
     this.resetFormData('ID_VERIFICATION_FRM');
     this.resetFormData('ID_VERIFICATION_DOCS_FRM');
     this.resetFormData('ID_PHONE_VERIFICATION');
+    this.resetFormData('ID_VERIFICATION_QUESTIONS');
+  }
+
+  @action
+  setCipDetails = () => {
+    const { legalDetails, phone } = userDetailsStore.userDetails;
+    const { fields } = this.ID_VERIFICATION_FRM;
+    if (userDetailsStore.isCipExpired) {
+      if (legalDetails && legalDetails.legalName) {
+        fields.firstLegalName.value = legalDetails.legalName.firstLegalName;
+        fields.lastLegalName.value = legalDetails.legalName.lastLegalName;
+      }
+      if (legalDetails && legalDetails.legalAddress) {
+        fields.city.value = legalDetails.legalAddress.city;
+        const selectedState =
+        find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
+        if (selectedState) {
+          fields.state.value = selectedState.value;
+        }
+        fields.residentalStreet.value = legalDetails.legalAddress.street;
+        fields.zipCode.value = legalDetails.legalAddress.zipCode;
+      }
+      if (legalDetails && legalDetails.dateOfBirth) {
+        fields.dateOfBirth.value = legalDetails.dateOfBirth;
+      }
+      if (legalDetails && legalDetails.ssn) {
+        fields.ssn.value = legalDetails.ssn;
+      }
+      if (legalDetails && phone && phone.number) {
+        fields.phoneNumber.value = phone.number;
+      }
+    }
   }
 }
 

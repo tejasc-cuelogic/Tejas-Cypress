@@ -29,7 +29,6 @@ export default class Finances extends Component {
   render() {
     const {
       FINANCES_FORM,
-      INVESTOR_PROFILE_FORM,
       financesChange,
       canSubmitFieldsForm,
       chkboxTicked,
@@ -56,74 +55,30 @@ export default class Finances extends Component {
         </p>
         <Form error>
           <FormRadioGroup
-            fielddata={INVESTOR_PROFILE_FORM.fields.investorProfileType}
+            fielddata={FINANCES_FORM.fields.investorProfileType}
             name="investorProfileType"
             changed={investorProfileChange}
-            containerclassname="button-radio center-align mb-50"
+            containerclassname="button-radio center-align"
+            classname="center-align"
+            showerror
           />
-          {/* <MaskedInput
-            name="netWorth"
-            currency
-            fielddata={FINANCES_FORM.fields.netWorth}
-            changed={financesChange}
-            prefix="$ "
-          /> */}
-          <Form.Group widths="equal">
-            {['netWorth', 'annualIncomeThirdLastYear'].map(field => (
-              <MaskedInput
-                type="tel"
-                key={field}
-                name={field}
-                currency
-                fielddata={FINANCES_FORM.fields[field]}
-                changed={financesChange}
-                prefix="$ "
-              />
-            ))
-            }
-          </Form.Group>
-          <Form.Group widths="equal">
-            {['annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
-              <MaskedInput
-                type="tel"
-                key={field}
-                name={field}
-                currency
-                fielddata={FINANCES_FORM.fields[field]}
-                changed={financesChange}
-                prefix="$ "
-              />
-            ))
-            }
-          </Form.Group>
-          {/* <FormCheckbox
-            fielddata={FINANCES_FORM.fields.checkbox1}
-            name="checkbox1"
-            changed={this.handleTick}
-            defaults
-          />
-          { FINANCES_FORM.fields.directorShareHolderOfCompany.value ?
-            <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
-              The name of the company is{' '}
-              <span style={{ textDecoration: 'underline' }}>
-              {FINANCES_FORM.fields.directorShareHolderOfCompany.value}</span>
-            </p>
-            : <p />
-          }
-          <FormCheckbox
-            fielddata={FINANCES_FORM.fields.checkbox2}
-            name="checkbox2"
-            changed={this.handleTick}
-            defaults
-          />
-          { FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value ?
-            <p style={{ paddingLeft: '30px', marginTop: '5px' }}>
-              The name of firm is{' '}
-              <span style={{ textDecoration: 'underline' }}>
-              {FINANCES_FORM.fields.employedOrAssoWithFINRAFirmName.value}</span>
-            </p>
-          : <p />
-          } */}
+          <div className="field-wrap">
+            <Form.Group widths={2}>
+              {['netWorth', 'annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
+                <MaskedInput
+                  type="tel"
+                  key={field}
+                  name={field}
+                  currency
+                  fielddata={FINANCES_FORM.fields[field]}
+                  changed={financesChange}
+                  prefix="$ "
+                  showerror
+                />
+              ))
+              }
+            </Form.Group>
+          </div>
         </Form>
       </div>
     );

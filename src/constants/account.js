@@ -168,9 +168,12 @@ export const IND_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'required|numeric|min:100',
     label: 'Deposit Amount',
     maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least 100.',
+    },
   },
 };
 
@@ -330,32 +333,32 @@ export const ENTITY_FIN_INFO = {
 
 export const ENTITY_GEN_INFO = {
   name: {
-    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
+    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'Enter Here',
   },
   taxId: {
-    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'e.g. 12345',
+    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'XX-XXXXXX',
   },
   entityType: {
     key: 'entityType', value: '', label: 'Entity Type', error: undefined, rule: 'required|string', placeHolder: 'Select one',
   },
   street: {
-    key: 'street', value: '', label: 'Street Address', error: undefined, rule: 'required|string',
+    key: 'street', value: '', label: 'Street Address', error: undefined, rule: 'required|string', placeHolder: 'Enter Here',
   },
   city: {
-    key: 'city', value: '', placeHolder: 'New York', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', placeHolder: 'Enter Here', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    key: 'state', value: '', placeHolder: 'NY', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', placeHolder: 'Select', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|numeric',
   },
 };
 
 export const ENTITY_TYPES = [
   { key: 'LLC', value: 'LLC', text: 'LLC' },
   { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
-  { key: 'S-Corporation', value: 'S_CORPORATION', text: 'S-Corporation' },
+  { key: 'S-Corporation', value: 'SCORP', text: 'S-Corporation' },
   { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
   { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
   { key: 'Estate', value: 'ESTATE', text: 'Estate' },
@@ -444,7 +447,7 @@ export const BROKERAGE_EMPLOYMENT = {
         { label: 'No', value: 'no' },
       ],
     error: undefined,
-    rule: 'optional',
+    rule: 'required',
   },
   brokerageFirmName: {
     key: 'brokerageFirmName',
@@ -453,6 +456,9 @@ export const BROKERAGE_EMPLOYMENT = {
     error: undefined,
     rule: 'required_if:brokerageEmployment,yes',
     placeHolder: 'Enter here',
+    customErrors: {
+      required_if: 'required',
+    },
   },
 };
 
@@ -466,7 +472,7 @@ export const PUBLIC_COMPANY_REL = {
         { label: 'No', value: 'no' },
       ],
     error: undefined,
-    rule: 'optional',
+    rule: 'required',
   },
   publicCompanyTicker: {
     key: 'publicCompanyTicker',
@@ -475,6 +481,9 @@ export const PUBLIC_COMPANY_REL = {
     error: undefined,
     rule: 'required_if:publicCompanyRel,yes',
     placeHolder: 'E.g. GOOG',
+    customErrors: {
+      required_if: 'required',
+    },
   },
 };
 
@@ -502,6 +511,9 @@ export const EMPLOYMENT = {
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Type employer name',
     objRef: 'employmentStatusInfo',
+    customErrors: {
+      required_if: 'required',
+    },
   },
   position: {
     key: 'position',
@@ -511,6 +523,9 @@ export const EMPLOYMENT = {
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'E.g. CEO',
     objRef: 'employmentStatusInfo',
+    customErrors: {
+      required_if: 'required',
+    },
   },
 };
 
@@ -524,13 +539,25 @@ export const INVESTOR_PROFILE = {
 };
 
 export const FINANCES = {
+  investorProfileType: {
+    value: '',
+    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: 'required',
+    },
+  },
   netWorth: {
     value: '',
-    label: 'Net Worth (Excluding Primary Residence)',
+    label: 'Net Worth',
     error: undefined,
     rule: 'required',
     placeHolder: 'Net Worth',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeThirdLastYear: {
     value: '',
@@ -540,6 +567,9 @@ export const FINANCES = {
     year: '2016',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeLastYear: {
     value: '',
@@ -549,6 +579,9 @@ export const FINANCES = {
     year: '2017',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeCurrentYear: {
     value: '',
@@ -558,13 +591,16 @@ export const FINANCES = {
     year: '2018',
     placeHolder: '$60,000',
     objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
 };
 
 export const INVESTMENT_EXPERIENCE = {
   experienceLevel: {
     value: '',
-    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I’m an expert', value: 'EXPERT' }],
+    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
     objRef: 'investmentExperienceInfo',

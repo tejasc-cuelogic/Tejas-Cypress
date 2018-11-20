@@ -111,6 +111,7 @@ export const userDetailsQuery = gql`
             }
             name
             taxId
+            entityType
             address {
               street
               city
