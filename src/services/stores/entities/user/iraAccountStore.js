@@ -109,7 +109,7 @@ class IraAccountStore {
       }
       const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
       if (isValidAddFunds) {
-        payload.initialDepositAmount = bankAccountStore.formAddFunds.value.value;
+        payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
       }
     } else {
       payload.linkedBank = {};
@@ -119,7 +119,7 @@ class IraAccountStore {
         payload.linkedBank.routingNumber = routingNumber.value;
         const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
         if (isValidAddFunds) {
-          payload.initialDepositAmount = bankAccountStore.formAddFunds.value.value;
+          payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         }
       }
     }
@@ -205,7 +205,7 @@ class IraAccountStore {
           }
           const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
           if (isValidAddFunds) {
-            accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.value.value;
+            accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
           }
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
             res();
@@ -333,7 +333,7 @@ class IraAccountStore {
         if (account.details.linkedBank &&
           account.details.linkedBank.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositValue;
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -348,7 +348,7 @@ class IraAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
-          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositValue;
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
 
         const getIraStep = AccCreationHelper.iraSteps();

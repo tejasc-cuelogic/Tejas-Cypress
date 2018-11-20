@@ -258,7 +258,7 @@ class EntityAccountStore {
 
     const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
     if (isValidAddFunds) {
-      payload.initialDepositAmount = bankAccountStore.formAddFunds.value.value;
+      payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
     }
 
     return payload;
@@ -370,7 +370,7 @@ class EntityAccountStore {
         }
         const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
         if (isValidAddFunds) {
-          accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.value.value;
+          accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         }
         this.submitForm(currentStep, formStatus, accountAttributes)
           .then(() => res()).catch(() => rej());
@@ -534,7 +534,7 @@ class EntityAccountStore {
         if (account.details.linkedBank &&
           account.details.linkedBank.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
-          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositValue;
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -548,7 +548,7 @@ class EntityAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
-          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositValue;
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
         this.renderAfterPopulate();
       }

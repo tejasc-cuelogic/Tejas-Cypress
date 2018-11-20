@@ -112,7 +112,7 @@ export class BankAccountStore {
     }
     const isValidAddFunds = this.formAddFunds.meta.isValid;
     if (isValidAddFunds) {
-      accountAttributes.initialDepositAmount = this.formAddFunds.value.value;
+      accountAttributes.initialDepositAmount = this.formAddFunds.fields.value.value;
     }
     return accountAttributes;
   }
