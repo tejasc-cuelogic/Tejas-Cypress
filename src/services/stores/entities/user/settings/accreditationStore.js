@@ -28,6 +28,7 @@ export class AccreditationStore {
   @observable removeFileIdsList = [];
   @observable stepToBeRendered = '';
   @observable filters = false;
+  @observable firstInit = '';
   @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
     filters: false,
@@ -77,6 +78,11 @@ export class AccreditationStore {
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
+  }
+
+  @action
+  setFieldVal(field, val) {
+    this[field] = val;
   }
 
   @action
