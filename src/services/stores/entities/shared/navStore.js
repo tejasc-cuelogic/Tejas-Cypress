@@ -22,10 +22,11 @@ export class NavStore {
     }
   }
 
-  canAccessBasedOnCapability = (capability) => {
-    const key = capability.split('_');
-    const capabilityCheck = (key[1] !== 'ANY') ? [capability] :
-      [`${key[0]}_FULL`, `${key[0]}_MANAGER`, `${key[0]}_SUPPORT`];
+  canAccessBasedOnCapability = (capab) => {
+    const rest = capab.substring(0, capab.lastIndexOf('_'));
+    const last = capab.substring(capab.lastIndexOf('_') + 1, capab.length);
+    const capabilityCheck = (last !== 'ANY') ? [capab] :
+      [`${rest}_FULL`, `${rest}_MANAGER`, `${rest}_SUPPORT`];
     return _.intersection(userStore.myCapabilities, capabilityCheck).length > 0;
   }
 
