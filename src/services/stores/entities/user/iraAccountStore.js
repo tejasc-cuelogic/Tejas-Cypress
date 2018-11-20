@@ -205,7 +205,8 @@ class IraAccountStore {
           }
           const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
           if (isValidAddFunds) {
-            accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+            accountAttributes.initialDepositAmount =
+            bankAccountStore.formAddFunds.fields.value.value;
           }
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
             res();
