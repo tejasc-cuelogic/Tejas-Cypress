@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import moment from 'moment';
-import { Button, Icon, Checkbox } from 'semantic-ui-react';
+import { Button, Icon, Checkbox, Divider } from 'semantic-ui-react';
 
 
 export default class ButtonGroupType2 extends Component {
@@ -15,12 +15,15 @@ export default class ButtonGroupType2 extends Component {
     return (
       <Aux>
         {launch && approved && approved.status && (
-          <div className="mb-10">
-            <Checkbox
-              label="Launch Sign-Off"
-              onClick={() => this.setState({ canLaunch: !canLaunch })}
-            />
-          </div>
+          <Aux>
+            <div className="mb-10">
+              <Checkbox
+                label="Launch Sign-Off"
+                onClick={() => this.setState({ canLaunch: !canLaunch })}
+              />
+            </div>
+            <Divider hidden />
+          </Aux>
         )}
         <div className="sticky-actions">
           <Button.Group vertical icon size="tiny" className="time-stamp">

@@ -15,7 +15,7 @@ const FormData = observer(({
 }) => (
   <div className="featured-section collapsed-checkbox">
     <Checkbox
-      disabled={isReadonly}
+      readOnly={isReadonly}
       name={checkboxField}
       label={
         <label>
