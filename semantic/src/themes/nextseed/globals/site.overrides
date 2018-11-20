@@ -229,6 +229,12 @@ a{
 			color:@neutral-middark;
 		}
 	}
+	&.green-hover:hover{
+		color: @primary-one !important;
+	}
+}
+.green-hover.ui.button.link-button.grey:hover {
+	color: @primary-one !important;
 }
 .invisible{
 	opacity:0 !important;
@@ -1841,7 +1847,6 @@ ol.progtrckr{
 		}
 	}
 }
-
 .update-details{
 	.ui.embed{
 		margin-bottom:@28px;

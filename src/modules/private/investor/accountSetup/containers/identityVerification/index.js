@@ -13,6 +13,9 @@ import { NS_SITE_EMAIL_SUPPORT } from '../../../../../../constants/common';
 @withRouter
 @observer
 export default class IdentityVerification extends Component {
+  componentWillMount() {
+    this.props.identityStore.setCipDetails();
+  }
   onPhotoIdDrop = (files) => {
     this.props.identityStore.setFileUploadData('photoId', files);
   }
@@ -73,9 +76,14 @@ export default class IdentityVerification extends Component {
           } = this.props.identityStore.userVerficationStatus;
           if (key === 'id.success') {
             const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+            const { isCipExpired, accountForWhichCipExpired } = this.props.userDetailsStore;
             if (phoneVerification === 'DONE') {
               Helper.toast(alertMsg, msgType);
-              this.props.history.push(route);
+              if (isCipExpired && accountForWhichCipExpired) {
+                this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+              } else {
+                this.props.history.push(route);
+              }
             } else {
               this.props.identityStore.startPhoneVerification().then(() => {
                 this.props.history.push('/app/summary/identity-verification/3');
@@ -102,7 +110,12 @@ export default class IdentityVerification extends Component {
     const { phoneVerification } = this.props.userDetailsStore.signupStatus;
     this.props.identityStore.uploadAndUpdateCIPInfo().then(() => {
       if (phoneVerification === 'DONE') {
-        this.props.history.push('/app/summary');
+        const { accountForWhichCipExpired } = this.props.userDetailsStore;
+        if (accountForWhichCipExpired) {
+          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+        } else {
+          this.props.history.push('/app/summary');
+        }
       } else {
         this.props.identityStore.startPhoneVerification().then(() => {
           this.props.history.push('/app/summary/identity-verification/3');
@@ -123,7 +136,12 @@ export default class IdentityVerification extends Component {
       if (result.data.verifyCIPAnswers.__typename === 'UserCIPPass') {
         Helper.toast('Identity questions verified.', 'success');
         if (phoneVerification === 'DONE') {
-          this.props.history.push('/app/summary');
+          const { accountForWhichCipExpired } = this.props.userDetailsStore;
+          if (accountForWhichCipExpired) {
+            this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+          } else {
+            this.props.history.push('/app/summary');
+          }
         } else {
           this.props.identityStore.startPhoneVerification().then(() => {
             this.props.history.push('/app/summary/identity-verification/3');

@@ -77,7 +77,7 @@ export default class General extends Component {
                 search
                 selection
                 compact
-                placeholder="NY"
+                placeholder="Select"
                 onChange={genInfoChange}
               />
               <MaskedInput

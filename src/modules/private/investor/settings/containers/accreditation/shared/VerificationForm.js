@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Form, Button } from 'semantic-ui-react';
-import { FormInput } from '../../../../../../../theme/form';
+import { FormInput, FormDropDown } from '../../../../../../../theme/form';
+import { VARIFY_ROLES } from '../../../../../../../constants/account';
 
 @inject('accreditationStore')
 @withRouter
@@ -20,10 +21,14 @@ export default class VerificationForm extends Component {
         <p className="center-align">Your lawyer, CPA, investment advisor or investment broker can verify that they have seen evidence of your accredited status.No documentation is required</p>
         <Form error>
           <div className="field-wrap">
-            <FormInput
-              name="verifierRole"
+            <FormDropDown
               fielddata={VERIFICATION_REQUEST_FORM.fields.verifierRole}
-              changed={verificationFormChange}
+              selection
+              containerclassname="dropdown-field"
+              name="verifierRole"
+              options={VARIFY_ROLES}
+              placeholder="Choose verifier role"
+              onChange={(e, result) => verificationFormChange(e, result)}
             />
             <FormInput
               name="verifierEmail"

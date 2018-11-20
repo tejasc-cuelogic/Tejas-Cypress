@@ -38,7 +38,12 @@ export default class ConfirmPhoneNumber extends Component {
     } else {
       this.props.identityStore.confirmPhoneNumber().then(() => {
         Helper.toast('Phone number is confirmed.', 'success');
-        this.props.history.push('/app/summary/establish-profile');
+        const { accountForWhichCipExpired } = this.props.userDetailsStore;
+        if (accountForWhichCipExpired) {
+          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+        } else {
+          this.props.history.push('/app/summary/establish-profile');
+        }
       })
         .catch(() => { });
     }
@@ -109,10 +114,10 @@ export default class ConfirmPhoneNumber extends Component {
             phoneNumberDisplayMode
           />
           {editMode ?
-            <Link className="grey-link" to={this.props.match.url} onClick={this.startPhoneVerification}>
+            <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>
               Confirm Phone number
             </Link> :
-            <Link className="grey-link" to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
+            <Link className="grey-link green-hover" to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
               Change phone number
             </Link>
           }
@@ -127,7 +132,7 @@ export default class ConfirmPhoneNumber extends Component {
                 fielddata={ID_PHONE_VERIFICATION.fields.code}
                 onChange={phoneVerificationChange}
               />
-              <Button type="button" size="small" color="grey" className="link-button" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
+              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
             </Form.Field>
             {errors &&
               <Message error textAlign="left" className="mb-40">

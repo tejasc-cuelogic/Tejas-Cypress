@@ -2,7 +2,6 @@ import { observable, action, computed, toJS } from 'mobx';
 import { isEmpty } from 'lodash';
 import {
   EMPLOYMENT,
-  INVESTOR_PROFILE,
   FINANCES,
   INVESTMENT_EXPERIENCE,
   BROKERAGE_EMPLOYMENT,
@@ -13,7 +12,7 @@ import { updateInvestorProfileData } from '../../queries/account';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { uiStore } from '../../index';
+import { uiStore, userStore, userDetailsStore } from '../../index';
 
 class InvestorProfileStore {
   @observable EMPLOYMENT_FORM = FormValidator.prepareFormObject(EMPLOYMENT, true);
@@ -21,11 +20,11 @@ class InvestorProfileStore {
   FormValidator.prepareFormObject(BROKERAGE_EMPLOYMENT, true);
   @observable PUBLIC_COMPANY_REL_FORM =
   FormValidator.prepareFormObject(PUBLIC_COMPANY_REL, true);
-  @observable INVESTOR_PROFILE_FORM = FormValidator.prepareFormObject(INVESTOR_PROFILE, true);
-  @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES);
+  @observable FINANCES_FORM = FormValidator.prepareFormObject(FINANCES, true);
   @observable INVESTMENT_EXP_FORM = FormValidator.prepareFormObject(INVESTMENT_EXPERIENCE, true);
   @observable chkboxTicked = null;
   @observable stepToBeRendered = 0;
+  @observable isInvestmentExperienceValid = true;
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -51,7 +50,7 @@ class InvestorProfileStore {
 
   @action
   investorProfileChange = (e, result) => {
-    this.formChange(e, result, 'INVESTOR_PROFILE_FORM');
+    this.formChange(e, result, 'FINANCES_FORM');
   }
 
   @action
@@ -70,6 +69,7 @@ class InvestorProfileStore {
   @action
   experiencesChange = (e, result) => {
     this.formChange(e, result, 'INVESTMENT_EXP_FORM');
+    this.validateInvestmentExperience();
   }
 
   @computed
@@ -112,7 +112,7 @@ class InvestorProfileStore {
 
   @computed
   get isValidInvestorProfileForm() {
-    return this.EMPLOYMENT_FORM.meta.isValid && this.INVESTOR_PROFILE_FORM.meta.isValid
+    return this.EMPLOYMENT_FORM.meta.isValid
     && this.FINANCES_FORM.meta.isValid && this.INVESTMENT_EXP_FORM.meta.isValid
     && this.BROKERAGE_EMPLOYMENT_FORM.meta.isValid && this.PUBLIC_COMPANY_REL_FORM.meta.isValid;
   }
@@ -128,7 +128,7 @@ class InvestorProfileStore {
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         if (fields.brokerageEmployment.value === 'no') {
-          fields.brokerageFirmName.value = null;
+          fields.brokerageFirmName.value = 'false';
         } else {
           fields.brokerageFirmName.value = fields.brokerageFirmName.value;
         }
@@ -136,8 +136,8 @@ class InvestorProfileStore {
           { brokerageFirmName: fields.brokerageFirmName.value };
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
-        if (fields.publicCompanyTicker.value === 'no') {
-          fields.publicCompanyTicker.value = null;
+        if (fields.publicCompanyRel.value === 'no') {
+          fields.publicCompanyTicker.value = 'false';
         } else {
           fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
         }
@@ -145,7 +145,7 @@ class InvestorProfileStore {
           { publicCompanyTicker: fields.publicCompanyTicker.value };
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
-          taxFilingAs: this.INVESTOR_PROFILE_FORM.fields.investorProfileType.value,
+          taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
           annualIncome: [{
             year: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.year,
             income: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.value,
@@ -161,6 +161,7 @@ class InvestorProfileStore {
           netWorth: this.FINANCES_FORM.fields.netWorth.value,
         };
       } else if (currentStep.form === 'INVESTMENT_EXP_FORM') {
+        this.validateInvestmentExperience();
         const { fields } = this.INVESTMENT_EXP_FORM;
         formPayload = {
           experienceLevel: fields.experienceLevel.value,
@@ -169,7 +170,14 @@ class InvestorProfileStore {
         };
       }
       formPayload.isPartialProfile = !this.isValidInvestorProfileForm;
-      this.submitForm(currentStep, formPayload);
+      if (formPayload.isPartialProfile === false && currentStep.form !== 'INVESTMENT_EXP_FORM') {
+        formPayload.isPartialProfile = true;
+      }
+      if (currentStep.form === 'INVESTMENT_EXP_FORM' && this.isInvestmentExperienceValid) {
+        this.submitForm(currentStep, formPayload);
+      } else if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
+        this.submitForm(currentStep, formPayload);
+      }
     }
   }
 
@@ -186,6 +194,9 @@ class InvestorProfileStore {
           Helper.toast('Investor profile updated successfully.', 'success');
           FormValidator.setIsDirty(this[currentStep.form], false);
           this.setStepToBeRendered(currentStep.stepToBeRendered);
+          if (this.isValidInvestorProfileForm) {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
@@ -206,7 +217,6 @@ class InvestorProfileStore {
         this.setFormData('BROKERAGE_EMPLOYMENT_FORM', investorProfileData);
         this.setFormData('PUBLIC_COMPANY_REL_FORM', investorProfileData);
         this.setFormData('FINANCES_FORM', investorProfileData);
-        this.setFormData('INVESTOR_PROFILE_FORM', investorProfileData);
         this.setFormData('INVESTMENT_EXP_FORM', investorProfileData);
         const getProfileStep = AccCreationHelper.establishProfileSteps();
         if (!this.EMPLOYMENT_FORM.meta.isValid) {
@@ -215,8 +225,6 @@ class InvestorProfileStore {
           this.setStepToBeRendered(getProfileStep.BROKERAGE_EMPLOYMENT_FORM);
         } else if (!this.PUBLIC_COMPANY_REL_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.PUBLIC_COMPANY_REL_FORM);
-        } else if (!this.INVESTOR_PROFILE_FORM.meta.isValid) {
-          this.setStepToBeRendered(getProfileStep.INVESTOR_PROFILE_FORM);
         } else if (!this.FINANCES_FORM.meta.isValid) {
           this.setStepToBeRendered(getProfileStep.FINANCES_FORM);
         } else if (!this.INVESTMENT_EXP_FORM.meta.isValid) {
@@ -240,8 +248,13 @@ class InvestorProfileStore {
         case 'BROKERAGE_EMPLOYMENT_FORM':
           if (investorProfileData.brokerageFirmName) {
             const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
-            fields.brokerageFirmName.value = investorProfileData.brokerageFirmName;
-            if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '') {
+            if (investorProfileData.brokerageFirmName !== 'false') {
+              fields.brokerageFirmName.value = investorProfileData.brokerageFirmName;
+            } else {
+              fields.brokerageFirmName.value = '';
+            }
+            if (investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '' &&
+            investorProfileData.brokerageFirmName !== 'false') {
               fields.brokerageEmployment.value = 'yes';
             } else {
               fields.brokerageEmployment.value = 'no';
@@ -251,8 +264,13 @@ class InvestorProfileStore {
         case 'PUBLIC_COMPANY_REL_FORM':
           if (investorProfileData.publicCompanyTicker) {
             const { fields } = this.PUBLIC_COMPANY_REL_FORM;
-            fields.publicCompanyTicker.value = investorProfileData.publicCompanyTicker;
-            if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== '') {
+            if (investorProfileData.publicCompanyTicker !== 'false') {
+              fields.publicCompanyTicker.value = investorProfileData.publicCompanyTicker;
+            } else {
+              fields.publicCompanyTicker.value = '';
+            }
+            if (investorProfileData.publicCompanyTicker && investorProfileData.publicCompanyTicker !== '' &&
+            investorProfileData.publicCompanyTicker !== 'false') {
               fields.publicCompanyRel.value = 'yes';
             } else {
               fields.publicCompanyRel.value = 'no';
@@ -287,7 +305,7 @@ class InvestorProfileStore {
           break;
         case 'FINANCES_FORM':
           this.FINANCES_FORM.fields.netWorth.value = investorProfileData.netWorth;
-          this.INVESTOR_PROFILE_FORM.fields.investorProfileType.value =
+          this.FINANCES_FORM.fields.investorProfileType.value =
           investorProfileData.taxFilingAs;
           if (investorProfileData.annualIncome) {
             ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
@@ -318,8 +336,20 @@ class InvestorProfileStore {
     this.resetFormData('PUBLIC_COMPANY_REL_FORM');
     this.resetFormData('FINANCES_FORM');
     this.resetFormData('INVESTMENT_EXP_FORM');
-    this.resetFormData('INVESTOR_PROFILE_FORM');
     this.stepToBeRendered = 0;
+  }
+
+  @action
+  validateInvestmentExperience = () => {
+    const { isComfortable, isRiskTaker, experienceLevel } = this.INVESTMENT_EXP_FORM.fields;
+    if ((Array.isArray(toJS(isComfortable.value)) && isComfortable.value.length === 0) ||
+    (Array.isArray(toJS(isRiskTaker.value)) && isRiskTaker.value.length === 0) ||
+    (experienceLevel.value === 'NONE' || experienceLevel.value === 'SOME')
+    ) {
+      this.isInvestmentExperienceValid = false;
+    } else {
+      this.isInvestmentExperienceValid = true;
+    }
   }
 }
 

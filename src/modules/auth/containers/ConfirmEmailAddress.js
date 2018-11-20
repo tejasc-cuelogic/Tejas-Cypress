@@ -111,7 +111,7 @@ export default class ConfirmEmailAddress extends Component {
             displayMode
             className="display-only"
           />
-          <Link to={changeEmailAddressLink} className="grey-link">Change email address</Link>
+          <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
           <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
@@ -123,7 +123,7 @@ export default class ConfirmEmailAddress extends Component {
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
-              <Button type="button" size="small" color="grey" className="link-button" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
             </Form.Field>
             {errors &&
               <Message error textAlign="left" className="mb-40">

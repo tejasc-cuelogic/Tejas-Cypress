@@ -26,21 +26,20 @@ export default class VerifyAccreditation extends Component {
             <p>Please confirm which of the following is applicable for you:</p>
           </Modal.Header>
           <Modal.Content>
-            <Grid stackable textAlign="center">
-              <Grid.Row columns={2}>
-                {accreditationMethods.map(method => (
-                  <Grid.Column
-                    onClick={e => accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'accreditationMethods', value: method.value })}
-                  >
-                    <div className={`user-type ${(ACCREDITATION_FORM.fields.accreditationMethods.value === method.value ? 'active' : '')}`}>
+            <Grid stackable columns={2} textAlign="center">
+              {accreditationMethods.map(method => (
+                <Grid.Column
+                  onClick={e => accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'accreditationMethods', value: method.value })}
+                >
+                  <div className={`user-type ${(ACCREDITATION_FORM.fields.accreditationMethods.value === method.value ? 'active' : '')}`}>
+                    {method.header ?
                       <Header as="h4">{method.header}</Header>
-                      <p>
-                        {method.desc}
-                      </p>
-                    </div>
-                  </Grid.Column>
+                      : null
+                    }
+                    <p>{method.desc}</p>
+                  </div>
+                </Grid.Column>
               ))}
-              </Grid.Row>
             </Grid>
             <Button
               circular
