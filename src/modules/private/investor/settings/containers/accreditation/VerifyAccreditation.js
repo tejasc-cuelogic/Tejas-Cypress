@@ -3,23 +3,23 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Verification from './shared/Verification';
 import PopulateAccreditationSteps from './PopulateAccreditationSteps';
-import { NET_WORTH } from './../../../../../../services/constants/investmentLimit';
+import { NET_WORTH, ACCREDITATION_METHODS } from './../../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
 @withRouter
 @observer
 export default class Accreditation extends React.Component {
   componentWillMount() {
-    const { accreditationStore, match } = this.props;
+    const { match } = this.props;
     const { accountType } = match.params;
-    const { setFormData, changeFormObject } = accreditationStore;
-    setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
-    changeFormObject('NET_WORTH_FORM', NET_WORTH);
-    setFormData('NET_WORTH_FORM', 'accreditation', accountType);
-    setFormData('INCOME_EVIDENCE_FORM', 'accreditation', accountType);
-    setFormData('VERIFICATION_REQUEST_FORM', 'accreditation', accountType);
-    setFormData('INCOME_UPLOAD_DOC_FORM', 'accreditation', accountType);
-    setFormData('ASSETS_UPLOAD_DOC_FORM', 'accreditation', accountType);
+    this.props.accreditationStore.changeFormObject('ACCREDITATION_FORM', ACCREDITATION_METHODS);
+    this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+    this.props.accreditationStore.changeFormObject('NET_WORTH_FORM', NET_WORTH);
+    this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
+    this.props.accreditationStore.setFormData('INCOME_EVIDENCE_FORM', 'accreditation', accountType);
+    this.props.accreditationStore.setFormData('VERIFICATION_REQUEST_FORM', 'accreditation', accountType);
+    this.props.accreditationStore.setFormData('INCOME_UPLOAD_DOC_FORM', 'accreditation', accountType);
+    this.props.accreditationStore.setFormData('ASSETS_UPLOAD_DOC_FORM', 'accreditation', accountType);
   }
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);

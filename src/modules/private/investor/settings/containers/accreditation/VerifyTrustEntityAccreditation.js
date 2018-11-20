@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import NetWorth from './assets/NetWorth';
 import Verification from './shared/Verification';
 import AccreditationMethod from './shared/AccreditationMethod';
-import { ENTITY_TRUST_NET_WORTH } from './../../../../../../services/constants/investmentLimit';
+import { ENTITY_TRUST_NET_WORTH, ACCREDITATION_METHODS_ENTITY } from './../../../../../../services/constants/investmentLimit';
 import PopulateAccreditationSteps from './PopulateAccreditationSteps';
 
 @inject('accreditationStore')
@@ -14,6 +14,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
   componentWillMount() {
     const { accountType } = this.props.match.params;
     this.props.accreditationStore.setFormData('TRUST_ENTITY_ACCREDITATION_FRM', 'accreditation', accountType);
+    this.props.accreditationStore.changeFormObject('ACCREDITATION_FORM', ACCREDITATION_METHODS_ENTITY);
     this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
     this.props.accreditationStore.changeFormObject('NET_WORTH_FORM', ENTITY_TRUST_NET_WORTH);
     this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
