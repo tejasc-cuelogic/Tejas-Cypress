@@ -9,35 +9,32 @@ import { VARIFY_ROLES } from '../../../../../../../constants/account';
 @withRouter
 @observer
 export default class VerificationForm extends Component {
-  showThanksNote = () => {
-    this.props.history.push(`${this.props.match.url}/success`);
-  }
-
   render() {
     const { VERIFICATION_REQUEST_FORM, verificationFormChange } = this.props.accreditationStore;
     return (
       <div>
         <Header as="h3" textAlign="center">Send verification request</Header>
-        <p className="center-align">Your lawyer, CPA, investment advisor or investment broker can verify that they have seen evidence of your accredited status.No documentation is required</p>
+        <p className="center-align">Your lawyer, CPA, investment advisor or investment broker can verify that they have seen evidence of your accredited status.</p>
+        <p className="center-align"> No documentation is required</p>
         <Form error>
           <div className="field-wrap">
             <FormDropDown
-              fielddata={VERIFICATION_REQUEST_FORM.fields.verifierRole}
+              fielddata={VERIFICATION_REQUEST_FORM.fields.role}
               selection
               containerclassname="dropdown-field"
-              name="verifierRole"
+              name="role"
               options={VARIFY_ROLES}
               placeholder="Choose verifier role"
               onChange={(e, result) => verificationFormChange(e, result)}
             />
             <FormInput
-              name="verifierEmail"
-              fielddata={VERIFICATION_REQUEST_FORM.fields.verifierEmail}
+              name="email"
+              fielddata={VERIFICATION_REQUEST_FORM.fields.email}
               changed={verificationFormChange}
             />
           </div>
           <div className="center-align">
-            <Button onClick={this.showThanksNote} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Confirm</Button>
+            <Button onClick={() => this.props.clicked('VERIFICATION_REQUEST_FORM')} primary size="large" disabled={!VERIFICATION_REQUEST_FORM.meta.isValid}>Send verification request</Button>
           </div>
         </Form>
       </div>

@@ -37,6 +37,7 @@ export default class General extends Component {
               name="name"
               fielddata={GEN_INFO_FRM.fields.name}
               changed={genInfoChange}
+              showerror
             />
             <Form.Group widths="equal">
               <MaskedInput
@@ -45,6 +46,7 @@ export default class General extends Component {
                 changed={maskedGenInfoChange}
                 format="##-#######"
                 taxId
+                showerror
               />
               <FormDropDown
                 fielddata={GEN_INFO_FRM.fields.entityType}
@@ -69,6 +71,7 @@ export default class General extends Component {
                 name="city"
                 fielddata={GEN_INFO_FRM.fields.city}
                 changed={genInfoChange}
+                showerror
               />
               <FormDropDown
                 name="state"
@@ -85,6 +88,7 @@ export default class General extends Component {
                 fielddata={GEN_INFO_FRM.fields.zipCode}
                 changed={maskedGenInfoChange}
                 zipCode
+                showerror
               />
             </Form.Group>
           </div>

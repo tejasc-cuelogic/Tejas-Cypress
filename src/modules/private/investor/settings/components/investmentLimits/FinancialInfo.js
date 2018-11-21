@@ -5,35 +5,44 @@ import { inject, observer } from 'mobx-react';
 import { startCase } from 'lodash';
 import { Grid, Card, Statistic, Popup, Icon, Button, Divider, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
+import { DataFormatter } from '../../../../../../helper';
 import { EmptyDataSet, InlineLoader } from '../../../../../../theme/shared';
+import { ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constants/investmentLimit';
 
-
-@inject('investmentLimitStore', 'uiStore', 'userDetailsStore')
+@inject('investmentLimitStore', 'uiStore', 'userDetailsStore', 'accreditationStore')
 @withRouter
 @observer
 export default class FinancialInfo extends Component {
+  componentWillMount() {
+    this.props.investmentLimitStore.setAccountsLimits();
+    this.props.accreditationStore.initiateAccreditation();
+  }
   submit = (e) => {
     e.preventDefault();
     this.props.investmentLimitStore.updateFinInfo();
   }
-  handleUpdateInvestmentLimit =(e, accountType) => {
+  handleUpdateInvestmentLimit =(e, accountType, accountId) => {
     e.preventDefault();
-    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType);
+    this.props.investmentLimitStore.setInvestmentLimitInfo(accountType, accountId);
     this.props.history.push(`${this.props.match.url}/update`);
   }
-  handleVerifyAccreditation = (name) => {
-    if (name === 'entity') {
-      this.props.history.push(`${this.props.match.url}/verify-entity-accreditation`);
+  handleVerifyAccreditation = (e, accountType, accountId) => {
+    if (accountType === 'entity') {
+      if (this.props.userDetailsStore.isEntityTrust) {
+        this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountId}/${accountType}`);
+      } else {
+        this.props.history.push(`${this.props.match.url}/verify-entity-accreditation/${accountId}/${accountType}`);
+      }
     } else {
-      this.props.history.push(`${this.props.match.url}/verify-accreditation`);
+      this.props.history.push(`${this.props.match.url}/verify-accreditation/${accountId}/${accountType}`);
     }
   }
   render() {
     const {
-      INVESTEMENT_LIMIT_META, getActiveAccountList,
+      getActiveAccountList, entityCurrentLimit, individualIRACurrentLimit,
     } = this.props.investmentLimitStore;
+    const { accreditationData } = this.props.accreditationStore;
     const { currentUser } = this.props.userDetailsStore;
-    const { fields } = INVESTEMENT_LIMIT_META;
     if (currentUser.loading) {
       return <InlineLoader />;
     }
@@ -86,22 +95,38 @@ export default class FinancialInfo extends Component {
                             />
                           </Statistic.Label>
                           <Statistic.Value>
-                            {Helper.CurrencyFormat(account.name === 'entity' ? fields.currentLimitEntity.value : fields.currentLimitIndividualOrIra.value)}
+                            {Helper.CurrencyFormat(account.name === 'entity' ? entityCurrentLimit : individualIRACurrentLimit)}
                           </Statistic.Value>
                         </Statistic>
                         <Divider clearing hidden />
-                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name)} inverted color="green" content="Update investment limits" />
+                        <Button onClick={e => this.handleUpdateInvestmentLimit(e, account.name, account.details.accountId)} inverted color="green" content="Update investment limits" />
                       </Card.Content>
                     </Grid.Column>
                     <Grid.Column width={8}>
-                      <Card.Content>
-                        <Header as="h4">Accreditation</Header>
-                        <p className="intro-text">This will trigger a modal of 3-4 steps, and show a status</p>
-                        <Divider hidden />
-                        <Card.Description>
-                          <Button onClick={() => this.handleVerifyAccreditation(account.name)} primary content="Verify accreditation" />
-                        </Card.Description>
-                      </Card.Content>
+                      {accreditationData[account.name] &&
+                      accreditationData[account.name].status ?
+                        <Card.Content>
+                          <Header as="h4">
+                            Accreditation
+                            {'  '}<Button className="link-button" color="green" onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)}>Update accreditation</Button>
+                          </Header>
+                          <dl className="dl-horizontal">
+                            <dt>Status :</dt>
+                            <dd className="negative-text">{accreditationData[account.name] ? (accreditationData[account.name].expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accreditationData[account.name].expiration)) === 0)) ? 'Expired' : (accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]) : '-'}</dd>
+                            <dt>Date :</dt>
+                            <dd>{accreditationData[account.name] && accreditationData[account.name].requestDate ? DataFormatter.formatedDate(accreditationData[account.name].requestDate) : '-'}</dd>
+                          </dl>
+                        </Card.Content>
+                        :
+                        <Card.Content>
+                          <Header as="h4">Reg D 506(c) Investor Accreditation</Header>
+                          <p className="intro-text">In order to participate in Reg D offerings, the SEC requires NextSeed to verify your Accredited Investor status</p>
+                          <Divider hidden />
+                          <Card.Description>
+                            <Button onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)} primary content="Verify accreditation" />
+                          </Card.Description>
+                        </Card.Content>
+                      }
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
