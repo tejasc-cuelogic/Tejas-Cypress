@@ -7,6 +7,11 @@ import { FieldError } from '../../shared';
 @observer
 export default class FormTextarea extends Component {
   state = { showError: false };
+  componentWillMount() {
+    if (this.props.defaultValue && (this.props.fielddata.value === '' || this.props.fielddata.value === undefined)) {
+      this.props.changed({}, { name: this.props.name, value: this.props.defaultValue });
+    }
+  }
   triggerError = (val) => {
     this.setState({ showError: val });
   }

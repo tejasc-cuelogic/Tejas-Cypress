@@ -1200,7 +1200,7 @@ export const GENERAL = {
     placeHolder: 'Type your text here...',
     objRefOutput: 'useOfProceeds',
   },
-  rightsOfEqShareHolders: {
+  equityShareholderRights: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
     error: undefined,
@@ -1376,7 +1376,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  businessRisk: {
+  businessRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isBusinessRisk',
@@ -1390,7 +1390,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  financingRisk: {
+  financingRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isFinancingRisk',
@@ -1404,7 +1404,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  developmentRisk: {
+  developmentRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isDevelopmentRisk',
@@ -1418,7 +1418,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  reputationalRisk: {
+  reputationalRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isReputationalRisk',
@@ -1432,7 +1432,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  competitionRisk: {
+  competitionRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isCompetitionRisk',
@@ -1446,7 +1446,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  marketRisk: {
+  marketRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isMarketRisk',
@@ -1474,7 +1474,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  managementRisk: {
+  managementRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isManagementRisk',
@@ -1488,7 +1488,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  personnelRisk: {
+  personnelRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPersonnelRisk',
@@ -1502,7 +1502,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  laborSupplyRisk: {
+  laborSupplyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isLaborSupplyRisk',
@@ -1516,7 +1516,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  privacyRisk: {
+  privacyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPrivacyRisk',

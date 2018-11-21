@@ -343,7 +343,7 @@ export const getOfferingDetails = gql`
             reachedMinOfferingGoal
             reachedMaxOfferingGoal
           }
-          rightsOfEqShareHolders
+          equityShareholderRights
           security {
             class
             votingRights
@@ -386,17 +386,17 @@ export const getOfferingDetails = gql`
           }
         }
         riskFactors {
-          businessRisk
-          financingRisk
-          developmentRisk
-          reputationalRisk
-          competitionRisk
-          marketRisk
+          businessRisks
+          financingRisks
+          developmentRisks
+          reputationalRisks
+          competitionRisks
+          marketRisks
           workStoppagesRisks
-          managementRisk
-          personnelRisk
-          laborSupplyRisk
-          privacyRisk
+          managementRisks
+          personnelRisks
+          laborSupplyRisks
+          privacyRisks
           realEstateRisks
           supplyRisks
           foodSafetyRisks
