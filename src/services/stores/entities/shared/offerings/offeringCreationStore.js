@@ -995,6 +995,14 @@ export class OfferingCreationStore {
           );
         }
         payloadData[keyName] = omitDeep(payloadData[keyName], ['__typename', 'fileHandle']);
+        if (keyName === 'keyTerms' && payloadData[keyName].uploadProformas) {
+          const uploadProformas = {
+            fileId: payloadData[keyName].uploadProformas.fileId,
+            fileName: payloadData[keyName].uploadProformas.fileName,
+          };
+          payloadData[keyName] = omitDeep(payloadData[keyName], ['uploadProformas']);
+          payloadData[keyName].uploadProformas = { ...uploadProformas };
+        }
         payloadData[keyName] = cleanDeep(payloadData[keyName]);
       }
     } else if (keyName === 'contingencies') {

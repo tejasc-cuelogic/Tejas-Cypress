@@ -229,12 +229,19 @@ a{
 			color:@neutral-middark;
 		}
 	}
+	&.green-hover:hover{
+		color: @primary-one !important;
+	}
+}
+.green-hover.ui.button.link-button.grey:hover {
+	color: @primary-one !important;
 }
 .invisible{
 	opacity:0 !important;
 }
 .bg-offwhite {
 	background-color: @neutral-offwhite;
+	padding:@14px @20px;
 }
 .green-block {
 	background-color: @primary-one;
@@ -1221,33 +1228,56 @@ a.icon-link:hover {
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
+	.sticy-sidebar{
+		top:30px;
+	}
+	.sticky-actions{
+		bottom:14px;
+	}
 }
 .business-application .content-spacer{
 	padding:@50px 0px;
 }
-// .sticy-sidebar{
-// 	position:sticky;
-// 	top:0;
-// }
-// .sticky-actions{
-// 	position:sticky;
-// 	padding:@10px 0 0;
-// 	bottom:0;
-// 	background-color:@white;
-// 	&:after{
-// 		content:"";
-// 		height:14px;
-// 		width:100%;
-// 		background-color:@white;
-// 		display:block;
-// 		position:absolute;
-// 		bottom:-14px;
-// 	}
-// }
+.sticy-sidebar{
+	position:sticky;
+	top:0;
+}
+.sticky-actions{
+	position:sticky;
+	padding:@14px 0 0;
+	border-top:@neutral-offdark 1px solid;
+	bottom:0;
+	background-color:@white;
+	display:flex;
+	align-items:center;
+	z-index:9;
+	&:before{
+		content:"";
+		width:~"calc(100% + 1px)";
+		height:40px;
+		background:linear-gradient(transparent, @white);
+		position:absolute;
+		top:-41px;
+		pointer-events:none;
+	}
+	&:after{
+		content:"";
+		height:14px;
+		width:100%;
+		background-color:@white;
+		display:block;
+		position:absolute;
+		bottom:-14px;
+	}
+}
 .inner-content-spacer{
 	padding:@20px !important;
 	+ .inner-content-spacer{
 		border-top:@neutral-midwhite 1px solid;
+	}
+	.fr-box.html-editor{
+		box-shadow:none;
+		border:@neutral-darkwhite 1px solid;
 	}
 	.slick-slider.offers-carousel.slick-slider{
 		@media only screen and (min-width : @tabletBreakpoint) {
@@ -1813,6 +1843,9 @@ ol.progtrckr{
 			bottom:0;
 			transform:translate(-50%, 0%);
 		}
+		&.hidden{
+			display:none !important;
+		}
 		&.progtrckr-todo{
 			color:@neutral-offdark;
 			&:after{
@@ -1841,7 +1874,6 @@ ol.progtrckr{
 		}
 	}
 }
-
 .update-details{
 	.ui.embed{
 		margin-bottom:@28px;

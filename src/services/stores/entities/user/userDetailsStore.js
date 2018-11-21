@@ -28,6 +28,7 @@ export class UserDetailsStore {
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
+  @observable accountForWhichCipExpired = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -131,6 +132,12 @@ export class UserDetailsStore {
   @action
   updateUserStatus = (status) => {
     this.detailsOfUser.data.user.accountStatus = status;
+  }
+
+  @computed get isEntityTrust() {
+    const Accdetails = this.currentUser.data.user.roles.find(obj => obj.name === 'entity');
+
+    return (Accdetails && Accdetails.details && Accdetails.details.isTrust) || false;
   }
 
   @action
@@ -298,7 +305,7 @@ export class UserDetailsStore {
   }
 
   @computed get isCipExpired() {
-    if (this.userDetails) {
+    if (this.userDetails && this.userDetails.cip) {
       const { expiration } = this.userDetails.cip;
       const expirationDate = new Date(expiration);
       const currentDate = new Date();
@@ -307,6 +314,11 @@ export class UserDetailsStore {
       }
     }
     return false;
+  }
+
+  @action
+  setAccountForWhichCipExpired = (accountName) => {
+    this.accountForWhichCipExpired = accountName;
   }
 }
 

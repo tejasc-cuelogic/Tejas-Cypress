@@ -41,7 +41,7 @@ const AccTypeDescription = observer((props) => {
             <p>
               For new NextSeed IRA accounts, NextSeed will cover the one-time setup fee and
               annual account fees for four years. See the{' '}
-              <Link to="/app/summary/account-creation" className="link">Terms and Conditions</Link>
+              <Link to="/agreements/terms-of-use" className="link">Terms and Conditions</Link>
               {' '}for full details.
             </p>
           </div>
@@ -54,7 +54,7 @@ const AccTypeDescription = observer((props) => {
             The uninvested cash in your account is FDIC-insured up to $250,000 and is
             interest-bearing. We safeguard your information with bank-level security measures.
             <br />Questions? Please see our{' '}
-            <Link to="/app/summary/account-creation" className="link">FAQs on IRAs</Link>.
+            <Link to="/app/resources/faq" className="link">FAQs on IRAs</Link>.
           </p>
           <p className="grey-text">
             NextSeed is not a tax, investment or legal advisor and does not provide any tax,

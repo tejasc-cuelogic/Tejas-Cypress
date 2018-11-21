@@ -205,6 +205,7 @@ class FormValidator {
         }
       }
       currentForm.fields[field].error = undefined;
+      currentForm.response = {};
       return true;
     });
     currentForm.meta.isValid = false;

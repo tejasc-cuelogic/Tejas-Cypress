@@ -21,6 +21,8 @@ export default class BrokerageEmployment extends Component {
             name="brokerageEmployment"
             changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
             containerclassname="button-radio center-align"
+            classname="center-align"
+            showerror
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes' &&
           <div className="field-wrap">
@@ -30,6 +32,7 @@ export default class BrokerageEmployment extends Component {
                 fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageFirmName}
                 name="brokerageFirmName"
                 changed={(e, result) => employmentChange(e, 'BROKERAGE_EMPLOYMENT_FORM', result)}
+                showerror
               />
             </Form.Group>
           </div>

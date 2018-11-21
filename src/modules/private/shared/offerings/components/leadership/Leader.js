@@ -240,7 +240,7 @@ export default class Leader extends Component {
                   </Link>
                   }
                 </Header>
-                <div className="bg-offwhite">
+                <div className="featured-section">
                   <Form.Group widths={2}>
                     {
                       ['name', 'type'].map(field => (
