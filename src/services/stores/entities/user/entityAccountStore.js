@@ -126,7 +126,7 @@ class EntityAccountStore {
         this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
         break;
 
-      case 'Entity info':
+      case 'Trust Status':
         this.entityData.isTrust = this.TRUST_INFO_FRM.fields.isTrust.value;
         this.entityData.trustDate = this.TRUST_INFO_FRM.fields.trustDate.value;
         break;
@@ -256,6 +256,11 @@ class EntityAccountStore {
       }
     }
 
+    const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
+    if (isValidAddFunds) {
+      payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+    }
+
     return payload;
   }
 
@@ -291,7 +296,7 @@ class EntityAccountStore {
   (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
     let accountAttributes = {};
-    const array1 = ['Financial info', 'General', 'Entity info'];
+    const array1 = ['Financial info', 'General', 'Trust Status'];
     const array2 = ['Personal info', 'Formation doc'];
     if (array1.includes(currentStep.name)) {
       currentStep.validate();
@@ -303,7 +308,7 @@ class EntityAccountStore {
             dateOfInvestment: '02281975',
             amount: this.FIN_INFO_FRM.fields.cfInvestment.value,
           };
-        } else if (currentStep.name === 'General' || currentStep.name === 'Entity info') {
+        } else if (currentStep.name === 'General' || currentStep.name === 'Trust Status') {
           accountAttributes = this.setEntityAttributes(currentStep.name);
         }
         if (currentStep.name === 'General') {
@@ -341,12 +346,14 @@ class EntityAccountStore {
         }
       }
     } else if (currentStep.name === 'Link bank') {
+      bankAccountStore.validateAddFunds();
       if (bankAccountStore.bankLinkInterface === 'list') {
         currentStep.validate();
       }
+      const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
       isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
         bankAccountStore.isValidLinkBank;
-      if (isValidCurrentStep) {
+      if (isValidCurrentStep && isValidAddFunds) {
         uiStore.setProgress();
         if (bankAccountStore.plaidAccDetails && !isEmpty(bankAccountStore.plaidAccDetails)) {
           const plaidBankDetails = {};
@@ -363,6 +370,7 @@ class EntityAccountStore {
             accountAttributes.linkedBank = plaidBankDetails;
           }
         }
+        accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         this.submitForm(currentStep, formStatus, accountAttributes)
           .then(() => res()).catch(() => rej());
       } else {
@@ -456,7 +464,7 @@ class EntityAccountStore {
           this.FIN_INFO_FRM.fields[f].value = accountDetails[f];
         }
       } else if (form === 'GEN_INFO_FRM') {
-        if ((f === 'taxId' || f === 'name') && accountDetails && accountDetails[f]) {
+        if ((f === 'taxId' || f === 'name' || f === 'entityType') && accountDetails && accountDetails[f]) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails[f];
         } else if (accountDetails && accountDetails.address) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails.address[f];
@@ -511,7 +519,7 @@ class EntityAccountStore {
         }
         this.setFormData('TRUST_INFO_FRM', account.details);
         if (account.details && account.details.isTrust) {
-          this.setEntityAttributes('Entity info');
+          this.setEntityAttributes('Trust Status');
         }
         this.setFormData('PERSONAL_INFO_FRM', account.details);
         if (account.details && account.details.legalInfo) {
@@ -525,6 +533,7 @@ class EntityAccountStore {
         if (account.details.linkedBank &&
           account.details.linkedBank.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -538,6 +547,7 @@ class EntityAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
         this.renderAfterPopulate();
       }

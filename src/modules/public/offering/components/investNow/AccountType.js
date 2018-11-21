@@ -35,7 +35,8 @@ class AccountType extends Component {
     } = this.props.investmentStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     if (this.props.investmentStore.getSelectedAccountTypeId) {
-      this.props.investmentLimitStore.getInvestorInvestmentLimit();
+      this.props.investmentLimitStore
+        .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId);
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);

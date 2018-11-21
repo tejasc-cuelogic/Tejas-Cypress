@@ -18,6 +18,8 @@ export default class Employment extends Component {
             name="status"
             changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
             containerclassname="button-radio center-align"
+            classname="center-align"
+            showerror
           />
           {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' &&
           <div className="field-wrap">
@@ -28,6 +30,7 @@ export default class Employment extends Component {
                   fielddata={EMPLOYMENT_FORM.fields[field]}
                   name={field}
                   changed={(e, result) => employmentChange(e, 'EMPLOYMENT_FORM', result)}
+                  showerror
                 />
               ))}
             </Form.Group>

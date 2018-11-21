@@ -227,7 +227,7 @@ export default class Media extends Component {
         </Form>
         <Divider section />
         <Header as="h4">Logo</Header>
-        <Form className="cropper-wrap gallery-img">
+        <Form className="cropper-wrap gallery-img logo-img">
           <List horizontal>
             {MEDIA_FRM.fields.logo.preSignedUrl && MEDIA_FRM.fields.logo.preSignedUrl.length &&
             MEDIA_FRM.fields.logo.preSignedUrl.map((url, i) => (
@@ -255,16 +255,17 @@ export default class Media extends Component {
               />
             </List.Item>
           </List>
-          <ButtonGroup
-            isIssuer={isIssuer}
-            submitted={submitted}
-            isManager={isManager}
-            formValid={MEDIA_FRM.meta.isValid}
-            approved={approved}
-            updateOffer={this.handleFormSubmit}
-            issuerSubmitted={issuerSubmitted}
-          />
+          <Divider hidden />
         </Form>
+        <ButtonGroup
+          isIssuer={isIssuer}
+          submitted={submitted}
+          isManager={isManager}
+          formValid={MEDIA_FRM.meta.isValid}
+          approved={approved}
+          updateOffer={this.handleFormSubmit}
+          issuerSubmitted={issuerSubmitted}
+        />
         <Confirm
           content="Are you sure you want to remove this media file?"
           open={this.state.ConfirmModal}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import isEmpty from 'lodash/isEmpty';
+import { isEmpty, find } from 'lodash';
 import { Grid, Form, Card, Header, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../theme/form';
 import { US_STATES_FOR_INVESTOR } from '../../../../../constants/account';
@@ -19,6 +19,13 @@ import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
 @inject('userDetailsStore', 'userStore', 'identityStore', 'uiStore')
 @observer
 export default class ProfileData extends Component {
+  componentWillMount() {
+    const { ID_PROFILE_INFO, setStateValue } = this.props.identityStore;
+    const selectedState = find(US_STATES_FOR_INVESTOR, { key: ID_PROFILE_INFO.fields.state.value });
+    if (selectedState) {
+      setStateValue(selectedState.value);
+    }
+  }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
   }

@@ -23,6 +23,8 @@ export default class PublicCompanyRel extends Component {
             name="publicCompanyRel"
             changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
             containerclassname="button-radio center-align"
+            showerror
+            classname="center-align"
           />
           {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes' &&
           <div className="field-wrap">
@@ -32,6 +34,7 @@ export default class PublicCompanyRel extends Component {
                 fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyTicker}
                 name="publicCompanyTicker"
                 changed={(e, result) => employmentChange(e, 'PUBLIC_COMPANY_REL_FORM', result)}
+                showerror
               />
             </Form.Group>
           </div>
