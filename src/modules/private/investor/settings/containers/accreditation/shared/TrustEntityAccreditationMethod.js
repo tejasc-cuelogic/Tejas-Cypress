@@ -23,7 +23,7 @@ export default class TrustEntityAccreditationMethod extends Component {
           <Grid columns={1}>
             {trustEntityAccMethods.map(method => (
               <Grid.Column
-                onClick={(e) => { accreditationMethodChange(e, 'TRUST_ENTITY_ACCREDITATION_FRM', { name: 'method', value: method.value }); accreditationMethodChange(e, 'NET_WORTH_FORM', { name: 'netWorth', value: method.value === 'ASSETS' ? 'FIVE_MILLION' : 'NONE' }); accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: method.value === 'ASSETS' ? 'ASSETS' : 'REVOCABLE_TRUST_ASSETS' }); }}
+                onClick={(e) => { accreditationMethodChange(e, 'TRUST_ENTITY_ACCREDITATION_FRM', { name: 'method', value: method.value }); accreditationMethodChange(e, 'NET_WORTH_FORM', { name: 'netWorth', value: method.value === 'ASSETS' ? 'FIVE_MILLION' : 'NONE' }); accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: method.value === 'ASSETS' ? 'ASSETS' : '' }); }}
               >
                 <div className={`user-type ${(TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value === method.value ? 'active' : '')}`}>
                   <Header as="h6">{method.header}</Header>

@@ -36,16 +36,19 @@ export default class MultiStep extends React.Component {
     this.previous = this.previous.bind(this);
   }
   componentWillMount() {
-    if (this.state.compState > -1) {
-      this.setState({ showNextBtn: !this.props.steps[this.state.compState].disableNxtBtn });
+    if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
+      this.setNavState(this.props.stepToBeRendered);
+    }
+    if (this.props.stepToBeRendered > -1) {
+      this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
     }
   }
   componentWillReceiveProps(nextProps) {
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
       this.setNavState(nextProps.stepToBeRendered);
     }
-    if (this.state.compState > -1) {
-      this.setState({ showNextBtn: !nextProps.steps[this.state.compState].disableNxtBtn });
+    if (nextProps.stepToBeRendered > -1) {
+      this.setState({ showNextBtn: !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn });
     }
     if (typeof nextProps.disableNxtbtn !== 'undefined') {
       this.setState({ showNextBtn: nextProps.disableNxtbtn });
@@ -143,11 +146,11 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
-      return !this.props.steps[i].isHideLabel ? (
-        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
+      return (
+        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
           {this.props.steps[i].name}
         </li>
-      ) : null;
+      );
     });
   }
 
