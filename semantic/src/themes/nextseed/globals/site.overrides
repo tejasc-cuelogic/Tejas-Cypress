@@ -1846,6 +1846,9 @@ ol.progtrckr{
 			bottom:0;
 			transform:translate(-50%, 0%);
 		}
+		&.hidden{
+			display:none !important;
+		}
 		&.progtrckr-todo{
 			color:@neutral-offdark;
 			&:after{
