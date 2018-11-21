@@ -239,9 +239,6 @@ a{
 .invisible{
 	opacity:0 !important;
 }
-.hidden{
-	display:none !important;
-}
 .bg-offwhite {
 	background-color: @neutral-offwhite;
 	padding:@14px @20px;
@@ -1845,6 +1842,9 @@ ol.progtrckr{
 			left:50%;
 			bottom:0;
 			transform:translate(-50%, 0%);
+		}
+		&.hidden{
+			display:none !important;
 		}
 		&.progtrckr-todo{
 			color:@neutral-offdark;
