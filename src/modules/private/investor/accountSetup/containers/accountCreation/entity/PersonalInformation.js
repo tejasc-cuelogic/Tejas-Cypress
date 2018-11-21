@@ -56,6 +56,7 @@ export default class PersonalInformation extends Component {
               name="title"
               fielddata={PERSONAL_INFO_FRM.fields.title}
               changed={personalInfoChange}
+              showerror
             />
           </div>
           <Grid verticalAlign="middle">

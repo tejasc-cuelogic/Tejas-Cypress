@@ -39,7 +39,7 @@ export default class MultiStep extends React.Component {
     if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
       this.setNavState(this.props.stepToBeRendered);
     }
-    if (this.props.stepToBeRendered > -1) {
+    if (this.props.stepToBeRendered > -1 && _.has(this.props.steps[this.props.stepToBeRendered], 'disableNxtBtn')) {
       this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
     }
   }
@@ -47,7 +47,7 @@ export default class MultiStep extends React.Component {
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
       this.setNavState(nextProps.stepToBeRendered);
     }
-    if (nextProps.stepToBeRendered > -1) {
+    if (nextProps.stepToBeRendered > -1 && _.has(nextProps.steps[nextProps.stepToBeRendered], 'disableNxtBtn')) {
       this.setState({ showNextBtn: !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn });
     }
     if (typeof nextProps.disableNxtbtn !== 'undefined') {
