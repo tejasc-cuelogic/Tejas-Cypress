@@ -107,7 +107,7 @@ class IraAccountStore {
         payload.linkedBank.accountNumber = accountNumber;
         payload.linkedBank.routingNumber = routingNumber;
       }
-      const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
+      const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
       if (isValidAddFunds) {
         payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
       }
@@ -117,7 +117,7 @@ class IraAccountStore {
       if (accountNumber && routingNumber) {
         payload.linkedBank.accountNumber = accountNumber.value;
         payload.linkedBank.routingNumber = routingNumber.value;
-        const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
+        const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
         if (isValidAddFunds) {
           payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         }
@@ -181,12 +181,13 @@ class IraAccountStore {
           });
         break;
       case 'Link bank':
+        bankAccountStore.validateAddFunds();
         if (bankAccountStore.bankLinkInterface === 'list') {
           currentStep.validate();
         }
         isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
           bankAccountStore.isValidLinkBank;
-        if (isValidCurrentStep) {
+        if (isValidCurrentStep && bankAccountStore.formAddFunds.meta.isFieldValid) {
           uiStore.setProgress();
           if (!isEmpty(bankAccountStore.plaidAccDetails)) {
             const { public_token, account_id } = bankAccountStore.plaidAccDetails;
@@ -203,11 +204,7 @@ class IraAccountStore {
               accountAttributes.linkedBank = plaidBankDetails;
             }
           }
-          const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
-          if (isValidAddFunds) {
-            accountAttributes.initialDepositAmount =
-            bankAccountStore.formAddFunds.fields.value.value;
-          }
+          accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
             res();
           })

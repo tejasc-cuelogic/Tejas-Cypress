@@ -52,12 +52,14 @@ export default class ManualForm extends Component {
               fielddata={formLinkBankManually.fields.accountNumber}
               changed={linkBankManuallyChange}
               accountNumber
+              showerror
             />
             <MaskedInput
               name="routingNumber"
               fielddata={formLinkBankManually.fields.routingNumber}
               changed={linkBankManuallyChange}
               routingNumber
+              showerror
             />
           </div>
           <div className="center-align">

@@ -17,60 +17,63 @@ class IndividualAccountStore {
   }
 
   createAccount = (currentStep, formStatus = 'draft') => {
-    uiStore.setProgress();
-    let mutation = createIndividual;
-    const variables = {
-      userId: userStore.currentUser.sub,
-      accountAttributes: bankAccountStore.accountAttributes,
-      status: formStatus,
-      accountType: 'INDIVIDUAL',
-    };
-    let actionPerformed = 'submitted';
-    if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-      if (accountDetails) {
-        mutation = updateAccount;
-        variables.accountId = accountDetails.details.accountId;
-        actionPerformed = 'updated';
+    if (bankAccountStore.formAddFunds.meta.isFieldValid) {
+      uiStore.setProgress();
+      let mutation = createIndividual;
+      const variables = {
+        userId: userStore.currentUser.sub,
+        accountAttributes: bankAccountStore.accountAttributes,
+        status: formStatus,
+        accountType: 'INDIVIDUAL',
+      };
+      let actionPerformed = 'submitted';
+      if (userDetailsStore.currentUser.data) {
+        const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+        if (accountDetails) {
+          mutation = updateAccount;
+          variables.accountId = accountDetails.details.accountId;
+          actionPerformed = 'updated';
+        }
       }
+      return new Promise((resolve, reject) => {
+        client
+          .mutate({
+            mutation,
+            variables,
+          })
+          .then(action((result) => {
+            if (result.data.createInvestorAccount || formStatus === 'submit') {
+              userDetailsStore.getUser(userStore.currentUser.sub);
+            }
+            if (result.data.createInvestorAccount) {
+              const { linkedBank } = result.data.createInvestorAccount;
+              bankAccountStore.setPlaidAccDetails(linkedBank);
+            } else {
+              const { linkedBank } = result.data.updateInvestorAccount;
+              bankAccountStore.setPlaidAccDetails(linkedBank);
+            }
+            if (formStatus === 'submit') {
+              Helper.toast('Individual account created successfully.', 'success');
+              this.submited = true;
+            } else if (currentStep) {
+              this.setStepToBeRendered(currentStep.stepToBeRendered);
+              Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+            } else {
+              Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+            }
+            uiStore.setErrors(null);
+            resolve(result);
+          }))
+          .catch(action((err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            reject();
+          }))
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      });
     }
-    return new Promise((resolve, reject) => {
-      client
-        .mutate({
-          mutation,
-          variables,
-        })
-        .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
-          if (result.data.createInvestorAccount) {
-            const { linkedBank } = result.data.createInvestorAccount;
-            bankAccountStore.setPlaidAccDetails(linkedBank);
-          } else {
-            const { linkedBank } = result.data.updateInvestorAccount;
-            bankAccountStore.setPlaidAccDetails(linkedBank);
-          }
-          if (formStatus === 'submit') {
-            Helper.toast('Individual account created successfully.', 'success');
-            this.submited = true;
-          } else if (currentStep) {
-            this.setStepToBeRendered(currentStep.stepToBeRendered);
-            Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
-          } else {
-            Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-          }
-          uiStore.setErrors(null);
-          resolve(result);
-        }))
-        .catch(action((err) => {
-          uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject();
-        }))
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
-    });
+    return null;
   }
 
   @action

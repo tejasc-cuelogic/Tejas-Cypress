@@ -256,7 +256,7 @@ class EntityAccountStore {
       }
     }
 
-    const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
+    const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
     if (isValidAddFunds) {
       payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
     }
@@ -346,12 +346,14 @@ class EntityAccountStore {
         }
       }
     } else if (currentStep.name === 'Link bank') {
+      bankAccountStore.validateAddFunds();
       if (bankAccountStore.bankLinkInterface === 'list') {
         currentStep.validate();
       }
+      const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
       isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
         bankAccountStore.isValidLinkBank;
-      if (isValidCurrentStep) {
+      if (isValidCurrentStep && isValidAddFunds) {
         uiStore.setProgress();
         if (bankAccountStore.plaidAccDetails && !isEmpty(bankAccountStore.plaidAccDetails)) {
           const plaidBankDetails = {};
@@ -368,10 +370,7 @@ class EntityAccountStore {
             accountAttributes.linkedBank = plaidBankDetails;
           }
         }
-        const isValidAddFunds = bankAccountStore.formAddFunds.meta.isValid;
-        if (isValidAddFunds) {
-          accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
-        }
+        accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         this.submitForm(currentStep, formStatus, accountAttributes)
           .then(() => res()).catch(() => rej());
       } else {
