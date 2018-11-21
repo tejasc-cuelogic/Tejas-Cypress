@@ -239,6 +239,9 @@ a{
 .invisible{
 	opacity:0 !important;
 }
+.hidden{
+	display:none !important;
+}
 .bg-offwhite {
 	background-color: @neutral-offwhite;
 	padding:@14px @20px;

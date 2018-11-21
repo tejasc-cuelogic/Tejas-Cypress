@@ -107,12 +107,20 @@ class IraAccountStore {
         payload.linkedBank.accountNumber = accountNumber;
         payload.linkedBank.routingNumber = routingNumber;
       }
+      const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
+      if (isValidAddFunds) {
+        payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+      }
     } else {
       payload.linkedBank = {};
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       if (accountNumber && routingNumber) {
         payload.linkedBank.accountNumber = accountNumber.value;
         payload.linkedBank.routingNumber = routingNumber.value;
+        const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
+        if (isValidAddFunds) {
+          payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+        }
       }
     }
     return payload;
@@ -173,12 +181,13 @@ class IraAccountStore {
           });
         break;
       case 'Link bank':
+        bankAccountStore.validateAddFunds();
         if (bankAccountStore.bankLinkInterface === 'list') {
           currentStep.validate();
         }
         isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
           bankAccountStore.isValidLinkBank;
-        if (isValidCurrentStep) {
+        if (isValidCurrentStep && bankAccountStore.formAddFunds.meta.isFieldValid) {
           uiStore.setProgress();
           if (!isEmpty(bankAccountStore.plaidAccDetails)) {
             const { public_token, account_id } = bankAccountStore.plaidAccDetails;
@@ -195,6 +204,7 @@ class IraAccountStore {
               accountAttributes.linkedBank = plaidBankDetails;
             }
           }
+          accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
             res();
           })
@@ -321,6 +331,7 @@ class IraAccountStore {
         if (account.details.linkedBank &&
           account.details.linkedBank.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -335,6 +346,7 @@ class IraAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
 
         const getIraStep = AccCreationHelper.iraSteps();

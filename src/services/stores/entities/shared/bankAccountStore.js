@@ -1,10 +1,11 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, isArray } from 'lodash';
+import { isEmpty, isArray, map } from 'lodash';
 import { FormValidator as Validator } from '../../../../helper';
 import { accountStore } from '../../index';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
+import validationService from '../../../../api/validation';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -110,6 +111,10 @@ export class BankAccountStore {
       };
       accountAttributes = { ...plaidBankDetails };
     }
+    const isValidAddFunds = this.formAddFunds.meta.isValid;
+    if (isValidAddFunds) {
+      accountAttributes.initialDepositAmount = this.formAddFunds.fields.value.value;
+    }
     return accountAttributes;
   }
 
@@ -203,6 +208,19 @@ export class BankAccountStore {
   resetFormData(form) {
     const resettedForm = Validator.resetFormData(this[form]);
     this[form] = resettedForm;
+  }
+
+  @action
+  validateAddFunds = () => {
+    map(this.formAddFunds.fields, (value) => {
+      const { key } = value;
+      const { errors } = validationService.validate(value);
+      Validator.setFormError(
+        this.formAddFunds,
+        key,
+        errors && errors[key][0],
+      );
+    });
   }
 
   @action
