@@ -176,7 +176,11 @@ export class AccreditationStore {
 
   @action
   setFormFileArray = (formName, field, getField, value) => {
-    this[formName].fields[field][getField] = value;
+    if (formName === 'ASSETS_UPLOAD_DOC_FORM' && field === 'statementDoc' && getField !== 'showLoader' && getField !== 'error') {
+      this[formName].fields[field][getField].push(value);
+    } else {
+      this[formName].fields[field][getField] = value;
+    }
   }
 
   @action

@@ -62,7 +62,7 @@ export default class FinancialInfo extends Component {
                         <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name.toUpperCase()}
                       </Aux> :
                       <Aux>
-                        <Icon color="teal" className={`ns-${account.name}-line`} /> {startCase(account.name)}
+                        <Icon color="teal" className={`ns-${account.name}-line`} /> {account.name === 'ira' ? account.name.toUpperCase() : startCase(account.name)}
                       </Aux>
                     }
                   </Card.Header>
