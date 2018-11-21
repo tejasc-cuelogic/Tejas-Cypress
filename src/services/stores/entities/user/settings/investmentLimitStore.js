@@ -2,19 +2,28 @@ import { observable, action, computed, toJS } from 'mobx';
 import { mapValues, filter, find, map } from 'lodash';
 import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { GqlClient as client2 } from '../../../../../api/gcoolApi';
-import { uiStore, userDetailsStore, investmentStore } from '../../../index';
+import { uiStore, userDetailsStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateFinLimit, getInvestorInvestmentLimit } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
+import { userDetailsQuery } from '../../../queries/users';
 
 export class InvestmentLimitStore {
   @observable INVESTEMENT_LIMIT_META = Validator.prepareFormObject(INVESTEMENT_LIMIT);
   @observable investmentLimit = {};
   @observable currentLimit = 0;
+  @observable investorInvestmentLimit = null;
   @observable activeAccounts = null;
   @observable currentAccountType = null;
+  @observable currentAccountId = null;
+  @observable entityCurrentLimit = 0;
+  @observable individualIRACurrentLimit = 0;
+
+  @action
+  setFieldValue = (field, value) => {
+    this[field] = value;
+  }
 
   @computed get getActiveAccountList() {
     let isIndividualAccount = false;
@@ -26,13 +35,13 @@ export class InvestmentLimitStore {
   }
 
   @action
-  getInvestorInvestmentLimit = () => new Promise((resolve) => {
-    this.currentLimit = graphql({
+  getInvestorInvestmentLimit = accountId => new Promise((resolve) => {
+    this.investorInvestmentLimit = graphql({
       client,
       query: getInvestorInvestmentLimit,
       variables: {
         userId: userDetailsStore.currentUserId,
-        accountId: investmentStore.getSelectedAccountTypeId,
+        accountId,
       },
       onFetch: (data) => {
         if (data) {
@@ -44,7 +53,8 @@ export class InvestmentLimitStore {
   });
 
   @computed get getCurrentLimitForAccount() {
-    return (this.currentLimit.data && this.currentLimit.data.getInvestorInvestmentLimit) || 0;
+    return (this.investorInvestmentLimit.data &&
+      this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
   }
 
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
@@ -77,17 +87,33 @@ export class InvestmentLimitStore {
   }
 
   @action
-  setInvestmentLimitInfo = (accountType) => {
+  setAccountsLimits = () => {
+    const { accountList } = this.getActiveAccountList;
+    accountList.forEach((account) => {
+      this.getInvestorInvestmentLimit(account.details.accountId).then((data) => {
+        if (account.name === 'entity') {
+          this.setFieldValue('entityCurrentLimit', data.getInvestorInvestmentLimit);
+        } else {
+          this.setFieldValue('individualIRACurrentLimit', data.getInvestorInvestmentLimit);
+        }
+      });
+    });
+  }
+
+  @action
+  setInvestmentLimitInfo = (accountType, accountId = null) => {
     // set form values accountwise
+    const { userDetails } = userDetailsStore;
     this.currentAccountType = accountType;
+    this.currentAccountId = accountId;
     const { accountList } = this.getActiveAccountList;
     const accountData = find(accountList, account => account.name === accountType);
     const limitField = (accountType === 'entity') ? 'currentLimitEntity' : 'currentLimitIndividualOrIra';
     const fieldVal = {};
-    fieldVal.otherInvestments = 0;
-    fieldVal.annualIncome = (accountType === 'entity') ? accountData.details.cfInvestment.amount : accountData.details.annualIncome;
-    fieldVal.netWorth = (accountType === 'entity') ? accountData.details.netAssets : accountData.details.netWorth;
-    ['annualIncome', 'netWorth', 'otherInvestments'].forEach((field) => {
+    fieldVal.cfInvestments = (accountType === 'entity') ? accountData.details.limits.otherContributions : (userDetails && userDetails.limits && userDetails.limits.otherContributions) || 0;
+    fieldVal.annualIncome = (accountType === 'entity') ? accountData.details.limits.income : (userDetails && userDetails.limits && userDetails.limits.income) || 0;
+    fieldVal.netWorth = (accountType === 'entity') ? accountData.details.limits.netWorth : (userDetails && userDetails.limits && userDetails.limits.netWorth) || 0;
+    ['annualIncome', 'netWorth', 'cfInvestments'].forEach((field) => {
       this.INVESTEMENT_LIMIT_META = Validator.onChange(
         this.INVESTEMENT_LIMIT_META,
         { name: field, value: fieldVal[field] ? fieldVal[field] : 0 },
@@ -124,24 +150,49 @@ export class InvestmentLimitStore {
   @action
   updateInvestmentLimit = () => new Promise((resolve) => {
     const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
-    const currentLimit = parseInt(this.getInvestmentLimit(data), 10);
-    uiStore.setProgress();
-    client2
-      .mutate({
-        mutation: updateFinLimit,
-        variables: {
-          annualIncome: data.annualIncome,
-          netWorth: data.netWorth,
-          otherInvestments: data.otherInvestments,
-          currentLimit,
-        },
-      })
-      .then(() => {
-        Helper.toast('Updated Financial Info!', 'success');
-        resolve();
-      })
-      .catch(error => Helper.toast(`Error while updating Financial Info- ${error}`, 'error'))
-      .finally(() => uiStore.setProgress(false));
+    // const currentLimit = parseInt(this.getInvestmentLimit(data), 10);
+    this.updateInvestmentLimits(data, this.currentAccountId).then(() => resolve());
   })
+
+  @action
+  updateInvestmentLimits = (data, accountId, userId = null) => {
+    uiStore.setProgress();
+    return new Promise((resolve) => {
+      client
+        .mutate({
+          mutation: updateInvestmentLimits,
+          variables: {
+            userId: userId || userDetailsStore.currentUserId,
+            accountId,
+            annualIncome: data.annualIncome,
+            netWorth: data.netWorth,
+            otherRegCfInvestments: data.cfInvestments,
+          },
+          refetchQueries: [{
+            query: getInvestorInvestmentLimit,
+            variables: {
+              userId: userId || userDetailsStore.currentUserId,
+              accountId,
+            },
+          },
+          {
+            query: userDetailsQuery,
+            variables: {
+              userId: userId || userDetailsStore.currentUserId,
+            },
+          }],
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
 }
 export default new InvestmentLimitStore();

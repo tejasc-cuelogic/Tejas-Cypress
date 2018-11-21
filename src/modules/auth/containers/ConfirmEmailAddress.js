@@ -5,7 +5,7 @@ import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider, Icon } from 'semantic-ui-react';
-import { authActions, validationActions } from '../../../services/actions';
+import { authActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
@@ -32,8 +32,6 @@ export default class ConfirmEmailAddress extends Component {
     cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
     this.props.uiStore.clearErrors();
   }
-  handleInputChange = (e, { name, value }) =>
-    validationActions.validateLoginField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();

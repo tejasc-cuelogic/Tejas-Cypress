@@ -1,31 +1,16 @@
 import gql from 'graphql-tag';
 
-export const finLimit = gql`
-  query FinancialLimits {
-    FinancialLimits(id:"cjheqz99f0dzu0171soskx0pp") {
-      id
-      annualIncome
-      netWorth
-      otherInvestments
-      currentLimit
-    }
-  }
-`;
-
-export const updateFinLimit = gql`
-  mutation updateFinancialLimits($annualIncome: Int!, $netWorth: Int!, $otherInvestments: Int!, $currentLimit: Int!){
-    updateFinancialLimits(
-      id: "cjheqz99f0dzu0171soskx0pp",
-      annualIncome: $annualIncome,
-      netWorth: $netWorth,
-      otherInvestments: $otherInvestments,
-      currentLimit: $currentLimit,
-    ) {
-      id
-      annualIncome
-      netWorth
-      otherInvestments
-      currentLimit
+export const updateInvestmentLimits = gql`
+  mutation _updateInvestmentLimits($userId: String, $accountId: String!, $annualIncome: Float, $netWorth: Float, $otherRegCfInvestments: Float){
+    updateInvestmentLimits(
+      userId: $userId
+      accountId: $accountId
+      annualIncome: $annualIncome
+      netWorth: $netWorth
+      otherRegCfInvestments: $otherRegCfInvestments
+    )
+    {
+      investmentLimit
     }
   }
 `;

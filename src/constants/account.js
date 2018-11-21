@@ -642,7 +642,6 @@ export const VARIFY_ROLES = [
   { key: 'Accountant (must be CPA)', value: 'Accountant (must be CPA)', text: 'Accountant (must be CPA)' },
   { key: 'Personal Attorney (properly licensed)', value: 'Personal Attorney (properly licensed)', text: 'Personal Attorney (properly licensed)' },
 ];
-
 export const FILTER_META = {
   method: {
     value: [],
