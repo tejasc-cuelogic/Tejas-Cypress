@@ -256,6 +256,11 @@ class EntityAccountStore {
       }
     }
 
+    const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
+    if (isValidAddFunds) {
+      payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
+    }
+
     return payload;
   }
 
@@ -341,12 +346,14 @@ class EntityAccountStore {
         }
       }
     } else if (currentStep.name === 'Link bank') {
+      bankAccountStore.validateAddFunds();
       if (bankAccountStore.bankLinkInterface === 'list') {
         currentStep.validate();
       }
+      const isValidAddFunds = bankAccountStore.formAddFunds.meta.isFieldValid;
       isValidCurrentStep = bankAccountStore.formLinkBankManually.meta.isValid ||
         bankAccountStore.isValidLinkBank;
-      if (isValidCurrentStep) {
+      if (isValidCurrentStep && isValidAddFunds) {
         uiStore.setProgress();
         if (bankAccountStore.plaidAccDetails && !isEmpty(bankAccountStore.plaidAccDetails)) {
           const plaidBankDetails = {};
@@ -363,6 +370,7 @@ class EntityAccountStore {
             accountAttributes.linkedBank = plaidBankDetails;
           }
         }
+        accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         this.submitForm(currentStep, formStatus, accountAttributes)
           .then(() => res()).catch(() => rej());
       } else {
@@ -525,6 +533,7 @@ class EntityAccountStore {
         if (account.details.linkedBank &&
           account.details.linkedBank.plaidItemId) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {
           Object.keys(bankAccountStore.formLinkBankManually.fields).map((f) => {
             const { details } = account;
@@ -538,6 +547,7 @@ class EntityAccountStore {
           account.details.linkedBank.accountNumber !== '') {
             bankAccountStore.linkBankFormChange();
           }
+          bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         }
         this.renderAfterPopulate();
       }

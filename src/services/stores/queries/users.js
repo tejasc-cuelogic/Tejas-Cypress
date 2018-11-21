@@ -162,6 +162,7 @@ export const userDetailsQuery = gql`
               dateOfInvestment
               amount
             }
+            initialDepositAmount
             linkedBank {
               bankName
               plaidAccountId

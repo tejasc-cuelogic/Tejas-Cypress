@@ -229,8 +229,14 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
-          this.updateUserInfo();
-          resolve();
+          if (data.data.verifyCIPIdentity.passId ||
+            data.data.verifyCIPIdentity.softFailId ||
+            data.data.verifyCIPIdentity.hardFailId) {
+            this.updateUserInfo();
+            resolve();
+          } else {
+            uiStore.setErrors(data.data.verifyCIPIdentity.message);
+          }
         })
         .catch((err) => {
           if (err.response) {
