@@ -257,8 +257,16 @@ export class AccreditationStore {
     this[formObj] = Validator.prepareFormObject(formArray);
   }
 
+  @action
+  checkFormIsValid = (form) => {
+    this[form] = Validator.validateForm(this[form], false, false);
+  }
+
   formValidCheck = (forms) => {
-    const notOkForms = forms.filter(form => !this[form].meta.isValid);
+    const notOkForms = forms.filter((form) => {
+      this.checkFormIsValid(form);
+      return !this[form].meta.isValid;
+    });
     return notOkForms;
   }
 
