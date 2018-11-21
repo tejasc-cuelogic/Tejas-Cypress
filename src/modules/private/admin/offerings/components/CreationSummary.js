@@ -24,7 +24,7 @@ const summary = offer => [
   { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
   {
     title: 'Days Till Launch',
-    content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.terminationDate)} days` : 'N/A',
+    content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
     type: 0,
   },
 ];

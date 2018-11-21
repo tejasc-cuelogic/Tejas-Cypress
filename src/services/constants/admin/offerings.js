@@ -1200,7 +1200,7 @@ export const GENERAL = {
     placeHolder: 'Type your text here...',
     objRefOutput: 'useOfProceeds',
   },
-  rightsOfEqShareHolders: {
+  equityShareholderRights: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
     error: undefined,
@@ -1376,7 +1376,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  businessRisk: {
+  businessRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isBusinessRisk',
@@ -1390,7 +1390,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  financingRisk: {
+  financingRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isFinancingRisk',
@@ -1404,7 +1404,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  developmentRisk: {
+  developmentRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isDevelopmentRisk',
@@ -1418,7 +1418,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  reputationalRisk: {
+  reputationalRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isReputationalRisk',
@@ -1432,7 +1432,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  competitionRisk: {
+  competitionRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isCompetitionRisk',
@@ -1446,7 +1446,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  marketRisk: {
+  marketRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isMarketRisk',
@@ -1474,7 +1474,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  managementRisk: {
+  managementRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isManagementRisk',
@@ -1488,7 +1488,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  personnelRisk: {
+  personnelRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPersonnelRisk',
@@ -1502,7 +1502,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  laborSupplyRisk: {
+  laborSupplyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isLaborSupplyRisk',
@@ -1516,7 +1516,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  privacyRisk: {
+  privacyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPrivacyRisk',
@@ -1715,7 +1715,7 @@ export const RISK_FACTORS = {
   ipRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
-    refSelector: 'ipRisks',
+    refSelector: 'isIpRisks',
     error: undefined,
     rule: 'optional',
     defaultValue: 'Our intellectual property is material to conducting business. Our success depends in part on furthering brand recognition using trademarks, service marks, trade dress, trade secrets and other proprietary intellectual property, including our name, logos and unique ambiance of {{shorthand_name}}. We have taken efforts to protect our brand, but if its efforts are inadequate, or if any third party misappropriates or infringes on our intellectual property, the value of the store brand or consumer products brand may be harmed, which could have a material adverse effect on the business. There are no material claims against us from prior users of intellectual property, but there can be no assurances that we will not encounter any material claims in the future. If this happens, it could harm our image, brands or competitive position and cause us to incur significant penalties and costs.',

@@ -59,7 +59,7 @@ export class InvestmentLimitStore {
 
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
   getInvestmentLimit = (data) => {
-    let limit = 0;
+    let limit = 2200;
     const maxLimit = 107000;
     const annualIncomeOrNetWorth = data.annualIncome > data.netWorth ?
       data.netWorth : data.annualIncome;
