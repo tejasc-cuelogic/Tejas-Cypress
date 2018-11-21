@@ -298,9 +298,10 @@ export const IRA_FIN_INFO = {
     maxLength: 15,
   },
   investmentLimit: {
+    key: 'investmentLimit',
     value: '',
     error: undefined,
-    rule: 'numeric',
+    rule: 'numeric|min:5000',
   },
 };
 
