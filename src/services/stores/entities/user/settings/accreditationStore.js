@@ -433,6 +433,7 @@ export class AccreditationStore {
       this.TRUST_ENTITY_ACCREDITATION_FRM = Validator.prepareFormObject(TRUST_ENTITY_ACCREDITATION);
       if (data.method === 'ASSETS') {
         this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'ASSETS';
+        this.ACCREDITATION_FORM.fields.method.value = 'ASSETS';
       } else {
         if (data.method === 'REVOCABLE_TRUST_ASSETS' || data.method === 'REVOCABLE_TRUST_INCOME') {
           this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'REVOCABLE_TRUST_ASSETS';
