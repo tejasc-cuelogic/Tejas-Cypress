@@ -73,6 +73,42 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            accreditation {
+              status
+              expiration
+              requestDate
+              approved {
+                id
+                by
+                date
+                comment
+              }
+              update {
+                id
+                by
+                date
+              }
+              method
+              netWorth
+              grantorName
+              assetsUpload {
+                type
+                fileInfo {
+                  fileId
+                  fileName
+                }
+              }
+              verifier {
+                role
+                email
+              }
+            }
+            limits {
+              income
+              netWorth
+              otherContributions
+              limit
+            }
             name
             taxId
             entityType
@@ -146,6 +182,33 @@ export const userDetailsQuery = gql`
       }
       accreditation {
         status
+        expiration
+        requestDate
+        approved {
+          id
+          by
+          date
+          comment
+        }
+        update {
+          id
+          by
+          date
+        }
+        method
+        netWorth
+        grantorName
+        assetsUpload {
+          type
+          fileInfo {
+            fileId
+            fileName
+          }
+        }
+        verifier {
+          role
+          email
+        }
       }
       created {
         date

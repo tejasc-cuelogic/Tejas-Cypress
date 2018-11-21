@@ -35,10 +35,20 @@ export default class MultiStep extends React.Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
   }
-
+  componentWillMount() {
+    if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
+      this.setNavState(this.props.stepToBeRendered);
+    }
+    if (this.props.stepToBeRendered > -1) {
+      this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
       this.setNavState(nextProps.stepToBeRendered);
+    }
+    if (nextProps.stepToBeRendered > -1) {
+      this.setState({ showNextBtn: !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn });
     }
     if (typeof nextProps.disableNxtbtn !== 'undefined') {
       this.setState({ showNextBtn: nextProps.disableNxtbtn });
@@ -137,7 +147,7 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       return (
-        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
+        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
           {this.props.steps[i].name}
         </li>
       );
@@ -165,7 +175,9 @@ export default class MultiStep extends React.Component {
           <Aux>
             <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
             <ol className="progtrckr">
-              {this.renderSteps()}
+              {!this.props.steps[this.state.compState].isHideLabel &&
+                this.renderSteps()
+              }
             </ol>
           </Aux>
           }
