@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
+import Helper from '../../../../../../../helper/utility';
 
-@inject('iraAccountStore')
+@inject('iraAccountStore', 'investmentLimitStore')
 @observer
 export default class FinancialInformation extends React.Component {
   render() {
@@ -29,6 +30,7 @@ export default class FinancialInformation extends React.Component {
                 />
               ))
             }
+            <p>Your investment limit: <span className="highlight-text">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
           </div>
         </Form>
       </div>

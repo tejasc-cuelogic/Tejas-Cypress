@@ -8,7 +8,7 @@ import {
   IRA_FUNDING,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, userStore, bankAccountStore, userDetailsStore } from '../../index';
+import { uiStore, userStore, bankAccountStore, userDetailsStore, investmentLimitStore } from '../../index';
 import { createIndividual, updateAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -43,6 +43,11 @@ class IraAccountStore {
 
   @action
   finInfoChange = (values, field) => {
+    this.FIN_INFO_FRM.fields.investmentLimit.value =
+    investmentLimitStore.getInvestmentLimit({
+      annualIncome: this.FIN_INFO_FRM.fields.annualIncome.value,
+      netWorth: this.FIN_INFO_FRM.fields.netWorth.value,
+    });
     this.FIN_INFO_FRM = FormValidator.onChange(
       this.FIN_INFO_FRM,
       { name: field, value: values.floatValue },
