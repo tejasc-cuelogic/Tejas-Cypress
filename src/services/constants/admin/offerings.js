@@ -1715,7 +1715,7 @@ export const RISK_FACTORS = {
   ipRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
-    refSelector: 'ipRisks',
+    refSelector: 'isIpRisks',
     error: undefined,
     rule: 'optional',
     defaultValue: 'Our intellectual property is material to conducting business. Our success depends in part on furthering brand recognition using trademarks, service marks, trade dress, trade secrets and other proprietary intellectual property, including our name, logos and unique ambiance of {{shorthand_name}}. We have taken efforts to protect our brand, but if its efforts are inadequate, or if any third party misappropriates or infringes on our intellectual property, the value of the store brand or consumer products brand may be harmed, which could have a material adverse effect on the business. There are no material claims against us from prior users of intellectual property, but there can be no assurances that we will not encounter any material claims in the future. If this happens, it could harm our image, brands or competitive position and cause us to incur significant penalties and costs.',
