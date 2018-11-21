@@ -536,7 +536,7 @@ class FormValidator {
             if (fields[key].objRefOutput && !reference) {
               reference = fields[key].objRefOutput;
             }
-            let objValue = (fields[key].value === '' || fields[key].value === undefined) && fields[key].defaultValue ? fields[key].defaultValue :
+            let objValue = (fields[key].value === '' || (fields[key].value === undefined && fields[key].refSelector === undefined)) && fields[key].defaultValue ? fields[key].defaultValue :
               fields[key].value;
             if (fields[key].objType && fields[key].objType === 'FileObjectType') {
               objValue = this.evalFileObj(fields[key]);
