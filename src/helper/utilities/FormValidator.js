@@ -536,19 +536,14 @@ class FormValidator {
             if (fields[key].objRefOutput && !reference) {
               reference = fields[key].objRefOutput;
             }
-            let objValue = fields[key].value;
+            let objValue = (fields[key].value === '' || (fields[key].value === undefined && fields[key].refSelector === undefined)) && fields[key].defaultValue ? fields[key].defaultValue :
+              fields[key].value;
             if (fields[key].objType && fields[key].objType === 'FileObjectType') {
               objValue = this.evalFileObj(fields[key]);
             } else if (fields[key].objType && fields[key].objType === 'DATE') {
               objValue = this.evalDateObj(fields[key].value);
             } else if (fields[key].objType && fields[key].objType === 's3File') {
               objValue = this.evalS3FileObj(fields[key]);
-              // {
-              //   id: 1,
-              //   url: fields[key].preSignedUrl,
-              //   fileName: fields[key].value,
-              //   isPublic: true,
-              // };
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);
