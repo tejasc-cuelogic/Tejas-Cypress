@@ -186,3 +186,22 @@ export const portPrequalDataToApplication = gql`
       id
     }
   }`;
+
+export const requestOtp = gql`
+  mutation requestOtp($userId: String $type: String){
+    requestOtp(
+      userId: $userId
+      type: $type
+    ){
+      resourceId
+    }
+  }`;
+
+export const verfiyOtp = gql`
+  mutation verifyOtp($resourceId: String $verificationCode: Int){
+    verifyOtp(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+    )
+  }
+`;

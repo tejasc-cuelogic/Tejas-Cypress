@@ -156,9 +156,10 @@ export const USER_IDENTITY = {
     objRef: 'legalDetails',
   },
   mfaMethod: {
+    key: 'mfaMethod',
     value: true,
     values: [{ label: 'Text', value: true }, { label: 'Call', value: false }],
-    label: 'How would you want to recieve the MFA Code ?',
+    label: 'How would you want to receive the MFA Code ?',
     error: undefined,
     rule: 'optional',
   },
