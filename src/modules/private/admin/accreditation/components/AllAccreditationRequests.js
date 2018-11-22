@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { Card, Table } from 'semantic-ui-react';
-import { DateTimeFormat, InlineLoader } from './../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Actions from './Actions';
 import ConfirmModel from './ConfirmModel';
 
@@ -12,12 +12,16 @@ export default class AllAccreditationRequests extends Component {
   componentWillMount() {
     this.props.accreditationStore.initRequest();
   }
+  paginate = params => this.props.accreditationStore.initRequest(params);
   render() {
     const { match, accreditationStore } = this.props;
-    const { accreditations, loading } = accreditationStore;
+    const {
+      accreditations, loading, count, requestState,
+    } = accreditationStore;
     if (loading) {
       return <InlineLoader />;
     }
+    const totalRecords = count || 0;
     return (
       <Card fluid>
         <div className="table-wrapper">
@@ -51,14 +55,22 @@ export default class AllAccreditationRequests extends Component {
                     <Table.Cell>
                       <a href={`${accreditation.boxLink}`} className="link" rel="noopener noreferrer" target="_blank" >{accreditation.boxLink}</a>
                     </Table.Cell>
-                    <Actions {...this.props} />
+                    <Actions
+                      accountId={accreditation.id}
+                      userId={accreditation.id}
+                      accountType={accreditation.id}
+                      {...this.props}
+                    />
                   </Table.Row>
                 ))
               }
             </Table.Body>
           </Table>
-          <Route path={`${match.url}/:action`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
+          <Route path={`${match.url}/:action/:userId/:accountId/:accountType`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
         </div>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        }
       </Card>
     );
   }

@@ -12,7 +12,13 @@ export default class ConfirmModel extends Component {
     this.props.history.push(`${this.props.refLink}`);
   }
   handleConfirm = () => {
-    this.props.history.push(`${this.props.refLink}`);
+    const {
+      action, accountId, userId, accountType,
+    } = this.props.match.params;
+    this.props.accreditationStore
+      .accreditationAction(action, accountId, userId, accountType).then(() => {
+        this.props.history.push(`${this.props.refLink}`);
+      });
   }
   render() {
     const { formChange, CONFIRM_ACCREDITATION_FRM } = this.props.accreditationStore;
@@ -20,16 +26,17 @@ export default class ConfirmModel extends Component {
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
         <Modal.Content>
-          <Header textAlign="center" as="h3">Mark as {actionValue === 'approved' ? 'approved' : 'declined'}</Header>
+          <Header textAlign="center" as="h3">Mark as {actionValue === 'APPROVE' ? 'approved' : 'declined'}</Header>
           <Form>
             <FormTextarea
               containerclassname="secondary"
+              name="justifyDescription"
               fielddata={CONFIRM_ACCREDITATION_FRM.fields.justifyDescription}
               changed={(e, result) => formChange(e, result, 'CONFIRM_ACCREDITATION_FRM')}
             />
             <div className="center-align mt-30">
               <Button.Group>
-                <Button className={actionValue === 'approved' ? 'primary' : 'red'} content={actionValue === 'approved' ? 'Approve request' : 'Decline request'} onClick={this.handleConfirm} />
+                <Button disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid} className={actionValue === 'APPROVE' ? 'primary' : 'red'} content={actionValue === 'APPROVE' ? 'Approve request' : 'Decline request'} onClick={this.handleConfirm} />
               </Button.Group>
             </div>
           </Form>

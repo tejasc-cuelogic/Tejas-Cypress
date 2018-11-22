@@ -11,3 +11,26 @@ export const updateAccreditation = gql`
   )
 }
 `;
+
+export const listAccreditation = gql`
+  query listAccreditation($page: Int, $search: String, $method: FilterAccreditationMethodEnum, $type: UserAccreditationMethodEnum, $accountCreateFromDate: String, $accountCreateToDate: String) {
+  listAccreditation (
+    page: $page
+    search: $search
+    method: $method
+    type: $type
+    accountCreateFromDate: $accountCreateFromDate
+    accountCreateToDate: $accountCreateToDate
+  ) {
+    users {
+      id
+      info {
+        firstName
+        lastName
+      }
+      
+    }
+    resultCount
+  }
+}
+`;

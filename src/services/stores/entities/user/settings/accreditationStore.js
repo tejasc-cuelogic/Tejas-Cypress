@@ -1,12 +1,13 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray } from 'lodash';
 import cleanDeep from 'clean-deep';
+import graphql from 'mobx-apollo';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../../index';
-import { updateAccreditation } from '../../../queries/accreditation';
+import { updateAccreditation, listAccreditation } from '../../../queries/accreditation';
 import { userDetailsQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
@@ -56,6 +57,12 @@ export class AccreditationStore {
         ...{ accountCreateFromDate: startDate, accountCreateToDate: endDate },
       };
     }
+    this.data = graphql({
+      client,
+      query: listAccreditation,
+      variables: params,
+      fetchPolicy: 'network-only',
+    });
     this.data = [
       {
         id: 1,
@@ -75,6 +82,14 @@ export class AccreditationStore {
       },
     ];
   }
+
+  @computed get count() {
+    return (this.data.data
+      && this.data.data.listAccreditation
+      && toJS(this.data.data.listAccreditation.resultCount)
+    ) || 0;
+  }
+
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -391,6 +406,38 @@ export class AccreditationStore {
               userId: userDetailsStore.currentUserId,
             },
           }],
+        })
+        .then(() => resolve())
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+        })
+        .finally(() => uiStore.setProgress(false));
+    });
+  }
+
+  @action
+  updateAccreditation = (accreditationAction, accountId, userId, accountType) => {
+    uiStore.setProgress();
+    const field = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateAccreditation,
+          variables: {
+            action: accreditationAction,
+            accountId,
+            userId,
+            accountType,
+            field,
+          },
+          // refetchQueries: [{
+          //   query: userDetailsQuery,
+          //   variables: {
+          //     userId: userDetailsStore.currentUserId,
+          //   },
+          // }],
         })
         .then(() => resolve())
         .catch((error) => {
