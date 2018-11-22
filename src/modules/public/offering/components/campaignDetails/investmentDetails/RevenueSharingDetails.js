@@ -13,7 +13,7 @@ class RevenueSharingDetails extends Component {
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
           <Segment padded>
             <Header as="h4">
-              <Link to={`${refLink}/overview/keyterms`}>
+              <Link to={`${refLink}/investment-details/summary`}>
                 Revenue Sharing Summary*
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
@@ -121,7 +121,7 @@ class RevenueSharingDetails extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid>
-            <Link to={`${refLink}/overview/keyterms`} className="pull-right mt-10">View More</Link>
+            <Link to={`${refLink}/overview/keyterms`} className="right-align mt-10">View More</Link>
           </Segment>
         </Grid.Column>
       </Grid.Row>

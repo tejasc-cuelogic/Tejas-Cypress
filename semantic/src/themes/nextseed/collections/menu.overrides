@@ -499,6 +499,9 @@ footer{
             background-color:@white;
         }
     }
+    .ui.secondary-menu.menu .right.item:before {
+        background-color: transparent;
+    }
 }
 
 

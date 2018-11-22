@@ -14,7 +14,7 @@ const AllInclusive = () => (
           <Grid.Row>
             <Grid.Column computer={10} tablet={16} mobile={16} verticalAlign="middle" className="side-section">
               <Header as="h2">Reach your goals with full-service support included.</Header>
-              <p className="mb-30">
+              <p className="mb-60">
               Our one-time fee comes with everything you need to launch, promote and service
               your campaign. Best of all, we only charge you if your offering is successful.
               </p>
@@ -76,6 +76,7 @@ const AllInclusive = () => (
                   </Item.Content>
                 </Item>
               </Item.Group>
+              <Divider hidden section />
               <List horizontal={!isMobile} relaxed className="learn-more-list">
                 <List.Item>
                   <List.Header>Learn more</List.Header>

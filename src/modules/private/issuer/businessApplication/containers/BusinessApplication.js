@@ -121,7 +121,7 @@ export default class BusinessApplication extends Component {
     const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
-        subNavComponent={<Menu.Item position="right"><Link to={`${match.url}/need-help`}>Need Help / Have Questions?</Link></Menu.Item>}
+        rightLabel={<Menu.Item position="right"><Link to={`${match.url}/need-help`}>Need Help / Have Questions?</Link></Menu.Item>}
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
