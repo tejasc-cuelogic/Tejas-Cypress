@@ -49,7 +49,8 @@ const ProgressCard = props => (
         const verificationStatus =
         props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification) ||
         (props.signupStatus.isMigratedFullAccount &&
-        (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null));
+        (props.userDetailsStore.userDetails && props.userDetailsStore.userDetails.cip
+        && props.userDetailsStore.userDetails.cip.requestId !== null));
         /*
         * Condition added for migrated-user
         */

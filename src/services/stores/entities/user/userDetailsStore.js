@@ -176,12 +176,10 @@ export class UserDetailsStore {
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
-      // details.isMigratedUser =
-      // (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
-      // details.isMigratedFullAccount =
-      // (this.userDetails.status && this.userDetails.status === 'MIGRATION_FULL');
-      details.isMigratedUser = true;
-      details.isMigratedFullAccount = true;
+      details.isMigratedUser =
+      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
+      details.isMigratedFullAccount =
+      (this.userDetails.status && this.userDetails.status === 'MIGRATION_FULL');
       details.investorProfileCompleted =
       this.userDetails.investorProfileData === null ?
         false : this.userDetails.investorProfileData ?
