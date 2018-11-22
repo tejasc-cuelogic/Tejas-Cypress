@@ -31,7 +31,7 @@ export default class ApplicationCards extends Component {
         <Card.Group stackable itemsPerRow={3} className="application-cards">
           <Card fluid>
             <Card.Content>
-              <Header as="h3"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
+              <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
               <p>Want to start a new campaing? Start new application process to proceed</p>
               <Divider hidden />
               <Button primary as={Link} to="/app/dashboard/select-application-type">Start application</Button>
@@ -42,7 +42,7 @@ export default class ApplicationCards extends Component {
               application.applicationStatus !== BUSINESS_APPLICATION_STATUS.APPLICATION_REMOVED &&
                 <Card fluid key={application.applicationId}>
                   <Card.Content>
-                    <Header as="h3"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
+                    <Header as="h4"><Icon color={BUSINESS_APP_USER_STATUS[application.applicationStatus].color} name={BUSINESS_APP_USER_STATUS[application.applicationStatus].icon} /> {application.prequalDetails.businessGeneralInfo.businessName}</Header>
                   </Card.Content>
                   <Card.Content>
                     <dl className="dl-horizontal">

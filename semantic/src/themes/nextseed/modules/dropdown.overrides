@@ -63,6 +63,7 @@
 
 //    Custom for NS V.2
 .ui.selection.dropdown{
+    min-width: auto;
 	border-bottom:@border-color 1px solid;
 	.menu{
 		border:none;
@@ -74,29 +75,33 @@
 	}
 	~ .dropdown-effect{
 		position:absolute;
-		top:-7px;
+		top:-8px;
 		left:0;
 		right:0;
 		z-index:1;
-		border-radius:@borderRadius @borderRadius 0 0;
+		border-radius:@borderRadius;
 		color:@fullBlack;
 		padding:0;
 		height:0;
 		font-size:0;
 		font-weight:@fontMedium;
-	}
+    }
+    &.upward ~ .dropdown-effect{
+        top:auto;
+        bottom:-10px;
+    }
 	&.active{
 		.menu > .item{
 			border:none;
 			background:transparent;
 		}
 		~ .dropdown-effect{
-			height:90px;
+			height:~"calc(100% + 18px)";
 			padding:@8px @14px;
 			font-size:@13px;
 			line-height:18px;
 			background-color:@white;
-			box-shadow:0 0 20px @veryStrongTransparentBlack;
+			box-shadow:0 0 10px @veryStrongTransparentBlack;
 		}
 	}
     &.secondary {
@@ -126,13 +131,18 @@
         }
     }
     &.display-only{
+        min-height:auto;
         padding:0 !important;
         border:none !important;
         font-weight:@fontMedium;
         text-overflow:ellipsis;
+        line-height:@17px;
         cursor:default;
         background:none !important;
         pointer-events:none;
+        >.text{
+            display:initial;
+        }
         >.icon{
             display:none;
         }
@@ -140,9 +150,22 @@
     > .text{
         width:100%;
     }
+    &.compact{
+        min-height:auto;
+        padding-top:@3px;
+        padding-bottom:@3px;
+        >.dropdown.icon, >.search.icon, >.delete.icon{
+            padding-top:@4px;
+            padding-bottom:@4px;
+        }
+    }
+}
+dl.dl-horizontal dd .ui.selection.dropdown.display-only{
+    font-weight:@normal;
 }
 .ui.dropdown{
     >.text{
+        min-height:14px;
         overflow:hidden;
         white-space:nowrap;
         text-overflow:ellipsis;

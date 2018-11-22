@@ -157,8 +157,8 @@ const HowItWorks = () => (
       {!isMobile ?
         <Container>
           <Grid centered stackable relaxed={isTablet ? '' : 'very'}>
-            {businesses.map(row => (
-              <Grid.Row>
+            {businesses.map((row, index) => (
+              <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
                 {
                   row.map(b => (
                     <Grid.Column textAlign="center" width={isTablet ? 5 : 4}>

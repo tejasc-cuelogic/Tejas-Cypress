@@ -32,7 +32,7 @@ export default class PreQualRealEstate extends Component {
           currentApplicationType={this.props.applicationType || currentApplicationType}
           setAddressFields={setAddressFields}
         />
-        <FormElementWrap hideFields={hideFields} header="Industries">
+        <FormElementWrap hideFields={hideFields} header="Industries" subHeader="Please select all that apply.">
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.industryTypes}
@@ -41,7 +41,7 @@ export default class PreQualRealEstate extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="Select Investment Type" subHeader="Select your Investment Type.">
+        <FormElementWrap hideFields={hideFields} header="Investment Type" subHeader="Select your Investment Type.">
           <FormRadioGroup
             containerclassname="button-radio"
             disabled={preQualFormDisabled}
@@ -55,7 +55,7 @@ export default class PreQualRealEstate extends Component {
             {getInvestmentTypeTooltip}
           </p>}
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="Select Real Estate Type" subHeader="Select all the Real Estate types that apply.">
+        <FormElementWrap hideFields={hideFields} header="Real Estate Type" subHeader="Select all the Real Estate types that apply.">
           <FormCheckbox
             containerclassname="button-checkbox"
             disabled={preQualFormDisabled}

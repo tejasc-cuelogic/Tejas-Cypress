@@ -239,6 +239,10 @@
         border:none;
         border-bottom:@borderColor 1px solid;
     }
+    .ui.input.compact input{
+        padding-top:@3px;
+        padding-bottom:@3px;
+    }
     .ui.table{
         input:not([type]),
         input[type=date],

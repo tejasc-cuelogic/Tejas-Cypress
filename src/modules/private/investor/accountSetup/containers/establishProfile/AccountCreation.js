@@ -17,7 +17,11 @@ export default class AccountCreation extends React.Component {
     this.props.userDetailsStore.setUserAccDetails();
   }
   handleMultiStepModalclose = () => {
-    this.props.history.push('/app/summary');
+    if (this.props.refUrl) {
+      this.props.history.push(this.props.refUrl);
+    } else {
+      this.props.history.push('/app/summary');
+    }
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
   handleStepChange = (step) => {
