@@ -188,7 +188,7 @@ export const portPrequalDataToApplication = gql`
   }`;
 
 export const requestOtp = gql`
-  mutation requestOtp($userId: String $type: String){
+  mutation requestOtp($userId: String $type: MFAModeEnum){
     requestOtp(
       userId: $userId
       type: $type
