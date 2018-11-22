@@ -335,6 +335,12 @@ export const ENTITY_FIN_INFO = {
     rule: 'required|numeric',
     maxLength: 15,
   },
+  investmentLimit: {
+    key: 'investmentLimit',
+    value: '',
+    error: undefined,
+    rule: 'numeric|min:5000',
+  },
 };
 
 export const ENTITY_GEN_INFO = {

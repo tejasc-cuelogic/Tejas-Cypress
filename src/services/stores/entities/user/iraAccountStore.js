@@ -1,6 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find } from 'lodash';
-import omitDeep from 'omit-deep';
+import { isEmpty, find, omit } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -156,7 +155,7 @@ class IraAccountStore {
         isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
-          accountAttributes = omitDeep(accountAttributes, ['investmentLimit']);
+          accountAttributes = omit(accountAttributes, ['investmentLimit']);
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
             res();
           })

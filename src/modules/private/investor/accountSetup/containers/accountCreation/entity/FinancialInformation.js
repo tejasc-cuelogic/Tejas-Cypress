@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form } from 'semantic-ui-react';
+import { Header, Form, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
+import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore')
+@inject('entityAccountStore', 'investmentLimitStore')
 @observer
 export default class FinancialInformation extends Component {
+  componentWillMount() {
+    const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
+    if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netAssets.value !== '' && FIN_INFO_FRM.fields.cfInvestment.value !== ''))) && !(FIN_INFO_FRM.fields.netAssets.value === '' && FIN_INFO_FRM.fields.cfInvestment.value === '')) {
+      maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netAssets.value }, name: 'netAssets' });
+    }
+  }
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
@@ -33,7 +40,15 @@ export default class FinancialInformation extends Component {
                 />
               ))
             }
+            <p>Your investment limit: <span className="highlight-text">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
           </div>
+          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
+          <Message error textAlign="left" className="mb-40">
+          Based on your net assets and annual income, your 12-month investment
+          limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
+          This is below the $5,000 minimum opening deposit for IRA accounts.
+          </Message>
+          }
         </Form>
       </div>
     );
