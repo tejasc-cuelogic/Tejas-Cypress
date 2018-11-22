@@ -33,7 +33,7 @@ class Comments extends Component {
                 <Button secondary>Sign Up Now</Button>
               </section> */}
               {/* After sign up view - do not remove */}
-              <section className="center-align">
+              <section className="center-align mt-80">
                 {!isMobile &&
                   <Header as="h4" className="mb-30">Post New Comment</Header>
                 }

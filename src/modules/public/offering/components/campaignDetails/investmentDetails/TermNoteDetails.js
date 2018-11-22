@@ -149,7 +149,7 @@ class TermNoteDetails extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid>
-            <Link to={`${refLink}/overview/keyterms`} className="pull-right mt-10">View More</Link>
+            <Link to={`${refLink}/overview/keyterms`} className="right-align mt-10">View More</Link>
           </Segment>
         </Grid.Column>
         <Route path={`${this.props.match.url}/paymentcalculator`} component={PaymentCalculatorModal} />

@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import moment from 'moment';
+import React from 'react';
+import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
@@ -404,7 +407,7 @@ export const ACC_TYPE = {
     value: 0,
     values: [
       {
-        label: 'Individual',
+        label: (<label><Icon className="ns-individual-line" />Individual</label>),
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
         An initial deposit can be quickly and securely completed by linking your checking account. 
@@ -415,7 +418,7 @@ export const ACC_TYPE = {
         accType: 'individual',
       },
       {
-        label: 'IRA',
+        label: (<label><Icon className="ns-ira-line" />IRA</label>),
         value: 1,
         description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.) 
         Minimum opening deposit: $5,000. Investment limits apply. 
@@ -424,7 +427,7 @@ export const ACC_TYPE = {
         accType: 'ira',
       },
       {
-        label: 'Entity',
+        label: (<label><Icon className="ns-entity-line" />Entity</label>),
         value: 2,
         description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts) 
         An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. 
@@ -443,9 +446,14 @@ export const BROKERAGE_EMPLOYMENT = {
     value: '',
     values:
       [
-        { label: 'Yes', value: 'yes' },
-        { label: 'No', value: 'no' },
+        {
+          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+        },
+        {
+          label: 'No', value: 'no', key: 'No', text: 'No',
+        },
       ],
+    skipField: true,
     error: undefined,
     rule: 'required',
   },
@@ -468,9 +476,14 @@ export const PUBLIC_COMPANY_REL = {
     value: '',
     values:
       [
-        { label: 'Yes', value: 'yes' },
-        { label: 'No', value: 'no' },
+        {
+          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+        },
+        {
+          label: 'No', value: 'no', key: 'No', text: 'No',
+        },
       ],
+    skipField: true,
     error: undefined,
     rule: 'required',
   },
@@ -493,15 +506,26 @@ export const EMPLOYMENT = {
     value: '',
     values:
       [
-        { label: 'Employed', value: 'EMPLOYED' },
-        { label: 'Self Employed', value: 'SELF_EMPLOYED' },
-        { label: 'Retired', value: 'RETIRED' },
-        { label: 'Student', value: 'STUDENT' },
-        { label: 'Not Employed', value: 'NOT_EMPLOYED' },
+        {
+          label: 'Employed', value: 'EMPLOYED', key: 'Employed', text: 'Employed',
+        },
+        {
+          label: 'Self Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
+        },
+        {
+          label: 'Retired', value: 'RETIRED', key: 'Retired', text: 'Retired',
+        },
+        {
+          label: 'Student', value: 'STUDENT', key: 'Student', text: 'Student',
+        },
+        {
+          label: 'Not Employed', value: 'NOT_EMPLOYED', key: 'Not Employed', text: 'Not Employed',
+        },
       ],
     error: undefined,
     rule: 'required',
-    objRef: 'employmentStatusInfo',
+    objRef: 'employment',
+    objRefOutput: 'employment',
   },
   employer: {
     key: 'employer',
@@ -510,7 +534,8 @@ export const EMPLOYMENT = {
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Type employer name',
-    objRef: 'employmentStatusInfo',
+    objRef: 'employment',
+    objRefOutput: 'employment',
     customErrors: {
       required_if: 'required',
     },
@@ -522,7 +547,8 @@ export const EMPLOYMENT = {
     error: undefined,
     rule: 'required_if:status,EMPLOYED',
     placeHolder: 'E.g. CEO',
-    objRef: 'employmentStatusInfo',
+    objRef: 'employment',
+    objRefOutput: 'employment',
     customErrors: {
       required_if: 'required',
     },
@@ -532,7 +558,12 @@ export const EMPLOYMENT = {
 export const INVESTOR_PROFILE = {
   investorProfileType: {
     value: '',
-    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
+    values: [{
+      label: 'Individual', value: 'INDIVIDUAL', key: 'Individual', text: 'Individual',
+    },
+    {
+      label: 'Joint (Married)', value: 'JOINT', key: 'Joint (Married)', text: 'Joint (Married)',
+    }],
     error: undefined,
     rule: 'required',
   },
@@ -554,7 +585,6 @@ export const FINANCES = {
     error: undefined,
     rule: 'required',
     placeHolder: 'Net Worth',
-    objRef: 'financialInfo',
     customErrors: {
       required: 'required',
     },
@@ -566,7 +596,7 @@ export const FINANCES = {
     rule: 'required',
     year: '2016',
     placeHolder: '$60,000',
-    objRef: 'financialInfo',
+    objRefOutput: 'annualIncome',
     customErrors: {
       required: 'required',
     },
@@ -578,7 +608,7 @@ export const FINANCES = {
     rule: 'required',
     year: '2017',
     placeHolder: '$60,000',
-    objRef: 'financialInfo',
+    objRefOutput: 'annualIncome',
     customErrors: {
       required: 'required',
     },
@@ -590,7 +620,7 @@ export const FINANCES = {
     rule: 'required',
     year: '2018',
     placeHolder: '$60,000',
-    objRef: 'financialInfo',
+    objRefOutput: 'annualIncome',
     customErrors: {
       required: 'required',
     },
@@ -603,7 +633,6 @@ export const INVESTMENT_EXPERIENCE = {
     values: [{ label: 'No experience', value: 'NONE' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
-    objRef: 'investmentExperienceInfo',
   },
   isComfortable: {
     value: [],
@@ -641,6 +670,71 @@ export const VARIFY_ROLES = [
   { key: 'Broker-Dealer (SEC-registered)', value: 'Broker-Dealer (SEC-registered)', text: 'Broker-Dealer (SEC-registered)' },
   { key: 'Accountant (must be CPA)', value: 'Accountant (must be CPA)', text: 'Accountant (must be CPA)' },
   { key: 'Personal Attorney (properly licensed)', value: 'Personal Attorney (properly licensed)', text: 'Personal Attorney (properly licensed)' },
+];
+
+
+export const INVESTOR_PROFILE_FULL_META = {
+  ...INVESTMENT_EXPERIENCE,
+  ...EMPLOYMENT,
+  ...BROKERAGE_EMPLOYMENT,
+  taxFilingAs: FINANCES.investorProfileType,
+  netWorth: FINANCES.netWorth,
+  annualIncomeThirdLastYear: FINANCES.annualIncomeThirdLastYear,
+  annualIncomeLastYear: FINANCES.annualIncomeLastYear,
+  annualIncomeCurrentYear: FINANCES.annualIncomeCurrentYear,
+  ...PUBLIC_COMPANY_REL,
+};
+
+export const INVESTMENT_EXPERIENCE_LIST = [
+  { key: 'No experience', value: 'NONE', text: 'No experience' },
+  { key: 'I have some experience', value: 'SOME', text: 'I have some experience' },
+  { key: 'I know what I’m doing', value: 'GOOD', text: 'I know what I’m doing' },
+  { key: 'I’m an expert', value: 'EXPERT', text: 'I’m an expert' },
+];
+
+export const EMPLOYMENT_LIST = [
+  {
+    value: 'EMPLOYED', key: 'Employed', text: 'Employed',
+  },
+  {
+    value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
+  },
+  {
+    value: 'RETIRED', key: 'Retired', text: 'Retired',
+  },
+  {
+    value: 'STUDENT', key: 'Student', text: 'Student',
+  },
+  {
+    value: 'NOT_EMPLOYED', key: 'Not Employed', text: 'Not Employed',
+  },
+];
+
+export const BROKERAGE_EMPLOYMENT_LIST = [
+  {
+    value: 'yes', key: 'Yes', text: 'Yes',
+  },
+  {
+    value: 'no', key: 'No', text: 'No',
+  },
+];
+
+export const PUBLIC_COMPANY_REL_LIST = [
+  {
+    value: 'yes', key: 'Yes', text: 'Yes',
+  },
+  {
+    value: 'no', key: 'No', text: 'No',
+  },
+];
+
+export const INVESTOR_PROFILE_LIST = [
+  {
+    value: 'INDIVIDUAL', key: 'Individual', text: 'Individual',
+  },
+  {
+    value: 'JOINT', key: 'Joint (Married)', text: 'Joint (Married)',
+  },
 ];
 export const FILTER_META = {
   method: {
