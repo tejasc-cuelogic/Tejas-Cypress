@@ -22,7 +22,7 @@ export class IdentityStore {
   @observable ID_PROFILE_INFO = FormValidator.prepareFormObject(UPDATE_PROFILE_INFO);
   @observable submitVerificationsDocs = false;
   @observable reSendVerificationCode = false;
-  @observable userCipStatus = 'FAIL';
+  @observable userCipStatus = '';
 
   @action setCipStatus = (status) => {
     this.userCipStatus = status;
@@ -118,7 +118,7 @@ export class IdentityStore {
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
-      status: this.userCipStatus,
+      status: this.userCipStatus !== '' ? this.userCipStatus : this.cipStatus,
       dateOfBirth: fields.dateOfBirth.value,
       ssn: fields.ssn.value,
       legalAddress: {
@@ -176,7 +176,7 @@ export class IdentityStore {
         firstLegalName: fields.firstLegalName.value,
         lastLegalName: fields.lastLegalName.value,
       },
-      status: this.userCipStatus,
+      status: this.userCipStatus !== '' ? this.userCipStatus : this.cipStatus,
       dateOfBirth: fields.dateOfBirth.value,
       ssn: fields.ssn.value,
       legalAddress: {
@@ -208,11 +208,9 @@ export class IdentityStore {
     this.ID_PROFILE_INFO.fields.state.value = stateValue;
   }
 
-  @computed
-  get cipStatus() {
+  @computed get cipStatus() {
     const { key, questions } = this.ID_VERIFICATION_FRM.response;
     const cipStatus = identityHelper.getCipStatus(key, questions);
-    this.setCipStatus(cipStatus);
     return cipStatus;
   }
   @action

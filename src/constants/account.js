@@ -297,6 +297,12 @@ export const IRA_FIN_INFO = {
     placeHolder: 'Your annual income',
     maxLength: 15,
   },
+  investmentLimit: {
+    key: 'investmentLimit',
+    value: '',
+    error: undefined,
+    rule: 'numeric|min:5000',
+  },
 };
 
 export const IRA_IDENTITY = {
@@ -328,6 +334,12 @@ export const ENTITY_FIN_INFO = {
     error: undefined,
     rule: 'required|numeric',
     maxLength: 15,
+  },
+  investmentLimit: {
+    key: 'investmentLimit',
+    value: '',
+    error: undefined,
+    rule: 'numeric|min:5000',
   },
 };
 
