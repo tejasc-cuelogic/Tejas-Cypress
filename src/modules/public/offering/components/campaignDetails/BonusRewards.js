@@ -72,15 +72,15 @@ class BonusRewards extends Component {
         <Grid stackable>
           <Grid.Column>
             <Segment padded>
-              <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
-                <Grid.Column>
-                  {/* <Image src={`${ASSETS_URL}images/cards/pour_cards_black.jpg`} />
-                  <Header as="h5">Black Card</Header> */}
-                  <p>
+              {offeringMISC ?
+                <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
+                  <Grid.Column>
                     <p className="detail-section" dangerouslySetInnerHTML={{ __html: offeringMISC }} />
-                  </p>
-                </Grid.Column>
-              </Grid>
+                  </Grid.Column>
+                </Grid>
+                :
+                <InlineLoader text="No data found." />
+              }
             </Segment>
           </Grid.Column>
         </Grid>
