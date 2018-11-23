@@ -10,7 +10,11 @@ import ConfirmCancelModal from './ConfirmCancelModal';
 @observer
 export default class EstablishProfile extends Component {
   handleCloseModal = () => {
-    this.props.history.push('/app/summary');
+    if (this.props.refUrl) {
+      this.props.history.push(this.props.refUrl);
+    } else {
+      this.props.history.push('/app/summary');
+    }
   }
   handleCloseNestedModal = () => {
     this.props.history.push('/app/summary/establish-profile');

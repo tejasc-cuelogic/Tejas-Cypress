@@ -39,9 +39,9 @@ export const updateAccount = gql`
   }`;
 
 export const updateInvestorProfileData = gql`
-  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employmentStatusInfo: EmploymentStatusInput $brokerageFirmName: String $publicCompanyTicker: String $netWorth: Int $annualIncome: [InvestorAnnualIncome] $experienceLevel: InvestorExperienceLevelTypeEnum $isRiskTaker: Boolean $isComfortable: Boolean $taxFilingAs: InvestorProfileTypeEnum) {
+  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employment: EmploymentStatusInput $brokerageFirmName: String $publicCompanyTicker: String $netWorth: Int $annualIncome: [InvestorAnnualIncome] $experienceLevel: InvestorExperienceLevelTypeEnum $isRiskTaker: Boolean $isComfortable: Boolean $taxFilingAs: InvestorProfileTypeEnum) {
     createInvestorProfile(
-      employmentStatusInfo: $employmentStatusInfo
+      employmentStatusInfo: $employment
       brokerageFirmName: $brokerageFirmName
       publicCompanyTicker: $publicCompanyTicker
       netWorth: $netWorth

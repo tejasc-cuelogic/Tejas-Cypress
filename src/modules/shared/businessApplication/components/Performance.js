@@ -69,7 +69,7 @@ export default class Performance extends Component {
                     <Header as={hideFields ? 'h6' : 'h5'} content="Prior Year" />
                     <div className="field-wrap">
                       {
-                        ['pyGrossSales', 'pyCogs', 'pyOperatingExpenses', 'pyNetIncome'].map(field => (
+                        ['pyGrossSales', 'pyOperatingExpenses', 'pyNetIncome', 'pyCogs'].map(field => (
                           <MaskedInput
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
@@ -90,7 +90,7 @@ export default class Performance extends Component {
                   <Header as={hideFields ? 'h6' : 'h5'} content="Future Year" />
                   <div className="field-wrap">
                     {
-                      ['nyGrossSales', 'nyCogs', 'nyOperatingExpenses', 'nyNetIncome'].map(field => (
+                      ['nyGrossSales', 'nyOperatingExpenses', 'nyNetIncome', 'nyCogs'].map(field => (
                         <MaskedInput
                           readOnly={formReadOnlyMode}
                           containerclassname={formReadOnlyMode ? 'display-only' : ''}

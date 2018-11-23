@@ -12,6 +12,7 @@ import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
+import Footer from './../../../../theme/layout/Footer';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -89,6 +90,9 @@ class offerDetails extends Component {
             <Route path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
             <Route path={`${match.url}/congratulation`} component={Congratulation} />
           </Switch>
+          <Responsive minWidth={768} as={Aux}>
+            <Footer path={location.pathname} />
+          </Responsive>
         </div>
       </div>
     );

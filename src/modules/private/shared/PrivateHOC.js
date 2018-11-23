@@ -42,7 +42,7 @@ class PrivateHOC extends Component {
         </div>
         {this.props.P5}
         {(pageMeta.subPanel === 1 || this.props.subNav) &&
-          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} subNavComponent={this.props.subNavComponent} />
+          <SecondaryMenu addon={this.props.subNavAddon} noinvert match={this.props.match} attached="bottom" className="secondary-menu" navItems={pageMeta.subNavigations} stepsStatus={this.props.appStepsStatus} rightLabel={this.props.rightLabel} />
         }
         <div className="content-spacer">
           {this.props.children}

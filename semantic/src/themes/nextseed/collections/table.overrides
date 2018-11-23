@@ -256,6 +256,43 @@
         + .basic.form-table{
             margin-top:@21px;
         }
+        &.profile-table {
+            a {
+                color: @primary-one;
+                &.ui.button.green {
+                    color: @white;
+                }
+            }
+            &.structured tbody tr {
+                border: none;
+            }
+            .sb-avatar{
+                width:58px;
+                height:58px;
+                margin-right:0;
+                .sb-avatar__text{
+                    width:58px;
+                    height:58px;
+                    font-size:@21px;
+                    line-height:58px;
+                }
+            }
+            .profile-pic-wrapper{
+                position: relative;
+                height: 58px;
+                width: 58px;
+                .change-profile-icon{
+                    position: absolute;
+                    padding: 6px;
+                    bottom: -7px;
+                    right: -7px;
+                }
+                img.avatar {
+                    height: 58px;
+                    width: 58px;
+                }
+            }
+        }
     }
     &.bg-offwhite {
         padding:0;

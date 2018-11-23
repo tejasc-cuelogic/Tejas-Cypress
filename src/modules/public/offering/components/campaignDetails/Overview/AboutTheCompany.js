@@ -31,21 +31,13 @@ class AboutTheCompany extends Component {
               </Link>
             </Header>
             <p>
-              <b>Industry: </b>
-              {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
-              <b>Investment Type: </b>
+              <b>Type of Raise: </b>
               {campaign && campaign.keyTerms && campaign.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities] : ''}
               <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <a target="blank" href="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor">See some examples</a>.</span>)} />
             </p>
-            {/* <p
-              className="detail-section"
-              dangerouslySetInnerHTML={
-                {
-                  __html: campaign && campaign.offering && campaign.offering.about &&
-                    campaign.offering.about.theCompany
-                }
-              }
-            /> */}
+            <b>Industry: </b>
+            {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
+            <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
             <p>
               {campaign && campaign.offering && campaign.offering.overview &&
                 campaign.offering.overview.highlight ?
@@ -57,10 +49,10 @@ class AboutTheCompany extends Component {
                   </List>
                   :
                   <InlineLoader text="No Data Found" />
-              }
+                }
             </p>
           </div>
-          <Link to={`${this.props.refLink}/about`}>Read More</Link>
+          <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
           {
             filteredSocialArr.length ?
               <div className="mt-50">

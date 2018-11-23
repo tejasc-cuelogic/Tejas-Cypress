@@ -44,6 +44,7 @@ class LocationAnalysisModal extends Component {
                   <NsCarousel
                     {...settings}
                     thumbs={isMobile ? tabGalleryLength : galleryLength}
+                    customThumSliderClass
                     imageCount={galleryArray.length}
                     isTablet={isMobile}
                     handlePaginationFun={this.handlePagination}

@@ -185,6 +185,12 @@ h6{
 		margin-bottom:0px;
 	}
 }
+.regular-text {
+	font-weight: @normal !important;
+}
+.more-info {
+	font-size: 12px;
+}
 //	normal link styles
 a:not(.item), a:not(.ui.button){
 	color:@link-color;
@@ -260,55 +266,94 @@ i.icon.right {
 // Footer Styles
 footer{
 	background-color:@neutral-offwhite;
-	.footer-head{
-		background-color:@neutral;
-	}
-	section{
-		overflow:hidden;
-		transition:all .5s ease-in-out;
-		display: flex;
-		flex-direction: row;
-		margin: 0 -@14px;
-		>div {
-			padding: 0 @14px;
-		}
-		&.inactive{
-			height:0;
-			padding:0;
-		}
-		&.active{
-			// height:240px;
-			padding:@30px 0px;
-			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-				height:auto;
-			}
+	padding: @50px 0;
+	.footer-left {
+		display: flex !important;
+		flex-direction: column !important;
+		.footer-left-nav {
+			flex-grow: 0;
+			display: flex;
+			flex-direction: row;
 			@media only screen and (max-width : @largestMobileScreen){
-				height: auto;
-				flex-direction: column;
+				flex-direction: column; 
 			}
 		}
-		.footer-left {
-			display: inline-block;
-			min-width: 275px;
-		}
-		.copyright-info{
+		.secure {
 			flex-grow: 1;
-			font-size:@12px;
-			line-height:22px;
+		}
+		.footer-social {
+			flex-grow: 0;
 			@media only screen and (max-width : @largestMobileScreen){
-				float:none;
+				text-align: center;
 			}
-			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-				max-width: 480px;
-			}
-			a {
+			a.item {
+				display: inline-block;
 				color: @neutral-middark;
-				text-decoration: underline;
+				&:hover {
+					text-decoration: none;
+				}
 			}
+			p {
+				display: inline-block;
+				margin-left: 60px;
+				@media only screen and (max-width : @largestMobileScreen){
+					display: block;
+					margin-left: 0;
+				}
+			}
+		}
+	}
+	@media only screen and (max-width : @largestMobileScreen){
+		.secure img{
+			margin: auto;
+		}
+	}
+	.copyright-info{
+		flex-grow: 1;
+		font-size:@12px;
+		line-height:@22px;
+		@media only screen and (max-width : @largestMobileScreen){
+			float:none;
+		}
+		a {
+			color: @neutral-middark;
+			text-decoration: underline;
 		}
 	}
 }
-
+.offering-wrapper footer {
+	padding: @50px @40px;
+	.footer-left-nav {
+		flex-grow: 1;
+		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+			justify-content: center;
+		}
+		.ui.vertical.menu .item {
+			line-height: @20px;
+		}
+	}
+	.footer-left {
+		.footer-social {
+			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+				text-align: center;
+				margin-bottom: @20px;
+			}
+			p {
+				display: block;
+				margin-top: @14px;
+				margin-left: 0;
+				@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+					min-width: 100%;
+				}
+			}
+		}
+	} 
+}
+.public-pusher footer {
+	@media only screen and (max-width : @computerBreakpoint){
+		padding-bottom: @42px;
+	}
+}
 /** campaign filter **/
 .campaign-list-wrapper {
 	position: relative;
@@ -453,7 +498,7 @@ footer{
 			padding: @10px 0;
 		}
 		p {
-			color: @neutral;
+			color: @neutral-middark;
 			&.note {
 				color:@neutral-middark;
 				font-size: @12px;
@@ -1791,15 +1836,18 @@ dl.dl-horizontal{
 	}
 	dt{
 		float:left;
-		width:140px;
+		width:180px;
 		font-weight:700;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
 		.ui.label{
 			padding:@3px @8px;
 			margin-left:@7px;
 		}
 	}
 	dd{
-		margin-left:150px;
+		margin-left:190px;
 		margin-bottom:@10px;
 		color:@neutral-middark;
 		overflow:hidden;
@@ -1809,6 +1857,15 @@ dl.dl-horizontal{
 		}
 		> .link{
 			margin-left:@28px;
+		}
+		&.visible-dropdown{
+			overflow:visible;
+			> .field{
+				clear:unset;
+			}
+		}
+		.field.display-only input{
+			font-weight:@normal !important;
 		}
 	}
 }
@@ -2471,5 +2528,12 @@ p.check-extra-info{
 	padding: @10px;
 	h5.ui.header {
 		margin: 0; 
+	}
+}
+// Profile setting new structure 
+.profile-settings .field-wrap {
+	padding: @20px;
+	.fields:last-child .field {
+		margin-bottom: 0;
 	}
 }
