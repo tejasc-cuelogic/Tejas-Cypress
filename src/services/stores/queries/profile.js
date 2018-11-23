@@ -197,7 +197,7 @@ export const requestOtp = gql`
     }
   }`;
 
-export const verfiyOtp = gql`
+export const verifyOtp = gql`
   mutation verifyOtp($resourceId: String $verificationCode: Int){
     verifyOtp(
       resourceId: $resourceId

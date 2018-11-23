@@ -12,22 +12,25 @@ import { ListErrors } from '../../../theme/shared';
 @withRouter
 @observer
 export default class ConfirmPhoneNumber extends Component {
-  // state = {
-  //   changePhoneNumber: this.props.uiStore.editMode,
-  // }
   componentWillMount() {
+    const { userDetailsStore, identityStore } = this.props;
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
       this.setConfirmPhoneFormData();
+    }
+    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
+      const fieldValue = userDetailsStore.userDetails.phone.type;
+      identityStore.phoneTypeChange(fieldValue);
     }
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
   setConfirmPhoneFormData = () => {
-    if (this.props.userDetailsStore.userDetails.phone &&
-      this.props.userDetailsStore.userDetails.phone.number) {
-      const fieldValue = this.props.userDetailsStore.userDetails.phone.number;
-      this.props.identityStore.phoneNumberChange(fieldValue);
+    const { userDetailsStore, identityStore } = this.props;
+    if (userDetailsStore.userDetails.phone &&
+      userDetailsStore.userDetails.phone.number) {
+      const fieldValue = userDetailsStore.userDetails.phone.number;
+      identityStore.phoneNumberChange(fieldValue);
     }
   }
   handleConfirmPhoneNumber = (e) => {

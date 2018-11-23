@@ -5,7 +5,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, userStore, userDetailsStore } from '../../index';
-import { isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
@@ -23,6 +23,11 @@ export class IdentityStore {
   @observable submitVerificationsDocs = false;
   @observable reSendVerificationCode = false;
   @observable userCipStatus = 'FAIL';
+  @observable requestOtpResponse = {};
+
+  @action setRequestOtpResponse = (result) => {
+    this.requestOtpResponse = result;
+  }
 
   @action setCipStatus = (status) => {
     this.userCipStatus = status;
@@ -59,6 +64,14 @@ export class IdentityStore {
     this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'phoneNumber', value },
+    );
+  }
+
+  @action
+  phoneTypeChange = (value) => {
+    this.ID_VERIFICATION_FRM = FormValidator.onChange(
+      this.ID_VERIFICATION_FRM,
+      { name: 'mfaMethod', value },
     );
   }
 
@@ -321,19 +334,21 @@ export class IdentityStore {
     });
   }
 
-  startPhoneVerification = () => {
+  startPhoneVerification = (type = undefined) => {
+    const { phone } = userDetailsStore.userDetails;
     uiStore.clearErrors();
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: startUserPhoneVerification,
+          mutation: requestOtp,
           variables: {
-            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
-            method: 'sms',
+            userId: userStore.currentUser.sub,
+            type: type || phone.type || 'TEXT',
           },
         })
-        .then(() => {
+        .then((result) => {
+          this.setRequestOtpResponse(result);
           Helper.toast('Verification code sent to user.', 'success');
           resolve();
         })
@@ -428,9 +443,9 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: checkUserPhoneVerificationCode,
+          mutation: verifyOtp,
           variables: {
-            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
+            resourceId: this.requestOtpResponse.resourceId,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })

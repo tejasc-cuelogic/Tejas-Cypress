@@ -13,12 +13,17 @@ import { ListErrors } from '../../../../../../theme/shared';
 @observer
 export default class ConfirmPhoneNumber extends Component {
   componentWillMount() {
-    if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
-      if (this.props.userDetailsStore.userDetails.contactDetails.phone) {
+    const { identityStore, userDetailsStore } = this.props;
+    if (identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
+      if (userDetailsStore.userDetails.contactDetails.phone) {
         const fieldValue =
-        Helper.maskPhoneNumber(this.props.userDetailsStore.userDetails.contactDetails.phone.number);
+        Helper.maskPhoneNumber(userDetailsStore.userDetails.contactDetails.phone.number);
         this.props.identityStore.phoneNumberChange(fieldValue);
       }
+    }
+    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
+      const fieldValue = userDetailsStore.userDetails.phone.type;
+      identityStore.phoneTypeChange(fieldValue);
     }
   }
   handleConfirmPhoneNumber = (e) => {
