@@ -4,7 +4,7 @@ import { isEmpty, find } from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
-import { ListErrors } from '../../../../../../../theme/shared';
+import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
 @inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
 @withRouter
@@ -104,9 +104,22 @@ export default class Summary extends Component {
         <p className="center-align mt-30">
           <b>
             By continuing, I acknowledge that I have read and agree to the
-            terms of the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${ccAgreementId}`}>CrowdPay Custodial Account Agreement</a>,
-            <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${irsCertificationId}`}>Substitute IRS Form W-9 Certification</a>,
-            and the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${membershipAgreementId}`}>NextSeed Membership Agreement</a>.
+            terms of the
+            <IframeModal
+              className="link-button highlight-text"
+              text="CrowdPay Custodial Account Agreement"
+              srcUrl={`https://nextseed.box.com/s/${ccAgreementId}`}
+            />
+            <IframeModal
+              className="link-button highlight-text"
+              text="Substitute IRS Form W-9 Certification"
+              srcUrl={`https://nextseed.box.com/s/${irsCertificationId}`}
+            />, and the
+            <IframeModal
+              className="link-button highlight-text"
+              text="NextSeed Membership Agreement"
+              srcUrl={`https://nextseed.box.com/s/${membershipAgreementId}`}
+            />
           </b>
         </p>
       </div>

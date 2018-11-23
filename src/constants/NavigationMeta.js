@@ -330,7 +330,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'dollar',
     title: 'Change Linked Account Bank Request',
-    // capability: 'LINKED_BANK_ANY',
+    capability: 'LINKED_BANK_ANY',
     to: 'change-linked-bank-requests',
     heading: 'Change Linked Account Bank Request',
     path: 'admin/linkedBank',
@@ -379,7 +379,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'payment',
     title: 'Accreditation Requests',
-    // capability: 'ACCREDITATION_ANY',
+    capability: 'ACCREDITATION_ANY',
     to: 'accreditation',
     path: 'admin/accreditation',
     accessibleTo: ['admin', 'manager', 'support'],

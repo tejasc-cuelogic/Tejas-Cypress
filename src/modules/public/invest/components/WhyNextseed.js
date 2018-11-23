@@ -159,8 +159,8 @@ const WhyNextseed = () => (
           {!isMobile ?
             <Container>
               <Grid centered stackable className="vertical-gutter">
-                {businesses.map(row => (
-                  <Grid.Row>
+                {businesses.map((row, index) => (
+                  <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
                     {
                       row.map(b => (
                         <Grid.Column textAlign="center" width={4}>

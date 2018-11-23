@@ -2,37 +2,30 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Segment, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 class RevenueSharingDetails extends Component {
   render() {
     const { KeyTerms, refLink } = this.props;
+    const revenueShareSummary =
+      (KeyTerms && KeyTerms.revShareSummary) || null;
     return (
       <Grid.Row>
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
           <Segment padded>
             <Header as="h4">
-              <Link to={`${refLink}/overview/keyterms`}>
+              <Link to={`${refLink}/investment-details/summary`}>
                 Revenue Sharing Summary*
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
             </Header>
             <p>
-              This investment has a 6-month startup period during which no cash payments will
-              be made. The startup period commences the first full month after the offering’s
-              close.
-            </p>
-            <p>
-              After the end of the startup period or once the Issuer commences
-              operations (whichever comes later), the Issuer will share a percentage of each
-              month’s gross revenue with the investors as a group until they are paid in full.
-              The total amount raised by the offering will determine the Investment Multiple
-              and the monthly Revenue Sharing Percentage.
-            </p>
-            <p className="note mt-30">
-              * For illustration only. See expanded Payment Calculator view to
-              read more regarding actual performance variables.
+              {revenueShareSummary ?
+                <p className="detail-section" dangerouslySetInnerHTML={{ __html: revenueShareSummary }} />
+                : <InlineLoader text="No data available" />
+              }
             </p>
           </Segment>
         </Grid.Column>
@@ -121,7 +114,7 @@ class RevenueSharingDetails extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid>
-            <Link to={`${refLink}/overview/keyterms`} className="pull-right mt-10">View More</Link>
+            <Link to={`${refLink}/overview/keyterms`} className="right-align mt-10">View More</Link>
           </Segment>
         </Grid.Column>
       </Grid.Row>

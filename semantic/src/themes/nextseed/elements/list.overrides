@@ -318,7 +318,7 @@ ol.ui.list.step-list{
 ul.ui.list li{
     &:before{
         font-size:@20px;
-        color:@primary-one;
+        // color:@primary-one; commented to update styles on verify identity modal - investor
     }
 }
 

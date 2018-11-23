@@ -67,7 +67,7 @@ const Mission = () => (
           </Grid.Row>
         </Grid>
         <Divider section as={Container} hidden />
-        <Grid celled columns={isMobile ? 1 : 2} className="mb-30">
+        <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Trust</Header>
@@ -90,7 +90,7 @@ const Mission = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={isMobile ? 1 : 2} className="mb-30">
+        <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Innovation</Header>
@@ -114,7 +114,7 @@ const Mission = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={isMobile ? 1 : 2} className="mt-50">
+        <Grid celled columns={isMobile ? 1 : 2}>
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Community</Header>
