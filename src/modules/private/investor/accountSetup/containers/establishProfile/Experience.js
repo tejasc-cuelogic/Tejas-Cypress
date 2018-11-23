@@ -4,7 +4,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Header, Form, Button } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
 
-@inject('investorProfileStore')
+@inject('investorProfileStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class Experience extends Component {
@@ -22,7 +22,12 @@ export default class Experience extends Component {
         stepToBeRendered: 6,
       };
       updateInvestorProfileData(currentStep);
-      this.props.history.push('/app/summary/account-creation');
+      const { signupStatus } = this.props.userDetailsStore;
+      if (signupStatus.isMigratedFullAccount) {
+        this.props.history.push('/app/summary');
+      } else {
+        this.props.history.push('/app/summary/account-creation');
+      }
     }
   }
   render() {

@@ -61,44 +61,44 @@ export default class IdentityVerification extends Component {
             );
             this.props.uiStore.setProgress(false);
             this.props.uiStore.setErrors(setErrorMessage);
-            throw new Error('Stop the excution');
+            throw new Error('Stop the execution');
           }
           this.props.uiStore.setErrors(null);
-          return this.props.identityStore.verifyUserIdentity();
-        })
-        .then(() => {
-          this.props.uiStore.setProgress(false);
-          const {
-            key,
-            alertMsg,
-            msgType,
-            route,
-          } = this.props.identityStore.userVerficationStatus;
-          if (key === 'id.success') {
-            const { phoneVerification } = this.props.userDetailsStore.signupStatus;
-            const { isCipExpired, accountForWhichCipExpired } = this.props.userDetailsStore;
-            if (phoneVerification === 'DONE') {
-              Helper.toast(alertMsg, msgType);
-              if (isCipExpired && accountForWhichCipExpired) {
-                this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+          this.props.identityStore.verifyUserIdentity()
+            .then(() => {
+              this.props.uiStore.setProgress(false);
+              const {
+                key,
+                alertMsg,
+                msgType,
+                route,
+              } = this.props.identityStore.userVerficationStatus;
+              if (key === 'id.success') {
+                const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+                const { isCipExpired, accountForWhichCipExpired } = this.props.userDetailsStore;
+                if (phoneVerification === 'DONE') {
+                  Helper.toast(alertMsg, msgType);
+                  if (isCipExpired && accountForWhichCipExpired) {
+                    this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+                  } else {
+                    this.props.history.push(route);
+                  }
+                } else {
+                  this.props.identityStore.startPhoneVerification().then(() => {
+                    this.props.history.push('/app/summary/identity-verification/3');
+                  })
+                    .catch((err) => {
+                      this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+                    });
+                }
               } else {
+                Helper.toast(alertMsg, msgType);
+                if (key === 'id.failure') {
+                  this.props.identityStore.setIdentityQuestions();
+                }
                 this.props.history.push(route);
               }
-            } else {
-              this.props.identityStore.startPhoneVerification().then(() => {
-                this.props.history.push('/app/summary/identity-verification/3');
-              })
-                .catch((err) => {
-                  this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-                });
-            }
-          } else {
-            Helper.toast(alertMsg, msgType);
-            if (key === 'id.failure') {
-              this.props.identityStore.setIdentityQuestions();
-            }
-            this.props.history.push(route);
-          }
+            });
         })
         .catch(() => { });
     }

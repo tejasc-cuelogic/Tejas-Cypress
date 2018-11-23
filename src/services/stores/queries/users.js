@@ -40,6 +40,7 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      status
       cip {
         expiration
       }
@@ -65,6 +66,7 @@ export const userDetailsQuery = gql`
       }
       email {
         address
+        verified
       }
       capabilities
       roles {
@@ -217,6 +219,7 @@ export const userDetailsQuery = gql`
       lastLoginDate
       phone {
         number
+        type
         verified
       }
       legalDetails {

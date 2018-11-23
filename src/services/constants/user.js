@@ -155,6 +155,14 @@ export const USER_IDENTITY = {
     },
     objRef: 'legalDetails',
   },
+  mfaMethod: {
+    key: 'mfaMethod',
+    value: '',
+    values: [{ label: 'Text', value: 'TEXT' }, { label: 'Call', value: 'CALL' }],
+    label: 'How would you want to receive the MFA Code ?',
+    error: undefined,
+    rule: 'optional',
+  },
 };
 
 export const USER_TITLE = [

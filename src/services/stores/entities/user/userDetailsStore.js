@@ -153,7 +153,13 @@ export class UserDetailsStore {
   }
 
   @computed get signupStatus() {
-    const details = { idVerification: 'FAIL', roles: [], phoneVerification: 'FAIL' };
+    const details = {
+      idVerification: 'FAIL',
+      roles: [],
+      phoneVerification: 'FAIL',
+      isMigratedUser: false,
+      isMigratedFullAccount: false,
+    };
     const validAccTypes = ['individual', 'ira', 'entity'];
     details.inActiveAccounts = [];
     const accTypes = [];
@@ -176,6 +182,11 @@ export class UserDetailsStore {
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
+      details.isMigratedUser =
+      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
+      details.isMigratedFullAccount =
+      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
+      this.userDetails.status === 'MIGRATION_FULL');
       details.investorProfileCompleted =
       this.userDetails.investorProfileData === null ?
         false : this.userDetails.investorProfileData ?
@@ -231,7 +242,18 @@ export class UserDetailsStore {
   @computed
   get pendingStep() {
     let routingUrl = '';
-    if (!this.validAccStatus.includes(this.signupStatus.idVerification)) {
+    if (this.signupStatus.isMigratedUser) {
+      if (this.signupStatus.isMigratedFullAccount &&
+        (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
+        if (this.signupStatus.phoneVerification !== 'DONE') {
+          routingUrl = 'summary/identity-verification/3';
+        } else if (!this.signupStatus.investorProfileCompleted) {
+          routingUrl = 'summary/establish-profile';
+        }
+      } else {
+        routingUrl = 'summary/identity-verification/0';
+      }
+    } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)) {
       routingUrl = 'summary/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
       routingUrl = 'summary/identity-verification/3';
