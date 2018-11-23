@@ -78,7 +78,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Is Entity a Trust?</Table.Cell>
-                  <Table.Cell>{TRUST_INFO_FRM.fields.isTrust.value}
+                  <Table.Cell>
                     {TRUST_INFO_FRM.fields.isTrust.value &&
                       'Yes, since '
                     }

@@ -111,7 +111,7 @@ class IraAccountStore {
       if (isValidAddFunds) {
         payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
       }
-    } else {
+    } else if (this.fundingOption.rawValue === 'check') {
       payload.linkedBank = {};
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       if (accountNumber && routingNumber) {

@@ -20,7 +20,7 @@ export default class Overview extends Component {
     if (signupStatus.isMigratedFullAccount) {
       overviewInfo = `
       New investments will now be offered through NextSeed Securities, LLC, an SEC-
-      registered broker-dealer.${(<br />)}
+      registered broker-dealer.
       To migrate your existing account and to begin making investments on the new platform,
       you will need to answer a few more questions to complete your investor profile.
       `;

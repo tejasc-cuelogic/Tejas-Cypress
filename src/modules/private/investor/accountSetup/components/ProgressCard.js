@@ -13,7 +13,8 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
       status = 2;
     } else if (signupStatus.isMigratedFullAccount && userDetailsStore.userDetails &&
       userDetailsStore.userDetails.cip &&
-      userDetailsStore.userDetails.cip.requestId !== null) {
+      userDetailsStore.userDetails.cip.requestId !== null &&
+      signupStatus.phoneVerification === 'DONE') {
       status = 2;
     } else {
       status = 1;
