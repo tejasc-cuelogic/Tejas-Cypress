@@ -31,15 +31,19 @@ export const USER_LIST_META = [
 
 export const FILTER_META = {
   accountType: [
-    { text: 'Admin', value: 'admin' },
-    { text: 'Business', value: 'issuer' },
-    { text: 'IRA', value: 'ira' },
-    { text: 'Individual', value: 'individual' },
-    { text: 'Entity', value: 'entity' },
+    { text: 'Admin', value: 'ADMIN' },
+    { text: 'Business', value: 'ISSUER' },
+    { text: 'IRA', value: 'IRA' },
+    { text: 'Individual', value: 'INDIVIDUAL' },
+    { text: 'Entity', value: 'ENTITY' },
   ],
   accountStatus: [
-    { text: 'Unlocked', value: 'UNLOCK' },
-    { text: 'Locked', value: 'LOCK' },
+    { text: 'Partial', value: 'PARTIAL' },
+    { text: 'Basic', value: 'BASIC' },
+    { text: 'Full', value: 'FULL' },
+    { text: 'Frozen', value: 'FROZEN' },
+    { text: 'Locked', value: 'LOCKED' },
+    { text: 'Unlocked', value: 'UNLOCKED' },
   ],
   accreditation: [
     { text: 'Accridiated', value: 'yes' },

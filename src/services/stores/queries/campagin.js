@@ -4,6 +4,7 @@ export const allOfferings = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      offeringSlug
       stage
       media {
         tombstoneImage {
@@ -12,6 +13,7 @@ query getOfferingList($filters: OfferingFilterInputType){
           fileName
         }
       }
+
       offering {
         about {
           theCompany
@@ -41,8 +43,8 @@ export const getOfferingById = gql`
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingById($id: ID) {
-  getOfferingDetailsById (id: $id) {
+  query getOfferingDetailsById($id: ID!) {
+    getOfferingDetailsById (id: $id) {
     id
     stage
     applicationId
