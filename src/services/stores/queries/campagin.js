@@ -43,8 +43,8 @@ export const getOfferingById = gql`
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsBySlug($id: String) {
-    getOfferingDetailsBySlug (offeringSlug: $id) {
+  query getOfferingDetailsById($id: ID!) {
+    getOfferingDetailsById (id: $id) {
     id
     stage
     applicationId
