@@ -493,6 +493,17 @@ export const FOOTER_NAV = [
       { title: 'Press', to: 'press' },
     ],
   },
-  { title: 'Terms of Use', exact: true, to: 'agreements/terms-of-use' },
-  { title: 'Privacy Policy', exact: true, to: 'agreements/privacy-policy' },
+  {
+    title: 'Legal',
+    to: 'agreements/legal',
+    exact: true,
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Terms of Use', to: 'terms-of-use' },
+      { title: 'Privacy Policy', to: 'privacy-policy' },
+      { title: 'General Disclosures', to: 'general-disclosures' },
+      { title: 'General Risk Factors', to: 'general-risk-factors' },
+      { title: 'Legal Documents', to: 'legal-documents' },
+    ],
+  },
 ];

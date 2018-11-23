@@ -71,6 +71,12 @@
             cursor: pointer;
         }
     }
+    &.legal-documents {
+        box-shadow: none;
+        p {
+            margin-bottom: @25px;
+        }
+    }
 }
 .press-news {
 	.ui.segment {

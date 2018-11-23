@@ -3,21 +3,21 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Header, Divider, List } from 'semantic-ui-react';
 
-const ambassadors = () => (
+const TermsOfUse = () => (
   <Aux>
     <Header as="h2">Terms of Use</Header>
-    <Header.Subheader>Revision Date:&nbsp;5/16/2016</Header.Subheader>
-    <Header.Subheader>Questions or Comments:&nbsp;info@nextseed.co</Header.Subheader>
+    <p>Last updated January 2018</p>
+    <p>Questions or Comments: info@nextseed.co</p>
     <Divider section />
     <div className="justify-text">
       <Header as="h5">INTRODUCTION</Header>
       <p>NextSeed US LLC (together with its affiliates, “NextSeed”) offers its website and services
-         on the terms stated in these Terms of Use (the “Terms”). The NextSeed Privacy Policy inclu
-         des additional information about NextSeed’s use of information you submit using the websit
-         e and services. Please read the Terms and the Privacy Policy carefully and let us know if you have any questions at all. You may reach NextSeed at info@nextseed.co.&nbsp;<strong>If you do not agree to the Terms or Privacy Policy you may not use the website or service. By using the website or services, you accept these Terms and the Privacy Policy.&nbsp;</strong>If you are using the website or services on behalf of any entity, you represent and warrant that you are authorized to accept these Terms and the Privacy Policy on that entity’s behalf.
+on the terms stated in these Terms of Use (the “Terms”). The NextSeed Privacy Policy inclu
+des additional information about NextSeed’s use of information you submit using the websit
+e and services. Please read the Terms and the Privacy Policy carefully and let us know if you have any questions at all. You may reach NextSeed at info@nextseed.co. <strong>If you do not agree to the Terms or Privacy Policy you may not use the website or service. By using the website or services, you accept these Terms and the Privacy Policy. </strong>If you are using the website or services on behalf of any entity, you represent and warrant that you are authorized to accept these Terms and the Privacy Policy on that entity’s behalf.
       </p>
       <p>Certain words used in these Terms have specific meanings as stated in the section where th
-        ey are first used or in the section below captioned&nbsp;<em>Definitions</em>. For example, the words “NextSeed Content” and “User Content” have specific definitions that you must read and understand to have a full understanding these Terms.
+ey are first used or in the section below captioned <em>Definitions</em>. For example, the words “NextSeed Content” and “User Content” have specific definitions that you must read and understand to have a full understanding these Terms.
       </p>
       <Header as="h5">NEXTSEED PLATFORM</Header>
       <p>The NextSeed website and services are an online intermediary platform (the “<strong>Platform</strong>”) where crowdfunded securities are offered for sale by Issuers in accordance with the rules governing the offer and sale of securities under new Section 4(a)(6) of the Securities Act of 1933 (the “<strong>Regulation Crowdfunding</strong>”) promulgated by the United States Securities and Exchange Commission. NextSeed is not a broker-dealer or investment advisor, and is not responsible for the activities of Platform Users.</p>
@@ -26,7 +26,7 @@ const ambassadors = () => (
       <Header as="h5">SITE VISITORS</Header>
       <p>You may browse the Site as a Visitor without setting up an Account, subject to the terms, conditions, and restrictions stated in the Section captioned “Acceptable Use Policy” and other Sections of the Terms.</p>
       <Header as="h5">ACCOUNT AND LOGIN CREDENTIALS</Header>
-      <p>To use the NextSeed Platform as an Issuer or Investor, you must set up an account (an “<strong>Account”</strong>) by providing the information required by the Platform (“<strong>Account Information</strong>”) and creating a user name and password (your “<strong>Credentials</strong>”). Each User may establish only one Account. If there is more than one individual associated with a User, such as a joint owners or employees, then each such individual must establish separate Credentials if directed by NextSeed. You represent and warrant to NextSeed and to each other User that your Account Information is accurate and complete. You agree to keep your Account Information up to date at all times. You agree that NextSeed may use your Account Information as described in the Privacy Policy. You are responsible for maintaining the confidentially of your Credentials and are responsible for all activities that occur through the use of your Credentials. You agree to notify NextSeed immediately if you believe the confidentiality of your Credentials has been compromised or if you suspect unauthorized use of your account.&nbsp;<strong>You agree that NextSeed will not be liable for any loss or damage arising from unauthorized use of your Credentials</strong>.</p>
+      <p>To use the NextSeed Platform as an Issuer or Investor, you must set up an account (an “<strong>Account”</strong>) by providing the information required by the Platform (“<strong>Account Information</strong>”) and creating a user name and password (your “<strong>Credentials</strong>”). Each User may establish only one Account. If there is more than one individual associated with a User, such as a joint owners or employees, then each such individual must establish separate Credentials if directed by NextSeed. You represent and warrant to NextSeed and to each other User that your Account Information is accurate and complete. You agree to keep your Account Information up to date at all times. You agree that NextSeed may use your Account Information as described in the Privacy Policy. You are responsible for maintaining the confidentially of your Credentials and are responsible for all activities that occur through the use of your Credentials. You agree to notify NextSeed immediately if you believe the confidentiality of your Credentials has been compromised or if you suspect unauthorized use of your account. <strong>You agree that NextSeed will not be liable for any loss or damage arising from unauthorized use of your Credentials</strong>.</p>
       <p>You agree that NextSeed may disclose your Account Information and other information it may have about you and your User Content to fully cooperate with any law enforcement authorities or legal process, such as a subpoena or hold request.</p>
       <Header as="h5">LICENSE TO USE PLATFORM AND CONTENT</Header>
       <p>NextSeed grants you a limited, revocable, non-exclusive, non-transferrable license to use the Platform and NextSeed Content solely for legally permitted activities related to the NextSeed Platform, (the “<strong>Purpose</strong>”), and subject to the terms, conditions and restrictions stated in these Terms.</p>
@@ -121,39 +121,39 @@ const ambassadors = () => (
       <p>NextSeed may modify or remove the information on the Platform, and may modify or discontinue any part of the Platform, or create usage limits, at any time in its sole discretion without notice to you.</p>
       <p>NextSeed may amend these Terms or the Privacy Policy from time to time by posting a revision on its website. The amended Terms or Privacy Policy are applicable to your use of the Platform on the first day you use the Platform after NextSeed posts the amended Terms or Privacy Policy.</p>
       <Header as="h5">DEFINITIONS</Header>
-      <p><strong>Account</strong>&nbsp;has the meaning given in the section captioned “Your Account Information and Log-In Credentials.”
+      <p><strong>Account</strong> has the meaning given in the section captioned “Your Account Information and Log-In Credentials.”
         <br />
-        <strong>Account Information</strong>&nbsp;has the meaning given in the section captioned “Your Account Information and Log-In Credentials.”
+        <strong>Account Information</strong> has the meaning given in the section captioned “Your Account Information and Log-In Credentials.”
         <br /> “
         <strong>Credentials</strong>” has the meaning given in the section captioned “Your Account Information and Log-In Credentials.”
         <br />
-        <strong>Investor</strong>&nbsp;means an “investor” as the term is used in Regulation Crowdfunding.
+        <strong>Investor</strong> means an “investor” as the term is used in Regulation Crowdfunding.
         <br />
-        <strong>Issuer</strong>&nbsp;means an “issuer” as the term is used in Regulation Crowdfunding.
+        <strong>Issuer</strong> means an “issuer” as the term is used in Regulation Crowdfunding.
         <br />
-        <strong>Malware</strong>&nbsp;means any virus, malware, spyware, ransomware, adware, or other code or information that is designed to interrupt the normal use of the Platform or the Site or the systems used to access the Platform or the Site, or destroy or corrupt any data, or covertly transmit information.
+        <strong>Malware</strong> means any virus, malware, spyware, ransomware, adware, or other code or information that is designed to interrupt the normal use of the Platform or the Site or the systems used to access the Platform or the Site, or destroy or corrupt any data, or covertly transmit information.
         <br />
-        <strong>NextSeed</strong>&nbsp;means NextSeed US LLC and its affiliates and successors.
+        <strong>NextSeed</strong> means NextSeed US LLC and its affiliates and successors.
         <br />
-        <strong>NextSeed Content</strong>&nbsp;means the contents of the NextSeed Platform that are provided by NextSeed such as designs, text, graphics, images, video, information, logos, button icons, software, audio files, and computer code.
+        <strong>NextSeed Content</strong> means the contents of the NextSeed Platform that are provided by NextSeed such as designs, text, graphics, images, video, information, logos, button icons, software, audio files, and computer code.
         <br />
-        <strong>Platform</strong>&nbsp;has the meaning given in the Section captioned “NextSeed Platform.”
+        <strong>Platform</strong> has the meaning given in the Section captioned “NextSeed Platform.”
         <br />
-        <strong>Privacy Policy</strong>&nbsp;means the NextSeed Privacy Policy posted at https://www.nextseed.co/agreements/privacy-policy/ as of the Revision Date stated above, as it may be modified from time to time.
+        <strong>Privacy Policy</strong> means the NextSeed Privacy Policy posted at https://www.nextseed.co/agreements/privacy-policy/ as of the Revision Date stated above, as it may be modified from time to time.
         <br />
-        <strong>Purpose</strong>&nbsp;has the meaning given in the Section captioned “License to Use Platform and Content.”
+        <strong>Purpose</strong> has the meaning given in the Section captioned “License to Use Platform and Content.”
         <br />
         <strong>Regulation Crowdfunding </strong>has the meaning given in the Section captioned “NextSeed Platform,” as it may be amended from time to time, and any successor rules.
       </p>
-      <p><strong>Site</strong>&nbsp;means the website at&nbsp;<u>www.nextseed.co</u>&nbsp;or any successor site.
+      <p><strong>Site</strong> means the website at <u>www.nextseed.co</u> or any successor site.
         <br />
-        <strong>Terms</strong>&nbsp;means these Terms of Use as of the Revision Date stated above, as these Terms of Use may be modified from time to time.
+        <strong>Terms</strong> means these Terms of Use as of the Revision Date stated above, as these Terms of Use may be modified from time to time.
         <br />
-        <strong>User</strong>&nbsp;means a person who uses the Platform as an Issuer, Investor, or with a view toward possibly participating in the Platform as an Issuer or Investor.
+        <strong>User</strong> means a person who uses the Platform as an Issuer, Investor, or with a view toward possibly participating in the Platform as an Issuer or Investor.
         <br />
-        <strong>User Content</strong>&nbsp;means text, pictures, videos, questions, comments, suggestions, website addresses and links to other website/articles post by a User to the Platform.
+        <strong>User Content</strong> means text, pictures, videos, questions, comments, suggestions, website addresses and links to other website/articles post by a User to the Platform.
         <br />
-        <strong>Visitor</strong>&nbsp;means a person who visits or uses the Site other than as a User.
+        <strong>Visitor</strong> means a person who visits or uses the Site other than as a User.
       </p>
       <Header as="h5">GENERAL</Header>
       <p><em>Governing Law</em></p>
@@ -177,7 +177,7 @@ const ambassadors = () => (
       <p><em>Agency</em></p>
       <p>No agency, partnership, joint venture, or employment relationship is created as a result of this Agreement and neither party has any authority of any kind to bind the other in any respect.</p>
       <p><em>Notices</em></p>
-      <p>Unless otherwise specified is this Agreement, all notices under this Agreement will be in writing and will be deemed to have been duly given when received, if personally delivered or sent by certified or registered mail, return receipt requested; when receipt is electronically confirmed, if transmitted by facsimile or e-mail; or the day after it is sent, if sent for next day delivery by recognized overnight delivery service. Electronic notices should be sent to&nbsp;info@nextseed.co.</p>
+      <p>Unless otherwise specified is this Agreement, all notices under this Agreement will be in writing and will be deemed to have been duly given when received, if personally delivered or sent by certified or registered mail, return receipt requested; when receipt is electronically confirmed, if transmitted by facsimile or e-mail; or the day after it is sent, if sent for next day delivery by recognized overnight delivery service. Electronic notices should be sent to info@nextseed.co.</p>
       <p><em>No Waiver</em></p>
       <p>NextSeed’s failure to enforce any right or provision of these Terms of Use will not constitute a waiver of future enforcement of that right or provision. The waiver of any such right or provision will be effective only if in writing and signed by a duly authorized representative of NextSeed.</p>
       <p><em>US Jurisdiction Only</em></p>
@@ -202,9 +202,10 @@ const ambassadors = () => (
         <br /> PO Box 540341
       </p>
       <p>77254, TX</p>
-      <p>By Email:&nbsp;dmca@nextseed.co</p>
+      <p>By Email: dmca@nextseed.co</p>
     </div>
   </Aux>
 );
 
-export default ambassadors;
+export default TermsOfUse;
+
