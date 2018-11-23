@@ -1,20 +1,9 @@
-import { toJS, observable, action, computed } from 'mobx';
-import graphql from 'mobx-apollo';
+import { toJS, observable, computed } from 'mobx';
 import { forEach } from 'lodash';
-import { GqlClient as client } from '../../../../../api/gcoolApi';
-import { allAgreements } from '../../../queries/agreements';
 
 export class AgreementsStore {
   @observable agreementsList = [];
   @observable agreements = {
-    welcomeKit: {
-      title: 'Welcome Packet',
-      boxRef: {
-        demo: 'v7damnl8jh75ize4xrbu8dl0lj0rvxja',
-        develop: 'qda0prkhki8pk9lxr8dc4vlstwgmia5b',
-        qa: 'rbiewvvoyz787xempqimccrzxgjism7l',
-      },
-    },
     cCAgreement: {
       title: 'Crowdpay Custodial Agreement',
       boxRef: {
@@ -47,25 +36,13 @@ export class AgreementsStore {
   }
 
   @computed get getNavItems() {
-    const agreementsList = this.getAgreementsList;
+    const agreementsList = this.agreements;
     const navList = [];
-    forEach(agreementsList, (ele) => {
-      navList.push({ title: ele.title, to: ele.id, url: ele.url });
+    forEach(agreementsList, (ele, idx) => {
+      navList.push({ title: ele.title, to: idx, url: ele.boxRef.develop });
     });
     return navList;
   }
-
-  @action
-  fetchNavItems = () => new Promise((resolve) => {
-    this.agreementsList = graphql({
-      client,
-      query: allAgreements,
-      fetchPolicy: 'network-only',
-      onFetch: () => {
-        resolve();
-      },
-    });
-  })
 
   getCurrentEnv = () => process.env.REACT_APP_DEPLOY_ENV;
 
