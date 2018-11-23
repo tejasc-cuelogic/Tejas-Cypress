@@ -179,7 +179,8 @@ export class UserDetailsStore {
       details.isMigratedUser =
       (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount =
-      (this.userDetails.status && this.userDetails.status === 'MIGRATION_FULL');
+      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
+      this.userDetails.status === 'MIGRATION_FULL');
       details.investorProfileCompleted =
       this.userDetails.investorProfileData === null ?
         false : this.userDetails.investorProfileData ?
