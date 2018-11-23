@@ -19,7 +19,7 @@ class LocationAnalysisModal extends Component {
       infinite: false,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: true,
+      arrows: false,
       adaptiveHeight: true,
     };
     const galleryArray = campaign && campaign.media && campaign.media.location &&
@@ -66,7 +66,7 @@ class LocationAnalysisModal extends Component {
                   <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
                 } */}
               </Grid.Column>
-              <Grid.Column computer={10} tablet={10} mobile={16}>
+              <Grid.Column computer={9} tablet={10} mobile={16}>
                 {
                   campaign && campaign.offering
                     && campaign.offering.about
