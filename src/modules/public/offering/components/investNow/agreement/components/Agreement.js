@@ -91,68 +91,66 @@ export default class Agreement extends React.Component {
           </Modal.Content>
         </Modal>
         <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
-          <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
-            <div className="pdf-viewer">
-              <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+          <Modal.Content className="signup-content">
+            <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
+              <div className="pdf-viewer">
+                <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+              </div>
+              <div className="center-align mt-20">
+                <Button type="button" content="Go Back" primary onClick={e => this.docuSignHandeler(e, false)} />
+              </div>
             </div>
-            <div className="center-align mt-20">
-              <Button type="button" primary onClick={e => this.docuSignHandeler(e, false)}>
-                Go Back
-              </Button>
-            </div>
-          </Modal.Content>
-          <Modal.Content className="signup-header" style={{ display: this.state.showDocuSign ? 'none' : 'block' }}>
-            <Header as="h3" className="mb-40">
-              Let&#39;s confirm your investment.<br />You are investing
-              <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in
-              {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
-                getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
-            </Header>
-            {investmentFlowErrorMessage &&
-              <Message error textAlign="left" className="mb-40">
-                {investmentFlowErrorMessage}
-              </Message>
-            }
-            {!AGREEMENT_DETAILS_FORM.meta.isValid &&
-              <Message error textAlign="left" className="mb-40">
-                All boxes must be checked to confirm your investment.
-              </Message>
-            }
-            <Form error size="huge">
-              <Grid stackable>
-                <Grid.Row>
-                  {['checkboxesLeft', 'checkboxesRight'].map(field => (
-                    <Grid.Column width={8}>
-                      <FormCheckbox
-                        defaults
-                        fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
-                        name={field}
-                        containerclassname="ui very relaxed list"
-                        changed={setCheckbox}
-                        customLabel={(
-                          <Aux>
-                            I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
-                          </Aux>
-                        )}
-                      />
-                    </Grid.Column>
-                  ))}
-                </Grid.Row>
-              </Grid>
-            </Form>
-            <Divider hidden />
-            <div className="center-align">
-              <Button
-                primary
-                loading={inProgress}
-                disabled={!AGREEMENT_DETAILS_FORM.meta.isValid}
-                onClick={this.submit}
-              >
-                Invest
-              </Button>
-              <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
-                Cancel
-              </Button>
+            <div style={{ display: this.state.showDocuSign ? 'none' : 'block' }}>
+              <Header as="h3" className="mb-40">
+                Let&#39;s confirm your investment.<br />You are investing
+                <span className="positive-text"> {Helper.CurrencyFormat(investmentAmount)}</span> in
+                {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
+                  getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
+              </Header>
+              {investmentFlowErrorMessage &&
+                <Message error textAlign="left" className="mb-40">
+                  {investmentFlowErrorMessage}
+                </Message>
+              }
+              <Form error size="huge">
+                <Grid stackable>
+                  <Grid.Row>
+                    {['checkboxesLeft', 'checkboxesRight'].map(field => (
+                      <Grid.Column width={8}>
+                        <FormCheckbox
+                          defaults
+                          fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
+                          name={field}
+                          containerclassname="ui very relaxed list"
+                          changed={setCheckbox}
+                          customLabel={(
+                            <Aux>
+                              I have reviewed and agree to the terms of the <Link onClick={e => this.docuSignHandeler(e, true)} to="/">Note Purchase Agreement</Link>.
+                            </Aux>
+                          )}
+                        />
+                      </Grid.Column>
+                    ))}
+                  </Grid.Row>
+                </Grid>
+              </Form>
+              <Divider hidden />
+              <div className="center-align">
+                <Button
+                  primary
+                  loading={inProgress}
+                  disabled={!AGREEMENT_DETAILS_FORM.meta.isValid}
+                  onClick={this.submit}
+                >
+                  Invest
+                </Button>
+                <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
+                  Cancel
+                </Button>
+              </div>
+              {!AGREEMENT_DETAILS_FORM.meta.isValid &&
+                <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
+              }
             </div>
           </Modal.Content>
         </Modal>

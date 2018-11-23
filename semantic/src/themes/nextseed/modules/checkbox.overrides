@@ -108,6 +108,10 @@
 			}
 		}
 	}
+	.field.error .ui.radio.checkbox label, .field.error .ui.checkbox label{
+		color:@neutral !important;
+		border-color:@highlight-primary;
+	}
 }
 
 .iconic-checkbox, .iconic-radio{
