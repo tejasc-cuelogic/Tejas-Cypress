@@ -7,6 +7,11 @@ import { FieldError } from '../../shared';
 @observer
 export default class FormTextarea extends Component {
   state = { showError: false };
+  componentWillMount() {
+    if (this.props.defaultValue && (this.props.fielddata.value === '' || this.props.fielddata.value === undefined)) {
+      this.props.changed({}, { name: this.props.name, value: this.props.defaultValue });
+    }
+  }
   triggerError = (val) => {
     this.setState({ showError: val });
   }
@@ -21,8 +26,9 @@ export default class FormTextarea extends Component {
       value,
     } = props.fielddata;
     const { displayMode, readOnly } = props;
+    const classes = `${props.containerclassname || ''} ${props.readOnly ? 'display-only' : ''}`;
     return (
-      <Form.Field className={props.containerclassname || ''} error={(!!error && this.state.showError)}>
+      <Form.Field className={classes} error={(!!error && this.state.showError)}>
         {!props.hidelabel && label !== '' &&
           <label>
             {props.label || label}
@@ -50,7 +56,10 @@ export default class FormTextarea extends Component {
             label={label}
             placeholder={(displayMode || readOnly) ? '' : placeHolder}
             defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
-            onChange={(e) => { props.changed(e); this.triggerError(false); }}
+            onChange={(e) => {
+              props.changed(e, { name: e.target.name, value: e.target.value });
+              this.triggerError(false);
+            }}
             onBlur={() => this.triggerError(true)}
           />
         }

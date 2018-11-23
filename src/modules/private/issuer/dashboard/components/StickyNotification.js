@@ -8,7 +8,7 @@ const StickyNotification = () => (
         <Card.Content>
           <Card.Meta>Congratulations!</Card.Meta>
           <Statistic size="mini" className="cta">
-            <Statistic.Value>You have been pre-qualified for a NextSeed campaign</Statistic.Value>
+            <Statistic.Value className="mb-10">You have been pre-qualified for a NextSeed campaign</Statistic.Value>
             <Statistic.Label>
               We are hard at work finalizing your application and will be in touch within
               three business days.

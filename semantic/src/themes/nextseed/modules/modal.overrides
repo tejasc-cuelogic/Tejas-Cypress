@@ -161,6 +161,11 @@
             width:450px;
         }
     }
+    &.extra.large{
+        @media only screen and (min-width:@widescreenMonitorBreakpoint){
+            width:75%;
+        }
+    }
 }
 .ui.modal.deletion{
     .actions{

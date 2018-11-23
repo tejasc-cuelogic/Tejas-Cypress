@@ -109,8 +109,9 @@
                 background:none !important;
             }
             p.commet-area{
-                font-weight:500;
+                // font-weight:500;
                 color:@neutral;
+                word-break:break-word;
             }
         }
         &.secondary textarea{
@@ -238,6 +239,10 @@
         border:none;
         border-bottom:@borderColor 1px solid;
     }
+    .ui.input.compact input{
+        padding-top:@3px;
+        padding-bottom:@3px;
+    }
     .ui.table{
         input:not([type]),
         input[type=date],
@@ -346,6 +351,12 @@
                         height:auto;
                     }
                 }
+            }
+            &.logo-img .file-uploader.attached img.ui.image{
+                width:auto;
+                max-width:100%;
+                max-height:100%;
+                margin:0 auto;
             }
         }
         &.hero-img{

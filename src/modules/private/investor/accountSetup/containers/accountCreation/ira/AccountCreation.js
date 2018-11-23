@@ -47,7 +47,7 @@ export default class AccountCreation extends React.Component {
       stepToBeRendered,
       createAccount,
     } = this.props.iraAccountStore;
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const { formAddFunds, plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps =
       [
@@ -79,7 +79,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Link bank',
           component: <Plaid />,
-          isValid: '',
+          isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
           isDirty: !isEmpty(plaidAccDetails) ||
           formLinkBankManually.meta.isDirty,
           validate: validationActions.validateLinkBankForm,

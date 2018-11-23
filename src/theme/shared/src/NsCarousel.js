@@ -22,8 +22,9 @@ export default class NsCarousel extends Component {
   }
   render() {
     const settings = {
-      infinite: true,
+      infinite: false,
       speed: 500,
+      className: this.props.className,
       slidesToShow: this.props.slidesToShow,
       slidesToScroll: this.props.slidesToScroll,
       arrows: this.props.arrows,

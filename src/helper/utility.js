@@ -3,6 +3,7 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
+import moment from 'moment';
 import apiService from '../api/restApi';
 
 export class Utility {
@@ -119,6 +120,14 @@ export class Utility {
     daysFromNow = new Date(daysFromNow).toISOString();
     console.log(daysFromNow);
     return daysFromNow;
+  }
+  getLastThreeYearsLabel = () => {
+    const currentYear = parseInt(moment().format('YYYY'), 10);
+    return {
+      annualIncomeCurrentYear: currentYear,
+      annualIncomeLastYear: currentYear - 1,
+      annualIncomeThirdLastYear: currentYear - 2,
+    };
   }
 }
 

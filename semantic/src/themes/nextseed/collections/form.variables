@@ -31,7 +31,7 @@
 @inputFont: @pageFont;
 @inputWidth: 100%;
 @inputFontSize: 1em;
-@inputPadding: (@inputVerticalPadding + ((1em - @inputLineHeight) / 2)) @inputHorizontalPadding;
+@inputPadding: @inputVerticalPadding @inputHorizontalPadding;
 @inputBorder:none;
 @inputBorderRadius: @absoluteBorderRadius * 0;
 @inputColor: @textColor;

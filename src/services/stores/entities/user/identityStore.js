@@ -5,7 +5,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, userStore, userDetailsStore } from '../../index';
-import { isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, startUserPhoneVerification, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
@@ -24,10 +24,15 @@ export class IdentityStore {
   @observable reSendVerificationCode = false;
   @observable userCipStatus = 'FAIL';
   @observable confirmMigratedUserPhoneNumber = false;
+  @observable requestOtpResponse = {};
 
   @action
   setConfirmMigratedUserPhoneNumber = (status) => {
     this.confirmMigratedUserPhoneNumber = status;
+  }
+
+  @action setRequestOtpResponse = (result) => {
+    this.requestOtpResponse = result;
   }
 
   @action setCipStatus = (status) => {
@@ -65,6 +70,14 @@ export class IdentityStore {
     this.ID_VERIFICATION_FRM = FormValidator.onChange(
       this.ID_VERIFICATION_FRM,
       { name: 'phoneNumber', value },
+    );
+  }
+
+  @action
+  phoneTypeChange = (value) => {
+    this.ID_VERIFICATION_FRM = FormValidator.onChange(
+      this.ID_VERIFICATION_FRM,
+      { name: 'mfaMethod', value },
     );
   }
 
@@ -145,7 +158,9 @@ export class IdentityStore {
         fileName: proofOfResidence.value,
       },
     };
-    userInfo.verificationDocs = this.userCipStatus === 'MANUAL_VERIFICATION_PENDING' ? verificationDocs : null;
+    if (this.userCipStatus === 'MANUAL_VERIFICATION_PENDING') {
+      userInfo.verificationDocs = verificationDocs;
+    }
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
     const phoneDetails = { number };
     return { userInfo, phoneDetails };
@@ -203,7 +218,9 @@ export class IdentityStore {
         fileName: proofOfResidence.value,
       },
     };
-    userInfo.verificationDocs = this.userCipStatus === 'MANUAL_VERIFICATION_PENDING' ? verificationDocs : null;
+    if (this.userCipStatus === 'MANUAL_VERIFICATION_PENDING') {
+      userInfo.verificationDocs = verificationDocs;
+    }
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
     const phoneDetails = { number };
     return { userInfo, phoneDetails, cip };
@@ -235,8 +252,14 @@ export class IdentityStore {
         })
         .then((data) => {
           this.setVerifyIdentityResponse(data.data.verifyCIPIdentity);
-          this.updateUserInfo();
-          resolve();
+          if (data.data.verifyCIPIdentity.passId ||
+            data.data.verifyCIPIdentity.softFailId ||
+            data.data.verifyCIPIdentity.hardFailId) {
+            this.updateUserInfo();
+            resolve();
+          } else {
+            uiStore.setErrors(data.data.verifyCIPIdentity.message);
+          }
         })
         .catch((err) => {
           if (err.response) {
@@ -322,18 +345,20 @@ export class IdentityStore {
   }
 
   startPhoneVerification = () => {
+    const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: startUserPhoneVerification,
+          mutation: requestOtp,
           variables: {
-            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
-            method: 'sms',
+            userId: userStore.currentUser.sub,
+            type: mfaMethod.value !== '' ? mfaMethod.value : null,
           },
         })
-        .then(() => {
+        .then((result) => {
+          this.setRequestOtpResponse(result.data.requestOtp);
           Helper.toast('Verification code sent to user.', 'success');
           resolve();
         })
@@ -403,9 +428,9 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: checkUserPhoneVerificationCode,
+          mutation: verifyOtp,
           variables: {
-            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
+            requestId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
@@ -428,15 +453,23 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: checkUserPhoneVerificationCode,
+          mutation: verifyOtp,
           variables: {
-            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
+            resourceId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
-        .then(() => {
-          this.updateUserPhoneDetails();
-          resolve();
+        .then((result) => {
+          if (result.data.verifyOtp) {
+            this.updateUserPhoneDetails();
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            reject();
+          }
         })
         .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getJsonFormattedError(err));

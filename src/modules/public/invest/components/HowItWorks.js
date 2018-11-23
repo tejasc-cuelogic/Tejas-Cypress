@@ -34,7 +34,7 @@ const HowItWorks = () => (
     <Divider fitted as={Container} />
     <section>
       <Container textAlign={isMobile ? 'left' : 'center'}>
-        <Header>Choose how you want to invest.</Header>
+        <Header as="h2">Choose how you want to invest.</Header>
         <p className={isMobile ? 'mb-50' : 'mb-80'}>Understand and choose the right opportunities with the right payment terms for you.</p>
         <Grid doubling columns={3} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
           <Grid.Column>

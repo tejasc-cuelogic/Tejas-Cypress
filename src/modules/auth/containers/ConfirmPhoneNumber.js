@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message, ButtonGroup } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
-import { MaskedInput } from '../../../theme/form';
+import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
@@ -14,16 +14,25 @@ import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 @observer
 export default class ConfirmPhoneNumber extends Component {
   componentWillMount() {
+    const { userDetailsStore, identityStore } = this.props;
     if (this.props.identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
-      if (this.props.userDetailsStore.userDetails.phone &&
-        this.props.userDetailsStore.userDetails.phone.number) {
-        const fieldValue = this.props.userDetailsStore.userDetails.phone.number;
-        this.props.identityStore.phoneNumberChange(fieldValue);
-      }
+      this.setConfirmPhoneFormData();
+    }
+    if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
+      const fieldValue = userDetailsStore.userDetails.phone.type;
+      identityStore.phoneTypeChange(fieldValue);
     }
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
+  }
+  setConfirmPhoneFormData = () => {
+    const { userDetailsStore, identityStore } = this.props;
+    if (userDetailsStore.userDetails.phone &&
+      userDetailsStore.userDetails.phone.number) {
+      const fieldValue = userDetailsStore.userDetails.phone.number;
+      identityStore.phoneNumberChange(fieldValue);
+    }
   }
   handleConfirmPhoneNumber = (e) => {
     e.preventDefault();
@@ -74,6 +83,14 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.uiStore.clearErrors();
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
   }
+  cancelChangePhoneNo = () => {
+    if (!this.props.newPhoneNumber) {
+      this.props.uiStore.setEditMode(false);
+    } else {
+      this.props.uiStore.clearErrors();
+    }
+    this.setConfirmPhoneFormData();
+  }
   render() {
     const {
       ID_VERIFICATION_FRM,
@@ -82,6 +99,7 @@ export default class ConfirmPhoneNumber extends Component {
       phoneVerificationChange,
       reSendVerificationCode,
       confirmMigratedUserPhoneNumber,
+      personalInfoChange,
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
@@ -97,7 +115,10 @@ export default class ConfirmPhoneNumber extends Component {
             investment account.
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code sent to your phone number</p>
+          <p>
+            {editMode ? 'Please your update your number for MFA' : 'Please confirm the 6-digit verification code sent to your phone number'
+            }
+          </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           {/* {errors &&
@@ -119,15 +140,13 @@ export default class ConfirmPhoneNumber extends Component {
             className="display-only"
             phoneNumberDisplayMode
           />
-          {editMode ?
-            <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>
-              Confirm Phone number
-            </Link> :
+          {!editMode &&
             <Link className="grey-link green-hover" to={this.props.refLink ? this.props.refLink : this.props.match.url} onClick={this.handleChangePhoneNumber}>
               Change phone number
             </Link>
           }
           <Form className="mb-20" error onSubmit={this.handleConfirmPhoneNumber}>
+            {!editMode &&
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
               <ReactCodeInput
@@ -140,6 +159,7 @@ export default class ConfirmPhoneNumber extends Component {
               />
               <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
             </Form.Field>
+            }
             {errors &&
               <Message error textAlign="left" className="mb-40">
                 <ListErrors errors={[errors.message]} />
@@ -151,7 +171,26 @@ export default class ConfirmPhoneNumber extends Component {
               Your phone number has been confirmed.
             </Header> */}
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+            {editMode &&
+              <div className="field">
+                <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
+                <Form.Group className="center-align " inline>
+                  <FormRadioGroup
+                    fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
+                    name="mfaMethod"
+                    changed={(e, result) => personalInfoChange(e, result)}
+                  />
+                </Form.Group>
+              </div>
+            }
+            {!editMode ?
+              <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
+              :
+              <ButtonGroup>
+                <Button type="button" inverted color="red" className="relaxed" content="Cancel" onClick={this.cancelChangePhoneNo} />
+                <Button type="button" primary className="relaxed" content="Save" onClick={this.startPhoneVerification} />
+              </ButtonGroup>
+            }
           </Form>
         </Modal.Content>
         {/* <Modal.Actions className="signup-actions">

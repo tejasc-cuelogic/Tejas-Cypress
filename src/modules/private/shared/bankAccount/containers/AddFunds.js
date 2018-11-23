@@ -82,6 +82,7 @@ export default class AddFunds extends Component {
               changed={values => addFundChange(values, 'value')}
               maxLength={formAddFunds.fields.value.maxLength}
               prefix="$ "
+              showerror
             />
           </div>
           <div className="center-align">

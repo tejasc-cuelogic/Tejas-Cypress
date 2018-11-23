@@ -163,11 +163,11 @@ export default class General extends Component {
           }
           <Divider section />
           <Header as="h4">Describe Rights of Your Equity Shareholders</Header>
-          <p>{GENERAL_FRM.fields.rightsOfEqShareHolders.label}</p>
+          <p>{GENERAL_FRM.fields.equityShareholderRights.label}</p>
           <FormTextarea
             readOnly={isReadonly}
-            name="rightsOfEqShareHolders"
-            fielddata={GENERAL_FRM.fields.rightsOfEqShareHolders}
+            name="equityShareholderRights"
+            fielddata={GENERAL_FRM.fields.equityShareholderRights}
             changed={(e, result) => formArrayChange(e, result, formName)}
             containerclassname="secondary"
             hidelabel

@@ -37,10 +37,9 @@ export default class ResetPassword extends Component {
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Set a new password</Header>
+          <Header as="h3">Password Reset</Header>
           <p>
-            Password must contain one lowercase letter,
-            one number and be at least 8 characters long.
+            Please confirm your verifiction code and update your password
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">

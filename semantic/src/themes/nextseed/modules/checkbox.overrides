@@ -87,6 +87,13 @@
 			&:before, &:after{
 				display:none;
 			}
+			>.icon {
+				font-size: @18px;
+				vertical-align: middle;
+				height: @20px;
+				line-height: @18px;
+				color: @neutral-offdark;
+			}
 		}
 		input[type="radio"], input[type="checkbox"]{
 			width:100%;
@@ -96,6 +103,9 @@
 			background-color:@primary-one;
 			border-color:@primary-one;
 			color:@white;
+			>.icon {
+				color: @white;
+			}
 		}
 	}
 }

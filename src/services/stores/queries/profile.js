@@ -186,3 +186,20 @@ export const portPrequalDataToApplication = gql`
       id
     }
   }`;
+
+export const requestOtp = gql`
+  mutation requestOtp($userId: String $type: MFAModeEnum){
+    requestOtp(
+      userId: $userId
+      type: $type
+    )
+  }`;
+
+export const verifyOtp = gql`
+  mutation verifyOtp($resourceId: String! $verificationCode: String!){
+    verifyOtp(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+    )
+  }
+`;
