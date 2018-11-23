@@ -273,7 +273,7 @@
 @yellowBackground : #FFF8DB;
 @oliveBackground  : #FBFDEF;
 @greenBackground  : #E5F9E7;
-@tealBackground   : #E1F7F7;
+@tealBackground   : fade(@primary-one, 15%);
 @blueBackground   : #DFF0FF;
 @violetBackground : #EAE7FF;
 @purpleBackground : #F6E7FF;

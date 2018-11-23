@@ -198,20 +198,43 @@
     }
 }
 footer{
-    section{
-        .ui.vertical.text.menu{
-            width:120px;
+    .ui.text.menu{
+        @media only screen and (max-width : @largestMobileScreen){
+            flex-wrap: wrap;
+        }
+        &.vertical {
             margin:0;
             padding:0 @15px 0 0;
             flex-direction:row;
-            display:inline-block;
             vertical-align: top;
+            flex-wrap: wrap;
+            flex: 1;
             .item{
-                margin:0;
+                color: @neutral-middark;
+                padding: @3px 0;
+                margin: 0;
+                &.header {
+                    margin-top: 0;
+                }
+                &:hover {
+                    background-color: transparent;
+                    color: @neutral-middark;
+                }
             }
-            @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-				width: 110px;
-			}
+        }
+        .item{
+            font-size: @15px;
+            line-height: @20px;
+            &.header{
+                color: @neutral-middark;
+                padding: 0;
+                font-size: @13px;
+                line-height: @20px;
+                @media only screen and (max-width : @largestMobileScreen){
+                    display: block;
+                    width: 100%;
+                }
+            }
         }
     }
 }
@@ -235,7 +258,7 @@ footer{
         }
     }
 }
-.offer-details .ui.vertical.menu {
+.offer-details .offering-side-menu .ui.vertical.menu {
     background-color: transparent;
     .item {
         color: @white;
@@ -475,6 +498,9 @@ footer{
         &:hover, &:active, &:focus, &.active{
             background-color:@white;
         }
+    }
+    .ui.secondary-menu.menu .right.item:before {
+        background-color: transparent;
     }
 }
 
