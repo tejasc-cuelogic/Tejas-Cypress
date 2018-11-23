@@ -863,6 +863,22 @@ p i.icon {
 			// 	width:auto !important;
 			// }
 		}
+		&.thumb-location-gallery {
+			.slick-slide {
+				padding: 0 1px;
+				border-radius: 0;
+				@media only screen and (max-width: @computerBreakpoint) {
+					padding: 0;
+				}
+				img {
+					border: 0;
+					border-radius: 0;
+				}
+			}
+			.slick-track{
+				margin: 0;
+			}
+		}
 	}
 	&.offers-carousel{
 		@media only screen and (min-width : @tabletBreakpoint) {
@@ -1085,8 +1101,13 @@ pre.migrated-content{
 		}
 	}
 }
-a.icon-link:hover {
-	text-decoration: none;
+a.icon-link {
+	i.icon.grey {
+		color: @neutral-middark !important;
+	}
+	&:hover {
+		text-decoration: none;
+	}
 }
 .animation-container {
 	position: absolute;

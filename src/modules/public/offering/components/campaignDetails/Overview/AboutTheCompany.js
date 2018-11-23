@@ -37,25 +37,23 @@ class AboutTheCompany extends Component {
             </p>
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
-            <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
-            <p>
-              {campaign && campaign.offering && campaign.offering.overview &&
-                campaign.offering.overview.highlight ?
-                  <List bulleted>
-                    {campaign.offering.overview.highlight.map(field => (
-                      <List.Item>{field}</List.Item>
-                    ))
-                    }
-                  </List>
-                  :
-                  <InlineLoader text="No Data Found" />
-                }
-            </p>
+            <div className="detail-section mt-10" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+            {campaign && campaign.offering && campaign.offering.overview &&
+              campaign.offering.overview.highlight ?
+                <List bulleted>
+                  {campaign.offering.overview.highlight.map(field => (
+                    <List.Item className="mb-half">{field}</List.Item>
+                  ))
+                  }
+                </List>
+                :
+                <InlineLoader text="No Data Found" />
+            }
           </div>
           <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
           {
             filteredSocialArr.length ?
-              <div className="mt-50">
+              <div className="mt-40">
                 {filteredSocialArr.map(socalObj => (
                   socalObj.url && socalObj.url !== '' &&
                   <a href={`https://${socalObj.url}`} target="_blank" rel="noopener noreferrer" className="icon-link mr-10">
