@@ -192,13 +192,11 @@ export const requestOtp = gql`
     requestOtp(
       userId: $userId
       type: $type
-    ){
-      resourceId
-    }
+    )
   }`;
 
 export const verifyOtp = gql`
-  mutation verifyOtp($resourceId: String $verificationCode: Int){
+  mutation verifyOtp($resourceId: String! $verificationCode: String!){
     verifyOtp(
       resourceId: $resourceId
       verificationCode: $verificationCode

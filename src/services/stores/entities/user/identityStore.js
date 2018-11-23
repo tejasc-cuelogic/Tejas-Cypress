@@ -5,7 +5,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, userStore, userDetailsStore } from '../../index';
-import { verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, checkUserPhoneVerificationCode, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
@@ -152,7 +152,9 @@ export class IdentityStore {
         fileName: proofOfResidence.value,
       },
     };
-    userInfo.verificationDocs = this.userCipStatus === 'MANUAL_VERIFICATION_PENDING' ? verificationDocs : null;
+    if (this.userCipStatus === 'MANUAL_VERIFICATION_PENDING') {
+      userInfo.verificationDocs = verificationDocs;
+    }
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
     const phoneDetails = { number };
     return { userInfo, phoneDetails };
@@ -210,7 +212,9 @@ export class IdentityStore {
         fileName: proofOfResidence.value,
       },
     };
-    userInfo.verificationDocs = this.userCipStatus === 'MANUAL_VERIFICATION_PENDING' ? verificationDocs : null;
+    if (this.userCipStatus === 'MANUAL_VERIFICATION_PENDING') {
+      userInfo.verificationDocs = verificationDocs;
+    }
     const number = fields.phoneNumber.value ? fields.phoneNumber.value : phone !== null ? phone.number : '';
     const phoneDetails = { number };
     return { userInfo, phoneDetails, cip };
@@ -334,8 +338,8 @@ export class IdentityStore {
     });
   }
 
-  startPhoneVerification = (type = undefined) => {
-    const { phone } = userDetailsStore.userDetails;
+  startPhoneVerification = () => {
+    const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
@@ -344,11 +348,11 @@ export class IdentityStore {
           mutation: requestOtp,
           variables: {
             userId: userStore.currentUser.sub,
-            type: type || phone.type || 'TEXT',
+            type: mfaMethod.value !== '' ? mfaMethod.value : null,
           },
         })
         .then((result) => {
-          this.setRequestOtpResponse(result);
+          this.setRequestOtpResponse(result.data.requestOtp);
           Helper.toast('Verification code sent to user.', 'success');
           resolve();
         })
@@ -418,9 +422,9 @@ export class IdentityStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: checkUserPhoneVerificationCode,
+          mutation: verifyOtp,
           variables: {
-            phoneDetails: this.formattedUserInfoForCip.phoneDetails,
+            requestId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
@@ -445,13 +449,21 @@ export class IdentityStore {
         .mutate({
           mutation: verifyOtp,
           variables: {
-            resourceId: this.requestOtpResponse.resourceId,
+            resourceId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
-        .then(() => {
-          this.updateUserPhoneDetails();
-          resolve();
+        .then((result) => {
+          if (result.data.verifyOtp) {
+            this.updateUserPhoneDetails();
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            reject();
+          }
         })
         .catch(action((err) => {
           uiStore.setErrors(DataFormatter.getJsonFormattedError(err));

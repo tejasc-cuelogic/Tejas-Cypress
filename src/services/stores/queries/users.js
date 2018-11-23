@@ -217,6 +217,7 @@ export const userDetailsQuery = gql`
       lastLoginDate
       phone {
         number
+        type
         verified
       }
       legalDetails {
