@@ -255,8 +255,7 @@ export class IdentityStore {
           if (data.data.verifyCIPIdentity.passId ||
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
-            this.updateUserInfo();
-            resolve();
+            this.updateUserInfo().then(() => resolve());
           } else {
             uiStore.setErrors(data.data.verifyCIPIdentity.message);
           }
@@ -268,8 +267,7 @@ export class IdentityStore {
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('FAIL');
-            this.updateUserInfo();
-            resolve();
+            this.updateUserInfo().then(() => resolve());
             // reject(err);
           }
         })
