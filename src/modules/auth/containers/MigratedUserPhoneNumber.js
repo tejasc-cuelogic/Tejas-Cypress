@@ -10,6 +10,9 @@ import { MaskedInput } from '../../../theme/form';
 export default class MigratedUserPhoneNumber extends Component {
   handlePhoneNumberConfirmation = () => {
     this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
+    this.props.identityStore.updateUserPhoneDetails().then(() => {
+      this.props.identityStore.startPhoneVerification();
+    });
   }
   handleCloseModal = () => {
     this.props.history.push('/app/summary');

@@ -499,7 +499,7 @@ export class IdentityStore {
       });
   });
 
-  updateUserPhoneDetails = () => {
+  updateUserPhoneDetails = () => new Promise((res, rej) => {
     client
       .mutate({
         mutation: updateUserPhoneDetail,
@@ -509,9 +509,9 @@ export class IdentityStore {
           },
         },
       })
-      .then(() => { })
-      .catch(() => { });
-  }
+      .then(() => { res(); })
+      .catch(() => { rej(); });
+  })
 
   uploadProfilePhoto = () => {
     uiStore.setProgress();

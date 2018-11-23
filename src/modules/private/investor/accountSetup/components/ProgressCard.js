@@ -5,11 +5,15 @@ import Helper from '../helper';
 
 const progressMeta = Helper.Progress();
 
-const checkStatus = (signupStatus, key) => {
+const checkStatus = (signupStatus, key, userDetailsStore) => {
   let status = false;
   if (key === 'contact-card') {
     if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
       signupStatus.phoneVerification === 'DONE') {
+      status = 2;
+    } else if (signupStatus.isMigratedFullAccount && userDetailsStore.userDetails &&
+      userDetailsStore.userDetails.cip &&
+      userDetailsStore.userDetails.cip.requestId !== null) {
       status = 2;
     } else {
       status = 1;
@@ -39,7 +43,7 @@ const ProgressCard = props => (
       isEmpty(props.signupStatus.activeAccounts) &&
       Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
-        const status = checkStatus(props.signupStatus, key);
+        const status = checkStatus(props.signupStatus, key, props.userDetailsStore);
         if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
           return null;
         }
