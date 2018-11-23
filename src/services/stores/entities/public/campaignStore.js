@@ -75,8 +75,8 @@ export class CampaignStore {
   }
 
   @computed get campaign() {
-    return (this.details.data && this.details.data.getOfferingDetailsById &&
-      toJS(this.details.data.getOfferingDetailsById)) || null;
+    return (this.details.data && this.details.data.getOfferingDetailsBySlug &&
+      toJS(this.details.data.getOfferingDetailsBySlug)) || null;
   }
 
   @computed get getOfferingId() {
