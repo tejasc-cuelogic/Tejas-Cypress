@@ -1307,6 +1307,9 @@ a.icon-link {
 .sticy-sidebar{
 	position:sticky;
 	top:0;
+	&.legal-sidebar {
+		top: 108px;
+	}
 }
 .sticky-actions{
 	position:sticky;

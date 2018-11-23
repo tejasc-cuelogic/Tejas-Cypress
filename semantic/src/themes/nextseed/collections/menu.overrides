@@ -357,6 +357,14 @@ footer{
                 }
             }
         }
+        &.legal-menu {
+            background-color: transparent;
+            .item {
+                &.active, &:hover {
+                    background-color: transparent;
+                }
+            }
+        }
     }
     &.secondary.inverted{
         background-color:@neutral-midwhite;
