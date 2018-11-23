@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Modal, Icon, Popup } from 'semantic-ui-react';
+import { Modal, Icon, Popup, List } from 'semantic-ui-react';
 import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
-
+import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('campaignStore')
 @observer
@@ -12,7 +12,6 @@ class TopThingsToKnowModal extends Component {
 
   render() {
     const { campaign } = this.props.campaignStore;
-    const emptyStatement = 'Detail not found';
     return (
       <Modal
         open
@@ -31,13 +30,19 @@ class TopThingsToKnowModal extends Component {
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
             <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
-            {
-              campaign && campaign.offering && campaign.offering.about &&
-                campaign.offering.about.theCompany ?
-                  <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign.offering.about.theCompany }} />
+            <p>
+              {campaign && campaign.offering && campaign.offering.overview &&
+                campaign.offering.overview.highlight ?
+                  <List bulleted>
+                    {campaign.offering.overview.highlight.map(field => (
+                      <List.Item>{field}</List.Item>
+                    ))
+                    }
+                  </List>
                 :
-                  <p>{emptyStatement}</p>
-            }
+                  <InlineLoader text="No Data Found" />
+              }
+            </p>
           </Aux>
         </Modal.Content>
       </Modal>

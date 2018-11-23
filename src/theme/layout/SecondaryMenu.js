@@ -4,6 +4,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { Responsive, Menu, Dropdown, Icon, Header } from 'semantic-ui-react';
 import map from 'lodash/map';
 import mapKeys from 'lodash/mapKeys';
+import { MobileDropDownNav } from '../../theme/shared';
 
 const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
@@ -56,7 +57,8 @@ class SecondaryMenu extends Component {
   isActive = (to, location) => (location.pathname.startsWith(`${this.props.match.url}/${to}`));
   render() {
     const {
-      navItems, match, vertical, noinvert, attached, className, stepsStatus, addon, heading,
+      navItems, match, location, vertical,
+      noinvert, attached, className, stepsStatus, addon, heading,
       force2ary,
     } = this.props;
     const mobNavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
@@ -88,7 +90,17 @@ class SecondaryMenu extends Component {
           </Menu>
         </Responsive>
         <Responsive className="secondary-menu" maxWidth={767} as={Aux}>
-          <Dropdown fluid selection options={mobNavItems} />
+          {match.url === '/agreements/legal' ?
+            <MobileDropDownNav
+              inverted
+              refMatch={match}
+              navItems={navItems}
+              location={location}
+              className="legal-menu"
+            />
+           :
+            <Dropdown fluid selection options={mobNavItems} />
+          }
         </Responsive>
       </Aux>
     );

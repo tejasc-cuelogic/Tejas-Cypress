@@ -6,9 +6,8 @@ import { Header, Divider, Table, List } from 'semantic-ui-react';
 
 const PrivacyPolicy = () => (
   <Aux>
-    <Header as="h2">NextSeed Privacy Policy
-      <Header.Subheader>Last updated January 2018</Header.Subheader>
-    </Header>
+    <Header as="h2">NextSeed Privacy Policy</Header>
+    <p>Last updated January 2018</p>
     <Divider section />
     <div className="justify-text">
       <p>The NextSeed, Inc. (NextSeed) operates a public website at www.nextseed.com, and also offer an online intermediary platform through its subsidiary NextSeed US LLC for investment crowdfunding in accordance with Regulation Crowdfunding. You may browse the public content on the website without establishing a user account, but you must establish a user account to view and use non-public content on the site and to use the platform. NextSeed is committed to maintaining the confidentiality, integrity, and security of your personal information. This Privacy Policy covers NextSeed’s privacy policies for both its public site visitors and its platform users, and describes:</p>

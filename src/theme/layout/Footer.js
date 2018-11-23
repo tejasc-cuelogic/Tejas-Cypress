@@ -59,10 +59,10 @@ class Footer extends Component {
                   {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
                     <Menu.Item header>Legal</Menu.Item>
                   }
-                  <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
-                  <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
+                  <Menu.Item as={Link} to="/agreements/legal/terms-of-use">Terms of Use</Menu.Item>
+                  <Menu.Item as={Link} to="/agreements/legal/privacy-policy">Privacy Policy</Menu.Item>
                   {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                    <Menu.Item as={Link} to="/">Legal Documents</Menu.Item>
+                    <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
                   }
                 </Menu>
               </div>

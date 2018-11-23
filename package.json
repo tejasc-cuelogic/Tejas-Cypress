@@ -20,6 +20,7 @@
     "amazon-cognito-identity-js": "^1.23.0",
     "apollo-client-preset": "^1.0.8",
     "apollo-link": "^1.2.1",
+    "apollo-link-http": "1.5.5",
     "apollo-link-context": "^1.0.8",
     "apollo-link-ws": "^1.0.7",
     "apollo-utilities": "^1.0.10",

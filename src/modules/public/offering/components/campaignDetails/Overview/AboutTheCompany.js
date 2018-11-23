@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Header, Icon, Grid, Segment, Popup } from 'semantic-ui-react';
+import { Header, Icon, Grid, Segment, Popup, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
 import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 class AboutTheCompany extends Component {
   render() {
@@ -36,12 +37,23 @@ class AboutTheCompany extends Component {
             </p>
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
-            <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+            <div className="detail-section mt-10" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+            {campaign && campaign.offering && campaign.offering.overview &&
+              campaign.offering.overview.highlight ?
+                <List bulleted>
+                  {campaign.offering.overview.highlight.map(field => (
+                    <List.Item className="mb-half">{field}</List.Item>
+                  ))
+                  }
+                </List>
+                :
+                <InlineLoader text="No Data Found" />
+            }
           </div>
           <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
           {
             filteredSocialArr.length ?
-              <div className="mt-50">
+              <div className="mt-40">
                 {filteredSocialArr.map(socalObj => (
                   socalObj.url && socalObj.url !== '' &&
                   <a href={`https://${socalObj.url}`} target="_blank" rel="noopener noreferrer" className="icon-link mr-10">

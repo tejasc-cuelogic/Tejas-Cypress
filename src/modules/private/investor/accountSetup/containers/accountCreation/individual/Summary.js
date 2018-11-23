@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
-import { ListErrors } from '../../../../../../../theme/shared';
+import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore')
 @withRouter
@@ -90,9 +90,22 @@ export default class Summary extends React.Component {
         </div>
         <p className="center-align mb-30">
           By continuing, I acknowledge that I have read and agree to the
-          terms of the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${ccAgreementId}`}>CrowdPay Custodial Account Agreement</a>,
-          <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${irsCertificationId}`}>Substitute IRS Form W-9 Certification</a>,
-          and the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${membershipAgreementId}`}>NextSeed Membership Agreement</a>.
+          terms of the
+          <IframeModal
+            className="link-button highlight-text"
+            text="CrowdPay Custodial Account Agreement"
+            srcUrl={`https://nextseed.box.com/s/${ccAgreementId}`}
+          />
+          <IframeModal
+            className="link-button highlight-text"
+            text="Substitute IRS Form W-9 Certification"
+            srcUrl={`https://nextseed.box.com/s/${irsCertificationId}`}
+          />, and the
+          <IframeModal
+            className="link-button highlight-text"
+            text="NextSeed Membership Agreement"
+            srcUrl={`https://nextseed.box.com/s/${membershipAgreementId}`}
+          />
         </p>
         <div className="center-align">
           <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create your account</Button>
