@@ -85,7 +85,7 @@ export default class ConfirmPhoneNumber extends Component {
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
-    if (signupStatus.isMigratedUser && !confirmMigratedUserPhoneNumber) {
+    if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
       return <MigratedUserPhoneNumber />;
     }
     return (
