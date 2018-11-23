@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { forEach, filter } from 'lodash';
+import { map, filter } from 'lodash';
 import { Header, Icon, Modal, Input } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 
@@ -28,37 +28,36 @@ export default class Share extends Component {
       campaign.offering.overview.social &&
       campaign.offering.overview.social.length ? campaign.offering.overview.social : [];
     const filteredSocialArr = filter(socialArray, o => (
-      o.url === null
+      o.url
     ));
-    forEach(filteredSocialArr, (val) => {
-      if (val === 'type') {
-        switch (filteredSocialArr.val) {
+    map(filteredSocialArr, (val, key) => {
+      if (val.type) {
+        switch (val.type) {
           case 'facebook':
-            filteredSocialArr.name = 'facebook f';
-            filteredSocialArr.class = 'fb-color';
+            filteredSocialArr[key].name = 'facebook f';
+            filteredSocialArr[key].class = 'fb-color';
             break;
           case 'twitter':
-            filteredSocialArr.name = 'twitter';
-            filteredSocialArr.class = 'tw-color';
+            filteredSocialArr[key].name = 'twitter';
+            filteredSocialArr[key].class = 'tw-color';
             break;
           case 'linkedin':
-            filteredSocialArr.name = 'in-color';
-            filteredSocialArr.class = 'fb-color';
+            filteredSocialArr[key].name = 'linkedin in';
+            filteredSocialArr[key].class = 'in-color';
             break;
           case 'yelp':
-            filteredSocialArr.name = 'envelope outline';
-            filteredSocialArr.class = 'default';
+            filteredSocialArr[key].name = 'envelope outline';
+            filteredSocialArr[key].class = 'default';
             break;
           case 'instagram':
-            filteredSocialArr.name = 'instagram';
-            filteredSocialArr.class = 'instagram';
+            filteredSocialArr[key].name = 'instagram';
+            filteredSocialArr[key].class = 'instagram';
             break;
           default:
             break;
         }
       }
     });
-    console.log('campaign==>', campaign, filteredSocialArr);
     return (
       <Modal open size="tiny" onClose={this.props.history.goBack} className="share-modal">
         <Header as="h5">
@@ -69,11 +68,11 @@ export default class Share extends Component {
             filteredSocialArr.length ?
               <div className="share-icons center-align">
                 {filteredSocialArr.map(socalObj => (
-                  socalObj.shareLink && socalObj.shareLink !== '' &&
-                  <Link to={`https://${socalObj.url}`} target="_blank">
+                  socalObj.url && socalObj.url !== '' &&
+                  <a href={`${socalObj.url}`} target="_blank" rel="noopener noreferrer">
                     <Icon name={socalObj.name} circular inverted className={socalObj.class} size="big" />
                     {socalObj.title}
-                  </Link>
+                  </a>
                   // <a href={`https://${socalObj.url}`} target="_blank" rel="noopener noreferrer" className="icon-link mr-10">
                   //   <Icon color="grey" name={socalObj.type} />
                   // </a>
