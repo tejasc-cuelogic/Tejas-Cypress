@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Header, Icon, Grid, Segment, Popup } from 'semantic-ui-react';
+import { Header, Icon, Grid, Segment, Popup, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
 import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { InlineLoader } from '../../../../../../theme/shared';
 
 class AboutTheCompany extends Component {
   render() {
@@ -37,6 +38,19 @@ class AboutTheCompany extends Component {
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
             <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
+            <p>
+              {campaign && campaign.offering && campaign.offering.overview &&
+                campaign.offering.overview.highlight ?
+                  <List bulleted>
+                    {campaign.offering.overview.highlight.map(field => (
+                      <List.Item>{field}</List.Item>
+                    ))
+                    }
+                  </List>
+                  :
+                  <InlineLoader text="No Data Found" />
+                }
+            </p>
           </div>
           <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
           {
