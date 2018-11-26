@@ -10,6 +10,12 @@ import Helper from '../../../../helper/utility';
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
   @observable submited = false;
+  @observable isManualLinkBankSubmitted = false;
+
+  @action
+  setIsManualLinkBankSubmitted = (status) => {
+    this.isManualLinkBankSubmitted = status;
+  }
 
   @action
   setStepToBeRendered(step) {
@@ -92,10 +98,12 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        if (bankAccountStore.formLinkBankManually.meta.isValid ||
-          !isEmpty(bankAccountStore.plaidAccDetails)) {
+        if (!this.isManualLinkBankSubmitted && (
+          bankAccountStore.formLinkBankManually.meta.isValid ||
+          !isEmpty(bankAccountStore.plaidAccDetails))) {
           const getIndividualStep = AccCreationHelper.individualSteps();
           this.setStepToBeRendered(getIndividualStep.summary);
+          this.setIsManualLinkBankSubmitted(false);
         }
       }
     }

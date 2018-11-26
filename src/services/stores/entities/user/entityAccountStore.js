@@ -194,10 +194,9 @@ class EntityAccountStore {
     /* eslint-disable camelcase */
     let payload = {};
     payload = {
-      netAssets: this.FIN_INFO_FRM.fields.netAssets.value,
-      cfInvestment: {
-        dateOfInvestment: '02281975',
-        amount: this.FIN_INFO_FRM.fields.cfInvestment.value,
+      limits: {
+        netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
+        otherContributions: this.FIN_INFO_FRM.fields.cfInvestment.value,
       },
       name: this.GEN_INFO_FRM.fields.name.value,
       taxId: this.GEN_INFO_FRM.fields.taxId.value,
@@ -308,11 +307,11 @@ class EntityAccountStore {
       isValidCurrentStep = this[currentStep.form].meta.isValid;
       if (isValidCurrentStep) {
         if (currentStep.name === 'Financial info') {
-          accountAttributes.netAssets = this.FIN_INFO_FRM.fields.netAssets.value;
-          accountAttributes.cfInvestment = {
-            dateOfInvestment: '02281975',
-            amount: this.FIN_INFO_FRM.fields.cfInvestment.value,
+          const limitsValues = {
+            netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
+            otherContributions: this.FIN_INFO_FRM.fields.cfInvestment.value,
           };
+          accountAttributes.limits = limitsValues;
         } else if (currentStep.name === 'General' || currentStep.name === 'Trust Status') {
           accountAttributes = this.setEntityAttributes(currentStep.name);
         }
@@ -463,10 +462,10 @@ class EntityAccountStore {
     let isDirty = false;
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
-        if (f === 'cfInvestment' && accountDetails[f]) {
-          this.FIN_INFO_FRM.fields[f].value = accountDetails[f].amount;
-        } else {
-          this.FIN_INFO_FRM.fields[f].value = accountDetails[f];
+        if (f === 'cfInvestment' && accountDetails.limits && accountDetails.limits.otherContributions) {
+          this.FIN_INFO_FRM.fields[f].value = accountDetails.limits.otherContributions;
+        } else if (accountDetails.limits && accountDetails.limits.netWorth && f !== 'investmentLimit') {
+          this.FIN_INFO_FRM.fields[f].value = accountDetails.limits.netWorth;
         }
       } else if (form === 'GEN_INFO_FRM') {
         if ((f === 'taxId' || f === 'name' || f === 'entityType') && accountDetails && accountDetails[f]) {
