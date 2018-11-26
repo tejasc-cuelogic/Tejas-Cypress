@@ -156,10 +156,6 @@ export const userDetailsQuery = gql`
                 fileHandle
               }
             }
-<<<<<<< HEAD
-=======
-            annualIncome
->>>>>>> develop
             initialDepositAmount
             linkedBank {
               bankName
