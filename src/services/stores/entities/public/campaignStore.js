@@ -12,8 +12,9 @@ export class CampaignStore {
   @observable campaignSideBarShow = false;
   @observable selectedReadMore = {};
   @observable selectedReadLess = {};
-  @observable completedToDisplay = 9;
-  @observable activeToDisplay = 9;
+  @observable RECORDS_TO_DISPLAY = 9;
+  @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
+  @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
 
 
   @action

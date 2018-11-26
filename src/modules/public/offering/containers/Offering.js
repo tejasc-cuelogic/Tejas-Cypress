@@ -6,6 +6,12 @@ import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
 
+const LoadMoreBtn = ({ action, param }) => (
+  <div className="center-align mb-50">
+    <Button secondary content="Load More" onClick={() => action(param)} />
+  </div>
+);
+
 @inject('campaignStore')
 @observer
 class Offering extends Component {
@@ -18,7 +24,7 @@ class Offering extends Component {
   render() {
     const {
       active, completed, loading, loadMoreRecord, activeList,
-      completedList, activeToDisplay, completedToDisplay,
+      completedList, activeToDisplay, completedToDisplay, RECORDS_TO_DISPLAY,
     } = this.props.campaignStore;
     return (
       <Aux>
@@ -29,10 +35,9 @@ class Offering extends Component {
           filters
           heading={<Header as="h2" textAlign="center" caption className="mb-50">Active Campaigns</Header>}
         />
-        {activeList && activeList.length > 9 && activeToDisplay < activeList.length &&
-          <div className="center-align mb-50">
-            <Button secondary content="Load More" onClick={() => loadMoreRecord('activeToDisplay')} />
-          </div>
+        {activeList && activeList.length > RECORDS_TO_DISPLAY &&
+        activeToDisplay < activeList.length &&
+          <LoadMoreBtn action={loadMoreRecord} param="activeToDisplay" />
         }
         <section className="learn-more">
           <Container textAlign="center">
@@ -50,10 +55,9 @@ class Offering extends Component {
           locked={3}
           heading={<Header as="h2" textAlign="center" caption className="mb-50">Successfully Funded Campaigns</Header>}
         />
-        {completedList && completedList.length > 9 && completedToDisplay < completedList.length &&
-        <div className="center-align mb-50">
-          <Button secondary content="Load More" onClick={() => loadMoreRecord('completedToDisplay')} />
-        </div>
+        {completedList && completedList.length > RECORDS_TO_DISPLAY
+        && completedToDisplay < completedList.length &&
+        <LoadMoreBtn action={loadMoreRecord} param="completedToDisplay" />
         }
       </Aux>
     );
