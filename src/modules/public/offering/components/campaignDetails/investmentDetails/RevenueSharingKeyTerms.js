@@ -12,10 +12,10 @@ class RevenueSharingKeyTerms extends Component {
       <Modal.Content scrolling>
         <Grid columns={3} divided stackable className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b><br />{KeyTerms.shorthandBusinessName}</p>
+            <p><b>Issuer</b><br />{KeyTerms && KeyTerms.shorthandBusinessName ? KeyTerms.shorthandBusinessName : 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Securities</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
+            <p><b>Securities</b><br />{KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Offering Amount</b><br />{`Min.${Helper.CurrencyFormat(KeyTerms.minOfferingAmount)}, to max.${Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)}`}</p>

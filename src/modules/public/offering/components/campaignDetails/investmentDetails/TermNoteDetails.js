@@ -113,10 +113,10 @@ class TermNoteDetails extends Component {
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Min Investment</b>{''}
+                  <Statistic.Label><b>Min Investment</b>{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
-                      content="Lorem Ipsum"
+                      content="The required minimum investment per investor in this offering."
                       position="top center"
                       hoverable
                     />
