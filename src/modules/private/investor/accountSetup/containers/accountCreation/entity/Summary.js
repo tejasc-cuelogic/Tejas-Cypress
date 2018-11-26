@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { isEmpty } from 'lodash';
-import { DateTimeFormat, ListErrors } from '../../../../../../../theme/shared';
+import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
 @inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
@@ -78,7 +78,7 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Is Entity a Trust?</Table.Cell>
-                  <Table.Cell>{TRUST_INFO_FRM.fields.isTrust.value}
+                  <Table.Cell>
                     {TRUST_INFO_FRM.fields.isTrust.value &&
                       'Yes, since '
                     }
@@ -107,9 +107,22 @@ export default class Summary extends Component {
         </div>
         <p className="center-align mt-30 grey-text">
           By continuing, I acknowledge that I have read and agree to the
-          terms of the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${ccAgreementId}`}>CrowdPay Custodial Account Agreement</a>,
-          <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${irsCertificationId}`}>Substitute IRS Form W-9 Certification</a>,
-          and the <a target="_blank" rel="noopener noreferrer" href={`https://nextseed.box.com/s/${membershipAgreementId}`}>NextSeed Membership Agreement</a>.
+          terms of the
+          <IframeModal
+            className="link-button highlight-text"
+            text="CrowdPay Custodial Account Agreement"
+            srcUrl={`https://nextseed.box.com/s/${ccAgreementId}`}
+          />
+          <IframeModal
+            className="link-button highlight-text"
+            text="Substitute IRS Form W-9 Certification"
+            srcUrl={`https://nextseed.box.com/s/${irsCertificationId}`}
+          />, and the
+          <IframeModal
+            className="link-button highlight-text"
+            text="NextSeed Membership Agreement"
+            srcUrl={`https://nextseed.box.com/s/${membershipAgreementId}`}
+          />
         </p>
       </div>
     );

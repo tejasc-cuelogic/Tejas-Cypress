@@ -5,10 +5,15 @@ import Helper from '../helper';
 
 const progressMeta = Helper.Progress();
 
-const checkStatus = (signupStatus, key) => {
+const checkStatus = (signupStatus, key, userDetailsStore) => {
   let status = false;
   if (key === 'contact-card') {
     if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
+      signupStatus.phoneVerification === 'DONE') {
+      status = 2;
+    } else if (signupStatus.isMigratedFullAccount && userDetailsStore.userDetails &&
+      userDetailsStore.userDetails.cip &&
+      userDetailsStore.userDetails.cip.requestId !== null &&
       signupStatus.phoneVerification === 'DONE') {
       status = 2;
     } else {
@@ -39,12 +44,21 @@ const ProgressCard = props => (
       isEmpty(props.signupStatus.activeAccounts) &&
       Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
-        const status = checkStatus(props.signupStatus, key);
+        const status = checkStatus(props.signupStatus, key, props.userDetailsStore);
         if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
           return null;
         }
+        /*
+        * Condition added for migrated-user
+        */
         const verificationStatus =
-        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification);
+        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification) ||
+        (props.signupStatus.isMigratedFullAccount &&
+        (props.userDetailsStore.userDetails && props.userDetailsStore.userDetails.cip
+        && props.userDetailsStore.userDetails.cip.requestId !== null));
+        /*
+        * Condition added for migrated-user
+        */
         const pathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.route}` :
         `${props.match.url}/${currentCard.route}`;
         const altPathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.altRoute}` :

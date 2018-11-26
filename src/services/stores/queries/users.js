@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [String], $accountStatus: [String], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
+  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
     listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page) {
       resultCount
       users {
@@ -40,6 +40,7 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      status
       cip {
         expiration
       }
@@ -65,6 +66,7 @@ export const userDetailsQuery = gql`
       }
       email {
         address
+        verified
       }
       capabilities
       roles {
@@ -73,36 +75,6 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
-            accreditation {
-              status
-              expiration
-              requestDate
-              approved {
-                id
-                by
-                date
-                comment
-              }
-              update {
-                id
-                by
-                date
-              }
-              method
-              netWorth
-              grantorName
-              assetsUpload {
-                type
-                fileInfo {
-                  fileId
-                  fileName
-                }
-              }
-              verifier {
-                role
-                email
-              }
-            }
             limits {
               income
               netWorth
@@ -181,42 +153,13 @@ export const userDetailsQuery = gql`
       locked {
         lock
       }
-      accreditation {
-        status
-        expiration
-        requestDate
-        approved {
-          id
-          by
-          date
-          comment
-        }
-        update {
-          id
-          by
-          date
-        }
-        method
-        netWorth
-        grantorName
-        assetsUpload {
-          type
-          fileInfo {
-            fileId
-            fileName
-          }
-        }
-        verifier {
-          role
-          email
-        }
-      }
       created {
         date
       }
       lastLoginDate
       phone {
         number
+        type
         verified
       }
       legalDetails {
@@ -254,6 +197,87 @@ export const userDetailsQuery = gql`
         isComfortable
       }
       mfaMode
+    }
+  }
+`;
+
+export const userAccreditationQuery = gql`
+  query userAccreditationQuery($userId: ID!) {
+    user(id: $userId) {
+      id
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            accreditation {
+              status
+              expiration
+              requestDate
+              reviewed {
+                id
+                by
+                date
+                comment
+              }
+              update {
+                id
+                by
+                date
+              }
+              method
+              netWorth
+              grantorName
+              assetsUpload {
+                type
+                fileInfo {
+                  fileId
+                  fileName
+                }
+              }
+              verifier {
+                role
+                email
+              }
+            }
+            name
+            isTrust
+            accountId
+            status
+            }
+          }
+        }
+      accreditation {
+        status
+        expiration
+        requestDate
+        reviewed {
+          id
+          by
+          date
+          comment
+        }
+        update {
+          id
+          by
+          date
+        }
+        method
+        netWorth
+        grantorName
+        assetsUpload {
+          type
+          fileInfo {
+            fileId
+            fileName
+          }
+        }
+        verifier {
+          role
+          email
+        }
+      }
     }
   }
 `;

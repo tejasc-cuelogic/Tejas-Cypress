@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find } from 'lodash';
+import { isEmpty, find, omit } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -8,7 +8,7 @@ import {
   IRA_FUNDING,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, userStore, bankAccountStore, userDetailsStore } from '../../index';
+import { uiStore, userStore, bankAccountStore, userDetailsStore, investmentLimitStore } from '../../index';
 import { createIndividual, updateAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -43,6 +43,11 @@ class IraAccountStore {
 
   @action
   finInfoChange = (values, field) => {
+    this.FIN_INFO_FRM.fields.investmentLimit.value =
+    investmentLimitStore.getInvestmentLimit({
+      annualIncome: this.FIN_INFO_FRM.fields.annualIncome.value,
+      netWorth: this.FIN_INFO_FRM.fields.netWorth.value,
+    });
     this.FIN_INFO_FRM = FormValidator.onChange(
       this.FIN_INFO_FRM,
       { name: field, value: values.floatValue },
@@ -111,7 +116,7 @@ class IraAccountStore {
       if (isValidAddFunds) {
         payload.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
       }
-    } else {
+    } else if (this.fundingOption.rawValue === 'check') {
       payload.linkedBank = {};
       const { accountNumber, routingNumber } = bankAccountStore.formLinkBankManually.fields;
       if (accountNumber && routingNumber) {
@@ -150,6 +155,7 @@ class IraAccountStore {
         isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
+          accountAttributes = omit(accountAttributes, ['investmentLimit']);
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
             res();
           })

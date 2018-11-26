@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import { Container, Menu, Image, Responsive, Divider } from 'semantic-ui-react';
+import { Link, NavLink, matchPath } from 'react-router-dom';
+import { Container, Menu, Image, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { ASSETS_URL } from '../../constants/aws';
 import { SocialLinks } from '../shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 992;
 class Footer extends Component {
   state = { fShowHide: false };
   componentWillMount() {
@@ -24,53 +26,59 @@ class Footer extends Component {
   toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
+    const { path } = this.props;
+    const OfferFooter = ['/offerings/:id/:section?'];
+    const isCampaign = matchPath(path, { path: OfferFooter }) != null;
     return (
       <footer>
-        <div className="footer-head">
-          <Container>
-            <Menu inverted borderless>
-              {/*
-              <Menu.Item onClick={this.toggleShowHide}>Resources
-              <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} /></Menu.Item>
-              <Menu.Item onClick={this.toggleShowHide}>About Us
-              <Icon name={`caret ${(this.state.fShowHide ? 'up' : 'down')}`} /></Menu.Item>
-            */}
-              <Menu.Item as={Link} to="/agreements/terms-of-use">Terms of Use</Menu.Item>
-              <Menu.Item as={Link} to="/agreements/privacy-policy">Privacy Policy</Menu.Item>
-              <Menu.Menu position="right">
-                <Responsive minWidth={768} as={Aux}>
-                  <Menu.Item>© 2018 NextSeed US LLC</Menu.Item>
-                </Responsive>
+        <Container fluid={isCampaign}>
+          <Grid stackable>
+            <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
+              <div className="footer-left-nav">
+                {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
+                  <Aux path={path}>
+                    <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
+                      <Menu.Item header>Resources</Menu.Item>
+                      <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
+                      <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
+                    </Menu>
+                    <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
+                      <Menu.Item header>About Us</Menu.Item>
+                      <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>
+                      <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
+                      <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
+                      <Menu.Item as={NavLink} to="/about/press">Press</Menu.Item>
+                    </Menu>
+                  </Aux>
+                }
+                <Menu
+                  text
+                  vertical={((!isTablet && isCampaign) || (!isMobile && !isCampaign))}
+                  className={isTablet && (OfferFooter.find(item => matchPath(path, { path: item }))) ? 'center-align' : ''}
+                >
+                  {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
+                    <Menu.Item header>Legal</Menu.Item>
+                  }
+                  <Menu.Item as={Link} to="/agreements/legal/terms-of-use">Terms of Use</Menu.Item>
+                  <Menu.Item as={Link} to="/agreements/legal/privacy-policy">Privacy Policy</Menu.Item>
+                  {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
+                    <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
+                  }
+                </Menu>
+              </div>
+              {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
+                <Aux path={path}>
+                  <div className={`${isMobile && 'mb-30'} secure mt-20 mb-30`}>
+                    <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
+                  </div>
+                </Aux>
+              }
+              <div className={`${isMobile && 'mb-20'} footer-social`}>
                 <SocialLinks />
-              </Menu.Menu>
-            </Menu>
-          </Container>
-        </div>
-        <Container className="clearfix">
-          <section className="active">
-            <div className="footer-left">
-              <Menu text vertical>
-                <Menu.Header className="mb-10">RESOURCES</Menu.Header>
-                <Menu.Item as={NavLink} to="/resources/education-center">Ed Center</Menu.Item>
-                <Menu.Item as={NavLink} to="/resources/insights">Insights</Menu.Item>
-              </Menu>
-              <Menu text vertical>
-                <Menu.Header className="mb-10">ABOUT US</Menu.Header>
-                <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>
-                <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
-                <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
-                <Menu.Item as={NavLink} to="/about/press">Press</Menu.Item>
-              </Menu>
-              <Responsive minWidth={768} as={Aux}>
-                <div className="secure mt-30">
-                  <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
-                </div>
-              </Responsive>
-            </div>
-            <Responsive maxWidth={767} as={Aux}>
-              <Divider hidden />
-            </Responsive>
-            <div className="copyright-info">
+                <p className={isMobile && 'mt-10'}>© 2018 NextSeed US LLC</p>
+              </div>
+            </Grid.Column>
+            <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">
               <p>
                 This site is operated by NextSeed Technologies LLC ({'"'}NextSeed{'"'}),
                 which is neither a registered broker-dealer nor funding portal.
@@ -102,13 +110,8 @@ class Footer extends Component {
                 By accessing this site and any pages thereof, you agree to be bound by the
                 Terms of Use and Privacy Policy.
               </p>
-            </div>
-            <Responsive maxWidth={767} as={Aux}>
-              <div className="secure">
-                <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
-              </div>
-            </Responsive>
-          </section>
+            </Grid.Column>
+          </Grid>
         </Container>
       </footer>
     );

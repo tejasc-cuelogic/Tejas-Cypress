@@ -11,7 +11,7 @@ import { ListErrors } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -92,6 +92,7 @@ export default class ConfirmEmailAddress extends Component {
       canSubmitConfirmEmail,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/auth/login');
     }
@@ -122,7 +123,9 @@ export default class ConfirmEmailAddress extends Component {
                 displayMode
                 className="display-only"
               />
-              <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+              {!isMigratedUser &&
+                <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+              }
               <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
                 <Form.Field className="otp-wrap">
                   <label>Enter verification code here:</label>
@@ -141,19 +144,9 @@ export default class ConfirmEmailAddress extends Component {
                     <ListErrors errors={[errors.message]} />
                   </Message>
                 }
-                {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-                {/* <Header as="h3" className="success-msg mb-60">
-                  <Icon className="ns-check-circle" color="green" />
-                  Your e-mail address has been confirmed.
-                </Header> */}
-                {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
                 <Button primary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
               </Form>
             </Modal.Content>
-            {/* <Modal.Actions className="signup-actions">
-              <Button type="button" className="link-button"
-              content="Resend the code to my email" onClick={() => this.handleResendCode()} />
-            </Modal.Actions> */}
           </Modal>
         :
           <Modal size="mini" open>

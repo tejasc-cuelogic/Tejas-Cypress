@@ -847,6 +847,8 @@ export class OfferingCreationStore {
   mergeCustomize = (objValue, srcValue, key, object, source, stack) => {
     if (OFFERING_CREATION_ARRAY_KEY_LIST.includes(key)) {
       return srcValue;
+    } else if (srcValue === undefined || srcValue === null || srcValue === '') {
+      return null;
     }
   };
 

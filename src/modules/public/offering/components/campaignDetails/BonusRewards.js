@@ -21,6 +21,9 @@ class BonusRewards extends Component {
     const bonusRewards = campaign && campaign.bonusRewards &&
       campaign.bonusRewards.length && campaign.bonusRewards;
     const earlyBirdsCount = ((campaign && campaign.earlyBirdsCount) || 0);
+    const offeringMISC = campaign && campaign.offering && campaign.offering.misc &&
+      campaign.offering.misc.additionalBonusRewardsContent ?
+      campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
         <Grid stackable>
@@ -69,38 +72,15 @@ class BonusRewards extends Component {
         <Grid stackable>
           <Grid.Column>
             <Segment padded>
-              <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
-                <Grid.Column>
-                  <Image src={`${ASSETS_URL}images/cards/pour_cards_black.jpg`} />
-                  <Header as="h5">Black Card</Header>
-                  <p>
-                    One Premium bottle per year, VIP/Supercar Parking (with advanced notice), 25%
-                    discount every visit and Skip the Line for you and up to 16 guests (Fridays and
-                    Saturdays + Special Events)
-                  </p>
-                </Grid.Column>
-                <Grid.Column>
-                  <Image src={`${ASSETS_URL}images/cards/pour_cards_plat.jpg`} />
-                  <Header as="h5">Platinum Card</Header>
-                  <p>
-                    0% discount every visit and Skip the Line for you and up to 9 guests (Fridays
-                    and Saturdays + Special Events)
-                  </p>
-                </Grid.Column>
-                <Grid.Column>
-                  <Image src={`${ASSETS_URL}images/cards/pour_cards_gold.jpg`} />
-                  <Header as="h5">Gold Card</Header>
-                  <p>
-                    15% discount every visit and Skip the Line for you and up to 9 guests (Fridays
-                    and Saturdays + Special Events)
-                  </p>
-                </Grid.Column>
-                <Grid.Column>
-                  <Image src={`${ASSETS_URL}images/cards/pour_cards_silver.jpg`} />
-                  <Header as="h5">Silver Card</Header>
-                  <p>10% discount every visit</p>
-                </Grid.Column>
-              </Grid>
+              {offeringMISC ?
+                <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
+                  <Grid.Column>
+                    <p className="detail-section" dangerouslySetInnerHTML={{ __html: offeringMISC }} />
+                  </Grid.Column>
+                </Grid>
+                :
+                <InlineLoader text="No data found." />
+              }
             </Segment>
           </Grid.Column>
         </Grid>

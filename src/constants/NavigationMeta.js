@@ -330,7 +330,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'dollar',
     title: 'Change Linked Account Bank Request',
-    // capability: 'LINKED_BANK_ANY',
+    capability: 'LINKED_BANK_ANY',
     to: 'change-linked-bank-requests',
     heading: 'Change Linked Account Bank Request',
     path: 'admin/linkedBank',
@@ -379,7 +379,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'payment',
     title: 'Accreditation Requests',
-    // capability: 'ACCREDITATION_ANY',
+    capability: 'ACCREDITATION_ANY',
     to: 'accreditation',
     path: 'admin/accreditation',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -493,6 +493,17 @@ export const FOOTER_NAV = [
       { title: 'Press', to: 'press' },
     ],
   },
-  { title: 'Terms of Use', exact: true, to: 'agreements/terms-of-use' },
-  { title: 'Privacy Policy', exact: true, to: 'agreements/privacy-policy' },
+  {
+    title: 'Legal',
+    to: 'agreements/legal',
+    exact: true,
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Terms of Use', to: 'terms-of-use' },
+      { title: 'Privacy Policy', to: 'privacy-policy' },
+      { title: 'General Disclosures', to: 'general-disclosures' },
+      { title: 'General Risk Factors', to: 'general-risk-factors' },
+      { title: 'Legal Documents', to: 'legal-documents' },
+    ],
+  },
 ];

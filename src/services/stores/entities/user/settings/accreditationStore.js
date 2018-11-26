@@ -1,7 +1,7 @@
 import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray } from 'lodash';
-import cleanDeep from 'clean-deep';
 import graphql from 'mobx-apollo';
+import cleanDeep from 'clean-deep';
 import moment from 'moment';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
@@ -9,7 +9,7 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../../index';
 import { updateAccreditation, listAccreditation } from '../../../queries/accreditation';
-import { userDetailsQuery } from '../../../queries/users';
+import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
@@ -31,6 +31,7 @@ export class AccreditationStore {
   @observable stepToBeRendered = '';
   @observable filters = false;
   @observable firstInit = '';
+  @observable userData = null;
   @observable accreditationData = { ira: null, individual: null, entity: null };
   @observable requestState = {
     filters: false,
@@ -385,7 +386,7 @@ export class AccreditationStore {
           mutation: updateAccreditation,
           variables: payLoad,
           refetchQueries: [{
-            query: userDetailsQuery,
+            query: userAccreditationQuery,
             variables: {
               userId: userDetailsStore.currentUserId,
             },
@@ -488,8 +489,27 @@ export class AccreditationStore {
   }
 
   @action
+  getUserAccreditation = () => new Promise((res) => {
+    if (userDetailsStore.currentUserId) {
+      this.userData = graphql({
+        client,
+        query: userAccreditationQuery,
+        fetchPolicy: 'network-only',
+        variables: { userId: userDetailsStore.currentUserId },
+        onFetch: () => { res(); },
+        onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); },
+      });
+    }
+  })
+
+  @computed get userDetails() {
+    const details = (this.userData.data && toJS(this.userData.data.user)) || {};
+    return details;
+  }
+
+  @action
   setFormData = (form, ref, accountType) => {
-    const { userDetails } = userDetailsStore;
+    const { userDetails } = this;
     const entityAccreditation = userDetails && userDetails.roles &&
     userDetails.roles.find(role => role.name === accountType);
     const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
@@ -511,7 +531,7 @@ export class AccreditationStore {
 
   @action
   initiateAccreditation = () => {
-    const { userDetails } = userDetailsStore;
+    const { userDetails } = this;
     const entityAccreditation = userDetails && userDetails.roles &&
     userDetails.roles.find(role => role.name === 'entity');
     this.accreditationData.individual = userDetails && userDetails.accreditation;

@@ -10,7 +10,7 @@ import {
   ENTITY_PERSONAL_INFO,
   ENTITY_FORMATION_DOCS,
 } from '../../../../constants/account';
-import { bankAccountStore, userDetailsStore, userStore, uiStore } from '../../index';
+import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
 import { createIndividual, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -43,6 +43,11 @@ class EntityAccountStore {
 
   @action
   maskedFinInfoChange = (values, field) => {
+    this.FIN_INFO_FRM.fields.investmentLimit.value =
+    investmentLimitStore.getInvestmentLimit({
+      annualIncome: this.FIN_INFO_FRM.fields.cfInvestment.value,
+      netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
+    });
     this.FIN_INFO_FRM = FormValidator.onChange(
       this.FIN_INFO_FRM,
       { name: field, value: values.floatValue },
