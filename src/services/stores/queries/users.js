@@ -208,7 +208,7 @@ export const userAccreditationQuery = gql`
               status
               expiration
               requestDate
-              approved {
+              reviewed {
                 id
                 by
                 date
@@ -245,7 +245,7 @@ export const userAccreditationQuery = gql`
         status
         expiration
         requestDate
-        approved {
+        reviewed {
           id
           by
           date
