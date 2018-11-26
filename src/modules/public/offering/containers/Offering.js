@@ -15,9 +15,6 @@ class Offering extends Component {
   componentWillReceiveProps() {
     this.props.campaignStore.initRequest(['active', 'completed']);
   }
-  componentWillUnmount() {
-    this.props.campaignStore.resetDisplayCounts();
-  }
   render() {
     const {
       active, completed, loading, loadMoreRecord, activeList,
