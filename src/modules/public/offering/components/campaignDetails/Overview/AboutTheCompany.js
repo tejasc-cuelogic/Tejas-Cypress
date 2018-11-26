@@ -37,7 +37,6 @@ class AboutTheCompany extends Component {
             </p>
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
-            <div className="detail-section mt-10" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
             {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.highlight ?
                 <List bulleted>
@@ -46,11 +45,15 @@ class AboutTheCompany extends Component {
                   ))
                   }
                 </List>
-                :
+              :
                 <InlineLoader text="No Data Found" />
             }
           </div>
-          <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
+          {campaign && campaign.offering && campaign.offering.overview &&
+            campaign.offering.overview.highlight && campaign.offering.overview.highlight.length > 8 ?
+              <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
+            :
+            null}
           {
             filteredSocialArr.length ?
               <div className="mt-40">

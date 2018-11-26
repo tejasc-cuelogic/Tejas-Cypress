@@ -52,6 +52,8 @@ class InvestorProfileStore {
   @action
   setInvestorDetailInfo = (investorProfileData) => {
     this.INVESTOR_PROFILE_FULL =
+    FormValidator.prepareFormObject(INVESTOR_PROFILE_FULL_META, true);
+    this.INVESTOR_PROFILE_FULL =
       FormValidator.setFormData(this.INVESTOR_PROFILE_FULL, investorProfileData);
     if (investorProfileData && investorProfileData.brokerageFirmName && investorProfileData.brokerageFirmName !== '' &&
       investorProfileData.brokerageFirmName !== 'false') {
