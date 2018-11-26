@@ -15,7 +15,9 @@ import { ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constan
 export default class FinancialInfo extends Component {
   componentWillMount() {
     this.props.investmentLimitStore.setAccountsLimits();
-    this.props.accreditationStore.initiateAccreditation();
+    this.props.accreditationStore.getUserAccreditation().then(() => {
+      this.props.accreditationStore.initiateAccreditation();
+    });
   }
   submit = (e) => {
     e.preventDefault();
