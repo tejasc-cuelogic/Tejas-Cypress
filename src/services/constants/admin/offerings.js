@@ -337,7 +337,7 @@ export const BUSINESS_INDUSTRIES = [
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
-  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity 506C' },
+  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
 ];
 
 export const BUSINESS_TYPE_VALUES = [
@@ -2122,7 +2122,7 @@ export const ADD_NEW_BONUS_REWARD = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
     key: 0,
     earlyBirdQuantity: 50,
   },

@@ -328,7 +328,7 @@ export const PRIVATE_NAV = [
     ],
   },
   {
-    icon: 'dollar',
+    icon: 'university',
     title: 'Change Linked Account Bank Request',
     capability: 'LINKED_BANK_ANY',
     to: 'change-linked-bank-requests',
@@ -422,7 +422,7 @@ export const PUBLIC_NAV = [
         icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
+        icon: 'ns-document-search', title: 'Data Room', to: 'disclosures', component: 'Disclosures',
       },
       {
         icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',

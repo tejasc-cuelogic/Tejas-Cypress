@@ -25,6 +25,12 @@ export class IdentityStore {
   @observable confirmMigratedUserPhoneNumber = false;
   @observable requestOtpResponse = {};
   @observable userCipStatus = '';
+  @observable isOptConfirmed = false;
+
+  @action
+  setIsOptConfirmed = (status) => {
+    this.isOptConfirmed = status;
+  }
 
   @action
   setConfirmMigratedUserPhoneNumber = (status) => {

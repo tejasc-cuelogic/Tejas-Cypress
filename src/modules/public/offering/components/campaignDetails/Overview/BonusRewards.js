@@ -16,7 +16,7 @@ class BonusRewards extends Component {
             </Link>
           </Header>
           <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
-          <p className="center-align"><b>Invest more, recieve more.</b></p>
+          <p className="center-align"><b>Invest more, receive more.</b></p>
           <p className="early-bird-desc center-align">
             See the bonus rewards BuffBrew Taproom is offering for higher
             levels of investment.

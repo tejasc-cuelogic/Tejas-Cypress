@@ -12,6 +12,9 @@ export class CampaignStore {
   @observable campaignSideBarShow = false;
   @observable selectedReadMore = {};
   @observable selectedReadLess = {};
+  @observable RECORDS_TO_DISPLAY = 9;
+  @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
+  @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
 
 
   @action
@@ -65,13 +68,33 @@ export class CampaignStore {
   }
 
   @computed get active() {
-    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active'))
-      .includes(o.stage));
+    const offeringList = this.activeList.slice();
+    return offeringList.splice(0, this.activeToDisplay);
+  }
+
+  @computed get activeList() {
+    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
   }
 
   @computed get completed() {
-    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed'))
-      .includes(o.stage));
+    const offeringList = this.completedList.slice();
+    return offeringList.splice(0, this.completedToDisplay);
+  }
+  @computed get completedList() {
+    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage));
+  }
+  @action
+  loadMoreRecord = (type) => {
+    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.activeList;
+    if (offeringsList.length > this[type]) {
+      this[type] = this[type] + 9;
+    }
+  }
+
+  @action
+  resetDisplayCounts = () => {
+    this.completedToDisplay = 9;
+    this.activeToDisplay = 9;
   }
 
   @computed get campaign() {
