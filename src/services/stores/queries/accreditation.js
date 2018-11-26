@@ -22,13 +22,32 @@ export const listAccreditation = gql`
     accountCreateFromDate: $accountCreateFromDate
     accountCreateToDate: $accountCreateToDate
   ) {
-    users {
-      id
-      info {
-        firstName
-        lastName
+    accreditation {
+      userId
+      accountId
+      firstName
+      lastName
+      status
+      accountType
+      accreditationStatus
+      requestDate
+      method
+      netWorth
+      assetsUpload {
+        type
+        fileInfo {
+          fileId
+          fileName
+          fileHandle {
+            boxFileId
+            boxFolderId
+          }
+        }
       }
-      
+      verifier {
+        role
+        email
+      }
     }
     resultCount
   }

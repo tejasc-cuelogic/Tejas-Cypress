@@ -7,13 +7,22 @@ const actions = {
   decline: { label: 'Decline', color: 'red', actionValue: 'DECLINE' },
 };
 export default class Actions extends Component {
+  actionUrl = (action) => {
+    const {
+      match, accountId, accountType, userId,
+    } = this.props;
+    return `${match.url}/${action}/${userId}${accountId ? `/${accountId}/${accountType}` : ''}`;
+  }
   render() {
-    const { accountId, accountType, userId } = this.props;
     return (
       <Table.Cell collapsing textAlign="center">
         <Button.Group vertical compact size="mini">
           {Object.keys(actions).map(action => (
-            <Button as={Link} to={`${this.props.match.url}/${actions[action].actionValue}/${userId}/${accountId}/${accountType}`} className={actions[action].color}>
+            <Button
+              as={Link}
+              to={this.actionUrl(actions[action].actionValue)}
+              className={actions[action].color}
+            >
               {actions[action].label}
             </Button>
           ))}

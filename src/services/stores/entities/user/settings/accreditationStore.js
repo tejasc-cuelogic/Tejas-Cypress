@@ -2,6 +2,7 @@ import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray } from 'lodash';
 import cleanDeep from 'clean-deep';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -46,8 +47,8 @@ export class AccreditationStore {
     delete filters.keyword;
     let params = {
       search: keyword,
-      method,
-      type,
+      method: method !== 'ALL' ? method : null,
+      type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
     };
     this.requestState.page = params.page;
@@ -63,24 +64,6 @@ export class AccreditationStore {
       variables: params,
       fetchPolicy: 'network-only',
     });
-    this.data = [
-      {
-        id: 1,
-        name: 'Alexandra Smith',
-        createdAt: '7/12/2018',
-        type: 'Asset',
-        method: 'Verifier',
-        boxLink: 'https://www.nextseed.com/',
-      },
-      {
-        id: 2,
-        name: 'Alexandra Smith',
-        createdAt: '7/12/2018',
-        type: 'Asset',
-        method: 'Verifier',
-        boxLink: 'https://www.nextseed.com/',
-      },
-    ];
   }
 
   @computed get count() {
@@ -240,7 +223,7 @@ export class AccreditationStore {
   @action
   setInitiateSrch = (name, value) => {
     if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value;
+      this.requestState.search[name] = moment(value.formattedValue, 'MM-DD-YYY').toISOString();
       if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
         const srchParams = { ...this.requestState.search };
         this.initiateSearch(srchParams);
@@ -264,7 +247,8 @@ export class AccreditationStore {
     return this.data.loading;
   }
   @computed get accreditations() {
-    return (this.data) || [];
+    return (this.data && this.data.data && this.data.data.listAccreditation &&
+      this.data.data.listAccreditation.accreditation) || [];
   }
 
   @action
@@ -418,7 +402,7 @@ export class AccreditationStore {
   }
 
   @action
-  updateAccreditation = (accreditationAction, accountId, userId, accountType) => {
+  updateAccreditationAction = (accreditationAction, accountId, userId, accountType) => {
     uiStore.setProgress();
     const field = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
     return new Promise((resolve, reject) => {
