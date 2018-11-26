@@ -45,7 +45,7 @@ class IraAccountStore {
   finInfoChange = (values, field) => {
     this.FIN_INFO_FRM.fields.investmentLimit.value =
     investmentLimitStore.getInvestmentLimit({
-      annualIncome: this.FIN_INFO_FRM.fields.annualIncome.value,
+      annualIncome: this.FIN_INFO_FRM.fields.income.value,
       netWorth: this.FIN_INFO_FRM.fields.netWorth.value,
     });
     this.FIN_INFO_FRM = FormValidator.onChange(
@@ -90,8 +90,10 @@ class IraAccountStore {
   @computed
   get accountAttributes() {
     /* eslint-disable camelcase */
-    let payload = {};
-    payload = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
+    const payload = {};
+    payload.limits = {};
+    const limitValues = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
+    payload.limits = omit(limitValues, ['investmentLimit']);
     payload.identityDoc = {};
     payload.identityDoc.fileId = this.IDENTITY_FRM.fields.identityDoc.fileId;
     payload.identityDoc.fileName = this.IDENTITY_FRM.fields.identityDoc.value;
@@ -148,14 +150,15 @@ class IraAccountStore {
   validateAndSubmitStep =
   (currentStep, formStatus, removeUploadedData) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
-    let accountAttributes = {};
+    const accountAttributes = {};
     switch (currentStep.name) {
       case 'Financial info':
         currentStep.validate();
         isValidCurrentStep = this.FIN_INFO_FRM.meta.isValid;
         if (isValidCurrentStep) {
-          accountAttributes = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
-          accountAttributes = omit(accountAttributes, ['investmentLimit']);
+          let limitValues = FormValidator.ExtractValues(this.FIN_INFO_FRM.fields);
+          limitValues = omit(limitValues, ['investmentLimit']);
+          accountAttributes.limits = limitValues;
           this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
             res();
           })
@@ -330,7 +333,7 @@ class IraAccountStore {
     if (!isEmpty(userData)) {
       const account = find(userData.roles, { name: 'ira' });
       if (account) {
-        this.setFormData('FIN_INFO_FRM', account.details);
+        this.setFormData('FIN_INFO_FRM', account.details, userData);
         this.setFormData('FUNDING_FRM', account.details);
         this.setFormData('ACC_TYPES_FRM', account.details);
         this.setFormData('IDENTITY_FRM', account.details);
@@ -382,10 +385,10 @@ class IraAccountStore {
   }
 
   @action
-  setFormData = (form, accountDetails) => {
+  setFormData = (form, accountDetails, userData) => {
     Object.keys(this[form].fields).map((f) => {
-      if (form === 'FIN_INFO_FRM') {
-        this[form].fields[f].value = accountDetails[f];
+      if (form === 'FIN_INFO_FRM' && f !== 'investmentLimit' && userData && userData.limits) {
+        this[form].fields[f].value = userData.limits[f];
       } else if (form === 'IDENTITY_FRM') {
         if (accountDetails[f]) {
           this.IDENTITY_FRM.fields[f].value = accountDetails[f].fileName;
