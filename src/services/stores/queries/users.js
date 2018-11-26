@@ -91,7 +91,6 @@ export const userDetailsQuery = gql`
                 date
               }
               method
-              netWorth
               grantorName
               assetsUpload {
                 type
@@ -158,12 +157,6 @@ export const userDetailsQuery = gql`
               }
             }
             annualIncome
-            netWorth
-            netAssets
-            cfInvestment {
-              dateOfInvestment
-              amount
-            }
             initialDepositAmount
             linkedBank {
               bankName
@@ -257,6 +250,87 @@ export const userDetailsQuery = gql`
         isComfortable
       }
       mfaMode
+    }
+  }
+`;
+
+export const userAccreditationQuery = gql`
+  query userAccreditationQuery($userId: ID!) {
+    user(id: $userId) {
+      id
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            accreditation {
+              status
+              expiration
+              requestDate
+              approved {
+                id
+                by
+                date
+                comment
+              }
+              update {
+                id
+                by
+                date
+              }
+              method
+              netWorth
+              grantorName
+              assetsUpload {
+                type
+                fileInfo {
+                  fileId
+                  fileName
+                }
+              }
+              verifier {
+                role
+                email
+              }
+            }
+            name
+            isTrust
+            accountId
+            status
+            }
+          }
+        }
+      accreditation {
+        status
+        expiration
+        requestDate
+        approved {
+          id
+          by
+          date
+          comment
+        }
+        update {
+          id
+          by
+          date
+        }
+        method
+        netWorth
+        grantorName
+        assetsUpload {
+          type
+          fileInfo {
+            fileId
+            fileName
+          }
+        }
+        verifier {
+          role
+          email
+        }
+      }
     }
   }
 `;

@@ -70,6 +70,10 @@
             z-index: 1;
             cursor: pointer;
         }
+        img.ui.image {
+            height: auto;
+            width: 100%;
+        }
     }
     &.legal-documents {
         box-shadow: none;
