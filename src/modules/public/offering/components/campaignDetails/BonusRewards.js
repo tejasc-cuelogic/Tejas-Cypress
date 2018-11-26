@@ -69,21 +69,19 @@ class BonusRewards extends Component {
             ))}
           </Grid> : <InlineLoader text="No bonus rewards are available." />
         }
-        <Grid stackable>
-          <Grid.Column>
-            <Segment padded>
-              {offeringMISC ?
+        {offeringMISC &&
+          <Grid stackable>
+            <Grid.Column>
+              <Segment padded>
                 <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
                   <Grid.Column>
                     <p className="detail-section" dangerouslySetInnerHTML={{ __html: offeringMISC }} />
                   </Grid.Column>
                 </Grid>
-                :
-                <InlineLoader text="No data found." />
-              }
-            </Segment>
-          </Grid.Column>
-        </Grid>
+              </Segment>
+            </Grid.Column>
+          </Grid>
+        }
       </div>
     );
   }
