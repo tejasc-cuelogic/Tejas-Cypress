@@ -94,7 +94,7 @@ class KeyTerms extends Component {
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Ownership</b> <Popup trigger={<Icon name="help circle" color="green" />} content="Equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities." position="top center" /></Statistic.Label>
                 <Statistic.Value>
-                  {campaign && campaign.keyTerms ? campaign.keyTerms.securitiesOwnershipPercentage : '-'}
+                  {campaign && campaign.keyTerms ? `${campaign.keyTerms.securitiesOwnershipPercentage}%` : '-'}
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>

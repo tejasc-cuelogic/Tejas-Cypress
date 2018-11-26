@@ -64,7 +64,7 @@ export class Utility {
     return result;
   }
 
-  CurrencyFormat = (amount, f) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: typeof (f) === 'number' ? f : 2 }).format(amount)
+  CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(amount)
 
   cryptedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;

@@ -49,7 +49,10 @@ class AboutTheCompany extends Component {
                 <InlineLoader text="No Data Found" />
             }
           </div>
-          <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
+          {campaign.offering.overview.highlight.length > 6 ?
+            <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
+            :
+            null}
           {
             filteredSocialArr.length ?
               <div className="mt-40">

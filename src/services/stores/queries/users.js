@@ -91,7 +91,6 @@ export const userDetailsQuery = gql`
                 date
               }
               method
-              netWorth
               grantorName
               assetsUpload {
                 type
@@ -158,12 +157,6 @@ export const userDetailsQuery = gql`
               }
             }
             annualIncome
-            netWorth
-            netAssets
-            cfInvestment {
-              dateOfInvestment
-              amount
-            }
             initialDepositAmount
             linkedBank {
               bankName
