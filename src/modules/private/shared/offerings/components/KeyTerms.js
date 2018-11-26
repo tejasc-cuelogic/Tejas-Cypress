@@ -113,12 +113,11 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Header as="h4">Key Terms</Header>
           <Form.Group widths={3}>
-            <MaskedInput
+            <FormInput
               displayMode={isReadonly}
               name="maturity"
               fielddata={KEY_TERMS_FRM.fields.maturity}
-              changed={(values, name) => maskChange(values, formName, name)}
-              number
+              changed={(e, result) => formChange(e, result, formName)}
             />
             <div className="field">
               <FormDropDown

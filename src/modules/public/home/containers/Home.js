@@ -21,7 +21,9 @@ class Home extends Component {
     this.props.campaignStore.initRequest(['active']);
   }
   render() {
-    const { active, loading } = this.props.campaignStore;
+    const {
+      active, loading, activeToDisplay, activeList, loadMoreRecord,
+    } = this.props.campaignStore;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
       <Aux>
@@ -54,6 +56,11 @@ class Home extends Component {
             </Aux>
           }
         />
+        {activeList && activeList.length > 9 && activeToDisplay < activeList.length &&
+          <div className="center-align mb-50">
+            <Button secondary content="Load More" onClick={() => loadMoreRecord('activeToDisplay')} />
+          </div>
+        }
         <div className="center-align mb-50">
           <Button secondary content="Explore Campaigns" as={Link} to="/offerings" />
         </div>

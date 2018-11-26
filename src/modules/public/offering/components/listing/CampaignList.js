@@ -14,6 +14,9 @@ import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering'
 @observer
 export default class CampaignList extends Component {
   state = { filters: false };
+  componentWillUnmount() {
+    this.props.campaignStore.resetDisplayCounts();
+  }
   toggleFilters = () => {
     const { filters } = this.state;
     this.setState({ filters: filters === false });
