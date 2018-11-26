@@ -156,7 +156,6 @@ export const userDetailsQuery = gql`
                 fileHandle
               }
             }
-            annualIncome
             initialDepositAmount
             linkedBank {
               bankName
