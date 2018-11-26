@@ -2122,7 +2122,7 @@ export const ADD_NEW_BONUS_REWARD = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
     key: 0,
     earlyBirdQuantity: 50,
   },
