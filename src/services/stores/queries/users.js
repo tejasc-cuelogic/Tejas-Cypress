@@ -157,13 +157,6 @@ export const userDetailsQuery = gql`
                 fileHandle
               }
             }
-            annualIncome
-            netWorth
-            netAssets
-            cfInvestment {
-              dateOfInvestment
-              amount
-            }
             initialDepositAmount
             linkedBank {
               bankName
