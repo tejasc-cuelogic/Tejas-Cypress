@@ -75,35 +75,6 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
-            accreditation {
-              status
-              expiration
-              requestDate
-              approved {
-                id
-                by
-                date
-                comment
-              }
-              update {
-                id
-                by
-                date
-              }
-              method
-              grantorName
-              assetsUpload {
-                type
-                fileInfo {
-                  fileId
-                  fileName
-                }
-              }
-              verifier {
-                role
-                email
-              }
-            }
             limits {
               income
               netWorth
@@ -175,36 +146,6 @@ export const userDetailsQuery = gql`
       locked {
         lock
       }
-      accreditation {
-        status
-        expiration
-        requestDate
-        approved {
-          id
-          by
-          date
-          comment
-        }
-        update {
-          id
-          by
-          date
-        }
-        method
-        netWorth
-        grantorName
-        assetsUpload {
-          type
-          fileInfo {
-            fileId
-            fileName
-          }
-        }
-        verifier {
-          role
-          email
-        }
-      }
       created {
         date
       }
@@ -267,7 +208,7 @@ export const userAccreditationQuery = gql`
               status
               expiration
               requestDate
-              approved {
+              reviewed {
                 id
                 by
                 date
@@ -304,7 +245,7 @@ export const userAccreditationQuery = gql`
         status
         expiration
         requestDate
-        approved {
+        reviewed {
           id
           by
           date
