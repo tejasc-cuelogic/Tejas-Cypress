@@ -37,7 +37,6 @@ class AboutTheCompany extends Component {
             </p>
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
-            <div className="detail-section mt-10" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
             {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.highlight ?
                 <List bulleted>
