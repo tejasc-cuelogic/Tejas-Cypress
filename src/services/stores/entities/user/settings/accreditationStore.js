@@ -460,14 +460,16 @@ export class AccreditationStore {
 
   @action
   getUserAccreditation = () => new Promise((res) => {
-    this.userData = graphql({
-      client,
-      query: userAccreditationQuery,
-      fetchPolicy: 'network-only',
-      variables: { userId: userDetailsStore.currentUserId },
-      onFetch: () => { res(); },
-      onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); },
-    });
+    if (userDetailsStore.currentUserId) {
+      this.userData = graphql({
+        client,
+        query: userAccreditationQuery,
+        fetchPolicy: 'network-only',
+        variables: { userId: userDetailsStore.currentUserId },
+        onFetch: () => { res(); },
+        onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); },
+      });
+    }
   })
 
   @computed get userDetails() {
