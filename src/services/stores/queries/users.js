@@ -254,6 +254,87 @@ export const userDetailsQuery = gql`
   }
 `;
 
+export const userAccreditationQuery = gql`
+  query userAccreditationQuery($userId: ID!) {
+    user(id: $userId) {
+      id
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            accreditation {
+              status
+              expiration
+              requestDate
+              approved {
+                id
+                by
+                date
+                comment
+              }
+              update {
+                id
+                by
+                date
+              }
+              method
+              netWorth
+              grantorName
+              assetsUpload {
+                type
+                fileInfo {
+                  fileId
+                  fileName
+                }
+              }
+              verifier {
+                role
+                email
+              }
+            }
+            name
+            isTrust
+            accountId
+            status
+            }
+          }
+        }
+      accreditation {
+        status
+        expiration
+        requestDate
+        approved {
+          id
+          by
+          date
+          comment
+        }
+        update {
+          id
+          by
+          date
+        }
+        method
+        netWorth
+        grantorName
+        assetsUpload {
+          type
+          fileInfo {
+            fileId
+            fileName
+          }
+        }
+        verifier {
+          role
+          email
+        }
+      }
+    }
+  }
+`;
+
 export const createUserMutation = gql`
   mutation createUser($name: String!, $email: String!, $city: String!, $state: String!, $ssn: String!, $dateOfBirth: DateTime!, ) {
     createUser(name: $name, email: $email, city: $city, state: $state, ssn: $ssn, dateOfBirth: $dateOfBirth) {

@@ -19,24 +19,19 @@ class KeyTerms extends Component {
             <Grid.Column>
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Investment Type </b>
-                  {campaign && campaign.keyTerms &&
-                     campaign.keyTerms.securities ?
-                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
-                     :
-                     ''}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
                     content="Lorem Ipsum"
                     position="top center"
                   />
                 </Statistic.Label>
-                {/* <Statistic.Value>
-                  {campaign && campaign.selectedOffer &&
-                     campaign.selectedOffer.structure ?
-                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.selectedOffer.structure]
+                <Statistic.Value>
+                  {campaign && campaign.keyTerms &&
+                     campaign.keyTerms.securities ?
+                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
                      :
                      ''}
-                </Statistic.Value> */}
+                </Statistic.Value>
               </Statistic>
             </Grid.Column>
             <Grid.Column>
@@ -70,10 +65,10 @@ class KeyTerms extends Component {
             </Grid.Column>
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label><b>Min Investment</b>{''}
+                <Statistic.Label><b>Min Investment</b>{' '}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content="Lorem Ipsum"
+                    content="The required minimum investment per investor in this offering."
                     position="top center"
                     hoverable
                   />

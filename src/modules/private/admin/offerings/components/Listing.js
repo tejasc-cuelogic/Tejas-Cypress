@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
+import { STAGES } from '../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -48,6 +49,7 @@ export default class Listing extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Created Date</Table.HeaderCell>
                 <Table.HeaderCell>Days till launch</Table.HeaderCell>
                 <Table.HeaderCell>Lead</Table.HeaderCell>
@@ -67,6 +69,11 @@ export default class Listing extends Component {
                           (offering.keyTerms && offering.keyTerms.legalBusinessName) ? offering.keyTerms.legalBusinessName : 'N/A'
                         ))}
                       </b>
+                    </Table.Cell>
+                    <Table.Cell className="text-capitalize">
+                      {offering && offering.stage ?
+                        STAGES[offering.stage].label : '-'
+                      }
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
