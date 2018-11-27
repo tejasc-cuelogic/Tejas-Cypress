@@ -323,6 +323,7 @@ footer{
 }
 .offering-wrapper footer {
 	padding: @50px @40px;
+	flex-grow: 0;
 	.footer-left-nav {
 		flex-grow: 1;
 		@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
@@ -490,6 +491,8 @@ footer{
 		background-color: @neutral-midwhite;
 		padding-left: 280px;
 		min-height: ~'calc(100vh - 58px)';
+		display: flex;
+		flex-direction: column;
 		@media only screen and (max-width : @largestMobileScreen){
 			padding-left: 0;
 			padding-bottom: 30px;
@@ -512,6 +515,7 @@ footer{
 		}
 		.campaign-content-wrapper {
 			padding: @40px;
+			flex-grow: 1;
 			// background-color: @white;
 			@media only screen and (max-width : @largestMobileScreen){
 				padding: @40px 0;

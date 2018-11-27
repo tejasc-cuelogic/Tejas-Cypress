@@ -18,6 +18,7 @@ export default class ManualForm extends Component {
     this.props[accTypeStore].createAccount(currentStep, 'draft').then(() => {
       if (investmentAccType === 'individual') {
         this.props[accTypeStore].setStepToBeRendered(1);
+        this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
       } else {
         this.props.bankAccountStore.setShowAddFunds();
       }

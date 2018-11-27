@@ -6,7 +6,7 @@ import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Divider, Message, ButtonGroup } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { MaskedInput, FormRadioGroup } from '../../../theme/form';
-import { ListErrors } from '../../../theme/shared';
+import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import MigratedUserPhoneNumber from './MigratedUserPhoneNumber';
 
 @inject('uiStore', 'identityStore', 'userDetailsStore')
@@ -48,12 +48,7 @@ export default class ConfirmPhoneNumber extends Component {
     } else {
       this.props.identityStore.confirmPhoneNumber().then(() => {
         Helper.toast('Phone number is confirmed.', 'success');
-        const { accountForWhichCipExpired } = this.props.userDetailsStore;
-        if (accountForWhichCipExpired) {
-          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
-        } else {
-          this.props.history.push('/app/summary/establish-profile');
-        }
+        this.props.identityStore.setIsOptConfirmed(true);
       })
         .catch(() => { });
     }
@@ -91,6 +86,16 @@ export default class ConfirmPhoneNumber extends Component {
     }
     this.setConfirmPhoneFormData();
   }
+
+  handleContinue = () => {
+    const { accountForWhichCipExpired } = this.props.userDetailsStore;
+    if (accountForWhichCipExpired) {
+      this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+    } else {
+      this.props.history.push('/app/summary/establish-profile');
+    }
+  }
+
   render() {
     const {
       ID_VERIFICATION_FRM,
@@ -100,11 +105,14 @@ export default class ConfirmPhoneNumber extends Component {
       reSendVerificationCode,
       confirmMigratedUserPhoneNumber,
       personalInfoChange,
+      isOptConfirmed,
     } = this.props.identityStore;
     const { errors, editMode } = this.props.uiStore;
     const { signupStatus } = this.props.userDetailsStore;
     if (signupStatus.isMigratedFullAccount && !confirmMigratedUserPhoneNumber) {
       return <MigratedUserPhoneNumber />;
+    } else if (isOptConfirmed) {
+      return <SuccessScreen successMsg="Your phone number has been confirmed." handleContinue={this.handleContinue} />;
     }
     return (
       <Modal size="mini" open closeIcon onClose={() => this.handleCloseModal()} closeOnRootNodeClick={false} closeOnDimmerClick={false}>
@@ -121,11 +129,6 @@ export default class ConfirmPhoneNumber extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {/* {errors &&
-            <Message error>
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
-          } */}
           <MaskedInput
             hidelabel
             value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
@@ -162,15 +165,9 @@ export default class ConfirmPhoneNumber extends Component {
             }
             {errors &&
               <Message error textAlign="left" className="mb-40">
-                <ListErrors errors={[errors.message]} />
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
             }
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            {/* <Header as="h3" className="success-msg mb-60">
-              <Icon className="ns-check-circle" color="green" />
-              Your phone number has been confirmed.
-            </Header> */}
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
             {editMode &&
               <div className="field">
                 <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
@@ -193,12 +190,6 @@ export default class ConfirmPhoneNumber extends Component {
             }
           </Form>
         </Modal.Content>
-        {/* <Modal.Actions className="signup-actions">
-          <Button type="button" className="link-button"
-          content="Resend the code to my phone"
-          loading={reSendVerificationCode && this.props.uiStore.inProgress}
-          onClick={() => this.startPhoneVerification()} />
-        </Modal.Actions> */}
       </Modal>
     );
   }

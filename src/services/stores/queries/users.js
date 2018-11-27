@@ -75,36 +75,6 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
-            accreditation {
-              status
-              expiration
-              requestDate
-              approved {
-                id
-                by
-                date
-                comment
-              }
-              update {
-                id
-                by
-                date
-              }
-              method
-              netWorth
-              grantorName
-              assetsUpload {
-                type
-                fileInfo {
-                  fileId
-                  fileName
-                }
-              }
-              verifier {
-                role
-                email
-              }
-            }
             limits {
               income
               netWorth
@@ -157,13 +127,6 @@ export const userDetailsQuery = gql`
                 fileHandle
               }
             }
-            annualIncome
-            netWorth
-            netAssets
-            cfInvestment {
-              dateOfInvestment
-              amount
-            }
             initialDepositAmount
             linkedBank {
               bankName
@@ -182,36 +145,6 @@ export const userDetailsQuery = gql`
       }
       locked {
         lock
-      }
-      accreditation {
-        status
-        expiration
-        requestDate
-        approved {
-          id
-          by
-          date
-          comment
-        }
-        update {
-          id
-          by
-          date
-        }
-        method
-        netWorth
-        grantorName
-        assetsUpload {
-          type
-          fileInfo {
-            fileId
-            fileName
-          }
-        }
-        verifier {
-          role
-          email
-        }
       }
       created {
         date
@@ -257,6 +190,87 @@ export const userDetailsQuery = gql`
         isComfortable
       }
       mfaMode
+    }
+  }
+`;
+
+export const userAccreditationQuery = gql`
+  query userAccreditationQuery($userId: ID!) {
+    user(id: $userId) {
+      id
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            accreditation {
+              status
+              expiration
+              requestDate
+              reviewed {
+                id
+                by
+                date
+                comment
+              }
+              update {
+                id
+                by
+                date
+              }
+              method
+              netWorth
+              grantorName
+              assetsUpload {
+                type
+                fileInfo {
+                  fileId
+                  fileName
+                }
+              }
+              verifier {
+                role
+                email
+              }
+            }
+            name
+            isTrust
+            accountId
+            status
+            }
+          }
+        }
+      accreditation {
+        status
+        expiration
+        requestDate
+        reviewed {
+          id
+          by
+          date
+          comment
+        }
+        update {
+          id
+          by
+          date
+        }
+        method
+        netWorth
+        grantorName
+        assetsUpload {
+          type
+          fileInfo {
+            fileId
+            fileName
+          }
+        }
+        verifier {
+          role
+          email
+        }
+      }
     }
   }
 `;

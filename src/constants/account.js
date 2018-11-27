@@ -290,8 +290,8 @@ export const IRA_FIN_INFO = {
     placeHolder: 'Your networth',
     maxLength: 15,
   },
-  annualIncome: {
-    key: 'annualIncome',
+  income: {
+    key: 'income',
     value: '',
     error: undefined,
     rule: 'required|numeric',

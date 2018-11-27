@@ -10,7 +10,7 @@ import Helper from '../../../../../../../helper/utility';
 export default class FinancialInformation extends React.Component {
   componentWillMount() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
-    if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netWorth.value !== '' && FIN_INFO_FRM.fields.annualIncome.value !== ''))) && !(FIN_INFO_FRM.fields.netWorth.value === '' && FIN_INFO_FRM.fields.annualIncome.value === '')) {
+    if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netWorth.value !== '' && FIN_INFO_FRM.fields.income.value !== ''))) && !(FIN_INFO_FRM.fields.netWorth.value === '' && FIN_INFO_FRM.fields.income.value === '')) {
       finInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netWorth.value }, name: 'netWorth' });
     }
   }
@@ -23,7 +23,7 @@ export default class FinancialInformation extends React.Component {
         <Form error>
           <div className="field-wrap">
             {
-              ['netWorth', 'annualIncome'].map(field => (
+              ['netWorth', 'income'].map(field => (
                 <MaskedInput
                   key={field}
                   type="tel"

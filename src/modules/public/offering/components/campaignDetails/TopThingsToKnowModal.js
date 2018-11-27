@@ -29,7 +29,6 @@ class TopThingsToKnowModal extends Component {
             </p>
             <b>Industry: </b>
             {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}<br />
-            <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign && campaign.offering && campaign.offering.about && campaign.offering.about.theCompany }} />
             <p>
               {campaign && campaign.offering && campaign.offering.overview &&
                 campaign.offering.overview.highlight ?
