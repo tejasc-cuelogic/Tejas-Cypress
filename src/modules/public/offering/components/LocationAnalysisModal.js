@@ -19,7 +19,7 @@ class LocationAnalysisModal extends Component {
       infinite: false,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: false,
+      arrows: true,
       adaptiveHeight: true,
     };
     const galleryArray = campaign && campaign.media && campaign.media.location &&
