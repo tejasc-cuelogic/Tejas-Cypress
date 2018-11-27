@@ -41,7 +41,7 @@ class LocationAnalysisModal extends Component {
                 <Container fluid>
                   <NsCarousel
                     {...settings}
-                    thumbs={3}
+                    thumbs={4}
                     customThumSliderClass
                     imageCount={galleryArray.length}
                     isTablet={isMobile}
