@@ -65,6 +65,9 @@ h6{
 *:focus{
 	outline:none;
 }
+.mb-0{
+	margin-bottom:0 !important;
+}
 .mb-10 {
 	margin-bottom: @10px !important;
 }
@@ -1268,6 +1271,32 @@ a.icon-link {
 			padding: @5px 0;
 			width: 130px;
 		}
+	}
+}
+.error-page{
+	padding:@80px @14px;
+	text-align:center;
+	h1.ui.header{
+		font-size:@90px !important;
+		font-weight:@bold;
+		line-height:1;
+		margin-bottom:@30px;
+		.sub.header{
+			font-size:0.3em;
+            font-weight:@fontMedium;
+		}
+	}
+	p{
+		font-size:@24px;
+		&.small{
+			font-size:@20px;
+			margin:0;
+		}
+	}
+	.ui.divider{
+		width:290px;
+		margin-left:auto;
+		margin-right:auto;
 	}
 }
 /* END <== PUBLIC PAGES UI STYLES */
