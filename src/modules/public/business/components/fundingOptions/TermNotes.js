@@ -1,19 +1,13 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
 import { Header, List, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
-@inject('campaignStore')
-@observer
 export default class TermNotes extends Component {
   render() {
     return (
       <Grid reversed="computer" doubling columns={2} relaxed="very">
         <Grid.Column>
-          {this.props.campaignStore.isRenderRechart ?
-            <RevenueChart />
-            :
-            null}
+          <RevenueChart />
           <p className="caption-note">
             This example is for illustrative purposes only and does not reflect an actual
             deal or performance. The terms of each deal may differ. Payments are not
