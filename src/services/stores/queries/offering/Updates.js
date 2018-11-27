@@ -10,6 +10,10 @@ export const allUpdates = gql`
       updated {
         date
       }
+      approved {
+        by
+        date
+      }
       status
       scope
       content
@@ -35,6 +39,10 @@ export const getUpdate = gql`
       status
       scope
       content
+      approved {
+        by
+        date
+      }
     }
   }
 `;
@@ -47,6 +55,29 @@ export const editUpdate = gql`
     ) {
       id
       title
+      approved {
+        by
+        date
+      }
     }
   }
 `;
+
+export const approveUpdate = gql`
+mutation _offeringUpdatesApprovedByInfo($id: ID!) {
+  offeringUpdatesApprovedByInfo(id: $id) {
+    id
+    title
+    status
+    scope
+    content
+    approved {
+      by
+      date
+      __typename
+    }
+    __typename
+  }
+}
+`;
+

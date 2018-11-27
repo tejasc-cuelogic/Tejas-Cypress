@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Route } from 'react-router-dom';
 import { Form, Grid, Button, Modal } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -45,7 +44,7 @@ export default class BonusRewards extends Component {
                 addon={
                   <Grid.Column width={5} textAlign="right">
                     <Modal dimmer="inverted" onClose={this.close} size="large" trigger={<Button color="green" size="small">Add new Update</Button>} closeIcon >
-                      <NewUpdate match={match} />
+                      <NewUpdate match={match} refLink={match.url} id="new" />
                     </Modal>
                   </Grid.Column>
                 }
@@ -55,7 +54,6 @@ export default class BonusRewards extends Component {
         </Form>
         <div className={isIssuer ? 'ui card fluid' : ''}>
           <Listing data={updates} match={match} />
-          <Route path={`${match.url}/:id`} render={props => <NewUpdate refLink={match.url} {...props} />} />
         </div>
       </Aux>
     );
