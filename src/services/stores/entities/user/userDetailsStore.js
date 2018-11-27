@@ -241,7 +241,7 @@ export class UserDetailsStore {
 
   @computed
   get pendingStep() {
-    let routingUrl = '';
+    let routingUrl = 'summary';
     if (this.signupStatus.isMigratedUser) {
       if (this.signupStatus.isMigratedFullAccount &&
         (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
