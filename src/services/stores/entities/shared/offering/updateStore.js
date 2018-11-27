@@ -6,7 +6,7 @@ import Helper from '../../../../../helper/utility';
 import { UPDATES } from '../../../../constants/offering';
 import { offeringCreationStore } from '../../../index';
 import {
-  allUpdates, newUpdate, getUpdate, editUpdate,
+  allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate,
 } from '../../../queries/offering/Updates';
 
 export class UpdateStore {
@@ -47,7 +47,7 @@ export class UpdateStore {
     }
 
     @action
-    save = (id, status) => {
+    save = (id, status, isManager = false, isAlreadyPublished = false) => {
       const data = Validator.ExtractValues(this.PBUILDER_FRM.fields);
       const variables = { offerId: offeringCreationStore.currentOfferingId };
       data.status = status;
@@ -62,10 +62,29 @@ export class UpdateStore {
             { ...{ updatesInput: data }, id },
           refetchQueries: [{ query: allUpdates, variables }],
         })
-        .then(() => {
-          Helper.toast('Update added.', 'success');
+        .then((res) => {
+          if (isManager && !isAlreadyPublished) {
+            const UpdateId = res.data.createOfferingUpdates ?
+              res.data.createOfferingUpdates.id : res.data.updateOfferingUpdatesInfo.id;
+            this.approveUpdate(UpdateId);
+          } else {
+            Helper.toast('Update added.', 'success');
+          }
           this.reset();
         })
+        .catch(res => Helper.toast(`${res} Error`, 'error'));
+    }
+
+    @action
+    approveUpdate = (id) => {
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
+      client.mutate({
+        mutation: approveUpdate,
+        variables: { id },
+        refetchQueries: [{ query: allUpdates, variables }],
+      }).then(() => {
+        Helper.toast('Update published.', 'success');
+      })
         .catch(() => Helper.toast('Error', 'error'));
     }
 
