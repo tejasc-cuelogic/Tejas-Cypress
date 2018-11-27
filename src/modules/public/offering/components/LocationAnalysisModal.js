@@ -19,13 +19,11 @@ class LocationAnalysisModal extends Component {
       infinite: false,
       slidesToShow: 1,
       slidesToScroll: 1,
-      arrows: false,
+      arrows: true,
       adaptiveHeight: true,
     };
     const galleryArray = campaign && campaign.media && campaign.media.location &&
       campaign.media.location.length ? campaign.media.location : [];
-    const galleryLength = galleryArray.length < 8 ? galleryArray.length : 8;
-    const tabGalleryLength = galleryArray < 4 ? galleryArray.length : 4;
     return (
       <Modal
         open
@@ -39,11 +37,11 @@ class LocationAnalysisModal extends Component {
         <Modal.Content scrolling>
           <Grid>
             <Grid.Row>
-              <Grid.Column computer={6} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
+              <Grid.Column computer={7} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
                 <Container fluid>
                   <NsCarousel
                     {...settings}
-                    thumbs={isMobile ? tabGalleryLength : galleryLength}
+                    thumbs={4}
                     customThumSliderClass
                     imageCount={galleryArray.length}
                     isTablet={isMobile}
