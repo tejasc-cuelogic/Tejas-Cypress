@@ -27,7 +27,7 @@ export default class ConfirmEmailAddress extends Component {
     }
   }
   componentWillUnmount() {
-    cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
+    // cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
     this.props.uiStore.clearErrors();
     this.props.identityStore.setIsOptConfirmed(false);
   }

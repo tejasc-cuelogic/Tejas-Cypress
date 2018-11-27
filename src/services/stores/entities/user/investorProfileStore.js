@@ -28,6 +28,13 @@ class InvestorProfileStore {
   @observable chkboxTicked = null;
   @observable stepToBeRendered = 0;
   @observable isInvestmentExperienceValid = true;
+  @observable finishInvestorProfileLater = false;
+
+  @action
+  setFinishInvestorProfileLater = () => {
+    this.finishInvestorProfileLater = true;
+  }
+
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;

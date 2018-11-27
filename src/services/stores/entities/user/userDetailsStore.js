@@ -159,6 +159,8 @@ export class UserDetailsStore {
       phoneVerification: 'FAIL',
       isMigratedUser: false,
       isMigratedFullAccount: false,
+      isCipDoneForMigratedUser: false,
+      isEmailConfirmed: false,
     };
     const validAccTypes = ['individual', 'ira', 'entity'];
     details.inActiveAccounts = [];
@@ -191,6 +193,10 @@ export class UserDetailsStore {
       this.userDetails.investorProfileData === null ?
         false : this.userDetails.investorProfileData ?
           !this.userDetails.investorProfileData.isPartialProfile : false;
+      details.isCipDoneForMigratedUser =
+      this.userDetails.cip && this.userDetails.cip.requestId !== null;
+      details.isEmailConfirmed = this.userDetails.email && this.userDetails.email.verified
+      && this.userDetails.email.verified !== null;
       details.finalStatus = (details.activeAccounts.length > 2 &&
         this.validAccStatus.includes(details.idVerification) &&
         details.phoneVerification === 'DONE');
@@ -241,38 +247,41 @@ export class UserDetailsStore {
 
   @computed
   get pendingStep() {
-    let routingUrl = '';
+    let routingUrl = '/app/summary';
     if (this.signupStatus.isMigratedUser) {
-      if (this.signupStatus.isMigratedFullAccount &&
+      if (this.userDetails.email &&
+        (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
+        routingUrl = '/auth/confirm-email';
+      } else if (this.signupStatus.isMigratedFullAccount &&
         (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
         if (this.signupStatus.phoneVerification !== 'DONE') {
-          routingUrl = 'summary/identity-verification/3';
+          routingUrl = '/app/summary/identity-verification/3';
         } else if (!this.signupStatus.investorProfileCompleted) {
-          routingUrl = 'summary/establish-profile';
+          routingUrl = '/app/summary/establish-profile';
         }
       } else {
-        routingUrl = 'summary/identity-verification/0';
+        routingUrl = '/app/summary/identity-verification/0';
       }
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification)) {
-      routingUrl = 'summary/identity-verification/0';
+      routingUrl = '/app/summary/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = 'summary/identity-verification/3';
+      routingUrl = '/app/summary/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
-      routingUrl = 'summary/establish-profile';
+      routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(this.signupStatus.roles)) {
-      routingUrl = 'summary/account-creation';
+      routingUrl = '/app/summary/account-creation';
     } else if (this.signupStatus.partialAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (this.signupStatus.inActiveAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
     } else {
-      routingUrl = 'summary';
+      routingUrl = '/app/summary';
     }
     return routingUrl;
   }
@@ -341,6 +350,15 @@ export class UserDetailsStore {
   @action
   setAccountForWhichCipExpired = (accountName) => {
     this.accountForWhichCipExpired = accountName;
+  }
+
+  @computed get isBasicVerDoneForMigratedFullUser() {
+    if (this.signupStatus.phoneVerification === 'DONE' &&
+    this.signupStatus.isEmailConfirmed &&
+    this.signupStatus.isCipDoneForMigratedUser) {
+      return true;
+    }
+    return false;
   }
 }
 
