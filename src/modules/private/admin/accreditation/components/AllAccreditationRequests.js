@@ -59,7 +59,7 @@ export default class AllAccreditationRequests extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.assetsUpload && accreditation.assetsUpload.length ?
-                        <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].type === 'ASSETS' ? accreditation.assetsUpload[0].fileInfo.fileHandle.boxFolderId : accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
+                        <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
                       : '-'
                       }
                     </Table.Cell>
