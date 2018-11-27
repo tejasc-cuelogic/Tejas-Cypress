@@ -8,7 +8,8 @@ export default class NsPagination extends Component {
     skip: this.props.meta.requestState.skip || 0,
     first: this.props.meta.requestState.perPage || 10,
     currentPageNo: this.props.meta.requestState.page || 1,
-    totalPages: Math.ceil(this.props.meta.totalRecords / this.props.meta.requestState.perPage),
+    totalPages: this.props.meta.totalRecords > this.props.meta.requestState.perPage ?
+      Math.ceil(this.props.meta.totalRecords / this.props.meta.requestState.perPage) : 1,
     stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
   };
   pageChangeHandler = (e) => {
