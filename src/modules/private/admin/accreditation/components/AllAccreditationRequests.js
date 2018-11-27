@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Actions from './Actions';
@@ -9,10 +9,13 @@ import { ACCREDITATION_METHOD_ENUMS } from '../../../../../services/constants/ac
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 
 @inject('accreditationStore')
+@withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
   componentWillMount() {
-    this.props.accreditationStore.initRequest();
+    if (this.props.match.isExact) {
+      this.props.accreditationStore.initRequest();
+    }
   }
   paginate = params => this.props.accreditationStore.initRequest(params);
   render() {
@@ -56,7 +59,7 @@ export default class AllAccreditationRequests extends Component {
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.assetsUpload && accreditation.assetsUpload.length ?
-                        <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].type === 'ASSETS' ? accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId : accreditation.assetsUpload[0].fileInfo.fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
+                        <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].type === 'ASSETS' ? accreditation.assetsUpload[0].fileInfo.fileHandle.boxFolderId : accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
                       : '-'
                       }
                     </Table.Cell>

@@ -8,7 +8,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../../index';
-import { updateAccreditation, listAccreditation } from '../../../queries/accreditation';
+import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
@@ -67,6 +67,10 @@ export class AccreditationStore {
     });
   }
 
+  @action
+  resetModalForm = () => {
+    this.CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
+  }
   @computed get count() {
     return (this.data.data
       && this.data.data.listAccreditation
@@ -224,7 +228,8 @@ export class AccreditationStore {
   @action
   setInitiateSrch = (name, value) => {
     if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = moment(value.formattedValue, 'MM-DD-YYY').toISOString();
+      const date = name === 'startDate' ? moment(value.formattedValue).add(1, 'day').startOf('day') : moment(value.formattedValue).add(1, 'day').endOf('day');
+      this.requestState.search[name] = moment(date).toISOString();
       if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
         const srchParams = { ...this.requestState.search };
         this.initiateSearch(srchParams);
@@ -405,32 +410,27 @@ export class AccreditationStore {
   @action
   updateAccreditationAction = (accreditationAction, accountId, userId, accountType) => {
     uiStore.setProgress();
-    const field = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
+    const comment = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateAccreditation,
+          mutation: approveOrDeclineForAccreditationRequest,
           variables: {
             action: accreditationAction,
             accountId,
             userId,
             accountType,
-            field,
+            comment: comment.justifyDescription,
           },
-          // refetchQueries: [{
-          //   query: userDetailsQuery,
-          //   variables: {
-          //     userId: userDetailsStore.currentUserId,
-          //   },
-          // }],
+          // refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
         })
-        .then(() => resolve())
+        .then(() => setTimeout(() => { resolve(); }, 1000))
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject();
-        })
-        .finally(() => uiStore.setProgress(false));
+          uiStore.setProgress(false);
+        });
     });
   }
 

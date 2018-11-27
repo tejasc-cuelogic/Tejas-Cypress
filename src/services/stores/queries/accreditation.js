@@ -12,6 +12,18 @@ export const updateAccreditation = gql`
 }
 `;
 
+export const approveOrDeclineForAccreditationRequest = gql`
+  mutation _approveOrDeclineForAccreditationRequest($userId: String!, $accountId: String, $accountType: InvestorAccountTypeEnum, $action: AccreditationStatus!, $comment: String) {
+    approveOrDeclineForAccreditationRequest (
+    userId: $userId
+    accountId: $accountId
+    accountType: $accountType
+    action: $action
+    comment: $comment
+  )
+}
+`;
+
 export const listAccreditation = gql`
   query listAccreditation($page: Int, $search: String, $method: FilterAccreditationMethodEnum, $type: UserAccreditationMethodEnum, $accountCreateFromDate: String, $accountCreateToDate: String) {
   listAccreditation (

@@ -19,6 +19,7 @@ export default class FinancialInfo extends Component {
       this.props.accreditationStore.initiateAccreditation();
     });
   }
+  // eslint-disable-next-line react/sort-comp
   submit = (e) => {
     e.preventDefault();
     this.props.investmentLimitStore.updateFinInfo();
@@ -38,6 +39,16 @@ export default class FinancialInfo extends Component {
     } else {
       this.props.history.push(`${this.props.match.url}/verify-accreditation/${accountId}/${accountType}`);
     }
+  }
+  getStatus = (accName) => {
+    let status = '';
+    status = accName ? (accName.status === 'REQUESTED' && accName.expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accName.expiration)) === 0)) ? 'Expired' : (accName.status && ACCREDITATION_STATUS_LABEL[accName.status]) : '-';
+    return status;
+  }
+  getDate = (accName) => {
+    let date = '';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.formatedDate(accName.requestDate) : accName && (accName.status === 'APPROVED' || accName.status === 'DECLINED') && accName.reviewed && accName.reviewed.date ? DataFormatter.formatedDate(accName.reviewed.date) : '-';
+    return date;
   }
   render() {
     const {
@@ -114,9 +125,9 @@ export default class FinancialInfo extends Component {
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <dd className="negative-text">{accreditationData[account.name] ? (accreditationData[account.name].expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accreditationData[account.name].expiration)) === 0)) ? 'Expired' : (accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]) : '-'}</dd>
+                            <dd className="negative-text">{this.getStatus(accreditationData[account.name])}</dd>
                             <dt>Date :</dt>
-                            <dd>{accreditationData[account.name] && accreditationData[account.name].requestDate ? DataFormatter.formatedDate(accreditationData[account.name].requestDate) : '-'}</dd>
+                            <dd>{this.getDate(accreditationData[account.name])}</dd>
                           </dl>
                         </Card.Content>
                         :
