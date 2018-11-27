@@ -7,7 +7,7 @@
         .ui.input.ReactPasswordStrength{
             flex-direction:column;
             border:none;
-            >input[type=password]{
+            >input[type=password], >input[type=text]{
                 padding-right:@28px;
             }
             .ReactPasswordStrength-strength-bar{
@@ -42,14 +42,14 @@
                 width:~"calc(100% - 52px)";
             }
             ~ i.icon.ns-view{
-                width:30px;
+                // width:30px;
                 height:auto;
-                margin:0;
-                padding:@8px 0;
+                margin:@10px 0;
+                padding:0;
                 position:absolute;
                 right:0;
                 background-color:@white;
-                text-align:right;
+                // text-align:right;
                 &.active{
                     color:@primary-one;
                 }

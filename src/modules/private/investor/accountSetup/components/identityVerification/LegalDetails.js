@@ -78,7 +78,7 @@ const LegalDetails = observer(({
             options={US_STATES_FOR_INVESTOR}
             search
             selection
-            placeholder="NY"
+            placeholder="Select"
             // onChange={(e, res) => userEleChange(e, res, 'dropdown')}
             onChange={change}
           />

@@ -96,7 +96,7 @@
 			border-radius:@4px !important;
 			margin-bottom:@3px;
 			font-weight:400;
-			>.text{
+			&.ui.dropdown>.text{
 				max-width:142px;
 			}
 			// &:first-of-type{
@@ -210,12 +210,15 @@
 				display:none;
 			}
 		}
-		~ .ui.button.collapseIcon{
+		~ .ui.button.collapseIcon, ~ a.add-account{
 			width:63px;
 			span{
 				display:none;
 			}
 		}
+	}
+	&.push.animating .item .icon.dropdown{
+		display:none;
 	}
 	&.overlay{
 		width:260px;
@@ -336,9 +339,20 @@
 		z-index:999;
 		background-color:@white;
 		cursor:pointer;
+		transition:all .5s ease;
+		overflow:hidden;
 		> .icon{
+			float:left;
+			display:block;
 			margin-right:@13px;
 			height:auto;
+		}
+		>span{
+			display:block;
+			margin-left:@30px;
+			overflow:hidden;
+			white-space:nowrap;
+			text-overflow:ellipsis;
 		}
 	}
 	~ .ui.button.collapseIcon{
