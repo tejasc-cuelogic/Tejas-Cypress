@@ -422,9 +422,9 @@ export class AccreditationStore {
             accountType,
             comment: comment.justifyDescription,
           },
-          // refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
+          refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
         })
-        .then(() => setTimeout(() => { resolve(); }, 1000))
+        .then(() => resolve())
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
