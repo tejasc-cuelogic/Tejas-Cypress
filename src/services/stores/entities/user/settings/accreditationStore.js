@@ -518,6 +518,7 @@ export class AccreditationStore {
     }
     if (form === 'TRUST_ENTITY_ACCREDITATION_FRM') {
       this.setTrustEntityAccreditationData(appData.accreditation);
+      this.checkFormIsValid('ACCREDITATION_FORM', false, false);
     } else if (form === 'INCOME_EVIDENCE_FORM') {
       this.setIncomeEvidenceData(appData.accreditation);
     } else if (form !== 'INCOME_UPLOAD_DOC_FORM' && form !== 'ASSETS_UPLOAD_DOC_FORM') {
