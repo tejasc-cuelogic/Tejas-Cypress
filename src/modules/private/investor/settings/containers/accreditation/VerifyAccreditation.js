@@ -21,6 +21,9 @@ export default class Accreditation extends React.Component {
       this.props.accreditationStore.setFormData('VERIFICATION_REQUEST_FORM', 'accreditation', accountType);
       this.props.accreditationStore.setFormData('INCOME_UPLOAD_DOC_FORM', 'accreditation', accountType);
       this.props.accreditationStore.setFormData('ASSETS_UPLOAD_DOC_FORM', 'accreditation', accountType);
+      if (this.props.accreditationStore.firstInit === '') {
+        this.props.accreditationStore.setFieldVal('firstInit', true);
+      }
     });
   }
   handleStepChange = (step) => {
