@@ -525,6 +525,8 @@ export class AccreditationStore {
       this[form] = Validator.setFormData(this[form], appData, ref);
     } else {
       this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
+      this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+      this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
     }
     this.checkFormValid(form, false, false);
     return false;
