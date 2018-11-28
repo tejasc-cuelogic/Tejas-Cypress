@@ -28,6 +28,10 @@ class InvestorSignup extends Component {
           const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
           const userCredentials = { email: email.value, password: btoa(password.value) };
           cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+          // this.props.identityStore.startPhoneVerification().then(() => {
+          //   this.props.history.push('/auth/confirm-email');
+          // })
+          //   .catch(() => {});
           this.props.history.push('/auth/confirm-email');
         }
       })

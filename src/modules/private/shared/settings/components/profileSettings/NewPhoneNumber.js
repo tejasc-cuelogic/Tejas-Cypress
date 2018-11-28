@@ -17,8 +17,11 @@ export default class NewPhoneNumber extends Component {
     this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
   handleChangePhoneNumber = () => {
-    this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
-    this.props.identityStore.startPhoneVerification().then(() => {
+    const { resetFormData, ID_VERIFICATION_FRM } = this.props.identityStore;
+    resetFormData('ID_PHONE_VERIFICATION');
+    const { phoneNumber } = ID_VERIFICATION_FRM.fields;
+    const phoneNumberValue = phoneNumber.value;
+    this.props.identityStore.startPhoneVerification('NEW', phoneNumberValue).then(() => {
       this.props.history.push('/app/profile-settings/profile-data/confirm');
     })
       .catch(() => {});
@@ -38,7 +41,7 @@ export default class NewPhoneNumber extends Component {
         <Modal.Content>
           {errors &&
             <Message error >
-              <ListErrors errors={[errors.message]} />
+              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
             </Message>
           }
           <Form error onSubmit={this.handleChangePhoneNumber}>

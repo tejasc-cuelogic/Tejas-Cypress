@@ -4,7 +4,7 @@ import { mapValues, keyBy, find, flatMap, map, omit } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
-import { uiStore, userStore, userDetailsStore } from '../../index';
+import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
 import { verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -128,7 +128,7 @@ export class IdentityStore {
   };
 
   @action
-  resetFormData(form) {
+  resetFormData = (form) => {
     const resettedForm = FormValidator.resetFormData(this[form]);
     this[form] = resettedForm;
   }
@@ -346,7 +346,7 @@ export class IdentityStore {
     });
   }
 
-  startPhoneVerification = () => {
+  startPhoneVerification = (type, address = undefined) => {
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
@@ -355,8 +355,9 @@ export class IdentityStore {
         .mutate({
           mutation: requestOtp,
           variables: {
-            userId: userStore.currentUser.sub,
-            type: mfaMethod.value !== '' ? mfaMethod.value : null,
+            userId: userStore.currentUser.sub || authStore.userId,
+            type: type || (mfaMethod.value !== '' ? mfaMethod.value : null),
+            address,
           },
         })
         .then((result) => {
@@ -365,7 +366,8 @@ export class IdentityStore {
           resolve();
         })
         .catch((err) => {
-          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          // uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
         .finally(() => {
@@ -432,13 +434,21 @@ export class IdentityStore {
         .mutate({
           mutation: verifyOtp,
           variables: {
-            requestId: this.requestOtpResponse,
+            resourceId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
-        .then(() => {
-          this.updateUserPhoneDetails();
-          resolve();
+        .then((result) => {
+          if (result.data.verifyOtp) {
+            this.updateUserPhoneDetails();
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            reject();
+          }
         })
         .catch(action((err) => {
           uiStore.setErrors(JSON.stringify(err.message));

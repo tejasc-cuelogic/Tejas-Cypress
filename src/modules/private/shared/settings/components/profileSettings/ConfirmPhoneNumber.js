@@ -15,9 +15,10 @@ export default class ConfirmPhoneNumber extends Component {
   componentWillMount() {
     const { identityStore, userDetailsStore } = this.props;
     if (identityStore.ID_VERIFICATION_FRM.fields.phoneNumber.value === '') {
-      if (userDetailsStore.userDetails.contactDetails.phone) {
+      if (userDetailsStore.userDetails && userDetailsStore.userDetails.phone
+        && userDetailsStore.userDetails.phone.number) {
         const fieldValue =
-        Helper.maskPhoneNumber(userDetailsStore.userDetails.contactDetails.phone.number);
+        Helper.maskPhoneNumber(userDetailsStore.userDetails.phone.number);
         this.props.identityStore.phoneNumberChange(fieldValue);
       }
     }
@@ -132,7 +133,7 @@ export default class ConfirmPhoneNumber extends Component {
             </Form.Field>
             {errors &&
               <Message error textAlign="left" className="mb-40">
-                <ListErrors errors={[errors.message]} />
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
             }
             {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}

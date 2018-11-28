@@ -226,7 +226,7 @@ export class AuthStore {
         .mutate({
           mutation: verifyAndUpdateEmail,
           variables: {
-            resourceId: identityStore.requestOtpResponse.resourceId,
+            resourceId: identityStore.requestOtpResponse,
             confirmationCode: this.CONFIRM_FRM.fields.code.value,
           },
         })
@@ -253,7 +253,8 @@ export class AuthStore {
             newEmail: this.CONFIRM_FRM.fields.email.value,
           },
         })
-        .then(() => {
+        .then((result) => {
+          identityStore.setRequestOtpResponse(result.data.requestEmailChange);
           resolve();
         })
         .catch((err) => {
