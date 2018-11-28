@@ -20,37 +20,11 @@ const data = [
 @inject('campaignStore')
 @observer
 export default class RevenueChart extends Component {
-  // componentDidMount() {
-  //   this.props.campaignStore.setFieldValue('isRenderRechart', false);
-  // }
-  state = {
-    notusedstate: '456',
-  };
-  componentWillMount() {
-    console.log('call component will mount');
-    this.setState({
-      notusedstate: '123',
-    });
-    console.log(this.state.notusedstate);
-  }
-  shouldComponentUpdate(nextProps) {
-    console.log('this.props==>', this.props);
-    console.log('nextProps==>', nextProps);
-    // return !deepEquals(render(this.props), render(nextProps));
-    return nextProps.data !== this.props.data;
-  }
-  componentDidUpdate(prevProps) {
-    // Manipulate this._ctx here
-    console.log('prevProps', prevProps);
-  }
   render() {
     const style = {
       top: 0,
       right: 0,
     };
-    // if (!this.props.campaignStore.isRenderRechart) {
-    //   return null;
-    // }
     return (
       <ResponsiveContainer height={220}>
         <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>
