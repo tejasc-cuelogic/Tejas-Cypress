@@ -144,9 +144,10 @@ export const requestEmailChnage = gql`
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($confirmationCode: String!) {
+  mutation _verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
     verifyAndUpdateEmail(
       confirmationCode: $confirmationCode
+      resourceId: $resourceId
     ){
       id
       email {
