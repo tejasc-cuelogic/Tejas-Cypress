@@ -89,6 +89,7 @@ class offerDetails extends Component {
             <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
             <Route path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
             <Route path={`${match.url}/congratulation`} component={Congratulation} />
+            <Route component={NotFound} />
           </Switch>
           <Responsive minWidth={768} as={Aux}>
             <Footer path={location.pathname} />
