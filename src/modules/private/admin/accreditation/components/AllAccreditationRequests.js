@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
 import { Route, withRouter } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Actions from './Actions';
 import ConfirmModel from './ConfirmModel';
-import { ACCREDITATION_METHOD_ENUMS } from '../../../../../services/constants/accreditation';
+import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../services/constants/accreditation';
 import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
+import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
 @withRouter
@@ -52,23 +54,41 @@ export default class AllAccreditationRequests extends Component {
                       <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}</p>
+                      <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
+                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') &&
+                          <Aux><br /><b>Net Worth: </b>
+                            {ACCREDITATION_NETWORTH_LABEL[accreditation.netWorth]}
+                          </Aux>
+                        }
+                      </p>
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ? 'Uploads' : 'Verifier'}</p>
+                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ? 'Uploads' : 'Verifier'}
+                        {accreditation.verifier &&
+                          <Aux>
+                            <br /><b>Role: </b> {accreditation.verifier.role}
+                            <br /><b>Email: </b> {accreditation.verifier.email}
+                          </Aux>
+                        }
+                      </p>
                     </Table.Cell>
                     <Table.Cell>
                       {accreditation.assetsUpload && accreditation.assetsUpload.length ?
                         <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
-                      : '-'
+                      : <p className="intro-text">N/A</p>
                       }
                     </Table.Cell>
-                    <Actions
-                      accountId={accreditation.accountId}
-                      userId={accreditation.userId}
-                      accountType={accreditation.accountType}
-                      {...this.props}
-                    />
+                    {accreditation.accreditationStatus === 'REQUESTED' ?
+                      <Actions
+                        accountId={accreditation.accountId}
+                        userId={accreditation.userId}
+                        accountType={accreditation.accountType}
+                        {...this.props}
+                      /> :
+                      <Table.Cell>
+                        <p className={`${accreditation.accreditationStatus === 'APPROVED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
+                      </Table.Cell>
+                    }
                   </Table.Row>
                 ))
               }
