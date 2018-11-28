@@ -12,3 +12,10 @@ export const ACCREDITATION_METHOD_ENUMS = {
   OWNERS_ACCREDITATED: 'Entity Owners Accredited',
   OWNERS_QUALIFIED: 'Entity Owners Qualified',
 };
+
+export const ACCREDITATION_NETWORTH_LABEL = {
+  FIVE_MILLION: '$5,000,000',
+  TWENTY_FIVE_MILLION: '$25,000,000',
+  TWO_MILLION: '$2,000,000',
+  ONE_MILLION: '$1,000,000',
+};

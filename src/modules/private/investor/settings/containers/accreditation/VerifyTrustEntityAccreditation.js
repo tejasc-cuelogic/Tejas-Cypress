@@ -65,7 +65,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           component: <Verification refLink={this.props.refLink} type={3} />,
         },
       ]
-      : ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME' ? [
+      : ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS' ? [
         { key: 'TRUST_ENTITY_ACCREDITATION_FRM' },
         { key: 'ACCREDITATION_FORM', component: <AccreditationMethod isTrust /> },
         { key: 'NET_WORTH_FORM', component: <NetWorth isTrust /> },

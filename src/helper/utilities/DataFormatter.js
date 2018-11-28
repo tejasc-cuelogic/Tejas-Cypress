@@ -41,7 +41,11 @@ class DataFormatter {
     }
     return diff;
   }
-
+  getDate = (date, iso = true, dayType = null) => {
+    let formatedDate = moment(this.formatedDate(date)).utc();
+    formatedDate = dayType === 'startDate' ? moment(formatedDate).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(formatedDate).add(1, 'day').endOf('day') : formatedDate;
+    return iso ? moment(formatedDate).toISOString() : formatedDate;
+  }
   formatedDate = date => moment(date).format('MM/DD/YYYY');
   QueryStringToJSON = (search) => {
     const pairs = search.slice(1).split('&');

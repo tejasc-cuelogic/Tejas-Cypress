@@ -30,6 +30,7 @@ export default class FinancialInfo extends Component {
     this.props.history.push(`${this.props.match.url}/update`);
   }
   handleVerifyAccreditation = (e, accountType, accountId) => {
+    e.preventDefault();
     if (accountType === 'entity') {
       if (this.props.userDetailsStore.isEntityTrust) {
         this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountId}/${accountType}`);
@@ -121,11 +122,11 @@ export default class FinancialInfo extends Component {
                         <Card.Content>
                           <Header as="h4">
                             Accreditation
-                            {'  '}<Button className="link-button" color="green" onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)}>Update accreditation</Button>
+                            <Link as={Button} to="/" className="link" onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)}><small>Update accreditation</small></Link>
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <dd className="negative-text">{this.getStatus(accreditationData[account.name])}</dd>
+                            <b><dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd></b>
                             <dt>Date :</dt>
                             <dd>{this.getDate(accreditationData[account.name])}</dd>
                           </dl>

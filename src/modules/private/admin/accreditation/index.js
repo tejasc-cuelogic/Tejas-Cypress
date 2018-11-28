@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import moment from 'moment';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllAccreditationRequests from './components/AllAccreditationRequests';
 import { ByKeyword } from '../../../../theme/form/Filters';
@@ -19,19 +20,12 @@ export default class CrowdPay extends Component {
       this.props.accreditationStore.setInitiateSrch('keyword', e.target.value);
     }
   }
-  dateFilterStart = (date) => {
-    if (date) {
-      this.props.accreditationStore.setInitiateSrch('startDate', date);
-    }
-  }
-
-  dateFilterEnd = (date) => {
-    if (date) {
-      this.props.accreditationStore.setInitiateSrch('endDate', date);
+  change = (date, field) => {
+    if (date && moment(date.formattedValue, 'MM-DD-YYYY', true).isValid()) {
+      this.props.accreditationStore.setInitiateSrch(field, date);
     }
   }
   render() {
-    // match
     const {
       requestState, filters, FILTER_FRM,
     } = this.props.accreditationStore;
@@ -54,8 +48,7 @@ export default class CrowdPay extends Component {
             filters={filters}
             setSearchParam={this.setSearchParam}
             executeSearch={this.executeSearch}
-            dateFilterStart={this.dateFilterStart}
-            dateFilterEnd={this.dateFilterEnd}
+            change={this.change}
             FILTER_FRM={FILTER_FRM}
           />
         }
