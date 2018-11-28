@@ -32,18 +32,16 @@ const LegalDetails = observer(({
             options={USER_TITLE}
             changed={change}
           />
-          {
-            ['firstLegalName', 'lastLegalName'].map(field => (
-              <FormInput
-                key={field}
-                type="text"
-                name={field}
-                fielddata={form.fields[field]}
-                changed={change}
-                showerror
-              />
-            ))
-          }
+          {['firstLegalName', 'lastLegalName'].map(field => (
+            <FormInput
+              key={field}
+              type="text"
+              name={field}
+              fielddata={form.fields[field]}
+              changed={change}
+              showerror
+            />
+          ))}
         </Form.Group>
         <AutoComplete
           name="residentalStreet"
@@ -72,8 +70,6 @@ const LegalDetails = observer(({
             // onChange={(e, res) => userEleChange(e, res, 'dropdown')}
             onChange={change}
           />
-        </Form.Group>
-        <Form.Group widths={2}>
           <MaskedInput
             key="zipCode"
             name="zipCode"
@@ -91,8 +87,6 @@ const LegalDetails = observer(({
             phoneNumber
             showerror
           />
-        </Form.Group>
-        <Form.Group widths={2}>
           <MaskedInput
             name="dateOfBirth"
             fielddata={form.fields.dateOfBirth}
