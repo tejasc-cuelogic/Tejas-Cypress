@@ -25,7 +25,7 @@ export const approveOrDeclineForAccreditationRequest = gql`
 `;
 
 export const listAccreditation = gql`
-  query listAccreditation($page: Int, $search: String, $method: FilterAccreditationMethodEnum, $type: UserAccreditationMethodEnum, $accountCreateFromDate: String, $accountCreateToDate: String) {
+  query listAccreditation($page: Int, $search: String, $method: FilterAccreditationMethodEnum, $type: UserAccreditationMethodEnum, $accountCreateFromDate: String, $accountCreateToDate: String, $status: AccreditationStatus) {
   listAccreditation (
     page: $page
     search: $search
@@ -33,6 +33,7 @@ export const listAccreditation = gql`
     type: $type
     accountCreateFromDate: $accountCreateFromDate
     accountCreateToDate: $accountCreateToDate
+    status: $status
   ) {
     accreditation {
       userId
@@ -45,6 +46,7 @@ export const listAccreditation = gql`
       requestDate
       method
       netWorth
+      grantorName
       assetsUpload {
         type
         fileInfo {

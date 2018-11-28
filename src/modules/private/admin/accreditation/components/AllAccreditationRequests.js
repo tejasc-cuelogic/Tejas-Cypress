@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Link } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Actions from './Actions';
@@ -37,6 +37,7 @@ export default class AllAccreditationRequests extends Component {
               <Table.Row>
                 <Table.HeaderCell>Investor Name</Table.HeaderCell>
                 <Table.HeaderCell>Requested Date</Table.HeaderCell>
+                <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
                 <Table.HeaderCell>Method</Table.HeaderCell>
                 <Table.HeaderCell>Box Link</Table.HeaderCell>
@@ -48,16 +49,30 @@ export default class AllAccreditationRequests extends Component {
                 accreditations.map(accreditation => (
                   <Table.Row key={accreditation.id}>
                     <Table.Cell>
-                      <p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p>
+                      <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
                       <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
+                    </Table.Cell>
+                    <Table.Cell textAlign="center">
+                      {accreditation.accountType ?
+                        <Icon className="ns-entity-line" color="green" /> :
+                        <Aux>
+                          <Icon className="ns-individual-line" color="green" />
+                          <Icon className="ns-ira-line" color="green" />
+                        </Aux>
+                      }
                     </Table.Cell>
                     <Table.Cell>
                       <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
                         {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') &&
                           <Aux><br /><b>Net Worth: </b>
                             {ACCREDITATION_NETWORTH_LABEL[accreditation.netWorth]}
+                          </Aux>
+                        }
+                        {(accreditation.method === 'REVOCABLE_TRUST_ASSETS' || accreditation.method === 'REVOCABLE_TRUST_INCOME') && accreditation.grantorName &&
+                          <Aux><br /><b>Grantor Name: </b>
+                            {accreditation.grantorName}
                           </Aux>
                         }
                       </p>
@@ -72,7 +87,7 @@ export default class AllAccreditationRequests extends Component {
                         }
                       </p>
                     </Table.Cell>
-                    <Table.Cell>
+                    <Table.Cell textAlign="center">
                       {accreditation.assetsUpload && accreditation.assetsUpload.length ?
                         <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
                       : <p className="intro-text">N/A</p>
