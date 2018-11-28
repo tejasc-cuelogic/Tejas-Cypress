@@ -22,17 +22,7 @@ const LegalDetails = observer(({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      {errors &&
-      <Message error textAlign="left">
-        <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-      </Message>
-        }
-      {form.response.qualifiers &&
-      <Message error>
-        <CipErrors errorsList={form.response.qualifiers} />
-      </Message>
-        }
-      <Form onSubmit={onSubmit}>
+      <Form error onSubmit={onSubmit}>
         <Form.Group widths="equal">
           <FormSelect
             containerwidth={8}
@@ -119,12 +109,18 @@ const LegalDetails = observer(({
             showerror
           />
         </Form.Group>
+        {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
+        }
+        {form.response.qualifiers &&
+          <Message error className="mt-30">
+            <CipErrors errorsList={form.response.qualifiers} />
+          </Message>
+        }
         <div className="center-align mt-30">
           <Button primary size="large" className="very relaxed" content="Verify my identity" loading={inProgress} />
-          {/* <Button.Group vertical>
-            <Button type="button" className="link-button cancel-link"
-            onClick={close}>I’ll finish this later</Button>
-          </Button.Group> */}
         </div>
       </Form>
     </Modal.Content>
