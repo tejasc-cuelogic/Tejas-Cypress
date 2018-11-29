@@ -39,7 +39,6 @@ class AboutTheCompany extends Component {
               <b>Industry: </b>
               {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}
             </p>
-            <br />
             {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.highlight ?
                 <List bulleted>
