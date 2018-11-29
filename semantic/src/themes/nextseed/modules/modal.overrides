@@ -60,12 +60,10 @@
                 top:10px !important;
             }
         }
-        .header {
-            font-size: @16px;
-        }
         .content {
             padding: 0 !important;
             border-radius: 0;
+            font-size: @15px;
         }
         .item {
             margin-top: 0;
