@@ -43,6 +43,7 @@ export const userDetailsQuery = gql`
       status
       cip {
         expiration
+        failType
       }
       limits {
         income
