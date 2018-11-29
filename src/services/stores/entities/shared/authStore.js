@@ -9,7 +9,7 @@ import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
 import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore } from '../../index';
+import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
 
 export class AuthStore {
   @observable hasSession = false;
@@ -231,6 +231,7 @@ export class AuthStore {
           },
         })
         .then(() => {
+          userDetailsStore.getUser(userStore.currentUser.sub);
           resolve();
         })
         .catch((err) => {

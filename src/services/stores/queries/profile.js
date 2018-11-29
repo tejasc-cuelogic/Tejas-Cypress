@@ -149,7 +149,6 @@ export const verifyAndUpdateEmail = gql`
       confirmationCode: $confirmationCode
       resourceId: $resourceId
     ){
-      id
       email {
         address
       }
