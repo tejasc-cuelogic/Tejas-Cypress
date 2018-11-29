@@ -47,7 +47,6 @@ class Footer extends Component {
                       <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>
                       <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
                       <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
-                      <Menu.Item as={NavLink} to="/about/press">Press</Menu.Item>
                     </Menu>
                   </Aux>
                 }
