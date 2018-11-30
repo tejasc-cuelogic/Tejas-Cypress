@@ -204,6 +204,7 @@ export class Auth {
 
     return new Promise((res, rej) => {
       const { fields } = authStore.SIGNUP_FRM;
+      const signupFields = authStore.CONFIRM_FRM.fields;
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
         Name: 'custom:roles', Value: JSON.stringify([fields.role.value]),
       });
@@ -220,8 +221,8 @@ export class Auth {
       attributeList.push(attributeFirstName);
       attributeList.push(attributeLastName);
       this.userPool.signUp(
-        fields.email.value,
-        fields.password.value,
+        fields.email.value || signupFields.email.value,
+        fields.password.value || signupFields.password.value,
         attributeList,
         null,
         (err, result) => {
