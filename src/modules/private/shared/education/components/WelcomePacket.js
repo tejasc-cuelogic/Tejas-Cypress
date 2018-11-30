@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import { Grid } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+import { InlineLoader } from '../../../../../theme/shared';
 
-const boxRef = {
-  demo: 'https://nextseed.box.com/s/v7damnl8jh75ize4xrbu8dl0lj0rvxja',
-  develop: 'https://nextseed.box.com/s/qda0prkhki8pk9lxr8dc4vlstwgmia5b',
-  qa: 'https://nextseed.box.com/s/rbiewvvoyz787xempqimccrzxgjism7l',
-};
+@inject('agreementsStore')
+@observer
 export default class WelcomePacket extends Component {
+  componentWillMount() {
+    const { getBoxEmbedLink } = this.props.agreementsStore;
+    getBoxEmbedLink('welcomeKit');
+  }
   render() {
+    const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <div>
         <Grid>
           <Grid.Row>
             <Grid.Column className="welcome-packet">
               <div className="pdf-viewer">
-                <iframe width="100%" height="100%" title="agreement" src={boxRef[process.env.REACT_APP_DEPLOY_ENV] || boxRef.develop} />
+                {(docLoading || !embedUrl) ? <InlineLoader /> :
+                <iframe width="100%" height="100%" title="agreement" src={embedUrl} />}
               </div>
             </Grid.Column>
           </Grid.Row>

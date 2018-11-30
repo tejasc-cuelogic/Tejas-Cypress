@@ -213,6 +213,9 @@ a:not(.item), a:not(.ui.button){
 	}
 	&.home-summary {
 		margin: 0 @35px;
+		.ui.button {
+			width: 150px;
+		}
 	}
 	&.campaign img.ui.image {
 		height: auto !important;
@@ -2594,5 +2597,13 @@ p.check-extra-info{
 	padding: @20px;
 	.fields:last-child .field {
 		margin-bottom: 0;
+	}
+}
+// Legal Documents
+.legal-desc p {
+	margin-bottom: @22px;
+	a {
+		color: @neutral-middark;
+		text-decoration: underline;
 	}
 }

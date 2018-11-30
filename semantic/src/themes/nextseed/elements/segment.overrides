@@ -77,8 +77,10 @@
     }
     &.legal-documents {
         box-shadow: none;
+        align-items: center;
         p {
             margin-bottom: @25px;
+            flex-grow: 1;
         }
     }
 }
