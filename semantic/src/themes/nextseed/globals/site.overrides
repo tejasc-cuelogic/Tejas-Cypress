@@ -2596,3 +2596,11 @@ p.check-extra-info{
 		margin-bottom: 0;
 	}
 }
+// Legal Documents
+.legal-desc p {
+	margin-bottom: @22px;
+	a {
+		color: @neutral-middark;
+		text-decoration: underline;
+	}
+}
