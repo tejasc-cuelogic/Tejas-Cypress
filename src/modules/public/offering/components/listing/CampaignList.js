@@ -76,7 +76,7 @@ export default class CampaignList extends Component {
                             />
                           </Card.Content>
                           <Card.Content extra>
-                            <p><b>{offering && offering.keyTerms && offering.keyTerms.securities && capitalize(offering.keyTerms.securities.split('_').join(' '))}</b></p>
+                            <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
                             <List divided horizontal>
                               <List.Item>Raised $1,000,000</List.Item>
                               <List.Item>
