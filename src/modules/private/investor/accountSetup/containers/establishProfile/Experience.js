@@ -65,7 +65,7 @@ export default class Experience extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          <div className="center-align">
+          <div className="center-align mt-20">
             {!isInvestmentExperienceValid &&
               <p className="negative-text mb-20">
                 NextSeed investments are suitable for experienced investors
