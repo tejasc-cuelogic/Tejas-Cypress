@@ -213,6 +213,9 @@ a:not(.item), a:not(.ui.button){
 	}
 	&.home-summary {
 		margin: 0 @35px;
+		.ui.button {
+			width: 150px;
+		}
 	}
 	&.campaign img.ui.image {
 		height: auto !important;
