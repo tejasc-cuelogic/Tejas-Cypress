@@ -5,10 +5,9 @@ import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
-import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
 class InvestorSignup extends Component {
@@ -20,22 +19,16 @@ class InvestorSignup extends Component {
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.register()
-      .then(() => {
-        if (this.props.authStore.newPasswordRequired) {
-          this.props.history.push('/auth/change-password');
-        } else {
-          const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-          const userCredentials = { email: email.value, password: btoa(password.value) };
-          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-          // this.props.identityStore.startPhoneVerification().then(() => {
-          //   this.props.history.push('/auth/confirm-email');
-          // })
-          //   .catch(() => {});
-          this.props.history.push('/auth/confirm-email');
-        }
-      })
-      .catch(() => { });
+    if (this.props.authStore.newPasswordRequired) {
+      this.props.history.push('/auth/change-password');
+    } else {
+      const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+      const userCredentials = { email: email.value, password: btoa(password.value) };
+      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+      this.props.identityStore.requestOtpWrapper().then(() => {
+        this.props.history.push('/auth/confirm-email');
+      });
+    }
   };
   render() {
     const {
@@ -59,7 +52,7 @@ class InvestorSignup extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">
             Sign up as {' '}
-            {(SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
+            {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>

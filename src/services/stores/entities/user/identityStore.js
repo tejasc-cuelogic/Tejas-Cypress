@@ -5,8 +5,9 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
@@ -738,6 +739,69 @@ export class IdentityStore {
         fields.phoneNumber.value = phone.number;
       }
     }
+  }
+
+  requestOtpWrapper = () => {
+    uiStore.setProgress();
+    const { email } = authStore.SIGNUP_FRM.fields;
+    const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
+    return new Promise((resolve, reject) => {
+      publicClient
+        .mutate({
+          mutation: requestOtpWrapper,
+          variables: {
+            address: email.value || emailInCookie,
+          },
+        })
+        .then((result) => {
+          this.setRequestOtpResponse(result.data.requestOTPWrapper);
+          Helper.toast('Verification code sent to user.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  verifyOTPWrapper = () => {
+    uiStore.setProgress();
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const verifyOTPData = {
+      resourceId: this.requestOtpResponse,
+      confirmationCode: code,
+      address: email,
+    };
+    return new Promise((resolve, reject) => {
+      publicClient
+        .mutate({
+          mutation: verifyOTPWrapper,
+          variables: {
+            verifyOTPData,
+          },
+        })
+        .then((result) => {
+          if (result.data.verifyOTPWrapper) {
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            uiStore.setProgress(false);
+            reject();
+          }
+        })
+        .catch((err) => {
+          uiStore.setProgress(false);
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        });
+    });
   }
 }
 

@@ -204,3 +204,19 @@ export const verifyOtp = gql`
     )
   }
 `;
+
+export const requestOtpWrapper = gql`
+  mutation requestOTPWrapper($address: String!){
+    requestOTPWrapper(
+      address: $address
+    )
+  }
+`;
+
+export const verifyOTPWrapper = gql`
+  mutation verifyOTPWrapper($verifyOTPData: VerifyOTPInput!){
+    verifyOTPWrapper(
+      verifyOTPData: $verifyOTPData
+    )
+  }
+`;

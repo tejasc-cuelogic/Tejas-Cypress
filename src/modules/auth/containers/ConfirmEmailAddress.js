@@ -20,7 +20,7 @@ export default class ConfirmEmailAddress extends Component {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
     this.props.authStore.resetForm('CONFIRM_FRM');
-    this.props.identityStore.setIsOptConfirmed(false);
+    // this.props.identityStore.setIsOptConfirmed(false);
     const credentials = cookie.load('USER_CREDENTIALS');
     if (credentials) {
       this.props.authStore.setCredentials(credentials);
@@ -29,7 +29,6 @@ export default class ConfirmEmailAddress extends Component {
   componentWillUnmount() {
     // cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
     this.props.uiStore.clearErrors();
-    this.props.identityStore.setIsOptConfirmed(false);
   }
 
   handleSubmitForm = (e) => {
@@ -37,24 +36,28 @@ export default class ConfirmEmailAddress extends Component {
     this.props.authStore.setProgress('confirm');
     if (this.props.refLink) {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
+        this.props.identityStore.setIsOptConfirmed(true);
         Helper.toast('Email has been verified and updated', 'success');
-        this.props.history.push('/app/profile-settings/profile-data');
       })
         .catch(() => { });
+    } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === '') {
+      this.props.history.push('/auth/register-investor');
     } else {
-      authActions.confirmCode()
-        .then(() => {
-          const { roles } = this.props.userStore.currentUser;
-          if (roles.includes('investor')) {
-            this.props.identityStore.setIsOptConfirmed(true);
-          } else {
-            const redirectUrl = !roles ? '/auth/login' :
-              SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                roles.includes(user.role)).path;
-            this.props.history.replace(redirectUrl);
-          }
-        })
-        .catch(() => { });
+      this.props.identityStore.verifyOTPWrapper().then(() => {
+        authActions.register()
+          .then(() => {
+            const { roles } = this.props.userStore.currentUser;
+            if (roles.includes('investor')) {
+              this.props.identityStore.setIsOptConfirmed(true);
+            } else {
+              const redirectUrl = !roles ? '/auth/login' :
+                SIGNUP_REDIRECT_ROLEWISE.find(user =>
+                  roles.includes(user.role)).path;
+              this.props.history.replace(redirectUrl);
+            }
+          })
+          .catch(() => { });
+      });
     }
   }
 
@@ -73,12 +76,17 @@ export default class ConfirmEmailAddress extends Component {
       })
         .catch(() => { });
     } else {
-      authActions.resendConfirmationCode();
+      this.props.identityStore.requestOtpWrapper();
     }
   }
 
   handleContinue = () => {
-    this.props.history.replace('/app/summary/identity-verification/0');
+    if (this.props.refLink) {
+      this.props.history.push('/app/profile-settings/profile-data');
+    } else {
+      this.props.history.replace('/app/summary/identity-verification/0');
+    }
+    this.props.identityStore.setIsOptConfirmed(false);
   }
 
   render() {
@@ -96,7 +104,7 @@ export default class ConfirmEmailAddress extends Component {
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/auth/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
-      return <SuccessScreen successMsg="Your e-mail address has been confirmed." handleContinue={this.handleContinue} />;
+      return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
     }
     return (
       <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
@@ -137,7 +145,7 @@ export default class ConfirmEmailAddress extends Component {
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
-              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+              <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
             </Form.Field>
             {errors &&
               <Message error textAlign="left" className="mb-40">

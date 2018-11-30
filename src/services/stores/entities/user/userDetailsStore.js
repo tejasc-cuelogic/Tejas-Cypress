@@ -14,6 +14,7 @@ import {
   iraAccountStore,
   entityAccountStore,
   investorProfileStore,
+  authStore,
 } from '../../index';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
@@ -251,6 +252,7 @@ export class UserDetailsStore {
     if (this.signupStatus.isMigratedUser) {
       if (this.userDetails.email &&
         (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
+        this.setSignUpDataForMigratedUser(this.userDetails);
         routingUrl = '/auth/confirm-email';
       } else if (this.signupStatus.isMigratedFullAccount &&
         (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
@@ -359,6 +361,15 @@ export class UserDetailsStore {
       return true;
     }
     return false;
+  }
+
+  @action
+  setSignUpDataForMigratedUser = (userDetails) => {
+    if (userDetails.info) {
+      authStore.SIGNUP_FRM.fields.givenName.value = userDetails.info.firstName;
+      authStore.SIGNUP_FRM.fields.role.value = 'investor';
+      authStore.SIGNUP_FRM.fields.familyName.value = userDetails.info.lastName;
+    }
   }
 }
 
