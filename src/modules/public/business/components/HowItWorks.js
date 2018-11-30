@@ -270,7 +270,7 @@ const HowItWorks = () => (
           <Grid.Column>
             <Embed
               id={nsvideos.embed}
-              placeholder={`${ASSETS_URL}images/636206632.jpg`}
+              placeholder={`${ASSETS_URL}images/677134021.jpg`}
               source="vimeo"
               icon="ns-play"
             />
