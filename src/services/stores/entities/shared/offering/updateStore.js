@@ -53,7 +53,6 @@ export class UpdateStore {
       data.status = status;
       data.lastUpdate = this.lastUpdateText;
       data.offeringId = offeringCreationStore.currentOfferingId;
-      data.scope = 'INVESTORS';
       data.isEarlyBirdOnly = false;
       client
         .mutate({
