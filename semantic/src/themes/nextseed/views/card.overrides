@@ -371,13 +371,19 @@
     }
     &.linked-bank{
         .item{
+            .ui.tiny.image{
+                width:60px;
+            }
             .extra{
                 margin-bottom:@7px;
                 color:@neutral-middark;
             }
             .header{
-                font-weight:700;
+                font-weight:@fontMedium;
                 color:@fullBlack;
+            }
+            a.header{
+                color:@primary-one;
             }
         }
     }

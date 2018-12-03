@@ -7,8 +7,9 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { allTransactions, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
+import { requestOtp, verifyOtp } from '../../queries/profile';
 import { TRANSFER_FUND, VERIFY_OTP } from '../../../constants/transaction';
-import { uiStore, userDetailsStore } from '../../index';
+import { uiStore, userDetailsStore, userStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
@@ -27,6 +28,7 @@ export class TransactionStore {
   @observable reSendVerificationCode = null;
   @observable transactionOtpRequestId = null;
   @observable transactionDisplayPhoneNumber = null;
+  @observable confirmEmailAdress = '';
   @action
   initRequest = (props) => {
     const { first, skip, page } = props ||
@@ -156,7 +158,7 @@ export class TransactionStore {
     this.reSendVerificationCode = value;
   }
   @action
-  requestOtpForManageTransactions = () => {
+  requestOtpForManageAddWithdrawTransactions = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -182,12 +184,77 @@ export class TransactionStore {
     });
   }
   @action
+  requestOtpForManageTransactions = () => {
+    uiStore.setProgress();
+    const { userDetails } = userDetailsStore;
+    const otpType = userDetails.mfaMode === 'PHONE' ? userDetails.phone.type : 'EMAIL';
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: requestOtp,
+          variables: {
+            userId: userStore.currentUser.sub,
+            type: otpType,
+          },
+        })
+        .then((result) => {
+          this.transactionOtpRequestId = result.data.requestOtp;
+          if (userDetails.mfaMode === 'PHONE') {
+            this.setPhoneNumber(userDetails.phone.number);
+          } else {
+            this.setConfirmEmailAddress(userDetails.email.address);
+          }
+          resolve();
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+  confirmAccountLinking = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: verifyOtp,
+          variables: {
+            resourceId: this.transactionOtpRequestId,
+            verificationCode: this.OTP_VERIFY_META.fields.code.value,
+          },
+        })
+        .then((response) => {
+          // this.updateUserPhoneDetails();
+          if (response.data.verifyOtp) {
+            resolve();
+          } else {
+            uiStore.setErrors('OTP verificaton failed.');
+            reject();
+          }
+        })
+        .catch(action((err) => {
+          uiStore.setErrors(JSON.stringify(err.message));
+          reject(err);
+        }))
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+  @action
   resetFormData(form) {
     this[form] = Validator.resetFormData(this[form]);
   }
   @action
   setPhoneNumber(phoneNumberVal) {
     this.transactionDisplayPhoneNumber = phoneNumberVal;
+  }
+  @action
+  setConfirmEmailAddress(emailVal) {
+    this.confirmEmailAdress = emailVal;
   }
   @action
   withdrawFunds = (amount, description) => {
