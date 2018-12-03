@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon } from 'semantic-ui-react';
-import { FormInput } from '../../../../../../theme/form';
+import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import Actions from './Actions';
 import Status from './Status';
@@ -99,6 +99,19 @@ export default class NewUpdate extends Component {
               <Card fluid>
                 <Card.Content>
                   <h4>Chat box will be here</h4>
+                </Card.Content>
+              </Card>
+              <Card fluid>
+                <Card.Content>
+                  <h4>Who’s this update for?</h4>
+                  <Form.Group inline>
+                    <FormRadioGroup
+                      disabled={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                      fielddata={PBUILDER_FRM.fields.scope}
+                      name="scope"
+                      changed={UpdateChange}
+                    />
+                  </Form.Group>
                 </Card.Content>
               </Card>
               <Card fluid>

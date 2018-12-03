@@ -23,6 +23,7 @@ query getOfferingList($filters: OfferingFilterInputType){
         totalInvestorCount
       }
       keyTerms {
+        regulation
         shorthandBusinessName
         legalBusinessName
         securities
