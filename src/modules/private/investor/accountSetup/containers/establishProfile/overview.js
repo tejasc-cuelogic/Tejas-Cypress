@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Divider, Button } from 'semantic-ui-react';
@@ -27,17 +26,13 @@ export default class Overview extends Component {
       `;
     }
     return (
-      <Aux>
-        <Header as="h3" textAlign="center">Please establish your investor profile</Header>
+      <div className="center-align">
+        <Header as="h3">Please establish your investor profile</Header>
         <Divider section className="small" />
-        <p className="center-align mb-50">{overviewInfo}</p>
-        <div className="center-align mt-30">
-          <Button primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
-        </div>
-        <div className="center-align mt-30">
-          <p><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
-        </div>
-      </Aux>
+        <p className="mb-50">{overviewInfo}</p>
+        <Button primary size="large" className="very relaxed" content="Continue" onClick={this.handleChangeStep} />
+        <p className="mt-30"><Link to={`${this.props.match.url}/confirm`}>I’ll do it later</Link></p>
+      </div>
     );
   }
 }
