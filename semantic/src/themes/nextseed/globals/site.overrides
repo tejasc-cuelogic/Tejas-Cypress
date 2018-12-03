@@ -170,6 +170,7 @@ h6{
 }
 .intro-text, .note{
 	color:@neutral-middark !important;
+	font-size: @12px;
 }
 .primary-two-text {
 	color: @primary-two !important;
@@ -178,7 +179,7 @@ h6{
 	color: @neutral-offdark;
 }
 .caption-note{
-	font-size:@13px;
+	font-size:@12px;
 	font-style:italic;
 	margin:@7px 0;
 	&:first-child{
@@ -212,6 +213,9 @@ a:not(.item), a:not(.ui.button){
 	}
 	&.home-summary {
 		margin: 0 @35px;
+		.ui.button {
+			width: 150px;
+		}
 	}
 	&.campaign img.ui.image {
 		height: auto !important;
@@ -250,7 +254,7 @@ a{
 }
 .bg-offwhite {
 	background-color: @neutral-offwhite;
-	padding:@14px @20px;
+	// padding:@14px @20px;       commented to resolve on public homepage
 }
 .green-block {
 	background-color: @primary-one;
@@ -313,7 +317,7 @@ footer{
 	}
 	.copyright-info{
 		flex-grow: 1;
-		font-size:@12px;
+		font-size:@13px;
 		line-height:@22px;
 		@media only screen and (max-width : @largestMobileScreen){
 			float:none;
@@ -526,6 +530,7 @@ footer{
 			p {
 				line-height: @20px;
 				color:@neutral-middark;
+				font-size: @15px;
 			}
 			.embed {
 				img {
@@ -2592,5 +2597,13 @@ p.check-extra-info{
 	padding: @20px;
 	.fields:last-child .field {
 		margin-bottom: 0;
+	}
+}
+// Legal Documents
+.legal-desc p {
+	margin-bottom: @22px;
+	a {
+		color: @neutral-middark;
+		text-decoration: underline;
 	}
 }

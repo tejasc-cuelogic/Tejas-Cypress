@@ -2,9 +2,8 @@ import { observable, action, toJS, computed } from 'mobx';
 import { forEach, isArray } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
-import moment from 'moment';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
-import { FormValidator as Validator } from '../../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../../index';
@@ -42,7 +41,7 @@ export class AccreditationStore {
   @action
   initRequest = (reqParams) => {
     const {
-      keyword, method, type, startDate, endDate,
+      keyword, method, type, status, startDate, endDate,
     } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
@@ -52,6 +51,12 @@ export class AccreditationStore {
       type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
     };
+    if (status && status !== '') {
+      params = {
+        ...params,
+        status,
+      };
+    }
     this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
@@ -228,8 +233,8 @@ export class AccreditationStore {
   @action
   setInitiateSrch = (name, value) => {
     if (name === 'startDate' || name === 'endDate') {
-      const date = name === 'startDate' ? moment(value.formattedValue).add(1, 'day').startOf('day') : moment(value.formattedValue).add(1, 'day').endOf('day');
-      this.requestState.search[name] = moment(date).toISOString();
+      const date = DataFormatter.getDate(value.formattedValue, true, name);
+      this.requestState.search[name] = date;
       if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
         const srchParams = { ...this.requestState.search };
         this.initiateSearch(srchParams);
@@ -469,7 +474,7 @@ export class AccreditationStore {
       } else {
         if (data.method === 'REVOCABLE_TRUST_ASSETS' || data.method === 'REVOCABLE_TRUST_INCOME') {
           this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'REVOCABLE_TRUST_ASSETS';
-          this.ACCREDITATION_FORM.fields.method.value = data.method === 'REVOCABLE_TRUST_ASSETS' ? 'REVOCABLE_TRUST_ASSETS' : 'REVOCABLE_TRUST_INCOME';
+          this.ACCREDITATION_FORM.fields.method.value = data.method;
         }
         this.ACCREDITATION_FORM.fields.grantorName.value = data.grantorName;
       }
@@ -525,6 +530,8 @@ export class AccreditationStore {
       this[form] = Validator.setFormData(this[form], appData, ref);
     } else {
       this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
+      this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+      this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
     }
     this.checkFormValid(form, false, false);
     return false;

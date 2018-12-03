@@ -1,12 +1,7 @@
 import gql from 'graphql-tag';
 
-export const allAgreements = gql`
-  query allAgreements {
-    allAgreements{
-      id
-      title
-      shortName
-      url
-    }
+export const getBoxEmbedLink = gql`
+  mutation _getBoxEmbedLink($fileId: String!) {
+    getBoxEmbedLink (fileId: $fileId)
   }
 `;

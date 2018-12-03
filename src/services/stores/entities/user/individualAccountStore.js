@@ -3,7 +3,7 @@ import { isEmpty, find } from 'lodash';
 import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { createIndividual, updateAccount } from '../../queries/account';
+import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -61,6 +61,24 @@ class IndividualAccountStore {
             if (formStatus === 'submit') {
               Helper.toast('Individual account created successfully.', 'success');
               this.submited = true;
+              if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
+                userDetailsStore.userDetails.cip.failType &&
+                userDetailsStore.userDetails.cip.failType !== null) {
+                client.mutate({
+                  mutation: crowdPayAccountNotifyGs,
+                  variables: {
+                    userId: userStore.currentUser.sub,
+                    accountId: result.data.createInvestorAccount ?
+                      result.data.createInvestorAccount.accountId :
+                      result.data.updateInvestorAccount.accountId,
+                  },
+                })
+                  .then(() => {})
+                  .catch(action((err) => {
+                    uiStore.setErrors(DataFormatter.getSimpleErr(err));
+                    reject();
+                  }));
+              }
             } else if (currentStep) {
               this.setStepToBeRendered(currentStep.stepToBeRendered);
               Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

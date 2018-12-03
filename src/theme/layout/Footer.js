@@ -32,6 +32,12 @@ class Footer extends Component {
     return (
       <footer>
         <Container fluid={isCampaign}>
+          {(OfferFooter.find(item => matchPath(path, { path: item }))) &&
+            <p className="mb-40 copyright-info">
+              <b>Buffbrew Disclaimer:</b> The securities offered above is facilitated by NextSeed
+              US LLC, a registered funding portal and member of <Link to="http://www.finra.org/" target="_blank">FINRA</Link>.
+            </p>
+          }
           <Grid stackable>
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
               <div className="footer-left-nav">
@@ -47,7 +53,6 @@ class Footer extends Component {
                       <Menu.Item as={NavLink} to="/about/mission">Mission</Menu.Item>
                       <Menu.Item as={NavLink} to="/about/team">Team & Culture</Menu.Item>
                       <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
-                      <Menu.Item as={NavLink} to="/about/press">Press</Menu.Item>
                     </Menu>
                   </Aux>
                 }
@@ -80,35 +85,33 @@ class Footer extends Component {
             </Grid.Column>
             <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">
               <p>
-                This site is operated by NextSeed Technologies LLC ({'"'}NextSeed{'"'}),
-                which is neither a registered broker-dealer nor funding portal.
+                This site is operated by NextSeed Services LLC ({'"'}NextSeed{'"'}), which is
+                neither a registered broker-dealer nor funding portal.
               </p>
               <p>
-                All securities-related activity is conducted by NextSeed Securities, LLC,
-                an affiliate of NextSeed, and a registered broker dealer, and member of{' '}
-                <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
-                {' '}(checkout our background on BrokerCheck) or NextSeed US LLC, a registered
-                funding portal and member of{' '}
-                <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
+                All securities-related activity is conducted by regulated affiliates of NextSeed:
+                NextSeed Securities, LLC, a registered broker dealer and member of <Link to="http://www.finra.org/" target="_blank">FINRA</Link>
+                /SIPC (check out the background of our broker-dealer on <Link to="https://brokercheck.finra.org/firm/summary/291387" target="_blank">BrokerCheck</Link>) or NextSeed
+                US LLC, a registered funding portal and member of <Link to="http://www.finra.org/" target="_blank">FINRA</Link>.
               </p>
               <p>
-                Securities offered on NextSeed have not been recommended or approved by any
-                federal or state securities commission or regulatory authority. NextSeed and
-                its affiliates do not provide any investment advice or recommendation and does
-                not provide any legal or tax advice with respect to any securities. All
-                securities listed on this site are being offered by, and all information
-                included on this site is the responsibility of, the applicable issuer of such
-                securities. In making an investment decision, investors must rely on their own
-                examination of the issuer and the terms of the offering, including the merits
-                and risks involved. NextSeed does not verify the adequacy, accuracy or
-                completeness of any information. Neither NextSeed nor any of its officers,
-                directors, agents and employees makes any warranty, express or implied, of any
-                kind whatsoever related to the adequacy, accuracy or completeness of any
-                information on this site or the use of information on this site.
+                Any securities offered on this website have not been recommended or approved by any
+                federal or state securities commission or regulatory authority. NextSeed and its
+                affiliates do not provide any investment advice or recommendation and does not
+                provide any legal or tax advice with respect to any securities. All securities
+                listed on this site are being offered by, and all information included on this
+                site is the responsibility of, the applicable issuer of such securities. In making
+                an investment decision, investors must rely on their own examination of the issuer
+                and the terms of the offering, including the merits and risks involved. NextSeed
+                does not verify the adequacy, accuracy or completeness of any information. Neither
+                NextSeed nor any of its officers, directors, agents and employees makes any
+                warranty, express or implied, of any kind whatsoever related to the adequacy,
+                accuracy or completeness of any information on this site or the use of information
+                on this site. See additional general disclosures <Link to="/agreements/legal/general-disclosures">here</Link>.
               </p>
               <p>
-                By accessing this site and any pages thereof, you agree to be bound by the
-                Terms of Use and Privacy Policy.
+                By accessing this site and any pages thereof, you agree to be bound by the <Link to="/agreements/legal/terms-of-use">Terms of Use</Link>
+                {' '}and <Link to="/agreements/legal/privacy-policy">Privacy Policy</Link>.
               </p>
             </Grid.Column>
           </Grid>

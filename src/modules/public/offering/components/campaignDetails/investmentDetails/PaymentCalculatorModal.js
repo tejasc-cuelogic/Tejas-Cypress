@@ -55,7 +55,7 @@ class PaymentCalculatorModal extends Component {
             </Grid.Column>
           </Grid>
           <PaymentCalculator />
-          <p className="mt-30">
+          <p className="mt-30 note">
             * Payment for any given month (including the total payment at the end of the
             final month) indicates the cumulative amount contractually required to be paid
             to an investor after the end of that month, assuming the loan is not prepaid.

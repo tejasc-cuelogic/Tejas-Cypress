@@ -86,7 +86,7 @@ export default class KeyTerms extends Component {
               />
             </div>
             {
-              ['minInvestAmt', 'maxOfferingAmount'].map(field => (
+              ['minOfferingAmount', 'maxOfferingAmount'].map(field => (
                 <MaskedInput
                   displayMode={isReadonly}
                   name={field}
@@ -151,8 +151,8 @@ export default class KeyTerms extends Component {
             }
             <MaskedInput
               displayMode={isReadonly}
-              name="minOfferingAmount"
-              fielddata={KEY_TERMS_FRM.fields.minOfferingAmount}
+              name="minInvestAmt"
+              fielddata={KEY_TERMS_FRM.fields.minInvestAmt}
               changed={(values, name) => maskChange(values, formName, name)}
               currency
               prefix="$"

@@ -76,3 +76,11 @@ export const createIndividual = gql`
       type
     }
   }`;
+
+export const crowdPayAccountNotifyGs = gql`
+  mutation _crowdPayAccountNotifyGS($userId: String, $accountId: String!) {
+    crowdPayAccountNotifyGS(
+      userId: $userId
+      accountId: $accountId
+    )
+  }`;

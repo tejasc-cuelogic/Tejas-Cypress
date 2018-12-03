@@ -12,20 +12,23 @@
         &.status{
             font-weight:500;
             text-transform:capitalize;
-            &.partial, &.pending{
+            &.partial{
+                color:@tertiary-text;
+            }
+            &.full{
+                color:@primary-one;
+            }
+            &.frozen{
                 color:@highlight-secondary;
             }
-            &.failed{
+            &.cip-processing, &.ns-processing, &.gs-processing{
+                color:@highlight-quaternary;
+            }
+            &.declined{
                 color:@highlight-primary;
             }
-            &.to-be-reviewed{
-                color:@primary-two;
-            }
-            &.processing{
-                color:@neutral-offdark;
-            }
-            &.processed{
-                color:@primary-one;
+            &.deleted{
+                color:@border-color;
             }
         }
         &.text-capitalize{
@@ -125,6 +128,13 @@
                 text-decoration:underline;
             }
         }
+    }
+    a.filename-link:not(.button){
+        max-width:200px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        display:block;
     }
     &.statment-tables{
         td>i.icon{
@@ -309,6 +319,9 @@
     }
     .dark-cell {
         background-color: @neutral-midwhite;
+    }
+    .ui.vertical.buttons{
+        display:flex;
     }
 }
 

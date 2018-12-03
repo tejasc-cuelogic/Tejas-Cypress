@@ -12,7 +12,7 @@ export class CampaignStore {
   @observable campaignSideBarShow = false;
   @observable selectedReadMore = {};
   @observable selectedReadLess = {};
-  @observable RECORDS_TO_DISPLAY = 9;
+  @observable RECORDS_TO_DISPLAY = 12;
   @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
 
@@ -86,14 +86,14 @@ export class CampaignStore {
   loadMoreRecord = (type) => {
     const offeringsList = type === 'completedToDisplay' ? this.completedList : this.activeList;
     if (offeringsList.length > this[type]) {
-      this[type] = this[type] + 9;
+      this[type] = this[type] + this.RECORDS_TO_DISPLAY;
     }
   }
 
   @action
   resetDisplayCounts = () => {
-    this.completedToDisplay = 9;
-    this.activeToDisplay = 9;
+    this.completedToDisplay = this.RECORDS_TO_DISPLAY;
+    this.activeToDisplay = this.RECORDS_TO_DISPLAY;
   }
 
   @computed get campaign() {

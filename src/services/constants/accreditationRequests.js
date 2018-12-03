@@ -9,6 +9,16 @@ export const FILTER_META = {
     error: undefined,
     rule: 'empty',
   },
+  status: {
+    value: [],
+    values: [
+      { text: 'Requested', value: 'REQUESTED' },
+      { text: 'Approved', value: 'APPROVED' },
+      { text: 'Declined', value: 'DECLINED' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
   type: {
     value: [],
     values: [
