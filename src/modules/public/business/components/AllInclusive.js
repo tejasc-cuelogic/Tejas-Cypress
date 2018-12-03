@@ -1,10 +1,10 @@
 import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
-import { Header, Grid, List, Divider, Container, Item } from 'semantic-ui-react';
+import { Header, Grid, Container, Item } from 'semantic-ui-react';
 import { ASSETS_URL } from '../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 
 const AllInclusive = () => (
   <Aux>

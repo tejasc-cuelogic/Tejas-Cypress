@@ -63,15 +63,15 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List verticalAlign="top" horizontal className={`learn-more-list ${isMobile ? 'mb-30' : 'mt-30'}`}>
+            {/* <List verticalAlign="top" horizontal
+            className={`learn-more-list ${isMobile ? 'mb-30' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                {/* <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" /> */}
                 <List.Content>
                   See an example of a <a href="/">Term Note investment</a>
                 </List.Content>
               </List.Item>
-            </List>
+            </List> */}
           </Grid.Column>
           <Grid.Column>
             <div className="flex-content">
@@ -101,15 +101,15 @@ const HowItWorks = () => (
                 </Item>
               </Item.Group>
             </div>
-            <List verticalAlign="top" horizontal className={`learn-more-list ${isMobile ? '' : 'mt-30'}`}>
+            {/* <List verticalAlign="top" horizontal
+            className={`learn-more-list ${isMobile ? '' : 'mt-30'}`}>
               <List.Item>
                 <List.Header>Learn more</List.Header>
-                {/* <List.Icon className="ns-arrow-right" color="green" verticalAlign="top" /> */}
                 <List.Content>
                   See an example of a <a href="/">Revenue Sharing Note investment</a>
                 </List.Content>
               </List.Item>
-            </List>
+            </List> */}
           </Grid.Column>
           <Grid.Column>
             <div className="flex-content">
@@ -146,30 +146,16 @@ const HowItWorks = () => (
     </section>
     <section className="bg-offwhite">
       <Container>
-        <Grid relaxed={!isTablet && 'very'} stackable columns={2}>
+        <Grid relaxed={!isTablet && 'very'} stackable centered>
           <Grid.Row>
-            <Grid.Column>
+            <Grid.Column width={10} textAlign="center">
               <Header as="h2">Every investment comes with risk and opportunity.</Header>
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column>
               <p>
                 Remember, returns and bonus rewards are not guaranteed. Investments can be lost
                 entirely. Be sure to do your own due diligence, review all offering documents
                 carefully, and never invest more than you can afford to lose. Businesses may fail,
                 but those that succeed can make a lasting impact in your city.
               </p>
-            </Grid.Column>
-            <Grid.Column>
-              <List relaxed className="learn-more-list">
-                <List.Item>
-                  <List.Header>Learn more</List.Header>
-                  <List.Content>
-                    Is investing on <a href="/">NextSeed risky?</a>
-                  </List.Content>
-                </List.Item>
-              </List>
             </Grid.Column>
           </Grid.Row>
         </Grid>

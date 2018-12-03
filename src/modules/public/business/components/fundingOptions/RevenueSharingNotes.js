@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, List, Grid, Item, Divider, Button } from 'semantic-ui-react';
+import { Header, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const RevenueSharingNotes = () => (

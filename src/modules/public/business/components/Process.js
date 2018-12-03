@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Header, Grid, Card, List, Divider, Container } from 'semantic-ui-react';
+import { Header, Grid, Card, Container } from 'semantic-ui-react';
 import Aux from 'react-aux';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -46,17 +45,16 @@ const Process = () => (
                       tools and support you need to raise funds and tap into a base of
                       thousands of local investors.
                     </p>
-                    {!isMobile &&
+                    {/* {!isMobile &&
                     <List horizontal relaxed className="learn-more-list mt-80">
                       <List.Item>
                         <List.Header>Learn more</List.Header>
-                        {/* <List.Icon className="ns-arrow-right" color="green" /> */}
                         <List.Content>
                           How to start a <a href="/">raise on NextSeed</a>
                         </List.Content>
                       </List.Item>
                     </List>
-                    }
+                    } */}
                   </Card.Content>
                 </Card>
                 <Card>

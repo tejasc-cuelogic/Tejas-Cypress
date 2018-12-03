@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Header, List, Grid, Item, Divider, Button } from 'semantic-ui-react';
+import { Header, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 export default class TermNotes extends Component {
