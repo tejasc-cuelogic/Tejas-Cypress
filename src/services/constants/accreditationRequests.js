@@ -2,9 +2,19 @@ export const FILTER_META = {
   method: {
     value: [],
     values: [
-      { text: 'All', value: 'all' },
-      { text: 'Verifier', value: 'verifier' },
-      { text: 'Upload', value: 'upload' },
+      { text: 'All', value: 'ALL' },
+      { text: 'Verifier', value: 'VERIFIER' },
+      { text: 'Upload', value: 'UPLOAD' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
+  status: {
+    value: [],
+    values: [
+      { text: 'Requested', value: 'REQUESTED' },
+      { text: 'Approved', value: 'APPROVED' },
+      { text: 'Declined', value: 'DECLINED' },
     ],
     error: undefined,
     rule: 'empty',
@@ -12,9 +22,13 @@ export const FILTER_META = {
   type: {
     value: [],
     values: [
-      { text: 'All', value: 'all' },
-      { text: 'Asset', value: 'asset' },
-      { text: 'Income', value: 'income' },
+      { text: 'All', value: 'ALL' },
+      { text: 'Asset', value: 'ASSETS' },
+      { text: 'Income', value: 'INCOME' },
+      { text: 'Trust Assets', value: 'REVOCABLE_TRUST_ASSETS' },
+      { text: 'Trust Income', value: 'REVOCABLE_TRUST_INCOME' },
+      { text: 'Owners Accredited', value: 'OWNERS_ACCREDITATED' },
+      { text: 'Owners Qualified', value: 'OWNERS_QUALIFIED' },
     ],
     error: undefined,
     rule: 'empty',

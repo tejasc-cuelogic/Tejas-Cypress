@@ -3,6 +3,7 @@ import { Link, Route } from 'react-router-dom';
 import { Header, Segment, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
 import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTabletLand = document.documentElement.clientWidth >= 992
@@ -83,20 +84,20 @@ class TermNoteDetails extends Component {
                     />
                   </Statistic.Label>
                   <Statistic.Value>
-                    {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : ''}
+                    {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : '-'}
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Interest Rate</b>{' '}
+                  <Statistic.Label><b>Multiple</b>{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="Lorem Ipsum"
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms ? KeyTerms.interestRate : '0'}%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -108,7 +109,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms ? KeyTerms.maturity : '0'} months</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -121,7 +122,7 @@ class TermNoteDetails extends Component {
                       hoverable
                     />
                   </Statistic.Label>
-                  <Statistic.Value>${KeyTerms ? KeyTerms.minInvestAmt : '0'}</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.minInvestAmt ? Helper.CurrencyFormat(KeyTerms.minInvestAmt) : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -133,7 +134,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms && KeyTerms.frequencyOfPayments}</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -145,7 +146,7 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms ? KeyTerms.securitiesOwnershipPercentage : '0'}%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.securitiesOwnershipPercentage ? `${KeyTerms.securitiesOwnershipPercentage}%` : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
             </Grid>

@@ -1,26 +1,64 @@
+export const ACCOUNT_STATUS_VALUES = {
+  review: ['FULL', 'DECLINED'],
+  cip: ['GS_PROCESSING', 'DECLINED'],
+  ira: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'],
+  entity: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'],
+};
+
+export const ACCOUNT_STATUS_FILTER_VALUES = {
+  review: null,
+  cip: ['GS_PROCESSING'],
+  ira: ['NS_PROCESSING'],
+  entity: ['NS_PROCESSING'],
+};
+
 export const FILTER_META = {
-  status: {
+  review: {
     value: [],
     values: [
-      { label: 'Basic', value: 'Basic' },
-      { label: 'CIP Passed', value: 'CIP Passed' },
-      { label: 'Verified Phone', value: 'Verified Phone' },
-      { label: 'Full', value: 'Full' },
-      { label: 'Verified Email', value: 'Verified Email' },
-      { label: 'CIP Failed', value: 'CIP Failed' },
-      { label: 'Eligible', value: 'Eligible' },
-      { label: 'Declined', value: 'Declined' },
+      { label: 'Declined', value: 'DECLINED' },
     ],
     error: undefined,
     rule: 'array',
   },
-  identityStatus: {
-    value: [],
+  cip: {
+    value: ['GS_PROCESSING'],
     values: [
-      { text: 'To Be reviewed', value: 'To Be reviewed' },
-      { text: 'Reviewed', value: 'Reviewed' },
+      { label: 'GS Processing', value: 'GS_PROCESSING' },
+      { label: 'Declined', value: 'DECLINED' },
     ],
     error: undefined,
-    rule: 'empty',
+    rule: 'array',
   },
+  ira: {
+    value: ['NS_PROCESSING'],
+    values: [
+      { label: 'NS Processing', value: 'NS_PROCESSING' },
+      { label: 'GS Processing', value: 'GS_PROCESSING' },
+      { label: 'Declined', value: 'DECLINED' },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
+  entity: {
+    value: ['NS_PROCESSING'],
+    values: [
+      { label: 'NS Processing', value: 'NS_PROCESSING' },
+      { label: 'GS Processing', value: 'GS_PROCESSING' },
+      { label: 'Declined', value: 'DECLINED' },
+    ],
+    error: undefined,
+    rule: 'array',
+  },
+};
+
+export const CROWDPAY_ACCOUNTS_STATUS = {
+  PARTIAL: 'PARTIAL',
+  FULL: 'FULL',
+  FROZEN: 'FROZEN',
+  CIP_PROCESSING: 'CIP_PROCESSING',
+  NS_PROCESSING: 'NS_PROCESSING',
+  GS_PROCESSING: 'GS_PROCESSING',
+  DECLINED: 'DECLINED',
+  DELETED: 'DELETED',
 };

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Header, Segment, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -48,20 +49,20 @@ class RevenueSharingDetails extends Component {
                     />
                   </Statistic.Label>
                   <Statistic.Value>
-                    {CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}
+                    {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : '-'}
                   </Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
                 <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Interest Rate</b>{' '}
+                  <Statistic.Label><b>Multiple</b>{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="Lorem Ipsum"
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms ? KeyTerms.interestRate : '0'}%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -73,7 +74,7 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms ? KeyTerms.maturity : '0'} months</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -86,7 +87,7 @@ class RevenueSharingDetails extends Component {
                       hoverable
                     />
                   </Statistic.Label>
-                  <Statistic.Value>${KeyTerms ? KeyTerms.minInvestAmt : '0'}</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.minInvestAmt ? Helper.CurrencyFormat(KeyTerms.minInvestAmt) : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -98,7 +99,7 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms.frequencyOfPayments}</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
@@ -110,7 +111,7 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms ? KeyTerms.securitiesOwnershipPercentage : '0'}%</Statistic.Value>
+                  <Statistic.Value>{KeyTerms && KeyTerms.securitiesOwnershipPercentage ? `${KeyTerms.securitiesOwnershipPercentage}%` : '-'}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
             </Grid>

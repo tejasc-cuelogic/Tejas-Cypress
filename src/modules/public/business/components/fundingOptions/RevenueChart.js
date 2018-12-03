@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import { LineChart, Line, XAxis, Legend, ResponsiveContainer } from 'recharts';
 
 const data = [
@@ -16,13 +17,22 @@ const data = [
   { name: '11 MOS.', 'Your Payments': 5000, 'Your Revenue': 4800 },
   { name: '12 MOS.', 'Your Payments': 5000, 'Your Revenue': 6300 },
 ];
-
+@inject('campaignStore')
+@observer
 export default class RevenueChart extends Component {
+  componentDidMount(prevProps, prevState) {
+    console.log('nextProps==>', prevProps);
+    console.log('nextState==>', prevState);
+    this.props.campaignStore.setFieldValue('isRenderRechart', false);
+  }
   render() {
     const style = {
       top: 0,
       right: 0,
     };
+    if (!this.props.campaignStore.isRenderRechart) {
+      return null;
+    }
     return (
       <ResponsiveContainer height={220}>
         <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>

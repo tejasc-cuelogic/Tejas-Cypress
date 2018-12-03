@@ -6,7 +6,7 @@
     .ui.horizontal.list{
         min-width: auto;
         >.item{
-            font-size:@12px;
+            font-size:@13px;
             font-weight:@fontMedium;
             text-transform: capitalize;
             color: @neutral;
@@ -25,9 +25,11 @@
     &.learn-more-list>.item {
         .header {
             margin-bottom: @10px;
+            font-size: @13px;
             +.content {
                 display:table-cell;
                 color: @neutral-middark;
+                font-size: @13px;
                 a {
                     color: @primary-one;
                 }
@@ -38,6 +40,9 @@
         }
         .icon {
             margin-left: @5px !important;
+        }
+        strong {
+            color: @neutral;
         }
     }
     &.rewards >li {

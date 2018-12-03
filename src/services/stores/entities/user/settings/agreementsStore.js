@@ -1,50 +1,72 @@
-import { toJS, observable, computed } from 'mobx';
+import { toJS, observable, computed, action } from 'mobx';
 import { forEach } from 'lodash';
+import { GqlClient as client } from '../../../../../api/publicApi';
+import { getBoxEmbedLink } from '../../../queries/agreements';
 
 export class AgreementsStore {
-  @observable agreementsList = [];
   @observable agreements = {
     cCAgreement: {
       title: 'Crowdpay Custodial Agreement',
-      boxRef: {
-        demo: 'u8y3ul3l4fb8qwnewn5u2nyikt7t2lmo',
-        develop: 'xkcu623s6p4279qxh07j89x73jeo6kcb',
-        qa: 'kaizhkgfv0u3i6byx4toru2700373zaw',
-      },
+      boxRef: { demo: '350609225244', develop: '350628768734', qa: '350614281589' },
     },
     irsCertification: {
       title: 'Subsitute IRS Form W-9 Certification',
-      boxRef: {
-        demo: 'jb8xswuegog9f1466k78ldwocc2gxmv8',
-        develop: '8acqrch3361a9xy1u6ey8rl86v278nfb',
-        qa: 'cidf554o3crhtd0vbbw0h2pq0br2gncx',
-      },
+      boxRef: { demo: '350621936982', develop: '350612351853', qa: '350633121944' },
     },
     membershipAgreement: {
       title: 'NextSeed US LLC Membership Agreement',
-      boxRef: {
-        demo: 'zczuyza7blkv8erfr1m9bituhmw8qqg9',
-        develop: 'z84yqcjpn58glkd0um9ibiro3n353sja',
-        qa: '8crhx2vddztxdnnmvs391j9mss2imqfv',
-      },
+      boxRef: { demo: '350617165075', develop: '350612483063', qa: '350616705574' },
+    },
+    welcomeKit: {
+      title: 'Welcome Packet',
+      boxRef: { demo: '350613582871', develop: '350632240634', qa: '350638909011' },
     },
   }
+  @observable embedUrl = null;
+  @observable docLoading = false;
 
   @computed get getAgreementsList() {
-    return (this.agreementsList && this.agreementsList.data &&
-      toJS(this.agreementsList.data.allAgreements)) || [];
+    return toJS(this.agreements);
+  }
+
+  @action
+  setLoading = (status) => {
+    this.docLoading = status;
+  }
+
+  @action
+  setAgreementUrl = (of, url) => {
+    this.agreements[of].embedUrl = url;
+    this.embedUrl = url;
+  }
+
+  @action
+  getBoxEmbedLink = (of, fileId) => {
+    this.docLoading = true;
+    const boxFileId = fileId || this.getAgreementsList[of].boxRef[this.getCurrentEnv()];
+    console.log(this.getAgreementsList, of, this.getCurrentEnv());
+    client.mutate({
+      mutation: getBoxEmbedLink,
+      variables: { fileId: boxFileId },
+    }).then((res) => {
+      this.setAgreementUrl(of, res.data.getBoxEmbedLink);
+      this.setLoading(false);
+    }).catch(() => this.setLoading(false));
   }
 
   @computed get getNavItems() {
-    const agreementsList = this.agreements;
+    const agreementsList = this.getAgreementsList;
     const navList = [];
     forEach(agreementsList, (ele, idx) => {
-      navList.push({ title: ele.title, to: idx, url: ele.boxRef.develop });
+      if (idx !== 'welcomeKit') {
+        navList.push({ title: ele.title, to: idx, url: ele.boxRef.develop });
+      }
     });
     return navList;
   }
 
-  getCurrentEnv = () => process.env.REACT_APP_DEPLOY_ENV;
+  getCurrentEnv = () => (process.env.REACT_APP_DEPLOY_ENV === 'localhost' ? 'develop' :
+    process.env.REACT_APP_DEPLOY_ENV);
 
   @computed
   get ccAgreementId() {

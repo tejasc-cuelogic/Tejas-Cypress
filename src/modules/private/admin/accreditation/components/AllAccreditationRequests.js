@@ -1,23 +1,34 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
-import { Card, Table } from 'semantic-ui-react';
-import { DateTimeFormat, InlineLoader } from './../../../../../theme/shared';
+import Aux from 'react-aux';
+import { Route, withRouter, Link } from 'react-router-dom';
+import { Card, Table, Icon } from 'semantic-ui-react';
+import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Actions from './Actions';
 import ConfirmModel from './ConfirmModel';
+import { ACCREDITATION_METHOD_ENUMS, ACCREDITATION_NETWORTH_LABEL } from '../../../../../services/constants/accreditation';
+import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
+import { ACCREDITATION_STATUS_LABEL } from '../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
+@withRouter
 @observer
 export default class AllAccreditationRequests extends Component {
   componentWillMount() {
-    this.props.accreditationStore.initRequest();
+    if (this.props.match.isExact) {
+      this.props.accreditationStore.initRequest();
+    }
   }
+  paginate = params => this.props.accreditationStore.initRequest(params);
   render() {
     const { match, accreditationStore } = this.props;
-    const { accreditations, loading } = accreditationStore;
+    const {
+      accreditations, loading, count, requestState,
+    } = accreditationStore;
     if (loading) {
       return <InlineLoader />;
     }
+    const totalRecords = count || 0;
     return (
       <Card fluid>
         <div className="table-wrapper">
@@ -26,6 +37,7 @@ export default class AllAccreditationRequests extends Component {
               <Table.Row>
                 <Table.HeaderCell>Investor Name</Table.HeaderCell>
                 <Table.HeaderCell>Requested Date</Table.HeaderCell>
+                <Table.HeaderCell>Account Type</Table.HeaderCell>
                 <Table.HeaderCell>Type</Table.HeaderCell>
                 <Table.HeaderCell>Method</Table.HeaderCell>
                 <Table.HeaderCell>Box Link</Table.HeaderCell>
@@ -37,28 +49,71 @@ export default class AllAccreditationRequests extends Component {
                 accreditations.map(accreditation => (
                   <Table.Row key={accreditation.id}>
                     <Table.Cell>
-                      <p><b>{accreditation.name}</b></p>
+                      <Link to={`/app/users/${accreditation.userId}/profile-data`}><p><b>{`${accreditation.firstName} ${accreditation.lastName}`}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
-                      <DateTimeFormat datetime={accreditation.createdAt} />
+                      <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
+                    </Table.Cell>
+                    <Table.Cell textAlign="center">
+                      {accreditation.accountType ?
+                        <Icon className="ns-entity-line" color="green" /> :
+                        <Aux>
+                          <Icon className="ns-individual-line" color="green" />
+                          <Icon className="ns-ira-line" color="green" />
+                        </Aux>
+                      }
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{accreditation.type}</p>
+                      <p>{ACCREDITATION_METHOD_ENUMS[accreditation.method]}
+                        {(accreditation.method === 'ASSETS' || accreditation.method === 'REVOCABLE_TRUST_ASSETS') &&
+                          <Aux><br /><b>Net Worth: </b>
+                            {ACCREDITATION_NETWORTH_LABEL[accreditation.netWorth]}
+                          </Aux>
+                        }
+                        {(accreditation.method === 'REVOCABLE_TRUST_ASSETS' || accreditation.method === 'REVOCABLE_TRUST_INCOME') && accreditation.grantorName &&
+                          <Aux><br /><b>Grantor Name: </b>
+                            {accreditation.grantorName}
+                          </Aux>
+                        }
+                      </p>
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{accreditation.method}</p>
+                      <p>{accreditation.assetsUpload && accreditation.assetsUpload.length ? 'Uploads' : 'Verifier'}
+                        {accreditation.verifier &&
+                          <Aux>
+                            <br /><b>Role: </b> {accreditation.verifier.role}
+                            <br /><b>Email: </b> {accreditation.verifier.email}
+                          </Aux>
+                        }
+                      </p>
                     </Table.Cell>
-                    <Table.Cell>
-                      <a href={`${accreditation.boxLink}`} className="link" rel="noopener noreferrer" target="_blank" >{accreditation.boxLink}</a>
+                    <Table.Cell textAlign="center">
+                      {accreditation.assetsUpload && accreditation.assetsUpload.length ?
+                        <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
+                      : <p className="intro-text">N/A</p>
+                      }
                     </Table.Cell>
-                    <Actions {...this.props} />
+                    {accreditation.accreditationStatus === 'REQUESTED' ?
+                      <Actions
+                        accountId={accreditation.accountId}
+                        userId={accreditation.userId}
+                        accountType={accreditation.accountType}
+                        {...this.props}
+                      /> :
+                      <Table.Cell>
+                        <p className={`${accreditation.accreditationStatus === 'APPROVED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
+                      </Table.Cell>
+                    }
                   </Table.Row>
                 ))
               }
             </Table.Body>
           </Table>
-          <Route path={`${match.url}/:action`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
+          <Route path={`${match.url}/:action/:userId/:accountId?/:accountType?`} render={props => <ConfirmModel refLink={match.url} {...props} />} />
         </div>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        }
       </Card>
     );
   }

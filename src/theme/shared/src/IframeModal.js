@@ -1,14 +1,19 @@
 import React from 'react';
-import { Button, Modal } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
+import { InlineLoader } from '../index';
 
 class IframeModal extends React.Component {
   render() {
-    const { className, text, srcUrl } = this.props;
+    const {
+      srcUrl, open, close, loading,
+    } = this.props;
     return (
-      <Modal size="large" closeIcon trigger={<Button className={className} >{text}</Button>} >
+      <Modal open={open} size="large" closeIcon onClose={close} >
         <Modal.Content>
           <div className="pdf-viewer">
+            {(loading || !srcUrl) ? <InlineLoader /> :
             <iframe width="100%" height="100%" title="agreement" src={srcUrl} />
+            }
           </div>
         </Modal.Content>
       </Modal>

@@ -12,9 +12,6 @@
 					font-weight: normal;
 					text-transform: none;
 				}
-				>.label {
-					font-weight: @bold;
-				}
 			}
 			&.three .statistic {
 				margin-bottom: @20px;
@@ -122,6 +119,9 @@
 				font-size: @30px !important;
 				font-weight: @fontMedium;
 			}
+		}
+		.label {
+			font-size: @15px;
 		}
 		&.small >.value {
 			font-size: @40px !important;

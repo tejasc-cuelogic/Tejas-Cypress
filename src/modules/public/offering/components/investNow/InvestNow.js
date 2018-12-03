@@ -32,7 +32,7 @@ export default class InvestNow extends React.Component {
 
   handleMultiStepModalclose = () => {
     this.props.investmentStore.setStepToBeRendered(0);
-    this.props.history.push('overview');
+    this.props.history.push(this.props.refLink);
     this.props.investmentStore.resetData();
     this.props.investmentStore.setByDefaultRender(true);
   }
@@ -85,6 +85,7 @@ export default class InvestNow extends React.Component {
         } else {
           this.setState({ submitLoading: true });
           this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
+            this.setState({ submitLoading: isValid });
             if (isValid) {
               this.props.investmentStore.generateAgreement().then(() => {
                 Helper.toast('Transfer request is in process!', 'success');
