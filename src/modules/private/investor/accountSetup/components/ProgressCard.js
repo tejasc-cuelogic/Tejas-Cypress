@@ -19,7 +19,10 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
       status = 1;
     }
   } else if (key === 'cash-dollar') {
-    if (signupStatus.investorProfileCompleted) {
+    if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount)
+    || (signupStatus.isMigratedFullAccount &&
+    signupStatus.isCipDoneForMigratedUser &&
+    signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed && signupStatus.investorProfileCompleted)) {
       status = 2;
     } else if (((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
     signupStatus.phoneVerification === 'DONE') ||
@@ -30,7 +33,13 @@ const checkStatus = (signupStatus, key, userDetailsStore) => {
       status = 0;
     }
   } else if (key === 'bar-line-chart') {
-    if (signupStatus.investorProfileCompleted) {
+    if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount) ||
+      (signupStatus.isMigratedFullAccount &&
+      signupStatus.isCipDoneForMigratedUser &&
+      signupStatus.phoneVerification === 'DONE' &&
+      signupStatus.isEmailConfirmed &&
+      signupStatus.investorProfileCompleted
+      )) {
       status = 1;
     } else {
       status = 0;

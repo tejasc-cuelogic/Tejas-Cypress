@@ -27,6 +27,12 @@ export class IdentityStore {
   @observable requestOtpResponse = {};
   @observable userCipStatus = '';
   @observable isOptConfirmed = false;
+  @observable sendOtpToMigratedUser = [];
+
+  @action
+  setSendOtpToMigratedUser = (step) => {
+    this.sendOtpToMigratedUser.push(step);
+  }
 
   @action
   setIsOptConfirmed = (status) => {
@@ -362,6 +368,11 @@ export class IdentityStore {
           },
         })
         .then((result) => {
+          if (type === 'EMAIL') {
+            this.setSendOtpToMigratedUser('EMAIL');
+          } else {
+            this.setSendOtpToMigratedUser('PHONE');
+          }
           this.setRequestOtpResponse(result.data.requestOtp);
           Helper.toast('Verification code sent to user.', 'success');
           resolve();
@@ -800,6 +811,40 @@ export class IdentityStore {
           uiStore.setProgress(false);
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
+        });
+    });
+  }
+
+  @action
+  confirmEmailAddress = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: verifyOtp,
+          variables: {
+            resourceId: this.requestOtpResponse,
+            verificationCode: authStore.CONFIRM_FRM.fields.code.value,
+          },
+        })
+        .then((result) => {
+          if (result.data.verifyOtp) {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            reject();
+          }
+        })
+        .catch(action((err) => {
+          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          reject(err);
+        }))
+        .finally(() => {
+          uiStore.setProgress(false);
         });
     });
   }

@@ -20,10 +20,14 @@ export default class ConfirmEmailAddress extends Component {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
     this.props.authStore.resetForm('CONFIRM_FRM');
-    // this.props.identityStore.setIsOptConfirmed(false);
     const credentials = cookie.load('USER_CREDENTIALS');
     if (credentials) {
       this.props.authStore.setCredentials(credentials);
+    }
+    if (this.props.userDetailsStore.signupStatus.isMigratedUser
+      && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
+      && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
+      this.props.identityStore.startPhoneVerification('EMAIL');
     }
   }
   componentWillUnmount() {
@@ -40,24 +44,40 @@ export default class ConfirmEmailAddress extends Component {
         Helper.toast('Email has been verified and updated', 'success');
       })
         .catch(() => { });
-    } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === '') {
+    } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
+    && !this.props.userStore.currentUser) {
       this.props.history.push('/auth/register-investor');
     } else {
-      this.props.identityStore.verifyOTPWrapper().then(() => {
-        authActions.register()
-          .then(() => {
-            const { roles } = this.props.userStore.currentUser;
-            if (roles.includes('investor')) {
-              this.props.identityStore.setIsOptConfirmed(true);
-            } else {
-              const redirectUrl = !roles ? '/auth/login' :
-                SIGNUP_REDIRECT_ROLEWISE.find(user =>
-                  roles.includes(user.role)).path;
-              this.props.history.replace(redirectUrl);
-            }
-          })
-          .catch(() => { });
-      });
+      const { isMigratedFullAccount } = this.props.userDetailsStore.signupStatus;
+      if (isMigratedFullAccount) {
+        this.props.identityStore.confirmEmailAddress().then(() => {
+          const { roles } = this.props.userStore.currentUser;
+          if (roles.includes('investor')) {
+            this.props.identityStore.setIsOptConfirmed(true);
+          } else {
+            const redirectUrl = !roles ? '/auth/login' :
+              SIGNUP_REDIRECT_ROLEWISE.find(user =>
+                roles.includes(user.role)).path;
+            this.props.history.replace(redirectUrl);
+          }
+        });
+      } else {
+        this.props.identityStore.verifyOTPWrapper().then(() => {
+          authActions.register()
+            .then(() => {
+              const { roles } = this.props.userStore.currentUser;
+              if (roles.includes('investor')) {
+                this.props.identityStore.setIsOptConfirmed(true);
+              } else {
+                const redirectUrl = !roles ? '/auth/login' :
+                  SIGNUP_REDIRECT_ROLEWISE.find(user =>
+                    roles.includes(user.role)).path;
+                this.props.history.replace(redirectUrl);
+              }
+            })
+            .catch(() => { });
+        });
+      }
     }
   }
 
@@ -83,6 +103,8 @@ export default class ConfirmEmailAddress extends Component {
   handleContinue = () => {
     if (this.props.refLink) {
       this.props.history.push('/app/profile-settings/profile-data');
+    } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
+      this.props.history.replace(this.props.userDetailsStore.pendingStep);
     } else {
       this.props.history.replace('/app/summary/identity-verification/0');
     }
