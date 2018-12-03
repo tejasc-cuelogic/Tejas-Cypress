@@ -22,7 +22,7 @@ class Home extends Component {
   }
   render() {
     const {
-      active, loading, activeToDisplay, activeList, loadMoreRecord,
+      active, loading,
     } = this.props.campaignStore;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
@@ -45,7 +45,7 @@ class Home extends Component {
         <CampaignList
           loading={loading}
           explore
-          campaigns={active}
+          campaigns={active.splice(0, 6)}
           heading={
             <Aux>
               <Header as="h2" textAlign="center">Latest Campaigns</Header>
@@ -56,11 +56,6 @@ class Home extends Component {
             </Aux>
           }
         />
-        {activeList && activeList.length > 9 && activeToDisplay < activeList.length &&
-          <div className="center-align mb-50">
-            <Button secondary content="Load More" onClick={() => loadMoreRecord('activeToDisplay')} />
-          </div>
-        }
         <div className="center-align mb-50">
           <Button secondary content="Explore Campaigns" as={Link} to="/offerings" />
         </div>
