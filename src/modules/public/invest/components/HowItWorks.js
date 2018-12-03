@@ -146,11 +146,7 @@ const HowItWorks = () => (
     </section>
     <section className="bg-offwhite">
       <Container>
-<<<<<<< HEAD
-        <Grid relaxed={!isTablet && 'very'} stackable centered className="mt-40 mb-40">
-=======
         <Grid relaxed={!isTablet && 'very'} stackable centered>
->>>>>>> 7b49181147fdb2f9efe6a658066ea54827e50158
           <Grid.Row>
             <Grid.Column width={10} textAlign="center">
               <Header as="h2">Every investment comes with risk and opportunity.</Header>
