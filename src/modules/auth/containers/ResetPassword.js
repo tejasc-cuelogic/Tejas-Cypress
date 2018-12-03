@@ -38,9 +38,7 @@ export default class ResetPassword extends Component {
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Password Reset</Header>
-          <p>
-            Please confirm your verifiction code and update your password
-          </p>
+          <p>Please confirm your verifiction code and update your password</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
           <Form error onSubmit={this.onSubmit}>

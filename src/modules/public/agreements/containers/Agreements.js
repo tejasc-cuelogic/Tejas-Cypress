@@ -7,6 +7,7 @@ import SecondaryMenu from '../../../../theme/layout/SecondaryMenu';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { InlineLoader } from '../../../../theme/shared';
 import { DataFormatter } from '../../../../helper';
+import NotFound from '../../../shared/NotFound';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -32,12 +33,7 @@ export default class TermsOfUse extends Component {
     return (
       <Aux>
         {isMobile &&
-        <SecondaryMenu
-          secondary
-          vertical
-          match={match}
-          navItems={navItems}
-        />
+        <SecondaryMenu secondary vertical match={match} navItems={navItems} />
         }
         <section>
           <Container>
@@ -67,6 +63,7 @@ export default class TermsOfUse extends Component {
                     <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
                   ))
                   }
+                  <Route component={NotFound} />
                 </Switch>
               </Grid.Column>
             </Grid>

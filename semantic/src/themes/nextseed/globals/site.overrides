@@ -1281,6 +1281,7 @@ a.icon-link {
 .error-page{
 	padding:@80px @14px;
 	text-align:center;
+	flex-grow:1;	// useful on campaign details page
 	h1.ui.header{
 		font-size:@90px !important;
 		font-weight:@bold;

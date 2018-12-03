@@ -17,7 +17,7 @@ const FormSelect = observer((props) => {
   }
   const { displayMode, readOnly } = props;
   return (
-    <Form.Field width={width}>
+    <Form.Field error={error} width={width}>
       <label>
         {label}
         {props.tooltip &&
