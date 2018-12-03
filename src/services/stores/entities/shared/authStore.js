@@ -314,7 +314,7 @@ export class AuthStore {
   }
 
   @action
-  checkEmailExistsPresignup = email => new Promise((res) => {
+  checkEmailExistsPresignup = email => new Promise((res, rej) => {
     graphql({
       client: clientPublic,
       query: checkEmailExistsPresignup,
@@ -325,6 +325,8 @@ export class AuthStore {
         if (data.checkEmailExistsPresignup) {
           this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
           this.SIGNUP_FRM.meta.isValid = false;
+          rej();
+        } else {
           res();
         }
       },
