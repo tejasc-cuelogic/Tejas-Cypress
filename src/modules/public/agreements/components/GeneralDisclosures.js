@@ -52,7 +52,7 @@ export default class GeneralDisclosures extends Component {
             Use and Privacy Policy to the actual URL that has them.
           </p>
           <p>
-            service their outstanding debt securities, or that the stated equity valuation and other
+            Service their outstanding debt securities, or that the stated equity valuation and other
             terms are accurate or in agreement with the market or industry valuations.Additionally,
             investors may receive illiquid and/or restricted stock that may be subject to holding
             period requirements and/or liquidity concerns. As a prudent matter, investingin startups

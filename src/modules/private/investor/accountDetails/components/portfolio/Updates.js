@@ -5,13 +5,16 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import UpdatesTimeline from './UpdatesComponents/UpdatesTimeline';
 import UpdateDetails from './UpdatesComponents/UpdateDetails';
+import { InlineLoader } from '../../../../../../theme/shared';
 
-@inject('campaignStore')
+@inject('updateStore')
 @observer
 class Updates extends Component {
+  componentWillMount() {
+    this.props.updateStore.initRequest();
+  }
   render() {
-    const { campaign } = this.props.campaignStore;
-    const updates = campaign && campaign.updates;
+    const { updates, loading } = this.props.updateStore;
     const summary = [];
     if (updates && updates.length) {
       updates.map((dataItem, index) => {
@@ -21,6 +24,9 @@ class Updates extends Component {
           moment(updates[index].updated.date).format('ll') : null;
         return summary.push(dateObj);
       });
+    }
+    if (loading) {
+      return <InlineLoader />;
     }
     return (
       <Grid padded relaxed="very">
