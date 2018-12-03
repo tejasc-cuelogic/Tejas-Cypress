@@ -120,8 +120,14 @@ const HowItWorks = () => (
             <div>
               <Header as="h5">Cost-effective capital, with benefits</Header>
               <p>
+<<<<<<< HEAD
                 With NextSeed, your financing solution is part of your marketing campaign. Share
                 your story with thousands of local investors and interested fans nationwide.
+=======
+                With NextSeed, you have access to a unique type of financing that can maximize
+                your ownership stake. Share your concept with thousands of local investors, as
+                well as your fans all over the country.
+>>>>>>> 7b49181147fdb2f9efe6a658066ea54827e50158
               </p>
             </div>
           </Grid.Column>

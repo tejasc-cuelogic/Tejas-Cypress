@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Card, Table } from 'semantic-ui-react';
-import { DateTimeFormat, InlineLoader } from './../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 import Actions from './Actions';
 
 @inject('bankAccountStore')
@@ -10,9 +11,13 @@ export default class AllRequests extends Component {
   componentWillMount() {
     this.props.bankAccountStore.initRequest();
   }
+  paginate = params => this.props.bankAccountStore.pageRequest(params);
   render() {
     const { bankAccountStore } = this.props;
-    const { changeRequests, loading } = bankAccountStore;
+    const {
+      changeRequests, loading, count, requestState,
+    } = bankAccountStore;
+    const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
     }
@@ -33,22 +38,27 @@ export default class AllRequests extends Component {
             <Table.Body>
               {
                 changeRequests.map(req => (
-                  <Table.Row key={req.id}>
+                  <Table.Row key={req.userId}>
                     <Table.Cell>
-                      <p><b>{req.name}</b></p>
+                      <p><b>{req.firstName} {req.lastName}</b></p>
                     </Table.Cell>
                     <Table.Cell>
-                      <DateTimeFormat datetime={req.createdAt} />
+                      <DateTimeFormat datetime={req.dateRequested} />
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{req.type}</p>
+                      <p>{req.linkedBank && req.linkedBank.changeRequest &&
+                        req.linkedBank.changeRequest.plaidAccessToken ? 'Plaid' : 'Manual'}
+                      </p>
                     </Table.Cell>
                     <Table.Cell>
-                      <p>{req.transaction}</p>
+                      <p>N/A</p>
                     </Table.Cell>
                     <Table.Cell>
-                        XXX XXX 8493<br />
-                        2424024249
+                      {(req.linkedBank && req.linkedBank.changeRequest
+                        && req.linkedBank.changeRequest.accountNumber && Helper.encryptNumberWithX(req.linkedBank.changeRequest.accountNumber)) || 'N/A'}
+                      <br />
+                      {(req.linkedBank && req.linkedBank.changeRequest
+                        && req.linkedBank.changeRequest.routingNumber && req.linkedBank.changeRequest.routingNumber) || 'N/A'}
                     </Table.Cell>
                     <Actions {...this.props} />
                   </Table.Row>
@@ -57,6 +67,9 @@ export default class AllRequests extends Component {
             </Table.Body>
           </Table>
         </div>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        }
       </Card>
     );
   }

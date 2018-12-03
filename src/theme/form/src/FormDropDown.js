@@ -12,7 +12,7 @@ const FormDropDown = observer((props) => {
     tooltip,
   } = props.fielddata;
   return (
-    <Form.Field width={props.containerwidth || false} className={props.containerclassname || ''}>
+    <Form.Field error={error} width={props.containerwidth || false} className={props.containerclassname || ''}>
       {!props.ishidelabel && label !== '' &&
         <label>
           {label}

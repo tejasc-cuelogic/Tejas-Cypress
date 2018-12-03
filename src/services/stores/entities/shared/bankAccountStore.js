@@ -1,11 +1,14 @@
 import { observable, action, computed } from 'mobx';
+import graphql from 'mobx-apollo';
 import { isEmpty, isArray, map } from 'lodash';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore } from '../../index';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
+import { getlistLinkedBankUsers } from '../../queries/bankAccount';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -19,12 +22,21 @@ export class BankAccountStore {
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable filters = false;
+  @observable db;
   @observable requestState = {
+    skip: 0,
+    page: 1,
+    perPage: 10,
+    displayTillIndex: 10,
     filters: false,
     search: {
     },
   };
 
+  @action
+  setDb = (data) => {
+    this.db = ClientDb.initiateDb(data);
+  }
   @action
   setDepositMoneyNow(status) {
     this.depositMoneyNow = status;
@@ -150,24 +162,17 @@ export class BankAccountStore {
   }
 
   @action
-  initRequest = () => {
-    this.data = [
-      {
-        id: 1,
-        name: 'Alexandra Smith',
-        createdAt: '7/12/2018',
-        type: 'Plaid',
-        transaction: '2424024249',
-      },
-      {
-        id: 2,
-        name: 'Johny Kaka',
-        createdAt: '7/12/2018',
-        type: 'Manual',
-        transaction: '2534535435',
-      },
-    ];
-  }
+    initRequest = () => {
+      const variables = { page: 1, limit: 100 };
+      this.data = graphql({
+        client,
+        query: getlistLinkedBankUsers,
+        variables,
+        onFetch: (res) => {
+          this.setDb(res.listLinkedBankUsers.linkedBankList);
+        },
+      });
+    }
 
   @action
   initiateSearch = (srchParams) => {
@@ -176,21 +181,13 @@ export class BankAccountStore {
   }
   @action
   setInitiateSrch = (name, value) => {
-    if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value;
-      if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
-        const srchParams = { ...this.requestState.search };
-        this.initiateSearch(srchParams);
-      }
+    const srchParams = { ...this.requestState.search };
+    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
+      srchParams[name] = value;
     } else {
-      const srchParams = { ...this.requestState.search };
-      if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-        srchParams[name] = value;
-      } else {
-        delete srchParams[name];
-      }
-      this.initiateSearch(srchParams);
+      delete srchParams[name];
     }
+    this.initiateSearch(srchParams);
   }
   @action
   toggleSearch = () => {
@@ -201,13 +198,21 @@ export class BankAccountStore {
     return this.data.loading;
   }
   @computed get changeRequests() {
-    return (this.data) || [];
+    return (this.db && this.db.length &&
+      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @action
   resetFormData(form) {
     const resettedForm = Validator.resetFormData(this[form]);
     this[form] = resettedForm;
+  }
+
+  @action
+  pageRequest = ({ skip, page }) => {
+    this.requestState.displayTillIndex = this.requestState.perPage * page;
+    this.requestState.page = page;
+    this.requestState.skip = skip;
   }
 
   @action
@@ -221,6 +226,10 @@ export class BankAccountStore {
         errors && errors[key][0],
       );
     });
+  }
+
+  @computed get count() {
+    return (this.changeRequests && this.changeRequests.length) || 0;
   }
 
   @action
