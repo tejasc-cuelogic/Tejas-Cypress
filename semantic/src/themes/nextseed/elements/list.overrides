@@ -41,6 +41,9 @@
         .icon {
             margin-left: @5px !important;
         }
+        strong {
+            color: @neutral;
+        }
     }
     &.rewards >li {
         color: @neutral-middark;
