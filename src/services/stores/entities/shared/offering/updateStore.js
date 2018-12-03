@@ -62,7 +62,7 @@ export class UpdateStore {
           refetchQueries: [{ query: allUpdates, variables }],
         })
         .then((res) => {
-          if (isManager && !isAlreadyPublished) {
+          if (isManager && !isAlreadyPublished && status !== 'DRAFT') {
             const UpdateId = res.data.createOfferingUpdates ?
               res.data.createOfferingUpdates.id : res.data.updateOfferingUpdatesInfo.id;
             this.approveUpdate(UpdateId);

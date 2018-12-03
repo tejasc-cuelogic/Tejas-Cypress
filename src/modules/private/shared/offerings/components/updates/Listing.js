@@ -30,7 +30,7 @@ export default class Listing extends Component {
               this.props.data.map(record => (
                 <Table.Row key={record.id}>
                   <Table.Cell>
-                    <Modal dimmer="inverted" onClose={this.close} size="large" trigger={<Button className="link-button" >{record.title}</Button>} closeIcon >
+                    <Modal dimmer="inverted" onClose={this.close} closeOnDimmerClick={false} size="large" trigger={<Button className="link-button" >{record.title}</Button>} closeIcon >
                       <NewUpdate
                         refLink={this.props.match.url}
                         id={record.id}
@@ -39,7 +39,7 @@ export default class Listing extends Component {
                       />
                     </Modal>
                   </Table.Cell>
-                  <Table.Cell>Public</Table.Cell>
+                  <Table.Cell>{capitalize(record.scope)}</Table.Cell>
                   <Table.Cell><DateTimeFormat datetime={record.updated.date} /></Table.Cell>
                   <Table.Cell className={`status ${kebabCase(record.status)}`}> <Icon className="ns-circle" color={record.status === 'PUBLISHED' ? 'green' : record.status === 'DRAFT' ? 'red' : 'orange'} /> {capitalize(record.status)}</Table.Cell>
                   <Table.Cell textAlign="right">{record.status === 'PUBLISHED' ? 'Update is published' : record.status === 'DRAFT' ? 'Saved To Draft' : 'Sent update for review'}</Table.Cell>
