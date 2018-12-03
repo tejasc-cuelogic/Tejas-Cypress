@@ -178,6 +178,10 @@ section{
     } 
     &.track{
         background:url(../../assets/images/investors/laptop.png) 100% center no-repeat;
+        @media only screen and (min-width: @monitorBreakpoint) and (max-width: @largestLargeMonitor ) {
+            background-size: 50%;
+            background-position: right;
+        }
         @media only screen and (min-width: @tabletBreakpoint) and (max-width: @largestTabletScreen ) {
             background-size: contain;
         }
