@@ -31,6 +31,7 @@ export default class NewPhoneNumber extends Component {
     const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
     this.props.identityStore.startPhoneVerification(type, phoneNumberValue).then(() => {
       this.props.identityStore.setIsOptConfirmed(false);
+      this.props.uiStore.clearErrors();
       this.props.history.push('/app/profile-settings/profile-data/confirm');
     })
       .catch(() => {});
