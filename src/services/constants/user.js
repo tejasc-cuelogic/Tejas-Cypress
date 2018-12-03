@@ -199,7 +199,7 @@ export const PHONE_VERIFICATION = {
     value: '',
     label: 'Enter your verification code here:',
     error: undefined,
-    rule: 'required',
+    rule: 'required|min:6',
   },
 };
 

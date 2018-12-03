@@ -17,17 +17,23 @@ class InvestorSignup extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+  handleIsEmailExist = (email) => {
+    this.props.authStore.checkEmailExistsPresignup(email);
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
     if (this.props.authStore.newPasswordRequired) {
       this.props.history.push('/auth/change-password');
     } else {
       const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+      this.props.authStore.checkEmailExistsPresignup(email.value);
       const userCredentials = { email: email.value, password: btoa(password.value) };
       cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-      this.props.identityStore.requestOtpWrapper().then(() => {
-        this.props.history.push('/auth/confirm-email');
-      });
+      if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
+        this.props.identityStore.requestOtpWrapper().then(() => {
+          this.props.history.push('/auth/confirm-email');
+        });
+      }
     }
   };
   render() {
@@ -82,6 +88,7 @@ class InvestorSignup extends Component {
               name="email"
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
+              onblur={this.handleIsEmailExist}
             />
             <FormPasswordStrength
               key="password"

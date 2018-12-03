@@ -220,3 +220,9 @@ export const verifyOTPWrapper = gql`
     )
   }
 `;
+
+export const checkEmailExistsPresignup = gql`
+  query checkEmailExistsPresignup($email: String!){
+    checkEmailExistsPresignup(email: $email)
+  }
+`;

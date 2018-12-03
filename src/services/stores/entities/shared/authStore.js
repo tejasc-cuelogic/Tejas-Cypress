@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
@@ -6,7 +7,7 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication } from '../../queries/profile';
+import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
@@ -310,6 +311,24 @@ export class AuthStore {
     this.resetForm('FORGOT_PASS_FRM', null);
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
+  }
+
+  @action
+  checkEmailExistsPresignup = (email) => {
+    graphql({
+      client: clientPublic,
+      query: checkEmailExistsPresignup,
+      variables: {
+        email,
+      },
+      onFetch: (data) => {
+        if (data.checkEmailExistsPresignup) {
+          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
+          this.SIGNUP_FRM.meta.isValid = false;
+        }
+      },
+      fetchPolicy: 'network-only',
+    });
   }
 }
 
