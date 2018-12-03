@@ -141,7 +141,7 @@
                 font-weight:@fontMedium;
             }
         }
-        &.error .ui.dropdown .text{
+        &.error .ui.dropdown .text:not(.default){
             color:@neutral;
         }
     }
