@@ -3,7 +3,7 @@
 *******************************/
 section{
     &.banner { 
-        height:710px;
+        height:817px;
         @media only screen and (max-width : @computerBreakpoint) {
             height:400px;
             padding-top: 80px;
@@ -65,7 +65,7 @@ section{
             }
         }
         &.campaign-list-banner{
-            height:435px;
+            height:535px;
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat / cover;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -88,7 +88,7 @@ section{
             }
         }
         &.resources-banner {
-            height:435px;
+            height:535px ;
             background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat / cover;  
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -99,14 +99,14 @@ section{
             }
         }
         &.edu-center-business-banner {
-            height:435px;
+            height:535px;
             background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat / cover;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
             }
         }
         &.edu-center-investor-banner {
-            height:435px;
+            height:535px;
             background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat / cover;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;

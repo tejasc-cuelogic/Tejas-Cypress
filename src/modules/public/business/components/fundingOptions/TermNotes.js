@@ -46,15 +46,14 @@ export default class TermNotes extends Component {
           </Item.Group>
           <Divider hidden />
           <Button secondary>Apply Now</Button>
-          <List horizontal className="learn-more-list mt-20">
+          {/* <List horizontal className="learn-more-list mt-20">
             <List.Item>
               <List.Header>Learn more</List.Header>
-              {/* < List.Icon className="ns-arrow-right" color="green" /> */}
               <List.Content>
                 See how a <a href="/">Term Note Works</a>
               </List.Content>
             </List.Item>
-          </List>
+          </List> */}
         </Grid.Column>
       </Grid>
     );

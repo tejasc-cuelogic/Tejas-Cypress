@@ -69,11 +69,10 @@ const Process = () => (
                   </Card.Content>
                 </Card>
               </Card.Group>
-              {isMobile &&
+              {/* {isMobile &&
               <List horizontal relaxed className="learn-more-list">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
                   <List.Content>
                     How to start a <a href="/">raise on NextSeed</a>
                   </List.Content>
@@ -83,12 +82,13 @@ const Process = () => (
               <Divider />
               <List className="learn-more-list">
                 <List.Item>
-                  <List.Content as={Link} to="/business/all-inclusive" className="text-uppercase" floated="right">
+                  <List.Content as={Link} to="/business/all-inclusive"
+                  className="text-uppercase" floated="right">
                     <b>All-Inclusive</b>
                     <List.Icon className="ns-arrow-right" color="green" />
                   </List.Content>
                 </List.Item>
-              </List>
+              </List> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>
