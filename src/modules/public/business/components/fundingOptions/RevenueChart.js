@@ -20,19 +20,11 @@ const data = [
 @inject('campaignStore')
 @observer
 export default class RevenueChart extends Component {
-  componentDidMount(prevProps, prevState) {
-    console.log('nextProps==>', prevProps);
-    console.log('nextState==>', prevState);
-    this.props.campaignStore.setFieldValue('isRenderRechart', false);
-  }
   render() {
     const style = {
       top: 0,
       right: 0,
     };
-    if (!this.props.campaignStore.isRenderRechart) {
-      return null;
-    }
     return (
       <ResponsiveContainer height={220}>
         <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>

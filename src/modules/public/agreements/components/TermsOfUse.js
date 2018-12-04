@@ -2,7 +2,6 @@
 /* eslint-disable max-len */
 import React from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
 import { Header, Divider, List } from 'semantic-ui-react';
 
 const TermsOfUse = () => (
@@ -219,7 +218,7 @@ const TermsOfUse = () => (
       <p>
         NextSeed is not a registered broker-dealer nor a registered Funding Portal. All
         securities-related activity is conducted by either (a) NextSeed Securities, an affiliate
-        of NextSeed and a registered broker dealer and member of <Link to="http://www.finra.org/" target="_blank">FINRA</Link>
+        of NextSeed and a registered broker dealer and member of <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
         /SIPC or (b) NextSeed Funding Portal, an affiliate of NextSeed and a registered
         Funding Portal member of FINRA. The provision of brokerage services offered by
         NextSeed Securities is governed by the Investor Agreements entered into between

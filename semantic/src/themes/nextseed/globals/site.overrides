@@ -87,7 +87,7 @@ h6{
 	margin-bottom:@60px !important;
 }
 .mb-80 {
-	margin-bottom: 80px !important;
+	margin-bottom: @80px !important;
 }
 .mt-10 {
 	margin-top: @10px !important;
@@ -108,7 +108,7 @@ h6{
 	margin-top: 74px;
 }
 .mt-80 {
-	margin-top: 80px !important;
+	margin-top: @80px !important;
 }
 .mb-half{
 	margin-bottom:@7px !important;
@@ -176,7 +176,7 @@ h6{
 	color: @primary-two !important;
 }
 .grey-text {
-	color: @neutral-offdark;
+	color: @border-color;
 }
 .caption-note{
 	font-size:@12px;
@@ -283,6 +283,7 @@ footer{
 			flex-direction: row;
 			@media only screen and (max-width : @largestMobileScreen){
 				flex-direction: column; 
+				align-items: center;
 			}
 		}
 		.secure {
@@ -2600,6 +2601,23 @@ p.check-extra-info{
 		margin-bottom: 0;
 	}
 }
+
+.goldstar-info{
+	display:inline-block;
+	margin:0 auto;
+	text-align:left;
+	dl.dl-horizontal{
+		dt{
+			width:60px;
+			font-weight:@normal;
+		}
+		dd{
+			margin-left:70px;
+			margin-bottom:@5px;
+		}
+	}
+}
+
 // Legal Documents
 .legal-desc p {
 	margin-bottom: @22px;

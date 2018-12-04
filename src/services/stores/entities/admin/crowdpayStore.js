@@ -10,6 +10,13 @@ import { FILTER_META, ACCOUNT_STATUS_VALUES, ACCOUNT_STATUS_FILTER_VALUES } from
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../index';
 
+const types = {
+  review: null,
+  cip: 'INDIVIDUAL',
+  ira: 'IRA',
+  entity: 'ENTITY',
+};
+
 export class CrowdpayStore {
   @observable data = [];
   @observable filters = false;
@@ -25,9 +32,10 @@ export class CrowdpayStore {
   };
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable db;
+
   @action
-  setAccountTypes = (accType, type) => {
-    this.requestState.search.accountType = accType;
+  setAccountTypes = (type) => {
+    this.requestState.search.accountType = types[type];
     this.requestState.type = type;
   }
 
