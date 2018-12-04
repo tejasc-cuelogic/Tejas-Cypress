@@ -17,18 +17,18 @@ import Disclosure from './DataRoom/Disclosure';
 const isMobile = document.documentElement.clientWidth < 768;
 
 const navItems = [
-  { title: 'Disclosure', to: 'disclosure' },
-  { title: 'Purchase Agreement', to: 'purchase-agreement' },
-  { title: 'Current Capitalization Table', to: 'current-capitalization-table' },
-  { title: 'Escrow Agreement', to: 'escrow-agreement' },
-  { title: 'Operating Agreement', to: 'operating-agreement' },
+  { title: 'Disclosure', to: 'disclosure', content: 'offeringpageignited.pdf' },
+  { title: 'Purchase Agreement', to: 'purchase-agreement', content: 'offeringpageignited.pdf' },
+  { title: 'Current Capitalization Table', to: 'current-capitalization-table', content: 'offeringpageignited.pdf' },
+  { title: 'Escrow Agreement', to: 'escrow-agreement', content: 'offeringpageignited.pdf' },
+  { title: 'Operating Agreement', to: 'operating-agreement', content: 'offeringpageignited.pdf' },
 ];
 @withRouter
 export default class TermsOfUse extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       // const navItems = GetNavMeta(this.props.match.url, [], true).subNavigations;
-      this.props.history.push(`${this.props.match.url}/disclosures`);
+      this.props.history.push(`${this.props.match.url}/disclosure`);
     }
   }
   module = name => DataFormatter.upperCamelCase(name);
@@ -66,11 +66,31 @@ export default class TermsOfUse extends Component {
                     exact
                     path={`${match.url}/${navItems[0].to}`}
                     // component={Disclosures}
-                    render={props => <Disclosure {...props} />}
+                    render={
+                      props =>
+                        (<Disclosure
+                          {...props}
+                          documentToLoad={navItems[0].content}
+                          headerTitle={navItems[0].title}
+                        />)
+                    }
                   />
                   {
                     navItems.map(item => (
-                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <Disclosure {...props} />} />
+                      <Route
+                        exact={false}
+                        key={item.to}
+                        documentToLoad={item.content}
+                        path={`${match.url}/${item.to}`}
+                        render={
+                          props =>
+                            (<Disclosure
+                              {...props}
+                              documentToLoad={item.content}
+                              headerTitle={item.title}
+                            />)
+                        }
+                      />
                     ))
                   }
                 </Switch>
