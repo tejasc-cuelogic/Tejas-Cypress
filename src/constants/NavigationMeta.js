@@ -475,7 +475,7 @@ export const PUBLIC_NAV = [
     subPanel: 1,
     exact: true,
     subNavigations: [
-      { title: 'Mission', to: 'about' },
+      { title: 'Mission', to: 'about/mission' },
       { title: 'Team', to: 'about/team' },
       { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'resources/insights' },

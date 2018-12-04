@@ -29,7 +29,7 @@ class Overview extends Component {
         <Grid stackable doubling>
           <Grid.Row>
             <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
-            <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
+            <Grid.Column widescreen={10} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
               <Segment padded className="overview-video">
                 {campaign && campaign.media &&
                   campaign.media.heroVideo && campaign.media.heroVideo.url ?

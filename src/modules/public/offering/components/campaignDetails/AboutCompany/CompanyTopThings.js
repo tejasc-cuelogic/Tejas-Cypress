@@ -10,7 +10,7 @@ class CompanyTopThings extends Component {
       campaign, companyDescriptionUrl, emptyStatement,
     } = this.props;
     return (
-      <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
+      <Grid.Column widescreen={6} largeScreen={8} computer={16} tablet={16}>
         <Segment padded>
           {/* <Breadcrumb>
                   <Breadcrumb.Section as={Link}to={`${this.props.match.url}/companydescription`}>
