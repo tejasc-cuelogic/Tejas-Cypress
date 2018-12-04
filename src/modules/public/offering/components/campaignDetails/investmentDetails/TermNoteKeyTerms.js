@@ -12,7 +12,7 @@ class TermNoteKeyTerms extends Component {
       <Modal.Content scrolling>
         <Grid columns={3} stackable divided className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b><br />{KeyTerms && KeyTerms.shorthandBusinessName ? KeyTerms.shorthandBusinessName : 'NA'}</p>
+            <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
             <p><b>Regulation</b><br />{KeyTerms && KeyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>

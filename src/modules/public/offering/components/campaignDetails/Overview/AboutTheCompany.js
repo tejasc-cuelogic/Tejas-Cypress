@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Icon, Grid, Segment, Popup, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
-import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 class AboutTheCompany extends Component {
@@ -25,14 +25,14 @@ class AboutTheCompany extends Component {
           <Header as="h3">Top things to know</Header> */}
           <div className="segment-container small">
             <Header as="h3">
-              <Link to={`${refLink}/overview/details`}>
+              <Link to={`${refLink}/overview/top-things-to-know`}>
                 Top Things to Know
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
             </Header>
             <p>
               <b>Type of Raise: </b>
-              {campaign && campaign.keyTerms && campaign.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities] : ''}
+              {campaign && campaign.keyTerms && campaign.keyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : ''}
               <Popup hoverable position="bottom center" trigger={<Icon name="help circle" color="green" />} content={(<span>For every $100 you invest, you are paid a portion of this company&apos;s gross revenue every month until you are paid $190 within 78 months. A 1.0% service fee is deducted from each payment. <a target="blank" href="https://www.nextseed.com/offerings/buffbrew-taproom/#returnsGraphAnchor">See some examples</a>.</span>)} />
             </p>
             <p>
