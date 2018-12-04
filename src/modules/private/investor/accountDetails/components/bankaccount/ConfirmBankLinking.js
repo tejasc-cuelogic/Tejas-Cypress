@@ -12,6 +12,7 @@ import ConfirmOTPModal from '../../../../shared/ConfirmOTPModal';
 export default class ConfirmBankLinking extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
+    this.props.transactionStore.resetFormData('OTP_VERIFY_META');
   }
 
   submit = (e) => {
