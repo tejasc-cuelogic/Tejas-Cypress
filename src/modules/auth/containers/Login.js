@@ -28,9 +28,12 @@ class Login extends Component {
           this.props.history.push('/auth/change-password');
         } else {
           const { roles } = this.props.userStore.currentUser;
+          const { email, password } = this.props.authStore.LOGIN_FRM.fields;
+          const userCredentials = { email: email.value, password: btoa(password.value) };
+          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
           this.props.authStore.resetForm('LOGIN_FRM');
           this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
-            `/app/${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+            `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
         }
       });
   };

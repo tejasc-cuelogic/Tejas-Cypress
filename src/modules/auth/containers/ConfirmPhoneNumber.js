@@ -64,7 +64,10 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.identityStore.setReSendVerificationCode(true);
     this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
     this.props.uiStore.clearErrors();
-    this.props.identityStore.startPhoneVerification();
+    const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
+    const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
+    const phoneNumberValue = phoneNumber.value;
+    this.props.identityStore.startPhoneVerification(type, phoneNumberValue);
     if (!this.props.refLink) {
       this.props.uiStore.setEditMode(false);
     }
@@ -185,7 +188,7 @@ export default class ConfirmPhoneNumber extends Component {
               :
               <ButtonGroup>
                 <Button type="button" inverted color="red" className="relaxed" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                <Button type="button" primary className="relaxed" content="Save" onClick={this.startPhoneVerification} />
+                <Button type="button" primary className="relaxed" content="Save" onClick={() => this.startPhoneVerification()} />
               </ButtonGroup>
             }
           </Form>

@@ -33,6 +33,7 @@ export default class AccountCreation extends React.Component {
       isEnterPressed,
       resetIsEnterPressed,
       setIsEnterPressed,
+      errors,
     } = this.props.uiStore;
     const {
       INVESTMENT_EXP_FORM,
@@ -56,7 +57,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Employment Status',
         component: <Employment />,
-        isValid: EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
+        isValid: EMPLOYMENT_FORM.meta.isFieldValid && !errors ? '' : 'error',
         isDirty: EMPLOYMENT_FORM.meta.isDirty,
         form: 'EMPLOYMENT_FORM',
         stepToBeRendered: 2,
@@ -64,7 +65,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Brokerage Employment',
         component: <BrokerageEmployment />,
-        isValid: BROKERAGE_EMPLOYMENT_FORM.meta.isFieldValid ? '' : 'error',
+        isValid: BROKERAGE_EMPLOYMENT_FORM.meta.isFieldValid && !errors ? '' : 'error',
         isDirty: BROKERAGE_EMPLOYMENT_FORM.meta.isDirty,
         form: 'BROKERAGE_EMPLOYMENT_FORM',
         stepToBeRendered: 3,
@@ -72,7 +73,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Public Company Relations',
         component: <PublicCompanyRelations />,
-        isValid: PUBLIC_COMPANY_REL_FORM.meta.isFieldValid ? '' : 'error',
+        isValid: PUBLIC_COMPANY_REL_FORM.meta.isFieldValid && !errors ? '' : 'error',
         isDirty: PUBLIC_COMPANY_REL_FORM.meta.isDirty,
         form: 'PUBLIC_COMPANY_REL_FORM',
         stepToBeRendered: 4,
@@ -80,7 +81,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Financial Information',
         component: <Finances />,
-        isValid: FINANCES_FORM.meta.isFieldValid ? '' : 'error',
+        isValid: FINANCES_FORM.meta.isFieldValid && !errors ? '' : 'error',
         isDirty: FINANCES_FORM.meta.isDirty,
         form: 'FINANCES_FORM',
         stepToBeRendered: 5,
@@ -88,7 +89,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Investment Experience',
         component: <Experience />,
-        isValid: INVESTMENT_EXP_FORM.meta.isFieldValid ? '' : 'error',
+        isValid: INVESTMENT_EXP_FORM.meta.isFieldValid && !errors ? '' : 'error',
         isDirty: INVESTMENT_EXP_FORM.meta.isDirty,
         form: 'INVESTMENT_EXP_FORM',
         stepToBeRendered: 6,

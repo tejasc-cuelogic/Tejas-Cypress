@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Form } from 'semantic-ui-react';
+import { Header, Form, Message } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { MaskedInput, FormRadioGroup } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 @inject('investorProfileStore', 'uiStore')
 @withRouter
 @observer
@@ -13,6 +14,7 @@ export default class Finances extends Component {
       financesChange,
       investorProfileChange,
     } = this.props.investorProfileStore;
+    const { errors } = this.props.uiStore;
     return (
       <div className="center-align">
         <Header as="h3">Financial Information</Header>
@@ -20,6 +22,11 @@ export default class Finances extends Component {
           Provide your financial information to access the right investments for you.
           Your information is encrypted and securely transmitted.
         </p>
+        {errors &&
+        <Message error textAlign="left">
+          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+        </Message>
+        }
         <Form error>
           <FormRadioGroup
             fielddata={FINANCES_FORM.fields.investorProfileType}
