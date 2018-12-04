@@ -14,16 +14,14 @@ export default class BonusRewards extends Component {
     this.props.updateStore.initRequest();
   }
   executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.updateStore.setInitiateSrch('keyword', e.target.value);
-    }
+    this.props.updateStore.setInitiateSrch('keyword', e.target.value);
   }
   render() {
     const {
       updateStore, match,
     } = this.props;
     const {
-      updates, loading, requestState, filters,
+      updates, loading, requestState, filters, count,
     } = updateStore;
     const { isIssuer } = this.props.userStore;
     if (loading) {
@@ -35,7 +33,7 @@ export default class BonusRewards extends Component {
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
-                executeSearch={this.executeSearch}
+                change={this.executeSearch}
                 w={[11]}
                 placeholder="Search by keyword or phrase"
                 requestState={requestState}
@@ -53,7 +51,7 @@ export default class BonusRewards extends Component {
           </Grid>
         </Form>
         <div className={isIssuer ? 'ui card fluid' : ''}>
-          <Listing data={updates} match={match} />
+          <Listing data={updates} count={count} match={match} requestState={requestState} />
         </div>
       </Aux>
     );
