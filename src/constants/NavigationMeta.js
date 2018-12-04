@@ -422,7 +422,7 @@ export const PUBLIC_NAV = [
         icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'ns-document-search', title: 'Data Room', to: 'disclosures', component: 'Disclosures',
+        icon: 'ns-document-search', title: 'Data Room', to: 'data-room', component: 'Disclosures',
       },
       {
         icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',
