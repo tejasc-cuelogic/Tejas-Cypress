@@ -209,10 +209,16 @@ footer{
             vertical-align: top;
             flex-wrap: wrap;
             flex: 1;
+            @media only screen and (max-width : @largestMobileScreen){
+                padding: 0;
+            }
             .item{
                 color: @neutral-middark;
                 padding: @3px 0;
                 margin: 0;
+                @media only screen and (max-width : @largestMobileScreen){
+                    text-align: center;
+                }
                 &.header {
                     margin-top: 0;
                 }

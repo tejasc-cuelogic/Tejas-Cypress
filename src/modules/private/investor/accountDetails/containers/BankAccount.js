@@ -6,7 +6,6 @@ import { isEmpty, includes } from 'lodash';
 import AccountDetailsView from '../components/bankaccount/AccountDetailsView';
 import ConfirmBankLinking from '../components/bankaccount/ConfirmBankLinking';
 import VerifyBankUpdate from '../components/bankaccount/VerifyBankUpdate';
-import { FaqWidget } from '../../../../../theme/shared';
 import LinkBankAccount from './LinkBankAccount';
 
 
@@ -21,7 +20,6 @@ export default class BankAccount extends Component {
   }
 
   render() {
-    const { faqsOfModule } = this.props.educationStore;
     const { plaidAccDetails } = this.props.bankAccountStore;
     const pendingAccoungDetails = plaidAccDetails && plaidAccDetails.changeRequest &&
       plaidAccDetails.changeRequest.status !== 'REQUEST_CANCELLATION' ? plaidAccDetails.changeRequest : null;
@@ -92,11 +90,6 @@ export default class BankAccount extends Component {
               </Grid.Column>
             </Grid.Row>
           }
-          <Grid.Row>
-            <Grid.Column widescreen={6} largeScreen={10} computer={10} tablet={13} mobile={16}>
-              <FaqWidget heading="Bank Account" faqs={faqsOfModule} />
-            </Grid.Column>
-          </Grid.Row>
         </Grid>
       </div>
     );

@@ -15,8 +15,6 @@ export class CampaignStore {
   @observable RECORDS_TO_DISPLAY = 12;
   @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
-  @observable isRenderRechart = true;
-
 
   @action
   setFieldValue = (field, val) => {
