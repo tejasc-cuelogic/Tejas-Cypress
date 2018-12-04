@@ -9,12 +9,6 @@ import { NEXTSEED_BOX_URL } from '../../../../../constants/common';
 import Actions from './Actions';
 import MessageModal from '../components/MessageModal';
 
-const types = {
-  review: null,
-  cip: 'INDIVIDUAL',
-  ira: 'IRA',
-  entity: 'ENTITY',
-};
 const statusDetails = {
   PARTIAL: 'Partial',
   FULL: 'Full',
@@ -32,8 +26,7 @@ const statusDetails = {
 export default class AllCrowdPay extends Component {
   componentWillMount() {
     const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('cip') ? 'cip' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
-    const accountType = types[type];
-    this.props.crowdpayStore.setAccountTypes(accountType, type);
+    this.props.crowdpayStore.setAccountTypes(type);
     this.props.crowdpayStore.reset();
     this.props.crowdpayStore.initRequest();
   }

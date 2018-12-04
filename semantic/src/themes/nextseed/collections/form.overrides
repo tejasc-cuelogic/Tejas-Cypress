@@ -141,6 +141,9 @@
                 font-weight:@fontMedium;
             }
         }
+        &.error .ui.dropdown .text:not(.default){
+            color:@neutral;
+        }
     }
     .otp-wrap{
         margin:@32px 0 @42px 0;
