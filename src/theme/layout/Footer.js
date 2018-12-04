@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, NavLink, matchPath } from 'react-router-dom';
+import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Image, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { ASSETS_URL } from '../../constants/aws';
@@ -41,7 +41,7 @@ class Footer extends Component {
           <Grid stackable>
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
               <div className="footer-left-nav">
-                {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
+                {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
                   <Aux path={path}>
                     <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
                       <Menu.Item header>Resources</Menu.Item>
@@ -55,10 +55,11 @@ class Footer extends Component {
                       <Menu.Item as={NavLink} to="/about/careers">Careers</Menu.Item>
                     </Menu>
                   </Aux>
-                }
+                } */}
                 <Menu
                   text
-                  vertical={((!isTablet && isCampaign) || (!isMobile && !isCampaign))}
+                  vertical={!isTablet
+                    || (!OfferFooter.find(item => matchPath(path, { path: item })))}
                   className={isTablet && (OfferFooter.find(item => matchPath(path, { path: item }))) ? 'center-align' : ''}
                 >
                   {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&

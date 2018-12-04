@@ -3,6 +3,7 @@ import { Modal } from 'semantic-ui-react';
 import { Plaid } from '../../../shared/bankAccount';
 
 export default class LinkBankAccount extends Component {
+  state = { action: 'change' };
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.history.goBack();
@@ -11,7 +12,7 @@ export default class LinkBankAccount extends Component {
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="small" closeOnDimmerClick={false}>
         <Modal.Content className="relaxed">
-          <Plaid />
+          <Plaid action={this.state.action} refLink={this.props.match.url} />
         </Modal.Content>
       </Modal>
     );

@@ -128,10 +128,6 @@ const HowItWorks = () => (
         </Grid>
         <div className="center-align mt-50">
           <List horizontal relaxed className="learn-more-list">
-            {/* <List.Item>
-              <List.Header>Learn more</List.Header>
-              <List.Content>Why fundraise on <a href="/">NextSeed?</a></List.Content>
-            </List.Item> */}
             <List.Item>
               <List.Content><strong>Learn more:</strong> Is fundraising on <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
             </List.Item>

@@ -5,6 +5,8 @@ import apiService from '../../../api/restApi';
 import { bankAccountStore, individualAccountStore, accountStore, uiStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
+const sharedPayload = { key: PLAID_PUBLIC_KEY };
+const sharedPublicPayload = { public_key: PLAID_PUBLIC_KEY };
 export class BankAccount {
   bankSearch = (e) => {
     if (e.charCode === 13) {
@@ -12,7 +14,7 @@ export class BankAccount {
       const { value } = bankAccountStore.formBankSearch.fields.bankName;
       if (value !== '') {
         const payload = {
-          public_key: PLAID_PUBLIC_KEY,
+          ...sharedPublicPayload,
           query: value,
           products: ['auth'],
           options: {
@@ -20,7 +22,7 @@ export class BankAccount {
             limit: 9,
           },
         };
-        apiService.postNoAuth(PLAID_URL, payload)
+        apiService.postNoAuth(`${PLAID_URL}/institutions/search`, payload)
           .then(data => bankAccountStore.setBankListing(data.body.institutions))
           .finally(() => uiStore.setProgress(false));
       } else {
@@ -30,23 +32,50 @@ export class BankAccount {
     }
   }
 
-  bankSelect = (institutionId) => {
+  getById = (institutionId, accountType) => {
+    const payload = {
+      ...sharedPublicPayload,
+      institution_id: institutionId,
+      options: { include_display_data: true },
+    };
+    return new Promise((resolve, reject) => {
+      apiService.postNoAuth(`${PLAID_URL}/institutions/get_by_id`, payload)
+        // .then(data => resolve(data.body.institution))
+        .then((data) => {
+          if (accountType && accountType === 'pending') {
+            bankAccountStore.setPendingeBankPlaidLogo(data.body.institution.logo);
+          } else {
+            bankAccountStore.setActiveBankPlaidLogo(data.body.institution.logo);
+          }
+        })
+        .catch(() => reject())
+        .finally(() => { });
+    });
+  }
+
+  bankSelect = (institutionId, action = 'investorAccCreation') => {
     /* eslint-disable no-undef */
     const linkHandler = Plaid.create({
       env: PLAID_ENV,
       clientName: 'NS',
-      key: PLAID_PUBLIC_KEY,
+      ...sharedPayload,
       product: ['auth, transactions'],
       onLoad: () => {
         // The Link module finished loading.
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
+        bankAccountStore.setNewPlaidBankDetails(metadata);
         Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
-        if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 0) {
-          individualAccountStore.setStepToBeRendered(1);
+        if (action === 'change') {
+          // bankAccountStore.changeBankPlaid();
+          bankAccountStore.setPlaidBankVerificationStatus(true);
+        } else {
+          if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 0) {
+            individualAccountStore.setStepToBeRendered(1);
+          }
+          bankAccountStore.setShowAddFunds();
         }
-        bankAccountStore.setShowAddFunds();
       },
       onExit: (err) => {
         // The user exited the Link flow.

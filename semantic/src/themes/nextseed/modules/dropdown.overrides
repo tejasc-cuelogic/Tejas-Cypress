@@ -173,6 +173,9 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
     &.inverted>.text{
         color:@white;
     }
+    &:not(.button) > .default.text{
+        opacity:0.5;
+    }
 }
 .ui.vertical.menu .ui.dropdown.item > .text{
     max-width:~"calc(100% - 20px)";
