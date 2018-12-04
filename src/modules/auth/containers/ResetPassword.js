@@ -39,7 +39,7 @@ export default class ResetPassword extends Component {
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Password Reset</Header>
           <p>
-            Please confirm your verifiction code and update your password
+            Please confirm your verification code and update your password
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content">

@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header } from 'semantic-ui-react';
+import { Form, Header, Message } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 
-@inject('investorProfileStore')
+@inject('investorProfileStore', 'uiStore')
 @observer
 export default class Employment extends Component {
   render() {
     const { EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
+    const { errors } = this.props.uiStore;
     return (
       <div>
         <Header as="h3" textAlign="center">What is your employment status?</Header>
         <p className="center-align mb-50">Please indicate your current employment status</p>
+        {errors &&
+        <Message error textAlign="left">
+          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+        </Message>
+        }
         <Form error>
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.status}

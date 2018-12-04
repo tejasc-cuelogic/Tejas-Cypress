@@ -175,7 +175,7 @@ class InvestorProfileStore {
   }
 
   @action
-  updateInvestorProfileData = (currentStep) => {
+  updateInvestorProfileData = currentStep => new Promise((res, rej) => {
     this[currentStep.form] = FormValidator.validateForm(this[currentStep.form], false, true);
     if (this[currentStep.form].meta.isValid) {
       let formPayload = '';
@@ -231,12 +231,22 @@ class InvestorProfileStore {
         formPayload.isPartialProfile = true;
       }
       if (currentStep.form === 'INVESTMENT_EXP_FORM' && this.isInvestmentExperienceValid) {
-        this.submitForm(currentStep, formPayload);
+        this.submitForm(currentStep, formPayload).then(() => {
+          res();
+        })
+          .catch(() => {
+            rej();
+          });
       } else if (currentStep.form !== 'INVESTMENT_EXP_FORM') {
-        this.submitForm(currentStep, formPayload);
+        this.submitForm(currentStep, formPayload).then(() => {
+          res();
+        })
+          .catch(() => {
+            rej();
+          });
       }
     }
-  }
+  })
 
   @action
   updateInvestorEditProfileData = () => {
@@ -269,6 +279,7 @@ class InvestorProfileStore {
           if (this.isValidInvestorProfileForm) {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
+          resolve();
         }))
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
