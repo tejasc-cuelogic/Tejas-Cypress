@@ -44,40 +44,38 @@ export default class TermsOfUse extends Component {
             navItems={navItems}
           />
         }
-        <section>
-          <Container>
-            <Grid>
-              {!isMobile &&
-                <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
-                  <div className="sticy-sidebar legal-sidebar">
-                    <SecondaryMenu
-                      secondary
-                      vertical
-                      match={match}
-                      navItems={navItems}
-                      className="legal-menu"
-                    />
-                  </div>
-                </Grid.Column>
-              }
-              <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
-                <Switch>
-                  <Route
-                    exact
-                    path={`${match.url}/${navItems[0].to}`}
-                    // component={Disclosures}
-                    render={props => <Disclosure {...props} />}
+        <div className="campaign-content-wrapper">
+          <Grid>
+            {!isMobile &&
+              <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
+                <div className="sticy-sidebar legal-sidebar">
+                  <SecondaryMenu
+                    secondary
+                    vertical
+                    match={match}
+                    navItems={navItems}
+                    className="legal-menu"
                   />
-                  {
-                    navItems.map(item => (
-                      <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <Disclosure {...props} />} />
-                    ))
-                  }
-                </Switch>
+                </div>
               </Grid.Column>
-            </Grid>
-          </Container>
-        </section>
+            }
+            <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
+              <Switch>
+                <Route
+                  exact
+                  path={`${match.url}/${navItems[0].to}`}
+                  // component={Disclosures}
+                  render={props => <Disclosure {...props} />}
+                />
+                {
+                  navItems.map(item => (
+                    <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} render={props => <Disclosure {...props} />} />
+                  ))
+                }
+              </Switch>
+            </Grid.Column>
+          </Grid>
+        </div>
       </Aux>
     );
   }
