@@ -87,7 +87,7 @@ h6{
 	margin-bottom:@60px !important;
 }
 .mb-80 {
-	margin-bottom: 80px !important;
+	margin-bottom: @80px !important;
 }
 .mt-10 {
 	margin-top: @10px !important;
@@ -108,7 +108,7 @@ h6{
 	margin-top: 74px;
 }
 .mt-80 {
-	margin-top: 80px !important;
+	margin-top: @80px !important;
 }
 .mb-half{
 	margin-bottom:@7px !important;
