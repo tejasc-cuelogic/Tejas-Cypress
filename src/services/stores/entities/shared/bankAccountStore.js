@@ -1,6 +1,6 @@
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isEmpty, isArray, map } from 'lodash';
+import { isEmpty, map, uniqWith, isEqual } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore } from '../../index';
@@ -175,19 +175,23 @@ export class BankAccountStore {
     }
 
   @action
-  initiateSearch = (srchParams) => {
-    this.requestState.search = srchParams;
-    this.initRequest();
+  setInitiateSrch = (name, value) => {
+    this.requestState.search[name] = value;
+    this.initiateFilters();
   }
   @action
-  setInitiateSrch = (name, value) => {
-    const srchParams = { ...this.requestState.search };
-    if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
-      srchParams[name] = value;
+  initiateFilters = () => {
+    const { keyword } = this.requestState.search;
+    let resultArray = [];
+    if (keyword) {
+      resultArray = ClientDb.filterData('firstName', keyword, 'likenocase');
+      resultArray = [...resultArray, ...ClientDb.filterData('lastName', keyword, 'likenocase')];
+      this.setDb(uniqWith(resultArray, isEqual));
+      this.requestState.page = 1;
+      this.requestState.skip = 0;
     } else {
-      delete srchParams[name];
+      this.setDb(this.data.data.listLinkedBankUsers.linkedBankList);
     }
-    this.initiateSearch(srchParams);
   }
   @action
   toggleSearch = () => {
@@ -199,7 +203,7 @@ export class BankAccountStore {
   }
   @computed get changeRequests() {
     return (this.db && this.db.length &&
-      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+      toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
 
   @action

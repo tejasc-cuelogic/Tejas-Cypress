@@ -14,9 +14,7 @@ export default class CrowdPay extends Component {
     this.props.bankAccountStore.setInitiateSrch(name, value);
   toggleSearch = () => this.props.bankAccountStore.toggleSearch();
   executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.bankAccountStore.setInitiateSrch('keyword', e.target.value);
-    }
+    this.props.bankAccountStore.setInitiateSrch('keyword', e.target.value);
   }
   dateFilterStart = (date) => {
     if (date) {
@@ -39,7 +37,7 @@ export default class CrowdPay extends Component {
         {...this.props}
         P1={
           <ByKeyword
-            executeSearch={this.executeSearch}
+            change={this.executeSearch}
             w={[8]}
             placeholder="Search by Investor"
             toggleSearch={this.toggleSearch}

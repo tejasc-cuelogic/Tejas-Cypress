@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Card, Table } from 'semantic-ui-react';
@@ -37,8 +38,13 @@ export default class AllRequests extends Component {
             </Table.Header>
             <Table.Body>
               {
-                changeRequests.map(req => (
-                  <Table.Row key={req.userId}>
+              changeRequests.length === 0 ? (
+                <Table.Row>
+                  <Table.Cell textAlign="center" colSpan={5}>No Linked Account Bank requests to display !</Table.Cell>
+                </Table.Row>
+                ) :
+                changeRequests.map((req, index) => (
+                  <Table.Row key={`${req.userId}_${index}`}>
                     <Table.Cell>
                       <p><b>{req.firstName} {req.lastName}</b></p>
                     </Table.Cell>
