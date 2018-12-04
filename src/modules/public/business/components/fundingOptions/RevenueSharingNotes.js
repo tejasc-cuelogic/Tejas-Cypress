@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header, List, Grid, Item, Divider, Button } from 'semantic-ui-react';
+import { Header, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
 
 const RevenueSharingNotes = () => (
@@ -43,15 +43,14 @@ const RevenueSharingNotes = () => (
       </Item.Group>
       <Divider hidden />
       <Button secondary>Apply Now</Button>
-      <List horizontal relaxed className="learn-more-list mt-20">
+      {/* <List horizontal relaxed className="learn-more-list mt-20">
         <List.Item>
           <List.Header>Learn more</List.Header>
-          {/* <List.Icon className="ns-arrow-right" color="green" /> */}
           <List.Content>
             See how <a href="/">Revenue Sharing Notes Works</a>
           </List.Content>
         </List.Item>
-      </List>
+      </List> */}
     </Grid.Column>
   </Grid>
 );

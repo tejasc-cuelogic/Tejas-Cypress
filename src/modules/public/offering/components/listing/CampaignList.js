@@ -8,7 +8,7 @@ import { Container, Card, Image, Label, Icon, List, Grid, Message } from 'semant
 import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../constants/aws';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../constants/offering';
 
 @inject('campaignStore')
 @observer
@@ -52,7 +52,7 @@ export default class CampaignList extends Component {
                             <div className="tags mb-10">
                               {offering && offering.keyTerms && offering.keyTerms.industry ? capitalize(offering.keyTerms.industry.split('_').join(' ')) : '-'}
                               <span className="pull-right">
-                                {offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}
+                                {offering && offering.keyTerms && offering.keyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[offering.keyTerms.regulation] : '-'}
                               </span>
                             </div>
                             <Card.Header>{offering && offering.keyTerms &&
@@ -76,7 +76,7 @@ export default class CampaignList extends Component {
                             />
                           </Card.Content>
                           <Card.Content extra>
-                            <p><b>{offering && offering.keyTerms && offering.keyTerms.securities && capitalize(offering.keyTerms.securities.split('_').join(' '))}</b></p>
+                            <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
                             <List divided horizontal>
                               <List.Item>Raised $1,000,000</List.Item>
                               <List.Item>

@@ -28,14 +28,14 @@ export const DropdownFilter = props => (
 );
 
 export const ByKeyword = ({
-  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon, more,
+  w, executeSearch, placeholder, fLabel, requestState, toggleSearch, filters, addon, more, change,
 }) => (
   <Aux>
     <Grid.Column widescreen={w[0]} largeScreen={w[0]} computer={w[1]} tablet={w[1]} mobile={w[1]}>
       <Form>
         <Form.Field inverted>
           {fLabel && <label className="invisible">{placeholder}</label>}
-          <Input fluid onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
+          <Input fluid onChange={change} onKeyPress={executeSearch} inverted icon={{ className: 'ns-search' }} iconPosition="left" placeholder={placeholder} />
         </Form.Field>
       </Form>
     </Grid.Column>
@@ -62,7 +62,7 @@ export const DateRangeFilter = props => (
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
-          onValueChange={values => props.changeStart(values, 'startDate')}
+          onValueChange={values => props.change(values, 'startDate')}
         />
       </Form.Field>
       <Form.Field>
@@ -70,7 +70,7 @@ export const DateRangeFilter = props => (
           type="text"
           format="##-##-####"
           placeholder="MM-DD-YYYY"
-          onValueChange={values => props.changeStart(values, 'endDate')}
+          onValueChange={values => props.change(values, 'endDate')}
         />
       </Form.Field>
     </Form.Group>

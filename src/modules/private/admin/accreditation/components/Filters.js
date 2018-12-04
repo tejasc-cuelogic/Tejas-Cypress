@@ -7,7 +7,7 @@ import { DropdownFilter, DateRangeFilter } from '../../../../../theme/form/Filte
 export default class Filters extends Component {
   render() {
     const {
-      requestState, setSearchParam, dateFilterStart, dateFilterEnd, filters, FILTER_FRM,
+      requestState, setSearchParam, change, filters, FILTER_FRM,
     } = this.props;
     return (
       <div className={`search-filters more ${!filters ? 'collapsed' : ''}`}>
@@ -15,13 +15,16 @@ export default class Filters extends Component {
           <Grid stackable>
             <Grid.Row>
               <Grid.Column width={4}>
-                <DateRangeFilter filters={requestState.search} label="Creation date" name="createdAt" changeStart={dateFilterStart} changeEnd={dateFilterEnd} />
+                <DateRangeFilter filters={requestState.search} label="Creation date" name="createdAt" change={change} />
               </Grid.Column>
               <Grid.Column width={3}>
                 <DropdownFilter value={requestState.search.method} name="Method" change={setSearchParam} options={FILTER_FRM.fields.method.values} />
               </Grid.Column>
               <Grid.Column width={3}>
                 <DropdownFilter value={requestState.search.type} name="Type" change={setSearchParam} options={FILTER_FRM.fields.type.values} />
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <DropdownFilter value={requestState.search.status} name="Status" change={setSearchParam} options={FILTER_FRM.fields.status.values} />
               </Grid.Column>
             </Grid.Row>
           </Grid>

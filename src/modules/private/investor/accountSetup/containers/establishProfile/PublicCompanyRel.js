@@ -11,14 +11,12 @@ export default class PublicCompanyRel extends Component {
     const { PUBLIC_COMPANY_REL_FORM, employmentChange } = this.props.investorProfileStore;
     const { errors } = this.props.uiStore;
     return (
-      <div>
-        <Header as="h3" textAlign="center">Public Company Relations</Header>
-        <p className="center-align mb-50">Are you (or an immediate family member) a 10% shareholder,
-        director or senior officer at a publicly traded U.S. company?
+      <div className="center-align">
+        <Header as="h3">Public Company Relations</Header>
+        <p className="mb-50">Are you (or an immediate family member) a 10% shareholder,
+          director or senior officer at a publicly traded U.S. company?
         </p>
-        <p className="center-align mb-50">
-        If you do not know what this means, it likely does not apply to you
-        </p>
+        <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
         {errors &&
         <Message error textAlign="left">
           <ListErrors errors={errors.message ? [errors.message] : [errors]} />
@@ -34,7 +32,7 @@ export default class PublicCompanyRel extends Component {
             classname="center-align"
           />
           {PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel.value === 'yes' &&
-          <div className="field-wrap">
+          <div className="field-wrap left-align">
             <Form.Group widths="equal">
               <FormInput
                 key="publicCompanyTicker"

@@ -770,3 +770,10 @@ export const FILTER_META = {
     rule: 'empty',
   },
 };
+
+export const LINKED_ACCOUND_STATUS = {
+  REQUEST_CANCELLATION: 'Canceled',
+  REQUESTED: 'Pending Approval',
+  DENIED: 'Declined',
+  APPROVED: 'Approved',
+};

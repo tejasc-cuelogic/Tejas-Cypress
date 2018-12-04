@@ -43,6 +43,7 @@ export const userDetailsQuery = gql`
       status
       cip {
         expiration
+        failType
       }
       limits {
         income
@@ -132,9 +133,22 @@ export const userDetailsQuery = gql`
               bankName
               plaidAccountId
               plaidItemId
+              plaidInstitutionId
               accountNumber
               routingNumber
               plaidAccessToken
+              dateRequested
+              pendingUpdate
+              changeRequest {
+                accountNumber
+                bankName
+                plaidAccessToken
+                plaidAccountId
+                plaidItemId
+                plaidInstitutionId
+                dateRequested
+                status
+              }
             }
             created {
               date

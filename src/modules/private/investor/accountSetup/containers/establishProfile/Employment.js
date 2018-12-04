@@ -11,9 +11,9 @@ export default class Employment extends Component {
     const { EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
     const { errors } = this.props.uiStore;
     return (
-      <div>
-        <Header as="h3" textAlign="center">What is your employment status?</Header>
-        <p className="center-align mb-50">Please indicate your current employment status</p>
+      <div className="center-align">
+        <Header as="h3">What is your employment status?</Header>
+        <p className="mb-40">Please indicate your current employment status</p>
         {errors &&
         <Message error textAlign="left">
           <ListErrors errors={errors.message ? [errors.message] : [errors]} />
@@ -29,7 +29,7 @@ export default class Employment extends Component {
             showerror
           />
           {EMPLOYMENT_FORM.fields.status.value === 'EMPLOYED' &&
-          <div className="field-wrap">
+          <div className="field-wrap left-align">
             <Form.Group widths="equal">{
               ['employer', 'position'].map(field => (
                 <FormInput

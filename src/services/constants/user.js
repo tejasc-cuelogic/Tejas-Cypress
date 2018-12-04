@@ -51,7 +51,7 @@ export const USER_IDENTITY = {
     label: 'Title',
     placeHolder: 'Select',
     error: undefined,
-    rule: 'string',
+    rule: 'required',
     customErrors: {
       required: '* required.',
     },

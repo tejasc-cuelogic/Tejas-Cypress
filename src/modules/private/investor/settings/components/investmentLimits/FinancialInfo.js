@@ -19,6 +19,7 @@ export default class FinancialInfo extends Component {
       this.props.accreditationStore.initiateAccreditation();
     });
   }
+  // eslint-disable-next-line react/sort-comp
   submit = (e) => {
     e.preventDefault();
     this.props.investmentLimitStore.updateFinInfo();
@@ -29,6 +30,7 @@ export default class FinancialInfo extends Component {
     this.props.history.push(`${this.props.match.url}/update`);
   }
   handleVerifyAccreditation = (e, accountType, accountId) => {
+    e.preventDefault();
     if (accountType === 'entity') {
       if (this.props.userDetailsStore.isEntityTrust) {
         this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountId}/${accountType}`);
@@ -38,6 +40,16 @@ export default class FinancialInfo extends Component {
     } else {
       this.props.history.push(`${this.props.match.url}/verify-accreditation/${accountId}/${accountType}`);
     }
+  }
+  getStatus = (accName) => {
+    let status = '';
+    status = accName ? (accName.status === 'REQUESTED' && accName.expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accName.expiration)) === 0)) ? 'Expired' : (accName.status && ACCREDITATION_STATUS_LABEL[accName.status]) : '-';
+    return status;
+  }
+  getDate = (accName) => {
+    let date = '';
+    date = accName && accName.status === 'REQUESTED' && accName.requestDate ? DataFormatter.formatedDate(accName.requestDate) : accName && (accName.status === 'APPROVED' || accName.status === 'DECLINED') && accName.reviewed && accName.reviewed.date ? DataFormatter.formatedDate(accName.reviewed.date) : '-';
+    return date;
   }
   render() {
     const {
@@ -110,13 +122,13 @@ export default class FinancialInfo extends Component {
                         <Card.Content>
                           <Header as="h4">
                             Accreditation
-                            {'  '}<Button className="link-button" color="green" onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)}>Update accreditation</Button>
+                            <Link as={Button} to="/" className="link" onClick={e => this.handleVerifyAccreditation(e, account.name, account.details.accountId)}><small>Update accreditation</small></Link>
                           </Header>
                           <dl className="dl-horizontal">
                             <dt>Status :</dt>
-                            <dd className="negative-text">{accreditationData[account.name] ? (accreditationData[account.name].expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accreditationData[account.name].expiration)) === 0)) ? 'Expired' : (accreditationData[account.name].status && ACCREDITATION_STATUS_LABEL[accreditationData[account.name].status]) : '-'}</dd>
+                            <b><dd className={`${this.getStatus(accreditationData[account.name]) === 'Requested' ? 'warning' : this.getStatus(accreditationData[account.name]) === 'Approved' ? 'positive' : 'negative'}-text`}>{this.getStatus(accreditationData[account.name])}</dd></b>
                             <dt>Date :</dt>
-                            <dd>{accreditationData[account.name] && accreditationData[account.name].requestDate ? DataFormatter.formatedDate(accreditationData[account.name].requestDate) : '-'}</dd>
+                            <dd>{this.getDate(accreditationData[account.name])}</dd>
                           </dl>
                         </Card.Content>
                         :

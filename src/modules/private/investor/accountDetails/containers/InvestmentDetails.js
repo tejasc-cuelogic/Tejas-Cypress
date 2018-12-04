@@ -23,7 +23,7 @@ const navItems = [
   { title: 'Updates', to: 'updates', component: 'Updates' },
   { title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards' },
 ];
-@inject('portfolioStore', 'campaignStore')
+@inject('portfolioStore', 'campaignStore', 'offeringCreationStore')
 @observer
 class InvestmentDetails extends Component {
   componentWillMount() {
@@ -33,6 +33,7 @@ class InvestmentDetails extends Component {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
     this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
+    this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
   }
   handleCloseModal = (e) => {
     e.stopPropagation();

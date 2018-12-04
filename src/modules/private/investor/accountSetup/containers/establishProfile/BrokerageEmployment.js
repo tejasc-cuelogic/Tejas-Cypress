@@ -11,11 +11,11 @@ export default class BrokerageEmployment extends Component {
     const { BROKERAGE_EMPLOYMENT_FORM, employmentChange } = this.props.investorProfileStore;
     const { errors } = this.props.uiStore;
     return (
-      <div>
-        <Header as="h3" textAlign="center">Brokerage employment</Header>
-        <p className="center-align mb-50">Do you (or an immediate family member) work for
-         another U.S. brokerage? If you do not know what this means,
-         it likely does not apply to you
+      <div className="center-align">
+        <Header as="h3">Brokerage employment</Header>
+        <p className="mb-40">Do you (or an immediate family member) work for
+          another U.S. brokerage? If you do not know what this means,
+          it likely does not apply to you
         </p>
         {errors &&
         <Message error textAlign="left">
@@ -32,7 +32,7 @@ export default class BrokerageEmployment extends Component {
             showerror
           />
           {BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment.value === 'yes' &&
-          <div className="field-wrap">
+          <div className="field-wrap left-align">
             <Form.Group widths="equal">
               <FormInput
                 key="brokerageFirmName"

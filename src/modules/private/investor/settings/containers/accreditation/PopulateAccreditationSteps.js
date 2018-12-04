@@ -56,13 +56,14 @@ const StepsMetaData = {
 @observer
 export default class PopulateAccreditationSteps extends React.Component {
   componentWillMount() {
-    if (this.props.accreditationStore.firstInit === '') {
-      this.props.accreditationStore.setFieldVal('firstInit', true);
-    }
+    // if (this.props.accreditationStore.firstInit === '') {
+    //   this.props.accreditationStore.setFieldVal('firstInit', true);
+    // }
   }
   handleMultiStepModalclose = () => {
     this.props.history.push('/app/profile-settings/investment-limits');
     this.props.accreditationStore.resetAllForms();
+    this.props.accreditationStore.setFieldVal('firstInit', '');
   }
   handleStepChange = (step) => {
     this.props.accreditationStore.setStepToBeRendered(step);
@@ -82,7 +83,7 @@ export default class PopulateAccreditationSteps extends React.Component {
         formObj.isValid = (accreditationStore.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? !accreditationStore.VERIFICATION_REQUEST_FORM.meta.isFieldValid : accreditationStore.ACCREDITATION_FORM.fields.method.value === 'INCOME' ? !accreditationStore.INCOME_UPLOAD_DOC_FORM.meta.isFieldValid : !accreditationStore.ASSETS_UPLOAD_DOC_FORM.meta.isFieldValid) ? 'error' : '';
         formObj.disableNxtBtn = accreditationStore.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? !accreditationStore.VERIFICATION_REQUEST_FORM.meta.isValid :
           accreditationStore.ACCREDITATION_FORM.fields.method.value === 'INCOME' ? !accreditationStore.INCOME_UPLOAD_DOC_FORM.meta.isValid : !accreditationStore.ASSETS_UPLOAD_DOC_FORM.meta.isValid;
-        formObj.formName = accreditationStore.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? 'VERIFICATION_REQUEST_FORM' : accreditationStore.ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'INCOME_UPLOAD_DOC_FORM' : 'ASSETS_UPLOAD_DOC_FORM';
+        formObj.formName = accreditationStore.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? 'VERIFICATION_REQUEST_FORM' : (accreditationStore.ACCREDITATION_FORM.fields.method.value === 'INCOME' || accreditationStore.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME') ? 'INCOME_UPLOAD_DOC_FORM' : 'ASSETS_UPLOAD_DOC_FORM';
       } else if (form.key === 'ENTITY_ACCREDITATION_FORM') {
         formObj.isValid = accreditationStore.ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error';
         formObj.disableNxtBtn = !accreditationStore.ACCREDITATION_FORM.meta.isValid;

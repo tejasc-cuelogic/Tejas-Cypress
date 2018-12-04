@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
@@ -10,6 +11,9 @@ import Helper from '../../../../../../../helper/utility';
 @withRouter
 @observer
 export default class Summary extends Component {
+  state = {
+    open: false,
+  };
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
@@ -26,8 +30,17 @@ export default class Summary extends Component {
       });
     }
   }
+  openModal = (type) => {
+    const { getBoxEmbedLink } = this.props.agreementsStore;
+    getBoxEmbedLink(type);
+    this.setState({
+      open: true,
+    });
+  }
+  closeModal = () => {
+    this.setState({ open: false });
+  }
   render() {
-    const { ccAgreementId, irsCertificationId, membershipAgreementId } = this.props.agreementsStore;
     const {
       FIN_INFO_FRM,
       PERSONAL_INFO_FRM,
@@ -39,6 +52,7 @@ export default class Summary extends Component {
     const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
+    const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <div>
         <Header as="h3" textAlign="center">Verify the info and create Entity account</Header>
@@ -105,24 +119,26 @@ export default class Summary extends Component {
         <div className="center-align">
           <Button primary size="large" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm}>Confirm</Button>
         </div>
-        <p className="center-align mt-30 grey-text">
-          By continuing, I acknowledge that I have read and agree to the
-          terms of the
-          <IframeModal
-            className="link-button highlight-text"
-            text="CrowdPay Custodial Account Agreement"
-            srcUrl={`https://nextseed.box.com/s/${ccAgreementId}`}
-          />
-          <IframeModal
-            className="link-button highlight-text"
-            text="Substitute IRS Form W-9 Certification"
-            srcUrl={`https://nextseed.box.com/s/${irsCertificationId}`}
-          />, and the
-          <IframeModal
-            className="link-button highlight-text"
-            text="NextSeed Membership Agreement"
-            srcUrl={`https://nextseed.box.com/s/${membershipAgreementId}`}
-          />
+        <p className="center-align mt-30">
+          <b>
+              By continuing, I acknowledge that I have read and agree to the
+              terms of the{' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+              CrowdPay Custodial Account Agreement
+            </span>,{' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+              Substitute IRS Form W-9 Certification
+            </span>{' '}and the{' '}
+            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
+              NextSeed Membership Agreement
+            </span>.
+            <IframeModal
+              open={this.state.open}
+              close={this.closeModal}
+              srcUrl={embedUrl}
+              loading={docLoading}
+            />
+          </b>
         </p>
       </div>
     );

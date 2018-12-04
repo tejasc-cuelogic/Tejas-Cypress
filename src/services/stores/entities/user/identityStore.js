@@ -733,7 +733,7 @@ export class IdentityStore {
       if (legalDetails && legalDetails.legalAddress) {
         fields.city.value = legalDetails.legalAddress.city;
         const selectedState =
-        find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
+          find(US_STATES_FOR_INVESTOR, { key: legalDetails.legalAddress.state });
         if (selectedState) {
           fields.state.value = selectedState.value;
         }

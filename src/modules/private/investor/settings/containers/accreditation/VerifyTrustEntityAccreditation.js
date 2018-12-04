@@ -22,6 +22,9 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       this.props.accreditationStore.setFormData('VERIFICATION_REQUEST_FORM', 'accreditation', accountType);
       this.props.accreditationStore.setFormData('INCOME_UPLOAD_DOC_FORM', 'accreditation', accountType);
       this.props.accreditationStore.setFormData('ASSETS_UPLOAD_DOC_FORM', 'accreditation', accountType);
+      if (this.props.accreditationStore.firstInit === '') {
+        this.props.accreditationStore.setFieldVal('firstInit', true);
+      }
     });
   }
   handleStepChange = (step) => {
@@ -62,7 +65,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
           component: <Verification refLink={this.props.refLink} type={3} />,
         },
       ]
-      : ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME' ? [
+      : ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS' ? [
         { key: 'TRUST_ENTITY_ACCREDITATION_FRM' },
         { key: 'ACCREDITATION_FORM', component: <AccreditationMethod isTrust /> },
         { key: 'NET_WORTH_FORM', component: <NetWorth isTrust /> },

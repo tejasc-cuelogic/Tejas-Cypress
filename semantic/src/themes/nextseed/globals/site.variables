@@ -41,7 +41,7 @@
 @emSize   : 14px;
 
 /* The size of page text  */
-@fontSize : 14px;
+@fontSize : 15px;
 
 
 /*-------------------
@@ -616,6 +616,7 @@
 @64px : unit( (64 / @emSize), rem);
 @70px : unit( (70 / @emSize), rem);
 @80px : unit( (80 / @emSize), rem);
+@90px : unit( (90 / @emSize), rem);
 
 @relative1px  : unit( (1 / @emSize), em);
 @relative2px  : unit( (2 / @emSize), em);

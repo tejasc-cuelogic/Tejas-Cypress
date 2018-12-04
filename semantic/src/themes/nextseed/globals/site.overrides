@@ -65,6 +65,9 @@ h6{
 *:focus{
 	outline:none;
 }
+.mb-0{
+	margin-bottom:0 !important;
+}
 .mb-10 {
 	margin-bottom: @10px !important;
 }
@@ -167,15 +170,16 @@ h6{
 }
 .intro-text, .note{
 	color:@neutral-middark !important;
+	font-size: @12px;
 }
 .primary-two-text {
 	color: @primary-two !important;
 }
 .grey-text {
-	color: @neutral-offdark;
+	color: @border-color;
 }
 .caption-note{
-	font-size:@13px;
+	font-size:@12px;
 	font-style:italic;
 	margin:@7px 0;
 	&:first-child{
@@ -209,6 +213,9 @@ a:not(.item), a:not(.ui.button){
 	}
 	&.home-summary {
 		margin: 0 @35px;
+		.ui.button {
+			width: 150px;
+		}
 	}
 	&.campaign img.ui.image {
 		height: auto !important;
@@ -247,7 +254,7 @@ a{
 }
 .bg-offwhite {
 	background-color: @neutral-offwhite;
-	padding:@14px @20px;
+	// padding:@14px @20px;       commented to resolve on public homepage
 }
 .green-block {
 	background-color: @primary-one;
@@ -310,7 +317,7 @@ footer{
 	}
 	.copyright-info{
 		flex-grow: 1;
-		font-size:@12px;
+		font-size:@13px;
 		line-height:@22px;
 		@media only screen and (max-width : @largestMobileScreen){
 			float:none;
@@ -523,6 +530,7 @@ footer{
 			p {
 				line-height: @20px;
 				color:@neutral-middark;
+				font-size: @15px;
 			}
 			.embed {
 				img {
@@ -869,7 +877,7 @@ p i.icon {
 		}
 		&.thumb-location-gallery {
 			.slick-slide {
-				padding: 0 1px;
+				padding: 0 1px 0 0;
 				border-radius: 0;
 				@media only screen and (max-width: @computerBreakpoint) {
 					padding: 0;
@@ -1268,6 +1276,33 @@ a.icon-link {
 			padding: @5px 0;
 			width: 130px;
 		}
+	}
+}
+.error-page{
+	padding:@80px @14px;
+	text-align:center;
+	flex-grow:1;	// useful on campaign details page
+	h1.ui.header{
+		font-size:@90px !important;
+		font-weight:@bold;
+		line-height:1;
+		margin-bottom:@30px;
+		.sub.header{
+			font-size:0.3em;
+            font-weight:@fontMedium;
+		}
+	}
+	p{
+		font-size:@24px;
+		&.small{
+			font-size:@20px;
+			margin:0;
+		}
+	}
+	.ui.divider{
+		width:290px;
+		margin-left:auto;
+		margin-right:auto;
 	}
 }
 /* END <== PUBLIC PAGES UI STYLES */
@@ -2563,5 +2598,30 @@ p.check-extra-info{
 	padding: @20px;
 	.fields:last-child .field {
 		margin-bottom: 0;
+	}
+}
+
+.goldstar-info{
+	display:inline-block;
+	margin:0 auto;
+	text-align:left;
+	dl.dl-horizontal{
+		dt{
+			width:60px;
+			font-weight:@normal;
+		}
+		dd{
+			margin-left:70px;
+			margin-bottom:@5px;
+		}
+	}
+}
+
+// Legal Documents
+.legal-desc p {
+	margin-bottom: @22px;
+	a {
+		color: @neutral-middark;
+		text-decoration: underline;
 	}
 }

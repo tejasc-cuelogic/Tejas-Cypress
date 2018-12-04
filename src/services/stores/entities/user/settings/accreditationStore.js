@@ -3,11 +3,11 @@ import { forEach, isArray } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
-import { FormValidator as Validator } from '../../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../../index';
-import { updateAccreditation } from '../../../queries/accreditation';
+import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
 import { ACCREDITATION_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
@@ -41,16 +41,22 @@ export class AccreditationStore {
   @action
   initRequest = (reqParams) => {
     const {
-      keyword, method, type, startDate, endDate,
+      keyword, method, type, status, startDate, endDate,
     } = this.requestState.search;
     const filters = toJS({ ...this.requestState.search });
     delete filters.keyword;
     let params = {
       search: keyword,
-      method,
-      type,
+      method: method !== 'ALL' ? method : null,
+      type: type !== 'ALL' ? type : null,
       page: reqParams ? reqParams.page : 1,
     };
+    if (status && status !== '') {
+      params = {
+        ...params,
+        status,
+      };
+    }
     this.requestState.page = params.page;
     if (startDate && endDate) {
       params = {
@@ -58,25 +64,25 @@ export class AccreditationStore {
         ...{ accountCreateFromDate: startDate, accountCreateToDate: endDate },
       };
     }
-    this.data = [
-      {
-        id: 1,
-        name: 'Alexandra Smith',
-        createdAt: '7/12/2018',
-        type: 'Asset',
-        method: 'Verifier',
-        boxLink: 'https://www.nextseed.com/',
-      },
-      {
-        id: 2,
-        name: 'Alexandra Smith',
-        createdAt: '7/12/2018',
-        type: 'Asset',
-        method: 'Verifier',
-        boxLink: 'https://www.nextseed.com/',
-      },
-    ];
+    this.data = graphql({
+      client,
+      query: listAccreditation,
+      variables: params,
+      fetchPolicy: 'network-only',
+    });
   }
+
+  @action
+  resetModalForm = () => {
+    this.CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
+  }
+  @computed get count() {
+    return (this.data.data
+      && this.data.data.listAccreditation
+      && toJS(this.data.data.listAccreditation.resultCount)
+    ) || 0;
+  }
+
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
@@ -227,7 +233,8 @@ export class AccreditationStore {
   @action
   setInitiateSrch = (name, value) => {
     if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value;
+      const date = DataFormatter.getDate(value.formattedValue, true, name);
+      this.requestState.search[name] = date;
       if (this.requestState.search.startDate !== '' && this.requestState.search.endDate !== '') {
         const srchParams = { ...this.requestState.search };
         this.initiateSearch(srchParams);
@@ -251,7 +258,8 @@ export class AccreditationStore {
     return this.data.loading;
   }
   @computed get accreditations() {
-    return (this.data) || [];
+    return (this.data && this.data.data && this.data.data.listAccreditation &&
+      this.data.data.listAccreditation.accreditation) || [];
   }
 
   @action
@@ -405,6 +413,33 @@ export class AccreditationStore {
   }
 
   @action
+  updateAccreditationAction = (accreditationAction, accountId, userId, accountType) => {
+    uiStore.setProgress();
+    const comment = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: approveOrDeclineForAccreditationRequest,
+          variables: {
+            action: accreditationAction,
+            accountId,
+            userId,
+            accountType,
+            comment: comment.justifyDescription,
+          },
+          refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
+        })
+        .then(() => resolve())
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject();
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  @action
   setFileFormData = (filesData) => {
     if (filesData && filesData.length) {
       this.INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
@@ -439,7 +474,7 @@ export class AccreditationStore {
       } else {
         if (data.method === 'REVOCABLE_TRUST_ASSETS' || data.method === 'REVOCABLE_TRUST_INCOME') {
           this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'REVOCABLE_TRUST_ASSETS';
-          this.ACCREDITATION_FORM.fields.method.value = data.method === 'REVOCABLE_TRUST_ASSETS' ? 'REVOCABLE_TRUST_ASSETS' : 'REVOCABLE_TRUST_INCOME';
+          this.ACCREDITATION_FORM.fields.method.value = data.method;
         }
         this.ACCREDITATION_FORM.fields.grantorName.value = data.grantorName;
       }
@@ -488,12 +523,15 @@ export class AccreditationStore {
     }
     if (form === 'TRUST_ENTITY_ACCREDITATION_FRM') {
       this.setTrustEntityAccreditationData(appData.accreditation);
+      this.checkFormIsValid('ACCREDITATION_FORM', false, false);
     } else if (form === 'INCOME_EVIDENCE_FORM') {
       this.setIncomeEvidenceData(appData.accreditation);
     } else if (form !== 'INCOME_UPLOAD_DOC_FORM' && form !== 'ASSETS_UPLOAD_DOC_FORM') {
       this[form] = Validator.setFormData(this[form], appData, ref);
     } else {
       this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
+      this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+      this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
     }
     this.checkFormValid(form, false, false);
     return false;

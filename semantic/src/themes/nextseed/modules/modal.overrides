@@ -60,12 +60,10 @@
                 top:10px !important;
             }
         }
-        .header {
-            font-size: @16px;
-        }
         .content {
             padding: 0 !important;
             border-radius: 0;
+            font-size: @15px;
         }
         .item {
             margin-top: 0;
@@ -448,8 +446,8 @@
         font-weight:@fontMedium;
         text-align:center;
         border:none;
-        border-bottom:@border-light 1px solid;
-        background:@border-light;
+        border-bottom:@neutral-offwhite 1px solid;
+        background:@neutral-offwhite;
     }
     .display-only input[type=tel]:not(:read-only),
     .display-only input[type=email]:not(:read-only),
