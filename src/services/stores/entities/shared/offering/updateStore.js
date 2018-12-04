@@ -49,7 +49,7 @@ export class UpdateStore {
     const { keyword } = this.requestState.search;
     let resultArray = [];
     if (keyword) {
-      resultArray = ClientDb.filterData('title', keyword, 'like');
+      resultArray = ClientDb.filterData('title', keyword, 'likenocase');
       this.setDb(resultArray);
       this.requestState.page = 1;
       this.requestState.skip = 0;
