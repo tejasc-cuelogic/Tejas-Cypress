@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Grid, Container } from 'semantic-ui-react';
+import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 // import { InlineLoader } from '../../../../../theme/shared';
@@ -44,60 +44,58 @@ export default class TermsOfUse extends Component {
             navItems={navItems}
           />
         }
-        <section>
-          <Container>
-            <Grid>
-              {!isMobile &&
-                <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
-                  <div className="sticy-sidebar legal-sidebar">
-                    <SecondaryMenu
-                      secondary
-                      vertical
-                      match={match}
-                      navItems={navItems}
-                      className="legal-menu"
-                    />
-                  </div>
-                </Grid.Column>
-              }
-              <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
-                <Switch>
-                  <Route
-                    exact
-                    path={`${match.url}/${navItems[0].to}`}
-                    // component={Disclosures}
-                    render={
-                      props =>
-                        (<Disclosure
-                          {...props}
-                          documentToLoad={navItems[0].content}
-                          headerTitle={navItems[0].title}
-                        />)
-                    }
+        <div className="campaign-content-wrapper">
+          <Grid>
+            {!isMobile &&
+              <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
+                <div className="sticy-sidebar legal-sidebar">
+                  <SecondaryMenu
+                    secondary
+                    vertical
+                    match={match}
+                    navItems={navItems}
+                    className="legal-menu"
                   />
-                  {
-                    navItems.map(item => (
-                      <Route
-                        exact={false}
-                        key={item.to}
-                        documentToLoad={item.content}
-                        path={`${match.url}/${item.to}`}
-                        render={
-                          props =>
-                            (<Disclosure
-                              {...props}
-                              documentToLoad={item.content}
-                              headerTitle={item.title}
-                            />)
-                        }
-                      />
-                    ))
-                  }
-                </Switch>
+                </div>
               </Grid.Column>
-            </Grid>
-          </Container>
-        </section>
+            }
+            <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
+              <Switch>
+                <Route
+                  exact
+                  path={`${match.url}/${navItems[0].to}`}
+                  // component={Disclosures}
+                  render={
+                    props =>
+                      (<Disclosure
+                        {...props}
+                        documentToLoad={navItems[0].content}
+                        headerTitle={navItems[0].title}
+                      />)
+                  }
+                />
+                {
+                  navItems.map(item => (
+                    <Route
+                      exact={false}
+                      key={item.to}
+                      documentToLoad={item.content}
+                      path={`${match.url}/${item.to}`}
+                      render={
+                        props =>
+                          (<Disclosure
+                            {...props}
+                            documentToLoad={item.content}
+                            headerTitle={item.title}
+                          />)
+                      }
+                    />
+                  ))
+                }
+              </Switch>
+            </Grid.Column>
+          </Grid>
+        </div>
       </Aux>
     );
   }

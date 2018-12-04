@@ -73,6 +73,11 @@ export default class AllCrowdPay extends Component {
             </Table.Header>
             <Table.Body>
               {
+              accounts.length === 0 ? (
+                <Table.Row>
+                  <Table.Cell textAlign="center" colSpan={5}>No accounts to display !</Table.Cell>
+                </Table.Row>
+                ) :
                 accounts.map(account => (
                   <Table.Row key={account.id}>
                     <Table.Cell>

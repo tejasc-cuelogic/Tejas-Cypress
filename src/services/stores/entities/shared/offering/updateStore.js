@@ -1,7 +1,8 @@
-import { observable, action, computed, toJS } from 'mobx';
+import { observable, action, computed } from 'mobx';
 import graphql from 'mobx-apollo';
+import { orderBy } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { FormValidator as Validator } from '../../../../../helper';
+import { FormValidator as Validator, ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import { UPDATES } from '../../../../constants/offering';
 import { offeringCreationStore } from '../../../index';
@@ -14,20 +15,53 @@ export class UpdateStore {
     @observable filters = false;
     @observable currentUpdate = {};
     @observable requestState = {
+      skip: 0,
+      page: 1,
+      perPage: 10,
+      displayTillIndex: 10,
       search: {},
     };
+    @observable db;
     @observable PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
 
     @action
     initRequest = () => {
       const variables = { offerId: offeringCreationStore.currentOfferingId };
-      this.data = graphql({ client, query: allUpdates, variables });
+      this.data = graphql({
+        client,
+        query: allUpdates,
+        variables,
+        onFetch: (res) => {
+          this.setDb(res.offeringUpdatesByOfferId);
+        },
+      });
     }
+
+  @action
+  setDb = (data) => {
+    const orderedData = orderBy(data, ['updated.date'], ['desc']);
+    this.db = ClientDb.initiateDb(orderedData);
+  }
+
+
+  @action
+  initiateFilters = () => {
+    const { keyword } = this.requestState.search;
+    let resultArray = [];
+    if (keyword) {
+      resultArray = ClientDb.filterData('title', keyword, 'likenocase');
+      this.setDb(resultArray);
+      this.requestState.page = 1;
+      this.requestState.skip = 0;
+    } else {
+      this.setDb(this.data.data.offeringUpdatesByOfferId);
+    }
+  }
 
     @action
     setInitiateSrch = (name, value) => {
       this.requestState.search[name] = value;
-      this.initRequest({ ...this.requestState.search });
+      this.initiateFilters();
     }
 
     @action
@@ -62,7 +96,7 @@ export class UpdateStore {
           refetchQueries: [{ query: allUpdates, variables }],
         })
         .then((res) => {
-          if (isManager && !isAlreadyPublished) {
+          if (isManager && !isAlreadyPublished && status !== 'DRAFT') {
             const UpdateId = res.data.createOfferingUpdates ?
               res.data.createOfferingUpdates.id : res.data.updateOfferingUpdatesInfo.id;
             this.approveUpdate(UpdateId);
@@ -89,6 +123,7 @@ export class UpdateStore {
 
     @action
     getOne = (id) => {
+      this.reset();
       this.currentUpdate = graphql({
         client,
         query: getUpdate,
@@ -107,6 +142,12 @@ export class UpdateStore {
     reset = () => {
       this.PBUILDER_FRM = Validator.prepareFormObject(UPDATES);
     }
+    @action
+    pageRequest = ({ skip, page }) => {
+      this.requestState.displayTillIndex = this.requestState.perPage * page;
+      this.requestState.page = page;
+      this.requestState.skip = skip;
+    }
 
     @computed get lastUpdateText() {
       const { status } = Validator.ExtractValues(this.PBUILDER_FRM.fields);
@@ -118,7 +159,15 @@ export class UpdateStore {
     }
 
     @computed get updates() {
-      return (this.data.data && toJS(this.data.data.offeringUpdatesByOfferId)) || [];
+      return (this.db && this.db.length &&
+        this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    }
+
+    @computed get loadingCurrentUpdate() {
+      return this.currentUpdate.loading;
+    }
+    @computed get count() {
+      return (this.db && this.db.length) || 0;
     }
 
     @computed get loading() {

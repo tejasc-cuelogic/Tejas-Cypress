@@ -6,7 +6,7 @@ export const ACCOUNT_STATUS_VALUES = {
 };
 
 export const ACCOUNT_STATUS_FILTER_VALUES = {
-  review: null,
+  review: ['FULL'],
   cip: ['GS_PROCESSING'],
   ira: ['NS_PROCESSING'],
   entity: ['NS_PROCESSING'],
