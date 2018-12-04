@@ -399,7 +399,7 @@ export const PUBLIC_NAV = [
     noNav: true,
     subNavigations: [
       { title: 'Mission', to: 'mission' },
-      { title: 'Team & Culture', to: 'team' },
+      { title: 'Team', to: 'team' },
       { title: 'Careers', to: 'careers' },
       // { title: 'Impact', to: 'impact' },
       // { title: 'Press', to: 'press' },
@@ -466,7 +466,7 @@ export const PUBLIC_NAV = [
     subNavigations: [
       { title: 'Fundraising', to: 'business' },
       { title: 'Investing', to: 'invest' },
-      { title: 'Education Center', to: 'education-center' },
+      { title: 'Education Center', to: 'resources/education-center' },
     ],
   },
   {
@@ -476,7 +476,7 @@ export const PUBLIC_NAV = [
     exact: true,
     subNavigations: [
       { title: 'Mission', to: 'about' },
-      { title: 'Team & Culture', to: 'about/team' },
+      { title: 'Team', to: 'about/team' },
       { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'resources/insights' },
     ],

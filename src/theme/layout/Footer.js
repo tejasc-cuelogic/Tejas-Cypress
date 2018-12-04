@@ -58,7 +58,8 @@ class Footer extends Component {
                 } */}
                 <Menu
                   text
-                  vertical={((!isTablet && isCampaign) || (!isMobile && !isCampaign))}
+                  vertical={!isTablet
+                    || (!OfferFooter.find(item => matchPath(path, { path: item })))}
                   className={isTablet && (OfferFooter.find(item => matchPath(path, { path: item }))) ? 'center-align' : ''}
                 >
                   {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
