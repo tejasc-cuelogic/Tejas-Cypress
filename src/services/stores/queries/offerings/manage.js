@@ -63,8 +63,6 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       keyTerms {
-        minOfferingAmtExpense
-        maxOfferingAmtExpense
         useOfProceedFootnote
         currentFinancialStatements
         submitted {
@@ -340,8 +338,14 @@ export const getOfferingDetails = gql`
           accountNumber
           businessCapitalization
           useOfProceeds {
-            reachedMinOfferingGoal
-            reachedMaxOfferingGoal
+            minOfferingExpense {
+              amount
+              description
+            }
+            maxOfferingExpense {
+              amount
+              description
+            }
           }
           equityShareholderRights
           security {
