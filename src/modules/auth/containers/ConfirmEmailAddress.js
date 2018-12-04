@@ -82,7 +82,11 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleCloseModal = () => {
-    this.props.history.push(this.props.uiStore.authRef || '/');
+    if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
+      this.props.history.push('/app/summary');
+    } else {
+      this.props.history.push(this.props.uiStore.authRef || '/');
+    }
     this.props.uiStore.clearErrors();
   }
 

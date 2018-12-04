@@ -22,14 +22,6 @@ export default class ConfirmPhoneNumber extends Component {
       const fieldValue = userDetailsStore.userDetails.phone.type;
       identityStore.phoneTypeChange(fieldValue);
     }
-    if (this.props.userDetailsStore.signupStatus.isMigratedUser
-      && this.props.userDetailsStore.signupStatus.phoneVerification === 'FAIL'
-      && !this.props.identityStore.sendOtpToMigratedUser.includes('PHONE')) {
-      const { mfaMethod, phoneNumber } = this.props.identityStore.ID_VERIFICATION_FRM.fields;
-      const type = mfaMethod.value !== '' ? mfaMethod.value : 'NEW';
-      const phoneNumberValue = phoneNumber.value;
-      this.props.identityStore.startPhoneVerification(type, phoneNumberValue);
-    }
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
