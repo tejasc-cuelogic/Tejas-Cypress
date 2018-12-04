@@ -176,7 +176,7 @@ h6{
 	color: @primary-two !important;
 }
 .grey-text {
-	color: @neutral-offdark;
+	color: @border-color;
 }
 .caption-note{
 	font-size:@12px;
@@ -1281,6 +1281,7 @@ a.icon-link {
 .error-page{
 	padding:@80px @14px;
 	text-align:center;
+	flex-grow:1;	// useful on campaign details page
 	h1.ui.header{
 		font-size:@90px !important;
 		font-weight:@bold;
@@ -2599,6 +2600,23 @@ p.check-extra-info{
 		margin-bottom: 0;
 	}
 }
+
+.goldstar-info{
+	display:inline-block;
+	margin:0 auto;
+	text-align:left;
+	dl.dl-horizontal{
+		dt{
+			width:60px;
+			font-weight:@normal;
+		}
+		dd{
+			margin-left:70px;
+			margin-bottom:@5px;
+		}
+	}
+}
+
 // Legal Documents
 .legal-desc p {
 	margin-bottom: @22px;

@@ -3,7 +3,6 @@ import { inject, observer } from 'mobx-react';
 import PrivateLayout from '../../shared/PrivateLayout';
 import AllRequests from './components/AllRequests';
 import { ByKeyword } from '../../../../theme/form/Filters';
-import Filters from './components/Filters';
 
 @inject('bankAccountStore')
 @observer
@@ -33,7 +32,7 @@ export default class CrowdPay extends Component {
   render() {
     // match
     const {
-      requestState, filters, FILTER_FRM,
+      requestState,
     } = this.props.bankAccountStore;
     return (
       <PrivateLayout
@@ -45,18 +44,7 @@ export default class CrowdPay extends Component {
             placeholder="Search by Investor"
             toggleSearch={this.toggleSearch}
             requestState={requestState}
-            filters={filters}
-          />
-        }
-        P2={
-          <Filters
-            requestState={requestState}
-            filters={filters}
-            setSearchParam={this.setSearchParam}
-            executeSearch={this.executeSearch}
-            dateFilterStart={this.dateFilterStart}
-            dateFilterEnd={this.dateFilterEnd}
-            FILTER_FRM={FILTER_FRM}
+            more="no"
           />
         }
       >
