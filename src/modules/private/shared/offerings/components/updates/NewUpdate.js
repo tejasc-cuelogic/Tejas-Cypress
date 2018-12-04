@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon } from 'semantic-ui-react';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
+import { InlineLoader } from '../../../../../../theme/shared';
 import Actions from './Actions';
 import Status from './Status';
 
@@ -16,7 +17,6 @@ export default class NewUpdate extends Component {
   }
   componentWillMount() {
     this.initiateFlow(this.props.id);
-    this.props.updateStore.reset();
   }
   initiateFlow = (id) => {
     if (id !== 'new') {
@@ -40,12 +40,17 @@ export default class NewUpdate extends Component {
     this.setState({ editForm: true });
   }
   render() {
-    const { PBUILDER_FRM, UpdateChange, FChange } = this.props.updateStore;
+    const {
+      PBUILDER_FRM, UpdateChange, FChange, loadingCurrentUpdate,
+    } = this.props.updateStore;
     const isNew = this.props.id === 'new';
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     // const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     const isReadonly = !isManager && (this.props.status === 'PENDING' || this.props.status === 'PUBLISHED');
+    if (loadingCurrentUpdate) {
+      return <InlineLoader />;
+    }
     return (
       <Modal.Content className="transaction-details">
         <Header as="h3">
@@ -101,19 +106,21 @@ export default class NewUpdate extends Component {
                   <h4>Chat box will be here</h4>
                 </Card.Content>
               </Card>
-              <Card fluid>
-                <Card.Content>
-                  <h4>Who’s this update for?</h4>
-                  <Form.Group inline>
-                    <FormRadioGroup
-                      disabled={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
-                      fielddata={PBUILDER_FRM.fields.scope}
-                      name="scope"
-                      changed={UpdateChange}
-                    />
-                  </Form.Group>
-                </Card.Content>
-              </Card>
+              {this.props.match.url.includes('engagement') &&
+                <Card fluid>
+                  <Card.Content>
+                    <h4>Who’s this update for?</h4>
+                    <Form.Group inline>
+                      <FormRadioGroup
+                        disabled={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                        fielddata={PBUILDER_FRM.fields.scope}
+                        name="scope"
+                        changed={UpdateChange}
+                      />
+                    </Form.Group>
+                  </Card.Content>
+                </Card>
+              }
               <Card fluid>
                 <Card.Content>
                   <Header as="h4">NextSeed Tips</Header>
