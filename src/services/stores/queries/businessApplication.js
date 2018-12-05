@@ -505,12 +505,13 @@ query _getBusinessApplicationById ($id: String!) {
 `;
 
 export const signPortalAgreement = gql`
-mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean){
+mutation _signPortalAgreement($applicationId: String!, $issuerId: String!, $selectedOffer: OfferInput!, $isSelectedOfferChanged: Boolean, $callbackUrl: String){
   signPortalAgreement(
     applicationId: $applicationId
     issuerId: $issuerId
     selectedOffer: $selectedOffer
     isSelectedOfferChanged: $isSelectedOfferChanged
+    callbackUrl: $callbackUrl
   )
 }
 `;
