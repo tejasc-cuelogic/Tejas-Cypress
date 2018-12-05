@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Header, Grid, Image, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import Aux from 'react-aux';
+import { orderBy } from 'lodash';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class BonusRewards extends Component {
   render() {
-    const { isTabletLand, refLink } = this.props;
+    const { isTabletLand, refLink, campaign } = this.props;
+    const rewardsTiers = campaign && campaign.rewardsTierIds &&
+      campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
     return (
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
@@ -15,12 +19,24 @@ class BonusRewards extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
-          <p className="center-align"><b>Invest more, receive more.</b></p>
-          <p className="early-bird-desc center-align">
-            See the bonus rewards BuffBrew Taproom is offering for higher
-            levels of investment.
-          </p>
+          {!rewardsTiers ?
+            <Aux>
+              <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
+              <p className="center-align"><b>Invest more, receive more.</b></p>
+              <p className="early-bird-desc center-align">
+                See the bonus rewards BuffBrew Taproom is offering for higher
+                levels of investment.
+              </p>
+            </Aux>
+            :
+            <Aux>
+              <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
+              <p className="center-align"><b>Early Bird rewards remaining</b></p>
+              <p className="early-bird-desc center-align">
+                First 100 to invest $1,000+
+              </p>
+            </Aux>
+          }
         </Segment>
         {/* <Segment padded>
           <Breadcrumb>

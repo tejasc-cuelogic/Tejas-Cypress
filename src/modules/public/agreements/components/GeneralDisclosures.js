@@ -22,13 +22,13 @@ export default class GeneralDisclosures extends Component {
             NextSeed nor any of its officers, directors, agents and employees makes any warranty,
             express or implied, of any kind whatsoever related to the adequacy, accuracy or
             completeness of any information on this site or the use of information on this site.
-            By accessing this site and any pages thereof, you agree to be bound by the <Link to="/agreements/legal/terms-of-use">Terms of Use</Link>
-            {' '}and <Link to="/agreements/legal/privacy-policy">Privacy Policy</Link>.
+            By accessing this site and any pages thereof, you agree to be bound by the <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>
+            {' '}and <Link className="positive-text" to="/agreements/legal/privacy-policy">Privacy Policy</Link>.
           </p>
           <p>
             All securities-related activity on this site is conducted by NextSeed Securities, LLC
             (“NextSeed Securities”), an affiliate of NextSeedand a SEC-registered broker-dealer and
-            member <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>/SIPC, unless otherwise specifically indicated as being conducted by
+            member <a className="positive-text" href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>/SIPC, unless otherwise specifically indicated as being conducted by
             NextSeed US LLC (“NextSeed Funding Portal”), anotheraffiliate of NextSeedand a
             SEC-registered Funding Portal and member FINRA, both located at 3 Greenway Plaza, Ste
             110, Houston TX 77046. NextSeed Securities and NextSeed Funding Portal does not make
@@ -48,8 +48,8 @@ export default class GeneralDisclosures extends Component {
             businesses seeking growth capital through investment crowdfunding tend to be in earlier
             stages of development,and their business model, products and services may not yet be
             fully developed, operational or tested in the public marketplace. There is no guarantee
-            that companies will be able to generate sufficient cashflow to 1Need to link <Link to="/agreements/legal/terms-of-use">Terms of Use</Link>
-            {' '}and <Link to="/agreements/legal/privacy-policy">Privacy Policy</Link> to the actual URL that has them.
+            that companies will be able to generate sufficient cashflow to 1Need to link <Link className="positive-text" to="/agreements/legal/terms-of-use">Terms of Use</Link>
+            {' '}and <Link className="positive-text" to="/agreements/legal/privacy-policy">Privacy Policy</Link> to the actual URL that has them.
           </p>
           <p>
             Service their outstanding debt securities, or that the stated equity valuation and other

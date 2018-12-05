@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Divider, Grid, Card, Form, List, Icon } from 'semantic-ui-react';
+import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm } from 'semantic-ui-react';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -14,6 +14,7 @@ import Status from './Status';
 export default class NewUpdate extends Component {
   state = {
     editForm: false,
+    confirmModal: false,
   }
   componentWillMount() {
     this.initiateFlow(this.props.id);
@@ -29,7 +30,16 @@ export default class NewUpdate extends Component {
     e.stopPropagation();
     this.props.history.replace(this.props.refLink);
   };
-
+  showConfirmModal = () => {
+    this.setState({ confirmModal: true });
+  }
+  toggleConfirmModal = () => {
+    this.setState({ confirmModal: false });
+  }
+  deleteUpdate = () => {
+    this.props.updateStore.deleteOfferingUpdates(this.props.id);
+    this.props.history.push(this.props.refLink);
+  }
   save = (status) => {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
@@ -64,6 +74,8 @@ export default class NewUpdate extends Component {
             isPublished={this.props.status === 'PUBLISHED'}
             editForm={this.state.editForm}
             edit={this.edit}
+            deleteUpdate={this.showConfirmModal}
+            id={this.props.id}
           />
         </Header>
         <Divider hidden />
@@ -138,6 +150,15 @@ export default class NewUpdate extends Component {
             </Grid.Column>
           </Grid.Row>
         </Grid>
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to delete this Update ?"
+          open={this.state.confirmModal}
+          onCancel={this.toggleConfirmModal}
+          onConfirm={this.deleteUpdate}
+          size="mini"
+          className="deletion"
+        />
       </Modal.Content>
     );
   }

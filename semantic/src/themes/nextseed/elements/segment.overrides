@@ -42,12 +42,12 @@
     .segment-container {
         max-height: 544px;
         overflow: hidden;
-        @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largestLargeMonitor ) {
+        @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largeMonitorBreakpoint ) {
             max-height: 230px;
         }
         &.small {
             max-height: 440px;
-            @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largestLargeMonitor ) {
+            @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largeMonitorBreakpoint ) {
                 max-height: 130px;
             }
         }
