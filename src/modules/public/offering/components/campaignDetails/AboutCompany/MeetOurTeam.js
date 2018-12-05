@@ -40,7 +40,7 @@ class MeetOurTeam extends Component {
                     data.isPublic ?
                       <Grid.Column>
                         <Reveal animated="small fade">
-                          <Reveal.Content hidden>
+                          <Reveal.Content hidden as={Link} to={`${meetOurTeamUrl}/meetourteam`}>
                             <div className="team-overlay">
                               <p>{`${data.firstName} ${data.lastName}`}</p>
                             </div>

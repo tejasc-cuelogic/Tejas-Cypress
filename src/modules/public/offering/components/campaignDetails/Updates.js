@@ -103,7 +103,7 @@ class Updates extends Component {
               }
             </VerticalTimeline>
             :
-            <InlineLoader text="No data found." />
+            <InlineLoader text="No Updates" />
           }
         </div>
       </div>
