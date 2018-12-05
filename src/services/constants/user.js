@@ -1,4 +1,5 @@
 import Validator from 'validatorjs';
+import moment from 'moment';
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable arrow-body-style */
@@ -7,6 +8,13 @@ Validator.register(
     return value.toString().length === 9;
   },
   'The :attribute is not in the format XXX-XX-XXXX.',
+);
+
+Validator.register(
+  'dob', (value, attribute) => {
+    return moment(value, 'MM/DD/YYYY').isBefore(moment());
+  },
+  "The :attribute should be less than today's date.",
 );
 
 Validator.register(
@@ -137,7 +145,7 @@ export const USER_IDENTITY = {
     label: 'Date of Birth',
     placeHolder: 'mm/dd/yyyy',
     error: undefined,
-    rule: 'required|date',
+    rule: 'required|date|dob',
     customErrors: {
       required: '* required.',
     },
@@ -199,7 +207,7 @@ export const PHONE_VERIFICATION = {
     value: '',
     label: 'Enter your verification code here:',
     error: undefined,
-    rule: 'required',
+    rule: 'required|min:6',
   },
 };
 

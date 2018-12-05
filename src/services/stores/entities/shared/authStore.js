@@ -1,4 +1,5 @@
 import { observable, action, computed } from 'mobx';
+import graphql from 'mobx-apollo';
 import cookie from 'react-cookies';
 import { isEmpty } from 'lodash';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
@@ -6,10 +7,10 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication } from '../../queries/profile';
+import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { uiStore, navStore, identityStore } from '../../index';
+import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
 
 export class AuthStore {
   @observable hasSession = false;
@@ -226,11 +227,12 @@ export class AuthStore {
         .mutate({
           mutation: verifyAndUpdateEmail,
           variables: {
-            resourceId: identityStore.requestOtpResponse.resourceId,
+            resourceId: identityStore.requestOtpResponse,
             confirmationCode: this.CONFIRM_FRM.fields.code.value,
           },
         })
         .then(() => {
+          userDetailsStore.getUser(userStore.currentUser.sub);
           resolve();
         })
         .catch((err) => {
@@ -253,7 +255,8 @@ export class AuthStore {
             newEmail: this.CONFIRM_FRM.fields.email.value,
           },
         })
-        .then(() => {
+        .then((result) => {
+          identityStore.setRequestOtpResponse(result.data.requestEmailChange);
           resolve();
         })
         .catch((err) => {
@@ -309,6 +312,27 @@ export class AuthStore {
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
   }
+
+  @action
+  checkEmailExistsPresignup = email => new Promise((res, rej) => {
+    graphql({
+      client: clientPublic,
+      query: checkEmailExistsPresignup,
+      variables: {
+        email,
+      },
+      onFetch: (data) => {
+        if (data.checkEmailExistsPresignup) {
+          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
+          this.SIGNUP_FRM.meta.isValid = false;
+          rej();
+        } else {
+          res();
+        }
+      },
+      fetchPolicy: 'network-only',
+    });
+  });
 }
 
 export default new AuthStore();

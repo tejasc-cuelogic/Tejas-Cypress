@@ -4,9 +4,10 @@ import { mapValues, keyBy, find, flatMap, map, omit } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
-import { uiStore, userStore, userDetailsStore } from '../../index';
-import { verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
@@ -26,6 +27,12 @@ export class IdentityStore {
   @observable requestOtpResponse = {};
   @observable userCipStatus = '';
   @observable isOptConfirmed = false;
+  @observable sendOtpToMigratedUser = [];
+
+  @action
+  setSendOtpToMigratedUser = (step) => {
+    this.sendOtpToMigratedUser.push(step);
+  }
 
   @action
   setIsOptConfirmed = (status) => {
@@ -128,7 +135,7 @@ export class IdentityStore {
   };
 
   @action
-  resetFormData(form) {
+  resetFormData = (form) => {
     const resettedForm = FormValidator.resetFormData(this[form]);
     this[form] = resettedForm;
   }
@@ -346,7 +353,7 @@ export class IdentityStore {
     });
   }
 
-  startPhoneVerification = () => {
+  startPhoneVerification = (type, address = undefined) => {
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
@@ -355,17 +362,24 @@ export class IdentityStore {
         .mutate({
           mutation: requestOtp,
           variables: {
-            userId: userStore.currentUser.sub,
-            type: mfaMethod.value !== '' ? mfaMethod.value : null,
+            userId: userStore.currentUser.sub || authStore.userId,
+            type: type || (mfaMethod.value !== '' ? mfaMethod.value : null),
+            address,
           },
         })
         .then((result) => {
+          if (type === 'EMAIL') {
+            this.setSendOtpToMigratedUser('EMAIL');
+          } else {
+            this.setSendOtpToMigratedUser('PHONE');
+          }
           this.setRequestOtpResponse(result.data.requestOtp);
           Helper.toast('Verification code sent to user.', 'success');
           resolve();
         })
         .catch((err) => {
-          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          // uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
         })
         .finally(() => {
@@ -432,13 +446,21 @@ export class IdentityStore {
         .mutate({
           mutation: verifyOtp,
           variables: {
-            requestId: this.requestOtpResponse,
+            resourceId: this.requestOtpResponse,
             verificationCode: this.ID_PHONE_VERIFICATION.fields.code.value,
           },
         })
-        .then(() => {
-          this.updateUserPhoneDetails();
-          resolve();
+        .then((result) => {
+          if (result.data.verifyOtp) {
+            this.updateUserPhoneDetails();
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            reject();
+          }
         })
         .catch(action((err) => {
           uiStore.setErrors(JSON.stringify(err.message));
@@ -728,6 +750,103 @@ export class IdentityStore {
         fields.phoneNumber.value = phone.number;
       }
     }
+  }
+
+  requestOtpWrapper = () => {
+    uiStore.setProgress();
+    const { email } = authStore.SIGNUP_FRM.fields;
+    const emailInCookie = authStore.CONFIRM_FRM.fields.email.value;
+    return new Promise((resolve, reject) => {
+      publicClient
+        .mutate({
+          mutation: requestOtpWrapper,
+          variables: {
+            address: email.value || emailInCookie,
+          },
+        })
+        .then((result) => {
+          this.setRequestOtpResponse(result.data.requestOTPWrapper);
+          Helper.toast('Verification code sent to user.', 'success');
+          resolve();
+        })
+        .catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
+  }
+
+  verifyOTPWrapper = () => {
+    uiStore.setProgress();
+    const { email, code } = FormValidator.ExtractValues(authStore.CONFIRM_FRM.fields);
+    const verifyOTPData = {
+      resourceId: this.requestOtpResponse,
+      confirmationCode: code,
+      address: email,
+    };
+    return new Promise((resolve, reject) => {
+      publicClient
+        .mutate({
+          mutation: verifyOTPWrapper,
+          variables: {
+            verifyOTPData,
+          },
+        })
+        .then((result) => {
+          if (result.data.verifyOTPWrapper) {
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            uiStore.setProgress(false);
+            reject();
+          }
+        })
+        .catch((err) => {
+          uiStore.setProgress(false);
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          reject(err);
+        });
+    });
+  }
+
+  @action
+  confirmEmailAddress = () => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: verifyOtp,
+          variables: {
+            resourceId: this.requestOtpResponse,
+            verificationCode: authStore.CONFIRM_FRM.fields.code.value,
+          },
+        })
+        .then((result) => {
+          if (result.data.verifyOtp) {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+            resolve();
+          } else {
+            const error = {
+              message: 'Please enter correct verification code.',
+            };
+            uiStore.setErrors(error);
+            reject();
+          }
+        })
+        .catch(action((err) => {
+          uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+          reject(err);
+        }))
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    });
   }
 }
 

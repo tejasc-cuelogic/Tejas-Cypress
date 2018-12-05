@@ -67,7 +67,14 @@ export default class FormInput extends Component {
               props.changed(e, { name: e.target.name, value: e.target.value, dataid });
               this.triggerError(props.showerror || false);
             }}
-          onBlur={() => this.triggerError(true)}
+          onBlur={
+            (e) => {
+              this.triggerError(true);
+              if (props.onblur) {
+                this.props.onblur(e.target.value);
+              }
+            }
+          }
           readOnly={displayMode}
           {...props}
           value={value === '' ? undefined : value}
