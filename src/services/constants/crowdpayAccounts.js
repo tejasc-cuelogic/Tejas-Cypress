@@ -1,15 +1,8 @@
-export const ACCOUNT_STATUS_VALUES = {
-  review: ['FULL', 'DECLINED'],
-  cip: ['GS_PROCESSING', 'DECLINED'],
-  ira: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'],
-  entity: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'],
-};
-
-export const ACCOUNT_STATUS_FILTER_VALUES = {
-  review: ['FULL'],
-  cip: ['GS_PROCESSING'],
-  ira: ['NS_PROCESSING'],
-  entity: ['NS_PROCESSING'],
+export const CROWDPAY_FILTERS = {
+  review: { initialStatus: ['FULL', 'DECLINED'], initialFilters: ['FULL'], accountType: [] },
+  cip: { initialStatus: ['GS_PROCESSING', 'DECLINED'], initialFilters: ['GS_PROCESSING'], accountType: ['INDIVIDUAL'] },
+  ira: { initialStatus: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'], initialFilters: ['NS_PROCESSING'], accountType: ['IRA'] },
+  entity: { initialStatus: ['GS_PROCESSING', 'NS_PROCESSING', 'DECLINED'], initialFilters: ['NS_PROCESSING'], accountType: ['ENTITY'] },
 };
 
 export const FILTER_META = {
