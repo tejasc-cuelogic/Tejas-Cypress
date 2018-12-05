@@ -137,105 +137,115 @@ export default class Media extends Component {
           </Grid.Column>
         </Grid>
         <Divider section />
-        <Header as="h4">Tombstone image</Header>
-        <Form className="cropper-wrap tombstone-img">
-          {MEDIA_FRM.fields.tombstoneImage.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.showConfirmModal('tombstoneImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image64 srcUrl={MEDIA_FRM.fields.tombstoneImage.preSignedUrl} />
-            </div>
-          ) : (
-            <ImageCropper
-              disabled={isReadonly}
-              fieldData={MEDIA_FRM.fields.tombstoneImage}
-              setData={(attr, value) => this.setData(attr, value, 'tombstoneImage')}
-              verifySize={this.handleVerifyFileSize}
-              verifyExtension={this.handleVerifyFileExtension}
-              handelReset={() => this.handleresetProfilePhoto('tombstoneImage')}
-              verifyImageDimension={this.handelImageDeimension}
-              field={MEDIA_FRM.fields.tombstoneImage}
-              modalUploadAction={this.uploadMedia}
-              name="tombstoneImage"
-              cropInModal
-              aspect={3 / 2}
-            />
-          )}
-        </Form>
+        <Grid columns={2} stackable>
+          <Grid.Column>
+            <Header as="h4">Tombstone image</Header>
+            <Form className="cropper-wrap tombstone-img">
+              {MEDIA_FRM.fields.tombstoneImage.preSignedUrl ? (
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.showConfirmModal('tombstoneImage')} circular icon={{ className: 'ns-close-light' }} />
+                  <Image64 srcUrl={MEDIA_FRM.fields.tombstoneImage.preSignedUrl} />
+                </div>
+              ) : (
+                <ImageCropper
+                  disabled={isReadonly}
+                  fieldData={MEDIA_FRM.fields.tombstoneImage}
+                  setData={(attr, value) => this.setData(attr, value, 'tombstoneImage')}
+                  verifySize={this.handleVerifyFileSize}
+                  verifyExtension={this.handleVerifyFileExtension}
+                  handelReset={() => this.handleresetProfilePhoto('tombstoneImage')}
+                  verifyImageDimension={this.handelImageDeimension}
+                  field={MEDIA_FRM.fields.tombstoneImage}
+                  modalUploadAction={this.uploadMedia}
+                  name="tombstoneImage"
+                  cropInModal
+                  aspect={3 / 2}
+                />
+              )}
+            </Form>
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h4">Location Hero Image</Header>
+            <Form className="cropper-wrap tombstone-img">
+              {MEDIA_FRM.fields.locationHeroImage.preSignedUrl ? (
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.showConfirmModal('locationHeroImage')} circular icon={{ className: 'ns-close-light' }} />
+                  <Image64 srcUrl={MEDIA_FRM.fields.locationHeroImage.preSignedUrl} />
+                </div>
+              ) : (
+                <ImageCropper
+                  disabled={isReadonly}
+                  fieldData={MEDIA_FRM.fields.locationHeroImage}
+                  setData={(attr, value) => this.setData(attr, value, 'locationHeroImage')}
+                  verifySize={this.handleVerifyFileSize}
+                  verifyExtension={this.handleVerifyFileExtension}
+                  handelReset={() => this.handleresetProfilePhoto('locationHeroImage')}
+                  verifyImageDimension={this.handelImageDeimension}
+                  field={MEDIA_FRM.fields.locationHeroImage}
+                  modalUploadAction={this.uploadMedia}
+                  name="locationHeroImage"
+                  cropInModal
+                  aspect={3 / 2}
+                />
+              )}
+            </Form>
+          </Grid.Column>
+        </Grid>
         <Divider section />
-        <Header as="h4">Location Hero Image</Header>
-        <Form className="cropper-wrap tombstone-img">
-          {MEDIA_FRM.fields.locationHeroImage.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.showConfirmModal('locationHeroImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image64 srcUrl={MEDIA_FRM.fields.locationHeroImage.preSignedUrl} />
-            </div>
-          ) : (
-            <ImageCropper
-              disabled={isReadonly}
-              fieldData={MEDIA_FRM.fields.locationHeroImage}
-              setData={(attr, value) => this.setData(attr, value, 'locationHeroImage')}
-              verifySize={this.handleVerifyFileSize}
-              verifyExtension={this.handleVerifyFileExtension}
-              handelReset={() => this.handleresetProfilePhoto('locationHeroImage')}
-              verifyImageDimension={this.handelImageDeimension}
-              field={MEDIA_FRM.fields.locationHeroImage}
-              modalUploadAction={this.uploadMedia}
-              name="locationHeroImage"
-              cropInModal
-              aspect={3 / 2}
-            />
-          )}
-        </Form>
-        <Divider section />
-        <Header as="h4">Use of Proceeds Image</Header>
-        <Form className="cropper-wrap tombstone-img">
-          {MEDIA_FRM.fields.useOfProceeds.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.showConfirmModal('useOfProceeds')} circular icon={{ className: 'ns-close-light' }} />
-              <Image64 srcUrl={MEDIA_FRM.fields.useOfProceeds.preSignedUrl} />
-            </div>
-          ) : (
-            <ImageCropper
-              disabled={isReadonly}
-              fieldData={MEDIA_FRM.fields.useOfProceeds}
-              setData={(attr, value) => this.setData(attr, value, 'useOfProceeds')}
-              verifySize={this.handleVerifyFileSize}
-              verifyExtension={this.handleVerifyFileExtension}
-              handelReset={() => this.handleresetProfilePhoto('useOfProceeds')}
-              verifyImageDimension={this.handelImageDeimension}
-              field={MEDIA_FRM.fields.useOfProceeds}
-              modalUploadAction={this.uploadMedia}
-              name="useOfProceeds"
-              cropInModal
-              aspect={3 / 2}
-            />
-          )}
-        </Form>
-        <Divider section />
-        <Header as="h4">Business Model Image</Header>
-        <Form className="cropper-wrap tombstone-img">
-          {MEDIA_FRM.fields.businessModelImage.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.showConfirmModal('businessModelImage')} circular icon={{ className: 'ns-close-light' }} />
-              <Image64 srcUrl={MEDIA_FRM.fields.businessModelImage.preSignedUrl} />
-            </div>
-          ) : (
-            <ImageCropper
-              disabled={isReadonly}
-              fieldData={MEDIA_FRM.fields.businessModelImage}
-              setData={(attr, value) => this.setData(attr, value, 'businessModelImage')}
-              verifySize={this.handleVerifyFileSize}
-              verifyExtension={this.handleVerifyFileExtension}
-              handelReset={() => this.handleresetProfilePhoto('businessModelImage')}
-              verifyImageDimension={this.handelImageDeimension}
-              field={MEDIA_FRM.fields.businessModelImage}
-              modalUploadAction={this.uploadMedia}
-              name="businessModelImage"
-              cropInModal
-              aspect={3 / 2}
-            />
-          )}
-        </Form>
+        <Grid columns={2} stackable>
+          <Grid.Column>
+            <Header as="h4">Use of Proceeds Image</Header>
+            <Form className="cropper-wrap tombstone-img">
+              {MEDIA_FRM.fields.useOfProceeds.preSignedUrl ? (
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.showConfirmModal('useOfProceeds')} circular icon={{ className: 'ns-close-light' }} />
+                  <Image64 srcUrl={MEDIA_FRM.fields.useOfProceeds.preSignedUrl} />
+                </div>
+              ) : (
+                <ImageCropper
+                  disabled={isReadonly}
+                  fieldData={MEDIA_FRM.fields.useOfProceeds}
+                  setData={(attr, value) => this.setData(attr, value, 'useOfProceeds')}
+                  verifySize={this.handleVerifyFileSize}
+                  verifyExtension={this.handleVerifyFileExtension}
+                  handelReset={() => this.handleresetProfilePhoto('useOfProceeds')}
+                  verifyImageDimension={this.handelImageDeimension}
+                  field={MEDIA_FRM.fields.useOfProceeds}
+                  modalUploadAction={this.uploadMedia}
+                  name="useOfProceeds"
+                  cropInModal
+                  aspect={3 / 2}
+                />
+              )}
+            </Form>
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h4">Business Model Image</Header>
+            <Form className="cropper-wrap tombstone-img">
+              {MEDIA_FRM.fields.businessModelImage.preSignedUrl ? (
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.showConfirmModal('businessModelImage')} circular icon={{ className: 'ns-close-light' }} />
+                  <Image64 srcUrl={MEDIA_FRM.fields.businessModelImage.preSignedUrl} />
+                </div>
+              ) : (
+                <ImageCropper
+                  disabled={isReadonly}
+                  fieldData={MEDIA_FRM.fields.businessModelImage}
+                  setData={(attr, value) => this.setData(attr, value, 'businessModelImage')}
+                  verifySize={this.handleVerifyFileSize}
+                  verifyExtension={this.handleVerifyFileExtension}
+                  handelReset={() => this.handleresetProfilePhoto('businessModelImage')}
+                  verifyImageDimension={this.handelImageDeimension}
+                  field={MEDIA_FRM.fields.businessModelImage}
+                  modalUploadAction={this.uploadMedia}
+                  name="businessModelImage"
+                  cropInModal
+                  aspect={3 / 2}
+                />
+              )}
+            </Form>
+          </Grid.Column>
+        </Grid>
         <Divider section />
         <Header as="h4">Location Image</Header>
         <Form className="cropper-wrap gallery-img">
