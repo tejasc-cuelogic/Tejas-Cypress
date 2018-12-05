@@ -12,6 +12,11 @@ export default class NsPagination extends Component {
       Math.ceil(this.props.meta.totalRecords / this.props.meta.requestState.perPage) : 1,
     stateOptions: [5, 10, 15].map(n => ({ key: n, value: n, text: n })),
   };
+  componentWillReceiveProps(nextProps) {
+    const totalPages = nextProps.meta.totalRecords > nextProps.meta.requestState.perPage ?
+      Math.ceil(nextProps.meta.totalRecords / nextProps.meta.requestState.perPage) : 1;
+    this.setState({ totalPages });
+  }
   pageChangeHandler = (e) => {
     this.setState({ currentPageNo: parseInt(e.target.value, 10) });
   }
