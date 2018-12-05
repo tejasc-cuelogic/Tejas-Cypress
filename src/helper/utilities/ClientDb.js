@@ -5,7 +5,7 @@ class ClientDb {
   database = null;
   initiateDb = (data, isUniqWith = false) => {
     this.database = TAFFY(isUniqWith ? uniqWith(data, isEqual) : data);
-    return this.database().get();
+    return this.getDatabase();
   };
 
   getDatabase = () => this.database().get();
@@ -17,7 +17,7 @@ class ClientDb {
     this.database().get().length) || 0;
   }
 
-  filterData = (key, value, filterBy = null, customKey = null) => {
+  filterData = (key, value, filterBy = null, customKey = null, setDb = true) => {
     let resultArray = [];
     const filterByObj = filterBy ? { [filterBy]: value } : value;
     const customKeyVal = customKey ? { [customKey]: filterByObj } : filterByObj;
@@ -31,8 +31,13 @@ class ClientDb {
     } else {
       resultArray = [...this.database({ [key]: customKeyVal }).get()];
     }
-    // return this.initiateDb(resultArray, true);
-    return uniqWith(resultArray, isEqual);
+    return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
+  }
+
+  filterByDate = (sDate, eDate) => {
+    const data = this.getDatabase();
+    const filterData = data.filter(e => e.date <= eDate && e.date >= sDate);
+    this.initiateDb(filterData, true);
   }
 }
 
