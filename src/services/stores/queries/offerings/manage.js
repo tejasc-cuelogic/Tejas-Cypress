@@ -62,7 +62,9 @@ export const getOfferingDetails = gql`
       id
       offeringSlug
       referralCode
+      previewPassword
       keyTerms {
+        revSharePercentageDescription
         useOfProceedFootnote
         currentFinancialStatements
         submitted {
@@ -104,6 +106,7 @@ export const getOfferingDetails = gql`
         stockType
         offeringExpTarget
         offeringExpMax
+        offeringDisclaimer
         revShareSummary
         nsFeeCalcDescription
         isNewBusiness
@@ -230,6 +233,12 @@ export const getOfferingDetails = gql`
             url
             shareLink
             blurb
+            featuredImageUpload {
+              id
+              url
+              fileName
+              isPublic
+            }
           }
           issuerWebsite
           issuerSubmitted
@@ -338,14 +347,10 @@ export const getOfferingDetails = gql`
           accountNumber
           businessCapitalization
           useOfProceeds {
-            minOfferingExpense {
-              amount
-              description
-            }
-            maxOfferingExpense {
-              amount
-              description
-            }
+            minOfferingExpenseAmount
+            minOfferingExpenseAmountDescription
+            maxOfferingExpenseAmount
+            maxOfferingExpenseAmountDescription
           }
           equityShareholderRights
           security {

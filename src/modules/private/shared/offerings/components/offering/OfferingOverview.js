@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Button } from 'semantic-ui-react';
-import { FormTextarea, FormInput } from '../../../../../../theme/form';
+import { FormTextarea, FormInput, DropZone } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
@@ -12,6 +12,12 @@ export default class OfferingOverview extends Component {
     this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
     this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
+  }
+  onFileDrop = (files, name) => {
+    this.props.offeringCreationStore.uploadFileToS3('OFFERING_OVERVIEW_FRM', name, files);
+  }
+  handleDelDoc = (field) => {
+    this.props.offeringCreationStore.removeFileFromS3('OFFERING_OVERVIEW_FRM', field);
   }
   addNewBullet = (e) => {
     e.preventDefault();
@@ -111,6 +117,15 @@ export default class OfferingOverview extends Component {
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
+        <DropZone
+          disabled={isReadonly}
+          name="facebook_featured_image"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featured_image}
+          ondrop={(files, name) => this.onFileDrop(files, name)}
+          onremove={fieldName => this.handleDelDoc(fieldName)}
+          uploadtitle="Choose a file or drag it here"
+          containerclassname="field"
+        />
         <Header as="h6">Twitter</Header>
         <FormInput
           displayMode={isReadonly}
@@ -125,6 +140,15 @@ export default class OfferingOverview extends Component {
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
+        <DropZone
+          disabled={isReadonly}
+          name="twitter_featured_image"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_featured_image}
+          ondrop={(files, name) => this.onFileDrop(files, name)}
+          onremove={fieldName => this.handleDelDoc(fieldName)}
+          // uploadtitle="Upload a file"
+          containerclassname="field"
+        />
         <Divider section />
         <Header as="h4">Google
           <Header.Subheader>
@@ -137,6 +161,15 @@ export default class OfferingOverview extends Component {
           fielddata={OFFERING_OVERVIEW_FRM.fields.googleMeta}
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
+        />
+        <DropZone
+          disabled={isReadonly}
+          name="google_featured_image"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.google_featured_image}
+          ondrop={(files, name) => this.onFileDrop(files, name)}
+          onremove={fieldName => this.handleDelDoc(fieldName)}
+          // uploadtitle="Upload a file"
+          containerclassname="field"
         />
         <Divider hidden />
         <ButtonGroup

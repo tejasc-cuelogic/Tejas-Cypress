@@ -173,7 +173,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths={2}>
             {
-            ['investmentMultipleSummary', 'revShareSummary'].map(field => (
+            ['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
