@@ -120,19 +120,14 @@ const HowItWorks = () => (
             <div>
               <Header as="h5">Cost-effective capital, with benefits</Header>
               <p>
-                With NextSeed, you have access to a unique type of financing that can maximize
-                your ownership stake. Share your concept with thousands of local investors, as
-                well as your fans all over the country.
+                With NextSeed, your financing solution is part of your marketing campaign. Share
+                your story with thousands of local investors and interested fans nationwide.
               </p>
             </div>
           </Grid.Column>
         </Grid>
         <div className="center-align mt-50">
           <List horizontal relaxed className="learn-more-list">
-            {/* <List.Item>
-              <List.Header>Learn more</List.Header>
-              <List.Content>Why fundraise on <a href="/">NextSeed?</a></List.Content>
-            </List.Item> */}
             <List.Item>
               <List.Content><strong>Learn more:</strong> Is fundraising on <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
             </List.Item>

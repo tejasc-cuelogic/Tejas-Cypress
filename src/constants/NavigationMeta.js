@@ -422,7 +422,7 @@ export const PUBLIC_NAV = [
         icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'ns-document-search', title: 'Data Room', to: 'disclosures', component: 'Disclosures',
+        icon: 'ns-document-search', title: 'Data Room', to: 'data-room', component: 'Disclosures',
       },
       {
         icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',
@@ -466,33 +466,46 @@ export const PUBLIC_NAV = [
     subNavigations: [
       { title: 'Fundraising', to: 'business' },
       { title: 'Investing', to: 'invest' },
+      { title: 'Education Center', to: 'resources/education-center' },
+    ],
+  },
+  {
+    title: 'About us',
+    to: '',
+    subPanel: 1,
+    exact: true,
+    subNavigations: [
+      { title: 'Mission', to: 'about/mission' },
+      { title: 'Team', to: 'about/team' },
+      { title: 'Careers', to: 'about/careers' },
+      { title: 'Insights', to: 'resources/insights' },
     ],
   },
 ];
 
 
 export const FOOTER_NAV = [
-  {
-    title: 'Resources',
-    to: 'resources',
-    subPanel: 1,
-    subNavigations: [
-      { title: 'Ed Center', to: 'education-center' },
-      { title: 'Insights', to: 'insights' },
-    ],
-  },
-  {
-    title: 'About Us',
-    to: 'about',
-    exact: true,
-    subPanel: 1,
-    subNavigations: [
-      { title: 'Mission', to: 'mission' },
-      { title: 'Team & Culture', to: 'team' },
-      { title: 'Careers', to: 'careers' },
-      { title: 'Press', to: 'press' },
-    ],
-  },
+  // {
+  //   title: 'Resources',
+  //   to: 'resources',
+  //   subPanel: 1,
+  //   subNavigations: [
+  //     { title: 'Ed Center', to: 'education-center' },
+  //     { title: 'Insights', to: 'insights' },
+  //   ],
+  // },
+  // {
+  //   title: 'About Us',
+  //   to: 'about',
+  //   exact: true,
+  //   subPanel: 1,
+  //   subNavigations: [
+  //     { title: 'Mission', to: 'mission' },
+  //     { title: 'Team & Culture', to: 'team' },
+  //     { title: 'Careers', to: 'careers' },
+  //     { title: 'Press', to: 'press' },
+  //   ],
+  // },
   {
     title: 'Legal',
     to: 'agreements/legal',

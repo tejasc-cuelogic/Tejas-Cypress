@@ -31,7 +31,13 @@ export class NavStore {
   }
 
   @computed get myRoutes() {
-    const permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
+    let permitted = [];
+    if (userDetailsStore.signupStatus.isMigratedFullAccount
+      && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
+      permitted = [...this.params.roles];
+    } else {
+      permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
+    }
     const routes = _.filter(
       this.NAV_ITEMS,
       n => ((n.accessibleTo.length === 0 || _.intersection(n.accessibleTo, permitted).length > 0) &&

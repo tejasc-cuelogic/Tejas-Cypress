@@ -13,6 +13,7 @@ import Helper from '../../../../../../helper/utility';
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
     this.props.authStore.requestEmailChange().then(() => {
+      this.props.uiStore.clearErrors();
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
       const userCredentials = { email: email.value, password: btoa(password.value) };

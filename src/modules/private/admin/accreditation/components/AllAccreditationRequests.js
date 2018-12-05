@@ -46,6 +46,11 @@ export default class AllAccreditationRequests extends Component {
             </Table.Header>
             <Table.Body>
               {
+              accreditations.length === 0 ? (
+                <Table.Row>
+                  <Table.Cell textAlign="center" colSpan={5}>No accreditation requests to display !</Table.Cell>
+                </Table.Row>
+                ) :
                 accreditations.map(accreditation => (
                   <Table.Row key={accreditation.id}>
                     <Table.Cell>
@@ -54,12 +59,12 @@ export default class AllAccreditationRequests extends Component {
                     <Table.Cell>
                       <DateTimeFormat unix format="MM-DD-YYYY" datetime={accreditation.requestDate} />
                     </Table.Cell>
-                    <Table.Cell textAlign="center">
+                    <Table.Cell>
                       {accreditation.accountType ?
-                        <Icon className="ns-entity-line" color="green" /> :
+                        <Icon size="large" className="ns-entity-line" color="green" /> :
                         <Aux>
-                          <Icon className="ns-individual-line" color="green" />
-                          <Icon className="ns-ira-line" color="green" />
+                          <Icon size="large" className="ns-individual-line" color="green" />
+                          <Icon size="large" className="ns-ira-line" color="green" />
                         </Aux>
                       }
                     </Table.Cell>

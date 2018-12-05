@@ -204,6 +204,7 @@ export class Auth {
 
     return new Promise((res, rej) => {
       const { fields } = authStore.SIGNUP_FRM;
+      const signupFields = authStore.CONFIRM_FRM.fields;
       const attributeRoles = new AWSCognito.CognitoUserAttribute({
         Name: 'custom:roles', Value: JSON.stringify([fields.role.value]),
       });
@@ -220,8 +221,8 @@ export class Auth {
       attributeList.push(attributeFirstName);
       attributeList.push(attributeLastName);
       this.userPool.signUp(
-        fields.email.value,
-        fields.password.value,
+        fields.email.value || signupFields.email.value,
+        fields.password.value || signupFields.password.value,
         attributeList,
         null,
         (err, result) => {
@@ -236,13 +237,58 @@ export class Auth {
     })
       .then(() => {
         Helper.toast('Thanks! You have successfully signed up to the NextSeed.', 'success');
+        if (!userStore.currentUser) {
+          const { email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
+          const authenticationDetails = new AWSCognito.AuthenticationDetails({
+            Username: email, Password: password,
+          });
+
+          this.cognitoUser = new AWSCognito.CognitoUser({
+            Username: email, Pool: this.userPool,
+          });
+
+          return new Promise((res, rej) => {
+            this.cognitoUser.authenticateUser(authenticationDetails, {
+              onSuccess: result => res({ data: result }),
+              newPasswordRequired: (result) => {
+                res({ data: result, action: 'newPassword' });
+              },
+              onFailure: err => rej(err),
+            });
+          })
+            .then((result) => {
+              authStore.setUserLoggedIn(true);
+              if (result.action && result.action === 'newPassword') {
+                authStore.setEmail(result.data.email);
+                authStore.setCognitoUserSession(this.cognitoUser.Session);
+                authStore.setNewPasswordRequired(true);
+              } else {
+                const { data } = result;
+                // Extract JWT from token
+                commonStore.setToken(data.idToken.jwtToken);
+                userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+                userDetailsStore.getUser(userStore.currentUser.sub);
+                AWS.config.region = AWS_REGION;
+                if (userStore.isCurrentUserWithRole('admin')) {
+                  this.setAWSAdminAccess(data.idToken.jwtToken);
+                }
+              }
+              uiStore.setProgress(false);
+            })
+            .catch((err) => {
+              uiStore.setProgress(false);
+              uiStore.setErrors(this.simpleErr(err));
+              throw err;
+            });
+        }
+        return null;
       })
       .catch((err) => {
+        uiStore.setProgress(false);
         uiStore.setErrors(this.simpleErr(err));
         throw err;
       })
       .finally(() => {
-        uiStore.setProgress(false);
         uiStore.clearLoaderMessage();
       });
   }

@@ -40,14 +40,22 @@
         }
     }
     .segment-container {
-        max-height: 410px;
+        max-height: 544px;
         overflow: hidden;
-        flex-grow: 1;
+        @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largestLargeMonitor ) {
+            max-height: 230px;
+        }
         &.small {
-            max-height: 356px;
+            max-height: 440px;
+            @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largestLargeMonitor ) {
+                max-height: 130px;
+            }
         }
         &.mini {
             max-height: 90px;
+        }
+        p {
+            margin-bottom: @20px;
         }
     }
     &.overview-video {

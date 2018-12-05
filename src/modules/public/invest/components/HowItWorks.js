@@ -8,7 +8,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
 const HowItWorks = () => (
   <Aux>
-    <section>
+    <section className="mb-80 mt-80">
       <Container>
         <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
         <div className="how-it-works-steps">
@@ -32,7 +32,7 @@ const HowItWorks = () => (
       </Container>
     </section>
     <Divider fitted as={Container} />
-    <section>
+    <section className="mb-80 mt-80">
       <Container textAlign={isMobile ? 'left' : 'center'}>
         <Header as="h2">Choose how you want to invest.</Header>
         <p className={isMobile ? 'mb-50' : 'mb-80'}>Understand and choose the right opportunities with the right payment terms for you.</p>
@@ -146,7 +146,7 @@ const HowItWorks = () => (
     </section>
     <section className="bg-offwhite">
       <Container>
-        <Grid relaxed={!isTablet && 'very'} stackable centered>
+        <Grid relaxed={!isTablet && 'very'} stackable centered className="mt-80 mb-80">
           <Grid.Row>
             <Grid.Column width={10} textAlign="center">
               <Header as="h2">Every investment comes with risk and opportunity.</Header>
@@ -161,12 +161,13 @@ const HowItWorks = () => (
         </Grid>
       </Container>
     </section>
-    <section>
+    <section className="mt-50">
       <Container className="center-align">
         <Header as="h2" className="mb-30">Register for an account.</Header>
         <Button.Group vertical={isMobile} className="mb-50">
           <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
         </Button.Group>
+        <Divider section hidden />
         <Divider />
         <List className="learn-more-list">
           <List.Item>

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
-import { Header, Form, Button } from 'semantic-ui-react';
+import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 
-@inject('investorProfileStore', 'userDetailsStore')
+@inject('investorProfileStore', 'userDetailsStore', 'uiStore')
 @withRouter
 @observer
 export default class Experience extends Component {
@@ -22,13 +23,14 @@ export default class Experience extends Component {
         form: 'INVESTMENT_EXP_FORM',
         stepToBeRendered: 6,
       };
-      updateInvestorProfileData(currentStep);
-      const { signupStatus } = this.props.userDetailsStore;
-      if (signupStatus.isMigratedFullAccount) {
-        this.props.history.push('/app/summary');
-      } else {
-        this.props.history.push('/app/summary/account-creation');
-      }
+      updateInvestorProfileData(currentStep).then(() => {
+        const { signupStatus } = this.props.userDetailsStore;
+        if (signupStatus.isMigratedFullAccount) {
+          this.props.history.push('/app/summary');
+        } else {
+          this.props.history.push('/app/summary/account-creation');
+        }
+      });
     }
   }
   render() {
@@ -37,6 +39,7 @@ export default class Experience extends Component {
       isInvestmentExperienceValid,
       experiencesChange,
     } = this.props.investorProfileStore;
+    const { errors } = this.props.uiStore;
     return (
       <Aux>
         <Header as="h3" textAlign="center">Investment Experience</Header>
@@ -44,6 +47,11 @@ export default class Experience extends Component {
           Confirm your experience and understanding of the investment risks on NextSeed.
           Select the box that best describes your investment experience to date:
         </p>
+        {errors &&
+        <Message error textAlign="left">
+          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+        </Message>
+        }
         <Form error onSubmit={this.handleSubmitInvestmentExperience}>
           <FormRadioGroup
             fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}

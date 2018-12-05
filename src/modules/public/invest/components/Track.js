@@ -9,7 +9,7 @@ const Track = () => (
       <Container>
         <Grid padded="vertically">
           <Grid.Row>
-            <Grid.Column computer={8} tablet={8} mobile={16} verticalAlign="middle" className="side-section track-left-section">
+            <Grid.Column widescreen={8} computer={8} tablet={8} mobile={16} verticalAlign="middle" className="side-section track-left-section">
               <div>
                 <Header as="h2">Track your investments.</Header>
                 <p className="mb-30">

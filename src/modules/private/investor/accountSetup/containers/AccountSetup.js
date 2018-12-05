@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { findKey } from 'lodash';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
-import { Header } from 'semantic-ui-react';
+import { Header, Card } from 'semantic-ui-react';
 import PrivateLayout from '../../../shared/PrivateHOC';
 import StickyNotification from '../components/StickyNotification';
 import ProgressCard from '../components/ProgressCard';
@@ -13,7 +14,33 @@ import { InlineLoader } from '../../../../../theme/shared';
 import {
   INVESTMENT_ACCOUNT_TYPES,
 } from '../../../../../constants/account';
-@inject('userDetailsStore', 'accountStore')
+import SummaryHeader from '../../accountDetails/components/portfolio/SummaryHeader';
+import CashMovement from '../../summary/components/CashMovement';
+
+const summaryDetails = ({
+  totalInvested, pendingInvestments, paidToDate, tnar,
+}) => {
+  console.log(tnar);
+  return {
+    accountType: 'individual',
+    title: false,
+    summary: [
+      {
+        title: 'Total Invested', content: totalInvested, type: 1, info: 'Total Invested as of today',
+      },
+      {
+        title: 'Pending Investment', content: pendingInvestments, type: 1, info: 'Pending Investment',
+      },
+      {
+        title: 'Paid to Date', content: paidToDate, type: 1, info: 'Paid to Date',
+      },
+      {
+        title: 'Simple Earnings %', content: `${tnar} %`, type: 0, info: 'Simple Earnings %',
+      },
+    ],
+  };
+};
+@inject('userDetailsStore', 'accountStore', 'portfolioStore', 'investorProfileStore')
 @observer
 export default class AccountSetup extends Component {
   componentWillMount() {
@@ -22,6 +49,7 @@ export default class AccountSetup extends Component {
     if (signupStatus.inActiveAccounts.length !== 3) {
       this.props.accountStore.setInvestmentAccTypeValues(validAccTypes);
     }
+    this.props.portfolioStore.getSummary();
   }
 
   navToAccTypes = (step) => {
@@ -37,18 +65,28 @@ export default class AccountSetup extends Component {
 
   render() {
     const { match } = this.props;
-    const { signupStatus, currentUser, getStepStatus } = this.props.userDetailsStore;
-
+    const {
+      signupStatus,
+      currentUser,
+      getStepStatus,
+      isBasicVerDoneForMigratedFullUser,
+    } = this.props.userDetailsStore;
+    const { finishInvestorProfileLater } = this.props.investorProfileStore;
+    const { summaryLoading, summary } = this.props.portfolioStore;
     return (
       <PrivateLayout
         {...this.props}
         P5={!signupStatus.finalStatus ? !currentUser.loading ?
-          <StickyNotification signupStatus={signupStatus} /> : <InlineLoader /> : ''}
+          <StickyNotification
+            signupStatus={signupStatus}
+            userDetailsStore={this.props.userDetailsStore}
+          /> : <InlineLoader /> : ''}
       >
         <Header as="h4">{!signupStatus.finalStatus ? 'Complete your account setup' : ''}</Header>
         {!currentUser.loading ?
           <ProgressCard
             {...this.props}
+            isBasicVerDoneForMigratedFullUser={isBasicVerDoneForMigratedFullUser}
             signupStatus={signupStatus}
             getStepStatus={getStepStatus}
             navToAccTypes={this.navToAccTypes}
@@ -60,6 +98,23 @@ export default class AccountSetup extends Component {
           <Route path={`${match.url}/establish-profile`} component={EstablishProfile} />
           <Route path={`${match.url}/account-creation`} component={AccountCreation} />
         </Switch>
+        {
+          signupStatus.isMigratedFullAccount
+          && finishInvestorProfileLater ?
+            summaryLoading ?
+              <InlineLoader /> :
+              <Aux>
+                <Header as="h4">Values Performance</Header>
+                <SummaryHeader details={summaryDetails(summary)} />
+                <Card fluid>
+                  <Card.Content>
+                    <Header as="h4">Cash Movement, LTM</Header>
+                    <CashMovement data={summary.cashMovement} />
+                  </Card.Content>
+                </Card>
+              </Aux>
+          : null
+        }
       </PrivateLayout>
     );
   }
