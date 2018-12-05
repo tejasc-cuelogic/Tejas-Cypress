@@ -81,3 +81,9 @@ mutation _offeringUpdatesApprovedByInfo($id: ID!) {
 }
 `;
 
+export const deleteOfferingUpdate = gql`
+mutation deleteOfferingUpdate($id: [ID]) {
+  deleteOfferingUpdates(id: $id)
+}
+`;
+
