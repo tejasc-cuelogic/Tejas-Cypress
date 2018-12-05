@@ -185,6 +185,18 @@ export const getOfferingDetails = gql`
           isPublic
           fileName
         }
+        useOfProceeds {
+          id
+          url
+          isPublic
+          fileName
+        }
+        businessModelImage {
+          id
+          url
+          isPublic
+          fileName
+        }
         issuerSubmitted
         submitted {
           id
