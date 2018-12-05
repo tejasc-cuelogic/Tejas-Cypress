@@ -10,7 +10,7 @@ const featuredOn = [
 const FeaturedOn = () => (
   <section className="bg-offwhite">
     <Container>
-      <Header as="h2" textAlign="center" className="mb-50">As seen on…</Header>
+      <Header as="h3" textAlign="center" className="mb-50 grey-header">As seen on</Header>
       <Grid columns={5} doubling verticalAlign="middle" className="vertical-gutter">
         <Responsive minWidth="768" as={Aux}>
           {/* {featuredOn.map(row => (
