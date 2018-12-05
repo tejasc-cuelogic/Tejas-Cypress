@@ -1,9 +1,8 @@
 import gql from 'graphql-tag';
 
 export const listCrowdPayUsers = gql`
-query listCrowdPayUsers($page: Int, $limit: Int!, $search: String, $accountType: InvestorAccountTypeEnum, $accountStatus: [InvestorAccountStatusEnum] $accountCreateFromDate: String, $accountCreateToDate: String) {
-  listCrowdPayUsers(page: $page, limit: $limit search: $search, accountType: $accountType, accountStatus: $accountStatus,
-      accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate) {
+query listCrowdPayUsers($limit: Int) {
+  listCrowdPayUsers(limit: $limit) {
         resultCount
         crowdPayList {
           userId
