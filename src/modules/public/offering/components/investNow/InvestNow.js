@@ -29,7 +29,12 @@ export default class InvestNow extends React.Component {
       this.props.campaignStore.getCampaignDetails(offeringId);
     }
   }
-
+  componentDidMount() {
+    window.addEventListener('message', this.handleIframeTask);
+  }
+  handleIframeTask = (e) => {
+    console.log(e.data);
+  };
   handleMultiStepModalclose = () => {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.history.push(this.props.refLink);

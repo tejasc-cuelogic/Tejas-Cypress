@@ -344,6 +344,7 @@ export class InvestmentStore {
             offeringId: campaignStore.getOfferingId,
             investmentAmount: this.investmentAmount,
             creditToSpend: this.getSpendCreditValue,
+            callbackUrl: `${window.location.origin}/secure-gateway`,
           },
           // refetchQueries: [{ query: getBusinessApplications }],
         })
