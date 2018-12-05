@@ -3,12 +3,15 @@ import { Modal, Button } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
-@inject('uiStore', 'offeringsStore', 'offeringCreationStore')
+@inject('investorProfileStore')
 @observer
 @withRouter
 export default class ConfirmCancelModal extends React.Component {
     handleCloseModal = () => {
       this.props.history.push('/app/summary/establish-profile');
+    }
+    handleFinishLater = () => {
+      this.props.investorProfileStore.setFinishInvestorProfileLater(true);
     }
     render() {
       return (
@@ -23,7 +26,7 @@ export default class ConfirmCancelModal extends React.Component {
               <Button primary size="large" onClick={this.handleCloseModal} className="very relaxed" content="Go Back" />
             </div>
             <div className="center-align mt-30">
-              <p><Link to="/app/summary">Finish later</Link></p>
+              <p><Link to="/app/summary" onClick={this.handleFinishLater}>Finish later</Link></p>
             </div>
           </Modal.Content>
         </Modal>

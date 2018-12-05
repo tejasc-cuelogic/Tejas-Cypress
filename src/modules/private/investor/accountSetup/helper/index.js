@@ -10,6 +10,7 @@ class Helper {
         successMsg: 'Complete',
         route: 'identity-verification/0',
         altRoute: 'identity-verification/3',
+        emailVerificationRoute: '/auth/confirm-email',
       },
       'cash-dollar': {
         step: 1,

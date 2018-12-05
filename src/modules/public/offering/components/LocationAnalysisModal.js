@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Modal, Grid, Image, Container } from 'semantic-ui-react';
-import { InlineLoader, Image64, NsCarousel } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
+import { Header, Modal, Grid } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../theme/shared';
+// import { ASSETS_URL } from '../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('campaignStore')
 @observer
@@ -14,16 +14,16 @@ class LocationAnalysisModal extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     // const emptyStatement = 'Detail not found';
-    const settings = {
-      dots: false,
-      infinite: false,
-      slidesToShow: 1,
-      slidesToScroll: 1,
-      arrows: true,
-      adaptiveHeight: true,
-    };
-    const galleryArray = campaign && campaign.media && campaign.media.location &&
-      campaign.media.location.length ? campaign.media.location : [];
+    // const settings = {
+    //   dots: false,
+    //   infinite: false,
+    //   slidesToShow: 1,
+    //   slidesToScroll: 1,
+    //   arrows: true,
+    //   adaptiveHeight: true,
+    // };
+    // const galleryArray = campaign && campaign.media && campaign.media.location &&
+    //   campaign.media.location.length ? campaign.media.location : [];
     return (
       <Modal
         open
@@ -37,7 +37,7 @@ class LocationAnalysisModal extends Component {
         <Modal.Content scrolling>
           <Grid>
             <Grid.Row>
-              <Grid.Column computer={7} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
+              {/* <Grid.Column computer={7} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
                 <Container fluid>
                   <NsCarousel
                     {...settings}
@@ -57,13 +57,7 @@ class LocationAnalysisModal extends Component {
                     }
                   </NsCarousel>
                 </Container>
-                {/* {campaign && campaign.media && campaign.media.location &&
-                  campaign.media.location.length && campaign.media.location[0].url ?
-                  <Image64 srcUrl={campaign.media.location[0].url} />
-                  :
-                  <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
-                } */}
-              </Grid.Column>
+              </Grid.Column> */}
               <Grid.Column computer={9} tablet={10} mobile={16}>
                 {
                   campaign && campaign.offering

@@ -7,7 +7,7 @@ import Helper from '../../../../../helper/utility';
 import { UPDATES } from '../../../../constants/offering';
 import { offeringCreationStore } from '../../../index';
 import {
-  allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate,
+  allUpdates, newUpdate, getUpdate, editUpdate, approveUpdate, deleteOfferingUpdate,
 } from '../../../queries/offering/Updates';
 
 export class UpdateStore {
@@ -168,6 +168,22 @@ export class UpdateStore {
     }
     @computed get count() {
       return (this.db && this.db.length) || 0;
+    }
+
+    @action
+    deleteOfferingUpdates = (id) => {
+      const variables = { offerId: offeringCreationStore.currentOfferingId };
+      client
+        .mutate({
+          mutation: deleteOfferingUpdate,
+          variables: {
+            id: [id],
+          },
+          refetchQueries: [{ query: allUpdates, variables }],
+        }).then(() => {
+          Helper.toast('Update deleted.', 'success');
+        })
+        .catch(() => Helper.toast('Error', 'error'));
     }
 
     @computed get loading() {

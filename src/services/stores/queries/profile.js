@@ -144,11 +144,11 @@ export const requestEmailChnage = gql`
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($confirmationCode: String!) {
+  mutation _verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
     verifyAndUpdateEmail(
       confirmationCode: $confirmationCode
+      resourceId: $resourceId
     ){
-      id
       email {
         address
       }
@@ -188,10 +188,11 @@ export const portPrequalDataToApplication = gql`
   }`;
 
 export const requestOtp = gql`
-  mutation requestOtp($userId: String $type: MFAModeEnum){
+  mutation requestOtp($userId: String $type: MFAModeEnum, $address: String){
     requestOtp(
       userId: $userId
       type: $type
+      address: $address
     )
   }`;
 
@@ -201,5 +202,27 @@ export const verifyOtp = gql`
       resourceId: $resourceId
       verificationCode: $verificationCode
     )
+  }
+`;
+
+export const requestOtpWrapper = gql`
+  mutation requestOTPWrapper($address: String!){
+    requestOTPWrapper(
+      address: $address
+    )
+  }
+`;
+
+export const verifyOTPWrapper = gql`
+  mutation verifyOTPWrapper($verifyOTPData: VerifyOTPInput!){
+    verifyOTPWrapper(
+      verifyOTPData: $verifyOTPData
+    )
+  }
+`;
+
+export const checkEmailExistsPresignup = gql`
+  query checkEmailExistsPresignup($email: String!){
+    checkEmailExistsPresignup(email: $email)
   }
 `;
