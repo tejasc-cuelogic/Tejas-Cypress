@@ -2,7 +2,24 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Table, Icon } from 'semantic-ui-react';
+import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 
+const fielddata = {
+  label: '',
+  error: '',
+  tooltip: '',
+  placeHolder: 'Document Name',
+  defaultValue: '',
+  value: '',
+  name: 'document',
+};
+const dropzonedata = {
+  label: '',
+  value: '',
+  error: '',
+  showLoader: '',
+  fileId: '',
+};
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class DataRoom extends Component {
@@ -36,7 +53,7 @@ export default class DataRoom extends Component {
                   <Link to="/" className="link"><Icon className="ns-file" />disclosure-document.pdf</Link>
                 </Table.Cell>
                 <Table.Cell>12-15-2011</Table.Cell>
-                <Table.Cell textAlign="center" className="positive-text">Yes</Table.Cell>
+                <Table.Cell textAlign="center">Yes</Table.Cell>
                 <Table.Cell collapsing>
                   <Button icon circular color="green" className="link-button">
                     <Icon name="ns-unlock" />
@@ -52,13 +69,39 @@ export default class DataRoom extends Component {
                   <Link to="/" className="link"><Icon className="ns-file" />financial-document.pdf</Link>
                 </Table.Cell>
                 <Table.Cell>12-15-2011</Table.Cell>
-                <Table.Cell textAlign="center" className="negative-text">No</Table.Cell>
+                <Table.Cell textAlign="center">No</Table.Cell>
                 <Table.Cell collapsing>
                   <Button icon circular color="red" className="link-button">
                     <Icon name="ns-lock" />
                   </Button>
                   <Button icon circular className="link-button">
                     <Icon name="ns-trash" />
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
+              <Table.Row>
+                <Table.Cell>
+                  <FormInput
+                    name="name"
+                    fielddata={fielddata}
+                    size="small"
+                  />
+                </Table.Cell>
+                <Table.Cell colSpan="3">
+                  <DropZone
+                    size="small"
+                    className="secondary"
+                    name="docDetails"
+                    fielddata={dropzonedata}
+                    uploadtitle="Upload"
+                  />
+                </Table.Cell>
+                <Table.Cell collapsing>
+                  <Button icon circular color="green" className="link-button">
+                    <Icon name="ns-check-circle" />
+                  </Button>
+                  <Button icon circular color="red" className="link-button">
+                    <Icon name="ns-close-circle" />
                   </Button>
                 </Table.Cell>
               </Table.Row>

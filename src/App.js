@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
 import './assets/semantic/semantic.min.css';
@@ -9,6 +9,7 @@ import { DevBanner, Spinner } from './theme/shared';
 import Layout from './theme/layout/Layout';
 import Private from './modules/private';
 import Public from './modules/public';
+import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
 /**
  * Main App
@@ -60,11 +61,15 @@ class App extends Component {
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
   render() {
+    const { location } = this.props;
+    if (matchPath(location.pathname, { path: '/secure-gateway' })) {
+      return (
+        <Route path="/secure-gateway" component={SecureGateway} />
+      );
+    }
     if (this.props.authStore.hasSession && this.props.uiStore.appLoader) {
       return (
-        <Aux>
-          <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
-        </Aux>
+        <Spinner loaderMessage={this.props.uiStore.loaderMessage} />
       );
     }
     return (
