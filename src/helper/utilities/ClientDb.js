@@ -17,6 +17,9 @@ class ClientDb {
     this.database().get().length) || 0;
   }
 
+  getFilterParaObj = (key, parameters) =>
+    (isArray(key) ? key.map(k => ({ [k]: parameters })) : { [key]: parameters });
+
   filterData = (key, value, filterBy = null, customKey = null, setDb = true) => {
     let resultArray = [];
     const filterByObj = filterBy ? { [filterBy]: value } : value;
@@ -25,12 +28,18 @@ class ClientDb {
       value.map((val) => {
         const filterByObjArray = filterBy ? { [filterBy]: val } : val;
         const customKeyValArray = customKey ? { [customKey]: filterByObjArray } : filterByObjArray;
-        resultArray = [...this.database({ [key]: customKeyValArray }).get(), ...resultArray];
+        resultArray = [...this.database(this.getFilterParaObj(key, customKeyValArray)).get(),
+          ...resultArray];
         return false;
       });
     } else {
-      resultArray = [...this.database({ [key]: customKeyVal }).get()];
+      resultArray = [...this.database(this.getFilterParaObj(key, customKeyVal)).get()];
     }
+    return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
+  }
+
+  filterByMultipleKeys = (filterObj, setDb = true) => {
+    const resultArray = [...this.database(filterObj).get()];
     return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
   }
 
