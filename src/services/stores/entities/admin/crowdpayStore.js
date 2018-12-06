@@ -64,13 +64,6 @@ export class CrowdpayStore {
 
   @action
   setDb = (data) => {
-    // const updatedData = map(data, d => (
-    //   {
-    //     ...d,
-    //     date: d.created ? parseInt(d.created.date, 10) : d.created,
-    //     created: d.created ? { ...d.created, date: parseInt(d.created.date, 10) }
-    //       : d.created,
-    //   }));
     this.db = ClientDb.initiateDb(data);
   }
 
@@ -114,8 +107,12 @@ export class CrowdpayStore {
     ClientDb.filterData('accountStatus', accountStatus2, 'like');
     if (keyword) {
       resultArray = [];
+      const fullName = keyword.split(' ');
+      const firstName = fullName.length && fullName[0];
+      const lastName = (fullName.length > 1 && fullName[1]) || (fullName.length && fullName[0]);
       resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'likenocase', false),
-        ...ClientDb.filterData(['firstName', 'lastName'], keyword, 'likenocase', false)];
+        ...ClientDb.filterData('firstName', firstName, 'likenocase', false),
+        ...ClientDb.filterData('lastName', lastName, 'likenocase', false)];
       ClientDb.initiateDb(resultArray, true);
     }
     if (startDate && endDate) {

@@ -24,7 +24,7 @@ class ClientDb {
     let resultArray = [];
     const filterByObj = filterBy ? { [filterBy]: value } : value;
     const customKeyVal = customKey ? { [customKey]: filterByObj } : filterByObj;
-    if (isArray(value)) {
+    if (isArray(value) && !isArray(key)) {
       value.map((val) => {
         const filterByObjArray = filterBy ? { [filterBy]: val } : val;
         const customKeyValArray = customKey ? { [customKey]: filterByObjArray } : filterByObjArray;
