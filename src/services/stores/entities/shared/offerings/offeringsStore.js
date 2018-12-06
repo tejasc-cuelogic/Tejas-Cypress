@@ -70,10 +70,9 @@ export class OfferingsStore {
   @action
   initiateFilters = () => {
     const { keyword } = this.requestState.search;
-    let resultArray = [];
     if (keyword) {
-      resultArray = ClientDb.filterData('BusinessName', keyword, 'likenocase');
-      this.setDb(resultArray);
+      ClientDb.filterFromNestedObjs('keyTerms.legalBusinessName', keyword);
+      this.db = ClientDb.getDatabase();
       this.requestState.page = 1;
       this.requestState.skip = 0;
     } else {
