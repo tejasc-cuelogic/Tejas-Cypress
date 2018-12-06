@@ -53,7 +53,7 @@ export default class DataRoom extends Component {
                   <Link to="/" className="link"><Icon className="ns-file" />disclosure-document.pdf</Link>
                 </Table.Cell>
                 <Table.Cell>12-15-2011</Table.Cell>
-                <Table.Cell textAlign="center" className="positive-text">Yes</Table.Cell>
+                <Table.Cell textAlign="center">Yes</Table.Cell>
                 <Table.Cell collapsing>
                   <Button icon circular color="green" className="link-button">
                     <Icon name="ns-unlock" />
@@ -69,7 +69,7 @@ export default class DataRoom extends Component {
                   <Link to="/" className="link"><Icon className="ns-file" />financial-document.pdf</Link>
                 </Table.Cell>
                 <Table.Cell>12-15-2011</Table.Cell>
-                <Table.Cell textAlign="center" className="negative-text">No</Table.Cell>
+                <Table.Cell textAlign="center">No</Table.Cell>
                 <Table.Cell collapsing>
                   <Button icon circular color="red" className="link-button">
                     <Icon name="ns-lock" />
