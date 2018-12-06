@@ -476,7 +476,7 @@ export const OFFERING_OVERVIEW = {
     type: 'facebook',
     ArrayObjItem: true,
   },
-  facebook_featured_image: {
+  facebook_featuredImageUpload: {
     label: 'Featured Upload image',
     value: '',
     error: undefined,
@@ -516,7 +516,7 @@ export const OFFERING_OVERVIEW = {
     type: 'twitter',
     ArrayObjItem: true,
   },
-  twitter_featured_image: {
+  twitter_featuredImageUpload: {
     label: 'Featured Upload image',
     value: '',
     error: undefined,
@@ -539,7 +539,7 @@ export const OFFERING_OVERVIEW = {
     rule: 'optional',
     placeHolder: 'e.g. Company was formed...',
   },
-  google_featured_image: {
+  google_featuredImageUpload: {
     label: 'Featured Upload image',
     value: '',
     error: undefined,

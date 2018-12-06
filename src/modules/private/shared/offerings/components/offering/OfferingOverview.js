@@ -119,8 +119,8 @@ export default class OfferingOverview extends Component {
         />
         <DropZone
           disabled={isReadonly}
-          name="facebook_featured_image"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featured_image}
+          name="facebook_featuredImageUpload"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featuredImageUpload}
           ondrop={(files, name) => this.onFileDrop(files, name)}
           onremove={fieldName => this.handleDelDoc(fieldName)}
           uploadtitle="Choose a file or drag it here"
@@ -142,8 +142,8 @@ export default class OfferingOverview extends Component {
         />
         <DropZone
           disabled={isReadonly}
-          name="twitter_featured_image"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_featured_image}
+          name="twitter_featuredImageUpload"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_featuredImageUpload}
           ondrop={(files, name) => this.onFileDrop(files, name)}
           onremove={fieldName => this.handleDelDoc(fieldName)}
           // uploadtitle="Upload a file"
@@ -164,8 +164,8 @@ export default class OfferingOverview extends Component {
         />
         <DropZone
           disabled={isReadonly}
-          name="google_featured_image"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.google_featured_image}
+          name="google_featuredImageUpload"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.google_featuredImageUpload}
           ondrop={(files, name) => this.onFileDrop(files, name)}
           onremove={fieldName => this.handleDelDoc(fieldName)}
           // uploadtitle="Upload a file"

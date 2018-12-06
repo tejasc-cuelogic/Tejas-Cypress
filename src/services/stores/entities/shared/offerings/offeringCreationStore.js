@@ -768,7 +768,7 @@ export class OfferingCreationStore {
             if (key === `${records.type}_blurb`) {
               toObj.blurb = records.value || null;
             }
-            if (key === `${records.type}_featured_image`) {
+            if (key === `${records.type}_featuredImageUpload`) {
               toObj.featuredImageUpload = {
                 id: records.id,
                 url: records.preSignedUrl,
@@ -788,7 +788,7 @@ export class OfferingCreationStore {
             if (key === `${records.type}_blurb`) {
               object.blurb = records.value || null;
             }
-            if (key === `${records.type}_featured_image`) {
+            if (key === `${records.type}_featuredImageUpload`) {
               object.featuredImageUpload = {
                 id: records.id,
                 url: records.preSignedUrl,
