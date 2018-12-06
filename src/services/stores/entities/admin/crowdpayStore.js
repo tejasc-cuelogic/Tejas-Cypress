@@ -114,9 +114,9 @@ export class CrowdpayStore {
     ClientDb.filterData('accountStatus', accountStatus2, 'like');
     if (keyword) {
       resultArray = [];
-      resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'like', false),
-        ...ClientDb.filterData('firstName', keyword, 'like', false),
-        ...ClientDb.filterData('lastName', keyword, 'like', false)];
+      resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'likenocase', false),
+        ...ClientDb.filterData('firstName', keyword, 'likenocase', false),
+        ...ClientDb.filterData('lastName', keyword, 'likenocase', false)];
       ClientDb.initiateDb(resultArray, true);
     }
     if (startDate && endDate) {
