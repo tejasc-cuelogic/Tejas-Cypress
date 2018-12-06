@@ -74,8 +74,9 @@ export const getInvestorInFlightCash = gql`
 `;
 
 export const generateAgreement = gql`
-  mutation _generateAgreement($userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $transferAmount: Float){
+  mutation _generateAgreement($callbackUrl: String, $userId: String!, $accountId: String!, $offeringId: String!, $investmentAmount: Float!, $transferAmount: Float){
     generateAgreement(
+      callbackUrl: $callbackUrl
       userId: $userId
       accountId: $accountId
       offeringId: $offeringId
@@ -86,6 +87,7 @@ export const generateAgreement = gql`
       agreementId
       envelopeId
       docuSignViewURL
+      npaViewUrl
     }
   }
 `;

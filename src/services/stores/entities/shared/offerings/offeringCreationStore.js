@@ -259,7 +259,7 @@ export class OfferingCreationStore {
 
   @action
   removeFileFromS3 = (form, name) => {
-    fileUpload.deleteFromS3(this[form].fields[name].fileName)
+    fileUpload.deleteFromS3(this[form].fields[name].value)
       .then(action((res) => {
         ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
           this[form].fields[name][subKey] = '';
@@ -770,9 +770,9 @@ export class OfferingCreationStore {
             }
             if (key === `${records.type}_featuredImageUpload`) {
               toObj.featuredImageUpload = {
-                id: records.id,
+                id: records.fileId,
                 url: records.preSignedUrl,
-                fileName: records.fileName,
+                fileName: records.value,
                 isPublic: true,
               };
             }
@@ -790,7 +790,7 @@ export class OfferingCreationStore {
             }
             if (key === `${records.type}_featuredImageUpload`) {
               object.featuredImageUpload = {
-                id: records.id,
+                id: records.fileId,
                 url: records.preSignedUrl,
                 fileName: records.fileName,
                 isPublic: true,

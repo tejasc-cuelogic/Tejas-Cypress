@@ -52,7 +52,7 @@ class MeetTeamModal extends Component {
                         </Header>
                         <p>{data.bio && data.bio !== '' ? data.bio : emptyStatement}</p>
                         <div>
-                          {
+                          {data && data.social &&
                             Object.keys(data.social).map(key => (
                               <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
                                 <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
@@ -76,7 +76,7 @@ class MeetTeamModal extends Component {
                         </Header>
                         <p>{data.bio && data.bio !== '' ? data.bio : emptyStatement}</p>
                         <div>
-                          {
+                          {data && data.social &&
                             Object.keys(data.social).map(key => (
                               <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
                                 <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />

@@ -178,6 +178,9 @@ h6{
 .grey-text {
 	color: @border-color;
 }
+.grey-header {
+	color: @neutral-middark !important;
+}
 .caption-note{
 	font-size:@12px;
 	font-style:italic;
@@ -529,7 +532,6 @@ footer{
 				padding: @40px 0;
 			}
 			p {
-				line-height: @20px;
 				color:@neutral-middark;
 				font-size: @15px;
 			}

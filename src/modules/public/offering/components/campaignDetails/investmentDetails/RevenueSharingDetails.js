@@ -28,6 +28,10 @@ class RevenueSharingDetails extends Component {
                 : <InlineLoader text="No data available" />
               }
             </p>
+            <p className="note">
+              * For illustration only. See expanded Payment Calculator view to read more
+              regarding actual performance variables.
+            </p>
           </Segment>
         </Grid.Column>
         <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
