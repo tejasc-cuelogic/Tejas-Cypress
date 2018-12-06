@@ -43,6 +43,20 @@ class ClientDb {
     return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
   }
 
+  filterFromNestedObjs = (key, value) => {
+    const data = this.getDatabase();
+    let tempRef;
+    const resultArray = data.filter((e) => {
+      tempRef = false;
+      key.split('.').map((k) => {
+        tempRef = !tempRef ? e[k] : tempRef[k];
+        return tempRef;
+      });
+      return (tempRef && tempRef.toLowerCase().includes(value.toLowerCase()));
+    });
+    this.initiateDb(resultArray, true);
+  }
+
   filterByDate = (sDate, eDate, key = 'date', subkey = null) => {
     const data = this.getDatabase();
     const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)
