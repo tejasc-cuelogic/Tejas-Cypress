@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Button } from 'semantic-ui-react';
-import { FormTextarea, FormInput, DropZone } from '../../../../../../theme/form';
+import { FormTextarea, FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
@@ -122,7 +122,7 @@ export default class OfferingOverview extends Component {
           name="facebook_featuredImageUpload"
           fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featuredImageUpload}
           ondrop={(files, name) => this.onFileDrop(files, name)}
-          onremove={fieldName => this.handleDelDoc(fieldName)}
+          onremove={field => this.handleDelDoc(field)}
           uploadtitle="Choose a file or drag it here"
           containerclassname="field"
         />
@@ -146,7 +146,7 @@ export default class OfferingOverview extends Component {
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_featuredImageUpload}
           ondrop={(files, name) => this.onFileDrop(files, name)}
           onremove={fieldName => this.handleDelDoc(fieldName)}
-          // uploadtitle="Upload a file"
+          uploadtitle="Choose a file or drag it here"
           containerclassname="field"
         />
         <Divider section />
@@ -161,15 +161,6 @@ export default class OfferingOverview extends Component {
           fielddata={OFFERING_OVERVIEW_FRM.fields.googleMeta}
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
-        />
-        <DropZone
-          disabled={isReadonly}
-          name="google_featuredImageUpload"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.google_featuredImageUpload}
-          ondrop={(files, name) => this.onFileDrop(files, name)}
-          onremove={fieldName => this.handleDelDoc(fieldName)}
-          // uploadtitle="Upload a file"
-          containerclassname="field"
         />
         <Divider hidden />
         <ButtonGroup
