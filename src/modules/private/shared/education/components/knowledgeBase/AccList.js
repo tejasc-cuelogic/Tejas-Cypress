@@ -19,10 +19,10 @@ export default class AccList extends Component {
   isActive = (record, key) => {
     let currId = this.props.location.pathname.split('/')[4];
     if (this.props.educationStore.selected) {
-      currId = this.props.educationStore.selected.id;
+      currId = this.props.educationStore.selected.slug || this.props.educationStore.selected.id;
     }
-    const ids = record[key].map(item => item.id);
-    return this.state.activeIndex === record.id || ids.includes(currId);
+    const ids = record[key].map(item => item.slug);
+    return this.state.activeIndex === record.id || record.slug || ids.includes(currId);
   }
   render() {
     const {
@@ -42,7 +42,7 @@ export default class AccList extends Component {
                 active={this.isActive(record, params.subItems)}
                 onClick={this.toggleAction}
                 index={record.id}
-                refItem={record[params.subItems].length > 0 ? record[params.subItems][0].id : ''}
+                refItem={record[params.subItems].length > 0 ? record[params.subItems][0].slug : ''}
               >
                 {record.categoryName}
                 <Icon className="ns-chevron-down" />
@@ -53,9 +53,9 @@ export default class AccList extends Component {
                     {
                       record[params.subItems].map(item => (
                         <List.Item
-                          className={selected && selected.id === item.id ? 'active' : ''}
-                          to={`${match.url}/${item.id}`}
-                          key={item.id}
+                          className={selected && selected.slug === item.slug ? 'active' : ''}
+                          to={`${match.url}/${item.slug}`}
+                          key={item.slug}
                           as={NavLink}
                         >
                           {item[params.item]}

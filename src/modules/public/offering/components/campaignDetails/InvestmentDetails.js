@@ -34,42 +34,44 @@ class InvestmentDetails extends Component {
                   </Segment>
                 </Grid.Column>
               </Responsive>
-              <Grid.Column widescreen={7} largeScreen={8} computer={16} tablet={16}>
+              <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16}>
                 <Segment padded>
-                  <Header as="h3">Use of Proceeds</Header>
-                  {campaign && campaign.legal &&
-                    campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                    campaign.legal.general.useOfProceeds ?
-                      <Aux>
-                        <Header as="h6">If minimum offering amount is reached:</Header>
-                        <p>
-                          {campaign && campaign.legal &&
-                            campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                            campaign.legal.general.useOfProceeds.reachedMinOfferingGoal ?
-                            campaign.legal.general.useOfProceeds.reachedMinOfferingGoal
-                             :
-                             emptyContent
-                          }
-                        </p>
-                        <Header as="h6">If maximum offering amount is reached:</Header>
-                        <p>
-                          {campaign && campaign.legal &&
-                            campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                            campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal ?
-                            campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal
-                             :
-                             emptyContent
-                          }
-                        </p>
-                      </Aux>
-                    :
-                      <InlineLoader text={emptyContent} />
-                  }
+                  <div className="segment-container small">
+                    <Header as="h3">Use of Proceeds</Header>
+                    {campaign && campaign.legal &&
+                      campaign.legal.general && campaign.legal.general.useOfProceeds &&
+                      campaign.legal.general.useOfProceeds ?
+                        <Aux>
+                          <Header as="h6">If minimum offering amount is reached:</Header>
+                          <p>
+                            {campaign && campaign.legal &&
+                              campaign.legal.general && campaign.legal.general.useOfProceeds &&
+                              campaign.legal.general.useOfProceeds.reachedMinOfferingGoal ?
+                              campaign.legal.general.useOfProceeds.reachedMinOfferingGoal
+                              :
+                              emptyContent
+                            }
+                          </p>
+                          <Header as="h6">If maximum offering amount is reached:</Header>
+                          <p>
+                            {campaign && campaign.legal &&
+                              campaign.legal.general && campaign.legal.general.useOfProceeds &&
+                              campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal ?
+                              campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal
+                              :
+                              emptyContent
+                            }
+                          </p>
+                        </Aux>
+                      :
+                        <InlineLoader text={emptyContent} />
+                    }
+                  </div>
                 </Segment>
               </Grid.Column>
               <Responsive minWidth={768} as={Aux}>
-                <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
-                  <Segment padded>
+                <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
+                  <Segment padded className="overview-video">
                     <Image64
                       srcUrl={campaign && campaign.media &&
                         campaign.media.heroImage &&
