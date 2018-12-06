@@ -19,7 +19,9 @@ const sortMe = (dataToSort, key) => {
 export class EducationStore {
   @observable data = { KnowledgeBase: [], Faq: [] };
   @observable searchParam = { Faq: '', KnowledgeBase: '' };
-  @observable selected = { id: '', title: '', content: '' };
+  @observable selected = {
+    slug: '', title: '', content: '', id: '',
+  };
   @observable faqsList = [
     {
       id: 1,
@@ -50,21 +52,23 @@ export class EducationStore {
   }
 
   @action
-  getOne = (ref, id) => {
+  getOne = (ref, slug) => {
     const meta = { knowledgeBase: ['kbs', 'title', 'content'], faq: ['faqs', 'question', 'answer'] };
     const subItems = ref === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems';
     if (this[meta[ref][0]].length > 0) {
       let tempItem = {};
       this[meta[ref][0]].forEach((element) => {
         element[subItems].forEach((f) => {
-          if (f.id === id) {
+          if (f.slug === slug || f.id === slug) {
             tempItem = f;
           }
         });
       });
-      const item = (!id) ? this[meta[ref][0]][0][subItems][0] : tempItem;
+      const item = (!slug) ? this[meta[ref][0]][0][subItems][0] : tempItem;
       this.selected = item ?
-        { id: item.id, title: item[meta[ref][1]], content: item[meta[ref][2]] } :
+        {
+          slug: item.slug, id: item.id, title: item[meta[ref][1]], content: item[meta[ref][2]],
+        } :
         {};
     }
   }
