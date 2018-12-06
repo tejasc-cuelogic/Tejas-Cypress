@@ -34,9 +34,10 @@ class ClientDb {
     return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
   }
 
-  filterByDate = (sDate, eDate) => {
+  filterByDate = (sDate, eDate, key = 'date', subkey = null) => {
     const data = this.getDatabase();
-    const filterData = data.filter(e => e.date <= eDate && e.date >= sDate);
+    const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)
+      <= eDate && parseInt((subkey ? e[key][subkey] : e[key]), 10) >= sDate);
     this.initiateDb(filterData, true);
   }
 }

@@ -1,9 +1,9 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray, map } from 'lodash';
+import { isArray } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS } from '../../../constants/crowdpayAccounts';
@@ -64,14 +64,14 @@ export class CrowdpayStore {
 
   @action
   setDb = (data) => {
-    const updatedData = map(data, d => (
-      {
-        ...d,
-        date: d.created ? parseInt(d.created.date, 10) : d.created,
-        created: d.created ? { ...d.created, date: parseInt(d.created.date, 10) }
-          : d.created,
-      }));
-    this.db = ClientDb.initiateDb(updatedData);
+    // const updatedData = map(data, d => (
+    //   {
+    //     ...d,
+    //     date: d.created ? parseInt(d.created.date, 10) : d.created,
+    //     created: d.created ? { ...d.created, date: parseInt(d.created.date, 10) }
+    //       : d.created,
+    //   }));
+    this.db = ClientDb.initiateDb(data);
   }
 
   @action
@@ -110,7 +110,7 @@ export class CrowdpayStore {
       ClientDb.initiateDb(resultArray, true);
     }
     if (startDate && endDate) {
-      ClientDb.filterByDate(startDate, endDate);
+      ClientDb.filterByDate(startDate, endDate, 'created', 'date');
     }
     this.db = ClientDb.getDatabase();
   }
@@ -118,7 +118,7 @@ export class CrowdpayStore {
   @action
   setInitiateSrch = (name, value) => {
     if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? moment(value.formattedValue, 'MM-DD-YYYY').unix() : undefined;
+      this.requestState.search[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, false, name, true) : undefined;
       const srchParams = { ...this.requestState.search };
       this.initiateSearch(srchParams);
     } else {
