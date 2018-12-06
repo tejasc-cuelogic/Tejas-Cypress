@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Grid, Button, Confirm } from 'semantic-ui-react';
+import { Modal, Grid, Confirm } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { DataFormatter } from '../../../../../helper';
@@ -11,6 +11,9 @@ import { InlineLoader } from '../../../../../theme/shared';
 export default class OfferSigning extends Component {
   state = {
     showConfirmModal: false,
+  }
+  componentDidMount() {
+    window.addEventListener('message', this.docuSignListener);
   }
   getPortalAgreementStatus = (funType = '') => {
     const { match, businessAppReviewStore } = this.props;
@@ -24,6 +27,18 @@ export default class OfferSigning extends Component {
       }
     }).finally(() => this.props.uiStore.setProgress(false));
   }
+  docuSignListener = (e) => {
+    const { match } = this.props;
+    setTimeout(() => {
+      if (e.data === 'signing_complete') {
+        this.getPortalAgreementStatus('Button');
+      } else if (e.data === 'viewing_complete') {
+        this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
+      } else {
+        this.props.history.push('/app/dashboard');
+      }
+    }, 2000);
+  };
   hideConfirm = () => {
     this.setState({ showConfirmModal: false });
   }
@@ -44,9 +59,6 @@ export default class OfferSigning extends Component {
                   {this.props.uiStore.inProgress ? <InlineLoader /> :
                   <iframe id="docuSignIframe" onLoad={this.iframeLoading} width="100%" height="100%" title="pdf" src={signPortalAgreementURL} />
                   }
-                </div>
-                <div className="mt-20 center-align">
-                  <Button primary loading={this.props.uiStore.inProgress} className="relaxed" content="Finish" onClick={() => this.getPortalAgreementStatus('Button')} />
                 </div>
               </Grid.Column>
             </Grid.Row>

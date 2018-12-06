@@ -436,6 +436,7 @@ export class BusinessAppReviewStore {
       applicationId: offerData.applicationId,
       issuerId: offerData.userId,
       selectedOffer: offer,
+      callbackUrl: `${window.location.origin}/secure-gateway`,
     };
     if (!offer.isAccepted) {
       payLoad = {
