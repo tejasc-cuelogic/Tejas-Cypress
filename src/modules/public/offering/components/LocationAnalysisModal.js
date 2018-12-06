@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Modal, Grid } from 'semantic-ui-react';
+import { Header, Modal } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../theme/shared';
 // import { ASSETS_URL } from '../../../../constants/aws';
 
@@ -35,45 +35,18 @@ class LocationAnalysisModal extends Component {
           Location Analysis
         </Header>
         <Modal.Content scrolling>
-          <Grid>
-            <Grid.Row>
-              {/* <Grid.Column computer={7} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
-                <Container fluid>
-                  <NsCarousel
-                    {...settings}
-                    thumbs={4}
-                    customThumSliderClass
-                    imageCount={galleryArray.length}
-                    isTablet={isMobile}
-                    handlePaginationFun={this.handlePagination}
-                  >
+          {
+            campaign && campaign.offering
+              && campaign.offering.about
+              && campaign.offering.about.locationAnalysis ?
+                <p
+                  dangerouslySetInnerHTML={
                     {
-                      galleryArray.length ?
-                        galleryArray.map(data => (
-                          <Image64 srcUrl={data.url} />
-                        ))
-                        :
-                        <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
+                      __html: campaign.offering.about.locationAnalysis,
                     }
-                  </NsCarousel>
-                </Container>
-              </Grid.Column> */}
-              <Grid.Column computer={9} tablet={10} mobile={16}>
-                {
-                  campaign && campaign.offering
-                    && campaign.offering.about
-                    && campaign.offering.about.locationAnalysis ?
-                      <p
-                        dangerouslySetInnerHTML={
-                          {
-                            __html: campaign.offering.about.locationAnalysis,
-                          }
-                        }
-                      /> : <InlineLoader text="No data found." />
-                }
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+                  }
+                /> : <InlineLoader text="No data found." />
+          }
         </Modal.Content>
       </Modal>
     );

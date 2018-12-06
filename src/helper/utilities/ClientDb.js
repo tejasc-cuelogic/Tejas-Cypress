@@ -17,26 +17,50 @@ class ClientDb {
     this.database().get().length) || 0;
   }
 
+  getFilterParaObj = (key, parameters) =>
+    (isArray(key) ? key.map(k => ({ [k]: parameters })) : { [key]: parameters });
+
   filterData = (key, value, filterBy = null, customKey = null, setDb = true) => {
     let resultArray = [];
     const filterByObj = filterBy ? { [filterBy]: value } : value;
     const customKeyVal = customKey ? { [customKey]: filterByObj } : filterByObj;
-    if (isArray(value)) {
+    if (isArray(value) && !isArray(key)) {
       value.map((val) => {
         const filterByObjArray = filterBy ? { [filterBy]: val } : val;
         const customKeyValArray = customKey ? { [customKey]: filterByObjArray } : filterByObjArray;
-        resultArray = [...this.database({ [key]: customKeyValArray }).get(), ...resultArray];
+        resultArray = [...this.database(this.getFilterParaObj(key, customKeyValArray)).get(),
+          ...resultArray];
         return false;
       });
     } else {
-      resultArray = [...this.database({ [key]: customKeyVal }).get()];
+      resultArray = [...this.database(this.getFilterParaObj(key, customKeyVal)).get()];
     }
     return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
   }
 
-  filterByDate = (sDate, eDate) => {
+  filterByMultipleKeys = (filterObj, setDb = true) => {
+    const resultArray = [...this.database(filterObj).get()];
+    return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
+  }
+
+  filterFromNestedObjs = (key, value) => {
     const data = this.getDatabase();
-    const filterData = data.filter(e => e.date <= eDate && e.date >= sDate);
+    let tempRef;
+    const resultArray = data.filter((e) => {
+      tempRef = false;
+      key.split('.').map((k) => {
+        tempRef = !tempRef ? e[k] : tempRef[k];
+        return tempRef;
+      });
+      return (tempRef && tempRef.toLowerCase().includes(value.toLowerCase()));
+    });
+    this.initiateDb(resultArray, true);
+  }
+
+  filterByDate = (sDate, eDate, key = 'date', subkey = null) => {
+    const data = this.getDatabase();
+    const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)
+      <= eDate && parseInt((subkey ? e[key][subkey] : e[key]), 10) >= sDate);
     this.initiateDb(filterData, true);
   }
 }

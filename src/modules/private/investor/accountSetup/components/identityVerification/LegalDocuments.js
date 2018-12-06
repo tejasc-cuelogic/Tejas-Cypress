@@ -84,10 +84,6 @@ const LegalDocuments = observer(({
         </Form.Field>
         <div className="center-align mt-30">
           <Button primary size="large" className="very relaxed" content="Verify my identity" loading={submitVerificationsDocs && inProgress} disabled={!form.meta.isValid} />
-          {/* <Button.Group vertical>
-            <Button type="button" className="link-button cancel-link"
-            onClick={() => close()}>I`ll finish this later</Button>
-          </Button.Group> */}
         </div>
       </Form>
       <Confirm

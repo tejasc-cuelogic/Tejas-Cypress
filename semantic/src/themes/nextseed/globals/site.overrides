@@ -175,6 +175,9 @@ h6{
 .primary-two-text {
 	color: @primary-two !important;
 }
+.neutral-text {
+	color: @neutral !important;
+}
 .grey-text {
 	color: @border-color;
 }
