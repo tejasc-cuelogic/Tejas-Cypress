@@ -33,6 +33,7 @@ export default class Legal extends Component {
     ];
     const adminLegalInfo = [
       { title: 'Generate Docs', to: 'generate-docs' },
+      { title: 'Data Room', to: 'data-room' },
       {
         title: 'Bad Actor Check',
         to: 'bad-actor-check',

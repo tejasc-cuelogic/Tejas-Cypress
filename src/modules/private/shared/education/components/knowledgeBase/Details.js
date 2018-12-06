@@ -7,10 +7,10 @@ import { Header, Card } from 'semantic-ui-react';
 @observer
 export default class Details extends Component {
   componentWillMount() {
-    this.props.educationStore.getOne(this.props.module, this.props.match.params.id);
+    this.props.educationStore.getOne(this.props.module, this.props.match.params.slug);
   }
   componentWillReceiveProps(nextProps) {
-    this.props.educationStore.getOne(this.props.module, nextProps.match.params.id);
+    this.props.educationStore.getOne(this.props.module, nextProps.match.params.slug);
   }
   render() {
     const { selected } = this.props.educationStore;
