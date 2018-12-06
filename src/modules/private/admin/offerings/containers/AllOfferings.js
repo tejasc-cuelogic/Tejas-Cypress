@@ -49,14 +49,12 @@ export default class Offerings extends Component {
                 addon={
                   <Aux>
                     <Grid.Column width={5} textAlign="right">
-                      <Button className="relaxed" color="green" as={Link} floated="right" to={match.url}>
-                        Export
-                      </Button>
-                      {stage === 'creation' &&
-                        <Button color="green" as={Link} floated="right" to={`${match.url}/new`}>
-                          Create New Offering
-                        </Button>
-                      }
+                      <Button.Group floated="right">
+                        {stage === 'creation' &&
+                          <Button color="green" as={Link} to={`${match.url}/new`} content="Create New Offering" />
+                        }
+                        <Button color="green" as={Link} to={match.url} className="relaxed" content="Export" />
+                      </Button.Group>
                     </Grid.Column>
                   </Aux>
                 }

@@ -34,6 +34,10 @@ class AboutTheCompany extends Component {
               {campaign && campaign.keyTerms && INDUSTRY_TYPES[campaign.keyTerms.industry]}
             </p>
             {campaign && campaign.offering && campaign.offering.overview &&
+              campaign.offering.overview.elevatorPitch &&
+              <div className="detail-section mt-10" dangerouslySetInnerHTML={{ __html: campaign.offering.overview.elevatorPitch }} />
+            }
+            {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.highlight ?
                 <List bulleted>
                   {campaign.offering.overview.highlight.map(field => (
