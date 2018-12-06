@@ -28,18 +28,14 @@ export default class AllCrowdPay extends Component {
     const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('cip') ? 'cip' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
     this.props.crowdpayStore.setAccountTypes(type);
     this.props.crowdpayStore.reset();
-    this.props.crowdpayStore.initRequest();
   }
   paginate = params => this.props.crowdpayStore.pageRequest(params);
   render() {
     const { crowdpayStore, uiStore } = this.props;
     const {
-      accounts, loading, count, requestState, crowdPayCtaHandler,
+      accounts, count, requestState, crowdPayCtaHandler,
     } = crowdpayStore;
     const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('cip') ? 'cip' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
-    if (loading) {
-      return <InlineLoader />;
-    }
     if (count === 0) {
       return <InlineLoader text="No data found." />;
     }
