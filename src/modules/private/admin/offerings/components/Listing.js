@@ -91,13 +91,13 @@ export default class Listing extends Component {
                       </p>
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="center">
-                      {Object.keys(actions).map(action => (
-                        <Button.Group vertical>
-                          <Button className="link-button" >
+                      <Button.Group>
+                        {Object.keys(actions).map(action => (
+                          <Button icon className="link-button" >
                             <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id)} />
                           </Button>
-                        </Button.Group>
-                    ))}
+                        ))}
+                      </Button.Group>
                     </Table.Cell>
                   </Table.Row>
                 ))
