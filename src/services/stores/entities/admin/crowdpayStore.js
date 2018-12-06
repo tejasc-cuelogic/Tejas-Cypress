@@ -83,6 +83,7 @@ export class CrowdpayStore {
       fetchPolicy: 'network-only',
       onFetch: () => {
         this.setData('isApiHit', true);
+        this.setCrowdpayAccountsSummary();
       },
     });
   }
@@ -91,6 +92,15 @@ export class CrowdpayStore {
   initiateSearch = (srchParams) => {
     this.requestState.search = srchParams;
     this.initiateFilters();
+  }
+
+  @action
+  setCrowdpayAccountsSummary = () => {
+    Object.keys(this.summary).map((type) => {
+      this.setAccountTypes(type);
+      this.summary[type] = this.count;
+      return false;
+    });
   }
 
   @action
@@ -104,9 +114,9 @@ export class CrowdpayStore {
     ClientDb.filterData('accountStatus', accountStatus2, 'like');
     if (keyword) {
       resultArray = [];
-      resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'like', false),
-        ...ClientDb.filterData('firstName', keyword, 'like', false),
-        ...ClientDb.filterData('lastName', keyword, 'like', false)];
+      resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'likenocase', false),
+        ...ClientDb.filterData('firstName', keyword, 'likenocase', false),
+        ...ClientDb.filterData('lastName', keyword, 'likenocase', false)];
       ClientDb.initiateDb(resultArray, true);
     }
     if (startDate && endDate) {
@@ -133,7 +143,7 @@ export class CrowdpayStore {
   }
 
   @action
-  fChange = (e, result) => { // this is only for checkboxes
+  fChange = (e, result) => {
     this.FILTER_FRM = Validator.onChange(this.FILTER_FRM, Validator.pullValues(e, result));
     const selected = this.FILTER_FRM.fields[this.requestState.type].value;
     const srchParams = { ...this.requestState.search };
