@@ -104,12 +104,24 @@ export default class OfferingOverview extends Component {
           </Header.Subheader>
         </Header>
         <Header as="h6">Facebook</Header>
-        <FormInput
-          displayMode={isReadonly}
-          name="facebook_shareLink"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
-          changed={(e, result) => formArrayChange(e, result, formName)}
-        />
+        <Form.Group>
+          <FormInput
+            displayMode={isReadonly}
+            name="facebook_shareLink"
+            containerwidth="10"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_shareLink}
+            changed={(e, result) => formArrayChange(e, result, formName)}
+          />
+          <DropZone
+            disabled={isReadonly}
+            name="facebook_featuredImageUpload"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featuredImageUpload}
+            ondrop={(files, name) => this.onFileDrop(files, name)}
+            onremove={fieldName => this.handleDelDoc(fieldName)}
+            uploadtitle="Choose a file or drag it here"
+            containerclassname="field six wide"
+          />
+        </Form.Group>
         <FormTextarea
           readOnly={isReadonly}
           name="facebook_blurb"
@@ -117,37 +129,31 @@ export default class OfferingOverview extends Component {
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
         />
-        <DropZone
-          disabled={isReadonly}
-          name="facebook_featuredImageUpload"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.facebook_featuredImageUpload}
-          ondrop={(files, name) => this.onFileDrop(files, name)}
-          onremove={fieldName => this.handleDelDoc(fieldName)}
-          uploadtitle="Choose a file or drag it here"
-          containerclassname="field"
-        />
         <Header as="h6">Twitter</Header>
-        <FormInput
-          displayMode={isReadonly}
-          name="twitter_shareLink"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
-          changed={(e, result) => formArrayChange(e, result, formName)}
-        />
+        <Form.Group>
+          <FormInput
+            displayMode={isReadonly}
+            name="twitter_shareLink"
+            containerwidth="10"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_shareLink}
+            changed={(e, result) => formArrayChange(e, result, formName)}
+          />
+          <DropZone
+            disabled={isReadonly}
+            name="twitter_featuredImageUpload"
+            fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_featuredImageUpload}
+            ondrop={(files, name) => this.onFileDrop(files, name)}
+            onremove={fieldName => this.handleDelDoc(fieldName)}
+            // uploadtitle="Upload a file"
+            containerclassname="field six wide"
+          />
+        </Form.Group>
         <FormTextarea
           readOnly={isReadonly}
           name="twitter_blurb"
           fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_blurb}
           changed={(e, result) => formArrayChange(e, result, formName)}
           containerclassname="secondary"
-        />
-        <DropZone
-          disabled={isReadonly}
-          name="twitter_featuredImageUpload"
-          fielddata={OFFERING_OVERVIEW_FRM.fields.twitter_featuredImageUpload}
-          ondrop={(files, name) => this.onFileDrop(files, name)}
-          onremove={fieldName => this.handleDelDoc(fieldName)}
-          // uploadtitle="Upload a file"
-          containerclassname="field"
         />
         <Divider section />
         <Header as="h4">Google
