@@ -362,10 +362,6 @@ class FormValidator {
                 tempRef.find(o =>
                   o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].url :
                 tempRef[key].url;
-              fields[key].fileId = fields[key].find ?
-                tempRef.find(o =>
-                  o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].id :
-                tempRef[key].id;
             } else {
               fields[key].value = tempRef[key].fileName;
               fields[key].preSignedUrl = tempRef[key].url;
