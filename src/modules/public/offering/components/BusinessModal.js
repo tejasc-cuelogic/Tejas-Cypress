@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Header, Modal, Image, Grid } from 'semantic-ui-react';
+import { Header, Modal } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
 
 @inject('campaignStore')
 @observer
@@ -23,24 +22,17 @@ class BusinessModal extends Component {
           Business Model
         </Header>
         <Modal.Content image scrolling>
-          <Grid stackable doubling>
-            <Grid.Column computer={7} tablet={7} mobile={16}>
-              <Image src={`${ASSETS_URL}images/interior-view-patio-garden.jpg`} wrapped />
-            </Grid.Column>
-            <Grid.Column computer={9} tablet={9} mobile={16}>
-              {
-                campaign && campaign.offering && campaign.offering.about &&
-                  campaign.offering.about.businessModel ?
-                    <p
-                      dangerouslySetInnerHTML={
-                      {
-                        __html: campaign.offering.about.businessModel,
-                      }
-                    }
-                    /> : <InlineLoader text="No data found." />
-              }
-            </Grid.Column>
-          </Grid>
+          {
+            campaign && campaign.offering && campaign.offering.about &&
+              campaign.offering.about.businessModel ?
+                <p
+                  dangerouslySetInnerHTML={
+                  {
+                    __html: campaign.offering.about.businessModel,
+                  }
+                }
+                /> : <InlineLoader text="No data found." />
+          }
         </Modal.Content>
       </Modal>
     );

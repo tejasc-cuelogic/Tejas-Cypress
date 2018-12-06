@@ -11,6 +11,7 @@ query getListOfFAQsAndKnowledgeBase($categoryType: CategoryTypeEnum!) {
       title
       content
       order
+      slug
     }
   }
 }
@@ -26,6 +27,7 @@ export const allFaqQuery = gql`query getListOfFAQsAndKnowledgeBase($categoryType
     question
     answer
     order
+    slug
   }
   }
 }

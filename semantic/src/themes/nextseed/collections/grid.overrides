@@ -214,3 +214,11 @@
         }
     }
 }
+.campaign-content-wrapper {
+    > .ui.grid {
+        > .row > .column, >.column:not(.row) {
+            padding-left: @5px;
+            padding-right: @5px;
+        }
+    }
+}

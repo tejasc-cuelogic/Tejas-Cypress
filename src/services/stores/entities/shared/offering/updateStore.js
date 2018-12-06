@@ -32,6 +32,8 @@ export class UpdateStore {
         query: allUpdates,
         variables,
         onFetch: (res) => {
+          this.requestState.page = 1;
+          this.requestState.skip = 0;
           this.setDb(res.offeringUpdatesByOfferId);
         },
       });
@@ -182,8 +184,7 @@ export class UpdateStore {
           refetchQueries: [{ query: allUpdates, variables }],
         }).then(() => {
           Helper.toast('Update deleted.', 'success');
-        })
-        .catch(() => Helper.toast('Error', 'error'));
+        });
     }
 
     @computed get loading() {
