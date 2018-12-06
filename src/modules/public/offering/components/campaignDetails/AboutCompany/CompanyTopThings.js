@@ -18,7 +18,7 @@ class CompanyTopThings extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header> */}
-          <div className="segment-container">
+          <div className="segment-container small">
             <Header as="h3">
               <Link to={`${companyDescriptionUrl}/companydescription`}>
                 Company Description

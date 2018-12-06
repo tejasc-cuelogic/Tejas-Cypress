@@ -10,7 +10,7 @@ class Gallery extends Component {
       campaign, settings, isTabletLand, isTablet, galleryUrl,
     } = this.props;
     return (
-      <Grid.Column widescreen={10} largeScreen={6} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
+      <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
         <Segment padded>
           <Breadcrumb>
             <Breadcrumb.Section as={Link} to={`${galleryUrl}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
