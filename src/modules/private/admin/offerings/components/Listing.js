@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
-import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
 import { STAGES } from '../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../helper/utility';
 
@@ -26,6 +26,8 @@ export default class Listing extends Component {
       this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
     }
   }
+  paginate = params => this.props.offeringsStore.pageRequest(params);
+
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
@@ -36,9 +38,17 @@ export default class Listing extends Component {
   }
 
   render() {
-    const { offerings, loading, uiStore } = this.props;
+    const {
+      uiStore, offeringsStore,
+    } = this.props;
+    const {
+      offerings,
+      loading,
+      count,
+      requestState,
+    } = offeringsStore;
     const { confirmBox } = uiStore;
-
+    const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
     }
@@ -105,6 +115,9 @@ export default class Listing extends Component {
             </Table.Body>
           </Table>
         </div>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        }
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this offering?"
