@@ -250,7 +250,6 @@ export class OfferingCreationStore {
       .catch(action((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         fileField.showLoader = false;
-        console.log(err);
       }))
       .finally(action(() => {
         fileField.showLoader = false;
@@ -268,7 +267,6 @@ export class OfferingCreationStore {
       }))
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
       });
   }
   @action
@@ -578,7 +576,6 @@ export class OfferingCreationStore {
   @action
   removeUploadedData = (form, subForm = 'data', field, index = null, stepName, updateOnRemove = false) => {
     if (stepName) {
-      const currentStep = { name: stepName };
       const { fileId } = this[form].fields[field];
       if (this[form].fields[field].showLoader !== undefined) {
         this[form].fields[field].showLoader = true;
@@ -593,7 +590,6 @@ export class OfferingCreationStore {
         if (updateOnRemove) {
           this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} Removed successfully.`);
         }
-        this.createAccount(currentStep, 'draft', true, field);
       }))
         .catch(() => { })
         .finally(action(() => {
