@@ -167,6 +167,7 @@ export const INCOME_EVIDENCE_META = [
     header: 'Upload document',
     value: 'uploaddocument',
     desc: 'W2, 1040, or other official IRS or foreign tax authority document containing salary information for the past 2 years; or a letter from your lawyer, CPA, registered investment advisor or broker-dealer.',
+    desc2: 'Asset-based verification should be bank statements, brokerage statements that shows value of accounts. There should also be a note that we need to do a soft pull of their credit to see their liabilities in order to determine net worth.',
   },
 ];
 

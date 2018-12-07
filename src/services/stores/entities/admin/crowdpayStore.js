@@ -22,7 +22,7 @@ export class CrowdpayStore {
   @observable filters = false;
   @observable isApiHit = false;
   @observable summary = {
-    review: 0, cip: 0, ira: 12, entity: 3,
+    review: 0, cip: 0, ira: 0, entity: 0,
   };
   @observable requestState = {
     skip: 0,
