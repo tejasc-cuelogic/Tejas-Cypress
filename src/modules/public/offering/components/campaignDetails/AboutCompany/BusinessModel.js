@@ -22,9 +22,6 @@ class BusinessModel extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          {/*
-          <Image className="business-modal" src={`${ASSETS_URL}images/business_model.jpg`} fluid />
-          */}
           {<Image64 srcUrl={businessModelImage} />}
         </Segment>
       </Grid.Column>
