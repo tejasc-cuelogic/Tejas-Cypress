@@ -8,9 +8,14 @@
         border-radius:0;
         transition: all .3s ease-in-out;
         .menu{
-            margin:@11px @16px;
+            margin:@11px 0;
             .item{
                 color:@neutral;
+                padding:@3px @27px;
+                @media only screen and (min-width : @tabletBreakpoint) and (max-width : @computerBreakpoint){
+                    padding: @3px @10px;
+                    font-size: @12px;
+                }
                 &:hover, &.active{
                     color:@primary-one;
                     background-color:transparent;
@@ -26,7 +31,6 @@
             }
         }
         .item{
-            padding:@3px @18px;
             font-weight:@fontMedium;
             text-transform:uppercase;
             > span{
@@ -81,6 +85,14 @@
                 background: @primary-one !important;
                 text-align: center;
                 color: @white !important;
+                font-size: @16px !important;
+                border-bottom: 1px solid @primary-one-darken;
+                @media only screen and (min-width : @tabletBreakpoint) and (max-width : @computerBreakpoint){
+                    font-size: @14px!important;
+                }
+                &:last-child {
+                    border-bottom: 0;
+                }
                 &:hover, &.active {
                     background: @primary-one-darken !important;
                     color: @white !important;
