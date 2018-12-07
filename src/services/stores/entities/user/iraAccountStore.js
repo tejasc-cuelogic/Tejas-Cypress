@@ -6,6 +6,7 @@ import {
   IRA_FIN_INFO,
   IRA_IDENTITY,
   IRA_FUNDING,
+  FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { uiStore, userStore, bankAccountStore, userDetailsStore, investmentLimitStore } from '../../index';
@@ -415,8 +416,9 @@ class IraAccountStore {
   setFileUploadData = (field, files) => {
     uiStore.setProgress();
     const file = files[0];
+    const stepName = FILE_UPLOAD_STEPS[field];
     const fileData = Helper.getFormattedFileData(file);
-    fileUpload.setFileUploadData('', fileData, 'ACCOUNT_IRA_CREATION_CIP', 'INVESTOR').then(action((result) => {
+    fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this.IDENTITY_FRM.fields[field].fileId = fileId;
       this.IDENTITY_FRM.fields[field].preSignedUrl = preSignedUrl;
