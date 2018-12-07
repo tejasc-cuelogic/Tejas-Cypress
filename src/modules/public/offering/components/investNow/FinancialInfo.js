@@ -12,10 +12,6 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore')
 @observer
 class FinancialInfo extends Component {
-  componentWillMount() {
-    const { INVESTMONEY_FORM } = this.props.investmentStore;
-    INVESTMONEY_FORM.fields.investmentAmount.value = '';
-  }
   render() {
     const {
       investmentAmount,

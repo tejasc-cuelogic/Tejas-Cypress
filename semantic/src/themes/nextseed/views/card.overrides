@@ -48,7 +48,7 @@
                 font-size:@13px;
                 font-weight:@fontMedium;
                 color:@neutral-middark;
-                text-transform:uppercase;
+                text-transform:capitalize;
                 >span{
                     text-transform:none;
                 }

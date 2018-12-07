@@ -122,6 +122,38 @@ class Comments extends Component {
             </Segment>
           </Grid.Column>
         </Grid>
+        {/*
+        ********** No comments UI do not remove ***********
+        <Grid stackable>
+          <Grid.Column>
+            <Segment padded className="center-align">
+              <div className="segment-container no-comments">
+                <Header as="h3">Leave your questions and encouragement here.</Header>
+                <Button primary fluid={isMobile} className={isMobile && 'mt-20'}>
+                Post Comment</Button>
+              </div>
+              <Grid centered>
+                <Grid.Column width={14} textAlign={!isMobile && 'center'}>
+                  <p>
+                    Note that both NextSeed and issuers are notified of all comments immediately,
+                    but there may be a slight delay in response to questions submitted outside of
+                    standard business hours (9am to 5pm CST, Monday through Friday).
+                  </p>
+                  <p>
+                    Most questions will be answered by issuers in approximately two business days,
+                    although some questions require more thorough analyses and will take additional
+                    time.
+                  </p>
+                  <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                  <p>
+                    If you have any technical questions or questions about NextSeed, please
+                    email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+                  </p>
+                </Grid.Column>
+              </Grid>
+            </Segment>
+          </Grid.Column>
+        </Grid> */}
         <Route path={`${this.props.match.url}/commentsreply`} component={CommentsReplyModal} />
       </div>
     );

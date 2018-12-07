@@ -29,28 +29,6 @@ class CompanyDescriptionModal extends Component {
       >
         <Modal.Header>Company Description</Modal.Header>
         <Modal.Content scrolling>
-          {/* <Divider section />
-          <Grid columns={2} stackable>
-            <Grid.Column verticalAlign="middle" textAlign="center">
-              <p>
-                Over the years, Buffbrew has developed a lineup of products that has drawn an
-                adventurous community. Its brewing methods have applied cutting-edge technology,
-                technique and unique flavor profiles to achieve a unique and superior taste that
-                the team is extremely proud of. As important, its self-distributing model gives
-                the business a degree of independence and control over its product that no other
-                Houston brewery has matched.
-              </p>
-            </Grid.Column>
-            <Grid.Column>
-              <Embed
-                id={nsvideos.embed}
-                placeholder={videoPoster}
-                source="vimeo"
-                icon="ns-play"
-              />
-            </Grid.Column>
-          </Grid>
-          <Divider section /> */}
           <Aux>
             {
               campaign && campaign.offering && campaign.offering.about &&

@@ -27,6 +27,7 @@ export default class Agreement extends React.Component {
     setFieldValue('investmentFlowErrorMessage', null);
   }
   handleCloseModal = (e) => {
+    this.props.investmentStore.resetData();
     if (this.state.showDocuSign) {
       this.docuSignHandeler(e, false);
     } else if (this.props.changeInvestment) {
