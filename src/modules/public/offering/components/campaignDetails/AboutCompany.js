@@ -81,7 +81,7 @@ class AboutCompany extends Component {
             ))
           }
         </Switch>
-        <Route path={`${this.props.match.url}/companydescription`} component={CompanyDescriptionModal} />
+        <Route path={`${this.props.match.url}/company-description`} component={CompanyDescriptionModal} />
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
       </div>
     );
