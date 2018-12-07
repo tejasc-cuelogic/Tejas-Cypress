@@ -134,8 +134,8 @@ class IraAccountStore {
   }
 
   @action
-  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false) => new Promise((resolve) => {
-    if (formStatus === 'submit') {
+  createAccount = (currentStep, formStatus = 'PARTIAL', removeUploadedData = false) => new Promise((resolve) => {
+    if (formStatus === 'FULL') {
       this.submitForm(currentStep, formStatus, this.accountAttributes).then(() => {
         resolve();
       });
@@ -267,9 +267,8 @@ class IraAccountStore {
     uiStore.setProgress();
     let mutation = createIndividual;
     const variables = {
-      userId: userStore.currentUser.sub,
       accountAttributes,
-      status: formStatus,
+      accountStatus: formStatus,
       accountType: 'IRA',
     };
     let actionPerformed = 'submitted';
@@ -300,13 +299,13 @@ class IraAccountStore {
               FormValidator.setIsDirty(this[currentStep.form], false);
               this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
-          } else if (formStatus !== 'submit') {
+          } else if (formStatus !== 'FULL') {
             if (currentStep.name !== 'Link bank') {
               FormValidator.setIsDirty(this[currentStep.form], false);
             }
             this.setStepToBeRendered(currentStep.stepToBeRendered);
           }
-          if (formStatus === 'submit') {
+          if (formStatus === 'FULL') {
             bankAccountStore.resetPlaidAccData();
             Helper.toast('IRA account created successfully.', 'success');
           } else {
@@ -446,7 +445,7 @@ class IraAccountStore {
       this.IDENTITY_FRM.fields[field].value = '';
       this.IDENTITY_FRM.fields[field].fileId = '';
       this.IDENTITY_FRM.fields[field].preSignedUrl = '';
-      this.createAccount(currentStep, 'draft', true);
+      this.createAccount(currentStep, 'PARTIAL', true);
     }))
       .catch(() => { });
   }

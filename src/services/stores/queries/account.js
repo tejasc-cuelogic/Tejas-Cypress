@@ -1,17 +1,15 @@
 import gql from 'graphql-tag';
 
 export const createAccount = gql`
-  mutation _createAccount($userId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: UserAccountTypeEnum!) {
+  mutation _createAccount($accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: UserAccountTypeEnum!) {
     createInvestorAccount(
-      userId: $userId
       accountAttributes: $accountAttributes
-      status: $status
+      accountStatus: $accountStatus
       accountType: $accountType
     ) {
-      userId
       accountId
       accountType
-      status
+      accountStatus
       startedDate
       finishedDate
       accountDetails
@@ -19,22 +17,20 @@ export const createAccount = gql`
   }`;
 
 export const updateAccount = gql`
-  mutation _updateAccount($userId: String! $accountId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: InvestorAccountTypeEnum!) {
+  mutation _updateAccount($accountId: String! $accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: InvestorAccountTypeEnum!) {
     updateInvestorAccount(
-      userId: $userId
       accountId: $accountId
       accountAttributes: $accountAttributes
-      status: $status
-      type: $accountType
+      accountStatus: $accountStatus
+      accountType: $accountType
     ) {
-      userId
       accountId
       linkedBank {
         accountNumber
         routingNumber
         bankName
       }
-      type
+      accountType
     }
   }`;
 
@@ -64,8 +60,8 @@ query checkEntityTaxIdCollision($taxId: String!) {
 }`;
 
 export const createIndividual = gql`
-  mutation createIndividiaul($userId: String!, $accountAttributes: AccountInputType!, $status: AccountCreationStatusEnum!, $accountType: InvestorAccountTypeEnum!){
-    createInvestorAccount(userId: $userId, accountAttributes: $accountAttributes, status: $status, type: $accountType){
+  mutation createIndividiaul($accountAttributes: AccountInputType!, $accountStatus: InvestorAccountStatusEnum!, $accountType: InvestorAccountTypeEnum!){
+    createInvestorAccount(accountAttributes: $accountAttributes, accountStatus: $accountStatus, accountType: $accountType){
       userId
       accountId
       linkedBank {
@@ -73,7 +69,7 @@ export const createIndividual = gql`
         routingNumber
         bankName
       }
-      type
+      accountType
     }
   }`;
 

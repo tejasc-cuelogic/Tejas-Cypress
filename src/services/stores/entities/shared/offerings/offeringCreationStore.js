@@ -232,37 +232,41 @@ export class OfferingCreationStore {
 
   @action
   uploadFileToS3 = (form, name, files, key, index) => {
-    this[form].fields[key][index][name].showLoader = true;
+    let fileField = '';
+    if (key) {
+      fileField = this[form].fields[key][index][name];
+    } else {
+      fileField = this[form].fields[name];
+    }
+    fileField.showLoader = true;
     fileUpload.uploadToS3(files[0])
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
-        this[form].fields[key][index][name].value = res.fileName;
-        this[form].fields[key][index][name].preSignedUrl = res.location;
-        this[form].fields[key][index][name].fileId = `${res.fileName}${Date.now()}`;
-        this[form].fields[key][index][name].fileName = `${res.fileName}${Date.now()}`;
+        fileField.value = res.fileName;
+        fileField.preSignedUrl = res.location;
+        fileField.fileId = `${res.fileName}${Date.now()}`;
+        fileField.fileName = `${res.fileName}${Date.now()}`;
       }))
       .catch(action((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        this[form].fields[key][index][name].showLoader = false;
-        console.log(err);
+        fileField.showLoader = false;
       }))
       .finally(action(() => {
-        this[form].fields[key][index][name].showLoader = false;
+        fileField.showLoader = false;
       }));
   }
 
   @action
-  removeFileFromS3 = (form, name, key, index) => {
-    fileUpload.deleteFromS3(this[form].fields[key][index][name].fileName)
+  removeFileFromS3 = (form, name) => {
+    fileUpload.deleteFromS3(this[form].fields[name].value)
       .then(action((res) => {
         ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
-          this[form].fields[key][index][name][subKey] = '';
+          this[form].fields[name][subKey] = '';
         });
         Helper.toast('file Deleted successfully', 'success');
       }))
       .catch((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
-        console.log(err);
       });
   }
   @action
@@ -572,7 +576,6 @@ export class OfferingCreationStore {
   @action
   removeUploadedData = (form, subForm = 'data', field, index = null, stepName, updateOnRemove = false) => {
     if (stepName) {
-      const currentStep = { name: stepName };
       const { fileId } = this[form].fields[field];
       if (this[form].fields[field].showLoader !== undefined) {
         this[form].fields[field].showLoader = true;
@@ -587,7 +590,6 @@ export class OfferingCreationStore {
         if (updateOnRemove) {
           this.updateOffering(this.currentOfferingId, this.ADMIN_DOCUMENTATION_FRM.fields, 'legal', 'admin', true, `${this[form].fields[field].label} Removed successfully.`);
         }
-        this.createAccount(currentStep, 'draft', true, field);
       }))
         .catch(() => { })
         .finally(action(() => {
@@ -762,6 +764,14 @@ export class OfferingCreationStore {
             if (key === `${records.type}_blurb`) {
               toObj.blurb = records.value || null;
             }
+            if (key === `${records.type}_featuredImageUpload`) {
+              toObj.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.value,
+                isPublic: true,
+              };
+            }
           } else {
             const object = {};
             object.type = records.type;
@@ -773,6 +783,14 @@ export class OfferingCreationStore {
             }
             if (key === `${records.type}_blurb`) {
               object.blurb = records.value || null;
+            }
+            if (key === `${records.type}_featuredImageUpload`) {
+              object.featuredImageUpload = {
+                id: records.fileId,
+                url: records.preSignedUrl,
+                fileName: records.fileName,
+                isPublic: true,
+              };
             }
             social.push(object);
           }
