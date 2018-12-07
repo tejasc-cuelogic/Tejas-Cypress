@@ -160,7 +160,10 @@ export class UserDetailsStore {
         mutation: toggleUserAccount,
         variables: params,
       })
-      .then(() => this.updateUserStatus(params.status))
+      .then(() => {
+        this.getUserProfileDetails(this.detailsOfUser.data.user.id);
+        this.updateUserStatus(params.status);
+      })
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
 
