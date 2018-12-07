@@ -226,8 +226,10 @@ export const campaignDetailsQuery = gql`
       general {
         websiteUrl
         useOfProceeds {
-          reachedMinOfferingGoal
-          reachedMaxOfferingGoal
+          minOfferingExpenseAmount
+          minOfferingExpenseAmountDescription
+          maxOfferingExpenseAmount
+          maxOfferingExpenseAmountDescription
         }
         approved {
           id
