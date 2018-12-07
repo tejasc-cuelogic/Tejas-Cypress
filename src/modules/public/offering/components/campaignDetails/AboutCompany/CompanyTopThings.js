@@ -10,7 +10,7 @@ class CompanyTopThings extends Component {
       campaign, companyDescriptionUrl, emptyStatement,
     } = this.props;
     return (
-      <Grid.Column widescreen={6} largeScreen={8} computer={16} tablet={16}>
+      <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16}>
         <Segment padded>
           {/* <Breadcrumb>
                   <Breadcrumb.Section as={Link}to={`${this.props.match.url}/companydescription`}>
@@ -18,7 +18,7 @@ class CompanyTopThings extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header> */}
-          <div className="segment-container">
+          <div className="segment-container small">
             <Header as="h3">
               <Link to={`${companyDescriptionUrl}/companydescription`}>
                 Company Description
