@@ -51,7 +51,7 @@ class AboutTheCompany extends Component {
           </div>
           {campaign && campaign.offering && campaign.offering.overview &&
             campaign.offering.overview.highlight &&
-            campaign.offering.overview.highlight.length > 8 ?
+            campaign.offering.overview.highlight.length > 6 ?
               <Link to={`${this.props.refLink}/overview/top-things-to-know`}>Read More</Link>
             :
             null}

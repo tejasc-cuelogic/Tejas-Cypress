@@ -25,8 +25,8 @@ class CompanyTopThings extends Component {
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
             </Header>
-            {
-              campaign && campaign.offering
+            <p>{`Text Len==> ${campaign.offering.about.theCompany.length}`}</p>
+            {campaign && campaign.offering
               && campaign.offering.about
               && campaign.offering.about.theCompany ?
                 <p
