@@ -93,7 +93,7 @@ class Footer extends Component {
                 All securities-related activity is conducted by regulated affiliates of
                 NextSeed: NextSeed Securities, LLC, a registered broker dealer and member
                 of <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a> (check out
-                the background of our broker-dealer on BrokerCheck®) or NextSeed US LLC, a
+                the background of our broker-dealer on <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>) or NextSeed US LLC, a
                 registered funding portal and member of <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
               </p>
               <p>

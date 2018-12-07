@@ -476,7 +476,7 @@ export const PUBLIC_NAV = [
     exact: true,
     subNavigations: [
       { title: 'Mission', to: 'about/mission' },
-      { title: 'Team', to: 'about/team' },
+      { title: 'Team & Culture', to: 'about/team' },
       { title: 'Careers', to: 'about/careers' },
       { title: 'Insights', to: 'resources/insights' },
     ],
