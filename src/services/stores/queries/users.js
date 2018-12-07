@@ -312,8 +312,8 @@ export const deleteUserMutation = gql`
 `;
 
 export const toggleUserAccount = gql`
-  mutation updateUserStatus($id: String!, $status: profileLockEnum!) {
-    updateUserStatus(userId: $id, accountStatus:$status) {
+  mutation updateUserStatus($id: String!, $accountStatus: profileLockEnum!) {
+    updateUserStatus(userId: $id, accountStatus:$accountStatus) {
       id
     }
   }
