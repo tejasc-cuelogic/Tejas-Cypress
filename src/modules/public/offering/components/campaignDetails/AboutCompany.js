@@ -66,6 +66,7 @@ class AboutCompany extends Component {
             />
             <BusinessModel
               businessModelUrl={this.props.match.url}
+              campaign={campaign}
             />
             <LocationAnalysis
               isTabletLand={isTabletLand}
