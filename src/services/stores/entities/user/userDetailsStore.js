@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-expressions */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import { concat, isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
+import { concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
@@ -42,13 +43,17 @@ export class UserDetailsStore {
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
+    details.roles && details.roles.map((role, index) => {
+      details.roles[index].name = lowerCase(role.name);
+      return details;
+    });
     return details;
   }
 
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details && account.details.status === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details && account.details.accountStatus === 'FULL');
     }
     return accDetails;
   }
@@ -117,6 +122,12 @@ export class UserDetailsStore {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         res();
+        this.currentUser.data &&
+        this.currentUser.data.user &&
+        this.currentUser.data.user.roles && this.currentUser.data.user.roles.map((role, index) => {
+          this.currentUser.data.user.roles[index].name = lowerCase(role.name);
+          return this.currentUser;
+        });
       },
     });
   })
@@ -172,7 +183,11 @@ export class UserDetailsStore {
       ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.roles = mapValues(this.userDetails.roles, (a) => {
         const data =
-        { accountId: a.accountId, name: a.name, status: a.details ? a.details.status : null };
+        {
+          accountId: a.accountId,
+          name: a.name,
+          status: a.details ? a.details.accountStatus : null,
+        };
         return data;
       });
       Object.keys(details.roles).map((key) => {

@@ -22,14 +22,13 @@ class IndividualAccountStore {
     this.stepToBeRendered = step;
   }
 
-  createAccount = (currentStep, formStatus = 'draft') => {
+  createAccount = (currentStep, formStatus = 'PARTIAL') => {
     if (bankAccountStore.formAddFunds.meta.isFieldValid) {
       uiStore.setProgress();
       let mutation = createIndividual;
       const variables = {
-        userId: userStore.currentUser.sub,
         accountAttributes: bankAccountStore.accountAttributes,
-        status: formStatus,
+        accountStatus: formStatus,
         accountType: 'INDIVIDUAL',
       };
       let actionPerformed = 'submitted';
@@ -48,7 +47,7 @@ class IndividualAccountStore {
             variables,
           })
           .then(action((result) => {
-            if (result.data.createInvestorAccount || formStatus === 'submit') {
+            if (result.data.createInvestorAccount || formStatus === 'FULL') {
               userDetailsStore.getUser(userStore.currentUser.sub);
             }
             if (result.data.createInvestorAccount) {
@@ -58,7 +57,7 @@ class IndividualAccountStore {
               const { linkedBank } = result.data.updateInvestorAccount;
               bankAccountStore.setPlaidAccDetails(linkedBank);
             }
-            if (formStatus === 'submit') {
+            if (formStatus === 'FULL') {
               Helper.toast('Individual account created successfully.', 'success');
               this.submited = true;
               if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&

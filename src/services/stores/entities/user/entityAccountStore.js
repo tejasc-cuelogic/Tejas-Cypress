@@ -104,8 +104,8 @@ class EntityAccountStore {
   }
 
   @action
-  createAccount = (currentStep, formStatus = 'draft', removeUploadedData = false, field = null) => new Promise((resolve) => {
-    if (formStatus === 'submit') {
+  createAccount = (currentStep, formStatus = 'PARTIAL', removeUploadedData = false, field = null) => new Promise((resolve) => {
+    if (formStatus === 'FULL') {
       this.submitForm(currentStep, formStatus, this.accountAttributes).then(() => {
         resolve();
       });
@@ -389,9 +389,8 @@ class EntityAccountStore {
     uiStore.setProgress();
     let mutation = createIndividual;
     const variables = {
-      userId: userStore.currentUser.sub,
       accountAttributes,
-      status: formStatus,
+      accountStatus: formStatus,
       accountType: 'ENTITY',
     };
     let actionPerformed = 'submitted';
@@ -410,14 +409,14 @@ class EntityAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'submit') {
+          if (result.data.createInvestorAccount || formStatus === 'FULL') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (result.data.updateInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.updateInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }
-          if (formStatus !== 'submit') {
+          if (formStatus !== 'FULL') {
             if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
               if (removeUploadedData) {
                 if (currentStep.name === 'Personal info') {
@@ -436,7 +435,7 @@ class EntityAccountStore {
               this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
           }
-          if (formStatus === 'submit') {
+          if (formStatus === 'FULL') {
             Helper.toast('Entity account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
@@ -613,7 +612,7 @@ class EntityAccountStore {
       );
       this[form].fields[field].fileId = '';
       this[form].fields[field].preSignedUrl = '';
-      this.createAccount(currentStep, 'draft', true, field);
+      this.createAccount(currentStep, 'PARTIAL', true, field);
     }))
       .catch(() => { });
   }

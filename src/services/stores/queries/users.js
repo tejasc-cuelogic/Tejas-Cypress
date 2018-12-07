@@ -153,7 +153,7 @@ export const userDetailsQuery = gql`
             created {
               date
             }
-            status
+            accountStatus
           }
         }
       }

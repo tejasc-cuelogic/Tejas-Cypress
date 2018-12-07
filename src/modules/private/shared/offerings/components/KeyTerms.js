@@ -173,7 +173,7 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths={2}>
             {
-            ['investmentMultipleSummary', 'revShareSummary'].map(field => (
+            ['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
@@ -230,7 +230,7 @@ export default class KeyTerms extends Component {
             }
           </Form.Group>
           <Form.Group widths={2}>
-            {['nsFeeCalcDescription', 'currentFinancialStatements', 'minOfferingAmtExpense', 'maxOfferingAmtExpense', 'useOfProceedFootnote'].map(field => (
+            {['nsFeeCalcDescription', 'currentFinancialStatements', 'useOfProceedFootnote'].map(field => (
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
