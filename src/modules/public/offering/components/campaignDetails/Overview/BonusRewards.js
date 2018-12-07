@@ -10,6 +10,9 @@ class BonusRewards extends Component {
     const { isTabletLand, refLink, campaign } = this.props;
     const rewardsTiers = campaign && campaign.rewardsTierIds &&
       campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+    const shorthandBusinessName = campaign && campaign.keyTerms &&
+      campaign.keyTerms.shorthandBusinessName ?
+      campaign.keyTerms.shorthandBusinessName : '';
     return (
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
@@ -19,19 +22,19 @@ class BonusRewards extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          {!rewardsTiers ?
+          {rewardsTiers ?
             <Aux>
               <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
-              <p className="center-align"><b>Invest more, receive more.</b></p>
+              <p className="center-align neutral-text mb-0"><b>Invest more, receive more.</b></p>
               <p className="early-bird-desc center-align">
-                See the bonus rewards BuffBrew Taproom is offering for higher
-                levels of investment.
+                {`See the bonus rewards ${shorthandBusinessName} is offering for higher
+                levels of investment.`}
               </p>
             </Aux>
             :
             <Aux>
               <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
-              <p className="center-align"><b>Early Bird rewards remaining</b></p>
+              <p className="center-align neutral-text mb-0"><b><span className="primary-text">Early Bird</span> rewards remaining</b></p>
               <p className="early-bird-desc center-align">
                 First 100 to invest $1,000+
               </p>

@@ -26,9 +26,11 @@ export default class Agreement extends React.Component {
     }
     setFieldValue('investmentFlowErrorMessage', null);
   }
-  handleCloseModal = () => {
+  handleCloseModal = (e) => {
     this.props.investmentStore.resetData();
-    if (this.props.changeInvestment) {
+    if (this.state.showDocuSign) {
+      this.docuSignHandeler(e, false);
+    } else if (this.props.changeInvestment) {
       const { offeringId } = this.props.match.params;
       this.props.history.push(`${this.props.refLink}/${offeringId}`);
     } else {
@@ -91,11 +93,12 @@ export default class Agreement extends React.Component {
             </div>
           </Modal.Content>
         </Modal>
-        <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+        <Modal size="large" open closeIcon closeOnRootNodeClick={false} onClose={e => this.handleCloseModal(e)}>
           <Modal.Content className="signup-content">
             <div style={{ display: this.state.showDocuSign ? 'block' : 'none' }}>
               <div className="pdf-viewer">
-                <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+                <iframe onLoad={this.iframeLoading} width="0" height="0" title="agreement" src={agreementDetails && agreementDetails.docuSignViewURL} />
+                <iframe onLoad={this.iframeLoading} width="100%" height="100%" title="npa" src={agreementDetails && agreementDetails.npaViewUrl} />
               </div>
               <div className="center-align mt-20">
                 <Button type="button" content="Go Back" primary onClick={e => this.docuSignHandeler(e, false)} />

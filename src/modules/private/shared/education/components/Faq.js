@@ -56,7 +56,7 @@ export default class KnowledgeBase extends Component {
                 render={props => <Details module={modul} {...props} />}
               />
               <Route
-                path={`${match.url}/:id`}
+                path={`${match.url}/:slug`}
                 render={props => <Details module={modul} {...props} />}
               />
             </Grid.Column>
