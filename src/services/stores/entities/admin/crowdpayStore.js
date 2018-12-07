@@ -1,9 +1,9 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray, map } from 'lodash';
+import { isArray } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS } from '../../../constants/crowdpayAccounts';
@@ -64,14 +64,7 @@ export class CrowdpayStore {
 
   @action
   setDb = (data) => {
-    const updatedData = map(data, d => (
-      {
-        ...d,
-        date: d.created ? parseInt(d.created.date, 10) : d.created,
-        created: d.created ? { ...d.created, date: parseInt(d.created.date, 10) }
-          : d.created,
-      }));
-    this.db = ClientDb.initiateDb(updatedData);
+    this.db = ClientDb.initiateDb(data);
   }
 
   @action
@@ -83,6 +76,7 @@ export class CrowdpayStore {
       fetchPolicy: 'network-only',
       onFetch: () => {
         this.setData('isApiHit', true);
+        this.setCrowdpayAccountsSummary();
       },
     });
   }
@@ -91,6 +85,15 @@ export class CrowdpayStore {
   initiateSearch = (srchParams) => {
     this.requestState.search = srchParams;
     this.initiateFilters();
+  }
+
+  @action
+  setCrowdpayAccountsSummary = () => {
+    Object.keys(this.summary).map((type) => {
+      this.setAccountTypes(type);
+      this.summary[type] = this.count;
+      return false;
+    });
   }
 
   @action
@@ -104,13 +107,16 @@ export class CrowdpayStore {
     ClientDb.filterData('accountStatus', accountStatus2, 'like');
     if (keyword) {
       resultArray = [];
-      resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'like', false),
-        ...ClientDb.filterData('firstName', keyword, 'like', false),
-        ...ClientDb.filterData('lastName', keyword, 'like', false)];
+      const fullName = keyword.split(' ');
+      const firstName = fullName.length && fullName[0];
+      const lastName = (fullName.length > 1 && fullName[1]) || (fullName.length && fullName[0]);
+      resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'likenocase', false),
+        ...ClientDb.filterData('firstName', firstName, 'likenocase', false),
+        ...ClientDb.filterData('lastName', lastName, 'likenocase', false)];
       ClientDb.initiateDb(resultArray, true);
     }
     if (startDate && endDate) {
-      ClientDb.filterByDate(startDate, endDate);
+      ClientDb.filterByDate(startDate, endDate, 'created', 'date');
     }
     this.db = ClientDb.getDatabase();
   }
@@ -118,7 +124,7 @@ export class CrowdpayStore {
   @action
   setInitiateSrch = (name, value) => {
     if (name === 'startDate' || name === 'endDate') {
-      this.requestState.search[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? moment(value.formattedValue, 'MM-DD-YYYY').unix() : undefined;
+      this.requestState.search[name] = value && moment(value.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(value.formattedValue, false, name, true) : undefined;
       const srchParams = { ...this.requestState.search };
       this.initiateSearch(srchParams);
     } else {
@@ -133,7 +139,7 @@ export class CrowdpayStore {
   }
 
   @action
-  fChange = (e, result) => { // this is only for checkboxes
+  fChange = (e, result) => {
     this.FILTER_FRM = Validator.onChange(this.FILTER_FRM, Validator.pullValues(e, result));
     const selected = this.FILTER_FRM.fields[this.requestState.type].value;
     const srchParams = { ...this.requestState.search };

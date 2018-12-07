@@ -53,7 +53,7 @@ export default class FaqsCombined extends Component {
         <div className="mt-30">
           {faqs &&
           faqs.map((faq, key) => (
-            <Accordion key={faq.id} className="faq-accordion" >
+            <Accordion key={faq.slug} className="faq-accordion" >
               <Accordion.Title active={activeIndex === key} index={key} onClick={() => this.toggleAccordion(key, 'activeIndex')}>
                 {faq.categoryName}
                 <Icon className="ns-chevron-down" />
@@ -61,7 +61,7 @@ export default class FaqsCombined extends Component {
               <Accordion.Content active={activeIndex === key}>
                 {faq.faqItems &&
                 faq.faqItems.map((faqItem, index) => (
-                  <Accordion key={faqItem.id}>
+                  <Accordion key={faqItem.slug}>
                     <Accordion.Title
                       active={innerActiveIndex === index}
                       index={index}
