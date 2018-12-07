@@ -79,7 +79,6 @@ export default class General extends Component {
                 options={US_STATES_FOR_INVESTOR}
                 search
                 selection
-                compact
                 placeholder="Select"
                 onChange={genInfoChange}
               />

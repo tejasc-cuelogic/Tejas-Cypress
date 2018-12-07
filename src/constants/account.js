@@ -143,6 +143,16 @@ export const US_STATES = [
   { key: '1V', value: '1V', text: 'NORTHERN MARIANA ISLANDS' },
 ];
 
+export const FILE_UPLOAD_STEPS = {
+  photoId: 'PROFILE_CIP_LICENSE',
+  proofOfResidence: 'PROFILE_CIP_RESIDENCE',
+  identityDoc: 'ACCOUNT_IRA_PHOTO_ID',
+  legalDocUrl: 'ACCOUNT_ENTITY_PHOTO_ID',
+  formationDoc: 'ACCOUNT_ENTITY_FORMATION',
+  operatingAgreementDoc: 'ACCOUNT_ENTITY_OPERATING_AGREEMENT',
+  einVerificationDoc: 'ACCOUNT_ENTITY_EIN_VERIFICATION',
+};
+
 export const IND_LINK_BANK_MANUALLY = {
   routingNumber: {
     key: 'routingNumber',

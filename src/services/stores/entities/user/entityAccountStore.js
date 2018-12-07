@@ -9,6 +9,7 @@ import {
   ENTITY_TRUST_INFO,
   ENTITY_PERSONAL_INFO,
   ENTITY_FORMATION_DOCS,
+  FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
 import { createIndividual, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
@@ -581,8 +582,9 @@ class EntityAccountStore {
   setFileUploadData = (form, field, files) => {
     uiStore.setProgress();
     const file = files[0];
+    const stepName = FILE_UPLOAD_STEPS[field];
     const fileData = Helper.getFormattedFileData(file);
-    fileUpload.setFileUploadData('', fileData, 'ACCOUNT_ENTITY_CREATION', 'INVESTOR').then(action((result) => {
+    fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR').then(action((result) => {
       const { fileId, preSignedUrl } = result.data.createUploadEntry;
       this[form].fields[field].fileId = fileId;
       this[form].fields[field].preSignedUrl = preSignedUrl;
