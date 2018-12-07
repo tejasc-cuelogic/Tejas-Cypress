@@ -1283,6 +1283,15 @@ a.icon-link {
 			width: 130px;
 		}
 	}
+	.no-updates {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		h3{
+			color: @neutral !important;
+		}
+	}
 }
 .error-page{
 	padding:@80px @14px;
