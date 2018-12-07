@@ -128,16 +128,20 @@ export class AccreditationStore {
     this[form] = Validator.validateForm(this[form], multiForm, showErrors, false);
   }
 
-  getFileUploadEnum = field => ACCREDITATION_FILE_UPLOAD_ENUMS[field];
+  getFileUploadEnum = accountType => ACCREDITATION_FILE_UPLOAD_ENUMS[accountType];
 
   @action
-  setFileUploadData = (form, field, files) => {
+  setFileUploadData = (form, field, files, accountType, accreditationMethod) => {
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
-        const stepName = this.getFileUploadEnum(field);
+        const stepName = this.getFileUploadEnum(accountType);
+        const tags = [accreditationMethod];
+        if (accreditationMethod === 'Income') {
+          tags.push(this.getFileUploadEnum(field));
+        }
         this.setFormFileArray(form, field, 'showLoader', true);
-        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR').then((result) => {
+        fileUpload.setFileUploadData('', fileData, stepName, 'INVESTOR', '', '', tags).then((result) => {
           const { fileId, preSignedUrl } = result.data.createUploadEntry;
           fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
             this.setFormFileArray(form, field, 'fileData', file);

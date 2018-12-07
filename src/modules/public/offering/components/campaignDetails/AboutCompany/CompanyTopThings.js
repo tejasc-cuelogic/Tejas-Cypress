@@ -11,7 +11,7 @@ class CompanyTopThings extends Component {
     const {
       campaign, companyDescriptionUrl, emptyStatement,
     } = this.props;
-    const textContentMaxLength = isSmallscreen ? 67 : 1075;
+    const textContentMaxLength = isSmallscreen ? 280 : 1075;
     return (
       <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16}>
         <Segment padded>
@@ -21,13 +21,14 @@ class CompanyTopThings extends Component {
                   <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
                 </Breadcrumb>
                 <Header as="h3">Top things to know</Header> */}
-          <div className="segment-container small">
+          <div className={`segment-container ${!isSmallscreen && 'small'}`}>
             <Header as="h3">
               <Link to={`${companyDescriptionUrl}/company-description`}>
                 Company Description
                 <Icon className="ns-chevron-right" color="green" />
               </Link>
             </Header>
+            {/* <p>{`Text Conten Len==> ${campaign.offering.about.theCompany.length}`}</p> */}
             {campaign && campaign.offering
               && campaign.offering.about
               && campaign.offering.about.theCompany ?

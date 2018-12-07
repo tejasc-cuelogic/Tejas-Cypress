@@ -9,7 +9,7 @@ import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
 @observer
 export default class UploadDocument extends Component {
   onFileDrop = (files, field) => {
-    this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files);
+    this.props.accreditationStore.setFileUploadData('ASSETS_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Assets');
   }
   handleDelCancel = () => {
     this.props.uiStore.setConfirmBox('');
