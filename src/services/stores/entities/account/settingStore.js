@@ -76,7 +76,7 @@ export class SettingStore {
           this.entityInfo.push({ label: 'Is Entity a trust?', value: 'No' });
         }
         this.entityInfo.push({ label: 'Title with the Entity', value: accountDetails.legalInfo.title });
-        this.entityInfo.push({ label: 'Bank account', value: Helper.encryptNumber(accountDetails.linkedBank.accountNumber) });
+        this.entityInfo.push({ label: 'Bank account', value: accountDetails.linkedBank ? Helper.encryptNumber(accountDetails.linkedBank.accountNumber) : null });
         this.entityInfo.push({ label: 'Requested Date', value: moment(accountDetails.created.date).format('MM/DD/YYYY') });
         this.entityInfo.push({ label: 'Approval Date', value: 'N/A' });
         this.includeData.push(accountType);

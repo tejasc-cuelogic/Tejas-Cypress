@@ -31,9 +31,9 @@ export default class Overview extends Component {
       <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
           <Header as="h4">Offering Details</Header>
-          <Form.Group widths={2}>
+          <Form.Group widths={3}>
             {
-              ['offeringSlug', 'referralCode'].map(field => (
+              ['offeringSlug', 'previewPassword', 'referralCode'].map(field => (
                 <FormInput
                   name={field}
                   fielddata={OFFERING_DETAILS_FRM.fields[field]}
