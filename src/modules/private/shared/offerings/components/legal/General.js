@@ -150,16 +150,38 @@ export default class General extends Component {
               This section will also be public on the offering page.`}
           </p>
           {
-            ['reachedMinOfferingGoal', 'reachedMaxOfferingGoal'].map(field => (
+            <Aux>
+              <MaskedInput
+                displayMode={isReadonly}
+                name="minOfferingExpenseAmount"
+                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmount}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                currency
+                prefix="$"
+              />
               <FormTextarea
                 readOnly={isReadonly}
-                key={field}
-                name={field}
-                fielddata={GENERAL_FRM.fields[field]}
+                name="minOfferingExpenseAmountDescription"
+                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmountDescription}
                 changed={(e, result) => formArrayChange(e, result, formName)}
                 containerclassname="secondary"
               />
-            ))
+              <MaskedInput
+                displayMode={isReadonly}
+                name="maxOfferingExpenseAmount"
+                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmount}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                currency
+                prefix="$"
+              />
+              <FormTextarea
+                readOnly={isReadonly}
+                name="maxOfferingExpenseAmountDescription"
+                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmountDescription}
+                changed={(e, result) => formArrayChange(e, result, formName)}
+                containerclassname="secondary"
+              />
+            </Aux>
           }
           <Divider section />
           <Header as="h4">Describe Rights of Your Equity Shareholders</Header>
