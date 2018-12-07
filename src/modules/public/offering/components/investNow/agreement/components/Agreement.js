@@ -27,6 +27,7 @@ export default class Agreement extends React.Component {
     setFieldValue('investmentFlowErrorMessage', null);
   }
   handleCloseModal = () => {
+    this.props.investmentStore.resetData();
     if (this.props.changeInvestment) {
       const { offeringId } = this.props.match.params;
       this.props.history.push(`${this.props.refLink}/${offeringId}`);
