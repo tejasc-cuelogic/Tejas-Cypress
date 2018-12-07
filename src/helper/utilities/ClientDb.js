@@ -43,17 +43,39 @@ class ClientDb {
     return setDb ? this.initiateDb(resultArray, true) : uniqWith(resultArray, isEqual);
   }
 
-  filterFromNestedObjs = (key, value) => {
-    const data = this.getDatabase();
-    let tempRef;
-    const resultArray = data.filter((e) => {
-      tempRef = false;
-      key.split('.').map((k) => {
-        tempRef = !tempRef ? e[k] : tempRef[k];
-        return tempRef;
-      });
-      return (tempRef && tempRef.toLowerCase().includes(value.toLowerCase()));
+  getRefFromObjRef = (objRef, data) => {
+    let tempRef = false;
+    objRef.split('.').map((k) => {
+      tempRef = !tempRef ? data[k] : tempRef[k];
+      return tempRef;
     });
+    return tempRef;
+  }
+
+  filterFromNestedObjs = (key, value) => {
+    let tempRef;
+    let resultArray = [];
+    const data = this.getDatabase();
+    if (isArray(key)) {
+      let keyString = '';
+      data.map((e) => {
+        keyString = '';
+        key.map((d) => {
+          tempRef = this.getRefFromObjRef(d, e);
+          keyString = `${keyString} ${tempRef}`;
+          return false;
+        });
+        if (keyString.toLowerCase().includes(value)) {
+          resultArray.push(e);
+        }
+        return false;
+      });
+    } else {
+      resultArray = data.filter((e) => {
+        tempRef = this.getRefFromObjRef(key, e);
+        return (tempRef && tempRef.toLowerCase().includes(value.toLowerCase()));
+      });
+    }
     this.initiateDb(resultArray, true);
   }
 
