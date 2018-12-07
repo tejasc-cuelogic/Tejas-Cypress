@@ -102,18 +102,10 @@ export class CrowdpayStore {
     const {
       keyword, startDate, endDate, accountStatus,
     } = this.requestState.search;
-    let resultArray = [];
     const accountStatus2 = this.requestState.type === 'review' && !accountStatus ? ['FULL'] : accountStatus;
     ClientDb.filterData('accountStatus', accountStatus2, 'like');
     if (keyword) {
-      resultArray = [];
-      const fullName = keyword.split(' ');
-      const firstName = fullName.length && fullName[0];
-      const lastName = (fullName.length > 1 && fullName[1]) || (fullName.length && fullName[0]);
-      resultArray = [...resultArray, ...ClientDb.filterData('email', keyword, 'likenocase', false),
-        ...ClientDb.filterData('firstName', firstName, 'likenocase', false),
-        ...ClientDb.filterData('lastName', lastName, 'likenocase', false)];
-      ClientDb.initiateDb(resultArray, true);
+      ClientDb.filterFromNestedObjs(['firstName', 'lastName', 'email'], keyword);
     }
     if (startDate && endDate) {
       ClientDb.filterByDate(startDate, endDate, 'created', 'date');
