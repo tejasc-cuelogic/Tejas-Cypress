@@ -27,9 +27,10 @@ export default class IncomeEvidence extends Component {
               >
                 <div className={`user-type ${(INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === method.value ? 'active' : '')}`}>
                   <Header as="h6">{method.header}</Header>
-                  <p>
-                    {method.desc}
-                  </p>
+                  {((this.props.isTrust || ACCREDITATION_FORM.fields.method.value === 'ASSETS') && method.value === 'uploaddocument') ?
+                    <p> {method.desc2} </p> :
+                    <p> {method.desc} </p>
+                    }
                 </div>
               </Grid.Column>
             ))}
