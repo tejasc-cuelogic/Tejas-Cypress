@@ -221,13 +221,20 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
+      businessModelImage {
+        id
+        url
+        isPublic
+      }
     }
     legal {
       general {
         websiteUrl
         useOfProceeds {
-          reachedMinOfferingGoal
-          reachedMaxOfferingGoal
+          minOfferingExpenseAmount
+          minOfferingExpenseAmountDescription
+          maxOfferingExpenseAmount
+          maxOfferingExpenseAmountDescription
         }
         approved {
           id

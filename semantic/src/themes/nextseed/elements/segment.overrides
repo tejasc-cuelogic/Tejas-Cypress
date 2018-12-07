@@ -43,12 +43,12 @@
         max-height: 544px;
         overflow: hidden;
         @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largeMonitorBreakpoint ) {
-            max-height: 230px;
+            max-height: 290px;
         }
         &.small {
             max-height: 440px;
             @media only screen and (min-width: @largeMonitorBreakpoint) and (max-width: @largeMonitorBreakpoint ) {
-                max-height: 130px;
+                max-height: 172px;
             }
         }
         &.mini {
@@ -90,6 +90,15 @@
             margin-bottom: @25px;
             flex-grow: 1;
         }
+    }
+    .no-comments {
+        padding: 200px 0;  
+        @media only screen and (max-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
+            padding: 100px 0;
+        } 
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @40px 0;
+        }      
     }
 }
 .press-news {

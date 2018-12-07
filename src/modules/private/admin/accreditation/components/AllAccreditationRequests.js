@@ -48,7 +48,7 @@ export default class AllAccreditationRequests extends Component {
               {
               accreditations.length === 0 ? (
                 <Table.Row>
-                  <Table.Cell textAlign="center" colSpan={5}>No accreditation requests to display !</Table.Cell>
+                  <Table.Cell textAlign="center" colSpan={7}>No accreditation requests to display !</Table.Cell>
                 </Table.Row>
                 ) :
                 accreditations.map(accreditation => (

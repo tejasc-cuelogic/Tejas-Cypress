@@ -251,7 +251,7 @@ export const userAccreditationQuery = gql`
             name
             isTrust
             accountId
-            status
+            accountStatus
             }
           }
         }
