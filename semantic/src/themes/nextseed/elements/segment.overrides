@@ -91,6 +91,15 @@
             flex-grow: 1;
         }
     }
+    .no-comments {
+        padding: 200px 0;  
+        @media only screen and (max-width : @tabletBreakpoint) and (max-width : @monitorBreakpoint){
+            padding: 100px 0;
+        } 
+        @media only screen and (max-width : @largestMobileScreen){
+            padding: @40px 0;
+        }      
+    }
 }
 .press-news {
 	.ui.segment {
