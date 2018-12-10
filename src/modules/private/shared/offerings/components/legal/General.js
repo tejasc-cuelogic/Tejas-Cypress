@@ -205,9 +205,11 @@ export default class General extends Component {
             GENERAL_FRM.fields.security.map((security, index) => (
               <Aux>
                 <Header as="h6">{`Security ${index + 1}`}
+                  {GENERAL_FRM.fields.security.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="featured-section">
                   <Form.Group widths={2}>
@@ -247,9 +249,11 @@ export default class General extends Component {
             GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
               <Aux>
                 <Header as="h6">{`Other Exempt Offering ${index + 1}`}
+                  {GENERAL_FRM.fields.exemptOfferings.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="featured-section">
                   <Form.Group widths={2}>
@@ -297,9 +301,11 @@ export default class General extends Component {
             GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
               <Aux>
                 <Header as="h6">{`Term ${index + 1}`}
+                  {GENERAL_FRM.fields.materialIndebtedness.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="featured-section">
                   <FormInput
@@ -344,8 +350,6 @@ export default class General extends Component {
             ))
           }
           <Divider section />
-          {/* <Button size="small" color="blue" className="link-button" onClick={e => this.
-          addMore(e, formName, 'materialIndebtedness')}>+ Add New Term</Button> */}
           <Header as="h4">
             Affiliated Party Transactions
             {!isReadonly &&
@@ -360,9 +364,11 @@ export default class General extends Component {
           GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
             <Aux>
               <Header as="h6">{`Transaction ${index + 1}`}
+                {GENERAL_FRM.fields.affiliatedTransactions.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
+                }
               </Header>
               <div className="featured-section">
                 <FormInput

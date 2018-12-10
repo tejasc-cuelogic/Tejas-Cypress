@@ -74,7 +74,9 @@ const TableBody = ({
 @observer
 export default class Contingencies extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('CONTINGENCY_FRM', 'review.contingencies');
+    if (!this.props.businessAppReviewStore.initLoad.includes('CONTINGENCY_FRM')) {
+      this.props.businessAppReviewStore.setFormData('CONTINGENCY_FRM', 'review.contingencies');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.contingencies.managerOverview');
   }
   toggleConfirmModal = (e, index, formName) => {
