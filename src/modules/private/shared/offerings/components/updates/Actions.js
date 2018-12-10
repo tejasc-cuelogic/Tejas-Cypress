@@ -5,7 +5,7 @@ import { Button } from 'semantic-ui-react';
 
 const Actions = observer((props) => {
   const {
-    save, meta, isManager, isPending, isPublished, edit, editForm, deleteUpdate, id,
+    save, meta, isManager, isPending, isPublished, edit, editForm, deleteUpdate, id, cancelUpdate,
   } = props;
   return (
     <Aux>
@@ -71,6 +71,15 @@ const Actions = observer((props) => {
             content="Edit"
           />
         </Button.Group>
+      }
+      {id === 'new' &&
+        <Button
+          inverted
+          color="red"
+          onClick={cancelUpdate}
+          content="Cancel"
+          disabled={!meta.isValid}
+        />
       }
     </Aux>
   );

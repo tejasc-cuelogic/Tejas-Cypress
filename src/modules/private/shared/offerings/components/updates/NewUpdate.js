@@ -49,6 +49,9 @@ export default class NewUpdate extends Component {
   edit = () => {
     this.setState({ editForm: true });
   }
+  cancelUpdate = () => {
+    this.props.history.push(this.props.refLink);
+  }
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, loadingCurrentUpdate,
@@ -76,6 +79,7 @@ export default class NewUpdate extends Component {
             edit={this.edit}
             deleteUpdate={this.showConfirmModal}
             id={this.props.id}
+            cancelUpdate={this.cancelUpdate}
           />
         </Header>
         <Divider hidden />
@@ -111,11 +115,6 @@ export default class NewUpdate extends Component {
                       <Link to="/"><Icon className="ns-envelope" />Send test email to me</Link>
                     </List.Item>
                   </List>
-                </Card.Content>
-              </Card>
-              <Card fluid>
-                <Card.Content>
-                  <h4>Chat box will be here</h4>
                 </Card.Content>
               </Card>
               {this.props.match.url.includes('engagement') &&

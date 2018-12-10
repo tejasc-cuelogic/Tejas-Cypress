@@ -2390,3 +2390,27 @@ export const ADMIN_DOCUMENTATION = {
     lastModifiedDate: '',
   },
 };
+
+export const POC_DETAILS = {
+  poc: {
+    value: '',
+    label: 'POC email address',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  name: {
+    value: '',
+    label: 'Lead name',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  daysTillLaunch: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+};

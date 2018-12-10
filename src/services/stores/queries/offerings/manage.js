@@ -23,6 +23,18 @@ export const allOfferings = gql`
       keyTerms {
         legalBusinessName
       }
+      issuerDetails {
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+       phone {
+        number
+      } 
+      }
       offering {
         launch {
           targetDate
@@ -63,6 +75,18 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       previewPassword
+      issuerDetails {
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+       phone {
+        number
+      } 
+      }
       keyTerms {
         revSharePercentageDescription
         useOfProceedFootnote

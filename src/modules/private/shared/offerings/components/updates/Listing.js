@@ -35,7 +35,7 @@ export default class Listing extends Component {
                 this.props.data.map(record => (
                   <Table.Row key={record.id}>
                     <Table.Cell>
-                      <Modal dimmer="inverted" onClose={this.close} closeOnDimmerClick={false} size="large" trigger={<Button className="link-button" >{record.title}</Button>} closeIcon >
+                      <Modal dimmer="inverted" closeOnEscape={false} onClose={this.close} closeOnDimmerClick={false} size="large" trigger={<Button className="link-button" >{record.title}</Button>} closeIcon >
                         <NewUpdate
                           refLink={this.props.match.url}
                           id={record.id}
