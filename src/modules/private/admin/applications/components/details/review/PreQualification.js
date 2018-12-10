@@ -12,7 +12,9 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @observer
 export default class PreQual extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('JUSTIFICATIONS_FRM', 'review.preQualification');
+    if (!this.props.businessAppReviewStore.initLoad.includes('JUSTIFICATIONS_FRM')) {
+      this.props.businessAppReviewStore.setFormData('JUSTIFICATIONS_FRM', 'review.preQualification');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.preQualification.managerOverview');
   }
   addJustification = (e) => {

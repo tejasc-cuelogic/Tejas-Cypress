@@ -14,7 +14,9 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 export default class Offer extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', true);
-    this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
+    if (!this.props.businessAppReviewStore.initLoad.includes('OFFERS_FRM')) {
+      this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'offers.managerOverview');
   }
   onFileDrop = (files, name) => {

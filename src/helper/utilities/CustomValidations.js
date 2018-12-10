@@ -7,6 +7,7 @@ class CustomValidations extends Component {
   loadCustomValidations = (form) => {
     const currentForm = form;
     Validator.register('maskedField', (value, requirement) => value.toString().length === parseInt(requirement, 10));
+    Validator.register('maxVal', (value, requirement) => parseInt(value, 10) <= parseInt(requirement, 10));
     /* Optional field validation register */
     Validator.register('optional', () => true);
 
