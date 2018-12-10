@@ -78,7 +78,9 @@ const AddMore = ({
 @observer
 export default class Miscellaneous extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('MISCELLANEOUS_FRM', 'review.miscellaneous');
+    if (!this.props.businessAppReviewStore.initLoad.includes('MISCELLANEOUS_FRM')) {
+      this.props.businessAppReviewStore.setFormData('MISCELLANEOUS_FRM', 'review.miscellaneous');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.miscellaneous.managerOverview');
   }
   onFileDrop = (files, name, index) => {
@@ -191,6 +193,7 @@ export default class Miscellaneous extends Component {
                   <Table.Cell>
                     <DropZone
                       size="small"
+                      hideFields={isReadonly}
                       className={isReadonly ? 'display-only secondary' : 'secondary'}
                       disabled={isReadonly}
                       name="docDetails"
