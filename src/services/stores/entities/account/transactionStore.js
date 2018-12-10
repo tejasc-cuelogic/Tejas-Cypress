@@ -2,7 +2,6 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
-import { GqlClient as clientStub } from '../../../../api/gcoolApi';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { allTransactions, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
@@ -45,21 +44,28 @@ export class TransactionStore {
     this.requestState.page = page || this.requestState.page;
     this.requestState.perPage = first || this.requestState.perPage;
     this.requestState.skip = skip || this.requestState.skip;
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const { userDetails } = userDetailsStore;
     this.data = graphql({
-      client: clientStub,
+      client,
       query: allTransactions,
-      variables: { filters: params, first: first || this.requestState.perPage, skip },
+      variables: {
+        filters: params,
+        first: first || this.requestState.perPage,
+        skip,
+        accountId: account.details.accountId,
+        userId: userDetails.id,
+      },
     });
   }
 
   @computed get getAllTransactions() {
-    return (this.data && this.data.data.allTransactions &&
-      toJS(this.data.data.allTransactions)) || [];
+    return (this.data && this.data.data.getAccountTransactions &&
+      toJS(this.data.data.getAccountTransactions)) || [];
   }
 
   @computed get totalRecords() {
-    return (this.data && this.data.data._allTransactionsMeta &&
-      this.data.data._allTransactionsMeta.count) || 0;
+    return this.getAllTransactions.length || 0;
   }
 
   @computed get loading() {
@@ -72,13 +78,9 @@ export class TransactionStore {
 
   @action
   transact = (amount, operation) => {
-    if (operation) {
-      this.cash = this.cash + parseFloat(operation === 'add' ? amount : -amount);
-      this.cash = !this.cash ? 0.00 : this.cash;
-    } else {
-      this.cash = parseFloat(amount);
-      this.cash = !this.cash ? 0.00 : this.cash;
-    }
+    this.cash = operation ? (this.cash + parseFloat(operation === 'add' ? amount : -amount)) :
+      parseFloat(amount);
+    this.cash = !this.cash ? 0.00 : this.cash;
   }
 
   @action

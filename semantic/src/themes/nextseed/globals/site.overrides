@@ -1616,9 +1616,9 @@ div.login-form {
 	.ui.button.link-button{
 		padding:@11px 0;
 	}
-	&.more{
-		background-color:@neutral-offwhite;
-	}
+	// &.more{
+	// 	background-color:@neutral-offwhite;
+	// }
 }
 .filter-meta{
 	background-color:@neutral;
