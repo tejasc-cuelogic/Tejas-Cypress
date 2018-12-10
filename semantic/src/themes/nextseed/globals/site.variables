@@ -993,7 +993,7 @@
 @neutral-middark:#676A73;
 @neutral-offdark:#CDCDD1;             //  @neutral-light
 @neutral-darkwhite:#E6E6E8;           //  @neutral-lighter
-@neutral-midwhite:#E9ECF0;            //  @neutral-lightest
+@neutral-midwhite:#EDEEF2;            //  @neutral-lightest
 @neutral-offwhite:#F7F8FC;            //  @neutral-lighten
 
 @commonShadow:0px 1px 1px @thumbInactiveBackground;
