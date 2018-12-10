@@ -2392,24 +2392,26 @@ export const ADMIN_DOCUMENTATION = {
 };
 
 export const POC_DETAILS = {
-  poc: {
+  address: {
     value: '',
-    label: 'POC email address',
+    label: 'POC Email Address',
+    objRef: 'issuerDetails.email',
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
   },
   name: {
     value: '',
-    label: 'Lead name',
+    label: 'Lead Name',
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  daysTillLaunch: {
+  targetDate: {
     value: '',
     label: 'Launch Date',
     error: undefined,
+    objRef: 'offering.launch',
     rule: 'string',
     placeHolder: 'Enter here',
   },

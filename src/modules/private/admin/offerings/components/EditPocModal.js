@@ -7,7 +7,7 @@ import { FormInput, MaskedInput } from '../../../../../theme/form';
 @observer
 export default class EditOffering extends React.Component {
   componentWillMount() {
-    // this.props.offeringCreationStore.setFormData('POC_DETAILS', '');
+    this.props.offeringCreationStore.setFormData('POC_DETAILS_FRM', '');
   }
     handleCloseModal = () => {
       this.props.history.push(this.props.refLink);
@@ -17,7 +17,7 @@ export default class EditOffering extends React.Component {
         updateOffering,
         currentOfferingId,
       } = this.props.offeringCreationStore;
-      updateOffering(currentOfferingId, null, 'editForm');
+      updateOffering(currentOfferingId, null, 'editPocForm');
       this.props.history.push(this.props.refLink);
     }
     render() {
@@ -32,7 +32,7 @@ export default class EditOffering extends React.Component {
           <Modal.Content>
             <Form onSubmit={() => this.handleSubmitForm()}>
               {
-              ['poc', 'name'].map(field => (
+              ['address', 'name'].map(field => (
                 <FormInput
                   name={field}
                   fielddata={POC_DETAILS_FRM.fields[field]}
@@ -41,8 +41,8 @@ export default class EditOffering extends React.Component {
               ))
             }
               <MaskedInput
-                name="daysTillLaunch"
-                fielddata={POC_DETAILS_FRM.fields.daysTillLaunch}
+                name="targetDate"
+                fielddata={POC_DETAILS_FRM.fields.targetDate}
                 changed={(values, name) => maskChange(values, 'POC_DETAILS_FRM', name)}
                 dateOfBirth
               />

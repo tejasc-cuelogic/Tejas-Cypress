@@ -729,6 +729,7 @@ export class OfferingCreationStore {
       RISK_FACTORS_FRM: { isMultiForm: false },
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
+      POC_DETAILS_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -836,13 +837,17 @@ export class OfferingCreationStore {
     successMsg = undefined, fromS3 = false,
   ) => {
     uiStore.setProgress();
+    const variables = {
+      id,
+      offeringDetails: payload,
+    };
+    if (keyName === 'editPocForm') {
+      variables.poc = this.POC_DETAILS_FRM.fields.address.value;
+    }
     client
       .mutate({
         mutation: updateOffering,
-        variables: {
-          id,
-          offeringDetails: payload,
-        },
+        variables,
       })
       .then(() => {
         this.removeUploadedFiles(fromS3);
@@ -937,13 +942,25 @@ export class OfferingCreationStore {
         payloadData.offering = cleanDeep(payloadData.offering);
         payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
         payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
+      } else if (keyName === 'editPocForm') {
+        payloadData.offering = {};
+        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
+        payloadData.lead = { name: this.POC_DETAILS_FRM.fields.name.value };
+        payloadData.offering = mergeWith(
+          toJS(getOfferingById.offering),
+          payloadData.offering,
+          this.mergeCustomize,
+        );
+        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
+        payloadData.offering = cleanDeep(payloadData.offering);
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    if (keyName !== 'contingencies' && keyName !== 'editForm') {
+    if (keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
