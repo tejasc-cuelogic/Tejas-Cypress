@@ -24,6 +24,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       }
       keyTerms {
         regulation
+        offeringDisclaimer
         shorthandBusinessName
         legalBusinessName
         securities
@@ -57,6 +58,7 @@ export const campaignDetailsQuery = gql`
     }
     keyTerms {
       regulation
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity
@@ -363,6 +365,7 @@ query getOfferingById($id: ID) {
     offeringSlug
     keyTerms {
       regulation
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity

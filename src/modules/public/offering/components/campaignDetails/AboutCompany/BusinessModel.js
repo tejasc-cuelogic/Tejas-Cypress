@@ -22,7 +22,7 @@ class BusinessModel extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          {<Image64 srcUrl={businessModelImage} />}
+          {<Image64 srcUrl={businessModelImage} fluid />}
         </Segment>
       </Grid.Column>
     );

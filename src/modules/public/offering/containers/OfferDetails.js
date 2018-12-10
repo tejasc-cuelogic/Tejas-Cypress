@@ -56,7 +56,7 @@ class offerDetails extends Component {
   render() {
     const { match, campaignStore, location } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
-    const { details, campaignSideBarShow } = campaignStore;
+    const { details, campaignSideBarShow, campaign } = campaignStore;
     if (this.state.showPassDialog) {
       return <DevPassProtected offerPreview authPreviewOffer={this.authPreviewOffer} />;
     }
@@ -92,7 +92,7 @@ class offerDetails extends Component {
             <Route component={NotFound} />
           </Switch>
           <Responsive minWidth={768} as={Aux}>
-            <Footer path={location.pathname} />
+            <Footer path={location.pathname} campaign={campaign} />
           </Responsive>
         </div>
       </div>
