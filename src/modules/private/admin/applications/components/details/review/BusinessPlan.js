@@ -20,7 +20,9 @@ const AddMore = ({
 @observer
 export default class BusinessPlan extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('BUSINESS_PLAN_FRM', 'review.businessPlan');
+    if (!this.props.businessAppReviewStore.initLoad.includes('BUSINESS_PLAN_FRM')) {
+      this.props.businessAppReviewStore.setFormData('BUSINESS_PLAN_FRM', 'review.businessPlan');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.businessPlan.managerOverview');
   }
   onFileDrop = (files, name, index) => {
@@ -140,6 +142,7 @@ export default class BusinessPlan extends Component {
                   <Form.Group widths={3}>
                     <Form.Field>
                       <DropZone
+                        hideFields={isReadonly}
                         containerclassname={isReadonly ? 'display-only' : ''}
                         disabled={isReadonly}
                         name="experienceUpload"
@@ -151,6 +154,7 @@ export default class BusinessPlan extends Component {
                     </Form.Field>
                     <Form.Field>
                       <DropZone
+                        hideFields={isReadonly}
                         containerclassname={isReadonly ? 'display-only' : ''}
                         disabled={isReadonly}
                         name="creditUpload"

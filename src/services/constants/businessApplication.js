@@ -193,10 +193,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {
-    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
+    value: '', label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
   },
   businessAgeMonths: {
-    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required' },
+    value: '', label: 'Months', error: undefined, rule: 'maxVal:11|required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required', maxVal: 'Please enter valid value.' },
   },
   franchiseHolder: {
     value: '',

@@ -13,7 +13,9 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @observer
 export default class Overview extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint');
+    if (!this.props.businessAppReviewStore.initLoad.includes('OVERVIEW_FRM')) {
+      this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.overview.managerOverview');
   }
   addCriticalPoint = (e) => {

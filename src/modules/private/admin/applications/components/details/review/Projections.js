@@ -11,7 +11,9 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @observer
 export default class Projections extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('PROJECTIONS_FRM', 'review.projections');
+    if (!this.props.businessAppReviewStore.initLoad.includes('PROJECTIONS_FRM')) {
+      this.props.businessAppReviewStore.setFormData('PROJECTIONS_FRM', 'review.projections');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.projections.managerOverview');
   }
   onBenchmarkDrop = (files) => {
@@ -69,6 +71,7 @@ export default class Projections extends Component {
           }
           <DropZone
             containerclassname={isReadonly ? 'display-only' : ''}
+            hideFields={isReadonly}
             disabled={isReadonly}
             name="revenueCheckUpload"
             fielddata={PROJECTIONS_FRM.fields.revenueCheckUpload}
@@ -97,6 +100,7 @@ export default class Projections extends Component {
           <DropZone
             containerclassname={isReadonly ? 'display-only' : ''}
             disabled={isReadonly}
+            hideFields={isReadonly}
             name="benchmarkUpload"
             fielddata={PROJECTIONS_FRM.fields.benchmarkUpload}
             ondrop={this.onBenchmarkDrop}
