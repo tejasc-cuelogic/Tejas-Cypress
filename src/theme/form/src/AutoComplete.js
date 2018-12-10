@@ -24,7 +24,7 @@ export default class AutoComplete extends Component {
       >
         <label>{label}</label>
         {props.readOnly ?
-          <p className="commet-area">{value}</p> :
+          <p className="address-line">{value}</p> :
           <Autocomplete
             {...props}
             onPlaceSelected={(place) => {
