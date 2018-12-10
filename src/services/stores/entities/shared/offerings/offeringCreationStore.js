@@ -946,7 +946,9 @@ export class OfferingCreationStore {
         payloadData.offering = {};
         payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
-        payloadData.lead = { name: this.POC_DETAILS_FRM.fields.name.value };
+        if (this.POC_DETAILS_FRM.fields.name.value) {
+          payloadData.lead = { name: this.POC_DETAILS_FRM.fields.name.value };
+        }
         payloadData.offering = mergeWith(
           toJS(getOfferingById.offering),
           payloadData.offering,

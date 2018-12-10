@@ -47,7 +47,7 @@ export default class EditOffering extends React.Component {
                 dateOfBirth
               />
               <div className="center-align">
-                <Button className="relaxed" primary >Save Changes</Button>
+                <Button className="relaxed" disabled={!POC_DETAILS_FRM.meta.isValid} primary >Save Changes</Button>
               </div>
             </Form>
           </Modal.Content>
