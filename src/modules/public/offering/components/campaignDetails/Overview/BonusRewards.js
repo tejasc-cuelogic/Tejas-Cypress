@@ -8,6 +8,7 @@ import ChartPieForBonusRewards from './ChartPieForBonusRewards';
 
 const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
 const bonusDetails = [{ name: '10', value: 1 }, { name: '10', value: 2 }];
+
 class BonusRewards extends Component {
   render() {
     const { isTabletLand, refLink, campaign } = this.props;

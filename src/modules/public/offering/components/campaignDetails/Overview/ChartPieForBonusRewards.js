@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Label, Sector } from 'recharts';
+
 /*
   Reference:
   http://recharts.org/en-US/examples/CustomActiveShapePieChart
