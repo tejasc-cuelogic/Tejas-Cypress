@@ -2394,7 +2394,8 @@ export const ADMIN_DOCUMENTATION = {
 export const POC_DETAILS = {
   address: {
     value: '',
-    label: 'POC Email Address',
+    label: 'POC',
+    tooltip: 'Email Address',
     objRef: 'issuerDetails.email',
     error: undefined,
     rule: 'string|required|email',

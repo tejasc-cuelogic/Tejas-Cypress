@@ -5,36 +5,58 @@ import { Button } from 'semantic-ui-react';
 
 const Actions = observer((props) => {
   const {
-    save, meta, isManager, isPending, isPublished, edit, editForm, deleteUpdate, id, cancelUpdate,
+    save, meta, isManager, isPending, isPublished,
+    edit, editForm, deleteUpdate, id, cancelUpdate, cancelChanges,
   } = props;
   return (
     <Aux>
       {(isManager && !isPublished) || editForm ?
         <Button.Group compact floated="right">
-          {id !== 'new' &&
           <Button
             inverted
             color="red"
-            onClick={deleteUpdate}
-            content="Delete"
-            disabled={!meta.isValid}
+            onClick={editForm ? cancelChanges : cancelUpdate}
+            content="Cancel"
           />
+          {id !== 'new' &&
+            <Button
+              inverted
+              color="red"
+              onClick={deleteUpdate}
+              content="Delete"
+            />
           }
           <Button
             inverted
             onClick={() => save('DRAFT')}
             color="green"
-            content="Save as draft"
+            content={editForm ? 'Save and Unpublish' : 'Save as draft'}
             disabled={!meta.isValid}
           />
           <Button
             primary
             onClick={() => save('PUBLISHED')}
-            content="Publish"
+            content={editForm ? 'Save and Publish' : 'Publish'}
             disabled={!meta.isValid}
           />
         </Button.Group> :
         <Button.Group compact floated="right">
+          {!isManager &&
+            <Button
+              inverted
+              color="red"
+              onClick={cancelUpdate}
+              content="Cancel"
+            />
+          }
+          {id !== 'new' && !isPublished &&
+            <Button
+              inverted
+              color="red"
+              onClick={deleteUpdate}
+              content="Delete"
+            />
+          }
           {!isPending && !isPublished &&
             <Button
               inverted
@@ -45,24 +67,29 @@ const Actions = observer((props) => {
             />
           }
           {!isPublished &&
-          <Button
-            primary
-            onClick={() => save('PENDING')}
-            content={isPending ? 'Awaiting Manager Approval' : 'Submit for Approval'}
-            disabled={!meta.isValid || isPending}
-          />
+            <Button
+              primary
+              onClick={() => save('PENDING')}
+              content={isPending ? 'Awaiting Manager Approval' : 'Submit for Approval'}
+              disabled={!meta.isValid || isPending}
+            />
           }
         </Button.Group>
       }
       {isManager && isPublished && !editForm &&
         <Button.Group compact floated="right">
+          <Button
+            inverted
+            color="red"
+            onClick={cancelUpdate}
+            content="Cancel"
+          />
           {id !== 'new' &&
             <Button
               inverted
               color="red"
               onClick={deleteUpdate}
               content="Delete"
-              disabled={!meta.isValid}
             />
           }
           <Button
@@ -71,15 +98,6 @@ const Actions = observer((props) => {
             content="Edit"
           />
         </Button.Group>
-      }
-      {id === 'new' &&
-        <Button
-          inverted
-          color="red"
-          onClick={cancelUpdate}
-          content="Cancel"
-          disabled={!meta.isValid}
-        />
       }
     </Aux>
   );

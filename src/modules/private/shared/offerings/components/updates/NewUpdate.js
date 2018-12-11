@@ -52,6 +52,10 @@ export default class NewUpdate extends Component {
   cancelUpdate = () => {
     this.props.history.push(this.props.refLink);
   }
+  cancelChanges = () => {
+    this.initiateFlow(this.props.id);
+    this.setState({ editForm: false });
+  }
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, loadingCurrentUpdate,
@@ -68,7 +72,9 @@ export default class NewUpdate extends Component {
       <Modal.Content className="transaction-details">
         <Header as="h3">
           {isNew ? 'New' : 'Edit'} Update
-          <Status status={PBUILDER_FRM.fields.status.value} />
+          {!isNew &&
+            <Status status={PBUILDER_FRM.fields.status.value} />
+          }
           <Actions
             save={this.save}
             meta={PBUILDER_FRM.meta}
@@ -80,6 +86,7 @@ export default class NewUpdate extends Component {
             deleteUpdate={this.showConfirmModal}
             id={this.props.id}
             cancelUpdate={this.cancelUpdate}
+            cancelChanges={this.cancelChanges}
           />
         </Header>
         <Divider hidden />
