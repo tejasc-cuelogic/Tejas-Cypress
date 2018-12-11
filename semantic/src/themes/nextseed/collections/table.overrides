@@ -391,6 +391,9 @@
         &.balance-half{
             width:~"calc(50% - 120px)";
             flex-grow:0;
+            &:nth-child(2){
+                margin-right:auto;
+            }
             >a.link{
                 float:left;
                 max-width:100%;
