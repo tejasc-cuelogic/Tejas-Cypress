@@ -41,7 +41,7 @@ export default class EditOffering extends React.Component {
           }
           <Form onSubmit={() => this.handleSubmitForm()}>
             {
-            ['address', 'name'].map(field => (
+            ['address'].map(field => ( // "name" is skipped due to lead id issue
               <FormInput
                 name={field}
                 fielddata={POC_DETAILS_FRM.fields[field]}
