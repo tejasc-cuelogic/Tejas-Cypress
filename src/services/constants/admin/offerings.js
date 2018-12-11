@@ -47,7 +47,7 @@ export const KEY_TERMS = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Shorthand Name of Business',
+    label: 'Short hand Name of Business',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
@@ -2388,5 +2388,33 @@ export const ADMIN_DOCUMENTATION = {
     objType: 'FileObjectType',
     stepName: 'DOCUMENTS_LEGAL_PROMISSORY_NOTE',
     lastModifiedDate: '',
+  },
+};
+
+export const POC_DETAILS = {
+  address: {
+    value: '',
+    label: 'POC',
+    tooltip: 'Email Address',
+    objRef: 'issuerDetails.email',
+    error: undefined,
+    rule: 'string|required|email',
+    placeHolder: 'Enter here',
+  },
+  name: {
+    value: '',
+    label: 'Lead Name',
+    error: undefined,
+    objRef: 'lead',
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  targetDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    objRef: 'offering.launch',
+    rule: 'string',
+    placeHolder: 'Enter here',
   },
 };

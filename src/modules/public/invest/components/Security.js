@@ -29,12 +29,12 @@ const Security = () => (
                   <p>
                     All securities-related activity is conducted by NextSeed Securities, LLC,
                     an affiliate of NextSeed, and a registered broker dealer, and member of{' '}
-                    <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
+                    <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
                     {' '}and SIPC (checkout our background on{' '}
                     <a href="https://brokercheck.finra.org/" target="_blank" rel="noopener noreferrer">BrokerCheck</a>
                     ) or NextSeed US
                     LLC, a registered funding portal and member of{' '}
-                    <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
+                    <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
                     {' '}NextSeed US LLC was the first registered funding portal with the SEC and closed the
                     first-ever Regulation Crowdfunding offering.
                   </p>

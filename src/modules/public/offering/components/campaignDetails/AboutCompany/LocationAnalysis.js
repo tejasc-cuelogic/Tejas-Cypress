@@ -22,7 +22,7 @@ class LocationAnalysis extends Component {
               <Icon className="ns-chevron-right" color="green" />
             </Link>
           </Header>
-          {<Image64 srcUrl={locationImage} />}
+          {<Image64 fluid srcUrl={locationImage} />}
         </Segment>
       </Grid.Column>
     );
