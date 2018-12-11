@@ -241,52 +241,52 @@ export class Auth {
     })
       .then(() => {
         Helper.toast('Thanks! You have successfully signed up to the NextSeed.', 'success');
-        if (!userStore.currentUser) {
-          const { email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
-          const authenticationDetails = new AWSCognito.AuthenticationDetails({
-            Username: email, Password: password,
-          });
-
-          this.cognitoUser = new AWSCognito.CognitoUser({
-            Username: email, Pool: this.userPool,
-          });
-
-          return new Promise((res, rej) => {
-            this.cognitoUser.authenticateUser(authenticationDetails, {
-              onSuccess: result => res({ data: result }),
-              newPasswordRequired: (result) => {
-                res({ data: result, action: 'newPassword' });
-              },
-              onFailure: err => rej(err),
+        if (authStore.SIGNUP_FRM.fields.role.value === 'investor') {
+          if (!userStore.currentUser) {
+            const { email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
+            const authenticationDetails = new AWSCognito.AuthenticationDetails({
+              Username: email, Password: password,
             });
-          })
-            .then((result) => {
-              authStore.setUserLoggedIn(true);
-              if (result.action && result.action === 'newPassword') {
-                authStore.setEmail(result.data.email);
-                authStore.setCognitoUserSession(this.cognitoUser.Session);
-                authStore.setNewPasswordRequired(true);
-              } else {
-                const { data } = result;
-                // Extract JWT from token
-                commonStore.setToken(data.idToken.jwtToken);
-                userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-                if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
-                  commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE'));
-                }
-                userDetailsStore.getUser(userStore.currentUser.sub);
-                AWS.config.region = AWS_REGION;
-                if (userStore.isCurrentUserWithRole('admin')) {
-                  this.setAWSAdminAccess(data.idToken.jwtToken);
-                }
-              }
-              uiStore.setProgress(false);
+            this.cognitoUser = new AWSCognito.CognitoUser({
+              Username: email, Pool: this.userPool,
+            });
+            return new Promise((res, rej) => {
+              this.cognitoUser.authenticateUser(authenticationDetails, {
+                onSuccess: result => res({ data: result }),
+                newPasswordRequired: (result) => {
+                  res({ data: result, action: 'newPassword' });
+                },
+                onFailure: err => rej(err),
+              });
             })
-            .catch((err) => {
-              uiStore.setProgress(false);
-              uiStore.setErrors(this.simpleErr(err));
-              throw err;
-            });
+              .then((result) => {
+                authStore.setUserLoggedIn(true);
+                if (result.action && result.action === 'newPassword') {
+                  authStore.setEmail(result.data.email);
+                  authStore.setCognitoUserSession(this.cognitoUser.Session);
+                  authStore.setNewPasswordRequired(true);
+                } else {
+                  const { data } = result;
+                  // Extract JWT from token
+                  commonStore.setToken(data.idToken.jwtToken);
+                  userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+                  if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
+                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE'));
+                  }
+                  userDetailsStore.getUser(userStore.currentUser.sub);
+                  AWS.config.region = AWS_REGION;
+                  if (userStore.isCurrentUserWithRole('admin')) {
+                    this.setAWSAdminAccess(data.idToken.jwtToken);
+                  }
+                }
+                uiStore.setProgress(false);
+              })
+              .catch((err) => {
+                uiStore.setProgress(false);
+                uiStore.setErrors(this.simpleErr(err));
+                throw err;
+              });
+          }
         }
         return null;
       })
