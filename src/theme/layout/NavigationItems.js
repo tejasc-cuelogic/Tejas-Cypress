@@ -26,8 +26,8 @@ export class NavItems extends Component {
       return subNavigations.find(s => location.pathname.startsWith(`/${s.to}`));
     }
     return ((to !== '' && this.state.active === to) ||
-    ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
-    (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
+      ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
+        (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
   doNothing = () => console.log('nothing');
   render() {
@@ -75,27 +75,30 @@ export class NavItems extends Component {
               ))}
             </Dropdown.Menu>
           </Dropdown>
-        ) : (
-          <Menu.Item
-            key={item.to}
-            name={item.to}
-            className={isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}
-            as={NavLink}
-            onClick={isMobile ? onToggle : this.doNothing}
-            to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
-          >
-            {item.icon &&
-              <Icon className={item.icon} />
-            }
-            {item.to === 'messages' &&
-              <Label circular color="red" size="mini" horizontal>3</Label>
-            }
-            <span>{item.title}</span>
-            {item.to === 'updates' || item.to === 'comments' ?
-              <Label circular color="blue" size="small">{this.props.updates && this.props.updates.length ? this.props.updates.length : 0 }</Label> : null
-            }
-          </Menu.Item>
-        )}
+        ) :
+          item.title === 'Bonus Rewards' && !this.props.bonusRewards ?
+            null
+            : (
+              <Menu.Item
+                key={item.to}
+                name={item.to}
+                className={isMobile && item.title === 'Home' && location.pathname !== '/' ? 'no-active' : ''}
+                as={NavLink}
+                onClick={isMobile ? onToggle : this.doNothing}
+                to={`${(isApp) ? '/app' : (this.props.sub ? match.url : '')}/${item.to}`}
+              >
+                {item.icon &&
+                  <Icon className={item.icon} />
+                }
+                {item.to === 'messages' &&
+                  <Label circular color="red" size="mini" horizontal>3</Label>
+                }
+                <span>{item.title}</span>
+                {item.to === 'updates' || item.to === 'comments' ?
+                  <Label circular color="blue" size="small">{this.props.updates && this.props.updates.length ? this.props.updates.length : 0}</Label> : null
+                }
+              </Menu.Item>
+            )}
       </Aux>
     ));
   }
@@ -129,8 +132,8 @@ export class NavigationItems extends Component {
         fixed="top"
         // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
-        // className={`${navStatus === 'sub' ? 'active' : ''}
-        // ${bottomPassed ? { subNavStatus } : ''}`}
+      // className={`${navStatus === 'sub' ? 'active' : ''}
+      // ${bottomPassed ? { subNavStatus } : ''}`}
       >
         <Container fluid>
           <Menu.Item as={Link} to="/" header>
@@ -156,27 +159,27 @@ export class NavigationItems extends Component {
               <Button.Group>
                 <Button as={Link} to="/business/how-it-works" inverted color="red">Cancel</Button>
                 {isPrequalQulify &&
-                <SubmitButton
-                  canSubmitApp={canSubmitApp}
-                  click={preQualSubmit}
-                  loading={loading}
-                />}
+                  <SubmitButton
+                    canSubmitApp={canSubmitApp}
+                    click={preQualSubmit}
+                    loading={loading}
+                  />}
               </Button.Group>
             </Menu.Item>
-          : !location.pathname.includes('/business-application') &&
+            : !location.pathname.includes('/business-application') &&
             (
-            !currentUser ? (
-              <Menu.Item as={Link} onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`}>
-                <Button secondary compact>{stepInRoute.title}</Button>
-              </Menu.Item>
-          ) : (
-            <Menu.Item
-              as={Link}
-              to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-            >
-              <Button secondary compact>Dashboard</Button>
-            </Menu.Item>
-          ))}
+              !currentUser ? (
+                <Menu.Item as={Link} onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`}>
+                  <Button secondary compact>{stepInRoute.title}</Button>
+                </Menu.Item>
+              ) : (
+                <Menu.Item
+                  as={Link}
+                  to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                >
+                  <Button secondary compact>Dashboard</Button>
+                </Menu.Item>
+                ))}
         </Container>
       </Menu>
     );
