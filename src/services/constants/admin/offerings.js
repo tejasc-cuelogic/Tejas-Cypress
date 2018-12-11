@@ -2393,14 +2393,14 @@ export const ADMIN_DOCUMENTATION = {
 
 export const DATA_ROOM = {
   documents: [{
-    documentName: {
+    name: {
       label: 'Document Name',
       value: '',
       error: undefined,
       rule: 'required|string',
       placeHolder: 'Enter here',
     },
-    dataRoom: {
+    upload: {
       value: '',
       label: '',
       error: undefined,
