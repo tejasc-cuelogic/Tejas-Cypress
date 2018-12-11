@@ -38,7 +38,7 @@ const Mission = () => (
                 The team behind NextSeed created the first registered funding portal with the
                 Securities & Exchange Commission (SEC) and became a member of the Financial
                 Industry Regulatory Authority{' '}
-                (<a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
+                (<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
                 {' '}The portal closed the first-ever regulation crowdfunding offering in the country.
                 Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered
                 broker-dealer and FINRA member.

@@ -97,8 +97,8 @@ export default class Summary extends Component {
                     <Table.Cell>Identification:</Table.Cell>
                     <Table.Cell>
                       {IDENTITY_FRM.fields.identityDoc.value ?
-                        <span className="positive-text"><b>Uploaded</b></span> :
-                        <span className="negative-text"><b>Not Uploaded</b></span>}
+                        <span>Uploaded</span> :
+                        <span className="negative-text">Not Uploaded</span>}
                     </Table.Cell>
                   </Table.Row>
                   {fundingOption && fundingOption.value === 0 &&
@@ -115,26 +115,31 @@ export default class Summary extends Component {
         <div className="center-align">
           <Button primary size="large" onClick={() => this.handleCreateAccount()} className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>
         </div>
-        <p className="center-align mt-30">
-          <b>
-            By continuing, I acknowledge that I have read and agree to the
-            terms of the{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
-            CrowdPay Custodial Account Agreement
-            </span>,{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
-            Substitute IRS Form W-9 Certification
-            </span>{' '}and the{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
-            NextSeed Membership Agreement
-            </span>.
-            <IframeModal
-              open={this.state.open}
-              close={this.closeModal}
-              srcUrl={embedUrl}
-              loading={docLoading}
-            />
-          </b>
+        <p className="center-align mt-30 grey-header">
+          By continuing, I acknowledge that I have read and agree to the
+          terms of the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+          CrowdPay Custodial Account Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+          NextSeed Funding Portal Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+          NextSeed Broker-Dealer Investor Agreement
+          </span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+          Substitute IRS Form W-9 Certification
+          </span>.
+          {/* <span className="highlight-text" style={{ cursor: 'pointer' }}
+          onClick={() => this.openModal('membershipAgreement')}>
+          NextSeed Membership Agreement
+          </span>. */}
+          <IframeModal
+            open={this.state.open}
+            close={this.closeModal}
+            srcUrl={embedUrl}
+            loading={docLoading}
+          />
         </p>
       </div>
     );
