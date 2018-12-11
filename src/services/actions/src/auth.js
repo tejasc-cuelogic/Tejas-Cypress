@@ -1,6 +1,7 @@
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
 import camel from 'to-camel-case';
+import cookie from 'react-cookies';
 import _ from 'lodash';
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
@@ -164,6 +165,9 @@ export class Auth {
             // Extract JWT from token
             commonStore.setToken(result.idToken.jwtToken);
             userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
+            if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
+              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE'));
+            }
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
               res();
             });
@@ -267,6 +271,9 @@ export class Auth {
                 // Extract JWT from token
                 commonStore.setToken(data.idToken.jwtToken);
                 userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
+                if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
+                  commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE'));
+                }
                 userDetailsStore.getUser(userStore.currentUser.sub);
                 AWS.config.region = AWS_REGION;
                 if (userStore.isCurrentUserWithRole('admin')) {

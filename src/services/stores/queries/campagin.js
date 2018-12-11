@@ -36,6 +36,16 @@ query getOfferingList($filters: OfferingFilterInputType){
   }
 `;
 
+export const getOfferingsReferral = gql`
+query getOfferingList($filters: OfferingFilterInputType){
+    getOfferingList(filters: $filters) {
+      id
+      offeringSlug
+      referralCode
+    }
+  }
+`;
+
 export const getOfferingById = gql`
   query getOfferingById($id: ID!) {
     getOfferingDetailsById(id: $id) {
