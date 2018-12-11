@@ -1,21 +1,41 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import ReactDragList from 'react-drag-list';
 import { Form, Header, Button, Divider, Table, Icon, Confirm } from 'semantic-ui-react';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
+import ButtonGroup from '../ButtonGroup';
+
+const dataArray = [
+  {
+    color: '#FF5500',
+    title: 'Senior Product Designer',
+    text: 'Senior Product Designer',
+  },
+  {
+    color: '#5FC296',
+    title: 'Senior Animator',
+    text: 'Senior Animator',
+  },
+  {
+    color: '#2DB7F5',
+    title: 'Visual Designer',
+    text: 'Visual Designer',
+  },
+  {
+    color: '#FFAA00',
+    title: 'Computer Engineer',
+    text: 'Computer Engineer',
+  },
+];
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
 export default class DataRoom extends Component {
-  // componentWillMount() {
-  //   const { setFormData } = this.props.offeringCreationStore;
-  //   setFormData('DATA_ROOM_FRM', 'legal.dataRoom');
-  // }
-  shouldComponentUpdate(nextProps) {
-    console.log(nextProps);
-    console.log(this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents[0]);
-  }
+  state = {
+    dataSource: dataArray,
+  };
   onFileDrop = (files, name, index) => {
-    this.props.offeringCreationStore.setFileUploadDataMulitple('DATA_ROOM_FRM', 'documents', name, files, 'DOCUMENTS_LEGAL_DATAROOM', index);
+    this.props.offeringCreationStore.setFileUploadDataMulitple('DATA_ROOM_FRM', 'documents', name, files, 'DOCUMENTS_LEGAL_DATAROOM', index, true);
   }
   handleDelDoc = (field, index = undefined) => {
     this.props.offeringCreationStore.removeUploadedDataMultiple('DATA_ROOM_FRM', field, index, 'documents');
@@ -35,9 +55,33 @@ export default class DataRoom extends Component {
     const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataRoom', true, undefined);
   }
+  handleFormSubmit = (isApproved = null) => {
+    const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
+    updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataRoom', true, undefined, isApproved);
+  }
+  handleUpdate = (evt, updated) => {
+    console.log(evt); // tslint:disable-line
+    console.log(updated); // tslint:disable-line
+    // this.setState({
+    //   dataSource: [...updated, {
+    //     color: '#FFAA00',
+    //     title: 'Added Engineer',
+    //     text: 'Added Engineer',
+    //   }]
+    // })
+  }
   render() {
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
+    const access = this.props.userStore.myAccessForModule('OFFERINGS');
+    const isManager = access.asManager;
+    const { offer } = this.props.offeringsStore;
+    const submitted = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.submitted) ? offer.legal.riskFactors.submitted : null;
+    const approved = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.approved) ? offer.legal.riskFactors.approved : null;
+    const issuerSubmitted = (offer && offer.legal && offer.legal.riskFactors &&
+      offer.legal.riskFactors.issuerSubmitted) ? offer.legal.riskFactors.issuerSubmitted : null;
     const {
       DATA_ROOM_FRM,
       formArrayChange,
@@ -102,7 +146,17 @@ export default class DataRoom extends Component {
               }
             </Table.Body>
           </Table>
-          <Button onClick={this.handleSubmitDataRoom} type="button" primary content="Submit" disabled={!DATA_ROOM_FRM.meta.isValid} />
+          {/* <Button onClick={this.handleSubmitDataRoom}
+          type="button" primary content="Submit" disabled={!DATA_ROOM_FRM.meta.isValid} /> */}
+          <ButtonGroup
+            isIssuer={isIssuer}
+            submitted={submitted}
+            isManager={isManager}
+            formValid={DATA_ROOM_FRM.meta.isValid}
+            approved={approved}
+            updateOffer={this.handleFormSubmit}
+            issuerSubmitted={issuerSubmitted}
+          />
         </Form>
         <Confirm
           header="Confirm"
@@ -112,6 +166,20 @@ export default class DataRoom extends Component {
           onConfirm={() => removeData(confirmModalName, 'documents')}
           size="mini"
           className="deletion"
+        />
+        <ReactDragList
+          dataSource={this.state.dataSource}
+          rowKey="title"
+          row={(record, index) => (
+            <div key={index} style={{ color: record.color }}>
+              <div className="simple-drag-row-title">{record.title}</div>
+              <span>{record.text}</span>
+            </div>
+          )}
+          handles={false}
+          className="simple-drag"
+          rowClassName="simple-drag-row"
+          onUpdate={this.handleUpdate}
         />
       </div>
     );

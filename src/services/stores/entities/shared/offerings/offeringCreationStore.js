@@ -420,7 +420,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadDataMulitple = (form, arrayName, field, files, stepName, index = null) => {
+  setFileUploadDataMulitple =
+  (form, arrayName, field, files, stepName, index = null, multiForm = false) => {
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
@@ -433,7 +434,7 @@ export class OfferingCreationStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form);
+            this.checkFormValid(form, multiForm);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
