@@ -24,10 +24,17 @@ class BonusRewards extends Component {
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
           <Header as="h4">
-            <Link to={`${refLink}/bonus-rewards`}>
-              Bonus Rewards
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
+            {rewardsTiers && rewardsTiers.length ?
+              <Link to={`${refLink}/bonus-rewards`}>
+                Bonus Rewards
+                <Icon className="ns-chevron-right" color="green" />
+              </Link>
+              :
+              <Aux>
+                <span>Bonus Rewards</span>
+                <Icon className="ns-chevron-right" color="green" />
+              </Aux>
+            }
           </Header>
           {rewardsTiers && rewardsTiers.length ?
             (!isEarlyBirdExists ?
