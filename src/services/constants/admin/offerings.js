@@ -47,7 +47,7 @@ export const KEY_TERMS = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Shorthand Name of Business',
+    label: 'Short hand Name of Business',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',

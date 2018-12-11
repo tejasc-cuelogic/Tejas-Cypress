@@ -834,7 +834,7 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false,
+    successMsg = undefined, fromS3 = false, res, rej,
   ) => {
     uiStore.setProgress();
     const variables = {
@@ -857,10 +857,12 @@ export class OfferingCreationStore {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
         offeringsStore.getOne(id, false);
+        res();
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
+        rej();
       })
       .finally(() => {
         uiStore.setProgress(false);
@@ -881,7 +883,7 @@ export class OfferingCreationStore {
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
     approvedObj, fromS3 = false, leaderIndex,
-  ) => {
+  ) => new Promise((res, rej) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
@@ -1057,8 +1059,8 @@ export class OfferingCreationStore {
         });
       });
     }
-    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
-  }
+    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3, res, rej);
+  });
 
   @action
   getOfferingBac = (offeringId, bacType) => {
