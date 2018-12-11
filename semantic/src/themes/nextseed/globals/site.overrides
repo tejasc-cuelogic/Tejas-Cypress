@@ -117,7 +117,10 @@ h6{
 	margin-top:@7px !important;
 }
 .mr-10 {
-	margin-right: 10px;
+	margin-right: @10px;
+}
+.ml-10 {
+	margin-left: @10px;
 }
 .pull-left{
 	float:left !important;
@@ -850,7 +853,7 @@ p i.icon {
 			}
 			img {
 				border: 2px solid @fullBlack;
-				border-radius: 6px;
+				border-radius: 4px;
 			}
 			&.slick-current {
 				img {
@@ -2639,4 +2642,10 @@ p.check-extra-info{
 		color: @neutral-middark;
 		text-decoration: underline;
 	}
+}
+//IRA account creation
+.field-wrap .highlight-text.large {
+	font-size: @20px;
+	font-weight: @fontMedium;
+	vertical-align: middle;
 }

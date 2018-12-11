@@ -119,26 +119,24 @@ export default class Summary extends Component {
         <div className="center-align">
           <Button primary size="large" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm}>Confirm</Button>
         </div>
-        <p className="center-align mt-30">
-          <b>
-              By continuing, I acknowledge that I have read and agree to the
-              terms of the{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
-              CrowdPay Custodial Account Agreement
-            </span>,{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
-              Substitute IRS Form W-9 Certification
-            </span>{' '}and the{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
-              NextSeed Membership Agreement
-            </span>.
-            <IframeModal
-              open={this.state.open}
-              close={this.closeModal}
-              srcUrl={embedUrl}
-              loading={docLoading}
-            />
-          </b>
+        <p className="center-align mt-30 grey-header">
+          By continuing, I acknowledge that I have read and agree to the
+          terms of the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+            CrowdPay Custodial Account Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+            Substitute IRS Form W-9 Certification
+          </span>{' '}and the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
+            NextSeed Membership Agreement
+          </span>.
+          <IframeModal
+            open={this.state.open}
+            close={this.closeModal}
+            srcUrl={embedUrl}
+            loading={docLoading}
+          />
         </p>
       </div>
     );
