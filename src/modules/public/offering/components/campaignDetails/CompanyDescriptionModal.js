@@ -39,9 +39,9 @@ class CompanyDescriptionModal extends Component {
             }
             {campaign && campaign.media && campaign.media.heroImage
                   && campaign.media.heroImage.url ?
-                    <Image64 fluid centered className="mt-30" srcUrl={campaign.media.heroImage.url} />
+                    <Image64 fluid centered className="mt-30" srcUrl={campaign.media.heroImage.url} imgType="heroImage" />
                     :
-                    <Image fluid centered className="mt-30" src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
+                    <Image fluid centered className="mt-30" src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
               }
           </Aux>
           <Divider section />

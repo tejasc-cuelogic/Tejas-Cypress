@@ -218,7 +218,7 @@ const TermsOfUse = () => (
       <p>
         NextSeed is not a registered broker-dealer nor a registered Funding Portal. All
         securities-related activity is conducted by either (a) NextSeed Securities, an affiliate
-        of NextSeed and a registered broker dealer and member of <a className="positive-text" href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
+        of NextSeed and a registered broker dealer and member of <a className="positive-text" href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>
         /SIPC or (b) NextSeed Funding Portal, an affiliate of NextSeed and a registered
         Funding Portal member of FINRA. The provision of brokerage services offered by
         NextSeed Securities is governed by the Investor Agreements entered into between

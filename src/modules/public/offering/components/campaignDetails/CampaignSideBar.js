@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
+import { orderBy } from 'lodash';
 import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../../helper';
@@ -25,10 +26,12 @@ export default class CampaignSideBar extends Component {
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
     const updatesArr = campaign && campaign.updates &&
-     campaign.updates.length ? campaign.updates : [];
+      campaign.updates.length ? campaign.updates : [];
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(terminationDate);
+    const rewardsTiers = campaign && campaign.rewardsTierIds &&
+      campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
     return (
       <Aux>
         <div className={`${className} offering-side-menu`}>
@@ -89,7 +92,7 @@ export default class CampaignSideBar extends Component {
             <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
             <p>
               ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-              || 0} min investment
+                || 0} min investment
             </p>
             {isMobile &&
               <Button.Group compact widths="2" className="mt-30">
@@ -105,7 +108,7 @@ export default class CampaignSideBar extends Component {
           {!isMobile &&
             <Aux>
               <Menu vertical fluid>
-                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} updates={updatesArr} />
+                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} updates={updatesArr} bonusRewards={rewardsTiers} />
                 {/* <Divider />
                 <Menu.Item as={Link} to="/" className="secondary-item">
                   <Icon name="heart outline" /> Watch Deal

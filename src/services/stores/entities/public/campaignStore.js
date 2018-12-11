@@ -2,7 +2,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
 
 export class CampaignStore {
@@ -22,14 +22,26 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (publicRef) => {
+  initRequest = (publicRef, referralCode = false) => {
     const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    this.data =
-      graphql({
-        client: clientPublic,
-        query: allOfferings,
-        variables: { filters: { stage } },
-      });
+    const filters = { stage };
+    if (referralCode) {
+      filters.referralCode = referralCode;
+    }
+    return new Promise((resolve) => {
+      this.data =
+        graphql({
+          client: clientPublic,
+          query: referralCode ? getOfferingsReferral : allOfferings,
+          variables: { filters },
+          onFetch: (data) => {
+            if (data) {
+              const offering = data.getOfferingList.length && data.getOfferingList[0];
+              resolve(offering);
+            }
+          },
+        });
+    });
   }
 
   @action
