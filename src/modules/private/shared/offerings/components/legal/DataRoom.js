@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import ReactDragList from 'react-drag-list';
 import { Form, Header, Button, Divider, Table, Icon, Confirm } from 'semantic-ui-react';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
-import ButtonGroup from '../ButtonGroup';
+import ButtonGroupType2 from '../ButtonGroupType2';
 
 const dataArray = [
   {
@@ -34,6 +34,11 @@ export default class DataRoom extends Component {
   state = {
     dataSource: dataArray,
   };
+  componentWillMount() {
+    if (!this.props.offeringCreationStore.initLoad.includes('DATA_ROOM_FRM')) {
+      this.props.offeringCreationStore.setFormData('DATA_ROOM_FRM', 'legal.dataroom');
+    }
+  }
   onFileDrop = (files, name, index) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DATA_ROOM_FRM', 'documents', name, files, 'DOCUMENTS_LEGAL_DATAROOM', index, true);
   }
@@ -51,13 +56,9 @@ export default class DataRoom extends Component {
   handleLockUnlock = (index) => {
     this.props.offeringCreationStore.setAccreditedOnlyField(index);
   }
-  handleSubmitDataRoom = () => {
-    const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataRoom', true, undefined);
-  }
   handleFormSubmit = (isApproved = null) => {
     const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataRoom', true, undefined, isApproved);
+    updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
   }
   handleUpdate = (evt, updated) => {
     console.log(evt); // tslint:disable-line
@@ -76,12 +77,11 @@ export default class DataRoom extends Component {
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
     const isManager = access.asManager;
     const { offer } = this.props.offeringsStore;
-    const submitted = (offer && offer.legal && offer.legal.riskFactors &&
-      offer.legal.riskFactors.submitted) ? offer.legal.riskFactors.submitted : null;
-    const approved = (offer && offer.legal && offer.legal.riskFactors &&
-      offer.legal.riskFactors.approved) ? offer.legal.riskFactors.approved : null;
-    const issuerSubmitted = (offer && offer.legal && offer.legal.riskFactors &&
-      offer.legal.riskFactors.issuerSubmitted) ? offer.legal.riskFactors.issuerSubmitted : null;
+    const submitted = (offer && offer.legal && offer.legal.dataroom &&
+      offer.legal.dataroom.submitted) ? offer.legal.dataroom.submitted : null;
+    const approved = (offer && offer.legal && offer.legal.dataroom &&
+      offer.legal.dataroom.approved) ? offer.legal.dataroom.approved : null;
+    const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     const {
       DATA_ROOM_FRM,
       formArrayChange,
@@ -91,6 +91,7 @@ export default class DataRoom extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'DATA_ROOM_FRM';
     console.log(DATA_ROOM_FRM.fields.documents);
+    console.log(offer);
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -105,8 +106,8 @@ export default class DataRoom extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Document Name</Table.HeaderCell>
-                <Table.HeaderCell>&nbsp;</Table.HeaderCell>
-                <Table.HeaderCell>&nbsp;</Table.HeaderCell>
+                <Table.HeaderCell>Document</Table.HeaderCell>
+                <Table.HeaderCell>Actions</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
@@ -116,26 +117,29 @@ export default class DataRoom extends Component {
                   <Table.Row>
                     <Table.Cell>
                       <FormInput
-                        name="documentName"
-                        fielddata={document.documentName}
+                        displayMode={isReadonly}
+                        name="name"
+                        fielddata={document.name}
                         size="small"
                         changed={(e, result) => formArrayChange(e, result, formName, 'documents', index)}
+                        ishidelabel
                       />
                     </Table.Cell>
                     <Table.Cell>
                       <DropZone
+                        disabled={isReadonly}
                         size="small"
-                        // className="secondary"
-                        name="dataRoom"
-                        fielddata={document.dataRoom}
+                        className="secondary"
+                        name="upload"
+                        fielddata={document.upload}
                         uploadtitle="Upload"
                         ondrop={(files, name) => this.onFileDrop(files, name, index)}
                         onremove={fieldName => this.handleDelDoc(fieldName, index)}
                       />
                     </Table.Cell>
                     <Table.Cell collapsing>
-                      <Button icon circular color={document.accreditedOnly ? 'green' : 'red'} className="link-button">
-                        <Icon className={document.accreditedOnly ? 'ns-unlock' : 'ns-lock'} onClick={() => this.handleLockUnlock(index)} />
+                      <Button icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
+                        <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => this.handleLockUnlock(index)} />
                       </Button>
                       <Button icon circular className="link-button">
                         <Icon className="ns-trash" onClick={e => this.toggleConfirmModal(e, index, formName)} />
@@ -146,16 +150,11 @@ export default class DataRoom extends Component {
               }
             </Table.Body>
           </Table>
-          {/* <Button onClick={this.handleSubmitDataRoom}
-          type="button" primary content="Submit" disabled={!DATA_ROOM_FRM.meta.isValid} /> */}
-          <ButtonGroup
-            isIssuer={isIssuer}
+          <ButtonGroupType2
             submitted={submitted}
             isManager={isManager}
-            formValid={DATA_ROOM_FRM.meta.isValid}
             approved={approved}
             updateOffer={this.handleFormSubmit}
-            issuerSubmitted={issuerSubmitted}
           />
         </Form>
         <Confirm

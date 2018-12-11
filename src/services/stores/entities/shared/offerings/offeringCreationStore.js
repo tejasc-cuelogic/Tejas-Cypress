@@ -405,6 +405,10 @@ export class OfferingCreationStore {
   @action
   setFormFileArray = (formName, arrayName, field, getField, value, index = undefined) => {
     if (index !== undefined && arrayName) {
+      console.log(this[formName].fields);
+      console.log(this[formName].fields[arrayName]);
+      console.log(index);
+      console.log(this[formName].fields[arrayName][index]);
       this[formName].fields[arrayName][index][field][getField] = value;
     } else if (index !== null) {
       if (getField === 'error' || getField === 'showLoader') {
@@ -435,10 +439,10 @@ export class OfferingCreationStore {
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
             this.checkFormValid(form, multiForm);
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          }).finally(() => {
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           });
         }).catch((error) => {
@@ -486,7 +490,7 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, form === 'LEADERSHIP_FRM');
+    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM'));
   }
 
   @action
@@ -730,6 +734,7 @@ export class OfferingCreationStore {
       RISK_FACTORS_FRM: { isMultiForm: false },
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
+      DATA_ROOM_FRM: { isMultiForm: true },
     };
     return metaDataMapping[formName][getField];
   }
@@ -896,7 +901,7 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
         Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
-        payloadData[keyName].dataRoom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
+        payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
