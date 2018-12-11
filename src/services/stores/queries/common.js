@@ -16,6 +16,14 @@ export const removeUploadedFile = gql`
     }
   }`;
 
+export const updateUserReferralCode = gql`
+mutation _updateUserReferralCode($cognitoUserId: String!, $referralCode: String!) {
+  updateUserReferralCode (
+    cognitoUserId: $cognitoUserId
+    referralCode: $referralCode
+  )
+}`;
+
 export const getBoxFileDetails = gql`
   query getFileDetails($fileId: String!) {
     getFileDetails (fileId: $fileId) {

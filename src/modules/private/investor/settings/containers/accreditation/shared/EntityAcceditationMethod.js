@@ -28,13 +28,15 @@ export default class VerifyEntityAccreditation extends Component {
         verified as an accredited investor.
         </p>
         <p className="center-align">Please confirm which of the following is applicable for your entity.</p>
-        <Grid stackable textAlign="center">
+        <Grid stackable textAlign="center" columns={2}>
           {accreditationMethods.map(method => (
             <Grid.Column
               onClick={(e) => { accreditationMethodChange(e, 'NET_WORTH_FORM', { name: 'netWorth', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? method.value : 'NONE' }); accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: (method.value === 'FIVE_MILLION' || method.value === 'TWENTY_FIVE_MILLION') ? 'ASSETS' : method.value }); }}
             >
               <div className={`user-type ${((NET_WORTH_FORM.fields.netWorth.value === method.value || ACCREDITATION_FORM.fields.method.value === method.value) ? 'active' : '')}`}>
-                <Header as="h4">{method.header}</Header>
+                {method.header &&
+                  <Header as="h4">{method.header}</Header>
+                }
                 <p>
                   {method.desc}
                   {method.tooltip &&

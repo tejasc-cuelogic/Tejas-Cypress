@@ -6,8 +6,9 @@ import { orderBy, filter } from 'lodash';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 import ChartPieForBonusRewards from './ChartPieForBonusRewards';
 
-const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
-const bonusDetails = [{ name: '10', value: 1 }, { name: '10', value: 2 }];
+// const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
+const COLORS = ['#E6E7EB', '#20C86D'];
+const bonusDetails = [{ name: '10', value: 100 }, { name: '10', value: 10 }];
 
 class BonusRewards extends Component {
   render() {
@@ -48,7 +49,9 @@ class BonusRewards extends Component {
               </Aux>
               :
               <Aux>
-                <ChartPieForBonusRewards title="10" data={bonusDetails} colors={COLORS} />
+                <div className="boanusreward-chart">
+                  <ChartPieForBonusRewards title="10" data={bonusDetails} colors={COLORS} />
+                </div>
                 <p className="center-align neutral-text mb-0"><b><span className="primary-text">Early Bird</span> rewards remaining</b></p>
                 <p className="early-bird-desc center-align">
                   First {earlyBirdDetails[0].earlyBirdQuantity} {earlyBirdDetails[0].amount > 0 ? 'to invest $1,000+' : ''}
