@@ -1845,7 +1845,7 @@ i.icon[class*="ns-"]{
     content:@ns-chevron-up-compact;
 }
 .ns-circle:before{
-    content:@ns-circle; 
+    content:@ns-circle;
 }
 .ns-circle-line:before{
     content:@ns-circle-line;
@@ -1906,6 +1906,12 @@ i.icon[class*="ns-"]{
 }
 .ns-download:before{
     content:@ns-download;
+}
+.ns-drag-holder:before{
+    content:@ns-drag-holder;
+}
+.ns-drag-holder-large:before{
+    content:@ns-drag-holder-large;
 }
 .ns-dumbbells:before{
     content:@ns-dumbbells;
@@ -2035,6 +2041,9 @@ i.icon[class*="ns-"]{
 }
 .ns-nextseed-icon-line:before{
     content:@ns-nextseed-icon-line;
+}
+.ns-no-view:before{
+    content:@ns-no-view;
 }
 .ns-off-shoot-business:before{
     content:@ns-off-shoot-business;

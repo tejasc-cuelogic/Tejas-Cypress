@@ -75,7 +75,6 @@
     "react": "^16.1.0",
     "react-aux": "^1.1.0",
     "react-avatar": "^3.1.2",
-    "react-beautiful-dnd": "^10.0.2",
     "react-chips": "^0.6.4",
     "react-code-input": "3.5.0",
     "react-confetti": "^2.3.0",

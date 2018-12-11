@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import ReactDragList from 'react-drag-list';
 import { Form, Header, Button, Divider, Table, Icon, Confirm } from 'semantic-ui-react';
@@ -10,21 +11,49 @@ const dataArray = [
     color: '#FF5500',
     title: 'Senior Product Designer',
     text: 'Senior Product Designer',
+    documentName: {
+      label: '',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
   },
   {
     color: '#5FC296',
     title: 'Senior Animator',
     text: 'Senior Animator',
+    documentName: {
+      label: '',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
   },
   {
     color: '#2DB7F5',
     title: 'Visual Designer',
     text: 'Visual Designer',
+    documentName: {
+      label: '',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
   },
   {
     color: '#FFAA00',
     title: 'Computer Engineer',
     text: 'Computer Engineer',
+    documentName: {
+      label: '',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
   },
 ];
 
@@ -146,6 +175,7 @@ export default class DataRoom extends Component {
               }
             </Table.Body>
           </Table>
+          <Divider hidden />
           {/* <Button onClick={this.handleSubmitDataRoom}
           type="button" primary content="Submit" disabled={!DATA_ROOM_FRM.meta.isValid} /> */}
           <ButtonGroup
@@ -167,20 +197,49 @@ export default class DataRoom extends Component {
           size="mini"
           className="deletion"
         />
-        <ReactDragList
-          dataSource={this.state.dataSource}
-          rowKey="title"
-          row={(record, index) => (
-            <div key={index} style={{ color: record.color }}>
-              <div className="simple-drag-row-title">{record.title}</div>
-              <span>{record.text}</span>
-            </div>
-          )}
-          handles={false}
-          className="simple-drag"
-          rowClassName="simple-drag-row"
-          onUpdate={this.handleUpdate}
-        />
+        <Divider section />
+        <div className="ui basic compact table form-table">
+          <div className="row-wrap thead">
+            <div className="balance-half">Document Name</div>
+            <div className="balance-half">Document</div>
+            <div className="date">Updated on</div>
+            <div className="status">is Public?</div>
+            <div className="action">Actions</div>
+          </div>
+          <ReactDragList
+            dataSource={this.state.dataSource}
+            rowKey="title"
+            row={(record, index) => (
+              <div key={index} className="row-wrap">
+                <div className="balance-half simple-drag-row-title">
+                  <FormInput
+                    ishidelabel
+                    name="documentName"
+                    fielddata={record.documentName}
+                    size="small"
+                    changed={(e, result) => formArrayChange(e, result, formName, 'documents', index)}
+                  />
+                  {/* {record.title} */}
+                </div>
+                <div className="balance-half">
+                  <Link to="/" className="link"><Icon className="ns-file" />disclosure-document.pdf</Link>
+                </div>
+                <div className="date">88/88/8888</div>
+                <div className="status">Yes</div>
+                <div className="action">
+                  <Button icon circular color="red" className="link-button">
+                    <Icon name="ns-lock" />
+                  </Button>
+                  <Button icon circular className="link-button">
+                    <Icon name="ns-trash" />
+                  </Button>
+                </div>
+              </div>
+            )}
+            handles={false}
+            onUpdate={this.handleUpdate}
+          />
+        </div>
       </div>
     );
   }
