@@ -7,7 +7,8 @@ import { ASSETS_URL } from '../../../../../../constants/aws';
 import ChartPieForBonusRewards from './ChartPieForBonusRewards';
 
 const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
-const bonusDetails = [{ name: '10', value: 1 }];
+const bonusDetails = [{ name: '10', value: 1 }, { name: '10', value: 2 }];
+
 class BonusRewards extends Component {
   render() {
     const { isTabletLand, refLink, campaign } = this.props;
@@ -23,10 +24,17 @@ class BonusRewards extends Component {
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
           <Header as="h4">
-            <Link to={`${refLink}/bonus-rewards`}>
-              Bonus Rewards
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
+            {rewardsTiers && rewardsTiers.length ?
+              <Link to={`${refLink}/bonus-rewards`}>
+                Bonus Rewards
+                <Icon className="ns-chevron-right" color="green" />
+              </Link>
+              :
+              <Aux>
+                <span>Bonus Rewards</span>
+                <Icon className="ns-chevron-right" color="green" />
+              </Aux>
+            }
           </Header>
           {rewardsTiers && rewardsTiers.length ?
             (!isEarlyBirdExists ?

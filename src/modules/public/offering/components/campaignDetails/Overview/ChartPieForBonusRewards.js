@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend, Sector } from 'recharts';
-// import Helper from '../../../../../helper/utility';
+import { PieChart, Pie, Cell, ResponsiveContainer, Label, Sector } from 'recharts';
 
 /*
   Reference:
@@ -47,36 +46,22 @@ export default class ChartPieForBonusRewards extends Component {
   onPieEnter = (data, index) => {
     this.setState({
       activeIndex: index,
-      title: data.name,
+      title: '',
     });
   }
-
-  renderLegend = (props) => {
-    const { payload } = props;
-    return (
-      <ul className="chartLegends">
-        {
-          payload.map(entry => (
-            <li style={{ color: entry.color }} key={`item-${entry.value}`}><span>{entry.icon} {entry.value}</span></li>
-          ))
-        }
-      </ul>
-    );
-  };
 
   render() {
     const { data, title, colors } = this.props;
     return (
       <ResponsiveContainer height={220}>
         <PieChart>
-          <Legend layout="vertical" verticalAlign="middle" align="right" content={this.renderLegend} />
           <Pie
             dataKey="value"
             activeIndex={this.state.activeIndex}
             activeShape={renderActiveShape}
             data={data}
-            innerRadius="85%"
-            outerRadius="100%"
+            innerRadius="85"
+            outerRadius="100"
             startAngle={0}
             endAngle={360}
             type="circle"
