@@ -21,6 +21,11 @@ const summary = offer => [
     content: offer.created ? DataFormatter.formatedDate(offer.created.date) : 'N/A',
     type: 0,
   },
+  {
+    title: 'POC',
+    content: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'NA',
+    type: 0,
+  },
   { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
   {
     title: 'Days Till Launch',

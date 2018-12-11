@@ -9,7 +9,7 @@ import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST } from '../../../../constants/admin/offerings';
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, POC_DETAILS } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -63,6 +63,7 @@ export class OfferingCreationStore {
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
+  @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -728,6 +729,7 @@ export class OfferingCreationStore {
       RISK_FACTORS_FRM: { isMultiForm: false },
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
+      POC_DETAILS_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
   }
@@ -832,16 +834,20 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false,
+    successMsg = undefined, fromS3 = false, res, rej,
   ) => {
     uiStore.setProgress();
+    const variables = {
+      id,
+      offeringDetails: payload,
+    };
+    if (keyName === 'editPocForm') {
+      variables.poc = this.POC_DETAILS_FRM.fields.address.value;
+    }
     client
       .mutate({
         mutation: updateOffering,
-        variables: {
-          id,
-          offeringDetails: payload,
-        },
+        variables,
       })
       .then(() => {
         this.removeUploadedFiles(fromS3);
@@ -851,10 +857,12 @@ export class OfferingCreationStore {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
         offeringsStore.getOne(id, false);
+        res();
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
         Helper.toast('Something went wrong.', 'error');
+        rej();
       })
       .finally(() => {
         uiStore.setProgress(false);
@@ -875,7 +883,7 @@ export class OfferingCreationStore {
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
     approvedObj, fromS3 = false, leaderIndex,
-  ) => {
+  ) => new Promise((res, rej) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
       applicationId: getOfferingById.applicationId,
@@ -936,13 +944,27 @@ export class OfferingCreationStore {
         payloadData.offering = cleanDeep(payloadData.offering);
         payloadData.keyTerms = omitDeep(payloadData.keyTerms, ['__typename', 'fileHandle']);
         payloadData.keyTerms = cleanDeep(payloadData.keyTerms);
+      } else if (keyName === 'editPocForm') {
+        payloadData.offering = {};
+        payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
+        payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
+        if (this.POC_DETAILS_FRM.fields.name.value) {
+          payloadData.lead = { name: this.POC_DETAILS_FRM.fields.name.value };
+        }
+        payloadData.offering = mergeWith(
+          toJS(getOfferingById.offering),
+          payloadData.offering,
+          this.mergeCustomize,
+        );
+        payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
+        payloadData.offering = cleanDeep(payloadData.offering);
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    if (keyName !== 'contingencies' && keyName !== 'editForm') {
+    if (keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
@@ -1037,8 +1059,8 @@ export class OfferingCreationStore {
         });
       });
     }
-    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3);
-  }
+    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3, res, rej);
+  });
 
   @action
   getOfferingBac = (offeringId, bacType) => {
