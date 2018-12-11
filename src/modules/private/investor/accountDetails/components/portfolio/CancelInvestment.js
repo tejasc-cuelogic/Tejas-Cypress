@@ -14,11 +14,22 @@ export default class CancelInvestment extends Component {
     btnCancel: '',
   }
   componentWillMount() {
-    const { setInitialLinkValue } = this.props.portfolioStore;
+    const { setInitialLinkValue, setInvestmentDetailsForCancelRequest } = this.props.portfolioStore;
     setInitialLinkValue(false);
+    setInvestmentDetailsForCancelRequest(null);
     this.props.uiStore.clearErrors();
   }
-
+  componentDidMount() {
+    const {
+      getInvestorAccounts,
+      setInvestmentDetailsForCancelRequest,
+    } = this.props.portfolioStore;
+    const pendingList = getInvestorAccounts && getInvestorAccounts.investments &&
+      getInvestorAccounts.investments.pending ? getInvestorAccounts.investments.pending : [];
+    const investmentDetials =
+      find(pendingList, { agreementId: toInteger(this.props.match.params.id) });
+    setInvestmentDetailsForCancelRequest(investmentDetials);
+  }
   submit = (e) => {
     e.preventDefault();
     const { cancelAgreement } = this.props.portfolioStore;
@@ -42,11 +53,17 @@ export default class CancelInvestment extends Component {
 
   render() {
     const { inProgress, errors } = this.props.uiStore;
-    const { isCancelShowLink, getInvestorAccounts } = this.props.portfolioStore;
+    const {
+      isCancelShowLink,
+      getInvestorAccounts,
+      canceledInvestmentDetails,
+    } = this.props.portfolioStore;
     const pendingList = getInvestorAccounts && getInvestorAccounts.investments &&
       getInvestorAccounts.investments.pending ? getInvestorAccounts.investments.pending : [];
-    const investmentOfferingDetails =
+    const investmentDetials =
       find(pendingList, { agreementId: toInteger(this.props.match.params.id) });
+    // setInvestmentDetailsForCancelRequest(investmentDetials);
+    const investmentOfferingDetails = investmentDetials || canceledInvestmentDetails;
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
         <Modal.Content className="signup-content relaxed">
