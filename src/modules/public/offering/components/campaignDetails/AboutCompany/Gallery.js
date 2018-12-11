@@ -28,7 +28,7 @@ class Gallery extends Component {
                     <Image64 srcUrl={data.url} />
                   ))
                   :
-                  <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
+                  <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
               }
             </NsCarousel>
           </div>

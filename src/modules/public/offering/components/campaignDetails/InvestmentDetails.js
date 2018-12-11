@@ -42,6 +42,7 @@ class InvestmentDetails extends Component {
                         campaign.media.heroImage.url ?
                         campaign.media.heroImage.url : null
                       }
+                      imgType="heroImage"
                     />
                   </Segment>
                 </Grid.Column>
@@ -77,6 +78,7 @@ class InvestmentDetails extends Component {
                         campaign.media.heroImage.url ?
                         campaign.media.heroImage.url : null
                       }
+                      imgType="heroImage"
                     />
                   </Segment>
                 </Grid.Column>

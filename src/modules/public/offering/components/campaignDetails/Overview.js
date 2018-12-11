@@ -40,6 +40,7 @@ class Overview extends Component {
                           campaign.media.heroImage.url ?
                           campaign.media.heroImage.url : null
                         }
+                        imgType="heroImage"
                       />
                       <Icon
                         className="ns-play play-icon"
@@ -52,6 +53,7 @@ class Overview extends Component {
                         campaign.media.heroImage.url ?
                         campaign.media.heroImage.url : null
                       }
+                      imgType="heroImage"
                     />
                 }
               </Segment>
