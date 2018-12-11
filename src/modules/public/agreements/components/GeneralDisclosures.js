@@ -28,7 +28,7 @@ export default class GeneralDisclosures extends Component {
           <p>
             All securities-related activity on this site is conducted by NextSeed Securities, LLC
             (“NextSeed Securities”), an affiliate of NextSeedand a SEC-registered broker-dealer and
-            member <a className="positive-text" href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>/SIPC, unless otherwise specifically indicated as being conducted by
+            member <a className="positive-text" href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>/SIPC, unless otherwise specifically indicated as being conducted by
             NextSeed US LLC (“NextSeed Funding Portal”), anotheraffiliate of NextSeedand a
             SEC-registered Funding Portal and member FINRA, both located at 3 Greenway Plaza, Ste
             110, Houston TX 77046. NextSeed Securities and NextSeed Funding Portal does not make
