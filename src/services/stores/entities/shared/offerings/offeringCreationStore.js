@@ -9,7 +9,7 @@ import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST } from '../../../../constants/admin/offerings';
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -63,6 +63,7 @@ export class OfferingCreationStore {
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
+  @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
   @observable confirmModalName = null;
@@ -894,6 +895,7 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
         Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+        payloadData[keyName].dataRoom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -1637,6 +1639,18 @@ export class OfferingCreationStore {
 
   @action resetInitLoad() {
     this.initLoad = [];
+  }
+
+  @action
+  setAccreditedOnlyField = (index) => {
+    // this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value =
+    // !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value;
+    this.DATA_ROOM_FRM = Validator.onArrayFieldChange(
+      this.DATA_ROOM_FRM,
+      { name: 'accreditedOnly', value: !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value },
+      'documents',
+      index,
+    );
   }
 }
 

@@ -2390,3 +2390,32 @@ export const ADMIN_DOCUMENTATION = {
     lastModifiedDate: '',
   },
 };
+
+export const DATA_ROOM = {
+  documents: [{
+    documentName: {
+      label: 'Document Name',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
+    dataRoom: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'required',
+      showLoader: false,
+      preSignedUrl: '',
+      fileId: '',
+      fileData: '',
+      objType: 'FileObjectType',
+    },
+    accreditedOnly: {
+      label: '',
+      value: false,
+      error: undefined,
+      rule: 'required',
+    },
+  }],
+};
