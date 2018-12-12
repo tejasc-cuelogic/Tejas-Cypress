@@ -18,15 +18,17 @@ class Disclosure extends Component {
   }
   render() {
     const { embedUrl, docLoading } = this.props.campaignStore;
-    const { roles } = this.props.userStore.currentUser;
-    if (roles.includes('investor') && !this.props.accreditationStore.isUserAccreditated) {
+    if (!this.props.userStore.currentUser ||
+      (this.props.userStore.currentUser && this.props.userStore.currentUser.roles &&
+      this.props.userStore.currentUser.roles.includes('investor') &&
+      !this.props.accreditationStore.isUserAccreditated)) {
       return (
         <div className="pdf-viewer disclosure-pdf">
           <p>
             This document is only available to accredited investors.
           </p>
           <span>Please confirm your accredited investor status to view this document.</span>
-          <Button as={Link} to="" primary content="Confirm Status" />
+          <Button as={Link} to="/app/profile-settings/investment-limits" primary content="Confirm Status" />
         </div>
       );
     }
