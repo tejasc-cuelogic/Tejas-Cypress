@@ -56,14 +56,9 @@ export default class Summary extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Verify the info and create Entity account</Header>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
         <div className="field-wrap">
           <div className="table-wrapper">
-            <Table unstackable basic fixed>
+            <Table unstackable basic="very" fixed>
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Entity Net Assets</Table.Cell>
@@ -116,10 +111,15 @@ export default class Summary extends Component {
             </Table>
           </div>
         </div>
-        <div className="center-align">
-          <Button primary size="large" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm}>Confirm</Button>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
+        <div className="center-align mt-30">
+          <Button primary size="large" content="Confirm" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm} />
         </div>
-        <p className="center-align mt-30 grey-header">
+        <p className="center-align mt-30 grey-text">
           By continuing, I acknowledge that I have read and agree to the
           terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Header, Form, Grid, Message, Confirm } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { Header, Form, Message, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, DropZone } from '../../../../../../../theme/form';
@@ -28,14 +29,9 @@ export default class PersonalInformation extends Component {
     const { currentUser } = this.props.userStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Authorized Signatory Informaiton</Header>
         <p className="center-align">Please provide your title and a copy of your photo ID.</p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
         <Form error>
           <div className="field-wrap">
             <Form.Group widths="equal">
@@ -59,20 +55,19 @@ export default class PersonalInformation extends Component {
               showerror
             />
           </div>
-          <Grid verticalAlign="middle">
-            <Grid.Row>
-              <Grid.Column width={16}>
-                <DropZone
-                  name="legalDocUrl"
-                  fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
-                  ondrop={this.onLegalDocUrlDrop}
-                  onremove={this.confirmRemoveDoc}
-                  uploadtitle="Choose a file or drag it here"
-                  containerclassname="fluid"
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          <DropZone
+            name="legalDocUrl"
+            fielddata={PERSONAL_INFO_FRM.fields.legalDocUrl}
+            ondrop={this.onLegalDocUrlDrop}
+            onremove={this.confirmRemoveDoc}
+            uploadtitle="Choose a file or drag it here"
+            containerclassname="fluid"
+          />
+          {errors &&
+            <Message error className="mt-30">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
         </Form>
         <Confirm
           header="Confirm"
@@ -83,7 +78,7 @@ export default class PersonalInformation extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }

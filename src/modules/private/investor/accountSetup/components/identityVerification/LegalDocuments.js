@@ -37,12 +37,7 @@ const LegalDocuments = observer(({
           <Loader active={inProgress} />
         </Dimmer>
       }
-      {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-      }
-      <Form onSubmit={onSubmit} className="file-uploader-inline">
+      <Form error onSubmit={onSubmit} className="file-uploader-inline">
         <Form.Field className="mb-30">
           <label className="mb-half">Upload a Photo ID (Drivers License or Passport)</label>
           <DropZone
@@ -82,6 +77,11 @@ const LegalDocuments = observer(({
             containerclassname="fluid"
           />
         </Form.Field>
+        {errors &&
+          <Message error textAlign="left" className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
+        }
         <div className="center-align mt-30">
           <Button primary size="large" className="very relaxed" content="Verify my identity" loading={submitVerificationsDocs && inProgress} disabled={!form.meta.isValid} />
         </div>
