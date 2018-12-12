@@ -2137,6 +2137,12 @@ svg:not(:root).recharts-surface{
 		font-size:@13px;
 	}
 }
+.boanusreward-chart .recharts-wrapper tspan{
+	font-size: 28px;
+	line-height: 38px;
+	fill: @primary-one;
+	font-weight: @fontMedium;
+}
 // Rechart Styles Ends
 
 .knowledge-details{
