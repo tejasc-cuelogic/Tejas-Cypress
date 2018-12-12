@@ -27,10 +27,6 @@ export default class FundingOption extends Component {
       this.props.history.replace(`${this.props.match.url}/term-notes`);
     }
   }
-  shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextProps, nextState);
-    return false;
-  }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match, location } = this.props;
