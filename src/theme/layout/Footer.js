@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style  */
 import React, { Component } from 'react';
 import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Image, Grid } from 'semantic-ui-react';
