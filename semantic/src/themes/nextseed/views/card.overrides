@@ -8,7 +8,7 @@
 //     }
 // }
 .ui.card{
-    &.campaign{
+    &.campaign{ 
         box-shadow:none;
         height: 100%;
         &:hover {
@@ -138,6 +138,10 @@
                     font-size: @15px;
                     margin: 0 0 @30px;
                     height: auto;
+                }
+                .ui.image {
+                    max-width: 100%;
+                    width: auto;
                 }
             }
             .extra {
