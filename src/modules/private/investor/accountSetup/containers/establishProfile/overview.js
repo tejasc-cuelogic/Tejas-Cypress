@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Divider, Button } from 'semantic-ui-react';
@@ -12,18 +13,34 @@ export default class Overview extends Component {
   }
   render() {
     const { signupStatus } = this.props.userDetailsStore;
-    let overviewInfo = `
-      NextSeed Securities, LLC operates as an SEC-registered broker-dealer.
-      To begin making investments on the platform, you will need to answer a few more
-      questions to complete your investor profile.
-    `;
+    let overviewInfo = (
+      <Aux>
+        <p>
+          NextSeed Securities, LLC operates as an SEC-registered broker-dealer and is a member
+          firm of the Financial Industry Regulatory Authority ({'"'}<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>{'"'}).
+        </p>
+        <Divider hidden />
+        <p>
+          To begin making investments on the platform, you will need to answer a few more
+          questions to complete your investor profile.
+        </p>
+      </Aux>
+    );
     if (signupStatus.isMigratedFullAccount) {
-      overviewInfo = `
-        New investments will now be offered through NextSeed Securities, LLC, an SEC-
-        registered broker-dealer.
-        To migrate your existing account and to begin making investments on the new platform,
-        you will need to answer a few more questions to complete your investor profile.
-      `;
+      overviewInfo = (
+        <Aux>
+          <p>
+            New investments will now be offered through NextSeed Securities, LLC, an SEC-
+            registered broker-dealer and a member firm of the Financial Industry Regulatory
+            Authority ({'"'}<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>{'"'}).
+          </p>
+          <Divider hidden />
+          <p>
+            To migrate your existing account and to begin making investments on the new platform,
+            you will need to answer a few more questions to complete your investor profile.
+          </p>
+        </Aux>
+      );
     }
     return (
       <div className="center-align">

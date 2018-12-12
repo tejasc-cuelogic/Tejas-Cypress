@@ -26,16 +26,22 @@ class Footer extends Component {
   toggleShowHide = () => this.setState({ fShowHide: !this.state.fShowHide });
 
   render() {
-    const { path } = this.props;
+    const { path, campaign } = this.props;
     const OfferFooter = ['/offerings/:id/:section?'];
     const isCampaign = matchPath(path, { path: OfferFooter }) != null;
+    const offeirngDisclaimer = campaign && campaign.keyTerms &&
+      campaign.keyTerms.offeringDisclaimer ?
+      campaign.keyTerms.offeringDisclaimer : null;
+    const shorthandBusinessName = campaign && campaign.keyTerms &&
+      campaign.keyTerms.shorthandBusinessName ?
+      campaign.keyTerms.shorthandBusinessName : '';
     return (
       <footer>
         <Container fluid={isCampaign}>
-          {(OfferFooter.find(item => matchPath(path, { path: item }))) &&
+          {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
-              <b>Buffbrew Disclaimer:</b> The securities offered above is facilitated by NextSeed
-              US LLC, a registered funding portal and member of <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
+              <b>`{shorthandBusinessName} Disclaimer:`</b>
+              <span dangerouslySetInnerHTML={{ __html: offeirngDisclaimer }} />
             </p>
           }
           <Grid stackable>
@@ -92,9 +98,9 @@ class Footer extends Component {
               <p>
                 All securities-related activity is conducted by regulated affiliates of
                 NextSeed: NextSeed Securities, LLC, a registered broker dealer and member
-                of <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a> (check out
+                of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a> (check out
                 the background of our broker-dealer on <a href="https://brokercheck.finra.org/firm/summary/291387" target="_blank" rel="noopener noreferrer">BrokerCheck®</a>) or NextSeed US LLC, a
-                registered funding portal and member of <a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
+                registered funding portal and member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
               </p>
               <p>
                 Any securities offered on this website have not been recommended or approved

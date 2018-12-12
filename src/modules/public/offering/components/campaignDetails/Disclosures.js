@@ -6,6 +6,7 @@ import { Route, Switch, withRouter } from 'react-router-dom';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
+import { InlineLoader } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore', 'accreditationStore')
@@ -16,13 +17,26 @@ export default class TermsOfUse extends Component {
     this.props.accreditationStore.getUserAccreditation();
     if (this.props.match.isExact) {
       const { getNavItemsForDataRoom } = this.props.campaignStore;
-      this.props.history.push(`${this.props.match.url}/${getNavItemsForDataRoom[0].to}`);
+      if (getNavItemsForDataRoom.length) {
+        this.props.history.push(`${this.props.match.url}/${getNavItemsForDataRoom[0].to}`);
+      }
     }
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match } = this.props;
     const { getNavItemsForDataRoom } = this.props.campaignStore;
+    if (!getNavItemsForDataRoom.length) {
+      return (
+        <div className="campaign-content-wrapper">
+          <div className="updates-modal">
+            <div className="no-updates">
+              <InlineLoader text="No Data Room Documents" />
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <Aux>
         {isMobile &&

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Button } from 'semantic-ui-react';
+import { Button, Header } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 @inject('campaignStore', 'accreditationStore', 'userStore')
@@ -23,12 +23,14 @@ class Disclosure extends Component {
       this.props.userStore.currentUser.roles.includes('investor') &&
       !this.props.accreditationStore.isUserAccreditated)) {
       return (
-        <div className="pdf-viewer disclosure-pdf">
-          <p>
-            This document is only available to accredited investors.
-          </p>
-          <span>Please confirm your accredited investor status to view this document.</span>
-          <Button as={Link} to="/app/profile-settings/investment-limits" primary content="Confirm Status" />
+        <div className="updates-modal">
+          <div className="no-updates">
+            <Header as="h3" className="mb-20">
+              This document is only available to accredited investors.
+            </Header>
+            <p>Please confirm your accredited investor status to view this document.</p>
+            <Button as={Link} to="/app/profile-settings/investment-limits" primary content="Confirm Status" className="mt-20" />
+          </div>
         </div>
       );
     }

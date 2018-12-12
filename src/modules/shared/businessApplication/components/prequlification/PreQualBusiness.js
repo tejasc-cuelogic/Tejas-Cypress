@@ -88,6 +88,7 @@ export default class PreQualBusiness extends Component {
                       {
                         ['businessAgeYears', 'businessAgeMonths'].map(field => (
                           <MaskedInput
+                            maxLength="2"
                             containerclassname={preQualFormDisabled ? 'display-only' : ''}
                             readOnly={preQualFormDisabled}
                             key={field}

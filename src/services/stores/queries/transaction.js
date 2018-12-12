@@ -1,16 +1,14 @@
 import gql from 'graphql-tag';
 
 export const allTransactions = gql`
-query allTransactions($filters: TransactionFilter,$first:Int,$skip:Int) {
-    allTransactions( first:$first, skip:$skip, orderBy: createdAt_DESC, filter: $filters){
-      id
-      createdAt
-      amount,
+  query getAccountTransactions($userId: String!, $accountId: String!) {
+    getAccountTransactions(userId: $userId, accountId: $accountId) {
+      date
       description
-      transactionType
-    }
-    _allTransactionsMeta(filter: $filters){
-      count
+      type
+      status
+      amount
+      offering
     }
   }
 `;

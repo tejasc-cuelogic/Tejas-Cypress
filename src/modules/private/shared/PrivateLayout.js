@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { matchPath } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Form, Grid, Header } from 'semantic-ui-react';
 import SecondaryMenu from '../../../theme/layout/SecondaryMenu';
 import NotFound from '../../shared/NotFound';
 
+const overrideContainerClass = ['account-details/:accountType/transactions'];
 @inject('uiStore', 'navStore')
 @observer
 class PrivateLayout extends Component {
   render() {
-    const pageMeta = this.props.navStore.navMeta;
+    const { location, navStore } = this.props;
+    const pageMeta = navStore.navMeta;
     if (!pageMeta) {
       return <NotFound />;
     }
@@ -54,7 +57,7 @@ class PrivateLayout extends Component {
         {this.props.P2}
         {this.props.P3}
         {this.props.P5}
-        <div className="content-spacer">
+        <div className={`${(overrideContainerClass.find(item => matchPath(location.pathname, { path: `/app/${item}` }))) ? '' : 'content-spacer'}`}>
           {this.props.children}
         </div>
       </Aux>

@@ -14,6 +14,7 @@ export class PortfolioStore {
   @observable currentOfferingId = null;
   @observable isCancelShowLink = false;
   @observable investmentDetails = null;
+  @observable canceledInvestmentDetails = null;
 
   @action
   setFieldValue = (field, value) => {
@@ -198,6 +199,10 @@ export class PortfolioStore {
   @action
   setInitialLinkValue = (boolValue) => {
     this.isCancelShowLink = boolValue;
+  }
+  @action
+  setInvestmentDetailsForCancelRequest = (detailObject) => {
+    this.canceledInvestmentDetails = detailObject;
   }
 }
 

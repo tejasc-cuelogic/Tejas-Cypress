@@ -43,6 +43,7 @@ export class BusinessAppReviewStore {
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
+  @observable initLoad = [];
 
   @action
   setFieldvalue = (field, value) => {
@@ -564,6 +565,7 @@ export class BusinessAppReviewStore {
     }
     this.paBoxFolderId = get(appData, 'storageDetails.Application.Review.Offer.id');
     this[form] = Validator.setFormData(this[form], appData, ref);
+    this.initLoad.push(form);
     const multiForm = this.getActionType(form, 'isMultiForm');
     if (form !== 'MANAGERS_FRM') {
       this.checkFormValid(form, multiForm, false);

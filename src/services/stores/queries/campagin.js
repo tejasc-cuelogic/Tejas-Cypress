@@ -24,6 +24,7 @@ query getOfferingList($filters: OfferingFilterInputType){
       }
       keyTerms {
         regulation
+        offeringDisclaimer
         shorthandBusinessName
         legalBusinessName
         securities
@@ -31,6 +32,16 @@ query getOfferingList($filters: OfferingFilterInputType){
         state
         city
       }
+    }
+  }
+`;
+
+export const getOfferingsReferral = gql`
+query getOfferingList($filters: OfferingFilterInputType){
+    getOfferingList(filters: $filters) {
+      id
+      offeringSlug
+      referralCode
     }
   }
 `;
@@ -57,6 +68,7 @@ export const campaignDetailsQuery = gql`
     }
     keyTerms {
       regulation
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity
@@ -221,6 +233,11 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
+      businessModelImage {
+        id
+        url
+        isPublic
+      }
     }
     legal {
       general {
@@ -371,6 +388,7 @@ query getOfferingById($id: ID) {
     offeringSlug
     keyTerms {
       regulation
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity

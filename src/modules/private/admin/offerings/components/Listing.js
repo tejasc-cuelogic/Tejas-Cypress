@@ -95,9 +95,13 @@ export default class Listing extends Component {
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.lead ? offering.lead.name : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
-                        <b>pocname11</b><br />
-                        pocemail11@test.com<br />
-                        {Helper.maskPhoneNumber('123-456-7890')}
+                        <b>
+                          {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : 'NA'}
+                        </b>
+                        <br />
+                        {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : 'NA'}
+                        <br />
+                        {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : 'NA'}
                       </p>
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="center">

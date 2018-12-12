@@ -77,6 +77,30 @@ export const DateRangeFilter = props => (
   </Form.Field>
 );
 
+export const AmountRangeFilter = props => (
+  <Form.Field>
+    <label>{props.label}</label>
+    <Form.Group widths="equal">
+      <Form.Field>
+        <NumberFormat
+          prefix="$ "
+          maxLength="10"
+          thousandSeparator
+          currency
+        />
+      </Form.Field>
+      <Form.Field>
+        <NumberFormat
+          prefix="$ "
+          maxLength="10"
+          thousandSeparator
+          currency
+        />
+      </Form.Field>
+    </Form.Group>
+  </Form.Field>
+);
+
 export const AppliedFilters = (props) => {
   const data = { ...props.filters };
   if (data.startDate && data.endDate) {

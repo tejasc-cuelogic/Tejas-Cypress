@@ -113,6 +113,10 @@
                 color:@neutral;
                 word-break:break-word;
             }
+            p.address-line{
+                color:@neutral;
+                font-weight:@fontMedium;
+            }
         }
         &.secondary textarea{
             background-color:@white;
