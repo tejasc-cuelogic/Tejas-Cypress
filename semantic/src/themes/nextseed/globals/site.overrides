@@ -2650,8 +2650,10 @@ p.check-extra-info{
 	}
 }
 //IRA account creation
-.field-wrap .highlight-text.large {
-	font-size: @20px;
-	font-weight: @fontMedium;
-	vertical-align: middle;
+.highlight-text, .negative-text {
+	&.large {
+		font-size: @20px;
+		font-weight: @fontMedium;
+		vertical-align: middle;
+	}
 }
