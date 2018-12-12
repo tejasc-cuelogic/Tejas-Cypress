@@ -2,7 +2,7 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Header, Button, Message, Table } from 'semantic-ui-react';
+import { Header, Button, Message, Table, Divider } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
@@ -103,26 +103,28 @@ export default class Summary extends React.Component {
           </div>
         </div>
         <p className="center-align mt-30">
-          <b>
-              By continuing, I acknowledge that I have read and agree to the
-              terms of the{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
-              CrowdPay Custodial Account Agreement
-            </span>,{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
-              Substitute IRS Form W-9 Certification
-            </span>{' '}and the{' '}
-            <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
-              NextSeed Membership Agreement
-            </span>.
-            <IframeModal
-              open={this.state.open}
-              close={this.closeModal}
-              srcUrl={embedUrl}
-              loading={docLoading}
-            />
-          </b>
+          By continuing, I acknowledge that I have read and agree to the
+          terms of the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+            CrowdPay Custodial Account Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+            NextSeed Funding Portal Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+            NextSeed Broker-Dealer Investor Agreement
+          </span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+            Substitute IRS Form W-9 Certification
+          </span>.
+          <IframeModal
+            open={this.state.open}
+            close={this.closeModal}
+            srcUrl={embedUrl}
+            loading={docLoading}
+          />
         </p>
+        <Divider section hidden />
         <div className="center-align">
           <Button onClick={() => this.handleCreateAccount()} primary size="large" disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank}>Create your account</Button>
         </div>
