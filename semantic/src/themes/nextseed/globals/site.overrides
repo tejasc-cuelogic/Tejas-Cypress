@@ -559,6 +559,9 @@ footer{
 				> object {
 					flex: 1;
 				}
+				&.disclosure-pdf {
+					height: 100%;
+				}
 			}
 			.ui.padded.segment h6.ui.header {
 				margin: @7px 0;

@@ -38,13 +38,6 @@ export default class DataRoom extends Component {
   handleUpdate = (evt, updated) => {
     console.log(evt); // tslint:disable-line
     console.log(updated); // tslint:disable-line
-    // this.setState({
-    //   dataSource: [...updated, {
-    //     color: '#FFAA00',
-    //     title: 'Added Engineer',
-    //     text: 'Added Engineer',
-    //   }]
-    // })
   }
   render() {
     const { match } = this.props;
@@ -79,13 +72,13 @@ export default class DataRoom extends Component {
             <div className="row-wrap thead">
               <div className="balance-half">Document Name</div>
               <div className="balance-half">Document</div>
-              <div className="date">Updated on</div>
-              <div className="status">is Public?</div>
               <div className="action">Actions</div>
             </div>
             <ReactDragList
               dataSource={DATA_ROOM_FRM.fields.documents.length && DATA_ROOM_FRM.fields.documents}
               rowKey="title"
+              handles={false}
+              onUpdate={this.handleUpdate}
               row={(document, index) => (
                 <div key={index} className="row-wrap">
                   <div className="balance-half simple-drag-row-title">
@@ -109,11 +102,7 @@ export default class DataRoom extends Component {
                       ondrop={(files, name) => this.onFileDrop(files, name, index)}
                       onremove={fieldName => this.handleDelDoc(fieldName, index)}
                     />
-                    {/* <Link to="/" className="link"><Icon className="ns-file" />
-                    disclosure-document.pdf</Link> */}
                   </div>
-                  <div className="date">12/31/2016</div>
-                  <div className="status">Yes</div>
                   <div className="action">
                     <Button icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
                       <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => this.handleLockUnlock(index)} />
@@ -124,8 +113,6 @@ export default class DataRoom extends Component {
                   </div>
                 </div>
               )}
-              handles={false}
-              onUpdate={this.handleUpdate}
             />
           </div>
           <Divider hidden />

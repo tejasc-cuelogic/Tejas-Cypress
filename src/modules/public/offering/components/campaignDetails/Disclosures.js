@@ -8,13 +8,15 @@ import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 
 const isMobile = document.documentElement.clientWidth < 768;
-@inject('campaignStore')
+@inject('campaignStore', 'accreditationStore')
 @observer
 @withRouter
 export default class TermsOfUse extends Component {
   componentWillMount() {
+    this.props.accreditationStore.getUserAccreditation();
     if (this.props.match.isExact) {
-      this.props.history.push(`${this.props.match.url}/disclosure`);
+      const { getNavItemsForDataRoom } = this.props.campaignStore;
+      this.props.history.push(`${this.props.match.url}/${getNavItemsForDataRoom[0].to}`);
     }
   }
   module = name => DataFormatter.upperCamelCase(name);

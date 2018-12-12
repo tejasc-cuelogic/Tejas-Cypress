@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
+import { Button } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-@inject('campaignStore')
+@inject('campaignStore', 'accreditationStore', 'userStore')
 @withRouter
 @observer
 class Disclosure extends Component {
@@ -17,20 +18,30 @@ class Disclosure extends Component {
   }
   render() {
     const { embedUrl, docLoading } = this.props.campaignStore;
+    const { roles } = this.props.userStore.currentUser;
+    if (roles.includes('investor') && !this.props.accreditationStore.isUserAccreditated) {
+      return (
+        <div className="pdf-viewer disclosure-pdf">
+          <p>
+            This document is only available to accredited investors.
+          </p>
+          <span>Please confirm your accredited investor status to view this document.</span>
+          <Button as={Link} to="" primary content="Confirm Status" />
+        </div>
+      );
+    }
     return (
       <Aux>
-        <div className="pdf-viewer mt-30">
-          <div className="pdf-viewer">
-            {(docLoading || !embedUrl) ? <InlineLoader /> :
-            <iframe
-              width="100%"
-              height="100%"
-              title="agreement"
-              src={embedUrl}
-              ref={(c) => { this.iframeComponent = c; }}
-            />
-            }
-          </div>
+        <div className="pdf-viewer disclosure-pdf">
+          {(docLoading || !embedUrl) ? <InlineLoader /> :
+          <iframe
+            width="100%"
+            height="100%"
+            title="agreement"
+            src={embedUrl}
+            ref={(c) => { this.iframeComponent = c; }}
+          />
+          }
         </div>
       </Aux>
     );
