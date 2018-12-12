@@ -11,7 +11,7 @@ const Security = () => (
       <Container>
         <Grid padded="vertically">
           <Grid.Row>
-            <Grid.Column floated="right" computer={10} tablet={10} mobile={16} className="side-section">
+            <Grid.Column floated="right" computer={11} tablet={10} mobile={16} className="side-section">
               <Header as="h2" className="mb-30">Invest with peace of mind.</Header>
               <Grid columns={2} doubling stackable>
                 <Grid.Column>

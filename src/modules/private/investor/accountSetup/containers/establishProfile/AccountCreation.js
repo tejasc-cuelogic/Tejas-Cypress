@@ -53,6 +53,8 @@ export default class AccountCreation extends React.Component {
         isDirty: false,
         form: '',
         stepToBeRendered: 1,
+        disablePrevButton: true,
+        disableNextButton: true,
       },
       {
         name: 'Employment Status',

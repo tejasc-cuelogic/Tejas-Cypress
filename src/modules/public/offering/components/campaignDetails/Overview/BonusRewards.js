@@ -6,10 +6,6 @@ import { orderBy, filter } from 'lodash';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 import ChartPieForBonusRewards from './ChartPieForBonusRewards';
 
-// const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
-const COLORS = ['#E6E7EB', '#20C86D'];
-const bonusDetails = [{ name: '10', value: 100 }, { name: '10', value: 10 }];
-
 class BonusRewards extends Component {
   render() {
     const { isTabletLand, refLink, campaign } = this.props;
@@ -19,8 +15,16 @@ class BonusRewards extends Component {
       campaign.keyTerms.shorthandBusinessName ?
       campaign.keyTerms.shorthandBusinessName : '';
     const earlyBirdDetails =
-      ((rewardsTiers && filter(rewardsTiers, o => o.earlyBirdQuantity > 0)) || 0);
+      ((rewardsTiers && filter(rewardsTiers, o => o.earlyBirdQuantity > 0)) || []);
     const isEarlyBirdExists = !!(earlyBirdDetails && earlyBirdDetails.length);
+    const earlyBirdsCount = ((campaign && campaign.earlyBirdsCount) || 0);
+    const earlyBirdQuantity = earlyBirdDetails && earlyBirdDetails.length &&
+      earlyBirdDetails[0].earlyBirdQuantity ? earlyBirdDetails[0].earlyBirdQuantity : 0;
+    const COLORS = ['#E6E7EB', '#20C86D'];
+    const bonusDetails = [
+      { name: earlyBirdsCount, value: earlyBirdQuantity },
+      { name: earlyBirdsCount, value: earlyBirdsCount || 0 },
+    ];
     return (
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
@@ -50,7 +54,11 @@ class BonusRewards extends Component {
               :
               <Aux>
                 <div className="boanusreward-chart">
-                  <ChartPieForBonusRewards title="10" data={bonusDetails} colors={COLORS} />
+                  <ChartPieForBonusRewards
+                    title={earlyBirdsCount}
+                    data={bonusDetails}
+                    colors={COLORS}
+                  />
                 </div>
                 <p className="center-align neutral-text mb-0"><b><span className="primary-text">Early Bird</span> rewards remaining</b></p>
                 <p className="early-bird-desc center-align">
