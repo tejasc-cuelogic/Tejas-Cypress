@@ -5,7 +5,7 @@ import RevenueChart from './RevenueChart';
 const RevenueSharingNotes = () => (
   <Grid reversed="computer" doubling columns={2} relaxed="very">
     <Grid.Column>
-      <RevenueChart />
+      <RevenueChart chartFor="RevenuSharingNote" />
       <p className="caption-note">
         This example is for illustrative purposes only and does not reflect an actual
         deal or performance. The terms of each deal may differ. Payments are not
