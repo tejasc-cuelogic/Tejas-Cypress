@@ -30,14 +30,17 @@ export default class DataRoom extends Component {
   }
   handleLockUnlock = (index) => {
     this.props.offeringCreationStore.setAccreditedOnlyField(index);
+    this.forceUpdate();
   }
   handleFormSubmit = (isApproved = null) => {
     const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
   }
   handleUpdate = (evt, updated) => {
-    console.log(evt); // tslint:disable-line
-    console.log(updated); // tslint:disable-line
+    console.log(evt);
+    this.props.offeringCreationStore.setDataRoomDocsOrder(updated);
+    console.log(updated);
+    // this.forceUpdate();
   }
   render() {
     const { match } = this.props;
@@ -58,6 +61,7 @@ export default class DataRoom extends Component {
       removeData,
     } = this.props.offeringCreationStore;
     const formName = 'DATA_ROOM_FRM';
+    const docs = [...DATA_ROOM_FRM.fields.documents];
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -75,7 +79,7 @@ export default class DataRoom extends Component {
               <div className="action">Actions</div>
             </div>
             <ReactDragList
-              dataSource={DATA_ROOM_FRM.fields.documents.length && DATA_ROOM_FRM.fields.documents}
+              dataSource={docs}
               rowKey="title"
               handles={false}
               onUpdate={this.handleUpdate}

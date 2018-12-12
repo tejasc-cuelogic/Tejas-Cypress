@@ -1656,6 +1656,11 @@ export class OfferingCreationStore {
       index,
     );
   }
+
+  @action
+  setDataRoomDocsOrder = (orderedForm) => {
+    this.DATA_ROOM_FRM.fields.documents = toJS(orderedForm);
+  }
 }
 
 export default new OfferingCreationStore();
