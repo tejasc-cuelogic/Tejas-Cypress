@@ -62,7 +62,9 @@ export default class OfferingCompany extends Component {
         <Divider section />
         <Header as="h4">
           History
+          {!isReadonly &&
           <Link to={this.props.match.url} className="link" onClick={e => this.addNewMileStone(e, formName, 'history')}><small>+ Add another milestone</small></Link>
+          }
         </Header>
         {
           OFFERING_COMPANY_FRM.fields.history.map((history, index) => (

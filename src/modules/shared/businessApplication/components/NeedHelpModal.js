@@ -42,23 +42,16 @@ export default class NeedHelpModal extends Component {
           <Header as="h4">Need Help / Have Questions?</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
           <Form error onSubmit={this.submit}>
-            {
-              ['name', 'email'].map(field => (
-                <FormInput
-                  key={field}
-                  type="text"
-                  name={field}
-                  fielddata={fields[field]}
-                  changed={(e, res) => businessAppEleChange(e, res, 'NEED_HELP_FRM')}
-                />
-              ))
-            }
+            {['name', 'email'].map(field => (
+              <FormInput
+                key={field}
+                type="text"
+                name={field}
+                fielddata={fields[field]}
+                changed={(e, res) => businessAppEleChange(e, res, 'NEED_HELP_FRM')}
+              />
+            ))}
             <MaskedInput
               name="phone"
               fielddata={fields.phone}
@@ -71,10 +64,16 @@ export default class NeedHelpModal extends Component {
               containerclassname="secondary"
               changed={(e, res) => businessAppEleChange(e, res, 'NEED_HELP_FRM')}
             />
+            {!errors &&
+              <Message error>
+                <p>Test Error</p>
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
             <div className="center-align">
-              <Button.Group>
-                <Button inverted onClick={this.handleCloseModal} color="red" >Cancel</Button>
-                <Button disabled={!NEED_HELP_FRM.meta.isValid} className="relaxed" loading={inProgress} color="green">Send</Button>
+              <Button.Group widths="2" className="inline">
+                <Button inverted color="red" className="relaxed" content="Cancel" onClick={this.handleCloseModal} />
+                <Button primary className="relaxed" content="Send" disabled={!NEED_HELP_FRM.meta.isValid} loading={inProgress} />
               </Button.Group>
             </div>
           </Form>

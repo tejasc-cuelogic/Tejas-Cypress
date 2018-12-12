@@ -16,6 +16,18 @@ class InvestmentDetails extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyContent = 'No data found.';
+    const minOfferingExpenseDesc = campaign && campaign.legal &&
+      campaign.legal.general && campaign.legal.general.useOfProceeds &&
+      campaign.legal.general.useOfProceeds.minOfferingExpenseAmountDescription ?
+      campaign.legal.general.useOfProceeds.minOfferingExpenseAmountDescription
+      :
+      null;
+    const maxOfferingExpenseDesc = campaign && campaign.legal &&
+      campaign.legal.general && campaign.legal.general.useOfProceeds &&
+      campaign.legal.general.useOfProceeds.maxOfferingExpenseAmountDescription ?
+      campaign.legal.general.useOfProceeds.maxOfferingExpenseAmountDescription
+      :
+      null;
     return (
       <div className="campaign-content-wrapper">
         <Aux>
@@ -30,6 +42,7 @@ class InvestmentDetails extends Component {
                         campaign.media.heroImage.url ?
                         campaign.media.heroImage.url : null
                       }
+                      imgType="heroImage"
                     />
                   </Segment>
                 </Grid.Column>
@@ -39,31 +52,18 @@ class InvestmentDetails extends Component {
                   <div className="segment-container small">
                     <Header as="h3">Use of Proceeds</Header>
                     {campaign && campaign.legal &&
-                      campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                      campaign.legal.general.useOfProceeds ?
+                      campaign.legal.general && campaign.legal.general.useOfProceeds ?
                         <Aux>
                           <Header as="h6">If minimum offering amount is reached:</Header>
                           <p>
-                            {campaign && campaign.legal &&
-                              campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                              campaign.legal.general.useOfProceeds.reachedMinOfferingGoal ?
-                              campaign.legal.general.useOfProceeds.reachedMinOfferingGoal
-                              :
-                              emptyContent
-                            }
+                            {minOfferingExpenseDesc || emptyContent}
                           </p>
                           <Header as="h6">If maximum offering amount is reached:</Header>
                           <p>
-                            {campaign && campaign.legal &&
-                              campaign.legal.general && campaign.legal.general.useOfProceeds &&
-                              campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal ?
-                              campaign.legal.general.useOfProceeds.reachedMaxOfferingGoal
-                              :
-                              emptyContent
-                            }
+                            {maxOfferingExpenseDesc || emptyContent}
                           </p>
                         </Aux>
-                      :
+                        :
                         <InlineLoader text={emptyContent} />
                     }
                   </div>
@@ -78,6 +78,7 @@ class InvestmentDetails extends Component {
                         campaign.media.heroImage.url ?
                         campaign.media.heroImage.url : null
                       }
+                      imgType="heroImage"
                     />
                   </Segment>
                 </Grid.Column>

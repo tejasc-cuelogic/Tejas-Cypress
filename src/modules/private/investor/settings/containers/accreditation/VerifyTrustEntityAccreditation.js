@@ -3,6 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import NetWorth from './assets/NetWorth';
 import Verification from './shared/Verification';
+import IncomeEvidence from './shared/IncomeEvidence';
 import AccreditationMethod from './shared/AccreditationMethod';
 import { ENTITY_TRUST_NET_WORTH, ACCREDITATION_METHODS_ENTITY } from './../../../../../../services/constants/investmentLimit';
 import PopulateAccreditationSteps from './PopulateAccreditationSteps';
@@ -59,7 +60,7 @@ export default class VerifyTrustEntityAccreditation extends React.Component {
       [
         { key: 'TRUST_ENTITY_ACCREDITATION_FRM' },
         { key: 'NET_WORTH_FORM', component: <NetWorth isTrust /> },
-        { key: 'INCOME_EVIDENCE_FORM' },
+        { key: 'INCOME_EVIDENCE_FORM', component: <IncomeEvidence isTrust /> },
         {
           key: 'VERIFICATION',
           component: <Verification refLink={this.props.refLink} type={3} />,

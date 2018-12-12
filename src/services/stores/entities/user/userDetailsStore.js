@@ -154,13 +154,16 @@ export class UserDetailsStore {
 
   @action
   toggleState = (id, accountStatus) => {
-    const params = { status: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCK', id };
+    const params = { accountStatus: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCKED', id };
     client
       .mutate({
         mutation: toggleUserAccount,
         variables: params,
       })
-      .then(() => this.updateUserStatus(params.status))
+      .then(() => {
+        this.getUserProfileDetails(this.detailsOfUser.data.user.id);
+        this.updateUserStatus(params.status);
+      })
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
 
@@ -327,6 +330,15 @@ export class UserDetailsStore {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    if (form === 'USER_INVESTOR_PROFILE') {
+      if (details.investorProfileData && details.investorProfileData.annualIncome) {
+        ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
+          this.USER_INVESTOR_PROFILE.fields[item].value =
+          details.investorProfileData.annualIncome[index].income;
+          return true;
+        });
+      }
+    }
     return false;
   }
 

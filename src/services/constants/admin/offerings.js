@@ -47,7 +47,7 @@ export const KEY_TERMS = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Shorthand Name of Business',
+    label: 'Short hand Name of Business',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
@@ -1841,7 +1841,7 @@ export const RISK_FACTORS = {
   taxRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
-    refSelector: 'isRegulatoryFoodRisks',
+    refSelector: 'isTaxRisks',
     error: undefined,
     rule: 'optional',
     defaultValue: 'We are subject to federal, state and local taxes. In making tax estimates and paying taxes, significant judgment is often required. Although we believe our tax positions and estimates are reasonable, we could have additional tax liability, including interest and penalties, if a taxing authority disagrees with the positions. If material, payment of such additional amounts could have a material impact on finances and results of operations.',
@@ -2418,4 +2418,32 @@ export const DATA_ROOM = {
       rule: 'required',
     },
   }],
+};
+
+export const POC_DETAILS = {
+  address: {
+    value: '',
+    label: 'POC',
+    tooltip: 'Email Address',
+    objRef: 'issuerDetails.email',
+    error: undefined,
+    rule: 'string|required|email',
+    placeHolder: 'Enter here',
+  },
+  name: {
+    value: '',
+    label: 'Lead Name',
+    error: undefined,
+    objRef: 'lead',
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  targetDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    objRef: 'offering.launch',
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
 };

@@ -14,11 +14,22 @@ export default class CancelInvestment extends Component {
     btnCancel: '',
   }
   componentWillMount() {
-    const { setInitialLinkValue } = this.props.portfolioStore;
+    const { setInitialLinkValue, setInvestmentDetailsForCancelRequest } = this.props.portfolioStore;
     setInitialLinkValue(false);
+    setInvestmentDetailsForCancelRequest(null);
     this.props.uiStore.clearErrors();
   }
-
+  componentDidMount() {
+    const {
+      getInvestorAccounts,
+      setInvestmentDetailsForCancelRequest,
+    } = this.props.portfolioStore;
+    const pendingList = getInvestorAccounts && getInvestorAccounts.investments &&
+      getInvestorAccounts.investments.pending ? getInvestorAccounts.investments.pending : [];
+    const investmentDetials =
+      find(pendingList, { agreementId: toInteger(this.props.match.params.id) });
+    setInvestmentDetailsForCancelRequest(investmentDetials);
+  }
   submit = (e) => {
     e.preventDefault();
     const { cancelAgreement } = this.props.portfolioStore;
@@ -42,39 +53,40 @@ export default class CancelInvestment extends Component {
 
   render() {
     const { inProgress, errors } = this.props.uiStore;
-    const { isCancelShowLink, getInvestorAccounts } = this.props.portfolioStore;
+    const {
+      isCancelShowLink,
+      getInvestorAccounts,
+      canceledInvestmentDetails,
+    } = this.props.portfolioStore;
     const pendingList = getInvestorAccounts && getInvestorAccounts.investments &&
       getInvestorAccounts.investments.pending ? getInvestorAccounts.investments.pending : [];
-    const investmentOfferingDetails =
+    const investmentDetials =
       find(pendingList, { agreementId: toInteger(this.props.match.params.id) });
+    // setInvestmentDetailsForCancelRequest(investmentDetials);
+    const investmentOfferingDetails = investmentDetials || canceledInvestmentDetails;
     return (
       <Modal size="small" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h3"> {!isCancelShowLink ? 'Do you want to cancel this investment?' : 'Investment has been canceled.'}</Header>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
-          {!isCancelShowLink ?
-            <OfferingInvestDetails
-              offering={investmentOfferingDetails || null}
-              accType={this.props.accType}
-              disabledClass={isCancelShowLink ? 'disabled' : ''}
-            />
-            :
-            null}
+        <Modal.Content className="signup-content relaxed">
+          <Header as="h3" className="center-align">{!isCancelShowLink ? 'Do you want to cancel this investment?' : 'Investment has been canceled.'}</Header>
+          <OfferingInvestDetails
+            offering={investmentOfferingDetails || null}
+            accType={this.props.accType}
+            disabledClass={isCancelShowLink ? 'disabled' : ''}
+          />
           {!isCancelShowLink ?
             <Form error onSubmit={this.submit}>
-              <div className="center-align mt-40">
+              {errors &&
+                <Message error className="mt-30">
+                  <ListErrors errors={[errors]} />
+                </Message>
+              }
+              <div className="center-align mt-30">
                 <Button loading={inProgress} color="red" id="btnCancel" onClick={() => { this.handleClick('btnCancel'); }}>Yes, cancel investment</Button>
                 <Button color="green" id="btnNotCancel" onClick={() => { this.handleClick('btnNotCancel'); }}>No, keep investment</Button>
               </div>
             </Form>
             :
-            <div className="center-align mt-40">
+            <div className="center-align mt-30">
               <Link to="/app/account-details/individual/portfolio" className="back-link"><Icon className="ns-arrow-right" />Go to My Dashboard</Link>
             </div>
           }

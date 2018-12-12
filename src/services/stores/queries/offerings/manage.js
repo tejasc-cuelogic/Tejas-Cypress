@@ -23,6 +23,18 @@ export const allOfferings = gql`
       keyTerms {
         legalBusinessName
       }
+      issuerDetails {
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+       phone {
+        number
+      } 
+      }
       offering {
         launch {
           targetDate
@@ -32,7 +44,6 @@ export const allOfferings = gql`
       applicationId
       issuerId
       lead {
-        id
         name
       }
       stage
@@ -63,6 +74,18 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       previewPassword
+      issuerDetails {
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+       phone {
+        number
+      } 
+      }
       keyTerms {
         revSharePercentageDescription
         useOfProceedFootnote
@@ -827,7 +850,6 @@ export const getOfferingDetails = gql`
       applicationId
       issuerId
       lead {
-        id
         name
       }
       stage
@@ -860,8 +882,8 @@ export const getOfferingDetails = gql`
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
-  updateOffering(id: $id offeringDetails: $offeringDetails) {
+mutation _updateOffering($id: String!, $poc: String, $offeringDetails: OfferingInputType!) {
+  updateOffering(id: $id, poc: $poc offeringDetails: $offeringDetails) {
     id
   }
 }

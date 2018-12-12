@@ -95,25 +95,21 @@ export default class StatusChangeAppModal extends Component {
           <Header as="h3">{params.action === 'REMOVED' ? 'Remove' : capitalize(params.action)} Application?</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
           <Form error>
-            <Form.Group widths="equal">
-              <FormTextarea
-                type="text"
-                name="text"
-                fielddata={fields.text}
-                changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
-                containerclassname="secondary"
-              />
-            </Form.Group>
+            <FormTextarea
+              type="text"
+              name="text"
+              fielddata={fields.text}
+              changed={(e, result) => formChange(e, result, 'APPLICATION_STATUS_COMMENT_FRM')}
+              containerclassname="secondary"
+            />
+            {errors &&
+              <Message error>
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
             <div className="center-align">
-              <Button.Group>
-                <Button className="very relaxed" disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} color="green">Submit</Button>
-              </Button.Group>
+              <Button primary className="very relaxed" content="Submit" disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} onClick={params.action === 'PROMOTE' ? this.promoteApplication : this.updateApplicationStatus} loading={inProgress} />
             </div>
           </Form>
         </Modal.Content>

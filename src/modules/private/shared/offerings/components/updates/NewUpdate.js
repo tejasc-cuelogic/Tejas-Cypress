@@ -49,6 +49,13 @@ export default class NewUpdate extends Component {
   edit = () => {
     this.setState({ editForm: true });
   }
+  cancelUpdate = () => {
+    this.props.history.push(this.props.refLink);
+  }
+  cancelChanges = () => {
+    this.initiateFlow(this.props.id);
+    this.setState({ editForm: false });
+  }
   render() {
     const {
       PBUILDER_FRM, UpdateChange, FChange, loadingCurrentUpdate,
@@ -65,7 +72,9 @@ export default class NewUpdate extends Component {
       <Modal.Content className="transaction-details">
         <Header as="h3">
           {isNew ? 'New' : 'Edit'} Update
-          <Status status={PBUILDER_FRM.fields.status.value} />
+          {!isNew &&
+            <Status status={PBUILDER_FRM.fields.status.value} />
+          }
           <Actions
             save={this.save}
             meta={PBUILDER_FRM.meta}
@@ -76,6 +85,8 @@ export default class NewUpdate extends Component {
             edit={this.edit}
             deleteUpdate={this.showConfirmModal}
             id={this.props.id}
+            cancelUpdate={this.cancelUpdate}
+            cancelChanges={this.cancelChanges}
           />
         </Header>
         <Divider hidden />
@@ -111,11 +122,6 @@ export default class NewUpdate extends Component {
                       <Link to="/"><Icon className="ns-envelope" />Send test email to me</Link>
                     </List.Item>
                   </List>
-                </Card.Content>
-              </Card>
-              <Card fluid>
-                <Card.Content>
-                  <h4>Chat box will be here</h4>
                 </Card.Content>
               </Card>
               {this.props.match.url.includes('engagement') &&

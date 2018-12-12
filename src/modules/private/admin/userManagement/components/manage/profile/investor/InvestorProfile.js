@@ -24,7 +24,7 @@ export default class InvestorProfile extends Component {
         <Header as="h6">Employment</Header>
         <Form.Group widths={3}>
           {
-          ['employmentStatus', 'employer', 'position'].map(field => (
+          ['status', 'employer', 'position'].map(field => (
             <FormInput
               key={field}
               name={field}

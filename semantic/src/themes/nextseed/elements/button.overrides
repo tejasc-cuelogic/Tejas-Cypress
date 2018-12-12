@@ -170,6 +170,19 @@
     .ui.button{
         border-radius:6px;
     }
+    &.inline:not(.vertical){
+        padding:0 @5px;
+        width:auto;
+        .ui.button{
+            margin:0 @5px !important;
+            &:first-child{
+                margin-left:-@5px !important;
+            }
+            &:last-child{
+                margin-right:0 !important;
+            }
+        }
+    }
 }
 
 .ui.button.multistep__btn{

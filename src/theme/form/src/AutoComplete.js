@@ -16,20 +16,27 @@ export default class AutoComplete extends Component {
       label, error, value, placeHolder,
     } = props.fielddata;
     const { displayMode, readOnly } = props;
+    const classes = `${props.containerclassname || ''} ${props.readOnly ? 'display-only' : ''}`;
     return (
-      <Form.Field error={(!!error && this.state.showError) || (!!error && props.showerror)} className={props.containerclassname || ''}>
+      <Form.Field
+        error={(!!error && this.state.showError) || (!!error && props.showerror)}
+        className={classes}
+      >
         <label>{label}</label>
-        <Autocomplete
-          {...props}
-          onPlaceSelected={(place) => {
-            props.onplaceselected(place);
-          }}
-          value={value}
-          placeholder={(displayMode || readOnly) ? '' : placeHolder}
-          types={['address']}
-          onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
-          onBlur={() => this.triggerError(true)}
-        />
+        {props.readOnly ?
+          <p className="address-line">{value}</p> :
+          <Autocomplete
+            {...props}
+            onPlaceSelected={(place) => {
+              props.onplaceselected(place);
+            }}
+            value={value}
+            placeholder={(displayMode || readOnly) ? '' : placeHolder}
+            types={['address']}
+            onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
+            onBlur={() => this.triggerError(true)}
+          />
+        }
         {((error && this.state.showError) || (error && props.showerror)) &&
           <FieldError error={error} />
         }

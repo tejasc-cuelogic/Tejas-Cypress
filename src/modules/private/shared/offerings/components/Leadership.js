@@ -52,7 +52,9 @@ export default class Leadership extends Component {
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
             <div className="sticy-sidebar">
               <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+              {LEADERSHIP_FRM.fields.leadership.length < 5 &&
               <Button size="small" color="blue" className="link-button mt-20" onClick={e => this.addMore(e, formName)}>+ Add another leader</Button>
+              }
               <FaqWidget fullHeading="FAQ" faqs={faqsOfModule} />
             </div>
           </Grid.Column>
