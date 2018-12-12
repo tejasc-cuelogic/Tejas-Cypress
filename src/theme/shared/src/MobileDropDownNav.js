@@ -8,6 +8,10 @@ import { NavItems } from '../../../theme/layout/NavigationItems';
 @inject('campaignStore', 'navStore')
 @observer
 export default class MobileDropDownNav extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(nextProps, nextState);
+    return false;
+  }
   activeText = () => {
     const { navItems, location, refMatch } = this.props;
     const active = navItems.find((i) => {

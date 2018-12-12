@@ -6,10 +6,6 @@ import { orderBy, filter } from 'lodash';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 import ChartPieForBonusRewards from './ChartPieForBonusRewards';
 
-// const COLORS = ['#C782FF', '#28DAC9', '#0681A1', '#86D200', '#D2FF85', '#474747'];
-// const COLORS = ['#E6E7EB', '#20C86D'];
-// const bonusDetails = [{ name: '10', value: 100 }, { name: '10', value: 10 }];
-
 class BonusRewards extends Component {
   render() {
     const { isTabletLand, refLink, campaign } = this.props;
