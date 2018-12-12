@@ -103,7 +103,6 @@ export const checkUserPhoneVerificationCode = gql`
 export const updateUserCIPInfo = gql`
 mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation) {
     updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip) {
-      id
       email {
         address
       } info{
