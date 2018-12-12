@@ -475,6 +475,27 @@ export const getOfferingDetails = gql`
             status
           }
         }
+        dataroom {
+          documents {
+            name
+            upload {
+              fileId
+              fileName
+            }
+            accreditedOnly
+          }
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+        }
         documentation {
           issuer {
             formID {

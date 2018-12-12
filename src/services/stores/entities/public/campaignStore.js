@@ -1,9 +1,10 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy } from 'lodash';
+import { pickBy, forEach } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
+import { getBoxEmbedLink } from '../../queries/agreements';
 
 export class CampaignStore {
   @observable data = [];
@@ -15,6 +16,18 @@ export class CampaignStore {
   @observable RECORDS_TO_DISPLAY = 12;
   @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
+  @observable embedUrl = null;
+  @observable docLoading = false;
+
+  @action
+  setLoading = (status) => {
+    this.docLoading = status;
+  }
+
+  @action
+  setAgreementUrl = (of, url) => {
+    this.embedUrl = url;
+  }
 
   @action
   setFieldValue = (field, val) => {
@@ -150,6 +163,40 @@ export class CampaignStore {
 
   @computed get maxInvestAmt() {
     return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.maxInvestAmt : null;
+  }
+
+  @computed get dataRoomDocs() {
+    return this.campaign && this.campaign.legal && this.campaign.legal.dataroom
+    && this.campaign.legal.dataroom.documents ?
+      this.campaign.legal.dataroom.documents : null;
+  }
+
+  @computed get getNavItemsForDataRoom() {
+    const documentsList = toJS(this.dataRoomDocs);
+    const navList = [];
+    forEach(documentsList, (ele, idx) => {
+      if (!ele.accreditedOnly) {
+        navList.push({
+          title: ele.name,
+          to: idx,
+          url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
+        });
+      }
+    });
+    return navList;
+  }
+
+  @action
+  getBoxEmbedLink = (of, fileId) => {
+    this.docLoading = true;
+    const boxFileId = fileId;
+    clientPublic.mutate({
+      mutation: getBoxEmbedLink,
+      variables: { fileId: boxFileId },
+    }).then((res) => {
+      this.setAgreementUrl(of, res.data.getBoxEmbedLink);
+      this.setLoading(false);
+    }).catch(() => this.setLoading(false));
   }
 }
 
