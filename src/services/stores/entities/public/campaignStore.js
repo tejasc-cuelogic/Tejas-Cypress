@@ -1,9 +1,10 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy } from 'lodash';
+import { pickBy, forEach } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery } from '../../queries/campagin';
+import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
+import { getBoxEmbedLink } from '../../queries/agreements';
 
 export class CampaignStore {
   @observable data = [];
@@ -12,7 +13,21 @@ export class CampaignStore {
   @observable campaignSideBarShow = false;
   @observable selectedReadMore = {};
   @observable selectedReadLess = {};
+  @observable RECORDS_TO_DISPLAY = 12;
+  @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
+  @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
+  @observable embedUrl = null;
+  @observable docLoading = false;
 
+  @action
+  setLoading = (status) => {
+    this.docLoading = status;
+  }
+
+  @action
+  setAgreementUrl = (of, url) => {
+    this.embedUrl = url;
+  }
 
   @action
   setFieldValue = (field, val) => {
@@ -20,14 +35,26 @@ export class CampaignStore {
   }
 
   @action
-  initRequest = (publicRef) => {
+  initRequest = (publicRef, referralCode = false) => {
     const stage = Object.keys(pickBy(STAGES, s => publicRef.includes(s.publicRef)));
-    this.data =
-      graphql({
-        client: clientPublic,
-        query: allOfferings,
-        variables: { filters: { stage } },
-      });
+    const filters = { stage };
+    if (referralCode) {
+      filters.referralCode = referralCode;
+    }
+    return new Promise((resolve) => {
+      this.data =
+        graphql({
+          client: clientPublic,
+          query: referralCode ? getOfferingsReferral : allOfferings,
+          variables: { filters },
+          onFetch: (data) => {
+            if (data) {
+              const offering = data.getOfferingList.length && data.getOfferingList[0];
+              resolve(offering);
+            }
+          },
+        });
+    });
   }
 
   @action
@@ -65,13 +92,33 @@ export class CampaignStore {
   }
 
   @computed get active() {
-    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active'))
-      .includes(o.stage));
+    const offeringList = this.activeList.slice();
+    return offeringList.splice(0, this.activeToDisplay);
+  }
+
+  @computed get activeList() {
+    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'active')).includes(o.stage));
   }
 
   @computed get completed() {
-    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed'))
-      .includes(o.stage));
+    const offeringList = this.completedList.slice();
+    return offeringList.splice(0, this.completedToDisplay);
+  }
+  @computed get completedList() {
+    return this.OfferingList.filter(o => Object.keys(pickBy(STAGES, s => s.publicRef === 'completed')).includes(o.stage));
+  }
+  @action
+  loadMoreRecord = (type) => {
+    const offeringsList = type === 'completedToDisplay' ? this.completedList : this.activeList;
+    if (offeringsList.length > this[type]) {
+      this[type] = this[type] + this.RECORDS_TO_DISPLAY;
+    }
+  }
+
+  @action
+  resetDisplayCounts = () => {
+    this.completedToDisplay = this.RECORDS_TO_DISPLAY;
+    this.activeToDisplay = this.RECORDS_TO_DISPLAY;
   }
 
   @computed get campaign() {
@@ -116,6 +163,40 @@ export class CampaignStore {
 
   @computed get maxInvestAmt() {
     return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.maxInvestAmt : null;
+  }
+
+  @computed get dataRoomDocs() {
+    return this.campaign && this.campaign.legal && this.campaign.legal.dataroom
+    && this.campaign.legal.dataroom.documents ?
+      this.campaign.legal.dataroom.documents : null;
+  }
+
+  @computed get getNavItemsForDataRoom() {
+    const documentsList = toJS(this.dataRoomDocs);
+    const navList = [];
+    forEach(documentsList, (ele, idx) => {
+      if (!ele.accreditedOnly) {
+        navList.push({
+          title: ele.name,
+          to: idx,
+          url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
+        });
+      }
+    });
+    return navList;
+  }
+
+  @action
+  getBoxEmbedLink = (of, fileId) => {
+    this.docLoading = true;
+    const boxFileId = fileId;
+    clientPublic.mutate({
+      mutation: getBoxEmbedLink,
+      variables: { fileId: boxFileId },
+    }).then((res) => {
+      this.setAgreementUrl(of, res.data.getBoxEmbedLink);
+      this.setLoading(false);
+    }).catch(() => this.setLoading(false));
   }
 }
 

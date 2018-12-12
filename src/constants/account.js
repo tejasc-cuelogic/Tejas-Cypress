@@ -1,4 +1,7 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import moment from 'moment';
+import React from 'react';
+import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
@@ -140,6 +143,16 @@ export const US_STATES = [
   { key: '1V', value: '1V', text: 'NORTHERN MARIANA ISLANDS' },
 ];
 
+export const FILE_UPLOAD_STEPS = {
+  photoId: 'PROFILE_CIP_LICENSE',
+  proofOfResidence: 'PROFILE_CIP_RESIDENCE',
+  identityDoc: 'ACCOUNT_IRA_PHOTO_ID',
+  legalDocUrl: 'ACCOUNT_ENTITY_PHOTO_ID',
+  formationDoc: 'ACCOUNT_ENTITY_FORMATION',
+  operatingAgreementDoc: 'ACCOUNT_ENTITY_OPERATING_AGREEMENT',
+  einVerificationDoc: 'ACCOUNT_ENTITY_EIN_VERIFICATION',
+};
+
 export const IND_LINK_BANK_MANUALLY = {
   routingNumber: {
     key: 'routingNumber',
@@ -147,8 +160,8 @@ export const IND_LINK_BANK_MANUALLY = {
     error: undefined,
     rule: 'required|numeric|digits:9',
     placeHolder: '123456789',
-    label: 'Bank routing number',
-    tooltip: 'Put your 9 digit bank routing number',
+    label: 'Bank Routing Number',
+    // tooltip: 'Put your 9 digit bank routing number',
     maxLength: 9,
   },
   accountNumber: {
@@ -157,8 +170,8 @@ export const IND_LINK_BANK_MANUALLY = {
     error: undefined,
     placeHolder: '123456789',
     rule: 'required|minAcnum',
-    label: 'Bank account number',
-    tooltip: 'Put your 4 to 17 digit bank account number',
+    label: 'Bank Account Number',
+    // tooltip: 'Put your 4 to 17 digit bank account number',
     maxLength: 17,
   },
 };
@@ -168,9 +181,12 @@ export const IND_ADD_FUND = {
     value: '',
     key: 'value',
     error: undefined,
-    rule: 'required|numeric',
+    rule: 'optional|numeric|min:100',
     label: 'Deposit Amount',
     maxLength: 15,
+    customErrors: {
+      min: 'The deposit amount should be at least 100.',
+    },
   },
 };
 
@@ -233,7 +249,7 @@ export const IRA_ACC_TYPES = {
       {
         label: 'Roth',
         value: 1,
-        description: 'Earnings from investments on a Roth Individual Retirement Account grow tax-free. ',
+        description: 'Earnings from investments on a Traditional Indiviudal Retirement Account grow tax-deferred.',
         rawValue: 'roth',
       },
     ],
@@ -284,8 +300,8 @@ export const IRA_FIN_INFO = {
     placeHolder: 'Your networth',
     maxLength: 15,
   },
-  annualIncome: {
-    key: 'annualIncome',
+  income: {
+    key: 'income',
     value: '',
     error: undefined,
     rule: 'required|numeric',
@@ -293,6 +309,12 @@ export const IRA_FIN_INFO = {
     label: 'Annual income',
     placeHolder: 'Your annual income',
     maxLength: 15,
+  },
+  investmentLimit: {
+    key: 'investmentLimit',
+    value: '',
+    error: undefined,
+    rule: 'numeric|min:5000',
   },
 };
 
@@ -326,28 +348,47 @@ export const ENTITY_FIN_INFO = {
     rule: 'required|numeric',
     maxLength: 15,
   },
+  investmentLimit: {
+    key: 'investmentLimit',
+    value: '',
+    error: undefined,
+    rule: 'numeric|min:5000',
+  },
 };
 
 export const ENTITY_GEN_INFO = {
   name: {
-    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'e.g. Pad Wealth',
+    key: 'name', value: '', label: 'Name of Entity', error: undefined, rule: 'required', placeHolder: 'Enter Here',
   },
   taxId: {
-    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'e.g. 12345',
+    key: 'taxId', value: '', label: 'Tax ID', error: undefined, rule: 'required|taxId', placeHolder: 'XX-XXXXXX',
+  },
+  entityType: {
+    key: 'entityType', value: '', label: 'Entity Type', error: undefined, rule: 'required|string', placeHolder: 'Select one',
   },
   street: {
-    key: 'street', value: '', label: 'Street', error: undefined, rule: 'required|string',
+    key: 'street', value: '', label: 'Street Address', error: undefined, rule: 'required|string', placeHolder: 'Enter Here',
   },
   city: {
-    key: 'city', value: '', placeHolder: 'New York', label: 'City', error: undefined, rule: 'required|string',
+    key: 'city', value: '', placeHolder: 'Enter Here', label: 'City', error: undefined, rule: 'required|string',
   },
   state: {
-    key: 'state', value: '', placeHolder: 'NY', label: 'State', error: undefined, rule: 'required|string',
+    key: 'state', value: '', placeHolder: 'Select', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: '1001', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|numeric',
   },
 };
+
+export const ENTITY_TYPES = [
+  { key: 'LLC', value: 'LLC', text: 'LLC' },
+  { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+  { key: 'S-Corporation', value: 'SCORP', text: 'S-Corporation' },
+  { key: 'Partnership', value: 'PARTNERSHIP', text: 'Partnership' },
+  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
+  { key: 'Estate', value: 'ESTATE', text: 'Estate' },
+  { key: 'Exempt Organization', value: 'EXEMPT_ORGANIZATION', text: 'Exempt Organization' },
+];
 
 export const ENTITY_TRUST_INFO = {
   isTrust: {
@@ -364,10 +405,10 @@ export const ENTITY_TRUST_INFO = {
 
 export const ENTITY_PERSONAL_INFO = {
   title: {
-    key: 'title', value: '', error: undefined, rule: 'required', label: 'What is your title with the Entity', placeHolder: 'e.g. CEO',
+    key: 'title', value: '', error: undefined, rule: 'required', label: 'Title with the Entity', placeHolder: 'e.g. CEO',
   },
   legalDocUrl: {
-    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Drivers Livense or Passport)', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 
@@ -376,7 +417,7 @@ export const ENTITY_FORMATION_DOCS = {
     key: 'formationDoc', label: 'Entity Formation Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   operatingAgreementDoc: {
-    key: 'operatingAgreementDoc', label: 'Entity Operating Document', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'operatingAgreementDoc', label: 'Entity Operating Agreement', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
   },
   einVerificationDoc: {
     key: 'einVerificationDoc', label: 'EIN Verification', value: '', error: undefined, rule: 'required', preSignedUrl: '', fileId: '', fileData: '',
@@ -388,7 +429,7 @@ export const ACC_TYPE = {
     value: 0,
     values: [
       {
-        label: 'Individual',
+        label: (<label><Icon className="ns-individual-line" />Individual</label>),
         value: 0,
         description: `Open a NextSeed investment account to begin investing in local businesses.
         An initial deposit can be quickly and securely completed by linking your checking account. 
@@ -399,7 +440,7 @@ export const ACC_TYPE = {
         accType: 'individual',
       },
       {
-        label: 'IRA',
+        label: (<label><Icon className="ns-ira-line" />IRA</label>),
         value: 1,
         description: `Open a self-directed NextSeed IRA to begin investing in local businesses. (Traditional and Roth IRA options available.) 
         Minimum opening deposit: $5,000. Investment limits apply. 
@@ -408,7 +449,7 @@ export const ACC_TYPE = {
         accType: 'ira',
       },
       {
-        label: 'Entity',
+        label: (<label><Icon className="ns-entity-line" />Entity</label>),
         value: 2,
         description: `Invest in local businesses through an Entity investment account. (Note: Investment limits for Entity accounts are treated separately from Individual investment accounts) 
         An initial deposit can be quickly and securely completed by linking your entity checking account. You can easily connect your account by logging in through our secure system or by manually entering your account information. 
@@ -421,129 +462,201 @@ export const ACC_TYPE = {
   },
 };
 
-export const EMPLOYMENT = {
-  employmentStatus: {
-    key: 'employmentStatus',
+export const BROKERAGE_EMPLOYMENT = {
+  brokerageEmployment: {
+    key: 'brokerageEmployment',
     value: '',
     values:
       [
-        { label: 'Employed', value: 'EMPLOYED' },
-        { label: 'Self Employed', value: 'SELF_EMPLOYED' },
-        { label: 'Retired', value: 'RETIRED' },
-        { label: 'Student', value: 'STUDENT' },
-        { label: 'Not Employee', value: 'NOT_EMPLOYED' },
+        {
+          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+        },
+        {
+          label: 'No', value: 'no', key: 'No', text: 'No',
+        },
+      ],
+    skipField: true,
+    error: undefined,
+    rule: 'required',
+  },
+  brokerageFirmName: {
+    key: 'brokerageFirmName',
+    value: '',
+    label: 'Member Firm Name',
+    error: undefined,
+    rule: 'required_if:brokerageEmployment,yes',
+    placeHolder: 'Enter here',
+    customErrors: {
+      required_if: 'required',
+    },
+  },
+};
+
+export const PUBLIC_COMPANY_REL = {
+  publicCompanyRel: {
+    key: 'publicCompanyRel',
+    value: '',
+    values:
+      [
+        {
+          label: 'Yes', value: 'yes', key: 'Yes', text: 'Yes',
+        },
+        {
+          label: 'No', value: 'no', key: 'No', text: 'No',
+        },
+      ],
+    skipField: true,
+    error: undefined,
+    rule: 'required',
+  },
+  publicCompanyTicker: {
+    key: 'publicCompanyTicker',
+    value: '',
+    label: 'Ticker symbol',
+    error: undefined,
+    rule: 'required_if:publicCompanyRel,yes',
+    placeHolder: 'E.g. GOOG',
+    customErrors: {
+      required_if: 'required',
+    },
+  },
+};
+
+export const EMPLOYMENT = {
+  status: {
+    key: 'status',
+    value: '',
+    values:
+      [
+        {
+          label: 'Employed', value: 'EMPLOYED', key: 'Employed', text: 'Employed',
+        },
+        {
+          label: 'Self Employed', value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
+        },
+        {
+          label: 'Retired', value: 'RETIRED', key: 'Retired', text: 'Retired',
+        },
+        {
+          label: 'Student', value: 'STUDENT', key: 'Student', text: 'Student',
+        },
+        {
+          label: 'Not Employed', value: 'NOT_EMPLOYED', key: 'Not Employed', text: 'Not Employed',
+        },
       ],
     error: undefined,
     rule: 'required',
-    objRef: 'employmentStatusInfo',
+    objRef: 'employment',
+    objRefOutput: 'employment',
   },
   employer: {
     key: 'employer',
     value: '',
     label: 'Employer',
     error: undefined,
-    rule: 'required_if:employmentStatus,EMPLOYED',
+    rule: 'required_if:status,EMPLOYED',
     placeHolder: 'Type employer name',
-    objRef: 'employmentStatusInfo',
+    objRef: 'employment',
+    objRefOutput: 'employment',
+    customErrors: {
+      required_if: 'required',
+    },
   },
-  currentPosition: {
-    key: 'currentPosition',
+  position: {
+    key: 'position',
     value: '',
     label: 'Current Position Held',
     error: undefined,
-    rule: 'required_if:employmentStatus,EMPLOYED',
+    rule: 'required_if:status,EMPLOYED',
     placeHolder: 'E.g. CEO',
-    objRef: 'employmentStatusInfo',
+    objRef: 'employment',
+    objRefOutput: 'employment',
+    customErrors: {
+      required_if: 'required',
+    },
   },
 };
 
 export const INVESTOR_PROFILE = {
   investorProfileType: {
     value: '',
-    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
+    values: [{
+      label: 'Individual', value: 'INDIVIDUAL', key: 'Individual', text: 'Individual',
+    },
+    {
+      label: 'Joint (Married)', value: 'JOINT', key: 'Joint (Married)', text: 'Joint (Married)',
+    }],
     error: undefined,
     rule: 'required',
   },
 };
 
 export const FINANCES = {
+  investorProfileType: {
+    value: '',
+    values: [{ label: 'Individual', value: 'INDIVIDUAL' }, { label: 'Joint (Married)', value: 'JOINT' }],
+    error: undefined,
+    rule: 'required',
+    customErrors: {
+      required: 'required',
+    },
+  },
   netWorth: {
     value: '',
-    label: 'Net Worth (Excluding Primary Residence)',
+    label: 'Net Worth',
     error: undefined,
     rule: 'required',
     placeHolder: 'Net Worth',
-    objRef: 'financialInfo',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeThirdLastYear: {
     value: '',
     label: 'Annual Income 2016',
     error: undefined,
     rule: 'required',
+    year: '2016',
     placeHolder: '$60,000',
-    objRef: 'financialInfo',
+    objRefOutput: 'annualIncome',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeLastYear: {
     value: '',
     label: 'Annual Income 2017',
     error: undefined,
     rule: 'required',
+    year: '2017',
     placeHolder: '$60,000',
-    objRef: 'financialInfo',
+    objRefOutput: 'annualIncome',
+    customErrors: {
+      required: 'required',
+    },
   },
   annualIncomeCurrentYear: {
     value: '',
-    label: 'Annual Income 2018',
+    label: 'Annual Income 2018 (Expected)',
     error: undefined,
     rule: 'required',
+    year: '2018',
     placeHolder: '$60,000',
-    objRef: 'financialInfo',
-  },
-  checkbox1: {
-    value: [],
-    values: [
-      {
-        label: 'I am (or a member of my immediate family is) a director, 10% shareholder, or senior officer of a publicity traded company.',
-        value: 'iamadirector',
-      },
-    ],
-    error: undefined,
-    rule: 'alpha',
-  },
-  checkbox2: {
-    value: [],
-    values: [
-      {
-        label: 'I am (or a member of my immediate family is) employed by or associated with a member firm, a stock exchange or FINRA.',
-        value: 'iamamember',
-      },
-    ],
-    error: undefined,
-    rule: 'alpha',
-  },
-  directorShareHolderOfCompany: {
-    value: '',
-    label: 'Company Name',
-    error: undefined,
-    rule: 'string',
-  },
-  employedOrAssoWithFINRAFirmName: {
-    value: '',
-    label: 'Firm Name',
-    error: undefined,
-    rule: 'string',
+    objRefOutput: 'annualIncome',
+    customErrors: {
+      required: 'required',
+    },
   },
 };
 
 export const INVESTMENT_EXPERIENCE = {
-  investmentExperienceLevel: {
+  experienceLevel: {
     value: '',
-    values: [{ label: 'No experience', value: 'NO_EXPERIENCE' }, { label: 'I know what I’m doing', value: 'KNOW_AWARE' }, { label: 'I have some experience', value: 'SOME_EXPERIENCE' }, { label: 'I’m an expert', value: 'EXPERT' }],
+    values: [{ label: 'No experience', value: 'NONE' }, { label: 'I have some experience', value: 'SOME' }, { label: 'I know what I’m doing', value: 'GOOD' }, { label: 'I’m an expert', value: 'EXPERT' }],
     error: undefined,
     rule: 'required',
-    objRef: 'investmentExperienceInfo',
   },
-  readyInvestingInLimitedLiquiditySecurities: {
+  isComfortable: {
     value: [],
     values: [
       {
@@ -552,9 +665,9 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
   },
-  readyForRisksInvolved: {
+  isRiskTaker: {
     value: [],
     values: [
       {
@@ -563,7 +676,7 @@ export const INVESTMENT_EXPERIENCE = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
   },
 };
 
@@ -572,4 +685,105 @@ export const INV_PROFILE = {
   ...INVESTOR_PROFILE,
   ...FINANCES,
   ...INVESTMENT_EXPERIENCE,
+};
+
+export const VARIFY_ROLES = [
+  { key: 'Investment Adviser (SEC-registered)', value: 'Investment Adviser (SEC-registered)', text: 'Investment Adviser (SEC-registered)' },
+  { key: 'Broker-Dealer (SEC-registered)', value: 'Broker-Dealer (SEC-registered)', text: 'Broker-Dealer (SEC-registered)' },
+  { key: 'Accountant (must be CPA)', value: 'Accountant (must be CPA)', text: 'Accountant (must be CPA)' },
+  { key: 'Personal Attorney (properly licensed)', value: 'Personal Attorney (properly licensed)', text: 'Personal Attorney (properly licensed)' },
+];
+
+
+export const INVESTOR_PROFILE_FULL_META = {
+  ...INVESTMENT_EXPERIENCE,
+  ...EMPLOYMENT,
+  ...BROKERAGE_EMPLOYMENT,
+  taxFilingAs: FINANCES.investorProfileType,
+  netWorth: FINANCES.netWorth,
+  annualIncomeThirdLastYear: FINANCES.annualIncomeThirdLastYear,
+  annualIncomeLastYear: FINANCES.annualIncomeLastYear,
+  annualIncomeCurrentYear: FINANCES.annualIncomeCurrentYear,
+  ...PUBLIC_COMPANY_REL,
+};
+
+export const INVESTMENT_EXPERIENCE_LIST = [
+  { key: 'No experience', value: 'NONE', text: 'No experience' },
+  { key: 'I have some experience', value: 'SOME', text: 'I have some experience' },
+  { key: 'I know what I’m doing', value: 'GOOD', text: 'I know what I’m doing' },
+  { key: 'I’m an expert', value: 'EXPERT', text: 'I’m an expert' },
+];
+
+export const EMPLOYMENT_LIST = [
+  {
+    value: 'EMPLOYED', key: 'Employed', text: 'Employed',
+  },
+  {
+    value: 'SELF_EMPLOYED', key: 'Self Employed', text: 'Self Employed',
+  },
+  {
+    value: 'RETIRED', key: 'Retired', text: 'Retired',
+  },
+  {
+    value: 'STUDENT', key: 'Student', text: 'Student',
+  },
+  {
+    value: 'NOT_EMPLOYED', key: 'Not Employed', text: 'Not Employed',
+  },
+];
+
+export const BROKERAGE_EMPLOYMENT_LIST = [
+  {
+    value: 'yes', key: 'Yes', text: 'Yes',
+  },
+  {
+    value: 'no', key: 'No', text: 'No',
+  },
+];
+
+export const PUBLIC_COMPANY_REL_LIST = [
+  {
+    value: 'yes', key: 'Yes', text: 'Yes',
+  },
+  {
+    value: 'no', key: 'No', text: 'No',
+  },
+];
+
+export const INVESTOR_PROFILE_LIST = [
+  {
+    value: 'INDIVIDUAL', key: 'Individual', text: 'Individual',
+  },
+  {
+    value: 'JOINT', key: 'Joint (Married)', text: 'Joint (Married)',
+  },
+];
+export const FILTER_META = {
+  method: {
+    value: [],
+    values: [
+      { text: 'All', value: 'all' },
+      { text: 'Verifier', value: 'verifier' },
+      { text: 'Upload', value: 'upload' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
+  type: {
+    value: [],
+    values: [
+      { text: 'All', value: 'all' },
+      { text: 'Plaid', value: 'plaid' },
+      { text: 'Manual', value: 'manual' },
+    ],
+    error: undefined,
+    rule: 'empty',
+  },
+};
+
+export const LINKED_ACCOUND_STATUS = {
+  REQUEST_CANCELLATION: 'Canceled',
+  REQUESTED: 'Pending Approval',
+  DENIED: 'Declined',
+  APPROVED: 'Approved',
 };

@@ -1,23 +1,24 @@
 import React, { Component } from 'react';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 class RevenueSharingKeyTerms extends Component {
   render() {
-    const { KeyTerms } = this.props;
+    const { KeyTerms, launch } = this.props;
+    const edgarLink = launch && launch.edgarLink;
     return (
       <Modal.Content scrolling>
         <Grid columns={3} divided stackable className="vertical-gutter">
           <Grid.Column>
-            <p><b>Issuer</b><br />{KeyTerms.shorthandBusinessName}</p>
+            <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Securities</b><br />{CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}</p>
+            <p><b>Regulation</b><br />{KeyTerms && KeyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Offering Amount</b><br />{`Min.${Helper.CurrencyFormat(KeyTerms.minOfferingAmount)}, to max.${Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)}`}</p>
+            <p><b>Security</b><br />{KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
           </Grid.Column>
         </Grid>
         <Divider />
@@ -172,7 +173,7 @@ class RevenueSharingKeyTerms extends Component {
           <Divider />
         }
         <Header as="h5" className="center-align">
-          <a href="/https://www.sec.gov/Archives/edgar/data/1735180/000173518018000003/0001735180-18-000003-index.htm" target="blank">
+          <a href={edgarLink} target="blank">
             View the Issuer&apos;s SEC Form C filing
           </a>
         </Header>

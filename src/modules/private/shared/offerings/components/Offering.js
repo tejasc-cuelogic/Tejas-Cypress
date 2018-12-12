@@ -42,7 +42,9 @@ export default class Offering extends Component {
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+            <div className="sticy-sidebar">
+              <SecondaryMenu secondary vertical match={match} navItems={navItems} />
+            </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <div className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>

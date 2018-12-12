@@ -1,16 +1,27 @@
 /* eslint-disable no-unused-vars */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
+import { map, sortBy } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 // import { userStore } from '../../index';
 import { clientSearch } from '../../../../helper';
 import { allKbsQuery, allFaqQuery } from '../../queries/knowledgeBase';
 
-
+const sortMe = (dataToSort, key) => {
+  let data = toJS(dataToSort);
+  data = map(data, (c) => {
+    const newC = c;
+    newC[key] = sortBy(newC[key], ['order']);
+    return newC;
+  });
+  return sortBy(data, ['order']);
+};
 export class EducationStore {
   @observable data = { KnowledgeBase: [], Faq: [] };
   @observable searchParam = { Faq: '', KnowledgeBase: '' };
-  @observable selected = { id: '', title: '', content: '' };
+  @observable selected = {
+    slug: '', title: '', content: '', id: '',
+  };
   @observable faqsList = [
     {
       id: 1,
@@ -33,12 +44,6 @@ export class EducationStore {
   @action
   initRequest = (module, props, categoryType = 'INV_FAQ') => {
     const query = (module === 'KnowledgeBase') ? allKbsQuery : allFaqQuery;
-    // let categoryType = '';
-    // if (props && props.isMkt && props.params) {
-    //   categoryType = props.params.for === 'investor' ? 'INVESTOR_KB' : 'ISSUER_KB';
-    // } else if (userStore.currentUser) {
-    //   categoryType = toJS(userStore.currentUser.roles)[0] === 'investor' ? 'INVESTOR' : 'ISSUER';
-    // }
     this.data[module] = graphql({
       client: clientPublic,
       query,
@@ -47,22 +52,23 @@ export class EducationStore {
   }
 
   @action
-  getOne = (ref, id) => {
+  getOne = (ref, slug) => {
     const meta = { knowledgeBase: ['kbs', 'title', 'content'], faq: ['faqs', 'question', 'answer'] };
     const subItems = ref === 'knowledgeBase' ? 'knowledgeBaseItemList' : 'faqItems';
     if (this[meta[ref][0]].length > 0) {
       let tempItem = {};
       this[meta[ref][0]].forEach((element) => {
         element[subItems].forEach((f) => {
-          if (f.id === id) {
+          if (f.slug === slug || f.id === slug) {
             tempItem = f;
           }
         });
       });
-      const item = (!id) ? this[meta[ref][0]][0][subItems][0] : tempItem;
-      // flatMap(mapValues(this[meta[ref][0]], f => f[`${ref}ItemList`])).find(i => i.id === id);
+      const item = (!slug) ? this[meta[ref][0]][0][subItems][0] : tempItem;
       this.selected = item ?
-        { id: item.id, title: item[meta[ref][1]], content: item[meta[ref][2]] } :
+        {
+          slug: item.slug, id: item.id, title: item[meta[ref][1]], content: item[meta[ref][2]],
+        } :
         {};
     }
   }
@@ -80,7 +86,7 @@ export class EducationStore {
     return (this.allData.KnowledgeBase.data &&
       this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems
     && clientSearch.search(
-      toJS(this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems),
+      sortMe(this.allData.KnowledgeBase.data.faqAndKnowledgeBaseItems, 'knowledgeBaseItemList'),
       this.searchParam.KnowledgeBase,
       'knowledgeBase',
     )) || [];
@@ -89,7 +95,7 @@ export class EducationStore {
   @computed get faqs() {
     return (this.allData.Faq.data && this.allData.Faq.data.faqAndKnowledgeBaseItems
     && clientSearch.search(
-      toJS(this.allData.Faq.data.faqAndKnowledgeBaseItems),
+      sortMe(this.allData.Faq.data.faqAndKnowledgeBaseItems, 'faqItems'),
       this.searchParam.Faq, 'faq',
     )) || [];
   }

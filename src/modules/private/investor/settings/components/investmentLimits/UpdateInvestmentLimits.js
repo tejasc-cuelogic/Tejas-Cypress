@@ -15,11 +15,11 @@ export default class UpdateInvestmentLimits extends Component {
   }
   handleCloseModal = (e) => {
     e.stopPropagation();
-    this.props.history.goBack();
+    this.props.history.push(this.props.refLink);
   }
   updateInvestmentLimit = () => {
     this.props.investmentLimitStore.updateInvestmentLimit().then(() => {
-      this.props.history.goBack();
+      this.props.history.push(this.props.refLink);
     });
   }
   render() {
@@ -60,7 +60,7 @@ export default class UpdateInvestmentLimits extends Component {
             <Divider clearing hidden />
             <Form error onSubmit={this.submit}>
               {fields &&
-                ['annualIncome', 'netWorth', 'otherInvestments'].map(field => (
+                ['annualIncome', 'netWorth', 'cfInvestments'].map(field => (
                   <MaskedInput
                     key={field}
                     name={field}
@@ -69,7 +69,7 @@ export default class UpdateInvestmentLimits extends Component {
                     value={fields[field].value}
                     fielddata={fields[field]}
                     changed={maskingFieldChange}
-                    onBlur={investmentCalculate}
+                    onblur={investmentCalculate}
                   />
                 ))
               }

@@ -1,21 +1,105 @@
 import React, { Component } from 'react';
-import { Header, Grid } from 'semantic-ui-react';
+import { inject, observer } from 'mobx-react';
+import Aux from 'react-aux';
+import { Grid } from 'semantic-ui-react';
+import { Route, Switch, withRouter } from 'react-router-dom';
+import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
+import { DataFormatter } from '../../../../../helper';
+import Disclosure from './DataRoom/Disclosure';
+import { InlineLoader } from '../../../../../theme/shared';
 
-class Disclosures extends Component {
+const isMobile = document.documentElement.clientWidth < 768;
+@inject('campaignStore', 'accreditationStore')
+@observer
+@withRouter
+export default class TermsOfUse extends Component {
+  componentWillMount() {
+    this.props.accreditationStore.getUserAccreditation();
+    if (this.props.match.isExact) {
+      const { getNavItemsForDataRoom } = this.props.campaignStore;
+      if (getNavItemsForDataRoom.length) {
+        this.props.history.push(`${this.props.match.url}/${getNavItemsForDataRoom[0].to}`);
+      }
+    }
+  }
+  module = name => DataFormatter.upperCamelCase(name);
   render() {
-    return (
-      <div className="campaign-content-wrapper">
-        <Grid stackable>
-          <Grid.Column>
-            <Header as="h3">Disclosures</Header>
-          </Grid.Column>
-        </Grid>
-        <div className="pdf-viewer mt-30">
-          <object width="100%" height="100%" data="https://s3.amazonaws.com/dev-cdn.nextseed.qa/welcome-packet/offeringpageignited.pdf" type="application/pdf">failed to load..</object>
+    const { match } = this.props;
+    const { getNavItemsForDataRoom } = this.props.campaignStore;
+    if (!getNavItemsForDataRoom.length) {
+      return (
+        <div className="campaign-content-wrapper">
+          <div className="updates-modal">
+            <div className="no-updates">
+              <InlineLoader text="No Data Room Documents" />
+            </div>
+          </div>
         </div>
-      </div>
+      );
+    }
+    return (
+      <Aux>
+        {isMobile &&
+          <SecondaryMenu
+            secondary
+            vertical
+            match={match}
+            navItems={getNavItemsForDataRoom}
+          />
+        }
+        <div className="campaign-content-wrapper">
+          <Grid>
+            {!isMobile &&
+              <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
+                <div className="sticy-sidebar legal-sidebar">
+                  <SecondaryMenu
+                    secondary
+                    vertical
+                    match={match}
+                    navItems={getNavItemsForDataRoom}
+                    className="legal-menu"
+                  />
+                </div>
+              </Grid.Column>
+            }
+            <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
+              <Switch>
+                <Route
+                  exact
+                  path={`${match.url}/:docKey`}
+                  // component={Disclosures}
+                  render={
+                    props =>
+                      (<Disclosure
+                        {...props}
+                        documentToLoad={getNavItemsForDataRoom[0].content}
+                        headerTitle={getNavItemsForDataRoom[0].title}
+                      />)
+                  }
+                />
+                {
+                  getNavItemsForDataRoom.map(item => (
+                    <Route
+                      exact
+                      key={item.to}
+                      documentToLoad={item.content}
+                      path={`${match.url}/:docKey`}
+                      render={
+                        props =>
+                          (<Disclosure
+                            {...props}
+                            documentToLoad={item.content}
+                            headerTitle={item.title}
+                          />)
+                      }
+                    />
+                  ))
+                }
+              </Switch>
+            </Grid.Column>
+          </Grid>
+        </div>
+      </Aux>
     );
   }
 }
-
-export default Disclosures;

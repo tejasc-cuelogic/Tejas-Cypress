@@ -1,7 +1,8 @@
 import { observable, action, reaction } from 'mobx';
 import graphql from 'mobx-apollo';
-import { getBoxFileDetails } from '../queries/common';
+import { getBoxFileDetails, updateUserReferralCode } from '../queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
+import Helper from '../../../helper/utility';
 
 export class CommonStore {
   @observable appName = 'NextSeed';
@@ -34,6 +35,17 @@ export class CommonStore {
         }
       },
     });
+  });
+
+  @action
+  updateUserReferralCode = (cognitoUserId, referralCode) => new Promise((resolve, reject) => {
+    client
+      .mutate({ mutation: updateUserReferralCode, variables: { cognitoUserId, referralCode } })
+      .then(() => resolve())
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      });
   });
 
   @action

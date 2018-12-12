@@ -1,17 +1,15 @@
 import gql from 'graphql-tag';
 
 export const createAccount = gql`
-  mutation _createAccount($userId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: UserAccountTypeEnum!) {
+  mutation _createAccount($accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: UserAccountTypeEnum!) {
     createInvestorAccount(
-      userId: $userId
       accountAttributes: $accountAttributes
-      status: $status
+      accountStatus: $accountStatus
       accountType: $accountType
     ) {
-      userId
       accountId
       accountType
-      status
+      accountStatus
       startedDate
       finishedDate
       accountDetails
@@ -19,59 +17,38 @@ export const createAccount = gql`
   }`;
 
 export const updateAccount = gql`
-  mutation _updateAccount($userId: String! $accountId: String! $accountAttributes: AccountInputType! $status: AccountCreationStatusEnum! $accountType: InvestorAccountTypeEnum!) {
+  mutation _updateAccount($accountId: String! $accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: InvestorAccountTypeEnum!) {
     updateInvestorAccount(
-      userId: $userId
       accountId: $accountId
       accountAttributes: $accountAttributes
-      status: $status
-      type: $accountType
+      accountStatus: $accountStatus
+      accountType: $accountType
     ) {
-      userId
       accountId
       linkedBank {
         accountNumber
         routingNumber
         bankName
       }
-      type
+      accountType
     }
   }`;
 
 export const updateInvestorProfileData = gql`
-  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employmentStatusInfo: EmploymentStatusInput $investorProfileType: InvestorProfileTypeEnum $financialInfo: InvestorFinInfoInput $investmentExperienceInfo: InvestmentExperienceInput) {
+  mutation _updateInvestorProfileData($isPartialProfile: Boolean! $employment: EmploymentStatusInput $brokerageFirmName: String $publicCompanyTicker: String $netWorth: Int $annualIncome: [InvestorAnnualIncome] $experienceLevel: InvestorExperienceLevelTypeEnum $isRiskTaker: Boolean $isComfortable: Boolean $taxFilingAs: InvestorProfileTypeEnum) {
     createInvestorProfile(
-      employmentStatusInfo: $employmentStatusInfo
-      investorProfileType: $investorProfileType
-      financialInfo: $financialInfo
-      investmentExperienceInfo: $investmentExperienceInfo
+      employmentStatusInfo: $employment
+      brokerageFirmName: $brokerageFirmName
+      publicCompanyTicker: $publicCompanyTicker
+      netWorth: $netWorth
+      annualIncome: $annualIncome
+      experienceLevel: $experienceLevel
+      isRiskTaker: $isRiskTaker
+      isComfortable: $isComfortable
+      taxFilingAs: $taxFilingAs
       isPartialProfile: $isPartialProfile
     ) {
       id
-      investorProfileData {
-        isPartialProfile
-        employmentStatusInfo {
-          employmentStatus
-          employer
-          currentPosition
-        }
-
-        investorProfileType
-        financialInfo {
-          netWorth
-          annualIncomeThirdLastYear
-          annualIncomeLastYear
-          annualIncomeCurrentYear
-          directorShareHolderOfCompany
-          employedOrAssoWithFINRAFirmName
-        }
-
-        investmentExperienceInfo {
-          investmentExperienceLevel
-          readyInvestingInLimitedLiquiditySecurities
-          readyForRisksInvolved
-        }
-      }
     }
   }`;
 
@@ -83,8 +60,8 @@ query checkEntityTaxIdCollision($taxId: String!) {
 }`;
 
 export const createIndividual = gql`
-  mutation createIndividiaul($userId: String!, $accountAttributes: AccountInputType!, $status: AccountCreationStatusEnum!, $accountType: InvestorAccountTypeEnum!){
-    createInvestorAccount(userId: $userId, accountAttributes: $accountAttributes, status: $status, type: $accountType){
+  mutation createIndividiaul($accountAttributes: AccountInputType!, $accountStatus: InvestorAccountStatusEnum!, $accountType: InvestorAccountTypeEnum!){
+    createInvestorAccount(accountAttributes: $accountAttributes, accountStatus: $accountStatus, accountType: $accountType){
       userId
       accountId
       linkedBank {
@@ -92,6 +69,14 @@ export const createIndividual = gql`
         routingNumber
         bankName
       }
-      type
+      accountType
     }
+  }`;
+
+export const crowdPayAccountNotifyGs = gql`
+  mutation _crowdPayAccountNotifyGS($userId: String, $accountId: String!) {
+    crowdPayAccountNotifyGS(
+      userId: $userId
+      accountId: $accountId
+    )
   }`;

@@ -43,6 +43,7 @@ export class BusinessAppReviewStore {
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
+  @observable initLoad = [];
 
   @action
   setFieldvalue = (field, value) => {
@@ -159,15 +160,16 @@ export class BusinessAppReviewStore {
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
             this.checkFormValid(form, (index != null) || (form === 'OFFERS_FRM'), false);
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           }).catch((error) => {
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
           });
         }).catch((error) => {
+          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
-        }).finally(() => {
-          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
         });
       });
     }
@@ -435,6 +437,7 @@ export class BusinessAppReviewStore {
       applicationId: offerData.applicationId,
       issuerId: offerData.userId,
       selectedOffer: offer,
+      callbackUrl: `${window.location.origin}/secure-gateway`,
     };
     if (!offer.isAccepted) {
       payLoad = {
@@ -562,6 +565,7 @@ export class BusinessAppReviewStore {
     }
     this.paBoxFolderId = get(appData, 'storageDetails.Application.Review.Offer.id');
     this[form] = Validator.setFormData(this[form], appData, ref);
+    this.initLoad.push(form);
     const multiForm = this.getActionType(form, 'isMultiForm');
     if (form !== 'MANAGERS_FRM') {
       this.checkFormValid(form, multiForm, false);

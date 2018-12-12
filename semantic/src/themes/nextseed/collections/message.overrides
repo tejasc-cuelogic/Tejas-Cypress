@@ -13,6 +13,14 @@
             top:10px;
         }
     }
+    &.bottom-error{
+        font-size:@14px;
+        text-align:center;
+        padding-top:@26px;
+        padding-bottom:@26px;
+        margin:@40px -@42px -@20px;
+        box-shadow:0 -3px 0 @highlight-primary inset;
+    }
 }
 
 .notification-panel{

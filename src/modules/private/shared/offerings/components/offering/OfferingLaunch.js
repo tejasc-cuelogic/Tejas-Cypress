@@ -28,11 +28,15 @@ export default class OfferingLaunch extends Component {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOfferingMutation(
-      currentOfferingId, { stage: 'LIVE' }, false,
-      true, 'Offering Launched successfully.',
-    );
-    this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+    new Promise((res, rej) => {
+      updateOfferingMutation(
+        currentOfferingId, { stage: 'LIVE' }, false,
+        true, 'Offering Launched successfully.', false, res, rej,
+      );
+    })
+      .then(() => {
+        this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+      });
   }
   render() {
     const {
@@ -82,7 +86,7 @@ export default class OfferingLaunch extends Component {
                     <div className="display-only">
                       <Link to={this.props.match.url}><Icon className="ns-file" /><b>{legalDocs[document].fileName}</b></Link>
                     </div>
-                    <p>signed on{' '}
+                    <p>uploaded on{' '}
                       {
                         moment(legalDocs[document].fileHandle.created.date).format('MM/DD/YYYY')
                       }

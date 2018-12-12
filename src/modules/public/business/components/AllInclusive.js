@@ -1,10 +1,10 @@
 import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
-import { Header, Grid, List, Divider, Container, Item } from 'semantic-ui-react';
+import { Header, Grid, Container, Item } from 'semantic-ui-react';
 import { ASSETS_URL } from '../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 
 const AllInclusive = () => (
   <Aux>
@@ -14,7 +14,7 @@ const AllInclusive = () => (
           <Grid.Row>
             <Grid.Column computer={10} tablet={16} mobile={16} verticalAlign="middle" className="side-section">
               <Header as="h2">Reach your goals with full-service support included.</Header>
-              <p className="mb-30">
+              <p className="mb-60">
               Our one-time fee comes with everything you need to launch, promote and service
               your campaign. Best of all, we only charge you if your offering is successful.
               </p>
@@ -76,21 +76,20 @@ const AllInclusive = () => (
                   </Item.Content>
                 </Item>
               </Item.Group>
+              {/* <Divider hidden section />
               <List horizontal={!isMobile} relaxed className="learn-more-list">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
                   <List.Content>NextSeed and <a href="/">Small businesses</a></List.Content>
                 </List.Item>
                 <List.Item>
                   {!isMobile &&
                     <List.Header>&nbsp;</List.Header>
                   }
-                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
                   <List.Content>NextSeed and <a href="/">Commercial real estate</a></List.Content>
                 </List.Item>
               </List>
-              <Divider />
+              <Divider /> */}
             </Grid.Column>
           </Grid.Row>
         </Grid>

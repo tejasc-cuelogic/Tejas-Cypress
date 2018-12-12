@@ -10,7 +10,9 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @observer
 export default class Documentation extends Component {
   componentWillMount() {
-    this.props.businessAppReviewStore.setFormData('DOCUMENTATION_FRM', 'review.documentation');
+    if (!this.props.businessAppReviewStore.initLoad.includes('DOCUMENTATION_FRM')) {
+      this.props.businessAppReviewStore.setFormData('DOCUMENTATION_FRM', 'review.documentation');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'review.documentation.managerOverview');
   }
   submit = () => {

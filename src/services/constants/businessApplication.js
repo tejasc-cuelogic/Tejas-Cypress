@@ -138,7 +138,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g. NY', customErrors: { required: 'required' },
   },
   zipCode: {
-    value: '', label: 'Zip Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6, customErrors: { required: 'required' },
+    value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6, customErrors: { required: 'required' },
   },
   industryExperience: {
     value: '',
@@ -172,7 +172,7 @@ const BUSINESS_PREQUAL_COMMON = {
       { label: 'LLC', icon: 'ns-business', value: 'LLC' },
       { label: 'Limited Partnership', icon: 'ns-partnership', value: 'LIMITED_PARTNERSHIP' },
       { label: 'Sole Proprietor', icon: 'ns-proprietor', value: 'SOLE_PROPRIETOR' },
-      { label: 'Other', value: 'OTHER' },
+      { label: 'Other use of fund', value: 'OTHER' },
     ],
     error: undefined,
     rule: 'required',
@@ -193,10 +193,10 @@ export const BUSINESS_PRE_QUALIFICATION = {
   },
   ...BUSINESS_PREQUAL_COMMON,
   businessAgeYears: {
-    value: '', maxLength: 4, label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
+    value: '', label: 'Years', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '1', customErrors: { required_if: 'required' },
   },
   businessAgeMonths: {
-    value: '', maxLength: 2, label: 'Months', error: undefined, rule: 'required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required' },
+    value: '', label: 'Months', error: undefined, rule: 'maxVal:11|required_if:businessGoal,UPGRADE|required_if:businessGoal,RESTRUCTURE', placeHolder: '3', customErrors: { required_if: 'required', maxVal: 'Please enter valid value.' },
   },
   franchiseHolder: {
     value: '',
@@ -329,8 +329,8 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
     values: [
       { label: 'CRE', icon: 'ns-real-estate', value: 'COMMERCIAL_REAL_ESTATE' },
       { label: 'Restaurant & Bar', icon: 'ns-food-light', value: 'RESTAURANT_AND_BAR' },
-      { label: 'Fitness', icon: 'ns-dumbbells', value: 'FITNESS' },
       { label: 'Health & Wellness', icon: 'ns-beauty-spa', value: 'HEALTH_AND_WELLNESS' },
+      { label: 'Fitness', icon: 'ns-dumbbells', value: 'FITNESS' },
       { label: 'Hospitality', icon: 'ns-first-aid', value: 'HOSPITALITY' },
       { label: 'Other', value: 'OTHER' },
     ],
@@ -421,16 +421,16 @@ export const BUSINESS_PRE_QUALIFICATION_REAL_ESTATE = {
         value: 'HAS_NOT_SOLD_SECURITIES',
       },
       {
-        label: 'I have never filed for bankruptcy.',
+        label: 'The control owner(s) have not filed for bankruptcy.',
         value: 'HAS_NEVER_FILED_BANKRUPTCY',
         tooltip: 'If you have filed for bankruptcy, a NextSeed representative may follow up to verity the details of the bankruptcy.',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of fraud.',
+        label: 'The control owner(s) are not currently charged with or have ever been convicted of fraud.',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_FRAUD',
       },
       {
-        label: 'I am not currently charged with or have ever been convicted of a serious criminal offense.',
+        label: 'The control owner(s) are not currently charged with or have ever been convicted of a serious criminal offense.',
         value: 'HAS_NEVER_BEEN_CONVICTED_OF_CRIMINAL_OFFENCE',
       },
     ],
@@ -454,7 +454,7 @@ export const BUSINESS_DETAILS = {
   },
   debts: [{
     amount: {
-      value: 0, label: 'Existing Debt', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
+      value: 0, label: 'Amount', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
     },
     remainingPrincipal: {
       value: 0, label: 'Remaining Principal', error: undefined, rule: 'required', placeHolder: '500,000', customErrors: { required: 'required' },
@@ -483,7 +483,7 @@ export const BUSINESS_DETAILS = {
       value: null, label: 'Date of Service', error: undefined, rule: 'required', placeHolder: 'Select date', customErrors: { required: 'required' },
     },
     linkedInUrl: {
-      value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional|url', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
+      value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
     },
     title: {
       value: '', label: 'Title', error: undefined, rule: 'optional', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
@@ -518,7 +518,7 @@ export const BUSINESS_PERF = {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   pyCogs: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyGrossSales: {
     value: '', label: 'Gross Sales', error: undefined, rule: 'required', placeHolder: 'e.g. $1,250,000', customErrors: { required: 'required' },
@@ -530,7 +530,7 @@ export const BUSINESS_PERF = {
     value: '', label: 'Net Income', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
   nyCogs: {
-    value: '', label: 'Cost of Goods Sold', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
+    value: '', label: 'COGS', error: undefined, rule: 'required', placeHolder: 'e.g. $550,000', customErrors: { required: 'required' },
   },
 };
 

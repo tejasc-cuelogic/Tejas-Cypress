@@ -186,7 +186,8 @@ class FormValidator {
       mapKeys(v => `${key}.${v.rule}`))), (a, b) => Object.assign(a, b));
   resetFormData = (form, targetedFields) => {
     const currentForm = form;
-    const fieldsToReset = targetedFields || Object.keys(currentForm.fields);
+    const fieldsToReset = (targetedFields && targetedFields.length && targetedFields)
+    || Object.keys(currentForm.fields);
     fieldsToReset.map((field) => {
       if (Array.isArray(toJS(currentForm.fields[field].value))) {
         currentForm.fields[field].value = [];
@@ -204,6 +205,7 @@ class FormValidator {
         }
       }
       currentForm.fields[field].error = undefined;
+      currentForm.response = {};
       return true;
     });
     currentForm.meta.isValid = false;
@@ -289,7 +291,7 @@ class FormValidator {
           },
         };
       } else {
-        fields[key].value = typeof fields[key].value === 'number' ? 0 : '';
+        fields[key].value = typeof fields[key].value === 'number' ? '' : fields[key].default ? fields[key].default : '';
       }
     });
     return fields;
@@ -350,6 +352,16 @@ class FormValidator {
                   return false;
                 });
               }
+            } else if (fields[key].find) {
+              const fieldRef = key.split('_');
+              fields[key].value = fields[key].find ?
+                tempRef.find(o =>
+                  o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].fileName :
+                tempRef[key].fileName;
+              fields[key].preSignedUrl = fields[key].find ?
+                tempRef.find(o =>
+                  o[fields[key].find].toLowerCase() === fieldRef[0])[fieldRef[1]].url :
+                tempRef[key].url;
             } else {
               fields[key].value = tempRef[key].fileName;
               fields[key].preSignedUrl = tempRef[key].url;
@@ -534,19 +546,14 @@ class FormValidator {
             if (fields[key].objRefOutput && !reference) {
               reference = fields[key].objRefOutput;
             }
-            let objValue = fields[key].value;
+            let objValue = (fields[key].value === '' || (fields[key].value === undefined && fields[key].refSelector === undefined)) && fields[key].defaultValue ? fields[key].defaultValue :
+              fields[key].value;
             if (fields[key].objType && fields[key].objType === 'FileObjectType') {
               objValue = this.evalFileObj(fields[key]);
             } else if (fields[key].objType && fields[key].objType === 'DATE') {
               objValue = this.evalDateObj(fields[key].value);
             } else if (fields[key].objType && fields[key].objType === 's3File') {
               objValue = this.evalS3FileObj(fields[key]);
-              // {
-              //   id: 1,
-              //   url: fields[key].preSignedUrl,
-              //   fileName: fields[key].value,
-              //   isPublic: true,
-              // };
             }
             if (reference) {
               inputData = this.evaluateObjectRef(reference, inputData, [key], objValue);

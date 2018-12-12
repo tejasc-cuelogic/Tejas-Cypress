@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Modal, Grid, Image } from 'semantic-ui-react';
-import { InlineLoader, Image64 } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
+import { Header, Modal } from 'semantic-ui-react';
+import { InlineLoader } from '../../../../theme/shared';
+// import { ASSETS_URL } from '../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 768;
+// const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('campaignStore')
 @observer
@@ -14,6 +14,16 @@ class LocationAnalysisModal extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     // const emptyStatement = 'Detail not found';
+    // const settings = {
+    //   dots: false,
+    //   infinite: false,
+    //   slidesToShow: 1,
+    //   slidesToScroll: 1,
+    //   arrows: true,
+    //   adaptiveHeight: true,
+    // };
+    // const galleryArray = campaign && campaign.media && campaign.media.location &&
+    //   campaign.media.location.length ? campaign.media.location : [];
     return (
       <Modal
         open
@@ -25,32 +35,18 @@ class LocationAnalysisModal extends Component {
           Location Analysis
         </Header>
         <Modal.Content scrolling>
-          <Grid>
-            <Grid.Row>
-              <Grid.Column computer={6} tablet={6} mobile={16} className={isMobile && 'mb-30'}>
-                {campaign && campaign.media && campaign.media.location &&
-                  campaign.media.location.length && campaign.media.location[0].url ?
-                    <Image64 srcUrl={campaign.media.location[0].url} />
-                    :
-                    <Image src={`${ASSETS_URL}images/gallery-placeholder.jpg`} />
-              }
-              </Grid.Column>
-              <Grid.Column computer={10} tablet={10} mobile={16}>
-                {
-                  campaign && campaign.offering
-                  && campaign.offering.about
-                  && campaign.offering.about.locationAnalysis ?
-                    <p
-                      dangerouslySetInnerHTML={
-                        {
-                          __html: campaign.offering.about.locationAnalysis,
-                        }
-                      }
-                    /> : <InlineLoader text="No data found." />
-                }
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          {
+            campaign && campaign.offering
+              && campaign.offering.about
+              && campaign.offering.about.locationAnalysis ?
+                <p
+                  dangerouslySetInnerHTML={
+                    {
+                      __html: campaign.offering.about.locationAnalysis,
+                    }
+                  }
+                /> : <InlineLoader text="No data found." />
+          }
         </Modal.Content>
       </Modal>
     );

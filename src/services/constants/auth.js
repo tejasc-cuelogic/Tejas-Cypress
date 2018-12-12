@@ -22,7 +22,7 @@ export const COMMON = {
   code: {
     value: '',
     error: undefined,
-    rule: 'required',
+    rule: 'required|min:6',
     key: 'code',
     label: 'Enter verification code here:',
     customErrors: {

@@ -1,10 +1,16 @@
-import { observable, action, computed } from 'mobx';
-import { isEmpty } from 'lodash';
-import { FormValidator as Validator } from '../../../../helper';
-import { accountStore } from '../../index';
+import { observable, action, computed, toJS } from 'mobx';
+import graphql from 'mobx-apollo';
+import { isEmpty, map, uniqWith, isEqual, find } from 'lodash';
+import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { GqlClient as client } from '../../../../api/gqlApi';
+import { accountStore, userDetailsStore, uiStore, userStore } from '../../index';
+import { changeLinkedBank, changeBankManually, cancelBankRequest } from '../../queries/banking';
+import Helper from '../../../../helper/utility';
 import {
-  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND,
+  IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
+import validationService from '../../../../api/validation';
+import { getlistLinkedBankUsers } from '../../queries/bankAccount';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -16,7 +22,29 @@ export class BankAccountStore {
   @observable formBankSearch = Validator.prepareFormObject(IND_BANK_ACC_SEARCH);
   @observable formAddFunds = Validator.prepareFormObject(IND_ADD_FUND);
   @observable formLinkBankManually = Validator.prepareFormObject(IND_LINK_BANK_MANUALLY);
+  @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
+  @observable filters = false;
+  @observable CurrentAccountId;
+  @observable isPlaidBankVerified = false;
+  @observable newPlaidAccDetails = {};
+  @observable isLinkedBankCancelRequest = false;
+  @observable activeBankPladLogo = null;
+  @observable pendingBankPladLogo = null;
+  @observable db;
+  @observable requestState = {
+    skip: 0,
+    page: 1,
+    perPage: 10,
+    displayTillIndex: 10,
+    filters: false,
+    search: {
+    },
+  };
 
+  @action
+  setDb = (data) => {
+    this.db = ClientDb.initiateDb(data);
+  }
   @action
   setDepositMoneyNow(status) {
     this.depositMoneyNow = status;
@@ -40,7 +68,7 @@ export class BankAccountStore {
   @action
   addFundChange = (values, field) => {
     this.formAddFunds =
-    Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
+      Validator.onChange(this.formAddFunds, { name: field, value: values.floatValue });
   };
 
   @action
@@ -62,13 +90,27 @@ export class BankAccountStore {
   }
 
   @action
-  setPlaidAccDetails = (plaidAccDetails) => {
-    this.plaidAccDetails = plaidAccDetails;
+  setCurrentAccount = (accountType) => {
+    if (!isEmpty(userDetailsStore.userDetails)) {
+      const { roles } = userDetailsStore.userDetails;
+      const accountData = find(roles, { name: accountType });
+      this.plaidAccDetails = accountData.details && accountData.details.linkedBank ?
+        accountData.details.linkedBank : {};
+      this.CurrentAccountId = accountData.details && accountData.details.accountId;
+    }
   }
 
   @action
+  setPlaidAccDetails = (plaidAccDetails) => {
+    this.plaidAccDetails = plaidAccDetails;
+  }
+  @action
   setPlaidBankDetails = (plaidBankDetails) => {
     this.plaidBankDetails = plaidBankDetails;
+  }
+  @action
+  setNewPlaidBankDetails = (objVal) => {
+    this.newPlaidAccDetails = objVal;
   }
 
   /* eslint-disable camelcase */
@@ -102,6 +144,10 @@ export class BankAccountStore {
         routingNumber: routingNumber.value,
       };
       accountAttributes = { ...plaidBankDetails };
+    }
+    const isValidAddFunds = this.formAddFunds.meta.isValid;
+    if (isValidAddFunds) {
+      accountAttributes.initialDepositAmount = this.formAddFunds.fields.value.value;
     }
     return accountAttributes;
   }
@@ -138,9 +184,162 @@ export class BankAccountStore {
   }
 
   @action
+    initRequest = () => {
+      const variables = { page: 1, limit: 100 };
+      this.data = graphql({
+        client,
+        query: getlistLinkedBankUsers,
+        variables,
+        onFetch: (res) => {
+          this.setDb(res.listLinkedBankUsers.linkedBankList);
+        },
+      });
+    }
+
+  @action
+  setInitiateSrch = (name, value) => {
+    this.requestState.search[name] = value;
+    this.initiateFilters();
+  }
+  @action
+  initiateFilters = () => {
+    const { keyword } = this.requestState.search;
+    let resultArray = [];
+    if (keyword) {
+      resultArray = ClientDb.filterData('firstName', keyword, 'likenocase');
+      resultArray = [...resultArray, ...ClientDb.filterData('lastName', keyword, 'likenocase')];
+      this.setDb(uniqWith(resultArray, isEqual));
+      this.requestState.page = 1;
+      this.requestState.skip = 0;
+    } else {
+      this.setDb(this.data.data.listLinkedBankUsers.linkedBankList);
+    }
+  }
+  @action
+  toggleSearch = () => {
+    this.filters = !this.filters;
+  }
+
+  @computed get loading() {
+    return this.data.loading;
+  }
+  @computed get changeRequests() {
+    return (this.db && this.db.length &&
+      toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
+  }
+
+  @action
   resetFormData(form) {
     const resettedForm = Validator.resetFormData(this[form]);
     this[form] = resettedForm;
+  }
+
+  @action
+  pageRequest = ({ skip, page }) => {
+    this.requestState.displayTillIndex = this.requestState.perPage * page;
+    this.requestState.page = page;
+    this.requestState.skip = skip;
+  }
+
+  @action
+  validateAddFunds = () => {
+    map(this.formAddFunds.fields, (value) => {
+      const { key } = value;
+      const { errors } = validationService.validate(value);
+      Validator.setFormError(
+        this.formAddFunds,
+        key,
+        errors && errors[key][0],
+      );
+    });
+  }
+
+  @computed get count() {
+    return (this.changeRequests && this.changeRequests.length) || 0;
+  }
+
+  @action
+  changeBankPlaid = (pladiAccountDetails) => {
+    // const data = Validator.ExtractValues(this.formLinkBankManually.fields);
+    const data = {
+      plaidPublicToken: pladiAccountDetails.public_token,
+      plaidAccountId: pladiAccountDetails.account_id,
+      accountId: this.CurrentAccountId,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: changeLinkedBank,
+          variables: data,
+        })
+        .then(() => {
+          Helper.toast('Request for Change linked Bank initiated.', 'success');
+          this.resetFormData('formLinkBankManually');
+          userDetailsStore.getUser(userStore.currentUser.sub);
+          resolve();
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          Helper.toast(error.message, 'error');
+          reject(error.message);
+        });
+      // .catch (() => Helper.toast('Error', 'error'));
+    });
+  }
+
+  @action
+  changeBankManually = () => {
+    const data = Validator.ExtractValues(this.formLinkBankManually.fields);
+    const updatedData = {
+      bankRoutingNumber: data.routingNumber,
+      bankAccountNumber: data.accountNumber,
+      accountId: this.CurrentAccountId,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: changeBankManually,
+          variables: updatedData,
+        })
+        .then(() => {
+          Helper.toast('Request for Change linked Bank initiated.', 'success');
+          this.resetFormData('formLinkBankManually');
+          userDetailsStore.getUser(userStore.currentUser.sub);
+          resolve();
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          Helper.toast(error.message, 'error');
+          reject(error.message);
+        });
+      // .catch((error) => Helper.toast('Error', 'error'));
+    });
+  }
+
+  @action
+  cancelBankChangeRequest = () => {
+    const canceldData = {
+      accountId: this.CurrentAccountId,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: cancelBankRequest,
+          variables: canceldData,
+        })
+        .then(() => {
+          userDetailsStore.getUser(userStore.currentUser.sub);
+          resolve();
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          Helper.toast(error.message, 'error');
+          reject(error.message);
+        })
+        .finally(() => {
+          this.setLinkedBankCancelRequestStatus(false);
+        });
+    });
   }
 
   @action
@@ -151,9 +350,26 @@ export class BankAccountStore {
     this.bankLinkInterface = 'list';
     this.plaidAccDetails = {};
     this.plaidBankDetails = {};
+    this.newPlaidAccDetails = {};
     this.bankListing = undefined;
     this.depositMoneyNow = true;
     this.showAddFunds = false;
+  }
+  @action
+  setPlaidBankVerificationStatus = (booleanValue) => {
+    this.isPlaidBankVerified = booleanValue;
+  }
+  @action
+  setLinkedBankCancelRequestStatus = (booleanValue) => {
+    this.isLinkedBankCancelRequest = booleanValue;
+  }
+  @action
+  setActiveBankPlaidLogo = (logo) => {
+    this.activeBankPladLogo = logo;
+  }
+  @action
+  setPendingeBankPlaidLogo = (logo) => {
+    this.pendingBankPladLogo = logo;
   }
 }
 

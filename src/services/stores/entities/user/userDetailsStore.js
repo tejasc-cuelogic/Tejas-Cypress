@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-expressions */
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
-import { concat, isEmpty, difference, find, findKey, filter, isNull } from 'lodash';
+import { concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
 import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
@@ -14,6 +15,7 @@ import {
   iraAccountStore,
   entityAccountStore,
   investorProfileStore,
+  authStore,
 } from '../../index';
 import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
@@ -28,6 +30,7 @@ export class UserDetailsStore {
   validAccStatus = ['PASS', 'MANUAL_VERIFICATION_PENDING'];
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
+  @observable accountForWhichCipExpired = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -40,13 +43,17 @@ export class UserDetailsStore {
 
   @computed get userDetails() {
     const details = (this.currentUser.data && toJS(this.currentUser.data.user)) || {};
+    details.roles && details.roles.map((role, index) => {
+      details.roles[index].name = lowerCase(role.name);
+      return details;
+    });
     return details;
   }
 
   @computed get getActiveAccounts() {
     let accDetails;
     if (this.userDetails) {
-      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details && account.details.status === 'FULL');
+      accDetails = filter(this.userDetails.roles, account => account.name !== 'investor' && account.details && account.details.accountStatus === 'FULL');
     }
     return accDetails;
   }
@@ -115,6 +122,12 @@ export class UserDetailsStore {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         res();
+        this.currentUser.data &&
+        this.currentUser.data.user &&
+        this.currentUser.data.user.roles && this.currentUser.data.user.roles.map((role, index) => {
+          this.currentUser.data.user.roles[index].name = lowerCase(role.name);
+          return this.currentUser;
+        });
       },
     });
   })
@@ -133,20 +146,37 @@ export class UserDetailsStore {
     this.detailsOfUser.data.user.accountStatus = status;
   }
 
+  @computed get isEntityTrust() {
+    const Accdetails = this.currentUser.data.user.roles.find(obj => obj.name === 'entity');
+
+    return (Accdetails && Accdetails.details && Accdetails.details.isTrust) || false;
+  }
+
   @action
   toggleState = (id, accountStatus) => {
-    const params = { status: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCK', id };
+    const params = { accountStatus: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCKED', id };
     client
       .mutate({
         mutation: toggleUserAccount,
         variables: params,
       })
-      .then(() => this.updateUserStatus(params.status))
+      .then(() => {
+        this.getUserProfileDetails(this.detailsOfUser.data.user.id);
+        this.updateUserStatus(params.status);
+      })
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
 
   @computed get signupStatus() {
-    const details = { idVerification: 'FAIL', roles: [], phoneVerification: 'FAIL' };
+    const details = {
+      idVerification: 'FAIL',
+      roles: [],
+      phoneVerification: 'FAIL',
+      isMigratedUser: false,
+      isMigratedFullAccount: false,
+      isCipDoneForMigratedUser: false,
+      isEmailConfirmed: false,
+    };
     const validAccTypes = ['individual', 'ira', 'entity'];
     details.inActiveAccounts = [];
     const accTypes = [];
@@ -156,7 +186,11 @@ export class UserDetailsStore {
       ) ? this.userDetails.legalDetails.status : 'FAIL';
       details.roles = mapValues(this.userDetails.roles, (a) => {
         const data =
-        { accountId: a.accountId, name: a.name, status: a.details ? a.details.status : null };
+        {
+          accountId: a.accountId,
+          name: a.name,
+          status: a.details ? a.details.accountStatus : null,
+        };
         return data;
       });
       Object.keys(details.roles).map((key) => {
@@ -169,10 +203,19 @@ export class UserDetailsStore {
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
+      details.isMigratedUser =
+      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
+      details.isMigratedFullAccount =
+      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
+      this.userDetails.status === 'MIGRATION_FULL');
       details.investorProfileCompleted =
       this.userDetails.investorProfileData === null ?
         false : this.userDetails.investorProfileData ?
           !this.userDetails.investorProfileData.isPartialProfile : false;
+      details.isCipDoneForMigratedUser =
+      this.userDetails.cip && this.userDetails.cip.requestId !== null;
+      details.isEmailConfirmed = this.userDetails.email && this.userDetails.email.verified
+      && this.userDetails.email.verified !== null;
       details.finalStatus = (details.activeAccounts.length > 2 &&
         this.validAccStatus.includes(details.idVerification) &&
         details.phoneVerification === 'DONE');
@@ -223,27 +266,43 @@ export class UserDetailsStore {
 
   @computed
   get pendingStep() {
-    let routingUrl = '';
-    if (!this.validAccStatus.includes(this.signupStatus.idVerification)) {
-      routingUrl = 'summary/identity-verification/0';
+    let routingUrl = '/app/summary';
+    if (this.signupStatus.isMigratedUser) {
+      if (this.userDetails.email &&
+        (!this.userDetails.email.verified || this.userDetails.email.verified === null)) {
+        this.setSignUpDataForMigratedUser(this.userDetails);
+        routingUrl = '/auth/confirm-email';
+      } else if (this.signupStatus.isMigratedFullAccount &&
+        (this.userDetails && this.userDetails.cip && this.userDetails.cip.requestId !== null)) {
+        if (this.signupStatus.phoneVerification !== 'DONE') {
+          routingUrl = '/app/summary/identity-verification/3';
+        } else if (!this.signupStatus.investorProfileCompleted) {
+          routingUrl = '/app/summary/establish-profile';
+        }
+      } else {
+        routingUrl = '/app/summary/identity-verification/0';
+      }
+    } else if (!this.validAccStatus.includes(this.signupStatus.idVerification) &&
+      this.signupStatus.activeAccounts === 0) {
+      routingUrl = '/app/summary/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
-      routingUrl = 'summary/identity-verification/3';
+      routingUrl = '/app/summary/identity-verification/3';
     } else if (!this.signupStatus.investorProfileCompleted) {
-      routingUrl = 'summary/establish-profile';
+      routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(this.signupStatus.roles)) {
-      routingUrl = 'summary/account-creation';
+      routingUrl = '/app/summary/account-creation';
     } else if (this.signupStatus.partialAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (this.signupStatus.inActiveAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
-      routingUrl = `summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
     } else {
-      routingUrl = 'summary';
+      routingUrl = '/app/summary';
     }
     return routingUrl;
   }
@@ -271,6 +330,15 @@ export class UserDetailsStore {
       return false;
     }
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
+    if (form === 'USER_INVESTOR_PROFILE') {
+      if (details.investorProfileData && details.investorProfileData.annualIncome) {
+        ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
+          this.USER_INVESTOR_PROFILE.fields[item].value =
+          details.investorProfileData.annualIncome[index].income;
+          return true;
+        });
+      }
+    }
     return false;
   }
 
@@ -295,6 +363,41 @@ export class UserDetailsStore {
   @action
   resetStoreData = () => {
     this.currentUser = {};
+  }
+
+  @computed get isCipExpired() {
+    if (this.userDetails && this.userDetails.cip) {
+      const { expiration } = this.userDetails.cip;
+      const expirationDate = new Date(expiration);
+      const currentDate = new Date();
+      if (expirationDate < currentDate) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @action
+  setAccountForWhichCipExpired = (accountName) => {
+    this.accountForWhichCipExpired = accountName;
+  }
+
+  @computed get isBasicVerDoneForMigratedFullUser() {
+    if (this.signupStatus.phoneVerification === 'DONE' &&
+    this.signupStatus.isEmailConfirmed &&
+    this.signupStatus.isCipDoneForMigratedUser) {
+      return true;
+    }
+    return false;
+  }
+
+  @action
+  setSignUpDataForMigratedUser = (userDetails) => {
+    if (userDetails.info) {
+      authStore.SIGNUP_FRM.fields.givenName.value = userDetails.info.firstName;
+      authStore.SIGNUP_FRM.fields.role.value = 'investor';
+      authStore.SIGNUP_FRM.fields.familyName.value = userDetails.info.lastName;
+    }
   }
 }
 

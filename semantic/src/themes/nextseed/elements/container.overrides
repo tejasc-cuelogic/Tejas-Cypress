@@ -3,7 +3,7 @@
 *******************************/
 section{
     &.banner { 
-        height:710px;
+        height:817px;
         @media only screen and (max-width : @computerBreakpoint) {
             height:400px;
             padding-top: 80px;
@@ -42,6 +42,8 @@ section{
             .banner-meta {
                 align-self: baseline;
                 color: @neutral;
+                font-size: @13px;
+                line-height: @20px;
                 @media only screen and (max-width: @largestMobileScreen) {
                     background: fade(@neutral-darkwhite, 90%);
                     width: ~"calc(100% + "(@relative28px)~")";
@@ -63,7 +65,7 @@ section{
             }
         }
         &.campaign-list-banner{
-            height:435px;
+            height:535px;
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat / cover;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -86,7 +88,7 @@ section{
             }
         }
         &.resources-banner {
-            height:435px;
+            height:535px ;
             background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat / cover;  
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -97,14 +99,14 @@ section{
             }
         }
         &.edu-center-business-banner {
-            height:435px;
+            height:535px;
             background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat / cover;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
             }
         }
         &.edu-center-investor-banner {
-            height:435px;
+            height:535px;
             background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat / cover;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -176,6 +178,10 @@ section{
     } 
     &.track{
         background:url(../../assets/images/investors/laptop.png) 100% center no-repeat;
+        @media only screen and (min-width: @monitorBreakpoint) and (max-width: @largestLargeMonitor ) {
+            background-size: 50%;
+            background-position: right;
+        }
         @media only screen and (min-width: @tabletBreakpoint) and (max-width: @largestTabletScreen ) {
             background-size: contain;
         }

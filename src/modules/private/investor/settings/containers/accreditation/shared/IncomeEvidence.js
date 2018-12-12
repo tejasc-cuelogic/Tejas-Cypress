@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 import { Header, Form, Grid } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { INCOME_EVIDENCE_META } from './../../../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
+@withRouter
 @observer
 export default class IncomeEvidence extends Component {
   render() {
@@ -15,7 +17,7 @@ export default class IncomeEvidence extends Component {
     const incEvidenceMethods = INCOME_EVIDENCE_META.slice();
     return (
       <div>
-        <Header as="h3" textAlign="center">{ACCREDITATION_FORM.fields.accreditationMethods.value === 'income' ? 'Income evidence' : 'Assets' }</Header>
+        <Header as="h3" textAlign="center">{this.props.isEntity ? 'Provide evidence of accreditation' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income evidence' : 'Assets' }</Header>
         <p className="center-align">You can provide evidence of accreditation either through the verification of a professional advisor or by uploading the required documents.</p>
         <Form error className="account-type-tab">
           <Grid columns={1}>
@@ -25,9 +27,10 @@ export default class IncomeEvidence extends Component {
               >
                 <div className={`user-type ${(INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === method.value ? 'active' : '')}`}>
                   <Header as="h6">{method.header}</Header>
-                  <p>
-                    {method.desc}
-                  </p>
+                  {((this.props.isTrust || ACCREDITATION_FORM.fields.method.value === 'ASSETS' || ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') && method.value === 'uploaddocument' && !this.props.isEntity) ?
+                    <p> {method.desc2} </p> :
+                    <p> {method.desc} </p>
+                    }
                 </div>
               </Grid.Column>
             ))}

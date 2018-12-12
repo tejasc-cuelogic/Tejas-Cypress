@@ -19,7 +19,7 @@ class OverviewModal extends Component {
         size="large"
         closeIcon
       >
-        <Modal.Header>Company Description</Modal.Header>
+        <Modal.Header>Top Things to Know</Modal.Header>
         <Modal.Content scrolling>
           {emptyStatement}
         </Modal.Content>

@@ -1,57 +1,74 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Button, Grid } from 'semantic-ui-react';
-import { ACCREDITATION_METHODS_META } from './../../../../../../services/constants/investmentLimit';
+import { withRouter } from 'react-router-dom';
+import Verification from './shared/Verification';
+import PopulateAccreditationSteps from './PopulateAccreditationSteps';
+import { NET_WORTH, ACCREDITATION_METHODS } from './../../../../../../services/constants/investmentLimit';
 
-@inject('uiStore', 'accreditationStore')
+@inject('accreditationStore')
+@withRouter
 @observer
-export default class VerifyAccreditation extends Component {
-  handleCloseModal = (e) => {
-    e.stopPropagation();
-    this.props.history.goBack();
+export default class Accreditation extends React.Component {
+  componentWillMount() {
+    const { match } = this.props;
+    const { accountType } = match.params;
+    this.props.accreditationStore.getUserAccreditation().then(() => {
+      this.props.accreditationStore.changeFormObject('ACCREDITATION_FORM', ACCREDITATION_METHODS);
+      this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
+      this.props.accreditationStore.changeFormObject('NET_WORTH_FORM', NET_WORTH);
+      this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
+      this.props.accreditationStore.setFormData('INCOME_EVIDENCE_FORM', 'accreditation', accountType);
+      this.props.accreditationStore.setFormData('VERIFICATION_REQUEST_FORM', 'accreditation', accountType);
+      this.props.accreditationStore.setFormData('INCOME_UPLOAD_DOC_FORM', 'accreditation', accountType);
+      this.props.accreditationStore.setFormData('ASSETS_UPLOAD_DOC_FORM', 'accreditation', accountType);
+      if (this.props.accreditationStore.firstInit === '') {
+        this.props.accreditationStore.setFieldVal('firstInit', true);
+      }
+    });
+  }
+  handleStepChange = (step) => {
+    this.props.accreditationStore.setStepToBeRendered(step);
+  }
+  multiClickHandler = (step) => {
+    const { params } = this.props.match;
+    if (step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
+      this.props.accreditationStore
+        .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 1)
+        .then(() => {
+          this.handleStepChange(step.stepToBeRendered);
+        });
+    } else {
+      this.handleStepChange(step.stepToBeRendered);
+    }
   }
   render() {
-    const accreditationMethods = ACCREDITATION_METHODS_META.slice();
-    const { ACCREDITATION_FORM, accreditationMethodChange } = this.props.accreditationStore;
+    const {
+      ACCREDITATION_FORM,
+    } = this.props.accreditationStore;
+    const formArray = ACCREDITATION_FORM.fields.method.value === 'ASSETS' ?
+      [
+        { key: 'ACCREDITATION_FORM' },
+        { key: 'NET_WORTH_FORM' },
+        { key: 'INCOME_EVIDENCE_FORM' },
+        {
+          key: 'VERIFICATION',
+          component: <Verification step={3} refLink={this.props.refLink} type={1} />,
+        },
+      ]
+      :
+      [
+        { key: 'ACCREDITATION_FORM' },
+        { key: 'INCOME_EVIDENCE_FORM' },
+        {
+          key: 'VERIFICATION',
+          component: <Verification step={2} refLink={this.props.refLink} type={1} />,
+        },
+      ];
     return (
-      <div>
-        <Modal open onClose={this.handleCloseModal} size="tiny" closeOnDimmerClick>
-          <Modal.Header className="center-align signup-header">
-            <Header as="h3">How are you accredited?</Header>
-            <p>
-              To invest in Regulation D or 506(c) offerings, you will need to verify that
-              you are an accredited investor.
-            </p>
-            <p>Please confirm which of the following is applicable for you:</p>
-          </Modal.Header>
-          <Modal.Content>
-            <Grid stackable textAlign="center">
-              <Grid.Row columns={2}>
-                {accreditationMethods.map(method => (
-                  <Grid.Column
-                    onClick={e => accreditationMethodChange(e, { name: 'accreditationMethods', value: method.value })}
-                  >
-                    <div className={`user-type ${(ACCREDITATION_FORM.fields.accreditationMethods.value === method.value ? 'active' : '')}`}>
-                      <Header as="h4">{method.header}</Header>
-                      <p>
-                        {method.desc}
-                      </p>
-                    </div>
-                  </Grid.Column>
-              ))}
-              </Grid.Row>
-            </Grid>
-            <Button
-              circular
-              icon={{ className: 'ns-arrow-right' }}
-              className="multistep__btn next active"
-              as={Link}
-              to={`${this.props.match.url}/${ACCREDITATION_FORM.fields.accreditationMethods.value}`}
-            />
-          </Modal.Content>
-        </Modal>
-      </div>
+      <PopulateAccreditationSteps
+        multiClickHandler={this.multiClickHandler}
+        formArray={formArray}
+      />
     );
   }
 }

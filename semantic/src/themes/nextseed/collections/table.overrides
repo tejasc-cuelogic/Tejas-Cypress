@@ -12,20 +12,23 @@
         &.status{
             font-weight:500;
             text-transform:capitalize;
-            &.partial, &.pending{
+            &.partial{
+                color:@tertiary-text;
+            }
+            &.full{
+                color:@primary-one;
+            }
+            &.frozen{
                 color:@highlight-secondary;
             }
-            &.failed{
+            &.cip-processing, &.ns-processing, &.gs-processing{
+                color:@highlight-quaternary;
+            }
+            &.declined{
                 color:@highlight-primary;
             }
-            &.to-be-reviewed{
-                color:@primary-two;
-            }
-            &.processing{
-                color:@neutral-offdark;
-            }
-            &.processed{
-                color:@primary-one;
+            &.deleted{
+                color:@border-color;
             }
         }
         &.text-capitalize{
@@ -126,6 +129,13 @@
             }
         }
     }
+    a.filename-link:not(.button){
+        max-width:200px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        display:block;
+    }
     &.statment-tables{
         td>i.icon{
             color:@neutral-middark;
@@ -195,11 +205,15 @@
             }
         }
     }
-    &:not(.unstackable) tr>td {
-        @media only screen and (max-width : @largestMobileScreen){
-            padding-left: 0 !important;
+    &[class*="very basic"]:not(.unstackable){
+        td, th{
+            @media only screen and (max-width : @largestMobileScreen){
+                padding-left: 0 !important;
+            }
         }
     }
+    // &:not(.unstackable) tr>td {
+    // }
     &.basic.form-table {
         background: @neutral-offwhite;
         padding-bottom: @7px;
@@ -252,6 +266,43 @@
         + .basic.form-table{
             margin-top:@21px;
         }
+        &.profile-table {
+            a {
+                color: @primary-one;
+                &.ui.button.green {
+                    color: @white;
+                }
+            }
+            &.structured tbody tr {
+                border: none;
+            }
+            .sb-avatar{
+                width:58px;
+                height:58px;
+                margin-right:0;
+                .sb-avatar__text{
+                    width:58px;
+                    height:58px;
+                    font-size:@21px;
+                    line-height:58px;
+                }
+            }
+            .profile-pic-wrapper{
+                position: relative;
+                height: 58px;
+                width: 58px;
+                .change-profile-icon{
+                    position: absolute;
+                    padding: 6px;
+                    bottom: -7px;
+                    right: -7px;
+                }
+                img.avatar {
+                    height: 58px;
+                    width: 58px;
+                }
+            }
+        }
     }
     &.bg-offwhite {
         padding:0;
@@ -268,6 +319,9 @@
     }
     .dark-cell {
         background-color: @neutral-midwhite;
+    }
+    .ui.vertical.buttons{
+        display:flex;
     }
 }
 
@@ -321,4 +375,63 @@
             color: @neutral;
 		}
 	}
+}
+
+/* FULLY CUSTOM TABLE FOR Drag-and-Drop */
+.row-wrap{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    border-top:@neutral-midwhite 1px solid;
+    >div{
+        padding:.5em .7em;
+        display:inline-block;
+        position:relative;
+        flex-grow:1;
+        &.balance-half{
+            width:~"calc(50% - 120px)";
+            flex-grow:0;
+            &:nth-child(2){
+                margin-right:auto;
+            }
+            >a.link{
+                float:left;
+                max-width:100%;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+            }
+            &.simple-drag-row-title{
+                padding-left:@30px;
+                &:before{
+                    content:"\e998";
+                    font-family:'nextseed';
+                    font-size:@14px;
+                    color:@neutral-middark;
+                    position:absolute;
+                    left:10px;
+                    top:50%;
+                    transform:translate(0%, -50%);
+                }
+            }
+        }
+        &.date{
+            width:100px;
+            flex-grow:0;
+        }
+        &.status, &.action{
+            width:70px;
+            flex-grow:0;
+            text-align:center;
+        }
+    }
+    &.thead{
+        font-size:@12px;
+        font-weight:@normal;
+        color:@neutral-middark;
+        border:none;
+    }
+}
+.rc-draggable-list .rc-draggable-list-chosen{
+    background-color:@neutral-offdark;
 }

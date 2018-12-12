@@ -238,7 +238,7 @@ export const BUSINESS_DETAILS = {
     value: '', label: 'Ownership of Company', error: undefined, rule: 'required', placeHolder: '40.0%',
   },
   linkedInURL: {
-    value: '', label: 'LinkedIn URL', error: undefined, rule: 'required', placeHolder: 'http://linkedin.com/username',
+    value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional', placeHolder: 'http://linkedin.com/username',
   },
   title: {
     value: '', label: 'Title', error: undefined, rule: 'required', placeHolder: 'e.g. CEO',

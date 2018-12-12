@@ -37,6 +37,8 @@ export default class NavBarMobile extends Component {
       navTitle = 'Insights';
     } else if (location.pathname.startsWith('/offerings')) {
       navTitle = '';
+    } else if (location.pathname.startsWith('/agreements/legal')) {
+      navTitle = 'Legal';
     }
     const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (

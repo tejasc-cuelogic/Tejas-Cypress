@@ -5,26 +5,41 @@ import Helper from '../helper';
 
 const progressMeta = Helper.Progress();
 
-const checkStatus = (signupStatus, key) => {
+const checkStatus = (signupStatus, key, userDetailsStore) => {
   let status = false;
   if (key === 'contact-card') {
     if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
       signupStatus.phoneVerification === 'DONE') {
       status = 2;
+    } else if (signupStatus.isMigratedFullAccount &&
+      signupStatus.isCipDoneForMigratedUser &&
+      signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed) {
+      status = 2;
     } else {
       status = 1;
     }
   } else if (key === 'cash-dollar') {
-    if (signupStatus.investorProfileCompleted) {
+    if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount)
+    || (signupStatus.isMigratedFullAccount &&
+    signupStatus.isCipDoneForMigratedUser &&
+    signupStatus.phoneVerification === 'DONE' && signupStatus.isEmailConfirmed && signupStatus.investorProfileCompleted)) {
       status = 2;
-    } else if ((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
-    signupStatus.phoneVerification === 'DONE') {
+    } else if (((signupStatus.idVerification === 'PASS' || signupStatus.idVerification === 'MANUAL_VERIFICATION_PENDING') &&
+    signupStatus.phoneVerification === 'DONE') ||
+    (signupStatus.isMigratedFullAccount && userDetailsStore.isBasicVerDoneForMigratedFullUser)
+    ) {
       status = 1;
     } else {
       status = 0;
     }
   } else if (key === 'bar-line-chart') {
-    if (signupStatus.investorProfileCompleted) {
+    if ((signupStatus.investorProfileCompleted && !signupStatus.isMigratedFullAccount) ||
+      (signupStatus.isMigratedFullAccount &&
+      signupStatus.isCipDoneForMigratedUser &&
+      signupStatus.phoneVerification === 'DONE' &&
+      signupStatus.isEmailConfirmed &&
+      signupStatus.investorProfileCompleted
+      )) {
       status = 1;
     } else {
       status = 0;
@@ -36,15 +51,28 @@ const checkStatus = (signupStatus, key) => {
 const ProgressCard = props => (
   <Card.Group stackable itemsPerRow={3}>
     {
-      isEmpty(props.signupStatus.activeAccounts) &&
-      Object.keys(progressMeta).map((key) => {
+      (isEmpty(props.signupStatus.activeAccounts)
+      || (props.signupStatus.isMigratedFullAccount &&
+        (!props.isBasicVerDoneForMigratedFullUser
+        || !props.signupStatus.investorProfileCompleted)))
+      && Object.keys(progressMeta).map((key) => {
         const currentCard = progressMeta[key];
-        const status = checkStatus(props.signupStatus, key);
+        const status = checkStatus(props.signupStatus, key, props.userDetailsStore);
         if (props.signupStatus.partialAccounts.length > 0 && currentCard.step === 2) {
           return null;
         }
+        /*
+        * Condition added for migrated-user
+        */
         const verificationStatus =
-        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification);
+        props.userDetailsStore.validAccStatus.includes(props.signupStatus.idVerification) ||
+        (props.signupStatus.isMigratedFullAccount &&
+        (props.userDetailsStore.userDetails && props.userDetailsStore.userDetails.cip
+        && props.userDetailsStore.userDetails.cip.requestId !== null));
+        const isEmailVerified = props.signupStatus.isEmailConfirmed;
+        /*
+        * Condition added for migrated-user
+        */
         const pathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.route}` :
         `${props.match.url}/${currentCard.route}`;
         const altPathToRender = props.match.url.slice(-1) === '/' ? `${props.match.url}${currentCard.altRoute}` :
@@ -67,6 +95,8 @@ const ProgressCard = props => (
                     onClick={() =>
                       (currentCard.step !== 0 ?
                         props.history.push(`${pathToRender}`) :
+                        !isEmailVerified ?
+                          props.history.push(currentCard.emailVerificationRoute) :
                         !verificationStatus
                           ? props.history.push(`${pathToRender}`) :
                           props.history.push(`${altPathToRender}`))

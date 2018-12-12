@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
-import { Route } from 'react-router-dom';
 import { Form, Grid, Button, Modal } from 'semantic-ui-react';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -15,16 +14,14 @@ export default class BonusRewards extends Component {
     this.props.updateStore.initRequest();
   }
   executeSearch = (e) => {
-    if (e.charCode === 13) {
-      this.props.updateStore.setInitiateSrch('keyword', e.target.value);
-    }
+    this.props.updateStore.setInitiateSrch('keyword', e.target.value);
   }
   render() {
     const {
       updateStore, match,
     } = this.props;
     const {
-      updates, loading, requestState, filters,
+      updates, loading, requestState, filters, count,
     } = updateStore;
     const { isIssuer } = this.props.userStore;
     if (loading) {
@@ -36,7 +33,7 @@ export default class BonusRewards extends Component {
           <Grid stackable className="bottom-aligned">
             <Grid.Row>
               <ByKeyword
-                executeSearch={this.executeSearch}
+                change={this.executeSearch}
                 w={[11]}
                 placeholder="Search by keyword or phrase"
                 requestState={requestState}
@@ -44,8 +41,8 @@ export default class BonusRewards extends Component {
                 more="no"
                 addon={
                   <Grid.Column width={5} textAlign="right">
-                    <Modal dimmer="inverted" onClose={this.close} size="large" trigger={<Button color="green" size="small">Add new Update</Button>} closeIcon >
-                      <NewUpdate match={match} />
+                    <Modal closeOnEscape={false} closeOnDimmerClick={false} dimmer="inverted" size="large" trigger={<Button color="green" size="small">Add new Update</Button>} >
+                      <NewUpdate match={match} refLink={match.url} id="new" />
                     </Modal>
                   </Grid.Column>
                 }
@@ -54,8 +51,7 @@ export default class BonusRewards extends Component {
           </Grid>
         </Form>
         <div className={isIssuer ? 'ui card fluid' : ''}>
-          <Listing data={updates} match={match} />
-          <Route path={`${match.url}/:id`} render={props => <NewUpdate refLink={match.url} {...props} />} />
+          <Listing data={updates} count={count} match={match} requestState={requestState} />
         </div>
       </Aux>
     );

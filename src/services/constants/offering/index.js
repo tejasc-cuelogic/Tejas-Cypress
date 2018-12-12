@@ -11,6 +11,12 @@ export const UPDATES = {
   status: {
     value: 'PENDING', label: 'Status', error: undefined, rule: 'required',
   },
+  scope: {
+    value: 'PUBLIC',
+    values: [{ label: 'Public', value: 'PUBLIC' }, { label: 'Investors Only', value: 'INVESTORS' }],
+    error: undefined,
+    rule: 'optional',
+  },
 };
 
 export const OFFERING_STAGE = {

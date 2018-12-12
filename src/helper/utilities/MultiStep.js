@@ -35,10 +35,20 @@ export default class MultiStep extends React.Component {
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
   }
-
+  componentWillMount() {
+    if (typeof this.props.stepToBeRendered !== 'undefined' && this.props.stepToBeRendered !== '') {
+      this.setNavState(this.props.stepToBeRendered);
+    }
+    if (this.props.stepToBeRendered > -1 && _.has(this.props.steps[this.props.stepToBeRendered], 'disableNxtBtn')) {
+      this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
+    }
+  }
   componentWillReceiveProps(nextProps) {
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
       this.setNavState(nextProps.stepToBeRendered);
+    }
+    if (nextProps.stepToBeRendered > -1 && _.has(nextProps.steps[nextProps.stepToBeRendered], 'disableNxtBtn')) {
+      this.setState({ showNextBtn: !nextProps.steps[nextProps.stepToBeRendered].disableNxtBtn });
     }
     if (typeof nextProps.disableNxtbtn !== 'undefined') {
       this.setState({ showNextBtn: nextProps.disableNxtbtn });
@@ -110,10 +120,7 @@ export default class MultiStep extends React.Component {
   }
 
   next() {
-    if (this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience') {
-      this.props.createAccount(this.props.steps[this.state.compState]);
-      this.props.actionOnNextBtn();
-    } else if (!this.props.steps[this.state.compState].isDirty) {
+    if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
     } else {
       this.props.createAccount(this.props.steps[this.state.compState]);
@@ -140,7 +147,7 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/click-events-have-key-events */
       /* eslint-disable react/no-array-index-key */
       return (
-        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid}`} onClick={this.handleOnClick} key={i} value={i}>
+        <li className={`${this.getClassName('progtrckr', i)} ${this.props.steps[i].isValid} ${this.props.steps[i].isHideLabel ? 'hidden' : ''}`} onClick={this.handleOnClick} key={i} value={i}>
           {this.props.steps[i].name}
         </li>
       );
@@ -168,7 +175,9 @@ export default class MultiStep extends React.Component {
           <Aux>
             <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
             <ol className="progtrckr">
-              {this.renderSteps()}
+              {!this.props.steps[this.state.compState].isHideLabel &&
+                this.renderSteps()
+              }
             </ol>
           </Aux>
           }
@@ -177,19 +186,23 @@ export default class MultiStep extends React.Component {
             <Dimmer active={this.props.inProgress}>
               <Loader active={this.props.inProgress} />
             </Dimmer>
+            {!this.props.steps[this.state.compState].disablePrevButton &&
             <Button
               circular
               icon={{ className: 'ns-arrow-left' }}
               className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
               onClick={this.previous}
             />
+            }
+            {!this.props.steps[this.state.compState].disableNextButton &&
             <Button
               type="submit"
               circular
               icon={{ className: 'ns-arrow-right' }}
-              className={(this.props.actionOnNextBtn && this.props.steps[this.state.compState].name === 'Experience' ? 'multistep__btn next active' : this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled')}
+              className={this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled'}
               onClick={this.next}
             />
+            }
           </Modal.Content>
         </Modal>
       </div>

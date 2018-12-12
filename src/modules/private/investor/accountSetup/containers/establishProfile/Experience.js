@@ -1,44 +1,97 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Header, Form } from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
+import { Header, Form, Button, Message } from 'semantic-ui-react';
 import { FormRadioGroup, FormCheckbox } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 
-@inject('investorProfileStore')
+@inject('investorProfileStore', 'userDetailsStore', 'uiStore')
+@withRouter
 @observer
 export default class Experience extends Component {
+  handleSubmitInvestmentExperience = () => {
+    const {
+      validateInvestmentExperience,
+      INVESTMENT_EXP_FORM,
+      updateInvestorProfileData,
+    } = this.props.investorProfileStore;
+    validateInvestmentExperience();
+    if (INVESTMENT_EXP_FORM.meta.isValid &&
+      this.props.investorProfileStore.isInvestmentExperienceValid) {
+      const currentStep = {
+        form: 'INVESTMENT_EXP_FORM',
+        stepToBeRendered: 6,
+      };
+      updateInvestorProfileData(currentStep).then(() => {
+        const { signupStatus } = this.props.userDetailsStore;
+        if (signupStatus.isMigratedFullAccount) {
+          this.props.history.push('/app/summary');
+        } else {
+          this.props.history.push('/app/summary/account-creation');
+        }
+      });
+    }
+  }
   render() {
-    const { INVESTMENT_EXP_FORM, experiencesChange } = this.props.investorProfileStore;
+    const {
+      INVESTMENT_EXP_FORM,
+      isInvestmentExperienceValid,
+      experiencesChange,
+    } = this.props.investorProfileStore;
+    const { errors } = this.props.uiStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Investment Experience</Header>
-        <p className="center-align mb-50">
-          We are collecting the information below to better understand yout investment experience.
-          We recognize your responses may change over time as you work with us.
-          Please check the box that best descrives your investment experience to date
+        <p className="center-align mb-40">
+          Confirm your experience and understanding of the investment risks on NextSeed.
+          Select the box that best describes your investment experience to date:
         </p>
-        <Form error>
+        {errors &&
+        <Message error textAlign="left">
+          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+        </Message>
+        }
+        <Form error onSubmit={this.handleSubmitInvestmentExperience}>
           <FormRadioGroup
-            fielddata={INVESTMENT_EXP_FORM.fields.investmentExperienceLevel}
-            name="investmentExperienceLevel"
+            fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
+            name="experienceLevel"
             changed={experiencesChange}
-            containerclassname="button-radio center-align mb-50"
+            containerclassname="two wide button-radio center-align mb-50"
+            showerror
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.readyInvestingInLimitedLiquiditySecurities}
-            name="readyInvestingInLimitedLiquiditySecurities"
+            fielddata={INVESTMENT_EXP_FORM.fields.isComfortable}
+            name="isComfortable"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.readyForRisksInvolved}
-            name="readyForRisksInvolved"
+            fielddata={INVESTMENT_EXP_FORM.fields.isRiskTaker}
+            name="isRiskTaker"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
           />
+          <div className="center-align mt-20">
+            {!isInvestmentExperienceValid &&
+              <p className="negative-text mb-20">
+                NextSeed investments are suitable for experienced investors
+                are comfortable with long-term risk.
+                Please confirm that you fit this profile in order to proceed.
+              </p>
+            }
+            <Button primary className="relaxed" content="Continue to Account" disabled={!(INVESTMENT_EXP_FORM.meta.isValid && isInvestmentExperienceValid)} />
+            {!isInvestmentExperienceValid &&
+              <p className="negative-text mt-20">
+                Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center </Link>
+                to learn more about investing on NextSeed.
+              </p>
+            }
+          </div>
         </Form>
-      </div>
+      </Aux>
     );
   }
 }

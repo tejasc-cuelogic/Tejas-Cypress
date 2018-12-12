@@ -4,6 +4,7 @@ export const allOfferings = gql`
 query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
+      offeringSlug
       stage
       media {
         tombstoneImage {
@@ -12,6 +13,7 @@ query getOfferingList($filters: OfferingFilterInputType){
           fileName
         }
       }
+
       offering {
         about {
           theCompany
@@ -21,6 +23,8 @@ query getOfferingList($filters: OfferingFilterInputType){
         totalInvestorCount
       }
       keyTerms {
+        regulation
+        offeringDisclaimer
         shorthandBusinessName
         legalBusinessName
         securities
@@ -28,6 +32,16 @@ query getOfferingList($filters: OfferingFilterInputType){
         state
         city
       }
+    }
+  }
+`;
+
+export const getOfferingsReferral = gql`
+query getOfferingList($filters: OfferingFilterInputType){
+    getOfferingList(filters: $filters) {
+      id
+      offeringSlug
+      referralCode
     }
   }
 `;
@@ -41,8 +55,8 @@ export const getOfferingById = gql`
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingById($id: ID) {
-  getOfferingDetailsById (id: $id) {
+  query getOfferingDetailsById($id: ID!) {
+    getOfferingDetailsById (id: $id) {
     id
     stage
     applicationId
@@ -54,6 +68,7 @@ export const campaignDetailsQuery = gql`
     }
     keyTerms {
       regulation
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity
@@ -129,6 +144,18 @@ export const campaignDetailsQuery = gql`
         terminationDate
         expectedOpsDate
         issuerApprovedDate
+        edgarLink
+        submitted {
+          id
+          by
+          date
+        }
+        approved {
+          id
+          by
+          date
+        }
+        gsFees
       }
       misc {
         additionalBonusRewardsContent
@@ -206,18 +233,38 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
+      businessModelImage {
+        id
+        url
+        isPublic
+      }
     }
     legal {
       general {
         websiteUrl
         useOfProceeds {
-          reachedMinOfferingGoal
-          reachedMaxOfferingGoal
+          minOfferingExpenseAmount
+          minOfferingExpenseAmountDescription
+          maxOfferingExpenseAmount
+          maxOfferingExpenseAmountDescription
         }
         approved {
           id
           by
           date
+        }
+      }
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
         }
       }
     }
@@ -341,6 +388,7 @@ query getOfferingById($id: ID) {
     offeringSlug
     keyTerms {
       regulation
+      offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
       maturity

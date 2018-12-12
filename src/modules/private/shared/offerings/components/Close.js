@@ -42,11 +42,15 @@ export default class Close extends Component {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOfferingMutation(
-      currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
-      true, 'Offering Closed successfully.',
-    );
-    this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
+    new Promise((res, rej) => {
+      updateOfferingMutation(
+        currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
+        true, 'Offering Closed successfully.', false, res, rej,
+      );
+    })
+      .then(() => {
+        this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
+      });
   }
   render() {
     const {
@@ -181,7 +185,7 @@ export default class Close extends Component {
             form={CLOSING_CONTITNGENCIES_FRM}
             formName="CLOSING_CONTITNGENCIES_FRM"
             refTab="close"
-            hideAddNewBtn
+            OfferingClose
           />
         </div>
         <Confirm

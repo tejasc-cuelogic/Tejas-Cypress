@@ -52,19 +52,19 @@ export default class GenerateDocs extends Component {
           {!isEmpty(offeringFilingList) &&
             <Aux>
               <Header as="h4">Upload Final Signed Docs</Header>
-              {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'disclosure', 'securityAgreement', 'personalGuarantee'].map(field => (
-                <div className="field-wrap">
-                  <DropZone
-                    size="small"
-                    name="term"
-                    fielddata={ADMIN_DOCUMENTATION_FRM.fields[field]}
-                    ondrop={files =>
-                      this.onFileDrop(files, field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
-                    onremove={() =>
-                      this.handleDelDoc(field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
-                    uploadtitle="Upload"
-                  />
-                </div>
+              {['escrow', 'resolutionOfBorrowing', 'formC', 'npa', 'promissoryNote', 'securityAgreement', 'disclosure', 'personalGuarantee'].map(field => (
+                <DropZone
+                  size="small"
+                  name="term"
+                  fielddata={ADMIN_DOCUMENTATION_FRM.fields[field]}
+                  ondrop={files =>
+                    this.onFileDrop(files, field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
+                  onremove={() =>
+                    this.handleDelDoc(field, ADMIN_DOCUMENTATION_FRM.fields[field].stepName)}
+                  uploadtitle="Upload"
+                />
+                // <div className="field-wrap">
+                // </div>
               ))
               }
             </Aux>

@@ -1,16 +1,14 @@
 import gql from 'graphql-tag';
 
 export const allTransactions = gql`
-query allTransactions($filters: TransactionFilter,$first:Int,$skip:Int) {
-    allTransactions( first:$first, skip:$skip, orderBy: createdAt_DESC, filter: $filters){
-      id
-      createdAt
-      amount,
+  query getAccountTransactions($userId: String!, $accountId: String!) {
+    getAccountTransactions(userId: $userId, accountId: $accountId) {
+      date
       description
-      transactionType
-    }
-    _allTransactionsMeta(filter: $filters){
-      count
+      type
+      status
+      amount
+      offering
     }
   }
 `;
@@ -31,8 +29,23 @@ mutation CreateTransaction($transactionType: String!, $description: String!, $am
   } 
 `;
 
-export const addFunds = gql`
-  mutation addFunds($userId: String!, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int!) {
+export const addFundMutation = gql`
+  mutation _addFunds($userId: String!, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int) {
     addFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId)
+  }
+`;
+
+export const requestOptForTransaction = gql`
+  mutation _requestOtp($scopeType: mfaEnum!, $method: PhoneVerificationMethodsEnum!) {
+    requestOtp(scopeType: $scopeType, method: $method) {
+      requestId
+      phoneNumber
+    }
+  }
+`;
+
+export const withdrawFundMutation = gql`
+  mutation _withdrawFunds($userId: String!, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int) {
+    withdrawFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId)
   }
 `;

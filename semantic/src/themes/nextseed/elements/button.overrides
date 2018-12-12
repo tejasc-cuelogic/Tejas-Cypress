@@ -85,7 +85,7 @@
                 }
             }
             &.icon .icon {
-                margin-right: 5px!important;
+                margin-right:@3px !important;
             }
         }
         &.ghost-button{
@@ -145,10 +145,14 @@
             }
         }
         &.time-stamp .time-stamp{
-            padding:@14px 0;
+            padding:@3px 0;
             text-align:left;
+            margin:0 !important;
         }
     }
+}
+.sticky-actions .ui.buttons.time-stamp{
+    flex:1;
 }
 
 .ui.button, .ui.buttons .button{
@@ -165,6 +169,19 @@
 .ui.buttons{
     .ui.button{
         border-radius:6px;
+    }
+    &.inline:not(.vertical){
+        padding:0 @5px;
+        width:auto;
+        .ui.button{
+            margin:0 @5px !important;
+            &:first-child{
+                margin-left:-@5px !important;
+            }
+            &:last-child{
+                margin-right:0 !important;
+            }
+        }
     }
 }
 

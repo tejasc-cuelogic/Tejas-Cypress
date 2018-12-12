@@ -21,7 +21,9 @@ class Home extends Component {
     this.props.campaignStore.initRequest(['active']);
   }
   render() {
-    const { active, loading } = this.props.campaignStore;
+    const {
+      active, loading,
+    } = this.props.campaignStore;
     const isMobile = document.documentElement.clientWidth < 768;
     return (
       <Aux>
@@ -43,7 +45,7 @@ class Home extends Component {
         <CampaignList
           loading={loading}
           explore
-          campaigns={active}
+          campaigns={active.splice(0, 6)}
           heading={
             <Aux>
               <Header as="h2" textAlign="center">Latest Campaigns</Header>

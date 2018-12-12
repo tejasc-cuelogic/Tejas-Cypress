@@ -462,11 +462,11 @@ export const UPLOADED_DOCUMENTS = {
 export const OFFERS = {
   offer: [{
     structure: {
-      value: '',
+      value: 'TERM_NOTE',
       label: 'Structure',
-      placeHolder: 'Choose',
       error: undefined,
       rule: 'optional',
+      default: 'TERM_NOTE',
     },
     amount: {
       value: '',

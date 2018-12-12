@@ -572,6 +572,15 @@ export class BusinessAppStore {
     return notOkForms.length === 0 && isPartial.length === 0;
   }
 
+  @computed get ButtonTextToggle() {
+    const applicationStep = this.applicationStep !== '' ? this.applicationStep : 'documentation';
+    const notOkForms = ['BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
+      .filter(form => !this[form].meta.isValid);
+    const isPartial = this.appStepsStatus.filter(step => step.path !== applicationStep && step.status === 'IN_PROGRESS');
+
+    return (notOkForms.length === 0 && isPartial.length === 0) ? 'Submit' : 'Save';
+  }
+
   getFilesArray = (data, form) => {
     const arr = data ? data.map((item, key) => (
       { fileId: form.fileId[key] ? form.fileId[key] : '', fileName: item }
@@ -1120,6 +1129,7 @@ export class BusinessAppStore {
             if (this.currentApplicationType === 'business' && (fieldName === 'personalTaxReturn' || fieldName === 'businessTaxReturn')) {
               this.checkValidationForTaxReturn();
             }
+            this.checkFormisValid(this.applicationStep, false);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);

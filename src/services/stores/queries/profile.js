@@ -26,8 +26,13 @@ mutation verifyCIPUsers($userId: String!, $user: UserCIPInput){
         summary
       }
       ... on UserCIPHardFail{
+        hardFailId: id
         key
         message
+        qualifiers {
+          key
+          message
+        }
       }
       ... on UserCIPFail{
         key
@@ -96,9 +101,8 @@ export const checkUserPhoneVerificationCode = gql`
  }`;
 
 export const updateUserCIPInfo = gql`
-mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!) {
-    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails) {
-      id
+mutation updateUserCIPInfo($user: UserCIPInput!, $phoneDetails: phoneInput!, $cip: UserCIPInformation) {
+    updateUserCIPInfo(user: $user, phoneDetails: $phoneDetails, cip: $cip) {
       email {
         address
       } info{
@@ -139,11 +143,11 @@ export const requestEmailChnage = gql`
   }`;
 
 export const verifyAndUpdateEmail = gql`
-  mutation _verifyAndUpdateEmail($confirmationCode: String!) {
+  mutation _verifyAndUpdateEmail($confirmationCode: String! $resourceId: String!) {
     verifyAndUpdateEmail(
       confirmationCode: $confirmationCode
+      resourceId: $resourceId
     ){
-      id
       email {
         address
       }
@@ -181,3 +185,43 @@ export const portPrequalDataToApplication = gql`
       id
     }
   }`;
+
+export const requestOtp = gql`
+  mutation requestOtp($userId: String $type: MFAModeEnum, $address: String){
+    requestOtp(
+      userId: $userId
+      type: $type
+      address: $address
+    )
+  }`;
+
+export const verifyOtp = gql`
+  mutation verifyOtp($resourceId: String! $verificationCode: String!){
+    verifyOtp(
+      resourceId: $resourceId
+      verificationCode: $verificationCode
+    )
+  }
+`;
+
+export const requestOtpWrapper = gql`
+  mutation requestOTPWrapper($address: String!){
+    requestOTPWrapper(
+      address: $address
+    )
+  }
+`;
+
+export const verifyOTPWrapper = gql`
+  mutation verifyOTPWrapper($verifyOTPData: VerifyOTPInput!){
+    verifyOTPWrapper(
+      verifyOTPData: $verifyOTPData
+    )
+  }
+`;
+
+export const checkEmailExistsPresignup = gql`
+  query checkEmailExistsPresignup($email: String!){
+    checkEmailExistsPresignup(email: $email)
+  }
+`;

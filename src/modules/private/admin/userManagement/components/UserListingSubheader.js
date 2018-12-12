@@ -33,7 +33,7 @@ export const P5 = props => (
             <DropdownFilter value={props.requestState.search.accountStatus} name="Account Status" keyName="accountStatus" change={props.setSearchParam} options={FILTER_META.accountStatus} />
           </Grid.Column>
           <Grid.Column width={4}>
-            <DateRangeFilter filters={props.requestState.search} label="Account Creation" name="createdAt" changeStart={props.dateFilter} />
+            <DateRangeFilter filters={props.requestState.search} label="Account Creation" name="createdAt" change={props.dateFilter} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
