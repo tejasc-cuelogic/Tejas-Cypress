@@ -38,24 +38,13 @@ export default class UpdateInvestmentLimits extends Component {
             <p>
               Ensure that your 12-month Investment Limit for Regulation Crowdfunding is up to date
               by providing your most recent Annual Income and Net Worth.&nbsp;
-              <Link target="_blank" to="/app/resources/faq">
-                See FAQ on how your investment limit is calculated
-              </Link>
+              <Link target="_blank" to="/app/resources/faq">See FAQ on how your investment limit is calculated</Link>
             </p>
           </Modal.Header>
           <Modal.Content>
-            {errors &&
-              <Message error>
-                <ListErrors errors={[errors]} />
-              </Message>
-            }
             <Statistic size="tiny">
-              <Statistic.Label>
-                Estimated investment limit
-              </Statistic.Label>
-              <Statistic.Value>
-                {Helper.CurrencyFormat(currentLimit)}
-              </Statistic.Value>
+              <Statistic.Label>Estimated investment limit</Statistic.Label>
+              <Statistic.Value>{Helper.CurrencyFormat(currentLimit)}</Statistic.Value>
             </Statistic>
             <Divider clearing hidden />
             <Form error onSubmit={this.submit}>
@@ -73,8 +62,13 @@ export default class UpdateInvestmentLimits extends Component {
                   />
                 ))
               }
+              {errors &&
+                <Message error className="mt-30">
+                  <ListErrors errors={[errors]} />
+                </Message>
+              }
               <div className="center-align mt-30">
-                <Button loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} color="green">Update investment limits</Button>
+                <Button primary content="Update investment limits" loading={inProgress} disabled={!INVESTEMENT_LIMIT_META.meta.isValid} onClick={this.updateInvestmentLimit} />
               </div>
             </Form>
           </Modal.Content>

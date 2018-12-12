@@ -14,11 +14,6 @@ export default class Employment extends Component {
       <div className="center-align">
         <Header as="h3">What is your employment status?</Header>
         <p className="mb-40">Please indicate your current employment status</p>
-        {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-        }
         <Form error>
           <FormRadioGroup
             fielddata={EMPLOYMENT_FORM.fields.status}
@@ -42,6 +37,11 @@ export default class Employment extends Component {
               ))}
             </Form.Group>
           </div>
+          }
+          {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
           }
         </Form>
       </div>

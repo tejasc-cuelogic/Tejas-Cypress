@@ -66,20 +66,8 @@ export default class ConfirmVerificationCode extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
           <p className="display-only">{this.getMaskedPhoneNumber()}</p>
-          <p>
-            <Link
-              to="/app/profile-settings/security"
-              className="link"
-            >
-            See Multi-Factor Authentication Settings
-            </Link>
-          </p>
+          <p><Link to="/app/profile-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
           <Form error onSubmit={this.submit}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
@@ -92,6 +80,11 @@ export default class ConfirmVerificationCode extends Component {
                 onChange={verifyVerificationCodeChange}
               />
             </Form.Field>
+            {errors &&
+              <Message error>
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
             <Button.Group vertical>
               <Button loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTP_VERIFY_META.meta.isValid} >Submit to approval</Button>
               <Button loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="link-button cancel-link" onClick={e => this.resendVerification(e)}>Resend the code to my phone</Button>

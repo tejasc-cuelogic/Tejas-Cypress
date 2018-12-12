@@ -49,11 +49,6 @@ export default class BeneficiaryShareModal extends Component {
           <p>The sum of all shares should equal 100%</p>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
           <Form error onSubmit={this.submit}>
             {showError &&
               <FieldError error="The sum of percentages must be 100" icon="warning circle" />
@@ -86,6 +81,11 @@ export default class BeneficiaryShareModal extends Component {
                 }
               </Table.Body>
             </Table>
+            {errors &&
+              <Message error className="mt-30">
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
             <div className="center-align mt-30">
               <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
               <Button loading={inProgress} disabled={!BENEFICIARY_META.meta.isValid} color="green">Proceed</Button>

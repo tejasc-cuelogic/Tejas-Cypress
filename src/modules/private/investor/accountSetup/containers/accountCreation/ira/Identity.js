@@ -1,4 +1,6 @@
+/*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Form, Divider, Message, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { DropZoneLarge } from '../../../../../../../theme/form';
@@ -24,18 +26,13 @@ export default class Identity extends Component {
     const { IDENTITY_FRM } = this.props.iraAccountStore;
     const { errors, confirmBox } = this.props.uiStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Confirm your identity</Header>
         <Divider section hidden />
-        <p className="center-align grey-header">
-          <b>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</b>
-        </p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
         <Form className="file-uploader-large">
+          <div className="field">
+            <label className="center-align">Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</label>
+          </div>
           <DropZoneLarge
             name="identityDoc"
             fielddata={IDENTITY_FRM.fields.identityDoc}
@@ -43,9 +40,13 @@ export default class Identity extends Component {
             onremove={this.confirmRemoveDoc}
           />
         </Form>
+        {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
         <Divider section hidden />
-        <p className="center-align grey-header">NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.
-        </p>
+        <p className="center-align grey-header mt-30">NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.</p>
         <Confirm
           header="Confirm"
           content="Are you sure you want to remove this file?"
@@ -55,7 +56,7 @@ export default class Identity extends Component {
           size="mini"
           className="deletion"
         />
-      </div>
+      </Aux>
     );
   }
 }
