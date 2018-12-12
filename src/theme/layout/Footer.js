@@ -42,7 +42,6 @@ class Footer extends Component {
           {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
               <b>`{shorthandBusinessName} Disclaimer:`</b>
-              <span dangerouslySetInnerHTML={{ __html: offeirngDisclaimer }} />
             </p>
           }
           <Grid stackable>
