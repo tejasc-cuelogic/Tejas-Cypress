@@ -8,8 +8,9 @@ import AboutTheCompany from './Overview/AboutTheCompany';
 import BonusRewards from './Overview/BonusRewards';
 import KeyTerms from './Overview/KeyTerms';
 import LatestUpdates from './Overview/LatestUpdates';
-import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
+// import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 import OverviewModal from '../campaignDetails/Overview/OverviewModal';
+import TopThingsToKnowModal from '../campaignDetails/TopThingsToKnowModal';
 import VideoModal from './Overview/VideoModal';
 import { Image64 } from '../../../../../theme/shared';
 
@@ -28,7 +29,7 @@ class Overview extends Component {
         <Grid stackable doubling>
           <Grid.Row>
             <AboutTheCompany refLink={this.props.refLink} campaign={campaign} />
-            <Grid.Column widescreen={9} largeScreen={8} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
+            <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
               <Segment padded className="overview-video">
                 {campaign && campaign.media &&
                   campaign.media.heroVideo && campaign.media.heroVideo.url ?
@@ -39,6 +40,7 @@ class Overview extends Component {
                           campaign.media.heroImage.url ?
                           campaign.media.heroImage.url : null
                         }
+                        imgType="heroImage"
                       />
                       <Icon
                         className="ns-play play-icon"
@@ -51,6 +53,7 @@ class Overview extends Component {
                         campaign.media.heroImage.url ?
                         campaign.media.heroImage.url : null
                       }
+                      imgType="heroImage"
                     />
                 }
               </Segment>
@@ -72,8 +75,9 @@ class Overview extends Component {
         </Grid>
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
         <Route path={`${this.props.match.url}/keyterms`} render={props => <KeyTermsModal refLink={props.match} {...props} />} />
-        <Route path={`${this.props.match.url}/keyterms/summary`} component={SummaryModal} />
+        {/* <Route path={`${this.props.match.url}/overview/summary`} component={SummaryModal} /> */}
         <Route path={`${this.props.match.url}/details`} component={OverviewModal} />
+        <Route path={`${this.props.match.url}/top-things-to-know`} render={props => <TopThingsToKnowModal refLink={this.props.match.ur} campaign={campaign} {...props} />} />
       </div>
     );
   }

@@ -10,6 +10,7 @@ import Header from './../../theme/layout/Header';
 import Footer from './../../theme/layout/Footer';
 import Auth from '../auth';
 import NotFound from '../shared/NotFound';
+import Referral from '../shared/Referral';
 import Helper from '../../helper/utility';
 
 @inject('uiStore', 'navStore', 'userStore', 'businessAppStore')
@@ -36,6 +37,7 @@ export default class Public extends React.Component {
         />
       ))}
       <Route path="/auth" component={Auth} />
+      <Route path="/:referralCode" component={Referral} />
       <Route component={NotFound} />
     </Switch>
   );
@@ -59,7 +61,7 @@ export default class Public extends React.Component {
     if (visible) this.setState({ visible: false });
   };
   render() {
-    const { location } = this.props;
+    const { location, match } = this.props;
     const { BUSINESS_APP_FRM, isPrequalQulify } = this.props.businessAppStore;
     const { isValid } = BUSINESS_APP_FRM.meta;
     const { inProgress } = this.props.uiStore;
@@ -91,6 +93,7 @@ export default class Public extends React.Component {
             onToggle={this.handleToggle}
             visible={visible}
             location={location}
+            match={match}
             isMobile
             navStatus={this.props.navStore.navStatus}
             stepInRoute={this.props.navStore.stepInRoute}

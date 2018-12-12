@@ -7,7 +7,7 @@ import apiService from '../../../api/restApi';
 import { UPLOADS_CONFIG } from '../../../constants/aws';
 
 export class FileUpload {
-  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '') =>
+  setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags) =>
     new Promise((resolve, reject) => {
       client
         .mutate({
@@ -19,6 +19,7 @@ export class FileUpload {
             userRole,
             fileData,
             offeringId,
+            tags,
           },
         })
         .then((result) => {

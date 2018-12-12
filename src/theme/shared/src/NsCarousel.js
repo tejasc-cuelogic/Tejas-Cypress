@@ -22,8 +22,9 @@ export default class NsCarousel extends Component {
   }
   render() {
     const settings = {
-      infinite: true,
+      infinite: false,
       speed: 500,
+      className: this.props.className,
       slidesToShow: this.props.slidesToShow,
       slidesToScroll: this.props.slidesToScroll,
       arrows: this.props.arrows,
@@ -38,11 +39,17 @@ export default class NsCarousel extends Component {
 
     if (this.props.thumbs) {
       let thumbnailClassToApply = '';
-      if (this.props.isTablet) {
-        thumbnailClassToApply = this.props.imageCount >= 4 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+      let thumbSliderCustomClassToApply = '';
+      if (!this.props.customThumSliderClass) {
+        if (this.props.isTablet) {
+          thumbnailClassToApply = this.props.imageCount >= 4 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+        } else {
+          thumbnailClassToApply = this.props.imageCount >= 8 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+        }
       } else {
-        thumbnailClassToApply = this.props.imageCount >= 8 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+        thumbnailClassToApply = 'slider-thumbnails';
       }
+      thumbSliderCustomClassToApply = this.props.customThumSliderClass ? 'thumb-location-gallery' : '';
       return (
         <Aux>
           <Slider
@@ -59,7 +66,7 @@ export default class NsCarousel extends Component {
             slidesToShow={this.props.thumbs}
             swipeToSlide
             focusOnSelect
-            className={thumbnailClassToApply}
+            className={`${thumbnailClassToApply}  ${thumbSliderCustomClassToApply}`}
           >
             {this.props.children}
           </Slider>

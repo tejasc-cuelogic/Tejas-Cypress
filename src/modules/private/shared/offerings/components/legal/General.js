@@ -150,24 +150,46 @@ export default class General extends Component {
               This section will also be public on the offering page.`}
           </p>
           {
-            ['reachedMinOfferingGoal', 'reachedMaxOfferingGoal'].map(field => (
+            <Aux>
+              <MaskedInput
+                displayMode={isReadonly}
+                name="minOfferingExpenseAmount"
+                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmount}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                currency
+                prefix="$"
+              />
               <FormTextarea
                 readOnly={isReadonly}
-                key={field}
-                name={field}
-                fielddata={GENERAL_FRM.fields[field]}
+                name="minOfferingExpenseAmountDescription"
+                fielddata={GENERAL_FRM.fields.minOfferingExpenseAmountDescription}
                 changed={(e, result) => formArrayChange(e, result, formName)}
                 containerclassname="secondary"
               />
-            ))
+              <MaskedInput
+                displayMode={isReadonly}
+                name="maxOfferingExpenseAmount"
+                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmount}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                currency
+                prefix="$"
+              />
+              <FormTextarea
+                readOnly={isReadonly}
+                name="maxOfferingExpenseAmountDescription"
+                fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmountDescription}
+                changed={(e, result) => formArrayChange(e, result, formName)}
+                containerclassname="secondary"
+              />
+            </Aux>
           }
           <Divider section />
           <Header as="h4">Describe Rights of Your Equity Shareholders</Header>
-          <p>{GENERAL_FRM.fields.rightsOfEqShareHolders.label}</p>
+          <p>{GENERAL_FRM.fields.equityShareholderRights.label}</p>
           <FormTextarea
             readOnly={isReadonly}
-            name="rightsOfEqShareHolders"
-            fielddata={GENERAL_FRM.fields.rightsOfEqShareHolders}
+            name="equityShareholderRights"
+            fielddata={GENERAL_FRM.fields.equityShareholderRights}
             changed={(e, result) => formArrayChange(e, result, formName)}
             containerclassname="secondary"
             hidelabel
@@ -183,9 +205,11 @@ export default class General extends Component {
             GENERAL_FRM.fields.security.map((security, index) => (
               <Aux>
                 <Header as="h6">{`Security ${index + 1}`}
+                  {GENERAL_FRM.fields.security.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="featured-section">
                   <Form.Group widths={2}>
@@ -225,9 +249,11 @@ export default class General extends Component {
             GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
               <Aux>
                 <Header as="h6">{`Other Exempt Offering ${index + 1}`}
+                  {GENERAL_FRM.fields.exemptOfferings.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="featured-section">
                   <Form.Group widths={2}>
@@ -275,9 +301,11 @@ export default class General extends Component {
             GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
               <Aux>
                 <Header as="h6">{`Term ${index + 1}`}
+                  {GENERAL_FRM.fields.materialIndebtedness.length > 1 &&
                   <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
                     <Icon className="ns-close-circle" color="grey" />
                   </Link>
+                  }
                 </Header>
                 <div className="featured-section">
                   <FormInput
@@ -322,8 +350,6 @@ export default class General extends Component {
             ))
           }
           <Divider section />
-          {/* <Button size="small" color="blue" className="link-button" onClick={e => this.
-          addMore(e, formName, 'materialIndebtedness')}>+ Add New Term</Button> */}
           <Header as="h4">
             Affiliated Party Transactions
             {!isReadonly &&
@@ -338,9 +364,11 @@ export default class General extends Component {
           GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
             <Aux>
               <Header as="h6">{`Transaction ${index + 1}`}
+                {GENERAL_FRM.fields.affiliatedTransactions.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
+                }
               </Header>
               <div className="featured-section">
                 <FormInput

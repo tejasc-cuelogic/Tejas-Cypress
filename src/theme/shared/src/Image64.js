@@ -1,11 +1,13 @@
 import React from 'react';
 import { Image } from 'semantic-ui-react';
 import apiService from '../../../api/restApi';
-import emptyImage from '../../../assets/images/gallery-placeholder.jpg';
+import emptyImage1 from '../../../assets/images/gallery-placeholder-3-2.jpg';
+import emptyImage2 from '../../../assets/images/gallery-placeholder-16-9.jpg';
 
 class Image64 extends React.Component {
   state = { data: '' };
   componentWillMount() {
+    const emptyImage = this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (this.props.srcUrl) {
       apiService.getRemoteFile(this.props.srcUrl).then((res) => {
         this.setState({ data: res.text || emptyImage });

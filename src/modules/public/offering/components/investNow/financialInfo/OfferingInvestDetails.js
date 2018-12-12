@@ -20,7 +20,7 @@ const OfferingInvestDetails = props => (
             <Statistic size="mini" className="basic">
               <Statistic.Label>Account</Statistic.Label>
               <Statistic.Value>
-                <Icon className={`ns-${props.accType}-line`} color="green" />
+                <Icon className={`ns-${props.accType}-line`} color="green" />{' '}
                 {(props.offering && props.offering.offering.keyTerms &&
                   props.offering.offering.keyTerms.shorthandBusinessName)}
               </Statistic.Value>

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FaqWidget } from '../../../../../../theme/shared';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
 
@@ -30,7 +29,6 @@ export default class TaxForms extends Component {
   }
   render() {
     const { taxForms, loading, error } = this.props.statementStore;
-    const { faqsOfModule } = this.props.educationStore;
     result.rows = taxForms;
     return (
       <Grid>
@@ -44,11 +42,6 @@ export default class TaxForms extends Component {
                 result={result}
               />
             </Card>
-          </Grid.Column>
-        </Grid.Row>
-        <Grid.Row>
-          <Grid.Column widescreen={12} largeScreen={12} computer={12} tablet={16} mobile={16}>
-            <FaqWidget heading="Tax Forms" faqs={faqsOfModule} />
           </Grid.Column>
         </Grid.Row>
       </Grid>

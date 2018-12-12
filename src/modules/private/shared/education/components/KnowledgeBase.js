@@ -96,7 +96,7 @@ export default class KnowledgeBase extends Component {
                 }
               />
               <Route
-                path={`${match.url}/:id`}
+                path={`${match.url}/:slug`}
                 render={props => <Details marketing={marketing} module={modul} {...props} />}
               />
             </Grid.Column>

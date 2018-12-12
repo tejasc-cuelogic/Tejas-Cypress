@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Card, Header } from 'semantic-ui-react';
 import Helper from '../../../../../helper/utility';
 
-const userVerifiedDetails = ({ email, legalDetails, isUserVerified }) => {
+const userVerifiedDetails = ({ legalDetails, isUserVerified }) => {
   if (legalDetails === null ||
     (legalDetails !== null && !isUserVerified(legalDetails.status))) {
     return (
@@ -16,7 +16,7 @@ const userVerifiedDetails = ({ email, legalDetails, isUserVerified }) => {
   }
   return (
     <Card fluid className="form-card">
-      <Header as="h5">Identity verified</Header>
+      <Header as="h5">Verified Identity</Header>
       <dl className="dl-horizontal">
         <dt>Legal First Name</dt>
         <dd>{legalDetails.legalName.firstLegalName}</dd>
@@ -26,15 +26,26 @@ const userVerifiedDetails = ({ email, legalDetails, isUserVerified }) => {
         <dd>{Helper.cryptedSSNNumber(legalDetails.ssn) || '-'}</dd>
         <dt>DOB</dt>
         <dd>{legalDetails.dateOfBirth ? moment(legalDetails.dateOfBirth, 'MM/DD/YYYY').format('MM-DD-YYYY') : '-'}</dd>
-        <dt>Legal Address</dt>
-        <dd>{legalDetails.legalAddress ? `${legalDetails.legalAddress.street}, ${legalDetails.legalAddress.city}, ${legalDetails.legalAddress.state}, ${legalDetails.legalAddress.zipCode}` : 'N/A'}
+        <dt>Street</dt>
+        <dd>{legalDetails.legalAddress.street}</dd>
+        <dt>City</dt>
+        <dd>{legalDetails.legalAddress.city}</dd>
+        <dt>State</dt>
+        <dd>{legalDetails.legalAddress.state}</dd>
+        <dt>ZIP Code</dt>
+        <dd>{legalDetails.legalAddress.zipCode}</dd>
+        {/* <dt>Legal Address</dt>
+        <dd>{legalDetails.legalAddress ? `${legalDetails.legalAddress.street},
+        ${legalDetails.legalAddress.city}, ${legalDetails.legalAddress.state},
+        ${legalDetails.legalAddress.zipCode}` : 'N/A'}
         </dd>
         <dt>Email Address</dt>
         <dd>{email.address}</dd>
+        */}
       </dl>
       <p className="intro-text">
-        If any of this information needs to be updated, please contact support through the{' '}
-        <Link to="/app/messages" className="link"><b>Message center</b></Link>.
+        If any of this information needs to be updated, please contact support at{' '}
+        <a href="mailto:support@nextseed.com">Support@Nextseed.com</a>.
       </p>
     </Card>
   );

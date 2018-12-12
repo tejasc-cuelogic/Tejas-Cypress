@@ -5,7 +5,6 @@ import cookie from 'react-cookies';
 import { withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
-import { validationActions } from '../../../../../../services/actions';
 import Helper from '../../../../../../helper/utility';
 
 @inject('authStore', 'uiStore')
@@ -14,6 +13,7 @@ import Helper from '../../../../../../helper/utility';
 export default class NewEmailAddress extends Component {
   handleChangeEmailAddress = () => {
     this.props.authStore.requestEmailChange().then(() => {
+      this.props.uiStore.clearErrors();
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
       const userCredentials = { email: email.value, password: btoa(password.value) };
@@ -22,7 +22,6 @@ export default class NewEmailAddress extends Component {
     })
       .catch(() => {});
   }
-  handleInputChange = (e, { name, value }) => validationActions.validateRegisterField(name, value);
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.authStore.resetForm('CONFIRM_FRM');

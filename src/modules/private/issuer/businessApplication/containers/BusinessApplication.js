@@ -62,20 +62,45 @@ export default class BusinessApplication extends Component {
     });
   }
 
-  submit = () => {
-    this.props.businessAppStore.businessApplicationSubmitAction().then(() => {
-      Helper.toast('Business application submitted successfully!', 'success');
-      this.props.history.push('/app/dashboard');
-    });
+  // submit = () => {
+  //   this.props.businessAppStore.businessApplicationSubmitAction().then(() => {
+  //     Helper.toast('Business application submitted successfully!', 'success');
+  //     this.props.history.push('/app/dashboard');
+  //   });
+  // }
+  submit = (e) => {
+    e.preventDefault();
+    const {
+      checkFormisValid, currentApplicationId, applicationStep,
+      currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction,
+    } = this.props.businessAppStore;
+    if (checkFormisValid(applicationStep, true)) {
+      businessAppParitalSubmit().then((result) => {
+        if (result && this.props.businessAppStore.canSubmitApp) {
+          businessApplicationSubmitAction().then(() => {
+            Helper.toast('Business application submitted successfully!', 'success');
+            this.props.history.push('/app/dashboard');
+          });
+        } else {
+          this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
+        }
+      });
+    }
   }
 
   preQualSubmit = (e) => {
     e.preventDefault();
-    this.props.businessAppStore.businessPreQualificationFormSumbit().then(() => {
-      const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
-      Helper.toast('Business pre-qualification request submitted!', 'success');
-      this.props.history.push(`/app/business-application/${url}`);
-    });
+    this.props.businessAppStore.setPrequalBasicDetails();
+    this.props.businessAppStore.businessPreQualificationBasicFormSumbit()
+      .then(() => {
+        this.props.businessAppStore.setFieldvalue('isPrequalQulify', true);
+        this.props.businessAppStore.businessPreQualificationFormSumbit()
+          .then(() => {
+            const url = this.props.businessAppStore.BUSINESS_APP_STEP_URL;
+            Helper.toast('Business pre-qualification request submitted!', 'success');
+            this.props.history.push(`/app/business-application/${url}`);
+          });
+      });
   }
 
   checkIncludes = (paths, pathname) => paths.some(val => pathname.includes(val));
@@ -87,7 +112,8 @@ export default class BusinessApplication extends Component {
     const { match } = this.props;
     const { pathname } = this.props.location;
     const {
-      canSubmitApp, appStepsStatus, isFileUploading, BUSINESS_APP_FRM, formReadOnlyMode,
+      canSubmitApp, appStepsStatus, isFileUploading,
+      BUSINESS_APP_FRM, formReadOnlyMode, ButtonTextToggle,
     } = this.props.businessAppStore;
     const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status, formReadOnlyMode);
     const preQualPage = pathname.includes('pre-qualification');
@@ -95,7 +121,7 @@ export default class BusinessApplication extends Component {
     const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
-        subNavComponent={<Menu.Item position="right"><Link to={`${match.url}/need-help`}>Need Help / Have Questions?</Link></Menu.Item>}
+        rightLabel={<Menu.Item position="right"><Link to={`${match.url}/need-help`}>Need Help / Have Questions?</Link></Menu.Item>}
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}
         {...this.props}
@@ -118,6 +144,7 @@ export default class BusinessApplication extends Component {
             submitApp={this.submit}
             showSubNav={showSubNav}
             canSubmitApp={canSubmitApp}
+            ButtonTextToggle={ButtonTextToggle}
             preQualSubmit={this.preQualSubmit}
             inProgress={inProgress}
             isFileUploading={isFileUploading}

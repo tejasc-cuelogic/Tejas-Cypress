@@ -168,6 +168,8 @@
 @ns-document-search: "\e97b";
 @ns-doller-circle: "\e922";
 @ns-download: "\e923";
+@ns-drag-holder: "\e998";
+@ns-drag-holder-large: "\e997";
 @ns-dumbbells: "\e959";
 @ns-edu-center: "\e97c";
 @ns-ellipsis: "\e924";
@@ -211,6 +213,7 @@
 @ns-new-product: "\e95f";
 @ns-nextseed-icon: "\e944";
 @ns-nextseed-icon-line: "\e945";
+@ns-no-view: "\e999";
 @ns-off-shoot-business: "\e960";
 @ns-offering: "\e92e";
 @ns-paper-plane: "\e961";

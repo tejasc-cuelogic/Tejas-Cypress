@@ -9,10 +9,21 @@ import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
 
-@inject('bankAccountStore', 'uiStore')
+@inject('bankAccountStore', 'uiStore', 'transactionStore')
 @withRouter
 @observer
 export default class Plaid extends Component {
+  componentWillMount() {
+    this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
+    this.props.uiStore.clearErrors();
+  }
+  handleBankSelect = (referenceLink) => {
+    // const returnResult = bankAccountActions.bankSelect(institutionID, action);
+    this.props.transactionStore.requestOtpForManageTransactions().then(() => {
+      const confirmUrl = `${referenceLink}/confirm`;
+      this.props.history.push(confirmUrl);
+    });
+  }
   render() {
     const {
       bankLinkInterface,
@@ -20,22 +31,36 @@ export default class Plaid extends Component {
       bankSearchChange,
       bankListing,
       showAddFunds,
+      isPlaidBankVerified,
     } = this.props.bankAccountStore;
     const { inProgress, errors } = this.props.uiStore;
+    const { action, refLink } = this.props;
+    const headerText = action && action === 'change' ? 'Link bank account' : 'What is your employment status?';
+    const subHeaderText = action && action === 'change' ?
+      'Select your bank from the list'
+      :
+      `In order to make your first investment, you will need to link your bank and 
+      add funds into your account. Please choose the bank below.`;
+    if (isPlaidBankVerified) {
+      this.handleBankSelect(refLink);
+      this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
+    }
 
     if (showAddFunds) {
       return <AddFunds />;
     }
     if (bankLinkInterface === 'form') {
-      return <ManualForm />;
+      return <ManualForm action={action} refLink={refLink} />;
     }
     return (
       <div>
-        <Header as="h3" textAlign="center">Link Bank Account</Header>
-        <Header as="h6" textAlign="center">Select your bank from the list</Header>
+        <Header as="h3" textAlign="center">{headerText}</Header>
+        <p className="center-align mb-30">
+          {subHeaderText}
+        </p>
         {errors &&
           <Message error>
-            <ListErrors errors={[errors.message]} />
+            <ListErrors errors={[errors]} />
           </Message>
         }
         <Form>
@@ -86,7 +111,9 @@ export default class Plaid extends Component {
                       as="a"
                       className="bank-link"
                       to={this.props.match.url}
-                      onClick={() => bankAccountActions.bankSelect(bankData.institutionID)}
+                      onClick={
+                        () => bankAccountActions.bankSelect(bankData.institutionID, action)
+                      }
                     >
                       {/* eslint-disable import/no-dynamic-require */}
                       {/* eslint-disable global-require */}

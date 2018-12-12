@@ -10,10 +10,11 @@ const ThanksNote = props => (
           <Icon corner color="orange" className="ns-reload-circle" />
         </Icon.Group>
       </Header>
-      <Header as="h3">Thank you! We are verifying your request</Header>
+      <Header as="h3">Thank you! Your request was received.</Header>
       <Divider section />
       <p>
-        We are processing your Accreditation request and we will notify you about status changes.
+        We are processing your <b>Accreditation</b>
+        {' '}request and we will notify you about status changes.
       </p>
       <Divider hidden />
     </Modal.Header>

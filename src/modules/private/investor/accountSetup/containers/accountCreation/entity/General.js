@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Form, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { US_STATES_FOR_INVESTOR } from '../../../../../../../constants/account';
+import { US_STATES_FOR_INVESTOR, ENTITY_TYPES } from '../../../../../../../constants/account';
 import { ListErrors } from '../../../../../../../theme/shared';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../../../theme/form';
 
@@ -22,6 +22,10 @@ export default class General extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">General information</Header>
+        <p className="center-align">
+          Let{"'"}s create your Entity Investment Account. Get started by providing your
+          entity information.
+        </p>
         {errors &&
           <Message error textAlign="left">
             <ListErrors errors={[errors]} />
@@ -33,14 +37,28 @@ export default class General extends Component {
               name="name"
               fielddata={GEN_INFO_FRM.fields.name}
               changed={genInfoChange}
+              showerror
             />
-            <MaskedInput
-              name="taxId"
-              fielddata={GEN_INFO_FRM.fields.taxId}
-              changed={maskedGenInfoChange}
-              format="##-#######"
-              taxId
-            />
+            <Form.Group widths="equal">
+              <MaskedInput
+                name="taxId"
+                fielddata={GEN_INFO_FRM.fields.taxId}
+                changed={maskedGenInfoChange}
+                format="##-#######"
+                taxId
+                showerror
+              />
+              <FormDropDown
+                fielddata={GEN_INFO_FRM.fields.entityType}
+                selection
+                containerclassname="dropdown-field"
+                // value={GEN_INFO_FRM.fields.entityType.value}
+                name="entityType"
+                options={ENTITY_TYPES}
+                placeholder="Select one"
+                onChange={(e, result) => genInfoChange(e, result)}
+              />
+            </Form.Group>
             <h6>Registered Address</h6>
             <AutoComplete
               name="street"
@@ -53,6 +71,7 @@ export default class General extends Component {
                 name="city"
                 fielddata={GEN_INFO_FRM.fields.city}
                 changed={genInfoChange}
+                showerror
               />
               <FormDropDown
                 name="state"
@@ -60,8 +79,7 @@ export default class General extends Component {
                 options={US_STATES_FOR_INVESTOR}
                 search
                 selection
-                compact
-                placeholder="NY"
+                placeholder="Select"
                 onChange={genInfoChange}
               />
               <MaskedInput
@@ -69,6 +87,7 @@ export default class General extends Component {
                 fielddata={GEN_INFO_FRM.fields.zipCode}
                 changed={maskedGenInfoChange}
                 zipCode
+                showerror
               />
             </Form.Group>
           </div>

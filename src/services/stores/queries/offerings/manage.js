@@ -23,6 +23,18 @@ export const allOfferings = gql`
       keyTerms {
         legalBusinessName
       }
+      issuerDetails {
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+       phone {
+        number
+      } 
+      }
       offering {
         launch {
           targetDate
@@ -32,7 +44,6 @@ export const allOfferings = gql`
       applicationId
       issuerId
       lead {
-        id
         name
       }
       stage
@@ -62,7 +73,23 @@ export const getOfferingDetails = gql`
       id
       offeringSlug
       referralCode
+      previewPassword
+      issuerDetails {
+        email {
+          address
+        }
+        info {
+          firstName
+          lastName
+        }
+       phone {
+        number
+      } 
+      }
       keyTerms {
+        revSharePercentageDescription
+        useOfProceedFootnote
+        currentFinancialStatements
         submitted {
           id
           by
@@ -102,6 +129,7 @@ export const getOfferingDetails = gql`
         stockType
         offeringExpTarget
         offeringExpMax
+        offeringDisclaimer
         revShareSummary
         nsFeeCalcDescription
         isNewBusiness
@@ -180,6 +208,18 @@ export const getOfferingDetails = gql`
           isPublic
           fileName
         }
+        useOfProceeds {
+          id
+          url
+          isPublic
+          fileName
+        }
+        businessModelImage {
+          id
+          url
+          isPublic
+          fileName
+        }
         issuerSubmitted
         submitted {
           id
@@ -228,6 +268,12 @@ export const getOfferingDetails = gql`
             url
             shareLink
             blurb
+            featuredImageUpload {
+              id
+              url
+              fileName
+              isPublic
+            }
           }
           issuerWebsite
           issuerSubmitted
@@ -336,10 +382,12 @@ export const getOfferingDetails = gql`
           accountNumber
           businessCapitalization
           useOfProceeds {
-            reachedMinOfferingGoal
-            reachedMaxOfferingGoal
+            minOfferingExpenseAmount
+            minOfferingExpenseAmountDescription
+            maxOfferingExpenseAmount
+            maxOfferingExpenseAmountDescription
           }
-          rightsOfEqShareHolders
+          equityShareholderRights
           security {
             class
             votingRights
@@ -382,17 +430,17 @@ export const getOfferingDetails = gql`
           }
         }
         riskFactors {
-          businessRisk
-          financingRisk
-          developmentRisk
-          reputationalRisk
-          competitionRisk
-          marketRisk
+          businessRisks
+          financingRisks
+          developmentRisks
+          reputationalRisks
+          competitionRisks
+          marketRisks
           workStoppagesRisks
-          managementRisk
-          personnelRisk
-          laborSupplyRisk
-          privacyRisk
+          managementRisks
+          personnelRisks
+          laborSupplyRisks
+          privacyRisks
           realEstateRisks
           supplyRisks
           foodSafetyRisks
@@ -415,6 +463,27 @@ export const getOfferingDetails = gql`
           debtFinancingRisks
           conflictOfInterestRisks
           issuerSubmitted
+          submitted {
+            id
+            by
+            date
+          }
+          approved {
+            id
+            by
+            date
+            status
+          }
+        }
+        dataroom {
+          documents {
+            name
+            upload {
+              fileId
+              fileName
+            }
+            accreditedOnly
+          }
           submitted {
             id
             by
@@ -608,6 +677,21 @@ export const getOfferingDetails = gql`
                 }
               }
             }
+            promissoryNote {
+              fileId
+              fileName
+              fileHandle {
+                id
+                created {
+                  date
+                  by
+                }
+                updated {
+                  date
+                  by
+                }
+              }
+            }
             edgar
             submitted {
               id
@@ -766,7 +850,6 @@ export const getOfferingDetails = gql`
       applicationId
       issuerId
       lead {
-        id
         name
       }
       stage
@@ -799,8 +882,8 @@ export const getOfferingDetails = gql`
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String! $offeringDetails: OfferingInputType!) {
-  updateOffering(id: $id offeringDetails: $offeringDetails) {
+mutation _updateOffering($id: String!, $poc: String, $offeringDetails: OfferingInputType!) {
+  updateOffering(id: $id, poc: $poc offeringDetails: $offeringDetails) {
     id
   }
 }

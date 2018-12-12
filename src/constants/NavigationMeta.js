@@ -27,9 +27,12 @@ export const PRIVATE_NAV = [
         title: 'Investment limits', to: 'investment-limits', component: 'InvestmentLimits', accessibleTo: ['investor'],
       },
       { title: 'Security', to: 'security', component: 'Security' },
-      {
-        title: 'Beneficiaries', to: 'beneficiaries', component: 'Beneficiaries', accessibleTo: ['investor'],
-      },
+      // {
+      //   title: 'Beneficiaries',
+      //   to: 'beneficiaries',
+      //   component: 'Beneficiaries',
+      //   accessibleTo: ['investor'],
+      // },
       {
         title: 'Agreements', to: 'agreements', component: 'Agreements', accessibleTo: ['investor'],
       },
@@ -149,20 +152,20 @@ export const PRIVATE_NAV = [
     subPanel: 1,
     ...INVESTER_ACC_SUB_NAV_ITEMS,
   },
-  {
-    icon: 'ns-wallet',
-    title: 'Rewards wallet',
-    to: 'rewards-wallet',
-    path: 'investor/rewardsWallet/containers/RewardsWallet',
-    accessibleTo: ['ira', 'individual', 'entity'],
-  },
-  {
-    icon: 'ns-comments-edit',
-    title: 'Referrals',
-    to: 'referrals',
-    path: 'investor/referrals/containers/Referrals',
-    accessibleTo: ['ira', 'individual', 'entity'],
-  },
+  // {
+  //   icon: 'ns-wallet',
+  //   title: 'Rewards wallet',
+  //   to: 'rewards-wallet',
+  //   path: 'investor/rewardsWallet/containers/RewardsWallet',
+  //   accessibleTo: ['ira', 'individual', 'entity'],
+  // },
+  // {
+  //   icon: 'ns-comments-edit',
+  //   title: 'Referrals',
+  //   to: 'referrals',
+  //   path: 'investor/referrals/containers/Referrals',
+  //   accessibleTo: ['ira', 'individual', 'entity'],
+  // },
   {
     icon: 'gift',
     title: 'Offering',
@@ -308,7 +311,7 @@ export const PRIVATE_NAV = [
     icon: 'dollar',
     title: 'CrowdPay',
     capability: 'CROWD_PAY_ANY',
-    to: 'crowdPay',
+    to: 'crowdpay',
     heading: 'Manage Crowdpay Accounts',
     path: 'admin/crowdPay',
     accessibleTo: ['admin'],
@@ -323,6 +326,15 @@ export const PRIVATE_NAV = [
         component: 'ApplicationsList',
       },
     ],
+  },
+  {
+    icon: 'university',
+    title: 'Change Linked Account Bank Request',
+    capability: 'LINKED_BANK_ANY',
+    to: 'change-linked-bank-requests',
+    heading: 'Change Linked Account Bank Request',
+    path: 'admin/linkedBank',
+    accessibleTo: ['admin'],
   },
   {
     icon: 'credit card',
@@ -364,6 +376,14 @@ export const PRIVATE_NAV = [
     path: 'admin/deployments',
     accessibleTo: ['admin', 'manager', 'support'],
   },
+  {
+    icon: 'payment',
+    title: 'Accreditation Requests',
+    capability: 'ACCREDITATION_ANY',
+    to: 'accreditation',
+    path: 'admin/accreditation',
+    accessibleTo: ['admin', 'manager', 'support'],
+  },
 ];
 
 export const PUBLIC_NAV = [
@@ -402,7 +422,7 @@ export const PUBLIC_NAV = [
         icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'ns-document-search', title: 'Disclosures', to: 'disclosures', component: 'Disclosures',
+        icon: 'ns-document-search', title: 'Data Room', to: 'data-room', component: 'Disclosures',
       },
       {
         icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',
@@ -446,33 +466,57 @@ export const PUBLIC_NAV = [
     subNavigations: [
       { title: 'Fundraising', to: 'business' },
       { title: 'Investing', to: 'invest' },
+      { title: 'Education Center', to: 'resources/education-center' },
+    ],
+  },
+  {
+    title: 'About us',
+    to: '',
+    subPanel: 1,
+    exact: true,
+    subNavigations: [
+      { title: 'Mission', to: 'about/mission' },
+      { title: 'Team & Culture', to: 'about/team' },
+      { title: 'Careers', to: 'about/careers' },
+      { title: 'Insights', to: 'resources/insights' },
     ],
   },
 ];
 
 
 export const FOOTER_NAV = [
+  // {
+  //   title: 'Resources',
+  //   to: 'resources',
+  //   subPanel: 1,
+  //   subNavigations: [
+  //     { title: 'Ed Center', to: 'education-center' },
+  //     { title: 'Insights', to: 'insights' },
+  //   ],
+  // },
+  // {
+  //   title: 'About Us',
+  //   to: 'about',
+  //   exact: true,
+  //   subPanel: 1,
+  //   subNavigations: [
+  //     { title: 'Mission', to: 'mission' },
+  //     { title: 'Team & Culture', to: 'team' },
+  //     { title: 'Careers', to: 'careers' },
+  //     { title: 'Press', to: 'press' },
+  //   ],
+  // },
   {
-    title: 'Resources',
-    to: 'resources',
-    subPanel: 1,
-    subNavigations: [
-      { title: 'Ed Center', to: 'education-center' },
-      { title: 'Insights', to: 'insights' },
-    ],
-  },
-  {
-    title: 'About Us',
-    to: 'about',
+    title: 'Legal',
+    to: 'agreements/legal',
     exact: true,
     subPanel: 1,
     subNavigations: [
-      { title: 'Mission', to: 'mission' },
-      { title: 'Team & Culture', to: 'team' },
-      { title: 'Careers', to: 'careers' },
-      { title: 'Press', to: 'press' },
+      { title: 'Terms of Use', to: 'terms-of-use' },
+      { title: 'Privacy Policy', to: 'privacy-policy' },
+      { title: 'General Disclosures', to: 'general-disclosures' },
+      { title: 'General Risk Factors', to: 'general-risk-factors' },
+      { title: 'Legal Documents', to: 'legal-documents' },
     ],
   },
-  { title: 'Terms of Use', exact: true, to: 'agreements/terms-of-use' },
-  { title: 'Privacy Policy', exact: true, to: 'agreements/privacy-policy' },
 ];

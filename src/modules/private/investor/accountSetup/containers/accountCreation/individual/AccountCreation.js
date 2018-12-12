@@ -35,7 +35,12 @@ export default class AccountCreation extends React.Component {
     } = this.props.uiStore;
     // Done changes for saving link bank details - Alan's feedback point
     // const { plaidAccDetails, formLinkBankManually, formAddFunds } = this.props.bankAccountStore;
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      formAddFunds,
+      validateAddFunds,
+      plaidAccDetails,
+      formLinkBankManually,
+    } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
     [
@@ -52,7 +57,8 @@ export default class AccountCreation extends React.Component {
         component: <AddFunds />,
         // isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
         // Done changes for saving link bank details - Alan's feedback point
-        isValid: '',
+        isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
+        validate: validateAddFunds,
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         stepToBeRendered: 2,

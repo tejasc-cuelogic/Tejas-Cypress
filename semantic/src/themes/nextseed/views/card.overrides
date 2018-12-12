@@ -8,14 +8,17 @@
 //     }
 // }
 .ui.card{
-    &.campaign{
+    &.campaign{ 
         box-shadow:none;
+        height: 100%;
         &:hover {
             text-decoration: none;
         }
         .ui.image {
-            max-height: 200px;
-            height: 200px;
+            // max-height: 200px;
+            // height: 200px;
+            width: 100%;
+            border-radius: 0 !important;
         }
         .ui.label{
             border:none;
@@ -38,15 +41,15 @@
         }
         >.content{
             padding:@21px @28px;
+            // line-height:@24px;
             @media only screen and (max-width : @largestMobileScreen){
                 padding:@20px @22px;
             }
-            line-height:@24px;
             .tags{
                 font-size:@13px;
                 font-weight:@fontMedium;
                 color:@neutral-middark;
-                text-transform:uppercase;
+                text-transform:capitalize;
                 >span{
                     text-transform:none;
                 }
@@ -55,17 +58,28 @@
                 text-transform:none;
             }
             .description{
-                height:80px;
-                margin:@14px 0;
+                max-height:80px;
+                margin:@14px 0 0;
                 overflow:hidden;
                 font-size:@13px;
                 line-height:@20px;
             }
             p{
-                font-size: 13px;
+                font-size: @13px;
                 color: @neutral;
                 margin-bottom: 0;
             }
+            &.extra {
+                padding-top: 0;
+                border-top: 0!important;
+            }
+        }
+        .message {
+            padding: @6px @30px;
+            font-size: @12px;
+            line-height: @18px;
+            color: @neutral;
+            box-shadow: none;
         }
         >.content.card-hidden {
             position: absolute;
@@ -121,9 +135,13 @@
                 border: 0;
                 padding: 0 @28px;
                 .description {
-                    font-size: @14px;
+                    font-size: @15px;
                     margin: 0 0 @30px;
                     height: auto;
+                }
+                .ui.image {
+                    max-width: 100%;
+                    width: auto;
                 }
             }
             .extra {
@@ -198,6 +216,9 @@
     .fr-box.html-editor{
         box-shadow:none;
         border:@neutral-darkwhite 1px solid;
+    }
+    dl.dl-horizontal dd {
+        color: @neutral;
     }
 }
 .ui.stackable.cards>.card{
@@ -330,7 +351,6 @@
     }
     .meta{
         margin-bottom:1rem;
-        font-size:@14px;
         color:@neutral-middark;
         text-transform:uppercase;
     }
@@ -356,13 +376,19 @@
     }
     &.linked-bank{
         .item{
+            .ui.tiny.image{
+                width:60px;
+            }
             .extra{
                 margin-bottom:@7px;
                 color:@neutral-middark;
             }
             .header{
-                font-weight:700;
+                font-weight:@fontMedium;
                 color:@fullBlack;
+            }
+            a.header{
+                color:@primary-one;
             }
         }
     }
@@ -395,6 +421,9 @@
         .extra{
             color:@neutral;
         }
+        span.ui.button.time-stamp{
+            font-weight:@normal;
+        }
     }
 }
 .ui{
@@ -422,6 +451,7 @@
     .ui.card .meta{
         font-size:@13px;
         text-transform:none;
+        padding-left: @14px;
     }
 }
 
@@ -454,6 +484,14 @@
     &.application-cards{
         >.card>.content{
             flex-grow:0;
+        }
+        dl.dl-horizontal {
+            dt{
+                width:140px;
+            }
+            dd{
+                margin-left:150px;
+            }
         }
     }
 }

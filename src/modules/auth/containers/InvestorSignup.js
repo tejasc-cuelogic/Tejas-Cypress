@@ -5,10 +5,9 @@ import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
-import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
 
-@inject('authStore', 'uiStore')
+@inject('authStore', 'uiStore', 'identityStore')
 @withRouter
 @observer
 class InvestorSignup extends Component {
@@ -18,24 +17,29 @@ class InvestorSignup extends Component {
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
   }
+  handleIsEmailExist = (email) => {
+    this.props.authStore.checkEmailExistsPresignup(email);
+  }
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.register()
-      .then(() => {
-        if (this.props.authStore.newPasswordRequired) {
-          this.props.history.push('/auth/change-password');
-        } else {
-          const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
-          const userCredentials = { email: email.value, password: btoa(password.value) };
-          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-          this.props.history.push('/auth/confirm-email');
+    if (this.props.authStore.newPasswordRequired) {
+      this.props.history.push('/auth/change-password');
+    } else {
+      const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+      this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
+        const userCredentials = { email: email.value, password: btoa(password.value) };
+        cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+        if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
+          this.props.identityStore.requestOtpWrapper().then(() => {
+            this.props.history.push('/auth/confirm-email');
+          });
         }
-      })
-      .catch(() => { });
+      });
+    }
   };
   render() {
     const {
-      SIGNUP_FRM, signupChange, pwdInputType,
+      SIGNUP_FRM, signupChange, pwdInputType, currentScore,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
     const customError = errors && errors.code === 'UsernameExistsException'
@@ -44,8 +48,7 @@ class InvestorSignup extends Component {
       <Modal
         size="mini"
         open
-        closeOnDimmerClick={false}
-        closeIcon
+        closeOnDimmerClick
         onClose={
           () => {
             this.props.authStore.resetForm('SIGNUP_FRM');
@@ -54,9 +57,9 @@ class InvestorSignup extends Component {
         }
       >
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">
+          <Header as="h3" className="mb-0">
             Sign up as {' '}
-            {(SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
+            {(SIGNUP_FRM.fields.role.value === '' || SIGNUP_FRM.fields.role.value === 'investor') ? 'Investor' : 'Business Owner'}
           </Header>
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
@@ -86,6 +89,7 @@ class InvestorSignup extends Component {
               name="email"
               fielddata={SIGNUP_FRM.fields.email}
               changed={signupChange}
+              onblur={this.handleIsEmailExist}
             />
             <FormPasswordStrength
               key="password"
@@ -115,7 +119,7 @@ class InvestorSignup extends Component {
               </Message>
             }
             <div className="center-align mt-30">
-              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid} />
+              <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
             </div>
           </Form>
         </Modal.Content>

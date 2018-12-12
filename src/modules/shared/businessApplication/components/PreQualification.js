@@ -12,6 +12,7 @@ import PreQualRealEstate from './prequlification/PreQualRealEstate';
 import NotFound from '../../../shared/NotFound';
 import { DataFormatter } from '../../../../helper';
 
+const isMobile = document.documentElement.clientWidth < 768;
 @inject('businessAppStore', 'uiStore')
 @withRouter
 @observer
@@ -145,7 +146,7 @@ export default class PreQualification extends Component {
                 disabled={!BUSINESS_APP_FRM.meta.isValid}
                 size="large"
                 color="green"
-                className="very relaxed"
+                className={`${isMobile && 'mb-50'} very relaxed`}
               >
                 Submit
               </Button>

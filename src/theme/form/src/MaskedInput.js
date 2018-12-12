@@ -7,7 +7,11 @@ import InputMask from 'react-input-mask';
 import { Link } from 'react-router-dom';
 import { FieldError } from '../../shared';
 
-// const MaskedInput = observer((props) => {
+const NumberFormatWrapped = props => (
+  <div className={props.wrapperClass}>
+    <NumberFormat {...props} />
+  </div>
+);
 @observer
 export default class MaskedInput extends Component {
   state = { showError: false };
@@ -75,11 +79,11 @@ export default class MaskedInput extends Component {
               {props.actionlabel}
             </Button>
           </div>) : props.currency ? (
-            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+            <NumberFormatWrapped readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
           ) : props.number ? (
             <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
           ) : props.percentage ? (
-            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 4} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
+            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 6} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
           ) : props.phoneNumber ? (
             <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={(displayMode || readOnly) ? '' : placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.phoneNumberDisplayMode ? (

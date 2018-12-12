@@ -24,7 +24,7 @@ export default class FormInput extends Component {
     const maxlength = props.fielddata.maxLength ? props.fielddata.maxLength : (
       props.maxLength ? props.maxLength : false
     );
-    const { displayMode, readOnly } = props;
+    const { displayMode, readOnly, dataid } = props;
     const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
     return (
       <Form.Field
@@ -62,8 +62,19 @@ export default class FormInput extends Component {
           type={props.type || 'text'}
           placeholder={(displayMode || readOnly) ? '' : placeHolder}
           defaultValue={defaultValue}
-          onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
-          onBlur={() => this.triggerError(true)}
+          onChange={
+            (e) => {
+              props.changed(e, { name: e.target.name, value: e.target.value, dataid });
+              this.triggerError(props.showerror || false);
+            }}
+          onBlur={
+            (e) => {
+              this.triggerError(true);
+              if (props.onblur) {
+                this.props.onblur(e.target.value);
+              }
+            }
+          }
           readOnly={displayMode}
           {...props}
           value={value === '' ? undefined : value}

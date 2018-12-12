@@ -12,7 +12,7 @@ export default class AccountType extends Component {
     const { TRUST_INFO_FRM, trustInfoChange, entityInfoDateChange } = this.props.entityAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Is the Entity a trust?</Header>
+        <Header as="h3" textAlign="center">Is Entity a trust?</Header>
         <Form error className="account-type-tab">
           <FormRadioGroup
             fielddata={TRUST_INFO_FRM.fields.isTrust}

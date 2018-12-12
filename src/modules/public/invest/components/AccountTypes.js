@@ -35,7 +35,7 @@ const AccountTypes = () => (
                   <p>
                     Promotional Offer: For new NextSeed IRA Accounts, NextSeed will cover
                     the one-time setup fee and annual account fees for four years! For
-                    full details, go to the <Link to="/agreements/terms-of-use">Terms and Conditions</Link>.
+                    full details, go to the <Link to="/agreements/legal">Terms and Conditions</Link>.
                   </p>
                 </Grid.Column>
               </Grid>

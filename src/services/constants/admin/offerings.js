@@ -47,7 +47,7 @@ export const KEY_TERMS = {
   },
   shorthandBusinessName: {
     value: '',
-    label: 'Shorthand Name of Business',
+    label: 'Short hand Name of Business',
     error: undefined,
     rule: 'string|required',
     placeHolder: 'Enter here',
@@ -108,9 +108,23 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
+  offeringDisclaimer: {
+    value: '',
+    label: 'Offering Disclaimer',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
   revSharePercentage: {
     value: null,
     label: 'Revenue Sharing Percentage',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  revSharePercentageDescription: {
+    value: '',
+    label: 'Revenue Sharing Percentage Description',
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
@@ -288,6 +302,34 @@ export const KEY_TERMS = {
     fileData: '',
     objType: 'FileObjectType',
   },
+  // minOfferingAmtExpense: {
+  //   value: '',
+  //   label: 'Min Offering Amount Expense',
+  //   error: undefined,
+  //   rule: 'string',
+  //   placeHolder: 'Enter here',
+  // },
+  // maxOfferingAmtExpense: {
+  //   value: '',
+  //   label: 'Max Offering Amount Expense',
+  //   error: undefined,
+  //   rule: 'string',
+  //   placeHolder: 'Enter here',
+  // },
+  useOfProceedFootnote: {
+    value: '',
+    label: 'Use of Proceeds Calculation Footnote',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  currentFinancialStatements: {
+    value: '',
+    label: 'Current Financial Statemetns (New Business)',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -309,7 +351,7 @@ export const BUSINESS_INDUSTRIES = [
 export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
-  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity 506C' },
+  { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
 ];
 
 export const BUSINESS_TYPE_VALUES = [
@@ -434,6 +476,23 @@ export const OFFERING_OVERVIEW = {
     type: 'facebook',
     ArrayObjItem: true,
   },
+  facebook_featuredImageUpload: {
+    label: 'Featured Upload image',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    preSignedUrl: '',
+    showLoader: false,
+    id: '',
+    fileData: '',
+    fileName: '',
+    objType: 's3File',
+    skipField: true,
+    type: 'facebook',
+    find: 'type',
+    ArrayObjItem: true,
+    objRef: 'offering.overview.social',
+  },
   twitter_shareLink: {
     value: '',
     label: 'Sharelink',
@@ -457,6 +516,23 @@ export const OFFERING_OVERVIEW = {
     skipField: true,
     type: 'twitter',
     ArrayObjItem: true,
+  },
+  twitter_featuredImageUpload: {
+    label: 'Featured Upload image',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    preSignedUrl: '',
+    showLoader: false,
+    id: '',
+    fileData: '',
+    fileName: '',
+    objType: 's3File',
+    skipField: true,
+    find: 'type',
+    type: 'twitter',
+    ArrayObjItem: true,
+    objRef: 'offering.overview.social',
   },
   googleMeta: {
     value: '',
@@ -690,6 +766,13 @@ export const OFFERING_DETAILS = {
     rule: 'required',
     placeHolder: 'Enter here',
   },
+  previewPassword: {
+    value: '',
+    label: 'Preview Password',
+    error: undefined,
+    rule: 'required',
+    placeHolder: 'Enter here',
+  },
   referralCode: {
     value: '',
     label: 'Offering Referral Code',
@@ -708,6 +791,15 @@ export const MEDIA = {
   },
   tombstoneImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  locationHeroImage: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  useOfProceeds: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Use of Proceeds Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  businessModelImage: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Business Model Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   location: {
     fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Location Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
@@ -1152,7 +1244,17 @@ export const GENERAL = {
     error: undefined,
     rule: 'optional',
   },
-  reachedMinOfferingGoal: {
+  minOfferingExpenseAmount: {
+    label: 'Minimum offering amount expense',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    objRef: 'legal.general.useOfProceeds',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type amount here',
+    objRefOutput: 'useOfProceeds',
+  },
+  minOfferingExpenseAmountDescription: {
     label: 'If minimum offering amount is reached:',
     value: '',
     error: undefined,
@@ -1162,7 +1264,17 @@ export const GENERAL = {
     placeHolder: 'Type your text here...',
     objRefOutput: 'useOfProceeds',
   },
-  reachedMaxOfferingGoal: {
+  maxOfferingExpenseAmount: {
+    label: 'Maximum offering amount expense',
+    value: '',
+    error: undefined,
+    rule: 'optional',
+    objRef: 'legal.general.useOfProceeds',
+    objType: 'useOfProceeds',
+    placeHolder: 'Type amount here',
+    objRefOutput: 'useOfProceeds',
+  },
+  maxOfferingExpenseAmountDescription: {
     label: 'If maximum offering amount is reached:',
     value: '',
     error: undefined,
@@ -1172,7 +1284,7 @@ export const GENERAL = {
     placeHolder: 'Type your text here...',
     objRefOutput: 'useOfProceeds',
   },
-  rightsOfEqShareHolders: {
+  equityShareholderRights: {
     label: 'Please provide a description of how the exercise of rights held by the principal shareholders of the issuer could affect the purchasers of the securities being offered. Included is an example.',
     value: '',
     error: undefined,
@@ -1348,7 +1460,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  businessRisk: {
+  businessRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isBusinessRisk',
@@ -1362,7 +1474,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  financingRisk: {
+  financingRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isFinancingRisk',
@@ -1376,7 +1488,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  developmentRisk: {
+  developmentRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isDevelopmentRisk',
@@ -1390,7 +1502,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  reputationalRisk: {
+  reputationalRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isReputationalRisk',
@@ -1404,7 +1516,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  competitionRisk: {
+  competitionRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isCompetitionRisk',
@@ -1418,7 +1530,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  marketRisk: {
+  marketRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isMarketRisk',
@@ -1446,7 +1558,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  managementRisk: {
+  managementRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isManagementRisk',
@@ -1460,7 +1572,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  personnelRisk: {
+  personnelRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPersonnelRisk',
@@ -1474,7 +1586,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  laborSupplyRisk: {
+  laborSupplyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isLaborSupplyRisk',
@@ -1488,7 +1600,7 @@ export const RISK_FACTORS = {
     rule: 'optional',
     skipField: true,
   },
-  privacyRisk: {
+  privacyRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
     refSelector: 'isPrivacyRisk',
@@ -1687,7 +1799,7 @@ export const RISK_FACTORS = {
   ipRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
-    refSelector: 'ipRisks',
+    refSelector: 'isIpRisks',
     error: undefined,
     rule: 'optional',
     defaultValue: 'Our intellectual property is material to conducting business. Our success depends in part on furthering brand recognition using trademarks, service marks, trade dress, trade secrets and other proprietary intellectual property, including our name, logos and unique ambiance of {{shorthand_name}}. We have taken efforts to protect our brand, but if its efforts are inadequate, or if any third party misappropriates or infringes on our intellectual property, the value of the store brand or consumer products brand may be harmed, which could have a material adverse effect on the business. There are no material claims against us from prior users of intellectual property, but there can be no assurances that we will not encounter any material claims in the future. If this happens, it could harm our image, brands or competitive position and cause us to incur significant penalties and costs.',
@@ -1729,7 +1841,7 @@ export const RISK_FACTORS = {
   taxRisks: {
     label: 'Lorem ipsum dolor sit amet enim. Etiam ullamcorper. Suspendisse a pellentesque dui, non felis. Maecenas malesuada elit lectus felis, malesuada ultricies. Curabitur et ligula.',
     value: '',
-    refSelector: 'isRegulatoryFoodRisks',
+    refSelector: 'isTaxRisks',
     error: undefined,
     rule: 'optional',
     defaultValue: 'We are subject to federal, state and local taxes. In making tax estimates and paying taxes, significant judgment is often required. Although we believe our tax positions and estimates are reasonable, we could have additional tax liability, including interest and penalties, if a taxing authority disagrees with the positions. If material, payment of such additional amounts could have a material impact on finances and results of operations.',
@@ -2094,7 +2206,7 @@ export const ADD_NEW_BONUS_REWARD = {
       },
     ],
     error: undefined,
-    rule: 'alpha',
+    rule: 'optional',
     key: 0,
     earlyBirdQuantity: 50,
   },
@@ -2263,5 +2375,75 @@ export const ADMIN_DOCUMENTATION = {
     objType: 'FileObjectType',
     stepName: 'DOCUMENTS_LEGAL_PERSONAL_GUARANTEE',
     lastModifiedDate: '',
+  },
+  promissoryNote: {
+    value: '',
+    label: 'Promissory Note',
+    error: undefined,
+    rule: 'optional',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    objType: 'FileObjectType',
+    stepName: 'DOCUMENTS_LEGAL_PROMISSORY_NOTE',
+    lastModifiedDate: '',
+  },
+};
+
+export const DATA_ROOM = {
+  documents: [{
+    name: {
+      label: 'Document Name',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
+    upload: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'required',
+      showLoader: false,
+      preSignedUrl: '',
+      fileId: '',
+      fileData: '',
+      objType: 'FileObjectType',
+    },
+    accreditedOnly: {
+      label: '',
+      value: false,
+      error: undefined,
+      rule: 'required',
+    },
+  }],
+};
+
+export const POC_DETAILS = {
+  address: {
+    value: '',
+    label: 'POC',
+    tooltip: 'Email Address',
+    objRef: 'issuerDetails.email',
+    error: undefined,
+    rule: 'string|required|email',
+    placeHolder: 'Enter here',
+  },
+  name: {
+    value: '',
+    label: 'Lead Name',
+    error: undefined,
+    objRef: 'lead',
+    rule: 'string',
+    placeHolder: 'Enter here',
+  },
+  targetDate: {
+    value: '',
+    label: 'Launch Date',
+    error: undefined,
+    objRef: 'offering.launch',
+    rule: 'string',
+    placeHolder: 'Enter here',
   },
 };

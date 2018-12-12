@@ -15,6 +15,7 @@ export default class InvestNow extends React.Component {
   state = { submitLoading: false };
 
   componentWillMount() {
+    this.props.investmentStore.setStepToBeRendered(0);
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
@@ -28,10 +29,15 @@ export default class InvestNow extends React.Component {
       this.props.campaignStore.getCampaignDetails(offeringId);
     }
   }
-
+  componentDidMount() {
+    window.addEventListener('message', this.handleIframeTask);
+  }
+  handleIframeTask = (e) => {
+    console.log(e.data);
+  };
   handleMultiStepModalclose = () => {
     this.props.investmentStore.setStepToBeRendered(0);
-    this.props.history.push('overview');
+    this.props.history.push(this.props.refLink);
     this.props.investmentStore.resetData();
     this.props.investmentStore.setByDefaultRender(true);
   }
@@ -57,11 +63,12 @@ export default class InvestNow extends React.Component {
         this.props.investmentStore.transferFundsForInvestment().then((status) => {
           if (status) {
             this.props.investmentStore.generateAgreement().then(() => {
+              this.props.investmentStore.setByDefaultRender(true);
               Helper.toast('Transfer request is in process!', 'success');
               this.props.investmentStore.setStepToBeRendered(0);
               this.setState({ submitLoading: false });
               this.props.history.push('agreement');
-            }).finally(() => {
+            }).catch(() => {
               this.setState({ submitLoading: false });
             });
           }
@@ -83,6 +90,7 @@ export default class InvestNow extends React.Component {
         } else {
           this.setState({ submitLoading: true });
           this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
+            this.setState({ submitLoading: isValid });
             if (isValid) {
               this.props.investmentStore.generateAgreement().then(() => {
                 Helper.toast('Transfer request is in process!', 'success');
@@ -99,9 +107,11 @@ export default class InvestNow extends React.Component {
         }
       });
     } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
-      this.props.investmentLimitStore.getInvestorInvestmentLimit().then(() => {
-        this.handleStepChange(step.stepToBeRendered);
-      });
+      this.props.investmentLimitStore
+        .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId)
+        .then(() => {
+          this.handleStepChange(step.stepToBeRendered);
+        });
     }
   }
 

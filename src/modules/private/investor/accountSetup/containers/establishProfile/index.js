@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 
 import AccountCreation from './AccountCreation';
+import ConfirmCancelModal from './ConfirmCancelModal';
 
 @inject('investorProfileStore')
 @withRouter
 @observer
 export default class EstablishProfile extends Component {
   handleCloseModal = () => {
-    this.props.history.push('/app/summary');
+    if (this.props.refUrl) {
+      this.props.history.push(this.props.refUrl);
+    } else {
+      this.props.history.push('/app/summary');
+    }
   }
   handleCloseNestedModal = () => {
     this.props.history.push('/app/summary/establish-profile');
@@ -25,6 +30,7 @@ export default class EstablishProfile extends Component {
           close={this.handleCloseModal}
           {...this.props}
         />
+        <Route path={`${this.props.match.url}/confirm`} render={() => <ConfirmCancelModal refLink={this.props.match.url} />} />
       </div>
     );
   }

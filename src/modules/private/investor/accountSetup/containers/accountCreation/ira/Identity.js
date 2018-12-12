@@ -25,8 +25,11 @@ export default class Identity extends Component {
     const { errors, confirmBox } = this.props.uiStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Confirm your identity and upload your Driver’s License, state-issued ID, or U.S. <br /> passport</Header>
+        <Header as="h3" textAlign="center">Confirm your identity</Header>
         <Divider section hidden />
+        <p className="center-align grey-header">
+          <b>Upload a Photo ID (Upload your Driver’s License, state-issued ID, or U.S. passport)</b>
+        </p>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
@@ -41,7 +44,7 @@ export default class Identity extends Component {
           />
         </Form>
         <Divider section hidden />
-        <p className="center-align">NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML laws, we need to verify your identity in order to set up your account.
+        <p className="center-align grey-header">NextSeed is a regulated financial services company operating in the US. To comply with KYC/AML regulations, we need to verify your identity in order to set up your account.
         </p>
         <Confirm
           header="Confirm"

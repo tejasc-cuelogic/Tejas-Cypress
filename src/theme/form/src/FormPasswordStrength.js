@@ -24,6 +24,7 @@ export default class FormPasswordStrength extends Component {
       label,
       error,
       tooltip,
+      value,
     } = props.fielddata;
     const { displayMode } = props;
     const fieldClass = `${props.containerclassname || ''} ${displayMode ? ' display-only' : ''}`;
@@ -66,6 +67,7 @@ export default class FormPasswordStrength extends Component {
           inputProps={{ ...props.inputProps, type: pwdInputType }}
           changeCallback={(e) => { props.changed(e); this.triggerError(false); }}
           onBlur={() => this.triggerError(true)}
+          defaultValue={value}
         />
         {props.iconDisplay ?
           <Icon {...togglePasswordType()} onClick={() => setPwdVisibilityStatus()} />

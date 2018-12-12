@@ -16,9 +16,9 @@ const leftSummary = offer => [
 ];
 
 const rightSummary = offer => [
-  { title: 'Name', content: offer.lead ? offer.lead.name : 'NA' },
-  { title: 'Email', content: 'jdoe234@gmail.com' },
-  { title: 'Phone', content: '235-343-6453' },
+  { title: 'Name', content: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'NA' },
+  { title: 'Email', content: offer.issuerDetails && offer.issuerDetails.email && offer.issuerDetails.email.address ? offer.issuerDetails.email.address : 'N/A' },
+  { title: 'Phone', content: offer.issuerDetails && offer.issuerDetails.phone && offer.issuerDetails.phone.number ? offer.issuerDetails.phone.number : 'N/A' },
 ];
 const LiveSummary = ({ offer, refLink }) => (
   <Grid columns="equal">

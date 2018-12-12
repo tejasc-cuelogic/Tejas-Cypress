@@ -123,26 +123,24 @@ const WhyNextseed = () => (
             <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>
           </Button.Group>
         </div>
-        <Grid className="business-learn-more mb-30">
+        {/* <Grid className="business-learn-more mb-30">
           <Grid.Row>
             <Grid.Column className="center-align">
               <List horizontal relaxed className="learn-more-list left-align">
                 <List.Item>
                   <List.Header>Learn more</List.Header>
-                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
                   <List.Content>Why invest on <a href="/">NextSeed?</a></List.Content>
                 </List.Item>
                 <List.Item>
                   {!isMobile &&
                     <List.Header>&nbsp;</List.Header>
                   }
-                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
                   <List.Content>What are the <a href="/">risk of investing?</a></List.Content>
                 </List.Item>
               </List>
             </Grid.Column>
           </Grid.Row>
-        </Grid>
+        </Grid> */}
         <Divider fitted as={Container} />
         <section>
           <Container textAlign={isMobile ? 'left' : 'center'}>
@@ -159,8 +157,8 @@ const WhyNextseed = () => (
           {!isMobile ?
             <Container>
               <Grid centered stackable className="vertical-gutter">
-                {businesses.map(row => (
-                  <Grid.Row>
+                {businesses.map((row, index) => (
+                  <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
                     {
                       row.map(b => (
                         <Grid.Column textAlign="center" width={4}>

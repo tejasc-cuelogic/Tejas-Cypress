@@ -1,13 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, mapValues, values } from 'lodash';
+import { pickBy, mapValues, values, map } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
   allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore } from '../../../index';
+import { ClientDb } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 
 export class OfferingsStore {
@@ -24,65 +25,69 @@ export class OfferingsStore {
     completed: 40,
   };
   @observable requestState = {
-    search: {},
+    skip: 0,
     page: 1,
     perPage: 10,
-    skip: 0,
+    displayTillIndex: 10,
+    search: {},
   };
+  @observable db;
   @observable initLoad = [];
 
   @action
   initRequest = (props) => {
     const {
-      first, skip, page, stage,
-    } = props ||
-    {
-      first: this.requestState.perPage,
-      skip: this.requestState.skip,
-      page: this.requestState.page,
-      stage: this.requestState.stage,
-    };
-    this.requestState.page = page || this.requestState.page;
-    this.requestState.perPage = first || this.requestState.perPage;
-    this.requestState.skip = skip || this.requestState.skip;
-    this.requestState.stage = stage || this.requestState.stage;
+      stage,
+    } = props;
     const reqStages = Object.keys(pickBy(STAGES, s => s.ref === stage));
-    const params = {
-      first: first || this.requestState.perPage,
-      skip,
-    };
-    if (reqStages.length > 0) {
-      params.stage = reqStages;
-    }
     this.data = graphql({
       client,
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
-      variables: stage !== 'active' ? params :
-        { ...params, ...{ issuerId: userStore.currentUser.sub } },
+      variables: stage !== 'active' ? { stage: reqStages } :
+        { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
+      onFetch: (res) => {
+        this.requestState.page = 1;
+        this.requestState.skip = 0;
+        this.setDb(res.getOfferings);
+      },
     });
+  }
+
+  @action
+  setDb = (data) => {
+    const updatedData = map(data, d => (
+      {
+        ...d,
+        BusinessName: d.keyTerms ? d.keyTerms.legalBusinessName : '',
+      }));
+    this.db = ClientDb.initiateDb(updatedData);
   }
 
   @action
   toggleSearch = () => {
     this.filters = !this.filters;
   }
-
+  @action
+  initiateFilters = () => {
+    const { keyword } = this.requestState.search;
+    if (keyword) {
+      ClientDb.filterFromNestedObjs('keyTerms.legalBusinessName', keyword);
+      this.db = ClientDb.getDatabase();
+      this.requestState.page = 1;
+      this.requestState.skip = 0;
+    } else {
+      this.setDb(this.data.data.getOfferings);
+    }
+  }
   @action
   setInitiateSrch = (name, value) => {
     this.requestState.search[name] = value;
-    this.initRequest({ ...this.requestState.search });
+    this.initiateFilters();
   }
 
   @action
   deleteOffering = (id) => {
     const reqStages = Object.keys(pickBy(STAGES, s => s.ref === this.requestState.stage));
-    const params = {
-      first: this.requestState.perPage,
-      skip: this.requestState.skip,
-    };
-    if (reqStages.length > 0) {
-      params.stage = reqStages;
-    }
     client
       .mutate({
         mutation: deleteOffering,
@@ -91,7 +96,7 @@ export class OfferingsStore {
         },
         refetchQueries: [{
           query: allOfferings,
-          variables: { ...params, ...{ issuerId: userStore.currentUser.sub } },
+          variables: { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
         }],
       })
       .then(() => Helper.toast('Offering deleted successfully.', 'success'))
@@ -119,7 +124,7 @@ export class OfferingsStore {
         setFormData('OFFERING_DETAILS_FRM', false);
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
-        offeringCreationStore.resetInitLoad();
+        // offeringCreationStore.resetInitLoad();
       },
     });
   }
@@ -134,7 +139,18 @@ export class OfferingsStore {
   }
 
   @computed get offerings() {
-    return (this.data.data && toJS(this.data.data.getOfferings)) || [];
+    return (this.db && this.db.length &&
+      this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+  }
+  @action
+  pageRequest = ({ skip, page }) => {
+    this.requestState.displayTillIndex = this.requestState.perPage * page;
+    this.requestState.page = page;
+    this.requestState.skip = skip;
+  }
+
+  @computed get count() {
+    return (this.db && this.db.length) || 0;
   }
 
   @computed get offer() {

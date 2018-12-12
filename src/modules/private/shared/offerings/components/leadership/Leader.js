@@ -37,7 +37,7 @@ export default class Leader extends Component {
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
   removeData = (confirmModalName, arrayName = 'leadership') => {
-    // this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
+    this.props.offeringCreationStore.removeData(confirmModalName, arrayName);
     if (arrayName === 'leadership') {
       this.props.history.push(`${this.props.refLink}/leader/1`);
       this.handleFormSubmit(null, 'Leader has been deleted successfully.');
@@ -157,6 +157,7 @@ export default class Leader extends Component {
           </Form.Group>
           <Header as="h4">Address</Header>
           <AutoComplete
+            displayMode={isReadonly}
             readOnly={isReadonly}
             name="street"
             fielddata={LEADERSHIP_FRM.fields.leadership[index].street}
@@ -240,7 +241,7 @@ export default class Leader extends Component {
                   </Link>
                   }
                 </Header>
-                <div className="bg-offwhite">
+                <div className="featured-section">
                   <Form.Group widths={2}>
                     {
                       ['name', 'type'].map(field => (

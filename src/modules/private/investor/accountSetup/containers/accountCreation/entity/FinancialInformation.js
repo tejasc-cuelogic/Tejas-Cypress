@@ -1,19 +1,27 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form } from 'semantic-ui-react';
+import { Header, Form, Message, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
+import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore')
+@inject('entityAccountStore', 'investmentLimitStore')
 @observer
 export default class FinancialInformation extends Component {
+  componentWillMount() {
+    const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
+    if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netAssets.value !== '' && FIN_INFO_FRM.fields.cfInvestment.value !== ''))) && !(FIN_INFO_FRM.fields.netAssets.value === '' && FIN_INFO_FRM.fields.cfInvestment.value === '')) {
+      maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netAssets.value }, name: 'netAssets' });
+    }
+  }
   render() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
     return (
       <div>
-        <Header as="h3" textAlign="center">Calculating your Entity{"'"}s investment limit</Header>
+        <Header as="h3" textAlign="center">Calculating your investment limit</Header>
         <p className="center-align">
-          Your entity{"'"}s net assets and annual income are used to determine its 12-month investment limit. <Link to="/app/summary/account-creation/entity" className="link">How is this calculated?</Link>
+          Your net worth and annual income are used to determine your 12-month investment limit.{' '}
+          <Link to="/app/summary/account-creation/entity" className="link">How is this calculated?</Link>
         </p>
         <Form error>
           <div className="field-wrap">
@@ -28,10 +36,27 @@ export default class FinancialInformation extends Component {
                   changed={values => maskedFinInfoChange(values, field)}
                   currency
                   prefix="$"
+                  showerror
                 />
               ))
             }
+            <Divider hidden />
+            <p className="grey-header">Your investment limit:
+              <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`} >
+                {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
+              </span>
+            </p>
+            {/* <p className="grey-header">Your investment limit:<span className="highlight-text
+          large ml-10">{Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}</span></p>
+          */}
           </div>
+          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
+          <Message error textAlign="left" className="mb-40">
+          Based on your net assets and annual income, your 12-month investment
+          limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
+          This is below the $5,000 minimum opening deposit for IRA accounts.
+          </Message>
+          }
         </Form>
       </div>
     );

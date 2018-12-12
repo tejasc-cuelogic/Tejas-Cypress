@@ -118,35 +118,21 @@ const HowItWorks = () => (
           <Grid.Column className="info-grid">
             <Image src={`${ASSETS_URL}images/icons/network.svg`} verticalAlign="top" />
             <div>
-              <Header as="h5">Cost-effective capital, with marketing benefits</Header>
+              <Header as="h5">Cost-effective capital, with benefits</Header>
               <p>
-                With NextSeed, you have access to a unique type of loan that maximizes
-                your ownership stake. Share your concept with thousands of local
-                investors, as well as your fans all over the country.
+                With NextSeed, your financing solution is part of your marketing campaign. Share
+                your story with thousands of local investors and interested fans nationwide.
               </p>
             </div>
           </Grid.Column>
         </Grid>
-        <Grid className="business-learn-more">
-          <Grid.Row>
-            <Grid.Column className="center-align">
-              <List horizontal relaxed className="learn-more-list left-align">
-                <List.Item>
-                  <List.Header>Learn more</List.Header>
-                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
-                  <List.Content>Why fundraise on <a href="/">NextSeed?</a></List.Content>
-                </List.Item>
-                <List.Item>
-                  {!isMobile &&
-                    <List.Header>&nbsp;</List.Header>
-                  }
-                  {/* <List.Icon className="ns-arrow-right" color="green" /> */}
-                  <List.Content>Is fundraising on <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
-                </List.Item>
-              </List>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <div className="center-align mt-50">
+          <List horizontal relaxed className="learn-more-list">
+            <List.Item>
+              <List.Content><strong>Learn more:</strong> Is fundraising on <a href="/" className="highlight-text">NextSeed risky?</a></List.Content>
+            </List.Item>
+          </List>
+        </div>
       </Container>
     </section>
     <Divider fitted as={Container} />
@@ -157,8 +143,8 @@ const HowItWorks = () => (
       {!isMobile ?
         <Container>
           <Grid centered stackable relaxed={isTablet ? '' : 'very'}>
-            {businesses.map(row => (
-              <Grid.Row>
+            {businesses.map((row, index) => (
+              <Grid.Row className={index !== (businesses.length) - 1 && 'mb-60'}>
                 {
                   row.map(b => (
                     <Grid.Column textAlign="center" width={isTablet ? 5 : 4}>
@@ -234,7 +220,7 @@ const HowItWorks = () => (
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>$10M+</Statistic.Value>
-                    <Statistic.Label>In capital deployed by NextSeed investors</Statistic.Label>
+                    <Statistic.Label>Capital deployed by NextSeed investors</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
                 <Grid.Column>
@@ -254,7 +240,7 @@ const HowItWorks = () => (
                 <Grid.Column>
                   <Statistic color="green" size="mini" className="basic">
                     <Statistic.Value>15,000+</Statistic.Value>
-                    <Statistic.Label>Avg. unique page views per offering</Statistic.Label>
+                    <Statistic.Label>Average unique page views per offering</Statistic.Label>
                   </Statistic>
                 </Grid.Column>
               </Grid.Row>
@@ -262,15 +248,15 @@ const HowItWorks = () => (
             <Divider hidden />
             <p>
               The above figures include the total amount raised in offerings completed through
-              NextSeed Securities, LLC ($XX,XXX,XXX), NextSeed US, LLC ($XX,XXX,XXX) and
-              NextSeed TX, LLC ($XX,XXX,XXX). Historical figures only. Past performance of one
-              business is not a guarantee of future results of another business.
+              NextSeed US, LLC ($X,XXX,XXX) and NextSeed TX, LLC ($1,303,500). Historical
+              figures only. Past performance of one business is not a guarantee of future
+              results of another business.
             </p>
           </Grid.Column>
           <Grid.Column>
             <Embed
               id={nsvideos.embed}
-              placeholder={`${ASSETS_URL}images/636206632.jpg`}
+              placeholder={`${ASSETS_URL}images/677134021.jpg`}
               source="vimeo"
               icon="ns-play"
             />

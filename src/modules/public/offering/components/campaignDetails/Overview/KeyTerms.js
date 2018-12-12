@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, Icon, Grid, Segment, Popup, Statistic } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import Helper from '../../../../../../helper/utility';
 
 class KeyTerms extends Component {
   render() {
@@ -19,31 +20,26 @@ class KeyTerms extends Component {
             <Grid.Column>
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Investment Type </b>
-                  {campaign && campaign.keyTerms &&
-                     campaign.keyTerms.securities ?
-                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
-                     :
-                     ''}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
                     content="Lorem Ipsum"
                     position="top center"
                   />
                 </Statistic.Label>
-                {/* <Statistic.Value>
-                  {campaign && campaign.selectedOffer &&
-                     campaign.selectedOffer.structure ?
-                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.selectedOffer.structure]
+                <Statistic.Value>
+                  {campaign && campaign.keyTerms &&
+                     campaign.keyTerms.securities ?
+                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
                      :
                      ''}
-                </Statistic.Value> */}
+                </Statistic.Value>
               </Statistic>
             </Grid.Column>
             <Grid.Column>
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Multiple</b> <Popup trigger={<Icon name="help circle" color="green" />} content="For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $XXX within YY months. A 1.0% service fee is deducted from each payment." position="top center" /></Statistic.Label>
                 <Statistic.Value>
-                  {campaign && campaign.keyTerms ? campaign.keyTerms.investmentMultiple : '-'}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : '-'}
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>
@@ -64,21 +60,25 @@ class KeyTerms extends Component {
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Maturity</b> <Popup trigger={<Icon name="help circle" color="green" />} content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors." position="top center" /></Statistic.Label>
                 <Statistic.Value>
-                  {campaign && campaign.keyTerms ? campaign.keyTerms.maturity : '-'}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '-'}
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label><b>Min Investment</b>{''}
+                <Statistic.Label><b>Min Investment</b>{' '}
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content="Lorem Ipsum"
+                    content="The required minimum investment per investor in this offering."
                     position="top center"
                     hoverable
                   />
                 </Statistic.Label>
-                <Statistic.Value>$100</Statistic.Value>
+                <Statistic.Value>
+                  {campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt ?
+                    Helper.CurrencyFormat(campaign.keyTerms.minInvestAmt) : '-'
+                  }
+                </Statistic.Value>
               </Statistic>
             </Grid.Column>
             <Grid.Column>
@@ -91,7 +91,7 @@ class KeyTerms extends Component {
                   />
                 </Statistic.Label>
                 <Statistic.Value>
-                  {campaign && campaign.keyTerms ? campaign.keyTerms.frequencyOfPayments : '-'}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.frequencyOfPayments ? campaign.keyTerms.frequencyOfPayments : '-'}
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>
@@ -99,7 +99,7 @@ class KeyTerms extends Component {
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Ownership</b> <Popup trigger={<Icon name="help circle" color="green" />} content="Equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities." position="top center" /></Statistic.Label>
                 <Statistic.Value>
-                  {campaign && campaign.keyTerms ? campaign.keyTerms.securitiesOwnershipPercentage : '-'}
+                  {campaign && campaign.keyTerms && campaign.keyTerms.securitiesOwnershipPercentage ? `${campaign.keyTerms.securitiesOwnershipPercentage}%` : '-'}
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>

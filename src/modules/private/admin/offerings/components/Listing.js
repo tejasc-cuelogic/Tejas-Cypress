@@ -3,7 +3,8 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
-import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
+import { DateTimeFormat, InlineLoader, NsPagination } from '../../../../../theme/shared';
+import { STAGES } from '../../../../../services/constants/admin/offerings';
 import Helper from '../../../../../helper/utility';
 
 const actions = {
@@ -25,6 +26,8 @@ export default class Listing extends Component {
       this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
     }
   }
+  paginate = params => this.props.offeringsStore.pageRequest(params);
+
   handleDeleteCancel = () => {
     this.props.uiStore.setConfirmBox('');
   }
@@ -35,9 +38,17 @@ export default class Listing extends Component {
   }
 
   render() {
-    const { offerings, loading, uiStore } = this.props;
+    const {
+      uiStore, offeringsStore,
+    } = this.props;
+    const {
+      offerings,
+      loading,
+      count,
+      requestState,
+    } = offeringsStore;
     const { confirmBox } = uiStore;
-
+    const totalRecords = count || 0;
     if (loading) {
       return <InlineLoader />;
     }
@@ -48,6 +59,7 @@ export default class Listing extends Component {
             <Table.Header>
               <Table.Row>
                 <Table.HeaderCell>Name</Table.HeaderCell>
+                <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Created Date</Table.HeaderCell>
                 <Table.HeaderCell>Days till launch</Table.HeaderCell>
                 <Table.HeaderCell>Lead</Table.HeaderCell>
@@ -68,6 +80,11 @@ export default class Listing extends Component {
                         ))}
                       </b>
                     </Table.Cell>
+                    <Table.Cell className="text-capitalize">
+                      {offering && offering.stage ?
+                        STAGES[offering.stage].label : '-'
+                      }
+                    </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
@@ -78,19 +95,23 @@ export default class Listing extends Component {
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.lead ? offering.lead.name : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
-                        <b>pocname11</b><br />
-                        pocemail11@test.com<br />
-                        {Helper.maskPhoneNumber('123-456-7890')}
+                        <b>
+                          {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : 'NA'}
+                        </b>
+                        <br />
+                        {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : 'NA'}
+                        <br />
+                        {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : 'NA'}
                       </p>
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="center">
-                      {Object.keys(actions).map(action => (
-                        <Button.Group vertical>
-                          <Button className="link-button" >
+                      <Button.Group>
+                        {Object.keys(actions).map(action => (
+                          <Button icon className="link-button" >
                             <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id)} />
                           </Button>
-                        </Button.Group>
-                    ))}
+                        ))}
+                      </Button.Group>
                     </Table.Cell>
                   </Table.Row>
                 ))
@@ -98,6 +119,9 @@ export default class Listing extends Component {
             </Table.Body>
           </Table>
         </div>
+        {totalRecords > 0 &&
+          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+        }
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this offering?"

@@ -20,7 +20,7 @@ window.jQuery = $;
 const uploadsConfig = { ...UPLOADS_CONFIG, ...{ acl: 'public-read', keyStart: 'offerings/' } };
 const getConfig = (keyStart, overrides) => {
   const config = {
-    placeholderText: 'Your content goes here!',
+    placeholderText: 'Enter here..',
     toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
     charCounterCount: false,
     imageUploadURL: false,

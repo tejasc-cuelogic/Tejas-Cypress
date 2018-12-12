@@ -8,9 +8,14 @@
         border-radius:0;
         transition: all .3s ease-in-out;
         .menu{
-            margin:@11px @16px;
+            margin:@11px 0;
             .item{
                 color:@neutral;
+                padding:@3px @27px;
+                @media only screen and (min-width : @tabletBreakpoint) and (max-width : @computerBreakpoint){
+                    padding: @3px @10px;
+                    font-size: @12px;
+                }
                 &:hover, &.active{
                     color:@primary-one;
                     background-color:transparent;
@@ -26,7 +31,6 @@
             }
         }
         .item{
-            padding:@3px @18px;
             font-weight:@fontMedium;
             text-transform:uppercase;
             > span{
@@ -81,6 +85,14 @@
                 background: @primary-one !important;
                 text-align: center;
                 color: @white !important;
+                font-size: @16px !important;
+                border-bottom: 1px solid @primary-one-darken;
+                @media only screen and (min-width : @tabletBreakpoint) and (max-width : @computerBreakpoint){
+                    font-size: @14px!important;
+                }
+                &:last-child {
+                    border-bottom: 0;
+                }
                 &:hover, &.active {
                     background: @primary-one-darken !important;
                     color: @white !important;
@@ -198,20 +210,49 @@
     }
 }
 footer{
-    section{
-        .ui.vertical.text.menu{
-            width:120px;
+    .ui.text.menu{
+        @media only screen and (max-width : @largestMobileScreen){
+            flex-wrap: wrap;
+        }
+        &.vertical {
             margin:0;
             padding:0 @15px 0 0;
             flex-direction:row;
-            display:inline-block;
             vertical-align: top;
-            .item{
-                margin:0;
+            flex-wrap: wrap;
+            flex: 1;
+            @media only screen and (max-width : @largestMobileScreen){
+                padding: 0;
             }
-            @media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-				width: 110px;
-			}
+            .item{
+                color: @neutral-middark;
+                padding: @3px 0;
+                margin: 0;
+                @media only screen and (max-width : @largestMobileScreen){
+                    text-align: center;
+                }
+                &.header {
+                    margin-top: 0;
+                }
+                &:hover {
+                    background-color: transparent;
+                    color: @neutral-middark;
+                }
+            }
+        }
+        .item{
+            font-size: @15px;
+            line-height: @20px;
+            &.header{
+                color: @neutral-middark;
+                padding: 0;
+                font-size: @13px;
+                line-height: @20px;
+                @media only screen and (max-width : @largestMobileScreen){
+                    display: block;
+                    width: 100%;
+                }
+            }
         }
     }
 }
@@ -235,7 +276,7 @@ footer{
         }
     }
 }
-.offer-details .ui.vertical.menu {
+.offer-details .offering-side-menu .ui.vertical.menu {
     background-color: transparent;
     .item {
         color: @white;
@@ -331,6 +372,14 @@ footer{
                     border-radius:0;
                     padding:@8px @16px @8px @32px !important;
                     color:@tertiary-text !important;
+                }
+            }
+        }
+        &.legal-menu {
+            background-color: transparent;
+            .item {
+                &.active, &:hover {
+                    background-color: transparent;
                 }
             }
         }
@@ -475,6 +524,9 @@ footer{
         &:hover, &:active, &:focus, &.active{
             background-color:@white;
         }
+    }
+    .ui.secondary-menu.menu .right.item:before {
+        background-color: transparent;
     }
 }
 

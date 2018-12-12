@@ -3,6 +3,7 @@
  */
 import { toast } from 'react-toastify';
 import _ from 'lodash';
+import moment from 'moment';
 import apiService from '../api/restApi';
 
 export class Utility {
@@ -63,7 +64,7 @@ export class Utility {
     return result;
   }
 
-  CurrencyFormat = (amount, f) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: typeof (f) === 'number' ? f : 2 }).format(amount)
+  CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(amount)
 
   cryptedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;
@@ -75,6 +76,11 @@ export class Utility {
   encryptNumber = (number) => {
     let encryptedNumber = number.replace(/.(?=.{4,}$)/g, '...');
     encryptedNumber = encryptedNumber.slice(-7);
+    return encryptedNumber;
+  }
+
+  encryptNumberWithX = (number) => {
+    const encryptedNumber = number.replace(/.(?=.{4,}$)/g, 'X');
     return encryptedNumber;
   }
 
@@ -106,6 +112,22 @@ export class Utility {
   maskPhoneNumber = (phoneNumber) => {
     const maskPhoneNumber = phoneNumber.replace(/(\d\d\d)(\d\d\d)(\d\d\d\d)/, '$1-$2-$3');
     return maskPhoneNumber;
+  }
+
+  getDaysfromNow = (days) => {
+    const d = new Date();
+    let daysFromNow = d.setDate(d.getDate() + days);
+    daysFromNow = new Date(daysFromNow).toISOString();
+    console.log(daysFromNow);
+    return daysFromNow;
+  }
+  getLastThreeYearsLabel = () => {
+    const currentYear = parseInt(moment().format('YYYY'), 10);
+    return {
+      annualIncomeCurrentYear: currentYear,
+      annualIncomeLastYear: currentYear - 1,
+      annualIncomeThirdLastYear: currentYear - 2,
+    };
   }
 }
 

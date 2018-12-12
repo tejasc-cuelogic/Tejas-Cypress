@@ -38,7 +38,7 @@ const Mission = () => (
                 The team behind NextSeed created the first registered funding portal with the
                 Securities & Exchange Commission (SEC) and became a member of the Financial
                 Industry Regulatory Authority{' '}
-                (<a href="http://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
+                (<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
                 {' '}The portal closed the first-ever regulation crowdfunding offering in the country.
                 Beginning in October 2018, NextSeed Securities LLC operates as an SEC-registered
                 broker-dealer and FINRA member.
@@ -67,7 +67,7 @@ const Mission = () => (
           </Grid.Row>
         </Grid>
         <Divider section as={Container} hidden />
-        <Grid celled columns={isMobile ? 1 : 2} className="mb-30">
+        <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Trust</Header>
@@ -90,7 +90,7 @@ const Mission = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={isMobile ? 1 : 2} className="mb-30">
+        <Grid celled columns={isMobile ? 1 : 2} className="mb-40">
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Innovation</Header>
@@ -114,7 +114,7 @@ const Mission = () => (
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        <Grid celled columns={isMobile ? 1 : 2} className="mt-50">
+        <Grid celled columns={isMobile ? 1 : 2}>
           <Grid.Row>
             <Grid.Column verticalAlign="middle">
               <Header as="h2">Community</Header>

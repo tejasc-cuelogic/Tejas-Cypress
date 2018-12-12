@@ -5,13 +5,13 @@ import cookie from 'react-cookies';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider } from 'semantic-ui-react';
-import { authActions, validationActions } from '../../../services/actions';
+import { authActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
-import { ListErrors } from '../../../theme/shared';
+import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 
-@inject('authStore', 'uiStore', 'userStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -24,38 +24,69 @@ export default class ConfirmEmailAddress extends Component {
     if (credentials) {
       this.props.authStore.setCredentials(credentials);
     }
+    if (this.props.userDetailsStore.signupStatus.isMigratedUser
+      && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
+      && !this.props.identityStore.sendOtpToMigratedUser.includes('EMAIL')) {
+      this.props.identityStore.startPhoneVerification('EMAIL');
+    }
   }
   componentWillUnmount() {
-    cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
+    // cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
     this.props.uiStore.clearErrors();
   }
-  handleInputChange = (e, { name, value }) =>
-    validationActions.validateLoginField(name, value);
 
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.authStore.setProgress('confirm');
     if (this.props.refLink) {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
+        this.props.identityStore.setIsOptConfirmed(true);
         Helper.toast('Email has been verified and updated', 'success');
-        this.props.history.push('/app/profile-settings/profile-data');
       })
         .catch(() => { });
+    } else if (this.props.authStore.SIGNUP_FRM.fields.givenName.value === ''
+    && !this.props.userStore.currentUser) {
+      this.props.history.push('/auth/register-investor');
     } else {
-      authActions.confirmCode()
-        .then(() => {
+      const { isMigratedFullAccount } = this.props.userDetailsStore.signupStatus;
+      if (isMigratedFullAccount) {
+        this.props.identityStore.confirmEmailAddress().then(() => {
           const { roles } = this.props.userStore.currentUser;
-          const redirectUrl = !roles ? '/auth/login' :
-            SIGNUP_REDIRECT_ROLEWISE.find(user =>
-              roles.includes(user.role)).path;
-          this.props.history.replace(redirectUrl);
-        })
-        .catch(() => { });
+          if (roles.includes('investor')) {
+            this.props.identityStore.setIsOptConfirmed(true);
+          } else {
+            const redirectUrl = !roles ? '/auth/login' :
+              SIGNUP_REDIRECT_ROLEWISE.find(user =>
+                roles.includes(user.role)).path;
+            this.props.history.replace(redirectUrl);
+          }
+        });
+      } else {
+        this.props.identityStore.verifyOTPWrapper().then(() => {
+          authActions.register()
+            .then(() => {
+              const { roles } = this.props.userStore.currentUser;
+              if (roles.includes('investor')) {
+                this.props.identityStore.setIsOptConfirmed(true);
+              } else {
+                const redirectUrl = !roles ? '/auth/login' :
+                  SIGNUP_REDIRECT_ROLEWISE.find(user =>
+                    roles.includes(user.role)).path;
+                this.props.history.replace(redirectUrl);
+              }
+            })
+            .catch(() => { });
+        });
+      }
     }
   }
 
   handleCloseModal = () => {
-    this.props.history.push(this.props.uiStore.authRef || '/');
+    if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
+      this.props.history.push('/app/summary');
+    } else {
+      this.props.history.push(this.props.uiStore.authRef || '/');
+    }
     this.props.uiStore.clearErrors();
   }
 
@@ -69,13 +100,24 @@ export default class ConfirmEmailAddress extends Component {
       })
         .catch(() => { });
     } else {
-      authActions.resendConfirmationCode();
+      this.props.identityStore.requestOtpWrapper();
     }
+  }
+
+  handleContinue = () => {
+    if (this.props.refLink) {
+      this.props.history.push('/app/profile-settings/profile-data');
+    } else if (this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
+      this.props.history.replace(this.props.userDetailsStore.pendingStep);
+    } else {
+      this.props.history.replace('/app/summary/identity-verification/0');
+    }
+    this.props.identityStore.setIsOptConfirmed(false);
   }
 
   render() {
     const changeEmailAddressLink = this.props.refLink ?
-      this.props.refLink : '/auth/register-investor';
+      '/app/profile-settings/profile-data/new-email-address' : '/auth/register-investor';
     const {
       CONFIRM_FRM,
       ConfirmChange,
@@ -83,19 +125,25 @@ export default class ConfirmEmailAddress extends Component {
       canSubmitConfirmEmail,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
+    const { isOptConfirmed } = this.props.identityStore;
+    const { isMigratedUser } = this.props.userDetailsStore.signupStatus;
     if (errors && errors.code === 'NotAuthorizedException') {
       this.props.history.push('/auth/login');
+    } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
+      return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
     }
     return (
       <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <p>
-            We&#39;re introducing Multi-Factor Authentication (MFA) to
-            increase the security of your NextSeed account
+            We use Multi-Factor Authentication (MFA) to increase the security of your
+            NextSeed investment account.
           </p>
           <Divider section />
-          <p>Please confirm the 6-digit verification code sent to your email address</p>
+          <p>
+            Please confirm the 6-digit verification code in the text message sent to your e-mail
+          </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
           <FormInput
@@ -109,7 +157,9 @@ export default class ConfirmEmailAddress extends Component {
             displayMode
             className="display-only"
           />
-          <Link to={changeEmailAddressLink} className="grey-link">Change email address</Link>
+          {!isMigratedUser &&
+            <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>
+          }
           <Form className="mb-20" onSubmit={this.handleSubmitForm} error={!!(errors && errors.message)} >
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
@@ -121,26 +171,16 @@ export default class ConfirmEmailAddress extends Component {
                 fielddata={CONFIRM_FRM.fields.code}
                 onChange={ConfirmChange}
               />
-              <Button type="button" size="small" color="grey" className="link-button" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
+              <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
             </Form.Field>
             {errors &&
               <Message error textAlign="left" className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            {/* <Header as="h3" className="success-msg mb-60">
-              <Icon className="ns-check-circle" color="green" />
-              Your e-mail address has been confirmed.
-            </Header> */}
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
             <Button primary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
           </Form>
         </Modal.Content>
-        {/* <Modal.Actions className="signup-actions">
-          <Button type="button" className="link-button"
-          content="Resend the code to my email" onClick={() => this.handleResendCode()} />
-        </Modal.Actions> */}
       </Modal>
     );
   }

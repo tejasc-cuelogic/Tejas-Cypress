@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 // queries, mutations and subscriptions , limit: "10"
 export const allUsersQuery = gql`
-  query listUsers($accountType: [String], $accountStatus: [String], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
+  query listUsers($accountType: [UserFilterTypeEnum], $accountStatus: [UserFilterStatusEnum], $search: String, $accountCreateFromDate: String, $accountCreateToDate: String, $page: Int) {
     listUsers (accountType: $accountType, accountStatus: $accountStatus, search: $search, accountCreateFromDate: $accountCreateFromDate, accountCreateToDate: $accountCreateToDate, page: $page) {
       resultCount
       users {
@@ -40,6 +40,11 @@ export const userDetailsQuery = gql`
   query getUserDetails($userId: ID!) {
     user(id: $userId) {
       id
+      status
+      cip {
+        expiration
+        failType
+      }
       limits {
         income
         netWorth
@@ -62,6 +67,7 @@ export const userDetailsQuery = gql`
       }
       email {
         address
+        verified
       }
       capabilities
       roles {
@@ -70,8 +76,15 @@ export const userDetailsQuery = gql`
         status
         details {
           ... on Investor {
+            limits {
+              income
+              netWorth
+              otherContributions
+              limit
+            }
             name
             taxId
+            entityType
             address {
               street
               city
@@ -115,33 +128,37 @@ export const userDetailsQuery = gql`
                 fileHandle
               }
             }
-            annualIncome
-            netWorth
-            netAssets
-            cfInvestment {
-              dateOfInvestment
-              amount
-            }
+            initialDepositAmount
             linkedBank {
               bankName
               plaidAccountId
               plaidItemId
+              plaidInstitutionId
               accountNumber
               routingNumber
               plaidAccessToken
+              dateRequested
+              pendingUpdate
+              changeRequest {
+                accountNumber
+                bankName
+                plaidAccessToken
+                plaidAccountId
+                plaidItemId
+                plaidInstitutionId
+                dateRequested
+                status
+              }
             }
             created {
               date
             }
-            status
+            accountStatus
           }
         }
       }
       locked {
         lock
-      }
-      accreditation {
-        status
       }
       created {
         date
@@ -149,6 +166,7 @@ export const userDetailsQuery = gql`
       lastLoginDate
       phone {
         number
+        type
         verified
       }
       legalDetails {
@@ -168,27 +186,105 @@ export const userDetailsQuery = gql`
       }
       investorProfileData {
         isPartialProfile
-        employmentStatusInfo {
-          employmentStatus
+        employment {
+          status
           employer
-          currentPosition
+          position
         }
-        investorProfileType
-        financialInfo {
-          netWorth
-          annualIncomeThirdLastYear
-          annualIncomeLastYear
-          annualIncomeCurrentYear
-          directorShareHolderOfCompany
-          employedOrAssoWithFINRAFirmName
+        brokerageFirmName
+        publicCompanyTicker
+        taxFilingAs
+        netWorth
+        annualIncome {
+          year
+          income
         }
-        investmentExperienceInfo {
-          investmentExperienceLevel
-          readyInvestingInLimitedLiquiditySecurities
-          readyForRisksInvolved
-        }
+        experienceLevel
+        isRiskTaker
+        isComfortable
       }
       mfaMode
+    }
+  }
+`;
+
+export const userAccreditationQuery = gql`
+  query userAccreditationQuery($userId: ID!) {
+    user(id: $userId) {
+      id
+      roles {
+        name
+        scope
+        status
+        details {
+          ... on Investor {
+            accreditation {
+              status
+              expiration
+              requestDate
+              reviewed {
+                id
+                by
+                date
+                comment
+              }
+              update {
+                id
+                by
+                date
+              }
+              method
+              netWorth
+              grantorName
+              assetsUpload {
+                type
+                fileInfo {
+                  fileId
+                  fileName
+                }
+              }
+              verifier {
+                role
+                email
+              }
+            }
+            name
+            isTrust
+            accountId
+            accountStatus
+            }
+          }
+        }
+      accreditation {
+        status
+        expiration
+        requestDate
+        reviewed {
+          id
+          by
+          date
+          comment
+        }
+        update {
+          id
+          by
+          date
+        }
+        method
+        netWorth
+        grantorName
+        assetsUpload {
+          type
+          fileInfo {
+            fileId
+            fileName
+          }
+        }
+        verifier {
+          role
+          email
+        }
+      }
     }
   }
 `;
@@ -216,8 +312,8 @@ export const deleteUserMutation = gql`
 `;
 
 export const toggleUserAccount = gql`
-  mutation updateUserStatus($id: String!, $status: profileEnum!) {
-    updateUserStatus(userId: $id, accountStatus:$status) {
+  mutation updateUserStatus($id: String!, $accountStatus: profileLockEnum!) {
+    updateUserStatus(userId: $id, accountStatus:$accountStatus) {
       id
     }
   }

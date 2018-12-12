@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-for */
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import { Modal, Button, Header, Form, Divider, Popup, Icon, Grid, List, Message, Confirm, Dimmer, Loader } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message, Confirm, Dimmer, Loader, List, Grid } from 'semantic-ui-react';
 
 import { ListErrors } from '../../../../../../theme/shared';
 import { DropZone } from '../../../../../../theme/form';
@@ -42,60 +43,47 @@ const LegalDocuments = observer(({
         </Message>
       }
       <Form onSubmit={onSubmit} className="file-uploader-inline">
-        <Grid divided="vertically">
-          <Grid.Row>
-            <Grid.Column width={7}>
-              <Header as="h5">
-                Upload a Photo ID
-                <Header.Subheader>Driving License or passport</Header.Subheader>
-              </Header>
-            </Grid.Column>
-            <Grid.Column width={9}>
-              <DropZone
-                name="photoId"
-                fielddata={form.fields.photoId}
-                ondrop={onPhotoIdDrop}
-                onremove={confirmRemoveDoc}
-              />
-            </Grid.Column>
-          </Grid.Row>
-          <Grid.Row>
-            <Grid.Column width={7}>
-              <Header as="h5">Proof of Residence
-                <Popup className="test" trigger={<Icon className="ns-help-circle" />} position="top center" flowing hoverable>
-                  <Popup.Content>
-                    <p><b>Acceptable documents:</b></p>
-                    <List bulleted>
-                      <List.Item>Utility bill in your name for that address</List.Item>
-                      <List.Item>
-                        Signed lease (if an apartment) that shows the
-                        address (just the signature page)
-                      </List.Item>
-                      <List.Item>Voided check with your name  and address on it</List.Item>
-                      <List.Item>A completed USPS mail forward form</List.Item>
-                      <List.Item>DMV registration form</List.Item>
-                    </List>
-                  </Popup.Content>
-                </Popup>
-                <Header.Subheader>Utility Bill or USPS change of address format</Header.Subheader>
-              </Header>
-            </Grid.Column>
-            <Grid.Column width={9}>
-              <DropZone
-                name="proofOfResidence"
-                fielddata={form.fields.proofOfResidence}
-                ondrop={onProofOfResidenceDrop}
-                onremove={confirmRemoveDoc}
-              />
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        <Form.Field className="mb-30">
+          <label className="mb-half">Upload a Photo ID (Drivers License or Passport)</label>
+          <DropZone
+            name="photoId"
+            fielddata={form.fields.photoId}
+            ondrop={onPhotoIdDrop}
+            onremove={confirmRemoveDoc}
+            containerclassname="fluid"
+          />
+        </Form.Field>
+        <Form.Field>
+          <label className="mb-20">Proof of Residence</label>
+          <div className="more-info">
+            <p>Provide one of the acceptable documents:</p>
+            <Grid>
+              <Grid.Column width={8}>
+                <List bulleted>
+                  <List.Item>Utility bill in your name</List.Item>
+                  <List.Item>Completed USPS mail forward form</List.Item>
+                  <List.Item>DMV registration form</List.Item>
+                </List>
+              </Grid.Column>
+              <Grid.Column width={8}>
+                <List bulleted>
+                  <List.Item>Signed lease (including address and signature page)</List.Item>
+                  <List.Item>Voided check with your name and address</List.Item>
+                </List>
+              </Grid.Column>
+            </Grid>
+          </div>
+          <Divider hidden />
+          <DropZone
+            name="proofOfResidence"
+            fielddata={form.fields.proofOfResidence}
+            ondrop={onProofOfResidenceDrop}
+            onremove={confirmRemoveDoc}
+            containerclassname="fluid"
+          />
+        </Form.Field>
         <div className="center-align mt-30">
           <Button primary size="large" className="very relaxed" content="Verify my identity" loading={submitVerificationsDocs && inProgress} disabled={!form.meta.isValid} />
-          {/* <Button.Group vertical>
-            <Button type="button" className="link-button cancel-link"
-            onClick={() => close()}>I`ll finish this later</Button>
-          </Button.Group> */}
         </div>
       </Form>
       <Confirm
@@ -109,7 +97,7 @@ const LegalDocuments = observer(({
       />
     </Modal.Content>
     <Modal.Actions className="signup-actions">
-      <p><Link to="/" onClick={close}>I’ll finish this later</Link></p>
+      <p><Link to="/app/summary">I’ll finish this later</Link></p>
     </Modal.Actions>
   </Modal>
 ));

@@ -88,16 +88,17 @@ export default class BusinessDetails extends Component {
             BUSINESS_DETAILS_FRM.fields.debts.map((debt, index) => (
               <Grid>
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
-                  <Header as={hideFields ? 'h6' : 'h5'}>Existing Debt {index + 1}
-                    {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                      <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
-                        <Icon color="red" size="small" className="ns-trash" />
-                      </Button>
-                    }
-                  </Header>
                   <div className="field-wrap">
+                    <Header as={hideFields ? 'h6' : 'h5'} className="mb-20">Existing Debt {index + 1}
+                      {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
+                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                          <Icon color="red" size="small" className="ns-trash" />
+                        </Button>
+                      }
+                    </Header>
                     <Form.Group widths="equal">
                       <MaskedInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         prefix="$ "
@@ -108,6 +109,7 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                       <MaskedInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
@@ -119,6 +121,7 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <MaskedInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         prefix="$ "
@@ -129,6 +132,7 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                       <MaskedInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         number
@@ -198,6 +202,7 @@ export default class BusinessDetails extends Component {
                       {
                         ['fullLegalName', 'title'].map(field => (
                           <FormInput
+                            showerror
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
@@ -211,6 +216,7 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <MaskedInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         number
@@ -220,6 +226,7 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
                       <MaskedInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
@@ -242,6 +249,7 @@ export default class BusinessDetails extends Component {
                         changed={date => businessDetailsDateChange('dateOfService', date, index)}
                       />
                       <MaskedInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         ssn
@@ -253,6 +261,7 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <FormInput
+                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         type="text"

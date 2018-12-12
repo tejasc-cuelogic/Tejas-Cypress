@@ -41,7 +41,7 @@
 @emSize   : 14px;
 
 /* The size of page text  */
-@fontSize : 14px;
+@fontSize : 15px;
 
 
 /*-------------------
@@ -273,7 +273,7 @@
 @yellowBackground : #FFF8DB;
 @oliveBackground  : #FBFDEF;
 @greenBackground  : #E5F9E7;
-@tealBackground   : #E1F7F7;
+@tealBackground   : fade(@primary-one, 15%);
 @blueBackground   : #DFF0FF;
 @violetBackground : #EAE7FF;
 @purpleBackground : #F6E7FF;
@@ -616,6 +616,7 @@
 @64px : unit( (64 / @emSize), rem);
 @70px : unit( (70 / @emSize), rem);
 @80px : unit( (80 / @emSize), rem);
+@90px : unit( (90 / @emSize), rem);
 
 @relative1px  : unit( (1 / @emSize), em);
 @relative2px  : unit( (2 / @emSize), em);
@@ -992,7 +993,7 @@
 @neutral-middark:#676A73;
 @neutral-offdark:#CDCDD1;             //  @neutral-light
 @neutral-darkwhite:#E6E6E8;           //  @neutral-lighter
-@neutral-midwhite:#E9ECF0;            //  @neutral-lightest
+@neutral-midwhite:#EDEEF2;            //  @neutral-lightest
 @neutral-offwhite:#F7F8FC;            //  @neutral-lighten
 
 @commonShadow:0px 1px 1px @thumbInactiveBackground;
