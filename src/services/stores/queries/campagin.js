@@ -238,10 +238,17 @@ export const campaignDetailsQuery = gql`
         }
       }
       dataroom {
-        documentName
-        fileId
-        fileName
-        accreditedOnly
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
+        }
       }
     }
     closureSummary {
