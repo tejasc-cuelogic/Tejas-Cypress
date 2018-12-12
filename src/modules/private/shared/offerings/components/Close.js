@@ -42,11 +42,15 @@ export default class Close extends Component {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOfferingMutation(
-      currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
-      true, 'Offering Closed successfully.',
-    );
-    this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
+    new Promise((res, rej) => {
+      updateOfferingMutation(
+        currentOfferingId, { stage: 'STARTUP_PERIOD' }, false,
+        true, 'Offering Closed successfully.', false, res, rej,
+      );
+    })
+      .then(() => {
+        this.props.history.push(`/app/offerings/engagement/edit/${currentOfferingId}/overview`);
+      });
   }
   render() {
     const {
