@@ -7,7 +7,7 @@ export default class TermNotes extends Component {
     return (
       <Grid reversed="computer" doubling columns={2} relaxed="very">
         <Grid.Column>
-          <RevenueChart />
+          <RevenueChart chartFor="TermNote" />
           <p className="caption-note">
             This example is for illustrative purposes only and does not reflect an actual
             deal or performance. The terms of each deal may differ. Payments are not
