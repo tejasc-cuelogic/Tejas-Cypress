@@ -254,6 +254,19 @@ export const campaignDetailsQuery = gql`
           date
         }
       }
+      dataroom {
+        documents {
+          name
+          accreditedOnly
+          upload {
+            fileId
+            fileName
+            fileHandle {
+              boxFileId
+            }
+          }
+        }
+      }
     }
     closureSummary {
       totalInvestorCount

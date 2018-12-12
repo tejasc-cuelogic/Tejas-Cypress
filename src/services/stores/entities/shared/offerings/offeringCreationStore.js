@@ -9,7 +9,7 @@ import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, POC_DETAILS } from '../../../../constants/admin/offerings';
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
@@ -63,6 +63,7 @@ export class OfferingCreationStore {
   @observable DOCUMENTATION_FRM = Validator.prepareFormObject(DOCUMENTATION);
   @observable EDIT_CONTINGENCY_FRM = Validator.prepareFormObject(EDIT_CONTINGENCY);
   @observable ADMIN_DOCUMENTATION_FRM = Validator.prepareFormObject(ADMIN_DOCUMENTATION);
+  @observable DATA_ROOM_FRM = Validator.prepareFormObject(DATA_ROOM);
   @observable POC_DETAILS_FRM = Validator.prepareFormObject(POC_DETAILS);
   @observable contingencyFormSelected = undefined;
   @observable confirmModal = false;
@@ -405,6 +406,10 @@ export class OfferingCreationStore {
   @action
   setFormFileArray = (formName, arrayName, field, getField, value, index = undefined) => {
     if (index !== undefined && arrayName) {
+      console.log(this[formName].fields);
+      console.log(this[formName].fields[arrayName]);
+      console.log(index);
+      console.log(this[formName].fields[arrayName][index]);
       this[formName].fields[arrayName][index][field][getField] = value;
     } else if (index !== null) {
       if (getField === 'error' || getField === 'showLoader') {
@@ -420,7 +425,8 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadDataMulitple = (form, arrayName, field, files, stepName, index = null) => {
+  setFileUploadDataMulitple =
+  (form, arrayName, field, files, stepName, index = null, multiForm = false) => {
     if (typeof files !== 'undefined' && files.length) {
       forEach(files, (file) => {
         const fileData = Helper.getFormattedFileData(file);
@@ -433,11 +439,11 @@ export class OfferingCreationStore {
             this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
             this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
             this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form);
+            this.checkFormValid(form, multiForm);
+            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
             uiStore.setErrors(error.message);
-          }).finally(() => {
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
           });
         }).catch((error) => {
@@ -485,7 +491,7 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, form === 'LEADERSHIP_FRM');
+    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM'));
   }
 
   @action
@@ -729,6 +735,7 @@ export class OfferingCreationStore {
       RISK_FACTORS_FRM: { isMultiForm: false },
       DOCUMENTATION_FRM: { isMultiForm: false },
       ADMIN_DOCUMENTATION_FRM: { isMultiForm: false },
+      DATA_ROOM_FRM: { isMultiForm: true },
       POC_DETAILS_FRM: { isMultiForm: false },
     };
     return metaDataMapping[formName][getField];
@@ -902,6 +909,7 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
         Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+        payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -1659,6 +1667,21 @@ export class OfferingCreationStore {
 
   @action resetInitLoad() {
     this.initLoad = [];
+  }
+
+  @action
+  setAccreditedOnlyField = (index) => {
+    this.DATA_ROOM_FRM = Validator.onArrayFieldChange(
+      this.DATA_ROOM_FRM,
+      { name: 'accreditedOnly', value: !this.DATA_ROOM_FRM.fields.documents[index].accreditedOnly.value },
+      'documents',
+      index,
+    );
+  }
+
+  @action
+  setDataRoomDocsOrder = (orderedForm) => {
+    this.DATA_ROOM_FRM.fields.documents = toJS(orderedForm);
   }
 }
 

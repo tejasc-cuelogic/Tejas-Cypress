@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray } from 'lodash';
+import { forEach, isArray, find } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
@@ -550,6 +550,24 @@ export class AccreditationStore {
     this.accreditationData.ira = userDetails && userDetails.accreditation;
     this.accreditationData.entity = entityAccreditation && entityAccreditation.details &&
     entityAccreditation.details.accreditation;
+  }
+
+  @computed get isUserAccreditated() {
+    let entityAccountDetails;
+    if (this.userData && this.userData.data && this.userData.data.user) {
+      if (this.userData.data.user.roles) {
+        entityAccountDetails = find(this.userData.data.user.roles, { name: 'entity' });
+      }
+      if ((this.userData.data.user.accreditation &&
+        this.userData.data.user.accreditation.status === 'APPROVED') ||
+        (entityAccountDetails && entityAccountDetails.details &&
+        entityAccountDetails.details.accreditation
+        && entityAccountDetails.details.accreditation.status === 'APPROVED')
+      ) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 export default new AccreditationStore();
