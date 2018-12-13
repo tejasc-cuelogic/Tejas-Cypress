@@ -43,9 +43,6 @@ export const allOfferings = gql`
       }
       applicationId
       issuerId
-      lead {
-        name
-      }
       stage
       created {
         id
@@ -87,6 +84,7 @@ export const getOfferingDetails = gql`
       } 
       }
       keyTerms {
+        startupPeriod
         revSharePercentageDescription
         useOfProceedFootnote
         currentFinancialStatements
@@ -850,7 +848,7 @@ export const getOfferingDetails = gql`
       applicationId
       issuerId
       lead {
-        name
+        id
       }
       stage
       rewardsTierIds {
@@ -883,7 +881,7 @@ export const getOfferingDetails = gql`
 
 export const updateOffering = gql`
 mutation _updateOffering($id: String!, $issuerId: String, $offeringDetails: OfferingInputType!) {
-  updateOffering(id: $id, issuerId: $issuerId offeringDetails: $offeringDetails) {
+  updateOffering(id: $id, issuerId: $issuerId, offeringDetails: $offeringDetails) {
     id
   }
 }

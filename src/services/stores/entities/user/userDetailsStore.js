@@ -295,12 +295,14 @@ export class UserDetailsStore {
       routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(this.signupStatus.roles)) {
       routingUrl = '/app/summary/account-creation';
-    } else if (this.signupStatus.partialAccounts.length > 0) {
+    } else if (!this.signupStatus.activeAccounts.length &&
+      this.signupStatus.partialAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
-    } else if (this.signupStatus.inActiveAccounts.length > 0) {
+    } else if (!this.signupStatus.activeAccounts.length &&
+      this.signupStatus.inActiveAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);

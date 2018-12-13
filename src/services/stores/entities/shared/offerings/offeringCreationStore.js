@@ -1681,7 +1681,8 @@ export class OfferingCreationStore {
 
   @action
   setDataRoomDocsOrder = (orderedForm) => {
-    this.DATA_ROOM_FRM = Validator.setFormData(this.LEADERSHIP_EXP_FRM, toJS(orderedForm));
+    this.DATA_ROOM_FRM.fields.documents = toJS(orderedForm);
+    // this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, toJS(orderedForm));
   }
 }
 

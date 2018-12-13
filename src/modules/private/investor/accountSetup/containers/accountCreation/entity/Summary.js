@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
@@ -54,16 +55,11 @@ export default class Summary extends Component {
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Verify the info and create Entity account</Header>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
         <div className="field-wrap">
           <div className="table-wrapper">
-            <Table unstackable basic fixed>
+            <Table unstackable basic="very" fixed>
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Entity Net Assets</Table.Cell>
@@ -116,21 +112,19 @@ export default class Summary extends Component {
             </Table>
           </div>
         </div>
-        <div className="center-align">
-          <Button primary size="large" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm}>Confirm</Button>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
+        <div className="center-align mt-30">
+          <Button primary size="large" content="Confirm" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm} />
         </div>
-        <p className="center-align mt-30 grey-header">
-          By continuing, I acknowledge that I have read and agree to the
-          terms of the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
-            CrowdPay Custodial Account Agreement
-          </span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
-            Substitute IRS Form W-9 Certification
-          </span>{' '}and the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
-            NextSeed Membership Agreement
-          </span>.
+        <p className="center-align grey-header mt-30 mb-0">
+          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span> and the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>NextSeed Membership Agreement</span>.
           <IframeModal
             open={this.state.open}
             close={this.closeModal}
@@ -138,7 +132,7 @@ export default class Summary extends Component {
             loading={docLoading}
           />
         </p>
-      </div>
+      </Aux>
     );
   }
 }

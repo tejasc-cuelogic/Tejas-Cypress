@@ -22,37 +22,8 @@ export default class ManagerOverview extends Component {
         <Aux>
           <Header as="h4">
             Manager
-            {approved && approved.status && submitted &&
-            <Button.Group floated="right" size="mini">
-              <Button as="span" className="time-stamp">
-                <Icon className="ns-circle" color="green" />
-                Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
-              </Button>
-              <Button as="span" className="time-stamp">
-                <Icon className="ns-check-circle" color="green" />
-                Approved By {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
-              </Button>
-              {isManager && approved && approved.status && applicationStatus
-              !== BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL &&
-              <Aux>
-                <Button className="relaxed" loading={inProgress === 'REVIEW_DECLINED'} inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'SUPPORT_DECLINE')}>Decline</Button>
-                <Button loading={inProgress === 'REVIEW_APPROVED'} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_EDIT')}>Edit</Button>
-              </Aux>
-              }
-            </Button.Group>
-            }
             {!isReadonly && isManager && submitted &&
-              <Button.Group floated="right" size="mini">
-                {submitted &&
-                  <Button as="span" className="time-stamp">
-                    <Icon className="ns-circle" color="green" />
-                    Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
-                  </Button>
-                }
-                <Button loading={inProgress === 'REVIEW_DECLINED'} className="relaxed" inverted color="red" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'SUPPORT_DECLINE')}>Decline</Button>
-                <Button loading={inProgress === 'SAVE'} primary className="relaxed">Save</Button>
-                <Button loading={inProgress === 'REVIEW_APPROVED'} disabled={!MANAGERS_FRM.meta.isValid} primary className="relaxed" type="button" onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_APPROVE')}>{title || 'Approve'}</Button>
-              </Button.Group>
+              <Button primary size="mini" floated="right" className="relaxed" content="Save" loading={inProgress === 'SAVE'} />
             }
           </Header>
           <FormTextarea
@@ -62,6 +33,45 @@ export default class ManagerOverview extends Component {
             readOnly={isReadonly}
             containerclassname={isReadonly ? 'display-only secondary' : 'secondary'}
           />
+          {approved && approved.status && submitted &&
+          <div className="sticky-actions at-top">
+            <Button.Group vertical icon size="tiny" className="time-stamp">
+              <Button as="span" className="time-stamp">
+                <Icon className="ns-circle" color="green" />{' '}
+                Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
+              </Button>
+              <Button as="span" className="time-stamp">
+                <Icon className="ns-check-circle" color="green" />{' '}
+                Approved By {approved.by} on {moment(approved.date).format('MM/DD/YYYY')}
+              </Button>
+            </Button.Group>
+            {isManager && approved && approved.status && applicationStatus
+            !== BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL &&
+            <Button.Group>
+              <Button inverted className="relaxed" color="red" content="Decline" loading={inProgress === 'REVIEW_DECLINED'} onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'SUPPORT_DECLINE')} />
+              <Button primary className="relaxed" content="Edit" loading={inProgress === 'REVIEW_APPROVED'} onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_EDIT')} />
+            </Button.Group>
+            }
+          </div>
+          }
+          {!isReadonly && isManager && submitted &&
+            <div className="sticky-actions at-top">
+              <Button.Group vertical icon size="tiny" className="time-stamp">
+                {submitted &&
+                  <Button as="span" className="time-stamp">
+                    <Icon className="ns-circle" color="green" />{' '}
+                    Submitted By {submitted.by} on {moment(submitted.date).format('MM/DD/YYYY')}
+                  </Button>
+                }
+              </Button.Group>
+              <Button.Group>
+                <Button inverted color="red" className="relaxed" content="Decline" loading={inProgress === 'REVIEW_DECLINED'} onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'SUPPORT_DECLINE')} />
+                {/* <Button primary className="relaxed"
+                content="Save" loading={inProgress === 'SAVE'} /> */}
+                <Button primary className="relaxed" content={title || 'Approve'} loading={inProgress === 'REVIEW_APPROVED'} disabled={!MANAGERS_FRM.meta.isValid} onClick={() => saveReviewForms(formName, 'REVIEW_APPROVED', 'MANAGER_APPROVE')} />
+              </Button.Group>
+            </div>
+          }
           <Divider section />
         </Aux> : null
     );

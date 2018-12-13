@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Modal } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../theme/shared';
 
 @inject('campaignStore')
@@ -25,13 +26,10 @@ class BusinessModal extends Component {
           {
             campaign && campaign.offering && campaign.offering.about &&
               campaign.offering.about.businessModel ?
-                <p
-                  dangerouslySetInnerHTML={
-                  {
-                    __html: campaign.offering.about.businessModel,
-                  }
-                }
-                /> : <InlineLoader text="No data found." />
+                <p>
+                  {Parser(campaign.offering.about.businessModel)}
+                </p>
+                : <InlineLoader text="No data found." />
           }
         </Modal.Content>
       </Modal>

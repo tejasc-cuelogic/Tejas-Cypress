@@ -40,11 +40,6 @@ export default class NewEmailAddress extends Component {
           <p>We will send you a verification code to the email address you provide.</p>
         </Modal.Header>
         <Modal.Content>
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors.message]} />
-            </Message>
-          }
           <Form error onSubmit={this.handleChangeEmailAddress}>
             <Form.Input
               fluid
@@ -56,8 +51,13 @@ export default class NewEmailAddress extends Component {
               error={!!CONFIRM_FRM.fields.email.error}
             />
             <FieldError error={CONFIRM_FRM.fields.email.error} />
+            {errors &&
+              <Message error className="mt-30">
+                <ListErrors errors={[errors.message]} />
+              </Message>
+            }
             <div className="center-align mt-30">
-              <Button disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value)} loading={this.props.uiStore.inProgress} primary size="large" className="very relaxed">Change Email Address</Button>
+              <Button primary size="large" className="very relaxed" content="Change Email Address" disabled={typeof CONFIRM_FRM.fields.email.error !== 'undefined' || isEmpty(CONFIRM_FRM.fields.email.value)} loading={this.props.uiStore.inProgress} />
             </div>
           </Form>
         </Modal.Content>

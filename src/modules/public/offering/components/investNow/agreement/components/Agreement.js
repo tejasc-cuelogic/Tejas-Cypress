@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Modal, Header, Button, Grid, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -13,6 +13,7 @@ export default class Agreement extends React.Component {
   state = {
     showDocuSign: false,
     open: false,
+    showError: false,
   }
   componentWillMount() {
     const {
@@ -38,11 +39,15 @@ export default class Agreement extends React.Component {
     }
   }
   submit = () => {
-    this.props.investmentStore.finishInvestment().then((investmentStatus) => {
-      if (investmentStatus) {
-        this.props.history.push('congratulation');
-      }
-    });
+    if (this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
+      this.props.investmentStore.finishInvestment().then((investmentStatus) => {
+        if (investmentStatus) {
+          this.props.history.push('congratulation');
+        }
+      });
+    } else {
+      this.setState({ showError: true });
+    }
   }
   handleCancelAgreement = (e) => {
     e.preventDefault();
@@ -86,7 +91,7 @@ export default class Agreement extends React.Component {
               <p className="mt-30 mb-30">By canceling this reservation, you will not be invested in this offering.</p>
             }
             <div className="center-align">
-              <Button.Group>
+              <Button.Group widths="2" className="inline">
                 <Button primary content="Back" onClick={this.handleCancel} />
                 <Button color="gray" content="Confirm" onClick={this.handleConfirm} />
               </Button.Group>
@@ -111,12 +116,7 @@ export default class Agreement extends React.Component {
                 {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                   getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
               </Header>
-              {investmentFlowErrorMessage &&
-                <Message error textAlign="left" className="mb-40">
-                  {investmentFlowErrorMessage}
-                </Message>
-              }
-              <Form error size="huge">
+              <Form error>
                 <Grid stackable>
                   <Grid.Row>
                     {['checkboxesLeft', 'checkboxesRight'].map(field => (
@@ -138,21 +138,16 @@ export default class Agreement extends React.Component {
                   </Grid.Row>
                 </Grid>
               </Form>
-              <Divider hidden />
-              <div className="center-align">
-                <Button
-                  primary
-                  loading={inProgress}
-                  disabled={!AGREEMENT_DETAILS_FORM.meta.isValid}
-                  onClick={this.submit}
-                >
-                  Invest
-                </Button>
-                <Button type="button" color="gray" onClick={this.handleCancelAgreement}>
-                  Cancel
-                </Button>
+              {investmentFlowErrorMessage &&
+                <Message error className="mt-30">
+                  {investmentFlowErrorMessage}
+                </Message>
+              }
+              <div className="center-align mt-30">
+                <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
+                <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
               </div>
-              {!AGREEMENT_DETAILS_FORM.meta.isValid &&
+              {this.state.showError &&
                 <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
               }
             </div>

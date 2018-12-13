@@ -18,14 +18,7 @@ export default class Finances extends Component {
     return (
       <div className="center-align">
         <Header as="h3">Financial Information</Header>
-        <p className="tertiary-text">
-          NextSeed Securities LLC ({'"'}NextSeed Broker-Dealer{'"'}) is required by SEC rules and regulations to determine investor suitability for private offerings.  Please provide your financial information to help determine your investment suitability. All information provided here is encrypted and securely transmitted to NextSeed Broker-Dealer solely to determine investor suitability
-        </p>
-        {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-        }
+        <p className="tertiary-text">NextSeed Securities LLC ({'"'}NextSeed Broker-Dealer{'"'}) is required by SEC rules and regulations to determine investor suitability for private offerings.  Please provide your financial information to help determine your investment suitability. All information provided here is encrypted and securely transmitted to NextSeed Broker-Dealer solely to determine investor suitability</p>
         <Form error>
           <FormRadioGroup
             fielddata={FINANCES_FORM.fields.investorProfileType}
@@ -51,6 +44,11 @@ export default class Finances extends Component {
               ))}
             </Form.Group>
           </div>
+          {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
+          }
         </Form>
       </div>
     );

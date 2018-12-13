@@ -175,6 +175,7 @@
         width:auto;
         .ui.button{
             margin:0 @5px !important;
+            min-width:130px;
             &:first-child{
                 margin-left:-@5px !important;
             }

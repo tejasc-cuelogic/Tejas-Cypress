@@ -261,7 +261,7 @@ export default class General extends Component {
                       ['dateOfOffering', 'securitiesExemption', 'securitiesOffered'].map(field => (
                         <FormInput
                           displayMode={isReadonly}
-                          hoverable={field === 'securitiesExemptionReliedUpon'}
+                          hoverable={field === 'securitiesExemption'}
                           key={field}
                           name={field}
                           fielddata={offering[field]}

@@ -17,11 +17,6 @@ export default class BrokerageEmployment extends Component {
           another U.S. brokerage? If you do not know what this means,
           it likely does not apply to you
         </p>
-        {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-        }
         <Form error>
           <FormRadioGroup
             fielddata={BROKERAGE_EMPLOYMENT_FORM.fields.brokerageEmployment}
@@ -43,6 +38,11 @@ export default class BrokerageEmployment extends Component {
               />
             </Form.Group>
           </div>
+          }
+          {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
           }
         </Form>
       </div>

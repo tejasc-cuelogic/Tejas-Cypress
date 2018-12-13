@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 @inject('campaignStore')
@@ -31,7 +32,9 @@ class SummaryModal extends Component {
         <Modal.Header>Revenue Sharing Summary*</Modal.Header>
         <Modal.Content scrolling>
           {revenueShareSummary ?
-            <p className="detail-section" dangerouslySetInnerHTML={{ __html: revenueShareSummary }} />
+            <p>
+              {Parser(revenueShareSummary)}
+            </p>
           : <InlineLoader text="No data available" />
           }
         </Modal.Content>

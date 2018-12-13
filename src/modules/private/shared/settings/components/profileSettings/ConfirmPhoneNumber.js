@@ -96,11 +96,6 @@ export default class ConfirmPhoneNumber extends Component {
           <p>Please confirm the 6-digit verification code in the text message sent to your phone</p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {/* {errors &&
-            <Message error>
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
-          } */}
           <MaskedInput
             hidelabel
             value={ID_VERIFICATION_FRM.fields.phoneNumber.value}
@@ -116,16 +111,8 @@ export default class ConfirmPhoneNumber extends Component {
             phoneNumberDisplayMode
           />
           {editMode ?
-            <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>
-              Confirm Phone number
-            </Link> :
-            <Link
-              className="grey-link green-hover"
-              to="/app/profile-settings/profile-data/new-phone-number"
-              onClick={this.handleChangePhoneNumber}
-            >
-              Change phone number
-            </Link>
+            <Link className="grey-link green-hover" to={this.props.match.url} onClick={this.startPhoneVerification}>Confirm Phone number</Link> :
+            <Link className="grey-link green-hover" to="/app/profile-settings/profile-data/new-phone-number" onClick={this.handleChangePhoneNumber}>Change phone number</Link>
           }
           <Form error onSubmit={this.handleConfirmPhoneNumber}>
             <Form.Field className="otp-wrap">
@@ -140,16 +127,10 @@ export default class ConfirmPhoneNumber extends Component {
               />
             </Form.Field>
             {errors &&
-              <Message error textAlign="left" className="mb-40">
+              <Message error className="mb-40">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
             }
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
-            {/* <Header as="h3" className="success-msg mb-60">
-              <Icon className="ns-check-circle" color="green" />
-              Your phone number has been confirmed.
-            </Header> */}
-            {/* THIS HEADER WILL BE VISIBLE AFTER SUCCESS */}
             <Button primary size="large" className="very relaxed" content="Confirm" loading={!this.props.identityStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
           </Form>
         </Modal.Content>

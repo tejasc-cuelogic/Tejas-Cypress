@@ -61,12 +61,7 @@ export default class ConfirmOTPModal extends Component {
             />
           }
           <p>
-            <Link
-              to="/app/profile-settings/security"
-              className="link"
-            >
-              See Multi-Factor Authentication Settings
-            </Link>
+            <Link to="/app/profile-settings/security" className="link">See Multi-Factor Authentication Settings</Link>
           </p>
           <Form error onSubmit={formSubmit}>
             <Form.Field className="otp-wrap">
@@ -79,14 +74,14 @@ export default class ConfirmOTPModal extends Component {
                 fielddata={OTPVerifyMeta.fields.code}
                 onChange={VerificationChange}
               />
-              <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" onClick={e => resendVerification(e)} />
+              <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" onClick={e => resendVerification(e)} />
             </Form.Field>
             {errors &&
-              <Message error textAlign="left" className="mb-40">
+              <Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
             }
-            <Button loading={!reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTPVerifyMeta.meta.isValid} >Submit to approval</Button>
+            <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTPVerifyMeta.meta.isValid} />
           </Form>
         </Modal.Content>
       </Modal>
