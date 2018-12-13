@@ -1,4 +1,5 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Message, Divider } from 'semantic-ui-react';
@@ -17,7 +18,7 @@ export default class FinancialInformation extends React.Component {
   render() {
     const { FIN_INFO_FRM, finInfoChange } = this.props.iraAccountStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Calculating your investment limit</Header>
         <p className="center-align">Your net worth and annual income are used to determine your 12-month investment limit. <Link className="link" to="/app/summary/account-creation/ira">How is this calculated?</Link></p>
         <Form error>
@@ -44,14 +45,14 @@ export default class FinancialInformation extends React.Component {
             </p>
           </div>
           {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
-          <Message error textAlign="left" className="mb-40">
-          Based on your net assets and annual income, your 12-month investment
-          limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
-          This is below the $5,000 minimum opening deposit for IRA accounts.
+          <Message error className="center-align">
+            Based on your net assets and annual income, your 12-month investment
+            limit is {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}.
+            This is below the $5,000 minimum opening deposit for IRA accounts.
           </Message>
           }
         </Form>
-      </div>
+      </Aux>
     );
   }
 }

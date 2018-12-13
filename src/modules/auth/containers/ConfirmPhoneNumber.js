@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Divider, Message, ButtonGroup } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
 import Helper from '../../../helper/utility';
 import { MaskedInput, FormRadioGroup } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
@@ -166,31 +166,29 @@ export default class ConfirmPhoneNumber extends Component {
               <Button type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={reSendVerificationCode && this.props.uiStore.inProgress} onClick={() => this.startPhoneVerification()} />
             </Form.Field>
             }
+            {editMode &&
+              <div className="mt-30 mb-30">
+                <Header as="h6">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
+                <FormRadioGroup
+                  fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
+                  name="mfaMethod"
+                  changed={(e, result) => personalInfoChange(e, result)}
+                  containerclassname="button-radio center-align"
+                />
+              </div>
+            }
             {errors &&
-              <Message error textAlign="left" className="mb-40">
+              <Message error textAlign="left" className="mb-30">
                 <ListErrors errors={errors.message ? [errors.message] : [errors]} />
               </Message>
-            }
-            {editMode &&
-              <div className="field">
-                <Header as="label">{ID_VERIFICATION_FRM.fields.mfaMethod.label}</Header>
-                <Form.Group className="center-align " inline>
-                  <FormRadioGroup
-                    fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
-                    name="mfaMethod"
-                    changed={(e, result) => personalInfoChange(e, result)}
-                    containerclassname="button-radio center-align"
-                  />
-                </Form.Group>
-              </div>
             }
             {!editMode ?
               <Button primary size="large" className="very relaxed" content="Confirm" loading={!reSendVerificationCode && this.props.uiStore.inProgress} disabled={!ID_PHONE_VERIFICATION.meta.isValid} />
               :
-              <ButtonGroup>
-                <Button type="button" inverted color="red" className="relaxed" content="Cancel" onClick={this.cancelChangePhoneNo} />
-                <Button type="button" primary className="relaxed" content="Save" onClick={() => this.startPhoneVerification()} />
-              </ButtonGroup>
+              <Button.Group widths="2" className="inline">
+                <Button type="button" inverted color="red" content="Cancel" onClick={this.cancelChangePhoneNo} />
+                <Button type="button" primary content="Save" onClick={() => this.startPhoneVerification()} />
+              </Button.Group>
             }
           </Form>
         </Modal.Content>
