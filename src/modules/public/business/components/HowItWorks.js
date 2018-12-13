@@ -1,9 +1,11 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Link } from 'react-router-dom';
-import { Header, Grid, Button, Image, Container, Embed, List, Statistic, Divider, Responsive, Item } from 'semantic-ui-react';
+import { Route, Link } from 'react-router-dom';
+// Embed
+import { Header, Grid, Button, Image, Container, List, Statistic, Divider, Responsive, Item, Icon } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import { ASSETS_URL } from '../../../../constants/aws';
+import VideoModal from './VideoModal';
 
 const nsvideos = {
   embed: '247714163',
@@ -156,10 +158,10 @@ const HowItWorks = () => (
                 }
               </Grid.Row>
             ))
-          }
+            }
           </Grid>
         </Container>
-      :
+        :
         <Aux>
           <Container>
             <NsCarousel {...settings}>
@@ -174,7 +176,7 @@ const HowItWorks = () => (
                   </Grid.Row>
                 ))
               ))
-            }
+              }
             </NsCarousel>
           </Container>
         </Aux>
@@ -200,7 +202,7 @@ const HowItWorks = () => (
                 </Item.Content>
               </Item>
             </Item.Group>
-            ))
+          ))
           }
         </NsCarousel>
       </Container>
@@ -254,12 +256,18 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
           <Grid.Column>
-            <Embed
+            <Link to="/business/how-it-works/video" className="how-it-works-video">
+              <Image src={`${ASSETS_URL}images/677134021.jpg`} />
+              <Icon
+                className="ns-play play-icon"
+              />
+            </Link>
+            {/* <Embed
               id={nsvideos.embed}
               placeholder={`${ASSETS_URL}images/677134021.jpg`}
               source="vimeo"
               icon="ns-play"
-            />
+            /> */}
             <p className="caption-note mt-10">
               The Native Hostel and Bar & Kitchen raised $396,500 from 227 investors.
             </p>
@@ -280,6 +288,7 @@ const HowItWorks = () => (
         </List>
       </Container>
     </section>
+    <Route path="/business/how-it-works/video" render={props => <VideoModal {...props} videoDetails={nsvideos} />} />
   </Aux>
 );
 
