@@ -44,9 +44,6 @@ export const allOfferings = gql`
       }
       applicationId
       issuerId
-      lead {
-        id
-      }
       stage
       created {
         id

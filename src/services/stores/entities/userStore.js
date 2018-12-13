@@ -2,6 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import { FormValidator as Validator } from '../../../helper';
 import { NEW_USER } from '../../../constants/user';
 import { PRIVATE_NAV } from '../../../constants/NavigationMeta';
+import { authStore } from '../index';
 
 export class UserStore {
   @observable currentUser;
@@ -52,7 +53,8 @@ export class UserStore {
   }
 
   @computed get myCapabilities() {
-    return this.currentUser ? toJS(this.currentUser.capabilities) : [];
+    console.log(this.opt);
+    return authStore.capabilities ? toJS(authStore.capabilities) : [];
   }
 
   myAccessForModule(module) {
