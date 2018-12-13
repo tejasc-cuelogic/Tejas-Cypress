@@ -79,16 +79,14 @@ export default class ConfirmVerificationCode extends Component {
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />
+              <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={e => this.resendVerification(e)} />
             </Form.Field>
             {errors &&
-              <Message error>
+              <Message error className="mb-40">
                 <ListErrors errors={[errors]} />
               </Message>
             }
-            <Button.Group vertical>
-              <Button loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTP_VERIFY_META.meta.isValid} >Submit to approval</Button>
-              <Button loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="link-button cancel-link" onClick={e => this.resendVerification(e)}>Resend the code to my phone</Button>
-            </Button.Group>
+            <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTP_VERIFY_META.meta.isValid} />
           </Form>
         </Modal.Content>
       </Modal>

@@ -53,16 +53,9 @@ export default class Plaid extends Component {
       return <ManualForm action={action} refLink={refLink} />;
     }
     return (
-      <div>
-        <Header as="h3" textAlign="center">{headerText}</Header>
-        <p className="center-align mb-30">
-          {subHeaderText}
-        </p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors]} />
-          </Message>
-        }
+      <div className="center-align">
+        <Header as="h3">{headerText}</Header>
+        <p className="mb-30">{subHeaderText}</p>
         <Form>
           <Input
             fluid
@@ -125,9 +118,12 @@ export default class Plaid extends Component {
             </Grid>
           }
         </div>
-        <div className="center-align">
-          <Button color="green" className="link-button" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')}>or enter it manually</Button>
-        </div>
+        {errors &&
+          <Message error>
+            <ListErrors errors={[errors]} />
+          </Message>
+        }
+        <Button color="green" className="link-button" content="or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
       </div>
     );
   }

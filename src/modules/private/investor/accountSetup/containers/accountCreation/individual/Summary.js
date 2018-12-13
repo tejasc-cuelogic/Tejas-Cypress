@@ -101,10 +101,7 @@ export default class Summary extends React.Component {
             <ListErrors errors={[errors.message]} />
           </Message>
         }
-        <div className="center-align mt-30">
-          <Button primary size="large" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank} />
-        </div>
-        <p className="center-align grey-header mt-30 mb-0">
+        <p className="center-align grey-header mt-30">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Funding Portal Agreement</span>,{' '}
@@ -117,6 +114,9 @@ export default class Summary extends React.Component {
             loading={docLoading}
           />
         </p>
+        <div className="center-align mt-30">
+          <Button primary size="large" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank} />
+        </div>
       </Aux>
     );
   }
