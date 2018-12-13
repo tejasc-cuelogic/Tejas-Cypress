@@ -114,12 +114,21 @@ export default class Summary extends Component {
         <div className="center-align mt-30">
           <Button primary size="large" content="Create the account" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
-        <p className="center-align grey-header mt-30 mb-0">
-          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Funding Portal Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Broker-Dealer Investor Agreement</span>, and {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>.
+        <p className="center-align mt-30 grey-header">
+          By continuing, I acknowledge that I have read and agree to the
+          terms of the{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+          CrowdPay Custodial Account Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
+          NextSeed Funding Portal Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
+          NextSeed Broker-Dealer Investor Agreement
+          </span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+          Substitute IRS Form W-9 Certification
+          </span>.
           {/* <span className="highlight-text" style={{ cursor: 'pointer' }}
           onClick={() => this.openModal('membershipAgreement')}>
           NextSeed Membership Agreement
