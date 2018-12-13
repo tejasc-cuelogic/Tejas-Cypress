@@ -17,6 +17,7 @@ export class AuthStore {
   @observable isUserLoggedIn = false;
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
+  @observable capabilities = [];
   @observable userId = null;
   @observable devAuth = {
     required: !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV),
@@ -311,6 +312,11 @@ export class AuthStore {
     this.resetForm('FORGOT_PASS_FRM', null);
     this.resetForm('RESET_PASS_FRM', null);
     this.resetForm('NEWSLETTER_FRM', null);
+  }
+
+  @action
+  setCurrentUserCapabilites = (capabilities) => {
+    this.capabilities = capabilities;
   }
 
   @action

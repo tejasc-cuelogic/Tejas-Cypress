@@ -657,7 +657,7 @@ export class Auth {
   parseRoles = (data) => {
     const newData = data;
     newData.roles = (data.roles) ? JSON.parse(data.roles) : [];
-    newData.capabilities = (data.capabilities) ? JSON.parse(data.capabilities) : [];
+    // newData.capabilities = (data.capabilities) ? JSON.parse(data.capabilities) : [];
     return newData;
   };
 

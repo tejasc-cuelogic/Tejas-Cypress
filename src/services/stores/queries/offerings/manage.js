@@ -882,8 +882,8 @@ export const getOfferingDetails = gql`
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String!, $poc: String, $offeringDetails: OfferingInputType!) {
-  updateOffering(id: $id, poc: $poc offeringDetails: $offeringDetails) {
+mutation _updateOffering($id: String!, $issuerId: String, $offeringDetails: OfferingInputType!) {
+  updateOffering(id: $id, issuerId: $issuerId offeringDetails: $offeringDetails) {
     id
   }
 }
