@@ -121,10 +121,10 @@ export default class Summary extends Component {
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
           CrowdPay Custodial Account Agreement
           </span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
           NextSeed Funding Portal Agreement
           </span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
           NextSeed Broker-Dealer Investor Agreement
           </span>, and {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
