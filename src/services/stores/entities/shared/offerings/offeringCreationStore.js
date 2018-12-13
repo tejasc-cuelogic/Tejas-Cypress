@@ -849,7 +849,10 @@ export class OfferingCreationStore {
       offeringDetails: payload,
     };
     if (keyName === 'editPocForm') {
-      variables.poc = this.POC_DETAILS_FRM.fields.address.value;
+      variables.issuerId = this.POC_DETAILS_FRM.fields.issuerId.value;
+      if (this.POC_DETAILS_FRM.fields.id.value) {
+        variables.adminId = this.POC_DETAILS_FRM.fields.id.value;
+      }
     }
     client
       .mutate({
@@ -956,9 +959,6 @@ export class OfferingCreationStore {
         payloadData.offering = {};
         payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
-        if (this.POC_DETAILS_FRM.fields.name.value) {
-          payloadData.lead = { name: this.POC_DETAILS_FRM.fields.name.value };
-        }
         payloadData.offering = mergeWith(
           toJS(getOfferingById.offering),
           payloadData.offering,
