@@ -1401,6 +1401,13 @@ a.icon-link {
 		position:absolute;
 		bottom:-14px;
 	}
+	&.at-top{
+		position:relative;
+		border:none;
+		&:before, &:before{
+			display:none;
+		}
+	}
 }
 .inner-content-spacer{
 	padding:@20px !important;
