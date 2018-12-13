@@ -13,6 +13,7 @@ export default class Agreement extends React.Component {
   state = {
     showDocuSign: false,
     open: false,
+    showError: false,
   }
   componentWillMount() {
     const {
@@ -38,11 +39,15 @@ export default class Agreement extends React.Component {
     }
   }
   submit = () => {
-    this.props.investmentStore.finishInvestment().then((investmentStatus) => {
-      if (investmentStatus) {
-        this.props.history.push('congratulation');
-      }
-    });
+    if (this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid) {
+      this.props.investmentStore.finishInvestment().then((investmentStatus) => {
+        if (investmentStatus) {
+          this.props.history.push('congratulation');
+        }
+      });
+    } else {
+      this.setState({ showError: true });
+    }
   }
   handleCancelAgreement = (e) => {
     e.preventDefault();
@@ -139,10 +144,10 @@ export default class Agreement extends React.Component {
                 </Message>
               }
               <div className="center-align mt-30">
-                <Button primary content="Invest" loading={inProgress} disabled={!AGREEMENT_DETAILS_FORM.meta.isValid} onClick={this.submit} />
+                <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
                 <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
               </div>
-              {!AGREEMENT_DETAILS_FORM.meta.isValid &&
+              {this.state.showError &&
                 <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
               }
             </div>
