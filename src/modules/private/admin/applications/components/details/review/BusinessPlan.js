@@ -221,7 +221,7 @@ export default class BusinessPlan extends Component {
                             name="amount"
                             fielddata={source.amount}
                             changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'sources', field, index)}
-                            ishidelabel
+                            hidelabel
                             size="small"
                           />
                         </Table.Cell>
@@ -285,7 +285,7 @@ export default class BusinessPlan extends Component {
                           name="amount"
                           fielddata={use.amount}
                           changed={(values, field) => maskChangeWithIndex(values, 'BUSINESS_PLAN_FRM', 'uses', field, index)}
-                          ishidelabel
+                          hidelabel
                           size="small"
                         />
                       </Table.Cell>
