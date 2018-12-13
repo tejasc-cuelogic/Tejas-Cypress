@@ -24,6 +24,7 @@ export const allOfferings = gql`
         legalBusinessName
       }
       issuerDetails {
+        id
         email {
           address
         }
@@ -72,6 +73,7 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       issuerDetails {
+        id
         email {
           address
         }
