@@ -24,6 +24,7 @@ export const allOfferings = gql`
         legalBusinessName
       }
       issuerDetails {
+        id
         email {
           address
         }
@@ -44,7 +45,7 @@ export const allOfferings = gql`
       applicationId
       issuerId
       lead {
-        name
+        id
       }
       stage
       created {
@@ -75,6 +76,7 @@ export const getOfferingDetails = gql`
       referralCode
       previewPassword
       issuerDetails {
+        id
         email {
           address
         }
@@ -851,7 +853,7 @@ export const getOfferingDetails = gql`
       applicationId
       issuerId
       lead {
-        name
+        id
       }
       stage
       rewardsTierIds {
