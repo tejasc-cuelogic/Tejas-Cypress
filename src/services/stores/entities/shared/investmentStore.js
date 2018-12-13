@@ -353,7 +353,7 @@ export class InvestmentStore {
           resolve(data.data.generateAgreement);
         })
         .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
+          Helper.toast(error.message, 'error');
           this.setShowTransferRequestErr(true);
           uiStore.setErrors(error.message);
           reject();

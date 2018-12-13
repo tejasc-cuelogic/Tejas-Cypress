@@ -174,7 +174,7 @@ export default class ConfirmEmailAddress extends Component {
               <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
             </Form.Field>
             {errors &&
-              <Message error textAlign="left" className="mb-40">
+              <Message error className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
             }

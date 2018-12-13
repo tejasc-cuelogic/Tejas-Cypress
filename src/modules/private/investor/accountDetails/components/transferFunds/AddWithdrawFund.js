@@ -68,18 +68,10 @@ export default class AddWithdrawFund extends Component {
     return (
       <Aux>
         <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
-          <Modal.Header>
+          <Modal.Header className="signup-header">
             <Header as="h3"><AccTypeTitle noText /> {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds</Header>
           </Modal.Header>
           <Modal.Content>
-            {!showConfirmPreview ?
-              errors &&
-              <Message error>
-                <ListErrors errors={[errors]} />
-              </Message>
-              :
-              null
-            }
             <Form error onSubmit={this.transfer} size="massive">
               <MaskedInput
                 disabled={showConfirmPreview ? 'disabled' : ''}
@@ -107,8 +99,14 @@ export default class AddWithdrawFund extends Component {
                 :
                 null
               }
-              <Divider hidden />
-              <div className="center-align">
+              {!showConfirmPreview ? errors &&
+                <Message error className="mt-30">
+                  <ListErrors errors={[errors]} />
+                </Message>
+                :
+                null
+              }
+              <div className="center-align mt-30">
                 <Button.Group>
                   {showConfirmPreview ?
                     <Button onClick={this.cancelTransfer} content="Cancel" /> : null

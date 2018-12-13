@@ -49,16 +49,11 @@ export default class ManualForm extends Component {
       return <AddFunds />;
     }
     return (
-      <div>
-        <Header as="h3" textAlign="center">Link bank manually</Header>
-        <p className="center-align">Enter your bank{"'"}s routing number and your checking account number.</p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
+      <div className="center-align">
+        <Header as="h3">Link bank manually</Header>
+        <p>Enter your bank{"'"}s routing number and your checking account number.</p>
         <Form error onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap">
+          <div className="field-wrap left-align">
             <MaskedInput
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
@@ -74,13 +69,14 @@ export default class ManualForm extends Component {
               showerror
             />
           </div>
-          <div className="center-align">
-            <Button primary size="large" className="relaxed" disabled={!formLinkBankManually.meta.isValid}>Confirm</Button>
-          </div>
+          {errors &&
+            <Message error className="mb-30">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
+          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
-        <div className="center-align mt-20">
-          <Button type="button" color="green" className="link-button" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')}>Or select your bank from the list</Button>
-        </div>
+        <Button color="green" className="link-button mt-30" content="Or select your bank from the list" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')} />
       </div>
     );
   }

@@ -671,6 +671,7 @@ textarea{
         padding:@4px 0;
         line-height:initial;
         background-color:transparent;
+        color: @primary-one;
         >p{
             color:@neutral-middark;
             font-weight:@normal;

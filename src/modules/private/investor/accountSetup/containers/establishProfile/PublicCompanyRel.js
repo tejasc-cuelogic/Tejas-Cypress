@@ -17,11 +17,6 @@ export default class PublicCompanyRel extends Component {
           director or senior officer at a publicly traded U.S. company?
         </p>
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
-        {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-        }
         <Form error>
           <FormRadioGroup
             fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel}
@@ -43,6 +38,11 @@ export default class PublicCompanyRel extends Component {
               />
             </Form.Group>
           </div>
+          }
+          {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
           }
         </Form>
       </div>
