@@ -11,7 +11,7 @@ class Gallery extends Component {
     } = this.props;
     return (
       <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
-        <Segment padded>
+        <Segment as={Link} to={`${galleryUrl}/photogallery`} padded>
           <Breadcrumb>
             <Breadcrumb.Section as={Link} to={`${galleryUrl}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
             <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
