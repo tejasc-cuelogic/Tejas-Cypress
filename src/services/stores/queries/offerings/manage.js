@@ -87,6 +87,7 @@ export const getOfferingDetails = gql`
       } 
       }
       keyTerms {
+        startupPeriod
         revSharePercentageDescription
         useOfProceedFootnote
         currentFinancialStatements

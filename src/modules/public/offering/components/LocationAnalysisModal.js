@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Parser from 'html-react-parser';
 import { inject, observer } from 'mobx-react';
 import { Header, Modal } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../theme/shared';
@@ -39,13 +40,10 @@ class LocationAnalysisModal extends Component {
             campaign && campaign.offering
               && campaign.offering.about
               && campaign.offering.about.locationAnalysis ?
-                <p
-                  dangerouslySetInnerHTML={
-                    {
-                      __html: campaign.offering.about.locationAnalysis,
-                    }
-                  }
-                /> : <InlineLoader text="No data found." />
+                <p>
+                  {Parser(campaign.offering.about.locationAnalysis)}
+                </p>
+                : <InlineLoader text="No data found." />
           }
         </Modal.Content>
       </Modal>

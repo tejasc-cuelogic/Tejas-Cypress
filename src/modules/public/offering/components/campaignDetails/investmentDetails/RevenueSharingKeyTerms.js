@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Parser from 'html-react-parser';
 import { Header, Modal, Grid, Table, Popup, Icon, Divider } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
@@ -74,13 +75,12 @@ class RevenueSharingKeyTerms extends Component {
                       `${KeyTerms.investmentMultiple}` : 'NA'}
                   </b>
                 </p>
-                <p dangerouslySetInnerHTML={{
-                  __html: KeyTerms && KeyTerms.investmentMultipleSummary ?
+                <p>
+                  {Parser(KeyTerms && KeyTerms.investmentMultipleSummary ?
                     KeyTerms.investmentMultipleSummary
                     :
-                    null,
-                }}
-                />
+                    null)}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -92,13 +92,12 @@ class RevenueSharingKeyTerms extends Component {
                       `${KeyTerms.revSharePercentage}` : 'NA'}
                   </b>
                 </p>
-                <p dangerouslySetInnerHTML={{
-                  __html: KeyTerms && KeyTerms.revShareSummary ?
+                <p>
+                  {Parser(KeyTerms && KeyTerms.revShareSummary ?
                     KeyTerms.revShareSummary
                     :
-                    null,
-                }}
-                />
+                    null)}
+                </p>
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">

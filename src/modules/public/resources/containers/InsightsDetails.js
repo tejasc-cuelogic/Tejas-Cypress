@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Parser from 'html-react-parser';
 import { inject, observer } from 'mobx-react';
 import { Header, Container, Grid, Breadcrumb } from 'semantic-ui-react';
 import { InlineLoader, Image64 } from '../../../../theme/shared';
@@ -34,7 +35,9 @@ export default class InsightsDetails extends Component {
                 srcUrl={ArticlesDetails.featuredImage}
                 className="mb-30 mt-30"
               />
-              <pre className="migrated-content" dangerouslySetInnerHTML={{ __html: ArticlesDetails.content }} />
+              <pre className="migrated-content">
+                {Parser(ArticlesDetails.content)}
+              </pre>
             </Grid.Column>
           </Grid>
         </section>

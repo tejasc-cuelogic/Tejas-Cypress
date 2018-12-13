@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { Modal, Icon, Popup, List } from 'semantic-ui-react';
 import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../constants/offering';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -34,7 +35,9 @@ class TopThingsToKnowModal extends Component {
             {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.elevatorPitch &&
               <Aux>
-                <div className="detail-section mt-10" dangerouslySetInnerHTML={{ __html: campaign.offering.overview.elevatorPitch }} /><br />
+                <div className="detail-section mt-10">
+                  {Parser(campaign.offering.overview.elevatorPitch)}
+                </div><br />
               </Aux>
             }
             {campaign && campaign.offering && campaign.offering.overview &&

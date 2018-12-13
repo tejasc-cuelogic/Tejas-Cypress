@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Parser from 'html-react-parser';
 import { Header, Segment, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -24,7 +25,9 @@ class RevenueSharingDetails extends Component {
             </Header>
             <p>
               {revenueShareSummary ?
-                <p className="detail-section" dangerouslySetInnerHTML={{ __html: revenueShareSummary }} />
+                <p className="detail-section">
+                  {Parser(revenueShareSummary)}
+                </p>
                 : <InlineLoader text="No data available" />
               }
             </p>
