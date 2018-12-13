@@ -122,12 +122,16 @@ export class UserDetailsStore {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         res();
+        const user = { ...this.currentUser };
         this.currentUser.data &&
         this.currentUser.data.user &&
         this.currentUser.data.user.roles && this.currentUser.data.user.roles.map((role, index) => {
           this.currentUser.data.user.roles[index].name = lowerCase(role.name);
           return this.currentUser;
         });
+        if (user && user.data && user.data.user && user.data.user.capabilities) {
+          authStore.setCurrentUserCapabilites(user.data.user.capabilities);
+        }
       },
     });
   })
