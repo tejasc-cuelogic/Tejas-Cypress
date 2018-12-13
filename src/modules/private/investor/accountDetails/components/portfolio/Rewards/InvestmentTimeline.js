@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import Parser from 'html-react-parser';
 import { intersectionBy, orderBy, findLastIndex, filter, toInteger, sortedIndexBy } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
@@ -71,7 +72,9 @@ class InvestmentTimeline extends Component {
                               {reward.title}
                               {/* <Header.Subheader>{reward.title}</Header.Subheader> */}
                             </Header>
-                            <p className="detail-section" dangerouslySetInnerHTML={{ __html: reward.description }} />
+                            <p className="detail-section">
+                              {Parser(reward.description)}
+                            </p>
                           </Popup.Content>
                         ))
                       }

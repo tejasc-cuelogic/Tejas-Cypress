@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 // import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 const isSmallscreen = document.documentElement.clientWidth >= 1200
@@ -32,16 +33,14 @@ class CompanyTopThings extends Component {
             {campaign && campaign.offering
               && campaign.offering.about
               && campaign.offering.about.theCompany ?
-                <p
-                  dangerouslySetInnerHTML={{
-                  __html: campaign.offering.about.theCompany.length <= textContentMaxLength ?
+                <p>
+                  {Parser(campaign.offering.about.theCompany.length <= textContentMaxLength ?
                     campaign.offering.about.theCompany
                     :
-                    campaign.offering.about.theCompany.substring(1, textContentMaxLength),
-                }}
-                />
+                    campaign.offering.about.theCompany.substring(1, textContentMaxLength))}
+                </p>
               :
-                    <InlineLoader text={emptyStatement} />
+                <InlineLoader text={emptyStatement} />
             }
           </div>
           {campaign && campaign.offering
