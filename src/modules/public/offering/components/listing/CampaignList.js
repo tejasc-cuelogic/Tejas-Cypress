@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { capitalize } from 'lodash';
+import Parser from 'html-react-parser';
 import { Container, Card, Image, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
 import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
@@ -68,11 +69,9 @@ export default class CampaignList extends Component {
                               }
                             </Card.Meta>
                             <Card.Description
-                              dangerouslySetInnerHTML={{
-                                __html: offering && offering.offering &&
-                                  offering.offering.about && offering.offering.about.theCompany ?
-                                  offering.offering.about.theCompany : '-',
-                              }}
+                              {...Parser(offering && offering.offering &&
+                                offering.offering.about && offering.offering.about.theCompany ?
+                                offering.offering.about.theCompany : '-')}
                             />
                           </Card.Content>
                           <Card.Content extra>

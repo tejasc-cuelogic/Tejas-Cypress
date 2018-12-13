@@ -66,6 +66,13 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  startupPeriod: {
+    value: '',
+    label: 'Startup Period',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
   regulation: {
     value: '',
     label: 'Regulation',
