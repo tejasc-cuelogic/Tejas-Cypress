@@ -13,8 +13,9 @@ export default class NewPhoneNumber extends Component {
   componentWillMount() {
     const { userDetailsStore, identityStore } = this.props;
     if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
-      const fieldValue = userDetailsStore.userDetails.phone.type;
-      identityStore.phoneTypeChange(fieldValue);
+      identityStore.phoneTypeChange(userDetailsStore.userDetails.phone.type);
+    } else {
+      identityStore.phoneTypeChange('TEXT');
     }
   }
   handleCloseModal = (e) => {

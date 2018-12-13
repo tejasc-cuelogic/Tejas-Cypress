@@ -179,6 +179,7 @@ export default class ConfirmPhoneNumber extends Component {
                     fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
                     name="mfaMethod"
                     changed={(e, result) => personalInfoChange(e, result)}
+                    containerclassname="button-radio center-align"
                   />
                 </Form.Group>
               </div>

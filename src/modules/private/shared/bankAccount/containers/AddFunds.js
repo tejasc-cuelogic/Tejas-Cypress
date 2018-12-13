@@ -35,7 +35,9 @@ export default class AddFunds extends Component {
         name: 'Add funds',
         stepToBeRendered: 2,
       };
-      this.props.individualAccountStore.createAccount(currentStep);
+      if (this.props.bankAccountStore.formAddFunds.fields.value.value) {
+        this.props.individualAccountStore.createAccount(currentStep);
+      }
       this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
@@ -44,7 +46,9 @@ export default class AddFunds extends Component {
         stepToBeRendered: 6,
         validate: validationActions.validateLinkBankForm,
       };
-      this.props.entityAccountStore.createAccount(currentStep);
+      if (this.props.bankAccountStore.formAddFunds.fields.value.value) {
+        this.props.entityAccountStore.createAccount(currentStep);
+      }
       this.props.entityAccountStore.setStepToBeRendered(AccCreationHelper.entitySteps().summary);
     }
     if (this.props.accountStore.investmentAccType === 'ira') {
@@ -53,7 +57,9 @@ export default class AddFunds extends Component {
         validate: validationActions.validateLinkBankForm,
         stepToBeRendered: 4,
       };
-      this.props.iraAccountStore.createAccount(currentStep);
+      if (this.props.bankAccountStore.formAddFunds.fields.value.value) {
+        this.props.iraAccountStore.createAccount(currentStep);
+      }
       this.props.iraAccountStore.setStepToBeRendered(AccCreationHelper.iraSteps().summary);
     }
   }
