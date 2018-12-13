@@ -383,6 +383,14 @@ footer{
                 }
             }
         }
+        &.dataroom-menu {
+            background-color: transparent;
+            .item {
+                &.active, &:hover {
+                    background-color: @neutral-midwhite;
+                }
+            }
+        }
     }
     &.secondary.inverted{
         background-color:@neutral-midwhite;
