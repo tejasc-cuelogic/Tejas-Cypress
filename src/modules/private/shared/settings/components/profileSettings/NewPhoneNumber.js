@@ -13,8 +13,9 @@ export default class NewPhoneNumber extends Component {
   componentWillMount() {
     const { userDetailsStore, identityStore } = this.props;
     if (userDetailsStore.userDetails.phone && userDetailsStore.userDetails.phone.type) {
-      const fieldValue = userDetailsStore.userDetails.phone.type;
-      identityStore.phoneTypeChange(fieldValue);
+      identityStore.phoneTypeChange(userDetailsStore.userDetails.phone.type);
+    } else {
+      identityStore.phoneTypeChange('TEXT');
     }
   }
   handleCloseModal = (e) => {
@@ -50,11 +51,6 @@ export default class NewPhoneNumber extends Component {
           <p>We will send you a verification code to the phone number you provide.</p>
         </Modal.Header>
         <Modal.Content>
-          {errors &&
-            <Message error >
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
-          }
           <Form error onSubmit={this.handleChangePhoneNumber}>
             <MaskedInput
               name="phoneNumber"
@@ -70,12 +66,18 @@ export default class NewPhoneNumber extends Component {
                 <FormRadioGroup
                   fielddata={ID_VERIFICATION_FRM.fields.mfaMethod}
                   name="mfaMethod"
+                  containerclassname="button-radio center-align"
                   changed={(e, result) => personalInfoChange(e, result)}
                 />
               </Form.Group>
             </div>
+            {errors &&
+              <Message error className="mt-20">
+                <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+              </Message>
+            }
             <div className="center-align mt-30">
-              <Button loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} primary size="large" className="very relaxed" >Change Phone Number</Button>
+              <Button primary size="large" className="very relaxed" content="Change Phone Number" loading={this.props.uiStore.inProgress} disabled={!!ID_VERIFICATION_FRM.fields.phoneNumber.error || isEmpty(ID_VERIFICATION_FRM.fields.phoneNumber.value)} />
             </div>
           </Form>
         </Modal.Content>

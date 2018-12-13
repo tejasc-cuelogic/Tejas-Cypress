@@ -63,19 +63,21 @@ export default class Review extends Component {
       <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <SecondaryMenu
-              addon={{ data: this.representAddon(subNavPresentation) }}
-              secondary
-              vertical
-              match={match}
-              navItems={navItems}
-            />
+            <div className="sticy-sidebar">
+              <SecondaryMenu
+                addon={{ data: this.representAddon(subNavPresentation) }}
+                secondary
+                vertical
+                match={match}
+                navItems={navItems}
+              />
+            </div>
             <Divider hidden />
             {showGeneratePA &&
             <Button.Group size="mini">
-              <Button color="blue" loading={inProgress === 'GENERATE_PA'} type="button" onClick={generatePortalAgreement} >Generate PA</Button>
+              <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
               {paBoxFolderId &&
-              <Button color="blue" className="link-button" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')}>PA BOX Link</Button>
+              <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
               }
             </Button.Group>
             }

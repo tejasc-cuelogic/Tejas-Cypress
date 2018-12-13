@@ -66,20 +66,8 @@ export default class ConfirmVerificationCode extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
           <p className="display-only">{this.getMaskedPhoneNumber()}</p>
-          <p>
-            <Link
-              to="/app/profile-settings/security"
-              className="link"
-            >
-            See Multi-Factor Authentication Settings
-            </Link>
-          </p>
+          <p><Link to="/app/profile-settings/security" className="link">See Multi-Factor Authentication Settings</Link></p>
           <Form error onSubmit={this.submit}>
             <Form.Field className="otp-wrap">
               <label>Enter verification code here:</label>
@@ -91,11 +79,14 @@ export default class ConfirmVerificationCode extends Component {
                 fielddata={OTP_VERIFY_META.fields.code}
                 onChange={verifyVerificationCodeChange}
               />
+              <Button size="small" color="grey" className="link-button green-hover" content="Resend the code to my phone" loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} onClick={e => this.resendVerification(e)} />
             </Form.Field>
-            <Button.Group vertical>
-              <Button loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} primary size="large" className="very relaxed" disabled={!OTP_VERIFY_META.meta.isValid} >Submit to approval</Button>
-              <Button loading={this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} type="button" className="link-button cancel-link" onClick={e => this.resendVerification(e)}>Resend the code to my phone</Button>
-            </Button.Group>
+            {errors &&
+              <Message error className="mb-40">
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
+            <Button primary size="large" className="very relaxed" content="Submit to approval" loading={!this.props.beneficiaryStore.reSendVerificationCode && this.props.uiStore.inProgress} disabled={!OTP_VERIFY_META.meta.isValid} />
           </Form>
         </Modal.Content>
       </Modal>

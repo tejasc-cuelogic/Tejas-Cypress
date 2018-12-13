@@ -47,11 +47,6 @@ export default class Experience extends Component {
           Confirm your experience and understanding of the investment risks on NextSeed.
           Select the box that best describes your investment experience to date:
         </p>
-        {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-        }
         <Form error onSubmit={this.handleSubmitInvestmentExperience}>
           <FormRadioGroup
             fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
@@ -74,6 +69,11 @@ export default class Experience extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
+          {errors &&
+          <Message error className="mt-20">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
+          }
           <div className="center-align mt-20">
             {!isInvestmentExperienceValid &&
               <p className="negative-text mb-20">
