@@ -64,16 +64,15 @@ export default class NeedHelpModal extends Component {
               containerclassname="secondary"
               changed={(e, res) => businessAppEleChange(e, res, 'NEED_HELP_FRM')}
             />
-            {!errors &&
+            {errors &&
               <Message error>
-                <p>Test Error</p>
                 <ListErrors errors={[errors]} />
               </Message>
             }
             <div className="center-align">
               <Button.Group widths="2" className="inline">
-                <Button inverted color="red" className="relaxed" content="Cancel" onClick={this.handleCloseModal} />
-                <Button primary className="relaxed" content="Send" disabled={!NEED_HELP_FRM.meta.isValid} loading={inProgress} />
+                <Button inverted color="red" content="Cancel" onClick={this.handleCloseModal} />
+                <Button primary content="Send" disabled={!NEED_HELP_FRM.meta.isValid} loading={inProgress} />
               </Button.Group>
             </div>
           </Form>

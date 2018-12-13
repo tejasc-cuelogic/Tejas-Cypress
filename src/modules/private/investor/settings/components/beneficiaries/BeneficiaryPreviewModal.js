@@ -40,11 +40,6 @@ export default class BeneficiaryPreviewModal extends Component {
           <Divider />
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
           {
             BENEFICIARY_META.fields.beneficiary.length ?
             BENEFICIARY_META.fields.beneficiary.map(beneficiary => (
@@ -78,9 +73,14 @@ export default class BeneficiaryPreviewModal extends Component {
             )) :
             <InlineLoader />
           }
+          {errors &&
+            <Message error>
+              <ListErrors errors={[errors]} />
+            </Message>
+          }
           <div className="center-align mt-30">
-            <Button as={Link} to={this.props.refLink} color="red" >Cancel</Button>
-            <Button loading={inProgress} onClick={this.submit} disabled={!BENEFICIARY_META.meta.isValid} color="green" >Submit</Button>
+            <Button color="red" content="Cancel" as={Link} to={this.props.refLink} />
+            <Button primary content="Submit" loading={inProgress} onClick={this.submit} disabled={!BENEFICIARY_META.meta.isValid} />
           </div>
         </Modal.Content>
       </Modal>

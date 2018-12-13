@@ -63,16 +63,11 @@ export default class AddFunds extends Component {
     const { errors } = this.props.uiStore;
 
     return (
-      <div>
-        <Header as="h3" textAlign="center">Add funds</Header>
-        <p className="center-align">How much would you like to deposit into your account today?</p>
-        {errors &&
-          <Message error>
-            <ListErrors errors={[errors.message]} />
-          </Message>
-        }
+      <div className="center-align">
+        <Header as="h3">Add funds</Header>
+        <p>How much would you like to deposit into your account today?</p>
         <Form error onSubmit={this.handleSubmitForm}>
-          <div className="field-wrap">
+          <div className="field-wrap left-align">
             <MaskedInput
               name="value"
               type="tel"
@@ -85,13 +80,14 @@ export default class AddFunds extends Component {
               showerror
             />
           </div>
-          <div className="center-align">
-            <Button primary size="large" className="relaxed" disabled={!formAddFunds.meta.isValid}>Confirm</Button>
-          </div>
+          {errors &&
+            <Message error className="mb-30">
+              <ListErrors errors={[errors.message]} />
+            </Message>
+          }
+          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formAddFunds.meta.isValid} />
         </Form>
-        <div className="center-align mt-20">
-          <Button type="button" color="green" className="link-button" onClick={() => this.doNotDepositMoneyNow()}>I don’t want to deposit any money now</Button>
-        </div>
+        <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
       </div>
     );
   }
