@@ -75,9 +75,9 @@ export default class Review extends Component {
             <Divider hidden />
             {showGeneratePA &&
             <Button.Group size="mini">
-              <Button color="blue" loading={inProgress === 'GENERATE_PA'} type="button" onClick={generatePortalAgreement} >Generate PA</Button>
+              <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
               {paBoxFolderId &&
-              <Button color="blue" className="link-button" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')}>PA BOX Link</Button>
+              <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
               }
             </Button.Group>
             }

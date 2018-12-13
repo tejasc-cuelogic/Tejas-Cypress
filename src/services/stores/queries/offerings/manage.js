@@ -884,7 +884,7 @@ export const getOfferingDetails = gql`
 
 export const updateOffering = gql`
 mutation _updateOffering($id: String!, $issuerId: String, $offeringDetails: OfferingInputType!) {
-  updateOffering(id: $id, issuerId: $issuerId offeringDetails: $offeringDetails) {
+  updateOffering(id: $id, issuerId: $issuerId, offeringDetails: $offeringDetails) {
     id
   }
 }
