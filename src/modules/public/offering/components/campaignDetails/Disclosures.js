@@ -1,39 +1,42 @@
 import React, { Component } from 'react';
+import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Grid } from 'semantic-ui-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-// import { InlineLoader } from '../../../../../theme/shared';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
-
-// const getModule = component => Loadable({
-//   loader: () => import(`./DataRoom/${component}`),
-//   loading() {
-//     return <InlineLoader />;
-//   },
-// });
+import { InlineLoader } from '../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
-
-const navItems = [
-  { title: 'Disclosure', to: 'disclosure', content: 'offeringpageignited.pdf' },
-  { title: 'Purchase Agreement', to: 'purchase-agreement', content: 'offeringpageignited.pdf' },
-  { title: 'Current Capitalization Table', to: 'current-capitalization-table', content: 'offeringpageignited.pdf' },
-  { title: 'Escrow Agreement', to: 'escrow-agreement', content: 'offeringpageignited.pdf' },
-  { title: 'Operating Agreement', to: 'operating-agreement', content: 'offeringpageignited.pdf' },
-];
+@inject('campaignStore', 'accreditationStore')
+@observer
 @withRouter
 export default class TermsOfUse extends Component {
   componentWillMount() {
+    this.props.accreditationStore.getUserAccreditation();
     if (this.props.match.isExact) {
-      // const navItems = GetNavMeta(this.props.match.url, [], true).subNavigations;
-      this.props.history.push(`${this.props.match.url}/disclosure`);
+      const { getNavItemsForDataRoom } = this.props.campaignStore;
+      if (getNavItemsForDataRoom.length) {
+        this.props.history.push(`${this.props.match.url}/${getNavItemsForDataRoom[0].to}`);
+      }
     }
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { match } = this.props;
+    const { getNavItemsForDataRoom } = this.props.campaignStore;
+    if (!getNavItemsForDataRoom.length) {
+      return (
+        <div className="campaign-content-wrapper">
+          <div className="updates-modal">
+            <div className="no-updates">
+              <InlineLoader text="No Data Room Documents" />
+            </div>
+          </div>
+        </div>
+      );
+    }
     return (
       <Aux>
         {isMobile &&
@@ -41,7 +44,7 @@ export default class TermsOfUse extends Component {
             secondary
             vertical
             match={match}
-            navItems={navItems}
+            navItems={getNavItemsForDataRoom}
           />
         }
         <div className="campaign-content-wrapper">
@@ -53,7 +56,7 @@ export default class TermsOfUse extends Component {
                     secondary
                     vertical
                     match={match}
-                    navItems={navItems}
+                    navItems={getNavItemsForDataRoom}
                     className="legal-menu"
                   />
                 </div>
@@ -63,24 +66,24 @@ export default class TermsOfUse extends Component {
               <Switch>
                 <Route
                   exact
-                  path={`${match.url}/${navItems[0].to}`}
+                  path={`${match.url}/:docKey`}
                   // component={Disclosures}
                   render={
                     props =>
                       (<Disclosure
                         {...props}
-                        documentToLoad={navItems[0].content}
-                        headerTitle={navItems[0].title}
+                        documentToLoad={getNavItemsForDataRoom[0].content}
+                        headerTitle={getNavItemsForDataRoom[0].title}
                       />)
                   }
                 />
                 {
-                  navItems.map(item => (
+                  getNavItemsForDataRoom.map(item => (
                     <Route
-                      exact={false}
+                      exact
                       key={item.to}
                       documentToLoad={item.content}
-                      path={`${match.url}/${item.to}`}
+                      path={`${match.url}/:docKey`}
                       render={
                         props =>
                           (<Disclosure

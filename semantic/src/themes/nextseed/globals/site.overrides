@@ -562,6 +562,9 @@ footer{
 				> object {
 					flex: 1;
 				}
+				&.disclosure-pdf {
+					height: 100%;
+				}
 			}
 			.ui.padded.segment h6.ui.header {
 				margin: @7px 0;
@@ -1142,6 +1145,7 @@ a.icon-link {
 // Vertical Timeline
 .updates-modal {
 	background: @white;
+	padding: @14px;
 	@media only screen and (min-width:@tabletBreakpoint){
 		height: ~'calc(100vh - 138px)';
 		overflow: auto;
@@ -1291,6 +1295,8 @@ a.icon-link {
 		align-items: center;
 		justify-content: center;
 		height: 100%;
+		flex-direction: column;
+		text-align: center;
 		h3{
 			color: @neutral !important;
 		}
@@ -2650,8 +2656,10 @@ p.check-extra-info{
 	}
 }
 //IRA account creation
-.field-wrap .highlight-text.large {
-	font-size: @20px;
-	font-weight: @fontMedium;
-	vertical-align: middle;
+.highlight-text, .negative-text {
+	&.large {
+		font-size: @20px;
+		font-weight: @fontMedium;
+		vertical-align: middle;
+	}
 }

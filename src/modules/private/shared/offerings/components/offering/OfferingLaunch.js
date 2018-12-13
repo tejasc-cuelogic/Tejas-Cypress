@@ -28,11 +28,15 @@ export default class OfferingLaunch extends Component {
       updateOfferingMutation,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOfferingMutation(
-      currentOfferingId, { stage: 'LIVE' }, false,
-      true, 'Offering Launched successfully.',
-    );
-    this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+    new Promise((res, rej) => {
+      updateOfferingMutation(
+        currentOfferingId, { stage: 'LIVE' }, false,
+        true, 'Offering Launched successfully.', false, res, rej,
+      );
+    })
+      .then(() => {
+        this.props.history.push(`/app/offerings/live/edit/${currentOfferingId}/offering-creation/offering/launch`);
+      });
   }
   render() {
     const {

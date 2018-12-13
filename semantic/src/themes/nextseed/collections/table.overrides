@@ -376,3 +376,62 @@
 		}
 	}
 }
+
+/* FULLY CUSTOM TABLE FOR Drag-and-Drop */
+.row-wrap{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    border-top:@neutral-midwhite 1px solid;
+    >div{
+        padding:.5em .7em;
+        display:inline-block;
+        position:relative;
+        flex-grow:1;
+        &.balance-half{
+            width:~"calc(50% - 120px)";
+            flex-grow:0;
+            &:nth-child(2){
+                margin-right:auto;
+            }
+            >a.link{
+                float:left;
+                max-width:100%;
+                overflow:hidden;
+                text-overflow:ellipsis;
+                white-space:nowrap;
+            }
+            &.simple-drag-row-title{
+                padding-left:@30px;
+                &:before{
+                    content:"\e998";
+                    font-family:'nextseed';
+                    font-size:@14px;
+                    color:@neutral-middark;
+                    position:absolute;
+                    left:10px;
+                    top:50%;
+                    transform:translate(0%, -50%);
+                }
+            }
+        }
+        &.date{
+            width:100px;
+            flex-grow:0;
+        }
+        &.status, &.action{
+            width:70px;
+            flex-grow:0;
+            text-align:center;
+        }
+    }
+    &.thead{
+        font-size:@12px;
+        font-weight:@normal;
+        color:@neutral-middark;
+        border:none;
+    }
+}
+.rc-draggable-list .rc-draggable-list-chosen{
+    background-color:@neutral-offdark;
+}

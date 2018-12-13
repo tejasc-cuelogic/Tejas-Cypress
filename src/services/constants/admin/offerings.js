@@ -2391,6 +2391,35 @@ export const ADMIN_DOCUMENTATION = {
   },
 };
 
+export const DATA_ROOM = {
+  documents: [{
+    name: {
+      label: 'Document Name',
+      value: '',
+      error: undefined,
+      rule: 'required|string',
+      placeHolder: 'Enter here',
+    },
+    upload: {
+      value: '',
+      label: '',
+      error: undefined,
+      rule: 'required',
+      showLoader: false,
+      preSignedUrl: '',
+      fileId: '',
+      fileData: '',
+      objType: 'FileObjectType',
+    },
+    accreditedOnly: {
+      label: '',
+      value: false,
+      error: undefined,
+      rule: 'required',
+    },
+  }],
+};
+
 export const POC_DETAILS = {
   address: {
     value: '',
