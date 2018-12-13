@@ -1401,6 +1401,13 @@ a.icon-link {
 		position:absolute;
 		bottom:-14px;
 	}
+	&.at-top{
+		position:relative;
+		border:none;
+		&:before, &:before{
+			display:none;
+		}
+	}
 }
 .inner-content-spacer{
 	padding:@20px !important;
@@ -2661,5 +2668,23 @@ p.check-extra-info{
 		font-size: @20px;
 		font-weight: @fontMedium;
 		vertical-align: middle;
+	}
+}
+//How it works video
+a.how-it-works-video {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	position: relative;
+	text-decoration: none;
+	i.icon {
+		font-size: 80px;
+		line-height: 80px;
+		color: #fff;
+		position: absolute;
+		top: 50%;
+		transform: translate(0,-50%);
+		z-index: 1;
+		cursor: pointer;
 	}
 }

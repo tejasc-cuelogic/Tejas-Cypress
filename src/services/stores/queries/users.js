@@ -26,6 +26,8 @@ export const allUsersQuery = gql`
         }
         roles {
           scope
+          name
+          
         }
         lastLoginDate
         created {
