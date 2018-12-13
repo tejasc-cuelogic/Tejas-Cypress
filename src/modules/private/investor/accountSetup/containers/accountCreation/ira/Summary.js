@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { isEmpty, find } from 'lodash';
 import { Header, Table, Button, Message } from 'semantic-ui-react';
@@ -61,59 +62,57 @@ export default class Summary extends Component {
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">Verify your information and create an IRA account</Header>
+        <div className="field-wrap">
+          <div className="table-wrapper">
+            <Table unstackable basic="very">
+              <Table.Body>
+                <Table.Row>
+                  <Table.Cell>Type:</Table.Cell>
+                  <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Funding Option:</Table.Cell>
+                  <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Net Worth:</Table.Cell>
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
+                    FIN_INFO_FRM.fields.netWorth.value : 0)}
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Annual Income:</Table.Cell>
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value ?
+                    FIN_INFO_FRM.fields.income.value : 0)}
+                  </Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Identification:</Table.Cell>
+                  <Table.Cell>
+                    {IDENTITY_FRM.fields.identityDoc.value ?
+                      <span>Uploaded</span> :
+                      <span className="negative-text">Not Uploaded</span>}
+                  </Table.Cell>
+                </Table.Row>
+                {fundingOption && fundingOption.value === 0 &&
+                  <Table.Row>
+                    <Table.Cell>Bank Account:</Table.Cell>
+                    <Table.Cell>{bankAccountNumber ? Helper.encryptNumberWithX(bankAccountNumber) : ''}</Table.Cell>
+                  </Table.Row>
+                }
+              </Table.Body>
+            </Table>
+          </div>
+        </div>
         {errors &&
           <Message error>
             <ListErrors errors={[errors.message]} />
           </Message>
         }
-        <div className="summary-wrap">
-          <div className="field-wrap">
-            <div className="table-wrapper">
-              <Table unstackable basic>
-                <Table.Body>
-                  <Table.Row>
-                    <Table.Cell>Type:</Table.Cell>
-                    <Table.Cell>{accountType ? accountType.label : ''}</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Funding Option:</Table.Cell>
-                    <Table.Cell>{fundingOption ? fundingOption.label : ''}</Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Net Worth:</Table.Cell>
-                    <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.netWorth.value ?
-                      FIN_INFO_FRM.fields.netWorth.value : 0)}
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Annual Income:</Table.Cell>
-                    <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.income.value ?
-                      FIN_INFO_FRM.fields.income.value : 0)}
-                    </Table.Cell>
-                  </Table.Row>
-                  <Table.Row>
-                    <Table.Cell>Identification:</Table.Cell>
-                    <Table.Cell>
-                      {IDENTITY_FRM.fields.identityDoc.value ?
-                        <span>Uploaded</span> :
-                        <span className="negative-text">Not Uploaded</span>}
-                    </Table.Cell>
-                  </Table.Row>
-                  {fundingOption && fundingOption.value === 0 &&
-                    <Table.Row>
-                      <Table.Cell>Bank Account:</Table.Cell>
-                      <Table.Cell>{bankAccountNumber ? Helper.encryptNumberWithX(bankAccountNumber) : ''}</Table.Cell>
-                    </Table.Row>
-                  }
-                </Table.Body>
-              </Table>
-            </div>
-          </div>
-        </div>
-        <div className="center-align">
-          <Button primary size="large" onClick={() => this.handleCreateAccount()} className="relaxed" disabled={!this.props.iraAccountStore.isValidIraForm}>Create the account</Button>
+        <div className="center-align mt-30">
+          <Button primary size="large" content="Create the account" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
         <p className="center-align mt-30 grey-header">
           By continuing, I acknowledge that I have read and agree to the
@@ -121,10 +120,10 @@ export default class Summary extends Component {
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
           CrowdPay Custodial Account Agreement
           </span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
           NextSeed Funding Portal Agreement
           </span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
           NextSeed Broker-Dealer Investor Agreement
           </span>, and {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
@@ -141,7 +140,7 @@ export default class Summary extends Component {
             loading={docLoading}
           />
         </p>
-      </div>
+      </Aux>
     );
   }
 }

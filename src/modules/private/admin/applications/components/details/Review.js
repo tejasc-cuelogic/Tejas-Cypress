@@ -63,13 +63,15 @@ export default class Review extends Component {
       <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <SecondaryMenu
-              addon={{ data: this.representAddon(subNavPresentation) }}
-              secondary
-              vertical
-              match={match}
-              navItems={navItems}
-            />
+            <div className="sticy-sidebar">
+              <SecondaryMenu
+                addon={{ data: this.representAddon(subNavPresentation) }}
+                secondary
+                vertical
+                match={match}
+                navItems={navItems}
+              />
+            </div>
             <Divider hidden />
             {showGeneratePA &&
             <Button.Group size="mini">

@@ -165,7 +165,7 @@ export const USER_IDENTITY = {
   },
   mfaMethod: {
     key: 'mfaMethod',
-    value: '',
+    value: 'TEXT',
     values: [{ label: 'Text', value: 'TEXT' }, { label: 'Call', value: 'CALL' }],
     label: 'How would you want to receive the MFA Code ?',
     error: undefined,
