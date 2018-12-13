@@ -93,7 +93,9 @@ export default class AllAccreditationRequests extends Component {
                       </p>
                     </Table.Cell>
                     <Table.Cell textAlign="center">
-                      {accreditation.assetsUpload && accreditation.assetsUpload.length ?
+                      {accreditation.assetsUpload && accreditation.assetsUpload.length &&
+                      accreditation.assetsUpload[0].fileInfo &&
+                      accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
                         <a href={`${NEXTSEED_BOX_URL}folder/${accreditation.assetsUpload[0].fileInfo[0].fileHandle.boxFolderId}`} className="link" rel="noopener noreferrer" target="_blank" ><Icon className="ns-file" /></a>
                       : <p className="intro-text">N/A</p>
                       }
