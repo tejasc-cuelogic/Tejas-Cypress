@@ -9,10 +9,10 @@ export default class TermNotes extends Component {
         <Grid.Column>
           <RevenueChart chartFor="TermNote" />
           <p className="caption-note">
-            This example is for illustrative purposes only and does not reflect an actual
+            {/* This example is for illustrative purposes only and does not reflect an actual
             deal or performance. The terms of each deal may differ. Payments are not
             guaranteed or insured and investors may lose some or all of the principal
-            invested if the business cannot make its payments.
+            invested if the business cannot make its payments. */}
           </p>
         </Grid.Column>
         <Grid.Column>
