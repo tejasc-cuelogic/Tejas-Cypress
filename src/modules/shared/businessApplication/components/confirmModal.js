@@ -23,16 +23,16 @@ export default class ConfirmModal extends Component {
           <Header as="h2">Do you want to save your progress?</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          {errors &&
-            <Message error>
-              <ListErrors errors={[errors]} />
-            </Message>
-          }
           <Form error onSubmit={this.props.partialSave}>
             <div className="center-align">
+              {errors &&
+                <Message error>
+                  <ListErrors errors={[errors]} />
+                </Message>
+              }
               <Button.Group vertical>
-                <Button className="very relaxed" loading={inProgress} color="green">Yes, save it</Button>
-                <Button inverted onClick={this.handleCloseModal} color="green" >No, thank you</Button>
+                <Button primary className="very relaxed" content="Yes, save it" loading={inProgress} />
+                <Button inverted color="green" content="No, thank you" onClick={this.handleCloseModal} />
               </Button.Group>
             </div>
           </Form>
