@@ -44,7 +44,7 @@ export const allOfferings = gql`
       applicationId
       issuerId
       lead {
-        name
+        id
       }
       stage
       created {
@@ -851,7 +851,7 @@ export const getOfferingDetails = gql`
       applicationId
       issuerId
       lead {
-        name
+        id
       }
       stage
       rewardsTierIds {
