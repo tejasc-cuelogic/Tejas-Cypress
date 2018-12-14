@@ -127,6 +127,12 @@ export class CampaignStore {
       toJS(this.details.data.getOfferingDetailsBySlug[0])) || null;
   }
 
+  @computed get campaignById() {
+    return (this.details.data && this.details.data.getOfferingDetailsById &&
+      toJS(this.details.data.getOfferingDetailsById)) || null;
+  }
+
+
   @computed get getOfferingId() {
     return (this.campaign && this.campaign.id);
   }
