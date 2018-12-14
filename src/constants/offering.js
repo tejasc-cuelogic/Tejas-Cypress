@@ -54,3 +54,9 @@ export const CAMPAIGN_KEYTERMS_REGULATION = {
   REGULATION_CF_506C: 'Reg CF 506(C)',
   REGULATION_CF: 'Reg CF',
 };
+
+export const OFFERING_COMMENTS_SCOPE = {
+  NEXTSEED: { title: 'Private Note', color: 'orange' },
+  PUBLIC: { title: 'Public', color: 'green' },
+  ISSUER: { titleI: 'Note From NS', title: 'Note to Issuer', color: 'blue' },
+};

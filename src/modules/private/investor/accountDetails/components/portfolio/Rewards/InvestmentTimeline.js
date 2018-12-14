@@ -73,7 +73,7 @@ class InvestmentTimeline extends Component {
                               {/* <Header.Subheader>{reward.title}</Header.Subheader> */}
                             </Header>
                             <p className="detail-section">
-                              {Parser(reward.description)}
+                              {Parser(reward.description || '')}
                             </p>
                           </Popup.Content>
                         ))

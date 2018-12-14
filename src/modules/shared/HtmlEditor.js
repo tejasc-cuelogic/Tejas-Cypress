@@ -41,7 +41,7 @@ export default class HtmlEditor extends React.Component {
   render() {
     const { keyStart, readOnly } = this.props;
     if (readOnly) {
-      return <div>{Parser(this.props.content)}</div>;
+      return <div>{Parser(this.props.content || '')}</div>;
     }
     return (
       <FroalaEditor
