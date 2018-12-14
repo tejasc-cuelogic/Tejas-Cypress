@@ -180,13 +180,11 @@ export class CampaignStore {
     const documentsList = toJS(this.dataRoomDocs);
     const navList = [];
     forEach(documentsList, (ele, idx) => {
-      if (!ele.accreditedOnly) {
-        navList.push({
-          title: ele.name,
-          to: idx,
-          url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
-        });
-      }
+      navList.push({
+        title: ele.name,
+        to: idx,
+        url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
+      });
     });
     return navList;
   }
