@@ -1,5 +1,5 @@
 export const DRAFT_NEW = {
-  body: {
+  comment: {
     value: '',
     placeHolder: 'Write a new message',
     label: '',
