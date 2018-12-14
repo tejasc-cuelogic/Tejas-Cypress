@@ -126,7 +126,7 @@ export default class NewUpdate extends Component {
                       >
                         <Modal.Content>
                           <p>
-                            {Parser(PBUILDER_FRM.fields.content.value)}
+                            {Parser(PBUILDER_FRM.fields.content.value || '')}
                           </p>
                         </Modal.Content>
                       </Modal>

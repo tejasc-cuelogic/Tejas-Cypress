@@ -36,7 +36,7 @@ export default class InsightsDetails extends Component {
                 className="mb-30 mt-30"
               />
               <pre className="migrated-content">
-                {Parser(ArticlesDetails.content)}
+                {Parser(ArticlesDetails.content || '')}
               </pre>
             </Grid.Column>
           </Grid>

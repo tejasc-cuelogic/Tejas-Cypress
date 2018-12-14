@@ -71,7 +71,7 @@ export default class CampaignList extends Component {
                             <Card.Description
                               {...Parser(offering && offering.offering &&
                                 offering.offering.about && offering.offering.about.theCompany ?
-                                offering.offering.about.theCompany : '-')}
+                                offering.offering.about.theCompany : '')}
                             />
                           </Card.Content>
                           <Card.Content extra>
