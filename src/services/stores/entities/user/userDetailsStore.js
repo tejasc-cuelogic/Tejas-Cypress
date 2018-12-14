@@ -122,12 +122,16 @@ export class UserDetailsStore {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         res();
+        const user = { ...this.currentUser };
         this.currentUser.data &&
         this.currentUser.data.user &&
         this.currentUser.data.user.roles && this.currentUser.data.user.roles.map((role, index) => {
           this.currentUser.data.user.roles[index].name = lowerCase(role.name);
           return this.currentUser;
         });
+        if (user && user.data && user.data.user && user.data.user.capabilities) {
+          authStore.setCurrentUserCapabilites(user.data.user.capabilities);
+        }
       },
     });
   })
@@ -291,12 +295,14 @@ export class UserDetailsStore {
       routingUrl = '/app/summary/establish-profile';
     } else if (isEmpty(this.signupStatus.roles)) {
       routingUrl = '/app/summary/account-creation';
-    } else if (this.signupStatus.partialAccounts.length > 0) {
+    } else if (!this.signupStatus.activeAccounts.length &&
+      this.signupStatus.partialAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
-    } else if (this.signupStatus.inActiveAccounts.length > 0) {
+    } else if (!this.signupStatus.activeAccounts.length &&
+      this.signupStatus.inActiveAccounts.length > 0) {
       const accValue =
       findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);

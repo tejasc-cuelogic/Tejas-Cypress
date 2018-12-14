@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies  */
 import React from 'react';
 import $ from 'jquery';
+import Parser from 'html-react-parser';
 import { S3 } from 'wysiwyg-editor-node-sdk/lib/s3';
 import 'froala-editor/js/froala_editor.pkgd.min';
 
@@ -40,7 +41,7 @@ export default class HtmlEditor extends React.Component {
   render() {
     const { keyStart, readOnly } = this.props;
     if (readOnly) {
-      return <div dangerouslySetInnerHTML={{ __html: this.props.content }} />;
+      return <div>{Parser(this.props.content)}</div>;
     }
     return (
       <FroalaEditor

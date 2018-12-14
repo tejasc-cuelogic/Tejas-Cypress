@@ -292,7 +292,7 @@ export const campaignDetailsQuery = gql`
         by
         date
       }
-      actingUserInfo {
+      createdUserInfo {
         id
         info {
           firstName

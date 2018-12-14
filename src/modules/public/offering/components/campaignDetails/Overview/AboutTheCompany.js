@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, Icon, Grid, Segment, Popup, List } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
+import Parser from 'html-react-parser';
 import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
@@ -35,7 +36,9 @@ class AboutTheCompany extends Component {
             </p>
             {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.elevatorPitch &&
-              <div className="detail-section mt-10" dangerouslySetInnerHTML={{ __html: campaign.offering.overview.elevatorPitch }} />
+              <div className="detail-section mt-10">
+                {Parser(campaign.offering.overview.elevatorPitch)}
+              </div>
             }
             {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.highlight ?

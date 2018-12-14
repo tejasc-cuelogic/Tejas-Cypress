@@ -23,7 +23,7 @@ export class Admin {
     const attributes = [];
     const mapKey = { role: 'custom:roles', capabilities: 'custom:user_capabilities' };
     Object.keys(user).map((item) => {
-      if (item !== 'TemporaryPassword' && item !== 'verifyPassword') {
+      if (!['capabilities', 'TemporaryPassword', 'verifyPassword'].includes(item)) {
         attributes.push({
           Name: (mapKey[item] || snakeCase(item)),
           Value: (mapKey[item] ? JSON.stringify(toJS(user[item])) : toJS(user[item])),

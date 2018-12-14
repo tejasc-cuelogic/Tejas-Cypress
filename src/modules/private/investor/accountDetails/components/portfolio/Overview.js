@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
+import Parser from 'html-react-parser';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
@@ -121,13 +122,12 @@ class Overview extends Component {
                       {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                         <Table.Cell>
                           {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'NA'}{' '}
-                          <p dangerouslySetInnerHTML={{
-                            __html: keyTerms && keyTerms.investmentMultipleSummary ?
-                              keyTerms.investmentMultipleSummary
-                              :
-                              null,
-                          }}
-                          />
+                          <p>
+                            {
+                               Parser(keyTerms && keyTerms.investmentMultipleSummary ?
+                               keyTerms.investmentMultipleSummary : null)
+                            }
+                          </p>
                         </Table.Cell>
                         :
                         <Table.Cell>
@@ -145,13 +145,14 @@ class Overview extends Component {
                             keyTerms.revSharePercentage
                             :
                             'NA'}
-                          <p dangerouslySetInnerHTML={{
-                            __html: keyTerms && keyTerms.revShareSummary ?
-                              keyTerms.revShareSummary
-                              :
-                              null,
-                          }}
-                          />
+                          <p>
+                            {
+                              Parser(keyTerms && keyTerms.revShareSummary ?
+                                keyTerms.revShareSummary
+                                :
+                                null)
+                            }
+                          </p>
                         </Table.Cell>
                       </Table.Row>
                       :

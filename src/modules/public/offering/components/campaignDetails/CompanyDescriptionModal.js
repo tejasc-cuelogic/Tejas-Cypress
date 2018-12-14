@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { Modal, Header, List, Icon, Image, Divider } from 'semantic-ui-react';
 import { Image64 } from '../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../constants/aws';
@@ -33,7 +34,9 @@ class CompanyDescriptionModal extends Component {
             {
               campaign && campaign.offering && campaign.offering.about &&
                 campaign.offering.about.theCompany ?
-                  <p className="detail-section" dangerouslySetInnerHTML={{ __html: campaign.offering.about.theCompany }} />
+                  <p className="detail-section">
+                    {Parser(campaign.offering.about.theCompany)}
+                  </p>
                 :
                   <p>{emptyStatement}</p>
             }

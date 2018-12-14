@@ -66,6 +66,13 @@ export const KEY_TERMS = {
     rule: 'optional',
     placeHolder: 'Enter here',
   },
+  startupPeriod: {
+    value: '',
+    label: 'Startup Period',
+    error: undefined,
+    rule: 'optional|numeric',
+    placeHolder: 'Enter here',
+  },
   regulation: {
     value: '',
     label: 'Regulation',
@@ -2421,22 +2428,19 @@ export const DATA_ROOM = {
 };
 
 export const POC_DETAILS = {
-  address: {
+  issuerId: {
     value: '',
-    label: 'POC',
+    label: '',
     tooltip: 'Email Address',
-    objRef: 'issuerDetails.email',
     error: undefined,
-    rule: 'string|required|email',
-    placeHolder: 'Enter here',
+    rule: 'string|required',
   },
-  name: {
+  id: {
     value: '',
-    label: 'Lead Name',
+    label: '',
     error: undefined,
     objRef: 'lead',
     rule: 'string',
-    placeHolder: 'Enter here',
   },
   targetDate: {
     value: '',
