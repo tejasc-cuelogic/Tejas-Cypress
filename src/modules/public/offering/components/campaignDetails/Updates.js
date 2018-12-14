@@ -87,7 +87,7 @@ class Updates extends Component {
                         style={!readLessStatus[index] ? { display: 'block' } : { display: 'none' }}
                       >
                         <p>
-                          {Parser(dataItem.content)}
+                          {Parser(dataItem.content || '')}
                         </p>
                         <a
                           href

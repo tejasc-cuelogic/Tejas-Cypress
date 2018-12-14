@@ -496,6 +496,10 @@ footer{
 		}
 		h4.ui.header {
 			position: relative;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 100%;
+			overflow: hidden;
 			> a {
 				position: absolute;
 				left: 0;
@@ -1998,19 +2002,20 @@ ol.progtrckr{
 			display:none !important;
 		}
 		&.progtrckr-todo{
-			color:@neutral-offdark;
+			color:@neutral-middark;
 			&:after{
-				background:@neutral-offdark;
+				background:@neutral-middark;
 			}
 		}
 		&.progtrckr-doing{
-			color:@white;
+			color:@primary-one;
 			&:after{
-				background:@white;
+				background:@primary-one;
 			}
 		}
 		&.progtrckr-done{
 			color:@primary-one;
+			opacity: 0.45;
 			&:after{
 				background:@primary-one;
 			}

@@ -1,4 +1,5 @@
 import React from 'react';
+import Aux from 'react-aux';
 import { Modal, Form, Button, Message, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput, FormDropDown } from '../../../../../theme/form';
@@ -45,30 +46,23 @@ export default class EditOffering extends React.Component {
             </Message>
           }
           <Form onSubmit={() => this.handleSubmitForm()}>
-            <Header as="h6">POC</Header>
-            <FormDropDown
-              search
-              name="issuerId"
-              placeholder="Choose here"
-              containerclassname="dropdown-field"
-              fluid
-              selection
-              fielddata={POC_DETAILS_FRM.fields.issuerId}
-              onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
-              options={usersOptionsForDropdown.issuer}
-            />
-            <Header as="h6">Lead</Header>
-            <FormDropDown
-              search
-              name="id"
-              placeholder="Choose here"
-              containerclassname="dropdown-field"
-              fluid
-              selection
-              fielddata={POC_DETAILS_FRM.fields.id}
-              onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
-              options={usersOptionsForDropdown.admin}
-            />
+            {['issuerId', 'id'].map(field => (
+              <Aux>
+                <Header as="h6">{field === 'issuerId' ? 'POC' : 'Lead'}</Header>
+                <FormDropDown
+                  search
+                  name={field}
+                  placeholder="Choose here"
+                  containerclassname="dropdown-field"
+                  fluid
+                  selection
+                  fielddata={POC_DETAILS_FRM.fields[field]}
+                  onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
+                  options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
+                />
+              </Aux>
+          ))
+          }
             <MaskedInput
               name="targetDate"
               fielddata={POC_DETAILS_FRM.fields.targetDate}

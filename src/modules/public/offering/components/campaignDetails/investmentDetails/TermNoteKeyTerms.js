@@ -89,6 +89,10 @@ class TermNoteKeyTerms extends Component {
                 {KeyTerms && KeyTerms.maturity ?
                   <p>
                     <b>{KeyTerms.maturity} Months</b>
+                    {
+                      KeyTerms && KeyTerms.startupPeriod &&
+                      ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
+                    }
                   </p>
                   :
                   'NA'
