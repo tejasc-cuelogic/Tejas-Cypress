@@ -16,8 +16,10 @@ export default class Overview extends Component {
     let overviewInfo = (
       <Aux>
         <p>
-          NextSeed Securities, LLC operates as an SEC-registered broker-dealer and is a member
-          firm of the Financial Industry Regulatory Authority ({'"'}<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>{'"'}).
+          Investment offerings on <a href="https://www.nextseed.com/" target="_blank" rel="noopener noreferrer">nextseed.com</a>
+          {' '}are facilitated by NextSeed US LLC (SEC-registered Funding Portal & member of FINRA)
+          and NextSeed Securities LLC (SEC-registered broker-dealer & member of{' '}
+          <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>.
         </p>
         <Divider hidden />
         <p>
