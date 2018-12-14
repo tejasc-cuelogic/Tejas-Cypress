@@ -19,7 +19,7 @@ export default class Details extends Component {
       <Aux>
         <Header as="h3">{selected.title}</Header>
         <pre className="migrated-content">
-          {Parser(selected.content)}
+          {Parser(selected.content || '')}
         </pre>
       </Aux>
     ) : <div>Nothing to display !</div>);

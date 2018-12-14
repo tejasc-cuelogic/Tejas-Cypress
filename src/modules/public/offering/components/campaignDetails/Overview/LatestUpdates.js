@@ -54,7 +54,7 @@ class LatestUpdates extends Component {
                     <div className="segment-container mini">
                       <p><b>{update.title}</b></p>
                       <p>
-                        {Parser(update.content)}
+                        {Parser(update.content || '')}
                       </p>
                     </div>
                     <Link to={`${refLink}/updates`}>View Update</Link>
