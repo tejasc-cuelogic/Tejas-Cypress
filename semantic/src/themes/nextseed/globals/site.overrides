@@ -496,6 +496,10 @@ footer{
 		}
 		h4.ui.header {
 			position: relative;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 100%;
+			overflow: hidden;
 			> a {
 				position: absolute;
 				left: 0;

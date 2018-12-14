@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Message } from 'semantic-ui-react';
+import { Form, Header, Message, Divider } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -13,9 +13,13 @@ export default class BrokerageEmployment extends Component {
     return (
       <div className="center-align">
         <Header as="h3">Brokerage employment</Header>
-        <p className="mb-40">Do you (or an immediate family member) work for
-          another U.S. brokerage? If you do not know what this means,
-          it likely does not apply to you
+        <Divider hidden />
+        <p>
+          Do you (or an immediate family member) work for a US-based securities brokerage firm?
+        </p>
+        <Divider hidden />
+        <p className="mb-40">
+          If you do not know what this means, it likely does not apply to you.
         </p>
         <Form error>
           <FormRadioGroup
