@@ -75,7 +75,7 @@ export class CampaignStore {
       variables: { id },
       onFetch: (data) => {
         if (data) {
-          resolve(data.getOfferingDetailsById);
+          resolve(data.getOfferingDetailsBySlug);
         }
       },
       fetchPolicy: 'network-only',
@@ -122,8 +122,9 @@ export class CampaignStore {
   }
 
   @computed get campaign() {
-    return (this.details.data && this.details.data.getOfferingDetailsById &&
-      toJS(this.details.data.getOfferingDetailsById)) || null;
+    return (this.details.data && this.details.data.getOfferingDetailsBySlug &&
+      this.details.data.getOfferingDetailsBySlug[0] &&
+      toJS(this.details.data.getOfferingDetailsBySlug[0])) || null;
   }
 
   @computed get getOfferingId() {
