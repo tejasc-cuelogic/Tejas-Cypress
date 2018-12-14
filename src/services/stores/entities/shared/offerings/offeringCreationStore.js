@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
 import { has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
@@ -1681,8 +1681,14 @@ export class OfferingCreationStore {
 
   @action
   setDataRoomDocsOrder = (orderedForm) => {
-    this.DATA_ROOM_FRM.fields.documents = toJS(orderedForm);
-    // this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, toJS(orderedForm));
+    const dataRoomDocs = toJS(orderedForm).map((d) => {
+      return {
+        name: d.name.value,
+        accreditedOnly: d.accreditedOnly.value,
+        upload: { fileId: d.upload.fileId, fileName: d.upload.value },
+      };
+    });
+    this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
   }
 }
 
