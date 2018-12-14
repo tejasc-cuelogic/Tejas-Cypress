@@ -28,7 +28,7 @@ class InvestmentTimeline extends Component {
       campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
     const totalRaisedAmount =
       getInvestor && getInvestor.totalRaisedAmount ? getInvestor.totalRaisedAmount : 0;
-    if (totalRaisedAmount < rewardsTiers[0].amount) {
+    if (rewardsTiers && (totalRaisedAmount < rewardsTiers[0].amount)) {
       rewardsTiers.splice(sortedIndexBy(
         rewardsTiers,
         { amount: totalRaisedAmount },
