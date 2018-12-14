@@ -12,6 +12,22 @@
         border-bottom:@border-color 1px solid;
     }
 }
+.ui.card.messages{
+    .ui.circular.label{
+        padding:@4px @12px !important;
+        font-size:@10px;
+        min-height:auto;
+        vertical-align:middle;
+    }
+    .ui.label.approve{
+        padding:@4px 0 !important;
+        border:none;
+        font-weight:@bold;
+        .icon{
+            margin:0 0 0 @5px;
+        }
+    }
+}
 
 // .ui.label{                  // commented to resolve label design in sidebar menu
 //     &.circular.horizontal{

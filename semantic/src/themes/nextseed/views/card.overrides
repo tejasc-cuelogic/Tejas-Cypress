@@ -425,6 +425,11 @@
             font-weight:@normal;
         }
     }
+    >.ui.card.messages.comments{
+        margin:0;
+        border:none;
+        box-shadow:none;
+    }
 }
 .ui{
     &.card, &.cards>.card{

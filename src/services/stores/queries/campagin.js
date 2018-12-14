@@ -303,6 +303,39 @@ export const campaignDetailsQuery = gql`
           }
         }
       }
+      threadComment {
+        id
+        offeringId
+        thread
+        scope
+        comment
+        approved {
+          id
+          by
+          date
+        }
+        updated {
+          id
+          by
+          date
+        }
+        deleted {
+          id
+          by
+          date
+        }
+        createdUserInfo {
+          id
+          info {
+            firstName
+            lastName
+            avatar {
+              url
+              name
+            }
+          }
+        }
+      }
     }
     updated {
       id
