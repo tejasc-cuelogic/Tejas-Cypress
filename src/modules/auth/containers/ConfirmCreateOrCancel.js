@@ -21,10 +21,12 @@ export default class ConfirmCreateOrCancel extends Component {
   render() {
     return (
       <Modal closeOnDimmerClick={false} size="mini" open closeOnRootNodeClick={false} >
-        <Modal.Content className="signup-content center-align">
-          <div>
+        <Modal.Content>
+          <p className="center-align mt-30 mb-30">
             In order to create an account, You need to verify your email address.
-            <Button primary className="relaxed" content="Create" onClick={this.handleCreateAccount} />
+          </p>
+          <div className="center-align mt-30">
+            <Button primary content="Create" onClick={this.handleCreateAccount} />
             <Button type="button" inverted color="red" content="Cancel" onClick={this.handleCancelAccount} />
           </div>
         </Modal.Content>

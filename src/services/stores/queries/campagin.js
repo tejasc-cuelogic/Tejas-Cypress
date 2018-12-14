@@ -68,6 +68,7 @@ export const campaignDetailsQuery = gql`
     }
     keyTerms {
       regulation
+      startupPeriod
       offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
@@ -388,6 +389,7 @@ query getOfferingById($id: ID) {
     offeringSlug
     keyTerms {
       regulation
+      startupPeriod
       offeringDisclaimer
       legalBusinessName
       shorthandBusinessName

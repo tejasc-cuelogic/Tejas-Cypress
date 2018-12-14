@@ -111,8 +111,11 @@ class RevenueSharingKeyTerms extends Component {
               <Table.Cell>
                 {KeyTerms && KeyTerms.maturity ?
                   <p>
-                    <b>{KeyTerms.maturity} Months,</b>{' '}
-                    including a 6 month startup period for ramp up
+                    <b>{KeyTerms.maturity} Months</b>
+                    {
+                      KeyTerms && KeyTerms.startupPeriod &&
+                      ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
+                    }
                   </p>
                   :
                   'NA'
