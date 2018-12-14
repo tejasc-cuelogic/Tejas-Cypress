@@ -60,6 +60,11 @@ class TransferRequest extends Component {
     return (
       <div className="center-align">
         <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
+        {investmentFlowErrorMessage &&
+          <Message error textAlign="left" className="mb-40">
+            {investmentFlowErrorMessage}
+          </Message>
+        }
         <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>
