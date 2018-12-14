@@ -63,7 +63,7 @@ class BonusRewards extends Component {
                               <List.Header>{reward.title}</List.Header>
                               <List.Description>
                                 <p className="detail-section">
-                                  {Parser(reward.description)}
+                                  {Parser(reward.description || '')}
                                 </p>
                               </List.Description>
                             </List.Item>

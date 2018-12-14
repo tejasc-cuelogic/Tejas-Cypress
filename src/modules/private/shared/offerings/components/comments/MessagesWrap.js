@@ -4,36 +4,50 @@ import { Confirm } from 'semantic-ui-react';
 import Body from './Body';
 import Compose from './Compose';
 
-@inject('messageStore', 'uiStore')
+@inject('messageStore', 'uiStore', 'userDetailsStore')
 @observer
 export default class MessagesWrap extends Component {
-  componentWillMount() {
-    this.props.messageStore.getMessageDetails(this.props.match.params.id);
-  }
-
-  confirmDelete = (e, { entity, refid }) => {
-    e.stopPropagation();
-    this.props.uiStore.setConfirmBox(entity, refid);
+  confirmDelete = (e, id) => {
+    e.preventDefault();
+    this.props.uiStore.setConfirmBox('message', id);
     return true;
   }
 
-  delete = () => {
-    this.props.messageStore.deleteMessage(this.props.match.params.id);
+  commentEditHandler = (e, id, comment, scope) => {
+    e.preventDefault();
+    this.props.messageStore.setCommentForEdit(id, comment, scope);
+  }
+  deleteCommentHandler = (id) => {
     this.props.uiStore.setConfirmBox('', '', '', false);
+    this.props.messageStore.deleteMessage(id);
   }
   render() {
-    const { uiStore, messageStore } = this.props;
-    const { thread, tError, tLoading } = messageStore;
+    const {
+      uiStore, messageStore, userDetailsStore, isIssuer,
+    } = this.props;
+    const {
+      thread, approveComment, buttonLoader, currentOfferingIssuerId,
+    } = messageStore;
+    const { currentUserId } = userDetailsStore;
     return (
       <div className="message-wrap">
-        <Body current="2" thread={thread} error={tError} loading={tLoading} />
-        <Compose />
+        <Body
+          currentOfferingIssuerId={currentOfferingIssuerId}
+          buttonLoader={buttonLoader}
+          isIssuer={isIssuer}
+          approveComment={approveComment}
+          currentUserId={currentUserId}
+          thread={thread}
+          commentEditHandler={this.commentEditHandler}
+          deleteCommentHandler={this.confirmDelete}
+        />
+        <Compose isIssuer={isIssuer} />
         <Confirm
           header="Confirm"
           content="Are you sure you want to delete this message?"
           open={uiStore.confirmBox.entity === 'message'}
           onCancel={() => uiStore.setConfirmBox('', '', '', false)}
-          onConfirm={this.delete}
+          onConfirm={() => this.deleteCommentHandler(uiStore.confirmBox.refId)}
           size="tiny"
           className="deletion"
         />

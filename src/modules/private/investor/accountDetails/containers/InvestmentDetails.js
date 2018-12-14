@@ -43,19 +43,18 @@ class InvestmentDetails extends Component {
   render() {
     const { match, portfolioStore } = this.props;
     const { getInvestor } = portfolioStore;
-    const { campaignById, details } = this.props.campaignStore;
+    const { campaign, details } = this.props.campaignStore;
 
     const summaryDetails = {
       accountType: 'individual',
       url: 'https://www.nextseed.com/offerings/chapman-kirby/',
-      businessName: campaignById && campaignById.keyTerms &&
-      campaignById.keyTerms.shorthandBusinessName,
+      businessName: campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName,
       summary: [
         {
           title: 'Total invested amount', content: getInvestor && getInvestor.totalRaisedAmount, type: 1, info: 'Your Total invested amount as of today',
         },
         {
-          title: 'Status', content: campaignById && campaignById.offeringStatus ? CAMPAIGN_OFFERING_STATUS[campaignById.offeringStatus] : 'NA', info: 'Your Status as of today',
+          title: 'Status', content: campaign && campaign.offeringStatus ? CAMPAIGN_OFFERING_STATUS[campaign.offeringStatus] : 'NA', info: 'Your Status as of today',
         },
         {
           title: 'Date', content: getInvestor && moment(getInvestor.fundedDate).format('ll'), info: 'Date of investment started',

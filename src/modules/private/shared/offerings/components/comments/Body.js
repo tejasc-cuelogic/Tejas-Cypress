@@ -1,75 +1,135 @@
 import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
-import { Label, Item, Header } from 'semantic-ui-react';
-import ProfilePicTemp from '../../../../../../assets/images/james-wright.png';
+import { Link } from 'react-router-dom';
+import { Label, Item, Header, Icon } from 'semantic-ui-react';
+import { InlineLoader, UserAvatar } from '../../../../../../theme/shared';
+import { OFFERING_COMMENTS_SCOPE } from '../../../../../../constants/offering';
 
 const D_FORMAT = 'MMMM D, YYYY';
-const Avatar = () => <Item.Image size="mini" avatar src={ProfilePicTemp} />;
-const MsgContent = ({ body, extra }) => (
-  <Item.Content>
+const MsgContent = ({
+  body, extra, edit, classes,
+}) => (
+  <Item.Content className={classes}>
     {extra}
     <Item.Description><p>{body}</p></Item.Description>
+    {edit}
   </Item.Content>
 );
-const Extra = ({ sent, read, time }) => (
+const Extra = ({
+  date, scope, isIssuer, approved, showApproval,
+}) => (
   <Item.Extra>
-    {!sent && read === '1' &&
-      <Label size="mini" color="red">New</Label>
+    <span className="time-stamp">{date}</span>
+    {scope === 'PUBLIC' && approved ?
+      <Label basic size="small" className="approve">
+        Approved
+        <Icon className="ns-check-circle" color="green" />
+      </Label>
+    : (scope === 'PUBLIC' && !approved) ? showApproval ? <Label circular basic size="mini" color="green">Approval Pending</Label> : null
+    : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? OFFERING_COMMENTS_SCOPE[scope].titleI : OFFERING_COMMENTS_SCOPE[scope].title : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
     }
-    <span className="time-stamp">{time}</span>
-    <Label circular size="mini" color="green">Public</Label>
   </Item.Extra>
 );
-
-const DateSeparator = ({ index, diff, date }) => (index === 0 || diff !== 0 ?
-  <Item className="date-stamp">{date}</Item> :
-  null);
 
 const Body = props => (
   <div className="message-body">
     <Item.Group className="messages comments">
-      {
+      {props.thread && props.thread.length ?
         props.thread.map((msg, index) => {
-          const d2 = moment(msg.updatedAt).format(D_FORMAT);
-          const d1 = index ? moment(props.thread[index - 1].updatedAt).format(D_FORMAT) :
-          moment(msg.updatedAt).subtract(1, 'day');
+          const date = msg.updated ? msg.updated.date : msg.created.date;
+          const lastThreadDate = index > 0 && props.thread[index - 1] &&
+          props.thread[index - 1].updated ? props.thread[index - 1].updated.date :
+            props.thread[index - 1] && props.thread[index - 1].created.date;
+          const d2 = moment(date).format(D_FORMAT);
+          const d1 = index ? moment(lastThreadDate).format(D_FORMAT) :
+          moment(date).subtract(1, 'day');
           const diff = moment(d2, D_FORMAT).diff(moment(d1, D_FORMAT), 'days');
-          const time = moment(msg.updatedAt).format('h:mm A');
-          return (msg.messageDetails.from !== props.current ? (
+          const msgDate = moment(date).format('LL');
+          const userFullName = msg.createdUserInfo.info && `${msg.createdUserInfo.info.firstName} ${msg.createdUserInfo.info.lastName}`;
+          const userInfo = {
+            firstName: msg.createdUserInfo.info.firstName,
+            lastName: msg.createdUserInfo.info.lastName,
+            avatarUrl: (msg.createdUserInfo.info && msg.createdUserInfo.info.avatar) ?
+            msg.createdUserInfo.info.avatar.url : null,
+            roles: [msg.createdUserInfo.roles.name],
+          };
+          const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
+          return ((props.isIssuer && msg.scope === 'NEXTSEED') ? false : msg.createdUserInfo.id !== props.currentUserId ? (
             <Aux>
-              <DateSeparator index={index} diff={diff} date={d2} />
               <Item className={`${d2} in ${d1} ${diff}`}>
-                <Avatar />
+                <UserAvatar size="mini" UserInfo={userInfo} />
                 <MsgContent
-                  body={msg.body}
+                  classes={classes}
+                  body={msg.comment}
                   extra={
                     <Aux>
-                      <Header as="h6">Loren Chosen</Header>
-                      <Extra time={time} />
+                      <Header as="h6">{userFullName}</Header>
+                      <Extra
+                        showApproval={!props.isIssuer &&
+                          msg.createdUserInfo.id === props.currentOfferingIssuerId}
+                        approved={msg.approved}
+                        isIssuer={props.isIssuer}
+                        date={msgDate}
+                        scope={msg.scope}
+                      />
                     </Aux>
+                  }
+                  edit={
+                    <div className="comment-actions">
+                      {msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && !msg.approved ?
+                        <Aux>
+                          <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
+                          <Link to="/" className="link" loading={props.buttonLoader === msg.id} onClick={e => props.approveComment(e, msg.id)}>Approve</Link>{' | '}
+                        </Aux>
+                      : msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && msg.approved &&
+                      <Aux>
+                        <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>{' | '}
+                      </Aux>
+                      }
+                      {!props.isIssuer &&
+                        <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
+                      }
+                    </div>
                   }
                 />
               </Item>
             </Aux>
           ) : (
             <Aux>
-              <DateSeparator index={index} diff={diff} date={d2} />
               <Item className={`${d2} sent ${d1} ${diff}`}>
                 <MsgContent
-                  body={msg.body}
+                  classes={classes}
+                  body={msg.comment}
                   extra={
                     <Aux>
-                      <Header as="h6">Brandon Black</Header>
-                      <Extra sent time={time} read={msg.messageDetails.read} />
+                      <Header as="h6">{userFullName}</Header>
+                      <Extra
+                        showApproval={props.isIssuer}
+                        approved={msg.approved}
+                        isIssuer={props.isIssuer}
+                        date={msgDate}
+                        scope={msg.scope}
+                      />
                     </Aux>
                   }
+                  edit={
+                    msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved &&
+                    <div className="comment-actions">
+                      <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment)}>Edit</Link>
+                      {!props.isIssuer &&
+                      <Aux>{' | '}
+                        <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>
+                      </Aux>
+                      }
+                    </div>
+                  }
                 />
-                <Avatar />
+                <UserAvatar size="mini" UserInfo={userInfo} />
               </Item>
             </Aux>
           ));
-        })
+        }) : <InlineLoader text="No data found." />
       }
     </Item.Group>
   </div>

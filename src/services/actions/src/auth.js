@@ -166,7 +166,9 @@ export class Auth {
             commonStore.setToken(result.idToken.jwtToken);
             userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
             if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
-              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE'));
+              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE')).then(() => {
+                cookie.remove('REFERRAL_CODE');
+              });
             }
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
               res();
@@ -271,7 +273,9 @@ export class Auth {
                   commonStore.setToken(data.idToken.jwtToken);
                   userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
                   if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
-                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE'));
+                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE')).then(() => {
+                      cookie.remove('REFERRAL_CODE');
+                    });
                   }
                   userDetailsStore.getUser(userStore.currentUser.sub);
                   AWS.config.region = AWS_REGION;

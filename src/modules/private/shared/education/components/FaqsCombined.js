@@ -73,7 +73,7 @@ export default class FaqsCombined extends Component {
                     </Accordion.Title>
                     <Accordion.Content active={innerActiveIndex === index}>
                       <pre className="migrated-content">
-                        {Parser(faqItem.answer)}
+                        {Parser(faqItem.answer || '')}
                       </pre>
                     </Accordion.Content>
                   </Accordion>

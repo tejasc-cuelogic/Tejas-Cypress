@@ -26,7 +26,7 @@ class Overview extends Component {
             </Header>
           </span>
           <span className="pull-right">
-            <Link target="_blank" to={`/offerings/${campaign.id}/overview`} className="pull-right">View offering page</Link>
+            <Link target="_blank" to={`/offerings/${campaign.offeringSlug}/overview`} className="pull-right">View offering page</Link>
           </span>
         </div>
         <div className="inner-content-spacer">
@@ -125,7 +125,7 @@ class Overview extends Component {
                           <p>
                             {
                                Parser(keyTerms && keyTerms.investmentMultipleSummary ?
-                               keyTerms.investmentMultipleSummary : null)
+                               keyTerms.investmentMultipleSummary : '')
                             }
                           </p>
                         </Table.Cell>
@@ -150,7 +150,7 @@ class Overview extends Component {
                               Parser(keyTerms && keyTerms.revShareSummary ?
                                 keyTerms.revShareSummary
                                 :
-                                null)
+                                '')
                             }
                           </p>
                         </Table.Cell>

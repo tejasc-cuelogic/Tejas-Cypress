@@ -79,7 +79,7 @@ class RevenueSharingKeyTerms extends Component {
                   {Parser(KeyTerms && KeyTerms.investmentMultipleSummary ?
                     KeyTerms.investmentMultipleSummary
                     :
-                    null)}
+                    '')}
                 </p>
               </Table.Cell>
             </Table.Row>
@@ -96,7 +96,7 @@ class RevenueSharingKeyTerms extends Component {
                   {Parser(KeyTerms && KeyTerms.revShareSummary ?
                     KeyTerms.revShareSummary
                     :
-                    null)}
+                    '')}
                 </p>
               </Table.Cell>
             </Table.Row>
