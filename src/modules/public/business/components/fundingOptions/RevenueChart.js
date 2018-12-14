@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { ResponsiveContainer } from 'recharts';
+// import { ResponsiveContainer } from 'recharts';
 import { Image } from 'semantic-ui-react';
 // import { LineChart, Line, XAxis, Legend, ResponsiveContainer } from 'recharts';
 import { ASSETS_URL } from '../../../../../constants/aws';
@@ -52,15 +52,15 @@ export default class RevenueChart extends Component {
     const { chartFor } = this.props;
     const data = chartFor && chartFor === 'TermNote' ? data1 : data2;
     return (
-      <ResponsiveContainer height={220}>
-        {/* <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>
-          <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={style} />
-          <XAxis tickLine={false} axisLine={false} dataKey="name" interval={11} />
-          <Line type="monotone" dataKey="Your Revenue" dot="" stroke="#20C86D" strokeWidth={3} />
-          <Line type="monotone" dataKey="Your Payments" stroke="#263E64" strokeWidth={2} />
-        </LineChart> */}
-        <Image src={`${ASSETS_URL}images/${data}`} />
-      </ResponsiveContainer>
+      //  <ResponsiveContainer height={220}>
+      //   <LineChart margin={{ top: 50, left: 20 }} height={100} data={data}>
+      //     <Legend layout="vertical" verticalAlign="top" align="right" wrapperStyle={style} />
+      //     <XAxis tickLine={false} axisLine={false} dataKey="name" interval={11} />
+      //     <Line type="monotone" dataKey="Your Revenue" dot="" stroke="#20C86D" strokeWidth={3} />
+      //     <Line type="monotone" dataKey="Your Payments" stroke="#263E64" strokeWidth={2} />
+      //   </LineChart>
+      // </ResponsiveContainer>
+      <Image src={`${ASSETS_URL}images/${data}`} />
     );
   }
 }
