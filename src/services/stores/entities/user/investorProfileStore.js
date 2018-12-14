@@ -126,7 +126,7 @@ class InvestorProfileStore {
   @action
   experiencesChange = (e, result) => {
     this.formChange(e, result, 'INVESTMENT_EXP_FORM');
-    this.validateInvestmentExperience();
+    this.isInvestmentExperienceValid = true;
   }
 
   @computed
@@ -218,7 +218,6 @@ class InvestorProfileStore {
           netWorth: this.FINANCES_FORM.fields.netWorth.value,
         };
       } else if (currentStep.form === 'INVESTMENT_EXP_FORM') {
-        this.validateInvestmentExperience();
         const { fields } = this.INVESTMENT_EXP_FORM;
         formPayload = {
           experienceLevel: fields.experienceLevel.value,

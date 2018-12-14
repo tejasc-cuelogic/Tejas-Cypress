@@ -14,6 +14,10 @@ export default class DataRoom extends Component {
       this.props.offeringCreationStore.setFormData('DATA_ROOM_FRM', 'legal.dataroom');
     }
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(nextProps, nextState);
+    return true;
+  }
   onFileDrop = (files, name, index) => {
     this.props.offeringCreationStore.setFileUploadDataMulitple('DATA_ROOM_FRM', 'documents', name, files, 'DOCUMENTS_LEGAL_DATAROOM', index, true);
   }
@@ -39,7 +43,7 @@ export default class DataRoom extends Component {
   handleUpdate = (evt, updated) => {
     console.log(evt);
     this.props.offeringCreationStore.setDataRoomDocsOrder(updated);
-    console.log(updated);
+    updated.forEach(d => console.log(d.name.value));
     // this.forceUpdate();
   }
   render() {
@@ -62,6 +66,7 @@ export default class DataRoom extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'DATA_ROOM_FRM';
     const docs = [...DATA_ROOM_FRM.fields.documents];
+    docs.forEach(d => console.log(d.name.value));
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
