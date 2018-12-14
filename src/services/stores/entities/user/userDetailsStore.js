@@ -158,7 +158,7 @@ export class UserDetailsStore {
 
   @action
   toggleState = (id, accountStatus) => {
-    const params = { accountStatus: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCKED', id };
+    const params = { accountStatus, id };
     client
       .mutate({
         mutation: toggleUserAccount,
