@@ -47,16 +47,16 @@ query getOfferingList($filters: OfferingFilterInputType){
 `;
 
 export const getOfferingById = gql`
-  query getOfferingById($id: ID!) {
-    getOfferingDetailsById(id: $id) {
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
     }
   }
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsById($id: ID!) {
-    getOfferingDetailsById (id: $id) {
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     stage
     applicationId

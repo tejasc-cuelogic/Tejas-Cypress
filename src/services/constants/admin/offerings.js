@@ -2439,7 +2439,7 @@ export const POC_DETAILS = {
     value: '',
     label: '',
     error: undefined,
-    objRef: 'lead',
+    objRef: 'leadDetails',
     rule: 'string',
   },
   targetDate: {

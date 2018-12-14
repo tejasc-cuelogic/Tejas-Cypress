@@ -18,10 +18,10 @@ export default class ConfirmCancelModal extends React.Component {
         <Modal size="mini" open>
           <Modal.Content>
             <p className="center-align mt-30 mb-30">
-              In order to make new investments on the platform, you will need to complete
-              your Investor Profile.
+              In order to participate in new investments, you will need to complete
+              your investor profile.
             </p>
-            <p className="center-align mb-30">Visit your Investor Dashboard to complete your profile.</p>
+            <p className="center-align mb-30">Visit your Investor Dashboard anytime to complete your profile.</p>
             <div className="center-align mt-30">
               <Button primary size="large" onClick={this.handleCloseModal} className="very relaxed" content="Go Back" />
             </div>
