@@ -30,7 +30,7 @@
 
 @nestedCommentDivider: none;
 @nestedCommentBorder: none;
-@nestedCommentBackground: fade(@primary-two, 10%);
+@nestedCommentBackground: none;
 
 /* Avatar */
 @avatarDisplay: block;

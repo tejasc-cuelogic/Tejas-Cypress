@@ -1374,7 +1374,7 @@ a.icon-link {
 .sticy-sidebar{
 	position:sticky;
 	top:0;
-	&.legal-sidebar {
+	&.legal-sidebar, &.comment-sidebar {
 		top: 108px;
 	}
 }
@@ -2239,7 +2239,7 @@ svg:not(:root).recharts-surface{
 
 //	Message details UI
 .message-wrap{
-	width:70%;
+	width:100%;
 	display:flex;
 	flex-direction:column;
 	.message-head, .message-body, .message-footer{
@@ -2264,6 +2264,11 @@ svg:not(:root).recharts-surface{
 		.new-msg-intro{
 			margin:10% 0;
 		}
+		.sb-avatar, img.avatar{
+			height:28px !important;
+			width:28px !important;
+			line-height:28px;
+		}
 	}
 	.message-footer{
 		border-top:@borderColor 1px solid;
@@ -2272,10 +2277,12 @@ svg:not(:root).recharts-surface{
 			.field{
 				flex:1;
 				margin:0 @20px 0 0;
+				display:flex;
+				flex-direction:column;
 			}
 			textarea{
 				min-height:42px;
-				max-height:150px;
+				max-height:120px;
 			}
 		}
 	}

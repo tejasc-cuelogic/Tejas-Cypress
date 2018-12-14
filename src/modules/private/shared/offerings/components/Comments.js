@@ -1,33 +1,45 @@
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
 import { Card } from 'semantic-ui-react';
 import MessagesList from './comments/MessagesList';
 import MessagesWrap from './comments/MessagesWrap';
+import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('offeringCreationStore', 'messageStore')
+@inject('offeringCreationStore', 'messageStore', 'userStore')
 @observer
 export default class Comments extends Component {
   componentWillMount() {
     this.props.messageStore.initRequest();
   }
+  messageSelectHandler = (currentMessageId) => {
+    this.props.messageStore.setDataValue('currentMessageId', currentMessageId);
+    this.props.messageStore.resetMessageForm();
+  }
   render() {
-    const { match, messageStore } = this.props;
+    const { match, messageStore, userStore } = this.props;
     const {
-      messages, current, loading, error,
+      messages, currentMessageId, loading, error, threadUsersList, newPostComment,
     } = messageStore;
+    const { isIssuer } = userStore;
+    if (loading) {
+      return <InlineLoader />;
+    }
     return (
       <Card fluid className="messages comments">
-        <MessagesList
-          match={match}
-          messages={messages}
-          current={current}
-          loading={loading}
-          error={error}
-        />
-        <Switch>
-          <Route exact path={`${match.url}/:id`} component={MessagesWrap} />
-        </Switch>
+        {messages.length ?
+          <MessagesList
+            newPostComment={newPostComment}
+            threadUsersList={threadUsersList}
+            messageSelectHandler={this.messageSelectHandler}
+            match={match}
+            messages={messages}
+            currentMessageId={currentMessageId}
+            loading={loading}
+            error={error}
+            isIssuer={isIssuer}
+          /> : null
+        }
+        <MessagesWrap isIssuer={isIssuer} />
       </Card>
     );
   }

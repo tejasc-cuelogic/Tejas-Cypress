@@ -1,69 +1,103 @@
 import gql from 'graphql-tag';
 
-export const allMessages = gql`
-  query allMessages {
-    allMessages(orderBy: createdAt_DESC, filter: {deleted: false}){
+export const offeringCommentsByOfferId = gql`
+  query _offeringCommentsByOfferId($offerId: String!) {
+  offeringCommentsByOfferId (offerId: $offerId) {
+    id
+    offeringId
+    thread
+    comment
+    scope
+    created {
       id
-      subject
-      body
-      updatedAt
-      parentId{
-        id
+      by
+      date
+    }
+    createdUserInfo {
+      id
+      info {
+        firstName
+        lastName
+        avatar {
+          url
+          name
+        }
       }
-      messageDetails{
-        id
-        from
-        to
-        read
+      roles {
+        name
+      }
+    }
+    threadComments {
+    id
+    comment
+    scope
+    created {
+      id
+      by
+      date
+    }
+    approved {
+      id
+      by
+      date
+    }
+    updated {
+      id
+      by
+      date
+    }
+    createdUserInfo {
+      id
+      info {
+        firstName
+        lastName
+        avatar {
+          url
+          name
+        }
+      }
+      roles {
+        name
       }
     }
   }
+  }
+}
 `;
 
 export const deleteMessage = gql`
-  mutation DeleteMessage($id: ID!) {
-    updateMessage( id: $id, deleted: true ) {
-      id
-    }
+  mutation _deleteOfferingComments($id: [String]) {
+    deleteOfferingComments(id: $id)
   }
 `;
 
-export const messageThread = gql`
-  query messageThread {
-    allMessages(orderBy: createdAt_ASC, filter: {deleted: false}){
-      id
-      subject
-      body
-      updatedAt
-      messageDetails{
-        id
-        from
-        to
-        read
-      }
-    }
+export const createOfferingComments = gql`
+  mutation _createOfferingComments($commentInput: OfferingCommentsInput!) {
+  createOfferingComments (
+    commentInput: $commentInput
+  ) {
+    id
   }
+}
 `;
 
-export const createMessage = gql`
-  mutation createMessageAndMeta($subject: String!, $body: String!) {
-    createMessage(
-      subject: $subject
-      body: $body
-      messageDetails: {
-        from: "2"
-        to: "1"
-        read: "1"
-        deletedSender: false
-        deletedReceiver: false
-      }
-    ) {
-      id
-      messageDetails {
-        id
-      }
-    }
+export const offeringCommentsApprovedByInfo = gql`
+  mutation _offeringCommentsApprovedByInfo($id: String!) {
+    offeringCommentsApprovedByInfo (
+    id: $id
+  ) {
+    id
   }
+}
 `;
 
-// (filter:{deletedReceiver_not: true}) , filter: {id: $id} ($id: ID!)
+export const updateOfferingCommentsInfo = gql`
+  mutation _updateOfferingCommentsInfo($id: String!, $commentInput: OfferingCommentsInput!) {
+    updateOfferingCommentsInfo (
+      id: $id
+      commentInput: $commentInput
+  ) {
+    id
+  }
+}
+`;
