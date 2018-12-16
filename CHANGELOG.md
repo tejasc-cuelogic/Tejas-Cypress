@@ -64,7 +64,6 @@
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([c2c7a53](https://chaos.ns.team/nsv2/ns-client/commits/c2c7a53))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([16a38ce](https://chaos.ns.team/nsv2/ns-client/commits/16a38ce))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
-* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([92d7999](https://chaos.ns.team/nsv2/ns-client/commits/92d7999))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([92d7999](https://chaos.ns.team/nsv2/ns-client/commits/92d7999))
 * **demo01[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo01 deployment]:** demo01 deployment ([c109dfb](https://chaos.ns.team/nsv2/ns-client/commits/c109dfb))
