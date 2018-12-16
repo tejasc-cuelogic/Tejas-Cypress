@@ -81,6 +81,7 @@
 * **Feedback loop 1[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - Feedback loop 1]:** updated video image on business home page ([a273560](https://chaos.ns.team/nsv2/ns-client/commits/a273560))
 * **Feedback[Issue [356](https://chaos.ns.team/nsv2/ns-ops/issues/356) - Feedback]:** Feedback ([c7003ac](https://chaos.ns.team/nsv2/ns-client/commits/c7003ac))
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([8bd12c1](https://chaos.ns.team/nsv2/ns-client/commits/8bd12c1))
+* **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([dd35301](https://chaos.ns.team/nsv2/ns-client/commits/dd35301))
 * **Feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - Feedback]:** Feedbac ([fcc2d5f](https://chaos.ns.team/nsv2/ns-client/commits/fcc2d5f))
 * **Feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - Feedback]:** Feedback ([4ac95e3](https://chaos.ns.team/nsv2/ns-client/commits/4ac95e3))
 * **Feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - Feedback]:** Feedback ([76fdd77](https://chaos.ns.team/nsv2/ns-client/commits/76fdd77))
