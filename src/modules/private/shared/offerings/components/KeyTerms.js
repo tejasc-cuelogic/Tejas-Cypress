@@ -119,6 +119,13 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.maturity}
               changed={(e, result) => formChange(e, result, formName)}
             />
+            <MaskedInput
+              displayMode={isReadonly}
+              name="startupPeriod"
+              fielddata={KEY_TERMS_FRM.fields.startupPeriod}
+              changed={(values, name) => maskChange(values, formName, name)}
+              number
+            />
             <div className="field">
               <FormDropDown
                 disabled={isReadonly}
@@ -132,12 +139,6 @@ export default class KeyTerms extends Component {
                 onChange={(e, result) => formChange(e, result, formName)}
               />
             </div>
-            <FormInput
-              displayMode={isReadonly}
-              name="frequencyOfPayments"
-              fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}
-              changed={(e, result) => formChange(e, result, formName)}
-            />
             {
               ['investmentMultiple', 'securityInterest', 'interestRate'].map(field => (
                 <FormInput
@@ -169,6 +170,12 @@ export default class KeyTerms extends Component {
               fielddata={KEY_TERMS_FRM.fields.securitiesOwnershipPercentage}
               changed={(values, name) => maskChange(values, formName, name)}
               percentage
+            />
+            <FormInput
+              displayMode={isReadonly}
+              name="frequencyOfPayments"
+              fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}
+              changed={(e, result) => formChange(e, result, formName)}
             />
           </Form.Group>
           <Form.Group widths={2}>

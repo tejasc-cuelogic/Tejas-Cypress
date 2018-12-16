@@ -25,8 +25,11 @@ export default class CampaignSideBar extends Component {
     const { campaign } = campaignStore;
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
-    const updatesArr = campaign && campaign.updates &&
-      campaign.updates.length ? campaign.updates : [];
+    const updatesCount = campaign && campaign.updates &&
+      campaign.updates.length ? campaign.updates.length : 0;
+    const commentsCount = campaign && campaign.comments &&
+      campaign.comments.length ? campaign.comments.length : 0;
+    const navCountData = { updates: updatesCount, comments: commentsCount };
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(terminationDate);
@@ -108,7 +111,7 @@ export default class CampaignSideBar extends Component {
           {!isMobile &&
             <Aux>
               <Menu vertical fluid>
-                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} updates={updatesArr} bonusRewards={rewardsTiers} />
+                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers} />
                 {/* <Divider />
                 <Menu.Item as={Link} to="/" className="secondary-item">
                   <Icon name="heart outline" /> Watch Deal

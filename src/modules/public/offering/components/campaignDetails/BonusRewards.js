@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { intersectionBy, orderBy } from 'lodash';
+import Parser from 'html-react-parser';
 import { Header, Grid, Segment, Label, List, Image } from 'semantic-ui-react';
 import { ASSETS_URL } from '../../../../../constants/aws';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -61,7 +62,9 @@ class BonusRewards extends Component {
                             <List.Item as="li">
                               <List.Header>{reward.title}</List.Header>
                               <List.Description>
-                                <p className="detail-section" dangerouslySetInnerHTML={{ __html: reward.description }} />
+                                <p className="detail-section">
+                                  {Parser(reward.description || '')}
+                                </p>
                               </List.Description>
                             </List.Item>
                           ))}
@@ -77,7 +80,9 @@ class BonusRewards extends Component {
                   <Segment padded>
                     <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
                       <Grid.Column>
-                        <p className="detail-section" dangerouslySetInnerHTML={{ __html: offeringMISC }} />
+                        <p className="detail-section">
+                          {Parser(offeringMISC)}
+                        </p>
                       </Grid.Column>
                     </Grid>
                   </Segment>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../../../theme/shared';
 
 @inject('updateStore')
@@ -12,13 +13,15 @@ class UpdateDetails extends Component {
     const { updates } = this.props.updateStore;
     const update = updates && updates.length ? updates[indexId] : null;
     return (
-      updates ?
+      update ?
         <Aux>
           <Header as="h4">
             {update.title}
             <Header.Subheader className="mt-half">{update.updated.date}</Header.Subheader>
           </Header>
-          <p dangerouslySetInnerHTML={{ __html: update.content }} />
+          <p>
+            {Parser(update.content || '')}
+          </p>
         </Aux>
         :
         <InlineLoader text="No data found." />

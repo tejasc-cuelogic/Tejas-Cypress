@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
 import { has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
@@ -849,7 +849,10 @@ export class OfferingCreationStore {
       offeringDetails: payload,
     };
     if (keyName === 'editPocForm') {
-      variables.poc = this.POC_DETAILS_FRM.fields.address.value;
+      variables.issuerId = this.POC_DETAILS_FRM.fields.issuerId.value;
+      if (this.POC_DETAILS_FRM.fields.id.value) {
+        variables.adminId = this.POC_DETAILS_FRM.fields.id.value;
+      }
     }
     client
       .mutate({
@@ -956,9 +959,6 @@ export class OfferingCreationStore {
         payloadData.offering = {};
         payloadData.offering.launch = Validator.evaluateFormData(this.COMPANY_LAUNCH_FRM.fields);
         payloadData.offering.launch.targetDate = this.POC_DETAILS_FRM.fields.targetDate.value;
-        if (this.POC_DETAILS_FRM.fields.name.value) {
-          payloadData.lead = { name: this.POC_DETAILS_FRM.fields.name.value };
-        }
         payloadData.offering = mergeWith(
           toJS(getOfferingById.offering),
           payloadData.offering,
@@ -1681,7 +1681,14 @@ export class OfferingCreationStore {
 
   @action
   setDataRoomDocsOrder = (orderedForm) => {
-    this.DATA_ROOM_FRM.fields.documents = toJS(orderedForm);
+    const dataRoomDocs = toJS(orderedForm).map((d) => {
+      return {
+        name: d.name.value,
+        accreditedOnly: d.accreditedOnly.value,
+        upload: { fileId: d.upload.fileId, fileName: d.upload.value },
+      };
+    });
+    this.DATA_ROOM_FRM = Validator.setFormData(this.DATA_ROOM_FRM, { documents: dataRoomDocs });
   }
 }
 

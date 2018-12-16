@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
 import { Modal, Button, Header, Form, Message, Divider } from 'semantic-ui-react';
 import { authActions } from '../../../services/actions';
@@ -10,6 +10,7 @@ import { FormInput } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
 import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
+import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
 
 @inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore')
 @withRouter
@@ -82,8 +83,13 @@ export default class ConfirmEmailAddress extends Component {
   }
 
   handleCloseModal = () => {
-    if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
-      this.props.history.push('/app/summary');
+    // if (!this.props.refLink && this.props.userDetailsStore.signupStatus.isMigratedFullAccount) {
+    //   this.props.history.push('/app/summary');
+    // } else {
+    //   this.props.history.push(this.props.uiStore.authRef || '/');
+    // }
+    if (!this.props.refLink) {
+      this.props.history.push(`${this.props.match.url}/create-or-cancel`);
     } else {
       this.props.history.push(this.props.uiStore.authRef || '/');
     }
@@ -134,6 +140,7 @@ export default class ConfirmEmailAddress extends Component {
     }
     return (
       <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+        <Route exact path={`${this.props.match.url}/create-or-cancel`} render={() => <ConfirmCreateOrCancel refLink={this.props.match.url} />} />
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your email address</Header>
           <p>
@@ -174,7 +181,7 @@ export default class ConfirmEmailAddress extends Component {
               <Button loading={confirmProgress === 'resend' && inProgress} type="button" size="small" color="grey" className="link-button green-hover" content="Resend the code to my email" onClick={() => this.handleResendCode()} />
             </Form.Field>
             {errors &&
-              <Message error textAlign="left" className="mb-40">
+              <Message error className="mb-40">
                 <ListErrors errors={[errors.message]} />
               </Message>
             }

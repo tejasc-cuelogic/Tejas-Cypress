@@ -23,7 +23,25 @@ export const allOfferings = gql`
       keyTerms {
         legalBusinessName
       }
+      leadDetails {
+        id
+        email {
+          address
+          __typename
+        }
+        info {
+          firstName
+          lastName
+          __typename
+        }
+        phone {
+          number
+          __typename
+        }
+        __typename
+      }
       issuerDetails {
+        id
         email {
           address
         }
@@ -43,9 +61,6 @@ export const allOfferings = gql`
       }
       applicationId
       issuerId
-      lead {
-        name
-      }
       stage
       created {
         id
@@ -74,7 +89,25 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       previewPassword
+      leadDetails {
+        id
+        email {
+          address
+          __typename
+        }
+        info {
+          firstName
+          lastName
+          __typename
+        }
+        phone {
+          number
+          __typename
+        }
+        __typename
+      }
       issuerDetails {
+        id
         email {
           address
         }
@@ -87,6 +120,7 @@ export const getOfferingDetails = gql`
       } 
       }
       keyTerms {
+        startupPeriod
         revSharePercentageDescription
         useOfProceedFootnote
         currentFinancialStatements
@@ -850,7 +884,7 @@ export const getOfferingDetails = gql`
       applicationId
       issuerId
       lead {
-        name
+        id
       }
       stage
       rewardsTierIds {
@@ -882,8 +916,8 @@ export const getOfferingDetails = gql`
 `;
 
 export const updateOffering = gql`
-mutation _updateOffering($id: String!, $poc: String, $offeringDetails: OfferingInputType!) {
-  updateOffering(id: $id, poc: $poc offeringDetails: $offeringDetails) {
+mutation _updateOffering($id: String!, $issuerId: String, $adminId: String, $offeringDetails: OfferingInputType!) {
+  updateOffering(id: $id, issuerId: $issuerId, adminId: $adminId, offeringDetails: $offeringDetails) {
     id
   }
 }

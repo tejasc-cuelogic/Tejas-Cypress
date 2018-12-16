@@ -455,6 +455,8 @@
     input[type=email].display-only:not(:read-only){
         background-color:@white;
         border-radius:0;
+        border-color:@border-color;
+        margin:0;
         &:focus{
             border-color:@primary-one;
             outline:none;

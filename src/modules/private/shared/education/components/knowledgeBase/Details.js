@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { Header, Card } from 'semantic-ui-react';
 
 @inject('educationStore')
@@ -17,7 +18,9 @@ export default class Details extends Component {
     const details = (selected ? (
       <Aux>
         <Header as="h3">{selected.title}</Header>
-        <pre className="migrated-content" dangerouslySetInnerHTML={{ __html: selected.content }} />
+        <pre className="migrated-content">
+          {Parser(selected.content || '')}
+        </pre>
       </Aux>
     ) : <div>Nothing to display !</div>);
     if (this.props.marketing) {

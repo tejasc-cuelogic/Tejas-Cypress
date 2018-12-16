@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm } from 'semantic-ui-react';
+import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button } from 'semantic-ui-react';
+import Parser from 'html-react-parser';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -116,7 +117,19 @@ export default class NewUpdate extends Component {
                 <Card.Content>
                   <List relaxed>
                     <List.Item>
-                      <Link to={`/offerings/preview/${this.props.offeringCreationStore.currentOfferingId}/updates`}><Icon className="ns-view" />See the update</Link>
+                      <Modal
+                        closeOnDimmerClick={false}
+                        closeIcon
+                        trigger={
+                          <Button color="green" className="link-button"><Icon className="ns-view" />See the update</Button>
+                        }
+                      >
+                        <Modal.Content>
+                          <p>
+                            {Parser(PBUILDER_FRM.fields.content.value || '')}
+                          </p>
+                        </Modal.Content>
+                      </Modal>
                     </List.Item>
                     <List.Item>
                       <Link to="/"><Icon className="ns-envelope" />Send test email to me</Link>

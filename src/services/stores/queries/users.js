@@ -10,6 +10,9 @@ export const allUsersQuery = gql`
         email {
           address
         }
+        locked {
+          lock
+        }
         info {
           firstName
           lastName
@@ -26,6 +29,8 @@ export const allUsersQuery = gql`
         }
         roles {
           scope
+          name
+          
         }
         lastLoginDate
         created {

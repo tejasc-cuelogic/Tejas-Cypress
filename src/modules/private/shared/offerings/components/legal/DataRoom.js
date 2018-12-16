@@ -1,10 +1,69 @@
+/* eslint-disable */
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import ReactDragList from 'react-drag-list';
+import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Divider, Icon, Confirm } from 'semantic-ui-react';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
+
+const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName }) => {
+  return (
+    <div className="row-wrap">
+      <div className="balance-half simple-drag-row-title">
+        <FormInput
+          displayMode={isReadonly}
+          name="name"
+          fielddata={document.name}
+          size="small"
+          changed={(e, result) => formArrayChange(e, result, formName, 'documents', docIndx)}
+          ishidelabel
+        />
+      </div>
+      <div className="balance-half">
+        <DropZone
+          disabled={isReadonly}
+          size="small"
+          className="secondary"
+          name="upload"
+          fielddata={document.upload}
+          uploadtitle="Upload"
+          ondrop={(files, name) => onFileDrop(files, name, docIndx)}
+          onremove={fieldName => handleDelDoc(fieldName, docIndx)}
+        />
+      </div>
+      <div className="action">
+        <Button icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
+          <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => handleLockUnlock(docIndx)} />
+        </Button>
+        <Button icon circular className="link-button">
+          <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
+        </Button>
+      </div>
+    </div>
+  );
+});
+
+const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName }) => {
+  return (
+    <div>
+      {docs.map((doc, index) => (
+        <SortableItem
+          key={`item-${index}`}
+          docIndx={index}
+          document={doc}
+          formArrayChange={formArrayChange}
+          isReadonly={isReadonly}
+          onFileDrop={onFileDrop}
+          handleDelDoc={handleDelDoc}
+          handleLockUnlock={handleLockUnlock}
+          toggleConfirmModal={toggleConfirmModal}
+          formName={formName}
+          index={index}
+        />
+      ))}
+    </div>
+  );
+});
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
@@ -36,12 +95,10 @@ export default class DataRoom extends Component {
     const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
   }
-  handleUpdate = (evt, updated) => {
-    console.log(evt);
-    this.props.offeringCreationStore.setDataRoomDocsOrder(updated);
-    console.log(updated);
-    // this.forceUpdate();
-  }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const docs = [...this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents];
+    this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex));
+  };
   render() {
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
@@ -78,45 +135,17 @@ export default class DataRoom extends Component {
               <div className="balance-half">Document</div>
               <div className="action">Actions</div>
             </div>
-            <ReactDragList
-              dataSource={docs}
-              rowKey="title"
-              handles={false}
-              onUpdate={this.handleUpdate}
-              row={(document, index) => (
-                <div key={index} className="row-wrap">
-                  <div className="balance-half simple-drag-row-title">
-                    <FormInput
-                      displayMode={isReadonly}
-                      name="name"
-                      fielddata={document.name}
-                      size="small"
-                      changed={(e, result) => formArrayChange(e, result, formName, 'documents', index)}
-                      ishidelabel
-                    />
-                  </div>
-                  <div className="balance-half">
-                    <DropZone
-                      disabled={isReadonly}
-                      size="small"
-                      className="secondary"
-                      name="upload"
-                      fielddata={document.upload}
-                      uploadtitle="Upload"
-                      ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                      onremove={fieldName => this.handleDelDoc(fieldName, index)}
-                    />
-                  </div>
-                  <div className="action">
-                    <Button icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
-                      <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => this.handleLockUnlock(index)} />
-                    </Button>
-                    <Button icon circular className="link-button">
-                      <Icon className="ns-trash" onClick={e => this.toggleConfirmModal(e, index, formName)} />
-                    </Button>
-                  </div>
-                </div>
-              )}
+            <SortableList
+              docs={docs}
+              pressDelay={100}
+              onSortEnd={this.onSortEnd}
+              formArrayChange={formArrayChange}
+              isReadonly={isReadonly}
+              onFileDrop={this.onFileDrop}
+              handleDelDoc={this.handleDelDoc}
+              handleLockUnlock={this.handleLockUnlock}
+              toggleConfirmModal={this.toggleConfirmModal}
+              formName={formName}
             />
           </div>
           <Divider hidden />

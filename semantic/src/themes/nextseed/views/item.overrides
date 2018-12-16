@@ -45,7 +45,7 @@
     }
     &.messages{
         .item{
-            margin:@35px 0;
+            margin:@30px 0;
             &.date-stamp{
                 margin:@14px 0;
                 justify-content:center;
@@ -59,8 +59,9 @@
                     padding:@12px @20px;
                     font-size:@14px;
                     line-height:@22px;
+                    color:@neutral;
                     border-radius:@6px;
-                    background-color:@neutral-offwhite;
+                    // background-color:@neutral-offwhite;
                     white-space: pre-line;
                 }
                 p{
@@ -103,15 +104,30 @@
                 position:relative;
                 padding:@10px @14px;
                 border-radius:@6px;
-                border:@neutral-offdark 1px solid;
+                border:@border-color 1px solid;
                 >.description{
                     padding:0;
                     border:none;
                 }
                 &.private{
-                    opacity:0.5;
+                    background-color:fade(@highlight-secondary, 15%);
+                    border-color:fade(@highlight-secondary, 30%);
+                    // .ui.header, .description{
+                    //     opacity:0.5;
+                    // }
+                }
+                &.note-comment{
+                    background-color:@neutral-offwhite;
+                    border-color:@neutral-darkwhite;
+                }
+                &.approval-pending{
+                    background-color:fade(@primary-two, 12%);
                     border-style:dashed;
-                    border-width:2px;
+                }
+                .comment-actions{
+                    position:absolute;
+                    top:~"calc(50% - 10px)";
+                    font-weight:@fontMedium;
                 }
             }
             .extra{
@@ -125,12 +141,24 @@
                 >*{
                     margin:0 @7px 0 0;
                 }
+                >.time-stamp{
+                    height:18px;
+                    line-height:18px;
+                    color:@neutral-middark;
+                    display:inline-block;
+                    vertical-align:middle;
+                }
             }
             &.in{
                 >.content{
                     margin-left:@14px;
-                    background-color:@neutral-offwhite;
+                    // background-color:@neutral-offwhite;
                     border-bottom-left-radius:0;
+                    .comment-actions{
+                        padding-left:10px;
+                        right:0;
+                        transform:translate(100%, 0%);
+                    }
                 }
             }
             &.sent{
@@ -139,6 +167,11 @@
                     margin-left:0;
                     margin-right:@14px;
                     border-bottom-right-radius:0;
+                    .comment-actions{
+                        padding-right:10px;
+                        left:0;
+                        transform:translate(-100%, 0%);
+                    }
                 }
             }
         }

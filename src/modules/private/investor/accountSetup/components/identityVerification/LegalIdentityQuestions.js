@@ -20,23 +20,11 @@ const LegalIdentityQuestions = observer(({
       <p>
         We were unable to match your information with the
         address you provided. (
-        <i>Note: This may happen if you
-        recently relocated or you entered your address incorrectly
+        <i>Note: This may happen if you recently relocated or you entered your address incorrectly
         </i>)
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      <Divider hidden />
-      {errors && errors.message &&
-        <Message error>
-          <ListErrors errors={[errors.message]} />
-        </Message>
-      }
-      {errors && !errors.message &&
-        <Message error>
-          <ListErrors errors={[errors]} />
-        </Message>
-      }
       <Form error onSubmit={onSubmit}>
         <Grid>
           {map(form.fields, field => (
@@ -51,12 +39,21 @@ const LegalIdentityQuestions = observer(({
             />
           ))}
         </Grid>
-        <Divider hidden />
-        <div className="center-align">
-          <Button loading={inProgress} color="green" size="large" className="relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
-        </div>
-        <div className="center-align">
-          <Button className="cancel-link" onClick={() => close()}>I’ll finish this later</Button>
+        {errors && errors.message &&
+          <Message error className="mt-30">
+            <ListErrors errors={[errors.message]} />
+          </Message>
+        }
+        {errors && !errors.message &&
+          <Message error className="mt-30">
+            <ListErrors errors={[errors]} />
+          </Message>
+        }
+        <div className="center-align mt-30">
+          <Button.Group vertical>
+            <Button loading={inProgress} color="green" size="large" className="relaxed" disabled={!form.meta.isValid}>Verify my identity</Button>
+            <Button className="cancel-link" onClick={() => close()}>I’ll finish this later</Button>
+          </Button.Group>
         </div>
       </Form>
     </Modal.Content>

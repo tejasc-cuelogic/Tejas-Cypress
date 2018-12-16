@@ -3,6 +3,7 @@ import { Grid, Segment, Item, Divider, Header, Label, Icon, Image } from 'semant
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { UserAvatar } from '../../../../../../theme/shared';
 
 class LatestUpdates extends Component {
@@ -52,7 +53,9 @@ class LatestUpdates extends Component {
                   <Item.Description>
                     <div className="segment-container mini">
                       <p><b>{update.title}</b></p>
-                      <p dangerouslySetInnerHTML={{ __html: update.content }} />
+                      <p>
+                        {Parser(update.content || '')}
+                      </p>
                     </div>
                     <Link to={`${refLink}/updates`}>View Update</Link>
                   </Item.Description>

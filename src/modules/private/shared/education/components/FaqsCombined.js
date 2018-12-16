@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { Input, Form, Accordion, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { toJS } from 'mobx';
+import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('educationStore', 'userStore')
@@ -71,7 +72,9 @@ export default class FaqsCombined extends Component {
                       {faqItem.question}
                     </Accordion.Title>
                     <Accordion.Content active={innerActiveIndex === index}>
-                      <pre className="migrated-content" dangerouslySetInnerHTML={{ __html: faqItem.answer }} />
+                      <pre className="migrated-content">
+                        {Parser(faqItem.answer || '')}
+                      </pre>
                     </Accordion.Content>
                   </Accordion>
                 ))

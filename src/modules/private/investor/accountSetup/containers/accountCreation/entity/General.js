@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Header, Form, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { US_STATES_FOR_INVESTOR, ENTITY_TYPES } from '../../../../../../../constants/account';
@@ -20,17 +21,12 @@ export default class General extends Component {
     } = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
     return (
-      <div>
+      <Aux>
         <Header as="h3" textAlign="center">General information</Header>
         <p className="center-align">
           Let{"'"}s create your Entity Investment Account. Get started by providing your
           entity information.
         </p>
-        {errors &&
-          <Message error textAlign="left">
-            <ListErrors errors={[errors]} />
-          </Message>
-        }
         <Form error>
           <div className="field-wrap">
             <FormInput
@@ -51,7 +47,6 @@ export default class General extends Component {
               <FormDropDown
                 fielddata={GEN_INFO_FRM.fields.entityType}
                 selection
-                containerclassname="dropdown-field"
                 // value={GEN_INFO_FRM.fields.entityType.value}
                 name="entityType"
                 options={ENTITY_TYPES}
@@ -91,8 +86,13 @@ export default class General extends Component {
               />
             </Form.Group>
           </div>
+          {errors &&
+            <Message error>
+              <ListErrors errors={[errors]} />
+            </Message>
+          }
         </Form>
-      </div>
+      </Aux>
     );
   }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Header, Button, Table, Divider, Popup, Icon, Message } from 'semantic-ui-react';
+import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
@@ -101,10 +101,14 @@ class TransferRequest extends Component {
             </Table.Row>
           </Table.Footer>
         </Table>
-        <Divider hidden />
-        <Button.Group>
+        {investmentFlowErrorMessage &&
+          <Message error className="mt-30">
+            {investmentFlowErrorMessage}
+          </Message>
+        }
+        <Button.Group widths="2" className="inline mt-30">
           <Button primary content="Confirm" onClick={this.props.confirm} />
-          <Button type="button" onClick={this.props.cancel}>Cancel</Button>
+          <Button content="Cancel" type="button" onClick={this.props.cancel} />
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from

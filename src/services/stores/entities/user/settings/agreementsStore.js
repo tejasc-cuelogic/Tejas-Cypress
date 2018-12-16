@@ -21,6 +21,14 @@ export class AgreementsStore {
       title: 'Welcome Packet',
       boxRef: { demo: '350613582871', develop: '350632240634', qa: '350638909011' },
     },
+    fPAgreemnt: {
+      title: 'Nextseed Funding Portal Agreement',
+      boxRef: { demo: '367040658100', develop: '367037388841', qa: '367033994152' },
+    },
+    bDIAgreemnt: {
+      title: 'NextSeed Broker-Dealer Investor Agreement',
+      boxRef: { demo: '367044243838', develop: '367027925128', qa: '367041113247' },
+    },
   }
   @observable embedUrl = null;
   @observable docLoading = false;
@@ -43,7 +51,8 @@ export class AgreementsStore {
   @action
   getBoxEmbedLink = (of, fileId) => {
     this.docLoading = true;
-    const boxFileId = fileId || this.getAgreementsList[of].boxRef[this.getCurrentEnv()];
+    const currentEnv = ['demo', 'develop', 'qa'].includes(this.getCurrentEnv()) ? this.getCurrentEnv() : 'develop';
+    const boxFileId = fileId || this.getAgreementsList[of].boxRef[currentEnv];
     console.log(this.getAgreementsList, of, this.getCurrentEnv());
     client.mutate({
       mutation: getBoxEmbedLink,

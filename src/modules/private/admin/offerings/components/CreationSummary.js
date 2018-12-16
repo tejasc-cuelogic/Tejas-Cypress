@@ -26,7 +26,11 @@ const summary = offer => [
     content: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'NA',
     type: 0,
   },
-  { title: 'Lead', content: offer.lead ? offer.lead.name : 'N/A', type: 0 },
+  {
+    title: 'Lead',
+    content: offer.leadDetails && offer.leadDetails.info ? `${offer.leadDetails.info.firstName} ${offer.leadDetails.info.lastName}` : 'NA',
+    type: 0,
+  },
   {
     title: 'Days Till Launch',
     content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',

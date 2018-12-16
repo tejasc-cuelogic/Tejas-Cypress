@@ -92,16 +92,16 @@ export default class Listing extends Component {
                       `${DataFormatter.diffDays(offering.offering.launch.terminationDate)} days` : 'N/A'
                       }
                     </Table.Cell>
-                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.lead ? offering.lead.name : 'N/A'}</Table.Cell>
+                    <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'NA'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
                         <b>
                           {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : 'NA'}
                         </b>
                         <br />
-                        {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : 'NA'}
+                        {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : ''}
                         <br />
-                        {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : 'NA'}
+                        {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : ''}
                       </p>
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="center">

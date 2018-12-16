@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import moment from 'moment';
+import Parser from 'html-react-parser';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
@@ -66,11 +67,10 @@ class Updates extends Component {
                       <div
                         style={readMoreStatus[index] ? { display: 'block' } : { display: 'none' }}
                       >
-                        <p dangerouslySetInnerHTML={{
-                          __html: dataItem.content.length <= 805 ?
-                            dataItem.content : dataItem.content.substring(1, 805),
-                        }}
-                        />
+                        <p>
+                          {Parser(dataItem.content.length <= 805 ?
+                            dataItem.content : dataItem.content.substring(1, 805))}
+                        </p>
                         {dataItem.content.length > 805 ?
                           <a
                             href
@@ -86,7 +86,9 @@ class Updates extends Component {
                       <div
                         style={!readLessStatus[index] ? { display: 'block' } : { display: 'none' }}
                       >
-                        <p dangerouslySetInnerHTML={{ __html: dataItem.content }} />
+                        <p>
+                          {Parser(dataItem.content || '')}
+                        </p>
                         <a
                           href
                           onClick={

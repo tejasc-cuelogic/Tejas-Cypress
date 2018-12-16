@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Message } from 'semantic-ui-react';
+import { Form, Header, Message, Divider } from 'semantic-ui-react';
 import { FormRadioGroup, FormInput } from '../../../../../../theme/form';
 import { ListErrors } from '../../../../../../theme/shared';
 
@@ -13,15 +13,11 @@ export default class PublicCompanyRel extends Component {
     return (
       <div className="center-align">
         <Header as="h3">Public Company Relations</Header>
-        <p className="mb-50">Are you (or an immediate family member) a 10% shareholder,
+        <p>Are you (or an immediate family member) a 10% shareholder,
           director or senior officer at a publicly traded U.S. company?
         </p>
+        <Divider hidden />
         <p className="mb-40">If you do not know what this means, it likely does not apply to you</p>
-        {errors &&
-        <Message error textAlign="left">
-          <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-        </Message>
-        }
         <Form error>
           <FormRadioGroup
             fielddata={PUBLIC_COMPANY_REL_FORM.fields.publicCompanyRel}
@@ -43,6 +39,11 @@ export default class PublicCompanyRel extends Component {
               />
             </Form.Group>
           </div>
+          }
+          {errors &&
+          <Message error className="mt-30">
+            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+          </Message>
           }
         </Form>
       </div>
