@@ -91,7 +91,7 @@ export default class CampaignList extends Component {
                         {offering.stage === 'LOCK' && (
                           <Card.Content className="card-hidden">
                             <div className="lock-image">
-                              <Image src={`${ASSETS_URL}images/icon_lock.png`} />
+                              <Image mini src={`${ASSETS_URL}images/icon_lock.png`} />
                             </div>
                             <div className="details">
                               <div className="tags mb-10">
