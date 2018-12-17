@@ -170,6 +170,9 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
         white-space:nowrap;
         text-overflow:ellipsis;
     }
+    &.selection > .text{
+        display:block;
+    }
     &.inverted>.text{
         color:@white;
     }

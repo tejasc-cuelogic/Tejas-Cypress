@@ -28,7 +28,9 @@ const FormDropDown = observer((props) => {
         </label>
       }
       <Dropdown {...props} value={value} />
-      <div className="dropdown-effect">{label}</div>
+      {!props.ishidelabel && label !== '' &&
+        <div className="dropdown-effect">{label}</div>
+      }
       {error &&
         <FieldError error={error} />
       }
