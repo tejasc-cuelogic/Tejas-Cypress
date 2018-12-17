@@ -10,7 +10,11 @@ class Image64 extends React.Component {
     const emptyImage = this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (this.props.srcUrl) {
       apiService.getRemoteFile(this.props.srcUrl).then((res) => {
-        this.setState({ data: res.text || emptyImage });
+        if (res.text.includes('data:')) {
+          this.setState({ data: res.text || emptyImage });
+        } else {
+          this.setState({ data: this.props.srcUrl || emptyImage });
+        }
       }).catch(() => this.setState({ data: emptyImage }));
     } else {
       this.setState({ data: emptyImage });
