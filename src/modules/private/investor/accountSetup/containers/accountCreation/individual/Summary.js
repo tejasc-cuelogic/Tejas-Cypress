@@ -97,7 +97,7 @@ export default class Summary extends React.Component {
           </div>
         </div>
         {errors &&
-          <Message error>
+          <Message error className="center-align">
             <ListErrors errors={[errors.message]} />
           </Message>
         }

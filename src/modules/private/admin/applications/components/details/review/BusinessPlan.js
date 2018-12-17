@@ -320,6 +320,7 @@ export default class BusinessPlan extends Component {
           <MaskedInput
             containerclassname={isReadonly ? 'display-only' : ''}
             readOnly={isReadonly}
+            containerwidth="4"
             name="dateOfIncorporation"
             fielddata={BUSINESS_PLAN_FRM.fields.dateOfIncorporation}
             format="##-##-####"
