@@ -20,8 +20,8 @@ export default class Compose extends Component {
       <div className="message-footer">
         <Form>
           <FormTextarea
-            fielddata={MESSAGE_FRM.fields.comment}
             name="comment"
+            fielddata={MESSAGE_FRM.fields.comment}
             changed={msgEleChange}
           />
           <div>

@@ -24,6 +24,9 @@ export default class Comments extends Component {
     if (loading) {
       return <InlineLoader />;
     }
+    if (!messages.length) {
+      this.props.messageStore.setDataValue('currentMessageId', null);
+    }
     return (
       <Card fluid className="messages comments">
         {messages.length ?

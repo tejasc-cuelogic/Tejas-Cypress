@@ -429,6 +429,7 @@
         margin:0;
         border:none;
         box-shadow:none;
+        height:~"calc(100vh - 353px)";
     }
 }
 .ui{
