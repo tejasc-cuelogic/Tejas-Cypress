@@ -123,6 +123,12 @@
                 &.approval-pending{
                     background-color:fade(@primary-two, 12%);
                     border-style:dashed;
+                    .header, .time-stamp, .description{
+                        opacity:0.5;
+                    }
+                }
+                &.approved{
+                    background-color:fade(@primary-two, 12%);
                 }
                 .comment-actions{
                     position:absolute;
