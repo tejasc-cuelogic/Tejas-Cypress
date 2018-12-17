@@ -28,16 +28,13 @@ query allBusinessApplicationses($filters: BusinessApplicationsFilter){
 `;
 
 export const getBusinessApplicationAdmin = gql`
-query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String, $lek: DecryptedString){
+query getBusinessApplicationAdmin($applicationType: ApplicationTypeEnum!, $orderBy: businessapplicationOrderBy, $limit:String, $search: String){
   businessApplicationsAdmin(
     applicationType: $applicationType
     orderBy: $orderBy
     limit: $limit
     search: $search
-    lek: $lek
-    
   ) {
-    lek
     resultCount
     totalCount
     businessApplications
