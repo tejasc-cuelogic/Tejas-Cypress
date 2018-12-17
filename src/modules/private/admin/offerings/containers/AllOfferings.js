@@ -48,7 +48,7 @@ export default class Offerings extends Component {
                 more="no"
                 addon={
                   <Aux>
-                    <Grid.Column width={5} textAlign="right">
+                    <Grid.Column width={5} textAlign="right" floated="right">
                       <Button.Group floated="right">
                         {stage === 'creation' &&
                           <Button color="green" as={Link} to={`${match.url}/new`} content="Create New Offering" />
