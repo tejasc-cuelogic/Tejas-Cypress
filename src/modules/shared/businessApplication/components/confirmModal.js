@@ -19,22 +19,18 @@ export default class ConfirmModal extends Component {
     const { errors } = this.props.uiStore;
     return (
       <Modal size="mini" open closeIcon onClose={this.handleCloseModal} closeOnRootNodeClick={false}>
-        <Modal.Header className="center-align signup-header">
-          <Header as="h2">Do you want to save your progress?</Header>
-        </Modal.Header>
-        <Modal.Content className="signup-content">
+        <Modal.Content className="center-align relaxed">
+          <Header as="h3" className="mb-30">Do you want to save your progress?</Header>
           <Form error onSubmit={this.props.partialSave}>
-            <div className="center-align">
-              {errors &&
-                <Message error>
-                  <ListErrors errors={[errors]} />
-                </Message>
-              }
-              <Button.Group vertical>
-                <Button primary className="very relaxed" content="Yes, save it" loading={inProgress} />
-                <Button inverted color="green" content="No, thank you" onClick={this.handleCloseModal} />
-              </Button.Group>
-            </div>
+            {errors &&
+              <Message error className="mb-30">
+                <ListErrors errors={[errors]} />
+              </Message>
+            }
+            <Button.Group vertical>
+              <Button primary className="very relaxed mb-10" content="Yes, save it" loading={inProgress} />
+              <Button inverted color="green" content="No, thank you" onClick={this.handleCloseModal} />
+            </Button.Group>
           </Form>
         </Modal.Content>
       </Modal>
