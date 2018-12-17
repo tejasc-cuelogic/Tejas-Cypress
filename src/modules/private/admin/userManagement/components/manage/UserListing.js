@@ -48,7 +48,7 @@ class UserListing extends Component {
               continuous
             >
               {listData.map(user => (
-                <Table.Row className={(user.locked && user.locked.lock) ? 'locked' : ''} key={user.id}>
+                <Table.Row className={(user.locked && user.locked.lock === 'LOCKED') ? 'locked' : ''} key={user.id}>
                   <Table.Cell collapsing>
                     {!user.profilepic &&
                       <div className="user-image">
