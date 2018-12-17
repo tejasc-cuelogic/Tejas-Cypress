@@ -35,7 +35,7 @@ export default class Plaid extends Component {
     } = this.props.bankAccountStore;
     const { inProgress, errors } = this.props.uiStore;
     const { action, refLink } = this.props;
-    const headerText = action && action === 'change' ? 'Link bank account' : 'What is your employment status?';
+    const headerText = action && action === 'change' ? 'Link bank account' : 'Link your bank account';
     const subHeaderText = action && action === 'change' ?
       'Select your bank from the list'
       :
@@ -123,7 +123,7 @@ export default class Plaid extends Component {
             <ListErrors errors={[errors]} />
           </Message>
         }
-        <Button color="green" className="link-button" content="or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
+        <Button color="green" className="link-button" content="Or link account directly" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />
       </div>
     );
   }
