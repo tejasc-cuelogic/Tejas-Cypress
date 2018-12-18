@@ -8,7 +8,6 @@ class CommunityGuideline extends Component {
       <Modal
         open
         onClose={this.handleClose}
-        size="large"
         closeIcon
       >
         <Modal.Header>Community Guidelines</Modal.Header>
