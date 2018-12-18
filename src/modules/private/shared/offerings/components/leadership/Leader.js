@@ -78,7 +78,7 @@ export default class Leader extends Component {
     }
   }
   handleresetProfilePhoto = (field, index) => {
-    this.props.offeringCreationStore.resetLeadershopProfilePhoto(field, index);
+    this.props.offeringCreationStore.resetLeadershipProfilePhoto(field, index);
   }
   handelImageDeimension = (width, height, field) => {
     if (width < 200 || height < 200) {
@@ -269,7 +269,7 @@ export default class Leader extends Component {
           <Form.Group widths={2}>
             {
               ['headshot', 'heroImage'].map(field => (
-                LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl ? (
+                LEADERSHIP_FRM.fields.leadership[index][field].value ? (
                   <div className="file-uploader attached">
                     <Button onClick={() => this.handleDelDoc(field)} circular icon={{ className: 'ns-close-light' }} />
                     <Image64 srcUrl={LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl} />
@@ -287,7 +287,7 @@ export default class Leader extends Component {
                     modalUploadAction={this.uploadMedia}
                     name={field}
                     cropInModal
-                    aspect={16 / 9}
+                    aspect={1 / 1}
                   />
                 )
               ))

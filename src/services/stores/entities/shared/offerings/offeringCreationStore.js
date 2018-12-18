@@ -171,7 +171,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  resetLeadershopProfilePhoto = (field, index) => {
+  resetLeadershipProfilePhoto = (field, index) => {
     const attributes = ['src', 'error', 'meta'];
     attributes.forEach((val) => {
       if ((typeof this.LEADERSHIP_FRM.fields.leadership[index][field][val] === 'object') && (this.LEADERSHIP_FRM.fields.leadership[index][field][val] !== null)) {
@@ -274,7 +274,7 @@ export class OfferingCreationStore {
     fileUpload.deleteFromS3(this.LEADERSHIP_FRM.fields.leadership[index][name].value)
       .then((res) => {
         Helper.toast(`${this.LEADERSHIP_FRM.fields.leadership[index][name].label} removed successfully.`, 'success');
-        this.resetFormField('LEADERSHIP_FRM', name, undefined, index);
+        this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
         // this.updateOffering
         // (this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
         this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
