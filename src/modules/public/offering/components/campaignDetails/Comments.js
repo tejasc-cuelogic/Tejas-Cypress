@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Grid, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route } from 'react-router-dom';
@@ -26,6 +27,8 @@ class Comments extends Component {
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
+    const accountStatusFull = activeAccounts && activeAccounts.length;
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && activeAccounts && activeAccounts.length);
     const readMoreLength = 50;
     const { campaign } = this.props.campaignStore;
@@ -56,9 +59,15 @@ class Comments extends Component {
                   </p>
                   {!isRightToPostComment ?
                     <section className="center-align mt-80 mb-80">
-                      <p>In order to leave comments, please sign up and verify your identity.</p>
+                      {loggedInAsInvestor && !accountStatusFull ?
+                        <p>In order to leave comments, please create any type of account first.</p>
+                      : <p>In order to leave comments, please sign up and verify your identity.</p>
+                      }
                       <Form reply className="public-form clearfix">
-                        <Link to="/auth/register-investor" className="ui button secondary">Sign Up Now</Link>
+                        {loggedInAsInvestor && !accountStatusFull ?
+                          <Link to="/app/summary" className="ui button secondary">Go To Dashboard</Link>
+                        : <Link to="/auth/register-investor" className="ui button secondary">Sign Up Now</Link>
+                        }
                       </Form>
                     </section>
                     :
@@ -80,11 +89,10 @@ class Comments extends Component {
               <Segment padded>
                 <Comment.Group minimal>
                   {comments &&
-                    comments.map(c => (
-                      c.scope === 'PUBLIC' &&
+                    comments.map(c => c.scope === 'PUBLIC' && (
                       <Comment>
                         <Comment.Content>
-                          <Comment.Author>{c && c.createdUserInfo && c.createdUserInfo.info && `${c.createdUserInfo.info.firstName} ${c.createdUserInfo.info.firstName}`}</Comment.Author>
+                          <Comment.Author>{get(c, 'createdUserInfo.info.firstName')}</Comment.Author>
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(c && c.updated ? c.updated.date : c && c.created.date).format('LL')}</span></Comment.Metadata>
                           {isUserLoggedIn &&
                           <Comment.Actions>
@@ -94,30 +102,30 @@ class Comments extends Component {
                           <Comment.Text className="mt-20">
                             {this.state.readMore === c.id ?
                             c.comment : c.comment.substr(0, readMoreLength)}
-                            {c.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
+                            {(c.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
                           </Comment.Text>
                         </Comment.Content>
                         <Divider />
-                        <Comment.Group>
+                        <Comment.Group className="reply-comments">
                           {c.threadComment &&
-                          c.threadComment.map(tc => (
+                          c.threadComment.map(tc =>
                             ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
-                              && tc.approved) ||
-                              (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) &&
-                              <Comment className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : 'reply-comment'}`}>
-                                <Comment.Content>
-                                  <Comment.Author>
-                                    {tc && tc.createdUserInfo && tc.createdUserInfo.info && `${tc.createdUserInfo.info.firstName} ${tc.createdUserInfo.info.firstName}`}
-                                    {tc.createdUserInfo && tc.createdUserInfo.id === issuerId && <Label color="blue" size="mini">ISSUER</Label>}
-                                  </Comment.Author>
-                                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(tc && tc.updated ? tc.updated.date : tc && tc.created.date).format('LL')}</span></Comment.Metadata>
-                                  <Comment.Text className="mt-20">
-                                    {this.state.readMoreInner === tc.id ?
-                                    tc.comment : tc.comment.substr(0, readMoreLength)}
-                                    {c.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}> {this.state.readMoreInner !== tc.id ? '...Read More' : 'Read Less'}</Link>}
-                                  </Comment.Text>
-                                </Comment.Content>
-                              </Comment>
+                            && tc.approved) ||
+                            (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) && tc.scope === 'PUBLIC' && (
+                            <Comment className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
+                              <Comment.Content>
+                                <Comment.Author>
+                                  {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
+                                  {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
+                                </Comment.Author>
+                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(tc && tc.updated ? tc.updated.date : tc && tc.created.date).format('LL')}</span></Comment.Metadata>
+                                <Comment.Text className="mt-20">
+                                  {this.state.readMoreInner === tc.id ?
+                                  tc.comment : tc.comment.substr(0, readMoreLength)}
+                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}> {this.state.readMoreInner !== tc.id ? '...Read More' : 'Read Less'}</Link>}
+                                </Comment.Text>
+                              </Comment.Content>
+                            </Comment>
                           ))}
                         </Comment.Group>
                       </Comment>
@@ -158,7 +166,7 @@ class Comments extends Component {
             </Grid.Column>
           </Grid>
         }
-        <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} refLink={this.props.match.url} {...props} />} />
+        <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
       </div>
     );
   }

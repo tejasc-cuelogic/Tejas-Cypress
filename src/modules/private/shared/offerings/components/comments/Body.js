@@ -1,12 +1,12 @@
 import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Label, Item, Header, Icon } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../../theme/shared';
 import { OFFERING_COMMENTS_SCOPE } from '../../../../../../constants/offering';
 
-const D_FORMAT = 'MMMM D, YYYY';
 const MsgContent = ({
   body, extra, edit, classes,
 }) => (
@@ -17,7 +17,7 @@ const MsgContent = ({
   </Item.Content>
 );
 const Extra = ({
-  date, scope, isIssuer, approved, showApproval,
+  date, scope, isIssuer, approved, showApproval, direction,
 }) => (
   <Item.Extra>
     <span className="time-stamp">{date}</span>
@@ -27,7 +27,7 @@ const Extra = ({
         <Icon className="ns-check-circle" color="green" />
       </Label>
     : (scope === 'PUBLIC' && !approved) ? showApproval ? <Label circular basic size="mini" color="green">Approval Pending</Label> : null
-    : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? OFFERING_COMMENTS_SCOPE[scope].titleI : OFFERING_COMMENTS_SCOPE[scope].title : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
+    : <Label circular size="mini" color={OFFERING_COMMENTS_SCOPE[scope].color}>{scope === 'ISSUER' ? isIssuer ? direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleITo : OFFERING_COMMENTS_SCOPE[scope].titleIFrom : direction === 'to' ? OFFERING_COMMENTS_SCOPE[scope].titleTo : OFFERING_COMMENTS_SCOPE[scope].titleFrom : OFFERING_COMMENTS_SCOPE[scope].title}</Label>
     }
   </Item.Extra>
 );
@@ -36,36 +36,29 @@ const Body = props => (
   <div className="message-body">
     <Item.Group className="messages comments">
       {props.thread && props.thread.length ?
-        props.thread.map((msg, index) => {
+        props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
-          const lastThreadDate = index > 0 && props.thread[index - 1] &&
-          props.thread[index - 1].updated ? props.thread[index - 1].updated.date :
-            props.thread[index - 1] && props.thread[index - 1].created.date;
-          const d2 = moment(date).format(D_FORMAT);
-          const d1 = index ? moment(lastThreadDate).format(D_FORMAT) :
-          moment(date).subtract(1, 'day');
-          const diff = moment(d2, D_FORMAT).diff(moment(d1, D_FORMAT), 'days');
           const msgDate = moment(date).format('LL');
-          const userFullName = msg.createdUserInfo.info && `${msg.createdUserInfo.info.firstName} ${msg.createdUserInfo.info.lastName}`;
+          const userFirstName = get(msg, 'createdUserInfo.info.firstName');
           const userInfo = {
-            firstName: msg.createdUserInfo.info.firstName,
-            lastName: msg.createdUserInfo.info.lastName,
-            avatarUrl: (msg.createdUserInfo.info && msg.createdUserInfo.info.avatar) ?
-            msg.createdUserInfo.info.avatar.url : null,
+            firstName: userFirstName,
+            lastName: get(msg, 'createdUserInfo.info.lastName'),
+            avatarUrl: get(msg, 'createdUserInfo.info.avatar.url') || null,
             roles: [msg.createdUserInfo.roles.name],
           };
-          const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
+          const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
           return ((props.isIssuer && msg.scope === 'NEXTSEED') ? false : msg.createdUserInfo.id !== props.currentUserId ? (
             <Aux>
-              <Item className={`${d2} in ${d1} ${diff}`}>
+              <Item className="in">
                 <UserAvatar size="mini" UserInfo={userInfo} />
                 <MsgContent
                   classes={classes}
                   body={msg.comment}
                   extra={
                     <Aux>
-                      <Header as="h6">{userFullName}</Header>
+                      <Header as="h6">{userFirstName}</Header>
                       <Extra
+                        direction="from"
                         showApproval={!props.isIssuer &&
                           msg.createdUserInfo.id === props.currentOfferingIssuerId}
                         approved={msg.approved}
@@ -97,14 +90,15 @@ const Body = props => (
             </Aux>
           ) : (
             <Aux>
-              <Item className={`${d2} sent ${d1} ${diff}`}>
+              <Item className="sent">
                 <MsgContent
                   classes={classes}
                   body={msg.comment}
                   extra={
                     <Aux>
-                      <Header as="h6">{userFullName}</Header>
+                      <Header as="h6">{userFirstName}</Header>
                       <Extra
+                        direction="to"
                         showApproval={props.isIssuer}
                         approved={msg.approved}
                         isIssuer={props.isIssuer}
