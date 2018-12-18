@@ -56,15 +56,15 @@ export default class Experience extends Component {
             showerror
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.isComfortable}
-            name="isComfortable"
+            fielddata={INVESTMENT_EXP_FORM.fields.isRiskTaker}
+            name="isRiskTaker"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
           />
           <FormCheckbox
-            fielddata={INVESTMENT_EXP_FORM.fields.isRiskTaker}
-            name="isRiskTaker"
+            fielddata={INVESTMENT_EXP_FORM.fields.isComfortable}
+            name="isComfortable"
             changed={experiencesChange}
             defaults
             containerclassname="ui relaxed list"
@@ -77,16 +77,16 @@ export default class Experience extends Component {
           <div className="center-align mt-20">
             {!isInvestmentExperienceValid &&
               <p className="negative-text mb-20">
-                NextSeed investments are suitable for experienced investors
-                are comfortable with long-term risk.
-                Please confirm that you fit this profile in order to proceed.
+                NextSeed investments are suitable for experienced investors who are
+                comfortable with long-term risk. Please confirm that you fit this
+                profile in order to proceed.
               </p>
             }
             <Button primary className="relaxed" content="Continue to Account" disabled={!(INVESTMENT_EXP_FORM.meta.isValid && isInvestmentExperienceValid)} />
             {!isInvestmentExperienceValid &&
               <p className="negative-text mt-20">
-                Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center </Link>
-                to learn more about investing on NextSeed.
+                Otherwise, please reference our <Link to="/app/resources/welcome-packet">Education Center</Link> to
+                learn more about investing on NextSeed.
               </p>
             }
           </div>

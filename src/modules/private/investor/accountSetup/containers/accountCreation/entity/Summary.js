@@ -56,7 +56,7 @@ export default class Summary extends Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Verify the info and create Entity account</Header>
+        <Header as="h3" textAlign="center">Verify information and submit for review</Header>
         <div className="field-wrap">
           <div className="table-wrapper">
             <Table unstackable basic="very" fixed>
@@ -118,13 +118,22 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" content="Confirm" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm} />
+          <Button primary size="large" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.entityAccountStore.isValidEntityForm} />
         </div>
         <p className="center-align grey-header mt-30 mb-0">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span> and the{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>NextSeed Membership Agreement</span>.
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
+            CrowdPay Custodial Account Agreement
+          </span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+            NextSeed US LLC Member Agreement
+          </span>,
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
+            NextSeed Securities LLC Investor Agreement
+          </span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
+            Substitute IRS Form W-9 Certification
+          </span>.
           <IframeModal
             open={this.state.open}
             close={this.closeModal}
