@@ -22,12 +22,11 @@ export default class CampaignSideBar extends Component {
   render() {
     const { className, campaignStore } = this.props;
     const { campaign } = campaignStore;
-    // const collected = 100;
     const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
     const minOffering = campaign && campaign.keyTerms &&
-     campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
+      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
     const maxOffering = campaign && campaign.keyTerms &&
-     campaign.keyTerms.maxOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+      campaign.keyTerms.maxOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
     const needValue = collected !== 0 && collected > minOffering ? maxOffering : minOffering;
     const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
@@ -42,6 +41,7 @@ export default class CampaignSideBar extends Component {
     const diff = DataFormatter.diffDays(terminationDate);
     const rewardsTiers = campaign && campaign.rewardsTierIds &&
       campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+    const flagStatus = collected >= minOffering;
     return (
       <Aux>
         <div className={`${className} offering-side-menu`}>
@@ -71,11 +71,14 @@ export default class CampaignSideBar extends Component {
                     collected,
                   }}
                 amountType={amountType}
+                maxOffering={maxOffering}
               />
             </Responsive>
+            {flagStatus &&
             <p>
               <Icon name="flag" /> Surpassed minimum goal
             </p>
+            }
             <Responsive maxWidth={767} as={Aux}>
               <Progress percent={90} size="tiny" color="green">tiny</Progress>
             </Responsive>
