@@ -156,7 +156,7 @@ class Comments extends Component {
                       analyses and will take additional
                       time.
                     </p>
-                    <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                    <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
                     <p>
                       If you have any technical questions or questions about NextSeed, please
                       email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
@@ -167,6 +167,7 @@ class Comments extends Component {
             </Grid.Column>
           </Grid>
         }
+        <Route path={`${this.props.match.url}/community-guidelines`} render={props => <CommentsReplyModal refLink={this.props.match.url} {...props} />} />
         <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
       </div>
     );
