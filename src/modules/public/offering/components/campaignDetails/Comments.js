@@ -8,7 +8,7 @@ import CommentsReplyModal from './CommentsReplyModal';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @observer
 class Comments extends Component {
   state={ readMore: false, readMoreInner: false }
@@ -25,6 +25,7 @@ class Comments extends Component {
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
     const { isUserLoggedIn } = this.props.authStore;
+    const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
@@ -65,8 +66,8 @@ class Comments extends Component {
                       }
                       <Form reply className="public-form clearfix">
                         {loggedInAsInvestor && !accountStatusFull ?
-                          <Link to="/app/summary" className="ui button secondary">Go To Dashboard</Link>
-                        : <Link to="/auth/register-investor" className="ui button secondary">Sign Up Now</Link>
+                          <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
+                        : <Link to={`/auth/${get(loginOrSignup, 'to')}`} className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                         }
                       </Form>
                     </section>
