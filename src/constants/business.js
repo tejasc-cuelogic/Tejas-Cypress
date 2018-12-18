@@ -1,4 +1,3 @@
-import moment from 'moment';
 import shortid from 'shortid';
 
 export const FORM_VALUES = [
@@ -83,7 +82,7 @@ export const PERSONAL_SIGNATURE = {
     },
   },
   signatureDate: {
-    value: moment(),
+    value: '',
     error: undefined,
     rule: 'required',
     key: 'signatureDate',
@@ -271,7 +270,7 @@ export const ISSUER_INFORMATION = {
     },
   },
   dateIncorporation: {
-    value: moment(),
+    value: '',
     key: 'dateIncorporation',
     placeHolder: 'Date of Incorporation/Organization',
     label: 'Date of Incorporation/Organization',
@@ -543,7 +542,7 @@ export const OFFERING_INFORMATION = {
     },
   },
   deadlineDate: {
-    value: moment(),
+    value: '',
     placeHolder: 'Deadline Date',
     label: 'Deadline Date',
     key: 'deadlineDate',

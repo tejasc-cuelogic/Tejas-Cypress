@@ -1,10 +1,10 @@
+/* eslint-disable react/jsx-indent */
 import React from 'react';
 import { Form, Button, Input } from 'semantic-ui-react';
 import { observer } from 'mobx-react';
-import moment from 'moment';
 import { FieldError } from '../../../../../theme/shared';
 
-import { FormInput, FormDatePicker } from './../../../../../theme/form';
+import { FormInput, MaskedInput } from './../../../../../theme/form';
 
 const PersonalSignature = observer(props => (
   <div>
@@ -40,16 +40,14 @@ const PersonalSignature = observer(props => (
           name="personTitle"
           changed={props.handleChange}
         />
-        <FormDatePicker
-          type="text"
-          name="signatureDate"
-          id="signatureDate"
-          placeholder="Select date"
-          maxDate={moment()}
-          fielddata={personData.signatureDate}
-          selected={personData.signatureDate.value}
-          changed={date => props.changedDate(null, { name: 'signatureDate', value: date, dataid: personData.id })}
-        />
+          <MaskedInput
+            name="signatureDate"
+            fielddata={personData.signatureDate}
+            format="##/##/####"
+            changed={date => props.changedDate(null, { name: 'signatureDate', value: date.formattedValue, dataid: personData.id })}
+            dateOfBirth
+            showerror
+          />
       </Form.Group>
     ))}
   </div>
