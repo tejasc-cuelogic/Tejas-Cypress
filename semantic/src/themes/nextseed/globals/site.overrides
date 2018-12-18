@@ -2268,6 +2268,9 @@ svg:not(:root).recharts-surface{
 			height:28px !important;
 			width:28px !important;
 			line-height:28px;
+			>.sb-avatar__text{
+				width:28px;
+			}
 		}
 	}
 	.message-footer{

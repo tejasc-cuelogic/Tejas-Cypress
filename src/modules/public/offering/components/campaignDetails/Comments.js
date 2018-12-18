@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Grid, Segment, Header, Label, Divider } from 'semantic-ui-react';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
+import CommunityGuideline from './CommunityGuideline';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @observer
 class Comments extends Component {
   state={ readMore: false, readMoreInner: false }
@@ -24,8 +26,11 @@ class Comments extends Component {
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
     const { isUserLoggedIn } = this.props.authStore;
+    const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
+    const accountStatusFull = activeAccounts && activeAccounts.length;
     const isRightToPostComment = isUserLoggedIn && (currentUser.roles.includes('investor') && activeAccounts && activeAccounts.length);
     const readMoreLength = 50;
     const { campaign } = this.props.campaignStore;
@@ -49,16 +54,22 @@ class Comments extends Component {
                     although some questions require more thorough analyses and will take additional
                     time.
                   </p>
-                  <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                  <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
                   <p>
                     If you have any technical questions or questions about NextSeed, please
                     email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
                   </p>
                   {!isRightToPostComment ?
                     <section className="center-align mt-80 mb-80">
-                      <p>In order to leave comments, please sign up and verify your identity.</p>
+                      {loggedInAsInvestor && !accountStatusFull ?
+                        <p>In order to leave comments, please create any type of account first.</p>
+                      : <p>In order to leave comments, please sign up and verify your identity.</p>
+                      }
                       <Form reply className="public-form clearfix">
-                        <Link to="/auth/register-investor" className="ui button secondary">Sign Up Now</Link>
+                        {loggedInAsInvestor && !accountStatusFull ?
+                          <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
+                        : <Link to={`/auth/${get(loginOrSignup, 'to')}`} className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                        }
                       </Form>
                     </section>
                     :
@@ -80,11 +91,10 @@ class Comments extends Component {
               <Segment padded>
                 <Comment.Group minimal>
                   {comments &&
-                    comments.map(c => (
-                      c.scope === 'PUBLIC' &&
+                    comments.map(c => c.scope === 'PUBLIC' && (
                       <Comment>
                         <Comment.Content>
-                          <Comment.Author>{c && c.createdUserInfo && c.createdUserInfo.info && `${c.createdUserInfo.info.firstName} ${c.createdUserInfo.info.firstName}`}</Comment.Author>
+                          <Comment.Author>{get(c, 'createdUserInfo.info.firstName')}</Comment.Author>
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(c && c.updated ? c.updated.date : c && c.created.date).format('LL')}</span></Comment.Metadata>
                           {isUserLoggedIn &&
                           <Comment.Actions>
@@ -94,30 +104,30 @@ class Comments extends Component {
                           <Comment.Text className="mt-20">
                             {this.state.readMore === c.id ?
                             c.comment : c.comment.substr(0, readMoreLength)}
-                            {c.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
+                            {(c.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
                           </Comment.Text>
                         </Comment.Content>
                         <Divider />
-                        <Comment.Group>
+                        <Comment.Group className="reply-comments">
                           {c.threadComment &&
-                          c.threadComment.map(tc => (
+                          c.threadComment.map(tc =>
                             ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
-                              && tc.approved) ||
-                              (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) &&
-                              <Comment className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : 'reply-comment'}`}>
-                                <Comment.Content>
-                                  <Comment.Author>
-                                    {tc && tc.createdUserInfo && tc.createdUserInfo.info && `${tc.createdUserInfo.info.firstName} ${tc.createdUserInfo.info.firstName}`}
-                                    {tc.createdUserInfo && tc.createdUserInfo.id === issuerId && <Label color="blue" size="mini">ISSUER</Label>}
-                                  </Comment.Author>
-                                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(tc && tc.updated ? tc.updated.date : tc && tc.created.date).format('LL')}</span></Comment.Metadata>
-                                  <Comment.Text className="mt-20">
-                                    {this.state.readMoreInner === tc.id ?
-                                    tc.comment : tc.comment.substr(0, readMoreLength)}
-                                    {c.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}> {this.state.readMoreInner !== tc.id ? '...Read More' : 'Read Less'}</Link>}
-                                  </Comment.Text>
-                                </Comment.Content>
-                              </Comment>
+                            && tc.approved) ||
+                            (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) && tc.scope === 'PUBLIC' && (
+                            <Comment className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
+                              <Comment.Content>
+                                <Comment.Author>
+                                  {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
+                                  {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
+                                </Comment.Author>
+                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(tc && tc.updated ? tc.updated.date : tc && tc.created.date).format('LL')}</span></Comment.Metadata>
+                                <Comment.Text className="mt-20">
+                                  {this.state.readMoreInner === tc.id ?
+                                  tc.comment : tc.comment.substr(0, readMoreLength)}
+                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}> {this.state.readMoreInner !== tc.id ? '...Read More' : 'Read Less'}</Link>}
+                                </Comment.Text>
+                              </Comment.Content>
+                            </Comment>
                           ))}
                         </Comment.Group>
                       </Comment>
@@ -147,7 +157,7 @@ class Comments extends Component {
                       analyses and will take additional
                       time.
                     </p>
-                    <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                    <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
                     <p>
                       If you have any technical questions or questions about NextSeed, please
                       email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
@@ -158,7 +168,10 @@ class Comments extends Component {
             </Grid.Column>
           </Grid>
         }
-        <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} refLink={this.props.match.url} {...props} />} />
+        <Switch>
+          <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
+          <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
+        </Switch>
       </div>
     );
   }
