@@ -2430,14 +2430,14 @@ export const DATA_ROOM = {
 export const POC_DETAILS = {
   issuerId: {
     value: '',
-    label: '',
-    tooltip: 'Email Address',
+    label: 'POC',
     error: undefined,
+    objRef: 'leadDetails',
     rule: 'string|required',
   },
   id: {
     value: '',
-    label: '',
+    label: 'Lead',
     error: undefined,
     objRef: 'leadDetails',
     rule: 'string',
@@ -2448,6 +2448,6 @@ export const POC_DETAILS = {
     error: undefined,
     objRef: 'offering.launch',
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'MM/DD/YYYY',
   },
 };
