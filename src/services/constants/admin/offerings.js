@@ -1053,6 +1053,10 @@ export const LEADERSHIP = {
       objRef: 'uploads',
       objType: 's3File',
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     heroImage: {
       label: 'Hero Image',
@@ -1067,6 +1071,10 @@ export const LEADERSHIP = {
       objType: 's3File',
       showLoader: false,
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     license: {
       label: 'Driver’s License',
@@ -2430,14 +2438,14 @@ export const DATA_ROOM = {
 export const POC_DETAILS = {
   issuerId: {
     value: '',
-    label: '',
-    tooltip: 'Email Address',
+    label: 'POC',
     error: undefined,
+    objRef: 'leadDetails',
     rule: 'string|required',
   },
   id: {
     value: '',
-    label: '',
+    label: 'Lead',
     error: undefined,
     objRef: 'leadDetails',
     rule: 'string',
@@ -2448,6 +2456,6 @@ export const POC_DETAILS = {
     error: undefined,
     objRef: 'offering.launch',
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'MM/DD/YYYY',
   },
 };

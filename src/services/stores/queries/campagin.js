@@ -66,6 +66,7 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
+    fundedAmount
     keyTerms {
       regulation
       startupPeriod
@@ -420,6 +421,7 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
+    fundedAmount
     keyTerms {
       regulation
       startupPeriod

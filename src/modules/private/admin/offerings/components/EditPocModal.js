@@ -1,6 +1,5 @@
 import React from 'react';
-import Aux from 'react-aux';
-import { Modal, Form, Button, Message, Header } from 'semantic-ui-react';
+import { Modal, Form, Button, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput, FormDropDown } from '../../../../../theme/form';
 import { ListErrors, InlineLoader } from '../../../../../theme/shared';
@@ -37,32 +36,23 @@ export default class EditOffering extends React.Component {
       return <InlineLoader />;
     }
     return (
-      <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
+      <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
         <Modal.Header>Edit information</Modal.Header>
         <Modal.Content>
-          {errors &&
-            <Message error textAlign="left" className="mt-30">
-              <ListErrors errors={errors.message ? [errors.message] : [errors]} />
-            </Message>
-          }
-          <Form onSubmit={() => this.handleSubmitForm()}>
+          <Form error onSubmit={() => this.handleSubmitForm()}>
             {['issuerId', 'id'].map(field => (
-              <Aux>
-                <Header as="h6">{field === 'issuerId' ? 'POC' : 'Lead'}</Header>
-                <FormDropDown
-                  search
-                  name={field}
-                  placeholder="Choose here"
-                  containerclassname="dropdown-field"
-                  fluid
-                  selection
-                  fielddata={POC_DETAILS_FRM.fields[field]}
-                  onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
-                  options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
-                />
-              </Aux>
-          ))
-          }
+              <FormDropDown
+                search
+                name={field}
+                placeholder="Choose here"
+                containerclassname="dropdown-field"
+                fluid
+                selection
+                fielddata={POC_DETAILS_FRM.fields[field]}
+                onChange={(e, result) => formChange(e, result, 'POC_DETAILS_FRM')}
+                options={field === 'issuerId' ? usersOptionsForDropdown.issuer : usersOptionsForDropdown.admin}
+              />
+            ))}
             <MaskedInput
               name="targetDate"
               fielddata={POC_DETAILS_FRM.fields.targetDate}
