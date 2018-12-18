@@ -408,7 +408,7 @@ export const ENTITY_PERSONAL_INFO = {
     key: 'title', value: '', error: undefined, rule: 'required', label: 'Title with the Entity', placeHolder: 'e.g. CEO',
   },
   legalDocUrl: {
-    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Drivers Livense or Passport)', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Driver License or Passport)', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 
