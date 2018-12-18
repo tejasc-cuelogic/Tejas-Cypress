@@ -433,6 +433,7 @@
         border:none;
     }
 }
+/* Drag-and-Drop effect styles in action */
 body > .row-wrap{
     background-color:@neutral-offdark;
     .ui.input>input{
@@ -451,3 +452,4 @@ body > .row-wrap{
         }
     }
 }
+/* Drag-and-Drop effect styles in action */
