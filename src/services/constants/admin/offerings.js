@@ -1053,6 +1053,10 @@ export const LEADERSHIP = {
       objRef: 'uploads',
       objType: 's3File',
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     heroImage: {
       label: 'Hero Image',
@@ -1067,6 +1071,10 @@ export const LEADERSHIP = {
       objType: 's3File',
       showLoader: false,
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     license: {
       label: 'Driver’s License',

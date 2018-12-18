@@ -3,7 +3,12 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
-import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox } from '../../../../../../theme/form';
+import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper } from '../../../../../../theme/form';
+import { Image64 } from '../../../../../../theme/shared';
+import {
+  PROFILE_PHOTO_BYTES,
+  PROFILE_PHOTO_EXTENSIONS,
+} from '../../../../../../services/constants/user';
 import ButtonGroup from '../ButtonGroup';
 
 const HeaderWithTooltip = ({ header, tooltip }) => (
@@ -29,6 +34,9 @@ export default class Leader extends Component {
   onFileDrop = (files, name, index) => {
     this.props.offeringCreationStore.uploadFileToS3('LEADERSHIP_FRM', name, files, 'leadership', index);
   }
+  setData = (attr, value, fieldName, index) => {
+    this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, value, fieldName, index);
+  }
   handleDelDoc = (field) => {
     this.props.offeringCreationStore.removeUploadedDataMultiple('LEADERSHIP_FRM', field, this.props.index || 0, 'leadership', true);
   }
@@ -50,6 +58,41 @@ export default class Leader extends Component {
   addMore = (e, formName, arrayName) => {
     e.preventDefault();
     this.props.offeringCreationStore.addMore(formName, arrayName);
+  }
+  handleVerifyFileSize = (fileSize, field) => {
+    if (fileSize > PROFILE_PHOTO_BYTES) {
+      const leaderNumber = this.props.index;
+      const index = leaderNumber || 0;
+      const attr = 'error';
+      const errorMsg = 'File size cannot be more than 5 MB.';
+      this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, errorMsg, field, index);
+    }
+  }
+  handleVerifyFileExtension = (fileExt) => {
+    if (PROFILE_PHOTO_EXTENSIONS.indexOf(fileExt) === -1) {
+      const leaderNumber = this.props.index;
+      const index = leaderNumber || 0;
+      const field = 'error';
+      const errorMsg = `Only ${PROFILE_PHOTO_EXTENSIONS.join(', ')}  extensions are allowed.`;
+      this.props.offeringCreationStore.setLeadershipProfilePhoto(field, errorMsg, '', index);
+    }
+  }
+  handleresetProfilePhoto = (field, index) => {
+    this.props.offeringCreationStore.resetLeadershopProfilePhoto(field, index);
+  }
+  handelImageDeimension = (width, height, field) => {
+    if (width < 200 || height < 200) {
+      const leaderNumber = this.props.index;
+      const index = leaderNumber || 0;
+      const attr = 'error';
+      const errorMsg = 'Image size should not be less than 200 x 200.';
+      this.props.offeringCreationStore.setLeadershipProfilePhoto(attr, errorMsg, field, index);
+    }
+  }
+  uploadMedia = (name) => {
+    const leaderNumber = this.props.index;
+    const index = leaderNumber || 0;
+    this.props.offeringCreationStore.uploadMediaForLeadership(name, 'LEADERSHIP_FRM', index);
   }
   render() {
     const leaderNumber = this.props.index;
@@ -207,9 +250,9 @@ export default class Leader extends Component {
           }
           <Divider section />
           <Header as="h4">Uploads</Header>
-          <Form.Group widths={3}>
+          <Form.Group widths={1}>
             {
-              ['headshot', 'heroImage', 'license'].map(field => (
+              ['license'].map(field => (
                 <DropZone
                   disabled={isReadonly}
                   name={field}
@@ -223,11 +266,38 @@ export default class Leader extends Component {
               ))
             }
           </Form.Group>
+          <Form.Group widths={2}>
+            {
+              ['headshot', 'heroImage'].map(field => (
+                LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl ? (
+                  <div className="file-uploader attached">
+                    <Button onClick={() => this.handleDelDoc(field)} circular icon={{ className: 'ns-close-light' }} />
+                    <Image64 srcUrl={LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl} />
+                  </div>
+                ) : (
+                  <ImageCropper
+                    disabled={isReadonly}
+                    fieldData={LEADERSHIP_FRM.fields.leadership[index][field]}
+                    setData={(attr, value) => this.setData(attr, value, field, index)}
+                    verifySize={this.handleVerifyFileSize}
+                    verifyExtension={this.handleVerifyFileExtension}
+                    handelReset={() => this.handleresetProfilePhoto(field, index)}
+                    verifyImageDimension={this.handelImageDeimension}
+                    field={LEADERSHIP_FRM.fields.leadership[index][field]}
+                    modalUploadAction={this.uploadMedia}
+                    name={field}
+                    cropInModal
+                    aspect={16 / 9}
+                  />
+                )
+              ))
+            }
+          </Form.Group>
           <Divider section />
           <Header as="h4">
             Experience
             {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length < 5 &&
-            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'LEADERSHIP_EXP_FRM', 'employer')}><small>+ Add another business</small></Link>
+              <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, 'LEADERSHIP_EXP_FRM', 'employer')}><small>+ Add another business</small></Link>
             }
           </Header>
           {
@@ -236,9 +306,9 @@ export default class Leader extends Component {
                 <Header as="h6">
                   {`Business ${index2 + 1}`}
                   {!isReadonly && LEADERSHIP_EXP_FRM.fields.employer.length > 1 &&
-                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
+                    <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index2, 'LEADERSHIP_EXP_FRM')}>
+                      <Icon className="ns-close-circle" color="grey" />
+                    </Link>
                   }
                 </Header>
                 <div className="featured-section">

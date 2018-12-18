@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
+import { Header, Grid, Segment, Icon, Reveal } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
-import { InlineLoader } from '../../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../../constants/aws';
+import { InlineLoader, Image64 } from '../../../../../../theme/shared';
+// import { ASSETS_URL } from '../../../../../../constants/aws';
 
 class MeetOurTeam extends Component {
   render() {
@@ -46,11 +46,14 @@ class MeetOurTeam extends Component {
                             </div>
                           </Reveal.Content>
                           <Reveal.Content visible>
-                            <Image
-                              src={
+                            {/* <Image64
+                              srcUrl={MEDIA_FRM.fields.heroImage.preSignedUrl}
+                            /> */}
+                            <Image64
+                              srcUrl={
                                 data && data.uploads && data.uploads.headshot &&
                                   data.uploads.headshot.url ?
-                                  data.uploads.headshot.url : `${ASSETS_URL}images/leader-placeholder.jpg`
+                                  data.uploads.headshot.url : null
                               }
                               circular
                             />
