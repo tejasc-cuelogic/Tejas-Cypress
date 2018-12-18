@@ -21,8 +21,15 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class CampaignSideBar extends Component {
   render() {
     const { className, campaignStore } = this.props;
-    const collected = 100;
     const { campaign } = campaignStore;
+    // const collected = 100;
+    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    const minOffering = campaign && campaign.keyTerms &&
+     campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
+    const maxOffering = campaign && campaign.keyTerms &&
+     campaign.keyTerms.maxOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const needValue = collected !== 0 && collected > minOffering ? maxOffering : minOffering;
+    const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
     const updatesCount = campaign && campaign.updates &&
@@ -60,10 +67,10 @@ export default class CampaignSideBar extends Component {
               <CampaignProgress
                 data={
                   {
-                    needed: (campaign && campaign.keyTerms &&
-                      campaign.keyTerms.maxOfferingAmount) || 0,
-                    collected: collected || 0,
+                    needed: needValue,
+                    collected,
                   }}
+                amountType={amountType}
               />
             </Responsive>
             <p>
