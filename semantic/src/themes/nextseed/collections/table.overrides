@@ -383,6 +383,7 @@
     flex-direction:row;
     align-items:center;
     border-top:@neutral-midwhite 1px solid;
+    z-index:1001;
     >div{
         padding:.5em .7em;
         display:inline-block;
@@ -432,6 +433,23 @@
         border:none;
     }
 }
-.rc-draggable-list .rc-draggable-list-chosen{
+/* Drag-and-Drop effect styles in action */
+body > .row-wrap{
     background-color:@neutral-offdark;
+    .ui.input>input{
+        background-color:@white;
+        padding:@5px;
+    }
+    .file-uploader{
+        padding:0;
+        margin:0;
+        min-height:auto;
+        border:0;
+        color:@primary-two;
+        text-align:left;
+        span{
+            color:@primary-two;
+        }
+    }
 }
+/* Drag-and-Drop effect styles in action */
