@@ -1,7 +1,8 @@
+/*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Form, Header, Button, Divider, Confirm, Icon, Popup } from 'semantic-ui-react';
+import { Form, Header, Button, Divider, Confirm, Icon, Popup, Grid } from 'semantic-ui-react';
 import { withRouter, Link } from 'react-router-dom';
 import { FormInput, MaskedInput, FormTextarea, DropZoneConfirm as DropZone, AutoComplete, FormCheckbox, ImageCropper } from '../../../../../../theme/form';
 import { Image64 } from '../../../../../../theme/shared';
@@ -250,48 +251,82 @@ export default class Leader extends Component {
           }
           <Divider section />
           <Header as="h4">Uploads</Header>
-          <Form.Group widths={1}>
-            {
-              ['license'].map(field => (
-                <DropZone
-                  disabled={isReadonly}
-                  name={field}
-                  fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
-                  ondrop={(files, name) => this.onFileDrop(files, name, index)}
-                  onremove={fieldName => this.handleDelDoc(fieldName)}
-                  uploadtitle="Upload a file"
-                  tooltip={field !== 'license' ? 'To be used on the public offering page' : false}
-                  containerclassname="field"
-                />
-              ))
-            }
-          </Form.Group>
-          <Form.Group widths={2}>
-            {
-              ['headshot', 'heroImage'].map(field => (
-                LEADERSHIP_FRM.fields.leadership[index][field].value ? (
-                  <div className="file-uploader attached">
-                    <Button onClick={() => this.handleDelDoc(field)} circular icon={{ className: 'ns-close-light' }} />
-                    <Image64 srcUrl={LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl} />
-                  </div>
-                ) : (
-                  <ImageCropper
-                    disabled={isReadonly}
-                    fieldData={LEADERSHIP_FRM.fields.leadership[index][field]}
-                    setData={(attr, value) => this.setData(attr, value, field, index)}
-                    verifySize={this.handleVerifyFileSize}
-                    verifyExtension={this.handleVerifyFileExtension}
-                    handelReset={() => this.handleresetProfilePhoto(field, index)}
-                    verifyImageDimension={this.handelImageDeimension}
-                    field={LEADERSHIP_FRM.fields.leadership[index][field]}
-                    modalUploadAction={this.uploadMedia}
-                    name={field}
-                    cropInModal
-                    aspect={field === 'headshot' ? 1 / 1 : 3 / 2}
-                  />
-                )
-              ))
-            }
+          <Grid stackable>
+            <Grid.Column width="6">
+              <div className="ui form cropper-wrap headshot-img">
+                <Form.Field>
+                  <label>Headshot image</label>
+                  {LEADERSHIP_FRM.fields.leadership[index].headshot.value ? (
+                    <div className="file-uploader attached">
+                      <Button onClick={() => this.handleDelDoc('headshot')} circular icon={{ className: 'ns-close-light' }} />
+                      <Image64
+                        srcUrl={LEADERSHIP_FRM.fields.leadership[index].headshot.preSignedUrl}
+                      />
+                    </div>
+                  ) : (
+                    <ImageCropper
+                      disabled={isReadonly}
+                      fieldData={LEADERSHIP_FRM.fields.leadership[index].headshot}
+                      setData={(attr, value) => this.setData(attr, value, 'headshot', index)}
+                      verifySize={this.handleVerifyFileSize}
+                      verifyExtension={this.handleVerifyFileExtension}
+                      handelReset={() => this.handleresetProfilePhoto('headshot', index)}
+                      verifyImageDimension={this.handelImageDeimension}
+                      field={LEADERSHIP_FRM.fields.leadership[index].headshot}
+                      modalUploadAction={this.uploadMedia}
+                      name="headshot"
+                      cropInModal
+                      aspect={1 / 1}
+                    />
+                  )}
+                </Form.Field>
+              </div>
+            </Grid.Column>
+            <Grid.Column width="10">
+              <div className="ui form cropper-wrap hero-img">
+                <Form.Field>
+                  <label>Hero image</label>
+                  {LEADERSHIP_FRM.fields.leadership[index].heroImage.value ? (
+                    <div className="file-uploader attached">
+                      <Button onClick={() => this.handleDelDoc('heroImage')} circular icon={{ className: 'ns-close-light' }} />
+                      <Image64
+                        srcUrl={LEADERSHIP_FRM.fields.leadership[index].heroImage.preSignedUrl}
+                      />
+                    </div>
+                  ) : (
+                    <ImageCropper
+                      disabled={isReadonly}
+                      fieldData={LEADERSHIP_FRM.fields.leadership[index].heroImage}
+                      setData={(attr, value) => this.setData(attr, value, 'heroImage', index)}
+                      verifySize={this.handleVerifyFileSize}
+                      verifyExtension={this.handleVerifyFileExtension}
+                      handelReset={() => this.handleresetProfilePhoto('heroImage', index)}
+                      verifyImageDimension={this.handelImageDeimension}
+                      field={LEADERSHIP_FRM.fields.leadership[index].heroImage}
+                      modalUploadAction={this.uploadMedia}
+                      name="heroImage"
+                      cropInModal
+                      aspect={16 / 9}
+                    />
+                  )}
+                </Form.Field>
+              </div>
+            </Grid.Column>
+          </Grid>
+          <Divider hidden />
+          <Form.Group widths={3}>
+            {['license'].map(field => (
+              <DropZone
+                disabled={isReadonly}
+                name={field}
+                fielddata={LEADERSHIP_FRM.fields.leadership[index][field]}
+                ondrop={(files, name) => this.onFileDrop(files, name, index)}
+                onremove={fieldName => this.handleDelDoc(fieldName)}
+                uploadtitle="Upload a file"
+                tooltip={field !== 'license' ? 'To be used on the public offering page' : false}
+                containerclassname="field"
+              />
+            ))}
           </Form.Group>
           <Divider section />
           <Header as="h4">
