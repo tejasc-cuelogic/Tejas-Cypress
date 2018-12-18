@@ -53,7 +53,7 @@ class Comments extends Component {
                     although some questions require more thorough analyses and will take additional
                     time.
                   </p>
-                  <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                  <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
                   <p>
                     If you have any technical questions or questions about NextSeed, please
                     email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
