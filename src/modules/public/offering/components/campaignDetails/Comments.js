@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Grid, Segment, Header, Label, Divider } from 'semantic-ui-react';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
+import CommunityGuideline from './CommunityGuideline';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -53,7 +54,7 @@ class Comments extends Component {
                     although some questions require more thorough analyses and will take additional
                     time.
                   </p>
-                  <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                  <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
                   <p>
                     If you have any technical questions or questions about NextSeed, please
                     email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
@@ -167,8 +168,10 @@ class Comments extends Component {
             </Grid.Column>
           </Grid>
         }
-        <Route path={`${this.props.match.url}/community-guidelines`} render={props => <CommentsReplyModal refLink={this.props.match.url} {...props} />} />
-        <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
+        <Switch>
+          <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
+          <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
+        </Switch>
       </div>
     );
   }
