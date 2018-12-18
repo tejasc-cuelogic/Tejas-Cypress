@@ -287,7 +287,7 @@ export default class Leader extends Component {
                     modalUploadAction={this.uploadMedia}
                     name={field}
                     cropInModal
-                    aspect={1 / 1}
+                    aspect={field === 'headshot' ? 1 / 1 : 3 / 2}
                   />
                 )
               ))
