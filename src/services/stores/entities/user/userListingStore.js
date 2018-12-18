@@ -188,17 +188,14 @@ export class UserListingStore {
         text: `${user.info.firstName} ${user.info.lastName}`,
         value: user.id,
         icon:
-  <span className="user-image">
-    <UserAvatar
-      UserInfo={{
-          firstName: user.info ? user.info.firstName : '',
-          lastName: user.info ? user.info.lastName : '',
-          avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
-          roles: user.roles.map(r => r.scope),
-        }}
-      size="mini"
-            />{' '}
-  </span>,
+  <UserAvatar
+    UserInfo={{
+      firstName: user.info ? user.info.firstName : '',
+      lastName: user.info ? user.info.lastName : '',
+      avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+      roles: user.roles.map(r => r.scope),
+    }}
+  />,
       // image: { avatar: user.info.avatar, src: (user.info.avatar && user.info.avatar.url) || '' },
       });
       return false;

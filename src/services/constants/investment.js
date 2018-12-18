@@ -126,7 +126,7 @@ export const AGREEMENT_DETAILS_INFO = {
             financial condition to bear the loss. I have read and agree to the terms of
             the <a href="/">CrowdPay Custodial Account Agreement</a>,
             the <a href="/">Substitute IRS Form W-9 Certification</a>,
-            and <a href="/">NextSeed Investor Membership Agreement</a>.
+            and <a href="/">NextSeed Securities LLC Investor Agreement</a>.
           </Aux>
         ),
         value: '6',

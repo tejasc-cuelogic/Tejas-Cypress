@@ -76,7 +76,7 @@ export default class ManualForm extends Component {
           }
           <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
-        <Button color="green" className="link-button mt-30" content="Or select your bank from the list" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')} />
+        <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')} />
       </div>
     );
   }

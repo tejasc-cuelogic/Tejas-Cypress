@@ -57,7 +57,7 @@ export default class OfferingDetails extends Component {
                   <Icon className="ns-view" /><b>Preview the offering page</b>
                 </Link>
                 {offer.stage === 'CREATION' &&
-                <small className="pull-right"><Link to={`${match.url}/editPoc`}><Icon className="ns-pencil" />Edit</Link></small>
+                  <Link to={`${match.url}/editPoc`} className="pull-right"><Icon className="ns-pencil" />Edit</Link>
                 }
               </Header.Subheader>
             </Header>
