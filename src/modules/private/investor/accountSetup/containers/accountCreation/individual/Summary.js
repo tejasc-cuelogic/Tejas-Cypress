@@ -97,15 +97,15 @@ export default class Summary extends React.Component {
           </div>
         </div>
         {errors &&
-          <Message error>
+          <Message error className="center-align">
             <ListErrors errors={[errors.message]} />
           </Message>
         }
         <p className="center-align grey-header mt-30">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Funding Portal Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Broker-Dealer Investor Agreement</span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed US LLC Member Agreement</span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>.
           <IframeModal
             open={this.state.open}

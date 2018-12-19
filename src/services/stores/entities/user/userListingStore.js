@@ -1,9 +1,11 @@
-/* eslint-disable class-methods-use-this */
+/* eslint-disable class-methods-use-this, react/jsx-closing-bracket-location */
 import { toJS, observable, computed, action } from 'mobx';
+import React from 'react';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import isArray from 'lodash/isArray';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { UserAvatar } from './../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
 
 export class UserListingStore {
@@ -174,6 +176,31 @@ export class UserListingStore {
         IRA: 17,
       },
     };
+  }
+
+  @computed get usersOptionsForDropdown() {
+    const usersOptions = {
+      admin: [],
+      issuer: [],
+    };
+    this.users.map((user) => {
+      usersOptions[user.roles[0].scope].push({
+        text: `${user.info.firstName} ${user.info.lastName}`,
+        value: user.id,
+        icon:
+  <UserAvatar
+    UserInfo={{
+      firstName: user.info ? user.info.firstName : '',
+      lastName: user.info ? user.info.lastName : '',
+      avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+      roles: user.roles.map(r => r.scope),
+    }}
+  />,
+      // image: { avatar: user.info.avatar, src: (user.info.avatar && user.info.avatar.url) || '' },
+      });
+      return false;
+    });
+    return usersOptions;
   }
 }
 

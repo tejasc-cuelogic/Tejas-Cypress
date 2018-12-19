@@ -47,16 +47,16 @@ query getOfferingList($filters: OfferingFilterInputType){
 `;
 
 export const getOfferingById = gql`
-  query getOfferingById($id: ID!) {
-    getOfferingDetailsById(id: $id) {
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
     }
   }
 `;
 
 export const campaignDetailsQuery = gql`
-  query getOfferingDetailsById($id: ID!) {
-    getOfferingDetailsById (id: $id) {
+  query getOfferingDetailsBySlug($id: String) {
+    getOfferingDetailsBySlug (offeringSlug: $id) {
     id
     stage
     applicationId
@@ -66,8 +66,10 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
+    fundedAmount
     keyTerms {
       regulation
+      startupPeriod
       offeringDisclaimer
       legalBusinessName
       shorthandBusinessName
@@ -292,6 +294,11 @@ export const campaignDetailsQuery = gql`
         by
         date
       }
+      created {
+        id
+        by
+        date
+      }
       createdUserInfo {
         id
         info {
@@ -300,6 +307,44 @@ export const campaignDetailsQuery = gql`
           avatar {
             url
             name
+          }
+        }
+      }
+      threadComment {
+        id
+        offeringId
+        thread
+        scope
+        comment
+        approved {
+          id
+          by
+          date
+        }
+        updated {
+          id
+          by
+          date
+        }
+        created {
+          id
+          by
+          date
+        }
+        deleted {
+          id
+          by
+          date
+        }
+        createdUserInfo {
+          id
+          info {
+            firstName
+            lastName
+            avatar {
+              url
+              name
+            }
           }
         }
       }
@@ -386,8 +431,10 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
+    fundedAmount
     keyTerms {
       regulation
+      startupPeriod
       offeringDisclaimer
       legalBusinessName
       shorthandBusinessName

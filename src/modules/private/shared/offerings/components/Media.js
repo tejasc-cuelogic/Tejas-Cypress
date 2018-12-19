@@ -110,7 +110,7 @@ export default class Media extends Component {
                   cropInModal
                   aspect={16 / 9}
                 />
-              )}
+                )}
             </Form>
           </Grid.Column>
           <Grid.Column>
@@ -161,7 +161,7 @@ export default class Media extends Component {
                   cropInModal
                   aspect={3 / 2}
                 />
-              )}
+                )}
             </Form>
           </Grid.Column>
           <Grid.Column>
@@ -187,7 +187,7 @@ export default class Media extends Component {
                   cropInModal
                   aspect={3 / 2}
                 />
-              )}
+                )}
             </Form>
           </Grid.Column>
         </Grid>
@@ -216,7 +216,7 @@ export default class Media extends Component {
                   cropInModal
                   aspect={3 / 2}
                 />
-              )}
+                )}
             </Form>
           </Grid.Column>
           <Grid.Column>
@@ -242,11 +242,11 @@ export default class Media extends Component {
                   cropInModal
                   aspect={3 / 2}
                 />
-              )}
+                )}
             </Form>
           </Grid.Column>
         </Grid>
-        <Divider section />
+        {/* <Divider section />
         <Header as="h4">Location Image</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
@@ -255,7 +255,10 @@ export default class Media extends Component {
             MEDIA_FRM.fields.location.preSignedUrl.map((url, i) => (
               <List.Item key={url}>
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('location', i)} circular icon={{ className: 'ns-close-light' }} />
+                  <Button onClick={
+                    () => this.showConfirmModal('location', i)
+                  }
+                  circular icon={{ className: 'ns-close-light' }} />
                   <Image64 srcUrl={url} />
                 </div>
               </List.Item>
@@ -277,21 +280,21 @@ export default class Media extends Component {
               />
             </List.Item>
           </List>
-        </Form>
+        </Form> */}
         <Divider section />
         <Header as="h4">Gallery</Header>
         <Form className="cropper-wrap gallery-img">
           <List horizontal>
             {MEDIA_FRM.fields.gallery.preSignedUrl &&
-            MEDIA_FRM.fields.gallery.preSignedUrl.length &&
-            MEDIA_FRM.fields.gallery.preSignedUrl.map((url, i) => (
-              <List.Item key={`gallery${url}`}>
-                <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image64 srcUrl={url} />
-                </div>
-              </List.Item>
-            ))}
+              MEDIA_FRM.fields.gallery.preSignedUrl.length &&
+              MEDIA_FRM.fields.gallery.preSignedUrl.map((url, i) => (
+                <List.Item key={`gallery${url}`}>
+                  <div className="file-uploader attached">
+                    <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
+                    <Image64 srcUrl={url} />
+                  </div>
+                </List.Item>
+              ))}
             <List.Item>
               <ImageCropper
                 disabled={isReadonly}
@@ -311,35 +314,39 @@ export default class Media extends Component {
           </List>
         </Form>
         <Divider section />
+
         <Header as="h4">Logo</Header>
         <Form className="cropper-wrap gallery-img logo-img">
           <List horizontal>
-            {MEDIA_FRM.fields.logo.preSignedUrl && MEDIA_FRM.fields.logo.preSignedUrl.length &&
-            MEDIA_FRM.fields.logo.preSignedUrl.map((url, i) => (
-              <List.Item key={`logo${url}`}>
-                <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('logo', i)} circular icon={{ className: 'ns-close-light' }} />
-                  <Image64 srcUrl={url} />
-                </div>
+            {MEDIA_FRM.fields.logo.preSignedUrl && MEDIA_FRM.fields.logo.preSignedUrl.length ?
+              (MEDIA_FRM.fields.logo.preSignedUrl.map((url, i) => (
+                <List.Item key={`logo${url}`}>
+                  <div className="file-uploader attached">
+                    <Button onClick={() => this.showConfirmModal('logo', i)} circular icon={{ className: 'ns-close-light' }} />
+                    <Image64 srcUrl={url} />
+                  </div>
+                </List.Item>
+              )))
+              :
+              <List.Item>
+                <ImageCropper
+                  disabled={isReadonly}
+                  fieldData={MEDIA_FRM.fields.logo}
+                  setData={(attr, value) => this.setData(attr, value, 'logo')}
+                  verifySize={this.handleVerifyFileSize}
+                  verifyExtension={this.handleVerifyFileExtension}
+                  handelReset={() => this.handleresetProfilePhoto('logo')}
+                  verifyImageDimension={this.handelImageDeimension}
+                  field={MEDIA_FRM.fields.logo}
+                  modalUploadAction={this.uploadMedia}
+                  name="logo"
+                  cropInModal
+                  aspect="none"
+                />
               </List.Item>
-            ))}
-            <List.Item>
-              <ImageCropper
-                disabled={isReadonly}
-                fieldData={MEDIA_FRM.fields.logo}
-                setData={(attr, value) => this.setData(attr, value, 'logo')}
-                verifySize={this.handleVerifyFileSize}
-                verifyExtension={this.handleVerifyFileExtension}
-                handelReset={() => this.handleresetProfilePhoto('logo')}
-                verifyImageDimension={this.handelImageDeimension}
-                field={MEDIA_FRM.fields.logo}
-                modalUploadAction={this.uploadMedia}
-                name="logo"
-                cropInModal
-                aspect="none"
-              />
-            </List.Item>
+            }
           </List>
+
           <Divider hidden />
         </Form>
         <ButtonGroup

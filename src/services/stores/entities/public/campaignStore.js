@@ -75,7 +75,7 @@ export class CampaignStore {
       variables: { id },
       onFetch: (data) => {
         if (data) {
-          resolve(data.getOfferingDetailsById);
+          resolve(data.getOfferingDetailsBySlug);
         }
       },
       fetchPolicy: 'network-only',
@@ -122,8 +122,13 @@ export class CampaignStore {
   }
 
   @computed get campaign() {
-    return (this.details.data && this.details.data.getOfferingDetailsById &&
-      toJS(this.details.data.getOfferingDetailsById)) || null;
+    if (this.details.data && this.details.data.getOfferingDetailsBySlug &&
+      this.details.data.getOfferingDetailsBySlug[0]) {
+      return toJS(this.details.data.getOfferingDetailsBySlug[0]);
+    } else if (this.details.data && this.details.data.getOfferingDetailsById) {
+      return toJS(this.details.data.getOfferingDetailsById);
+    }
+    return null;
   }
 
   @computed get getOfferingId() {
@@ -175,13 +180,11 @@ export class CampaignStore {
     const documentsList = toJS(this.dataRoomDocs);
     const navList = [];
     forEach(documentsList, (ele, idx) => {
-      if (!ele.accreditedOnly) {
-        navList.push({
-          title: ele.name,
-          to: idx,
-          url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
-        });
-      }
+      navList.push({
+        title: ele.name,
+        to: idx,
+        url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
+      });
     });
     return navList;
   }

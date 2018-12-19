@@ -408,7 +408,7 @@ export const ENTITY_PERSONAL_INFO = {
     key: 'title', value: '', error: undefined, rule: 'required', label: 'Title with the Entity', placeHolder: 'e.g. CEO',
   },
   legalDocUrl: {
-    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Drivers Livense or Passport)', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Driver License or Passport)', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 
@@ -660,7 +660,7 @@ export const INVESTMENT_EXPERIENCE = {
     value: [],
     values: [
       {
-        label: 'Investing in private business is not for investors with short-term time horizons.  Are you comfortable investing in securities that have limited liquidty?',
+        label: 'Investing in a private business is not for investors with short-term time horizons. I am comfortable investing in securities that have limited liquidity.',
         value: 'checked',
       },
     ],
@@ -671,7 +671,7 @@ export const INVESTMENT_EXPERIENCE = {
     value: [],
     values: [
       {
-        label: 'Investing in private business involves risk. When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
+        label: 'Investing in a private business involves risk. When investing on NextSeed, I am willing to take on significant risk to potentially earn a return on my investment.',
         value: 'checked',
       },
     ],

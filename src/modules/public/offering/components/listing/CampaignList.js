@@ -37,7 +37,7 @@ export default class CampaignList extends Component {
                 <Grid doubling columns={3} stackable>
                   {campaigns.map(offering => (
                     <Grid.Column>
-                      <Card className="campaign" fluid as={Link} to={`/offerings/${offering.id}/overview`}>
+                      <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}/overview`}>
                         <Image64
                           centered
                           srcUrl={offering && offering.media && offering.media.tombstoneImage &&
@@ -71,7 +71,7 @@ export default class CampaignList extends Component {
                             <Card.Description
                               {...Parser(offering && offering.offering &&
                                 offering.offering.about && offering.offering.about.theCompany ?
-                                offering.offering.about.theCompany : '-')}
+                                offering.offering.about.theCompany : '')}
                             />
                           </Card.Content>
                           <Card.Content extra>
@@ -91,7 +91,7 @@ export default class CampaignList extends Component {
                         {offering.stage === 'LOCK' && (
                           <Card.Content className="card-hidden">
                             <div className="lock-image">
-                              <Image src={`${ASSETS_URL}images/icon_lock.png`} />
+                              <Image mini src={`${ASSETS_URL}images/icon_lock.png`} />
                             </div>
                             <div className="details">
                               <div className="tags mb-10">

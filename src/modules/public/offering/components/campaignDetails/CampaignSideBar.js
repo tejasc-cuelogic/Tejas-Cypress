@@ -21,17 +21,27 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class CampaignSideBar extends Component {
   render() {
     const { className, campaignStore } = this.props;
-    const collected = 100;
     const { campaign } = campaignStore;
+    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    const minOffering = campaign && campaign.keyTerms &&
+      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
+    const maxOffering = campaign && campaign.keyTerms &&
+      campaign.keyTerms.maxOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const needValue = collected !== 0 && collected > minOffering ? maxOffering : minOffering;
+    const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
-    const updatesArr = campaign && campaign.updates &&
-      campaign.updates.length ? campaign.updates : [];
+    const updatesCount = campaign && campaign.updates &&
+      campaign.updates.length ? campaign.updates.length : 0;
+    const commentsCount = campaign && campaign.comments &&
+      campaign.comments.length ? campaign.comments.length : 0;
+    const navCountData = { updates: updatesCount, comments: commentsCount };
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(terminationDate);
     const rewardsTiers = campaign && campaign.rewardsTierIds &&
       campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+    const flagStatus = collected >= minOffering;
     return (
       <Aux>
         <div className={`${className} offering-side-menu`}>
@@ -57,15 +67,18 @@ export default class CampaignSideBar extends Component {
               <CampaignProgress
                 data={
                   {
-                    needed: (campaign && campaign.keyTerms &&
-                      campaign.keyTerms.maxOfferingAmount) || 0,
-                    collected: collected || 0,
+                    needed: needValue,
+                    collected,
                   }}
+                amountType={amountType}
+                maxOffering={maxOffering}
               />
             </Responsive>
+            {flagStatus &&
             <p>
               <Icon name="flag" /> Surpassed minimum goal
             </p>
+            }
             <Responsive maxWidth={767} as={Aux}>
               <Progress percent={90} size="tiny" color="green">tiny</Progress>
             </Responsive>
@@ -108,7 +121,7 @@ export default class CampaignSideBar extends Component {
           {!isMobile &&
             <Aux>
               <Menu vertical fluid>
-                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} updates={updatesArr} bonusRewards={rewardsTiers} />
+                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers} />
                 {/* <Divider />
                 <Menu.Item as={Link} to="/" className="secondary-item">
                   <Icon name="heart outline" /> Watch Deal

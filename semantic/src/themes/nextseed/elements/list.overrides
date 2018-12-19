@@ -203,7 +203,7 @@
 //  Used for message section
 .ui.card.messages{
     flex-direction:row;
-    max-height:~"calc(100vh - 232px)";
+    height:~"calc(100vh - 188px)";
     .ui.list{
         width:30%;
         margin:0;
@@ -213,9 +213,13 @@
         >.item{
             padding:@12px;
             position:relative;
+            font-size:@12px;
+            color:@neutral;
+            h5.header{
+                font-size:@15px;
+            }
             .header{
                 font-weight:@fontMedium;
-                color:@fullBlack;
             }
             .extra{
                 font-size:@13px;
@@ -227,26 +231,47 @@
                 position:relative;
                 width:28px;
                 height:28px;
-                >.avatar.image{
+                >.avatar.image, .sb-avatar{
                     position:absolute;
                     height:20px;
                     width:20px;
                     top:0;
-                    +.avatar.image{
+                    font-size:@10px;
+                    line-height:20px;
+                    &:nth-child(2){
                         top:8px;
                         left:8px;
                     }
+                }
+                +.content{
+                    width:auto;
                 }
             }
         }
         .content{
             + .content{
-                padding-top:@7px;
+                padding-top:@14px;
             }
             .description{
                 margin-top:@5px;
             }
         }
+        .sticky-wrap{
+            position:sticky;
+            padding:@12px;
+            bottom:0;
+            background-color:@white;
+            border-top:@border-color 1px solid;
+        }
+        + .message-wrap{
+            width:70%;
+        }
+    }
+}
+.ui.selection.list.list,
+.ui.selection.list{
+    > .item:hover{
+        text-decoration:none;
     }
 }
 

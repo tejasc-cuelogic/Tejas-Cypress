@@ -63,7 +63,7 @@ export default class Summary extends Component {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Verify your information and create an IRA account</Header>
+        <Header as="h3" textAlign="center">Verify your information and submit for review</Header>
         <div className="field-wrap">
           <div className="table-wrapper">
             <Table unstackable basic="very">
@@ -112,19 +112,18 @@ export default class Summary extends Component {
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" content="Create the account" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
+          <Button primary size="large" content="Submit for review" onClick={() => this.handleCreateAccount()} disabled={!this.props.iraAccountStore.isValidIraForm} />
         </div>
         <p className="center-align mt-30 grey-header">
-          By continuing, I acknowledge that I have read and agree to the
-          terms of the{' '}
+          By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
           CrowdPay Custodial Account Agreement
           </span>,{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
-          NextSeed Funding Portal Agreement
+          NextSeed US LLC Member Agreement
           </span>,{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
-          NextSeed Broker-Dealer Investor Agreement
+          NextSeed Securities LLC Investor Agreement
           </span>, and {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
           Substitute IRS Form W-9 Certification

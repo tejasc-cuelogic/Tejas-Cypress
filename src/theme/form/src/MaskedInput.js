@@ -33,6 +33,7 @@ export default class MaskedInput extends Component {
       <Form.Field
         error={(!!error && this.state.showError) || (!!error && props.showerror)}
         className={fieldClass}
+        width={props.containerwidth || false}
       >
         {!props.hidelabel &&
           <label>

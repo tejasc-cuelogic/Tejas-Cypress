@@ -335,7 +335,7 @@
                 justify-content:center;
             }
         }
-        &.hero-img, &.tombstone-img, &.gallery-img{
+        &.hero-img, &.tombstone-img, &.gallery-img, &.headshot-img, &.hero-img{
             .file-uploader.attached{
                 position:relative;
                 border:none;
@@ -378,7 +378,7 @@
                 height:264px;
             }
         }
-        &.gallery-img{
+        &.gallery-img, &.hero-img{
             max-width:none;
             max-height:none;
             text-align:left;
@@ -391,6 +391,21 @@
                 align-items:center;
                 justify-content:space-around;
             }
+        }
+        &.headshot-img{
+            text-align:left;
+            .file-uploader{
+                width:220px;
+                height:220px;
+                min-height:auto;
+                &.attached{
+                    color:red;
+                }
+            }
+        }
+        &.hero-img .file-uploader{
+            width:391px;
+            height:220px;
         }
         .ReactCrop.ReactCrop--fixed-aspect ~ .file-uploader{
             display:none;

@@ -10,6 +10,9 @@ export const allUsersQuery = gql`
         email {
           address
         }
+        locked {
+          lock
+        }
         info {
           firstName
           lastName

@@ -51,7 +51,8 @@ export class AgreementsStore {
   @action
   getBoxEmbedLink = (of, fileId) => {
     this.docLoading = true;
-    const boxFileId = fileId || this.getAgreementsList[of].boxRef[this.getCurrentEnv()];
+    const currentEnv = ['demo', 'develop', 'qa'].includes(this.getCurrentEnv()) ? this.getCurrentEnv() : 'develop';
+    const boxFileId = fileId || this.getAgreementsList[of].boxRef[currentEnv];
     console.log(this.getAgreementsList, of, this.getCurrentEnv());
     client.mutate({
       mutation: getBoxEmbedLink,

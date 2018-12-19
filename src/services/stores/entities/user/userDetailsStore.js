@@ -122,12 +122,16 @@ export class UserDetailsStore {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
         res();
+        const user = { ...this.currentUser };
         this.currentUser.data &&
         this.currentUser.data.user &&
         this.currentUser.data.user.roles && this.currentUser.data.user.roles.map((role, index) => {
           this.currentUser.data.user.roles[index].name = lowerCase(role.name);
           return this.currentUser;
         });
+        if (user && user.data && user.data.user && user.data.user.capabilities) {
+          authStore.setCurrentUserCapabilites(user.data.user.capabilities);
+        }
       },
     });
   })
@@ -143,7 +147,7 @@ export class UserDetailsStore {
 
   @action
   updateUserStatus = (status) => {
-    this.detailsOfUser.data.user.accountStatus = status;
+    this.detailsOfUser.data.user.locked.lock = status;
   }
 
   @computed get isEntityTrust() {
@@ -154,15 +158,14 @@ export class UserDetailsStore {
 
   @action
   toggleState = (id, accountStatus) => {
-    const params = { accountStatus: accountStatus === 'LOCK' ? 'UNLOCKED' : 'LOCKED', id };
+    const params = { accountStatus, id };
     client
       .mutate({
         mutation: toggleUserAccount,
         variables: params,
       })
       .then(() => {
-        this.getUserProfileDetails(this.detailsOfUser.data.user.id);
-        this.updateUserStatus(params.status);
+        this.updateUserStatus(params.accountStatus);
       })
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
@@ -283,7 +286,7 @@ export class UserDetailsStore {
         routingUrl = '/app/summary/identity-verification/0';
       }
     } else if (!this.validAccStatus.includes(this.signupStatus.idVerification) &&
-      this.signupStatus.activeAccounts === 0) {
+      this.signupStatus.activeAccounts.length === 0) {
       routingUrl = '/app/summary/identity-verification/0';
     } else if (this.signupStatus.phoneVerification !== 'DONE') {
       routingUrl = '/app/summary/identity-verification/3';

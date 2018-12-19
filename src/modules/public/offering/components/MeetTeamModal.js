@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { filter } from 'lodash';
 import { Header, Modal, Grid, Image, Icon, Responsive } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../theme/shared';
+import { InlineLoader, Image64 } from '../../../../theme/shared';
 import { ASSETS_URL } from '../../../../constants/aws';
 
 @inject('campaignStore')
@@ -36,13 +36,13 @@ class MeetTeamModal extends Component {
                   (index === 0 || index % 2 === 0) ?
                     <Aux>
                       <Grid.Column>
-                        <Image
-                          src={
-                            data && data.uploads && data.uploads.heroImage &&
-                              data.uploads.heroImage.url ?
-                              data.uploads.heroImage.url : `${ASSETS_URL}images/gallery-placeholder.jpg`
+                        <Image64
+                          srcUrl={data && data.uploads && data.uploads.heroImage &&
+                            data.uploads.heroImage.url ?
+                            data.uploads.heroImage.url : null
                           }
                           fluid
+                          imgType="heroImage"
                         />
                       </Grid.Column>
                       <Grid.Column className="padded team-details-container">
@@ -87,13 +87,13 @@ class MeetTeamModal extends Component {
                       </Grid.Column>
                       <Responsive minWidth={768} as={Aux}>
                         <Grid.Column>
-                          <Image
-                            src={
-                              data.uploads.heroImage.isPublic === true &&
-                                data.uploads.heroImage.url != null ?
-                                data.uploads.heroImage.url : `${ASSETS_URL}images/gallery-placeholder.jpg`
+                          <Image64
+                            srcUrl={data && data.uploads && data.uploads.heroImage &&
+                              data.uploads.heroImage.url ?
+                              data.uploads.heroImage.url : null
                             }
                             fluid
+                            imgType="heroImage"
                           />
                         </Grid.Column>
                       </Responsive>

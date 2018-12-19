@@ -13,14 +13,14 @@ class UpdateDetails extends Component {
     const { updates } = this.props.updateStore;
     const update = updates && updates.length ? updates[indexId] : null;
     return (
-      updates ?
+      update ?
         <Aux>
           <Header as="h4">
             {update.title}
             <Header.Subheader className="mt-half">{update.updated.date}</Header.Subheader>
           </Header>
           <p>
-            {Parser(update.content)}
+            {Parser(update.content || '')}
           </p>
         </Aux>
         :

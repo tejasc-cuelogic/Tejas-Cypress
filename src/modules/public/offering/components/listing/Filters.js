@@ -5,21 +5,13 @@ import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup, List
 // import BusinessType from './BusinessType';
 import Slider from 'react-slick';
 import { ASSETS_URL } from '../../../../../constants/aws';
+import { BUSINESS_INDUSTRIES } from '../../../../../services/constants/offering';
 
 const isMobile = document.documentElement.clientWidth < 768;
 export default class Filters extends Component {
   state = {
     activeSlide: 0,
-    BusinessTypes: [
-      { content: 'Commercial Real Estate', color: 'green', iconName: 'building' },
-      { content: 'Restaurant & Bar', color: 'green', iconName: 'food' },
-      { content: 'Brewery & Pub', color: 'green', iconName: 'bar' },
-      { content: 'Hospitality', iconName: 'bed' },
-      { content: 'Health & Wellness', iconName: 'heartbeat' },
-      { content: 'Fitness', iconName: 'bicycle' },
-      { content: 'Office', iconName: 'fax' },
-      { content: 'Other', iconName: 'ellipsis horizontal' },
-    ],
+    BusinessTypes: BUSINESS_INDUSTRIES,
     MoreOptions: [{
       label: 'Show Funded Deals',
       checkStatus: true,
