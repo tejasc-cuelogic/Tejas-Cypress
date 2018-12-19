@@ -29,7 +29,7 @@ class Disclosure extends Component {
               This document is only available to accredited investors.
             </Header>
             <p>Please confirm your accredited investor status to view this document.</p>
-            <Button as={Link} to="/app/profile-settings/investment-limits" primary content="Confirm Status" className="mt-20" />
+            <Button as={Link} to="/app/profile-settings/investment-limits" primary content={!this.props.userStore.currentUser ? 'Login / Sign Up' : 'Confirm Status'} className="mt-20" />
           </div>
         </div>
       );
