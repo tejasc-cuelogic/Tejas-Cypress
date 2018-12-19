@@ -206,7 +206,6 @@ export default class KeyTerms extends Component {
                   name={field}
                   fielddata={KEY_TERMS_FRM.fields[field]}
                   changed={(values, name) => maskChange(values, formName, name)}
-                  currency
                   prefix="$"
                 />
               )

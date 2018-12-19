@@ -239,6 +239,14 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'lightbulb outline',
+    title: 'Categories',
+    capability: 'INSIGHTS_ANY',
+    to: 'categories',
+    path: 'admin/categories',
+    accessibleTo: ['admin', 'manager', 'support'],
+  },
+  {
+    icon: 'lightbulb outline',
     title: 'Insights',
     capability: 'INSIGHTS_ANY',
     to: 'insights',
