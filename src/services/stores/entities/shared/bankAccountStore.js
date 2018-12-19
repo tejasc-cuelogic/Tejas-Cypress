@@ -146,7 +146,7 @@ export class BankAccountStore {
       accountAttributes = { ...plaidBankDetails };
     }
     const isValidAddFunds = this.formAddFunds.meta.isValid;
-    if (isValidAddFunds) {
+    if (isValidAddFunds && this.depositMoneyNow) {
       accountAttributes.initialDepositAmount = this.formAddFunds.fields.value.value;
     }
     return accountAttributes;

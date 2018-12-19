@@ -207,6 +207,10 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
+      useOfProceeds{
+        url
+        isPublic
+      }
       heroVideo {
         url
         isPublic
