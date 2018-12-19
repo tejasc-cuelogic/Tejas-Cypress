@@ -125,8 +125,6 @@ export class Utility {
     const currentYear = parseInt(moment().format('YYYY'), 10);
     return {
       annualIncomeCurrentYear: currentYear,
-      annualIncomeLastYear: currentYear - 1,
-      annualIncomeThirdLastYear: currentYear - 2,
     };
   }
 }
