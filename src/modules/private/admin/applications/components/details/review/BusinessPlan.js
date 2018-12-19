@@ -122,8 +122,6 @@ export default class BusinessPlan extends Component {
                       fielddata={controlPerson.derogatoryMarks}
                       changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM', 'controlPersons', index)}
                     />
-                  </Form.Group>
-                  <Form.Group widths={3}>
                     <FormInput
                       containerclassname={isReadonly ? 'display-only' : ''}
                       readOnly={isReadonly}
@@ -170,21 +168,19 @@ export default class BusinessPlan extends Component {
             ))
           }
           <Divider section />
-          {
-            ['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
-              <Aux>
-                <FormTextarea
-                  containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
-                  readOnly={isReadonly}
-                  key={field}
-                  name={field}
-                  fielddata={BUSINESS_PLAN_FRM.fields[field]}
-                  changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
-                />
-                <Divider section />
-              </Aux>
-            ))
-          }
+          {['timingOfOperation', 'financialToProjection', 'isPlanAdequate'].map(field => (
+            <Aux>
+              <FormTextarea
+                containerclassname={isReadonly ? 'secondary display-only' : 'secondary'}
+                readOnly={isReadonly}
+                key={field}
+                name={field}
+                fielddata={BUSINESS_PLAN_FRM.fields[field]}
+                changed={(e, result) => formChangeWithIndex(e, result, 'BUSINESS_PLAN_FRM')}
+              />
+              <Divider section />
+            </Aux>
+          ))}
           <Header as="h4">Sources and Uses Chart</Header>
           <Grid columns={2}>
             <Grid.Column>
