@@ -170,8 +170,22 @@ dl.dl-horizontal dd .ui.selection.dropdown.display-only{
         white-space:nowrap;
         text-overflow:ellipsis;
     }
-    &.selection > .text{
-        display:block;
+    &.selection{
+        > .text{
+            display:block;
+        }
+        .menu .item .sb-avatar{
+            height:2em;
+            width:2em;
+            line-height:2em;
+            margin-right:@11px;
+            margin-top:-.5em;
+            margin-bottom:-.5em;
+            .sb-avatar__text{
+                font-size:@12px;
+                font-weight:@normal;
+            }
+        }
     }
     &.inverted>.text{
         color:@white;

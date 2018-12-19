@@ -8,11 +8,16 @@ const dataRef = [
   { amount: 0, fill: '#1781FB' },
 ];
 
+const dataRefMin = [
+  { amount: 0, fill: '#20C86D' },
+  { amount: 0, fill: '#3A4049' },
+];
+
 export default class CampaignProgress extends Component {
   renderLegend = () => (
     <p>
       <h4>{Helper.CurrencyFormat(this.props.data.collected, 0)}</h4>
-      <span>of {Helper.CurrencyFormat(this.props.data.needed, 0)} max
+      <span>of {Helper.CurrencyFormat(this.props.data.needed, 0)} {this.props.amountType}
         <Popup
           trigger={<Icon name="help circle" color="grey" />}
           content="Lorem Ipsum"
@@ -22,9 +27,9 @@ export default class CampaignProgress extends Component {
     </p>
   );
   render() {
-    const data = [...dataRef];
-    data[0].amount = this.props.data.needed;
-    data[1].amount = this.props.data.collected;
+    const data = this.props.amountType === 'min' ? [...dataRefMin] : [...dataRef];
+    data[0].amount = this.props.amountType === 'min' ? (this.props.data.collected <= this.props.maxOffering ? this.props.data.collected : this.props.maxOffering) : this.props.data.needed;
+    data[1].amount = this.props.amountType === 'min' ? this.props.data.needed : (this.props.data.collected <= this.props.maxOffering ? this.props.data.collected : this.props.maxOffering);
     return (
       <ResponsiveContainer className="progress-bar" height={220}>
         <RadialBarChart innerRadius="75%" outerRadius="100%" barSize={8.5} data={data}>

@@ -5,16 +5,20 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
 import cleanDeep from 'clean-deep';
-import { DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
+import {
+  DEFAULT_TIERS, ADD_NEW_TIER, MISC, AFFILIATED_ISSUER, LEADER, MEDIA,
   RISK_FACTORS, GENERAL, ISSUER, LEADERSHIP, LEADERSHIP_EXP, OFFERING_DETAILS, CONTINGENCIES,
   ADD_NEW_CONTINGENCY, COMPANY_LAUNCH, KEY_TERMS, OFFERING_OVERVIEW,
   OFFERING_COMPANY, OFFER_CLOSE, ADD_NEW_BONUS_REWARD, NEW_OFFER, DOCUMENTATION, EDIT_CONTINGENCY,
-  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS } from '../../../../constants/admin/offerings';
+  ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
+} from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import { updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
+import {
+  updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
   getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
   getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
+  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering,
+} from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
@@ -105,7 +109,7 @@ export class OfferingCreationStore {
     DEFAULT_TIERS.map((tier) => {
       if (this.bonusRewardsTiers.data && this.bonusRewardsTiers.data.getBonusRewardTiers) {
         const isExisted =
-        find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.push(tier);
         }
@@ -113,13 +117,13 @@ export class OfferingCreationStore {
         this.bonusRewardsTiers.data = {};
         this.bonusRewardsTiers.data.getBonusRewardTiers = [];
         const isExisted =
-        find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
+          find(this.bonusRewardsTiers.data.getBonusRewardTiers, { amount: tier.amount });
         if (!isExisted) {
           this.bonusRewardsTiers.data.getBonusRewardTiers.unshift(tier);
         }
       }
       this.bonusRewardsTiers.data.getBonusRewardTiers =
-      orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
+        orderBy([...new Set(toJS(this.bonusRewardsTiers.data.getBonusRewardTiers))], ['amount'], ['asc']);
       return this.bonusRewardsTiers;
     });
   }
@@ -150,6 +154,11 @@ export class OfferingCreationStore {
   }
 
   @action
+  setLeadershipProfilePhoto(attr, value, field, index) {
+    this.LEADERSHIP_FRM.fields.leadership[index][field][attr] = value;
+  }
+
+  @action
   resetProfilePhoto = (field) => {
     const attributes = ['src', 'error', 'meta'];
     attributes.forEach((val) => {
@@ -157,6 +166,18 @@ export class OfferingCreationStore {
         this.MEDIA_FRM.fields[field][val] = {};
       } else {
         this.MEDIA_FRM.fields[field][val] = '';
+      }
+    });
+  }
+
+  @action
+  resetLeadershipProfilePhoto = (field, index) => {
+    const attributes = ['src', 'error', 'meta'];
+    attributes.forEach((val) => {
+      if ((typeof this.LEADERSHIP_FRM.fields.leadership[index][field][val] === 'object') && (this.LEADERSHIP_FRM.fields.leadership[index][field][val] !== null)) {
+        this.LEADERSHIP_FRM.fields.leadership[index][field][val] = {};
+      } else {
+        this.LEADERSHIP_FRM.fields.leadership[index][field][val] = '';
       }
     });
   }
@@ -193,6 +214,34 @@ export class OfferingCreationStore {
   }
 
   @action
+  resetFormFieldForLeadership = (form, field, fileObj, RemoveIndex, index) => {
+    if (fileObj
+      && Array.isArray(toJS(this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl))) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl.push(fileObj.location);
+      this.LEADERSHIP_FRM.fields.leadership[index][field].fileId.push(`${Date.now()}_${fileObj.fileName}`);
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value.push(fileObj.fileName);
+    } else if (fileObj) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl = fileObj.location;
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value = fileObj.fileName;
+      this.LEADERSHIP_FRM.fields.leadership[index][field].fileId = `${Date.now()}_${fileObj.fileName}`;
+    } else if (RemoveIndex > -1
+      && Array.isArray(toJS(this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl))) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl.splice(RemoveIndex, 1);
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value.splice(RemoveIndex, 1);
+    } else if (RemoveIndex === undefined) {
+      this.LEADERSHIP_FRM.fields.leadership[index][field].preSignedUrl = '';
+      this.LEADERSHIP_FRM.fields.leadership[index][field].value = '';
+    }
+    this[form].fields[field] = {
+      ...this.LEADERSHIP_FRM.fields.leadership[index][field],
+      ...{
+        src: '',
+        meta: {},
+      },
+    };
+  }
+
+  @action
   removeMedia = (name, index = undefined) => {
     let filename = '';
     if (index === undefined) {
@@ -215,17 +264,60 @@ export class OfferingCreationStore {
   }
 
   @action
-  uploadMedia = (name) => {
+  removeMediaForLeadership = (name, index = undefined) => {
+    let filename = '';
+    if (index === undefined) {
+      filename = this.LEADERSHIP_FRM.fields.leadership[index][name].value;
+    } else {
+      filename = this.LEADERSHIP_FRM.fields.leadership[index][name].value[index];
+    }
+    fileUpload.deleteFromS3(this.LEADERSHIP_FRM.fields.leadership[index][name].value)
+      .then((res) => {
+        Helper.toast(`${this.LEADERSHIP_FRM.fields.leadership[index][name].label} removed successfully.`, 'success');
+        this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
+        // this.updateOffering
+        // (this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
+        this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
+      })
+      .catch((err) => {
+        // force record deletion from db;
+        // this.resetFormField('LEADERSHIP_FRM', name, undefined, index);
+        this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
+        this.updateOffering(this.currentOfferingId, this.LEADERSHIP_FRM.fields, 'leadership', null, true, null, null, true, index);
+        console.log(err);
+      });
+  }
+
+  @action
+  uploadMedia = (name, form = 'MEDIA_FRM') => {
     const fileObj = {
-      obj: this.MEDIA_FRM.fields[name].base64String,
-      type: this.MEDIA_FRM.fields[name].meta.type,
-      name: this.MEDIA_FRM.fields[name].fileName,
+      obj: this[form].fields[name].base64String,
+      type: this[form].fields[name].meta.type,
+      name: this[form].fields[name].fileName,
     };
     fileUpload.uploadToS3(fileObj)
       .then((res) => {
-        Helper.toast(`${this.MEDIA_FRM.fields[name].label} uploaded successfully.`, 'success');
-        this.resetFormField('MEDIA_FRM', name, res);
-        this.updateOffering(this.currentOfferingId, this.MEDIA_FRM.fields, 'media', false, false);
+        Helper.toast(`${this[form].fields[name].label} uploaded successfully.`, 'success');
+        this.resetFormField(form, name, res);
+        this.updateOffering(this.currentOfferingId, this[form].fields, 'media', false, false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  @action
+  uploadMediaForLeadership = (name, form = 'LEADERSHIP_FRM', index) => {
+    const fileObj = {
+      obj: this[form].fields.leadership[index][name].base64String,
+      type: this[form].fields.leadership[index][name].meta.type,
+      name: this[form].fields.leadership[index][name].fileName,
+    };
+    fileUpload.uploadToS3(fileObj)
+      .then((res) => {
+        Helper.toast(`${this[form].fields.leadership[index][name].label} uploaded successfully.`, 'success');
+        this.resetFormFieldForLeadership(form, name, res, undefined, index);
+        this.updateOffering(this.currentOfferingId, this[form].fields, 'leadership', null, true, null, null, true, index);
       })
       .catch((err) => {
         console.log(err);
@@ -376,7 +468,7 @@ export class OfferingCreationStore {
   @action
   maskChange = (values, form, field) => {
     const fieldValue =
-    (field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
+      (field === 'terminationDate' || field === 'expirationDate' || field === 'targetDate' || field === 'expectedOpsDate') ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
       { name: field, value: fieldValue },
@@ -422,34 +514,34 @@ export class OfferingCreationStore {
 
   @action
   setFileUploadDataMulitple =
-  (form, arrayName, field, files, stepName, index = null, multiForm = false) => {
-    if (typeof files !== 'undefined' && files.length) {
-      forEach(files, (file) => {
-        const fileData = Helper.getFormattedFileData(file);
-        this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
-        fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
-          const { fileId, preSignedUrl } = result.data.createUploadEntry;
-          fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
-            this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
-            this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
-            this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
-            this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
-            this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
-            this.checkFormValid(form, multiForm);
-            this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+    (form, arrayName, field, files, stepName, index = null, multiForm = false) => {
+      if (typeof files !== 'undefined' && files.length) {
+        forEach(files, (file) => {
+          const fileData = Helper.getFormattedFileData(file);
+          this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
+          fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
+            const { fileId, preSignedUrl } = result.data.createUploadEntry;
+            fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file }).then(() => {
+              this.setFormFileArray(form, arrayName, field, 'fileData', file, index);
+              this.setFormFileArray(form, arrayName, field, 'preSignedUrl', preSignedUrl, index);
+              this.setFormFileArray(form, arrayName, field, 'fileId', fileId, index);
+              this.setFormFileArray(form, arrayName, field, 'value', fileData.fileName, index);
+              this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
+              this.checkFormValid(form, multiForm);
+              this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+            }).catch((error) => {
+              Helper.toast('Something went wrong, please try again later.', 'error');
+              uiStore.setErrors(error.message);
+              this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+            });
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
-            uiStore.setErrors(error.message);
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+            uiStore.setErrors(error.message);
           });
-        }).catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
-          uiStore.setErrors(error.message);
         });
-      });
+      }
     }
-  }
 
   @action
   removeUploadedDataMultiple = (form, field, index = null, arrayName, fromS3 = false) => {
@@ -676,11 +768,11 @@ export class OfferingCreationStore {
     if (form === 'LEADERSHIP_FRM') {
       forEach(offer.leadership, (emp, key) => {
         this.LEADERSHIP_EXP_FRM =
-        Validator.setFormData(
-          this.LEADERSHIP_EXP_FRM,
-          offer.leadership[key],
-          ref, keepAtLeastOne,
-        );
+          Validator.setFormData(
+            this.LEADERSHIP_EXP_FRM,
+            offer.leadership[key],
+            ref, keepAtLeastOne,
+          );
         this.leadershipExperience[key] = this.LEADERSHIP_EXP_FRM;
       });
     } else if (form === 'RISK_FACTORS_FRM') {
@@ -904,10 +996,10 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation = {};
         payloadData[keyName].documentation.issuer = {};
         payloadData[keyName].documentation.issuer =
-        Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
+          Validator.evaluateFormData(this.DOCUMENTATION_FRM.fields);
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
-        Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
+          Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
         payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
@@ -926,7 +1018,7 @@ export class OfferingCreationStore {
         let leadershipFields = Validator.evaluateFormData(fields);
         leadershipFields = leadershipFields.leadership.map((leadership, index) => {
           const employer =
-          Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
+            Validator.evaluateFormData(toJS(this.leadershipExperience[index]).fields);
           return { ...leadership, ...{ employer: employer.employer } };
         });
         payloadData = { ...payloadData, [keyName]: leadershipFields };
@@ -1380,7 +1472,7 @@ export class OfferingCreationStore {
     const tiers = [];
     map(fields, ((field) => {
       if ((field.key || field.earlyBirdQuantity) &&
-      field.value.length && field.value.length === 1) {
+        field.value.length && field.value.length === 1) {
         const tierObj = {};
         tierObj.amount = field.key;
         tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
@@ -1430,7 +1522,7 @@ export class OfferingCreationStore {
   @computed
   get allBonusRewards() {
     return (this.bonusRewards &&
-    toJS(this.bonusRewards)) || [];
+      toJS(this.bonusRewards)) || [];
   }
 
   @action
@@ -1508,7 +1600,7 @@ export class OfferingCreationStore {
             } else {
               const isEarlyBird = find(fields, { earlyBirdQuantity: 50 });
               if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS') &&
-              Array.isArray(toJS(isEarlyBird.value))) {
+                Array.isArray(toJS(isEarlyBird.value))) {
                 isEarlyBird.value.push('EARLY_BIRDS');
               }
             }
@@ -1525,7 +1617,7 @@ export class OfferingCreationStore {
     const tiers = [];
     map(fields, ((field) => {
       if ((field.key || field.earlyBirdQuantity) &&
-      field.value.length && field.value.length === 1) {
+        field.value.length && field.value.length === 1) {
         const tierObj = {};
         tierObj.amount = field.key;
         tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
