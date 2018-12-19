@@ -320,6 +320,19 @@
     .dark-cell {
         background-color: @neutral-midwhite;
     }
+    &.basic.categories-table {
+        tr td{
+            border-bottom:1px solid @white;
+            i.icon {
+                color: @neutral-middark;
+                height: auto;
+                vertical-align: middle;
+            }
+        }
+        &.form-table {
+            padding-bottom: 0;
+        }
+    }
     .ui.vertical.buttons{
         display:flex;
     }
