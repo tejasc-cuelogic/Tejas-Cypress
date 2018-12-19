@@ -51,6 +51,7 @@ export const getOfferingById = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
+      previewPassword
     }
   }
 `;
