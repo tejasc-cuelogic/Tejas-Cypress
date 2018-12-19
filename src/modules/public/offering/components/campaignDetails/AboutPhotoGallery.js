@@ -31,7 +31,7 @@ class AboutPhotoGallery extends Component {
       <Modal
         open
         onClose={this.handleClose}
-        size="fullscreen"
+        size="large"
         closeIcon
         className="about-modal"
       >

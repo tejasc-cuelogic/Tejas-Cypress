@@ -146,6 +146,7 @@ export default class DataRoom extends Component {
               handleLockUnlock={this.handleLockUnlock}
               toggleConfirmModal={this.toggleConfirmModal}
               formName={formName}
+              lockAxis="y"
             />
           </div>
           <Divider hidden />

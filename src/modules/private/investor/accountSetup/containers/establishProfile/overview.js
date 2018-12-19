@@ -32,14 +32,16 @@ export default class Overview extends Component {
       overviewInfo = (
         <Aux>
           <p>
-            New investments will now be offered through NextSeed Securities, LLC, an SEC-
-            registered broker-dealer and a member firm of the Financial Industry Regulatory
-            Authority ({'"'}<a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>{'"'}).
+            We{"'"}re pleased to share that certain new investments will now be facilitated
+            by NextSeed Securities LLC (SEC-registered broker-dealer & member of FINRA),
+            an affiliate of NextSeed US LLC (SEC-registered Funding Portal & member of <a href="https://www.finra.org/" target="_blank" rel="noopener noreferrer">FINRA</a>).
           </p>
           <Divider hidden />
           <p>
-            To migrate your existing account and to begin making investments on the new platform,
-            you will need to answer a few more questions to complete your investor profile.
+            As a registered broker-dealer, NextSeed Securities is required by SEC rules and
+            regulations to collect an investor profile. In order to gain full access to
+            investments, please answer the following questions to complete your investor
+            profile.
           </p>
         </Aux>
       );

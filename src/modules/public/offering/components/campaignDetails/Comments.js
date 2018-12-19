@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Button, Comment, Form, Grid, Segment, Header, Label, Divider } from 'semantic-ui-react';
-import { Link, Route } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
+import CommunityGuideline from './CommunityGuideline';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
-@inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore')
+@inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @observer
 class Comments extends Component {
   state={ readMore: false, readMoreInner: false }
@@ -25,6 +26,7 @@ class Comments extends Component {
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
     const { isUserLoggedIn } = this.props.authStore;
+    const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     const loggedInAsInvestor = isUserLoggedIn && currentUser.roles.includes('investor');
@@ -52,7 +54,7 @@ class Comments extends Component {
                     although some questions require more thorough analyses and will take additional
                     time.
                   </p>
-                  <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                  <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
                   <p>
                     If you have any technical questions or questions about NextSeed, please
                     email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
@@ -65,8 +67,8 @@ class Comments extends Component {
                       }
                       <Form reply className="public-form clearfix">
                         {loggedInAsInvestor && !accountStatusFull ?
-                          <Link to="/app/summary" className="ui button secondary">Go To Dashboard</Link>
-                        : <Link to="/auth/register-investor" className="ui button secondary">Sign Up Now</Link>
+                          <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
+                        : <Link to={`/auth/${get(loginOrSignup, 'to')}`} className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                         }
                       </Form>
                     </section>
@@ -155,7 +157,7 @@ class Comments extends Component {
                       analyses and will take additional
                       time.
                     </p>
-                    <p>See our <Link to="/">community guidelines</Link> on posting.</p>
+                    <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting.</p>
                     <p>
                       If you have any technical questions or questions about NextSeed, please
                       email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
@@ -166,7 +168,10 @@ class Comments extends Component {
             </Grid.Column>
           </Grid>
         }
-        <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
+        <Switch>
+          <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
+          <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
+        </Switch>
       </div>
     );
   }
