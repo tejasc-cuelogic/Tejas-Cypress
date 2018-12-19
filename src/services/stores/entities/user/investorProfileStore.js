@@ -438,7 +438,7 @@ class InvestorProfileStore {
       this.INVESTOR_PROFILE_FULL.fields : this.INVESTMENT_EXP_FORM.fields;
     if ((Array.isArray(toJS(isComfortable.value)) && isComfortable.value.length === 0) ||
       (Array.isArray(toJS(isRiskTaker.value)) && isRiskTaker.value.length === 0) ||
-      (experienceLevel.value === 'NONE' || experienceLevel.value === 'SOME')
+      (experienceLevel.value === 'NONE')
     ) {
       this.isInvestmentExperienceValid = false;
     } else {
