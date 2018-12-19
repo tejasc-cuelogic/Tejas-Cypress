@@ -120,6 +120,18 @@
             .calender-icon input{
                 padding-left:@21px !important;
             }
+            .ui.disabled.selection.dropdown{
+                padding-bottom:0;
+                padding-top:0;
+                border:none;
+                min-height:auto;
+                font-weight:@fontMedium;
+                opacity:1;
+                .dropdown.icon{
+                    padding-top:0;
+                    padding-bottom:0;
+                }
+            }
         }
         &.secondary textarea{
             background-color:@white;
