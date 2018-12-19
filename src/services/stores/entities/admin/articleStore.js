@@ -11,6 +11,7 @@ export class ArticleStore {
     @observable data = [];
     @observable Categories = [];
     @observable article = null;
+    @observable featuredData = [];
 
     @action
     requestAllArticles = () => {
@@ -23,6 +24,11 @@ export class ArticleStore {
     }
 
     @action
+    featuredRequestArticlesByCategoryId = (id) => {
+      this.featuredData = graphql({ client, query: getArticlesByCatId, variables: { id } });
+    }
+
+    @action
     getArticle = (id) => {
       this.article = graphql({ client, query: getArticleDetails, variables: { id } });
     }
@@ -30,6 +36,10 @@ export class ArticleStore {
     @computed get InsightArticles() {
       return (this.data.data && (toJS(this.data.data.insightsArticles)
         || toJS(this.data.data.insightArticlesByCategoryId))) || [];
+    }
+    @computed get InsightFeaturedArticles() {
+      return (this.featuredData.data && (toJS(this.featuredData.data.insightsArticles)
+        || toJS(this.featuredData.data.insightArticlesByCategoryId))) || [];
     }
 
     @computed get ArticlesDetails() {

@@ -59,12 +59,15 @@ export default class AddWithdrawFund extends Component {
       TRANSFER_FRM,
       TransferChange,
       showConfirmPreview,
+      cash,
     } = transactionStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
     const linkBankDetials = currentActiveAccountDetails && currentActiveAccountDetails.details &&
       currentActiveAccountDetails.details.linkedBank ?
       currentActiveAccountDetails.details.linkedBank : null;
     const { errors } = this.props.uiStore;
+    const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
+    console.log(cash);
     return (
       <Aux>
         <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
@@ -73,10 +76,24 @@ export default class AddWithdrawFund extends Component {
           </Modal.Header>
           <Modal.Content>
             <Form error onSubmit={this.transfer} size="massive">
+              {/* {!showConfirmPreview && match.params.action !== 'add' &&
+                <MaskedInput
+                  disabled="disabled"
+                  hoverable
+                  label="Total available for withdrawl:"
+                  key="amount"
+                  prefix="$ "
+                  name="maountInvested"
+                  containerclassname="fund-amount"
+                  currency
+                  fielddata={{ value: cash }}
+                // changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
+                />
+              } */}
               <MaskedInput
                 disabled={showConfirmPreview ? 'disabled' : ''}
                 hoverable
-                label={match.params.action === 'add' ? 'Deposit amount' : 'Withdrawal amount'}
+                label={match.params.action === 'add' ? 'Deposit amount' : labelForWithdrawInput}
                 key="amount"
                 prefix="$ "
                 name="amount"

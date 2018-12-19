@@ -83,7 +83,7 @@ class InvestorProfileStore {
       return false;
     });
     if (investorProfileData && investorProfileData.annualIncome) {
-      ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
+      ['annualIncomeCurrentYear'].map((item, index) => {
         this.INVESTOR_PROFILE_FULL.fields[item].value =
           investorProfileData.annualIncome[index].income;
         return true;
@@ -203,18 +203,11 @@ class InvestorProfileStore {
       } else if (currentStep.form === 'FINANCES_FORM') {
         formPayload = {
           taxFilingAs: this.FINANCES_FORM.fields.investorProfileType.value,
-          annualIncome: [{
-            year: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.year,
-            income: this.FINANCES_FORM.fields.annualIncomeThirdLastYear.value,
-          },
-          {
-            year: this.FINANCES_FORM.fields.annualIncomeLastYear.year,
-            income: this.FINANCES_FORM.fields.annualIncomeLastYear.value,
-          },
-          {
-            year: this.FINANCES_FORM.fields.annualIncomeCurrentYear.year,
-            income: this.FINANCES_FORM.fields.annualIncomeCurrentYear.value,
-          }],
+          annualIncome: [
+            {
+              year: this.FINANCES_FORM.fields.annualIncomeCurrentYear.year,
+              income: this.FINANCES_FORM.fields.annualIncomeCurrentYear.value,
+            }],
           netWorth: this.FINANCES_FORM.fields.netWorth.value,
         };
       } else if (currentStep.form === 'INVESTMENT_EXP_FORM') {
@@ -408,7 +401,7 @@ class InvestorProfileStore {
           this.FINANCES_FORM.fields.investorProfileType.value =
             investorProfileData.taxFilingAs;
           if (investorProfileData.annualIncome) {
-            ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
+            ['annualIncomeCurrentYear'].map((item, index) => {
               this.FINANCES_FORM.fields[item].value =
                 investorProfileData.annualIncome[index].income;
               return true;

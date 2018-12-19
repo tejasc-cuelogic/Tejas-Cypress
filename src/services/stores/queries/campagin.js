@@ -5,6 +5,7 @@ query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
       offeringSlug
+      fundedAmount
       stage
       media {
         tombstoneImage {
@@ -203,6 +204,10 @@ export const campaignDetailsQuery = gql`
     }
     media {
       heroImage {
+        url
+        isPublic
+      }
+      useOfProceeds{
         url
         isPublic
       }
