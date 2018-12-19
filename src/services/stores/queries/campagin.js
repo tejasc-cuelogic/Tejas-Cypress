@@ -5,6 +5,7 @@ query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
       offeringSlug
+      fundedAmount
       stage
       media {
         tombstoneImage {
@@ -50,6 +51,7 @@ export const getOfferingById = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
+      previewPassword
     }
   }
 `;

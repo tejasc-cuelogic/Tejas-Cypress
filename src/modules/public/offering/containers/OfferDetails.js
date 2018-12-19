@@ -58,7 +58,11 @@ class offerDetails extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     const { details, campaignSideBarShow, campaign } = campaignStore;
     if (this.state.showPassDialog) {
-      return <DevPassProtected offerPreview authPreviewOffer={this.authPreviewOffer} />;
+      return (<DevPassProtected
+        previewPassword={campaign.previewPassword}
+        offerPreview
+        authPreviewOffer={this.authPreviewOffer}
+      />);
     }
     if (!details || details.loading) {
       return <Spinner loaderMessage="Loading.." />;
