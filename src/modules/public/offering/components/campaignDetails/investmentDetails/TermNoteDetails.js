@@ -7,10 +7,12 @@ import Helper from '../../../../../../helper/utility';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTabletLand = document.documentElement.clientWidth >= 992
-&& document.documentElement.clientWidth < 1200;
+  && document.documentElement.clientWidth < 1200;
 class TermNoteDetails extends Component {
   render() {
     const { KeyTerms, refLink } = this.props;
+    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : null;
+    const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Grid.Row>
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
@@ -38,7 +40,7 @@ class TermNoteDetails extends Component {
                 <Statistic className="basic">
                   <Statistic.Label className={isMobile && 'center-align'}>Principal</Statistic.Label>
                   <Statistic.Value className="center-align highlight-text">
-                  $100
+                    $100
                   </Statistic.Value>
                   <div className="slidecontainer">
                     <input
@@ -109,7 +111,12 @@ class TermNoteDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '-'}</Statistic.Value>
+                  <Statistic.Value>
+                    {maturityMonth ?
+                    `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                    :
+                    '-'}
+                  </Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>

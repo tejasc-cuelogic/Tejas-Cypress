@@ -5,6 +5,7 @@ query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
       offeringSlug
+      fundedAmount
       stage
       media {
         tombstoneImage {

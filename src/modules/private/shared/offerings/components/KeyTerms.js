@@ -38,15 +38,15 @@ export default class KeyTerms extends Component {
           <Header as="h4">General</Header>
           <Form.Group widths={3}>
             {
-            ['legalBusinessName', 'shorthandBusinessName'].map(field => (
-              <FormInput
-                displayMode={isReadonly}
-                key={field}
-                name={field}
-                fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
-              />
-            ))
+              ['legalBusinessName', 'shorthandBusinessName'].map(field => (
+                <FormInput
+                  displayMode={isReadonly}
+                  key={field}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(e, result) => formChange(e, result, formName)}
+                />
+              ))
             }
             <div className="field">
               <FormDropDown
@@ -180,17 +180,17 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths={2}>
             {
-            ['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
-              <FormTextarea
-                readOnly={isReadonly}
-                key={field}
-                name={field}
-                fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
-                containerclassname="secondary"
-              />
-            ))
-          }
+              ['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
+                <FormTextarea
+                  readOnly={isReadonly}
+                  key={field}
+                  name={field}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  changed={(e, result) => formChange(e, result, formName)}
+                  containerclassname="secondary"
+                />
+              ))
+            }
           </Form.Group>
           <Header as="h4">Legal</Header>
           <Form.Group widths={3}>
@@ -206,7 +206,7 @@ export default class KeyTerms extends Component {
               ))
             }
             {
-              ['maxInvestAmt', 'nsMinFees'].map(field => (
+              ['maxInvestAmt', 'nsMinFees', 'nsMaxFees'].map(field => (
                 <MaskedInput
                   displayMode={isReadonly}
                   name={field}
@@ -217,27 +217,30 @@ export default class KeyTerms extends Component {
                 />
               ))
             }
-            <FormInput
-              displayMode={isReadonly}
-              name="stockType"
-              fielddata={KEY_TERMS_FRM.fields.stockType}
-              changed={(e, result) => formChange(e, result, formName)}
-            />
             {
-              ['offeringExpTarget', 'offeringExpMax', 'nsMaxFees'].map(field => (
-                <MaskedInput
-                  displayMode={isReadonly}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
+              ['offeringExpTarget', 'offeringExpMax', 'stockType'].map(field => (
+                field === 'stockType' ? (
+                  <FormInput
+                    displayMode={isReadonly}
+                    name="stockType"
+                    fielddata={KEY_TERMS_FRM.fields.stockType}
+                    changed={(e, result) => formChange(e, result, formName)}
+                  />
+                ) : (
+                  <MaskedInput
+                    displayMode={isReadonly}
+                    name={field}
+                    fielddata={KEY_TERMS_FRM.fields[field]}
+                    changed={(values, name) => maskChange(values, formName, name)}
+                    currency
+                    prefix="$"
+                  />
+                  )
               ))
             }
           </Form.Group>
           <Form.Group widths={2}>
-            {['nsFeeCalcDescription', 'currentFinancialStatements', 'useOfProceedFootnote'].map(field => (
+            {['useOfProceedFootnote', 'currentFinancialStatements'].map(field => (
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
@@ -247,7 +250,7 @@ export default class KeyTerms extends Component {
                 containerclassname="secondary"
               />
             ))
-          }
+            }
           </Form.Group>
           <Form.Group widths={3}>
             {
