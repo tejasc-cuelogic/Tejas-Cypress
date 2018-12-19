@@ -37,6 +37,11 @@ export default class ManualForm extends Component {
     }
   }
 
+  linkAccountDirectly = () => {
+    this.props.bankAccountStore.setBankLinkInterface('list');
+    this.props.uiStore.clearErrors();
+  }
+
   render() {
     const { errors } = this.props.uiStore;
     const {
@@ -76,7 +81,7 @@ export default class ManualForm extends Component {
           }
           <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
-        <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={() => this.props.bankAccountStore.setBankLinkInterface('list')} />
+        <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
       </div>
     );
   }

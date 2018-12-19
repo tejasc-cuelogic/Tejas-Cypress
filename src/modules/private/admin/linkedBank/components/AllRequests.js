@@ -40,7 +40,7 @@ export default class AllRequests extends Component {
               {
               changeRequests.length === 0 ? (
                 <Table.Row>
-                  <Table.Cell textAlign="center" colSpan={5}>No Linked Account Bank requests to display !</Table.Cell>
+                  <Table.Cell textAlign="center" colSpan={6}>No Linked Account Bank requests to display !</Table.Cell>
                 </Table.Row>
                 ) :
                 changeRequests.map((req, index) => (
