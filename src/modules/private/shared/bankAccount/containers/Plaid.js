@@ -120,7 +120,7 @@ export default class Plaid extends Component {
         </div>
         {errors &&
           <Message error>
-            <ListErrors errors={[errors]} />
+            <ListErrors errors={[errors.message]} />
           </Message>
         }
         <Button color="green" className="link-button" content="Or enter it manually" onClick={() => this.props.bankAccountStore.setBankLinkInterface('form')} />

@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Card, Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
-import moment from 'moment';
 
 import {
   OFFERED_SECURITIES,
@@ -13,7 +12,7 @@ import {
   FormTextarea,
   FormSelect,
   FormRadioGroup,
-  FormDatePicker,
+  MaskedInput,
 } from './../../../../../../theme/form';
 
 @inject('businessStore')
@@ -125,14 +124,13 @@ export default class OfferingInformation extends React.Component {
               name="offeringAmount"
               changed={offeringInfoChange}
             />
-            <FormDatePicker
+            <MaskedInput
               name="deadlineDate"
-              id="deadlinedate"
-              placeholder="Select date"
-              minDate={moment()}
               fielddata={formOfferingInfo.fields.deadlineDate}
-              selected={formOfferingInfo.fields.deadlineDate.value}
+              format="##/##/####"
               changed={verifyDeadlineDate}
+              dateOfBirth
+              showerror
             />
           </Form.Group>
         </Card>

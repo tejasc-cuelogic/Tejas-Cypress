@@ -13,6 +13,8 @@ class RevenueSharingDetails extends Component {
     const { KeyTerms, refLink } = this.props;
     const revenueShareSummary =
       (KeyTerms && KeyTerms.revShareSummary) || null;
+    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : null;
+    const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Grid.Row>
         <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
@@ -81,7 +83,12 @@ class RevenueSharingDetails extends Component {
                       position="top center"
                     />
                   </Statistic.Label>
-                  <Statistic.Value>{KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '-'}</Statistic.Value>
+                  <Statistic.Value>
+                    {maturityMonth ?
+                      `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                      :
+                      '-'}
+                  </Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>

@@ -339,6 +339,9 @@ footer{
             &:last-child{
                 margin-bottom:0;
             }
+            &.active {
+                background-color: @neutral-midwhite; 
+            }
         }
         .dropdown{
             .menu>.item{
@@ -383,14 +386,6 @@ footer{
                 }
             }
         }
-        // &.dataroom-menu {
-        //     background-color: transparent;
-        //     .item {
-        //         &.active, &:hover {
-        //             background-color: @neutral-midwhite;
-        //         }
-        //     }
-        // }
     }
     &.secondary.inverted{
         background-color:@neutral-midwhite;

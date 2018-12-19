@@ -184,6 +184,7 @@ export class CampaignStore {
         title: ele.name,
         to: idx,
         url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
+        accreditedOnly: ele.accreditedOnly,
       });
     });
     return navList;

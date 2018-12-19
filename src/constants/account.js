@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
+import Helper from '../helper/utility';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
 Validator.register('taxId', (value, attribute) => {
@@ -611,33 +612,9 @@ export const FINANCES = {
       required: 'required',
     },
   },
-  annualIncomeThirdLastYear: {
-    value: '',
-    label: 'Annual Income 2016',
-    error: undefined,
-    rule: 'required',
-    year: '2016',
-    placeHolder: '$60,000',
-    objRefOutput: 'annualIncome',
-    customErrors: {
-      required: 'required',
-    },
-  },
-  annualIncomeLastYear: {
-    value: '',
-    label: 'Annual Income 2017',
-    error: undefined,
-    rule: 'required',
-    year: '2017',
-    placeHolder: '$60,000',
-    objRefOutput: 'annualIncome',
-    customErrors: {
-      required: 'required',
-    },
-  },
   annualIncomeCurrentYear: {
     value: '',
-    label: 'Annual Income 2018 (Expected)',
+    label: `Annual Income ${Helper.getLastThreeYearsLabel().annualIncomeCurrentYear}`,
     error: undefined,
     rule: 'required',
     year: '2018',
@@ -701,8 +678,6 @@ export const INVESTOR_PROFILE_FULL_META = {
   ...BROKERAGE_EMPLOYMENT,
   taxFilingAs: FINANCES.investorProfileType,
   netWorth: FINANCES.netWorth,
-  annualIncomeThirdLastYear: FINANCES.annualIncomeThirdLastYear,
-  annualIncomeLastYear: FINANCES.annualIncomeLastYear,
   annualIncomeCurrentYear: FINANCES.annualIncomeCurrentYear,
   ...PUBLIC_COMPANY_REL,
 };
