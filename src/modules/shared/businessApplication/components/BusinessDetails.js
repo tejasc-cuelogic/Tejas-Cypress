@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
-import moment from 'moment';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
-import { FormInput, DropZoneConfirm as DropZone, MaskedInput, FormDatePicker } from '../../../../theme/form';
+import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
@@ -237,16 +236,15 @@ export default class BusinessDetails extends Component {
                       />
                     </Form.Group>
                     <Form.Group widths="equal">
-                      <FormDatePicker
-                        isdisabled={formReadOnlyMode}
-                        type="text"
+                      <MaskedInput
                         name="dateOfService"
-                        maxDate={moment()}
-                        placeholderText={owner.dateOfService.placeHolder}
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         fielddata={owner.dateOfService}
-                        selected={owner.dateOfService.value ?
-                          moment(owner.dateOfService.value, 'MM-DD-YYYY') : null}
-                        changed={date => businessDetailsDateChange('dateOfService', date, index)}
+                        format="##/##/####"
+                        changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
+                        dateOfBirth
+                        showerror
                       />
                       <MaskedInput
                         showerror

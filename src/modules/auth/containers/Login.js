@@ -97,7 +97,7 @@ class Login extends Component {
               <Link to="/auth/forgot-password">Forgot password?</Link>
             </Form.Field>
             {errors &&
-              <Message error textAlign="left" className="mt-30">
+              <Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
             }

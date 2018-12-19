@@ -4,20 +4,22 @@ import Aux from 'react-aux';
 import { Link, NavLink, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { NsCarousel, InlineLoader } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
 import InsightArticlesList from '../components/insightArticlesList';
+
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('articleStore')
 @observer
 export default class Insights extends Component {
   componentWillMount() {
+    const featuredArticleId = 'a25924d6-8136-4514-aee7-1ad8d78bb609';
     if (this.props.match.params && this.props.match.params.id) {
       this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
     } else {
       this.props.articleStore.requestAllArticles();
     }
     this.props.articleStore.getCategoryList();
+    this.props.articleStore.featuredRequestArticlesByCategoryId(featuredArticleId);
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
@@ -43,24 +45,29 @@ export default class Insights extends Component {
     const {
       InsightCategories,
       loading,
+      InsightFeaturedArticles,
     } = this.props.articleStore;
     const settings = {
       slidesToShow: isMobile ? '1' : 3,
       slidesToScroll: isMobile ? '1' : 3,
     };
+    const sliderInsightFeaturedArticles =
+        InsightFeaturedArticles && InsightFeaturedArticles.length ?
+          InsightFeaturedArticles.slice(0, 5) : [];
     return (
       <Aux>
         <NsCarousel {...settings}>
           {
-            [1, 2, 3, 4, 5].map(i => (
+            sliderInsightFeaturedArticles &&
+            sliderInsightFeaturedArticles.map(i => (
               <div className="insight-image-wrapper">
-                <Image src={`${ASSETS_URL}images/insights2.jpg`} key={i} />
+                <Image fluid as={Link} to={`/resources/insights/${i.id}`} src={i.featuredImage} key={i} />
                 <div className="image-caption">
                   <p className="news-category">
-                    BUSINESS
+                    Featured
                   </p>
                   <p className="news-title">
-                    Bring the local food movement home with hyper local sourcing.
+                    {i.title}
                   </p>
                 </div>
               </div>

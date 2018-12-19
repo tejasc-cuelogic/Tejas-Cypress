@@ -375,7 +375,7 @@ export class BusinessAppStore {
           this.BUSINESS_PERF_FRM.fields[ele].rule = '';
         });
       }
-      if (this.currentApplicationType === 'business') {
+      if (this.currentApplicationType === 'business' && data.performance) {
         ['cogSold', 'grossSales', 'netIncome', 'operatingExpenses'].forEach((ele, key) => {
           const field = ['nyCogs', 'nyGrossSales', 'nyNetIncome', 'nyOperatingExpenses'];
           this.BUSINESS_PERF_FRM.fields[field[key]].value = data.performance.nextYearSnapshot[ele];
@@ -497,7 +497,7 @@ export class BusinessAppStore {
   businessDetailsDateChange = (field, date, index = -1) => {
     this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
       this.BUSINESS_DETAILS_FRM,
-      { name: field, value: moment(date) },
+      { name: field, value: date },
       'owners',
       index,
     );

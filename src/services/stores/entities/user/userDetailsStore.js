@@ -337,7 +337,7 @@ export class UserDetailsStore {
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
     if (form === 'USER_INVESTOR_PROFILE') {
       if (details.investorProfileData && details.investorProfileData.annualIncome) {
-        ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
+        ['annualIncomeCurrentYear'].map((item, index) => {
           this.USER_INVESTOR_PROFILE.fields[item].value =
           details.investorProfileData.annualIncome[index].income;
           return true;
