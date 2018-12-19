@@ -242,7 +242,7 @@ export class Auth {
       );
     })
       .then(() => {
-        Helper.toast('Thanks! You have successfully signed up to the NextSeed.', 'success');
+        Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
         if (authStore.SIGNUP_FRM.fields.role.value === 'investor') {
           if (!userStore.currentUser) {
             const { email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
