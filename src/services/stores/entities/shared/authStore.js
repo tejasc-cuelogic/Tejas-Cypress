@@ -7,7 +7,7 @@ import {
   LOGIN, SIGNUP, CONFIRM, CHANGE_PASS, FORGOT_PASS, RESET_PASS, NEWSLETTER,
 } from '../../../constants/auth';
 import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
-import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup } from '../../queries/profile';
+import { requestEmailChnage, verifyAndUpdateEmail, portPrequalDataToApplication, checkEmailExistsPresignup, checkMigrationByEmail } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { uiStore, navStore, identityStore, userDetailsStore, userStore } from '../../index';
@@ -338,6 +338,36 @@ export class AuthStore {
       },
       fetchPolicy: 'network-only',
     });
+  });
+
+  @action
+  checkMigrationByEmail = params => new Promise((res, rej) => {
+    uiStore.setProgress();
+    clientPublic.mutate({
+      mutation: checkMigrationByEmail,
+      variables: {
+        migrationByEmailData: params,
+      },
+    })
+      .then((data) => {
+        if (!data.data.checkMigrationByEmail) {
+          uiStore.setErrors({
+            message: 'There was a problem with authentication',
+            code: 'checkMigrationByEmailFailed',
+          });
+        }
+        res(data.data.checkMigrationByEmail);
+      })
+      .catch((err) => {
+        uiStore.setErrors({
+          message: 'There was a problem with authentication',
+          code: 'checkMigrationByEmailFailed',
+        });
+        rej(err);
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   });
 }
 
