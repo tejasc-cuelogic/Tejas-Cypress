@@ -75,7 +75,7 @@ class Success extends Component {
   render() {
     const {
       signupChange, togglePasswordType, SIGNUP_FRM,
-      LoginChange, LOGIN_FRM, pwdInputType,
+      LoginChange, LOGIN_FRM, pwdInputType, currentScore,
     } = this.props.authStore;
     const { userExists } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
@@ -147,7 +147,7 @@ class Success extends Component {
               </Form>
             }
             <Divider section hidden />
-            <Button loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists)} size="large" color="green" className="very relaxed">Proceed</Button>
+            <Button loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists) || !currentScore} size="large" color="green" className="very relaxed">Proceed</Button>
           </Grid.Column>
         </Grid>
         {this.state.showProgressLoader &&
