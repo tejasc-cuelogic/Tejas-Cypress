@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import React from 'react';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import isArray from 'lodash/isArray';
+import { capitalize, isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from './../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
@@ -185,7 +185,7 @@ export class UserListingStore {
     };
     this.users.map((user) => {
       usersOptions[user.roles[0].scope].push({
-        text: `${user.info.firstName} ${user.info.lastName}`,
+        text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
         value: user.id,
         icon:
   <UserAvatar

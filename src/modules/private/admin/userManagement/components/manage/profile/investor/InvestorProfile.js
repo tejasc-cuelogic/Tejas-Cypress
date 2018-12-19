@@ -38,7 +38,7 @@ export default class InvestorProfile extends Component {
         <Divider />
         <Header as="h6">Finances</Header>
         <Form.Group widths={3}>
-          {['netWorth', 'annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
+          {['netWorth', 'annualIncomeCurrentYear'].map(field => (
             <MaskedInput
               type="tel"
               key={field}

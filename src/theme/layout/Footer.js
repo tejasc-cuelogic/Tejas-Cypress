@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Image, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { ASSETS_URL } from '../../constants/aws';
 import { SocialLinks } from '../shared';
 
@@ -41,7 +42,8 @@ class Footer extends Component {
         <Container fluid={isCampaign}>
           {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
-              <b>`{shorthandBusinessName} Disclaimer:`</b>
+              <b>{`${shorthandBusinessName} Disclaimer: `}</b>
+              {Parser(offeirngDisclaimer)}
             </p>
           }
           <Grid stackable>

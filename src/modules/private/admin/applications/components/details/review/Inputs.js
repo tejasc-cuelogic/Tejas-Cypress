@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Header, Form } from 'semantic-ui-react';
-import moment from 'moment';
-import { MaskedInput, FormRadioGroup, FormDatePicker } from '../../../../../../../theme/form';
+import { MaskedInput, FormRadioGroup } from '../../../../../../../theme/form';
 
 @inject('businessAppReviewStore')
 @observer
@@ -13,7 +12,6 @@ export default class Inputs extends Component {
       MODEL_INPUTS_FRM,
       formChange,
       maskChange,
-      onDateChange,
     } = this.props.businessAppReviewStore;
     return (
       <Aux>
@@ -56,14 +54,13 @@ export default class Inputs extends Component {
               />
             </div>
           </Form.Group>
-          <FormDatePicker
+          <MaskedInput
             name="companyInceptionDate"
-            placeholder="1/1/18"
-            selected={MODEL_INPUTS_FRM.fields.companyInceptionDate.value ?
-              moment(MODEL_INPUTS_FRM.fields.companyInceptionDate.value) : null}
-            changed={date => onDateChange('MODEL_INPUTS_FRM', 'companyInceptionDate', date)}
             fielddata={MODEL_INPUTS_FRM.fields.companyInceptionDate}
-            containerwidth={5}
+            format="##/##/####"
+            changed={(values, name) => maskChange(values, 'MODEL_INPUTS_FRM', name)}
+            dateOfBirth
+            showerror
           />
           <Header as="h4">
             Y1 Financial Information

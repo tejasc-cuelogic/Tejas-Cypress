@@ -22,9 +22,10 @@ export default class ManagerOverview extends Component {
         <Aux>
           <Header as="h4">
             Manager
-            {!isReadonly && isManager && submitted &&
-              <Button primary size="mini" floated="right" className="relaxed" content="Save" loading={inProgress === 'SAVE'} />
-            }
+            {/* {!isReadonly && isManager && submitted &&
+              <Button primary size="mini" floated="right" className="relaxed"
+              content="Save" loading={inProgress === 'SAVE'} />
+            } */}
           </Header>
           <FormTextarea
             name="managerOverview"

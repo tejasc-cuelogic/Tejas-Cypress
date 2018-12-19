@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import moment from 'moment';
 import { Header, Form } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 
-import { FormRadioGroup, FormDatePicker } from '../../../../../../../theme/form';
+import { FormRadioGroup, MaskedInput } from '../../../../../../../theme/form';
 
 @inject('entityAccountStore')
 @observer
@@ -20,16 +19,18 @@ export default class AccountType extends Component {
             changed={trustInfoChange}
             containerclassname="button-radio center-align"
           />
+          {TRUST_INFO_FRM.fields.isTrust.value &&
           <div className="field-wrap">
-            <FormDatePicker
+            <MaskedInput
               name="trustDate"
-              placeholder="Select date"
               fielddata={TRUST_INFO_FRM.fields.trustDate}
-              selected={moment(TRUST_INFO_FRM.fields.trustDate.value)}
-              changed={date => entityInfoDateChange(date)}
-              isdisabled={!TRUST_INFO_FRM.fields.isTrust.value}
+              format="##/##/####"
+              changed={values => entityInfoDateChange(values.formattedValue)}
+              dateOfBirth
+              showerror
             />
           </div>
+          }
         </Form>
       </div>
     );

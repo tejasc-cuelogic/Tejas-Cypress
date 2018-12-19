@@ -497,7 +497,7 @@ export class BusinessAppStore {
   businessDetailsDateChange = (field, date, index = -1) => {
     this.BUSINESS_DETAILS_FRM = Validator.onArrayFieldChange(
       this.BUSINESS_DETAILS_FRM,
-      { name: field, value: moment(date) },
+      { name: field, value: date },
       'owners',
       index,
     );

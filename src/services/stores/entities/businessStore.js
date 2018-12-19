@@ -177,9 +177,9 @@ export class BusinessStore {
   };
 
   @action
-  verifyDateIncorporation = (date) => {
-    this.onFieldChange('formIssuerInfo', 'dateIncorporation', date);
-  };
+  verifyDateIncorporation = (values) => {
+    this.onFieldChange('formIssuerInfo', 'dateIncorporation', values.formattedValue);
+  }
 
   @action
   offeringInfoChange = (e, { name, value }) => {
@@ -188,7 +188,7 @@ export class BusinessStore {
 
   @action
   verifyDeadlineDate = (date) => {
-    this.onFieldChange('formOfferingInfo', 'deadlineDate', date);
+    this.onFieldChange('formOfferingInfo', 'deadlineDate', date.formattedValue);
   };
 
   @action

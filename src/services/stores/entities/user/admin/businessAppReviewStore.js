@@ -240,7 +240,7 @@ export class BusinessAppReviewStore {
 
   @action
   maskChangeWithIndex = (values, form, arrayName = 'data', field, index) => {
-    const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' ? values.formattedValue : values.floatValue;
+    const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' || field === 'companyInceptionDate' ? values.formattedValue : values.floatValue;
     this[form] = Validator.onArrayFieldChange(
       this[form],
       { name: field, value: fieldValue }, arrayName, index,

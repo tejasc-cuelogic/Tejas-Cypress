@@ -38,7 +38,7 @@ export default class Finances extends Component {
           <Divider hidden />
           <div className="field-wrap left-align">
             <Form.Group widths={2}>
-              {['netWorth', 'annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map(field => (
+              {['netWorth', 'annualIncomeCurrentYear'].map(field => (
                 <MaskedInput
                   type="tel"
                   key={field}
