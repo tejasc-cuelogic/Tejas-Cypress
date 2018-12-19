@@ -225,3 +225,8 @@ export const checkEmailExistsPresignup = gql`
     checkEmailExistsPresignup(email: $email)
   }
 `;
+
+export const checkMigrationByEmail = gql`
+  mutation checkMigrationByEmail($migrationByEmailData: CheckMigrationByEmailInput!) {
+    checkMigrationByEmail(migrationByEmailData: $migrationByEmailData)
+ }`;
