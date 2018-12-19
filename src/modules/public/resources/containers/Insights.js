@@ -61,7 +61,7 @@ export default class Insights extends Component {
             sliderInsightFeaturedArticles &&
             sliderInsightFeaturedArticles.map(i => (
               <div className="insight-image-wrapper">
-                <Image as={Link} to={`/resources/insights/${i.id}`} src={i.featuredImage} key={i} />
+                <Image fluid as={Link} to={`/resources/insights/${i.id}`} src={i.featuredImage} key={i} />
                 <div className="image-caption">
                   <p className="news-category">
                     Featured
