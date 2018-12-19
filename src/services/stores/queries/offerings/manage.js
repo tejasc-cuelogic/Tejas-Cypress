@@ -236,6 +236,12 @@ export const getOfferingDetails = gql`
           isPublic
           fileName
         }
+        avatar {
+          id
+          url
+          isPublic
+          fileName
+        }
         heroVideo {
           id
           url
