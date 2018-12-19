@@ -238,6 +238,8 @@ export default class BusinessDetails extends Component {
                     <Form.Group widths="equal">
                       <MaskedInput
                         name="dateOfService"
+                        readOnly={formReadOnlyMode}
+                        containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         fielddata={owner.dateOfService}
                         format="##/##/####"
                         changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}

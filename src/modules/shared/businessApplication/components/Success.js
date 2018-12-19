@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer } from 'semantic-ui-react';
+import { Grid, Icon, Header, Divider, Button, Form, Loader, Dimmer, Message } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { FormInput, FormPasswordStrength } from '../../../../theme/form';
+import { ListErrors } from '../../../../theme/shared';
 import { authActions } from '../../../../services/actions';
 import Helper from '../../../../helper/utility';
 
@@ -65,18 +66,20 @@ class Success extends Component {
           const redirectUrl = `/app/business-application/${currentApplicationType}/${applicationId}/business-details`;
           this.props.history.push(redirectUrl);
         }
-      }).catch(() => {
+      }).catch((er) => {
         this.setState({ showProgressLoader: false });
-        Helper.toast('Something went wrong while saving filer information, Please try again.', 'error');
+        Helper.toast(er.message === 'Incorrect username or password.' ? 'Something went wrong while saving filer information, Please try again.' : er.message, 'error');
       });
   }
 
   render() {
     const {
-      signupChange, togglePasswordType, SIGNUP_FRM, LoginChange, LOGIN_FRM, pwdInputType,
+      signupChange, togglePasswordType, SIGNUP_FRM,
+      LoginChange, LOGIN_FRM, pwdInputType,
     } = this.props.authStore;
     const { userExists } = this.props.businessAppStore;
     const { fields } = SIGNUP_FRM;
+    const { errors } = this.props.uiStore;
     return (
       <Aux>
         <Grid container>
@@ -92,7 +95,7 @@ class Success extends Component {
               through the steps and keep the process organized.
             </p>
             {this.props.isPublic &&
-              <Form>
+              <Form error>
                 <Grid>
                   <Grid.Column widescreen={7} largeScreen={7} computer={8} tablet={16} mobile={16}>
                     {!userExists ?
@@ -133,6 +136,11 @@ class Success extends Component {
                           changed={LoginChange}
                         />
                       ))
+                    }
+                    {errors &&
+                      <Message error className="mt-30">
+                        <ListErrors errors={[errors.message]} />
+                      </Message>
                     }
                   </Grid.Column>
                 </Grid>
