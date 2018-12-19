@@ -294,6 +294,11 @@ export const campaignDetailsQuery = gql`
         by
         date
       }
+      created {
+        id
+        by
+        date
+      }
       createdUserInfo {
         id
         info {
@@ -317,6 +322,11 @@ export const campaignDetailsQuery = gql`
           date
         }
         updated {
+          id
+          by
+          date
+        }
+        created {
           id
           by
           date
