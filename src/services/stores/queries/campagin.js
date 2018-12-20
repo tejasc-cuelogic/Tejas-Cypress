@@ -241,6 +241,11 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
+      avatar  {
+        id
+        url
+        isPublic
+      }
       businessModelImage {
         id
         url
