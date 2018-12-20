@@ -15,7 +15,7 @@ const getModule = component => Loadable({
 
 const processingMsg = `Please wait, We are processing your request.
   If you have any query please contact support at
-  <a href="mailto:support@nextseed.com">Support@Nextseed.com</a>`;
+  <a href="mailto:support@nextseed.com">support@nextseed.com</a>`;
 
 @inject('userDetailsStore')
 @observer
