@@ -66,32 +66,36 @@ export default class AddWithdrawFund extends Component {
       currentActiveAccountDetails.details.linkedBank ?
       currentActiveAccountDetails.details.linkedBank : null;
     const { errors } = this.props.uiStore;
+    const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
-    console.log(cash);
     return (
       <Aux>
         <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
           <Modal.Header className="signup-header">
-            <Header as="h3"><AccTypeTitle noText /> {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds</Header>
+            <Header as="h3"><AccTypeTitle noText />
+              {headingTitle}
+            </Header>
           </Modal.Header>
           <Modal.Content>
             <Form error onSubmit={this.transfer} size="massive">
-              {/* {!showConfirmPreview && match.params.action !== 'add' &&
-                <MaskedInput
-                  disabled="disabled"
-                  hoverable
-                  label="Total available for withdrawl:"
-                  key="amount"
-                  prefix="$ "
-                  name="maountInvested"
-                  containerclassname="fund-amount"
-                  currency
-                  fielddata={{ value: cash }}
-                // changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
-                />
-              } */}
+              {!showConfirmPreview && match.params.action === 'withdraw' &&
+                <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show' : 'hidden'}>
+                  <MaskedInput
+                    readonly="readonly"
+                    hoverable
+                    label="Total available for withdrawl:"
+                    key="amount"
+                    prefix="$ "
+                    name="maountInvested"
+                    containerclassname="fund-amount"
+                    currency
+                    fielddata={{ value: cash }}
+                  />
+                </div>
+              }
               <MaskedInput
-                disabled={showConfirmPreview ? 'disabled' : ''}
+                // disabled={showConfirmPreview ? 'disabled' : ''}
+                readonly={showConfirmPreview ? 'readonly' : false}
                 hoverable
                 label={match.params.action === 'add' ? 'Deposit amount' : labelForWithdrawInput}
                 key="amount"

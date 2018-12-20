@@ -143,7 +143,8 @@ export default class NewUpdate extends Component {
                     <h4>Who’s this update for?</h4>
                     <Form.Group inline>
                       <FormRadioGroup
-                        disabled={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
+                        containerclassname={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly ? 'display-only' : ''}
+                        readOnly={(this.props.status === 'PUBLISHED' && isManager) ? !this.state.editForm : isReadonly}
                         fielddata={PBUILDER_FRM.fields.scope}
                         name="scope"
                         changed={UpdateChange}
