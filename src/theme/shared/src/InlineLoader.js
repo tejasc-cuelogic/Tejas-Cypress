@@ -1,4 +1,5 @@
 import React from 'react';
+import Parser from 'html-react-parser';
 
 const pillersMeta = [
   { x: 0, rotate: 3, begin: 0 },
@@ -12,7 +13,7 @@ const InlineLoader = props => (
   <section className="center-align">
     {
       props.text ? (
-        <h3 style={{ color: '#31333d7d' }}>{props.text}</h3>
+        <h3 style={{ color: '#31333d7d' }}>{Parser(props.text) || ''}</h3>
       ) : (
         <svg
           version="1.1"
