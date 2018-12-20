@@ -91,11 +91,7 @@ export default class MultiStep extends React.Component {
   }
 
   handleKeyDown(evt) {
-<<<<<<< HEAD
     if (evt.which === 13 && (evt.target.name !== 'bankName' && evt.target.name !== 'investmentAmount')) {
-=======
-    if (evt.which === 13 && evt.target.name !== 'bankName') {
->>>>>>> f69d36408945bb87d114297746da305fcbc7cac2
       this.next();
     }
   }
