@@ -279,14 +279,15 @@ export default class Media extends Component {
           </List>
         </Form>
         <Divider section />
-        <Header as="h4">Logo</Header>
-        <Form className="cropper-wrap hero-img">
-          {MEDIA_FRM.fields.logo.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.showConfirmModal('logo')} circular icon={{ className: 'ns-close-light' }} />
-              <Image64 srcUrl={MEDIA_FRM.fields.logo.preSignedUrl} />
-            </div>
-
+        <Grid columns={2} stackable>
+          <Grid.Column>
+            <Header as="h4">Logo</Header>
+            <Form className="cropper-wrap hero-img">
+              {MEDIA_FRM.fields.logo.preSignedUrl ? (
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.showConfirmModal('logo')} circular icon={{ className: 'ns-close-light' }} />
+                  <Image64 srcUrl={MEDIA_FRM.fields.logo.preSignedUrl} />
+                </div>
           ) : (
             <ImageCropper
               disabled={isReadonly}
@@ -303,14 +304,16 @@ export default class Media extends Component {
               aspect={16 / 9}
             />
             )}
-        </Form>
-        <Header as="h4">Company Avatar</Header>
-        <Form className="cropper-wrap hero-img">
-          {MEDIA_FRM.fields.avatar.preSignedUrl ? (
-            <div className="file-uploader attached">
-              <Button onClick={() => this.showConfirmModal('avatar')} circular icon={{ className: 'ns-close-light' }} />
-              <Image64 srcUrl={MEDIA_FRM.fields.avatar.preSignedUrl} />
-            </div>
+            </Form>
+          </Grid.Column>
+          <Grid.Column>
+            <Header as="h4">Company Avatar</Header>
+            <Form className="cropper-wrap hero-img">
+              {MEDIA_FRM.fields.avatar.preSignedUrl ? (
+                <div className="file-uploader attached">
+                  <Button onClick={() => this.showConfirmModal('avatar')} circular icon={{ className: 'ns-close-light' }} />
+                  <Image64 srcUrl={MEDIA_FRM.fields.avatar.preSignedUrl} />
+                </div>
           ) : (
             <ImageCropper
               disabled={isReadonly}
@@ -327,8 +330,10 @@ export default class Media extends Component {
               aspect={16 / 9}
             />
             )}
-
-        </Form>
+            </Form>
+          </Grid.Column>
+        </Grid>
+        <Divider section />
         <ButtonGroup
           isIssuer={isIssuer}
           submitted={submitted}

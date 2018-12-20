@@ -91,7 +91,7 @@ export default class MultiStep extends React.Component {
   }
 
   handleKeyDown(evt) {
-    if (evt.which === 13) {
+    if (evt.which === 13 && evt.target.name !== 'bankName') {
       this.next();
     }
   }
