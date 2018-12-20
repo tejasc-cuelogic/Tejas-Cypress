@@ -80,7 +80,7 @@ export default class MaskedInput extends Component {
               {props.actionlabel}
             </Button>
           </div>) : props.currency ? (
-            <NumberFormatWrapped readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+            <NumberFormatWrapped readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} onKeyPress={props.onkeypress ? () => { props.onkeypress(); this.triggerError(true); } : null} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
           ) : props.number ? (
             <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
           ) : props.percentage ? (
