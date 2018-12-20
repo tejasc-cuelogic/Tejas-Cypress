@@ -246,41 +246,6 @@ export default class Media extends Component {
             </Form>
           </Grid.Column>
         </Grid>
-        {/* <Divider section />
-        <Header as="h4">Location Image</Header>
-        <Form className="cropper-wrap gallery-img">
-          <List horizontal>
-            {MEDIA_FRM.fields.location.preSignedUrl &&
-            MEDIA_FRM.fields.location.preSignedUrl.length &&
-            MEDIA_FRM.fields.location.preSignedUrl.map((url, i) => (
-              <List.Item key={url}>
-                <div className="file-uploader attached">
-                  <Button onClick={
-                    () => this.showConfirmModal('location', i)
-                  }
-                  circular icon={{ className: 'ns-close-light' }} />
-                  <Image64 srcUrl={url} />
-                </div>
-              </List.Item>
-            ))}
-            <List.Item>
-              <ImageCropper
-                disabled={isReadonly}
-                fieldData={MEDIA_FRM.fields.location}
-                setData={(attr, value) => this.setData(attr, value, 'location')}
-                verifySize={this.handleVerifyFileSize}
-                verifyExtension={this.handleVerifyFileExtension}
-                handelReset={() => this.handleresetProfilePhoto('location')}
-                verifyImageDimension={this.handelImageDeimension}
-                field={MEDIA_FRM.fields.location}
-                modalUploadAction={this.uploadMedia}
-                name="location"
-                cropInModal
-                aspect={3 / 2}
-              />
-            </List.Item>
-          </List>
-        </Form> */}
         <Divider section />
         <Header as="h4">Gallery</Header>
         <Form className="cropper-wrap gallery-img">
@@ -314,15 +279,14 @@ export default class Media extends Component {
           </List>
         </Form>
         <Divider section />
-        <Grid columns={2} stackable>
-          <Grid.Column>
-            <Header as="h4">Logo</Header>
-            <Form className="cropper-wrap tombstone-img">
-              {MEDIA_FRM.fields.logo.preSignedUrl ? (
-                <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('logo')} circular icon={{ className: 'ns-close-light' }} />
-                  <Image64 srcUrl={MEDIA_FRM.fields.logo.preSignedUrl} />
-                </div>
+        <Header as="h4">Logo</Header>
+        <Form className="cropper-wrap hero-img">
+          {MEDIA_FRM.fields.logo.preSignedUrl ? (
+            <div className="file-uploader attached">
+              <Button onClick={() => this.showConfirmModal('logo')} circular icon={{ className: 'ns-close-light' }} />
+              <Image64 srcUrl={MEDIA_FRM.fields.logo.preSignedUrl} />
+            </div>
+
           ) : (
             <ImageCropper
               disabled={isReadonly}
@@ -339,16 +303,14 @@ export default class Media extends Component {
               aspect={16 / 9}
             />
             )}
-            </Form>
-          </Grid.Column>
-          <Grid.Column>
-            <Header as="h4">Company Avatar</Header>
-            <Form className="cropper-wrap tombstone-img">
-              {MEDIA_FRM.fields.avatar.preSignedUrl ? (
-                <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('avatar')} circular icon={{ className: 'ns-close-light' }} />
-                  <Image64 srcUrl={MEDIA_FRM.fields.avatar.preSignedUrl} />
-                </div>
+        </Form>
+        <Header as="h4">Company Avatar</Header>
+        <Form className="cropper-wrap hero-img">
+          {MEDIA_FRM.fields.avatar.preSignedUrl ? (
+            <div className="file-uploader attached">
+              <Button onClick={() => this.showConfirmModal('avatar')} circular icon={{ className: 'ns-close-light' }} />
+              <Image64 srcUrl={MEDIA_FRM.fields.avatar.preSignedUrl} />
+            </div>
           ) : (
             <ImageCropper
               disabled={isReadonly}
@@ -365,9 +327,8 @@ export default class Media extends Component {
               aspect={16 / 9}
             />
             )}
-            </Form>
-          </Grid.Column>
-        </Grid>
+
+        </Form>
         <ButtonGroup
           isIssuer={isIssuer}
           submitted={submitted}
