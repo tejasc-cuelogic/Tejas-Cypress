@@ -70,7 +70,7 @@ export class Utility {
 
   cryptedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;
-    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
+    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, 'X');
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
     return formattedSSNNumber;
   }
