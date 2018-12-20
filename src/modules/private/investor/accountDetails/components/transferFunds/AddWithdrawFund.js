@@ -51,6 +51,24 @@ export default class AddWithdrawFund extends Component {
       this.props.history.replace(this.props.refLink);
     });
   }
+  showConditionalComponent = (previewParam) => {
+    const { cash } = this.props.transactionStore;
+    if (previewParam) {
+      return '';
+    }
+    return (<MaskedInput
+      disabled="disabled"
+      hoverable
+      label="Total available for withdrawl:"
+      key="amount"
+      prefix="$ "
+      name="maountInvested"
+      containerclassname="fund-amount"
+      currency
+      fielddata={{ value: cash }}
+    // changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
+    />);
+  }
   render() {
     const {
       match, transactionStore,
@@ -76,20 +94,9 @@ export default class AddWithdrawFund extends Component {
           </Modal.Header>
           <Modal.Content>
             <Form error onSubmit={this.transfer} size="massive">
-              {/* {!showConfirmPreview && match.params.action !== 'add' &&
-                <MaskedInput
-                  disabled="disabled"
-                  hoverable
-                  label="Total available for withdrawl:"
-                  key="amount"
-                  prefix="$ "
-                  name="maountInvested"
-                  containerclassname="fund-amount"
-                  currency
-                  fielddata={{ value: cash }}
-                // changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
-                />
-              } */}
+              {
+                this.showConditionalComponent(showConfirmPreview)
+              }
               <MaskedInput
                 disabled={showConfirmPreview ? 'disabled' : ''}
                 hoverable
