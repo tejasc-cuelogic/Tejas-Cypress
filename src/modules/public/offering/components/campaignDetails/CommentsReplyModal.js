@@ -19,7 +19,7 @@ class CommentsReplyModal extends Component {
   readMore = (e, id) => { e.preventDefault(); this.setState({ readMore: id }); }
   handleClose = () => this.props.history.push(this.props.refLink);
   send = (scope) => {
-    this.props.messageStore.createNewComment(scope);
+    this.props.messageStore.createNewComment(scope, this.props.campaignSlug);
     this.handleClose();
   }
   render() {
