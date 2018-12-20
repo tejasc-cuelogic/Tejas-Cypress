@@ -36,7 +36,9 @@ export class NavStore {
       && !userDetailsStore.isBasicVerDoneForMigratedFullUser) {
       permitted = [...this.params.roles];
     } else {
-      permitted = [...this.params.roles, ...userDetailsStore.signupStatus.activeAccounts];
+      permitted = [...this.params.roles,
+        ...userDetailsStore.signupStatus.activeAccounts,
+        ...userDetailsStore.signupStatus.processingAccounts];
     }
     const routes = _.filter(
       this.NAV_ITEMS,

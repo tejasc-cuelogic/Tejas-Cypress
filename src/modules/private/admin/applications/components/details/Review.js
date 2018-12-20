@@ -71,16 +71,16 @@ export default class Review extends Component {
                 match={match}
                 navItems={navItems}
               />
-            </div>
-            <Divider hidden />
-            {showGeneratePA &&
-            <Button.Group size="mini">
-              <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
-              {paBoxFolderId &&
-              <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
+              <Divider hidden />
+              {showGeneratePA &&
+              <Button.Group size="mini">
+                <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
+                {paBoxFolderId &&
+                <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
+                }
+              </Button.Group>
               }
-            </Button.Group>
-            }
+            </div>
           </Grid.Column>
           <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
             <Switch>
