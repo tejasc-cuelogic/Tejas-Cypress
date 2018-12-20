@@ -68,14 +68,12 @@ export default class AddWithdrawFund extends Component {
     const { errors } = this.props.uiStore;
     const headingTitle = match.params.action === 'add' ? 'Add funds' : (!showConfirmPreview && match.params.action === 'withdraw') ? 'Withdraw funds' : 'Confirm withdrawal';
     const labelForWithdrawInput = match.params.action !== 'add' && (!showConfirmPreview) ? 'Amount you want to withdraw' : 'Withdrawal amount';
-    console.log(cash);
     return (
       <Aux>
         <Modal dimmer open size="mini" closeIcon onClose={this.goBack} closeOnDimmerClick={false}>
           <Modal.Header className="signup-header">
             <Header as="h3"><AccTypeTitle noText />
               {headingTitle}
-              {/* {(match.params.action === 'add' ? 'Add' : 'Withdraw')} funds */}
             </Header>
           </Modal.Header>
           <Modal.Content>
@@ -83,7 +81,6 @@ export default class AddWithdrawFund extends Component {
               {!showConfirmPreview && match.params.action === 'withdraw' &&
                 <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show' : 'hidden'}>
                   <MaskedInput
-                    // disabled="disabled"
                     readonly="readonly"
                     hoverable
                     label="Total available for withdrawl:"
@@ -93,7 +90,6 @@ export default class AddWithdrawFund extends Component {
                     containerclassname="fund-amount"
                     currency
                     fielddata={{ value: cash }}
-                  // changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
                   />
                 </div>
               }
