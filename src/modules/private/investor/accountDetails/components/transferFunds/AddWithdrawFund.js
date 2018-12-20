@@ -106,7 +106,7 @@ export default class AddWithdrawFund extends Component {
                 <Statistic className="mt-10 mb-10">
                   <Header as="h6" className="text-capitalize">
                     <Header.Subheader>From</Header.Subheader>
-                    {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'NA'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span> <Link to="/app/account-details/individual/bank-accounts">Change</Link>
+                    {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span> <Link to="/app/account-details/individual/bank-accounts">Change</Link>
                     <Divider hidden />
                     <Header.Subheader>To</Header.Subheader>
                     NextSeed {currentActiveAccountDetails && currentActiveAccountDetails.name ?
