@@ -67,6 +67,7 @@ export default class KeyTerms extends Component {
               />
             ))}
             <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.securities}
               selection
@@ -87,6 +88,7 @@ export default class KeyTerms extends Component {
               />
             ))}
             <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
               selection
@@ -113,6 +115,7 @@ export default class KeyTerms extends Component {
               number
             />
             <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.regulation}
               selection
@@ -229,7 +232,8 @@ export default class KeyTerms extends Component {
                 <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
                 <Form.Group inline>
                   <FormRadioGroup
-                    disabled={isReadonly}
+                    readOnly={isReadonly}
+                    containerclassname={isReadonly ? 'display-only' : ''}
                     fielddata={KEY_TERMS_FRM.fields[field]}
                     name={field}
                     changed={(e, result) => formChange(e, result, formName)}
@@ -251,7 +255,8 @@ export default class KeyTerms extends Component {
                 <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
                 <Form.Group inline>
                   <FormRadioGroup
-                    disabled={isReadonly}
+                    containerclassname={isReadonly ? 'display-only' : ''}
+                    readOnly={isReadonly}
                     fielddata={KEY_TERMS_FRM.fields[field]}
                     name={field}
                     changed={(e, result) => formChange(e, result, formName)}
