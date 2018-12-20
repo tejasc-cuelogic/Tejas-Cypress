@@ -91,7 +91,7 @@ export default class MultiStep extends React.Component {
   }
 
   handleKeyDown(evt) {
-    if (evt.which === 13 && evt.target.name !== 'bankName') {
+    if (evt.which === 13 && (evt.target.name !== 'bankName' && evt.target.name !== 'investmentAmount')) {
       this.next();
     }
   }
@@ -163,7 +163,7 @@ export default class MultiStep extends React.Component {
       /* eslint-disable jsx-a11y/no-static-element-interactions */
       <div onKeyDown={this.handleKeyDown} >
         <Modal
-          onKeyPress={event => this.props.setIsEnterPressed(event.charCode)}
+          onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
           open
           closeIcon
