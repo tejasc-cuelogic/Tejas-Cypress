@@ -53,11 +53,11 @@ export default class IdentityVerification extends Component {
           if (isSSNPresent) {
             // set error
             const setErrorMessage = (
-              <span>
+              `<span>
                 There was an issue with the information you submitted.
                 Please double-check and try again.
-                If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href={`mailto:${NS_SITE_EMAIL_SUPPORT}`}>{ NS_SITE_EMAIL_SUPPORT }</a>
-              </span>
+                If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href="mailto:${NS_SITE_EMAIL_SUPPORT}">${NS_SITE_EMAIL_SUPPORT}</a>
+              </span>`
             );
             this.props.uiStore.setProgress(false);
             this.props.uiStore.setErrors(setErrorMessage);

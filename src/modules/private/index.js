@@ -9,7 +9,7 @@ import { InlineLoader } from '../../theme/shared';
 import SidebarLeftOverlay from './../../theme/layout/SidebarLeftOverlay';
 import NotFound from '../shared/NotFound';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'accountStore')
 @withRouter
 @observer
 export default class Private extends React.Component {
@@ -61,6 +61,7 @@ export default class Private extends React.Component {
       roles: toJS(User.roles),
     };
     const routes = this.getPrivateRoutes(UserInfo.roles);
+    const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
     if (this.props.authStore.isUserLoggedIn) {
       return (
         <SidebarLeftOverlay
@@ -68,6 +69,7 @@ export default class Private extends React.Component {
           UserInfo={UserInfo}
           handleLogOut={this.handleLogOut}
           signupStatus={signupStatus}
+          accForm={INVESTMENT_ACC_TYPES}
         >
           <Switch>
             {privateRoutes.map(route => (

@@ -1,7 +1,13 @@
 import React from 'react';
 import Parser from 'html-react-parser';
 
-const cleanMsg = msg => (msg ? msg.replace('GraphQL error: ', '') : '');
+const cleanMsg = (msg) => {
+  try {
+    return (msg ? msg.replace('GraphQL error: ', '') : msg);
+  } catch (e) {
+    return msg;
+  }
+};
 class ListErrors extends React.Component {
   render() {
     const { errors } = this.props;
