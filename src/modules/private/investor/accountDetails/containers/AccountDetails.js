@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
+import { includes } from 'lodash';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import { InlineLoader } from '../../../../../theme/shared';
 import { GetNavMeta } from '../../../../../theme/layout/SidebarNav';
@@ -32,9 +33,12 @@ export default class AccountDetails extends Component {
     const accType = splittedUrl.pop();
     const isAccProcessing = processingAccounts.includes(accType);
     const navItems = isAccProcessing ? [] : GetNavMeta(match.url).subNavigations;
+    const processing = includes(this.props.location.pathname, 'transactions') ?
+      <div className="content-spacer"><InlineLoader text={processingMsg} /></div> :
+      <InlineLoader text={processingMsg} />;
     return (
       <PrivateLayout {...this.props}>
-        {isAccProcessing ? <InlineLoader text={processingMsg} /> : (
+        {isAccProcessing ? processing : (
           <Switch>
             <Route exact path={match.url} component={getModule(navItems[0].component)} />
             {
