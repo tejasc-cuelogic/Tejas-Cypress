@@ -79,7 +79,7 @@ export default class AddWithdrawFund extends Component {
           <Modal.Content>
             <Form error onSubmit={this.transfer} size="massive">
               {!showConfirmPreview && match.params.action === 'withdraw' &&
-                <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show' : 'hidden'}>
+                <div className={!showConfirmPreview && match.params.action === 'withdraw' ? 'show mb-30' : 'hidden'}>
                   <MaskedInput
                     readonly="readonly"
                     hoverable
