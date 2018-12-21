@@ -36,6 +36,7 @@ class Comments extends Component {
     const { campaign } = this.props.campaignStore;
     const comments = campaign && campaign.comments;
     const campaignId = campaign && campaign.id;
+    const campaignSlug = campaign && campaign.offeringSlug;
     const issuerId = campaign && campaign.issuerId;
     return (
       <div className="campaign-content-wrapper">
@@ -92,10 +93,10 @@ class Comments extends Component {
                 <Comment.Group minimal>
                   {comments &&
                     comments.map(c => c.scope === 'PUBLIC' && (
-                      <Comment>
+                      <Comment key={c.id}>
                         <Comment.Content>
                           <Comment.Author>{get(c, 'createdUserInfo.info.firstName')}</Comment.Author>
-                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(c && c.updated ? c.updated.date : c && c.created.date).format('LL')}</span></Comment.Metadata>
+                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('LL')}</span></Comment.Metadata>
                           {isUserLoggedIn &&
                           <Comment.Actions>
                             <Comment.Action as={Link} to={`${this.props.match.url}/${c.id}`} >Reply</Comment.Action>
@@ -114,13 +115,13 @@ class Comments extends Component {
                             ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
                             && tc.approved) ||
                             (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) && tc.scope === 'PUBLIC' && (
-                            <Comment className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
+                            <Comment key={tc.id} className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
                               <Comment.Content>
                                 <Comment.Author>
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
-                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(tc && tc.updated ? tc.updated.date : tc && tc.created.date).format('LL')}</span></Comment.Metadata>
+                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('LL')}</span></Comment.Metadata>
                                 <Comment.Text className="mt-20">
                                   {this.state.readMoreInner === tc.id ?
                                   tc.comment : tc.comment.substr(0, readMoreLength)}
@@ -170,7 +171,7 @@ class Comments extends Component {
         }
         <Switch>
           <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
-          <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
+          <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignSlug={campaignSlug} campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
         </Switch>
       </div>
     );

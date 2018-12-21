@@ -12,6 +12,7 @@ export class ArticleStore {
     @observable Categories = [];
     @observable article = null;
     @observable featuredData = [];
+    @observable featuredCategoryId = 'a25924d6-8136-4514-aee7-1ad8d78bb609';
 
     @action
     requestAllArticles = () => {
@@ -24,8 +25,10 @@ export class ArticleStore {
     }
 
     @action
-    featuredRequestArticlesByCategoryId = (id) => {
-      this.featuredData = graphql({ client, query: getArticlesByCatId, variables: { id } });
+    featuredRequestArticlesByCategoryId = () => {
+      const id = this.featuredCategoryId;
+      this.featuredData =
+        graphql({ client, query: getArticlesByCatId, variables: { id } });
     }
 
     @action

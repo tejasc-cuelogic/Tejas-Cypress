@@ -12,14 +12,13 @@ const isMobile = document.documentElement.clientWidth < 768;
 @observer
 export default class Insights extends Component {
   componentWillMount() {
-    const featuredArticleId = 'a25924d6-8136-4514-aee7-1ad8d78bb609';
     if (this.props.match.params && this.props.match.params.id) {
       this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
     } else {
       this.props.articleStore.requestAllArticles();
     }
     this.props.articleStore.getCategoryList();
-    this.props.articleStore.featuredRequestArticlesByCategoryId(featuredArticleId);
+    this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {

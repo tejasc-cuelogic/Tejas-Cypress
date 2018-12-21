@@ -73,7 +73,7 @@ export class NewMessage {
   }
 
   @action
-  createNewComment = (scope) => {
+  createNewComment = (scope, campaignSlug) => {
     this.setDataValue('buttonLoader', scope);
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
     const payload = {
@@ -100,7 +100,7 @@ export class NewMessage {
       })
       .then(() => {
         if (!offeringCreationStore.currentOfferingId) {
-          campaignStore.getCampaignDetails(this.currentOfferingId, false);
+          campaignStore.getCampaignDetails(campaignSlug, false);
         }
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
