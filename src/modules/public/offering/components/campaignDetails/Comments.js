@@ -93,7 +93,7 @@ class Comments extends Component {
                 <Comment.Group minimal>
                   {comments &&
                     comments.map(c => c.scope === 'PUBLIC' && (
-                      <Comment key={c.id}>
+                      <Comment>
                         <Comment.Content>
                           <Comment.Author>{get(c, 'createdUserInfo.info.firstName')}</Comment.Author>
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('LL')}</span></Comment.Metadata>
@@ -115,7 +115,7 @@ class Comments extends Component {
                             ((tc.createdUserInfo && tc.createdUserInfo.id === issuerId
                             && tc.approved) ||
                             (tc.createdUserInfo && tc.createdUserInfo.id !== issuerId)) && tc.scope === 'PUBLIC' && (
-                            <Comment key={tc.id} className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
+                            <Comment className={`${tc.createdUserInfo && tc.createdUserInfo.id === issuerId ? 'issuer-comment' : ''}`}>
                               <Comment.Content>
                                 <Comment.Author>
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
