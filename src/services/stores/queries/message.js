@@ -9,7 +9,6 @@ export const offeringCommentsByOfferId = gql`
     comment
     scope
     created {
-      id
       by
       date
     }
@@ -32,7 +31,6 @@ export const offeringCommentsByOfferId = gql`
     comment
     scope
     created {
-      id
       by
       date
     }
@@ -42,7 +40,6 @@ export const offeringCommentsByOfferId = gql`
       date
     }
     updated {
-      id
       by
       date
     }

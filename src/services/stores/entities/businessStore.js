@@ -116,6 +116,8 @@ export class BusinessStore {
     doc: false,
   };
 
+  @observable boxFolderLink = '/';
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -159,6 +161,11 @@ export class BusinessStore {
 
   @computed get checkStepsStatus() {
     return _.every(this.xmlSubStepsStatus, key => key === true);
+  }
+
+  @action
+  setBoxFolderLink = (link) => {
+    this.boxFolderLink = link;
   }
 
   @action
