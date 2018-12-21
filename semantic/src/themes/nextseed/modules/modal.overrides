@@ -149,6 +149,9 @@
         >.icon:first-child+* {
             border-radius: 0;
         }
+        .content {
+            padding: 0;
+        }
     }
 }
 //  Public pages Ends

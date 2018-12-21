@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Image64 } from '../../../theme/shared';
 
 export default class NsCarousel extends Component {
   constructor(props) {
@@ -68,7 +69,9 @@ export default class NsCarousel extends Component {
             focusOnSelect
             className={`${thumbnailClassToApply}  ${thumbSliderCustomClassToApply}`}
           >
-            {this.props.children}
+            {this.props.refItems.map(i => (
+              <Image64 bg className="carousel-bg-thumb" srcUrl={i.url} />
+            ))}
           </Slider>
         </Aux>
       );

@@ -855,6 +855,8 @@ p i.icon {
 		.slick-slide {
 			padding: @18px @5px;
 			border-radius: 4px;
+			width: 102px !important;
+			margin: 0 4px;
 			@media only screen and (max-width: @computerBreakpoint) {
 				padding: @5px;
 			}
@@ -862,11 +864,11 @@ p i.icon {
 				border: 2px solid @fullBlack;
 				border-radius: 4px;
 			}
-			&.slick-current {
-				img {
-					border-color: @primary-one;
-				}
-			}
+			// &.slick-current {
+			// 	.carousel-bg-thumb {
+			// 		box-shadow: inset 0 0 0 2px @primary-one;
+			// 	}
+			// }
 			// &.slick-cloned {
 			// 	display: none;
 			// }
@@ -880,31 +882,30 @@ p i.icon {
 		.slick-arrow {
 			display: none!important;
 		}
-		&.custom-count .slick-list .slick-slide{
-			// height:auto;
-			width:12.5% !important;
-			@media only screen and (max-width: @smallMonitorScreen) {
-				width:25% !important;
+		&.custom-count .slick-list .slick-slide {
+			.carousel-bg-thumb{
+				// height:auto;
+				// width:12.5% !important;
+				// @media only screen and (max-width: @smallMonitorScreen) {
+				// 	width:25% !important;
+				// }
+				// img {
+				// 	max-height:90px;
+				// 	width:auto !important;
+				// }
+				width: 102px;
+				height: 85px;
+				background-size: cover;
+				background-position: center;
+				background-position: center;
+				border-radius: 4px;
+				box-shadow: inset 0 0 0 2px transparent;
+				cursor: pointer;
 			}
-			// img {
-			// 	max-height:90px;
-			// 	width:auto !important;
-			// }
-		}
-		&.thumb-location-gallery {
-			.slick-slide {
-				padding: 0 1px 0 0;
-				border-radius: 0;
-				@media only screen and (max-width: @computerBreakpoint) {
-					padding: 0;
+			&.slick-current {
+				.carousel-bg-thumb {
+					box-shadow: inset 0 0 0 2px @primary-one;
 				}
-				img {
-					border: 0;
-					border-radius: 0;
-				}
-			}
-			.slick-track{
-				margin: 0;
 			}
 		}
 	}

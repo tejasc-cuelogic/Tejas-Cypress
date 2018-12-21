@@ -31,31 +31,34 @@ class AboutPhotoGallery extends Component {
       <Modal
         open
         onClose={this.handleClose}
-        size="large"
+        size="fullscreen"
         closeIcon
         className="about-modal"
       >
-        <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
-        <div className="carousel">
-          <Container fluid>
-            <NsCarousel
-              {...settings}
-              thumbs={isTablet ? tabGalleryLength : galleryLength}
-              imageCount={galleryArray.length}
-              isTablet={isTablet}
-              handlePaginationFun={this.handlePagination}
-            >
-              {
-                galleryArray.length ?
-                  galleryArray.map(data => (
-                    <Image64 srcUrl={data.url} />
-                  ))
-                  :
-                  <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
-              }
-            </NsCarousel>
-          </Container>
-        </div>
+        <Modal.Content image>
+          <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
+          <div className="carousel">
+            <Container fluid>
+              <NsCarousel
+                {...settings}
+                thumbs={isTablet ? tabGalleryLength : galleryLength}
+                imageCount={galleryArray.length}
+                isTablet={isTablet}
+                refItems={galleryArray}
+                handlePaginationFun={this.handlePagination}
+              >
+                {
+                  galleryArray.length ?
+                    galleryArray.map(data => (
+                      <Image64 srcUrl={data.url} />
+                    ))
+                    :
+                    <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
+                }
+              </NsCarousel>
+            </Container>
+          </div>
+        </Modal.Content>
       </Modal>
     );
   }
