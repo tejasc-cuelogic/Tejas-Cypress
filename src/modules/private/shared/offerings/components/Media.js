@@ -282,7 +282,7 @@ export default class Media extends Component {
         <Grid columns={2} stackable>
           <Grid.Column>
             <Header as="h4">Logo</Header>
-            <Form className="cropper-wrap hero-img">
+            <Form className="cropper-wrap headshot-img">
               {MEDIA_FRM.fields.logo.preSignedUrl ? (
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('logo')} circular icon={{ className: 'ns-close-light' }} />
@@ -301,14 +301,14 @@ export default class Media extends Component {
               modalUploadAction={this.uploadMedia}
               name="logo"
               cropInModal
-              aspect={16 / 9}
+              aspect={1 / 1}
             />
             )}
             </Form>
           </Grid.Column>
           <Grid.Column>
             <Header as="h4">Company Avatar</Header>
-            <Form className="cropper-wrap hero-img">
+            <Form className="cropper-wrap  headshot-img">
               {MEDIA_FRM.fields.avatar.preSignedUrl ? (
                 <div className="file-uploader attached">
                   <Button onClick={() => this.showConfirmModal('avatar')} circular icon={{ className: 'ns-close-light' }} />
@@ -327,7 +327,7 @@ export default class Media extends Component {
               modalUploadAction={this.uploadMedia}
               name="avatar"
               cropInModal
-              aspect={16 / 9}
+              aspect={1 / 1}
             />
             )}
             </Form>
