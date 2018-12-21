@@ -296,7 +296,6 @@ export const campaignDetailsQuery = gql`
         date
       }
       updated {
-        id
         by
         date
       }
@@ -306,7 +305,6 @@ export const campaignDetailsQuery = gql`
         date
       }
       created {
-        id
         by
         date
       }
@@ -322,7 +320,6 @@ export const campaignDetailsQuery = gql`
         }
       }
       threadComment {
-        id
         offeringId
         thread
         scope
@@ -333,17 +330,14 @@ export const campaignDetailsQuery = gql`
           date
         }
         updated {
-          id
           by
           date
         }
         created {
-          id
           by
           date
         }
         deleted {
-          id
           by
           date
         }
