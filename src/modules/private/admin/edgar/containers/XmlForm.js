@@ -23,13 +23,17 @@ import {
 @inject('businessStore', 'uiStore')
 @observer
 export default class XmlForm extends React.Component {
+  state = {
+    folderId: '',
+  }
   componentDidMount() {
     this.props.businessStore.setXmlActiveTabName('filer');
     this.props.businessStore.setOfferingId(this.props.match.params.offeringId);
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
     this.props.businessStore.setXmlSubmissionId(this.props.match.params.xmlId);
     businessActions.getFiles(this.props.match.params)
-      .then(() => {
+      .then((res) => {
+        this.setState({ folderId: res });
         if (this.props.match.params.xmlId) {
           businessActions.fetchXmlDetails(this.props.match.params);
         } else {
@@ -453,7 +457,7 @@ export default class XmlForm extends React.Component {
                 {xmlActiveTabName === 'offering' && <OfferingInformation />}
                 {xmlActiveTabName === 'annual' && <AnnualReportDisclosureRequirements />}
                 {xmlActiveTabName === 'signature' && <Signature />}
-                {xmlActiveTabName === 'doc' && <FileSelector />}
+                {xmlActiveTabName === 'doc' && <FileSelector folderId={this.state.folderId} />}
               </Form>
             </Grid.Column>
             <FormErrors xmlErrors={xmlErrors} className="field-error-message" />

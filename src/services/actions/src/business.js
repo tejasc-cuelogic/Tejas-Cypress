@@ -377,7 +377,7 @@ export class Business {
       ApiService.post(GRAPHQL, payload)
         .then((data) => {
           this.fetchAttachedFiles(data.body.data.businessFiling.folderId)
-            .then(() => resolve());
+            .then(() => resolve(data.body.data.businessFiling.folderId));
         })
         .catch(err => reject(err))
         .finally(() => {

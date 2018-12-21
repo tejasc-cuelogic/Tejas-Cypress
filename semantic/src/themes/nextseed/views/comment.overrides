@@ -27,19 +27,34 @@
             margin: 0 0 0 @10px;
             vertical-align: top;
         }
-        .comments .comment {
-            padding: @30px;
-            &.reply-comment {
-                background: transparent;
-                padding: 0 @30px @30px;
-                &:last-child {
-                    padding-bottom: 0;
-                }
+        .comments {
+            &.reply-comments {
+                .comment {
+                    padding: @24px @30px;
+                    background: transparent;
+                    border-top: 1px solid #ccc;
+                    &:first-child {
+                        padding-top: 0;
+                        border-top: 0;
+                    }
+                    &:last-child {
+                        padding-bottom: 0;
+                    }
+                    &.issuer-comment {
+                        background: fade(@primary-two-darken, 8%);
+                        border-radius: 4px;
+                        padding: 24px 30px;
+                        border-top: 0;
+                        +.issuer-comment {
+                            margin-top: @24px;
+                        }
+                        +.comment {
+                            border-top: 0;
+                        }
+                    }
+                }  
             }
-            &.issuer-comment {
-                background: fade(@primary-two, 10%);
-                border-radius: 4px;
-            }
+
         }
     }
     &.comments-modal {

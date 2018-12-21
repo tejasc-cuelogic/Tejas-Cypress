@@ -27,7 +27,7 @@ class DevPassProtected extends Component {
       });
   }
   authPreviewOffer = () => {
-    if (this.state.password === 'fourroses') {
+    if (this.state.password === this.props.previewPassword) {
       this.props.authPreviewOffer(true, this.state.password);
     } else {
       this.setState({ error: 'Entered password is invalid, please try again.' });

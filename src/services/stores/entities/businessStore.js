@@ -116,6 +116,8 @@ export class BusinessStore {
     doc: false,
   };
 
+  @observable boxFolderLink = '/';
+
   @computed get canSubmitEdgarForm() {
     return (_.every(this.templateVariables, val => !_.isEmpty(val)));
   }
@@ -162,6 +164,11 @@ export class BusinessStore {
   }
 
   @action
+  setBoxFolderLink = (link) => {
+    this.boxFolderLink = link;
+  }
+
+  @action
   updateStatusFlag = (stepDetails, key, value) => {
     this[stepDetails][key].isValid = value;
   };
@@ -177,9 +184,9 @@ export class BusinessStore {
   };
 
   @action
-  verifyDateIncorporation = (date) => {
-    this.onFieldChange('formIssuerInfo', 'dateIncorporation', date);
-  };
+  verifyDateIncorporation = (values) => {
+    this.onFieldChange('formIssuerInfo', 'dateIncorporation', values.formattedValue);
+  }
 
   @action
   offeringInfoChange = (e, { name, value }) => {
@@ -188,7 +195,7 @@ export class BusinessStore {
 
   @action
   verifyDeadlineDate = (date) => {
-    this.onFieldChange('formOfferingInfo', 'deadlineDate', date);
+    this.onFieldChange('formOfferingInfo', 'deadlineDate', date.formattedValue);
   };
 
   @action

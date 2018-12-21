@@ -7,6 +7,8 @@ import Helper from '../../../../../../helper/utility';
 class KeyTerms extends Component {
   render() {
     const { campaign, refLink } = this.props;
+    const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : null;
+    const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Grid.Column>
         <Segment padded className="clearfix">
@@ -28,10 +30,10 @@ class KeyTerms extends Component {
                 </Statistic.Label>
                 <Statistic.Value>
                   {campaign && campaign.keyTerms &&
-                     campaign.keyTerms.securities ?
-                     CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
-                     :
-                     ''}
+                    campaign.keyTerms.securities ?
+                    CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
+                    :
+                    ''}
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>
@@ -60,7 +62,11 @@ class KeyTerms extends Component {
               <Statistic size="mini" className="basic">
                 <Statistic.Label><b>Maturity</b> <Popup trigger={<Icon name="help circle" color="green" />} content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors." position="top center" /></Statistic.Label>
                 <Statistic.Value>
-                  {campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '-'}
+                  {maturityMonth ?
+                    `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                    :
+                    '-'
+                  }
                 </Statistic.Value>
               </Statistic>
             </Grid.Column>

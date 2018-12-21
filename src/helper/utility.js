@@ -20,10 +20,12 @@ export class Utility {
    * reference: https://fkhadra.github.io/react-toastify/
    */
   toast = (msg, alertType, optionsOverride) => {
+    const cleanMsg = s => (s ? s.replace('GraphQL error: ', '') : '');
+
     if (alertType && _.includes(['error', 'success', 'info', 'warning'], alertType)) {
-      toast[alertType](`${msg}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
+      toast[alertType](`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride, { className: alertType }));
     } else {
-      toast(`${msg}`, _.merge({}, this.options, optionsOverride));
+      toast(`${cleanMsg(msg)}`, _.merge({}, this.options, optionsOverride));
     }
   }
 
@@ -68,7 +70,7 @@ export class Utility {
 
   cryptedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;
-    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, '\u2715');
+    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, 'X');
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
     return formattedSSNNumber;
   }
@@ -125,8 +127,6 @@ export class Utility {
     const currentYear = parseInt(moment().format('YYYY'), 10);
     return {
       annualIncomeCurrentYear: currentYear,
-      annualIncomeLastYear: currentYear - 1,
-      annualIncomeThirdLastYear: currentYear - 2,
     };
   }
 }

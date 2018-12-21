@@ -23,6 +23,7 @@
         padding:@4px 0 !important;
         border:none;
         font-weight:@bold;
+        background-color:transparent;
         .icon{
             margin:0 0 0 @5px;
         }

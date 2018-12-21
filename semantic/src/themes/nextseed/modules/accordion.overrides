@@ -217,8 +217,8 @@
 			margin-bottom:@35px;
 		}
 		.title{
-			font-weight:700;
-			color:@fullBlack;
+			font-weight:@bold;
+			color:@neutral;
 			&.active{
 				border-bottom:@border-light 1px solid;
 			}
@@ -226,10 +226,27 @@
 				margin-right:@14px;
 				color:@link-color;
 			}
+			small {
+				margin-left: @10px;
+				color: @neutral-middark;
+				font-weight: @fontMedium;
+			}
+			a.link {
+				&:hover {
+					text-decoration: none;
+				}
+				> small{
+					color: @primary-two;
+				}
+			}
 		}
 		.content{
 			padding:0;
+			&.categories-acc {
+				padding: @30px @40px;
+			}
 		}
+
 	}
 }
 

@@ -16,7 +16,7 @@ const leftSummary = offer => [
 ];
 
 const rightSummary = offer => [
-  { title: 'Name', content: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'NA' },
+  { title: 'Name', content: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'N/A' },
   { title: 'Email', content: offer.issuerDetails && offer.issuerDetails.email && offer.issuerDetails.email.address ? offer.issuerDetails.email.address : 'N/A' },
   { title: 'Phone', content: offer.issuerDetails && offer.issuerDetails.phone && offer.issuerDetails.phone.number ? offer.issuerDetails.phone.number : 'N/A' },
 ];

@@ -67,13 +67,10 @@ export default class TermsOfUse extends Component {
                 <Route
                   exact
                   path={`${match.url}/:docKey`}
-                  // component={Disclosures}
                   render={
                     props =>
                       (<Disclosure
                         {...props}
-                        documentToLoad={getNavItemsForDataRoom[0].content}
-                        headerTitle={getNavItemsForDataRoom[0].title}
                       />)
                   }
                 />
@@ -82,14 +79,11 @@ export default class TermsOfUse extends Component {
                     <Route
                       exact
                       key={item.to}
-                      documentToLoad={item.content}
                       path={`${match.url}/:docKey`}
                       render={
                         props =>
                           (<Disclosure
                             {...props}
-                            documentToLoad={item.content}
-                            headerTitle={item.title}
                           />)
                       }
                     />

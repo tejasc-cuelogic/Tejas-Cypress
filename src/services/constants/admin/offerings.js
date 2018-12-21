@@ -10,7 +10,7 @@ Validator.register(
   'The :attribute is not in the format XXX-XX-XXXX.',
 );
 
-export const OFFERING_CREATION_ARRAY_KEY_LIST = ['security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
+export const OFFERING_CREATION_ARRAY_KEY_LIST = ['documents', 'security', 'corpFormation', 'employer', 'location', 'gallery', 'logo', 'history', 'highlight', 'exemptOfferings', 'materialIndebtedness', 'affiliatedTransactions', 'issuerFinancials', 'leaseAgreement'];
 
 export const STAGES = {
   CREATION: { ref: 'creation', accessKey: 1, label: 'Creation' },
@@ -362,11 +362,11 @@ export const SECURITIES_VALUES = [
 ];
 
 export const BUSINESS_TYPE_VALUES = [
-  { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'Sole Proprietor' },
-  { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
-  { key: 'Limited Liability Company', value: 'LLC', text: 'Limited Liability Company' },
-  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
-  { key: 'Other', value: 'OTHER', text: 'Other' },
+  { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'sole proprietor' },
+  { key: 'Corporation', value: 'CORPORATION', text: 'corporation' },
+  { key: 'Limited Liability Company', value: 'LLC', text: 'limited liability company' },
+  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'limited partnership' },
+  { key: 'Other', value: 'OTHER', text: 'other' },
 ];
 
 export const REGULATION_VALUES = [
@@ -815,7 +815,10 @@ export const MEDIA = {
     fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Gallery', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   logo: {
-    fileName: '', value: [], base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
+  avatar: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 
@@ -1053,6 +1056,10 @@ export const LEADERSHIP = {
       objRef: 'uploads',
       objType: 's3File',
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     heroImage: {
       label: 'Hero Image',
@@ -1067,6 +1074,10 @@ export const LEADERSHIP = {
       objType: 's3File',
       showLoader: false,
       objRefOutput2: 'uploads',
+      base64String: '',
+      src: '',
+      meta: {},
+      fileId: '',
     },
     license: {
       label: 'Driver’s License',
@@ -2430,14 +2441,14 @@ export const DATA_ROOM = {
 export const POC_DETAILS = {
   issuerId: {
     value: '',
-    label: '',
-    tooltip: 'Email Address',
+    label: 'POC',
     error: undefined,
+    objRef: 'leadDetails',
     rule: 'string|required',
   },
   id: {
     value: '',
-    label: '',
+    label: 'Lead',
     error: undefined,
     objRef: 'leadDetails',
     rule: 'string',
@@ -2448,6 +2459,6 @@ export const POC_DETAILS = {
     error: undefined,
     objRef: 'offering.launch',
     rule: 'string',
-    placeHolder: 'Enter here',
+    placeHolder: 'MM/DD/YYYY',
   },
 };

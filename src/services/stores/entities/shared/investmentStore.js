@@ -84,9 +84,8 @@ export class InvestmentStore {
     let spendAmount = 0;
     if (this.getCurrCashAvailable < this.investmentAmount) {
       const lowValue = (this.investmentAmount - this.getCurrCashAvailable);
-      if (rewardStore.getCurrCreditAvailable > 0) {
-        spendAmount = rewardStore.getCurrCreditAvailable > lowValue ?
-          lowValue : rewardStore.getCurrCreditAvailable;
+      if (rewardStore.getCurrCreditAvailable < lowValue) {
+        spendAmount = lowValue - rewardStore.getCurrCreditAvailable;
       }
     }
     return parseFloat(spendAmount, 2);
@@ -262,7 +261,7 @@ export class InvestmentStore {
         query: validateInvestmentAmountInOffering,
         variables: {
           investmentAmount: this.investmentAmount,
-          offeringId: campaignStore.getOfferingId,
+          offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
           userId: userDetailsStore.currentUserId,
           accountId: this.getSelectedAccountTypeId,
         },
@@ -289,7 +288,7 @@ export class InvestmentStore {
       variables: {
         userId: userDetailsStore.currentUserId,
         accountId: this.getSelectedAccountTypeId,
-        offeringId: campaignStore.getOfferingId,
+        offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
         investmentAmount: this.investmentAmount,
         autoDraftDeposit: this.getTransferRequestAmount,
         creditToSpend: this.getSpendCreditValue,
@@ -341,7 +340,7 @@ export class InvestmentStore {
           variables: {
             userId: userDetailsStore.currentUserId,
             accountId: this.getSelectedAccountTypeId,
-            offeringId: campaignStore.getOfferingId,
+            offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
             investmentAmount: this.investmentAmount,
             creditToSpend: this.getSpendCreditValue,
             callbackUrl: `${window.location.origin}/secure-gateway`,
@@ -375,7 +374,7 @@ export class InvestmentStore {
             variables: {
               userId: userDetailsStore.currentUserId,
               accountId: this.getSelectedAccountTypeId,
-              offeringId: campaignStore.getOfferingId,
+              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
               investmentAmount: this.investmentAmount,
               agreementId: this.agreementDetails.agreementId,
               transferAmount: this.getTransferRequestAmount,

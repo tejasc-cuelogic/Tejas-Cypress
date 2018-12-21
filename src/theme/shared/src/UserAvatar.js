@@ -14,7 +14,7 @@ const UserAvatar = observer((props) => {
       <Image
         src={UserInfo.avatarUrl}
         alt={UserInfo.firstName}
-        size={size || 'huge'}
+        size={size}
         avatar
         circular
       />);

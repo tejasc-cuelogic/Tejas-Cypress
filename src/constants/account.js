@@ -3,6 +3,7 @@ import moment from 'moment';
 import React from 'react';
 import { Icon } from 'semantic-ui-react';
 import Validator from 'validatorjs';
+import Helper from '../helper/utility';
 
 /* eslint-disable no-unused-vars, arrow-body-style */
 Validator.register('taxId', (value, attribute) => {
@@ -408,7 +409,7 @@ export const ENTITY_PERSONAL_INFO = {
     key: 'title', value: '', error: undefined, rule: 'required', label: 'Title with the Entity', placeHolder: 'e.g. CEO',
   },
   legalDocUrl: {
-    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Drivers Livense or Passport)', preSignedUrl: '', fileId: '', fileData: '',
+    key: 'legalDocUrl', value: '', error: undefined, rule: 'required', label: 'Upload a Photo ID (Driver License or Passport)', preSignedUrl: '', fileId: '', fileData: '',
   },
 };
 
@@ -611,33 +612,9 @@ export const FINANCES = {
       required: 'required',
     },
   },
-  annualIncomeThirdLastYear: {
-    value: '',
-    label: 'Annual Income 2016',
-    error: undefined,
-    rule: 'required',
-    year: '2016',
-    placeHolder: '$60,000',
-    objRefOutput: 'annualIncome',
-    customErrors: {
-      required: 'required',
-    },
-  },
-  annualIncomeLastYear: {
-    value: '',
-    label: 'Annual Income 2017',
-    error: undefined,
-    rule: 'required',
-    year: '2017',
-    placeHolder: '$60,000',
-    objRefOutput: 'annualIncome',
-    customErrors: {
-      required: 'required',
-    },
-  },
   annualIncomeCurrentYear: {
     value: '',
-    label: 'Annual Income 2018 (Expected)',
+    label: `Annual Income ${Helper.getLastThreeYearsLabel().annualIncomeCurrentYear}`,
     error: undefined,
     rule: 'required',
     year: '2018',
@@ -660,7 +637,7 @@ export const INVESTMENT_EXPERIENCE = {
     value: [],
     values: [
       {
-        label: 'Investing in private business is not for investors with short-term time horizons.  Are you comfortable investing in securities that have limited liquidty?',
+        label: 'Investing in a private business is not for investors with short-term time horizons. I am comfortable investing in securities that have limited liquidity.',
         value: 'checked',
       },
     ],
@@ -671,7 +648,7 @@ export const INVESTMENT_EXPERIENCE = {
     value: [],
     values: [
       {
-        label: 'Investing in private business involves risk. When investing on NextSeed, are you willing to take on significant risk to potentially earn a return in your investment?',
+        label: 'Investing in a private business involves risk. When investing on NextSeed, I am willing to take on significant risk to potentially earn a return on my investment.',
         value: 'checked',
       },
     ],
@@ -701,8 +678,6 @@ export const INVESTOR_PROFILE_FULL_META = {
   ...BROKERAGE_EMPLOYMENT,
   taxFilingAs: FINANCES.investorProfileType,
   netWorth: FINANCES.netWorth,
-  annualIncomeThirdLastYear: FINANCES.annualIncomeThirdLastYear,
-  annualIncomeLastYear: FINANCES.annualIncomeLastYear,
   annualIncomeCurrentYear: FINANCES.annualIncomeCurrentYear,
   ...PUBLIC_COMPANY_REL,
 };

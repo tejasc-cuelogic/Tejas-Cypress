@@ -53,6 +53,7 @@ export default class ProfileData extends Component {
     const userAvatar = {
       firstName: info ? info.firstName : '', lastName: info ? info.lastName : '', avatarUrl: info ? info.avatar ? info.avatar.url : '' : '', roles: toJS(User.roles),
     };
+    const { inProgress } = this.props.uiStore;
     const {
       ID_PROFILE_INFO,
       profileInfoChange,
@@ -147,7 +148,7 @@ export default class ProfileData extends Component {
                     zipCode
                   />
                 </Form.Group>
-                <Button primary disabled={!ID_PROFILE_INFO.meta.isValid} className="mt-20">Update information</Button>
+                <Button primary loading={inProgress} disabled={!ID_PROFILE_INFO.meta.isValid} className="mt-20">Update information</Button>
               </div>
             </Form>
           </Card>

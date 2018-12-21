@@ -203,6 +203,7 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
+      details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
@@ -337,7 +338,7 @@ export class UserDetailsStore {
     this[form] = Validator.setFormData(this[form], details, ref, keepAtLeastOne);
     if (form === 'USER_INVESTOR_PROFILE') {
       if (details.investorProfileData && details.investorProfileData.annualIncome) {
-        ['annualIncomeThirdLastYear', 'annualIncomeLastYear', 'annualIncomeCurrentYear'].map((item, index) => {
+        ['annualIncomeCurrentYear'].map((item, index) => {
           this.USER_INVESTOR_PROFILE.fields[item].value =
           details.investorProfileData.annualIncome[index].income;
           return true;
