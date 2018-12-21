@@ -55,6 +55,7 @@ export default class OffersPanel extends Component {
                       <FormDropDown
                         fielddata={offer.structure}
                         ishidelabel
+                        containerclassname={isReadonly ? 'display-only' : ''}
                         className={isReadonly ? 'display-only secondary' : 'secondary'}
                         readOnly={isReadonly}
                         name="structure"
@@ -188,6 +189,7 @@ export default class OffersPanel extends Component {
                       <FormDropDown
                         fielddata={offer.personalGuarantee}
                         ishidelabel
+                        containerclassname={isReadonly ? 'display-only' : ''}
                         className={isReadonly ? 'display-only secondary' : 'secondary'}
                         readOnly={isReadonly}
                         name="personalGuarantee"

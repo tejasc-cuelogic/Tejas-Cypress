@@ -142,14 +142,14 @@ export default class ConfirmEmailAddress extends Component {
       <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Route exact path={`${this.props.match.url}/create-or-cancel`} render={() => <ConfirmCreateOrCancel refLink={this.props.match.url} />} />
         <Modal.Header className="center-align signup-header">
-          <Header as="h3">Confirm your email address</Header>
+          <Header as="h3">Confirm your e-mail address</Header>
           <p>
             We use Multi-Factor Authentication (MFA) to increase the security of your
             NextSeed investment account.
           </p>
           <Divider section />
           <p>
-            Please confirm the 6-digit verification code in the text message sent to your e-mail
+          Please confirm the 6-digit verification code sent to your email
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">

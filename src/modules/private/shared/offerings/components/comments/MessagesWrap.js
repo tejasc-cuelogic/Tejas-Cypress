@@ -26,8 +26,9 @@ export default class MessagesWrap extends Component {
       uiStore, messageStore, userDetailsStore, isIssuer,
     } = this.props;
     const {
-      thread, approveComment, buttonLoader, currentOfferingIssuerId,
+      thread, approveComment, buttonLoader, currentOfferingIssuerId, threadMainMessage,
     } = messageStore;
+    const threadMessages = threadMainMessage.concat(thread);
     const { currentUserId } = userDetailsStore;
     return (
       <div className="message-wrap">
@@ -37,7 +38,7 @@ export default class MessagesWrap extends Component {
           isIssuer={isIssuer}
           approveComment={approveComment}
           currentUserId={currentUserId}
-          thread={thread}
+          thread={threadMessages}
           commentEditHandler={this.commentEditHandler}
           deleteCommentHandler={this.confirmDelete}
         />

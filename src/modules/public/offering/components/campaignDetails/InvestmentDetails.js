@@ -74,11 +74,11 @@ class InvestmentDetails extends Component {
                   <Segment padded className="overview-video">
                     <Image64
                       srcUrl={campaign && campaign.media &&
-                        campaign.media.heroImage &&
-                        campaign.media.heroImage.url ?
-                        campaign.media.heroImage.url : null
+                        campaign.media.useOfProceeds &&
+                        campaign.media.useOfProceeds.url ?
+                        campaign.media.useOfProceeds.url : null
                       }
-                      imgType="heroImage"
+                      imgType="useOfProceeds"
                     />
                   </Segment>
                 </Grid.Column>

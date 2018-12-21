@@ -37,8 +37,7 @@ export default class KeyTerms extends Component {
         <Form>
           <Header as="h4">General</Header>
           <Form.Group widths={3}>
-            {
-            ['legalBusinessName', 'shorthandBusinessName'].map(field => (
+            {['legalBusinessName', 'shorthandBusinessName'].map(field => (
               <FormInput
                 displayMode={isReadonly}
                 key={field}
@@ -46,70 +45,59 @@ export default class KeyTerms extends Component {
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, formName)}
               />
-            ))
-            }
-            <div className="field">
-              <FormDropDown
-                disabled={isReadonly}
-                fielddata={KEY_TERMS_FRM.fields.industry}
-                selection
-                containerclassname="dropdown-field"
-                value={KEY_TERMS_FRM.fields.industry.value}
-                name="industry"
-                placeholder="Choose here"
-                options={BUSINESS_INDUSTRIES}
-                onChange={(e, result) => formChange(e, result, formName)}
+            ))}
+            <FormDropDown
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.industry}
+              selection
+              value={KEY_TERMS_FRM.fields.industry.value}
+              name="industry"
+              placeholder="Choose here"
+              options={BUSINESS_INDUSTRIES}
+              onChange={(e, result) => formChange(e, result, formName)}
+              containerclassname={isReadonly ? 'display-only' : ''}
+            />
+            {['city', 'state'].map(field => (
+              <FormInput
+                displayMode={isReadonly}
+                key={field}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
               />
-            </div>
-            {
-              ['city', 'state'].map(field => (
-                <FormInput
-                  displayMode={isReadonly}
-                  key={field}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(e, result) => formChange(e, result, formName)}
-                />
-              ))
-            }
-            <div className="field">
-              <FormDropDown
-                disabled={isReadonly}
-                fielddata={KEY_TERMS_FRM.fields.securities}
-                selection
-                containerclassname="dropdown-field"
-                value={KEY_TERMS_FRM.fields.securities.value}
-                placeholder="Choose here"
-                name="securities"
-                options={SECURITIES_VALUES}
-                onChange={(e, result) => formChange(e, result, formName)}
+            ))}
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.securities}
+              selection
+              value={KEY_TERMS_FRM.fields.securities.value}
+              placeholder="Choose here"
+              name="securities"
+              options={SECURITIES_VALUES}
+              onChange={(e, result) => formChange(e, result, formName)}
+            />
+            {['minOfferingAmount', 'maxOfferingAmount'].map(field => (
+              <MaskedInput
+                displayMode={isReadonly}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(values, name) => maskChange(values, formName, name)}
+                currency
+                prefix="$"
               />
-            </div>
-            {
-              ['minOfferingAmount', 'maxOfferingAmount'].map(field => (
-                <MaskedInput
-                  displayMode={isReadonly}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              ))
-            }
-            <div className="field">
-              <FormDropDown
-                disabled={isReadonly}
-                fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
-                selection
-                containerclassname="dropdown-field"
-                value={KEY_TERMS_FRM.fields.legalBusinessType.value}
-                name="legalBusinessType"
-                placeholder="Choose here"
-                options={BUSINESS_TYPE_VALUES}
-                onChange={(e, result) => formChange(e, result, formName)}
-              />
-            </div>
+            ))}
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
+              selection
+              value={KEY_TERMS_FRM.fields.legalBusinessType.value}
+              name="legalBusinessType"
+              placeholder="Choose here"
+              options={BUSINESS_TYPE_VALUES}
+              onChange={(e, result) => formChange(e, result, formName)}
+            />
           </Form.Group>
           <Header as="h4">Key Terms</Header>
           <Form.Group widths={3}>
@@ -126,30 +114,26 @@ export default class KeyTerms extends Component {
               changed={(values, name) => maskChange(values, formName, name)}
               number
             />
-            <div className="field">
-              <FormDropDown
-                disabled={isReadonly}
-                fielddata={KEY_TERMS_FRM.fields.regulation}
-                selection
-                containerclassname="dropdown-field"
-                value={KEY_TERMS_FRM.fields.regulation.value}
-                name="regulation"
-                placeholder="Choose here"
-                options={REGULATION_VALUES}
-                onChange={(e, result) => formChange(e, result, formName)}
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.regulation}
+              selection
+              value={KEY_TERMS_FRM.fields.regulation.value}
+              name="regulation"
+              placeholder="Choose here"
+              options={REGULATION_VALUES}
+              onChange={(e, result) => formChange(e, result, formName)}
+            />
+            {['investmentMultiple', 'securityInterest', 'interestRate'].map(field => (
+              <FormInput
+                displayMode={isReadonly}
+                key={field}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
               />
-            </div>
-            {
-              ['investmentMultiple', 'securityInterest', 'interestRate'].map(field => (
-                <FormInput
-                  displayMode={isReadonly}
-                  key={field}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(e, result) => formChange(e, result, formName)}
-                />
-              ))
-            }
+            ))}
             <MaskedInput
               displayMode={isReadonly}
               name="minInvestAmt"
@@ -179,8 +163,7 @@ export default class KeyTerms extends Component {
             />
           </Form.Group>
           <Form.Group widths={2}>
-            {
-            ['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
+            {['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
@@ -189,24 +172,38 @@ export default class KeyTerms extends Component {
                 changed={(e, result) => formChange(e, result, formName)}
                 containerclassname="secondary"
               />
-            ))
-          }
+            ))}
           </Form.Group>
           <Header as="h4">Legal</Header>
           <Form.Group widths={3}>
-            {
-              ['locationRiskFactors', 'stateOfFormation', 'appendixATitle'].map(field => (
+            {['locationRiskFactors', 'stateOfFormation', 'appendixATitle'].map(field => (
+              <FormInput
+                displayMode={isReadonly}
+                key={field}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(e, result) => formChange(e, result, formName)}
+              />
+            ))}
+            {['maxInvestAmt', 'nsMinFees', 'nsMaxFees'].map(field => (
+              <MaskedInput
+                displayMode={isReadonly}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(values, name) => maskChange(values, formName, name)}
+                currency
+                prefix="$"
+              />
+            ))}
+            {['offeringExpTarget', 'offeringExpMax', 'stockType'].map(field => (
+              field === 'stockType' ? (
                 <FormInput
                   displayMode={isReadonly}
-                  key={field}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  name="stockType"
+                  fielddata={KEY_TERMS_FRM.fields.stockType}
                   changed={(e, result) => formChange(e, result, formName)}
                 />
-              ))
-            }
-            {
-              ['maxInvestAmt', 'nsMinFees'].map(field => (
+              ) : (
                 <MaskedInput
                   displayMode={isReadonly}
                   name={field}
@@ -215,29 +212,11 @@ export default class KeyTerms extends Component {
                   currency
                   prefix="$"
                 />
-              ))
-            }
-            <FormInput
-              displayMode={isReadonly}
-              name="stockType"
-              fielddata={KEY_TERMS_FRM.fields.stockType}
-              changed={(e, result) => formChange(e, result, formName)}
-            />
-            {
-              ['offeringExpTarget', 'offeringExpMax', 'nsMaxFees'].map(field => (
-                <MaskedInput
-                  displayMode={isReadonly}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              ))
-            }
+              )
+            ))}
           </Form.Group>
           <Form.Group widths={2}>
-            {['nsFeeCalcDescription', 'currentFinancialStatements', 'useOfProceedFootnote'].map(field => (
+            {['useOfProceedFootnote', 'currentFinancialStatements'].map(field => (
               <FormTextarea
                 readOnly={isReadonly}
                 key={field}
@@ -246,25 +225,23 @@ export default class KeyTerms extends Component {
                 changed={(e, result) => formChange(e, result, formName)}
                 containerclassname="secondary"
               />
-            ))
-          }
+            ))}
           </Form.Group>
           <Form.Group widths={3}>
-            {
-              ['isNewBusiness', 'isHealthcare'].map(field => (
-                <div className="field">
-                  <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
-                  <Form.Group inline>
-                    <FormRadioGroup
-                      disabled={isReadonly}
-                      fielddata={KEY_TERMS_FRM.fields[field]}
-                      name={field}
-                      changed={(e, result) => formChange(e, result, formName)}
-                    />
-                  </Form.Group>
-                </div>
-              ))
-            }
+            {['isNewBusiness', 'isHealthcare'].map(field => (
+              <div className="field">
+                <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
+                <Form.Group inline>
+                  <FormRadioGroup
+                    readOnly={isReadonly}
+                    containerclassname={isReadonly ? 'display-only' : ''}
+                    fielddata={KEY_TERMS_FRM.fields[field]}
+                    name={field}
+                    changed={(e, result) => formChange(e, result, formName)}
+                  />
+                </Form.Group>
+              </div>
+            ))}
             <DropZone
               disabled={isReadonly}
               name="uploadProformas"
@@ -274,21 +251,20 @@ export default class KeyTerms extends Component {
               uploadtitle="Upload a file"
               containerclassname="field"
             />
-            {
-              ['isAlcohol', 'isFood'].map(field => (
-                <div className="field">
-                  <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
-                  <Form.Group inline>
-                    <FormRadioGroup
-                      disabled={isReadonly}
-                      fielddata={KEY_TERMS_FRM.fields[field]}
-                      name={field}
-                      changed={(e, result) => formChange(e, result, formName)}
-                    />
-                  </Form.Group>
-                </div>
-              ))
-            }
+            {['isAlcohol', 'isFood'].map(field => (
+              <div className="field">
+                <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
+                <Form.Group inline>
+                  <FormRadioGroup
+                    containerclassname={isReadonly ? 'display-only' : ''}
+                    readOnly={isReadonly}
+                    fielddata={KEY_TERMS_FRM.fields[field]}
+                    name={field}
+                    changed={(e, result) => formChange(e, result, formName)}
+                  />
+                </Form.Group>
+              </div>
+            ))}
           </Form.Group>
           <Divider hidden />
           <ButtonGroupType2

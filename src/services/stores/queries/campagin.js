@@ -5,6 +5,7 @@ query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
       offeringSlug
+      fundedAmount
       stage
       media {
         tombstoneImage {
@@ -50,6 +51,7 @@ export const getOfferingById = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
       issuerId
+      previewPassword
     }
   }
 `;
@@ -66,6 +68,7 @@ export const campaignDetailsQuery = gql`
     selectedOffer {
       structure
     }
+    fundedAmount
     keyTerms {
       regulation
       startupPeriod
@@ -205,6 +208,10 @@ export const campaignDetailsQuery = gql`
         url
         isPublic
       }
+      useOfProceeds{
+        url
+        isPublic
+      }
       heroVideo {
         url
         isPublic
@@ -230,6 +237,11 @@ export const campaignDetailsQuery = gql`
         isPublic
       }
       logo  {
+        id
+        url
+        isPublic
+      }
+      avatar  {
         id
         url
         isPublic
@@ -284,12 +296,15 @@ export const campaignDetailsQuery = gql`
         date
       }
       updated {
-        id
         by
         date
       }
       deleted {
         id
+        by
+        date
+      }
+      created {
         by
         date
       }
@@ -305,7 +320,6 @@ export const campaignDetailsQuery = gql`
         }
       }
       threadComment {
-        id
         offeringId
         thread
         scope
@@ -316,12 +330,14 @@ export const campaignDetailsQuery = gql`
           date
         }
         updated {
-          id
+          by
+          date
+        }
+        created {
           by
           date
         }
         deleted {
-          id
           by
           date
         }
@@ -420,6 +436,7 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
+    fundedAmount
     keyTerms {
       regulation
       startupPeriod

@@ -203,7 +203,7 @@
 //  Used for message section
 .ui.card.messages{
     flex-direction:row;
-    max-height:~"calc(100vh - 232px)";
+    height:~"calc(100vh - 188px)";
     .ui.list{
         width:30%;
         margin:0;

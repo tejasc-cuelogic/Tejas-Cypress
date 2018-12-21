@@ -10,6 +10,7 @@ import { Header, Table, Message, Button, Confirm } from 'semantic-ui-react';
 import XmlSubmission from '../../../../admin/edgar/components/XmlSubmission';
 import Helper from '../../../../../../helper/utility';
 import { businessActions } from '../../../../../../services/actions';
+import { NEXTSEED_BOX_URL } from './../../../../../../constants/common';
 
 @withRouter
 @inject('businessStore', 'offeringCreationStore', 'uiStore')
@@ -113,7 +114,7 @@ export default class EdgarFilingList extends Component {
                         {filing.filingFolderName}
                         <div className="actions pull-right">
                           <a
-                            href={(`${process.env.REACT_APP_BOX_URL}/folder/${filing.folderId}`)}
+                            href={(`${NEXTSEED_BOX_URL}folder/${filing.folderId}`)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-link"
@@ -150,6 +151,7 @@ export default class EdgarFilingList extends Component {
                   handleDeleteCancel={this.handleDeleteCancel}
                   handleDeleteXMlSubmission={this.handleDeleteXMlSubmission}
                   handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
+                  boxFolderLink={(`${NEXTSEED_BOX_URL}folder/${filing.folderId}`)}
                 />
               </Table>
             </Aux>

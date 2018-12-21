@@ -37,14 +37,16 @@ export class NewMessage {
 
   @action
   newPostComment = () => {
-    if (this.data && this.data.data && this.data.data.offeringCommentsByOfferId) {
-      this.data.data.offeringCommentsByOfferId.push({
+    if (this.data && this.data.data && this.data.data.offeringCommentsByOfferId
+      && this.currentMessageId) {
+      this.data.data.offeringCommentsByOfferId.splice(0, 0, {
         id: null,
         offeringId: this.data.data.offeringCommentsByOfferId[0].offeringId,
         thread: null,
         createdUserInfo: this.data.data.offeringCommentsByOfferId[0].createdUserInfo,
         created: { id: '', by: '', date: moment().toISOString() },
         comment: 'Post New Comment',
+        scope: 'PUBLIC',
       });
     }
     this.setDataValue('currentMessageId', null);
@@ -71,7 +73,7 @@ export class NewMessage {
   }
 
   @action
-  createNewComment = (scope) => {
+  createNewComment = (scope, campaignSlug) => {
     this.setDataValue('buttonLoader', scope);
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
     const payload = {
@@ -98,7 +100,7 @@ export class NewMessage {
       })
       .then(() => {
         if (!offeringCreationStore.currentOfferingId) {
-          campaignStore.getCampaignDetails(this.currentOfferingId, false);
+          campaignStore.getCampaignDetails(campaignSlug, false);
         }
         this.resetMessageForm();
         Helper.toast('Message sent.', 'success');
@@ -167,6 +169,12 @@ export class NewMessage {
       toJS(msg[0].threadComments)) || [];
   }
 
+  @computed get threadMainMessage() {
+    const msg = filter(this.messages, message => message.id === this.currentMessageId);
+    return (msg && msg.length && msg[0] &&
+      [toJS(msg[0])]) || [];
+  }
+
   @computed get getSelectedMessage() {
     const msg = filter(
       campaignStore.campaign && campaignStore.campaign.comments,
@@ -182,8 +190,7 @@ export class NewMessage {
   resetMessageForm = () => {
     this.editMessageId = null;
     this.editScope = null;
-    this.MESSAGE_FRM.fields.comment.value = '';
-    // this.MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
+    this.MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
   }
 
   @action

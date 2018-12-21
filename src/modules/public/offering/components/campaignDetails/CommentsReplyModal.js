@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Modal, Comment, Label, Form, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
@@ -18,7 +19,7 @@ class CommentsReplyModal extends Component {
   readMore = (e, id) => { e.preventDefault(); this.setState({ readMore: id }); }
   handleClose = () => this.props.history.push(this.props.refLink);
   send = (scope) => {
-    this.props.messageStore.createNewComment(scope);
+    this.props.messageStore.createNewComment(scope, this.props.campaignSlug);
     this.handleClose();
   }
   render() {
@@ -31,7 +32,6 @@ class CommentsReplyModal extends Component {
     const message = getSelectedMessage;
     const date = message && message.updated ?
       message.updated.date : message && message.created.date;
-    const userFullName = message && message.createdUserInfo && message.createdUserInfo.info && `${message.createdUserInfo.info.firstName} ${message.createdUserInfo.info.firstName}`;
     return (
       <Modal
         open
@@ -45,7 +45,7 @@ class CommentsReplyModal extends Component {
             {!messageType && message &&
               <Comment className="issuer-comment">
                 <Comment.Content>
-                  <Comment.Author>{userFullName} <Label color="blue" size="mini">ISSUER</Label></Comment.Author>
+                  <Comment.Author>{get(message, 'createdUserInfo.info.firstName')} {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}</Comment.Author>
                   <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(date).format('LL')}</span></Comment.Metadata>
                   <Comment.Text className="mt-20">
                     {this.state.readMore === message.id ?
@@ -65,7 +65,7 @@ class CommentsReplyModal extends Component {
             questions require more thorough analyses and will take additional time.
               </p>
               <p>
-                See our <Link to="/">community guidelines</Link> on posting. If you have any
+                See our <Link to={`${this.props.refLink}/community-guidelines`}>community guidelines</Link> on posting. If you have any
                 technical questions or questions about NextSeed, please
                 email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
               </p>

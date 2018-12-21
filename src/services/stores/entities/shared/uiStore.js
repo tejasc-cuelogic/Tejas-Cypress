@@ -43,8 +43,8 @@ export class UiStore {
   }
 
   @action
-  setIsEnterPressed = (charCode) => {
-    if (charCode === 13) {
+  setIsEnterPressed = (e) => {
+    if (e.charCode === 13 && e.target.name !== 'investmentAmount') {
       this.isEnterPressed = true;
     }
   }

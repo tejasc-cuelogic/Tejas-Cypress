@@ -1,8 +1,11 @@
+/* eslint-disable jsx-a11y/label-has-for */
+/* eslint-disable no-undef */
 import React from 'react';
-import { Grid, GridColumn, Checkbox, Card } from 'semantic-ui-react';
+import { Grid, GridColumn, Checkbox, Card, Header } from 'semantic-ui-react';
 import _ from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom'; // Redirect
+import { NEXTSEED_BOX_URL } from './../../../../../../constants/common';
 
 @inject('businessStore')
 @withRouter
@@ -20,6 +23,16 @@ export default class FileSelector extends React.Component {
     return (
       <div>
         <Card fluid className="form-card">
+          <Header as="h5">Uploads to include as attachments to the XML Generation
+            <a
+              href={(`${NEXTSEED_BOX_URL}folder/${this.props.folderId}`)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="highlight-text pull-right"
+            >
+              <small>Documents</small>
+            </a>
+          </Header>
           <Grid>
             <Grid.Row>
               <Grid stackable columns={2}>

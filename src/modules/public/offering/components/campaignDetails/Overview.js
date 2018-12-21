@@ -65,6 +65,8 @@ class Overview extends Component {
               updates={campaign && campaign.updates}
               refLink={this.props.refLink}
               isTabletLand={isTabletLand}
+              companyAvatarUrl={campaign.media && campaign.media.avatar && campaign.media.avatar.url ? `${campaign.media.avatar.url}` : ''}
+              bussinessName={campaign.keyTerms.shorthandBusinessName}
             />
             <BonusRewards
               refLink={this.props.refLink}

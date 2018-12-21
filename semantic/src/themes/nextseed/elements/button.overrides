@@ -86,6 +86,8 @@
             }
             &.icon .icon {
                 margin-right:@3px !important;
+                height: auto;
+                vertical-align: middle;
             }
         }
         &.ghost-button{

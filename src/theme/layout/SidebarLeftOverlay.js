@@ -67,7 +67,7 @@ const MySidebar = observer(props => (
             </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             <div className="user-picture">
-              <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : ''} />
+              <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
               <h2>{props.UserInfo.fullname}</h2>
               {GetNavItem('profile-settings', props.UserInfo.roles)}
             </div>
@@ -76,7 +76,7 @@ const MySidebar = observer(props => (
         </Sidebar>
         {props.UserInfo.roles && props.UserInfo.roles.includes('investor') &&
           props.signupStatus && props.signupStatus.activeAccounts.length > 0 &&
-          !props.signupStatus.finalStatus &&
+          !props.signupStatus.finalStatus && props.accForm.fields.accType.values.length !== 0 &&
           <Link className="add-account" to="/app/summary/account-creation">
             <Icon name="add circle" />
             <span>Add New Account</span>

@@ -10,6 +10,7 @@ import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../constants/aws';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../constants/offering';
+import Helper from '../../../../../helper/utility';
 
 @inject('campaignStore')
 @observer
@@ -77,7 +78,9 @@ export default class CampaignList extends Component {
                           <Card.Content extra>
                             <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
                             <List divided horizontal>
-                              <List.Item>Raised $1,000,000</List.Item>
+                              <List.Item>
+                                {Helper.CurrencyFormat(offering.fundedAmount, 0)}
+                              </List.Item>
                               <List.Item>
                                 {(offering && offering.closureSummary &&
                                   offering.closureSummary.totalInvestorCount) || 0} investors
@@ -91,7 +94,7 @@ export default class CampaignList extends Component {
                         {offering.stage === 'LOCK' && (
                           <Card.Content className="card-hidden">
                             <div className="lock-image">
-                              <Image src={`${ASSETS_URL}images/icon_lock.png`} />
+                              <Image mini src={`${ASSETS_URL}images/icon_lock.png`} />
                             </div>
                             <div className="details">
                               <div className="tags mb-10">

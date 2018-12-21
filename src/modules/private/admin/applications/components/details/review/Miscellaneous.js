@@ -134,7 +134,7 @@ export default class Miscellaneous extends Component {
               {
                 MISCELLANEOUS_FRM.fields.socialMedia.length ?
                 MISCELLANEOUS_FRM.fields.socialMedia.map((socialMedia, index) => (
-                  <Table.Row verticalAlign="top">
+                  <Table.Row>
                     <Table.Cell width={3}>
                       <Dropdown
                         className={isReadonly ? 'display-only secondary' : 'secondary'}

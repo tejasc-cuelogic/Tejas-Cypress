@@ -58,5 +58,7 @@ export const CAMPAIGN_KEYTERMS_REGULATION = {
 export const OFFERING_COMMENTS_SCOPE = {
   NEXTSEED: { title: 'Private Note', color: 'orange' },
   PUBLIC: { title: 'Public', color: 'green' },
-  ISSUER: { titleI: 'Note From NS', title: 'Note to Issuer', color: 'blue' },
+  ISSUER: {
+    titleITo: 'Note to NS', titleIFrom: 'Note from NS', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
+  },
 };

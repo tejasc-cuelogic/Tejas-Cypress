@@ -21,20 +21,28 @@ class Login extends Component {
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
-    authActions.login()
-      .then(() => {
-        const { redirectURL } = this.props.uiStore;
-        if (this.props.authStore.newPasswordRequired) {
-          this.props.history.push('/auth/change-password');
-        } else {
-          const { roles } = this.props.userStore.currentUser;
-          const { email, password } = this.props.authStore.LOGIN_FRM.fields;
-          const userCredentials = { email: email.value, password: btoa(password.value) };
-          cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
-          this.props.authStore.resetForm('LOGIN_FRM');
-          this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
-            `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
-        }
+    const { email, password } = this.props.authStore.LOGIN_FRM.fields;
+    let userCredentials = { email: email.value, password: password.value };
+    this.props.authStore.checkMigrationByEmail(userCredentials).then((res) => {
+      if (res) {
+        authActions.login()
+          .then(() => {
+            const { redirectURL } = this.props.uiStore;
+            if (this.props.authStore.newPasswordRequired) {
+              this.props.history.push('/auth/change-password');
+            } else {
+              const { roles } = this.props.userStore.currentUser;
+              userCredentials = { email: email.value, password: btoa(password.value) };
+              cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+              this.props.authStore.resetForm('LOGIN_FRM');
+              this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
+                `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
+            }
+          });
+      }
+    })
+      .catch((err) => {
+        console.log(err);
       });
   };
   handleCloseModal = (e) => {
@@ -46,8 +54,13 @@ class Login extends Component {
       LOGIN_FRM, LoginChange, togglePasswordType, pwdInputType,
     } = this.props.authStore;
     const { errors, inProgress } = this.props.uiStore;
-    const customError = errors && errors.message === 'User does not exist.'
+    let customError = errors && errors.message === 'User does not exist.'
       ? 'Incorrect username or password.' : errors && errors.message;
+
+    if (errors && errors.code === 'checkMigrationByEmailFailed') {
+      customError = `There was a problem with authentication. Please try again or contact
+        <a className="negative-text" href="mailto:support@nextseed.com">support@nextseed.com</a>`;
+    }
     if (errors && errors.code === 'UserNotConfirmedException') {
       const { email, password } = this.props.authStore.LOGIN_FRM.fields;
       const userCredentials = { email: email.value, password: btoa(password.value) };
@@ -84,7 +97,7 @@ class Login extends Component {
               <Link to="/auth/forgot-password">Forgot password?</Link>
             </Form.Field>
             {errors &&
-              <Message error textAlign="left" className="mt-30">
+              <Message error className="mt-30">
                 <ListErrors errors={[customError]} />
               </Message>
             }

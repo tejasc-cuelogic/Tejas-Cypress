@@ -3,7 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import React from 'react';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import isArray from 'lodash/isArray';
+import { capitalize, isArray } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { UserAvatar } from './../../../../theme/shared';
 import { allUsersQuery } from '../../queries/users';
@@ -185,20 +185,17 @@ export class UserListingStore {
     };
     this.users.map((user) => {
       usersOptions[user.roles[0].scope].push({
-        text: `${user.info.firstName} ${user.info.lastName}`,
+        text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
         value: user.id,
         icon:
-  <span className="user-image">
-    <UserAvatar
-      UserInfo={{
-          firstName: user.info ? user.info.firstName : '',
-          lastName: user.info ? user.info.lastName : '',
-          avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
-          roles: user.roles.map(r => r.scope),
-        }}
-      size="mini"
-            />{' '}
-  </span>,
+  <UserAvatar
+    UserInfo={{
+      firstName: user.info ? user.info.firstName : '',
+      lastName: user.info ? user.info.lastName : '',
+      avatarUrl: user.info && user.info.avatar ? user.info.avatar.url : '',
+      roles: user.roles.map(r => r.scope),
+    }}
+  />,
       // image: { avatar: user.info.avatar, src: (user.info.avatar && user.info.avatar.url) || '' },
       });
       return false;

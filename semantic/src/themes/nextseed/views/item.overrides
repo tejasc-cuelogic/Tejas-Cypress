@@ -123,6 +123,12 @@
                 &.approval-pending{
                     background-color:fade(@primary-two, 12%);
                     border-style:dashed;
+                    .header, .time-stamp, .description{
+                        opacity:0.5;
+                    }
+                }
+                &.approved{
+                    background-color:fade(@primary-two, 12%);
                 }
                 .comment-actions{
                     position:absolute;
@@ -192,21 +198,32 @@
             }
         }
     }
-    &.campaign-updates >.item{
-        .ui.image img {
-            border-radius: 50%;
-        }
-        .content>.header:not(.ui) {
-            font-size: @13px;
-            line-height: 20px;
-        }
-        .meta {
-            font-size: @13px;
-            line-height: 20px;
-            margin: 0;
-        }
-        img {
-            width: 100%;
+    &.campaign-updates{
+        margin: 0;
+        >.item{
+            .avatar-image{
+                border-radius: 50%;
+                width: 36px;
+                height:36px;
+                +.header {
+                    margin-left: 46px;
+                    +.meta {
+                        margin-left: 46px;
+                    }
+                }
+            }
+            .content>.header:not(.ui) {
+                font-size: @13px;
+                line-height: 20px;
+            }
+            .meta {
+                font-size: @13px;
+                line-height: 20px;
+                margin: 0;
+            }
+            img {
+                width: 100%;
+            }
         }
     }
 }

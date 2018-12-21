@@ -11,6 +11,8 @@ export class ArticleStore {
     @observable data = [];
     @observable Categories = [];
     @observable article = null;
+    @observable featuredData = [];
+    @observable featuredCategoryId = 'a25924d6-8136-4514-aee7-1ad8d78bb609';
 
     @action
     requestAllArticles = () => {
@@ -23,6 +25,13 @@ export class ArticleStore {
     }
 
     @action
+    featuredRequestArticlesByCategoryId = () => {
+      const id = this.featuredCategoryId;
+      this.featuredData =
+        graphql({ client, query: getArticlesByCatId, variables: { id } });
+    }
+
+    @action
     getArticle = (id) => {
       this.article = graphql({ client, query: getArticleDetails, variables: { id } });
     }
@@ -30,6 +39,10 @@ export class ArticleStore {
     @computed get InsightArticles() {
       return (this.data.data && (toJS(this.data.data.insightsArticles)
         || toJS(this.data.data.insightArticlesByCategoryId))) || [];
+    }
+    @computed get InsightFeaturedArticles() {
+      return (this.featuredData.data && (toJS(this.featuredData.data.insightsArticles)
+        || toJS(this.featuredData.data.insightArticlesByCategoryId))) || [];
     }
 
     @computed get ArticlesDetails() {
