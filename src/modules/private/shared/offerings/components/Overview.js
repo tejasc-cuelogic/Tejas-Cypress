@@ -7,7 +7,7 @@ import Contingency from './overview/Contingency';
 import { FormInput } from '../../../../../theme/form';
 
 @withRouter
-@inject('offeringCreationStore', 'userStore')
+@inject('offeringCreationStore', 'userStore', 'uiStore')
 @observer
 export default class Overview extends Component {
   handleSubmitOfferingDetails = () => {
@@ -27,6 +27,7 @@ export default class Overview extends Component {
       formArrayChange,
     } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
+    const { inProgress } = this.props.uiStore;
     return (
       <div className={isIssuer ? 'ui card fluid form-card' : 'inner-content-spacer'}>
         <Form>
@@ -43,7 +44,7 @@ export default class Overview extends Component {
             }
           </Form.Group>
           <div className="clearfix">
-            <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
+            <Button primary disabled={!OFFERING_DETAILS_FRM.meta.isValid} loading={inProgress} content="Save" className="relaxed pull-right" onClick={this.handleSubmitOfferingDetails} />
           </div>
           <Contingency formArrayChange={formArrayChange} form={LAUNCH_CONTITNGENCIES_FRM} formName="LAUNCH_CONTITNGENCIES_FRM" />
           <Contingency formArrayChange={formArrayChange} form={CLOSING_CONTITNGENCIES_FRM} formName="CLOSING_CONTITNGENCIES_FRM" />
