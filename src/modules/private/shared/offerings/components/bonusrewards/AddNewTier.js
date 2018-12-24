@@ -1,23 +1,26 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
 
-@inject('offeringCreationStore')
+@inject('offeringCreationStore', 'offeringsStore')
 @observer
 export default class AddNewTier extends Component {
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
   handleAddTier = () => {
-    const { addNewTier } = this.props.offeringCreationStore;
-    addNewTier();
+    const { updateBonusRewardTier } = this.props.offeringCreationStore;
+    updateBonusRewardTier();
     this.props.history.push(this.props.refLink);
   }
   render() {
     const { ADD_NEW_TIER_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_TIER_FRM';
+    const { offer } = this.props.offeringsStore;
+    const earlyBird = get(offer, 'earlyBird') || null;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -26,14 +29,15 @@ export default class AddNewTier extends Component {
         <Modal.Content className="signup-content">
           <Form onSubmit={this.handleAddTier}>
             <div className="featured-section">
-              <FormCheckbox
-                fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
-                name="isEarlyBirds"
-                changed={(e, result) => formChange(e, result, formName, true)}
-                defaults
-                containerclassname="ui relaxed list"
-                disabled
-              />
+              {(!earlyBird || earlyBird.quantity === 0) &&
+                <FormCheckbox
+                  fielddata={ADD_NEW_TIER_FRM.fields.isEarlyBirds}
+                  name="isEarlyBirds"
+                  changed={(e, result) => formChange(e, result, formName, true)}
+                  defaults
+                  containerclassname="ui relaxed list"
+                />
+              }
               {
                 ADD_NEW_TIER_FRM.fields.isEarlyBirds.value.includes('EARLY_BIRDS') ?
                   <Aux>

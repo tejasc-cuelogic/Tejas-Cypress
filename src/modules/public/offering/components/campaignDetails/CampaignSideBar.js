@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter, Route } from 'react-router-dom';
-import { orderBy } from 'lodash';
+import { get } from 'lodash';
 import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../../helper';
@@ -39,8 +39,10 @@ export default class CampaignSideBar extends Component {
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(terminationDate);
-    const rewardsTiers = campaign && campaign.rewardsTierIds &&
-      campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds, ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
+    const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    // campaign && campaign.rewardsTierIds &&
+    //   campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds,
+    // ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
     const flagStatus = collected >= minOffering;
     return (
       <Aux>
@@ -121,7 +123,7 @@ export default class CampaignSideBar extends Component {
           {!isMobile &&
             <Aux>
               <Menu vertical fluid>
-                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers} />
+                <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
                 {/* <Divider />
                 <Menu.Item as={Link} to="/" className="secondary-item">
                   <Icon name="heart outline" /> Watch Deal
