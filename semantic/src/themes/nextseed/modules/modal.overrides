@@ -140,6 +140,7 @@
     }
     &.about-modal {
         border-radius: 0;
+        background-color:transparent;
         >.close {
             z-index: 2;
             color: @neutral-darkwhite;
@@ -151,6 +152,7 @@
         }
         .content {
             padding: 0;
+            background-color:transparent;
         }
         .carousel{
             max-height:~"calc(100vh - 30px)";
