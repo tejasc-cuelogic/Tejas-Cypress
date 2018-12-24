@@ -77,6 +77,9 @@ export class AuthStore {
 
   @action
   signupChange = (e, result) => {
+    if (result && result.name && result.name === 'role') {
+      cookie.save('ROLE_VALUE', result.value, { maxAge: 1200 });
+    }
     if (e.password || e.password === '') {
       this.SIGNUP_FRM =
         Validator.onChange(this.SIGNUP_FRM, Validator.pullValuesForPassword(e, result));
@@ -369,6 +372,11 @@ export class AuthStore {
         uiStore.setProgress(false);
       });
   });
+
+  @action
+  setUserRole = (userData) => {
+    this.SIGNUP_FRM.fields.role.value = userData;
+  }
 }
 
 export default new AuthStore();

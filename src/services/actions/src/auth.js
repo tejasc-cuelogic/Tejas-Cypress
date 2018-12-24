@@ -20,6 +20,7 @@ import {
   iraAccountStore,
   entityAccountStore,
   bankAccountStore,
+  individualAccountStore,
 } from '../../stores';
 import { FormValidator as Validator } from '../../../helper';
 import Helper from '../../../helper/utility';
@@ -605,6 +606,7 @@ export class Auth {
       iraAccountStore.resetStoreData();
       entityAccountStore.resetStoreData();
       bankAccountStore.resetStoreData();
+      individualAccountStore.resetStoreData();
       uiStore.clearErrors();
       res();
     })
