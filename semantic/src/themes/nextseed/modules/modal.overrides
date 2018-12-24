@@ -152,6 +152,16 @@
         .content {
             padding: 0;
         }
+        .carousel{
+            max-height:~"calc(100vh - 30px)";
+            .slick-slide{
+                text-align:center;
+                .ui.image{
+                    height:~"calc(100vh - 121px - 30px)";
+                    width:auto !important;
+                }
+            }
+        }
     }
 }
 //  Public pages Ends
