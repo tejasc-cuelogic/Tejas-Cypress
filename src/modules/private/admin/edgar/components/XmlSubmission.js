@@ -16,7 +16,6 @@ import {
 @observer
 class XmlSubmission extends Component {
   createNewSubmission = () => {
-    this.props.businessStore.setBoxFolderLink(this.props.boxFolderLink);
     this.props.history.push(`/app/edgar/${this.props.offeringId}/filing/${this.props.filingId}/xml`);
   }
   render() {

@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { sortBy, get, has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -13,12 +13,10 @@ import {
   ADMIN_DOCUMENTATION, OFFERING_CREATION_ARRAY_KEY_LIST, DATA_ROOM, POC_DETAILS,
 } from '../../../../constants/admin/offerings';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
-import {
-  updateBonusReward, deleteBonusReward, deleteBonusRewardsTierByOffering, updateOffering,
-  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, createBonusReward,
-  getBonusRewards, createBonusRewardsTier, getBonusRewardsTiers, getOfferingFilingList,
-  generateBusinessFiling, unlinkTiersFromBonusRewards, allOfferings, upsertOffering,
-} from '../../../queries/offerings/manage';
+import { deleteBonusReward, updateOffering,
+  getOfferingDetails, getOfferingBac, createBac, updateBac, deleteBac, upsertBonusReward,
+  getBonusRewards, getOfferingFilingList,
+  generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
@@ -81,7 +79,6 @@ export class OfferingCreationStore {
   @observable leadershipOfferingBac = {};
   @observable bonusRewardsTiers = {};
   @observable bonusRewards = {};
-  @observable currentRewardId = null;
   @observable tierTobeUnlinked = {};
   @observable leadershipExperience = {
     0: LEADERSHIP_EXP.employer,
@@ -95,6 +92,12 @@ export class OfferingCreationStore {
   };
   @observable removeFileIdsList = [];
   @observable removeFileNamesList = [];
+
+  @action
+  resetBonusRewardForm = () => {
+    this.ADD_NEW_BONUS_REWARD_FRM = Validator.prepareFormObject(ADD_NEW_BONUS_REWARD);
+    this.setTiersForBonusRewardsForm();
+  }
 
   @action
   setTierToBeUnlinked = (tier) => {
@@ -136,16 +139,6 @@ export class OfferingCreationStore {
   @action
   resetOfferingId = () => {
     this.currentOfferingId = null;
-  }
-
-  @action
-  setCurrentRewardId = (id) => {
-    this.currentRewardId = id;
-  }
-
-  @action
-  resetRewardId = () => {
-    this.currentRewardId = null;
   }
 
   @action
@@ -1054,13 +1047,31 @@ export class OfferingCreationStore {
         );
         payloadData.offering = omitDeep(payloadData.offering, ['__typename', 'fileHandle']);
         payloadData.offering = cleanDeep(payloadData.offering);
+      } else if (keyName === 'BonusRewardTier') {
+        const rewardsTiersData = getOfferingById.rewardsTiers || [];
+        const isEarlyBirds = fields.isEarlyBirds.value;
+        if (!subKey) {
+          if (isEarlyBirds.length) {
+            payloadData.earlyBird = {
+              amount: fields.amountForEarlyBird.value,
+              quantity: fields.earlyBirdQuantity.value,
+            };
+          } else {
+            rewardsTiersData.push(fields.amountForThisTier.value);
+            payloadData.rewardsTiers = sortBy(rewardsTiersData);
+          }
+        } else if (subKey.earlyBirdQuantity > 0) {
+          payloadData.earlyBird = null;
+        } else {
+          payloadData.rewardsTiers = sortBy(rewardsTiersData.filter(r => r !== subKey.amount));
+        }
       } else {
         payloadData = { ...payloadData, [keyName]: Validator.evaluateFormData(fields) };
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
     }
-    if (keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
+    if (keyName !== 'BonusRewardTier' && keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
         keyName === 'leadership' ? payloadData[keyName][leaderIndex] : payloadData[keyName] : payloadData;
       if (approvedObj !== null && approvedObj && approvedObj.isApproved) {
@@ -1382,73 +1393,28 @@ export class OfferingCreationStore {
       });
   }
 
-  addNewTier = () => {
-    let payloadData = {};
+  updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
     const { fields } = this.ADD_NEW_TIER_FRM;
-    const isEarlyBirds = fields.isEarlyBirds.value;
-    if (isEarlyBirds.length > 0) {
-      payloadData = {
-        amount: fields.amountForEarlyBird.value,
-        earlyBirdQuantity: fields.earlyBirdQuantity.value,
-      };
-    } else {
-      payloadData = {
-        amount: fields.amountForThisTier.value,
-        earlyBirdQuantity: 0,
-      };
-    }
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: createBonusRewardsTier,
-        variables: {
-          bonusRewardTierDetails: payloadData,
-        },
-        refetchQueries: [
-          { query: getBonusRewardsTiers },
-        ],
-      })
-      .then(() => {
-        Helper.toast('Tier has been created successfully', 'success');
-        Validator.resetFormData(this.ADD_NEW_TIER_FRM);
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
-  @action
-  getBonusRewardsTiers = () => {
-    this.bonusRewardsTiers = graphql({
-      client,
-      fetchPolicy: 'network-only',
-      query: getBonusRewardsTiers,
-      onFetch: (res) => {
-        if (res) {
-          this.setTiersForBonusRewardsForm();
-          this.setDefaultTiers();
-          this.setUpdateBonusRewardsData(
-            this.bonusRewards.data.getBonusRewards,
-            this.currentRewardId,
-          );
-        }
-      },
+    const subKey = isDelete ? { amount, earlyBirdQuantity } : null;
+    this.updateOffering(
+      this.currentOfferingId,
+      fields, 'BonusRewardTier', subKey, false, 'Tier has been created successfully',
+      null, false,
+    ).then(() => {
+      Validator.resetFormData(this.ADD_NEW_TIER_FRM);
     });
   }
 
   @action
   setTiersForBonusRewardsForm = () => {
-    const tiers = this.bonusRewardsTiers.data.getBonusRewardTiers;
+    const tiers = get(offeringsStore.offer, 'rewardsTiers') || [];
+    const earlyBird = get(offeringsStore.offer, 'earlyBird') || null;
     const tiersArray = [];
     forEach(tiers, (tier, index) => {
       const tierFieldObj = { rule: 'alpha_dash', error: undefined };
-      tierFieldObj.values = [{ label: `Invest ${Helper.CurrencyFormat(tier.amount)} or more`, value: tier.amount }];
-      tierFieldObj.key = tier.amount;
-      tierFieldObj.earlyBirdQuantity = tier.earlyBirdQuantity;
+      tierFieldObj.values = [{ label: `Invest ${Helper.CurrencyFormat(tier)} or more`, value: tier }];
+      tierFieldObj.key = tier;
+      tierFieldObj.earlyBirdQuantity = get(earlyBird, 'quantity') !== 0 && get(earlyBird, 'amount') === tier ? get(earlyBird, 'quantity') : 0;
       tierFieldObj.value = [];
       tierFieldObj.seqNum = index;
       tiersArray.push(tierFieldObj);
@@ -1467,48 +1433,6 @@ export class OfferingCreationStore {
     }
   }
 
-  createBonusReward = () => {
-    const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
-    const tiers = [];
-    map(fields, ((field) => {
-      if ((field.key || field.earlyBirdQuantity) &&
-        field.value.length && field.value.length === 1) {
-        const tierObj = {};
-        tierObj.amount = field.key;
-        tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
-        tiers.push(tierObj);
-      }
-    }));
-    let payloadData = {};
-    payloadData = {
-      offeringId: this.currentOfferingId,
-      title: fields.name.value,
-      description: fields.description.value,
-      rewardStatus: 'In Review',
-      expirationDate: moment(fields.expirationDate.value).toISOString(),
-      tiers,
-    };
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: createBonusReward,
-        variables: {
-          bonusRewardDetails: payloadData,
-        },
-      })
-      .then(() => {
-        Helper.toast('Bonus Reward has been added successfully', 'success');
-        Validator.resetFormData(this.ADD_NEW_BONUS_REWARD_FRM);
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
   @action
   getBonusRewards = () => {
     this.bonusRewards = graphql({
@@ -1521,8 +1445,13 @@ export class OfferingCreationStore {
 
   @computed
   get allBonusRewards() {
-    return (this.bonusRewards &&
-      toJS(this.bonusRewards)) || [];
+    return (this.bonusRewards && this.bonusRewards.data && this.bonusRewards.data.getBonusRewards &&
+    toJS(this.bonusRewards.data.getBonusRewards)) || [];
+  }
+
+  @computed
+  get allBonusRewardsLoading() {
+    return this.bonusRewards.loading;
   }
 
   @action
@@ -1535,10 +1464,14 @@ export class OfferingCreationStore {
           id,
           offeringId: this.currentOfferingId,
         },
-        refetchQueries: [
-          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
-          { query: getBonusRewardsTiers },
-        ],
+        refetchQueries: [{
+          query: getOfferingDetails,
+          variables: { id: this.currentOfferingId },
+        },
+        {
+          query: getBonusRewards,
+          variables: { offeringId: this.currentOfferingId },
+        }],
       })
       .then(() => {
         Helper.toast('Bonus Reward has been deleted successfully.', 'success');
@@ -1553,58 +1486,22 @@ export class OfferingCreationStore {
   }
 
   @action
-  deleteBonusRewardTier = (amount, earlyBirdQuantity) => {
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: deleteBonusRewardsTierByOffering,
-        variables: {
-          offeringId: this.currentOfferingId,
-          bonusRewardTierId: {
-            amount,
-            earlyBirdQuantity,
-          },
-        },
-        refetchQueries: [
-          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
-          { query: getBonusRewardsTiers },
-        ],
-      })
-      .then(() => {
-        Helper.toast('Tier has been deleted successfully.', 'success');
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
-  @action
-  setUpdateBonusRewardsData = (bonusRewards, rewardId) => {
+  setUpdateBonusRewardsData = (rewardId) => {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
-    if (bonusRewards) {
+    const bonusRewards = this.allBonusRewards;
+    if (bonusRewards && bonusRewards.length) {
       bonusRewards.map((reward) => {
         if (reward.id === rewardId) {
           fields.name.value = reward.title;
           fields.description.value = reward.description;
           fields.expirationDate.value = moment(reward.expirationDate).format('MM/DD/YYYY');
-          reward.tiers.map((tier) => {
-            const isExisted = find(fields, { key: tier.amount });
-            if (isExisted && !isExisted.value.includes(tier.amount) &&
-              Array.isArray(toJS(isExisted.value))) {
-              isExisted.value.push(tier.amount);
-              isExisted.value = [...new Set(toJS(isExisted.value))];
-            } else {
-              const isEarlyBird = find(fields, { earlyBirdQuantity: 50 });
-              if (isEarlyBird && !isEarlyBird.value.includes('EARLY_BIRDS') &&
-                Array.isArray(toJS(isEarlyBird.value))) {
-                isEarlyBird.value.push('EARLY_BIRDS');
-              }
+          map(fields, (f) => {
+            if (f.earlyBirdQuantity > 0 && reward.earlyBirdQuantity > 0) {
+              f.value.push('EARLY_BIRDS');
+            } else if (reward.tiers.includes(f.key)) {
+              f.value.push(f.key);
             }
-            return null;
+            return false;
           });
         }
         return null;
@@ -1612,38 +1509,46 @@ export class OfferingCreationStore {
     }
   }
 
-  updateBonusReward = (id) => {
+  createUpdateBonusReward = (earlyBirdQty, id = false) => {
     const { fields } = this.ADD_NEW_BONUS_REWARD_FRM;
     const tiers = [];
     map(fields, ((field) => {
-      if ((field.key || field.earlyBirdQuantity) &&
-        field.value.length && field.value.length === 1) {
-        const tierObj = {};
-        tierObj.amount = field.key;
-        tierObj.earlyBirdQuantity = field.earlyBirdQuantity;
-        tiers.push(tierObj);
+      if ((field.key) &&
+      field.value.length && field.value.length === 1) {
+        tiers.push(field.key);
       }
     }));
-    let payloadData = {};
-    payloadData = {
-      offeringId: this.currentOfferingId,
-      title: fields.name.value,
-      description: fields.description.value,
-      rewardStatus: 'In Review',
-      expirationDate: moment(fields.expirationDate.value).toISOString(),
-      tiers,
+    const payloadData = {
+      bonusRewardDetails: {
+        offeringId: this.currentOfferingId,
+        title: fields.name.value,
+        description: fields.description.value,
+        rewardStatus: 'In Review',
+        earlyBirdQuantity: fields.isEarlyBirds.value.length ?
+          earlyBirdQty : 0,
+        expirationDate: moment(fields.expirationDate.value).toISOString(),
+        tiers,
+      },
     };
+    if (id) {
+      payloadData.id = id;
+    }
     uiStore.setProgress();
     client
       .mutate({
-        mutation: updateBonusReward,
-        variables: {
-          id,
-          bonusRewardDetails: payloadData,
+        mutation: upsertBonusReward,
+        variables: payloadData,
+        refetchQueries: [{
+          query: getOfferingDetails,
+          variables: { id: this.currentOfferingId },
         },
+        {
+          query: getBonusRewards,
+          variables: { offeringId: this.currentOfferingId },
+        }],
       })
       .then(() => {
-        Helper.toast('Bonus Reward has been updated successfully', 'success');
+        Helper.toast(`Bonus Reward has been ${id ? 'updated' : 'added'} successfully`, 'success');
         Validator.resetFormData(this.ADD_NEW_BONUS_REWARD_FRM);
       })
       .catch(action((err) => {
@@ -1698,35 +1603,6 @@ export class OfferingCreationStore {
       .then(() => {
         this.getOfferingFilingList(this.currentOfferingId);
         Helper.toast('Generate Docs created.', 'success');
-      })
-      .catch(action((err) => {
-        uiStore.setErrors(DataFormatter.getSimpleErr(err));
-        Helper.toast('Something went wrong.', 'error');
-      }))
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
-  }
-
-  @action
-  unlinkTierFromBonusReward = (id, tier) => {
-    uiStore.setProgress();
-    client
-      .mutate({
-        mutation: unlinkTiersFromBonusRewards,
-        variables: {
-          bonusRewardId: id,
-          offeringId: this.currentOfferingId,
-          bonusRewardTierId: this.tierTobeUnlinked,
-        },
-        refetchQueries: [
-          { query: getBonusRewards, variables: { offeringId: this.currentOfferingId } },
-          { query: getBonusRewardsTiers },
-        ],
-      })
-      .then(() => {
-        Helper.toast('Bonus Reward has been deleted successfully.', 'success');
-        this.setTierToBeUnlinked(null);
       })
       .catch(action((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));

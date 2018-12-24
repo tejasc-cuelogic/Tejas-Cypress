@@ -156,8 +156,8 @@ export class PortfolioStore {
   });
   @computed get getInvestor() {
     return (this.investmentDetails && this.investmentDetails.data &&
-      this.investmentDetails.data.getInvestmentDetailsOverview &&
-      toJS(this.investmentDetails.data.getInvestmentDetailsOverview)) || null;
+      this.investmentDetails.data.getInvestmentDetails &&
+      toJS(this.investmentDetails.data.getInvestmentDetails)) || null;
   }
   @computed get loadingInvestDetails() {
     return this.investmentDetails.loading;
