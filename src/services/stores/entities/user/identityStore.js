@@ -251,6 +251,8 @@ export class IdentityStore {
   }
   @action
   verifyUserIdentity = () => {
+    this.ID_VERIFICATION_FRM.response = {};
+    this.setCipStatus('');
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client

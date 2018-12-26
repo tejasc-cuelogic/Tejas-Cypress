@@ -125,5 +125,12 @@ class IndividualAccountStore {
       }
     }
   }
+
+  @action
+  resetStoreData = () => {
+    this.stepToBeRendered = 0;
+    this.submited = false;
+    this.isManualLinkBankSubmitted = false;
+  }
 }
 export default new IndividualAccountStore();

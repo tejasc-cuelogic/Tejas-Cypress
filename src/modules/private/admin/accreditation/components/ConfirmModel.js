@@ -30,8 +30,10 @@ export default class ConfirmModel extends Component {
     const { inProgress } = this.props.uiStore;
     return (
       <Modal open closeOnDimmerClick={false} closeIcon onClose={this.handleBack} size="mini">
-        <Modal.Content>
+        <Modal.Header className="signup-header">
           <Header textAlign="center" as="h3">Mark as {actionValue === 'APPROVED' ? 'approved' : 'declined'}</Header>
+        </Modal.Header>
+        <Modal.Content>
           <Form>
             <FormTextarea
               containerclassname="secondary"
@@ -40,9 +42,7 @@ export default class ConfirmModel extends Component {
               changed={(e, result) => formChange(e, result, 'CONFIRM_ACCREDITATION_FRM')}
             />
             <div className="center-align mt-30">
-              <Button.Group>
-                <Button loading={inProgress} disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid} className={actionValue === 'APPROVED' ? 'primary' : 'red'} content={actionValue === 'APPROVED' ? 'Approve request' : 'Decline request'} onClick={this.handleConfirm} />
-              </Button.Group>
+              <Button className={actionValue === 'APPROVED' ? 'primary relaxed' : 'red relaxed'} content={actionValue === 'APPROVED' ? 'Approve request' : 'Decline request'} loading={inProgress} disabled={!CONFIRM_ACCREDITATION_FRM.meta.isValid} onClick={this.handleConfirm} />
             </div>
           </Form>
         </Modal.Content>

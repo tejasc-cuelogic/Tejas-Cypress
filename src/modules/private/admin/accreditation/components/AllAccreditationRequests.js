@@ -92,7 +92,7 @@ export default class AllAccreditationRequests extends Component {
                         }
                       </p>
                     </Table.Cell>
-                    <Table.Cell textAlign="center">
+                    <Table.Cell>
                       {accreditation.assetsUpload && accreditation.assetsUpload.length &&
                       accreditation.assetsUpload[0].fileInfo &&
                       accreditation.assetsUpload[0].fileInfo[0].fileHandle ?
