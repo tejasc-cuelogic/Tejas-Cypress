@@ -50,7 +50,7 @@ class AboutPhotoGallery extends Component {
                 {
                   galleryArray.length ?
                     galleryArray.map(data => (
-                      <Image64 srcUrl={data.url} />
+                      <Image64 bg srcUrl={data.url} />
                     ))
                     :
                     <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
