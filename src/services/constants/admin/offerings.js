@@ -332,7 +332,7 @@ export const KEY_TERMS = {
   },
   currentFinancialStatements: {
     value: '',
-    label: 'Current Financial Statemetns (New Business)',
+    label: 'Current Financial Statements (New Business)',
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
