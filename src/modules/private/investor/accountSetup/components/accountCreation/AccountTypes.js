@@ -30,17 +30,10 @@ const AccountTypes = ({
             changed={handleAccTypeChange}
             containerclassname="button-radio center-align"
           />
-          <AccTypeDescription
-            accTypes={form.fields.accType}
-          />
+          <AccTypeDescription accTypes={form.fields.accType} />
         </Form>
       </Grid>
-      <Button
-        circular
-        icon={{ className: 'ns-arrow-right' }}
-        className="multistep__btn next active"
-        onClick={() => renderAccType()}
-      />
+      <Button circular icon={{ className: 'ns-arrow-right' }} className="multistep__btn next active" onClick={() => renderAccType()} />
     </Modal.Content>
   </Modal>
 );
