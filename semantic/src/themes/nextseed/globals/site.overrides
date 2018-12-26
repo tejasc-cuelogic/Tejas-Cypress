@@ -2570,6 +2570,18 @@ p.check-extra-info{
     z-index: 1;
 }
 .about-modal {
+	.slick-slider:not(.slider-thumbnails) {
+		height:~"calc(100vh - 151px)";
+		.slick-list {
+			height: ~"calc(100vh - 151px)" !important;
+			.carousel-bg {
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+				height: ~"calc(100vh - 151px)";
+			}
+		}
+	}
 	.slick-prev, .slick-next {
 		background: fade(@fullBlack, 50%);
 		z-index: 1;
