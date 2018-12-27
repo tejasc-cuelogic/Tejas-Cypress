@@ -40,11 +40,13 @@ export class OfferingsStore {
       stage,
     } = props;
     const reqStages = Object.keys(pickBy(STAGES, s => s.ref === stage));
+    this.requestState.stage = stage;
     this.data = graphql({
       client,
       query: stage === 'active' ? allOfferingsCompact : allOfferings,
       variables: stage !== 'active' ? { stage: reqStages } :
         { stage: reqStages, ...{ issuerId: userStore.currentUser.sub } },
+      fetchPolicy: 'network-only',
       onFetch: (res) => {
         this.requestState.page = 1;
         this.requestState.skip = 0;

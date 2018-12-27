@@ -142,7 +142,7 @@ export const userDetailsQuery = gql`
               accountNumber
               routingNumber
               plaidAccessToken
-              dateRequested
+              dateLinked
               pendingUpdate
               changeRequest {
                 accountNumber

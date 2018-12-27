@@ -79,8 +79,8 @@ export default class AccountDetailsView extends Component {
                 <Item.Content>
                   <Item.Extra>Date linked</Item.Extra>
                   <Item.Header>
-                    {accountDetails && accountDetails.dateRequested ?
-                      moment(accountDetails.dateRequested).format('MM/DD/YYYY') : null}
+                    {accountDetails && accountDetails.dateLinked ?
+                      moment(accountDetails.dateLinked).format('MM/DD/YYYY') : null}
                   </Item.Header>
                 </Item.Content>
               </Item>
