@@ -41,10 +41,12 @@ export default class Creation extends Component {
     const { offer } = this.props.offeringsStore;
     const bonusRewardsTiers = get(offer, 'rewardsTiers') || [];
     const earlyBird = get(offer, 'earlyBird') || null;
+    const stage = get(offer, 'stage') || '';
     const { allBonusRewardsLoading } = this.props.offeringCreationStore;
     const { confirmBox } = this.props.uiStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
+    const isReadOnly = isIssuer && stage !== 'CREATION';
     if (allBonusRewardsLoading) {
       return <InlineLoader />;
     }
@@ -53,20 +55,23 @@ export default class Creation extends Component {
         <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
         <Route path={`${match.url}/add-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
         <Route path={`${match.url}/edit-bonus-reward/:rewardId`} render={props => <AddNewBonusReward refLink={match.url} isEditForm {...props} />} />
+        {!isReadOnly &&
         <div className="clearfix">
           <Button as={Link} to={`${match.url}/add-new-tier`} floated="right" primary content="Add new rewards tier" />
         </div>
+        }
         {earlyBird && get(earlyBird, 'quantity') !== 0 &&
           <div className="reward-tier">
             <Header as="h4">
               {`Early Birds investing ${Helper.CurrencyFormat(get(earlyBird, 'amount'))} Or more... (#${get(earlyBird, 'quantity')})`}
-              {this.isDeleteTier(get(earlyBird, 'amount'), true) &&
+              {this.isDeleteTier(get(earlyBird, 'amount'), true) && !isReadOnly &&
               <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', get(earlyBird, 'amount'), get(earlyBird, 'quantity'))}>
                 <Icon className="ns-trash" />
               </Button>
               }
             </Header>
-            <BonusRewardsList refLink={match.url} isEarlyBird tier={get(earlyBird, 'amount')} />
+            <BonusRewardsList isReadOnly={isReadOnly} refLink={match.url} isEarlyBird tier={get(earlyBird, 'amount')} />
+            {!isReadOnly &&
             <Button
               size="small"
               color="blue"
@@ -75,6 +80,7 @@ export default class Creation extends Component {
               className="link-button"
             >+ Add bonus reward
             </Button>
+            }
           </div>
         }
         {
@@ -82,13 +88,14 @@ export default class Creation extends Component {
             <div className="reward-tier">
               <Header as="h4">
                 {`Invest ${Helper.CurrencyFormat(tier)} or more`}
-                {this.isDeleteTier(tier) &&
+                {this.isDeleteTier(tier) && !isReadOnly &&
                 <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', tier, 0)}>
                   <Icon className="ns-trash" />
                 </Button>
                 }
               </Header>
-              <BonusRewardsList refLink={match.url} tier={tier} />
+              <BonusRewardsList isReadOnly={isReadOnly} refLink={match.url} tier={tier} />
+              {!isReadOnly &&
               <Button
                 size="small"
                 color="blue"
@@ -97,6 +104,7 @@ export default class Creation extends Component {
                 className="link-button"
               >+ Add bonus reward
               </Button>
+              }
             </div>
           ))
         }
