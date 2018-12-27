@@ -24,7 +24,7 @@ export default class BonusRewardsList extends Component {
     setConfirmBox('');
   }
   render() {
-    const { tier, refLink } = this.props;
+    const { tier, refLink, isReadOnly } = this.props;
     const { confirmBox } = this.props.uiStore;
     const { offer, offerLoading } = this.props.offeringsStore;
     const bonusRewards = get(offer, 'bonusRewards') || [];
@@ -43,10 +43,12 @@ export default class BonusRewardsList extends Component {
                   <Header as="h5">{reward.title}</Header>
                   <p>{reward.description}</p>
                   <p>Exp Date: {moment(reward.expirationDate).format('MMM D, YYYY')}</p>
+                  {!isReadOnly &&
                   <Button.Group size="mini" className="compact">
                     <Button inverted color="blue" content="Edit" as={Link} to={`${refLink}/edit-bonus-reward/${reward.id}`} />
                     <Button color="red" content="Delete" onClick={e => this.confirmRemoveBonusReward(e, 'bonusRewards', reward.id, tier)} />
                   </Button.Group>
+                  }
                 </div>
               );
             }

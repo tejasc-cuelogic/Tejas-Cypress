@@ -7,6 +7,7 @@ import { Header, Grid, Segment, Label, Image } from 'semantic-ui-react';
 import { ASSETS_URL } from '../../../../../constants/aws';
 import { InlineLoader } from '../../../../../theme/shared';
 import BonusRewardsList from './BonusRewardsList';
+import Helper from '../../../../../helper/utility';
 
 const isTablet = document.documentElement.clientWidth >= 768
   && document.documentElement.clientWidth < 992;
@@ -48,7 +49,7 @@ class BonusRewards extends Component {
                           <Label size="small" color="green" className="text-uppercase">{earlyBirdsCount} remaining</Label>
                         </Header.Subheader>
                       </Header>
-                      <Header as="h5" className="intro-text">First {earlyBird.quantity} {earlyBird.amount > 0 ? 'investors who invest $1,000 or more' : ''} will receive:</Header>
+                      <Header as="h5" className="intro-text">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
                     </Aux>
                     <BonusRewardsList
                       earlyBird
