@@ -1,8 +1,10 @@
-/* eslint-disable no-unused-vars, no-param-reassign, no-underscore-dangle */
+/* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { map, forEach, filter, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
+import { Calculator } from 'amortizejs';
+import money from 'money-math';
 import { APPLICATION_STATUS_COMMENT, CONTINGENCY, MODEL_MANAGER, MISCELLANEOUS, MODEL_RESULTS, MODEL_INPUTS, MODEL_VARIABLES, OFFERS, UPLOADED_DOCUMENTS, OVERVIEW, MANAGERS, JUSTIFICATIONS, DOCUMENTATION, PROJECTIONS, BUSINESS_PLAN } from '../../../../constants/admin/businessApplication';
 import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
@@ -43,7 +45,9 @@ export class BusinessAppReviewStore {
   @observable subNavPresentation = {
     overview: '', preQualification: '', businessPlan: '', projections: '', documentation: '', miscellaneous: '', contingencies: '', model: '', offer: '',
   };
+  @observable amortizationArray = [];
   @observable initLoad = [];
+  // @observable amortizationObject;
 
   @action
   setFieldvalue = (field, value) => {
@@ -426,6 +430,78 @@ export class BusinessAppReviewStore {
       },
     });
   });
+
+  @computed get offerStructure() {
+    const offerData = this.fetchBusinessApplicationOffers;
+    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    return offer.structure;
+  }
+  revenueSharing = () => {
+    const offerData = this.fetchBusinessApplicationOffers;
+    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    if (this.offerStructure === 'REVENUE_SHARING_NOTE' && offer.mthRevenueSharing) {
+      const { expectedAnnualRevenue } = offerData.offers;
+      const result = [];
+      let cumPayment = '0.00';
+      expectedAnnualRevenue.map((key, index) => {
+        const floatYear = key.year && key.year !== 0 ? money.floatToAmount(key.year.toString()) : '0.00';
+        const revenueShare = money.floatToAmount(offer.mthRevenueSharing.toString());
+        cumPayment = money.add(cumPayment, money.percent(
+          floatYear,
+          revenueShare,
+        ));
+        if (floatYear !== '0.00') {
+          result.push({
+            yearAmount: index + 1,
+            annualRevenue: Helper.CurrencyFormat(key.year),
+            revenueSharingPercentage: `${offer.mthRevenueSharing} %`,
+            paymentAmount: Helper.CurrencyFormat(money.percent(
+              floatYear,
+              revenueShare,
+            )),
+            cumulativePayments: Helper.CurrencyFormat(cumPayment),
+          });
+        }
+        return null;
+      });
+      return result;
+    }
+    return [];
+  }
+  paymentChart = () => {
+    const offerData = this.fetchBusinessApplicationOffers;
+    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    if (this.offerStructure === 'TERM_NOTE') {
+      const data = {
+        method: 'mortgage',
+        apr: offer.interestRate,
+        balance: offer.minimumAmount,
+        loanTerm: offer.maturity,
+      };
+      const { schedule, balance } = Calculator.calculate(data);
+      const formattedSchedule = [];
+      schedule.map((sc, index) => {
+        const interestAmount = money.floatToAmount(sc.interest.toString());
+        const principalAmount = money.floatToAmount(sc.principal.toString());
+        formattedSchedule.push({
+          index: index + 1,
+          loanAmount: Helper.CurrencyFormat(balance),
+          monthlyPayment: Helper.CurrencyFormat(money.add(
+            principalAmount,
+            interestAmount,
+          )),
+          interestAmount: Helper.CurrencyFormat(sc.interest),
+          principalAmount: Helper.CurrencyFormat(sc.principal),
+          balanceAmount: Helper.CurrencyFormat(sc.remainingBalance),
+          interestPercentage: `${money.div(money.mul('100.00', interestAmount), money.add(principalAmount, interestAmount))} %`,
+          principalPercentage: `${money.div(money.mul('100.00', principalAmount), money.add(principalAmount, interestAmount))} %`,
+        });
+        return null;
+      });
+      return formattedSchedule;
+    }
+    return [];
+  }
 
   @action
   signPortalAgreement = () => {
