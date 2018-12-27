@@ -233,17 +233,15 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths={3}>
             {['isNewBusiness', 'isHealthcare'].map(field => (
-              <div className="field">
+              <div className={!isReadonly ? 'field' : 'field display-only'}>
                 <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
-                <Form.Group inline>
-                  <FormRadioGroup
-                    readOnly={isReadonly}
-                    containerclassname={isReadonly ? 'display-only' : ''}
-                    fielddata={KEY_TERMS_FRM.fields[field]}
-                    name={field}
-                    changed={(e, result) => formChange(e, result, formName)}
-                  />
-                </Form.Group>
+                <FormRadioGroup
+                  readOnly={isReadonly}
+                  containerclassname={isReadonly ? 'display-only' : ''}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  name={field}
+                  changed={(e, result) => formChange(e, result, formName)}
+                />
               </div>
             ))}
             <DropZone
@@ -253,20 +251,18 @@ export default class KeyTerms extends Component {
               ondrop={(files, name) => this.onProFormasDrop(files, name)}
               onremove={fieldName => this.handleDelDoc(fieldName)}
               uploadtitle="Upload a file"
-              containerclassname="field"
+              containerclassname={!isReadonly ? 'field' : 'field display-only'}
             />
             {['isAlcohol', 'isFood'].map(field => (
-              <div className="field">
+              <div className={!isReadonly ? 'field' : 'field display-only'}>
                 <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
-                <Form.Group inline>
-                  <FormRadioGroup
-                    containerclassname={isReadonly ? 'display-only' : ''}
-                    readOnly={isReadonly}
-                    fielddata={KEY_TERMS_FRM.fields[field]}
-                    name={field}
-                    changed={(e, result) => formChange(e, result, formName)}
-                  />
-                </Form.Group>
+                <FormRadioGroup
+                  containerclassname={isReadonly ? 'display-only' : ''}
+                  readOnly={isReadonly}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  name={field}
+                  changed={(e, result) => formChange(e, result, formName)}
+                />
               </div>
             ))}
           </Form.Group>
