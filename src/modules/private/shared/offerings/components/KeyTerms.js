@@ -52,10 +52,11 @@ export default class KeyTerms extends Component {
               selection
               value={KEY_TERMS_FRM.fields.industry.value}
               name="industry"
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={BUSINESS_INDUSTRIES}
               onChange={(e, result) => formChange(e, result, formName)}
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
             />
             {['city', 'state'].map(field => (
               <FormInput
@@ -68,11 +69,12 @@ export default class KeyTerms extends Component {
             ))}
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.securities}
               selection
               value={KEY_TERMS_FRM.fields.securities.value}
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               name="securities"
               options={SECURITIES_VALUES}
               onChange={(e, result) => formChange(e, result, formName)}
@@ -89,12 +91,13 @@ export default class KeyTerms extends Component {
             ))}
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
               selection
               value={KEY_TERMS_FRM.fields.legalBusinessType.value}
               name="legalBusinessType"
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={BUSINESS_TYPE_VALUES}
               onChange={(e, result) => formChange(e, result, formName)}
             />
@@ -116,12 +119,13 @@ export default class KeyTerms extends Component {
             />
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.regulation}
               selection
               value={KEY_TERMS_FRM.fields.regulation.value}
               name="regulation"
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={REGULATION_VALUES}
               onChange={(e, result) => formChange(e, result, formName)}
             />
