@@ -125,7 +125,7 @@ export default class Agreement extends React.Component {
                           defaults
                           fielddata={AGREEMENT_DETAILS_FORM.fields[field]}
                           name={field}
-                          containerclassname="ui very relaxed list"
+                          containerclassname={`ui very relaxed list ${this.state.showError && !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid ? 'error' : ''}`}
                           changed={setCheckbox}
                           customLabel={(
                             <Aux>
@@ -148,6 +148,7 @@ export default class Agreement extends React.Component {
                 <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
               </div>
               {this.state.showError &&
+              !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid &&
                 <Message error className="bottom-error">All boxes must be checked to confirm your investment.</Message>
               }
             </div>

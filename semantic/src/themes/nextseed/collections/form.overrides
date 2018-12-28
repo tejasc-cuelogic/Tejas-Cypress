@@ -229,6 +229,7 @@
     }
     .error:not(.field){
         color:@negativeTextColor;
+        word-break: break-word;
     }
     label{
         i.ns-help-circle{

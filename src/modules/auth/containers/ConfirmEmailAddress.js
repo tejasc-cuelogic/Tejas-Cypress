@@ -107,6 +107,8 @@ export default class ConfirmEmailAddress extends Component {
         .catch(() => { });
     } else {
       this.props.identityStore.requestOtpWrapper();
+      this.props.authStore.resetForm('CONFIRM_FRM', ['code']);
+      this.props.uiStore.clearErrors();
     }
   }
 

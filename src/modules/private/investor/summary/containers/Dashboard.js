@@ -42,7 +42,7 @@ export default class Dashboard extends Component {
     this.props.portfolioStore.getSummary();
   }
   render() {
-    const { summaryLoading, summary } = this.props.portfolioStore;
+    const { summaryLoading, summary, cashMovement } = this.props.portfolioStore;
     if (summaryLoading) {
       return <InlineLoader />;
     }
@@ -59,7 +59,7 @@ export default class Dashboard extends Component {
           <Card fluid>
             <Card.Content>
               <Header as="h4">Cash Movement, LTM</Header>
-              <CashMovement data={summary.cashMovement} />
+              <CashMovement data={cashMovement()} />
             </Card.Content>
           </Card>
         </PrivateLayout>
