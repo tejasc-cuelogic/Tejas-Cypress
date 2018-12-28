@@ -7,14 +7,14 @@ import { FillTable } from '../../../../../../theme/table/NSTable';
 
 const TERMNOTEMETA = {
   columns: [
-    { title: 'No', field: 'index', textAlign: 'center' },
+    { title: 'Month', field: 'index', textAlign: 'center' },
     { title: 'Loan Amount', field: 'loanAmount', textAlign: 'center' },
     { title: 'Payment', field: 'monthlyPayment', textAlign: 'center' },
-    { title: 'Interest', field: 'interestAmount', textAlign: 'center' },
     { title: 'Principal', field: 'principalAmount', textAlign: 'center' },
+    { title: 'Interest', field: 'interestAmount', textAlign: 'center' },
+    // { title: 'Principal', field: 'principalPercentage', textAlign: 'center' },
+    // { title: 'Interest', field: 'interestPercentage', textAlign: 'center' },
     { title: 'Balance', field: 'balanceAmount', textAlign: 'center' },
-    { title: 'Interest', field: 'interestPercentage', textAlign: 'center' },
-    { title: 'Principal', field: 'principalPercentage', textAlign: 'center' },
   ],
   rows: null,
 };
