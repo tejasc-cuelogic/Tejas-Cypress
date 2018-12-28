@@ -68,7 +68,7 @@ export default class Portfolio extends Component {
             <p>No investments or reservations pending.</p>
             <Grid>
               <Grid.Row>
-                <Grid.Column widescreen={8} largeScreen={11} computer={13} tablet={16} mobile={16}>
+                <Grid.Column widescreen={4} largeScreen={4} computer={4} tablet={8} mobile={16}>
                   <Card className="form-card" fluid>
                     <Card.Content>
                       <Header as="h4">Browse the latest investment opportunities.</Header>
