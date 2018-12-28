@@ -184,3 +184,7 @@
 		padding-top:@20px;
 	}
 }
+
+.error .ui.checkbox label:before{
+	border-color:@highlight-primary;
+}
