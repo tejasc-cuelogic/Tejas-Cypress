@@ -38,16 +38,16 @@ const Body = props => (
       {props.thread && props.thread.length ?
         props.thread.map((msg) => {
           const date = msg.updated ? msg.updated.date : msg.created.date;
-          const msgDate = moment(date).format('LL');
+          const msgDate = moment(date).format('ll');
           const userFirstName = get(msg, 'createdUserInfo.info.firstName');
           const userInfo = {
             firstName: userFirstName,
             lastName: get(msg, 'createdUserInfo.info.lastName'),
             avatarUrl: get(msg, 'createdUserInfo.info.avatar.url') || null,
-            roles: [msg.createdUserInfo.roles.name],
+            roles: [get(msg, 'createdUserInfo.roles.name')],
           };
           const classes = msg.scope === 'NEXTSEED' ? 'private' : (msg.scope === 'PUBLIC' && msg.approved ? 'approved' : ((msg.scope === 'PUBLIC' && !msg.approved && props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId) || (msg.scope === 'PUBLIC' && !props.isIssuer && msg.createdUserInfo.id === props.currentOfferingIssuerId && !msg.approved)) ? 'approval-pending' : msg.scope === 'ISSUER' ? 'note-comment' : '');
-          return ((props.isIssuer && msg.scope === 'NEXTSEED') ? false : msg.createdUserInfo.id !== props.currentUserId ? (
+          return (((props.isIssuer && msg.scope === 'NEXTSEED') || msg.isSample) ? false : msg.createdUserInfo.id !== props.currentUserId ? (
             <Aux>
               <Item className="in">
                 <UserAvatar size="mini" UserInfo={userInfo} />
@@ -110,7 +110,7 @@ const Body = props => (
                   edit={
                     msg.scope === 'PUBLIC' && props.isIssuer && !msg.approved &&
                     <div className="comment-actions">
-                      <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment)}>Edit</Link>
+                      <Link to="/" className="link" onClick={e => props.commentEditHandler(e, msg.id, msg.comment, msg.scope)}>Edit</Link>
                       {!props.isIssuer &&
                       <Aux>{' | '}
                         <Link to="/" className="link negative-text" onClick={e => props.deleteCommentHandler(e, msg.id)}>Delete</Link>

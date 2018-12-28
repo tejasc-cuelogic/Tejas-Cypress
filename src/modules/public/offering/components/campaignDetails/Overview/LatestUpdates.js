@@ -60,7 +60,7 @@ class LatestUpdates extends Component {
                 </div>
                 {update ?
                   <Aux>
-                    <Item.Meta>{moment(update.updated.date).format('LL')}</Item.Meta>
+                    <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
                     <Divider />
                     <Item.Description>
                       <div className="segment-container mini">

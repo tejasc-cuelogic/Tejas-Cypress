@@ -1,11 +1,12 @@
 import React from 'react';
 import { List, Item, Label, Button } from 'semantic-ui-react';
+import { get } from 'lodash';
 import { DateTimeFormat, UserAvatar } from '../../../../../../theme/shared';
 
 const MessagesList = props => (
   <List divided selection relaxed="very" verticalAlign="middle">
     {
-      props.messages.map(msg => (
+      props.messages.map(msg => ((props.isIssuer && msg.scope !== 'NEXTSEED') || (!props.isIssuer)) && (
         <List.Item
           onClick={() => props.messageSelectHandler(msg.id)}
           key={msg.id}
@@ -22,22 +23,20 @@ const MessagesList = props => (
               <UserAvatar
                 size="mini"
                 UserInfo={{
-                  firstName: u.createdUserInfo.info.firstName,
-                  lastName: u.createdUserInfo.info.lastName,
-                  avatarUrl: (u.createdUserInfo.info && u.createdUserInfo.info.avatar) ?
-                  u.createdUserInfo.info.avatar.url : null,
-                  roles: [u.createdUserInfo.roles.name],
+                  firstName: get(u, 'createdUserInfo.info.firstName'),
+                  lastName: get(u, 'createdUserInfo.info.lastName'),
+                  avatarUrl: (get(u, 'createdUserInfo.info.avatar') || null),
+                  roles: [get(u, 'createdUserInfo.roles.name')],
                 }}
               />
             )) :
             <UserAvatar
               size="mini"
               UserInfo={{
-                firstName: msg.createdUserInfo.info.firstName,
-                lastName: msg.createdUserInfo.info.lastName,
-                avatarUrl: (msg.createdUserInfo.info && msg.createdUserInfo.info.avatar) ?
-                msg.createdUserInfo.info.avatar.url : null,
-                roles: [msg.createdUserInfo.roles.name],
+                firstName: get(msg, 'createdUserInfo.info.firstName'),
+                lastName: get(msg, 'createdUserInfo.info.lastName'),
+                avatarUrl: (get(msg, 'createdUserInfo.info.avatar') || null),
+                roles: [get(msg, 'createdUserInfo.roles.name')],
               }}
             />
           }
@@ -46,7 +45,7 @@ const MessagesList = props => (
             <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? (props.threadUsersList(msg.threadComments).map(u => (u.createdUserInfo.info && `${u.createdUserInfo.info.firstName}`))).join(', ') : msg.createdUserInfo.info && `${msg.createdUserInfo.info.firstName}`}</List.Header>
           </List.Content>
           <List.Content>
-            <List.Header><DateTimeFormat format="LL" datetime={msg.created.date} /></List.Header>
+            <List.Header><DateTimeFormat format="ll" datetime={msg.created.date} /></List.Header>
             <List.Description>{msg.comment.substr(0, 40)}</List.Description>
           </List.Content>
         </List.Item>
