@@ -47,13 +47,11 @@ class LatestUpdates extends Component {
             <Item>
               <Item.Content>
                 <div className="clearfix">
-                  <div className="avatar-image pull-left">
-                    {
-                      companyAvatarUrl && companyAvatarUrl.length ?
-                        <Image64 size="mini" srcUrl={companyAvatarUrl} circular />
-                      : <Image64 size="mini" srcUrl={UserInfo.avatarUrl} circular />
-                    }
-                  </div>
+                  {companyAvatarUrl && companyAvatarUrl.length ?
+                    <div className="avatar-image pull-left">
+                      <Image64 size="mini" srcUrl={companyAvatarUrl} circular />
+                    </div> : null
+                  }
                   <Item.Header className="neutral-text">
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
