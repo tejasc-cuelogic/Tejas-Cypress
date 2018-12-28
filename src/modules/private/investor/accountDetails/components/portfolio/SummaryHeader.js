@@ -51,7 +51,7 @@ const SummaryHeader = props => (
                         trigger={<Icon className="ns-help-circle" />}
                         content={row.info}
                         position="top center"
-                        className="center-align"
+                        wide
                       />
                     }
                   </Statistic.Label>
