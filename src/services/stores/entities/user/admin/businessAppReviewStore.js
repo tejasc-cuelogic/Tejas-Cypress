@@ -453,13 +453,13 @@ export class BusinessAppReviewStore {
         if (floatYear !== '0.00') {
           result.push({
             yearAmount: index + 1,
-            annualRevenue: Helper.CurrencyFormat(key.year),
+            annualRevenue: Helper.CurrencyFormat(key.year, 2),
             revenueSharingPercentage: `${offer.mthRevenueSharing} %`,
             paymentAmount: Helper.CurrencyFormat(money.percent(
               floatYear,
               revenueShare,
-            )),
-            cumulativePayments: Helper.CurrencyFormat(cumPayment),
+            ), 2),
+            cumulativePayments: Helper.CurrencyFormat(cumPayment, 2),
           });
         }
         return null;
@@ -483,18 +483,16 @@ export class BusinessAppReviewStore {
       schedule.map((sc, index) => {
         const interestAmount = money.floatToAmount(sc.interest.toString());
         const principalAmount = money.floatToAmount(sc.principal.toString());
+        const totalMonthlyPayment = money.floatToAmount(money.add(principalAmount, interestAmount));
         formattedSchedule.push({
           index: index + 1,
-          loanAmount: Helper.CurrencyFormat(balance),
-          monthlyPayment: Helper.CurrencyFormat(money.add(
-            principalAmount,
-            interestAmount,
-          )),
-          interestAmount: Helper.CurrencyFormat(sc.interest),
-          principalAmount: Helper.CurrencyFormat(sc.principal),
-          balanceAmount: Helper.CurrencyFormat(sc.remainingBalance),
-          interestPercentage: `${money.div(money.mul('100.00', interestAmount), money.add(principalAmount, interestAmount))} %`,
-          principalPercentage: `${money.div(money.mul('100.00', principalAmount), money.add(principalAmount, interestAmount))} %`,
+          loanAmount: Helper.CurrencyFormat(money.floatToAmount(balance.toString()), 2),
+          monthlyPayment: Helper.CurrencyFormat(totalMonthlyPayment, 2),
+          interestAmount: Helper.CurrencyFormat(sc.interest, 2),
+          principalAmount: Helper.CurrencyFormat(sc.principal, 2),
+          balanceAmount: Helper.CurrencyFormat(money.floatToAmount(sc.remainingBalance), 2),
+          interestPercentage: `${money.div(money.mul('100.00', interestAmount), totalMonthlyPayment)} %`,
+          principalPercentage: `${money.div(money.mul('100.00', principalAmount), totalMonthlyPayment)} %`,
         });
         return null;
       });
