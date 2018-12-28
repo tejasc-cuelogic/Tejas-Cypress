@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Button, Comment, Form, Grid, Segment, Header, Label, Divider } from 'semantic-ui-react';
+import { Button, Comment, Form, Grid, Segment, Header, Label, Divider, Confirm } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
@@ -12,7 +12,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @observer
 class Comments extends Component {
-  state={ readMore: false, readMoreInner: false }
+  state={ readMore: false, readMoreInner: false, showConfirm: false }
   postNewComment = () => {
     const { isUserLoggedIn } = this.props.authStore;
     if (!isUserLoggedIn) {
@@ -22,6 +22,13 @@ class Comments extends Component {
     } else {
       this.props.history.push(`${this.props.match.url}/postComment/NEW`);
     }
+  }
+  showConfirmToggle = (e, val) => {
+    e.preventDefault();
+    this.setState({ showConfirm: val });
+  }
+  confirmLoginSignup = (url) => {
+    this.props.history.push(`/auth/${url}`);
   }
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
@@ -69,7 +76,7 @@ class Comments extends Component {
                       <Form reply className="public-form clearfix">
                         {loggedInAsInvestor && !accountStatusFull ?
                           <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
-                        : <Link to={`/auth/${get(loginOrSignup, 'to')}`} className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                        : <Link onClick={e => this.showConfirmToggle(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                         }
                       </Form>
                     </section>
@@ -92,11 +99,16 @@ class Comments extends Component {
               <Segment padded>
                 <Comment.Group minimal>
                   {comments &&
-                    comments.map(c => c.scope === 'PUBLIC' && (
-                      <Comment key={c.id}>
+                    comments.map(c => ((c.createdUserInfo && c.createdUserInfo.id === issuerId
+                      && c.approved) ||
+                      (c.createdUserInfo && c.createdUserInfo.id !== issuerId)) && c.scope === 'PUBLIC' && (
+                      <Comment key={c.id} className={`${c.createdUserInfo && c.createdUserInfo.id === issuerId ? 'issuer-comm ent' : ''}`}>
                         <Comment.Content>
-                          <Comment.Author>{get(c, 'createdUserInfo.info.firstName')}</Comment.Author>
-                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('LL')}</span></Comment.Metadata>
+                          <Comment.Author>
+                            {(c.createdUserInfo && c.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(c, 'createdUserInfo.info.firstName')}
+                            {(c.createdUserInfo && c.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
+                          </Comment.Author>
+                          <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
                           {isUserLoggedIn &&
                           <Comment.Actions>
                             <Comment.Action as={Link} to={`${this.props.match.url}/${c.id}`} >Reply</Comment.Action>
@@ -121,7 +133,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) ? get(campaign, 'keyTerms.shorthandBusinessName') : get(tc, 'createdUserInfo.info.firstName')}
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
-                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('LL')}</span></Comment.Metadata>
+                                <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
                                 <Comment.Text className="mt-20">
                                   {this.state.readMoreInner === tc.id ?
                                   tc.comment : tc.comment.substr(0, readMoreLength)}
@@ -143,7 +155,16 @@ class Comments extends Component {
               <Segment padded className="center-align">
                 <div className="segment-container no-comments">
                   <Header as="h3">Leave your questions and encouragement here.</Header>
-                  <Button onClick={this.postNewComment} primary fluid={isMobile} className={isMobile && 'mt-20'}>Post Comment</Button>
+                  {isRightToPostComment ?
+                    <Button onClick={this.postNewComment} primary fluid={isMobile} className={isMobile && 'mt-20'}>Post Comment</Button>
+                  :
+                    <Form reply className="public-form clearfix">
+                      {loggedInAsInvestor && !accountStatusFull ?
+                        <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
+                      : <Link onClick={e => this.showConfirmToggle(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                      }
+                    </Form>
+                  }
                 </div>
                 <Grid centered>
                   <Grid.Column width={14} textAlign={!isMobile && 'center'}>
@@ -173,6 +194,15 @@ class Comments extends Component {
           <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
           <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignSlug={campaignSlug} campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
         </Switch>
+        <Confirm
+          header="Confirm"
+          content={`Sorry, you must be ${get(loginOrSignup, 'title')} as an Investor in order to Post a comment.`}
+          open={this.state.showConfirm}
+          onCancel={e => this.showConfirmToggle(e, false)}
+          onConfirm={() => this.confirmLoginSignup(get(loginOrSignup, 'to'))}
+          size="tiny"
+          // className="deletion"
+        />
       </div>
     );
   }
