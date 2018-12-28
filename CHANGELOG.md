@@ -96,6 +96,7 @@
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([8bd12c1](https://chaos.ns.team/nsv2/ns-client/commits/8bd12c1))
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([dd35301](https://chaos.ns.team/nsv2/ns-client/commits/dd35301))
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([52807b7](https://chaos.ns.team/nsv2/ns-client/commits/52807b7))
+* **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([dd35301](https://chaos.ns.team/nsv2/ns-client/commits/dd35301))
 * **Feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - Feedback]:** Feedbac ([fcc2d5f](https://chaos.ns.team/nsv2/ns-client/commits/fcc2d5f))
 * **Feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - Feedback]:** Feedback ([c216d2a](https://chaos.ns.team/nsv2/ns-client/commits/c216d2a))
 * **Feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - Feedback]:** Feedback ([76fdd77](https://chaos.ns.team/nsv2/ns-client/commits/76fdd77))
