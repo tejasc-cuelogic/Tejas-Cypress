@@ -45,7 +45,7 @@ export default class NsCarousel extends Component {
         if (this.props.isTablet) {
           thumbnailClassToApply = this.props.imageCount >= 4 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
         } else {
-          thumbnailClassToApply = this.props.imageCount >= 8 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+          thumbnailClassToApply = this.props.imageCount >= 10 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
         }
       } else {
         thumbnailClassToApply = 'slider-thumbnails';
@@ -68,6 +68,7 @@ export default class NsCarousel extends Component {
             swipeToSlide
             focusOnSelect
             className={`${thumbnailClassToApply}  ${thumbSliderCustomClassToApply}`}
+            variableWidth
           >
             {this.props.refItems.map(i => (
               <Image64 bg className="carousel-bg-thumb" srcUrl={i.url} />
