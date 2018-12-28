@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button } from 'semantic-ui-react';
+import { Modal, Header, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
 import { capitalize } from 'lodash';
 import { inject, observer } from 'mobx-react';
@@ -22,14 +22,11 @@ export default class ConfirmLoginModal extends React.Component {
     render() {
       const { userDetails } = this.props.userDetailsStore;
       return (
-        <Modal size="mini" open closeIcon onClose={this.handleCloseModal}>
-          <Modal.Content>
-            <p className="center-align mt-30 mb-30">
-              Hello {userDetails && userDetails.info && `${capitalize(userDetails.info.firstName)} ${capitalize(userDetails.info.lastName)}`}, to Invest one need to have a valid Investment account.
-            </p>
-            <div className="center-align mt-30">
-              <Button primary onClick={this.handleLogin} content="Login as a Investor" />
-            </div>
+        <Modal size="small" open closeIcon onClose={this.handleCloseModal}>
+          <Modal.Content className="relaxed center-align">
+            <Header as="h3">Hello {userDetails && userDetails.info && `${capitalize(userDetails.info.firstName)} ${capitalize(userDetails.info.lastName)}`},</Header>
+            <Header as="h4">to Invest one need to have a valid Investment account.</Header>
+            <Button primary className="mt-40" content="Login as a Investor" onClick={this.handleLogin} />
           </Modal.Content>
         </Modal>
       );

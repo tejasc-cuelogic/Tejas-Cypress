@@ -939,6 +939,16 @@ p i.icon {
 				right:-20px;
 			}
 		}
+		.slick-track{
+			display:flex;
+			flex-direction:row;
+			>.slick-slide{
+				height:auto;
+				>div{
+					height:100%;
+				}
+			}
+		}
 	}
 }
 //Investor homepage
