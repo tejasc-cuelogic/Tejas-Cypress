@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Button } from 'semantic-ui-react';
+import { has } from 'lodash';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
 import { Link } from 'react-router-dom';
@@ -68,7 +69,7 @@ export default class MaskedInput extends Component {
               onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
               onBlur={() => this.triggerError(true)}
               error={(!!error && this.state.showError) || (!!error && props.showerror)}
-              placeholder={(displayMode || readOnly) ? '' : placeHolder}
+              placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder}
               alwaysShowMask
               maskChar=" "
             />
@@ -80,32 +81,32 @@ export default class MaskedInput extends Component {
               {props.actionlabel}
             </Button>
           </div>) : props.currency ? (
-            <NumberFormatWrapped readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} onKeyPress={props.onkeypress ? () => { props.onkeypress(); this.triggerError(true); } : null} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+            <NumberFormatWrapped readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 15} thousandSeparator {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={props.onblur ? () => { props.onblur(); this.triggerError(true); } : () => this.triggerError(true)} onKeyPress={props.onkeypress ? () => { props.onkeypress(); this.triggerError(true); } : null} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
           ) : props.number ? (
-            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 10} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
           ) : props.percentage ? (
-            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} maxLength={props.maxlength || 6} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
+            <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} maxLength={props.maxlength || 6} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="%" suffix="%" />
           ) : props.phoneNumber ? (
-            <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={(displayMode || readOnly) ? '' : placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+            <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.phoneNumberDisplayMode ? (
             <div className="ui huge fluid input">
-              <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={(displayMode || readOnly) ? '' : placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+              <NumberFormat readOnly={displayMode} type="tel" format={props.format} {...props} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
             </div>
           ) : props.zipCode ? (
-            <NumberFormat readOnly={displayMode} type="tel" format="#####" {...props} placeholder={(displayMode || readOnly) ? '' : placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+            <NumberFormat readOnly={displayMode} type="tel" format="#####" {...props} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.ssn ? (
-            <NumberFormat readOnly={displayMode} type="tel" format="###-##-####" placeholder={(displayMode || readOnly) ? '' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+            <NumberFormat readOnly={displayMode} type="tel" format="###-##-####" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.dateOfBirth ? (
             <div className="calender-icon">
-              <NumberFormat readOnly={displayMode} type="text" format={props.format ? props.format : '##/##/####'} placeholder={(displayMode || readOnly) ? '' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+              <NumberFormat readOnly={displayMode} type="text" format={props.format ? props.format : '##/##/####'} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
             </div>
           ) : props.taxId ? (
-            <NumberFormat readOnly={displayMode} type="tel" format="##-#######" placeholder={(displayMode || readOnly) ? '' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
+            <NumberFormat readOnly={displayMode} type="tel" format="##-#######" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.accountNumber ? (
-            <NumberFormat readOnly={displayMode} type="tel" format="#################" placeholder={(displayMode || readOnly) ? '' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
+            <NumberFormat readOnly={displayMode} type="tel" format="#################" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
           ) : props.routingNumber ? (
-            <NumberFormat readOnly={displayMode} type="tel" format="#########" placeholder={(displayMode || readOnly) ? '' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
-          ) : <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? '' : placeHolder} format="(###) ###-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
+            <NumberFormat readOnly={displayMode} type="tel" format="#########" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
+          ) : <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} format="(###) ###-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
         }
         {((error && this.state.showError && !props.showErrorOnField) ||
         (error && props.showerror && !props.showErrorOnField))

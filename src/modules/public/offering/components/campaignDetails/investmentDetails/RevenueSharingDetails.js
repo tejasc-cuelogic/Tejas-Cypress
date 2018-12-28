@@ -13,7 +13,7 @@ class RevenueSharingDetails extends Component {
     const { KeyTerms, refLink } = this.props;
     const revenueShareSummary =
       (KeyTerms && KeyTerms.revShareSummary) || null;
-    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : null;
+    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Grid.Row>
@@ -79,7 +79,7 @@ class RevenueSharingDetails extends Component {
                   <Statistic.Label><b>Maturity</b>{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
-                      content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors."
+                      content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
                       position="top center"
                     />
                   </Statistic.Label>

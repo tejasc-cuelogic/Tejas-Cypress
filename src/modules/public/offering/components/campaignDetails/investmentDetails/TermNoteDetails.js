@@ -11,7 +11,7 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 class TermNoteDetails extends Component {
   render() {
     const { KeyTerms, refLink } = this.props;
-    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : null;
+    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Grid.Row>
@@ -107,7 +107,7 @@ class TermNoteDetails extends Component {
                   <Statistic.Label><b>Maturity</b>{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
-                      content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors."
+                      content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
                       position="top center"
                     />
                   </Statistic.Label>

@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { isEmpty, map, uniqWith, isEqual, find } from 'lodash';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { accountStore, userDetailsStore, uiStore, userStore } from '../../index';
+import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
 import { changeLinkedBank, changeBankManually, cancelBankRequest } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
@@ -177,6 +177,8 @@ export class BankAccountStore {
     Validator.resetFormData(this.formLinkBankManually);
     Validator.resetFormData(this.formAddFunds);
     if (accountStore.investmentAccType !== 'ira') {
+      this.plaidAccDetails = {};
+    } else if (accountStore.investmentAccType === 'ira' && iraAccountStore.stepToBeRendered < 3) {
       this.plaidAccDetails = {};
     }
     this.depositMoneyNow = true;
@@ -370,6 +372,13 @@ export class BankAccountStore {
   @action
   setPendingeBankPlaidLogo = (logo) => {
     this.pendingBankPladLogo = logo;
+  }
+  isEncrypted = (n, ref) => {
+    if (n) {
+      return ((ref === 'routingNo' && n.length > 9) ||
+        n.includes('X'));
+    }
+    return false;
   }
 }
 

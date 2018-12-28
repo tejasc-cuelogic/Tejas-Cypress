@@ -392,6 +392,7 @@
     }
     &.offer-card{
         height:100%;
+        display:flex !important;
         background-color:@neutral-offwhite;
         box-shadow:none;
         &.active{

@@ -20,16 +20,16 @@ const summaryDetails = ({
     title: false,
     summary: [
       {
-        title: 'Total Invested', content: totalInvested, type: 1, info: 'Total Invested as of today',
+        title: 'Total Invested', content: totalInvested, type: 1, info: 'Includes all investments made in successfully closed offerings. Does not include reservations or commitments in live offerings.',
       },
       {
-        title: 'Pending Investment', content: pendingInvestments, type: 1, info: 'Pending Investment',
+        title: 'Pending Investment', content: pendingInvestments, type: 1, info: 'Includes amounts reserved or committed in live offerings.',
       },
       {
-        title: 'Paid to Date', content: paidToDate, type: 1, info: 'Paid to Date',
+        title: 'Paid to Date', content: paidToDate, type: 1, info: 'Net payments received to date from all prior investments.',
       },
       {
-        title: 'Simple Earnings %', content: `${tnar} %`, type: 0, info: 'Simple Earnings %',
+        title: 'TNAR', content: `${tnar} %`, type: 0, info: 'Net Annualized Return ("NAR") measures the current financial return of each investment in your portfolio. Per investment, NAR is calculated as an annualized measure of the rate of return on the principal invested over the life of that investment, calculated based on actual cash payments received each month. We offer different types of debt investments, and NAR is calculated differently for each investment product to better reflect the underlying characteristics. Total Net Annualized Return ("TNAR") approximates the overall financial return on your investment portfolio. TNAR is a weighted average of NARS on all current investments in your portfolio. See Education Center to learn more about how NAR and TNAR are calculated.',
       },
     ],
   };
@@ -42,7 +42,7 @@ export default class Dashboard extends Component {
     this.props.portfolioStore.getSummary();
   }
   render() {
-    const { summaryLoading, summary } = this.props.portfolioStore;
+    const { summaryLoading, summary, cashMovement } = this.props.portfolioStore;
     if (summaryLoading) {
       return <InlineLoader />;
     }
@@ -59,7 +59,7 @@ export default class Dashboard extends Component {
           <Card fluid>
             <Card.Content>
               <Header as="h4">Cash Movement, LTM</Header>
-              <CashMovement data={summary.cashMovement} />
+              <CashMovement data={cashMovement()} />
             </Card.Content>
           </Card>
         </PrivateLayout>

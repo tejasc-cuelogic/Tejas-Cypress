@@ -96,9 +96,30 @@ export const campaignDetailsQuery = gql`
       state
       city
     }
-    rewardsTierIds {
-      amount
+    bonusRewards{
+      id
+      offeringId
+      title
+      description
+      rewardStatus
+      expirationDate
       earlyBirdQuantity
+      tiers
+      created {
+        id
+        by
+        date
+      }
+      updated {
+        id
+        by
+        date
+      }
+    }
+    rewardsTiers
+    earlyBird {
+      quantity
+      amount
     }
     offering {
       overview {
@@ -371,10 +392,7 @@ export const campaignDetailsQuery = gql`
       content
       status
       scope
-      tiers {
-        amount
-        earlyBirdQuantity
-      }
+      tiers
       isEarlyBirdOnly
       notificationSent {
         by
@@ -406,28 +424,6 @@ export const campaignDetailsQuery = gql`
       }
     }
     earlyBirdsCount
-    bonusRewards{
-      id
-      offeringId
-      title
-      rewardStatus
-      description
-      expirationDate
-      tiers{
-        amount
-        earlyBirdQuantity
-      }
-      created {
-        id
-        by
-        date
-      }
-      updated {
-        id
-        by
-        date
-      }
-    }
   }
 }
 `;
@@ -473,13 +469,11 @@ query getOfferingById($id: ID) {
       id
       offeringId
       title
-      rewardStatus
       description
+      rewardStatus
       expirationDate
-      tiers{
-        amount
-        earlyBirdQuantity
-      }
+      earlyBirdQuantity
+      tiers
       created {
         id
         by
@@ -498,10 +492,7 @@ query getOfferingById($id: ID) {
       content
       status
       scope
-      tiers {
-        amount
-        earlyBirdQuantity
-      }
+      tiers
       isEarlyBirdOnly
       notificationSent {
         by
@@ -532,9 +523,10 @@ query getOfferingById($id: ID) {
         }
       }
     }
-    rewardsTierIds {
+    rewardsTiers
+    earlyBird {
+      quantity
       amount
-      earlyBirdQuantity
     }
   }
 }

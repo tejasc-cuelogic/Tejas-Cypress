@@ -89,6 +89,9 @@ h6{
 .mb-80 {
 	margin-bottom: @80px !important;
 }
+.mt-0 {
+	margin-top: 0 !important;
+}
 .mt-10 {
 	margin-top: @10px !important;
 }
@@ -934,6 +937,16 @@ p i.icon {
 			}
 			.slick-next{
 				right:-20px;
+			}
+		}
+		.slick-track{
+			display:flex;
+			flex-direction:row;
+			>.slick-slide{
+				height:auto;
+				>div{
+					height:100%;
+				}
 			}
 		}
 	}
@@ -2701,5 +2714,14 @@ a.how-it-works-video {
 		transform: translate(0,-50%);
 		z-index: 1;
 		cursor: pointer;
+	}
+}
+//Add-withdraw fund popup
+.fund-amount h4.ui.header {
+	font-size: @24px;
+	span {
+		font-size: @12px;
+		cursor: pointer;
+		margin-left: @10px;
 	}
 }

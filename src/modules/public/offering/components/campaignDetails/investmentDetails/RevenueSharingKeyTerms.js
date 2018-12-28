@@ -8,6 +8,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 class RevenueSharingKeyTerms extends Component {
   render() {
     const { KeyTerms, launch } = this.props;
+    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = launch && launch.edgarLink;
     return (
       <Modal.Content scrolling>
@@ -104,7 +105,7 @@ class RevenueSharingKeyTerms extends Component {
               <Table.Cell width={5}><b>Maturity{' '}</b>
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
-                  content="If the investors have not been paid in full within [XX] months, the Issuer is required to promptly pay the entire outstanding balance to the investors."
+                  content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
                   position="bottom center"
                 />
               </Table.Cell>

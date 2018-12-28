@@ -87,6 +87,19 @@ export class PortfolioStore {
     return (this.accSummary.data && toJS(this.accSummary.data.getUserAccountSummary)) || {};
   }
 
+  cashMovement = () => {
+    const formattedData = [];
+    if (this.summary.cashMovement) {
+      this.summary.cashMovement.map((k) => {
+        formattedData.push({
+          name: k.yearMonth, Payment: k.payment, 'Paid to date': k.paidToDate,
+        });
+        return null;
+      });
+    }
+    return formattedData;
+  }
+
   @computed get summaryLoading() {
     return this.accSummary.loading;
   }
@@ -156,8 +169,8 @@ export class PortfolioStore {
   });
   @computed get getInvestor() {
     return (this.investmentDetails && this.investmentDetails.data &&
-      this.investmentDetails.data.getInvestmentDetailsOverview &&
-      toJS(this.investmentDetails.data.getInvestmentDetailsOverview)) || null;
+      this.investmentDetails.data.getInvestmentDetails &&
+      toJS(this.investmentDetails.data.getInvestmentDetails)) || null;
   }
   @computed get loadingInvestDetails() {
     return this.investmentDetails.loading;

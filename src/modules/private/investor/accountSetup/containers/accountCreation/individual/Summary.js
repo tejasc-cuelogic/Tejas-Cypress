@@ -49,6 +49,7 @@ export default class Summary extends React.Component {
       isValidLinkBank,
       formLinkBankManually,
       depositMoneyNow,
+      isEncrypted,
     } = this.props.bankAccountStore;
     const { userDetails } = this.props.userDetailsStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
@@ -65,7 +66,7 @@ export default class Summary extends React.Component {
                   <Table.Cell>Investor: </Table.Cell>
                   <Table.Cell>{`${userDetails.info.firstName} ${userDetails.info.lastName}`}</Table.Cell>
                 </Table.Row>
-                {!isEmpty(plaidAccDetails) &&
+                {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
                 <Table.Row>
                   <Table.Cell>Bank: </Table.Cell>
                   <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
@@ -73,13 +74,14 @@ export default class Summary extends React.Component {
                 }
                 <Table.Row>
                   <Table.Cell>Bank Account Number: </Table.Cell>
-                  <Table.Cell>{bankAccountNumber ? Helper.encryptNumberWithX(bankAccountNumber) : ''}</Table.Cell>
+                  <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
-                {formLinkBankManually.fields.routingNumber.value &&
+                {(formLinkBankManually.fields.routingNumber.value &&
+                !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
                 <Table.Row>
                   <Table.Cell>Routing Number</Table.Cell>
                   <Table.Cell>
-                    {Helper.encryptNumberWithX(formLinkBankManually.fields.routingNumber.value)}
+                    {formLinkBankManually.fields.routingNumber.value}
                   </Table.Cell>
                 </Table.Row>
                 }
@@ -115,7 +117,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank} />
         </div>
       </Aux>
     );

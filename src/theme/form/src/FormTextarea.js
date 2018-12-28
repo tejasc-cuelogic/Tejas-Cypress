@@ -49,10 +49,10 @@ export default class FormTextarea extends Component {
           </label>
         }
         {props.readOnly ?
-          <p className="commet-area">{value}</p> :
+          <p className={value ? 'commet-area' : 'not-applicable'}>{value || 'N/A'}</p> :
           <TextArea
             {...props}
-            value={value === '' ? undefined : value}
+            value={value === '' ? props.clear ? '' : undefined : value}
             label={label}
             placeholder={(displayMode || readOnly) ? '' : placeHolder}
             defaultValue={props.defaultValue ? props.defaultValue : defaultValue}
