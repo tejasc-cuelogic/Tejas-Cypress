@@ -496,6 +496,10 @@ query _getBusinessApplicationById ($id: String!) {
         totalCapital
         isAccepted
       }
+      expectedAnnualRevenue {
+        label
+        year
+      }
     }  
   }
 }
