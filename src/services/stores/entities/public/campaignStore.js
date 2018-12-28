@@ -176,6 +176,15 @@ export class CampaignStore {
       this.campaign.legal.dataroom.documents : null;
   }
 
+  @computed get navCountData() {
+    const res = { updates: 0, comments: 0 };
+    if (this.campaign) {
+      const { updates, comments } = this.campaign;
+      res.updates = updates && updates.length ? updates.length : 0;
+      res.comments = comments && comments.length ? comments.length : 0;
+    }
+    return res;
+  }
   @computed get getNavItemsForDataRoom() {
     const documentsList = toJS(this.dataRoomDocs);
     const navList = [];

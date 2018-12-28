@@ -141,6 +141,7 @@
     &.about-modal {
         border-radius: 0;
         background-color:transparent;
+        box-shadow:none;
         >.close {
             z-index: 2;
             color: @neutral-darkwhite;

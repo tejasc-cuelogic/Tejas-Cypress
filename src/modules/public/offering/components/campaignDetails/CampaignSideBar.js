@@ -21,7 +21,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 export default class CampaignSideBar extends Component {
   render() {
     const { className, campaignStore } = this.props;
-    const { campaign } = campaignStore;
+    const { campaign, navCountData } = campaignStore;
     const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
     const minOffering = campaign && campaign.keyTerms &&
       campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
@@ -31,11 +31,6 @@ export default class CampaignSideBar extends Component {
     const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
-    const updatesCount = campaign && campaign.updates &&
-      campaign.updates.length ? campaign.updates.length : 0;
-    const commentsCount = campaign && campaign.comments &&
-      campaign.comments.length ? campaign.comments.length : 0;
-    const navCountData = { updates: updatesCount, comments: commentsCount };
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(terminationDate);
