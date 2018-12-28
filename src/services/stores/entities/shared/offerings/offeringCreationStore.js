@@ -152,11 +152,6 @@ export class OfferingCreationStore {
   }
 
   @action
-  setLeadershipProfilePhoto(attr, value, field, index) {
-    this.LEADERSHIP_FRM.fields.leadership[index][field][attr] = value;
-  }
-
-  @action
   resetProfilePhoto = (field) => {
     const attributes = ['src', 'error', 'meta'];
     attributes.forEach((val) => {
