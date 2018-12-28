@@ -80,7 +80,11 @@ class IndividualAccountStore {
               }
             } else if (currentStep) {
               this.setStepToBeRendered(currentStep.stepToBeRendered);
-              Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+              if (!bankAccountStore.depositMoneyNow) {
+                Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+              } else {
+                Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+              }
             } else {
               Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
             }

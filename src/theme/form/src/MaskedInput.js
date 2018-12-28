@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
 import { Form, Popup, Icon, Button } from 'semantic-ui-react';
+import { has } from 'lodash';
 import NumberFormat from 'react-number-format';
 import InputMask from 'react-input-mask';
 import { Link } from 'react-router-dom';
@@ -102,9 +103,9 @@ export default class MaskedInput extends Component {
           ) : props.taxId ? (
             <NumberFormat readOnly={displayMode} type="tel" format="##-#######" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.accountNumber ? (
-            <NumberFormat readOnly={displayMode} type="tel" format="#################" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
+            <NumberFormat readOnly={displayMode} type="tel" format="#################" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
           ) : props.routingNumber ? (
-            <NumberFormat readOnly={displayMode} type="tel" format="#########" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
+            <NumberFormat readOnly={displayMode} type="tel" format="#########" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={has(props, 'value') ? props.value : value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} />
           ) : <NumberFormat readOnly={displayMode} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} format="(###) ###-####" {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} mask="_" />
         }
         {((error && this.state.showError && !props.showErrorOnField) ||
