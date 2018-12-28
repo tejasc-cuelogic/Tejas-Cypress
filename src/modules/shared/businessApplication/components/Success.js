@@ -87,12 +87,17 @@ class Success extends Component {
             <Icon className="ns-paper-plane" size="massive" color="green" />
             <Header as="h1">Congratulations!</Header>
             <p>
-              <b>You have been pre-qualified for a NextSeed campaign.</b>
+              <b>You have been prequalified for a NextSeed campaign.</b>
             </p>
             <p>
-              In the meantime, please begin filling out the rest of the application and
-              submitting the necessary paperwork. Our step-by-step guide will walk you
-              through the steps and keep the process organized.
+              {!userExists || !this.props.isPublic ?
+                `Please begin filling out the rest of the application and
+                submitting the necessary paperwork. Our step-by-step guide
+                will take you through the steps and keep the process organized.` :
+                `Please log in to finish filling out the rest of the application
+                and submitting the necessary paperwork. Our step-by-step guide
+                will walk you through the steps and keep the process organized.`
+              }
             </p>
             {this.props.isPublic &&
               <Form error>
@@ -117,7 +122,7 @@ class Success extends Component {
                           :
                           <FormInput
                             key={field}
-                            displayMode={field === 'email'}
+                            readOnly={field === 'email'}
                             // icon={field !== 'email' ? togglePasswordType(field) : null}
                             type={field !== 'email' ? pwdInputType : 'text'}
                             name={field}
@@ -131,7 +136,7 @@ class Success extends Component {
                           icon={field === 'password' ? togglePasswordType(field) : null}
                           type={field === 'password' ? pwdInputType : 'text'}
                           name={field}
-                          displayMode={field === 'email'}
+                          readOnly={field === 'email'}
                           fielddata={LOGIN_FRM.fields[field]}
                           changed={LoginChange}
                         />
@@ -147,7 +152,7 @@ class Success extends Component {
               </Form>
             }
             <Divider section hidden />
-            <Button loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && !SIGNUP_FRM.meta.isValid && !userExists) || !currentScore} size="large" color="green" className="very relaxed">Proceed</Button>
+            <Button primary size="large" className="very relaxed" content="Proceed" loading={this.props.uiStore.inProgress} onClick={this.onProceed} disabled={(this.props.isPublic && (!SIGNUP_FRM.meta.isValid || !currentScore) && !userExists)} />
           </Grid.Column>
         </Grid>
         {this.state.showProgressLoader &&

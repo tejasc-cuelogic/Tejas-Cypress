@@ -93,18 +93,14 @@ export const getOfferingDetails = gql`
         id
         email {
           address
-          __typename
         }
         info {
           firstName
           lastName
-          __typename
         }
         phone {
           number
-          __typename
         }
-        __typename
       }
       issuerDetails {
         id
@@ -862,15 +858,8 @@ export const getOfferingDetails = gql`
         description
         rewardStatus
         expirationDate
-        tiers {
-          amount
-          earlyBirdQuantity
-          created {
-            id
-            by
-            date
-          }
-        }
+        earlyBirdQuantity
+        tiers
         created {
           id
           by
@@ -893,14 +882,10 @@ export const getOfferingDetails = gql`
         id
       }
       stage
-      rewardsTierIds {
+      rewardsTiers
+      earlyBird {
+        quantity
         amount
-        earlyBirdQuantity
-        created {
-          id
-          by
-          date
-        }
       }
       created{
         id
@@ -1062,71 +1047,10 @@ export const generateBusinessFiling = gql`
   }
 `;
 
-export const createBonusRewardsTier = gql`
-mutation _createBonusRewardTier($bonusRewardTierDetails: BonusRewardTierInputType!){
-  createBonusRewardTier(bonusRewardTierDetails: $bonusRewardTierDetails) {
-    amount
-    earlyBirdQuantity
-    created{
-      id
-      date
-      by
-    }
-  }
-}
-`;
-
-export const getBonusRewardsTiers = gql`
-query _getBonusRewardTiers{
-  getBonusRewardTiers {
-    amount
-    earlyBirdQuantity
-    created{
-      id
-      date
-      by
-    }
-  }
-}
-`;
-
-export const createBonusReward = gql`
-mutation _createBonusReward($bonusRewardDetails: BonusRewardInputType!){
-  createBonusReward(
-    bonusRewardDetails: $bonusRewardDetails
-  ){
+export const upsertBonusReward = gql`
+mutation _upsertBonusReward($id: String, $bonusRewardDetails: BonusRewardInputType!){
+  upsertBonusReward(id: $id, bonusRewardDetails: $bonusRewardDetails){
     id
-    offeringId
-    title
-    description
-    rewardStatus
-    expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
-    created{
-      id
-      by
-      date
-    }
-    updated{
-      id
-      by
-      date
-    }
-  }
-}
-`;
-
-export const deleteBonusRewardsTierByOffering = gql`
-mutation _deleteBonusRewardTiersByOffering($offeringId: String! $bonusRewardTierId: BonusRewardTierInputType! ){
-  deleteBonusRewardsByTierId(offeringId: $offeringId bonusRewardTierId: $bonusRewardTierId) {
-    id
-    rewardsTierIds{
-      amount
-      earlyBirdQuantity
-    }
   }
 }
 `;
@@ -1140,10 +1064,8 @@ query _getBonusRewards($offeringId: String!){
     description
     rewardStatus
     expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
+    earlyBirdQuantity
+    tiers
     created{
       id
       by
@@ -1163,73 +1085,6 @@ mutation _deleteBonusReward($id: String! $offeringId: String!){
   deleteBonusReward(id: $id offeringId: $offeringId
   ){
     id
-    offeringId
-    title
-    description
-    rewardStatus
-    expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
-    created{
-      id
-      by
-      date
-    }
-    updated{
-      id
-      by
-      date
-    }
-    deleted{
-      id
-      by
-      date
-    }
-  }
-}
-`;
-
-export const updateBonusReward = gql`
-mutation _updateBonusReward($id: String! $bonusRewardDetails: BonusRewardInputType!){
-  updateBonusReward(id: $id bonusRewardDetails: $bonusRewardDetails){
-    id
-    offeringId
-    title
-    description
-    rewardStatus
-    expirationDate
-    tiers{
-      amount
-      earlyBirdQuantity
-    }
-    created{
-      id
-      by
-      date
-    }
-    updated{
-      id
-      by
-      date
-    }
-  }
-}
-`;
-
-export const unlinkTiersFromBonusRewards = gql`
-mutation _unlinkTiersFromBonusRewards($bonusRewardId: String! $offeringId: String! $bonusRewardTierId: BonusRewardTierInputType!){
-  unlinkTiersFromBonusRewards(
-    bonusRewardId: $bonusRewardId
-    offeringId: $offeringId
-    bonusRewardTierId: $bonusRewardTierId
-  ) {
-    id
-    rewardsTierIds{
-      amount
-      earlyBirdQuantity
-    }
   }
 }
 `;

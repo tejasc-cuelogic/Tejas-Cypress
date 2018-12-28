@@ -329,6 +329,7 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
+    defaultValue: 'NextSeed charges a percentage of the total Offering Amount (10% if the Offering Amount is $250,000 or less, 9% if the Offering Amount is more than $250,000 and $500,000 or less, 8% if the Offering Amount is more than $500,000 and $750,000 or less, and 7% if the Offering Amount is more than $750,000) as compensation for its services provided in connection with the Offering; provided that NextSeed will only charge 5% of the amount raised from investors that were introduced to the NextSeed website by the Issuer.',
   },
   currentFinancialStatements: {
     value: '',
@@ -336,6 +337,7 @@ export const KEY_TERMS = {
     error: undefined,
     rule: 'string',
     placeHolder: 'Enter here',
+    defaultValue: 'Because the Issuer was formed recently, the Issuer’s current financial statements only reflect the startup costs incurred thus far. Please see Appendix A for the financial statements as well as the full review report by the Issuer’s accountant.',
   },
 };
 

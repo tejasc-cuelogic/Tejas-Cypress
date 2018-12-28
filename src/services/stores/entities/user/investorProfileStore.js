@@ -185,7 +185,7 @@ class InvestorProfileStore {
       } else if (currentStep.form === 'BROKERAGE_EMPLOYMENT_FORM') {
         const { fields } = this.BROKERAGE_EMPLOYMENT_FORM;
         if (fields.brokerageEmployment.value === 'no') {
-          fields.brokerageFirmName.value = 'false';
+          fields.brokerageFirmName.value = null;
         } else {
           fields.brokerageFirmName.value = fields.brokerageFirmName.value;
         }
@@ -194,7 +194,7 @@ class InvestorProfileStore {
       } else if (currentStep.form === 'PUBLIC_COMPANY_REL_FORM') {
         const { fields } = this.PUBLIC_COMPANY_REL_FORM;
         if (fields.publicCompanyRel.value === 'no') {
-          fields.publicCompanyTicker.value = 'false';
+          fields.publicCompanyTicker.value = null;
         } else {
           fields.publicCompanyTicker.value = fields.publicCompanyTicker.value;
         }

@@ -23,7 +23,7 @@ const userVerifiedDetails = ({ legalDetails, isUserVerified }) => {
         <dt>Legal Last Name</dt>
         <dd>{legalDetails.legalName.lastLegalName}</dd>
         <dt>SSN</dt>
-        <dd>{Helper.cryptedSSNNumber(legalDetails.ssn) || '-'}</dd>
+        <dd>{Helper.formattedSSNNumber(legalDetails.ssn) || '-'}</dd>
         <dt>DOB</dt>
         <dd>{legalDetails.dateOfBirth ? moment(legalDetails.dateOfBirth, 'MM/DD/YYYY').format('MM-DD-YYYY') : '-'}</dd>
         <dt>Street</dt>

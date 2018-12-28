@@ -27,6 +27,18 @@
             margin: 0 0 0 @10px;
             vertical-align: top;
         }
+        &.issuer-comment {
+            background: fade(@primary-two-darken, 8%);
+            border-radius: 4px;
+            padding: 24px 30px;
+            border-top: 0;
+            +.issuer-comment {
+                margin-top: @24px;
+            }
+            +.comment {
+                border-top: 0;
+            }
+        }
         .comments {
             &.reply-comments {
                 .comment {

@@ -10,7 +10,7 @@ import {
 import Helper from '../../../../helper/utility';
 import { FormValidator as Validator } from '../../../../helper';
 import { DRAFT_NEW } from '../../../constants/messages';
-import { offeringCreationStore, campaignStore, offeringsStore } from '../../index';
+import { offeringCreationStore, campaignStore, offeringsStore, userDetailsStore } from '../../index';
 
 export class NewMessage {
   @observable MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
@@ -37,16 +37,19 @@ export class NewMessage {
 
   @action
   newPostComment = () => {
+    const { userDetails } = userDetailsStore;
+    console.log(userDetails);
     if (this.data && this.data.data && this.data.data.offeringCommentsByOfferId
       && this.currentMessageId) {
       this.data.data.offeringCommentsByOfferId.splice(0, 0, {
         id: null,
         offeringId: this.data.data.offeringCommentsByOfferId[0].offeringId,
         thread: null,
-        createdUserInfo: this.data.data.offeringCommentsByOfferId[0].createdUserInfo,
+        createdUserInfo: { info: get(userDetails, 'info') },
         created: { id: '', by: '', date: moment().toISOString() },
-        comment: 'Post New Comment',
+        comment: '',
         scope: 'PUBLIC',
+        isSample: true,
       });
     }
     this.setDataValue('currentMessageId', null);

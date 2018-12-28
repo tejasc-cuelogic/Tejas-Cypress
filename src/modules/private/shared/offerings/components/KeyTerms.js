@@ -52,10 +52,11 @@ export default class KeyTerms extends Component {
               selection
               value={KEY_TERMS_FRM.fields.industry.value}
               name="industry"
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={BUSINESS_INDUSTRIES}
               onChange={(e, result) => formChange(e, result, formName)}
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
             />
             {['city', 'state'].map(field => (
               <FormInput
@@ -68,11 +69,12 @@ export default class KeyTerms extends Component {
             ))}
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.securities}
               selection
               value={KEY_TERMS_FRM.fields.securities.value}
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               name="securities"
               options={SECURITIES_VALUES}
               onChange={(e, result) => formChange(e, result, formName)}
@@ -89,12 +91,13 @@ export default class KeyTerms extends Component {
             ))}
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.legalBusinessType}
               selection
               value={KEY_TERMS_FRM.fields.legalBusinessType.value}
               name="legalBusinessType"
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={BUSINESS_TYPE_VALUES}
               onChange={(e, result) => formChange(e, result, formName)}
             />
@@ -116,16 +119,17 @@ export default class KeyTerms extends Component {
             />
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
               disabled={isReadonly}
               fielddata={KEY_TERMS_FRM.fields.regulation}
               selection
               value={KEY_TERMS_FRM.fields.regulation.value}
               name="regulation"
-              placeholder="Choose here"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={REGULATION_VALUES}
               onChange={(e, result) => formChange(e, result, formName)}
             />
-            {['investmentMultiple', 'securityInterest', 'interestRate'].map(field => (
+            {['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
               <FormInput
                 displayMode={isReadonly}
                 key={field}
@@ -144,8 +148,8 @@ export default class KeyTerms extends Component {
             />
             <FormInput
               displayMode={isReadonly}
-              name="revSharePercentage"
-              fielddata={KEY_TERMS_FRM.fields.revSharePercentage}
+              name="securityInterest"
+              fielddata={KEY_TERMS_FRM.fields.securityInterest}
               changed={(e, result) => formChange(e, result, formName)}
             />
             <MaskedInput
@@ -229,17 +233,15 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths={3}>
             {['isNewBusiness', 'isHealthcare'].map(field => (
-              <div className="field">
+              <div className={!isReadonly ? 'field' : 'field display-only'}>
                 <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
-                <Form.Group inline>
-                  <FormRadioGroup
-                    readOnly={isReadonly}
-                    containerclassname={isReadonly ? 'display-only' : ''}
-                    fielddata={KEY_TERMS_FRM.fields[field]}
-                    name={field}
-                    changed={(e, result) => formChange(e, result, formName)}
-                  />
-                </Form.Group>
+                <FormRadioGroup
+                  readOnly={isReadonly}
+                  containerclassname={isReadonly ? 'display-only' : ''}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  name={field}
+                  changed={(e, result) => formChange(e, result, formName)}
+                />
               </div>
             ))}
             <DropZone
@@ -249,20 +251,18 @@ export default class KeyTerms extends Component {
               ondrop={(files, name) => this.onProFormasDrop(files, name)}
               onremove={fieldName => this.handleDelDoc(fieldName)}
               uploadtitle="Upload a file"
-              containerclassname="field"
+              containerclassname={!isReadonly ? 'field' : 'field display-only'}
             />
             {['isAlcohol', 'isFood'].map(field => (
-              <div className="field">
+              <div className={!isReadonly ? 'field' : 'field display-only'}>
                 <Header as="label">{KEY_TERMS_FRM.fields[field].label}</Header>
-                <Form.Group inline>
-                  <FormRadioGroup
-                    containerclassname={isReadonly ? 'display-only' : ''}
-                    readOnly={isReadonly}
-                    fielddata={KEY_TERMS_FRM.fields[field]}
-                    name={field}
-                    changed={(e, result) => formChange(e, result, formName)}
-                  />
-                </Form.Group>
+                <FormRadioGroup
+                  containerclassname={isReadonly ? 'display-only' : ''}
+                  readOnly={isReadonly}
+                  fielddata={KEY_TERMS_FRM.fields[field]}
+                  name={field}
+                  changed={(e, result) => formChange(e, result, formName)}
+                />
               </div>
             ))}
           </Form.Group>

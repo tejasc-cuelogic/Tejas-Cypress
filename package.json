@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "amazon-cognito-identity-js": "^1.23.0",
+    "amortizejs": "^1.0.3",
     "apollo-client-preset": "^1.0.8",
     "apollo-link": "^1.2.1",
     "apollo-link-context": "^1.0.8",
@@ -47,6 +48,7 @@
     "fs-extra": "3.0.1",
     "graphql": "0.13.2",
     "graphql-tag": "^2.8.0",
+    "gulp": "^3.9.1",
     "handlebars": "^4.0.12",
     "history": "4.6.3",
     "html-react-parser": "^0.4.7",
@@ -62,6 +64,7 @@
     "mobx-react": "^4.2.2",
     "mobx-react-form": "^1.32.3",
     "moment": "^2.20.1",
+    "money-math": "^2.5.1",
     "node-sass": "^4.5.3",
     "node-sass-chokidar": "0.0.3",
     "npm-run-all": "^4.1.2",

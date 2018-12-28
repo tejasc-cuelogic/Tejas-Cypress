@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Modal, Button, Header, Form, Divider, Statistic, Message } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../theme/form';
@@ -83,7 +86,7 @@ export default class AddWithdrawFund extends Component {
                   <MaskedInput
                     readonly="readonly"
                     hoverable
-                    label="Total available for withdrawl:"
+                    label="Total available for withdrawal:"
                     key="amount"
                     prefix="$ "
                     name="maountInvested"
@@ -93,30 +96,44 @@ export default class AddWithdrawFund extends Component {
                   />
                 </div>
               }
-              <MaskedInput
-                // disabled={showConfirmPreview ? 'disabled' : ''}
-                readonly={showConfirmPreview ? 'readonly' : false}
-                hoverable
-                label={match.params.action === 'add' ? 'Deposit amount' : labelForWithdrawInput}
-                key="amount"
-                prefix="$ "
-                name="amount"
-                containerclassname="fund-amount"
-                currency
-                fielddata={TRANSFER_FRM.fields.amount}
-                changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
-              />
+              {!showConfirmPreview &&
+                <MaskedInput
+                  // disabled={showConfirmPreview ? 'disabled' : ''}
+                  readonly={showConfirmPreview ? 'readonly' : false}
+                  hoverable
+                  label={match.params.action === 'add' ? 'Deposit amount' : labelForWithdrawInput}
+                  key="amount"
+                  prefix="$ "
+                  name="amount"
+                  containerclassname="fund-amount"
+                  currency
+                  fielddata={TRANSFER_FRM.fields.amount}
+                  changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
+                />
+              }
               {showConfirmPreview ?
-                <Statistic className="mt-10 mb-10">
-                  <Header as="h6" className="text-capitalize">
-                    <Header.Subheader>From</Header.Subheader>
-                    {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span> <Link to="/app/account-details/individual/bank-accounts">Change</Link>
-                    <Divider hidden />
-                    <Header.Subheader>To</Header.Subheader>
-                    NextSeed {currentActiveAccountDetails && currentActiveAccountDetails.name ?
-                      currentActiveAccountDetails.name : null} Investment Account
-                  </Header>
-                </Statistic>
+                <Aux>
+                  <div className="field fund-amount">
+                    {match.params.action === 'withdraw' ?
+                      <label>Withdrawal amount</label>
+                      :
+                      <label>Deposit amount</label>
+                    }
+                    <Header as="h4" className="mt-10">{Helper.CurrencyFormat(TRANSFER_FRM.fields.amount.value)}
+                      <span className="highlight-text" onClick={() => this.props.transactionStore.setInitialLinkValue(false)}>Change</span>
+                    </Header>
+                  </div>
+                  <Statistic className="mt-10 mb-10">
+                    <Header as="h5" className="text-capitalize">
+                      <Header.Subheader>From</Header.Subheader>
+                      {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
+                      <Divider hidden />
+                      <Header.Subheader>To</Header.Subheader>
+                      NextSeed {currentActiveAccountDetails && currentActiveAccountDetails.name ?
+                        currentActiveAccountDetails.name : null} Investment Account
+                    </Header>
+                  </Statistic>
+                </Aux>
                 :
                 null
               }

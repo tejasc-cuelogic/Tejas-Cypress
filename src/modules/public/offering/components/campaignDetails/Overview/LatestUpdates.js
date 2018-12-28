@@ -13,18 +13,18 @@ class LatestUpdates extends Component {
       updates, isTabletLand, refLink, companyAvatarUrl, bussinessName,
     } = this.props;
     const update = (updates && updates.length && updates[0]) || null;
-    let UserInfo = update && update.actingUserInfo ? update.actingUserInfo.info : null;
-    UserInfo = UserInfo ? {
-      firstName: UserInfo.firstName,
-      lastName: UserInfo.lastName,
-      roles: ['investor'],
-      avatarUrl: UserInfo.avatar ? UserInfo.avatar.url : null,
-    } : {
-      firstName: 'S',
-      lastName: 'T',
-      roles: ['investor'],
-      avatarUrl: null,
-    };
+    // let UserInfo = update && update.actingUserInfo ? update.actingUserInfo.info : null;
+    // UserInfo = UserInfo ? {
+    //   firstName: UserInfo.firstName,
+    //   lastName: UserInfo.lastName,
+    //   roles: ['investor'],
+    //   avatarUrl: UserInfo.avatar ? UserInfo.avatar.url : null,
+    // } : {
+    //   firstName: 'S',
+    //   lastName: 'T',
+    //   roles: ['investor'],
+    //   avatarUrl: null,
+    // };
     return (
       <Grid.Column className={isTabletLand && 'mt-30'}>
         <Segment padded>
@@ -47,20 +47,18 @@ class LatestUpdates extends Component {
             <Item>
               <Item.Content>
                 <div className="clearfix">
-                  <div className="avatar-image pull-left">
-                    {
-                      companyAvatarUrl && companyAvatarUrl.length ?
-                        <Image64 size="mini" srcUrl={companyAvatarUrl} circular />
-                      : <Image64 size="mini" srcUrl={UserInfo.avatarUrl} circular />
-                    }
-                  </div>
+                  {companyAvatarUrl && companyAvatarUrl.length ?
+                    <div className="avatar-image pull-left">
+                      <Image64 size="mini" srcUrl={companyAvatarUrl} circular />
+                    </div> : null
+                  }
                   <Item.Header className="neutral-text">
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
                 </div>
                 {update ?
                   <Aux>
-                    <Item.Meta>{moment(update.updated.date).format('LL')}</Item.Meta>
+                    <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
                     <Divider />
                     <Item.Description>
                       <div className="segment-container mini">

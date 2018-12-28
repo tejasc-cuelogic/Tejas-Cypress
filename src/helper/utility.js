@@ -66,11 +66,12 @@ export class Utility {
     return result;
   }
 
-  CurrencyFormat = amount => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(amount)
+  CurrencyFormat = (amount, fraction = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: fraction }).format(amount)
 
-  cryptedSSNNumber = (ssnNumber) => {
+  formattedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;
-    const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, 'X');
+    // const cyrptedSSNNumber = ssnNumber.replace(/.(?=.{4,}$)/g, 'X');
+    const cyrptedSSNNumber = ssnNumber;
     const formattedSSNNumber = `${cyrptedSSNNumber.substr(0, 3)}-${cyrptedSSNNumber.substr(3, 2)}-${cyrptedSSNNumber.substr(5, 4)}`;
     return formattedSSNNumber;
   }

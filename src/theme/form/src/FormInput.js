@@ -60,7 +60,7 @@ export default class FormInput extends Component {
           autoComplete="nope"
           maxLength={maxlength || false}
           type={props.type || 'text'}
-          placeholder={(displayMode || readOnly) ? '' : placeHolder}
+          placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder}
           defaultValue={defaultValue}
           onChange={
             (e) => {

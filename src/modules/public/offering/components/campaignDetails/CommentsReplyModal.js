@@ -46,7 +46,7 @@ class CommentsReplyModal extends Component {
               <Comment className="issuer-comment">
                 <Comment.Content>
                   <Comment.Author>{get(message, 'createdUserInfo.info.firstName')} {this.props.issuerId === get(message, 'createdUserInfo.id') && <Label color="blue" size="mini">ISSUER</Label>}</Comment.Author>
-                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(date).format('LL')}</span></Comment.Metadata>
+                  <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(date).format('ll')}</span></Comment.Metadata>
                   <Comment.Text className="mt-20">
                     {this.state.readMore === message.id ?
                       message.comment : message.comment.substr(0, readMoreLength)}

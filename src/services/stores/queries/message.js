@@ -12,6 +12,15 @@ export const offeringCommentsByOfferId = gql`
       by
       date
     }
+    approved {
+      id
+      by
+      date
+    }
+    updated {
+      by
+      date
+    }
     createdUserInfo {
       id
       info {
