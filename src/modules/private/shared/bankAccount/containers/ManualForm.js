@@ -46,6 +46,7 @@ export default class ManualForm extends Component {
     const { errors } = this.props.uiStore;
     const {
       showAddFunds,
+      isEncrypted,
       formLinkBankManually,
       linkBankManuallyChange,
     }
@@ -53,6 +54,7 @@ export default class ManualForm extends Component {
     if (showAddFunds) {
       return <AddFunds />;
     }
+    const isAccNumberEncrypted = isEncrypted(formLinkBankManually.fields.accountNumber.value);
     return (
       <div className="center-align">
         <Header as="h3">Link bank manually</Header>
@@ -63,6 +65,7 @@ export default class ManualForm extends Component {
               name="accountNumber"
               fielddata={formLinkBankManually.fields.accountNumber}
               changed={linkBankManuallyChange}
+              value={isAccNumberEncrypted ? '' : formLinkBankManually.fields.accountNumber.value}
               accountNumber
               showerror
             />
@@ -70,6 +73,7 @@ export default class ManualForm extends Component {
               name="routingNumber"
               fielddata={formLinkBankManually.fields.routingNumber}
               changed={linkBankManuallyChange}
+              value={isEncrypted(formLinkBankManually.fields.routingNumber.value) ? '' : formLinkBankManually.fields.routingNumber.value}
               routingNumber
               showerror
             />
