@@ -12,6 +12,7 @@ export const allTeamMembers = gql`
         type
         url
       }
+      order
     }
   }
 `;
