@@ -4,6 +4,7 @@ import Aux from 'react-aux';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { Image64 } from '../../../theme/shared';
 
 export default class NsCarousel extends Component {
   constructor(props) {
@@ -44,7 +45,7 @@ export default class NsCarousel extends Component {
         if (this.props.isTablet) {
           thumbnailClassToApply = this.props.imageCount >= 4 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
         } else {
-          thumbnailClassToApply = this.props.imageCount >= 8 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
+          thumbnailClassToApply = this.props.imageCount >= 10 ? 'slider-thumbnails' : 'slider-thumbnails custom-count';
         }
       } else {
         thumbnailClassToApply = 'slider-thumbnails';
@@ -67,8 +68,11 @@ export default class NsCarousel extends Component {
             swipeToSlide
             focusOnSelect
             className={`${thumbnailClassToApply}  ${thumbSliderCustomClassToApply}`}
+            variableWidth
           >
-            {this.props.children}
+            {this.props.refItems.map(i => (
+              <Image64 bg className="carousel-bg-thumb" srcUrl={i.url} />
+            ))}
           </Slider>
         </Aux>
       );

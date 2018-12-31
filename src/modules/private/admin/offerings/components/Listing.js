@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
@@ -95,13 +96,18 @@ export default class Listing extends Component {
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>
-                        <b>
-                          {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : 'N/A'}
-                        </b>
-                        <br />
-                        {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : ''}
-                        <br />
-                        {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : ''}
+                        {offering.issuerDetails ?
+                          <Aux>
+                            <b>
+                              {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
+                            </b>
+                            <br />
+                            {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : ''}
+                            <br />
+                            {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : ''}
+                          </Aux> :
+                          <b>N/A</b>
+                        }
                       </p>
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="center">
