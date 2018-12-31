@@ -57,7 +57,9 @@ class offerDetails extends Component {
   render() {
     const { match, campaignStore, location } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
-    const { details, campaignSideBarShow, campaign } = campaignStore;
+    const {
+      details, campaignSideBarShow, campaign, navCountData,
+    } = campaignStore;
     if (this.state.showPassDialog) {
       return (<DevPassProtected
         previewPassword={campaign.previewPassword}
@@ -79,7 +81,13 @@ class offerDetails extends Component {
         </Responsive>
         <Responsive maxWidth={767} as={Aux}>
           <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
-          <MobileDropDownNav inverted refMatch={match} navItems={navItems} location={location} />
+          <MobileDropDownNav
+            inverted
+            refMatch={match}
+            navCountData={navCountData}
+            navItems={navItems}
+            location={location}
+          />
         </Responsive>
         <div className="offering-wrapper">
           <Switch>

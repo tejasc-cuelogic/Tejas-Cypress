@@ -13,7 +13,7 @@ export default class Offering extends Component {
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/overview`);
     }
-    if (!this.props.offeringsStore.initLoad.includes('getOne')) {
+    if (!(this.props.offeringsStore.initLoad.includes('getOne') && this.props.offeringsStore.currentId === this.props.match.params.id)) {
       this.props.offeringsStore.getOne(this.props.match.params.id);
     }
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');

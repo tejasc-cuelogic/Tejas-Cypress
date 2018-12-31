@@ -25,37 +25,43 @@ class AboutPhotoGallery extends Component {
     };
     const galleryArray = campaign && campaign.media && campaign.media.gallery &&
       campaign.media.gallery.length ? campaign.media.gallery : [];
-    const galleryLength = galleryArray.length < 8 ? galleryArray.length : 8;
-    const tabGalleryLength = galleryArray < 4 ? galleryArray.length : 4;
+    // const galleryLength = galleryArray.length < 8 ? galleryArray.length : 8;
+    // const tabGalleryLength = galleryArray < 4 ? galleryArray.length : 4;
     return (
       <Modal
         open
         onClose={this.handleClose}
-        size="large"
+        size="fullscreen"
         closeIcon
         className="about-modal"
       >
-        <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
-        <div className="carousel">
-          <Container fluid>
-            <NsCarousel
-              {...settings}
-              thumbs={isTablet ? tabGalleryLength : galleryLength}
-              imageCount={galleryArray.length}
-              isTablet={isTablet}
-              handlePaginationFun={this.handlePagination}
-            >
-              {
-                galleryArray.length ?
+        <Modal.Content>
+          <div className="carousel">
+            <Container fluid>
+              <NsCarousel
+                {...settings}
+                // thumbs={isTablet ? tabGalleryLength : galleryLength}
+                imageCount={galleryArray.length}
+                isTablet={isTablet}
+                refItems={galleryArray}
+                handlePaginationFun={this.handlePagination}
+                fade
+              >
+                {
+                  galleryArray.length ?
                   galleryArray.map(data => (
-                    <Image64 srcUrl={data.url} />
+                    <div className="about-carousel">
+                      <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
+                      <Image64 srcUrl={data.url} />
+                    </div>
                   ))
                   :
                   <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
-              }
-            </NsCarousel>
-          </Container>
-        </div>
+                }
+              </NsCarousel>
+            </Container>
+          </div>
+        </Modal.Content>
       </Modal>
     );
   }
