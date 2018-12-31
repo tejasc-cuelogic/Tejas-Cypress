@@ -35,7 +35,7 @@ class AboutPhotoGallery extends Component {
         closeIcon
         className="about-modal"
       >
-        <Modal.Content image>
+        <Modal.Content>
           <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
           <div className="carousel">
             <Container fluid>
@@ -50,7 +50,7 @@ class AboutPhotoGallery extends Component {
                 {
                   galleryArray.length ?
                     galleryArray.map(data => (
-                      <Image64 bg srcUrl={data.url} className="carousel-bg" />
+                      <Image64 srcUrl={data.url} className="carousel-bg" />
                     ))
                     :
                     <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />

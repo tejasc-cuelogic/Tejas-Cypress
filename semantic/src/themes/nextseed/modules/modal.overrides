@@ -156,11 +156,12 @@
             background-color:transparent;
         }
         .carousel{
-            max-height:~"calc(100vh - 30px)";
             .slick-slide{
+                max-height:~"calc(100vh - 55px)";
+                text-align: center;
                 text-align:center;
                 .ui.image{
-                    height:~"calc(100vh - 121px - 30px)";
+                    max-height:~"calc(100vh - 55px)";
                     width:auto !important;
                 }
             }
