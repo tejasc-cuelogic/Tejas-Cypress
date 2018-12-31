@@ -155,15 +155,53 @@
             padding: 0;
             background-color:transparent;
         }
-        .carousel{
-            .slick-slide{
-                max-height:~"calc(100vh - 55px)";
-                text-align: center;
-                text-align:center;
-                .ui.image{
-                    max-height:~"calc(100vh - 55px)";
-                    width:auto !important;
+        .slick-slider{
+            height:~"calc(100vh - 55px)";
+            .slick-list {
+                height: ~"calc(100vh - 55px)" !important;
+                .slick-slide{
+                    height:~"calc(100vh - 55px)";
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    .about-carousel {
+                        position: relative;
+                    }
+                    .ui.image{
+                        max-height:~"calc(100vh - 55px)";
+                        width:auto !important;
+                        max-width: 100%;
+                        display: block;
+                    }
                 }
+            }
+        }
+        .slick-prev, .slick-next {
+            background: fade(@neutral-middark, 50%);
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+            border: 1px solid @white;
+            &:before {
+                color: @white;
+            }
+            &:hover, &:focus {
+                background: fade(@fullBlack, 50%);
+            }
+            @media only screen and (max-width : @largestMobileScreen){
+                top: 50%;
+            }
+        }
+        .slick-slider .slick-prev {
+            left: 20px;
+            @media only screen and (max-width : @largestMobileScreen){
+                left: 0px;
+            }
+        }
+        .slick-slider .slick-next {
+            right: 20px;
+            @media only screen and (max-width : @largestMobileScreen){
+                right: 0px;
             }
         }
     }
