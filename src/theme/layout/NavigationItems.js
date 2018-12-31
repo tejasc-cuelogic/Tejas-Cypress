@@ -94,7 +94,7 @@ export class NavItems extends Component {
                   <Label circular color="red" size="mini" horizontal>3</Label>
                 }
                 <span>{item.title}</span>
-                {item.to === 'updates' || item.to === 'comments' ?
+                {(item.to === 'updates' || item.to === 'comments') && this.props.countData ?
                   <Label circular color="blue" size="small">{this.props.countData[item.to]}</Label> : null
                 }
               </Menu.Item>
