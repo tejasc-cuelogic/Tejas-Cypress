@@ -1,5 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
+import { sortBy } from 'lodash';
 import { GqlClient as client } from '../../../../api/publicApi';
 import { allTeamMembers } from '../../queries/Team';
 
@@ -15,7 +16,7 @@ export class TeamStore {
     }
 
     @computed get teamMembers() {
-      return (this.data.data && toJS(this.data.data.teamMembers)) || [];
+      return (this.data.data && sortBy(toJS(this.data.data.teamMembers), ['order'])) || [];
     }
 
     @computed get loading() {
