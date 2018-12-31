@@ -32,6 +32,7 @@ export class OfferingsStore {
     search: {},
   };
   @observable db;
+  @observable currentId = '';
   @observable initLoad = [];
 
   @action
@@ -120,6 +121,7 @@ export class OfferingsStore {
       fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: () => {
+        this.currentId = id;
         this.offerLoading = false;
         this.oldOfferData = {};
         const { setFormData } = offeringCreationStore;
