@@ -56,7 +56,7 @@ export const ByKeyword = ({
 export const DateRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
-    <Form.Group widths="equal">
+    <Form.Group widths="equal" className="range">
       <Form.Field>
         <NumberFormat
           type="text"
@@ -80,7 +80,7 @@ export const DateRangeFilter = props => (
 export const AmountRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
-    <Form.Group widths="equal">
+    <Form.Group widths="equal" className="range">
       <Form.Field>
         <NumberFormat
           prefix="$ "
