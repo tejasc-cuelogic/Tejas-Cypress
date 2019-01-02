@@ -66,11 +66,11 @@ export class BankAccount {
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
         bankAccountStore.setNewPlaidBankDetails(metadata);
-        Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
         if (action === 'change') {
           // bankAccountStore.changeBankPlaid();
           bankAccountStore.setPlaidBankVerificationStatus(true);
         } else {
+          Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
           if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 0) {
             individualAccountStore.setStepToBeRendered(1);
           }
