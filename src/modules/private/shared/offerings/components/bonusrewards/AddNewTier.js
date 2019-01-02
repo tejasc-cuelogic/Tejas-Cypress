@@ -2,19 +2,26 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
-import { Modal, Header, Form, Button } from 'semantic-ui-react';
+import { Modal, Header, Form, Button, Message } from 'semantic-ui-react';
 import { MaskedInput, FormCheckbox } from '../../../../../../theme/form';
+import { ListErrors } from '../../../../../../theme/shared';
 
 @inject('offeringCreationStore', 'offeringsStore')
 @observer
 export default class AddNewTier extends Component {
+  state = { showError: false }
   handleCloseModal = () => {
     this.props.history.push(this.props.refLink);
   }
   handleAddTier = () => {
-    const { updateBonusRewardTier } = this.props.offeringCreationStore;
-    updateBonusRewardTier();
-    this.props.history.push(this.props.refLink);
+    const { updateBonusRewardTier, ADD_NEW_TIER_FRM } = this.props.offeringCreationStore;
+    if (this.props.bonusRewardsTiers.includes(ADD_NEW_TIER_FRM.fields.amountForThisTier.value)) {
+      this.setState({ showError: true });
+    } else {
+      this.setState({ showError: false });
+      updateBonusRewardTier();
+      this.props.history.push(this.props.refLink);
+    }
   }
   render() {
     const { ADD_NEW_TIER_FRM, formChange, maskChange } = this.props.offeringCreationStore;
@@ -27,7 +34,7 @@ export default class AddNewTier extends Component {
           <Header as="h3">Add new tier</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form onSubmit={this.handleAddTier}>
+          <Form error onSubmit={this.handleAddTier}>
             <div className="featured-section">
               {(!earlyBird || earlyBird.quantity === 0) &&
                 <FormCheckbox
@@ -66,7 +73,12 @@ export default class AddNewTier extends Component {
                   />
               }
             </div>
-            <div className="center-align">
+            {this.state.showError &&
+              <Message error className="mt-30">
+                <ListErrors errors={['The entered tier is already existed.']} />
+              </Message>
+            }
+            <div className="center-align mt-30">
               <Button primary content="Add new bonus reward" disabled={!ADD_NEW_TIER_FRM.meta.isValid} />
             </div>
           </Form>

@@ -52,7 +52,7 @@ export default class Creation extends Component {
     }
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : 'ui card fluid form-card'}>
-        <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier refLink={match.url} {...props} />} />
+        <Route path={`${match.url}/add-new-tier`} render={props => <AddNewTier bonusRewardsTiers={bonusRewardsTiers} refLink={match.url} {...props} />} />
         <Route path={`${match.url}/add-new-bonus-reward`} render={props => <AddNewBonusReward refLink={match.url} {...props} />} />
         <Route path={`${match.url}/edit-bonus-reward/:rewardId`} render={props => <AddNewBonusReward refLink={match.url} isEditForm {...props} />} />
         {!isReadOnly &&
