@@ -14,8 +14,10 @@ export default class AddNewTier extends Component {
     this.props.history.push(this.props.refLink);
   }
   handleAddTier = () => {
+    const { offer } = this.props.offeringsStore;
+    const bonusRewardsTiers = get(offer, 'rewardsTiers') || [];
     const { updateBonusRewardTier, ADD_NEW_TIER_FRM } = this.props.offeringCreationStore;
-    if (this.props.bonusRewardsTiers.includes(ADD_NEW_TIER_FRM.fields.amountForThisTier.value)) {
+    if (bonusRewardsTiers.includes(ADD_NEW_TIER_FRM.fields.amountForThisTier.value)) {
       this.setState({ showError: true });
     } else {
       this.setState({ showError: false });
