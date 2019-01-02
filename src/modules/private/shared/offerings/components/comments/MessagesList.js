@@ -18,6 +18,17 @@ const MessagesList = props => (
             </Item.Extra>
           }
           <div className="ui image">
+            {props.threadUsersList(msg.threadComments).length === 1 &&
+              <UserAvatar
+                size="mini"
+                UserInfo={{
+                  firstName: get(msg, 'createdUserInfo.info.firstName'),
+                  lastName: get(msg, 'createdUserInfo.info.lastName'),
+                  avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
+                  roles: [get(msg, 'createdUserInfo.roles.name')],
+                }}
+              />
+            }
             {props.threadUsersList(msg.threadComments).length ?
             props.threadUsersList(msg.threadComments).map(u => (
               <UserAvatar
@@ -25,7 +36,7 @@ const MessagesList = props => (
                 UserInfo={{
                   firstName: get(u, 'createdUserInfo.info.firstName'),
                   lastName: get(u, 'createdUserInfo.info.lastName'),
-                  avatarUrl: (get(u, 'createdUserInfo.info.avatar') || null),
+                  avatarUrl: (get(u, 'createdUserInfo.info.avatar.url') || null),
                   roles: [get(u, 'createdUserInfo.roles.name')],
                 }}
               />
@@ -35,7 +46,7 @@ const MessagesList = props => (
               UserInfo={{
                 firstName: get(msg, 'createdUserInfo.info.firstName'),
                 lastName: get(msg, 'createdUserInfo.info.lastName'),
-                avatarUrl: (get(msg, 'createdUserInfo.info.avatar') || null),
+                avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
                 roles: [get(msg, 'createdUserInfo.roles.name')],
               }}
             />
