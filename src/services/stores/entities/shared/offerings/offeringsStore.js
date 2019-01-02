@@ -118,7 +118,7 @@ export class OfferingsStore {
     this.offerData = graphql({
       client,
       query: getOfferingDetails,
-      fetchPolicy: 'no-cache',
+      fetchPolicy: 'network-only',
       variables: { id },
       onFetch: () => {
         this.currentId = id;

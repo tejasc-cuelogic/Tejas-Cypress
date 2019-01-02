@@ -57,7 +57,7 @@ export default class BonusRewardsList extends Component {
         }
         <Confirm
           header="Confirm"
-          content="Are you sure you want to remove this Bonus Reward, this will remove from all tiers?"
+          content="This bonus reward will be deleted from all tiers. Are you sure you want to delete it?"
           open={confirmBox.entity === 'bonusRewards'}
           onCancel={this.handleDelCancel}
           onConfirm={this.deleteBonusReward}
