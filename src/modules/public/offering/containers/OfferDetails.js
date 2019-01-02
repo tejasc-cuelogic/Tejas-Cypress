@@ -8,7 +8,7 @@ import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import InvestNow from '../components/investNow/InvestNow';
-import ConfirmLoginModal from '../components/investNow/ConfirmLoginModal';
+import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
@@ -101,7 +101,8 @@ class offerDetails extends Component {
               })
             }
             <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
-            <Route path={`${match.url}/confirm-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
+            <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
+            <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
             <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
             <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
             <Route component={NotFound} />
