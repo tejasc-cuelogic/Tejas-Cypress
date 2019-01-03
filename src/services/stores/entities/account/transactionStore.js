@@ -13,6 +13,7 @@ import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
   @observable data = [];
+  @observable statementDate = [];
   @observable filters = false;
   @observable requestState = {
     search: {},
@@ -32,8 +33,9 @@ export class TransactionStore {
   @observable investmentsByOffering = [];
   @observable investmentOptions = [];
   @observable selectedInvestment = '';
+
   @action
-  initRequest = props => new Promise((resolve, reject) => {
+  initRequest = (props) => {
     const {
       first, skip, page,
     } = {
@@ -56,29 +58,32 @@ export class TransactionStore {
     this.requestState.skip = skip || this.requestState.skip;
     const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
+
     this.data = graphql({
       client,
       query: allTransactions,
       variables: {
         ...params,
-        offset: skip === 0 ? 1 : skip,
+        offset: page || 1,
         accountId: account.details.accountId,
         userId: userDetails.id,
-        orderBy: (props && props.orderBy) || 'DESC',
+        orderBy: (props && props.orderBy) || 'ASC',
         limit: (props && props.limitData) || 10,
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (data) {
-          resolve();
+        if (props && props.statement) {
+          console.log(data);
+          this.setFirstTransaction(data);
         }
       },
-      onError: () => {
-        Helper.toast('Something went wrong, please try again later.', 'error');
-        reject();
-      },
     });
-  })
+  }
+
+  @action
+  setFirstTransaction = (t) => {
+    this.statementDate = t ? t.getAccountTransactions.transactions[0].date : '';
+  }
 
   @computed get getAllTransactions() {
     return (this.data && this.data.data.getAccountTransactions &&
@@ -86,8 +91,7 @@ export class TransactionStore {
   }
 
   @computed get totalRecords() {
-    return (this.getAllTransactions.transactions && this.getAllTransactions.transactions.length)
-    || 0;
+    return this.getAllTransactions.totalCount || 0;
   }
 
   @computed get loading() {
@@ -119,6 +123,7 @@ export class TransactionStore {
     } else {
       delete srchParams[name];
     }
+    this.requestState.page = 1;
     this.initiateSearch(srchParams);
   }
 

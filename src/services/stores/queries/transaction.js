@@ -20,6 +20,7 @@ export const allTransactions = gql`
         amount
         offering
       }
+      totalCount
     }
   }
 `;
