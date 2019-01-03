@@ -20,15 +20,8 @@ export default class TaxForms extends Component {
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', 'individual');
-    this.props.transactionStore.initRequest({ order: 'DESC', limitData: 1 }).then(() => {
-      const statementObj = {
-        field: 'taxFormDate',
-        rangeParam: 'year',
-        format: 'YYYY',
-        text: 'Tax Forms',
-      };
-      this.props.statementStore.allStatements(statementObj);
-    });
+    this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
+    this.props.statementStore.setActiveModule('taxForms');
   }
   paginate = params => this.props.statementStore.pageRequest(params);
 

@@ -6,7 +6,8 @@ import { uiStore, transactionStore } from '../../index';
 
 export class StatementStore {
   @observable data = [];
-  @observable tranStore = []
+  @observable tranStore = [];
+  @observable activeModule = null;
   @observable requestState = {
     skip: 0,
     page: 1,
@@ -42,11 +43,23 @@ export class StatementStore {
     });
   }
 
-  @action
-  allStatements = (statementObj) => {
+  @computed
+  get allStatements() {
+    const statementObj = (this.activeModule === 'MonthlyStatements') ? {
+      field: 'statementDate',
+      rangeParam: 'month',
+      format: 'MMM YYYY',
+      text: 'Monthly Statements',
+    } :
+      {
+        field: 'taxFormDate',
+        rangeParam: 'year',
+        format: 'YYYY',
+        text: 'Tax Forms',
+      };
     const dateRange = this.getDateRange(statementObj.rangeParam);
-    const descriptionKey = statementObj.text === 'Monthly statement' ? 'description' : 'types';
-    this.data = dateRange.map(d => (
+    const descriptionKey = this.activeModule === 'MonthlyStatements' ? 'description' : 'types';
+    return dateRange.map(d => (
       {
         [statementObj.field]: moment(d).format(statementObj.format),
         [descriptionKey]: statementObj.text,
@@ -54,8 +67,13 @@ export class StatementStore {
     ));
   }
 
+  @action
+  setActiveModule(statementType) {
+    this.activeModule = statementType;
+  }
+
   getDateRange = (rangeParam) => {
-    const dateStart = moment(this.getTransactionDate());
+    const dateStart = moment(transactionStore.statementDate);
     const dateEnd = moment();
     const timeValues = [];
     while (dateStart.isBefore(dateEnd)) {
@@ -80,13 +98,13 @@ export class StatementStore {
   }
 
   @computed get monthlyStatements() {
-    return (this.data && this.data.length &&
-      this.data.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return (this.allStatements && this.allStatements.length &&
+      this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get taxForms() {
-    return (this.data && this.data.length &&
-      this.data.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    return (this.allStatements && this.allStatements.length &&
+      this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get loading() {
@@ -98,7 +116,7 @@ export class StatementStore {
   }
 
   @computed get count() {
-    return (this.data && this.data.length) || 0;
+    return (this.allStatements && this.allStatements.length) || 0;
   }
 }
 

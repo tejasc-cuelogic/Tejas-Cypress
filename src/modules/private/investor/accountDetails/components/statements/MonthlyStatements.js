@@ -20,15 +20,8 @@ export default class MonthlyStatements extends Component {
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', 'individual');
-    this.props.transactionStore.initRequest({ order: 'DESC', limitData: 1 }).then(() => {
-      const statementObj = {
-        field: 'statementDate',
-        rangeParam: 'month',
-        format: 'MMM YYYY',
-        text: 'Monthly statement',
-      };
-      this.props.statementStore.allStatements(statementObj);
-    });
+    this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
+    this.props.statementStore.setActiveModule('MonthlyStatements');
   }
 
   paginate = params => this.props.statementStore.pageRequest(params);
@@ -46,7 +39,10 @@ export default class MonthlyStatements extends Component {
     if (loading) {
       return <InlineLoader />;
     }
-    const { monthlyStatements, count, requestState } = this.props.statementStore;
+    const {
+      count, requestState,
+      monthlyStatements,
+    } = this.props.statementStore;
     const totalRecords = count || 0;
     result.rows = monthlyStatements;
     return (
