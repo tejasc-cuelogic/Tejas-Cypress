@@ -37,12 +37,12 @@ class TopThingsToKnowModal extends Component {
               <Aux>
                 <div className="detail-section mt-10">
                   {Parser(campaign.offering.overview.elevatorPitch)}
-                </div><br />
+                </div>
               </Aux>
             }
             {campaign && campaign.offering && campaign.offering.overview &&
               campaign.offering.overview.highlight ?
-                <List bulleted>
+                <List bulleted className="mt-30">
                   {campaign.offering.overview.highlight.map(field => (
                     <List.Item>{field}</List.Item>
                   ))

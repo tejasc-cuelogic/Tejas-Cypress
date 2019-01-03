@@ -1,14 +1,26 @@
 import gql from 'graphql-tag';
 
 export const allTransactions = gql`
-  query getAccountTransactions($userId: String!, $accountId: String!) {
-    getAccountTransactions(userId: $userId, accountId: $accountId) {
-      date
-      description
-      type
-      status
-      amount
-      offering
+  query getAccountTransactions($userId: String!, $accountId: String!, $transactionDirection: [TransactionDirectionEnum], $dateFilterStart: String, $dateFilterStop: String, $offset: Int, $orderBy: OrderStatusEnum, $limit: Int) {
+    getAccountTransactions(
+      userId: $userId,
+      accountId: $accountId,
+      transactionDirection: $transactionDirection
+      dateFilterStart: $dateFilterStart
+      dateFilterStop: $dateFilterStop
+      offset: $offset
+      order: $orderBy
+      limit: $limit
+    ) {
+      transactions {
+        date
+        description
+        type
+        status
+        amount
+        offering
+      }
+      totalCount
     }
   }
 `;
@@ -47,5 +59,35 @@ export const requestOptForTransaction = gql`
 export const withdrawFundMutation = gql`
   mutation _withdrawFunds($userId: String!, $amount: Float!, $accountId: String!, $description: String, $agreementId: Int) {
     withdrawFunds(userId: $userId, amount: $amount, accountId: $accountId, description: $description, agreementId: $agreementId)
+  }
+`;
+
+export const paymentHistory = gql`
+  query _getPaymentHistory($investmentId: Int!, $offeringId: String!){
+    getPaymentHistory(
+      investmentId: $investmentId,
+      offeringId: $offeringId
+    )
+    {
+      completeDate
+      grossTotalAmount
+      feeTotalAmount
+      netTotalAmount
+      remainingAmountDue
+      interestGrossAmount
+      principalGrossAmount
+      remainingPrincipalDue
+    }
+  }
+`;
+
+export const investmentsByOfferingId = gql`
+  query _getInvestmentsByOfferingId($offeringId: String!) {
+    getInvestmentsByOfferingId(offeringId: $offeringId) {
+      investmentId
+      accountId
+      status
+      amount
+    }
   }
 `;

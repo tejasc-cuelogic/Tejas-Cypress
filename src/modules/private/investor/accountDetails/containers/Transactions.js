@@ -4,15 +4,15 @@ import { inject, observer } from 'mobx-react';
 import { includes } from 'lodash';
 import { Header, Card, Grid, Form } from 'semantic-ui-react';
 import { FillTable } from '../../../../../theme/table/NSTable';
-import { DropdownFilter, DateRangeFilter, AmountRangeFilter } from '../../../../../theme/form/Filters';
+import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { NsPagination } from '../../../../../theme/shared';
-import { TRANSACTION_TYPES } from '../../../../../services/constants/user';
+import { TRANSACTION_TYPES, DATE_RANGES } from '../../../../../services/constants/user';
 
 const result = {
   columns: [
     { title: 'Date', field: 'date' },
     { title: 'Description', field: 'description', className: 'positive-text' },
-    { title: 'Transaction Type', field: 'type' },
+    { title: 'Type', field: 'type' },
     { title: 'Status', field: 'status' },
     { title: 'Amount', field: 'amount', textAlign: 'right' },
   ],
@@ -37,7 +37,7 @@ export default class Transactions extends Component {
     const {
       getAllTransactions, loading, error, totalRecords, requestState,
     } = this.props.transactionStore;
-    result.rows = getAllTransactions;
+    result.rows = getAllTransactions.transactions;
     return (
       <Aux>
         <div className="more search-filters">
@@ -45,13 +45,10 @@ export default class Transactions extends Component {
             <Grid stackable>
               <Grid.Row>
                 <Grid.Column width={4}>
-                  <DateRangeFilter label="Date Range" name="dateRange" />
+                  <DropdownFilter placeHolder="Last 30 days" value={this.props.transactionStore.requestState.search.dateRange} change={this.setSearchParam} options={DATE_RANGES} label="Date Range" name="dateRange" />
                 </Grid.Column>
                 <Grid.Column width={3}>
-                  <DropdownFilter value={this.props.transactionStore.requestState.search.transactionType} name="Transaction Type" change={this.setSearchParam} options={TRANSACTION_TYPES} isMultiple />
-                </Grid.Column>
-                <Grid.Column width={4}>
-                  <AmountRangeFilter label="Amount Range" name="anountRange" />
+                  <DropdownFilter placeHolder="All" value={this.props.transactionStore.requestState.search.transactionType} change={this.setSearchParam} options={TRANSACTION_TYPES} label="Transaction Type" name="transactionType" isMultiple />
                 </Grid.Column>
               </Grid.Row>
             </Grid>

@@ -12,20 +12,36 @@ const MessagesList = props => (
           key={msg.id}
           className={props.currentMessageId === msg.id ? 'active' : ''}
         >
-          {props.threadUsersList(msg.threadComments).length === 0 && !props.isIssuer &&
+          {props.threadUsersList(msg.threadComments).length === 0 && !props.isIssuer ?
             <Item.Extra>
               <Label size="mini" color="red" horizontal circular>Response Needed</Label>
-            </Item.Extra>
+            </Item.Extra> : null
+          }
+          {props.threadMsgCount(msg.threadComments) ?
+            <Item.Extra>
+              <Label size="mini" color="blue" circular>{props.threadMsgCount(msg.threadComments)}</Label>
+            </Item.Extra> : null
           }
           <div className="ui image">
-            {props.threadUsersList(msg.threadComments).length ?
-            props.threadUsersList(msg.threadComments).map(u => (
+            {props.threadUsersList(msg.threadComments).length === 1 &&
+              <UserAvatar
+                size="mini"
+                UserInfo={{
+                  firstName: get(msg, 'createdUserInfo.info.firstName'),
+                  lastName: get(msg, 'createdUserInfo.info.lastName'),
+                  avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
+                  roles: [get(msg, 'createdUserInfo.roles.name')],
+                }}
+              />
+            }
+            {props.threadUsersList(msg.threadComments).length > 1 ?
+            props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (
               <UserAvatar
                 size="mini"
                 UserInfo={{
                   firstName: get(u, 'createdUserInfo.info.firstName'),
                   lastName: get(u, 'createdUserInfo.info.lastName'),
-                  avatarUrl: (get(u, 'createdUserInfo.info.avatar') || null),
+                  avatarUrl: (get(u, 'createdUserInfo.info.avatar.url') || null),
                   roles: [get(u, 'createdUserInfo.roles.name')],
                 }}
               />
@@ -35,14 +51,14 @@ const MessagesList = props => (
               UserInfo={{
                 firstName: get(msg, 'createdUserInfo.info.firstName'),
                 lastName: get(msg, 'createdUserInfo.info.lastName'),
-                avatarUrl: (get(msg, 'createdUserInfo.info.avatar') || null),
+                avatarUrl: (get(msg, 'createdUserInfo.info.avatar.url') || null),
                 roles: [get(msg, 'createdUserInfo.roles.name')],
               }}
             />
           }
           </div>
           <List.Content>
-            <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? (props.threadUsersList(msg.threadComments).map(u => (u.createdUserInfo.info && `${u.createdUserInfo.info.firstName}`))).join(', ') : msg.createdUserInfo.info && `${msg.createdUserInfo.info.firstName}`}</List.Header>
+            <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? `${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')}`}</List.Header>
           </List.Content>
           <List.Content>
             <List.Header><DateTimeFormat format="ll" datetime={msg.created.date} /></List.Header>

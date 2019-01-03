@@ -35,9 +35,6 @@ export default class CampaignSideBar extends Component {
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(terminationDate);
     const rewardsTiers = get(campaign, 'rewardsTiers') || [];
-    // campaign && campaign.rewardsTierIds &&
-    //   campaign.rewardsTierIds.length && orderBy(campaign.rewardsTierIds,
-    // ['earlyBirdQuantity', 'amount'], ['desc', 'asc']);
     const flagStatus = collected >= minOffering;
     return (
       <Aux>

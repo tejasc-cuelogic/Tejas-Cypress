@@ -25,6 +25,7 @@ export default class NsCarousel extends Component {
     const settings = {
       infinite: false,
       speed: 500,
+      fade: this.props.fade,
       className: this.props.className,
       slidesToShow: this.props.slidesToShow,
       slidesToScroll: this.props.slidesToScroll,
@@ -33,7 +34,9 @@ export default class NsCarousel extends Component {
       adaptiveHeight: this.props.adaptiveHeight,
       beforeChange: (current, next) => {
         if (this.props.handlePaginationFun) {
-          this.props.handlePaginationFun(next);
+          setTimeout(() => {
+            this.props.handlePaginationFun(next);
+          }, 5);
         }
       },
     };

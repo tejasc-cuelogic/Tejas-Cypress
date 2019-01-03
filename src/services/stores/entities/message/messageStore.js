@@ -1,5 +1,5 @@
 import { toJS, observable, computed, action } from 'mobx';
-import { filter, uniqBy, get } from 'lodash';
+import { filter, uniqBy, get, has, reduce } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -38,9 +38,8 @@ export class NewMessage {
   @action
   newPostComment = () => {
     const { userDetails } = userDetailsStore;
-    console.log(userDetails);
-    if (this.data && this.data.data && this.data.data.offeringCommentsByOfferId
-      && this.currentMessageId) {
+    const messagesList = this.messages;
+    if (messagesList && this.currentMessageId && messagesList.length && !has(messagesList[0], 'isSample')) {
       this.data.data.offeringCommentsByOfferId.splice(0, 0, {
         id: null,
         offeringId: this.data.data.offeringCommentsByOfferId[0].offeringId,
@@ -89,7 +88,7 @@ export class NewMessage {
     if (this.editMessageId) {
       payload.id = this.editMessageId;
     }
-    if (this.currentMessageId) {
+    if (this.currentMessageId && this.currentMessageId !== this.editMessageId) {
       payload.commentInput.thread = this.currentMessageId;
     }
     client
@@ -188,6 +187,8 @@ export class NewMessage {
   }
 
   threadUsersList = threadComments => uniqBy(threadComments, 'createdUserInfo.id');
+
+  threadMsgCount = threadComments => reduce(threadComments, (sum, c) => (c.scope === 'PUBLIC' ? (sum + 1) : sum), 0);
 
   @action
   resetMessageForm = () => {

@@ -1,24 +1,25 @@
 import React from 'react';
 import { Card, Grid, Icon, Header } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { get } from 'lodash';
 import { DataFormatter } from '../../../../../helper';
 
 const leftSummary = offer => [
   {
     title: 'Business Name',
-    content: ((offer.keyTerms && offer.keyTerms.shorthandBusinessName) ?
-      offer.keyTerms.shorthandBusinessName : (
-        (offer.keyTerms && offer.keyTerms.legalBusinessName) ? offer.keyTerms.legalBusinessName : 'N/A'
+    content: (get(offer, 'keyTerms.shorthandBusinessName') ?
+      get(offer, 'keyTerms.shorthandBusinessName') : (
+        get(offer, 'keyTerms.legalBusinessName') ? get(offer, 'keyTerms.legalBusinessName') : 'N/A'
       )),
   },
-  { title: 'Launch Date', content: offer && offer.offering && offer.offering.launch && DataFormatter.formatedDate(offer.offering.launch.targetDate) },
-  { title: offer.offering && offer.offering.launch && offer.offering.launch.terminationDate && DataFormatter.diffDays(offer.offering.launch.terminationDate, true) <= 0 ? 'Close Date' : 'Days Till Close', content: (offer.offering && offer.offering.launch && offer.offering.launch.terminationDate && DataFormatter.diffDays(offer.offering.launch.terminationDate, true) >= 0) ? `${DataFormatter.diffDays(offer.offering.launch.terminationDate)} days` : offer.offering.launch.terminationDate ? offer.offering.launch.terminationDate : 'N/A' },
+  { title: 'Launch Date', content: DataFormatter.formatedDate(get(offer, 'offering.launch.targetDate')) },
+  { title: DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'), true) <= 0 ? 'Close Date' : 'Days Till Close', content: (DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'), true) >= 0) ? `${DataFormatter.diffDays(get(offer, 'offering.launch.terminationDate'))} days` : get(offer, 'offering.launch.terminationDate') ? get(offer, 'offering.launch.terminationDate') : 'N/A' },
 ];
 
 const rightSummary = offer => [
-  { title: 'Name', content: offer.issuerDetails && offer.issuerDetails.info ? `${offer.issuerDetails.info.firstName} ${offer.issuerDetails.info.lastName}` : 'N/A' },
-  { title: 'Email', content: offer.issuerDetails && offer.issuerDetails.email && offer.issuerDetails.email.address ? offer.issuerDetails.email.address : 'N/A' },
-  { title: 'Phone', content: offer.issuerDetails && offer.issuerDetails.phone && offer.issuerDetails.phone.number ? offer.issuerDetails.phone.number : 'N/A' },
+  { title: 'Name', content: get(offer, 'issuerDetails.info') ? `${get(offer, 'issuerDetails.info.firstName')} ${get(offer, 'issuerDetails.info.lastName')}` : 'N/A' },
+  { title: 'Email', content: get(offer, 'issuerDetails.email.address') || 'N/A' },
+  { title: 'Phone', content: get(offer, 'issuerDetails.phone.number') || 'N/A' },
 ];
 const LiveSummary = ({ offer, refLink }) => (
   <Grid columns="equal">

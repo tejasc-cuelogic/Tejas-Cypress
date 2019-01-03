@@ -1,39 +1,25 @@
 import React, { Component } from 'react';
+import { includes } from 'lodash';
+import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
 import { ResponsiveContainer, Bar, ComposedChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import Helper from '../../../../../../helper/utility';
+import { InlineLoader } from '../../../../../../theme/shared';
 
-const data = [
-  { name: 'May 2017', Payment: 250, 'Paid to date': 250 },
-  { name: 'June 2017', Payment: 150, 'Paid to date': 400 },
-  { name: 'July 2017', Payment: 140, 'Paid to date': 540 },
-  { name: 'Aug 2017', Payment: 260, 'Paid to date': 800 },
-  { name: 'Sept 2017', Payment: 200, 'Paid to date': 1000 },
-  { name: 'Oct 2017', Payment: 250, 'Paid to date': 1250 },
-  { name: 'Nov 2017', Payment: 250, 'Paid to date': 1500 },
-  { name: 'Dec 2017', Payment: 300, 'Paid to date': 1800 },
-  { name: 'Jan 2018', Payment: 250, 'Paid to date': 2150 },
-  { name: 'Feb 2018', Payment: 150, 'Paid to date': 2300 },
-  { name: 'Mar 2018', Payment: 200, 'Paid to date': 2500 },
-  { name: 'April 2018', Payment: 300, 'Paid to date': 2800 },
-  { name: 'May 2018', Payment: 150, 'Paid to date': 2950 },
-  { name: 'June 2018', Payment: 500, 'Paid to date': 3450 },
-  { name: 'July 2018', Payment: 50, 'Paid to date': 3500 },
-  { name: 'Aug 2018', Payment: 250, 'Paid to date': 3750 },
-  { name: 'Sept 2018', Payment: 250, 'Paid to date': 4000 },
-  { name: 'Oct 2018', Payment: 250, 'Paid to date': 1500 },
-  { name: 'Nov 2018' },
-  { name: 'Dec 2018' },
-  { name: 'Jan 2018' },
-  { name: 'Feb 2018' },
-  { name: 'Mar 2018' },
-  { name: 'Apr 2018' },
-  { name: 'May 2018' },
-  { name: 'June 2018' },
-];
-
+@inject('portfolioStore')
+@withRouter
+@observer
 export default class PayOffChart extends Component {
+  componentWillMount() {
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    this.props.portfolioStore.getPayOffData(accountType);
+  }
   formatY = item => Helper.CurrencyFormat(item);
   render() {
+    const data = this.props.portfolioStore.getChartData();
+    if (data.length === 0) {
+      return <InlineLoader text="No Data to Display!" />;
+    }
     return (
       <ResponsiveContainer height={320}>
         <ComposedChart

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get } from 'lodash';
+import { map, forEach, filter, get, ceil } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
@@ -47,7 +47,6 @@ export class BusinessAppReviewStore {
   };
   @observable amortizationArray = [];
   @observable initLoad = [];
-  // @observable amortizationObject;
 
   @action
   setFieldvalue = (field, value) => {
@@ -241,7 +240,22 @@ export class BusinessAppReviewStore {
       { name: field, value: fieldValue },
     );
   }
-
+  @action
+  assignAdditionalTermsValue = (index) => {
+    this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+      this.OFFERS_FRM.fields.offer[index].additionalTerms.value ? 'Additional Terms Apply' : 'Add Terms';
+  }
+  @action
+  addAdditionalTermsToFormData = (index) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    if (!businessApplicationDetailsAdmin) {
+      return false;
+    }
+    this.OFFERS_FRM.fields.offer[index].additionalTerms.value =
+    (businessApplicationDetailsAdmin.offers.offer[index] &&
+      businessApplicationDetailsAdmin.offers.offer[index].additionalTerms) || null;
+    return false;
+  }
   @action
   maskChangeWithIndex = (values, form, arrayName = 'data', field, index) => {
     const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' || field === 'companyInceptionDate' ? values.formattedValue : values.floatValue;
@@ -249,6 +263,9 @@ export class BusinessAppReviewStore {
       this[form],
       { name: field, value: fieldValue }, arrayName, index,
     );
+    if (field === 'minimumAmount' || field === 'interestRate' || field === 'maturity') {
+      this.showFormAmortisation(index);
+    }
   }
 
   @computed
@@ -433,12 +450,14 @@ export class BusinessAppReviewStore {
 
   @computed get offerStructure() {
     const offerData = this.fetchBusinessApplicationOffers;
-    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    const offer = offerData && offerData.offers && offerData.offers.offer[this.selectedOfferIndex]
+      ? offerData.offers.offer[this.selectedOfferIndex] : null;
     return offer.structure;
   }
   revenueSharing = () => {
     const offerData = this.fetchBusinessApplicationOffers;
-    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    const offer = offerData && offerData.offers && offerData.offers.offer[this.selectedOfferIndex]
+      ? offerData.offers.offer[this.selectedOfferIndex] : null;
     if (this.offerStructure === 'REVENUE_SHARING_NOTE' && offer.mthRevenueSharing) {
       const { expectedAnnualRevenue } = offerData.offers;
       const result = [];
@@ -481,12 +500,14 @@ export class BusinessAppReviewStore {
       const { schedule, balance } = Calculator.calculate(data);
       const formattedSchedule = [];
       schedule.map((sc, index) => {
+        const previousBalance = index === 0 ? money.floatToAmount(balance.toString()) :
+          money.floatToAmount(schedule[index - 1].remainingBalance);
         const interestAmount = money.floatToAmount(sc.interest.toString());
         const principalAmount = money.floatToAmount(sc.principal.toString());
         const totalMonthlyPayment = money.floatToAmount(money.add(principalAmount, interestAmount));
         formattedSchedule.push({
           index: index + 1,
-          loanAmount: Helper.CurrencyFormat(money.floatToAmount(balance.toString()), 2),
+          loanAmount: Helper.CurrencyFormat(previousBalance, 2),
           monthlyPayment: Helper.CurrencyFormat(totalMonthlyPayment, 2),
           interestAmount: Helper.CurrencyFormat(sc.interest, 2),
           principalAmount: Helper.CurrencyFormat(sc.principal, 2),
@@ -644,7 +665,33 @@ export class BusinessAppReviewStore {
     if (form !== 'MANAGERS_FRM') {
       this.checkFormValid(form, multiForm, false);
     }
+    if (form === 'OFFERS_FRM') {
+      appData.offers.offer.map((offer, index) => {
+        this.showFormAmortisation(index);
+        this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+          offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
+        return null;
+      });
+    }
     return false;
+  }
+  @action
+  showFormAmortisation = (index) => {
+    const maturity = this.OFFERS_FRM.fields.offer[index].maturity.value || 0;
+    const interestRate = this.OFFERS_FRM.fields.offer[index].interestRate.value || 0;
+    const minimumAmount = this.OFFERS_FRM.fields.offer[index].amount.value || 0;
+    const Formdata = {
+      method: 'mortgage',
+      apr: interestRate,
+      balance: minimumAmount,
+      loanTerm: maturity,
+    };
+    const data = Calculator.calculate(Formdata);
+    const amortizationAmount = data && data.schedule.length ?
+      data.schedule[0].interest + data.schedule[0].principal : 0;
+    const returnedAmount = amortizationAmount * maturity;
+    this.OFFERS_FRM.fields.offer[index].totalCapital.value = ceil(returnedAmount);
+    this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = ceil(amortizationAmount);
   }
 }
 export default new BusinessAppReviewStore();

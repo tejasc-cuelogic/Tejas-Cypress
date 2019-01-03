@@ -18,7 +18,7 @@ export default class Compose extends Component {
       MESSAGE_FRM, msgEleChange, buttonLoader, editScope, editMessageId, threadMainMessage,
     } = messageStore;
     const scope = get(threadMainMessage && threadMainMessage.length && threadMainMessage[0], 'scope') || null;
-    const isPublic = scope === 'PUBLIC';
+    const isPublic = scope === 'PUBLIC' || (threadMainMessage && threadMainMessage.length === 0);
     const isPrivate = scope === 'NEXTSEED';
     return (
       <div className="message-footer">
