@@ -16,7 +16,7 @@ class Gallery extends Component {
             <Breadcrumb.Section as={Link} to={`${galleryUrl}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
             <Breadcrumb.Divider icon={{ className: 'ns-chevron-right', color: 'green' }} />
           </Breadcrumb>
-          <div className="carousel mt-10 mb-30">
+          <div className="about-carousel mt-10 mb-30">
             <NsCarousel
               {...settings}
               handlePaginationFun={() => {}}
@@ -25,7 +25,7 @@ class Gallery extends Component {
                 campaign && campaign.media &&
                   campaign.media.gallery && campaign.media.gallery.length ?
                   campaign.media.gallery.map(data => (
-                    <Image64 srcUrl={data.url} />
+                    <Image64 className="about-gallery-bg" bg srcUrl={data.url} />
                   ))
                   :
                   <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />

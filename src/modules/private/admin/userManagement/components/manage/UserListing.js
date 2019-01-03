@@ -95,7 +95,7 @@ class UserListing extends Component {
           </Table>
         </div>
         {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={paginate} meta={{ totalRecords, requestState }} />
+          <NsPagination initRequest={paginate} meta={{ totalRecords, requestState }} />
         }
       </Card>
     );
