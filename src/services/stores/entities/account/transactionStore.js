@@ -67,7 +67,7 @@ export class TransactionStore {
         offset: page || 1,
         accountId: account.details.accountId,
         userId: userDetails.id,
-        orderBy: (props && props.orderBy) || 'ASC',
+        orderBy: (props && props.order) || 'DESC',
         limit: (props && props.limitData) || 10,
       },
       fetchPolicy: 'network-only',
