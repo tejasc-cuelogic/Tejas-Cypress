@@ -18,7 +18,7 @@ export default class Comments extends Component {
   render() {
     const { match, messageStore, userStore } = this.props;
     const {
-      messages, currentMessageId, loading, error, threadUsersList, newPostComment,
+      messages, currentMessageId, loading, error, threadUsersList, newPostComment, threadMsgCount,
     } = messageStore;
     const { isIssuer } = userStore;
     if (loading) {
@@ -31,6 +31,7 @@ export default class Comments extends Component {
       <Card fluid className="messages comments">
         {messages.length ?
           <MessagesList
+            threadMsgCount={threadMsgCount}
             newPostComment={newPostComment}
             threadUsersList={threadUsersList}
             messageSelectHandler={this.messageSelectHandler}

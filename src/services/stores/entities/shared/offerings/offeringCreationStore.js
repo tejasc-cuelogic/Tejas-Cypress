@@ -922,7 +922,7 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success',
   ) => {
     uiStore.setProgress();
     const variables = {
@@ -943,7 +943,7 @@ export class OfferingCreationStore {
       .then(() => {
         this.removeUploadedFiles(fromS3);
         if (successMsg) {
-          Helper.toast(`${successMsg}`, 'success');
+          Helper.toast(`${successMsg}`, msgType);
         } else if (notify) {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
@@ -973,7 +973,7 @@ export class OfferingCreationStore {
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
-    approvedObj, fromS3 = false, leaderIndex,
+    approvedObj, fromS3 = false, leaderIndex, msgType = 'success',
   ) => new Promise((res, rej) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -1166,7 +1166,10 @@ export class OfferingCreationStore {
         });
       });
     }
-    this.updateOfferingMutation(id, payloadData, keyName, notify, successMsg, fromS3, res, rej);
+    this.updateOfferingMutation(
+      id, payloadData, keyName, notify, successMsg,
+      fromS3, res, rej, msgType,
+    );
   });
 
   @action
@@ -1395,11 +1398,13 @@ export class OfferingCreationStore {
 
   updateBonusRewardTier = (isDelete = false, amount = 0, earlyBirdQuantity = 0) => {
     const { fields } = this.ADD_NEW_TIER_FRM;
+    const msg = isDelete ? 'Tier has been deleted successfully' : 'Tier has been created successfully';
+    const msgType = isDelete ? 'error' : 'success';
     const subKey = isDelete ? { amount, earlyBirdQuantity } : null;
     this.updateOffering(
       this.currentOfferingId,
-      fields, 'BonusRewardTier', subKey, false, 'Tier has been created successfully',
-      null, false,
+      fields, 'BonusRewardTier', subKey, false, msg,
+      null, false, null, msgType,
     ).then(() => {
       Validator.resetFormData(this.ADD_NEW_TIER_FRM);
     });
@@ -1422,6 +1427,19 @@ export class OfferingCreationStore {
     this.ADD_NEW_BONUS_REWARD_FRM.fields =
       { ...this.ADD_NEW_BONUS_REWARD_FRM.fields, ...tiersArray };
   };
+
+  @computed get isCheckedAtLeastOneTiers() {
+    const tiers = get(offeringsStore.offer, 'rewardsTiers') || [];
+    let hasTierVal = false;
+    // eslint-disable-next-line consistent-return
+    forEach(tiers, (tier, index) => {
+      if (this.ADD_NEW_BONUS_REWARD_FRM.fields[index].value.length) {
+        hasTierVal = true;
+        return false;
+      }
+    });
+    return hasTierVal || this.ADD_NEW_BONUS_REWARD_FRM.fields.isEarlyBirds.value.length;
+  }
 
   @action
   bonusRewardTierChange = (e, seqNum, result) => {

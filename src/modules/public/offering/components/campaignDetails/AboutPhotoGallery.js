@@ -45,7 +45,7 @@ class AboutPhotoGallery extends Component {
                 isTablet={isTablet}
                 refItems={galleryArray}
                 handlePaginationFun={this.handlePagination}
-                fade
+                fade={!isTablet}
               >
                 {
                   galleryArray.length ?

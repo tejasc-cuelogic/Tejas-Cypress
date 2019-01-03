@@ -49,7 +49,7 @@ export const FillTable = ({
                       result.columns.map(col => (
                         <Table.Cell key={col.field} textAlign={col.textAlign}>
                           {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) : (
-                              ['taxFormDate', 'statementDate', 'createdAt', 'date'].includes(col.field) ?
+                              ['createdAt', 'date'].includes(col.field) ?
                                 <DateTimeFormat datetime={row[col.field]} /> : (
                                   (col.field === 'file') ? <Actions download={download} actions={row[col.field]} /> : (
                                     Array.isArray(row[col.field]) ? row[col.field].join(' and ') : row[col.field]

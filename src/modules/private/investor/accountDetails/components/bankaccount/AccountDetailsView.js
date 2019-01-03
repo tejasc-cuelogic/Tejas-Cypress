@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -77,10 +78,16 @@ export default class AccountDetailsView extends Component {
             <Grid.Column>
               <Item>
                 <Item.Content>
-                  <Item.Extra>Date linked</Item.Extra>
+                  <Item.Extra>
+                    {accountDetails && pendingAccoungDetails ? 'Date linked' : 'Date Requested'
+                    }
+                  </Item.Extra>
                   <Item.Header>
-                    {accountDetails && accountDetails.dateLinked ?
-                      moment(accountDetails.dateLinked).format('MM/DD/YYYY') : null}
+                  {accountDetails && pendingAccoungDetails && accountDetails.changeRequest &&
+                      accountDetails.changeRequest.dateRequested ?
+                      moment(accountDetails.changeRequest.dateRequested).format('MM/DD/YYYY') :
+                      moment(accountDetails.dateLinked).format('MM/DD/YYYY')
+                    }
                   </Item.Header>
                 </Item.Content>
               </Item>

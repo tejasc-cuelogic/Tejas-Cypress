@@ -37,6 +37,7 @@ export default class AddNewBonusReward extends Component {
       formChange,
       maskChange,
       bonusRewardTierChange,
+      isCheckedAtLeastOneTiers,
     } = this.props.offeringCreationStore;
     const formName = 'ADD_NEW_BONUS_REWARD_FRM';
     const { offer } = this.props.offeringsStore;
@@ -92,7 +93,7 @@ export default class AddNewBonusReward extends Component {
                 />
               </div>
               <div className="center-align">
-                <Button primary content={isEditForm ? 'Update bonus reward' : 'Add new bonus reward'} disabled={!ADD_NEW_BONUS_REWARD_FRM.meta.isValid} />
+                <Button primary content={isEditForm ? 'Update bonus reward' : 'Add new bonus reward'} disabled={!(ADD_NEW_BONUS_REWARD_FRM.meta.isValid && isCheckedAtLeastOneTiers)} />
               </div>
             </Form>
           </Modal.Content>

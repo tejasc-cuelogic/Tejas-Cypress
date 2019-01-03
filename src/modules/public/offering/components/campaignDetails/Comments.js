@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Button, Comment, Form, Grid, Segment, Header, Label, Divider, Confirm } from 'semantic-ui-react';
+import { Button, Comment, Form, Grid, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
@@ -12,7 +12,7 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore')
 @observer
 class Comments extends Component {
-  state={ readMore: false, readMoreInner: false, showConfirm: false }
+  state={ readMore: false, readMoreInner: false }
   postNewComment = () => {
     const { isUserLoggedIn } = this.props.authStore;
     if (!isUserLoggedIn) {
@@ -23,12 +23,17 @@ class Comments extends Component {
       this.props.history.push(`${this.props.match.url}/postComment/NEW`);
     }
   }
-  showConfirmToggle = (e, val) => {
+  handleLogin = (e) => {
     e.preventDefault();
-    this.setState({ showConfirm: val });
-  }
-  confirmLoginSignup = (url) => {
-    this.props.history.push(`/auth/${url}`);
+    const { isUserLoggedIn } = this.props.authStore;
+    const { currentUser } = this.props.userStore;
+    if (!isUserLoggedIn) {
+      this.props.uiStore.setAuthRef(`${this.props.refLink}/comments`);
+      this.props.uiStore.setRedirectURL({ pathname: `${this.props.refLink}/comments` });
+      this.props.history.push('/auth/login');
+    } else if (!(isUserLoggedIn && currentUser.roles.includes('investor'))) {
+      this.props.history.push(`${this.props.refLink}/confirm-comment-login`);
+    }
   }
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
@@ -76,7 +81,7 @@ class Comments extends Component {
                       <Form reply className="public-form clearfix">
                         {loggedInAsInvestor && !accountStatusFull ?
                           <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
-                        : <Link onClick={e => this.showConfirmToggle(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                        : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                         }
                       </Form>
                     </section>
@@ -161,7 +166,7 @@ class Comments extends Component {
                     <Form reply className="public-form clearfix">
                       {loggedInAsInvestor && !accountStatusFull ?
                         <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
-                      : <Link onClick={e => this.showConfirmToggle(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
+                      : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                       }
                     </Form>
                   }
@@ -194,15 +199,6 @@ class Comments extends Component {
           <Route exact path={`${this.props.match.url}/community-guidelines`} render={props => <CommunityGuideline refLink={this.props.match.url} {...props} />} />
           <Route path={`${this.props.match.url}/:id/:messageType?`} render={props => <CommentsReplyModal campaignSlug={campaignSlug} campaignId={campaignId} issuerId={issuerId} refLink={this.props.match.url} {...props} />} />
         </Switch>
-        <Confirm
-          header="Confirm"
-          content={`Sorry, you must be ${get(loginOrSignup, 'title')} as an Investor in order to Post a comment.`}
-          open={this.state.showConfirm}
-          onCancel={e => this.showConfirmToggle(e, false)}
-          onConfirm={() => this.confirmLoginSignup(get(loginOrSignup, 'to'))}
-          size="tiny"
-          // className="deletion"
-        />
       </div>
     );
   }

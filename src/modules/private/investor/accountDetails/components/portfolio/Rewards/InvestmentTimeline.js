@@ -25,22 +25,14 @@ class InvestmentTimeline extends Component {
     const { campaign } = this.props.campaignStore;
     const { getInvestor } = this.props.portfolioStore;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
-    const totalRaisedAmount =
-      getInvestor && getInvestor.totalRaisedAmount ? getInvestor.totalRaisedAmount : 0;
-    // if (rewardsTiers && (totalRaisedAmount < (rewardsTiers.length && rewardsTiers[0]))) {
-    //   rewardsTiers.splice(sortedIndexBy(
-    //     rewardsTiers,
-    //     { amount: totalRaisedAmount },
-    //   ), 0, { amount: totalRaisedAmount, earlyBirdQuantity: 0 });
-    // }
+    const myInvestment = get(getInvestor, 'myInvestment') || 0;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
-    const investBoanusReward = rewardsTiers.filter(r =>
+    const investBonusReward = rewardsTiers.filter(r =>
       bonusRewards.filter(b => b.tiers.includes(r)).length);
-    //  filter(rewardsTiers, tier => tier.earlyBirdQuantity <= 0);
-    rewardsTiers = investBoanusReward;
+    rewardsTiers = investBonusReward;
     const progress =
-      investBoanusReward.length ? calcSmartProgress(investBoanusReward, totalRaisedAmount) : 0;
-    const calculatedMargin = calMargin(investBoanusReward);
+      investBonusReward.length ? calcSmartProgress(investBonusReward, myInvestment) : 0;
+    const calculatedMargin = calMargin(investBonusReward);
     return (
       rewardsTiers && rewardsTiers.length ?
         <Aux>
@@ -48,12 +40,12 @@ class InvestmentTimeline extends Component {
           <Grid columns="equal" textAlign="center" className="investment-scale">
             <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
               <span className="investment-progress" style={{ width: `${progress}%` }} />
-              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(totalRaisedAmount)}</span></div>
+              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(myInvestment)}</span></div>
             </div>
             <Grid.Row>
               {rewardsTiers.map((tier, index) => (
                 <Grid.Column
-                  className={`${((rewardsTiers[index + 1] && toInteger(tier) <= toInteger(totalRaisedAmount) && rewardsTiers[index + 1] >= toInteger(totalRaisedAmount)) || toInteger(tier) === toInteger(totalRaisedAmount)) ? 'crossed' : ''}`}
+                  className={`${((rewardsTiers[index + 1] && toInteger(tier) <= toInteger(myInvestment) && rewardsTiers[index + 1] >= toInteger(myInvestment)) || toInteger(tier) === toInteger(myInvestment)) ? 'crossed' : ''}`}
                   key={`m_${tier}`}
                 >
                   <Popup

@@ -273,7 +273,7 @@ export default class Media extends Component {
                 modalUploadAction={this.uploadMedia}
                 name="gallery"
                 cropInModal
-                aspect={16 / 9}
+                aspect="none"
               />
             </List.Item>
           </List>

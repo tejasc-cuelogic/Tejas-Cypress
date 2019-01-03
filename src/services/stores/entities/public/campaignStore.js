@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, forEach } from 'lodash';
+import { pickBy, forEach, reduce, get } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
@@ -181,7 +181,11 @@ export class CampaignStore {
     if (this.campaign) {
       const { updates, comments } = this.campaign;
       res.updates = updates && updates.length ? updates.length : 0;
-      res.comments = comments && comments.length ? comments.length : 0;
+      // eslint-disable-next-line arrow-body-style
+      res.comments = reduce(comments, (sum, c) => {
+        console.log('name', get(c, 'createdUserInfo.roles[0].name'));
+        return (c.scope === 'PUBLIC' && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved)) ? (sum + 1) : sum);
+      }, 0);
     }
     return res;
   }
@@ -210,6 +214,17 @@ export class CampaignStore {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
       this.setLoading(false);
     }).catch(() => this.setLoading(false));
+  }
+
+  @computed get offerStructure() {
+    const { selectedOffer, keyTerms } = this.campaign;
+    let offerStructure = '';
+    if (selectedOffer && selectedOffer.structure !== '') {
+      offerStructure = selectedOffer.structure;
+    } else {
+      offerStructure = keyTerms.securities;
+    }
+    return offerStructure;
   }
 }
 
