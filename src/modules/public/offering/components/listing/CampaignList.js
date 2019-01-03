@@ -39,14 +39,17 @@ export default class CampaignList extends Component {
                   {campaigns.map(offering => (
                     <Grid.Column>
                       <Card className="campaign" fluid as={Link} to={`/offerings/${offering.offeringSlug}/overview`}>
-                        <Image64
-                          centered
-                          srcUrl={offering && offering.media && offering.media.tombstoneImage &&
-                            offering.media.tombstoneImage.url ?
-                            offering.media.tombstoneImage.url : null
-                          }
-                          alt={`${offering.keyTerms.shorthandBusinessName} poster`}
-                        />
+                        <div className="campaign-image-wrap">
+                          <Image64
+                            bg
+                            centered
+                            srcUrl={offering && offering.media && offering.media.tombstoneImage &&
+                              offering.media.tombstoneImage.url ?
+                              offering.media.tombstoneImage.url : null
+                            }
+                            alt={`${offering.keyTerms.shorthandBusinessName} poster`}
+                          />
+                        </div>
                         <Label color="green">NEW</Label> {/* apply attribute basic for successful campaigns */}
                         <Icon name="heart" /> {/* change name to "heart outline" for unliked campaigns */}
                         <Aux>
