@@ -33,7 +33,7 @@ const REVENUESHARINGMETA = {
 export default class PaymentChart extends Component {
   render() {
     const { revenueSharing, paymentChart, offerStructure } = this.props.businessAppReviewStore;
-    const payment = offerStructure === 'TERM_NOTE' ? paymentChart() : revenueSharing();
+    const payment = offerStructure && offerStructure === 'TERM_NOTE' ? paymentChart() : revenueSharing();
     if (offerStructure === 'TERM_NOTE') {
       TERMNOTEMETA.rows = payment;
     } else {
@@ -43,7 +43,10 @@ export default class PaymentChart extends Component {
       <Aux>
         <Header as="h4">{offerStructure === 'TERM_NOTE' ? 'Amortization Schedule Example' : 'Revenue Share Repayment Example'}</Header>
         <div className="table-wrapper-vertical">
-          <FillTable result={offerStructure === 'TERM_NOTE' ? TERMNOTEMETA : REVENUESHARINGMETA} />
+          {payment && payment.length ?
+            <FillTable result={offerStructure === 'TERM_NOTE' ? TERMNOTEMETA : REVENUESHARINGMETA} />
+          : <p>No Offers Added</p>
+        }
         </div>
       </Aux>
     );
