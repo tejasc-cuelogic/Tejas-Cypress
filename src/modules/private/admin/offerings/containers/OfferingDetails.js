@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Switch, Route, Link } from 'react-router-dom';
-import { find } from 'lodash';
+import { find, get } from 'lodash';
 import Aux from 'react-aux';
 import { Modal, Card, Header, Icon } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
@@ -41,7 +41,7 @@ export default class OfferingDetails extends Component {
     }
     navItems = navStore.filterByAccess(
       navItems,
-      find(offeringsStore.phases, (s, i) => i === offer.stage).accessKey,
+      get(find(offeringsStore.phases, (s, i) => i === offer.stage), 'accessKey'),
     );
     return (
       <Aux>
