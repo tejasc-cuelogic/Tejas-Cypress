@@ -1,5 +1,5 @@
 import { toJS, observable, computed, action } from 'mobx';
-import { filter, uniqBy, get } from 'lodash';
+import { filter, uniqBy, get, has } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -38,9 +38,8 @@ export class NewMessage {
   @action
   newPostComment = () => {
     const { userDetails } = userDetailsStore;
-    console.log(userDetails);
-    if (this.data && this.data.data && this.data.data.offeringCommentsByOfferId
-      && this.currentMessageId) {
+    const messagesList = this.messages;
+    if (messagesList && this.currentMessageId && messagesList.length && !has(messagesList[0], 'isSample')) {
       this.data.data.offeringCommentsByOfferId.splice(0, 0, {
         id: null,
         offeringId: this.data.data.offeringCommentsByOfferId[0].offeringId,
