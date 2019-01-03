@@ -1,5 +1,5 @@
 import { toJS, observable, computed, action } from 'mobx';
-import { filter, uniqBy, get, has } from 'lodash';
+import { filter, uniqBy, get, has, reduce } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -88,7 +88,7 @@ export class NewMessage {
     if (this.editMessageId) {
       payload.id = this.editMessageId;
     }
-    if (this.currentMessageId) {
+    if (this.currentMessageId && this.currentMessageId !== this.editMessageId) {
       payload.commentInput.thread = this.currentMessageId;
     }
     client
@@ -187,6 +187,8 @@ export class NewMessage {
   }
 
   threadUsersList = threadComments => uniqBy(threadComments, 'createdUserInfo.id');
+
+  threadMsgCount = threadComments => reduce(threadComments, (sum, c) => (c.scope === 'PUBLIC' ? (sum + 1) : sum), 0);
 
   @action
   resetMessageForm = () => {

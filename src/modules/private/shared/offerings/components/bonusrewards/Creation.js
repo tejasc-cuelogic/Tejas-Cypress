@@ -63,7 +63,7 @@ export default class Creation extends Component {
         {earlyBird && get(earlyBird, 'quantity') !== 0 &&
           <div className="reward-tier">
             <Header as="h4">
-              {`Early Birds investing ${Helper.CurrencyFormat(get(earlyBird, 'amount'))} Or more... (#${get(earlyBird, 'quantity')})`}
+              {`Early bird - First ${get(earlyBird, 'quantity')} investments of ${Helper.CurrencyFormat(get(earlyBird, 'amount'))} or more`}
               {this.isDeleteTier(get(earlyBird, 'amount'), true) && !isReadOnly &&
               <Button color="red" size="small" floated="right" className="link-button" onClick={e => this.confirmRemoveTier(e, 'tier', get(earlyBird, 'amount'), get(earlyBird, 'quantity'))}>
                 <Icon className="ns-trash" />
