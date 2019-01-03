@@ -339,6 +339,9 @@ export const campaignDetailsQuery = gql`
             name
           }
         }
+        roles {
+          name
+        }
       }
       threadComment {
         offeringId
@@ -371,6 +374,9 @@ export const campaignDetailsQuery = gql`
               url
               name
             }
+          }
+          roles {
+            name
           }
         }
       }
