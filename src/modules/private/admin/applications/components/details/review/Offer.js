@@ -43,6 +43,7 @@ export default class Offer extends Component {
   render() {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
+      assignAdditionalTermsValue, addAdditionalTermsToFormData,
       confirmModalName, removeData, inProgress,
       // checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
@@ -71,6 +72,8 @@ export default class Offer extends Component {
           </Header>
           <Divider hidden />
           <OffersPanel
+            assignAdditionalTermsValue={assignAdditionalTermsValue}
+            addAdditionalTermsToFormData={addAdditionalTermsToFormData}
             OFFERS_FRM={OFFERS_FRM}
             formChangeWithIndex={formChangeWithIndex}
             maskChangeWithIndex={maskChangeWithIndex}
