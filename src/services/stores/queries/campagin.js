@@ -470,6 +470,9 @@ query getOfferingById($id: ID) {
         targetDate
       }
     }
+    selectedOffer {
+      structure
+    }
     earlyBirdsCount
     bonusRewards{
       id

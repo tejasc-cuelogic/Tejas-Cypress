@@ -1,9 +1,10 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
 import { forEach } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary } from '../../queries/portfolio';
-import { userDetailsStore, userStore, uiStore } from '../../index';
+import { getInvestorAccountPortfolio, getInvestorDetailsById, cancelAgreement, getUserAccountSummary, getMonthlyPaymentsToInvestorByOffering } from '../../queries/portfolio';
+import { userDetailsStore, userStore, uiStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class PortfolioStore {
@@ -15,6 +16,8 @@ export class PortfolioStore {
   @observable isCancelShowLink = false;
   @observable investmentDetails = null;
   @observable canceledInvestmentDetails = null;
+  @observable PayOffData = null;
+  @observable currentAcccountType = null;
 
   @action
   setFieldValue = (field, value) => {
@@ -61,6 +64,20 @@ export class PortfolioStore {
   }
 
   @action
+  getPayOffData = (accountType) => {
+    userDetailsStore.setFieldValue('currentActiveAccount', accountType);
+    const account = userDetailsStore.currentActiveAccountDetails;
+    this.PayOffData = graphql({
+      client,
+      query: getMonthlyPaymentsToInvestorByOffering,
+      variables: {
+        userId: userStore.currentUser.sub,
+        accountId: account.details.accountId,
+        offeringId: offeringCreationStore.currentOfferingId,
+      },
+    });
+  }
+  @action
   calculateInvestmentType() {
     this.resetPiechartValues();
     const investmentData = this.getInvestorAccounts;
@@ -87,12 +104,13 @@ export class PortfolioStore {
     return (this.accSummary.data && toJS(this.accSummary.data.getUserAccountSummary)) || {};
   }
 
-  cashMovement = () => {
+  getChartData = (type) => {
     const formattedData = [];
-    if (this.summary.cashMovement) {
-      this.summary.cashMovement.map((k) => {
+    const rawData = type === 'cashMovement' ? this.summary.cashMovement : (this.PayOffData.data && this.PayOffData.data.getMonthlyPaymentsToInvestorByOffering) || [];
+    if (rawData) {
+      rawData.map((k) => {
         formattedData.push({
-          name: k.yearMonth, Payment: k.payment, 'Paid to date': k.paidToDate,
+          name: moment(k.yearMonth).format('MMM YYYY'), Payment: k.payment, 'Paid to date': k.paidToDate,
         });
         return null;
       });
@@ -120,7 +138,7 @@ export class PortfolioStore {
         userId: userDetails.id,
         accountId: (account && account.details) ? account.details.accountId : null,
       },
-      fetchPolicy: 'network-only',
+      // fetchPolicy: 'network-only',
       onFetch: (data) => {
         if (data) {
           this.calculateInvestmentType();
@@ -218,6 +236,10 @@ export class PortfolioStore {
   @action
   setInvestmentDetailsForCancelRequest = (detailObject) => {
     this.canceledInvestmentDetails = detailObject;
+  }
+  @action
+  currentAccoutType = (type) => {
+    this.currentAcccountType = type;
   }
 }
 

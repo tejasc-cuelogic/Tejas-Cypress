@@ -11,13 +11,13 @@ import NumberFormat from 'react-number-format';
 
 export const DropdownFilter = props => (
   <Form.Field className="dropdown-field">
-    <label>{props.name}</label>
+    <label>{props.label || props.name}</label>
     <Dropdown
       name={props.keyName || camelCase(props.name)}
       onChange={props.change}
       className={props.className}
       value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
-      placeholder="Select Filter"
+      placeholder={props.placeHolder || 'Select Filter'}
       fluid
       multiple={props.isMultiple}
       selection
