@@ -97,7 +97,7 @@ export default class MaskedInput extends Component {
           ) : props.ssn ? (
             <NumberFormat readOnly={displayMode} type="tel" format="###-##-####" placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
           ) : props.dateOfBirth ? (
-            <div className="calender-icon">
+            <div className="calender-i con">
               <NumberFormat readOnly={displayMode} type="text" format={props.format ? props.format : '##/##/####'} placeholder={(displayMode || readOnly) ? 'N/A' : placeHolder} {...props} value={value} onValueChange={(values) => { props.changed(values, props.name); this.triggerError(props.showerror || false); }} onBlur={() => this.triggerError(true)} error={(!!error && this.state.showError) || (!!error && props.showerror)} />
             </div>
           ) : props.taxId ? (
