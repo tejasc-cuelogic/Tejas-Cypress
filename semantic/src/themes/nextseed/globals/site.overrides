@@ -2564,10 +2564,29 @@ p.check-extra-info{
 		margin-top: 0;
 	}
 }
+.about-carousel .slick-slider .slick-slide{
+	// height:506px;
+	display:flex;
+	>div{
+		position:relative;
+		flex:1;
+		padding-top:56.25%;
+	}
+	.about-gallery-bg{
+		// height:100%;
+		position:absolute;
+		top:0;
+		right:0;
+		bottom:0;
+		left:0;
+		background-size:cover;
+		background-position:center center;
+	}
+}
 .carousel-counter {
 	position: absolute;
     display: inline-block;
-    right: 10px;
+    left:10px;
     top: 10px;
     min-width: 30px;
     border-radius: 3px;
