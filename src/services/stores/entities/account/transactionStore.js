@@ -3,12 +3,12 @@ import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { FormValidator as Validator } from '../../../../helper';
-import { allTransactions, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
+import { allTransactions, paymentHistory, investmentsByOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
 import { TRANSFER_FUND, VERIFY_OTP } from '../../../constants/transaction';
-import { uiStore, userDetailsStore, userStore } from '../../index';
+import { uiStore, userDetailsStore, userStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
 
 export class TransactionStore {
@@ -28,18 +28,28 @@ export class TransactionStore {
   @observable transactionOtpRequestId = null;
   @observable transactionDisplayPhoneNumber = null;
   @observable confirmEmailAdress = '';
+  @observable paymentHistoryData = [];
+  @observable investmentsByOffering = [];
+  @observable investmentOptions = [];
+  @observable selectedInvestment = '';
   @action
-  initRequest = (props) => {
-    const { first, skip, page } = props ||
-      {
-        first: this.requestState.perPage,
-        skip: this.requestState.skip,
-        page: this.requestState.page,
-      };
+  initRequest = props => new Promise((resolve, reject) => {
+    const {
+      first, skip, page,
+    } = {
+      first: (props && props.first) || this.requestState.perPage,
+      skip: (props && props.skip) || this.requestState.skip,
+      page: (props && props.page) || this.requestState.page,
+    };
     const filters = toJS({ ...this.requestState.search });
     const params = {};
     if (filters.transactionType && filters.transactionType.length > 0) {
-      params.transactionType_in = toJS(filters.transactionType);
+      params.transactionDirection = toJS(filters.transactionType);
+    }
+    if (filters.dateRange) {
+      const todayDate = new Date().toISOString();
+      params.dateFilterStart = DataFormatter.getDateFromNow(filters.dateRange);
+      params.dateFilterStop = todayDate;
     }
     this.requestState.page = page || this.requestState.page;
     this.requestState.perPage = first || this.requestState.perPage;
@@ -50,14 +60,25 @@ export class TransactionStore {
       client,
       query: allTransactions,
       variables: {
-        filters: params,
-        first: first || this.requestState.perPage,
-        skip,
+        ...params,
+        offset: skip === 0 ? 1 : skip,
         accountId: account.details.accountId,
         userId: userDetails.id,
+        orderBy: (props && props.orderBy) || 'DESC',
+        limit: (props && props.limitData) || 10,
+      },
+      fetchPolicy: 'network-only',
+      onFetch: (data) => {
+        if (data) {
+          resolve();
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
       },
     });
-  }
+  })
 
   @computed get getAllTransactions() {
     return (this.data && this.data.data.getAccountTransactions &&
@@ -65,7 +86,8 @@ export class TransactionStore {
   }
 
   @computed get totalRecords() {
-    return this.getAllTransactions.length || 0;
+    return (this.getAllTransactions.transactions && this.getAllTransactions.transactions.length)
+    || 0;
   }
 
   @computed get loading() {
@@ -316,6 +338,70 @@ export class TransactionStore {
         fetchPolicy: 'network-only',
       });
     });
+  }
+
+  @action
+  getPaymentHistory = () => new Promise((resolve, reject) => {
+    this.paymentHistoryData = graphql({
+      client,
+      query: paymentHistory,
+      variables: {
+        investmentId: this.selectedInvestment,
+        offeringId: offeringCreationStore.currentOfferingId,
+      },
+      onFetch: (data) => {
+        if (data) {
+          resolve();
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+      fetchPolicy: 'network-only',
+    });
+  })
+
+  @action
+  getInvestmentsByOfferingId = () => new Promise((resolve, reject) => {
+    this.investmentsByOffering = graphql({
+      client,
+      query: investmentsByOfferingId,
+      variables: {
+        offeringId: offeringCreationStore.currentOfferingId,
+      },
+      onFetch: (data) => {
+        if (data) {
+          this.setInvestmentOptions(data.getInvestmentsByOfferingId);
+          if (data.getInvestmentsByOfferingId[0]) {
+            this.setInvestment(data.getInvestmentsByOfferingId[0].investmentId);
+          }
+          resolve();
+        }
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      },
+      fetchPolicy: 'network-only',
+    });
+  })
+
+  @action
+  setInvestmentOptions = (investments) => {
+    const options = [];
+    investments.map((elem) => {
+      const obj = { text: `${Helper.CurrencyFormat(elem.amount)} (#${elem.investmentId})`, value: elem.investmentId };
+      options.push(obj);
+      return null;
+    });
+    this.investmentOptions = options;
+  }
+
+  @action
+  setInvestment = (value) => {
+    this.selectedInvestment = value;
+    this.getPaymentHistory();
   }
 }
 

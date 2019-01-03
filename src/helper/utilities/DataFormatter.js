@@ -63,6 +63,8 @@ class DataFormatter {
     return template(data);
   }
   fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
+  getDateFromNow = afterDays =>
+    new Date((new Date()).getTime() - (afterDays * 86400000)).toISOString();
 }
 
 export default new DataFormatter();

@@ -215,6 +215,17 @@ export class CampaignStore {
       this.setLoading(false);
     }).catch(() => this.setLoading(false));
   }
+
+  @computed get offerStructure() {
+    const { selectedOffer, keyTerms } = this.campaign;
+    let offerStructure = '';
+    if (selectedOffer && selectedOffer.structure !== '') {
+      offerStructure = selectedOffer.structure;
+    } else {
+      offerStructure = keyTerms.securities;
+    }
+    return offerStructure;
+  }
 }
 
 export default new CampaignStore();
