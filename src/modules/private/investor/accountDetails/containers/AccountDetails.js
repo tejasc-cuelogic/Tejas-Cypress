@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Parser from 'html-react-parser';
 import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { includes } from 'lodash';
@@ -14,9 +15,8 @@ const getModule = component => Loadable({
   },
 });
 
-const processingMsg = `Please wait, We are processing your request.
-  If you have any query please contact support at
-  <a href="mailto:support@nextseed.com">support@nextseed.com</a>`;
+const processingMsg = `We are currently processing your account creation request. Please contact
+  <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any questions.`;
 
 @inject('userDetailsStore')
 @observer
@@ -34,8 +34,8 @@ export default class AccountDetails extends Component {
     const isAccProcessing = processingAccounts.includes(accType);
     const navItems = isAccProcessing ? [] : GetNavMeta(match.url).subNavigations;
     const processing = includes(this.props.location.pathname, 'transactions') ?
-      <div className="content-spacer"><InlineLoader text={processingMsg} /></div> :
-      <InlineLoader text={processingMsg} />;
+      <div className="content-spacer"><section className="center-align"><h4 style={{ color: '#31333d7d' }}>{Parser(processingMsg)}</h4></section></div> :
+      <section className="center-align"><h4 style={{ color: '#31333d7d' }}>{Parser(processingMsg)}</h4></section>;
     return (
       <PrivateLayout {...this.props}>
         {isAccProcessing ? processing : (
