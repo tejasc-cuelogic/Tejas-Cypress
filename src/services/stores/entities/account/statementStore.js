@@ -99,10 +99,6 @@ export class StatementStore {
     return this.data.loading;
   }
 
-  @computed get error() {
-    return (this.allData && this.allData.error && this.allData.error.message) || null;
-  }
-
   @computed get monthlyStatementcount() {
     return (this.allStatements && this.allStatements.length) || 0;
   }
