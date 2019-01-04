@@ -199,7 +199,7 @@ export default class MultiStep extends React.Component {
               type="submit"
               circular
               icon={{ className: 'ns-arrow-right' }}
-              className={this.state.showNextBtn ? 'multistep__btn next active' : 'multistep__btn next disabled'}
+              className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
               onClick={this.next}
             />
             }

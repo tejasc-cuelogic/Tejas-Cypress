@@ -69,7 +69,7 @@ export default class BankAccount extends Component {
           }
           {!isEmpty(plaidAccDetails) &&
             <Grid.Row>
-              <Grid.Column widescreen={8} largeScreen={12} computer={13} tablet={16} mobile={16}>
+              <Grid.Column widescreen={12} largeScreen={16} computer={16} tablet={16} mobile={16}>
                 <Card fluid className="linked-bank">
                   <AccountDetailsView
                     accountDetails={plaidAccDetails}
