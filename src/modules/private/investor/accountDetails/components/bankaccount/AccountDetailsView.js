@@ -69,7 +69,7 @@ export default class AccountDetailsView extends Component {
                   <Item.Extra>Number</Item.Extra>
                   <Item.Header>
                     {accountDetails && accountDetails.accountNumber ?
-                      Helper.encryptNumber(accountDetails.accountNumber)
+                      Helper.encryptNumberWithX(accountDetails.accountNumber)
                       : null}
                   </Item.Header>
                 </Item.Content>

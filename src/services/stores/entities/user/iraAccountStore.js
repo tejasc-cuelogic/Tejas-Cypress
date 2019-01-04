@@ -436,7 +436,7 @@ class IraAccountStore {
             form: 'IDENTITY_FRM',
             stepToBeRendered: 5,
           };
-          this.createAccount(currentStep, 'PARTIAL', false, true);
+          this.createAccount(currentStep, 'PARTIAL', false);
         })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
