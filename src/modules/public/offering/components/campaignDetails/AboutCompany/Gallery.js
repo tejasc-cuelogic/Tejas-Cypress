@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
-import { Grid, Segment, Image, Header, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { NsCarousel, Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
@@ -38,7 +38,7 @@ class Gallery extends Component {
                     <Image64 className="about-gallery-bg" bg srcUrl={data.url} />
                   ))
                   :
-                  <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
+                  <Image64 className="about-gallery-bg" bg srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
               }
             </NsCarousel>
           </div>
