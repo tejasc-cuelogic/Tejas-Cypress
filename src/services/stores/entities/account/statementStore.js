@@ -99,11 +99,6 @@ export class StatementStore {
     return this.data.loading;
   }
 
-  @computed get taxForms() {
-    return (this.allStatements && this.allStatements.length &&
-      this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
-  }
-
   @computed get monthlyStatementcount() {
     return (this.allStatements && this.allStatements.length) || 0;
   }
