@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
-import { Breadcrumb, Grid, Segment, Image } from 'semantic-ui-react';
+import { Breadcrumb, Grid, Segment, Image, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { NsCarousel, Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
@@ -14,10 +14,18 @@ class Gallery extends Component {
     return (
       <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
         <Segment padded>
-          <Breadcrumb>
-            <Breadcrumb.Section as={isGallaryFilled && Link} to={isGallaryFilled && `${galleryUrl}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
-            <Breadcrumb.Divider as={isGallaryFilled && Link} to={isGallaryFilled && `${galleryUrl}/photogallery`} icon={{ className: 'ns-chevron-right', color: 'green' }} />
-          </Breadcrumb>
+          <Header as="h6">
+            <Link to={isGallaryFilled && `${galleryUrl}/photogallery`}>
+              Gallery
+              <Icon className="ns-chevron-right" color="green" />
+            </Link>
+          </Header>
+          {/* <Breadcrumb>
+            <Breadcrumb.Section as={isGallaryFilled && Link} to={isGallaryFilled &&
+              `${galleryUrl}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
+            <Breadcrumb.Divider as={isGallaryFilled && Link} to={isGallaryFilled &&
+          `${galleryUrl}/photogallery`} icon={{ className: 'ns-chevron-right', color: 'green' }} />
+          </Breadcrumb> */}
           <div className="about-carousel mt-10 mb-30">
             <NsCarousel
               {...settings}
