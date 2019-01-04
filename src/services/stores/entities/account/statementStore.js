@@ -99,8 +99,9 @@ export class StatementStore {
     return this.data.loading;
   }
 
-  @computed get error() {
-    return (this.allData && this.allData.error && this.allData.error.message) || null;
+  @computed get taxForms() {
+    return (this.allStatements && this.allStatements.length &&
+      this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get monthlyStatementcount() {
