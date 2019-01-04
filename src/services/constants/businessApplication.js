@@ -480,7 +480,7 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' },
     },
     dateOfService: {
-      value: null, label: 'Date of Service', error: undefined, rule: 'required', placeHolder: 'Select date', customErrors: { required: 'required' },
+      value: null, label: 'Date of Service', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
     linkedInUrl: {
       value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },

@@ -138,7 +138,7 @@ export default class ImageCropper extends Component {
               />
             </Modal.Content>
             <Modal.Actions>
-              <Button primary content="Upload" onClick={() => this.modalUpload(this.props.name, field)} />
+              <Button primary disabled={(this.props.aspect === 'none' && !this.state.crop.width)} content="Upload" onClick={() => this.modalUpload(this.props.name, field)} />
             </Modal.Actions>
           </Modal>
           :
