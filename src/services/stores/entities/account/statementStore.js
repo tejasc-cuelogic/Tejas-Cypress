@@ -55,6 +55,7 @@ export class StatementStore {
       {
         [statementObj.field]: moment(d).format(statementObj.format),
         description: statementObj.text,
+        fileId: '388a93e0-f7b4-11e8-b6c3-11b756c0f97f',
       }
     ));
   }
