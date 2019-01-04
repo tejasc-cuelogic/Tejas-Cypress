@@ -24,12 +24,11 @@ export class FileUpload {
         })
         .then((result) => {
           resolve(result);
+          uiStore.setProgress(false);
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
         });
     })
