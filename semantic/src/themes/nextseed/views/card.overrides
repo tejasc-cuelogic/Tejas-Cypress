@@ -398,6 +398,7 @@
             .header{
                 font-weight:@fontMedium;
                 color:@fullBlack;
+                word-break:break-all;
             }
             a.header{
                 color:@primary-one;

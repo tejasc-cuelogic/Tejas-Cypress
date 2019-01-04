@@ -57,6 +57,7 @@ export class BankAccountStore {
 
   @action
   setBankLinkInterface(mode) {
+    this.resetLinkBankForm();
     this.bankLinkInterface = mode;
   }
 

@@ -21,7 +21,6 @@ export default class MonthlyStatements extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', 'individual');
     this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
-    this.props.statementStore.setActiveModule('MonthlyStatements');
   }
 
   paginate = params => this.props.statementStore.pageRequest(params);
@@ -40,10 +39,10 @@ export default class MonthlyStatements extends Component {
       return <InlineLoader />;
     }
     const {
-      count, requestState,
+      monthlyStatementcount, requestState,
       monthlyStatements,
     } = this.props.statementStore;
-    const totalRecords = count || 0;
+    const totalRecords = monthlyStatementcount || 0;
     result.rows = monthlyStatements;
     return (
       <Aux>

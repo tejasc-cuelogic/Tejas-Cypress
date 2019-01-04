@@ -51,6 +51,8 @@ export default class AccountCreation extends React.Component {
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         stepToBeRendered: 1,
+        onlyDisableNextButton: !isEmpty(plaidAccDetails) ||
+        !formLinkBankManually.meta.isValid,
       },
       {
         name: 'Add funds',
