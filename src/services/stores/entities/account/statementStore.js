@@ -107,6 +107,11 @@ export class StatementStore {
     const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
     return (taxStatements && taxStatements.length) || 0;
   }
+
+  taxFormCount = () => {
+    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatements && taxStatements.length) || 0;
+  }
 }
 
 export default new StatementStore();
