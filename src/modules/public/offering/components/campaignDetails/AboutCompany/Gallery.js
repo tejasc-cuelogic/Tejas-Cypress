@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
-import { Breadcrumb, Grid, Segment, Image, Header, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Image, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { NsCarousel, Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
