@@ -87,6 +87,12 @@ export const userDetailsQuery = gql`
               otherContributions
               limit
             }
+            taxStatements {
+              fileId
+              fileName
+              year
+              formType
+            }
             name
             taxId
             entityType
