@@ -377,7 +377,7 @@ export const ENTITY_GEN_INFO = {
     key: 'state', value: '', placeHolder: 'Select', label: 'State', error: undefined, rule: 'required|string',
   },
   zipCode: {
-    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|numeric',
+    key: 'zipCode', value: '', label: 'ZIP Code', placeHolder: 'Enter Here', error: undefined, rule: 'required|maskedField:5', customErrors: { required: '* required', maskedField: 'The ZIP Code should be at least 5 digits' },
   },
 };
 

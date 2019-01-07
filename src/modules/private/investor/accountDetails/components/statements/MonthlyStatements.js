@@ -24,6 +24,7 @@ export default class MonthlyStatements extends Component {
   }
 
   paginate = params => this.props.statementStore.pageRequest(params);
+
   downloadhandler = (e, fileId) => {
     e.preventDefault();
     this.props.statementStore.handlePdfDownload(fileId).then((fileUrl) => {
@@ -33,6 +34,7 @@ export default class MonthlyStatements extends Component {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
   }
+
   render() {
     const { loading, error } = this.props.transactionStore;
     if (loading) {
@@ -56,12 +58,12 @@ export default class MonthlyStatements extends Component {
                   result={result}
                 />
               </Card>
+              {totalRecords > 0 &&
+              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              }
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-        }
       </Aux>
     );
   }

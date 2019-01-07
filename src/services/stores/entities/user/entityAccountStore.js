@@ -376,8 +376,13 @@ class EntityAccountStore {
           }
         }
         accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
-        this.submitForm(currentStep, formStatus, accountAttributes)
-          .then(() => res()).catch(() => rej());
+        bankAccountStore.checkOpeningDepositAmount().then(() => {
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
+        })
+          .catch(() => {
+            rej();
+          });
       } else {
         rej();
       }
