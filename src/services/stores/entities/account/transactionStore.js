@@ -49,7 +49,7 @@ export class TransactionStore {
     if (filters.transactionType && filters.transactionType.length > 0) {
       params.transactionDirection = toJS(filters.transactionType);
     }
-    if (filters.dateRange) {
+    if (filters.dateRange && filters.dateRange !== 'all') {
       const todayDate = new Date().toISOString();
       params.dateFilterStart = DataFormatter.getDateFromNow(filters.dateRange);
       params.dateFilterStop = todayDate;

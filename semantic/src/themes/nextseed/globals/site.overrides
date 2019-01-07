@@ -829,9 +829,7 @@ p i.icon {
 		}
 	}
 	.slick-dots{
-		left: 50%;
-		transform: translate(-50%, 0);
-		width: auto;
+		position: relative;
 		li{
 			width: 10px;
 			height: 10px;
