@@ -66,6 +66,7 @@ export class Utility {
     return result;
   }
 
+  MoneyMathDisplayCurrency = amount => `$${amount}`;
   CurrencyFormat = (amount, fraction = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: fraction }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {
