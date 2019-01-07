@@ -666,12 +666,14 @@ export class BusinessAppReviewStore {
       this.checkFormValid(form, multiForm, false);
     }
     if (form === 'OFFERS_FRM') {
-      appData.offers.offer.map((offer, index) => {
-        this.showFormAmortisation(index);
-        this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
-          offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
-        return null;
-      });
+      if (appData && get(appData, 'offers.offer')) {
+        appData.offers.offer.map((offer, index) => {
+          this.showFormAmortisation(index);
+          this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+            offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
+          return null;
+        });
+      }
     }
     return false;
   }
