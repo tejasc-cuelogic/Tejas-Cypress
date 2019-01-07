@@ -62,12 +62,12 @@ export default class Insights extends Component {
               <div className="insight-image-wrapper">
                 <Image fluid as={Link} to={`/resources/insights/${i.id}`} src={i.featuredImage} key={i} />
                 <div className="image-caption">
-                  <p className="news-category">
+                  <Link to={`/resources/insights/${i.id}`} className="news-category">
                     Featured
-                  </p>
-                  <p className="news-title">
+                  </Link>
+                  <Link to={`/resources/insights/${i.id}`} className="news-title">
                     {i.title}
-                  </p>
+                  </Link>
                 </div>
               </div>
             ))

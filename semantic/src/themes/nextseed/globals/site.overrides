@@ -1045,26 +1045,32 @@ address p{
 		color: @primary-two !important; 
 	}
 }
-.image-caption {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	padding: 20px;    
-	p {
-		background: @neutral;
-		padding: 5px 10px;
-		color: @white;
-		display: table;
-		margin-bottom: 5px;
-		&.news-category {
-			font-size: @13px;
-			text-transform: uppercase;
-		}
-		&.news-title {
-			font-size: @28px;
-			line-height: 30px;
-			@media only screen and (max-width : @largestSmallMonitor){
-				font-size: @20px;
+.insight-image-wrapper {
+	position: relative;
+	.image-caption {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		padding: 20px;    
+		a {
+			background: @neutral;
+			padding: 5px 10px;
+			color: @white;
+			display: table;
+			margin-bottom: 5px;
+			&:hover{
+				text-decoration: none;
+			}
+			&.news-category {
+				font-size: @13px;
+				text-transform: uppercase;
+			}
+			&.news-title {
+				font-size: @28px;
+				line-height: 30px;
+				@media only screen and (max-width : @largestSmallMonitor){
+					font-size: @20px;
+				}
 			}
 		}
 	}
