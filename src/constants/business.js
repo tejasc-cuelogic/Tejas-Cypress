@@ -332,10 +332,10 @@ export const ISSUER_INFORMATION = {
     placeHolder: 'Zip',
     label: 'Zip',
     error: undefined,
-    rule: 'required|max:10',
+    rule: 'required|maskedField:5',
     customErrors: {
       required: 'The Zip field is required.',
-      max: 'The Zip is too long. Max length is :max.',
+      maskedField: 'The ZIP Code should be at least 5 digits',
     },
   },
   issuerWebsite: {
