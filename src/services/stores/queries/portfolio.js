@@ -20,6 +20,7 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         offering {
           id
           stage
+          offeringSlug
           keyTerms {
             shorthandBusinessName
             securities
