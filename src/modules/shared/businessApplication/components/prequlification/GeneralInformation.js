@@ -76,6 +76,7 @@ const GeneralInformation = props => (
               name="zipCode"
               fielddata={props.fields.zipCode}
               changed={props.businessAppEleMaskChange}
+              showerror
             />
           </Form.Group>
         </div>

@@ -138,7 +138,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g. NY', customErrors: { required: 'required' },
   },
   zipCode: {
-    value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6, customErrors: { required: 'required' },
+    value: '', label: 'ZIP Code', error: undefined, rule: 'required|maskedField:5', placeHolder: '10012', customErrors: { required: 'required', maskedField: 'The ZIP Code should be at least 5 digits' },
   },
   industryExperience: {
     value: '',
