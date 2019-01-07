@@ -1047,20 +1047,20 @@ address p{
 }
 .insight-image-wrapper {
 	position: relative;
-	.image-caption {
+	a.image-caption {
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		padding: 20px;    
-		a {
+		padding: 20px; 
+		&:hover {
+			text-decoration: none;
+		}   
+		p {
 			background: @neutral;
 			padding: 5px 10px;
 			color: @white;
 			display: table;
 			margin-bottom: 5px;
-			&:hover{
-				text-decoration: none;
-			}
 			&.news-category {
 				font-size: @13px;
 				text-transform: uppercase;
