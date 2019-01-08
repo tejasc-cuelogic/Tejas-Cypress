@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get, ceil } from 'lodash';
+import { map, forEach, filter, get, ceil, times } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
@@ -47,6 +47,7 @@ export class BusinessAppReviewStore {
   };
   @observable amortizationArray = [];
   @observable initLoad = [];
+  @observable expAnnualRevCount = 4;
 
   @action
   setFieldvalue = (field, value) => {
@@ -266,6 +267,36 @@ export class BusinessAppReviewStore {
     if (field === 'minimumAmount' || field === 'interestRate' || field === 'maturity') {
       this.showFormAmortisation(index);
     }
+    if (field === 'maturity') {
+      this.calculateExpAnnualRevCount();
+    }
+  }
+
+  @action
+  calculateExpAnnualRevCount = () => {
+    const maxMaturity = this.getMaxMaturityValue;
+    const MaxMaturityInYears = maxMaturity ? ceil(maxMaturity / 12) : 4;
+    if (this.expAnnualRevCount !== MaxMaturityInYears) {
+      if (this.expAnnualRevCount < MaxMaturityInYears) {
+        times(MaxMaturityInYears - this.expAnnualRevCount, () => this.addExpAnnRev());
+      } else {
+        times(this.expAnnualRevCount - MaxMaturityInYears, () => this.removeExpAnnRev());
+      }
+      this.expAnnualRevCount = MaxMaturityInYears;
+    }
+  }
+
+  @action
+  addExpAnnRev = () => this.addMore('OFFERS_FRM', 'expectedAnnualRevenue');
+
+  @action
+  removeExpAnnRev = () => this.OFFERS_FRM.fields.expectedAnnualRevenue.splice(-1, 1);
+
+  @computed
+  get getMaxMaturityValue() {
+    const maxValue =
+    Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => o.maturity.value || 0));
+    return maxValue || 0;
   }
 
   @computed
@@ -673,6 +704,7 @@ export class BusinessAppReviewStore {
             offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
           return null;
         });
+        this.calculateExpAnnualRevCount();
       }
     }
     return false;
