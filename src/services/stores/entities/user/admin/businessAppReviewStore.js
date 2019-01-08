@@ -345,7 +345,7 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
+  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true, showLoader = true) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
     let formInputData = Validator.evaluateFormData(this[formName].fields);
@@ -390,7 +390,9 @@ export class BusinessAppReviewStore {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
     const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
-    this.setFieldvalue('inProgress', progressButton);
+    if (showLoader) {
+      this.setFieldvalue('inProgress', progressButton);
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -402,14 +404,13 @@ export class BusinessAppReviewStore {
         .then((result) => {
           this.removeUploadedFiles();
           Helper.toast('Data saved successfully.', 'success');
+          this.setFieldvalue('inProgress', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
-        })
-        .finally(() => {
           this.setFieldvalue('inProgress', false);
         });
     });
@@ -612,7 +613,8 @@ export class BusinessAppReviewStore {
 
   @action
   generatePortalAgreement = () => {
-    this.saveReviewForms('OFFERS_FRM').then(() => {
+    this.setFieldvalue('inProgress', 'GENERATE_PA');
+    this.saveReviewForms('OFFERS_FRM', '', true, false).then(() => {
       const { businessApplicationDetailsAdmin } = businessAppStore;
       const { applicationId, userId } = businessApplicationDetailsAdmin;
       const reFetchPayLoad = {
