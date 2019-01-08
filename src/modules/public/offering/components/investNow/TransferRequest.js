@@ -70,7 +70,7 @@ class TransferRequest extends Component {
             <Table.Row>
               <Table.Cell>Investment Amount:</Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(investmentAmount, 'number')}
+                {Helper.CurrencyFormat(investmentAmount)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -84,20 +84,20 @@ class TransferRequest extends Component {
                 />
               </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(getCurrCashAvailable, 'number')}
+                {Helper.CurrencyFormat(getCurrCashAvailable)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Available Credit: </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(getCurrCreditAvailable, 'number')}
+                {Helper.CurrencyFormat(getCurrCreditAvailable)}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-              <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(getTransferRequestAmount, 'number')}</Table.HeaderCell>
+              <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(getTransferRequestAmount)}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>
