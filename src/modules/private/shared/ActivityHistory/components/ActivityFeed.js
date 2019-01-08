@@ -1,6 +1,7 @@
 import React from 'react';
+import { get } from 'lodash';
 import { Feed, Image, Transition } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../../theme/shared/';
+import { InlineLoader, UserAvatar } from '../../../../../theme/shared/';
 import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
 import DateTimeFormat from '../../../../../theme/shared/src/DateTimeFormat';
 
@@ -11,11 +12,17 @@ const ActivityFeed = ({ loading, activities }) => (
         activities.map(a => (
           <Feed.Event>
             <Feed.Label>
-              <Image
-                src={a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.avatar &&
-                  a.createdUserInfo.info.avatar.url ? a.createdUserInfo.info.avatar.url :
-                  defaultLeaderProfile}
-              />
+              {a.createdUserInfo ?
+                <UserAvatar
+                  UserInfo={{
+                    firstName: get(a.createdUserInfo, 'info.firstName') || '',
+                    lastName: get(a.createdUserInfo, 'info.firstName') || '',
+                    avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
+                    roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
+                  }}
+                /> :
+                <Image src={defaultLeaderProfile} />
+              }
             </Feed.Label>
             <Feed.Content>
               <Feed.Meta>

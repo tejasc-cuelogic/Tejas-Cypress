@@ -121,6 +121,12 @@ export class BusinessAppReviewStore {
       const index = this[formName].fields[arrayName].length;
       this[formName].fields[arrayName][index - 1].label.value = `Year ${index}`;
     }
+    if (arrayName === 'offer') {
+      this.OFFERS_FRM.fields.offer.map((item, index) => {
+        this.assignAdditionalTermsValue(index);
+        return null;
+      });
+    }
   }
 
   @action

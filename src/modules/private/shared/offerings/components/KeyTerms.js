@@ -222,6 +222,7 @@ export default class KeyTerms extends Component {
           <Form.Group widths={2}>
             {['useOfProceedFootnote', 'currentFinancialStatements'].map(field => (
               <FormTextarea
+                rows={8}
                 readOnly={isReadonly}
                 key={field}
                 name={field}
