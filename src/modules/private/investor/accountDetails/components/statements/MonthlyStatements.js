@@ -21,10 +21,10 @@ export default class MonthlyStatements extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     setFieldValue('currentActiveAccount', 'individual');
     this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
-    this.props.statementStore.setActiveModule('MonthlyStatements');
   }
 
   paginate = params => this.props.statementStore.pageRequest(params);
+
   downloadhandler = (e, fileId) => {
     e.preventDefault();
     this.props.statementStore.handlePdfDownload(fileId).then((fileUrl) => {
@@ -34,16 +34,17 @@ export default class MonthlyStatements extends Component {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
   }
+
   render() {
     const { loading, error } = this.props.transactionStore;
     if (loading) {
       return <InlineLoader />;
     }
     const {
-      count, requestState,
+      monthlyStatementcount, requestState,
       monthlyStatements,
     } = this.props.statementStore;
-    const totalRecords = count || 0;
+    const totalRecords = monthlyStatementcount || 0;
     result.rows = monthlyStatements;
     return (
       <Aux>
@@ -57,12 +58,12 @@ export default class MonthlyStatements extends Component {
                   result={result}
                 />
               </Card>
+              {totalRecords > 0 &&
+              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              }
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-        }
       </Aux>
     );
   }

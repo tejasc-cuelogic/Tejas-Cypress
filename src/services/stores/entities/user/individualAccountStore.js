@@ -41,62 +41,67 @@ class IndividualAccountStore {
         }
       }
       return new Promise((resolve, reject) => {
-        client
-          .mutate({
-            mutation,
-            variables,
-          })
-          .then(action((result) => {
-            if (result.data.createInvestorAccount || formStatus === 'FULL') {
-              userDetailsStore.getUser(userStore.currentUser.sub);
-            }
-            if (result.data.createInvestorAccount) {
-              const { linkedBank } = result.data.createInvestorAccount;
-              bankAccountStore.setPlaidAccDetails(linkedBank);
-            } else {
-              const { linkedBank } = result.data.updateInvestorAccount;
-              bankAccountStore.setPlaidAccDetails(linkedBank);
-            }
-            if (formStatus === 'FULL') {
-              Helper.toast('Individual account created successfully.', 'success');
-              this.submited = true;
-              if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
-                userDetailsStore.userDetails.cip.failType &&
-                userDetailsStore.userDetails.cip.failType !== null) {
-                client.mutate({
-                  mutation: crowdPayAccountNotifyGs,
-                  variables: {
-                    userId: userStore.currentUser.sub,
-                    accountId: result.data.createInvestorAccount ?
-                      result.data.createInvestorAccount.accountId :
-                      result.data.updateInvestorAccount.accountId,
-                  },
-                })
-                  .then(() => {})
-                  .catch(action((err) => {
-                    uiStore.setErrors(DataFormatter.getSimpleErr(err));
-                    reject();
-                  }));
+        bankAccountStore.checkOpeningDepositAmount().then(() => {
+          client
+            .mutate({
+              mutation,
+              variables,
+            })
+            .then(action((result) => {
+              if (result.data.createInvestorAccount || formStatus === 'FULL') {
+                userDetailsStore.getUser(userStore.currentUser.sub);
               }
-            } else if (currentStep) {
-              this.setStepToBeRendered(currentStep.stepToBeRendered);
-              if (!bankAccountStore.depositMoneyNow) {
-                Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+              if (result.data.createInvestorAccount) {
+                const { linkedBank } = result.data.createInvestorAccount;
+                bankAccountStore.setPlaidAccDetails(linkedBank);
               } else {
-                Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+                const { linkedBank } = result.data.updateInvestorAccount;
+                bankAccountStore.setPlaidAccDetails(linkedBank);
               }
-            } else {
-              Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
-            }
-            uiStore.setErrors(null);
-            resolve(result);
-          }))
-          .catch(action((err) => {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              if (formStatus === 'FULL') {
+                Helper.toast('Individual account created successfully.', 'success');
+                this.submited = true;
+                if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
+                  userDetailsStore.userDetails.cip.failType &&
+                  userDetailsStore.userDetails.cip.failType !== null) {
+                  client.mutate({
+                    mutation: crowdPayAccountNotifyGs,
+                    variables: {
+                      userId: userStore.currentUser.sub,
+                      accountId: result.data.createInvestorAccount ?
+                        result.data.createInvestorAccount.accountId :
+                        result.data.updateInvestorAccount.accountId,
+                    },
+                  })
+                    .then(() => {})
+                    .catch(action((err) => {
+                      uiStore.setErrors(DataFormatter.getSimpleErr(err));
+                      reject();
+                    }));
+                }
+              } else if (currentStep) {
+                this.setStepToBeRendered(currentStep.stepToBeRendered);
+                if (!bankAccountStore.depositMoneyNow) {
+                  Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+                } else {
+                  Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+                }
+              } else {
+                Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
+              }
+              uiStore.setErrors(null);
+              resolve(result);
+            }))
+            .catch(action((err) => {
+              uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              reject();
+            }))
+            .finally(() => {
+              uiStore.setProgress(false);
+            });
+        })
+          .catch(() => {
             reject();
-          }))
-          .finally(() => {
-            uiStore.setProgress(false);
           });
       });
     }

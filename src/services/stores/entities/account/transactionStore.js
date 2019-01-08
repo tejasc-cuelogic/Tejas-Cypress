@@ -7,6 +7,7 @@ import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, investmentsByOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
 import { getInvestorAvailableCash } from '../../queries/investNow';
 import { requestOtp, verifyOtp } from '../../queries/profile';
+import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 import { TRANSFER_FUND, VERIFY_OTP } from '../../../constants/transaction';
 import { uiStore, userDetailsStore, userStore, offeringCreationStore } from '../../index';
 import Helper from '../../../../helper/utility';
@@ -48,7 +49,7 @@ export class TransactionStore {
     if (filters.transactionType && filters.transactionType.length > 0) {
       params.transactionDirection = toJS(filters.transactionType);
     }
-    if (filters.dateRange) {
+    if (filters.dateRange && filters.dateRange !== 'all') {
       const todayDate = new Date().toISOString();
       params.dateFilterStart = DataFormatter.getDateFromNow(filters.dateRange);
       params.dateFilterStop = todayDate;
@@ -150,6 +151,10 @@ export class TransactionStore {
             accountId: account.details.accountId,
             description,
           },
+          refetchQueries: [{
+            query: getInvestorAccountPortfolio,
+            variables: { userId: userDetails.id, accountId: account.details.accountId },
+          }],
         })
         .then(() => {
           this.setInitialLinkValue(true);
@@ -300,6 +305,10 @@ export class TransactionStore {
             accountId: account.details.accountId,
             description,
           },
+          refetchQueries: [{
+            query: getInvestorAccountPortfolio,
+            variables: { userId: userDetails.id, accountId: account.details.accountId },
+          }],
         })
         .then(() => {
           this.setInitialLinkValue(true);

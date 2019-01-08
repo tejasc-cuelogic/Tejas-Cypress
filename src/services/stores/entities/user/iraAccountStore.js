@@ -215,8 +215,13 @@ class IraAccountStore {
             }
           }
           accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
-          this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
-            res();
+          bankAccountStore.checkOpeningDepositAmount().then(() => {
+            this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
+              res();
+            })
+              .catch(() => {
+                rej();
+              });
           })
             .catch(() => {
               rej();
@@ -430,6 +435,13 @@ class IraAccountStore {
       uiStore.setProgress();
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
         .then(() => {
+          const currentStep = {
+            name: 'Identity',
+            validate: validationActions.validateIRAIdentityInfo,
+            form: 'IDENTITY_FRM',
+            stepToBeRendered: 5,
+          };
+          this.createAccount(currentStep, 'PARTIAL', false);
         })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');

@@ -376,8 +376,13 @@ class EntityAccountStore {
           }
         }
         accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
-        this.submitForm(currentStep, formStatus, accountAttributes)
-          .then(() => res()).catch(() => rej());
+        bankAccountStore.checkOpeningDepositAmount().then(() => {
+          this.submitForm(currentStep, formStatus, accountAttributes)
+            .then(() => res()).catch(() => rej());
+        })
+          .catch(() => {
+            rej();
+          });
       } else {
         rej();
       }
@@ -595,7 +600,25 @@ class EntityAccountStore {
       );
       uiStore.setProgress();
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
-        .then(() => { })
+        .then(() => {
+          if (this[form].meta.isValid) {
+            const currentStep = form === 'PERSONAL_INFO_FRM' ?
+              {
+                name: 'Personal info',
+                form: 'PERSONAL_INFO_FRM',
+                stepToBeRendered: 4,
+                validate: validationActions.validateEntityPersonalInfo,
+              } :
+              {
+                name: 'Formation doc',
+                form: 'FORM_DOCS_FRM',
+                stepToBeRendered: 5,
+                validate: validationActions.validateEntityFormationDoc,
+              };
+            this.createAccount(currentStep, 'PARTIAL', false);
+          }
+          uiStore.setProgress(false);
+        })
         .catch((err) => {
           uiStore.setProgress(false);
           uiStore.setErrors(DataFormatter.getSimpleErr(err));

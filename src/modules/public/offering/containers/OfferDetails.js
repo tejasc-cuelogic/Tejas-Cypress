@@ -33,7 +33,7 @@ class offerDetails extends Component {
     if ((!currentUser || (currentUser && !currentUser.roles.includes('admin'))) && this.props.match.url.includes('preview')) {
       if (currentUser && currentUser.roles.includes('issuer')) {
         this.props.campaignStore.getIssuerIdForOffering(this.props.match.params.id).then((data) => {
-          if (data.issuerId === currentUser.sub) {
+          if (data && data.length && data[0].issuerId === currentUser.sub) {
             this.setState({ showPassDialog: false });
             this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
           } else {
@@ -62,7 +62,7 @@ class offerDetails extends Component {
     } = campaignStore;
     if (this.state.showPassDialog) {
       return (<DevPassProtected
-        previewPassword={campaign.previewPassword}
+        previewPassword={campaign && campaign.previewPassword}
         offerPreview
         authPreviewOffer={this.authPreviewOffer}
       />);

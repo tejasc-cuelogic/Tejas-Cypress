@@ -38,11 +38,11 @@ const InvestmentList = (props) => {
                     <Table.Row key={data.name}>
                       <Table.Cell>
                         <Icon className={`${INDUSTRY_TYPES_ICONS[data.offering.keyTerms.industry]} offering-icon`} />
-                        {props.listOf === 'pending' ? data.offering.keyTerms.shorthandBusinessName : (
+                        {props.listOf === 'pending' ? (<Link to={`/offerings/${data.offering.offeringSlug}/overview`} target="_blank">{data.offering.keyTerms.shorthandBusinessName}</Link>) : (
                           <Link to={`${match.url}/investment-details/${data.offering.id}`}>{data.offering.keyTerms.shorthandBusinessName}</Link>
                         )}
                       </Table.Cell>
-                      <Table.Cell>{data.location}</Table.Cell>
+                      <Table.Cell>{data.offering.keyTerms.city ? `${data.offering.keyTerms.city}, ` : ''}{data.offering.keyTerms.state}</Table.Cell>
                       <Table.Cell>{data.offering.keyTerms.securities === 'TERM_NOTE' ? 'Term Note' : 'Rev Share'}</Table.Cell>
                       <Table.Cell>
                         {Helper.CurrencyFormat(data.investedAmount)}

@@ -5,7 +5,7 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
     { title: 'Bank Accounts', to: 'bank-accounts', component: 'BankAccount' },
     { title: 'Transactions', to: 'transactions', component: 'Transactions' },
     { title: 'Statements', to: 'statements', component: 'Statements' },
-    { title: 'Settings', to: 'Settings', component: 'Settings' },
+    // { title: 'Settings', to: 'Settings', component: 'Settings' },
   ],
 };
 
@@ -176,7 +176,7 @@ export const PRIVATE_NAV = [
     subNavigations: [
       { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4] },
       {
-        title: 'KeyTerms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Key Terms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'],
       },
       { title: 'Legal', to: 'legal', accessFor: [1] },
       { title: 'Offering', to: 'offering', accessFor: [1] },

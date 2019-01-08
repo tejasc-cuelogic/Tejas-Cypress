@@ -1,28 +1,29 @@
 import Aux from 'react-aux';
+import { includes } from 'lodash';
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
-import { InlineLoader, NsPagination } from './../../../../../../theme/shared';
+import { NsPagination } from './../../../../../../theme/shared';
 
 const result = {
   columns: [
-    { title: 'Statement Date', field: 'taxFormDate' },
-    { title: 'Form Type', field: 'types' },
+    { title: 'Statement Date', field: 'year' },
+    { title: 'Form Type', field: 'formType' },
     { title: 'Download as', field: 'file', textAlign: 'right' },
   ],
 };
 
-@inject('statementStore', 'educationStore', 'transactionStore', 'userDetailsStore')
+@inject('statementStore', 'educationStore', 'userDetailsStore')
 @observer
 export default class TaxForms extends Component {
   componentWillMount() {
     const { setFieldValue } = this.props.userDetailsStore;
-    setFieldValue('currentActiveAccount', 'individual');
-    this.props.transactionStore.initRequest({ order: 'ASC', limitData: 1, statement: true });
-    this.props.statementStore.setActiveModule('taxForms');
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    setFieldValue('currentActiveAccount', accountType);
   }
+
   paginate = params => this.props.statementStore.pageRequest(params);
 
   downloadhandler = (e, fileId) => {
@@ -34,13 +35,10 @@ export default class TaxForms extends Component {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
   }
+
   render() {
-    const { loading, error } = this.props.transactionStore;
-    if (loading) {
-      return <InlineLoader />;
-    }
-    const { taxForms, count, requestState } = this.props.statementStore;
-    const totalRecords = count || 0;
+    const { taxFormCount, requestState, taxForms } = this.props.statementStore;
+    const totalRecords = taxFormCount() || 0;
     result.rows = taxForms;
     return (
       <Aux>
@@ -50,17 +48,15 @@ export default class TaxForms extends Component {
               <Card fluid>
                 <FillTable
                   download={this.downloadhandler}
-                  loading={loading}
-                  error={error}
                   result={result}
                 />
               </Card>
+              {totalRecords > 0 &&
+              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              }
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-        }
       </Aux>
     );
   }
