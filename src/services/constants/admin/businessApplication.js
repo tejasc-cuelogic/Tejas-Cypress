@@ -603,6 +603,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      default: null,
     },
   },
   {
@@ -617,6 +618,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      default: null,
     },
   },
   {
@@ -631,6 +633,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      default: null,
     },
   },
   {
@@ -645,6 +648,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
+      default: null,
     },
   }],
 };

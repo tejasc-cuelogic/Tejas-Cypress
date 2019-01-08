@@ -14,7 +14,9 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 export default class Offer extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', true);
-    this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
+    if (!this.props.businessAppReviewStore.initLoad.includes('OFFERS_FRM')) {
+      this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
+    }
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'offers.managerOverview');
   }
   onFileDrop = (files, name) => {
@@ -44,7 +46,7 @@ export default class Offer extends Component {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
       assignAdditionalTermsValue, addAdditionalTermsToFormData,
-      confirmModalName, removeData, inProgress,
+      confirmModalName, removeData, inProgress, expAnnualRevCount,
       // checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
@@ -133,7 +135,7 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.expectedAnnualRevenue.map((expectedAnnualRevenue, index) => (
                   <Aux>
                     <MaskedInput
-                      removed={(!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > 4 && (OFFERS_FRM.fields.expectedAnnualRevenue.length - 1 === index)) ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
+                      removed={(!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > expAnnualRevCount && (OFFERS_FRM.fields.expectedAnnualRevenue.length - 1 === index)) ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
                       containerclassname={isReadonly ? 'display-only' : ''}
                       readOnly={isReadonly}
                       prefix="$"
