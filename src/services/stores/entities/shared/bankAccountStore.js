@@ -1,7 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { isEmpty, map, uniqWith, isEqual, find } from 'lodash';
-import { FormValidator as Validator, ClientDb } from '../../../../helper';
+import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
 import { changeLinkedBank, changeBankManually, cancelBankRequest } from '../../queries/banking';
@@ -10,7 +10,7 @@ import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
-import { getlistLinkedBankUsers } from '../../queries/bankAccount';
+import { getlistLinkedBankUsers, checkOpeningDepositAmount } from '../../queries/bankAccount';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -380,6 +380,45 @@ export class BankAccountStore {
         n.includes('X'));
     }
     return false;
+  }
+
+  @action
+  checkOpeningDepositAmount = () => {
+    uiStore.setProgress();
+    const variables = {
+      accountType: accountStore.investmentAccType.toUpperCase(),
+      accountAttributes: this.accountAttributes,
+    };
+    if (userDetailsStore.currentUser.data) {
+      const accountDetails = find(
+        userDetailsStore.currentUser.data.user.roles,
+        { name: accountStore.investmentAccType },
+      );
+      if (accountDetails) {
+        variables.accountId = accountDetails.details.accountId;
+      }
+    }
+    return new Promise((resolve, reject) => {
+      if (!this.depositMoneyNow) {
+        resolve();
+      } else {
+        client
+          .mutate({
+            mutation: checkOpeningDepositAmount,
+            variables,
+          })
+          .then(() => {
+            resolve();
+          })
+          .catch((err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            reject();
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      }
+    });
   }
 }
 

@@ -23,6 +23,7 @@ export default class TaxForms extends Component {
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
   }
+
   paginate = params => this.props.statementStore.pageRequest(params);
 
   downloadhandler = (e, fileId) => {
@@ -34,6 +35,7 @@ export default class TaxForms extends Component {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
   }
+
   render() {
     const { taxFormCount, requestState, taxForms } = this.props.statementStore;
     const totalRecords = taxFormCount() || 0;
@@ -49,12 +51,12 @@ export default class TaxForms extends Component {
                   result={result}
                 />
               </Card>
+              {totalRecords > 0 &&
+              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              }
             </Grid.Column>
           </Grid.Row>
         </Grid>
-        {totalRecords > 0 &&
-          <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
-        }
       </Aux>
     );
   }

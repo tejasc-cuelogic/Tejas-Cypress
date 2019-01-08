@@ -7,7 +7,7 @@ import Helper from '../../../../../../helper/utility';
 const InvestmentLimit = props => (
   <Aux>
     <Header as={props.changeInvest ? 'h6' : 'h4'} textAlign={props.changeInvest ? '' : 'center'}>
-      Your investment limit: {Helper.CurrencyFormat(props.getCurrentLimitForAccount || 0)}
+      Your investment limit: {Helper.MoneyMathDisplayCurrency(props.getCurrentLimitForAccount || 0)}
       <Popup
         wide
         trigger={<Icon className="ns-help-circle" color="green" />}
