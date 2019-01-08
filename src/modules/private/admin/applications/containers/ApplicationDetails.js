@@ -42,6 +42,7 @@ export default class ApplicationDetails extends Component {
   handleCloseModal = (e) => {
     e.stopPropagation();
     const { params } = this.props.match;
+    this.props.businessAppStore.setFieldvalue('applicationId', null);
     this.props.history.push(`/app/applications/${params.id}`);
   };
   editBusinessDetails = (e) => {

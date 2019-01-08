@@ -55,14 +55,16 @@ export class Utility {
       state: ['administrative_area_level_1'],
       zipCode: ['postal_code'],
     };
-    Object.keys(addressMap).map(aK => place.address_components.map((c) => {
-      if (_.intersection(addressMap[aK], c.types).length > 0) {
-        const addressEle = {};
-        addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]} ${c.long_name}` : c.long_name;
-        result = _.has(result, aK) ? addressEle : { ...result, ...addressEle };
-      }
-      return result;
-    }));
+    if (place.address_components) {
+      Object.keys(addressMap).map(aK => place.address_components.map((c) => {
+        if (_.intersection(addressMap[aK], c.types).length > 0) {
+          const addressEle = {};
+          addressEle[aK] = addressMap[aK].length > 2 && result[aK] ? `${result[aK]} ${c.long_name}` : c.long_name;
+          result = _.has(result, aK) ? addressEle : { ...result, ...addressEle };
+        }
+        return result;
+      }));
+    }
     return result;
   }
 

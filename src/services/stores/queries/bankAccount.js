@@ -23,3 +23,12 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
     }
   }
 `;
+
+export const checkOpeningDepositAmount = gql`
+  mutation checkOpeningDepositAmount($accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum! $accountId: String) {
+    checkOpeningDepositAmount(
+      accountAttributes: $accountAttributes
+      accountType: $accountType,
+      accountId: $accountId
+    )
+  }`;

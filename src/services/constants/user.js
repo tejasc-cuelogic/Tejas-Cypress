@@ -122,9 +122,10 @@ export const USER_IDENTITY = {
     label: 'Zip Code',
     placeHolder: '10011',
     error: undefined,
-    rule: 'required',
+    rule: 'required|maskedField:5',
     customErrors: {
       required: '* required.',
+      maskedField: 'The ZIP Code should be at least 5 digits',
     },
     objRef: 'legalDetails.legalAddress',
   },

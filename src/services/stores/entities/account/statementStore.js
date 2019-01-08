@@ -2,7 +2,7 @@ import moment from 'moment';
 import { observable, computed, action } from 'mobx';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { downloadFile } from '../../queries/statement';
-import { uiStore, transactionStore, userDetailsStore } from '../../index';
+import { uiStore, userDetailsStore, transactionStore } from '../../index';
 
 export class StatementStore {
   @observable data = [];
@@ -64,12 +64,12 @@ export class StatementStore {
     const dateStart = moment(statementObj.date);
     const dateEnd = moment();
     const timeValues = [];
-    while (dateStart.isBefore(dateEnd)) {
+    while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(dateStart.format('MM/DD/YYYY'), 'month')) {
       timeValues.push(dateStart.format('MM/DD/YYYY'));
       dateStart.add(1, statementObj.rangeParam);
     }
-    const fifthDate = moment().startOf('month').day(6);
-    if (fifthDate > dateEnd) {
+    const fifthDateOfMonth = moment().startOf('month').day(6);
+    if (fifthDateOfMonth > dateEnd) {
       timeValues.pop();
     }
     return timeValues.reverse();

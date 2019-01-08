@@ -449,7 +449,7 @@ export class InvestmentStore {
 
   @action
   updateInvestmentLimits = () => new Promise((resolve) => {
-    const data = mapValues(this.INVESTMENT_LIMITS_FORM, f => parseInt(f.value, 10));
+    const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
       .updateInvestmentLimits(data, this.getSelectedAccountTypeId, userDetailsStore.currentUserId)
       .then(() => resolve());

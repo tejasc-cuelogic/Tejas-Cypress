@@ -5,7 +5,7 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
     { title: 'Bank Accounts', to: 'bank-accounts', component: 'BankAccount' },
     { title: 'Transactions', to: 'transactions', component: 'Transactions' },
     { title: 'Statements', to: 'statements', component: 'Statements' },
-    { title: 'Settings', to: 'Settings', component: 'Settings' },
+    // { title: 'Settings', to: 'Settings', component: 'Settings' },
   ],
 };
 
