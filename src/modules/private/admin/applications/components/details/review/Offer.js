@@ -14,8 +14,13 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 export default class Offer extends Component {
   componentWillMount() {
     this.props.businessAppReviewStore.setFieldvalue('showGeneratePA', true);
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i <= this.props.businessAppReviewStore.revenueYearFieldCount; i++) {
+      this.props.businessAppReviewStore.addMore('OFFERS_FRM', 'expectedAnnualRevenue');
+    }
     this.props.businessAppReviewStore.setFormData('OFFERS_FRM', 'offers');
     this.props.businessAppReviewStore.setFormData('MANAGERS_FRM', 'offers.managerOverview');
+    this.props.businessAppReviewStore.addSectionCount();
   }
   onFileDrop = (files, name) => {
     this.props.businessAppReviewStore.setFileUploadData('OFFERS_FRM', '', name, files);
@@ -31,6 +36,9 @@ export default class Offer extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('OFFERS_FRM', array);
   }
+  // addSectionCount = () => {
+  //   this.props.businessAppReviewStore.addSectionCount();
+  // }
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OFFERS_FRM');
   }
@@ -44,7 +52,7 @@ export default class Offer extends Component {
     const {
       OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, confirmModal,
       assignAdditionalTermsValue, addAdditionalTermsToFormData,
-      confirmModalName, removeData, inProgress,
+      confirmModalName, removeData, inProgress, revenueYearFieldCount,
       // checkAllStepsIsApproved,
     } = this.props.businessAppReviewStore;
     const access = this.props.userStore.myAccessForModule('APPLICATIONS');
@@ -133,7 +141,7 @@ export default class Offer extends Component {
                 OFFERS_FRM.fields.expectedAnnualRevenue.map((expectedAnnualRevenue, index) => (
                   <Aux>
                     <MaskedInput
-                      removed={(!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > 4 && (OFFERS_FRM.fields.expectedAnnualRevenue.length - 1 === index)) ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
+                      removed={(!isReadonly && OFFERS_FRM.fields.expectedAnnualRevenue.length > revenueYearFieldCount && (OFFERS_FRM.fields.expectedAnnualRevenue.length - 1 === index)) ? e => this.toggleConfirmModal(e, index, 'expectedAnnualRevenue') : false}
                       containerclassname={isReadonly ? 'display-only' : ''}
                       readOnly={isReadonly}
                       prefix="$"

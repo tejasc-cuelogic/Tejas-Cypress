@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { map, forEach, filter, get, ceil } from 'lodash';
@@ -47,6 +48,7 @@ export class BusinessAppReviewStore {
   };
   @observable amortizationArray = [];
   @observable initLoad = [];
+  @observable revenueYearFieldCount = 4;
 
   @action
   setFieldvalue = (field, value) => {
@@ -102,6 +104,16 @@ export class BusinessAppReviewStore {
     return metaDataMapping[formName][getField];
   }
 
+  @action
+  addSectionCount = () => {
+    const maturityArray = [];
+    this.OFFERS_FRM.fields.offer.map((offer) => {
+      maturityArray.push(offer.maturity.value);
+      return null;
+    });
+    const maxMaturityCount = Math.max(...maturityArray);
+    this.revenueYearFieldCount = Math.ceil(maxMaturityCount / 12);
+  }
   @action
   addMore = (formName, arrayName = 'data') => {
     this[formName] = Validator.addMoreRecordToSubSection(this[formName], arrayName);
@@ -265,6 +277,27 @@ export class BusinessAppReviewStore {
     );
     if (field === 'minimumAmount' || field === 'interestRate' || field === 'maturity') {
       this.showFormAmortisation(index);
+    }
+    if (field === 'maturity') {
+      this.fieldsModification();
+    }
+  }
+
+  @action
+  fieldsModification = () => {
+    this.addSectionCount();
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    const offerData = businessApplicationDetailsAdmin;
+    const revenueCount = offerData.offers.expectedAnnualRevenue.length;
+    const diffrence = Math.abs(revenueCount - this.revenueYearFieldCount);
+    if (revenueCount > this.revenueYearFieldCount) {
+      for (let i = diffrence; i > 0; i--) {
+        this.removeData('OFFERS_FRM', 'expectedAnnualRevenue');
+      }
+    } else if (this.revenueYearFieldCount > revenueCount) {
+      for (let i = 0; i < diffrence; i++) {
+        this.addMore('OFFERS_FRM', 'expectedAnnualRevenue');
+      }
     }
   }
 
@@ -666,12 +699,15 @@ export class BusinessAppReviewStore {
       this.checkFormValid(form, multiForm, false);
     }
     if (form === 'OFFERS_FRM') {
-      appData.offers.offer.map((offer, index) => {
-        this.showFormAmortisation(index);
-        this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
-          offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
-        return null;
-      });
+      if (appData.offers && appData.offers.offer) {
+        this.addSectionCount();
+        appData.offers.offer.map((offer, index) => {
+          this.showFormAmortisation(index);
+          this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+            offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
+          return null;
+        });
+      }
     }
     return false;
   }
