@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+/* eslint-disable no-prototype-builtins */
 import { toJS } from 'mobx';
 import Validator from 'validatorjs';
 import moment from 'moment';
@@ -291,7 +292,9 @@ class FormValidator {
           },
         };
       } else {
-        fields[key].value = typeof fields[key].value === 'number' ? '' : fields[key].default ? fields[key].default : '';
+        fields[key].value = fields[key].hasOwnProperty('default') ? fields[key].default : '';
+        // fields[key].value = typeof fields[key].value === 'number' ? '' :
+        // fields[key].hasOwnProperty('default') ? fields[key].default : '';
       }
     });
     return fields;

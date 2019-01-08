@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get, ceil } from 'lodash';
+import { map, forEach, filter, get, ceil, times } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
@@ -47,6 +47,7 @@ export class BusinessAppReviewStore {
   };
   @observable amortizationArray = [];
   @observable initLoad = [];
+  @observable expAnnualRevCount = 4;
 
   @action
   setFieldvalue = (field, value) => {
@@ -266,6 +267,36 @@ export class BusinessAppReviewStore {
     if (field === 'minimumAmount' || field === 'interestRate' || field === 'maturity') {
       this.showFormAmortisation(index);
     }
+    if (field === 'maturity') {
+      this.calculateExpAnnualRevCount();
+    }
+  }
+
+  @action
+  calculateExpAnnualRevCount = () => {
+    const maxMaturity = this.getMaxMaturityValue;
+    const MaxMaturityInYears = maxMaturity ? ceil(maxMaturity / 12) : 4;
+    if (this.expAnnualRevCount !== MaxMaturityInYears) {
+      if (this.expAnnualRevCount < MaxMaturityInYears) {
+        times(MaxMaturityInYears - this.expAnnualRevCount, () => this.addExpAnnRev());
+      } else {
+        times(this.expAnnualRevCount - MaxMaturityInYears, () => this.removeExpAnnRev());
+      }
+      this.expAnnualRevCount = MaxMaturityInYears;
+    }
+  }
+
+  @action
+  addExpAnnRev = () => this.addMore('OFFERS_FRM', 'expectedAnnualRevenue');
+
+  @action
+  removeExpAnnRev = () => this.OFFERS_FRM.fields.expectedAnnualRevenue.splice(-1, 1);
+
+  @computed
+  get getMaxMaturityValue() {
+    const maxValue =
+    Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => o.maturity.value || 0));
+    return maxValue || 0;
   }
 
   @computed
@@ -345,7 +376,7 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
+  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true, showLoader = true) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
     let formInputData = Validator.evaluateFormData(this[formName].fields);
@@ -390,7 +421,9 @@ export class BusinessAppReviewStore {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
     const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
-    this.setFieldvalue('inProgress', progressButton);
+    if (showLoader) {
+      this.setFieldvalue('inProgress', progressButton);
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -402,14 +435,13 @@ export class BusinessAppReviewStore {
         .then((result) => {
           this.removeUploadedFiles();
           Helper.toast('Data saved successfully.', 'success');
+          this.setFieldvalue('inProgress', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
-        })
-        .finally(() => {
           this.setFieldvalue('inProgress', false);
         });
     });
@@ -612,7 +644,8 @@ export class BusinessAppReviewStore {
 
   @action
   generatePortalAgreement = () => {
-    this.saveReviewForms('OFFERS_FRM').then(() => {
+    this.setFieldvalue('inProgress', 'GENERATE_PA');
+    this.saveReviewForms('OFFERS_FRM', '', true, false).then(() => {
       const { businessApplicationDetailsAdmin } = businessAppStore;
       const { applicationId, userId } = businessApplicationDetailsAdmin;
       const reFetchPayLoad = {
@@ -673,6 +706,7 @@ export class BusinessAppReviewStore {
             offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
           return null;
         });
+        this.calculateExpAnnualRevCount();
       }
     }
     return false;
