@@ -90,14 +90,16 @@ export const PRIVATE_NAV = [
     path: 'issuer/businessApplication/containers/BusinessApplication',
     subNavigations: [
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Pre-qualification',
         to: 'pre-qualification',
         component: 'PreQualification',
         showIcon: true,
       },
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Business Details',
         to: 'business-details',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
@@ -105,7 +107,8 @@ export const PRIVATE_NAV = [
         showIcon: true,
       },
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Performance',
         to: 'performance',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
@@ -113,7 +116,8 @@ export const PRIVATE_NAV = [
         showIcon: true,
       },
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Documentation',
         to: 'documentation',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
