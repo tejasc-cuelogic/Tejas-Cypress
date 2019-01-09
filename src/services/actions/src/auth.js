@@ -243,8 +243,13 @@ export class Auth {
       );
     })
       .then(() => {
-        Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
-        if (authStore.SIGNUP_FRM.fields.role.value === 'investor') {
+        const signUpRole = authStore.SIGNUP_FRM.fields.role.value;
+        if (signUpRole === 'investor') {
+          Helper.toast('Thanks! You have successfully signed up on NextSeed.', 'success');
+        } else if (signUpRole === 'issuer') {
+          Helper.toast('Congrats, you have been PreQualified on NextSeed.', 'success');
+        }
+        if (signUpRole === 'investor') {
           if (!userStore.currentUser) {
             const { email, password } = Validator.ExtractValues(authStore.CONFIRM_FRM.fields);
             const authenticationDetails = new AWSCognito.AuthenticationDetails({
