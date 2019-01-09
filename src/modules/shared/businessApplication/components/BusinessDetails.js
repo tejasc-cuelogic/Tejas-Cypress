@@ -281,7 +281,10 @@ export default class BusinessDetails extends Component {
               </Aux>
             }
           </FormElementWrap>
-          <AppNavigation hideFields={hideFields} />
+          <AppNavigation
+            hideFields={hideFields}
+            isFileUploading={this.props.businessAppStore.isFileUploading}
+          />
         </Form>
         <Confirm
           header="Confirm"

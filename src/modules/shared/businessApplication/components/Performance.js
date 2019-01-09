@@ -109,7 +109,10 @@ export default class Performance extends Component {
               </Grid>
             </FormElementWrap>
           }
-          <AppNavigation hideFields={hideFields} />
+          <AppNavigation
+            hideFields={hideFields}
+            isFileUploading={this.props.businessAppStore.isFileUploading}
+          />
         </Form>
       </div>
     );

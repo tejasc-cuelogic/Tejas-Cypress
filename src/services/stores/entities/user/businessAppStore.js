@@ -696,8 +696,8 @@ export class BusinessAppStore {
           data.personalGuaranteeForm.value,
           this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
         ) : [],
-        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
-        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
+        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value === '' ? null : this.BUSINESS_DOC_FRM.fields.blanketLien.value ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
+        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === '' ? null : this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
       };
     } else {
       inputData = {
