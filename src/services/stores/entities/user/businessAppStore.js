@@ -222,8 +222,10 @@ export class BusinessAppStore {
           this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
           this.setDocumentationDetails(data.businessDocumentation);
         }
-        if ((data.applicationStatus || data.prequalStatus) ===
-          BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+        if (((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) ||
+          ((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
           this.formReadOnlyMode = true;
         } else if ((data.applicationStatus || data.prequalStatus) ===
           BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
