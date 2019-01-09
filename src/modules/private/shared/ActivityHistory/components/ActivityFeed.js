@@ -2,8 +2,8 @@ import React from 'react';
 import { get } from 'lodash';
 import { Feed, Image, Transition } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared/';
-import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
 import DateTimeFormat from '../../../../../theme/shared/src/DateTimeFormat';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const ActivityFeed = ({ loading, activities }) => (
   <Transition.Group animation="glow" className="activities" as={Feed} duration={900}>
@@ -21,12 +21,15 @@ const ActivityFeed = ({ loading, activities }) => (
                     roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
                   }}
                 /> :
-                <Image src={defaultLeaderProfile} />
+                <Image src={`${ASSETS_URL}images/logo-icon.svg`} />
               }
             </Feed.Label>
             <Feed.Content>
               <Feed.Meta>
-                {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName} <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
+                { a.createdUserInfo ? '' : 'NextSeed Notifications' }
+                {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName}{' '}
+                {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName}{' '}
+                <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>
               <Feed.Extra text>{a.activity}</Feed.Extra>
