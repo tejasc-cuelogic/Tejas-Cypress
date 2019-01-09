@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
 import { map, forEach, filter, get, ceil, times } from 'lodash';
@@ -109,6 +110,12 @@ export class BusinessAppReviewStore {
     if (arrayName === 'expectedAnnualRevenue') {
       const index = this[formName].fields[arrayName].length;
       this[formName].fields[arrayName][index - 1].label.value = `Year ${index}`;
+    }
+    if (arrayName === 'offer') {
+      this.OFFERS_FRM.fields.offer.map((item, index) => {
+        this.assignAdditionalTermsValue(index);
+        return null;
+      });
     }
   }
 
