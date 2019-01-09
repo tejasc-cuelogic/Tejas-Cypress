@@ -39,7 +39,7 @@
 .plus:before { content: '\e802'; }
 */
 
-//  NextSeed V-2 
+//  NextSeed V-2
 
 //  Button style radio buttons
 .ui.form{
@@ -169,9 +169,20 @@
 			margin-top:@4px;
 		}
 	}
-	.ui.checkbox .box, .ui.checkbox label{
-		&:before, &:after{
-			top:3px;
+	.ui.checkbox {
+		&.box, label{
+			&:before, &:after{
+				top:3px;
+			}
+			// &:not(:focus):before {
+			// 	background: @white;
+			// }
+		}
+		input:not(checked) ~ label:before{
+			background:@white;
+		}
+		input:checked ~ label:before{
+			background: @primary-one !important;
 		}
 	}
 	.checkbox-description{

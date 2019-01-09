@@ -11,7 +11,7 @@
 @labelDistance: 2.142857em; /* 30px @ 14/em */
 
 /* Checkbox */
-@checkboxBackground: @white;
+@checkboxBackground: transparent;
 @checkboxBorder: 2px solid @neutral-middark;
 @checkboxBorderRadius: @4px;
 @checkboxTransition:
@@ -48,7 +48,7 @@
 @labelPressedColor: @selectedTextColor;
 
 /* Focus */
-@checkboxFocusBackground: @white;
+@checkboxFocusBackground: transparent;
 @checkboxFocusBorderColor: @neutral-middark;
 @checkboxFocusCheckColor: @selectedTextColor;
 @labelFocusColor: @selectedTextColor;
@@ -67,7 +67,7 @@
 
 /* Indeterminate */
 @checkboxIndeterminateBackground: @checkboxActiveBackground;
-@checkboxIndeterminateBorderColor: @checkboxActiveBorderColor;
+@checkboxIndeterminateBorderColor: @checkboxFocusBorderColor;
 @checkboxIndeterminateCheckOpacity: 1;
 @checkboxIndeterminateCheckColor: @checkboxActiveCheckColor;
 
@@ -93,13 +93,13 @@
 @bulletColor: @primary-one;
 @bulletRadius: @circularRadius;
 
-@radioFocusBackground: @white;
+@radioFocusBackground: transparent;
 @radioFocusBulletColor: @primary-one;
 
-@radioActiveBackground: @white;
+@radioActiveBackground: @radioFocusBackground;
 @radioActiveBulletColor: @primary-one;
 
-@radioActiveFocusBackground: @white;
+@radioActiveFocusBackground: @radioFocusBackground;
 @radioActiveFocusBulletColor: @primary-one;
 
 /* Slider & Toggle Handle */
