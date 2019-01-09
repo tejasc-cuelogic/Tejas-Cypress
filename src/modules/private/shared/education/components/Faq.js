@@ -6,11 +6,11 @@ import AccList from '../components/knowledgeBase/AccList';
 import Details from '../components/knowledgeBase/Details';
 import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('educationStore')
+@inject('educationStore', 'userStore')
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.educationStore.initRequest('Faq');
+    this.props.educationStore.initRequest('Faq', null, this.props.userStore.isIssuer ? 'ISSUER_FAQ' : '');
   }
   search = (e) => {
     this.props.educationStore.setSrchParam('Faq', e.target.value);
