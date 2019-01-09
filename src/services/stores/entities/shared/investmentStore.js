@@ -449,7 +449,7 @@ export class InvestmentStore {
 
   @action
   updateInvestmentLimits = () => new Promise((resolve) => {
-    const data = mapValues(this.INVESTMENT_LIMITS_FORM, f => parseInt(f.value, 10));
+    const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
       .updateInvestmentLimits(data, this.getSelectedAccountTypeId, userDetailsStore.currentUserId)
       .then(() => resolve());
@@ -489,6 +489,18 @@ export class InvestmentStore {
       limit = min([limit, annualInvestmentLimit]);
     }
     return limit;
+  }
+  @action
+  setInvestmentLimitData = () => {
+    const userDetail = userDetailsStore.userDetails;
+    const investments = {
+      netWorth: userDetail.limits.netWorth,
+      annualIncome: userDetail.limits.income,
+      cfInvestments: userDetail.limits.otherContributions,
+    };
+    this.INVESTMENT_LIMITS_FORM = Validator
+      .setFormData(this.INVESTMENT_LIMITS_FORM, investments);
+    this.INVESTMENT_LIMITS_FORM.meta.isValid = true;
   }
 }
 

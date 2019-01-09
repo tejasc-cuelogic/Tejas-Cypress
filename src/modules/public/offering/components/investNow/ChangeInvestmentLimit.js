@@ -9,6 +9,9 @@ import { MaskedInput } from '../../../../../theme/form';
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
+  componentWillMount = () => {
+    this.props.investmentStore.setInvestmentLimitData();
+  }
   changeInvestmentLimit = () => {
     this.props.investmentStore.updateInvestmentLimits().then(() => {
       Helper.toast('Investment limit changed successfully.', 'success');
@@ -24,10 +27,13 @@ class ChangeInvestmentLimit extends Component {
     const { resetForm, INVESTMENT_LIMITS_FORM } = this.props.investmentStore;
     resetForm(INVESTMENT_LIMITS_FORM);
   }
+  change = (values, name) => {
+    this.props.investmentStore.investmentLimitChange(values, name);
+    this.forceUpdate();
+  }
   render() {
     const {
       INVESTMENT_LIMITS_FORM,
-      investmentLimitChange,
       changedInvestmentLimit,
     } = this.props.investmentStore;
     return (
@@ -50,8 +56,9 @@ class ChangeInvestmentLimit extends Component {
                   <Table.Cell width={5} textAlign="right">
                     <MaskedInput
                       name="netWorth"
-                      fielddata={INVESTMENT_LIMITS_FORM.fields.netWorth}
-                      changed={(values, name) => investmentLimitChange(values, name)}
+                      fielddata={INVESTMENT_LIMITS_FORM.fields.netWorth
+                        ? INVESTMENT_LIMITS_FORM.fields.netWorth : 0}
+                      changed={(values, name) => this.change(values, name)}
                       prefix="$"
                       currency
                       hidelabel
@@ -71,8 +78,9 @@ class ChangeInvestmentLimit extends Component {
                   <Table.Cell textAlign="right">
                     <MaskedInput
                       name="annualIncome"
-                      fielddata={INVESTMENT_LIMITS_FORM.fields.annualIncome}
-                      changed={(values, name) => investmentLimitChange(values, name)}
+                      fielddata={INVESTMENT_LIMITS_FORM.fields.annualIncome
+                        ? INVESTMENT_LIMITS_FORM.fields.annualIncome : 0}
+                      changed={(values, name) => this.change(values, name)}
                       prefix="$"
                       currency
                       hidelabel
@@ -84,8 +92,9 @@ class ChangeInvestmentLimit extends Component {
                   <Table.Cell textAlign="right">
                     <MaskedInput
                       name="cfInvestments"
-                      fielddata={INVESTMENT_LIMITS_FORM.fields.cfInvestments}
-                      changed={(values, name) => investmentLimitChange(values, name)}
+                      fielddata={INVESTMENT_LIMITS_FORM.fields.cfInvestments
+                        ? INVESTMENT_LIMITS_FORM.fields.cfInvestments : 0}
+                      changed={(values, name) => this.change(values, name)}
                       prefix="$"
                       currency
                       hidelabel
