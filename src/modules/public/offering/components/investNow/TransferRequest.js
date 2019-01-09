@@ -84,7 +84,7 @@ class TransferRequest extends Component {
                 />
               </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(getCurrCashAvailable)}
+                {Helper.MoneyMathDisplayCurrency(getCurrCashAvailable)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
