@@ -201,7 +201,9 @@ export const PRIVATE_NAV = [
     subPanel: 1,
     path: 'shared/education/containers/Education',
     subNavigations: [
-      { title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket' },
+      {
+        title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
+      },
       { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
       { title: 'FAQ', to: 'faq', component: 'Faq' },
     ],

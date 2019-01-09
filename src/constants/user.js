@@ -21,7 +21,7 @@ export const USER_TYPES_META = [
 export const USER_LIST_META = [
   ['profilepic', '', false],
   ['firstName', 'Full Name', false],
-  ['city', 'Residence City', false],
+  ['zipZode', 'ZIP Code', false],
   ['number', 'Phone Number', false],
   ['accountType', 'Account Types', false],
   ['createdDate', 'Account Creation', true],
