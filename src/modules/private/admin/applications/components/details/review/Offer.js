@@ -33,9 +33,6 @@ export default class Offer extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('OFFERS_FRM', array);
   }
-  // addSectionCount = () => {
-  //   this.props.businessAppReviewStore.addSectionCount();
-  // }
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OFFERS_FRM');
   }

@@ -26,9 +26,10 @@ const ActivityFeed = ({ loading, activities }) => (
             </Feed.Label>
             <Feed.Content>
               <Feed.Meta>
-                { a.createdUserInfo ? '' : 'NextSeed Notifications' }
-                {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName}{' '}
-                {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName}{' '}
+                { a.createdUserInfo ?
+                `${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} 
+                ${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName}`
+                : 'NextSeed Notifications' }
                 <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>
