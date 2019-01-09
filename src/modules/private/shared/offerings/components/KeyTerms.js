@@ -227,7 +227,7 @@ export default class KeyTerms extends Component {
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, formName)}
-                containerclassname="secondary key-terms-textarea"
+                containerclassname="secondary large"
               />
             ))}
           </Form.Group>
