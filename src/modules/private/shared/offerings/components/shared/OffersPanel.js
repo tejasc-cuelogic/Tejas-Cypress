@@ -7,6 +7,7 @@ import { NsCarousel } from '../../../../../../theme/shared';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { FormInput, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { STRUCTURE_TYPES, PERSONAL_GUARANTEE_TYPES } from '../../../../../../services/constants/admin/businessApplication';
+import Helper from '../../../../../../helper/utility';
 
 const isSmallMonitor = document.documentElement.clientWidth < 1920;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -122,7 +123,7 @@ export default class OffersPanel extends Component {
                       </Aux> :
                       <Table.Row>
                         <Table.Cell>Maximum Offering Amount</Table.Cell>
-                        <Table.Cell>{`$${offer.minimumAmount.value} - $${offer.amount.value}`}</Table.Cell>
+                        <Table.Cell>{`${Helper.CurrencyFormat(offer.minimumAmount.value)} - ${Helper.CurrencyFormat(offer.amount.value)}`}</Table.Cell>
                       </Table.Row>
                       }
                     <Table.Row>
