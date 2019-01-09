@@ -713,6 +713,9 @@ export class BusinessAppReviewStore {
             offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
           return null;
         });
+        if (appData.offers.expectedAnnualRevenue && appData.offers.expectedAnnualRevenue.length) {
+          this.expAnnualRevCount = appData.offers.expectedAnnualRevenue.length;
+        }
         this.calculateExpAnnualRevCount();
       }
     }
