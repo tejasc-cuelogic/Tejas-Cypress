@@ -19,13 +19,14 @@ export default class AppNavigation extends Component {
   }
   actualSubmit = (where) => {
     const {
-      checkFormisValid, currentApplicationId, currentApplicationType,
+      // checkFormisValid,
+      currentApplicationId, currentApplicationType,
     } = this.props.businessAppStore;
     if (where >= 0) {
-      if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
-        this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
-        this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
-      }
+      // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
+      this.submitSaveContinue(`${this.state.navItems[this.state.step].to}`);
+      this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
+      // }
     } else {
       this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step + where].to}`);
     }
@@ -38,21 +39,22 @@ export default class AppNavigation extends Component {
   submit = (e) => {
     e.preventDefault();
     const {
-      checkFormisValid, currentApplicationId,
+      // checkFormisValid,
+      currentApplicationId,
       currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction,
     } = this.props.businessAppStore;
-    if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
-      businessAppParitalSubmit().then((result) => {
-        if (result && this.props.businessAppStore.canSubmitApp) {
-          businessApplicationSubmitAction().then(() => {
-            Helper.toast('Business application submitted successfully!', 'success');
-            this.props.history.push('/app/dashboard');
-          });
-        } else {
-          this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step].to}`);
-        }
-      });
-    }
+    // if (checkFormisValid(`${this.state.navItems[this.state.step].to}`, true)) {
+    businessAppParitalSubmit().then((result) => {
+      if (result && this.props.businessAppStore.canSubmitApp) {
+        businessApplicationSubmitAction().then(() => {
+          Helper.toast('Business application submitted successfully!', 'success');
+          this.props.history.push('/app/dashboard');
+        });
+      } else {
+        this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${this.state.navItems[this.state.step].to}`);
+      }
+    });
+    // }
   }
   render() {
     const { isFileUploading, formReadOnlyMode, ButtonTextToggle } = this.props.businessAppStore;
@@ -75,7 +77,7 @@ export default class AppNavigation extends Component {
                   {this.state.step < (this.state.navItems.length - 1) ? (
                     <Aux>
                       {this.state.navItems[this.state.step + 1].title}
-                      <Button circular icon primary className="multistep__btn next active" onClick={() => this.actualSubmit(1)}>
+                      <Button circular icon primary className="multistep__btn next active" disabled={isFileUploading} onClick={() => this.actualSubmit(1)}>
                         <Icon className="ns-arrow-right" />
                       </Button>
                     </Aux>

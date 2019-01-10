@@ -68,6 +68,7 @@ export default class BusinessDetails extends Component {
             }
           >
             <DropZone
+              toolTipClassName="left-align justify-text"
               hideFields={hideFields}
               tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
               disabled={formReadOnlyMode}
@@ -280,7 +281,10 @@ export default class BusinessDetails extends Component {
               </Aux>
             }
           </FormElementWrap>
-          <AppNavigation hideFields={hideFields} />
+          <AppNavigation
+            hideFields={hideFields}
+            isFileUploading={this.props.businessAppStore.isFileUploading}
+          />
         </Form>
         <Confirm
           header="Confirm"

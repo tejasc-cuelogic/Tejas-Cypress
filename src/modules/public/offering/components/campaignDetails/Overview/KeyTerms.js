@@ -8,6 +8,7 @@ class KeyTerms extends Component {
   render() {
     const { campaign, refLink } = this.props;
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '[XX] Months';
+    const investmentMultiple = campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Grid.Column>
@@ -39,7 +40,13 @@ class KeyTerms extends Component {
             </Grid.Column>
             <Grid.Column>
               <Statistic size="mini" className="basic">
-                <Statistic.Label><b>Multiple</b> <Popup trigger={<Icon name="help circle" color="green" />} content="For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $XXX within YY months. A 1.0% service fee is deducted from each payment." position="top center" /></Statistic.Label>
+                <Statistic.Label><b>Multiple</b>
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultiple === 'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. A 1.0% service fee is deducted from each payment.`}
+                    position="top center"
+                  />
+                </Statistic.Label>
                 <Statistic.Value>
                   {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : '-'}
                 </Statistic.Value>

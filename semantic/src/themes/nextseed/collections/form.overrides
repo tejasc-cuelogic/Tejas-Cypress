@@ -76,12 +76,18 @@
             border:none;
             border-bottom:@borderColor 1px solid;
         }
-        &.secondary textarea{
-            padding:@11px @14px;
-            min-height:80px;
-            max-height:80px;
-            border-radius:@4px;
-            border:@neutral-offdark 1px solid;
+        &.secondary {
+            &.large textarea {
+                min-height: 150px;
+                max-height: 150px; 
+            }
+            textarea{
+                padding:@11px @14px;
+                min-height:80px;
+                max-height:80px;
+                border-radius:@4px;
+                border:@neutral-offdark 1px solid;
+            }
         }
         &.display-only{
             >label{

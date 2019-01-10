@@ -490,6 +490,18 @@ export class InvestmentStore {
     }
     return limit;
   }
+  @action
+  setInvestmentLimitData = () => {
+    const userDetail = userDetailsStore.userDetails;
+    const investments = {
+      netWorth: userDetail.limits.netWorth,
+      annualIncome: userDetail.limits.income,
+      cfInvestments: userDetail.limits.otherContributions,
+    };
+    this.INVESTMENT_LIMITS_FORM = Validator
+      .setFormData(this.INVESTMENT_LIMITS_FORM, investments);
+    this.INVESTMENT_LIMITS_FORM.meta.isValid = true;
+  }
 }
 
 export default new InvestmentStore();
