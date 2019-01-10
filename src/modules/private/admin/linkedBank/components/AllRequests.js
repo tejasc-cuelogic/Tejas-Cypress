@@ -1,7 +1,8 @@
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Card, Table } from 'semantic-ui-react';
+import { get } from 'lodash';
+import { Card, Table, Button } from 'semantic-ui-react';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import Actions from './Actions';
@@ -9,8 +10,17 @@ import Actions from './Actions';
 @inject('bankAccountStore')
 @observer
 export default class AllRequests extends Component {
+  state = {
+    routingNums: {},
+  }
   componentWillMount() {
     this.props.bankAccountStore.initRequest();
+  }
+  setRoutingNumber = (e, accNum) => {
+    e.stopPropagation();
+    const oldObj = this.state.routingNums;
+    oldObj[accNum] = true;
+    this.setState({ routingNums: oldObj });
   }
   paginate = params => this.props.bankAccountStore.pageRequest(params);
   render() {
@@ -63,8 +73,9 @@ export default class AllRequests extends Component {
                       {(req.linkedBank && req.linkedBank.changeRequest
                         && req.linkedBank.changeRequest.accountNumber && Helper.encryptNumberWithX(req.linkedBank.changeRequest.accountNumber)) || 'N/A'}
                       <br />
-                      {(req.linkedBank && req.linkedBank.changeRequest
-                        && req.linkedBank.changeRequest.routingNumber && req.linkedBank.changeRequest.routingNumber) || 'N/A'}
+                      {this.state.routingNums[get(req, 'accountId')] ? get(req, 'linkedBank.changeRequest.routingNumber') :
+                      <Button color="blue" onClick={e => this.setRoutingNumber(e, get(req, 'accountId'))} className="link-button"> Click for Routing # </Button>
+                      }
                     </Table.Cell>
                     <Actions {...this.props} />
                   </Table.Row>

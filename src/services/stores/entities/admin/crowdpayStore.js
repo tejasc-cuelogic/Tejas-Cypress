@@ -75,6 +75,8 @@ export class CrowdpayStore {
       variables: { limit: 500 },
       fetchPolicy: 'network-only',
       onFetch: () => {
+        this.requestState.page = 1;
+        this.requestState.skip = 0;
         this.setData('isApiHit', true);
         this.setCrowdpayAccountsSummary();
       },
@@ -156,9 +158,17 @@ export class CrowdpayStore {
         action: ctaAction,
       };
     }
+    this.reset();
     return new Promise((resolve, reject) => {
       client
-        .mutate({ mutation, variables })
+        .mutate({
+          mutation,
+          variables,
+          refetchQueries: [{
+            query: listCrowdPayUsers,
+            variables: { limit: 500 },
+          }],
+        })
         .then(() => { Helper.toast(sMsg, 'success'); resolve(); })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');

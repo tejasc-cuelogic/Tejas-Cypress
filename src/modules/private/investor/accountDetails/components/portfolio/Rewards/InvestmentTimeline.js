@@ -11,7 +11,7 @@ const calcSmartProgress = (milestones, amount) => {
   const pIndex = findLastIndex(milestones, m => toInteger(m) < toInteger(amount)) > 0 ?
     findLastIndex(milestones, m => toInteger(m) < toInteger(amount)) : 0;
   return ((pIndex / (milestones.length - 1)) * 100) +
-    (((amount - milestones[pIndex]) /
+    (((toInteger(amount) - milestones[pIndex]) /
       (milestones[pIndex + 1] - milestones[pIndex])) *
       (100 / (milestones.length - 1)));
 };
@@ -44,7 +44,7 @@ class InvestmentTimeline extends Component {
           <Grid columns="equal" textAlign="center" className="investment-scale">
             <div className="invested" style={{ margin: `0 ${calculatedMargin}%` }}>
               <span className="investment-progress" style={{ width: `${progress}%` }} />
-              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.CurrencyFormat(myInvestment)}</span></div>
+              <div className="amount" style={{ left: `${progress}%` }}>Your investment <span>{Helper.MoneyMathDisplayCurrency(myInvestment)}</span></div>
             </div>
             <Grid.Row>
               {rewardsTiers.map((tier, index) => (

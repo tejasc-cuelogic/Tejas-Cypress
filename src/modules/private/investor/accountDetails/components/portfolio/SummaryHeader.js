@@ -13,7 +13,7 @@ import Helper from '../../../../../../helper/utility';
 */
 
 const showValue = props => ((props.type === 1) ?
-  (Helper.CurrencyFormat(props.content)) :
+  (Helper.MoneyMathDisplayCurrency(props.content)) :
   ((props.type === 2) ? `date ${props.content}` : props.content));
 
 const SummaryTitle = props => ((props.details.businessName) ? (

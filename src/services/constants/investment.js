@@ -1,5 +1,6 @@
 import React from 'react';
 import Aux from 'react-aux';
+import { Link } from 'react-router-dom';
 import { Popup, List } from 'semantic-ui-react';
 
 
@@ -97,7 +98,7 @@ export const AGREEMENT_DETAILS_INFO = {
         ),
         label: (
           <Aux>
-            I confirm that I am complying with my <b>annual investment limit</b> (<a href="/">update</a>)
+            I confirm that I am complying with my <b>annual investment limit</b> (<Link to="/offerings/newlaunch/invest-now/change-investment-limit">update</Link>)
           </Aux>
         ),
         value: '4',
@@ -121,7 +122,7 @@ export const AGREEMENT_DETAILS_INFO = {
       {
         label: (
           <Aux>
-            I have reviewed NextSeed’s <a href="/">educational materials</a>, understand that
+            I have reviewed NextSeed’s <Link to="/app/resources/welcome-packet">educational materials</Link>, understand that
             the entire amount of my investment may be lost, and confirm that I am in a
             financial condition to bear the loss. I have read and agree to the terms of
             the <a href="/">CrowdPay Custodial Account Agreement</a>,
