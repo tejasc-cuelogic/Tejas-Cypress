@@ -157,8 +157,6 @@ export const getOfferingDetails = gql`
         appendixATitle
         investmentMultipleSummary
         stockType
-        offeringExpTarget
-        offeringExpMax
         offeringDisclaimer
         revShareSummary
         nsFeeCalcDescription

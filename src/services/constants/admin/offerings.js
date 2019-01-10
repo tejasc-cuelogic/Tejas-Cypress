@@ -185,20 +185,6 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  offeringExpTarget: {
-    value: null,
-    label: 'Offering Expense Min',
-    error: undefined,
-    rule: 'numeric',
-    placeHolder: 'Enter here',
-  },
-  offeringExpMax: {
-    value: null,
-    label: 'Offering Expense Max',
-    error: undefined,
-    rule: 'numeric',
-    placeHolder: 'Enter here',
-  },
   locationRiskFactors: {
     value: '',
     label: 'Location (Risk Factors)',
@@ -364,11 +350,11 @@ export const SECURITIES_VALUES = [
 ];
 
 export const BUSINESS_TYPE_VALUES = [
-  { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'sole proprietor' },
-  { key: 'Corporation', value: 'CORPORATION', text: 'corporation' },
-  { key: 'Limited Liability Company', value: 'LLC', text: 'limited liability company' },
-  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'limited partnership' },
-  { key: 'Other', value: 'OTHER', text: 'other' },
+  { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'Sole Proprietor' },
+  { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
+  { key: 'Limited Liability Company', value: 'LLC', text: 'Limited Liability Company' },
+  { key: 'Limited Partnership', value: 'LIMITED_PARTNERSHIP', text: 'Limited Partnership' },
+  { key: 'Other', value: 'OTHER', text: 'Other' },
 ];
 
 export const REGULATION_VALUES = [
