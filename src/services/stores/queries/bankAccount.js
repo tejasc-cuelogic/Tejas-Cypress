@@ -5,6 +5,7 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
     listLinkedBankUsers (page: $page, limit: $limit, status: $status){
      linkedBankList {
       userId
+      accountId
       firstName
       lastName
       email
