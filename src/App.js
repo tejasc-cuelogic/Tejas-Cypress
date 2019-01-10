@@ -20,6 +20,7 @@ import { authActions, activityActions } from './services/actions';
 class App extends Component {
   componentWillMount() {
     const { authStore, location, history } = this.props;
+    this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
       history.push('/password-protected');
     }
