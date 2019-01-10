@@ -349,6 +349,11 @@ export const SECURITIES_VALUES = [
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
 ];
 
+export const PORTAL_VALUES = [
+  { key: 'BD', value: 'BD', text: 'BD' },
+  { key: 'FP', value: 'FP', text: 'FP' },
+];
+
 export const BUSINESS_TYPE_VALUES = [
   { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'Sole Proprietor' },
   { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
@@ -1457,6 +1462,13 @@ export const NEW_OFFER = {
   legalBusinessName: { ...KEY_TERMS.legalBusinessName, objRefOutput: 'keyTerms' },
   shorthandBusinessName: { ...KEY_TERMS.shorthandBusinessName, objRefOutput: 'keyTerms' },
   offeringSlug: { ...OFFERING_DETAILS.offeringSlug },
+  portal: {
+    value: '',
+    label: 'The portal type',
+    error: undefined,
+    rule: 'string',
+    placeHolder: 'Choose here',
+  },
 };
 
 export const RISK_FACTORS = {
