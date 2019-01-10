@@ -1464,7 +1464,7 @@ export const NEW_OFFER = {
   offeringSlug: { ...OFFERING_DETAILS.offeringSlug },
   portal: {
     value: '',
-    label: 'The portal type',
+    label: 'Portal type',
     error: undefined,
     rule: 'string',
     placeHolder: 'Choose here',
