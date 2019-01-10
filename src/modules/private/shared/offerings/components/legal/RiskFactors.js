@@ -1,6 +1,7 @@
 /*  eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get, has, filter } from 'lodash';
 import { Header, Checkbox, Form, Divider } from 'semantic-ui-react';
 import { FormTextarea } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
@@ -57,6 +58,10 @@ export default class RiskFactors extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, RISK_FACTORS_FRM.fields, 'legal', 'riskFactors', true, undefined, isApproved);
   }
+  validateRiskFactorField = (keyTerms, field) => {
+    const v = filter(field.keyTerms, (k, i) => keyTerms[k] === field.dependantValue[i]);
+    return !has(field, 'dependantValue') || v.length === field.dependantValue.length;
+  }
   render() {
     const { RISK_FACTORS_FRM, formChange } = this.props.offeringCreationStore;
     const formName = 'RISK_FACTORS_FRM';
@@ -77,7 +82,8 @@ export default class RiskFactors extends Component {
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
           {
-            Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector)
+            Object.keys(RISK_FACTORS_FRM.fields).filter(f => RISK_FACTORS_FRM.fields[f].refSelector
+              && this.validateRiskFactorField(get(offer, 'keyTerms'), RISK_FACTORS_FRM.fields[f]))
             .map(field => (
               <FormData
                 isReadonly={isReadonly}
