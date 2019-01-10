@@ -61,7 +61,7 @@ export default class DropZone extends Component {
               trigger={<Icon className="ns-help-circle" />}
               content={this.props.tooltip}
               position="top center"
-              className="center-align"
+              className={this.props.toolTipClassName ? this.props.toolTipClassName : 'center-align'}
               wide
             />
             }

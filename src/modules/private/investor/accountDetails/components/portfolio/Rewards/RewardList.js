@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Card, Button } from 'semantic-ui-react';
+// import { Link } from 'react-router-dom';
+import { Card } from 'semantic-ui-react';
 
-const RewardList = ({ match, list }) => (
+const RewardList = ({ list }) => (
   <Card.Group stackable itemsPerRow={list.length}>
     {
       list.map(card => (
@@ -12,8 +12,9 @@ const RewardList = ({ match, list }) => (
             <Card.Description>
               {card.description}
             </Card.Description>
-            {card.action === 'redeem' &&
-              <Button as={Link} to={`${match.url}/redeem/${card.id}`} color="green">Redeem Reward</Button>
+            {/* {card.action === 'redeem' &&
+              <Button as={Link} to={`${match.url}/redeem/${card.id}`}
+              color="green">Redeem Reward</Button>
             }
 
             {card.action === 'voucher' &&
@@ -22,7 +23,7 @@ const RewardList = ({ match, list }) => (
 
             {card.expiry &&
               <div className="action-meta">Exp. date<br /><b>{card.expiry}</b></div>
-            }
+            } */}
           </Card.Content>
         </Card>
       ))

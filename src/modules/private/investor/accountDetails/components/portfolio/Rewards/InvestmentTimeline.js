@@ -24,11 +24,15 @@ class InvestmentTimeline extends Component {
   render() {
     const { campaign } = this.props.campaignStore;
     const { getInvestor } = this.props.portfolioStore;
+    const minInvestAmt = get(campaign, 'keyTerms.minInvestAmt') || null;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const myInvestment = get(getInvestor, 'myInvestment') || 0;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     const investBonusReward = rewardsTiers.filter(r =>
       bonusRewards.filter(b => b.tiers.includes(r)).length);
+    if (parseFloat(myInvestment) < (investBonusReward.length && parseFloat(investBonusReward[0]))) {
+      investBonusReward.splice(0, 0, minInvestAmt);
+    }
     rewardsTiers = investBonusReward;
     const progress =
       investBonusReward.length ? calcSmartProgress(investBonusReward, myInvestment) : 0;

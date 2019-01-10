@@ -3,7 +3,7 @@ import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
-import { intersection } from 'lodash';
+import { intersection, isEmpty } from 'lodash';
 import Loadable from 'react-loadable';
 import Helper from '../../../../../helper/utility';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
@@ -23,13 +23,13 @@ const navMeta = [
     title: 'Profile Data', to: 'profile-data', component: 'ProfileData', accessibleTo: [],
   },
   {
-    title: 'Individual', to: 'individual', component: 'AccountDetails', accessibleTo: ['individual'],
+    title: 'Individual', to: 'individual', component: 'AccountDetails', accessibleTo: ['INDIVIDUAL'],
   },
   {
-    title: 'IRA', to: 'ira', component: 'AccountDetails', accessibleTo: ['ira'],
+    title: 'IRA', to: 'ira', component: 'AccountDetails', accessibleTo: ['IRA'],
   },
   {
-    title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['entity'],
+    title: 'Entity', to: 'entity', component: 'AccountDetails', accessibleTo: ['ENTITY'],
   },
   {
     title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards', accessibleTo: ['investor'],
@@ -57,6 +57,9 @@ export default class AccountDetails extends Component {
       return <InlineLoader text="Loading User Details..." />;
     }
     const details = toJS({ ...detailsOfUser.data.user });
+    if (isEmpty(details)) {
+      return <InlineLoader text="No Data Found" />;
+    }
     const rolesRaw = details.roles.map(r => r.scope);
     let roles = [...new Set(rolesRaw)];
     if (roles.includes('investor')) {
