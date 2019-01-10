@@ -12,14 +12,14 @@ class TransferRequest extends Component {
     const {
       getTransferRequestAmount,
       setStepToBeRendered,
-      setFieldValue,
+      // setFieldValue,
     } = this.props.investmentStore;
     if (getTransferRequestAmount > 0) {
       setStepToBeRendered(2);
     } else {
       this.props.history.push('agreement');
     }
-    setFieldValue('investmentFlowErrorMessage', null);
+    // setFieldValue('investmentFlowErrorMessage', null);
   }
   componentDidMount() {
     const { setStepToBeRendered, setFieldValue } = this.props.investmentStore;
@@ -27,10 +27,11 @@ class TransferRequest extends Component {
     setStepToBeRendered(2);
   }
   componentWillUnmount() {
-    const { stepToBeRendered, setStepToBeRendered } = this.props.investmentStore;
+    const { stepToBeRendered, setStepToBeRendered, setFieldValue } = this.props.investmentStore;
     if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
+    setFieldValue('investmentFlowErrorMessage', null);
   }
   handleShowTransferErrRequest = () => {
     this.props.investmentStore.setShowTransferRequestErr(false);
@@ -60,17 +61,12 @@ class TransferRequest extends Component {
     return (
       <div className="center-align">
         <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
-        {investmentFlowErrorMessage &&
-          <Message error textAlign="left" className="mb-40">
-            {investmentFlowErrorMessage}
-          </Message>
-        }
         <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>
               <Table.Cell>Investment Amount:</Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(investmentAmount, 'number')}
+                {Helper.CurrencyFormat(investmentAmount)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
@@ -84,20 +80,20 @@ class TransferRequest extends Component {
                 />
               </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(getCurrCashAvailable, 'number')}
+                {Helper.MoneyMathDisplayCurrency(getCurrCashAvailable)}
               </Table.Cell>
             </Table.Row>
             <Table.Row>
               <Table.Cell>Available Credit: </Table.Cell>
               <Table.Cell collapsing>
-                {Helper.CurrencyFormat(getCurrCreditAvailable, 'number')}
+                {Helper.CurrencyFormat(getCurrCreditAvailable)}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
           <Table.Footer>
             <Table.Row>
               <Table.HeaderCell>Transfer Request: </Table.HeaderCell>
-              <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(getTransferRequestAmount, 'number')}</Table.HeaderCell>
+              <Table.HeaderCell className="positive-text" collapsing>{Helper.CurrencyFormat(getTransferRequestAmount)}</Table.HeaderCell>
             </Table.Row>
           </Table.Footer>
         </Table>

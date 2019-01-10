@@ -40,7 +40,7 @@ export default class FinancialInformation extends Component {
               />
             ))}
             <Divider hidden />
-            <p className="grey-header">Your investment limit:
+            <p className="grey-header">Your investment limit1:
               <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`} >
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>

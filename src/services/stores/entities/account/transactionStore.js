@@ -106,7 +106,7 @@ export class TransactionStore {
   @action
   transact = (amount, operation) => {
     this.cash = operation ? (this.cash + parseFloat(operation === 'add' ? amount : -amount)) :
-      parseFloat(amount);
+      amount;
     this.cash = !this.cash ? 0.00 : this.cash;
   }
 
