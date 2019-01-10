@@ -77,6 +77,8 @@ export default class InvestNow extends React.Component {
         }).catch(() => {
           this.setState({ submitLoading: false });
         });
+      } else {
+        this.setState({ submitLoading: false });
       }
     }).catch(() => {
       this.setState({ submitLoading: false });
@@ -95,7 +97,7 @@ export default class InvestNow extends React.Component {
             this.setState({ submitLoading: isValid });
             if (isValid) {
               this.props.investmentStore.generateAgreement().then(() => {
-                Helper.toast('Transfer request is in process!', 'success');
+                Helper.toast('Agreement has been generated successfully!', 'success');
                 this.props.investmentStore.setStepToBeRendered(0);
                 this.setState({ submitLoading: false });
                 this.props.history.push('agreement');

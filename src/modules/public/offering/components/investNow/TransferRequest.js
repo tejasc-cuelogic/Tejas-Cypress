@@ -12,14 +12,14 @@ class TransferRequest extends Component {
     const {
       getTransferRequestAmount,
       setStepToBeRendered,
-      setFieldValue,
+      // setFieldValue,
     } = this.props.investmentStore;
     if (getTransferRequestAmount > 0) {
       setStepToBeRendered(2);
     } else {
       this.props.history.push('agreement');
     }
-    setFieldValue('investmentFlowErrorMessage', null);
+    // setFieldValue('investmentFlowErrorMessage', null);
   }
   componentDidMount() {
     const { setStepToBeRendered, setFieldValue } = this.props.investmentStore;
@@ -27,10 +27,11 @@ class TransferRequest extends Component {
     setStepToBeRendered(2);
   }
   componentWillUnmount() {
-    const { stepToBeRendered, setStepToBeRendered } = this.props.investmentStore;
+    const { stepToBeRendered, setStepToBeRendered, setFieldValue } = this.props.investmentStore;
     if (stepToBeRendered === 2) {
       setStepToBeRendered(0);
     }
+    setFieldValue('investmentFlowErrorMessage', null);
   }
   handleShowTransferErrRequest = () => {
     this.props.investmentStore.setShowTransferRequestErr(false);
@@ -60,11 +61,6 @@ class TransferRequest extends Component {
     return (
       <div className="center-align">
         <Header as="h3" textAlign="center">Confirm Transfer Request</Header>
-        {investmentFlowErrorMessage &&
-          <Message error textAlign="left" className="mb-40">
-            {investmentFlowErrorMessage}
-          </Message>
-        }
         <Table basic="very" className="confirm-transfer-table mt-30" compact>
           <Table.Body>
             <Table.Row>
