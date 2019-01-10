@@ -983,7 +983,7 @@ p i.icon {
 		>.column {
 			padding: 0 !important;
 			&:last-child {
-				padding: @20px !important;
+				padding: @70px @20px !important;
 				a {
 					text-decoration: none;
 					.icon {

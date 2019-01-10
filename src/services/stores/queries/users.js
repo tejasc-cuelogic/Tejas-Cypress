@@ -22,6 +22,7 @@ export const allUsersQuery = gql`
           }
           mailingAddress {
             city
+            zipCode
           }
         }
         phone {

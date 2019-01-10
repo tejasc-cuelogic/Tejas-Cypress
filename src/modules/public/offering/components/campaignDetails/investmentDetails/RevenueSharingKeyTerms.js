@@ -9,6 +9,7 @@ class RevenueSharingKeyTerms extends Component {
   render() {
     const { KeyTerms, launch } = this.props;
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
+    const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
     const edgarLink = launch && launch.edgarLink;
     return (
       <Modal.Content scrolling>
@@ -67,7 +68,11 @@ class RevenueSharingKeyTerms extends Component {
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5}><b>Investment Multiple{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $XXX within YY months. A 1.0% service fee is deducted from each payment." position="bottom center" />
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultiple === 'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. A 1.0% service fee is deducted from each payment.`}
+                  position="bottom center"
+                />
               </Table.Cell>
               <Table.Cell>
                 <p>

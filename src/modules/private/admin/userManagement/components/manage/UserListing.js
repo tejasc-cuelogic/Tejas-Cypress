@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
+import { get } from 'lodash';
 import { Table, Visibility, Card } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { DateTimeFormat, UserAvatar, NsPagination } from './../../../../../../theme/shared';
+import Helper from '../../../../../../helper/utility';
 import UserTypeIcon from './UserTypeIcon';
 
 class UserListing extends Component {
@@ -69,11 +71,10 @@ class UserListing extends Component {
                     {user.email ? user.email.address : ''}
                   </Table.Cell>
                   <Table.Cell>
-                    {user.mailingAddress && user.mailingAddress.city ?
-                      user.mailingAddress.city : ''
+                    {get(user, 'info.mailingAddress.zipCode')
                     }
                   </Table.Cell>
-                  <Table.Cell>{user.phone ? user.phone.number : ''}</Table.Cell>
+                  <Table.Cell>{Helper.phoneNumberFormatter(user.phone ? user.phone.number : '')}</Table.Cell>
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created ?

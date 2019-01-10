@@ -63,20 +63,31 @@ export class NavStore {
     ));
 
   @computed get allNavItems() {
-    const navItems = [...this.myRoutes];
-    const bIndex = navItems.findIndex(r => r.title === 'Offering');
+    const navItems = [...toJS(this.myRoutes)];
+    const filteredNavs = [];
+    navItems.forEach((navitem) => {
+      const nItem = toJS(navitem);
+      if (nItem.subNavigations) {
+        const newSubNav = nItem.subNavigations.filter(n => !n.accessibleTo ||
+          n.accessibleTo.length === 0 ||
+          _.intersection(n.accessibleTo, this.params.roles).length > 0);
+        nItem.subNavigations = [...newSubNav];
+      }
+      filteredNavs.push(nItem);
+    });
+    const bIndex = filteredNavs.findIndex(r => r.title === 'Offering');
     if (bIndex !== -1) {
-      const subNavigations = [...navItems[bIndex].subNavigations];
+      const subNavigations = [...filteredNavs[bIndex].subNavigations];
       offeringsStore.offerings.forEach((b) => {
         const sNav = this.filterByAccess(
           subNavigations,
           _.find(offeringsStore.phases, (s, i) => i === b.stage).accessKey,
         );
-        navItems.splice(
+        filteredNavs.splice(
           bIndex,
           0,
           {
-            ...navItems[bIndex],
+            ...filteredNavs[bIndex],
             ...{
               title: this.businessName(b),
               to: `offering/${b.id}`,
@@ -86,7 +97,7 @@ export class NavStore {
         );
       });
     }
-    return navItems;
+    return filteredNavs;
   }
 
   @computed get sidebarItems() {

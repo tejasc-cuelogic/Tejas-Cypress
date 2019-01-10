@@ -1,8 +1,9 @@
 import React from 'react';
+import { get } from 'lodash';
 import { Feed, Image, Transition } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../../theme/shared/';
-import defaultLeaderProfile from '../../../../../assets/images/leader-placeholder.jpg';
+import { InlineLoader, UserAvatar } from '../../../../../theme/shared/';
 import DateTimeFormat from '../../../../../theme/shared/src/DateTimeFormat';
+import { ASSETS_URL } from '../../../../../constants/aws';
 
 const ActivityFeed = ({ loading, activities }) => (
   <Transition.Group animation="glow" className="activities" as={Feed} duration={900}>
@@ -11,15 +12,25 @@ const ActivityFeed = ({ loading, activities }) => (
         activities.map(a => (
           <Feed.Event>
             <Feed.Label>
-              <Image
-                src={a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.avatar &&
-                  a.createdUserInfo.info.avatar.url ? a.createdUserInfo.info.avatar.url :
-                  defaultLeaderProfile}
-              />
+              {a.createdUserInfo ?
+                <UserAvatar
+                  UserInfo={{
+                    firstName: get(a.createdUserInfo, 'info.firstName') || '',
+                    lastName: get(a.createdUserInfo, 'info.firstName') || '',
+                    avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
+                    roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
+                  }}
+                /> :
+                <Image src={`${ASSETS_URL}images/logo-icon.svg`} />
+              }
             </Feed.Label>
             <Feed.Content>
               <Feed.Meta>
-                {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} {a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName} <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
+                { a.createdUserInfo ?
+                `${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.firstName} 
+                ${a.createdUserInfo && a.createdUserInfo.info && a.createdUserInfo.info.lastName}`
+                : 'NextSeed Notifications' }
+                <DateTimeFormat format="(M/D/YYYY   |   h:mm a)" datetime={a.activityDate} />
               </Feed.Meta>
               <Feed.Summary>{a.activityTitle}</Feed.Summary>
               <Feed.Extra text>{a.activity}</Feed.Extra>

@@ -368,9 +368,7 @@ export class AuthStore {
         });
         rej(err);
       })
-      .finally(() => {
-        uiStore.setProgress(false);
-      });
+      .finally(() => { });
   });
 
   @action
