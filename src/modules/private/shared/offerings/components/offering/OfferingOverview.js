@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Form, Divider, Header, Button } from 'semantic-ui-react';
 import { FormTextarea, FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroup from '../ButtonGroup';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
@@ -30,6 +30,8 @@ export default class OfferingOverview extends Component {
     } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, OFFERING_OVERVIEW_FRM.fields, 'offering', 'overview', true, undefined, isApproved);
   }
+  editorChange =
+  (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const {
       OFFERING_OVERVIEW_FRM,
@@ -50,23 +52,25 @@ export default class OfferingOverview extends Component {
       (isManager && approved && approved.status));
     return (
       <Form>
-        {
-          ['elevatorPitch', 'tombstoneDescription'].map(field => (
-            <Aux>
-              <Header as="h4">{OFFERING_OVERVIEW_FRM.fields[field].label}</Header>
-              <FormTextarea
-                readOnly={isReadonly}
-                key={field}
-                name={field}
-                fielddata={OFFERING_OVERVIEW_FRM.fields[field]}
-                changed={(e, result) => formArrayChange(e, result, formName)}
-                containerclassname="secondary"
-                hidelabel
-              />
-              <Divider section />
-            </Aux>
-          ))
-        }
+        <Header as="h4">Elevator pitch</Header>
+        <HtmlEditor
+          readOnly={isReadonly}
+          changed={this.editorChange}
+          name="elevatorPitch"
+          form="OFFERING_OVERVIEW_FRM"
+          content={OFFERING_OVERVIEW_FRM.fields.elevatorPitch.value}
+        />
+        <Header as="h4">{OFFERING_OVERVIEW_FRM.fields.tombstoneDescription.label}</Header>
+        <FormTextarea
+          readOnly={isReadonly}
+          key="tombstoneDescription"
+          name="tombstoneDescription"
+          fielddata={OFFERING_OVERVIEW_FRM.fields.tombstoneDescription}
+          changed={(e, result) => formArrayChange(e, result, formName)}
+          containerclassname="secondary"
+          hidelabel
+        />
+        <Divider section />
         <Header as="h4">Offering highlights (Top bullet points)</Header>
         {
           OFFERING_OVERVIEW_FRM.fields.highlight.map((highlights, index) => (

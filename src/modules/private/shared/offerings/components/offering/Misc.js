@@ -37,7 +37,6 @@ export default class Misc extends Component {
           changed={rtEditorChange}
           name="additionalBonusRewardsContent"
           form={formName}
-          overrides={{ height: '244px' }}
           content={OFFERING_MISC_FRM.fields.additionalBonusRewardsContent.value}
         />
         <Divider hidden />

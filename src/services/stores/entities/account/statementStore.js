@@ -1,7 +1,7 @@
 import moment from 'moment';
 import { observable, computed, action } from 'mobx';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { downloadFile } from '../../queries/statement';
+import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
 import { uiStore, userDetailsStore, transactionStore } from '../../index';
 
 export class StatementStore {
@@ -41,6 +41,38 @@ export class StatementStore {
     });
   }
 
+  @action
+  generateMonthlyStatementsPdf = (timeStamp) => {
+    const year = parseFloat(moment(timeStamp, 'MMM YYYY').format('YYYY'));
+    const month = parseFloat(moment(timeStamp, 'MMM YYYY').format('MM'));
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const { userDetails } = userDetailsStore;
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: generateMonthlyStatementsPdf,
+          variables: {
+            year,
+            month,
+            userId: userDetails.id,
+            accountId: account.details.accountId,
+          },
+        })
+        .then((result) => {
+          if (result.data) {
+            const { pdfUrl } = result.data.generateMonthlyStatementsPdf;
+            resolve(pdfUrl);
+          } else {
+            reject();
+          }
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          reject(error);
+        });
+    });
+  }
+
   @computed
   get allStatements() {
     const statementObj = {
@@ -55,7 +87,7 @@ export class StatementStore {
       {
         [statementObj.field]: moment(d).format(statementObj.format),
         description: statementObj.text,
-        fileId: '388a93e0-f7b4-11e8-b6c3-11b756c0f97f',
+        fileId: moment(d).format(statementObj.format),
       }
     ));
   }

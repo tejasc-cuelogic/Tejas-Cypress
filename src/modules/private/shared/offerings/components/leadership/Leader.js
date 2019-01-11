@@ -11,6 +11,7 @@ import {
   PROFILE_PHOTO_EXTENSIONS,
 } from '../../../../../../services/constants/user';
 import ButtonGroup from '../ButtonGroup';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const HeaderWithTooltip = ({ header, tooltip }) => (
   <Header as="h4">
@@ -95,6 +96,9 @@ export default class Leader extends Component {
     const index = leaderNumber || 0;
     this.props.offeringCreationStore.uploadMediaForLeadership(name, 'LEADERSHIP_FRM', index);
   }
+  editorChange =
+  (field, value, form, index) =>
+    this.props.offeringCreationStore.rtEditorChange(field, value, form, 'leadership', index);
   render() {
     const leaderNumber = this.props.index;
     const formName = 'LEADERSHIP_FRM';
@@ -229,13 +233,13 @@ export default class Leader extends Component {
             />
           </Form.Group>
           <HeaderWithTooltip header="Bio" tooltip="To be used on the public offering page" />
-          <FormTextarea
+          <HtmlEditor
             readOnly={isReadonly}
+            changed={this.editorChange}
+            index={index}
             name="bio"
-            fielddata={LEADERSHIP_FRM.fields.leadership[index].bio}
-            changed={(e, result) => formArrayChange(e, result, formName, 'leadership', index)}
-            containerclassname="secondary"
-            hidelabel
+            form="LEADERSHIP_FRM"
+            content={LEADERSHIP_FRM.fields.leadership[index].bio.value}
           />
           <Divider section />
           <HeaderWithTooltip header="Website and Social Profiles" tooltip="To be used on the public offering page" />

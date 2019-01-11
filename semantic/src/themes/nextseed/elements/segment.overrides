@@ -57,6 +57,9 @@
         p {
             margin-bottom: @20px;
         }
+        img {
+            width: 100% !important;
+        }
     }
     &.overview-video {
         a {
