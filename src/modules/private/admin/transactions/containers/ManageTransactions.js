@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Icon } from 'semantic-ui-react';
 import { Route, withRouter, Switch } from 'react-router-dom';
-// import PrivateLayout from '../../../shared/PrivateHOC';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import AllTransactions from '../components/AllTransactions';
 import { ByKeyword, DropdownFilter, DateRangeFilter, AmountRangeFilter } from '../../../../../theme/form/Filters';
