@@ -27,9 +27,9 @@ export default class MonthlyStatements extends Component {
 
   downloadhandler = (e, fileId) => {
     e.preventDefault();
-    this.props.statementStore.handlePdfDownload(fileId).then((fileUrl) => {
+    this.props.statementStore.generateMonthlyStatementsPdf(fileId).then((pdfUrl) => {
       Helper.toast('File downloaded successfully!', 'success');
-      window.open(fileUrl);
+      window.open(pdfUrl);
     }).catch(() => {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
