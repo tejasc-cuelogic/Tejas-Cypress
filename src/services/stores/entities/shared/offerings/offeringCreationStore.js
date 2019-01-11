@@ -445,9 +445,13 @@ export class OfferingCreationStore {
   }
 
   @action
-  rtEditorChange = (field, value, form) => {
-    this[form].fields[field].value = value;
-    this[form] = Validator.validateForm(this[form], true, false, false);
+  rtEditorChange = (field, value, form, ref, index = undefined) => {
+    if (index !== undefined) {
+      this[form].fields[ref][index][field].value = value;
+    } else {
+      this[form].fields[field].value = value;
+      this[form] = Validator.validateForm(this[form], true, false, false);
+    }
   }
 
   @action

@@ -22,12 +22,14 @@ const uploadsConfig = { ...UPLOADS_CONFIG, ...{ acl: 'public-read', keyStart: 'o
 const getConfig = (keyStart, overrides) => {
   const config = {
     placeholderText: 'Enter here..',
-    toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
+    toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
     charCounterCount: false,
     imageUploadURL: false,
-    height: '70vh',
+    // height: '70vh',
     editorClass: 'html-editor',
     linkList: [],
+    heightMin: 244,
+    heightMax: '70vh',
     imageManager: false,
     imageUploadToS3: S3.getHash({ ...uploadsConfig }),
   };
@@ -36,7 +38,7 @@ const getConfig = (keyStart, overrides) => {
 
 export default class HtmlEditor extends React.Component {
   handleModelChange = (content) => {
-    this.props.changed(this.props.name, content, this.props.form);
+    this.props.changed(this.props.name, content, this.props.form, this.props.index);
   }
   render() {
     const { keyStart, readOnly } = this.props;

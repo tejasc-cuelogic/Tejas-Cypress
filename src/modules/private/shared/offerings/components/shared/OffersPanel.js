@@ -136,6 +136,7 @@ export default class OffersPanel extends Component {
                           fielddata={offer.maturity}
                           changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           hidelabel
+                          maxLength={3}
                           number
                         />
                       </Table.Cell>
@@ -315,7 +316,6 @@ export default class OffersPanel extends Component {
             </Header>
             <HtmlEditor
               name="additionalTerms"
-              overrides={{ height: '244px' }}
               changed={(name, value) => this.formChangeWithIndex(null, { name, value }, 'OFFERS_FRM', 'offer', this.state.modalIndex)}
               content={OFFERS_FRM.fields.offer[this.state.modalIndex].additionalTerms.value || null}
             />

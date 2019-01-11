@@ -29,7 +29,7 @@ class MeetTeamModal extends Component {
           Meet the Team
         </Header>
         <Modal.Content scrolling>
-          <Grid doubling columns={2} className="compact" verticalAlign="middle">
+          <Grid doubling columns={2} className="compact">
             {
               meetTeamOjb.length ?
                 meetTeamOjb.map((data, index) => (

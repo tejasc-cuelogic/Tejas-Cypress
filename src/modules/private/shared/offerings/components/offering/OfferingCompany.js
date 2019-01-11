@@ -56,7 +56,6 @@ export default class OfferingCompany extends Component {
           changed={this.editorChange}
           name="theCompany"
           form="OFFERING_COMPANY_FRM"
-          overrides={{ height: '244px' }}
           content={OFFERING_COMPANY_FRM.fields.theCompany.value}
         />
         <Divider section />
@@ -98,7 +97,6 @@ export default class OfferingCompany extends Component {
                 changed={rtEditorChange}
                 name={field}
                 form="OFFERING_COMPANY_FRM"
-                overrides={{ height: '244px' }}
                 content={OFFERING_COMPANY_FRM.fields[field].value}
               />
             </Aux>

@@ -2424,8 +2424,12 @@ p.check-extra-info{
 			content:"\e993";
 		}
 	}
-	.fr-toolbar .fr-command.fr-btn.fr-active{
-		color:@primary-two;
+	.fr-toolbar .fr-command.fr-btn{
+		width: 36px;
+		height: 36px;
+		.fr-active{
+			color:@primary-two;
+		}
 	}
 }
 //	Froala Editor Styles override - ENDS
