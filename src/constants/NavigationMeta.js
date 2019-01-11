@@ -357,6 +357,13 @@ export const PRIVATE_NAV = [
     to: 'transactions',
     path: 'admin/transactions',
     accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 0,
+    subNavigations: [
+      { title: 'Status 1', to: 'status-1', component: 'AllTransactions' },
+      { title: 'Status 2', to: 'status-2', component: 'AllTransactions' },
+      { title: 'Status 3', to: 'status-3', component: 'AllTransactions' },
+      { title: 'Status 4', to: 'status-4', component: 'AllTransactions' },
+    ],
   },
   {
     icon: 'user plus',
