@@ -86,6 +86,7 @@ export const AmountRangeFilter = props => (
           prefix="$ "
           maxLength="10"
           thousandSeparator
+          placeholder="Min Amount"
           currency
           onValueChange={values => props.change(values, 'min')}
         />
@@ -95,6 +96,7 @@ export const AmountRangeFilter = props => (
           prefix="$ "
           maxLength="10"
           thousandSeparator
+          placeholder="Max Amount"
           currency
           onValueChange={values => props.change(values, 'max')}
         />
