@@ -18,6 +18,7 @@ export { default as portfolioStore } from './entities/account/portfolioStore';
 export { default as articleStore } from './entities/admin/articleStore';
 export { default as crowdpayStore } from './entities/admin/crowdpayStore';
 export { default as repaymentStore } from './entities/admin/repaymentStore';
+export { default as transactionsStore } from './entities/admin/transactionsStore';
 
 export { default as educationStore } from './entities/education/educationStore';
 export { default as rewardStore } from './entities/rewardWallet/rewardStore';
