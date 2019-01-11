@@ -136,6 +136,7 @@ export default class OffersPanel extends Component {
                           fielddata={offer.maturity}
                           changed={(values, field) => this.maskChangeWithIndex(values, 'OFFERS_FRM', 'offer', field, index)}
                           hidelabel
+                          maxLength={3}
                           number
                         />
                       </Table.Cell>

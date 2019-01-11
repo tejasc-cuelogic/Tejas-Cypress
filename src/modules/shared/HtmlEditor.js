@@ -38,7 +38,7 @@ const getConfig = (keyStart, overrides) => {
 
 export default class HtmlEditor extends React.Component {
   handleModelChange = (content) => {
-    this.props.changed(this.props.name, content, this.props.form);
+    this.props.changed(this.props.name, content, this.props.form, this.props.index);
   }
   render() {
     const { keyStart, readOnly } = this.props;
