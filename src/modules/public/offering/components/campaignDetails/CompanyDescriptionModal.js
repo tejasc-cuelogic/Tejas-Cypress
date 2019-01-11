@@ -2,15 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
-import { Modal, Header, List, Icon, Image, Divider } from 'semantic-ui-react';
-import { Image64 } from '../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../constants/aws';
-
-// import videoPoster from '../../../../../assets/images/636206632.jpg';
-
-// const nsvideos = {
-//   embed: '218642510',
-// };
+import { Modal, Header, List, Icon, Divider } from 'semantic-ui-react';
 
 @inject('campaignStore')
 @observer
@@ -40,12 +32,6 @@ class CompanyDescriptionModal extends Component {
                 :
                   <p>{emptyStatement}</p>
             }
-            {campaign && campaign.media && campaign.media.heroImage
-                  && campaign.media.heroImage.url ?
-                    <Image64 fluid centered className="mt-30" srcUrl={campaign.media.heroImage.url} imgType="heroImage" />
-                    :
-                    <Image fluid centered className="mt-30" src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
-              }
           </Aux>
           <Divider section />
           <div className="history-section">
