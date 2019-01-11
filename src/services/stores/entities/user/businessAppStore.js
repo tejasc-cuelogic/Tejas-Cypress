@@ -196,7 +196,7 @@ export class BusinessAppStore {
   }
 
   @computed get stepToRender() {
-    const url = this.appStepsStatus.find(ele => ele.status === 'IN_PROGRESS');
+    const url = this.appStepsStatus.find(ele => (ele.status === null || ele.status === 'IN_PROGRESS'));
     /* eslint-disable no-unneeded-ternary */
     return this.formReadOnlyMode ? { path: 'pre-qualification' } : url ? url : { path: 'documentation' };
   }

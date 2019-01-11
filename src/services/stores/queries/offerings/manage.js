@@ -6,6 +6,7 @@ export const allOfferingsCompact = gql`
       id
       keyTerms {
         legalBusinessName
+        shorthandBusinessName
       }
       stage
       created {
@@ -22,6 +23,7 @@ export const allOfferings = gql`
       id
       keyTerms {
         legalBusinessName
+        shorthandBusinessName
       }
       leadDetails {
         id
