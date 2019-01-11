@@ -17,6 +17,7 @@ export class AuthStore {
   @observable isUserLoggedIn = false;
   @observable newPasswordRequired = false;
   @observable cognitoUserSession = null;
+  @observable isOfferPreviewUrl = false;
   @observable capabilities = [];
   @observable userId = null;
   @observable devAuth = {
@@ -34,6 +35,10 @@ export class AuthStore {
   @observable pwdInputType = 'password';
   @observable currentScore = 0;
 
+  @action
+  setFieldvalue = (field, value) => {
+    this[field] = value;
+  }
 
   @action
   setDefaultPwdType = () => {
@@ -188,7 +193,7 @@ export class AuthStore {
   }
 
   @computed get devPasswdProtection() {
-    return this.devAuth.required && !this.devAuth.authStatus;
+    return this.devAuth.required && !this.devAuth.authStatus && !this.isOfferPreviewUrl;
   }
 
   @action

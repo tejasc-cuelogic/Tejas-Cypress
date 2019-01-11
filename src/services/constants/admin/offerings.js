@@ -1498,6 +1498,8 @@ export const RISK_FACTORS = {
     refSelector: 'isFinancingRisk',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isNewBusiness'],
+    dependantValue: [true],
     defaultValue: 'We have not yet commenced operations and have not generated any revenue to date. In order to begin business operations, we will need to incur expenses related to the development of the planned service, expenses related to the acquisition of certain supplies, expenses related to the opening of the first planned location, and other start-up costs. Accordingly, if we do not obtain additional financing, including the financing sought in this offering, the business will likely fail.',
   },
   isDevelopmentRisk: {
@@ -1512,6 +1514,8 @@ export const RISK_FACTORS = {
     refSelector: 'isDevelopmentRisk',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isNewBusiness'],
+    dependantValue: [true],
     defaultValue: 'Our dependence on development exposes us to timing, budgeting and other risks. New project development has a number of risks, including risks associated with: (I) construction delays or cost overruns that may increase project costs; (ii) receipt of zoning, occupancy and other required governmental permits and authorizations from local governmental agencies, which are issued at the discretion of the issuing authority with no guaranty that all licenses and permits applied for by us will be issued; (iii) development costs incurred for projects that are not pursued to completion; (iv) so-called acts of God such as earthquakes, hurricanes, floods or fires that could adversely impact a project; (v) defects in design or construction that may result in additional costs to remedy or require all or a portion of a property to be closed during the period required to rectify the situation; (vi) ability to raise capital; and (vii) governmental restrictions on the nature or size of a project or timing of completion.    We cannot assure you that any development project will in fact be developed, and, if developed, the time period or the budget of such development may be greater than initially contemplated. We are planning to open in {{location}}. There is no guarantee that this site will remain suitable, or that the business will be operated profitably. We depend on cash flow from operations to pay lease obligations and to fulfill other cash requirements. If the business does not generate sufficient cash flow and sufficient funds are not otherwise available from other sources, we may not be able to meet lease obligations, grow the business, respond to competitive challenges or fund its other liquidity and capital needs, which would have a material adverse effect on our business.',
   },
   isReputationalRisk: {
@@ -1652,6 +1656,8 @@ export const RISK_FACTORS = {
     refSelector: 'isSupplyRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Supplies and prices of the various products used in the goods that we offer can be affected by a variety of factors, such as weather, seasonal fluctuations, demand, politics and economics in the producing regions. These factors may subject us to shortages or interruptions in product supplies, which could adversely affect revenue. We do not have control over the businesses of its vendors, suppliers and distributors, and our efforts to specify and monitor the standards under which they perform may not be successful. Higher diesel and gasoline prices may affect supply or transportation costs and may affect our profitability. If we have long-term purchase commitments in excess of what we need due to a decline in demand, this may also adversely affect profitability. Furthermore, certain supplies may be perishable, and we have limited control over whether those items will be delivered in an appropriate condition for use. If any of our vendors, suppliers or distributors are unable to fulfill their obligations to our standards, or if a replacement provider cannot be found in the event of a supply or service disruption, we could encounter supply shortages and incur higher costs to secure adequate supplies, which could materially adversely affect the business, financial condition and results of operation.',
   },
   isFoodSafetyRisks: {
@@ -1666,6 +1672,8 @@ export const RISK_FACTORS = {
     refSelector: 'isFoodSafetyRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'We consider food safety a top priority and dedicate substantial resources toward ensuring that customers enjoy high-quality, safe products. However, food tampering, employee hygiene and cleanliness failures or improper employee conduct at the business could lead to product liability or other claims. Instances of food-borne illnesses, whether real or perceived, and whether at the store or those of competitors, could harm customers and otherwise result in negative publicity about us or the products we serve, which could adversely affect revenue. If customers become ill from food-borne illnesses, we could be forced to temporarily close. In addition, we may have different or additional competitors for intended customers as a result of such changes and may not be able to compete successfully against those competitors. Food safety concerns may also adversely affect the price and availability of those affected ingredients and cause customers to shift their preferences. A decrease in customer traffic as a result of these health concerns or negative publicity, or as a result of a change in menu or customer experience or a temporary closure of the store, could materially and adversely impact the business’s financial condition and results of operations.  A number of pandemic scares related to a variety of raw food ingredients, including meats, fruits and vegetables, have recently caused concern among consumers and health care officials. One or more such outbreaks of such food related illnesses, whether pandemic or isolated, may adversely affect the consumer demand for certain foods and consequently negatively impact the operations and profitability, regardless of the quality and safety of products offered by us.',
   },
   isNutritionalDisclosureRisks: {
@@ -1680,6 +1688,8 @@ export const RISK_FACTORS = {
     refSelector: 'isNutritionalDisclosureRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Government regulation and consumer eating habits may impact our business as a result in changes in attitudes regarding diet and health or new information regarding the health effects of consuming the menu offerings. These changes have resulted in, and may continue to result in, the enactment of laws and regulations that impact the ingredients and nutritional content of the menu offerings, or laws and regulations requiring us to disclose the nutritional content of its food offerings. Compliance with current and future laws and regulations regarding the ingredients and nutritional content of the menu items may be costly and time-consuming. Additionally, government authorities may increase regulations regarding trans-fats and sodium, which may require us to limit or eliminate trans-fat and sodium in the menu offerings, switch to higher cost ingredients or may hinder our ability to operate. We cannot make any assurances regarding its ability to effectively respond to changes in consumer health perceptions or successfully implement the nutrient content disclosure requirements or menu-labeling laws, which could have an adverse effect on the results of operations and financial position.',
   },
   isFoodRisks: {
@@ -1694,6 +1704,8 @@ export const RISK_FACTORS = {
     refSelector: 'isFoodRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Food service businesses can be adversely affected by litigation and complaints from customers or government authorities resulting from food quality, health claims, allergens, illness, injury or other health concerns or operating issues stemming from one or more retail locations. Negative publicity about these allegations may negatively affect us, regardless of whether the allegations are true, by discouraging customers from patronizing {{shorthand_name}}. We may also be impacted by industry trends in litigation, including class-action allegations brought under various consumer protection laws, securities and derivative lawsuits claiming violations of state and federal securities law, and employee lawsuits, including wage and hour claims. Due to the inherent uncertainties of litigation and regulatory proceedings, we cannot accurately predict the outcome of any such proceedings. An unfavorable outcome could have a material adverse impact on the business, financial condition and results of operations. Further, regardless of outcome, these proceedings could result in substantial costs and may require resources be used to defend any claims.',
   },
   isAlcoholSalesRisks: {
@@ -1708,6 +1720,8 @@ export const RISK_FACTORS = {
     refSelector: 'isAlcoholSalesRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isAlcohol'],
+    dependantValue: [true],
     defaultValue: 'We are subject to alcoholic beverage control regulations that govern various aspects of daily operations of the business, including the minimum age of guests and employees, hours of operation, advertising, wholesale purchasing and inventory control, handling and storage. Any failure to obtain and maintain, on a timely basis, liquor or other licenses, permits or approvals required to serve alcoholic beverages or food, as well as any associated negative publicity, could delay or prevent the opening of, or adversely impact the viability of, and could have an adverse effect on, the business operations and financial performance. Because of the many and various state and federal licensing and permitting requirements, there is a risk that one or more regulatory agencies could determine that we have not complied with applicable licensing or permitting regulations or have not maintained the approvals necessary to conduct business within its jurisdiction.  We are subject to state “dram shop” laws, which generally allow a person to sue us if that person was injured by an intoxicated person who was wrongfully served alcoholic beverages at {{shorthand_name}}. A judgment against us under a dram shop law could exceed our liability insurance coverage policy limits and could result in substantial liability and materially adversely affect operations. Any inability to continue to obtain such insurance coverage at reasonable cost could also have a material adverse effect on operations. Regardless of the validity of the claims, we could be adversely affected by negative publicity resulting from such actions.',
   },
   isAlcoholInvestmentRisks: {
@@ -1722,6 +1736,8 @@ export const RISK_FACTORS = {
     refSelector: 'isAlcoholInvestmentRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isAlcohol'],
+    dependantValue: [true],
     defaultValue: 'Alcohol beverage control regulations may limit an Investor’s ability to hold interests in {{shorthand_name}}. For example, {{state_of_formation}} laws and regulations generally do not allow a person from holding financial interests in both manufacturers and distributors of alcoholic beverages and retailers of alcoholic beverages, and local regulators may require disclosure of Investors’ personal information to verify their eligibility to invest in {{shorthand_name}}. In the event that {{state_of_formation}} laws and regulations do not allow an Investor to hold the Securities, such Investor may be required to transfer its interests in the Securities to {{shorthand_name}} as described in the NPA. If a number of Investors are ineligible to hold the Securities, it could materially adversely affect the financial condition.',
   },
   isIndustryRisks: {
@@ -1736,6 +1752,8 @@ export const RISK_FACTORS = {
     refSelector: 'isIndustryRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isHealthcare'],
+    dependantValue: [true],
     defaultValue: 'Our success is impacted by [the medical community’s acceptance and adoption of [product]. Currently, [product], and it is difficult to predict how quickly the medical community will accept [product] or the extent of its use. We are seeking to offer [product] to the public, but the rate of adaptation is uncertain. In addition, while positive patient experiences can be a significant driver of future sales, it is impossible to influence the manner in which this information is transmitted and received, the choices potential patients may make and the recommendations that treating physicians and dentists make to their patients.',
   },
   isHealthcareRisks: {
@@ -1750,6 +1768,8 @@ export const RISK_FACTORS = {
     refSelector: 'isHealthcareRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isHealthcare'],
+    dependantValue: [true],
     defaultValue: 'The use and sale of medical products entail significant risk of product liability claims. The medical device industry, in general, has been subject to significant medical malpractice litigation. Any product liability claims, with or without merit, could result in costly litigation, reduced sales, cause us to incur significant liabilities and divert our management’s time, attention and resources. In addition, there has been substantial litigation regarding patent and other intellectual property rights in the medical device industry, and our competitors may initiate intellectual property litigation as a means of competition. Intellectual property litigation is complex and expensive and outcomes are difficult to predict. We also rely on trademarks to protect its brand and products in the marketplace, but there can be no assurances that its proprietary information will not be shared, confidentiality agreements will not be breached, or that there will be adequate remedies for any such breach. Products offered by us are subject to regulation by a number of governmental agencies, including the U.S. Food and Drug Administration. Compliance with the rules and regulations of these various regulatory bodies may delay or prevent introducing new product models. In addition, government regulations may be adopted that could prevent, delay, modify or rescind regulatory clearance or approval of products offered us. A recall or other regulatory action could substantially increase costs, damage reputation and materially affect operating results.',
   },
   isLegalRisks: {
@@ -1764,6 +1784,8 @@ export const RISK_FACTORS = {
     refSelector: 'isLegalRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isHealthcare', 'isFood'],
+    dependantValue: [false, false],
     defaultValue: 'Businesses in our industry can be adversely affected by litigation and complaints from customers or government authorities resulting from [food quality, health claims, allergens, illness, injury or other health concerns//[name specific risks] or] operating issues stemming from one or more retail locations. Negative publicity about these allegations may negatively affect us, regardless of whether the allegations are true, by discouraging customers from patronizing {{shorthand_name}}. We may also be impacted by industry trends in litigation, including class-action allegations brought under various consumer protection laws, securities and derivative lawsuits claiming violations of state and federal securities law, and employee lawsuits, including wage and hour claims. Due to the inherent uncertainties of litigation and regulatory proceedings, we cannot accurately predict the outcome of any such proceedings. An unfavorable outcome could have a material adverse impact on the business, financial condition and operations. Further, regardless of outcome, these proceedings could result in substantial costs and may require resources be used to defend any claims.',
   },
   isEnvironmentalRisks: {
@@ -1848,6 +1870,8 @@ export const RISK_FACTORS = {
     refSelector: 'isRegulatoryFoodRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [true],
     defaultValue: 'Products and services offered by us are subject to regulation. Regulatory action could substantially increase costs, damage reputation and materially affect operating results. Increased costs in complying with these requirements or failure to obtain required licenses or permits in a timely fashion may materially affect operations.   ""Regulations regarding climate change, energy usage and emissions controls may impact us directly through higher cost of goods. The potential impacts of climate change and climate change regulations are highly uncertain at this time, and we cannot anticipate or predict the material adverse effects on the business as a result of climate change or climate change regulation. For instance, changes in the prevailing climates may result in a reduction in, or increased prices of available goods, which may adversely affect our revenue and operating margins.  """"We are subject to various federal, state and local regulations, including regulations related to [the preparation and sale of food, the sale of alcoholic beverages,]16 zoning and building codes, land use and employee, health, sanitation and safety matters. We are also subject to the U.S. Fair Labor Standards Act, which governs such matters as working conditions, family leave mandates and other employment law matters. In recent years, there has been an increased legislative, regulatory and consumer focus on [nutrition and advertising practices in the food industry]17. Compliance with additional regulations can become costly and affect operating results.  [There is also a potential for increased regulation of certain food establishments in the United States, where compliance with a Hazard Analysis and Critical Control Points (“HACCP”) approach would be required. HACCP refers to a management system in which food safety is addressed through the analysis and control of potential hazards from raw material production, procurement and handling, to manufacturing, distribution and consumption of the finished product.]',
   },
   isTaxRisks: {

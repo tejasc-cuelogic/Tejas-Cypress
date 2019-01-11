@@ -10,6 +10,7 @@ class KeyTerms extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '[XX] Months';
     const investmentMultiple = campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
+    const portal = campaign.portal ? (campaign.portal === 'BD' ? '2%' : '1%') : '';
     return (
       <Grid.Column>
         <Segment padded className="clearfix">
@@ -43,7 +44,7 @@ class KeyTerms extends Component {
                 <Statistic.Label><b>Multiple</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultiple === 'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. A 1.0% service fee is deducted from each payment.`}
+                    content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultiple === 'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
                     position="top center"
                   />
                 </Statistic.Label>
