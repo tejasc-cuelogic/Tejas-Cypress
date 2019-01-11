@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import Loadable from 'react-loadable';
 import { Responsive } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -76,6 +78,31 @@ class offerDetails extends Component {
     }
     return (
       <div className="offer-details">
+        if (campaign) {
+          <Helmet>
+            <meta name="description" content="The expansion of the long-standing Avila&#039;s Restaurant is happening in Dallas! Avila&#039;s East is a modern update with the same quality food. Invest local!" />
+            <link rel="canonical" href="https://www.nextseed.com/offerings/avilas-east/" />
+            <meta property="og:locale" content="en_US" />
+            <meta property="og:type" content="article" />
+            <meta property="og:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
+            <meta property="og:description" content="The expansion of the long-standing Avila&#039;s Restaurant is happening in Dallas! Avila&#039;s East will be a modern update with the same quality food. Invest local!" />
+            <meta property="og:url" content="https://www.nextseed.com/offerings/avilas-east/" />
+            <meta property="og:site_name" content="NextSeed" />
+            <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
+            <meta property="article:tag" content={`${get(campaign, 'keyTerms.securities') === 'REVENUE_SHARING_NOTE' ? 'Revenue Share Loan' : 'Term Loan'}`} />
+            <meta property="article:section" content="Restaurant" />
+            <meta property="og:image" content="https://cdn.nextseed.co/app/uploads/32.jpg" />
+            <meta property="og:image:secure_url" content="https://cdn.nextseed.co/app/uploads/32.jpg" />
+            <meta property="og:image:width" content="1218" />
+            <meta property="og:image:height" content="542" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:description" content="The expansion of the long-standing Avila&#039;s Restaurant is happening in Dallas! Avila&#039;s East is a modern update with the same quality food. Invest local!" />
+            <meta name="twitter:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
+            <meta name="twitter:site" content="@thenextseed" />
+            <meta name="twitter:image" content="https://cdn.nextseed.co/app/uploads/32.jpg" />
+            <meta name="twitter:creator" content="@thenextseed" />
+          </Helmet>
+        }
         <Responsive minWidth={768} as={Aux}>
           <CampaignSideBar navItems={navItems} />
         </Responsive>
