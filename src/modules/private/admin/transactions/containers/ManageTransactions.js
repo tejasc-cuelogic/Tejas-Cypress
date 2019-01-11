@@ -47,13 +47,9 @@ export default class ManageTransactions extends Component {
           </div>}
         subNav
       >
-        <Grid>
-          <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
-            <Switch>
-              <Route exact path={`${match.url}/:statusType`} component={AllTransactions} />
-            </Switch>
-          </Grid.Column>
-        </Grid>
+        <Switch>
+          <Route exact path={`${match.url}/:statusType`} component={AllTransactions} />
+        </Switch>
       </PrivateLayout>
     );
   }

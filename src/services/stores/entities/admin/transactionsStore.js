@@ -1,7 +1,9 @@
-import { observable, action } from 'mobx';
+import { observable, action, computed } from 'mobx';
+import { transactions } from '../../../../services/constants/admin/transactions';
 
 export class TransactionsStore {
   @observable filters = false;
+  @observable data = [];
   @observable requestState = {
     page: 1,
     perPage: 10,
@@ -19,6 +21,15 @@ export class TransactionsStore {
   @action
   toggleSearch = () => {
     this.filters = !this.filters;
+  }
+
+  @action
+  initRequest = () => {
+    this.data = transactions;
+  }
+
+  @computed get allRecords() {
+    return this.data;
   }
 }
 
