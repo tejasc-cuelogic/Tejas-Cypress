@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { get } from 'lodash';
+import Aux from 'react-aux';
 import { Grid, Segment, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { NsCarousel, Image64 } from '../../../../../../theme/shared';
@@ -15,10 +16,16 @@ class Gallery extends Component {
       <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
         <Segment padded>
           <Header as="h6">
-            <Link to={isGallaryFilled && `${galleryUrl}/photogallery`}>
-              Gallery
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
+            {isGallaryFilled ?
+              <Link to={`${galleryUrl}/photogallery`}>
+                Gallery
+                <Icon className="ns-chevron-right" color="green" />
+              </Link> :
+              <Aux>
+                Gallery
+                <Icon className="ns-chevron-right" color="green" />
+              </Aux>
+          }
           </Header>
           {/* <Breadcrumb>
             <Breadcrumb.Section as={isGallaryFilled && Link} to={isGallaryFilled &&

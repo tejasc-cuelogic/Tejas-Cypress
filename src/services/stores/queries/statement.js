@@ -13,6 +13,15 @@ export const allMonthlyStatements = gql`
     }
   }
 `;
+
+export const generateMonthlyStatementsPdf = gql`
+mutation generateMonthlyStatementsPdf($userId: String!, $accountId: String!, $month: Int, $year: Int) {
+  generateMonthlyStatementsPdf(userId: $userId, accountId: $accountId, month: $month, year: $year){
+    pdfUrl
+  }
+}
+`;
+
 export const allTaxForms = gql`
   query _getAccountTaxForm($accountId: String!) {
     investorAccountTaxForms(accountId: $accountId){

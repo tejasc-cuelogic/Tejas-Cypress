@@ -118,7 +118,9 @@ export default class ChooseOffer extends Component {
                 </Switch>
               </div>
               <Card.Content extra className="center-align">
+                { fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL' ? '' :
                 <Button primary loading={this.props.uiStore.inProgress} className="very relaxed" content="Sign portal agreement" onClick={this.signPortalAgreement} />
+                }
               </Card.Content>
             </Card> : null
           }

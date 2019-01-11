@@ -60,6 +60,7 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
+    portal
     stage
     applicationId
     issuerId
