@@ -22,7 +22,7 @@ const uploadsConfig = { ...UPLOADS_CONFIG, ...{ acl: 'public-read', keyStart: 'o
 const getConfig = (keyStart, overrides) => {
   const config = {
     placeholderText: 'Enter here..',
-    toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
+    toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
     charCounterCount: false,
     imageUploadURL: false,
     // height: '70vh',
