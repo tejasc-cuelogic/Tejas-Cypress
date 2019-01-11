@@ -25,9 +25,11 @@ const getConfig = (keyStart, overrides) => {
     toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
     charCounterCount: false,
     imageUploadURL: false,
-    height: '70vh',
+    // height: '70vh',
     editorClass: 'html-editor',
     linkList: [],
+    heightMin: 244,
+    heightMax: '70vh',
     imageManager: false,
     imageUploadToS3: S3.getHash({ ...uploadsConfig }),
   };
