@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Header, Grid, Segment, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-// import Aux from 'react-aux';
+import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../../theme/shared';
 
@@ -33,12 +33,12 @@ class CompanyTopThings extends Component {
             {campaign && campaign.offering
               && campaign.offering.about
               && campaign.offering.about.theCompany ?
-                <p>
+                <Aux>
                   {Parser(campaign.offering.about.theCompany.length <= textContentMaxLength ?
                     campaign.offering.about.theCompany
                     :
                     campaign.offering.about.theCompany.substring(1, textContentMaxLength))}
-                </p>
+                </Aux>
               :
                 <InlineLoader text={emptyStatement} />
             }
