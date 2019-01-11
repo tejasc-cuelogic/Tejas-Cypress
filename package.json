@@ -92,6 +92,7 @@
     "react-error-overlay": "^1.0.10",
     "react-froala-wysiwyg": "^2.8.4",
     "react-google-autocomplete": "^1.0.15",
+    "react-helmet": "^5.2.0",
     "react-image-crop": "^4.0.1",
     "react-input-mask": "^1.2.2",
     "react-lazyload": "^2.3.0",
