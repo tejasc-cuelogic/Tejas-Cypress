@@ -78,7 +78,7 @@ class offerDetails extends Component {
     }
     return (
       <div className="offer-details">
-        if (campaign) {
+        {campaign &&
           <Helmet>
             <meta name="description" content="The expansion of the long-standing Avila&#039;s Restaurant is happening in Dallas! Avila&#039;s East is a modern update with the same quality food. Invest local!" />
             <link rel="canonical" href="https://www.nextseed.com/offerings/avilas-east/" />
