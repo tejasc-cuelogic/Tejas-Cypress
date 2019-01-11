@@ -63,6 +63,8 @@ export class TransactionsStore {
       const isoDate = field === 'startDate' ? moment(values.formattedValue).toISOString() :
         moment(values.formattedValue).add(1, 'day').toISOString();
       this.setInitiateSrch(field, isoDate);
+    } else {
+      this.setInitiateSrch(field, values.value);
     }
   }
 }

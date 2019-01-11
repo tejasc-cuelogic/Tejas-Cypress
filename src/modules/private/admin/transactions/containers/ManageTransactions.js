@@ -46,7 +46,7 @@ export default class ManageTransactions extends Component {
                     <DateRangeFilter change={maskChange} value={requestState.search.transactionType} label="Date Range" name="dateRange" />
                   </Grid.Column>
                   <Grid.Column width={4}>
-                    <AmountRangeFilter label="Amount Range" name="dateRange" />
+                    <AmountRangeFilter change={maskChange} label="Amount Range" name="dateRange" />
                   </Grid.Column>
                   <Grid.Column width={3}>
                     <DropdownFilter change={this.setSearchParam} value={requestState.search.transactionType} name="Transaction Type" keyName="transactionType" options={FILTER_META.transactionType} />

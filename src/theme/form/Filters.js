@@ -87,6 +87,7 @@ export const AmountRangeFilter = props => (
           maxLength="10"
           thousandSeparator
           currency
+          onValueChange={values => props.change(values, 'min')}
         />
       </Form.Field>
       <Form.Field>
@@ -95,6 +96,7 @@ export const AmountRangeFilter = props => (
           maxLength="10"
           thousandSeparator
           currency
+          onValueChange={values => props.change(values, 'max')}
         />
       </Form.Field>
     </Form.Group>
