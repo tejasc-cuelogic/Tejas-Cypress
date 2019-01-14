@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Form, Button } from 'semantic-ui-react';
 import { FormInput, FormDropDown } from '../../../../../theme/form';
-import { PORTAL_VALUES } from '../../../../../services/constants/admin/offerings';
+import { REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
 
 @inject('offeringCreationStore')
 @observer
@@ -20,7 +20,7 @@ export default class NewOffer extends Component {
   }
   change = (e, result, formName, field) => {
     this.props.offeringCreationStore.formChange(e, result, formName);
-    if (field !== 'portal') {
+    if (field !== 'regulation') {
       this.props.offeringCreationStore.offerCreateChange(formName, field);
     }
   }
@@ -46,13 +46,13 @@ export default class NewOffer extends Component {
             <FormDropDown
               containerclassname="dropdown-field"
               fluid
-              fielddata={NEW_OFFER_FRM.fields.portal}
+              fielddata={NEW_OFFER_FRM.fields.regulation}
               selection
-              value={NEW_OFFER_FRM.fields.portal.value}
-              name="portal"
+              value={NEW_OFFER_FRM.fields.regulation.value}
+              name="regulation"
               placeholder="Choose here"
-              options={PORTAL_VALUES}
-              onChange={(e, result) => this.change(e, result, formName, 'portal')}
+              options={REGULATION_VALUES}
+              onChange={(e, result) => this.change(e, result, formName, 'regulation')}
             />
             <div className="center-align">
               <Button primary content="Add new offering" disabled={!NEW_OFFER_FRM.meta.isValid} />

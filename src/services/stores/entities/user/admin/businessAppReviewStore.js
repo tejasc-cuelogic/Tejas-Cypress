@@ -133,6 +133,9 @@ export class BusinessAppReviewStore {
       this[form],
       Validator.pullValues(e, result), ref, index,
     );
+    if (result.name === 'structure') {
+      this.calculateExpAnnualRevCount();
+    }
   }
 
   @action
@@ -251,7 +254,7 @@ export class BusinessAppReviewStore {
   @action
   assignAdditionalTermsValue = (index) => {
     this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
-      this.OFFERS_FRM.fields.offer[index].additionalTerms.value ? 'Additional Terms Apply' : 'Add Terms';
+      this.OFFERS_FRM.fields.offer[index].additionalTerms.value ? 'Additional Terms Applied' : 'Add Terms';
   }
   @action
   addAdditionalTermsToFormData = (index) => {
@@ -271,7 +274,7 @@ export class BusinessAppReviewStore {
       this[form],
       { name: field, value: fieldValue }, arrayName, index,
     );
-    if (field === 'minimumAmount' || field === 'interestRate' || field === 'maturity') {
+    if (field === 'amount' || field === 'interestRate' || field === 'maturity') {
       this.showFormAmortisation(index);
     }
     if (field === 'maturity') {
@@ -302,7 +305,7 @@ export class BusinessAppReviewStore {
   @computed
   get getMaxMaturityValue() {
     const maxValue =
-    Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => o.maturity.value || 0));
+    Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => (o.structure.value === 'REVENUE_SHARING_NOTE' ? o.maturity.value : 0) || 0));
     return maxValue || 0;
   }
 
@@ -710,14 +713,14 @@ export class BusinessAppReviewStore {
         appData.offers.offer.map((offer, index) => {
           this.showFormAmortisation(index);
           this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
-            offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
+            offer.additionalTerms ? 'Additional Terms Applied' : 'Add Terms';
           return null;
         });
         if (appData.offers.expectedAnnualRevenue && appData.offers.expectedAnnualRevenue.length) {
           this.expAnnualRevCount = appData.offers.expectedAnnualRevenue.length;
         }
-        this.calculateExpAnnualRevCount();
       }
+      this.calculateExpAnnualRevCount();
     }
     return false;
   }
