@@ -51,8 +51,8 @@ class offerDetails extends Component {
     }
   }
   getOgDataFromSocial = (obj, type, att) => {
-    const image = find(obj, o => o.type === type);
-    return get(image, `featuredImageUpload.${att}`) || '';
+    const data = find(obj, o => o.type === type);
+    return get(data, att) || '';
   };
   authPreviewOffer = (isAuthenticated) => {
     if (isAuthenticated) {
@@ -85,25 +85,25 @@ class offerDetails extends Component {
         {campaign &&
           <Helmet>
             <meta name="description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
-            <link rel="canonical" href={`https://dev.nextseed.qa/offerings/${get(campaign, 'offeringSlug')}/`} />
+            <link rel="canonical" href={window.location.href} />
             <meta property="og:locale" content="en_US" />
             <meta property="og:type" content="article" />
             <meta property="og:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
             <meta property="og:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
-            <meta property="og:url" content={`https://dev.nextseed.qa/offerings/${get(campaign, 'offeringSlug')}/`} />
+            <meta property="og:url" content={window.location.href} />
             <meta property="og:site_name" content="NextSeed" />
             <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
             <meta property="article:tag" content={`${get(campaign, 'keyTerms.securities') === 'REVENUE_SHARING_NOTE' ? 'Revenue Share Loan' : 'Term Loan'}`} />
             <meta property="article:section" content="Restaurant" />
-            <meta property="og:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'url')} />
-            <meta property="og:image:secure_url" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'url')} />
+            <meta property="og:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
+            <meta property="og:image:secure_url" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
             <meta property="og:image:width" content="1218" />
             <meta property="og:image:height" content="542" />
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'blurb')} />
             <meta name="twitter:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
             <meta name="twitter:site" content="@thenextseed" />
-            <meta name="twitter:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'url')} />
+            <meta name="twitter:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'featuredImageUpload.url')} />
             <meta name="twitter:creator" content="@thenextseed" />
           </Helmet>
         }
