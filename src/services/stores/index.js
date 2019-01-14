@@ -12,6 +12,7 @@ export { default as iraAccountStore } from './entities/user/iraAccountStore';
 export { default as individualAccountStore } from './entities/user/individualAccountStore';
 export { default as statementStore } from './entities/account/statementStore';
 export { default as teamStore } from './entities/admin/teamStore';
+export { default as categoryStore } from './entities/admin/categoryStore';
 export { default as transactionStore } from './entities/account/transactionStore';
 export { default as settingStore } from './entities/account/settingStore';
 export { default as portfolioStore } from './entities/account/portfolioStore';
