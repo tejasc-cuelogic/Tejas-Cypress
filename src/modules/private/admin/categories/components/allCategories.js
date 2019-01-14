@@ -1,46 +1,59 @@
 import React, { Component } from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Accordion, Table, Icon, Button } from 'semantic-ui-react';
+import { InlineLoader } from './../../../../../theme/shared';
 
-const categories = [
-  {
-    title: 'Investor FAQ',
-    questions: [],
-  },
-  {
-    title: 'Issuer FAQ',
-    questions: [
-      {
-        question: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
-      },
-      {
-        question: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
-      },
-    ],
-  },
-  {
-    title: 'Issuer Knowledge Base',
-    questions: [],
-  },
-  {
-    title: 'Investor Knowledge Base',
-    questions: [],
-  },
-  {
-    title: 'Offerings',
-    questions: [],
-  },
-  {
-    title: 'Insights',
-    questions: [],
-  },
-];
+// const categories = [
+//   {
+//     title: 'Investor FAQ',
+//     questions: [],
+//   },
+//   {
+//     title: 'Issuer FAQ',
+//     questions: [
+//       {
+//         question: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
+//       },
+//       {
+//         question: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
+//       },
+//     ],
+//   },
+//   {
+//     title: 'Issuer Knowledge Base',
+//     questions: [],
+//   },
+//   {
+//     title: 'Investor Knowledge Base',
+//     questions: [],
+//   },
+//   {
+//     title: 'Offerings',
+//     questions: [],
+//   },
+//   {
+//     title: 'Insights',
+//     questions: [],
+//   },
+// ];
 
+@inject('categoryStore')
 @observer
 export default class AllCategories extends Component {
+  componentWillMount() {
+    this.props.categoryStore.initRequest('INV_FAQ');
+  }
   render() {
+    const { loading } = this.props.categoryStore;
+    if (loading) {
+      return <InlineLoader />;
+    }
+    const categories = this.props.categoryStore.getAllCategoriesData();
+    if (categories.length === 0) {
+      return <InlineLoader text="No data found." />;
+    }
     return (
       <Aux>
         {categories && categories.map(category => (
@@ -59,7 +72,7 @@ export default class AllCategories extends Component {
                         <Table.Row>
                           <Table.Cell>
                             <Icon className="ns-drag-holder-large mr-10" />
-                            {question.question}
+                            {question.categoryName}
                           </Table.Cell>
                           <Table.Cell collapsing>
                             <Button className="link-button">
