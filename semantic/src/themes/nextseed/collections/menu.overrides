@@ -279,7 +279,7 @@ footer{
 .offer-details .offering-side-menu .ui.vertical.menu {
     background-color: transparent;
     .item {
-        color: @white;
+        color: @neutral;
         line-height: 20px;
         border-left: @4px solid transparent;
         border-radius: 0;

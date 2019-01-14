@@ -1,18 +1,18 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Link, withRouter, Route } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import { get } from 'lodash';
-import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Divider } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
-import { DataFormatter } from '../../../../../helper';
-import CampaignProgress from './CampaignProgress';
+// import { DataFormatter } from '../../../../../helper';
+// import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
-import { ASSETS_URL } from '../../../../../constants/aws';
+// import { ASSETS_URL } from '../../../../../constants/aws';
 
-const nsvideos = {
-  embed: '218642510',
-};
+// const nsvideos = {
+//   embed: '218642510',
+// };
 const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('campaignStore')
@@ -22,25 +22,26 @@ export default class CampaignSideBar extends Component {
   render() {
     const { className, campaignStore } = this.props;
     const { campaign, navCountData } = campaignStore;
-    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
-    const minOffering = campaign && campaign.keyTerms &&
-      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-      campaign.keyTerms.maxOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
-    const needValue = collected !== 0 && collected > minOffering ? maxOffering : minOffering;
-    const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-      && campaign.offering.launch.terminationDate;
-    const address = campaign && campaign.keyTerms ?
-      `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    const diff = DataFormatter.diffDays(terminationDate);
+    // const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    // const minOffering = campaign && campaign.keyTerms &&
+    //   campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
+    // const maxOffering = campaign && campaign.keyTerms &&
+    //   campaign.keyTerms.maxOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    // const needValue = collected !== 0 && collected > minOffering ? maxOffering : minOffering;
+    // const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
+    // const terminationDate = campaign && campaign.offering && campaign.offering.launch
+    //   && campaign.offering.launch.terminationDate;
+    // const address = campaign && campaign.keyTerms ?
+    // `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
+    // ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
+    // const diff = DataFormatter.diffDays(terminationDate);
     const rewardsTiers = get(campaign, 'rewardsTiers') || [];
-    const flagStatus = collected >= minOffering;
+    // const flagStatus = collected >= minOffering;
     return (
       <Aux>
         <div className={`${className} offering-side-menu`}>
-          <div className="offering-intro center-align">
-            {isMobile &&
+          {/* <div className="offering-intro center-align">
+             {isMobile &&
               <Embed
                 id={nsvideos.embed}
                 placeholder={`${ASSETS_URL}images/636206632.jpg`}
@@ -49,11 +50,11 @@ export default class CampaignSideBar extends Component {
               />
             }
             <Header as="h4" inverted textAlign="center">
-              {/* {!isMobile &&
+              {!isMobile &&
                 <Link to="/offerings" className="icon-link">
                   <Icon name="arrow left" />
                 </Link>
-              } */}
+              }
               {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
               <Header.Subheader>{address}</Header.Subheader>
             </Header>
@@ -96,7 +97,8 @@ export default class CampaignSideBar extends Component {
               </Statistic>
             </Statistic.Group>
             <Divider hidden />
-            <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
+            <Button compact fluid={isMobile} as={Link}
+            to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
             <p>
               ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                 || 0} min investment
@@ -111,28 +113,21 @@ export default class CampaignSideBar extends Component {
                 </Button>
               </Button.Group>
             }
-          </div>
+          </div> */}
           {!isMobile &&
             <Aux>
               <Menu vertical fluid>
                 <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
-                {/* <Divider />
-                <Menu.Item as={Link} to="/" className="secondary-item">
-                  <Icon name="heart outline" /> Watch Deal
-                </Menu.Item>
-                <Menu.Item as={Link} to={`${this.props.match.url}/share`}
-                className="secondary-item">
-                  <Icon name="share alternate" /> Share
-                </Menu.Item> */}
               </Menu>
-              <Button.Group widths="2">
+              {/* <Button.Group widths="2">
                 <Button compact basic inverted color="green">
                   <Icon name="heart outline" /> Watch Deal
                 </Button>
-                <Button compact basic inverted color="green" as={Link} to={`${this.props.match.url}/share`}>
+                <Button compact basic inverted color="green" as={Link}
+                to={`${this.props.match.url}/share`}>
                   <Icon name="share alternate" /> Share
                 </Button>
-              </Button.Group>
+              </Button.Group> */}
             </Aux>
           }
           <Route path={`${this.props.match.url}/share`} component={share} />

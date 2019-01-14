@@ -458,13 +458,13 @@ footer{
 .offer-details {
 	min-height:~"calc(100vh - 58px)";
 	.offering-side-menu {
-		background-color: @neutral ;
-		padding: 0 0 74px;
-		width: 280px;
-		height: ~"calc(100vh - 58px)";
-		position: fixed;
-		z-index: 3;
-		overflow: auto;
+		// background-color: @neutral ;
+		// padding: 0 0 74px;
+		// width: 280px;
+		// height: ~"calc(100vh - 58px)";
+		// position: fixed;
+		// z-index: 3;
+		// overflow: auto;
 		@media only screen and (max-width : @largestMobileScreen){
 			position: static;
 			overflow: hidden;
@@ -512,9 +512,9 @@ footer{
 		}
 	}
 	.offering-wrapper {
-		background-color: @neutral-offwhite;
-		padding-left: 280px;
-		min-height: ~'calc(100vh - 58px)';
+		// background-color: @neutral-offwhite;
+		// padding-left: 280px;
+		// min-height: ~'calc(100vh - 58px)';
 		display: flex;
 		flex-direction: column;
 		@media only screen and (max-width : @largestMobileScreen){
@@ -2718,5 +2718,60 @@ a.how-it-works-video {
 		font-size: @12px;
 		cursor: pointer;
 		margin-left: @10px;
+	}
+}
+
+
+
+//Campaign Re-design
+.overview-video {
+	a {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		position: relative;
+		&:hover {
+			text-decoration: none;
+		}
+	}
+	.play-icon{
+		font-size: 80px;
+		line-height: 80px;
+		color: @white;
+		position:absolute;
+		top:50%;
+		transform:translate(0%,-50%);
+		z-index: 1;
+		cursor: pointer;
+	}
+	img.ui.image {
+		height: auto;
+		width: 100%;
+	}
+	~.social-links a{
+		color: @white;
+		&:hover {
+			text-decoration: none;
+		}
+		i.icon {
+			vertical-align: middle;
+			line-height: 1;
+		}
+	}
+}
+.offer-details{
+	.raise-type{
+		font-size: @18px;
+		color: @white;
+		line-height: 28px;
+		i.icon{
+			font-size: @14px;
+		}
+	}
+	.min-invest {
+		font-size: @13px;
+		color: @white;
+		line-height: 23px;
+		margin-top: @14px;
 	}
 }

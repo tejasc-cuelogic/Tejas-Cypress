@@ -46,6 +46,31 @@
 			}
 		}
 	}
+	.offer-stats {
+		position: absolute;
+		top: @14px;
+		background: @lightTextColor;
+		height: 76px;
+		padding: @15px;
+		.ui.statistics {
+			margin: 0;
+			.statistic {
+				padding: 0 @15px;
+				margin: 0;
+				>.value {
+					font-size: @20px !important;
+					color: @white;
+					~.label {
+						font-size: @15px;
+						color: @white;
+					}
+				}
+				+.statistic {
+					margin: 0;
+				}
+			}
+		}
+	}
 }
 /** About Us **/
 .statistic-section {
