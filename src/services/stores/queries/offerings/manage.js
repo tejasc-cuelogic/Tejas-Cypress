@@ -155,7 +155,6 @@ export const getOfferingDetails = gql`
         city
         state
         minInvestAmt
-        maxInvestAmt
         appendixATitle
         investmentMultipleSummary
         stockType

@@ -60,7 +60,6 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
-    portal
     stage
     applicationId
     issuerId
@@ -88,7 +87,6 @@ export const campaignDetailsQuery = gql`
       maxOfferingAmount
       industry
       minInvestAmt
-      maxInvestAmt
       appendixATitle
       revShareSummary
       investmentMultipleSummary
@@ -458,7 +456,6 @@ query getOfferingById($id: ID) {
       maxOfferingAmount
       industry
       minInvestAmt
-      maxInvestAmt
       revShareSummary
       investmentMultipleSummary
       locationRiskFactors
