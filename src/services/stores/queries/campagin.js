@@ -132,6 +132,9 @@ export const campaignDetailsQuery = gql`
           url
           shareLink
           blurb
+          featuredImageUpload {
+            url
+          }
         }
         googleMeta
         issuerWebsite
