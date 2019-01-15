@@ -38,8 +38,8 @@ class Footer extends Component {
       campaign.keyTerms.shorthandBusinessName ?
       campaign.keyTerms.shorthandBusinessName : '';
     return (
-      <footer>
-        <Container fluid={isCampaign}>
+      <footer className={isCampaign ? 'offering-footer' : ''}>
+        <Container>
           {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
               <b>{`${shorthandBusinessName} Disclaimer: `}</b>
@@ -48,7 +48,7 @@ class Footer extends Component {
           }
           <Grid stackable>
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
-              <div className="footer-left-nav">
+              <div className="footer-left-nav secure">
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
                   <Aux path={path}>
                     <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>

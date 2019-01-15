@@ -256,7 +256,7 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
           <Grid.Column>
-            <Link to="/business/how-it-works/video" className="how-it-works-video">
+            <Link to="/business/how-it-works/video" className="video-wrapper">
               <Image src={`${ASSETS_URL}images/677134021.jpg`} />
               <Icon
                 className="ns-play play-icon"
