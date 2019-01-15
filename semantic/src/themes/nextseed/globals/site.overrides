@@ -2776,7 +2776,4 @@ a.how-it-works-video {
 	i.icon{
 		font-size: @14px;
 	}
-	.gallery-preview img.ui.image:not(:last-child) {
-		margin-bottom: @40px;
-	}
 }
