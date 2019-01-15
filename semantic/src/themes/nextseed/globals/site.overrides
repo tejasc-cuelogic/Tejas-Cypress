@@ -12,7 +12,7 @@ html,body{
 body{
 	color:@neutral-middark;
 }
-.clearfix::after {
+.clearfix::after{
 	content: "";
 	clear: both;
 	display: table;
