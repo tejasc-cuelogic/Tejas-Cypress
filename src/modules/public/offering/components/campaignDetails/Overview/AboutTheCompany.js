@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, List, Button, Icon } from 'semantic-ui-react';
-// import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 // import { filter } from 'lodash';
 import Parser from 'html-react-parser';
 // import { INDUSTRY_TYPES, CAMPAIGN_KEYTERMS_REGULATION } from
 // '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
+@withRouter
 class AboutTheCompany extends Component {
+  handleViewAboutCompany = (e) => {
+    e.preventDefault();
+    this.props.history.push(`${this.props.refLink}/about`);
+  }
   render() {
     const { campaign } = this.props;
     // const socialArray = campaign && campaign.offering && campaign.offering.overview &&
@@ -19,7 +24,7 @@ class AboutTheCompany extends Component {
     // ));
     return (
       <Aux>
-        <Header as="h3">Top Things to Know</Header>
+        <Header as="h3" className="mb-30">Top Things to Know</Header>
         {/* <p className="mb-0 neutral-text">
           <b>Type of Raise: </b>
           {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?
@@ -42,7 +47,7 @@ class AboutTheCompany extends Component {
         }
         {campaign && campaign.offering && campaign.offering.overview &&
           campaign.offering.overview.highlight ?
-            <List bulleted>
+            <List bulleted relaxed="very">
               {campaign.offering.overview.highlight.map(field => (
                 <List.Item className="mb-half">{field}</List.Item>
               ))
@@ -51,9 +56,9 @@ class AboutTheCompany extends Component {
           :
             <InlineLoader text="No Data Found" />
         }
-        <Button basic compact className="highlight-text">
+        <Button onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
           Learn more about the company
-          <Icon size="small" className="ns-chevron-right" color="white" />
+          <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
         {/* {campaign && campaign.offering && campaign.offering.overview &&
           campaign.offering.overview.highlight &&

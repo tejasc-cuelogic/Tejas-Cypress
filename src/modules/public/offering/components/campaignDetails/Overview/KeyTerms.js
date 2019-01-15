@@ -1,31 +1,61 @@
+/* eslint-disable no-undef */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Icon, Popup, Table, Header } from 'semantic-ui-react';
+import { Link, withRouter } from 'react-router-dom';
+import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 // import { Link } from 'react-router-dom';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 // import Helper from '../../../../../../helper/utility';
 
+@withRouter
 class KeyTerms extends Component {
+  handleViewInvestmentDetails = (e) => {
+    e.preventDefault();
+    this.props.history.push(`${this.props.refLink}/investment-details`);
+  }
   render() {
     const { campaign } = this.props;
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '[XX] Months';
-    // const investmentMultiple = campaign && campaign.keyTerms &&
-    // campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
+    const investmentMultiple = campaign && campaign.keyTerms &&
+    campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
     // const portal = campaign.portal ? (campaign.portal === 'BD' ? '2%' : '1%') : '';
-    // const portal = campaign && campaign.regulation ?
-    // (campaign.regulation.includes('SECURITIES') ? '2%' : '1%') : '';
+    const portal = campaign && campaign.regulation ?
+      (campaign.regulation.includes('SECURITIES') ? '2%' : '1%') : '';
     return (
       <Aux>
-        <Header as="h3">Bonus Rewards</Header>
+        <Header as="h3" className="mb-30">Investment Highlights</Header>
         <Table basic="very">
           <Table.Body>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Type of Raise</b></Table.Cell>
+              <Table.Cell><b>Type of Raise</b>{' '}
+                {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?
+                CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : ''}
+                <Popup
+                  hoverable
+                  position="bottom center"
+                  trigger={<Icon
+                    name="help circle"
+                    color="green"
+                  />}
+                  content={(
+                    <span>This campaign is raising capital under Regulation CF and
+                      Regulation D. For more information on what this means, check out our{' '}
+                      <Link to="/resources/education-center">Education Center</Link>.
+                    </span>
+                  )}
+                />
+              </Table.Cell>
               <Table.Cell />
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Investment Type</b></Table.Cell>
+              <Table.Cell><b>Investment Type</b>{' '}
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="Lorem Ipsum"
+                  position="top center"
+                />
+              </Table.Cell>
               <Table.Cell>
                 {campaign && campaign.keyTerms &&
                   campaign.keyTerms.securities ?
@@ -35,7 +65,7 @@ class KeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Maturity{' '}</b>
+              <Table.Cell width={5}><b>Maturity</b>{' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
@@ -51,17 +81,37 @@ class KeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Revenue Sharing Percentage</b></Table.Cell>
+              <Table.Cell collapsing><b>Revenue Sharing Percentage</b>{' '}
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="Lorem Ipsum"
+                  position="top center"
+                />
+              </Table.Cell>
               <Table.Cell />
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Multiple</b></Table.Cell>
+              <Table.Cell><b>Multiple</b>{' '}
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={`For every $100 you invest, you are paid a portion of this
+                  company's gross revenue every month until you are paid $${investmentMultiple ===
+                  'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth ===
+                  '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee
+                  is deducted from each payment.` : ''}`}
+                  position="top center"
+                />
+              </Table.Cell>
               <Table.Cell>
                 {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : '-'}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
+        <Button onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
+          View Investment Highlights
+          <Icon size="small" className="ns-chevron-right right" color="white" />
+        </Button>
       </Aux>
       // <Grid.Column>
       //   <Segment padded className="clearfix">

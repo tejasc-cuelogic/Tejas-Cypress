@@ -2774,4 +2774,7 @@ a.how-it-works-video {
 		line-height: 23px;
 		margin-top: @14px;
 	}
+	.gallery-preview img.ui.image:not(:last-child) {
+		margin-bottom: @40px;
+	}
 }

@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
-import { Item, Divider, Header, Label } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
+// import { Link } from 'react-router-dom';
 import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Image64 } from '../../../../../../theme/shared';
 
-
+@withRouter
 class LatestUpdates extends Component {
+  handleViewUpdates = (e) => {
+    e.preventDefault();
+    this.props.history.push(`${this.props.refLink}/updates`);
+  }
   render() {
     const {
-      updates, refLink, companyAvatarUrl, bussinessName,
+      updates, companyAvatarUrl, bussinessName,
     } = this.props;
     const update = (updates && updates.length && updates[0]) || null;
     // let UserInfo = update && update.actingUserInfo ? update.actingUserInfo.info : null;
@@ -27,8 +32,8 @@ class LatestUpdates extends Component {
     // };
     return (
       <Aux>
-        <Header as="h3">Updates
-          <Label circular horizontal color="blue">{(updates && updates.length) || 0}</Label>
+        <Header as="h3" className="mb-30">Updates
+          <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
         </Header>
         <Item.Group className="campaign-updates">
           <Item>
@@ -39,33 +44,36 @@ class LatestUpdates extends Component {
                     <Image64 size="mini" srcUrl={companyAvatarUrl} circular />
                   </div> : null
                 }
-                <Item.Header className="neutral-text">
+                <Item.Header>
                   <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                 </Item.Header>
+                {update &&
+                  <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
+                }
               </div>
+              <Divider hidden />
               {update ?
                 <Aux>
-                  <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
-                  <Divider />
                   <Item.Description>
-                    <div className="segment-container mini">
-                      <p><b>{update.title}</b></p>
-                      <p>
-                        {Parser(update.content || '')}
-                      </p>
-                    </div>
-                    <Link to={`${refLink}/updates`}>View Update</Link>
+                    <Header as="h4">{update.title}</Header>
+                    <p>
+                      {Parser(update.content || '')}
+                    </p>
+                    {/* <Link to={`${refLink}/updates`}>View Update</Link> */}
                   </Item.Description>
                 </Aux>
                   :
                 <Aux>
-                  <Divider />
                   <Item.Description className="neutral-text"><b>No updates yet</b></Item.Description>
                 </Aux>
               }
             </Item.Content>
           </Item>
         </Item.Group>
+        <Button onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
+          View Updates
+          <Icon size="small" className="ns-chevron-right right" color="white" />
+        </Button>
       </Aux>
     );
   }
