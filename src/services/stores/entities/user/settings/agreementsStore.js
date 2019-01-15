@@ -1,9 +1,11 @@
 import { toJS, observable, computed, action } from 'mobx';
 import { forEach } from 'lodash';
+import graphql from 'mobx-apollo';
 import { GqlClient as client } from '../../../../../api/publicApi';
-import { getBoxEmbedLink } from '../../../queries/agreements';
+import { getBoxEmbedLink, getLegalDocsFileIds } from '../../../queries/agreements';
 
 export class AgreementsStore {
+  @observable legalDocsList = [];
   @observable agreements = {
     cCAgreement: {
       title: 'Crowdpay Custodial Agreement',
@@ -99,6 +101,33 @@ export class AgreementsStore {
       return this.agreements.membershipAgreement.boxRef[this.getCurrentEnv()];
     }
     return this.agreements.membershipAgreement.boxRef.develop;
+  }
+
+  getBoxLink = fileId =>
+    client.mutate({
+      mutation: getBoxEmbedLink,
+      variables: { fileId },
+    });
+
+  getLegalDocsFileIds = () => new Promise((resolve) => {
+    graphql({
+      client,
+      query: getLegalDocsFileIds,
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
+    });
+  });
+
+  @action
+  setFileIdsData = (meta, data) => {
+    meta.forEach((item) => {
+      const newItem = { ...item };
+      newItem.boxId = data[item.refEnum];
+      this.legalDocsList.push(newItem);
+    });
   }
 }
 
