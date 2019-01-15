@@ -3,7 +3,6 @@ import Aux from 'react-aux';
 import { get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import Loadable from 'react-loadable';
 import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Divider, Button, Statistic } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -17,6 +16,7 @@ import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 import Footer from './../../../../theme/layout/Footer';
 import { DataFormatter } from '../../../../helper';
+import OfferingMetaTags from '../components/OfferingMetaTags';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -93,29 +93,7 @@ class offerDetails extends Component {
     return (
       <div className="offer-details">
         {campaign &&
-          <Helmet>
-            <meta name="description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
-            <link rel="canonical" href={window.location.href} />
-            <meta property="og:locale" content="en_US" />
-            <meta property="og:type" content="article" />
-            <meta property="og:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
-            <meta property="og:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
-            <meta property="og:url" content={window.location.href} />
-            <meta property="og:site_name" content="NextSeed" />
-            <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
-            <meta property="article:tag" content={`${get(campaign, 'keyTerms.securities') === 'REVENUE_SHARING_NOTE' ? 'Revenue Share Loan' : 'Term Loan'}`} />
-            <meta property="article:section" content="Restaurant" />
-            <meta property="og:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
-            <meta property="og:image:secure_url" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
-            <meta property="og:image:width" content="1218" />
-            <meta property="og:image:height" content="542" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'blurb')} />
-            <meta name="twitter:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
-            <meta name="twitter:site" content="@thenextseed" />
-            <meta name="twitter:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'featuredImageUpload.url')} />
-            <meta name="twitter:creator" content="@thenextseed" />
-          </Helmet>
+          <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
         <section className="campaign-details-banner banner">
           <Responsive minWidth={768} as={Container}>
@@ -165,7 +143,7 @@ class offerDetails extends Component {
                           {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount)
                             || 0}
                         </Statistic.Value>
-                        <Statistic.Label>Early Birds</Statistic.Label>
+                        <Statistic.Label>Early Bird Rewards</Statistic.Label>
                       </Statistic>
                     </Statistic.Group>
                   </div>
@@ -231,41 +209,6 @@ class offerDetails extends Component {
           </Responsive>
         </section>
         {/* <Responsive minWidth={768} as={Aux}>
-        {campaign &&
-          <Helmet>
-            <meta name="description" content={this.getOgDataFromSocial(get(campaign,
-              'offering.overview.social'), 'facebook', 'blurb')} />
-            <link rel="canonical" href={window.location.href} />
-            <meta property="og:locale" content="en_US" />
-            <meta property="og:type" content="article" />
-            <meta property="og:title" content={`${get(campaign,
-              'keyTerms.shorthandBusinessName')} | NextSeed`} />
-            <meta property="og:description" content={this.getOgDataFromSocial(get(campaign,
-              'offering.overview.social'), 'facebook', 'blurb')} />
-            <meta property="og:url" content={window.location.href} />
-            <meta property="og:site_name" content="NextSeed" />
-            <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
-            <meta property="article:tag" content={`${get(campaign, 'keyTerms.securities')
-            === 'REVENUE_SHARING_NOTE' ? 'Revenue Share Loan' : 'Term Loan'}`} />
-            <meta property="article:section" content="Restaurant" />
-            <meta property="og:image" content={this.getOgDataFromSocial(get(campaign,
-              'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
-            <meta property="og:image:secure_url"
-            content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'),
-            'facebook', 'featuredImageUpload.url')} />
-            <meta property="og:image:width" content="1218" />
-            <meta property="og:image:height" content="542" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:description" content={this.getOgDataFromSocial(get(campaign,
-              'offering.overview.social'), 'twitter', 'blurb')} />
-            <meta name="twitter:title" content={`${get(campaign,
-              'keyTerms.shorthandBusinessName')} | NextSeed`} />
-            <meta name="twitter:site" content="@thenextseed" />
-            <meta name="twitter:image" content={this.getOgDataFromSocial(get(campaign,
-              'offering.overview.social'), 'twitter', 'featuredImageUpload.url')} />
-            <meta name="twitter:creator" content="@thenextseed" />
-          </Helmet>
-        }
         <Responsive minWidth={768} as={Aux}>
           <CampaignSideBar navItems={navItems} />
         </Responsive> */}
@@ -285,7 +228,7 @@ class offerDetails extends Component {
               <Grid.Column width={4}>
                 <CampaignSideBar navItems={navItems} />
               </Grid.Column>
-              <Grid.Column width={12}>
+              <Grid.Column width={10} floated="right">
                 <Switch>
                   <Route exact path={match.url} component={getModule(navItems[0].component)} />
                   {
