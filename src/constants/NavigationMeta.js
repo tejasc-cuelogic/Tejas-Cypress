@@ -431,25 +431,25 @@ export const PUBLIC_NAV = [
     to: 'offerings',
     subNavigations: [
       {
-        icon: 'ns-home-line', title: 'Overview', to: 'overview', component: 'Overview',
+        title: 'Overview', to: 'overview', component: 'Overview',
       },
       {
-        icon: 'ns-edu-center', title: 'About the Company', to: 'about', component: 'AboutCompany',
+        title: 'About the Company', to: 'about', component: 'AboutCompany',
       },
       {
-        icon: 'ns-investment', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+        title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
       },
       {
-        icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
+        title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'ns-document-search', title: 'Data Room', to: 'data-room', component: 'Disclosures',
+        title: 'Data Room', to: 'data-room', component: 'Disclosures',
       },
       {
-        icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',
+        title: 'Updates', to: 'updates', component: 'Updates',
       },
       {
-        icon: 'ns-comments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
+        title: 'Comments', to: 'comments', component: 'Comments',
       },
     ],
   },

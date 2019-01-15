@@ -111,3 +111,7 @@ h6.ui.header{
     padding-right: 0;
     border: 0;
 }
+
+.campaign-details-banner .ui.header .sub.header{
+    margin-top:@7px;
+}

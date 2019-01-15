@@ -281,11 +281,14 @@ footer{
     .item {
         color: @neutral;
         line-height: 20px;
-        border-left: @4px solid transparent;
         border-radius: 0;
-        padding-left: @27px;
+        padding:0;
+        margin-bottom:@14px;
+        &:before{
+            background-color:transparent;
+        }
         &:hover, &.active {
-            background-color: @nav-hover;
+            background-color:transparent;
             border-color: @primary-one;
             color: @primary-one;
         }
@@ -298,8 +301,10 @@ footer{
         }
         >.label.circular {
             float: none;
-            text-align: center;
+            min-width:30px;
             margin:0 0 0 @10px;
+            padding:0 .5em !important;
+            line-height:20px;
         }
         &.secondary-item {
             color: @neutral-middark;
