@@ -31,11 +31,16 @@ const legalDocsMeta = [
 @observer
 export default class LegalDocuments extends Component {
   componentWillMount() {
-    this.props.agreementsStore.setLoading(true);
-    this.props.agreementsStore.getLegalDocsFileIds().then((res) => {
-      this.props.agreementsStore.setLoading(false);
-      this.props.agreementsStore.setFileIdsData(legalDocsMeta, res.getLegalDocsFileIds);
-    });
+    const {
+      setLoading, getLegalDocsFileIds, setFileIdsData, legalDocsList,
+    } = this.props.agreementsStore;
+    if (!legalDocsList.length) {
+      setLoading(true);
+      getLegalDocsFileIds().then((res) => {
+        setLoading(false);
+        setFileIdsData(legalDocsMeta, res.getLegalDocsFileIds);
+      });
+    }
   }
   getBoxUrl = (boxId) => {
     this.props.agreementsStore.setLoading(true);
