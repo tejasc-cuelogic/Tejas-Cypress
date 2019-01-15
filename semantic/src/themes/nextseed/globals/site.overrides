@@ -2743,7 +2743,7 @@ p.check-extra-info{
 		&:hover {
 			text-decoration: none;
 		}
-		i.icon {
+		i.icon{
 			vertical-align: middle;
 			line-height: 1;
 			margin:0;
