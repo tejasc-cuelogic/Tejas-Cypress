@@ -5,9 +5,9 @@ import { inject, observer } from 'mobx-react';
 @observer
 export default class ReferralsDetails extends Component {
   componentDidMount() {
-    const apiKey = 'TEST_ug3VYDEACdh2wPNXZyLbeByHEhDMK9Ci:';
-    const auth = Buffer.from(`${apiKey}`).toString('base64');
-    const jwtToken = `Basic ${auth}`;
+    // const apiKey = 'TEST_ug3VYDEACdh2wPNXZyLbeByHEhDMK9Ci:';
+    // const auth = Buffer.from(`${apiKey}`).toString('base64');
+    // const jwtToken = `Basic ${auth}`;
     // const jwtToken = this.props.commonStore.token;
     window.squatch.ready(() => {
       window.squatch.init({
@@ -23,7 +23,7 @@ export default class ReferralsDetails extends Component {
         },
         engagementMedium: 'EMBED',
         widgetType: 'REFERRER_WIDGET',
-        jwt: jwtToken,
+        // jwt: jwtToken,
       };
       window.squatch.widgets().upsertUser(initObj).then((response) => {
         console.log(response.user);
@@ -36,7 +36,6 @@ export default class ReferralsDetails extends Component {
     return (
       <div>
         <div className="squatchembed" />
-        Referrals Page!
       </div>
     );
   }
