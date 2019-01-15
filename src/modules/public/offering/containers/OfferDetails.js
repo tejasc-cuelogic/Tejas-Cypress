@@ -99,7 +99,7 @@ class offerDetails extends Component {
           <Responsive minWidth={768} as={Container}>
             <Grid relaxed>
               <Grid.Column width={10}>
-                <div className="overview-video">
+                <div className="video-wrapper">
                   {campaign && campaign.media &&
                     campaign.media.heroVideo && campaign.media.heroVideo.url ?
                       <Link to={`${this.props.match.url}/herovideo`}>
