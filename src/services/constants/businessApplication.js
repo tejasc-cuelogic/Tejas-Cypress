@@ -89,6 +89,9 @@ export const BUSINESS_DETAILS_EDIT_META = {
   signupCode: {
     value: '', label: 'Sign-Up Code', error: undefined, rule: 'optional', placeHolder: 'e.g. JB-123',
   },
+  utmSource: {
+    value: '', label: 'Utm Source', error: undefined, rule: 'optional', placeHolder: 'e.g. JB-123',
+  },
 };
 
 export const NEED_HELP = {

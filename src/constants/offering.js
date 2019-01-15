@@ -50,11 +50,11 @@ export const CAMPAIGN_OFFERING_STATUS = {
   IN_DEFAULT: 'In default',
 };
 export const CAMPAIGN_KEYTERMS_REGULATION = {
-  REGULATION_RULE_147_TX: 'Rule 147, TX',
-  REGULATION_CF_US: 'Reg CF - US',
-  REGULATION_D_506C_SECURITIES: 'Reg CF - Securities',
-  REGULATION_CF_D_506C_SECURITIES: 'Reg D 506(c) - Securities',
-  REGULATION_CF_SECURITIES: 'Reg CF + Reg D 506(c) - Securities',
+  FP_TX: 'Rule 147, TX',
+  FP_CF: 'Reg CF - US',
+  BD_CF: 'Reg CF - Securities',
+  BD_506C: 'Reg D 506(c) - Securities',
+  BD_CF_506C: 'Reg CF + Reg D 506(c) - Securities',
 };
 
 export const OFFERING_COMMENTS_SCOPE = {

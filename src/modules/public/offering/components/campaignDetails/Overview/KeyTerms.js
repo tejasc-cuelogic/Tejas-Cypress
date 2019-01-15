@@ -20,8 +20,7 @@ class KeyTerms extends Component {
     campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
     // const portal = campaign.portal ? (campaign.portal === 'BD' ? '2%' : '1%') : '';
-    const portal = campaign && campaign.regulation ?
-      (campaign.regulation.includes('SECURITIES') ? '2%' : '1%') : '';
+    const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     return (
       <Aux>
         <Header as="h3" className="mb-30">Investment Highlights</Header>

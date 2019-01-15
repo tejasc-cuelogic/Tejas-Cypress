@@ -141,7 +141,7 @@ export default class ApplicationDetails extends Component {
                     <Form>
                       <Form.Group widths="equal">
                         {
-                          ['businessName', 'signupCode'].map(field => (
+                          ['businessName', 'signupCode', 'utmSource'].map(field => (
                             <FormInput
                               containerclassname={this.state.displayOnly ? 'display-only' : ''}
                               readOnly={this.state.displayOnly}
