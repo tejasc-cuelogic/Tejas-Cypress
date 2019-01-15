@@ -3,7 +3,7 @@ import Aux from 'react-aux';
 import { get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
-// import { Helmet } from 'react-helmet';
+import { Helmet } from 'react-helmet';
 import Loadable from 'react-loadable';
 import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Divider, Button, Statistic } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -70,6 +70,10 @@ class offerDetails extends Component {
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
     && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
+    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    const minOffering = campaign && campaign.keyTerms &&
+      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
+    const flagStatus = collected >= minOffering;
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     if (this.state.showPassDialog) {
@@ -88,6 +92,31 @@ class offerDetails extends Component {
     }
     return (
       <div className="offer-details">
+        {campaign &&
+          <Helmet>
+            <meta name="description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
+            <link rel="canonical" href={window.location.href} />
+            <meta property="og:locale" content="en_US" />
+            <meta property="og:type" content="article" />
+            <meta property="og:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
+            <meta property="og:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
+            <meta property="og:url" content={window.location.href} />
+            <meta property="og:site_name" content="NextSeed" />
+            <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
+            <meta property="article:tag" content={`${get(campaign, 'keyTerms.securities') === 'REVENUE_SHARING_NOTE' ? 'Revenue Share Loan' : 'Term Loan'}`} />
+            <meta property="article:section" content="Restaurant" />
+            <meta property="og:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
+            <meta property="og:image:secure_url" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
+            <meta property="og:image:width" content="1218" />
+            <meta property="og:image:height" content="542" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'blurb')} />
+            <meta name="twitter:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
+            <meta name="twitter:site" content="@thenextseed" />
+            <meta name="twitter:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'featuredImageUpload.url')} />
+            <meta name="twitter:creator" content="@thenextseed" />
+          </Helmet>
+        }
         <section className="campaign-details-banner banner">
           <Responsive minWidth={768} as={Container}>
             <Grid relaxed>
@@ -175,6 +204,11 @@ class offerDetails extends Component {
                   </Header.Subheader>
                 </Header>
                 <Progress percent={90} size="tiny" color="green" />
+                {flagStatus &&
+                  <p className="flag-status">
+                    <Icon name="flag" /> Surpassed minimum goal
+                  </p>
+                }
                 <Divider hidden />
                 <p className="raise-type">
                   <b>Revenue Sharing Note</b>
