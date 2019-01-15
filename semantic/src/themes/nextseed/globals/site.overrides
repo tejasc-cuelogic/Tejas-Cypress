@@ -2701,23 +2701,7 @@ p.check-extra-info{
 		vertical-align: middle;
 	}
 }
-//	How it works video
-// a.how-it-works-video {
-// 	display:block;
-// 	position: relative;
-// 	text-decoration: none;
-// 	i.icon {
-// 		font-size: 80px;
-// 		line-height: 80px;
-// 		color:@white;
-// 		position: absolute;
-// 		top: 50%;
-// 		left:50%;
-// 		transform: translate(-50%,-50%);
-// 		z-index: 1;
-// 		cursor: pointer;
-// 	}
-// }
+
 //	Add-withdraw fund popup
 .fund-amount h4.ui.header {
 	font-size: @24px;
@@ -2727,8 +2711,6 @@ p.check-extra-info{
 		margin-left: @10px;
 	}
 }
-
-
 
 //	Campaign Re-design
 .video-wrapper {
