@@ -2752,7 +2752,7 @@ p.check-extra-info{
 }
 .offer-details .raise-type{
 	font-size: @18px;
-	color: @white;
+	color:@white;
 	line-height: 28px;
 	i.icon{
 		font-size: @14px;
