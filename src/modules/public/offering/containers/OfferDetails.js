@@ -240,7 +240,7 @@ class offerDetails extends Component {
               <Grid.Column width={4}>
                 <CampaignSideBar navItems={navItems} />
               </Grid.Column>
-              <Grid.Column width={10} floated="right">
+              <Grid.Column width={12}>
                 <Switch>
                   <Route exact path={match.url} component={getModule(navItems[0].component)} />
                   {
