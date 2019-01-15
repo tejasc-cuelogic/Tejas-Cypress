@@ -3,23 +3,15 @@
 *******************************/
 //  Public page Starts
 .offer-details {
-	.offering-side-menu {
-        .ui.statistics {
-			.statistic {
-				>.value, >.label {
-					font-size: @13px !important;
-					color: @white;
-					font-weight: normal;
-					text-transform: none;
-				}
+	.offering-side-menu .ui.statistics .statistic{
+			>.value, >.label {
+				font-size: @13px !important;
+				color: @white;
+				font-weight: normal;
+				text-transform: none;
 			}
-			&.three .statistic {
-				margin-bottom: @20px;
-			}
-		}
 	}
-	.offering-wrapper {
-		.ui.statistic {
+	.offering-wrapper .ui.statistic {
 			width: 100%;
 			padding: 0;
 			>.label{
@@ -44,14 +36,13 @@
 				font-weight: @normal;
 				margin-top: @8px;
 			}
-		}
 	}
 	.offer-stats {
-		position: absolute;
-		top: @14px;
-		background: @lightTextColor;
-		height: 76px;
 		padding: @15px;
+		background: @lightTextColor;
+		position: absolute;
+		top:0;
+		left:0;
 		.ui.statistics {
 			margin: 0;
 			.statistic {

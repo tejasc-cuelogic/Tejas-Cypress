@@ -4,7 +4,7 @@ import { get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Divider, Button, Statistic } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Button, Statistic } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav, Image64 } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -148,7 +148,7 @@ class offerDetails extends Component {
                     </Statistic.Group>
                   </div>
                 </div>
-                <div className="clearfix social-links">
+                <div className="clearfix social-links mt-10">
                   <div className="pull-left">
                     <a href="/" target="_blank" rel="noopener noreferrer">
                       <Icon color="white" name="instagram" />
@@ -161,17 +161,28 @@ class offerDetails extends Component {
                     </a>
                   </div>
                   <a href="/" target="_blank" rel="noopener noreferrer" className="pull-right">
-                    View gallery <Icon size="small" className="ns-chevron-right" color="white" />
+                    View gallery <Icon size="small" className="ns-chevron-right" />
                   </a>
                 </div>
               </Grid.Column>
               <Grid.Column width={6}>
-                <Header as="h4" inverted>
+                <Header as="h3" inverted>
                   {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                   <Header.Subheader>{address}</Header.Subheader>
                 </Header>
-                <Divider hidden />
-                <Header as="h3" inverted>
+                <Statistic inverted size="tiny" className="basic mb-0">
+                  <Statistic.Value>
+                    <span className="highlight-text">$35,000</span> raised
+                  </Statistic.Value>
+                  <Statistic.Label>of $50,000 min{' '}
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content="Lorem Ipsum"
+                      position="top center"
+                    />
+                  </Statistic.Label>
+                </Statistic>
+                {/* <Header as="h3" inverted>
                   <span className="highlight-text">$35,000</span> raised
                   <Header.Subheader>of $50,000 min{' '}
                     <Popup
@@ -180,14 +191,13 @@ class offerDetails extends Component {
                       position="top center"
                     />
                   </Header.Subheader>
-                </Header>
-                <Progress percent={90} size="tiny" color="green" />
+                </Header> */}
+                <Progress inverted percent={90} size="tiny" color="green" />
                 {flagStatus &&
                   <p className="flag-status">
                     <Icon name="flag" /> Surpassed minimum goal
                   </p>
                 }
-                <Divider hidden />
                 <p className="raise-type">
                   <b>Revenue Sharing Note</b>
                   <Popup
@@ -199,11 +209,13 @@ class offerDetails extends Component {
                   Investment Multiple: 1.4–1.5x<br />
                   Maturity: 60 Months
                 </p>
-                <Button fluid as={Link} to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
-                <p className="center-align min-invest">
-                  ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                    || 0} min investment
-                </p>
+                <div className="center-align">
+                  <Button fluid secondary content="Invest Now" as={Link} to={`${this.props.match.url}/invest-now`} />
+                  <small>
+                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
+                      || 0} min investment
+                  </small>
+                </div>
               </Grid.Column>
             </Grid>
           </Responsive>

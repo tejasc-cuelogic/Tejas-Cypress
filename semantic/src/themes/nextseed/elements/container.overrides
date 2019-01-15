@@ -131,7 +131,8 @@ section{
         &.campaign-details-banner{
             height: 726px;
             background:url(../../assets/images/banners/campaign-details.png) top center no-repeat / cover;
-            background-color: @fullBlack;
+            background-color: @neutral;
+            background-blend-mode:multiply;
             >.ui.container{
                 justify-content: center;
             }

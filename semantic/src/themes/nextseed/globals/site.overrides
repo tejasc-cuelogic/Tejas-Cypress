@@ -455,6 +455,14 @@ footer{
 }
 
 /** Campaign Details **/
+.campaign-details-banner{
+	small{
+		display:inline-block;
+		margin-top:@7px;
+		font-size:@13px;
+		color:@white;
+	}
+}
 .offer-details {
 	min-height:~"calc(100vh - 58px)";
 	.offering-side-menu {
@@ -2433,7 +2441,7 @@ p.check-extra-info{
 	}
 }
 //	Froala Editor Styles override - ENDS
-//Public responsive start
+//	Public responsive start
 .public-header-section {
 	background-color: @white;
     position: fixed;
@@ -2522,8 +2530,8 @@ p.check-extra-info{
 		width: 200px;
 	}
 }
-//Public responsive end
-//Range slider
+//	Public responsive end
+//	Range slider Start
 .slider {
 	-webkit-appearance: none;
 	width: 100%;
@@ -2556,8 +2564,8 @@ p.check-extra-info{
 	cursor: pointer;
 	border-radius: 50px;
 }
-//Range slider
-// About company carousel
+//	Range slider Ends
+//	About company carousel
 .carousel {
 	width: 100%;
 	@media only screen and (max-width: @largestSmallMonitor) {
@@ -2605,11 +2613,11 @@ p.check-extra-info{
     background: fade(@fullBlack, 60%);
     z-index: 100;
 }
-// Careers Banner
+//	Careers Banner
 .careers-banner {
 	margin: 0 auto;
 }
-//Avtar image on public pages
+//	Avtar image on public pages
 .updates-modal, .campaign-updates {
 	.sb-avatar{
 		width:36px;
@@ -2617,7 +2625,7 @@ p.check-extra-info{
 		line-height:36px;
 	}
 }
-//investment-limit-calculator
+//	investment-limit-calculator
 #investment-limit-calculator .form-group.row {
 	display: flex;
     flex-direction: row;
@@ -2637,7 +2645,7 @@ p.check-extra-info{
 		}
 	}
 }
-//Homepage featured on section logos - mobile
+//	Homepage featured on section logos - mobile
 .featured-logos {
 	img.ui.image {
 		@media only screen and (max-width : @largestMobileScreen){
@@ -2645,7 +2653,7 @@ p.check-extra-info{
 		}
 	}
 }
-// IRA account creation 
+//	IRA account creation 
 .promitional-offer-block {
 	border: 1px solid @primary-one;
 	padding: @10px;
@@ -2653,7 +2661,7 @@ p.check-extra-info{
 		margin: 0; 
 	}
 }
-// Profile setting new structure 
+//	Profile setting new structure 
 .profile-settings .field-wrap {
 	padding: @20px;
 	.fields:last-child .field {
@@ -2677,7 +2685,7 @@ p.check-extra-info{
 	}
 }
 
-// Legal Documents
+//	Legal Documents
 .legal-desc p {
 	margin-bottom: @22px;
 	a {
@@ -2685,7 +2693,7 @@ p.check-extra-info{
 		text-decoration: underline;
 	}
 }
-//IRA account creation
+//	IRA account creation
 .highlight-text, .negative-text {
 	&.large {
 		font-size: @20px;
@@ -2693,7 +2701,7 @@ p.check-extra-info{
 		vertical-align: middle;
 	}
 }
-//How it works video
+//	How it works video
 a.how-it-works-video {
 	display: flex;
     flex-direction: column;
@@ -2711,7 +2719,7 @@ a.how-it-works-video {
 		cursor: pointer;
 	}
 }
-//Add-withdraw fund popup
+//	Add-withdraw fund popup
 .fund-amount h4.ui.header {
 	font-size: @24px;
 	span {
@@ -2723,13 +2731,12 @@ a.how-it-works-video {
 
 
 
-//Campaign Re-design
+//	Campaign Re-design
 .overview-video {
+	position:relative;
 	a {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
 		position: relative;
+		display:block;
 		&:hover {
 			text-decoration: none;
 		}
@@ -2740,7 +2747,8 @@ a.how-it-works-video {
 		color: @white;
 		position:absolute;
 		top:50%;
-		transform:translate(0%,-50%);
+		left:50%;
+		transform:translate(-50%,-50%);
 		z-index: 1;
 		cursor: pointer;
 	}
@@ -2749,6 +2757,7 @@ a.how-it-works-video {
 		width: 100%;
 	}
 	~.social-links a{
+		margin-right:@7px;
 		color: @white;
 		&:hover {
 			text-decoration: none;
@@ -2756,22 +2765,15 @@ a.how-it-works-video {
 		i.icon {
 			vertical-align: middle;
 			line-height: 1;
+			margin:0;
 		}
 	}
 }
-.offer-details{
-	.raise-type{
-		font-size: @18px;
-		color: @white;
-		line-height: 28px;
-		i.icon{
-			font-size: @14px;
-		}
-	}
-	.min-invest {
-		font-size: @13px;
-		color: @white;
-		line-height: 23px;
-		margin-top: @14px;
+.offer-details .raise-type{
+	font-size: @18px;
+	color: @white;
+	line-height: 28px;
+	i.icon{
+		font-size: @14px;
 	}
 }
