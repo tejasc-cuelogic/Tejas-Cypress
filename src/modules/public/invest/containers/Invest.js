@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Helmet } from 'react-helmet';
+import cookie from 'react-cookies';
 import Loadable from 'react-loadable';
 import { Visibility, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
@@ -21,6 +23,12 @@ const getModule = component => Loadable({
 @observer
 class Invest extends Component {
   componentWillMount() {
+    const urlParameter = DataFormatter.QueryStringToJSON(this.props.location.search);
+    const utmCampaign = get(urlParameter, 'utm_campaign') || null;
+    const rsCode = get(urlParameter, 'rsCode') || null;
+    if (utmCampaign === 'saasquatch' && rsCode) {
+      cookie.save('SAASQUATCH_REFERRAL_CODE', rsCode, { maxAge: 86400000 });
+    }
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/why-nextseed`);
     }
