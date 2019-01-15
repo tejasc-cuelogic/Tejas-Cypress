@@ -166,10 +166,6 @@ export class CampaignStore {
     return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.minInvestAmt : null;
   }
 
-  @computed get maxInvestAmt() {
-    return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.maxInvestAmt : null;
-  }
-
   @computed get dataRoomDocs() {
     return this.campaign && this.campaign.legal && this.campaign.legal.dataroom
     && this.campaign.legal.dataroom.documents ?

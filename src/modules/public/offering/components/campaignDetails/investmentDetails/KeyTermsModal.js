@@ -25,6 +25,7 @@ class KeyTerms extends Component {
         CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
           <RevenueSharingKeyTerms
             refLink={refLink}
+            campaign={campaign}
             KeyTerms={campaign.keyTerms}
             launch={campaign.offering && campaign.offering.launch}
           />

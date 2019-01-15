@@ -7,10 +7,10 @@ import Helper from '../../../../../../helper/utility';
 const isMobile = document.documentElement.clientWidth < 768;
 class RevenueSharingKeyTerms extends Component {
   render() {
-    const { KeyTerms, launch } = this.props;
+    const { KeyTerms, launch, campaign } = this.props;
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
-    const portal = KeyTerms.portal ? (KeyTerms.portal === 'BD' ? '2%' : '1%') : '';
+    const portal = campaign && campaign.regulation ? (campaign.regulation.includes('SECURITIES') ? '2%' : '1%') : '';
     const edgarLink = launch && launch.edgarLink;
     return (
       <Modal.Content scrolling>

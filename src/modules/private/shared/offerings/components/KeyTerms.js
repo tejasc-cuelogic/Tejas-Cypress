@@ -189,7 +189,7 @@ export default class KeyTerms extends Component {
                 changed={(e, result) => formChange(e, result, formName)}
               />
             ))}
-            {['maxInvestAmt', 'nsMinFees', 'nsMaxFees'].map(field => (
+            {['nsMinFees', 'nsMaxFees'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
                 name={field}

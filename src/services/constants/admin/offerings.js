@@ -220,13 +220,6 @@ export const KEY_TERMS = {
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
-  maxInvestAmt: {
-    value: null,
-    label: 'Max Investment Amount',
-    error: undefined,
-    rule: 'numeric',
-    placeHolder: 'Enter here',
-  },
   appendixATitle: {
     value: null,
     label: 'Appendix A Title (Disclosure)',
@@ -349,11 +342,6 @@ export const SECURITIES_VALUES = [
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
 ];
 
-export const PORTAL_VALUES = [
-  { key: 'BD', value: 'BD', text: 'BD' },
-  { key: 'FP', value: 'FP', text: 'FP' },
-];
-
 export const BUSINESS_TYPE_VALUES = [
   { key: 'Sole Proprietor', value: 'SOLE_PROPRIETOR', text: 'Sole Proprietor' },
   { key: 'Corporation', value: 'CORPORATION', text: 'Corporation' },
@@ -363,9 +351,11 @@ export const BUSINESS_TYPE_VALUES = [
 ];
 
 export const REGULATION_VALUES = [
-  { key: '506(c)', value: 'REGULATION_506C', text: '506(c)' },
-  { key: 'Reg CF 506(c)', value: 'REGULATION_CF_506C', text: 'Reg CF 506(c)' },
-  { key: 'Reg CF', value: 'REGULATION_CF', text: 'Reg CF' },
+  { key: 'Rule 147, TX', value: 'REGULATION_RULE_147_TX', text: 'Rule 147, TX' },
+  { key: 'Reg CF - US', value: 'REGULATION_CF_US', text: 'Reg CF - US' },
+  { key: 'Reg CF - Securities', value: 'REGULATION_D_506C_SECURITIES', text: 'Reg CF - Securities' },
+  { key: 'Reg D 506(c) - Securities', value: 'REGULATION_CF_D_506C_SECURITIES', text: 'Reg D 506(c) - Securities' },
+  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'REGULATION_CF_SECURITIES', text: 'Reg CF + Reg D 506(c) - Securities' },
 ];
 
 export const OFFERING_OVERVIEW = {
@@ -1462,9 +1452,9 @@ export const NEW_OFFER = {
   legalBusinessName: { ...KEY_TERMS.legalBusinessName, objRefOutput: 'keyTerms' },
   shorthandBusinessName: { ...KEY_TERMS.shorthandBusinessName, objRefOutput: 'keyTerms' },
   offeringSlug: { ...OFFERING_DETAILS.offeringSlug },
-  portal: {
+  regulation: {
     value: '',
-    label: 'Portal type',
+    label: 'Regulation',
     error: undefined,
     rule: 'string',
     placeHolder: 'Choose here',
