@@ -206,9 +206,10 @@ export class BusinessAppStore {
   }
 
   @action
-  setBusinessDetails = (businessName, signupCode) => {
+  setBusinessDetails = (businessName, signupCode, utmSource) => {
     this.BUSINESS_DETAILS_EDIT_FRM.fields.businessName.value = businessName;
     this.BUSINESS_DETAILS_EDIT_FRM.fields.signupCode.value = signupCode;
+    this.BUSINESS_DETAILS_EDIT_FRM.fields.utmSource.value = utmSource;
   }
 
   @action
@@ -229,6 +230,7 @@ export class BusinessAppStore {
             issuerId,
             businessName: payload.businessName,
             signupCode: payload.signupCode,
+            utmSource: payload.utmSource,
           },
           refetchQueries: [{
             query: getBusinessApplicationsDetailsAdmin,
