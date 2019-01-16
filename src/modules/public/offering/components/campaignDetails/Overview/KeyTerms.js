@@ -32,7 +32,7 @@ class KeyTerms extends Component {
                 CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : ''}
                 <Popup
                   hoverable
-                  position="bottom center"
+                  position="top center"
                   trigger={<Icon
                     name="help circle"
                     color="green"
@@ -68,7 +68,7 @@ class KeyTerms extends Component {
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                  position="bottom center"
+                  position="top center"
                 />
               </Table.Cell>
               <Table.Cell>
@@ -108,7 +108,7 @@ class KeyTerms extends Component {
           </Table.Body>
         </Table>
         <Button onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
-          View Investment Highlights
+          View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
       </Aux>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Grid, Segment, Icon, Reveal, Image } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Header, Item, Image, Icon } from 'semantic-ui-react';
+// import { Link } from 'react-router-dom';
 import { filter } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
@@ -9,7 +9,7 @@ import { ASSETS_URL } from '../../../../../../constants/aws';
 class MeetOurTeam extends Component {
   render() {
     const {
-      campaign, meetOurTeamUrl, emptyStatement,
+      campaign, emptyStatement,
     } = this.props;
     const leadershipArr = campaign && campaign.leadership && campaign.leadership.length ?
       campaign.leadership : [];
@@ -17,55 +17,58 @@ class MeetOurTeam extends Component {
       o.isPublic
     ));
     return (
-      <Grid.Column>
-        <Segment padded>
-          <Header as="h4">
-            {meetTeamOjb.length ?
-              <Link to={`${meetOurTeamUrl}/meetourteam`}>
-                Meet Our Team
-                <Icon className="ns-chevron-right" color="green" />
-              </Link>
-              :
-              <Aux>
-                Meet Our Team
-                <Icon className="ns-chevron-right" color="green" />
-              </Aux>
-            }
-          </Header>
-          {
-            meetTeamOjb.length ?
-              <Grid columns={3}>
+      <Aux>
+        <Header as="h3">Meet the Team</Header>
+        {
+          meetTeamOjb.length ?
+            <Aux>
+              <Item.Group className="meet-team">
                 {
                   meetTeamOjb.map(data => (
-                    data.isPublic ?
-                      <Grid.Column>
-                        <Reveal animated="small fade">
-                          <Reveal.Content hidden as={Link} to={`${meetOurTeamUrl}/meetourteam`}>
-                            <div className="team-overlay">
-                              <p>{`${data.firstName} ${data.lastName}`}</p>
+                    data.isPublic &&
+                      <Item>
+                        <Item.Content>
+                          <div className="campaign-avatar">
+                            <div className="avatar-image team-avatar">
+                              {data && data.uploads && data.uploads.headshot &&
+                                data.uploads.headshot.url ? (
+                                  <Image64 srcUrl={data.uploads.headshot.url} />
+                                ) : (
+                                  <Image src={`${ASSETS_URL}images/leader-placeholder.jpg`} />
+                                )
+                              }
                             </div>
-                          </Reveal.Content>
-                          <Reveal.Content visible>
-                            {data && data.uploads && data.uploads.headshot &&
-                              data.uploads.headshot.url ? (
-                                <Image64 srcUrl={data.uploads.headshot.url} circular />
-                              ) : (
-                                <Image src={`${ASSETS_URL}images/leader-placeholder.jpg`} circular />
-                              )
-                          }
-                          </Reveal.Content>
-                        </Reveal>
-                      </Grid.Column>
-                      :
-                      null
+                            <div className="avatar-details team-details">
+                              <Item.Header>{`${data.firstName} ${data.lastName}`}</Item.Header>
+                              <Item.Meta className="text-uppercase"><b>{data.companyPosition}</b></Item.Meta>
+                              <Item.Extra>
+                                <div>
+                                  {data && data.social &&
+                                    Object.keys(data.social).map(key => (
+                                      <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+                                        <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
+                                      </a>
+                                    ))
+                                  }
+                                </div>
+                              </Item.Extra>
+                            </div>
+                          </div>
+                          <Item.Description className="avatar-description mt-30">
+                            {data.bio && data.bio !== '' ? data.bio : emptyStatement}
+                          </Item.Description>
+                        </Item.Content>
+                      </Item>
                   ))
                 }
-              </Grid>
-              :
+              </Item.Group>
+            </Aux>
+            :
+            <section className="bg-offwhite">
               <InlineLoader text={emptyStatement} />
-          }
-        </Segment>
-      </Grid.Column>
+            </section>
+        }
+      </Aux>
     );
   }
 }

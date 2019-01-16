@@ -35,26 +35,28 @@ class LatestUpdates extends Component {
         <Header as="h3" className="mb-30">Updates
           <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
         </Header>
-        <Item.Group className="campaign-updates">
+        <Item.Group>
           <Item>
             <Item.Content>
-              <div className="clearfix">
+              <div className="campaign-avatar">
                 {companyAvatarUrl && companyAvatarUrl.length ?
-                  <div className="avatar-image pull-left">
-                    <Image64 size="mini" srcUrl={companyAvatarUrl} circular />
+                  <div className="avatar-image">
+                    <Image64 size="mini" srcUrl={companyAvatarUrl} />
                   </div> : null
                 }
-                <Item.Header>
-                  <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
-                </Item.Header>
-                {update &&
-                  <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
-                }
+                <div className="avatar-details">
+                  <Item.Header>
+                    <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
+                  </Item.Header>
+                  {update &&
+                    <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
+                  }
+                </div>
               </div>
               <Divider hidden />
               {update ?
                 <Aux>
-                  <Item.Description>
+                  <Item.Description className="avatar-description">
                     <Header as="h4">{update.title}</Header>
                     <p>
                       {Parser(update.content || '')}
