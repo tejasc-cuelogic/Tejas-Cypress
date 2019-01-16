@@ -27,6 +27,7 @@ class Invest extends Component {
     const utmCampaign = get(urlParameter, 'utm_campaign') || null;
     const rsCode = get(urlParameter, 'rsCode') || null;
     if (utmCampaign === 'saasquatch' && rsCode) {
+      // getReferralCreditsInformation query
       cookie.save('SAASQUATCH_REFERRAL_CODE', rsCode, { maxAge: 86400000 });
     }
     if (this.props.match.isExact) {

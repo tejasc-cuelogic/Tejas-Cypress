@@ -283,6 +283,7 @@ export class Auth {
                       cookie.remove('REFERRAL_CODE');
                     });
                   }
+                  // userPartialSignupWithReferralCode
                   userDetailsStore.getUser(userStore.currentUser.sub);
                   AWS.config.region = AWS_REGION;
                   if (userStore.isCurrentUserWithRole('admin')) {
