@@ -1,30 +1,33 @@
 import React, { Component } from 'react';
-import { Header, Grid, Segment, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { Image64 } from '../../../../../../theme/shared';
+import { Header } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import { inject, observer } from 'mobx-react';
+import Parser from 'html-react-parser';
+import { InlineLoader } from '../../../../../../theme/shared';
 
-const isTablet = document.documentElement.clientWidth >= 768
-  && document.documentElement.clientWidth < 992;
+@inject('campaignStore')
+@observer
 class BusinessModel extends Component {
   render() {
-    const {
-      businessModelUrl,
-      campaign,
-    } = this.props;
-    const businessModelImage = campaign && campaign.media && campaign.media.businessModelImage &&
-      campaign.media.businessModelImage.url ? campaign.media.businessModelImage.url : null;
+    const { campaign } = this.props.campaignStore;
+    // const businessModelImage = campaign && campaign.media && campaign.media.businessModelImage &&
+    //   campaign.media.businessModelImage.url ? campaign.media.businessModelImage.url : null;
     return (
-      <Grid.Column className={isTablet && 'mt-30'}>
-        <Segment padded>
-          <Header as="h4">
-            <Link to={`${businessModelUrl}/business`}>
-              Business Model
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
-          </Header>
-          {<Image64 srcUrl={businessModelImage} fluid />}
-        </Segment>
-      </Grid.Column>
+      <Aux>
+        <Header as="h3">Business Model</Header>
+        {
+            campaign && campaign.offering && campaign.offering.about &&
+              campaign.offering.about.businessModel ?
+                <p>
+                  {Parser(campaign.offering.about.businessModel)}
+                </p>
+                :
+                <section className="bg-offwhite">
+                  <InlineLoader text="No data found" />
+                </section>
+          }
+        {/* {<Image64 srcUrl={businessModelImage} fluid />} */}
+      </Aux>
     );
   }
 }

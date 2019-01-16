@@ -54,10 +54,12 @@ class AboutTheCompany extends Component {
               }
             </List>
           :
-            <InlineLoader text="No Data Found" />
+            <section className="bg-offwhite">
+              <InlineLoader text="No Data Found" />
+            </section>
         }
         <Button onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
-          Learn more about the company
+          Learn More About the Company
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
         {/* {campaign && campaign.offering && campaign.offering.overview &&
