@@ -33,6 +33,7 @@ export default class AutoComplete extends Component {
             value={value}
             placeholder={(displayMode || readOnly) ? '' : placeHolder}
             types={['address']}
+            componentRestrictions={{ country: 'us' }}
             onChange={(e) => { props.changed(e); this.triggerError(props.showerror || false); }}
             onBlur={() => this.triggerError(true)}
           />

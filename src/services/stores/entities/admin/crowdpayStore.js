@@ -28,6 +28,7 @@ export class CrowdpayStore {
     skip: 0,
     page: 1,
     perPage: 10,
+    oldType: null,
     displayTillIndex: 10,
     search: { accountType: null },
   };
@@ -75,6 +76,8 @@ export class CrowdpayStore {
       variables: { limit: 500 },
       fetchPolicy: 'network-only',
       onFetch: () => {
+        this.requestState.page = 1;
+        this.requestState.skip = 0;
         this.setData('isApiHit', true);
         this.setCrowdpayAccountsSummary();
       },
@@ -94,6 +97,9 @@ export class CrowdpayStore {
       this.summary[type] = this.count;
       return false;
     });
+    if (this.requestState.oldType) {
+      this.setAccountTypes(this.requestState.oldType);
+    }
   }
 
   @action
@@ -158,8 +164,18 @@ export class CrowdpayStore {
     }
     return new Promise((resolve, reject) => {
       client
-        .mutate({ mutation, variables })
-        .then(() => { Helper.toast(sMsg, 'success'); resolve(); })
+        .mutate({
+          mutation,
+          variables,
+          refetchQueries: [{
+            query: listCrowdPayUsers,
+            variables: { limit: 500 },
+          }],
+        })
+        .then(action(() => {
+          this.requestState.oldType = this.requestState.type;
+          Helper.toast(sMsg, 'success'); resolve();
+        }))
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);

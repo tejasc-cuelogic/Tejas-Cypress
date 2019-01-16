@@ -20,10 +20,13 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
         offering {
           id
           stage
+          offeringSlug
           keyTerms {
             shorthandBusinessName
             securities
             industry
+            city
+            state
           }
           offering {
             launch {
@@ -42,6 +45,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             shorthandBusinessName
             securities
             industry
+            city
+            state
           }
           closureSummary {
             disbursementDate
@@ -58,6 +63,8 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             shorthandBusinessName
             securities
             industry
+            city
+            state
           }
           closureSummary {
             disbursementDate
@@ -97,6 +104,21 @@ export const addFunds = gql`
   mutation addFunds($amount:  Float!, $accountId: String! ) {
     addFunds(amount: $amount, accountId: $accountId)
   }
+`;
+
+export const getMonthlyPaymentsToInvestorByOffering = gql`
+query _getMonthlyPaymentsToInvestorByOffering($userId:String, $accountId:String!, $offeringId:String!) {
+  getMonthlyPaymentsToInvestorByOffering (
+    userId: $userId
+    accountId: $accountId
+    offeringId: $offeringId
+  ) {
+    payment
+    yearMonth
+    paidToDate
+  }
+}
+
 `;
 
 export const getUserAccountSummary = gql`

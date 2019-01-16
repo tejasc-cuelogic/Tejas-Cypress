@@ -29,7 +29,7 @@ const TeamList = ({
           </Reveal>
         </Grid.Column>))}
       { joinColumn &&
-      <Grid.Column verticalAlign="middle" centered>
+      <Grid.Column verticalAlign="middle" className={`${(members.length % 2 === 0) && 'centered'}`}>
         <Link to="/about/careers">
           <Header as="h4" textAlign="center">
             Join our team

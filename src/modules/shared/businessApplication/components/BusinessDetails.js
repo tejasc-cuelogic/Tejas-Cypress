@@ -68,6 +68,7 @@ export default class BusinessDetails extends Component {
             }
           >
             <DropZone
+              toolTipClassName="left-align justify-text"
               hideFields={hideFields}
               tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
               disabled={formReadOnlyMode}
@@ -97,7 +98,6 @@ export default class BusinessDetails extends Component {
                     </Header>
                     <Form.Group widths="equal">
                       <MaskedInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         prefix="$ "
@@ -108,7 +108,6 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                       <MaskedInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
@@ -120,7 +119,6 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <MaskedInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         prefix="$ "
@@ -131,7 +129,6 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
                       <MaskedInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         number
@@ -201,7 +198,6 @@ export default class BusinessDetails extends Component {
                       {
                         ['fullLegalName', 'title'].map(field => (
                           <FormInput
-                            showerror
                             readOnly={formReadOnlyMode}
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
@@ -215,7 +211,6 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <MaskedInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         number
@@ -225,7 +220,6 @@ export default class BusinessDetails extends Component {
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
                       <MaskedInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
@@ -244,10 +238,8 @@ export default class BusinessDetails extends Component {
                         format="##/##/####"
                         changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                         dateOfBirth
-                        showerror
                       />
                       <MaskedInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         ssn
@@ -259,7 +251,6 @@ export default class BusinessDetails extends Component {
                     </Form.Group>
                     <Form.Group widths="equal">
                       <FormInput
-                        showerror
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         type="text"
@@ -290,7 +281,10 @@ export default class BusinessDetails extends Component {
               </Aux>
             }
           </FormElementWrap>
-          <AppNavigation hideFields={hideFields} />
+          <AppNavigation
+            hideFields={hideFields}
+            isFileUploading={this.props.businessAppStore.isFileUploading}
+          />
         </Form>
         <Confirm
           header="Confirm"

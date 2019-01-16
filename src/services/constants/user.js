@@ -122,9 +122,10 @@ export const USER_IDENTITY = {
     label: 'Zip Code',
     placeHolder: '10011',
     error: undefined,
-    rule: 'required',
+    rule: 'required|maskedField:5',
     customErrors: {
       required: '* required.',
+      maskedField: 'The ZIP Code should be at least 5 digits',
     },
     objRef: 'legalDetails.legalAddress',
   },
@@ -312,9 +313,18 @@ export const COUNTRY_CODES = {
 };
 
 export const TRANSACTION_TYPES = [
-  { text: 'Deposit', value: 'Deposit' },
-  { text: 'Withdrawal', value: 'Withdrawal' },
-  { text: 'Repayment', value: 'Repayment' },
-  { text: 'Interest Accured', value: 'Interest Accured' },
-  { text: 'Referral Credits', value: 'Referral Credits' },
+  { text: 'Deposit', value: 'DEPOSIT' },
+  { text: 'Withdrawal', value: 'WITHDRAWAL' },
+  { text: 'Payment', value: 'REPAYMENT' },
+  { text: 'Interest', value: 'INTEREST' },
+  { text: 'Investment', value: 'INVESTMENT' },
+  { text: 'Referral credits', value: 'REFERRAL_CREDITS' },
+  { text: 'Late fee', value: 'LATE_FEE' },
+];
+
+export const DATE_RANGES = [
+  { text: 'All', value: 'all' },
+  { text: 'Last 30 days', value: '30' },
+  { text: 'Last 60 days', value: '60' },
+  { text: 'Last 90 days', value: '90' },
 ];

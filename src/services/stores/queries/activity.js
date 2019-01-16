@@ -15,6 +15,10 @@ export const allActivities = gql`
       activity
       createdUserInfo {
         id
+        roles {
+          scope
+          name
+        }
         info {
           firstName
           lastName

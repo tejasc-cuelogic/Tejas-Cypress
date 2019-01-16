@@ -5,6 +5,7 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
     listLinkedBankUsers (page: $page, limit: $limit, status: $status){
      linkedBankList {
       userId
+      accountId
       firstName
       lastName
       email
@@ -23,3 +24,12 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
     }
   }
 `;
+
+export const checkOpeningDepositAmount = gql`
+  mutation checkOpeningDepositAmount($accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum! $accountId: String) {
+    checkOpeningDepositAmount(
+      accountAttributes: $accountAttributes
+      accountType: $accountType,
+      accountId: $accountId
+    )
+  }`;

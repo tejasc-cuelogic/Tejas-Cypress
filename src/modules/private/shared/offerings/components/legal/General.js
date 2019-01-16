@@ -143,14 +143,14 @@ export default class General extends Component {
           </p>
           {
             <Aux>
-              <MaskedInput
+              {/* <MaskedInput
                 displayMode={isReadonly}
                 name="minOfferingExpenseAmount"
                 fielddata={GENERAL_FRM.fields.minOfferingExpenseAmount}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
                 prefix="$"
-              />
+              /> */}
               <FormTextarea
                 readOnly={isReadonly}
                 name="minOfferingExpenseAmountDescription"
@@ -158,14 +158,14 @@ export default class General extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName)}
                 containerclassname="secondary"
               />
-              <MaskedInput
+              {/* <MaskedInput
                 displayMode={isReadonly}
                 name="maxOfferingExpenseAmount"
                 fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmount}
                 changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
                 prefix="$"
-              />
+              /> */}
               <FormTextarea
                 readOnly={isReadonly}
                 name="maxOfferingExpenseAmountDescription"

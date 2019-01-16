@@ -1,23 +1,31 @@
+import Aux from 'react-aux';
+import { includes } from 'lodash';
 import React, { Component } from 'react';
 import { Grid, Card } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { FillTable } from '../../../../../../theme/table/NSTable';
 import Helper from '../../../../../../helper/utility';
+import { NsPagination } from './../../../../../../theme/shared';
 
 const result = {
   columns: [
-    { title: 'Statement Date', field: 'taxFormDate' },
-    { title: 'Form Type', field: 'types' },
+    { title: 'Statement Date', field: 'year' },
+    { title: 'Form Type', field: 'formType' },
     { title: 'Download as', field: 'file', textAlign: 'right' },
   ],
 };
 
-@inject('statementStore', 'educationStore')
+@inject('statementStore', 'educationStore', 'userDetailsStore')
 @observer
 export default class TaxForms extends Component {
   componentWillMount() {
-    this.props.statementStore.initRequest('TaxForms');
+    const { setFieldValue } = this.props.userDetailsStore;
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    setFieldValue('currentActiveAccount', accountType);
   }
+
+  paginate = params => this.props.statementStore.pageRequest(params);
+
   downloadhandler = (e, fileId) => {
     e.preventDefault();
     this.props.statementStore.handlePdfDownload(fileId).then((fileUrl) => {
@@ -27,24 +35,29 @@ export default class TaxForms extends Component {
       Helper.toast('Something went wrong. Please try again in some time.', 'error');
     });
   }
+
   render() {
-    const { taxForms, loading, error } = this.props.statementStore;
+    const { taxFormCount, requestState, taxForms } = this.props.statementStore;
+    const totalRecords = taxFormCount() || 0;
     result.rows = taxForms;
     return (
-      <Grid>
-        <Grid.Row>
-          <Grid.Column width={16}>
-            <Card fluid>
-              <FillTable
-                download={this.downloadhandler}
-                loading={loading}
-                error={error}
-                result={result}
-              />
-            </Card>
-          </Grid.Column>
-        </Grid.Row>
-      </Grid>
+      <Aux>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column width={16}>
+              <Card fluid>
+                <FillTable
+                  download={this.downloadhandler}
+                  result={result}
+                />
+              </Card>
+              {totalRecords > 0 &&
+              <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+              }
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Aux>
     );
   }
 }

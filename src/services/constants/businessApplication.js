@@ -138,7 +138,7 @@ const BUSINESS_PREQUAL_COMMON = {
     value: '', label: 'State', error: undefined, rule: 'required', placeHolder: 'e.g. NY', customErrors: { required: 'required' },
   },
   zipCode: {
-    value: '', label: 'ZIP Code', error: undefined, rule: 'required|numeric', placeHolder: '10012', maxLength: 6, customErrors: { required: 'required' },
+    value: '', label: 'ZIP Code', error: undefined, rule: 'required|maskedField:5', placeHolder: '10012', customErrors: { required: 'required', maskedField: 'The ZIP Code should be at least 5 digits' },
   },
   industryExperience: {
     value: '',
@@ -480,7 +480,7 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Ownership of Company', error: undefined, rule: 'required|ownerPercentage:companyOwnerShip', placeHolder: '40.0%', customErrors: { required: 'required' },
     },
     dateOfService: {
-      value: null, label: 'Date of Service', error: undefined, rule: 'required', placeHolder: 'Select date', customErrors: { required: 'required' },
+      value: null, label: 'Date of Service', error: undefined, rule: 'required|date', placeHolder: 'MM/DD/YYYY', customErrors: { required: 'required', date: 'Please enter valid date' },
     },
     linkedInUrl: {
       value: '', label: 'LinkedIn URL', error: undefined, rule: 'optional', placeHolder: 'http://linkedin.com/username', customErrors: { required: 'required', url: 'Please enter valid URL.' },
@@ -489,7 +489,7 @@ export const BUSINESS_DETAILS = {
       value: '', label: 'Title', error: undefined, rule: 'optional', placeHolder: 'e.g. CEO', customErrors: { required: 'required' },
     },
     resume: {
-      value: '', label: 'Upload Resume/CV', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+      value: '', label: 'Upload Resume/CV', error: undefined, rule: 'optional', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
     },
   }],
 };

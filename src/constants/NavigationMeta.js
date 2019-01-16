@@ -5,7 +5,7 @@ const INVESTER_ACC_SUB_NAV_ITEMS = {
     { title: 'Bank Accounts', to: 'bank-accounts', component: 'BankAccount' },
     { title: 'Transactions', to: 'transactions', component: 'Transactions' },
     { title: 'Statements', to: 'statements', component: 'Statements' },
-    { title: 'Settings', to: 'Settings', component: 'Settings' },
+    // { title: 'Settings', to: 'Settings', component: 'Settings' },
   ],
 };
 
@@ -90,14 +90,16 @@ export const PRIVATE_NAV = [
     path: 'issuer/businessApplication/containers/BusinessApplication',
     subNavigations: [
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Pre-qualification',
         to: 'pre-qualification',
         component: 'PreQualification',
         showIcon: true,
       },
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Business Details',
         to: 'business-details',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
@@ -105,7 +107,8 @@ export const PRIVATE_NAV = [
         showIcon: true,
       },
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Performance',
         to: 'performance',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
@@ -113,7 +116,8 @@ export const PRIVATE_NAV = [
         showIcon: true,
       },
       {
-        icon: 'ns-check-circle',
+        icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
+        icon_color: { COMPLETE: 'green', IN_PROGRESS: 'orange' },
         title: 'Documentation',
         to: 'documentation',
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED'],
@@ -176,7 +180,7 @@ export const PRIVATE_NAV = [
     subNavigations: [
       { title: 'Overview', to: 'overview', accessFor: [1, 2, 3, 4] },
       {
-        title: 'KeyTerms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'],
+        title: 'Key Terms', to: 'key-terms', accessFor: [1], accessibleTo: ['admin', 'manager', 'support'],
       },
       { title: 'Legal', to: 'legal', accessFor: [1] },
       { title: 'Offering', to: 'offering', accessFor: [1] },
@@ -201,7 +205,9 @@ export const PRIVATE_NAV = [
     subPanel: 1,
     path: 'shared/education/containers/Education',
     subNavigations: [
-      { title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket' },
+      {
+        title: 'Welcome Packet', to: 'welcome-packet', component: 'WelcomePacket', accessibleTo: ['investor'],
+      },
       { title: 'Knowledge Base', to: 'knowledge-base', component: 'KnowledgeBase' },
       { title: 'FAQ', to: 'faq', component: 'Faq' },
     ],
@@ -351,6 +357,13 @@ export const PRIVATE_NAV = [
     to: 'transactions',
     path: 'admin/transactions',
     accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 0,
+    subNavigations: [
+      { title: 'Status 1', to: 'status-1', component: 'AllTransactions' },
+      { title: 'Status 2', to: 'status-2', component: 'AllTransactions' },
+      { title: 'Status 3', to: 'status-3', component: 'AllTransactions' },
+      { title: 'Status 4', to: 'status-4', component: 'AllTransactions' },
+    ],
   },
   {
     icon: 'user plus',

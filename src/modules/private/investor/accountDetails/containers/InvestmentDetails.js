@@ -31,9 +31,13 @@ class InvestmentDetails extends Component {
       this.props.history.replace(`${this.props.match.url}/${navItems[0].to}`);
     }
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
-    this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
-    this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
-    this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
+    if (this.props.offeringCreationStore.currentOfferingId !== this.props.match.params.id ||
+      this.props.portfolioStore.currentAcccountType !== accountType) {
+      this.props.portfolioStore.getInvestorDetails(accountType, this.props.match.params.id);
+      this.props.campaignStore.getCampaignDetails(this.props.match.params.id, true);
+      this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.id);
+      this.props.portfolioStore.currentAccoutType(accountType);
+    }
   }
   handleCloseModal = (e) => {
     e.stopPropagation();

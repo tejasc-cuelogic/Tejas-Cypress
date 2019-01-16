@@ -11,13 +11,13 @@ import NumberFormat from 'react-number-format';
 
 export const DropdownFilter = props => (
   <Form.Field className="dropdown-field">
-    <label>{props.name}</label>
+    <label>{props.label || props.name}</label>
     <Dropdown
       name={props.keyName || camelCase(props.name)}
       onChange={props.change}
       className={props.className}
       value={toJS(props.value) || ((props.isMultiple) ? [] : '')}
-      placeholder="Select Filter"
+      placeholder={props.placeHolder || 'Select Filter'}
       fluid
       multiple={props.isMultiple}
       selection
@@ -56,7 +56,7 @@ export const ByKeyword = ({
 export const DateRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
-    <Form.Group widths="equal">
+    <Form.Group widths="equal" className="range">
       <Form.Field>
         <NumberFormat
           type="text"
@@ -80,13 +80,15 @@ export const DateRangeFilter = props => (
 export const AmountRangeFilter = props => (
   <Form.Field>
     <label>{props.label}</label>
-    <Form.Group widths="equal">
+    <Form.Group widths="equal" className="range">
       <Form.Field>
         <NumberFormat
           prefix="$ "
           maxLength="10"
           thousandSeparator
+          placeholder="Min Amount"
           currency
+          onValueChange={values => props.change(values, 'min')}
         />
       </Form.Field>
       <Form.Field>
@@ -94,7 +96,9 @@ export const AmountRangeFilter = props => (
           prefix="$ "
           maxLength="10"
           thousandSeparator
+          placeholder="Max Amount"
           currency
+          onValueChange={values => props.change(values, 'max')}
         />
       </Form.Field>
     </Form.Group>

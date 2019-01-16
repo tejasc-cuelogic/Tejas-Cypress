@@ -1,6 +1,7 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-underscore-dangle */
 import { observable, action, computed, toJS } from 'mobx';
-import { map, forEach, filter, get } from 'lodash';
+import { map, forEach, filter, get, ceil, times } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { Calculator } from 'amortizejs';
@@ -47,7 +48,7 @@ export class BusinessAppReviewStore {
   };
   @observable amortizationArray = [];
   @observable initLoad = [];
-  // @observable amortizationObject;
+  @observable expAnnualRevCount = 4;
 
   @action
   setFieldvalue = (field, value) => {
@@ -109,6 +110,12 @@ export class BusinessAppReviewStore {
     if (arrayName === 'expectedAnnualRevenue') {
       const index = this[formName].fields[arrayName].length;
       this[formName].fields[arrayName][index - 1].label.value = `Year ${index}`;
+    }
+    if (arrayName === 'offer') {
+      this.OFFERS_FRM.fields.offer.map((item, index) => {
+        this.assignAdditionalTermsValue(index);
+        return null;
+      });
     }
   }
 
@@ -241,7 +248,22 @@ export class BusinessAppReviewStore {
       { name: field, value: fieldValue },
     );
   }
-
+  @action
+  assignAdditionalTermsValue = (index) => {
+    this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+      this.OFFERS_FRM.fields.offer[index].additionalTerms.value ? 'Additional Terms Apply' : 'Add Terms';
+  }
+  @action
+  addAdditionalTermsToFormData = (index) => {
+    const { businessApplicationDetailsAdmin } = businessAppStore;
+    if (!businessApplicationDetailsAdmin) {
+      return false;
+    }
+    this.OFFERS_FRM.fields.offer[index].additionalTerms.value =
+    (businessApplicationDetailsAdmin.offers.offer[index] &&
+      businessApplicationDetailsAdmin.offers.offer[index].additionalTerms) || null;
+    return false;
+  }
   @action
   maskChangeWithIndex = (values, form, arrayName = 'data', field, index) => {
     const fieldValue = field === 'expirationDate' || field === 'dateOfIncorporation' || field === 'companyInceptionDate' ? values.formattedValue : values.floatValue;
@@ -249,6 +271,39 @@ export class BusinessAppReviewStore {
       this[form],
       { name: field, value: fieldValue }, arrayName, index,
     );
+    if (field === 'minimumAmount' || field === 'interestRate' || field === 'maturity') {
+      this.showFormAmortisation(index);
+    }
+    if (field === 'maturity') {
+      this.calculateExpAnnualRevCount();
+    }
+  }
+
+  @action
+  calculateExpAnnualRevCount = () => {
+    const maxMaturity = this.getMaxMaturityValue;
+    const MaxMaturityInYears = maxMaturity ? ceil(maxMaturity / 12) : 4;
+    if (this.expAnnualRevCount !== MaxMaturityInYears) {
+      if (this.expAnnualRevCount < MaxMaturityInYears) {
+        times(MaxMaturityInYears - this.expAnnualRevCount, () => this.addExpAnnRev());
+      } else {
+        times(this.expAnnualRevCount - MaxMaturityInYears, () => this.removeExpAnnRev());
+      }
+      this.expAnnualRevCount = MaxMaturityInYears;
+    }
+  }
+
+  @action
+  addExpAnnRev = () => this.addMore('OFFERS_FRM', 'expectedAnnualRevenue');
+
+  @action
+  removeExpAnnRev = () => this.OFFERS_FRM.fields.expectedAnnualRevenue.splice(-1, 1);
+
+  @computed
+  get getMaxMaturityValue() {
+    const maxValue =
+    Math.max(...toJS(this.OFFERS_FRM.fields.offer).map(o => o.maturity.value || 0));
+    return maxValue || 0;
   }
 
   @computed
@@ -328,7 +383,7 @@ export class BusinessAppReviewStore {
   }
 
   @action
-  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true) => {
+  saveReviewForms = (formName, approveOrSubmitted = '', approvedStatus = true, showLoader = true) => {
     const { businessApplicationDetailsAdmin } = businessAppStore;
     const { applicationId, userId, applicationStatus } = businessApplicationDetailsAdmin;
     let formInputData = Validator.evaluateFormData(this[formName].fields);
@@ -373,7 +428,9 @@ export class BusinessAppReviewStore {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
     const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
-    this.setFieldvalue('inProgress', progressButton);
+    if (showLoader) {
+      this.setFieldvalue('inProgress', progressButton);
+    }
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -385,14 +442,13 @@ export class BusinessAppReviewStore {
         .then((result) => {
           this.removeUploadedFiles();
           Helper.toast('Data saved successfully.', 'success');
+          this.setFieldvalue('inProgress', false);
           resolve(result);
         })
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
           reject(error);
-        })
-        .finally(() => {
           this.setFieldvalue('inProgress', false);
         });
     });
@@ -433,12 +489,14 @@ export class BusinessAppReviewStore {
 
   @computed get offerStructure() {
     const offerData = this.fetchBusinessApplicationOffers;
-    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    const offer = offerData && offerData.offers && offerData.offers.offer[this.selectedOfferIndex]
+      ? offerData.offers.offer[this.selectedOfferIndex] : null;
     return offer.structure;
   }
   revenueSharing = () => {
     const offerData = this.fetchBusinessApplicationOffers;
-    const offer = offerData.offers.offer[this.selectedOfferIndex];
+    const offer = offerData && offerData.offers && offerData.offers.offer[this.selectedOfferIndex]
+      ? offerData.offers.offer[this.selectedOfferIndex] : null;
     if (this.offerStructure === 'REVENUE_SHARING_NOTE' && offer.mthRevenueSharing) {
       const { expectedAnnualRevenue } = offerData.offers;
       const result = [];
@@ -481,12 +539,14 @@ export class BusinessAppReviewStore {
       const { schedule, balance } = Calculator.calculate(data);
       const formattedSchedule = [];
       schedule.map((sc, index) => {
+        const previousBalance = index === 0 ? money.floatToAmount(balance.toString()) :
+          money.floatToAmount(schedule[index - 1].remainingBalance);
         const interestAmount = money.floatToAmount(sc.interest.toString());
         const principalAmount = money.floatToAmount(sc.principal.toString());
         const totalMonthlyPayment = money.floatToAmount(money.add(principalAmount, interestAmount));
         formattedSchedule.push({
           index: index + 1,
-          loanAmount: Helper.CurrencyFormat(money.floatToAmount(balance.toString()), 2),
+          loanAmount: Helper.CurrencyFormat(previousBalance, 2),
           monthlyPayment: Helper.CurrencyFormat(totalMonthlyPayment, 2),
           interestAmount: Helper.CurrencyFormat(sc.interest, 2),
           principalAmount: Helper.CurrencyFormat(sc.principal, 2),
@@ -591,7 +651,8 @@ export class BusinessAppReviewStore {
 
   @action
   generatePortalAgreement = () => {
-    this.saveReviewForms('OFFERS_FRM').then(() => {
+    this.setFieldvalue('inProgress', 'GENERATE_PA');
+    this.saveReviewForms('OFFERS_FRM', '', true, false).then(() => {
       const { businessApplicationDetailsAdmin } = businessAppStore;
       const { applicationId, userId } = businessApplicationDetailsAdmin;
       const reFetchPayLoad = {
@@ -644,7 +705,39 @@ export class BusinessAppReviewStore {
     if (form !== 'MANAGERS_FRM') {
       this.checkFormValid(form, multiForm, false);
     }
+    if (form === 'OFFERS_FRM') {
+      if (appData && get(appData, 'offers.offer')) {
+        appData.offers.offer.map((offer, index) => {
+          this.showFormAmortisation(index);
+          this.OFFERS_FRM.fields.offer[index].additionalTermsField.value =
+            offer.additionalTerms ? 'Additional Terms Apply' : 'Add Terms';
+          return null;
+        });
+        if (appData.offers.expectedAnnualRevenue && appData.offers.expectedAnnualRevenue.length) {
+          this.expAnnualRevCount = appData.offers.expectedAnnualRevenue.length;
+        }
+        this.calculateExpAnnualRevCount();
+      }
+    }
     return false;
+  }
+  @action
+  showFormAmortisation = (index) => {
+    const maturity = this.OFFERS_FRM.fields.offer[index].maturity.value || 0;
+    const interestRate = this.OFFERS_FRM.fields.offer[index].interestRate.value || 0;
+    const minimumAmount = this.OFFERS_FRM.fields.offer[index].amount.value || 0;
+    const Formdata = {
+      method: 'mortgage',
+      apr: interestRate,
+      balance: minimumAmount,
+      loanTerm: maturity,
+    };
+    const data = Calculator.calculate(Formdata);
+    const amortizationAmount = data && data.schedule.length ?
+      data.schedule[0].interest + data.schedule[0].principal : 0;
+    const returnedAmount = amortizationAmount * maturity;
+    this.OFFERS_FRM.fields.offer[index].totalCapital.value = ceil(returnedAmount);
+    this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = ceil(amortizationAmount);
   }
 }
 export default new BusinessAppReviewStore();

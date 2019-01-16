@@ -1,21 +1,19 @@
-import { toJS, observable, computed, action } from 'mobx';
-import graphql from 'mobx-apollo';
+import moment from 'moment';
+import { observable, computed, action } from 'mobx';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { allMonthlyStatements, allTaxForms, downloadFile } from '../../queries/statement';
-import { uiStore } from '../../index';
+import { downloadFile, generateMonthlyStatementsPdf } from '../../queries/statement';
+import { uiStore, userDetailsStore, transactionStore } from '../../index';
 
 export class StatementStore {
   @observable data = [];
-
-  @action
-  initRequest = (module) => {
-    const query = (module === 'MonthlyStatements') ? allMonthlyStatements : allTaxForms;
-    this.data = graphql({
-      client,
-      query,
-      variables: { accountId: '435e6230-6243-11e8-9398-89de698b9675' },
-    });
-  }
+  @observable tranStore = [];
+  @observable requestState = {
+    skip: 0,
+    page: 1,
+    perPage: 10,
+    displayTillIndex: 10,
+    search: {},
+  };
 
   @action
   handlePdfDownload = (fileId) => {
@@ -25,8 +23,7 @@ export class StatementStore {
         .mutate({
           mutation: downloadFile,
           variables: {
-            fileId: '77e03730-9a34-11e8-9eb6-529269fb1459',
-            // fileId,
+            fileId,
           },
         })
         .then((result) => {
@@ -44,30 +41,108 @@ export class StatementStore {
     });
   }
 
-  @computed get allData() {
-    return this.data;
+  @action
+  generateMonthlyStatementsPdf = (timeStamp) => {
+    const year = parseFloat(moment(timeStamp, 'MMM YYYY').format('YYYY'));
+    const month = parseFloat(moment(timeStamp, 'MMM YYYY').format('MM'));
+    const account = userDetailsStore.currentActiveAccountDetails;
+    const { userDetails } = userDetailsStore;
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: generateMonthlyStatementsPdf,
+          variables: {
+            year,
+            month,
+            userId: userDetails.id,
+            accountId: account.details.accountId,
+          },
+        })
+        .then((result) => {
+          if (result.data) {
+            const { pdfUrl } = result.data.generateMonthlyStatementsPdf;
+            resolve(pdfUrl);
+          } else {
+            reject();
+          }
+        })
+        .catch((error) => {
+          uiStore.setErrors(error.message);
+          reject(error);
+        });
+    });
   }
 
-  @computed get taxForms() {
-    return (this.allData.data && this.allData.data.investorAccountTaxForms &&
-      toJS(this.allData.data.investorAccountTaxForms)) || [];
+  @computed
+  get allStatements() {
+    const statementObj = {
+      field: 'statementDate',
+      rangeParam: 'month',
+      format: 'MMM YYYY',
+      text: 'Monthly Statements',
+      date: transactionStore.statementDate,
+    };
+    const dateRange = this.getDateRange(statementObj);
+    return dateRange.map(d => (
+      {
+        [statementObj.field]: moment(d).format(statementObj.format),
+        description: statementObj.text,
+        fileId: moment(d).format(statementObj.format),
+      }
+    ));
+  }
+
+  getDateRange = (statementObj) => {
+    const dateStart = moment(statementObj.date);
+    const dateEnd = moment();
+    const timeValues = [];
+    while (dateStart.isBefore(dateEnd) && !dateEnd.isSame(dateStart.format('MM/DD/YYYY'), 'month')) {
+      timeValues.push(dateStart.format('MM/DD/YYYY'));
+      dateStart.add(1, statementObj.rangeParam);
+    }
+    const fifthDateOfMonth = moment().startOf('month').day(6);
+    if (fifthDateOfMonth > dateEnd) {
+      timeValues.pop();
+    }
+    return timeValues.reverse();
+  }
+
+  @action
+  pageRequest = ({ skip, page }) => {
+    const pageWiseCount = this.requestState.perPage * page;
+    this.requestState.displayTillIndex = pageWiseCount;
+    this.requestState.page = page;
+    this.requestState.skip = (skip === pageWiseCount) ?
+      pageWiseCount - this.requestState.perPage : skip;
   }
 
   @computed get monthlyStatements() {
-    return (this.allData.data && this.allData.data.investorAccountStatements &&
-      toJS(this.allData.data.investorAccountStatements)) || [];
+    return (this.allStatements && this.allStatements.length &&
+      this.allStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
-  @computed get error() {
-    return (this.allData && this.allData.error && this.allData.error.message) || null;
+  @computed get taxForms() {
+    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatements && taxStatements.length &&
+      taxStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get loading() {
-    return this.allData.loading;
+    return this.data.loading;
   }
 
-  @computed get count() {
-    return this.kbs.length || 0;
+  @computed get monthlyStatementcount() {
+    return (this.allStatements && this.allStatements.length) || 0;
+  }
+
+  taxFormCount = () => {
+    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatements && taxStatements.length) || 0;
+  }
+
+  taxFormCount = () => {
+    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatements && taxStatements.length) || 0;
   }
 }
 

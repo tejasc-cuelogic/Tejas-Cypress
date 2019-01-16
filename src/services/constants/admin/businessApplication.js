@@ -549,6 +549,21 @@ export const OFFERS = {
         date: 'Date format is invalid.',
       },
     },
+    additionalTermsField: {
+      value: 'Add Terms',
+      label: 'Additional Terms',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+      skipField: true,
+    },
+    additionalTerms: {
+      value: '',
+      label: 'Additional Terms',
+      placeHolder: 'Enter here',
+      error: undefined,
+      rule: 'optional',
+    },
   }],
   term: {
     label: '',
@@ -588,48 +603,7 @@ export const OFFERS = {
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
-    },
-  },
-  {
-    label: {
-      value: 'Year 2',
-      rule: 'optional',
-      error: undefined,
-    },
-    year: {
-      value: null,
-      label: '',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'optional',
-    },
-  },
-  {
-    label: {
-      value: 'Year 3',
-      rule: 'optional',
-      error: undefined,
-    },
-    year: {
-      value: null,
-      label: '',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'optional',
-    },
-  },
-  {
-    label: {
-      value: 'Year 4',
-      rule: 'optional',
-      error: undefined,
-    },
-    year: {
-      value: null,
-      label: '',
-      placeHolder: 'Enter here',
-      error: undefined,
-      rule: 'optional',
+      default: null,
     },
   }],
 };

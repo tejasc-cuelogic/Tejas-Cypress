@@ -22,6 +22,7 @@ export const allUsersQuery = gql`
           }
           mailingAddress {
             city
+            zipCode
           }
         }
         phone {
@@ -86,6 +87,12 @@ export const userDetailsQuery = gql`
               netWorth
               otherContributions
               limit
+            }
+            taxStatements {
+              fileId
+              fileName
+              year
+              formType
             }
             name
             taxId

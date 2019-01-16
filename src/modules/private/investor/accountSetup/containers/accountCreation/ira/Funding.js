@@ -40,7 +40,7 @@ export default class Funding extends Component {
                 FUNDING_FRM.fields.fundingType.value === 1 ?
                   <p className="mt-20 grey-header">
                     You can transfer funds from your current [Traditional/Roth] IRA
-                    to set up your [Traditional/Roth]IRA account at NextSeed.<br /><br />
+                    to set up your [Traditional/Roth] IRA account at NextSeed.<br /><br />
                     Note: With a transfer, funds can only be moved between like-types of IRAs.
                   </p>
                 :

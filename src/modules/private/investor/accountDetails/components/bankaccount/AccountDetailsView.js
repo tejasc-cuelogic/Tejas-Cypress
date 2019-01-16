@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
@@ -51,9 +52,9 @@ export default class AccountDetailsView extends Component {
     }
     return (
       <Card.Content>
-        <Grid columns="equal">
+        <Grid stackable columns="equal">
           <Grid.Row>
-            <Grid.Column verticalAlign="middle">
+            <Grid.Column width={2} verticalAlign="middle">
               <Item>
                 {pladidLogo ?
                   <Item.Image size="tiny" src={`data:image/png;base64,${pladidLogo}`} />
@@ -68,7 +69,7 @@ export default class AccountDetailsView extends Component {
                   <Item.Extra>Number</Item.Extra>
                   <Item.Header>
                     {accountDetails && accountDetails.accountNumber ?
-                      Helper.encryptNumber(accountDetails.accountNumber)
+                      Helper.encryptNumberWithX(accountDetails.accountNumber)
                       : null}
                   </Item.Header>
                 </Item.Content>
@@ -77,10 +78,16 @@ export default class AccountDetailsView extends Component {
             <Grid.Column>
               <Item>
                 <Item.Content>
-                  <Item.Extra>Date linked</Item.Extra>
+                  <Item.Extra>
+                    {accountDetails && pendingAccoungDetails ? 'Date linked' : 'Date Requested'
+                    }
+                  </Item.Extra>
                   <Item.Header>
-                    {accountDetails && accountDetails.dateLinked ?
-                      moment(accountDetails.dateLinked).format('MM/DD/YYYY') : null}
+                  {accountDetails && pendingAccoungDetails && accountDetails.changeRequest &&
+                      accountDetails.changeRequest.dateRequested ?
+                      moment(accountDetails.changeRequest.dateRequested).format('MM/DD/YYYY') :
+                      moment(accountDetails.dateLinked).format('MM/DD/YYYY')
+                    }
                   </Item.Header>
                 </Item.Content>
               </Item>
@@ -101,7 +108,7 @@ export default class AccountDetailsView extends Component {
                 </Item.Content>
               </Item>
             </Grid.Column>
-            <Grid.Column width={5} textAlign="right" verticalAlign="middle">
+            <Grid.Column width={3} textAlign="right" verticalAlign="middle">
               {accountType === 'active' ?
                 accountDetails && !pendingAccoungDetails &&
                 <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />

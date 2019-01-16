@@ -42,7 +42,7 @@ const GeneralInformation = props => (
               content="Enter address of investment location,
               not of owner or entity."
               position="top center"
-              className="center-align"
+              className="left-align"
               wide
             />
           }
@@ -76,6 +76,7 @@ const GeneralInformation = props => (
               name="zipCode"
               fielddata={props.fields.zipCode}
               changed={props.businessAppEleMaskChange}
+              showerror
             />
           </Form.Group>
         </div>

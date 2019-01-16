@@ -62,7 +62,7 @@ export class BusinessAppStore {
   @observable businessApplicationsDataById = null;
   @observable isFetchedData = null;
   @observable removeFileIdsList = [];
-  @observable appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
+  @observable appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: null }, { path: 'performance', status: null }, { path: 'documentation', status: null }];
   @observable isFileUploading = false;
   @observable isPrequalQulify = false;
   @observable userExists = false;
@@ -196,7 +196,7 @@ export class BusinessAppStore {
   }
 
   @computed get stepToRender() {
-    const url = this.appStepsStatus.find(ele => ele.status === 'IN_PROGRESS');
+    const url = this.appStepsStatus.find(ele => (ele.status === null || ele.status === 'IN_PROGRESS'));
     /* eslint-disable no-unneeded-ternary */
     return this.formReadOnlyMode ? { path: 'pre-qualification' } : url ? url : { path: 'documentation' };
   }
@@ -222,8 +222,10 @@ export class BusinessAppStore {
           this.setPerformanceDetails(data.businessPerformance, data.prequalDetails);
           this.setDocumentationDetails(data.businessDocumentation);
         }
-        if ((data.applicationStatus || data.prequalStatus) ===
-          BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) {
+        if (((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED) ||
+          ((data.applicationStatus || data.prequalStatus) ===
+          BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL)) {
           this.formReadOnlyMode = true;
         } else if ((data.applicationStatus || data.prequalStatus) ===
           BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED) {
@@ -567,7 +569,7 @@ export class BusinessAppStore {
   @computed get canSubmitApp() {
     const notOkForms = ['BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
       .filter(form => !this[form].meta.isValid);
-    const isPartial = this.appStepsStatus.filter(step => step.status === 'IN_PROGRESS');
+    const isPartial = this.appStepsStatus.filter(step => (step.status === 'IN_PROGRESS' || step.status === null));
 
     return notOkForms.length === 0 && isPartial.length === 0;
   }
@@ -576,7 +578,7 @@ export class BusinessAppStore {
     const applicationStep = this.applicationStep !== '' ? this.applicationStep : 'documentation';
     const notOkForms = ['BUSINESS_DETAILS_FRM', 'BUSINESS_PERF_FRM', 'BUSINESS_DOC_FRM']
       .filter(form => !this[form].meta.isValid);
-    const isPartial = this.appStepsStatus.filter(step => step.path !== applicationStep && step.status === 'IN_PROGRESS');
+    const isPartial = this.appStepsStatus.filter(step => step.path !== applicationStep && (step.status === 'IN_PROGRESS' || step.status === null));
 
     return (notOkForms.length === 0 && isPartial.length === 0) ? 'Submit' : 'Save';
   }
@@ -696,8 +698,8 @@ export class BusinessAppStore {
           data.personalGuaranteeForm.value,
           this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
         ) : [],
-        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
-        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
+        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value === '' ? null : this.BUSINESS_DOC_FRM.fields.blanketLien.value ? this.BUSINESS_DOC_FRM.fields.blanketLien.value : false,
+        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === '' ? null : this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
       };
     } else {
       inputData = {
@@ -1223,7 +1225,7 @@ export class BusinessAppStore {
     this.BUSINESS_APP_FRM_BASIC = Validator.prepareFormObject(BUSINESS_PRE_QUALIFICATION_BASIC);
     this.BUSINESS_DETAILS_FRM = Validator.prepareFormObject(BUSINESS_DETAILS);
     this.preQualFormDisabled = false;
-    this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: 'IN_PROGRESS' }, { path: 'performance', status: 'IN_PROGRESS' }, { path: 'documentation', status: 'IN_PROGRESS' }];
+    this.appStepsStatus = [{ path: 'pre-qualification', status: 'IN_PROGRESS' }, { path: 'business-details', status: null }, { path: 'performance', status: null }, { path: 'documentation', status: null }];
     this.formReadOnlyMode = false;
     this.isPrequalQulify = false;
   }

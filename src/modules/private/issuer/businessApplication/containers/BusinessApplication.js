@@ -61,31 +61,28 @@ export default class BusinessApplication extends Component {
       this.props.history.push('/app/dashboard');
     });
   }
-
-  // submit = () => {
-  //   this.props.businessAppStore.businessApplicationSubmitAction().then(() => {
-  //     Helper.toast('Business application submitted successfully!', 'success');
-  //     this.props.history.push('/app/dashboard');
-  //   });
-  // }
-  submit = (e) => {
-    e.preventDefault();
+  submitHandler = (isRedirect = true) => {
     const {
-      checkFormisValid, currentApplicationId, applicationStep,
+      // checkFormisValid,
+      currentApplicationId, applicationStep,
       currentApplicationType, businessAppParitalSubmit, businessApplicationSubmitAction,
     } = this.props.businessAppStore;
-    if (checkFormisValid(applicationStep, true)) {
-      businessAppParitalSubmit().then((result) => {
-        if (result && this.props.businessAppStore.canSubmitApp) {
-          businessApplicationSubmitAction().then(() => {
-            Helper.toast('Business application submitted successfully!', 'success');
-            this.props.history.push('/app/dashboard');
-          });
-        } else {
-          this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
-        }
-      });
-    }
+    // if (checkFormisValid(applicationStep, true)) {
+    businessAppParitalSubmit().then((result) => {
+      if (result && this.props.businessAppStore.canSubmitApp) {
+        businessApplicationSubmitAction().then(() => {
+          Helper.toast('Business application submitted successfully!', 'success');
+          this.props.history.push('/app/dashboard');
+        });
+      } else if (isRedirect) {
+        this.props.history.push(`/app/business-application/${currentApplicationType}/${currentApplicationId}/${applicationStep}`);
+      }
+    });
+    // }
+  }
+  submit = (e) => {
+    e.preventDefault();
+    this.submitHandler();
   }
 
   preQualSubmit = (e) => {
@@ -102,6 +99,7 @@ export default class BusinessApplication extends Component {
           });
       });
   }
+  navCustomClick = () => this.submitHandler(false);
 
   checkIncludes = (paths, pathname) => paths.some(val => pathname.includes(val));
 
@@ -121,6 +119,7 @@ export default class BusinessApplication extends Component {
     const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
+        navCustomClick={this.navCustomClick}
         rightLabel={<Menu.Item position="right"><Link to={`${match.url}/need-help`}>Need Help / Have Questions?</Link></Menu.Item>}
         subNav={!showSubNav}
         appStepsStatus={appStepsStatus}

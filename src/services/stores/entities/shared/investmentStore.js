@@ -1,6 +1,7 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
 import graphql from 'mobx-apollo';
+import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
 import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -72,20 +73,23 @@ export class InvestmentStore {
       selectedAccount.details.accountId : null;
   }
   @computed get getCurrCashAvailable() {
-    return (this.cashAvailable && parseFloat(this.cashAvailable.data.getInvestorAvailableCash, 2))
+    return (this.cashAvailable &&
+      this.cashAvailable.data.getInvestorAvailableCash)
       || 0;
   }
   @computed get getTransferRequestAmount() {
-    const transferAmount = this.investmentAmount -
-      (this.getCurrCashAvailable + rewardStore.getCurrCreditAvailable);
+    const transferAmount = money.subtract(
+      this.investmentAmount,
+      money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
+    );
     return transferAmount < 0 ? 0 : transferAmount;
   }
   @computed get getSpendCreditValue() {
     let spendAmount = 0;
     if (this.getCurrCashAvailable < this.investmentAmount) {
-      const lowValue = (this.investmentAmount - this.getCurrCashAvailable);
+      const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
       if (rewardStore.getCurrCreditAvailable < lowValue) {
-        spendAmount = lowValue - rewardStore.getCurrCreditAvailable;
+        spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
       }
     }
     return parseFloat(spendAmount, 2);
@@ -158,7 +162,7 @@ export class InvestmentStore {
 
   @computed get investmentAmount() {
     const val = this.INVESTMONEY_FORM.fields.investmentAmount.value;
-    return parseFloat(val || 0, 2);
+    return money.floatToAmount(val || 0);
   }
 
   @computed get investmentLimitsChecked() {
@@ -449,7 +453,7 @@ export class InvestmentStore {
 
   @action
   updateInvestmentLimits = () => new Promise((resolve) => {
-    const data = mapValues(this.INVESTMENT_LIMITS_FORM, f => parseInt(f.value, 10));
+    const data = mapValues(this.INVESTMENT_LIMITS_FORM.fields, f => parseInt(f.value, 10));
     investmentLimitStore
       .updateInvestmentLimits(data, this.getSelectedAccountTypeId, userDetailsStore.currentUserId)
       .then(() => resolve());
@@ -489,6 +493,18 @@ export class InvestmentStore {
       limit = min([limit, annualInvestmentLimit]);
     }
     return limit;
+  }
+  @action
+  setInvestmentLimitData = () => {
+    const userDetail = userDetailsStore.userDetails;
+    const investments = {
+      netWorth: userDetail.limits.netWorth,
+      annualIncome: userDetail.limits.income,
+      cfInvestments: userDetail.limits.otherContributions,
+    };
+    this.INVESTMENT_LIMITS_FORM = Validator
+      .setFormData(this.INVESTMENT_LIMITS_FORM, investments);
+    this.INVESTMENT_LIMITS_FORM.meta.isValid = true;
   }
 }
 

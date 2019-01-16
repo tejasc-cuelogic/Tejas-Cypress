@@ -199,25 +199,12 @@ export default class KeyTerms extends Component {
                 prefix="$"
               />
             ))}
-            {['offeringExpTarget', 'offeringExpMax', 'stockType'].map(field => (
-              field === 'stockType' ? (
-                <FormInput
-                  displayMode={isReadonly}
-                  name="stockType"
-                  fielddata={KEY_TERMS_FRM.fields.stockType}
-                  changed={(e, result) => formChange(e, result, formName)}
-                />
-              ) : (
-                <MaskedInput
-                  displayMode={isReadonly}
-                  name={field}
-                  fielddata={KEY_TERMS_FRM.fields[field]}
-                  changed={(values, name) => maskChange(values, formName, name)}
-                  currency
-                  prefix="$"
-                />
-              )
-            ))}
+            <FormInput
+              displayMode={isReadonly}
+              name="stockType"
+              fielddata={KEY_TERMS_FRM.fields.stockType}
+              changed={(e, result) => formChange(e, result, formName)}
+            />
           </Form.Group>
           <Form.Group widths={2}>
             {['useOfProceedFootnote', 'currentFinancialStatements'].map(field => (
@@ -227,7 +214,7 @@ export default class KeyTerms extends Component {
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
                 changed={(e, result) => formChange(e, result, formName)}
-                containerclassname="secondary"
+                containerclassname="secondary large"
               />
             ))}
           </Form.Group>

@@ -495,6 +495,7 @@ query _getBusinessApplicationById ($id: String!) {
         multiple
         totalCapital
         isAccepted
+        additionalTerms
       }
       expectedAnnualRevenue {
         label

@@ -8,7 +8,7 @@ import { MobileDropDownNav } from '../../theme/shared';
 
 const iMap = { to: 'key', title: 'text' };
 const NavItems = ({
-  isActive, location, navItems, navClick, match, stepsStatus, addon,
+  isActive, location, navItems, navClick, match, stepsStatus, addon, navCustomClick,
 }) => navItems.map((item, key) => (
   <Aux>
     {(item.subNavigations) ?
@@ -35,9 +35,12 @@ const NavItems = ({
         </Dropdown.Menu>
       </Dropdown>
   ) : (
-    <Menu.Item key={item.to} as={NavLink} to={`${match.url}/${item.to}`}>
+    <Menu.Item key={item.to} onClick={navCustomClick} as={NavLink} to={`${match.url}/${item.to}`}>
       {item.showIcon &&
-        <Icon color={stepsStatus[key].status === 'COMPLETE' ? 'green' : ''} name={stepsStatus[key].status === 'COMPLETE' ? item.icon : 'circle'} />
+        <Icon
+          color={item.icon_color[stepsStatus[key].status]}
+          name={item.icon[stepsStatus[key].status]}
+        />
       }
       {addon && addon.pos === 'left' && addon.data[item.to]}
       {item.title}
@@ -59,7 +62,7 @@ class SecondaryMenu extends Component {
     const {
       navItems, match, location, vertical,
       noinvert, attached, className, stepsStatus, addon, heading,
-      force2ary,
+      force2ary, navCustomClick,
     } = this.props;
     const mobNavItems = map(navItems, i => mapKeys(i, (v, k) => iMap[k] || k));
     return (
@@ -85,6 +88,7 @@ class SecondaryMenu extends Component {
               navClick={this.navClick}
               match={match}
               stepsStatus={stepsStatus}
+              navCustomClick={navCustomClick}
             />
             {this.props.rightLabel}
           </Menu>
