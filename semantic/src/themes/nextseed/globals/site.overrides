@@ -12,7 +12,7 @@ html,body{
 body{
 	color:@neutral-middark;
 }
-.clearfix::after {
+.clearfix::after{
 	content: "";
 	clear: both;
 	display: table;
@@ -290,17 +290,20 @@ footer{
 		display: flex !important;
 		flex-direction: column !important;
 		.footer-left-nav {
-			flex-grow: 0;
+			flex-grow: 1;
 			display: flex;
-			flex-direction: row;
+			flex-direction:column;
 			@media only screen and (max-width : @largestMobileScreen){
 				flex-direction: column; 
 				align-items: center;
 			}
+			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+				justify-content: center;
+			}
 		}
-		.secure {
-			flex-grow: 1;
-		}
+		// .secure {
+		// 	flex-grow: 1;
+		// }
 		.footer-social {
 			flex-grow: 0;
 			@media only screen and (max-width : @largestMobileScreen){
@@ -343,15 +346,15 @@ footer{
 	&.offering-footer {
 		padding: @50px @40px;
 		flex-grow: 0;
-		.footer-left-nav {
-			flex-grow: 1;
-			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
-				justify-content: center;
-			}
-			.ui.vertical.menu .item {
-				line-height: @20px;
-			}
-		}
+		// .footer-left-nav {
+		// 	flex-grow: 1;
+		// 	@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
+		// 		justify-content: center;
+		// 	}
+		// 	.ui.vertical.menu .item {
+		// 		line-height: @20px;
+		// 	}
+		// }
 		.footer-left {
 			.footer-social {
 				@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){

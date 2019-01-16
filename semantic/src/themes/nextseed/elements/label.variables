@@ -218,7 +218,7 @@
 
 /* Circular Padding */
 @circularPadding: 0.5em;
-@circularMinSize: 1em;
+@circularMinSize: 2em;
 @emptyCircleSize: 0.5em;
 
 /* Pointing */
