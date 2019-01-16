@@ -34,7 +34,7 @@ const MessagesList = props => (
                 }}
               />
             }
-            {props.threadUsersList(msg.threadComments).length > 1 ?
+            {props.threadUsersList(msg.threadComments).length > 0 ?
             props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (
               <UserAvatar
                 size="mini"
@@ -58,7 +58,7 @@ const MessagesList = props => (
           }
           </div>
           <List.Content>
-            <List.Header as="h5">{props.threadUsersList(msg.threadComments).length ? `${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')}`}</List.Header>
+            <List.Header as="h5">{props.threadUsersList(msg.threadComments).length === 1 && `${get(msg, 'createdUserInfo.info.firstName')}, `}{props.threadUsersList(msg.threadComments).length ? `${(props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (`${get(u, 'createdUserInfo.info.firstName')}`))).join(', ')} ${props.threadUsersList(msg.threadComments).length > 2 ? '...' : ''}` : `${get(msg, 'createdUserInfo.info.firstName')}`}</List.Header>
           </List.Content>
           <List.Content>
             <List.Header><DateTimeFormat format="ll" datetime={msg.created.date} /></List.Header>
