@@ -28,7 +28,8 @@
         margin-top: @10px;
     }
 }
-.offer-details .ui.progress {
+// .offer-details
+.campaign-details-banner .ui.progress {
     margin-bottom: @15px;
     ~ p.flag-status{
         color: @white;

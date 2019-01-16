@@ -2,63 +2,63 @@
          Theme Overrides
 *******************************/
 //  Public page Starts
-.offer-details {
-	.offering-side-menu .ui.statistics .statistic{
-			>.value, >.label {
-				font-size: @13px !important;
-				color: @white;
-				font-weight: normal;
-				text-transform: none;
-			}
-	}
-	.offering-wrapper .ui.statistic {
-			width: 100%;
-			padding: 0;
-			>.label{
-				color:@neutral;
-				font-size: @13px;
-			}
-			>.value {
-				font-size: @28px !important;
-				color:@neutral-middark;
-				font-weight: @bold;
-				text-transform: none;
-				line-height: 30px;
-				margin-top: @30px;
-				@media only screen and (max-width : @largestSmallMonitor){
-					margin-top: 0;
-				}
-			}
-			&.mini >.value {
-				font-size: @13px !important;
-				color: @neutral;
-				line-height: 18px;
-				font-weight: @normal;
-				margin-top: @8px;
-			}
-	}
-	.offer-stats {
-		padding: @15px;
-		background: @lightTextColor;
-		position: absolute;
-		top:0;
-		left:0;
-		.ui.statistics {
+// .offer-details {
+// 	.offering-side-menu .ui.statistics .statistic{
+// 			>.value, >.label {
+// 				font-size: @13px !important;
+// 				color: @white;
+// 				font-weight: normal;
+// 				text-transform: none;
+// 			}
+// 	}
+// 	.offering-wrapper .ui.statistic {
+// 		width: 100%;
+// 		padding: 0;
+// 		>.label{
+// 			color:@neutral;
+// 			font-size: @13px;
+// 		}
+// 		>.value {
+// 			font-size: @28px !important;
+// 			color:@neutral-middark;
+// 			font-weight: @bold;
+// 			text-transform: none;
+// 			line-height: 30px;
+// 			margin-top: @30px;
+// 			@media only screen and (max-width : @largestSmallMonitor){
+// 				margin-top: 0;
+// 			}
+// 		}
+// 		&.mini >.value {
+// 			font-size: @13px !important;
+// 			color: @neutral;
+// 			line-height: 18px;
+// 			font-weight: @normal;
+// 			margin-top: @8px;
+// 		}
+// 	}
+// }
+.campaign-details-banner .offer-stats {
+	padding: @15px;
+	background: @lightTextColor;
+	position: absolute;
+	top:0;
+	left:0;
+	.ui.statistics {
+		margin: 0;
+		.statistic {
+			padding: 0 @15px;
 			margin: 0;
-			.statistic {
-				padding: 0 @15px;
-				margin: 0;
-				>.value {
-					font-size: @20px !important;
+			>.value {
+				font-size: @20px !important;
+				color: @white;
+				~.label {
+					font-size: @15px;
 					color: @white;
-					~.label {
-						font-size: @15px;
-						color: @white;
-					}
 				}
-				+.statistic {
-					margin: 0;
-				}
+			}
+			+.statistic {
+				margin: 0;
 			}
 		}
 	}

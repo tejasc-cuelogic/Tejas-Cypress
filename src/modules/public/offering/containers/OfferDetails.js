@@ -4,7 +4,7 @@ import { get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Button, Statistic } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Button, Statistic, Visibility, List } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav, Image64 } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
@@ -25,7 +25,7 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('campaignStore', 'userStore')
+@inject('campaignStore', 'userStore', 'navStore')
 @observer
 class offerDetails extends Component {
   state = {
@@ -61,8 +61,11 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
+  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   render() {
-    const { match, campaignStore, location } = this.props;
+    const {
+      match, campaignStore, location, navStore,
+    } = this.props;
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     const {
       details, campaignSideBarShow, campaign, navCountData,
@@ -90,8 +93,9 @@ class offerDetails extends Component {
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;
     }
+    const { navStatus, subNavStatus } = navStore;
     return (
-      <div className="offer-details">
+      <Aux>
         {campaign &&
           <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
@@ -224,48 +228,72 @@ class offerDetails extends Component {
         <Responsive minWidth={768} as={Aux}>
           <CampaignSideBar navItems={navItems} />
         </Responsive> */}
-        <Responsive maxWidth={767} as={Aux}>
-          <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
-          <MobileDropDownNav
-            inverted
-            refMatch={match}
-            navCountData={navCountData}
-            navItems={navItems}
-            location={location}
-          />
-        </Responsive>
-        <Container>
-          <section>
-            <Grid>
-              <Grid.Column width={4}>
-                <CampaignSideBar navItems={navItems} />
-              </Grid.Column>
-              <Grid.Column width={12}>
-                <Switch>
-                  <Route exact path={match.url} component={getModule(navItems[0].component)} />
-                  {
-                    navItems.map((item) => {
-                      const CurrentComponent = getModule(item.component);
-                      return (
-                        <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
-                      );
-                    })
-                  }
-                  <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
-                  <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
-                  <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
-                  <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
-                  <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
-                  <Route component={NotFound} />
-                </Switch>
-              </Grid.Column>
-            </Grid>
-          </section>
-        </Container>
+        <div className={`slide-down ${location.pathname.split('/')[2]}`}>
+          <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
+            <div
+              className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
+            >
+              <Container>
+                <List bulleted floated="right" horizontal>
+                  <List.Item>134 Investors</List.Item>
+                  <List.Item>8 Hours left</List.Item>
+                  <Button primary compact content="Invest Now" />
+                </List>
+                <List bulleted horizontal>
+                  <List.Item>
+                    <List.Header>Carmelo’s Cucina Italiana</List.Header>
+                  </List.Item>
+                  <List.Item>
+                    <List.Header><span className="highlight-text">$100,000</span> raised</List.Header>
+                  </List.Item>
+                  <List.Item>1.4–1.5x Investment Multiple</List.Item>
+                </List>
+              </Container>
+            </div>
+          </Visibility>
+          <Responsive maxWidth={767} as={Aux}>
+            <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
+            <MobileDropDownNav
+              inverted
+              refMatch={match}
+              navCountData={navCountData}
+              navItems={navItems}
+              location={location}
+            />
+          </Responsive>
+          <Container>
+            <section>
+              <Grid>
+                <Grid.Column width={4}>
+                  <CampaignSideBar navItems={navItems} />
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  <Switch>
+                    <Route exact path={match.url} component={getModule(navItems[0].component)} />
+                    {
+                      navItems.map((item) => {
+                        const CurrentComponent = getModule(item.component);
+                        return (
+                          <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+                        );
+                      })
+                    }
+                    <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
+                    <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
+                    <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
+                    <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                    <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </Grid.Column>
+              </Grid>
+            </section>
+          </Container>
+        </div>
         <Responsive minWidth={768} as={Aux}>
           <Footer path={location.pathname} campaign={campaign} />
         </Responsive>
-      </div>
+      </Aux>
     );
   }
 }
