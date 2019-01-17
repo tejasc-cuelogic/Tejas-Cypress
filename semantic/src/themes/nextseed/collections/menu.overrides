@@ -55,13 +55,15 @@
                     color:@primary-one;
                 }
             }
+            &.active.animate{
+                background:@neutral;
+            }
         }
         &.slide-up {
             top: -100px;
         }
         &.active.animate{
             top:-58px;
-            background:@neutral;
             &.reverse{
                 top:0;
             }

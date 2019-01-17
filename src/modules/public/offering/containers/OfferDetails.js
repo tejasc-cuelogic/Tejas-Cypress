@@ -230,9 +230,7 @@ class offerDetails extends Component {
         </Responsive> */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
-            <div
-              className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}
-            >
+            <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
               <Container>
                 <List bulleted floated="right" horizontal>
                   <List.Item>134 Investors</List.Item>
@@ -250,6 +248,7 @@ class offerDetails extends Component {
                 </List>
               </Container>
             </div>
+            <div className="animate-placeholder" />
           </Visibility>
           <Responsive maxWidth={767} as={Aux}>
             <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
