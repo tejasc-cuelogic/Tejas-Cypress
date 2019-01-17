@@ -319,12 +319,13 @@ footer{
             border-color: @primary-one;
             color: @primary-one;
         }
-        >i.icon {
-            float: left;
-            margin-left: 0;
-            margin-right: @14px;
-            font-size: @20px;
-            line-height: 20px;
+        >i.icon.dropdown{
+            display:none;
+            // float: left;
+            // margin-left: 0;
+            // margin-right: @14px;
+            // font-size: @20px;
+            // line-height: 20px;
         }
         >.label.circular {
             float: none;
@@ -333,8 +334,40 @@ footer{
             margin:0 0 0 @10px;
             line-height:10px;
         }
-        &.secondary-item {
-            color: @neutral-middark;
+        &.dropdown .menu{
+            position:relative;
+            top:100%;
+            left:0;
+            border:none;
+            box-shadow:none;
+        }
+    }
+    .ui.dropdown{
+        >.text{
+            display:block;
+        }
+        .menu>.item{
+            font-size:@14px !important;
+            line-height:1;
+            &:last-child{
+                margin:0;
+            }
+            &:after{
+                content:"";
+                width:3px;
+                height:14px;
+                background-color:transparent;
+                position:absolute;
+                left:0;
+                top:50%;
+                transform:translate(0, -50%);
+            }
+            &.active, &:hover, &:focus{
+                background-color:transparent !important;
+                &:after{
+                    background-color:@primary-one;
+                }
+            }
         }
     }
 }

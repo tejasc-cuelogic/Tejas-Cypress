@@ -432,13 +432,13 @@ export const PUBLIC_NAV = [
     subNavigations: [
       {
         title: 'Overview',
-        to: 'overview',
+        to: '',
         component: 'Overview',
         subPanel: 1,
         clickable: true,
         subNavigations: [
           {
-            title: 'Top Things to Know', to: '#about', component: '', noSlash: true,
+            title: 'Top Things to Know', to: '#top-things-to-know', component: '', noSlash: true,
           },
           {
             title: 'Investment Highlights', to: '#investment-highlights', component: '', noSlash: true,
