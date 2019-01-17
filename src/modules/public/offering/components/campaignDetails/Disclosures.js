@@ -51,7 +51,7 @@ export default class TermsOfUse extends Component {
           <Grid>
             {!isMobile &&
               <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
-                <div className="sticy-sidebar">
+                <div className="sticky-sidebar">
                   <SecondaryMenu
                     secondary
                     vertical

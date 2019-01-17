@@ -340,6 +340,12 @@
     .ui.vertical.buttons{
         display:flex;
     }
+    &.key-terms-table:not(.striped) {
+        color: @neutral-middark;
+        tr:last-child td{
+            border-bottom: 1px solid @neutral-darkwhite;
+        }
+    }
 }
 
 .compare-table {

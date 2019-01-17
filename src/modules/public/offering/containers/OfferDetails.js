@@ -229,13 +229,13 @@ class offerDetails extends Component {
           <CampaignSideBar navItems={navItems} />
         </Responsive> */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
-          <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous>
+          <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
             <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
               <Container>
                 <List bulleted floated="right" horizontal>
                   <List.Item>134 Investors</List.Item>
                   <List.Item>8 Hours left</List.Item>
-                  <Button primary compact content="Invest Now" />
+                  <Button secondary compact content="Invest Now" />
                 </List>
                 <List bulleted horizontal>
                   <List.Item>
@@ -248,7 +248,6 @@ class offerDetails extends Component {
                 </List>
               </Container>
             </div>
-            <div className="animate-placeholder" />
           </Visibility>
           <Responsive maxWidth={767} as={Aux}>
             <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />

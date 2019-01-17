@@ -1,138 +1,215 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import Parser from 'html-react-parser';
-import { Header, Segment, Statistic, Grid, Popup, Icon } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import Aux from 'react-aux';
+import { Header, Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 
-const isTabletLand = document.documentElement.clientWidth >= 992
-  && document.documentElement.clientWidth < 1200;
 class RevenueSharingDetails extends Component {
   render() {
-    const { KeyTerms, refLink } = this.props;
+    const { KeyTerms, launch, campaign } = this.props;
+    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
+    const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
+    const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
+    const edgarLink = launch && launch.edgarLink;
     const revenueShareSummary =
       (KeyTerms && KeyTerms.revShareSummary) || null;
-    const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
-    const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
+    // const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a
+    // ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
-      <Grid.Row>
-        <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16}>
-          <Segment padded>
-            <Header as="h4">
-              <Link to={`${refLink}/investment-details/summary`}>
-                Revenue Sharing Summary*
-                <Icon className="ns-chevron-right" color="green" />
-              </Link>
-            </Header>
-            <p>
-              {revenueShareSummary ?
-                <p className="detail-section">
-                  {Parser(revenueShareSummary)}
+      <Aux>
+        <Header as="h3" className="mb-30">Key Terms</Header>
+        <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
+          <Grid.Column>
+            <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA' }</p>
+          </Grid.Column>
+          <Grid.Column>
+            <p><b>Regulation</b><br />{KeyTerms && KeyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
+          </Grid.Column>
+          <Grid.Column>
+            <p><b>Security</b><br />{KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
+          </Grid.Column>
+        </Grid>
+        <Divider />
+        <Table basic="very" className="key-terms-table">
+          <Table.Body>
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Offering Min{' '}</b>
+                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {KeyTerms && KeyTerms.minOfferingAmount ?
+                    Helper.CurrencyFormat(KeyTerms.minOfferingAmount)
+                    :
+                    'NA'}
                 </p>
-                : <InlineLoader text="No data available" />
-              }
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Offering Max{' '}</b>
+                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {KeyTerms && KeyTerms.maxOfferingAmount ?
+                    Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)
+                    :
+                    'NA'}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Min Individual Investment{' '}</b>
+                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {KeyTerms && KeyTerms.minInvestAmt ?
+                    Helper.CurrencyFormat(KeyTerms.minInvestAmt)
+                    :
+                    'NA'}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Investment Multiple{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultiple === 'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                  position="bottom center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.investmentMultiple ?
+                      `${KeyTerms.investmentMultiple}` : 'NA'}
+                  </b>
+                </p>
+                <p>
+                  {Parser(KeyTerms && KeyTerms.investmentMultipleSummary ?
+                    KeyTerms.investmentMultipleSummary
+                    :
+                    '')}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell><b>Revenue Sharing Percentage</b></Table.Cell>
+              <Table.Cell>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.revSharePercentage ?
+                      `${KeyTerms.revSharePercentage}` : 'NA'}
+                  </b>
+                </p>
+                <p>
+                  {Parser(KeyTerms && KeyTerms.revShareSummary ?
+                    KeyTerms.revShareSummary
+                    :
+                    '')}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Maturity{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                  position="bottom center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {KeyTerms && KeyTerms.maturity ?
+                  <p>
+                    <b>{KeyTerms.maturity} Months</b>
+                    {
+                      KeyTerms && KeyTerms.startupPeriod &&
+                      ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
+                    }
+                  </p>
+                  :
+                  'NA'
+                }
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top" >
+              <Table.Cell width={5} className="neutral-text"><b>Payments{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
+                  position="bottom center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.frequencyOfPayments ?
+                      `${KeyTerms.frequencyOfPayments}` : 'NA'}
+                  </b>
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Security Interest{' '}</b>
+                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  <b>
+                    {KeyTerms && KeyTerms.securityInterest ?
+                      `${KeyTerms.securityInterest}` : 'NA'}
+                  </b>
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text">
+                <b>Ownership % Represented by Securities</b>
+              </Table.Cell>
+              <Table.Cell>
+                {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
+                  <p>
+                    <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
+                    Investors will not receive any equity interests in the Issuer or
+                    any voting or management rights with respect to the Issuer as a result of
+                    an investment in Securities.
+                  </p>
+                  :
+                  'NA'
+                }
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
+              <Table.Cell colSpan={2} className="center-align">
+                <a href={edgarLink} target="blank" className="highlight-text">
+                  View the Issuer&apos;s SEC Form C filing
+                </a>
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+        <Divider section hidden />
+        <Header as="h3" className="mb-30">Revenue Sharing Summary*</Header>
+        <p>
+          {revenueShareSummary ?
+            <p className="detail-section">
+              {Parser(revenueShareSummary)}
             </p>
-            <p className="note">
-              * For illustration only. See expanded Payment Calculator view to read more
-              regarding actual performance variables.
-            </p>
-          </Segment>
-        </Grid.Column>
-        <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
-          <Segment padded className="clearfix">
-            <Header as="h4">
-              <Link to={`${this.props.match.url}/keyterms`}>
-                Key Terms
-                <Icon className="ns-chevron-right" color="green" />
-              </Link>
-            </Header>
-            <Grid columns={3} doubling divided className="vertical-gutter">
-              <Grid.Column>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Investment Type</b>{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="Lorem Ipsum"
-                      position="top center"
-                    />
-                  </Statistic.Label>
-                  <Statistic.Value>
-                    {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : '-'}
-                  </Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Multiple</b>{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="Lorem Ipsum"
-                      position="top center"
-                    />
-                  </Statistic.Label>
-                  <Statistic.Value>{KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : '-'}</Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Maturity</b>{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                      position="top center"
-                    />
-                  </Statistic.Label>
-                  <Statistic.Value>
-                    {maturityMonth ?
-                      `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
-                      :
-                      '-'}
-                  </Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Min Investment</b>{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="The required minimum investment per investor in this offering."
-                      position="top center"
-                      hoverable
-                    />
-                  </Statistic.Label>
-                  <Statistic.Value>{KeyTerms && KeyTerms.minInvestAmt ? Helper.CurrencyFormat(KeyTerms.minInvestAmt) : '-'}</Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Payments</b>{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
-                      position="top center"
-                    />
-                  </Statistic.Label>
-                  <Statistic.Value>{KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments : '-'}</Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-              <Grid.Column>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Label><b>Ownership</b>{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="Equity interest in the Issuer or voting or management rights with respect to the Issuer as a result of an investment in Securities. "
-                      position="top center"
-                    />
-                  </Statistic.Label>
-                  <Statistic.Value>{KeyTerms && KeyTerms.securitiesOwnershipPercentage ? `${KeyTerms.securitiesOwnershipPercentage}%` : '-'}</Statistic.Value>
-                </Statistic>
-              </Grid.Column>
-            </Grid>
-            <Link to={`${refLink}/overview/keyterms`} className="right-align mt-10">View More</Link>
-          </Segment>
-        </Grid.Column>
-      </Grid.Row>
+            :
+            <section className="bg-offwhite">
+              <InlineLoader text="No data available" />
+            </section>
+          }
+        </p>
+        <p className="note">
+          * For illustration only. See expanded Payment Calculator view to read more
+          regarding actual performance variables.
+        </p>
+      </Aux>
     );
   }
 }
