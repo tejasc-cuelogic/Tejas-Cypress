@@ -190,6 +190,21 @@
         }
     }
 }
+.campaign-secondary-header .menu-secondary-fixed{
+    width:100%;
+    position:fixed;
+    top:-58px;
+    background-color:@white;
+    &.active{
+        top:58px;
+        &.animate{
+            top:0;
+            &.reverse{
+                top:58px;
+            }
+        }
+    }
+}
 .footer-head{
     .ui.menu{
         &.inverted{
