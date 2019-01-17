@@ -55,7 +55,7 @@ class Comments extends Component {
         {comments && comments.length ?
           <Grid stackable reversed="computer">
             <Grid.Column computer={6} tablet={16} mobile={16}>
-              <div className="sticy-sidebar comment-sidebar">
+              <div className="sticky-sidebar comment-sidebar">
                 <Segment padded>
                   <p>
                     Note that both NextSeed and issuers are notified of all comments immediately,

@@ -1344,7 +1344,7 @@ a.icon-link {
 	@media only screen and (max-width : @largestMobileScreen){
 		padding:@20px @10px;
 	}
-	.sticy-sidebar{
+	.sticky-sidebar{
 		top:30px;
 	}
 	.sticky-actions{
@@ -1354,11 +1354,14 @@ a.icon-link {
 .business-application .content-spacer{
 	padding:@50px 0px;
 }
-.sticy-sidebar{
+.sticky-sidebar{
 	position:sticky;
 	top:0;
 	&.legal-sidebar, &.comment-sidebar {
 		top: 108px;
+	}
+	&.offering-side-menu{
+		top:116px;
 	}
 }
 .sticky-actions{

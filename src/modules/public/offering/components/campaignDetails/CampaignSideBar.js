@@ -39,7 +39,7 @@ export default class CampaignSideBar extends Component {
     // const flagStatus = collected >= minOffering;
     return (
       <Aux>
-        <div className={`${className} offering-side-menu`}>
+        <div className={`${className} offering-side-menu sticky-sidebar`}>
           {/* <div className="offering-intro center-align">
              {isMobile &&
               <Embed
