@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch, Link, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Button, Statistic, Visibility, List } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -17,6 +17,7 @@ import NotFound from '../../../shared/NotFound';
 import Footer from './../../../../theme/layout/Footer';
 import { DataFormatter } from '../../../../helper';
 import OfferingMetaTags from '../components/OfferingMetaTags';
+import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -26,6 +27,7 @@ const getModule = component => Loadable({
 });
 
 @inject('campaignStore', 'userStore', 'navStore')
+@withRouter
 @observer
 class offerDetails extends Component {
   state = {
@@ -62,6 +64,10 @@ class offerDetails extends Component {
     }
   }
   handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
+  handleViewGallery = (e) => {
+    e.preventDefault();
+    this.props.history.push(`${this.props.match.url}/photogallery`);
+  }
   render() {
     const {
       match, campaignStore, location, navStore,
@@ -164,9 +170,9 @@ class offerDetails extends Component {
                       <Icon color="white" name="facebook" />
                     </a>
                   </div>
-                  <a href="/" target="_blank" rel="noopener noreferrer" className="pull-right">
+                  <Link to={this.props.match.url} onClick={this.handleViewGallery} className="pull-right">
                     View gallery <Icon size="small" className="ns-chevron-right" />
-                  </a>
+                  </Link>
                 </div>
               </Grid.Column>
               <Grid.Column width={6}>
@@ -202,7 +208,7 @@ class offerDetails extends Component {
                     <Icon name="flag" /> Surpassed minimum goal
                   </p>
                 }
-                <p className="raise-type">
+                <p className="raise-type mt-30">
                   <b>Revenue Sharing Note</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
@@ -281,6 +287,7 @@ class offerDetails extends Component {
                     <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
                     <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
                     <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
+                    <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                     <Route component={NotFound} />
                   </Switch>
                 </Grid.Column>
