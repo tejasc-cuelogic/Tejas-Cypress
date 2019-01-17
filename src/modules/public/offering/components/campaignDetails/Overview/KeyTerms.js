@@ -24,7 +24,7 @@ class KeyTerms extends Component {
     return (
       <Aux>
         <Header as="h3" className="mb-30">Investment Highlights</Header>
-        <Table basic="very">
+        <Table basic="very" className="key-terms-table">
           <Table.Body>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Raise</b>{' '}
