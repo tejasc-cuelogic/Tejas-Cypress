@@ -29,7 +29,8 @@ export class NavItems extends Component {
       ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
-  doNothing = (path = false) => {
+  doNothing = (e, path = false) => {
+    e.stopPropagation();
     if (path) {
       this.props.history.push(path);
     } else {
@@ -53,7 +54,7 @@ export class NavItems extends Component {
             `}
             name={item.to}
             disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : () => this.doNothing(item.clickable ? item.to : false)}
+            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : e => this.doNothing(e, item.clickable ? item.to : false)}
             text={
               <Aux>
                 {item.icon &&
