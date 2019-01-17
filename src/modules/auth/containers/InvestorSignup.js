@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
-import { Modal, Button, Header, Icon, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Icon, Form, Message } from 'semantic-ui-react';
 import { FormInput, FormPasswordStrength } from '../../../theme/form';
 import { ListErrors } from '../../../theme/shared';
 
@@ -68,10 +68,10 @@ class InvestorSignup extends Component {
           <Link to="/auth/register" className="back-link"><Icon className="ns-arrow-left" /></Link>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form>
+          {/* <Form>
             <Button fluid color="facebook" size="large" content="Sign up with Facebook" />
           </Form>
-          <Divider horizontal section>or</Divider>
+          <Divider horizontal section>or</Divider> */}
           <Form error onSubmit={this.handleSubmitForm}>
             <Form.Group widths="equal">
               {
