@@ -32,26 +32,27 @@ const legalDocsMeta = [
 export default class LegalDocuments extends Component {
   componentWillMount() {
     const {
-      setLoading, getLegalDocsFileIds, setFileIdsData, legalDocsList,
+      getLegalDocsFileIds, setFileIdsData, legalDocsList,
     } = this.props.agreementsStore;
     if (!legalDocsList.length) {
-      setLoading(true);
       getLegalDocsFileIds().then((res) => {
-        setLoading(false);
         setFileIdsData(legalDocsMeta, res.getLegalDocsFileIds);
       });
     }
   }
+  componentWillUnmount() {
+    this.props.agreementsStore.setField('alreadySet', false);
+  }
   getBoxUrl = (boxId) => {
-    this.props.agreementsStore.setLoading(true);
+    this.props.agreementsStore.setField('docLoading', true);
     this.props.agreementsStore.getBoxLink(boxId).then((res) => {
-      this.props.agreementsStore.setLoading(false);
+      this.props.agreementsStore.setField('docLoading', false);
       window.open(res.data.getBoxEmbedLink, '_blank');
     });
   }
   render() {
-    const { legalDocsList, docLoading } = this.props.agreementsStore;
-    if (docLoading) {
+    const { legalDocsList, docLoading, docIdsLoading } = this.props.agreementsStore;
+    if (docLoading || docIdsLoading) {
       return <InlineLoader />;
     }
     return (
