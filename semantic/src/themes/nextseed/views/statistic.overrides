@@ -40,7 +40,7 @@
 // }
 .campaign-details-banner .offer-stats {
 	padding: @15px;
-	background: @lightTextColor;
+	background: @mutedTextColor;
 	position: absolute;
 	top:0;
 	left:0;
