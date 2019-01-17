@@ -435,6 +435,7 @@ export const PUBLIC_NAV = [
         to: 'overview',
         component: 'Overview',
         subPanel: 1,
+        clickable: true,
         subNavigations: [
           {
             title: 'Top Things to Know', to: '#about', component: '', noSlash: true,
