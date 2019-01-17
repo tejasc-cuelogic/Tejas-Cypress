@@ -31,9 +31,9 @@
     }
     &.reward-block {
         .ui.header{
-            .ui.label {
-                margin: @5px 0 0;
-            }
+            color: @neutral-middark;
+            font-weight: @bold;
+            margin-bottom: 0;
             >img {
                 width: 50px;
             }

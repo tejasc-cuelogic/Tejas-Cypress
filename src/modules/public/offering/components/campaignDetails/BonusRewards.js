@@ -3,8 +3,8 @@ import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
 import Parser from 'html-react-parser';
-import { Header, Grid, Segment, Label, Image } from 'semantic-ui-react';
-import { ASSETS_URL } from '../../../../../constants/aws';
+import { Header, Grid, Segment, Label } from 'semantic-ui-react';
+// import { ASSETS_URL } from '../../../../../constants/aws';
 import { InlineLoader } from '../../../../../theme/shared';
 import BonusRewardsList from './BonusRewardsList';
 import Helper from '../../../../../helper/utility';
@@ -29,25 +29,18 @@ class BonusRewards extends Component {
       campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
+        <Header as="h3" className="mb-30">Bonus Rewards</Header>
         {rewardsTiers && rewardsTiers.length ?
           <div>
-            <Grid stackable>
-              <Grid.Column>
-                <Header as="h3">Bonus Rewards</Header>
-              </Grid.Column>
-            </Grid>
             {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&
             bonusRewards ?
-              <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 3}>
+              <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
                 {earlyBird && earlyBird.quantity &&
                 <Grid.Column>
                   <Segment padded className="reward-block">
                     <Aux>
-                      <Header as="h6">Early Bird Reward
-                        <Image src={`${ASSETS_URL}images/illustration.png`} floated="right" />
-                        <Header.Subheader>
-                          <Label size="small" color="green" className="text-uppercase">{earlyBirdsCount} remaining</Label>
-                        </Header.Subheader>
+                      <Header textAlign="left" as="h6" className="text-uppercase mb-40">Early Bird Reward
+                        <Label size="small" color="green" className="text-uppercase pull-right">{earlyBirdsCount} remaining</Label>
                       </Header>
                       <Header as="h5" className="intro-text">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
                     </Aux>
@@ -63,7 +56,7 @@ class BonusRewards extends Component {
                   <Grid.Column>
                     <Segment padded className="reward-block">
                       <Aux>
-                        <Header as="h6">Invest</Header>
+                        <Header as="h6" className="text-uppercase">Invest</Header>
                         <Header as="h3" className="highlight-text">${tier}+</Header>
                       </Aux>
                       <BonusRewardsList bonusRewards={bonusRewards} tier={tier} />
@@ -73,14 +66,12 @@ class BonusRewards extends Component {
               </Grid> : <InlineLoader text="No bonus rewards are available." />
             }
             {offeringMISC &&
-              <Grid stackable>
+              <Grid stackable celled="internally">
                 <Grid.Column>
                   <Segment padded>
-                    <Grid columns={isTablet || isTabletLand ? 2 : 4} className="vertical-gutter" stackable divided>
+                    <Grid columns={2} className="vertical-gutter" stackable divided>
                       <Grid.Column>
-                        <p className="detail-section">
-                          {Parser(offeringMISC)}
-                        </p>
+                        {Parser(offeringMISC)}
                       </Grid.Column>
                     </Grid>
                   </Segment>
@@ -89,11 +80,9 @@ class BonusRewards extends Component {
             }
           </div>
           :
-          <div className="updates-modal">
-            <div className="no-updates">
-              <InlineLoader text="No Bonus Rewards for this campaign." />
-            </div>
-          </div>
+          <section className="bg-offwhite">
+            <InlineLoader text="No Bonus Rewards" />
+          </section>
         }
       </div>
     );
