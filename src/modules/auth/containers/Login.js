@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
 import { inject, observer } from 'mobx-react';
-import { Modal, Button, Header, Form, Divider, Message } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
 import { authActions } from '../../../services/actions';
 import { ListErrors } from '../../../theme/shared';
@@ -73,12 +73,12 @@ class Login extends Component {
           <Header as="h3">Log in to NextSeed</Header>
         </Modal.Header>
         <Modal.Content className="signup-content">
-          <Form>
+          {/* <Form>
             <Button color="facebook" size="large" fluid>
               Log in with Facebook
             </Button>
           </Form>
-          <Divider horizontal section>or</Divider>
+          <Divider horizontal section>or</Divider> */}
           <Form error onSubmit={this.handleSubmitForm}>
             {
               Object.keys(LOGIN_FRM.fields).map(field => (
