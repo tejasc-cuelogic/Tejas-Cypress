@@ -66,15 +66,9 @@ class BonusRewards extends Component {
               </Grid> : <InlineLoader text="No bonus rewards are available." />
             }
             {offeringMISC &&
-              <Grid stackable celled="internally">
+              <Grid columns={2} celled stackable divided>
                 <Grid.Column>
-                  <Segment padded>
-                    <Grid columns={2} className="vertical-gutter" stackable divided>
-                      <Grid.Column>
-                        {Parser(offeringMISC)}
-                      </Grid.Column>
-                    </Grid>
-                  </Segment>
+                  {Parser(offeringMISC)}
                 </Grid.Column>
               </Grid>
             }

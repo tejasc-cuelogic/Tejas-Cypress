@@ -79,6 +79,9 @@
         }      
     }
 }
+.ui.segment.offering-comment {
+    padding: 0;
+}
 .press-news {
 	.ui.segment {
 		padding: 0;
