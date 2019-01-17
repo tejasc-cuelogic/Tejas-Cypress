@@ -1,10 +1,14 @@
 import TAFFY from 'taffy';
-import { uniqWith, isEqual, isArray } from 'lodash';
+import { uniqWith, isEqual, isArray, map } from 'lodash';
 
 class ClientDb {
   database = null;
-  initiateDb = (data, isUniqWith = false) => {
-    this.database = TAFFY(isUniqWith ? uniqWith(data, isEqual) : data);
+  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId') => {
+    let updatedData = data;
+    if (isReplaceId) {
+      updatedData = map(data, e => ({ [idReplaceKey]: e.id, ...e }));
+    }
+    this.database = TAFFY(isUniqWith ? uniqWith(updatedData, isEqual) : updatedData);
     return this.getDatabase();
   };
 

@@ -8,35 +8,21 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @observer
 export default class AgreementsPdfLoader extends Component {
   componentWillMount() {
-    const { getNavItems, getBoxEmbedLink } = this.props.agreementsStore;
+    const {
+      getLegalDocsFileIds, alreadySet,
+      getNavItems, getBoxEmbedLink,
+    } = this.props.agreementsStore;
     const { agreementKey } = this.props.match.params;
-    const doc = agreementKey ? getNavItems.find(ele => ele.to === agreementKey) :
+    const doc = agreementKey ? getNavItems.find(ele => ele.to.toString() === agreementKey) :
       getNavItems[0];
-    getBoxEmbedLink(doc.to, doc.url);
+    if (!alreadySet) {
+      getLegalDocsFileIds().then(() => {
+        getBoxEmbedLink(doc.to, doc.id);
+      });
+    } else {
+      getBoxEmbedLink(doc.to, doc.id);
+    }
   }
-  componentDidMount() {
-    const iframe = this.iframeComponent;
-    // iframe.onload = () => {
-    //   // iframe.contentWindow.postMessage('message', '*');
-    //   const docuele = iframe.contentWindow.document;
-    //   const headerCls = docuele.body.querySelector('#root');
-    //   headerCls.addEventListener('click', this.handleFrameTasks);
-    // };
-    console.log('ref iframe==>', iframe);
-  }
-  // componentWillUnmount() {
-  //   const iframe = this.iframeComponent;
-  //   iframe.removeEventListener('message', this.handleFrameTasks);
-  // }
-  onLoad = () => { console.log('Iframe loaded'); }
-  getPdfUrl = param => this.props.agreementsStore.getNavItems.find(ele => ele.to === param).url;
-  // handleFrameTasks = (e) => {
-  //   // console.log('Frame content==>', e.data.from.iframe);
-  //   if (e.target.innerText === 'EXPLORE CAMPAIGNS') {
-  //     console.log('Frame content Click occurs==>', e.target.innerText);
-  //   }
-  // }
-  getPdfUrl = param => this.props.agreementsStore.getNavItems.find(ele => ele.to === param);
   render() {
     const { embedUrl, docLoading } = this.props.agreementsStore;
     return (

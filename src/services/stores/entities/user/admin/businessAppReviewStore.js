@@ -48,7 +48,7 @@ export class BusinessAppReviewStore {
   };
   @observable amortizationArray = [];
   @observable initLoad = [];
-  @observable expAnnualRevCount = 4;
+  @observable expAnnualRevCount = 1;
 
   @action
   setFieldvalue = (field, value) => {

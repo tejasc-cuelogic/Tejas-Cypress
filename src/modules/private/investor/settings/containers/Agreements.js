@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Grid } from 'semantic-ui-react';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { EmptyDataSet } from '../../../../../theme/shared';
+import { EmptyDataSet, InlineLoader } from '../../../../../theme/shared';
 import AgreementsPdfLoader from '../components/agreements/AgreementsPdfLoader';
 
 
@@ -12,7 +12,10 @@ import AgreementsPdfLoader from '../components/agreements/AgreementsPdfLoader';
 export default class Agreements extends Component {
   render() {
     const { match } = this.props;
-    const { getNavItems } = this.props.agreementsStore;
+    const { getNavItems, docIdsLoading } = this.props.agreementsStore;
+    if (docIdsLoading) {
+      return <InlineLoader />;
+    }
     return (
       <div>
         {getNavItems && getNavItems.length ?
