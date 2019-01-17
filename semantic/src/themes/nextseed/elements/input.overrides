@@ -69,6 +69,10 @@ input[type=number]{
             margin-bottom: @14px;
         }
     }
+    .field.secondary textarea {
+        min-height: 140px;
+        max-height: 140px;
+    }
 }
 .edu-center {
     .ui.input {
