@@ -436,10 +436,18 @@ export const PUBLIC_NAV = [
         component: 'Overview',
         subPanel: 1,
         subNavigations: [
-          { title: 'Top Things to Know', to: '#about', component: '' },
-          { title: 'Investment Highlights', to: '#investment-highlights', component: '' },
-          { title: 'Updates', to: '#updates', component: '' },
-          { title: 'Gallery', to: '#gallery', component: '' },
+          {
+            title: 'Top Things to Know', to: '#about', component: '', noSlash: true,
+          },
+          {
+            title: 'Investment Highlights', to: '#investment-highlights', component: '', noSlash: true,
+          },
+          {
+            title: 'Updates', to: '#updates', component: '', noSlash: true,
+          },
+          {
+            title: 'Gallery', to: '#gallery', component: '', noSlash: true,
+          },
         ],
       },
       {

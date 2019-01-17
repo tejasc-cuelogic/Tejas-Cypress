@@ -68,7 +68,7 @@ export class NavItems extends Component {
                   key={sn.to}
                   as={NavLink}
                   onClick={isMobile ? onToggle : this.doNothing}
-                  to={`${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                  to={`${(isApp) ? '/app' : ''}${(item.to !== '' ? `${sn.noSlash ? '' : '/'}${item.to}` : '')}/${sn.to}`}
                 >
                   {sn.title}
                 </Dropdown.Item>
