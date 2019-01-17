@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
@@ -33,16 +34,10 @@ class AboutCompany extends Component {
     const { campaign } = this.props.campaignStore;
     const emptyStatement = 'Detail not found';
     return (
-      <div className="campaign-content-wrapper">
-        <CompanyTopThings
-          emptyStatement={emptyStatement}
-          campaign={campaign}
-        />
+      <Aux>
+        <CompanyTopThings emptyStatement={emptyStatement} campaign={campaign} />
         <Divider hidden section />
-        <BusinessModel
-          businessModelUrl={this.props.match.url}
-          campaign={campaign}
-        />
+        <BusinessModel businessModelUrl={this.props.match.url} campaign={campaign} />
         <Divider hidden section />
         <LocationAnalysis
           isTabletLand={isTabletLand}
@@ -56,10 +51,7 @@ class AboutCompany extends Component {
           meetOurTeamUrl={this.props.match.url}
         />
         <Divider hidden section />
-        <CompanyHistory
-          campaign={campaign}
-          emptyStatement={emptyStatement}
-        />
+        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
         <Switch>
           {
             navItems.map(item => (
@@ -68,7 +60,7 @@ class AboutCompany extends Component {
           }
         </Switch>
         <Route path={`${this.props.match.url}/company-description`} component={CompanyDescriptionModal} />
-      </div>
+      </Aux>
     );
   }
 }
