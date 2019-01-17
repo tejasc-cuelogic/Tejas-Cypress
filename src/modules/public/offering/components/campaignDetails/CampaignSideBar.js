@@ -116,7 +116,7 @@ export default class CampaignSideBar extends Component {
           </div> */}
           {!isMobile &&
             <Aux>
-              <Menu vertical fluid>
+              <Menu vertical>
                 <NavItems sub refLoc="public" location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
               </Menu>
               {/* <Button.Group widths="2">
