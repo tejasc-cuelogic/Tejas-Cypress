@@ -121,9 +121,7 @@ class offerDetails extends Component {
                           }
                           imgType="heroImage"
                         />
-                        <Icon
-                          className="ns-play play-icon"
-                        />
+                        <Icon className="ns-play play-icon" />
                       </Link>
                       :
                       <Image64
