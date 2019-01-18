@@ -70,23 +70,25 @@
     &.user-list{
         tr.locked{
             color:@neutral-offdark;
-            .user-image:after{
-                content:"\F023";
-                font-family:"Icons";
-                font-size:@20px;
-                color:@highlight-primary;
-                text-shadow:-2px 2px 0px @white, 2px 2px 0px @white, 2px -2px 0px @white, -2px -2px 0px @white, 0px -2px 0px @white;
-                position:absolute;
-                bottom:-4px;
-                right:-4px;
-                z-index:1;
+            .user-image{
+                position:relative;
+                &:after{
+                    content:"\F023";
+                    font-family:"Icons";
+                    font-size:@20px;
+                    color:@highlight-primary;
+                    text-shadow:-2px 2px 0px @white, 2px 2px 0px @white, 2px -2px 0px @white, -2px -2px 0px @white, 0px -2px 0px @white;
+                    position:absolute;
+                    bottom:-4px;
+                    right:-4px;
+                    z-index:1;
+                }
             }
             .user-status a{
                 color:@highlight-primary;
             }
         }
         .user-image{
-            position:relative;
             .ui.avatar.image{
                 margin-right:0;
                 border:1px solid @border-color;
