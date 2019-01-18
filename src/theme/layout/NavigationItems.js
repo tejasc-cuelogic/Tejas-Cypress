@@ -135,7 +135,7 @@ export class NavigationItems extends Component {
       <Menu
         stackable
         borderless
-        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' })}
+        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' }) || navStatus === 'sub'}
         fixed="top"
         // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}

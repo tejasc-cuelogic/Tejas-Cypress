@@ -236,7 +236,7 @@ class offerDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
             <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
-              <Container>
+              <Container fluid>
                 <List bulleted floated="right" horizontal>
                   <List.Item>134 Investors</List.Item>
                   <List.Item>8 Hours left</List.Item>
