@@ -51,7 +51,7 @@ class UserListing extends Component {
             >
               {listData.map(user => (
                 <Table.Row className={(user.locked && user.locked.lock === 'LOCKED') ? 'locked' : ''} key={user.id}>
-                  <Table.Cell collapsing>
+                  <Table.Cell>
                     {!user.profilepic &&
                       <div className="user-image">
                         <UserAvatar

@@ -1287,7 +1287,7 @@ a.icon-link {
 		top: 108px;
 	}
 	&.offering-side-menu{
-		top:116px;
+		top:136px;
 	}
 }
 .sticky-actions{
