@@ -12,7 +12,7 @@ class CompanyTopThings extends Component {
     } = this.props;
     return (
       <Aux>
-        <Header as="h3">Company Description</Header>
+        <Header as="h3" id="company-description">Company Description</Header>
         {campaign && campaign.offering
           && campaign.offering.about
           && campaign.offering.about.theCompany ?

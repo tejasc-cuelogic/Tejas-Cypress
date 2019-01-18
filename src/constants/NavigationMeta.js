@@ -431,6 +431,7 @@ export const PUBLIC_NAV = [
     to: 'offerings',
     subNavigations: [
       {
+        defaultOpen: true,
         title: 'Overview',
         to: 'overview',
         component: 'Overview',
@@ -452,10 +453,46 @@ export const PUBLIC_NAV = [
         ],
       },
       {
-        clickable: true, title: 'About the Company', to: 'about', component: 'AboutCompany',
+        title: 'About the Company',
+        to: 'about',
+        component: 'AboutCompany',
+        subPanel: 1,
+        clickable: true,
+        subNavigations: [
+          {
+            title: 'Company Description', to: '#company-description', useRefLink: true,
+          },
+          {
+            title: 'Business Model', to: '#business-model', useRefLink: true,
+          },
+          {
+            title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
+          },
+          {
+            title: 'Team', to: '#team', useRefLink: true,
+          },
+          {
+            title: 'History', to: '#history', useRefLink: true,
+          },
+        ],
       },
       {
-        clickable: true, title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+        title: 'Investment Details',
+        to: 'investment-details',
+        component: 'InvestmentDetails',
+        subPanel: 1,
+        clickable: true,
+        subNavigations: [
+          {
+            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true,
+          },
+          {
+            title: 'Key Terms', to: '#key-terms', useRefLink: true,
+          },
+          {
+            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
+          },
+        ],
       },
       {
         clickable: true, title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
