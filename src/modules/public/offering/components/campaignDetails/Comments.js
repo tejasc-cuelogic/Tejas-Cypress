@@ -153,6 +153,9 @@ class Comments extends Component {
                                 {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                               </Comment.Author>
                               <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
+                              <Comment.Actions>
+                                <Comment.Action as={Link} to={`${this.props.match.url}/${c.id}`} >Reply</Comment.Action>
+                              </Comment.Actions>
                               <Comment.Text className="mt-20">
                                 {this.state.readMoreInner === tc.id ?
                                 tc.comment : tc.comment.substr(0, readMoreLength)}

@@ -32,9 +32,7 @@ class CompanyHistory extends Component {
               }
               </List>
             :
-              <section>
-                <InlineLoader text={emptyHistoryStatement} />
-              </section>
+              <InlineLoader text={emptyHistoryStatement} />
         }
       </Aux>
     );

@@ -44,9 +44,7 @@ class InvestmentDetails extends Component {
               </p>
             </Aux>
             :
-            <section>
-              <InlineLoader text={emptyContent} />
-            </section>
+            <InlineLoader text={emptyContent} />
         }
         <Divider hidden />
         {/* <Image64

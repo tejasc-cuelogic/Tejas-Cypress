@@ -74,9 +74,7 @@ class BonusRewards extends Component {
             }
           </div>
           :
-          <section>
-            <InlineLoader text="No Bonus Rewards" />
-          </section>
+          <InlineLoader text="No Bonus Rewards" />
         }
       </div>
     );

@@ -23,9 +23,7 @@ class LocationAnalysis extends Component {
                 {Parser(campaign.offering.about.locationAnalysis)}
               </p>
               :
-              <section>
-                <InlineLoader text="No data found" />
-              </section>
+              <InlineLoader text="No data found" />
         }
         {/* {<Image64 fluid srcUrl={locationImage} />} */}
       </Aux>

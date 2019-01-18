@@ -54,9 +54,7 @@ class AboutTheCompany extends Component {
               }
             </List>
           :
-            <section>
-              <InlineLoader text="No Data Found" />
-            </section>
+            <InlineLoader text="No Data Found" />
         }
         <Button onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
           Learn More About the Company

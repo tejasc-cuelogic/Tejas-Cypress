@@ -42,7 +42,7 @@ class Updates extends Component {
                 >
                   <Item.Group>
                     <Item>
-                      <div className="ui mini image">
+                      <div className="ui image">
                         <UserAvatar
                           UserInfo={dataItem.actingUserInfo && dataItem.actingUserInfo.info ? {
                             firstName: dataItem.actingUserInfo.info.firstName,
@@ -102,9 +102,7 @@ class Updates extends Component {
             }
           </VerticalTimeline>
           :
-          <section className="center-align">
-            <InlineLoader text="No Updates" />
-          </section>
+          <InlineLoader text="No Updates" />
         }
       </div>
     );

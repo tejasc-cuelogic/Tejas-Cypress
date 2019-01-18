@@ -64,9 +64,7 @@ class MeetOurTeam extends Component {
               </Item.Group>
             </Aux>
             :
-            <section>
-              <InlineLoader text={emptyStatement} />
-            </section>
+            <InlineLoader text={emptyStatement} />
         }
       </Aux>
     );
