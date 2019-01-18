@@ -68,14 +68,40 @@ class offerDetails extends Component {
     e.preventDefault();
     this.props.history.push(`${this.props.match.url}/photogallery`);
   }
+  addDataRoomSubnavs = (oldNav, dataRoomDocs) => {
+    if (!dataRoomDocs) {
+      return oldNav;
+    }
+    console.log('oldNav', oldNav);
+    console.log('dataRoomDocs', dataRoomDocs);
+    const tempNav = [];
+    oldNav.forEach((item) => {
+      const tempItem = item;
+      if (item.title === 'Data Room') {
+        const tempSubNav = [];
+        dataRoomDocs.forEach((subItem, index) => {
+          tempSubNav.push({
+            title: subItem.name, to: index, component: '', useRefLink: true,
+          });
+        });
+        tempItem.subNavigations = tempSubNav;
+        tempItem.clickable = true;
+        tempItem.subPanel = 1;
+      }
+      tempNav.push(tempItem);
+    });
+    return tempNav;
+  }
   render() {
     const {
       match, campaignStore, location, navStore,
     } = this.props;
-    const navItems = GetNavMeta(match.url, [], true).subNavigations;
     const {
       details, campaignSideBarShow, campaign, navCountData,
     } = campaignStore;
+    const navItems =
+    this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
+      .subNavigations, get(campaign, 'legal.dataroom.documents'));
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
     && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);

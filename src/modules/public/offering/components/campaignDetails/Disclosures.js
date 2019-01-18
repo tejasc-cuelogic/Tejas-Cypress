@@ -49,7 +49,7 @@ export default class TermsOfUse extends Component {
         }
         <div className="campaign-content-wrapper">
           <Grid>
-            {!isMobile &&
+            {/* {!isMobile &&
               <Grid.Column widescreen={3} computer={3} tablet={4} mobile={16}>
                 <div className="sticky-sidebar">
                   <SecondaryMenu
@@ -61,7 +61,7 @@ export default class TermsOfUse extends Component {
                   />
                 </div>
               </Grid.Column>
-            }
+            } */}
             <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
               <Switch>
                 <Route
