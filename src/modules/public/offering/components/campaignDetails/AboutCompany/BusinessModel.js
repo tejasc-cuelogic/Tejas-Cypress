@@ -22,7 +22,7 @@ class BusinessModel extends Component {
                   {Parser(campaign.offering.about.businessModel)}
                 </p>
                 :
-                <section className="bg-offwhite">
+                <section>
                   <InlineLoader text="No data found" />
                 </section>
           }

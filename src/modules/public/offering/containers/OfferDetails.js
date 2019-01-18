@@ -185,7 +185,7 @@ class offerDetails extends Component {
                   <Statistic.Label>of $50,000 min{' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
-                      content="Lorem Ipsum"
+                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
                       position="top center"
                     />
                   </Statistic.Label>
@@ -207,10 +207,11 @@ class offerDetails extends Component {
                   </p>
                 }
                 <p className="raise-type mt-30">
-                  <b>Revenue Sharing Note</b>
+                  <b>Revenue Sharing Note</b>{' '}
                   <Popup
+                    hoverable
                     trigger={<Icon name="help circle" color="green" />}
-                    content="Lorem Ipsum"
+                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
                     position="top center"
                   />
                   <br />
@@ -235,7 +236,7 @@ class offerDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
             <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
-              <Container>
+              <Container fluid>
                 <List bulleted floated="right" horizontal>
                   <List.Item>134 Investors</List.Item>
                   <List.Item>8 Hours left</List.Item>

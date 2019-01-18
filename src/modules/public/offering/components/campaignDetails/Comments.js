@@ -85,7 +85,7 @@ class Comments extends Component {
         {comments && comments.length ?
           <Aux>
             {!isRightToPostComment ?
-              <section className="bg-offwhite center-align mt-30">
+              <section className="center-align mt-30">
                 {loggedInAsInvestor && !accountStatusFull ?
                   <p>In order to leave comments, please create any type of account first.</p>
                 : <p>In order to leave comments, please sign up and verify your identity.</p>

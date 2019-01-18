@@ -531,6 +531,9 @@ footer{
 		i.icon {
 			margin-left:@7px;
 		}
+		img {
+			max-width: 100%;
+		}
 	}
 	.embed img{
 		margin-top: 0;
@@ -1111,166 +1114,110 @@ a.icon-link {
 	z-index: 9999;
 	pointer-events:none;
 }
-//	Vertical Timeline
-.updates-modal {
-	background: @white;
-	padding: @14px;
-	@media only screen and (min-width:@tabletBreakpoint){
-		height: ~'calc(100vh - 138px)';
-		overflow: auto;
+// Vertical Timeline
+.vertical-timeline.campaign-updates {
+	margin: 0 auto;
+	&:before {
+		width: 1px;
+		background: @neutral-middark;
+		top: 45px;
+		left: 0;
 	}
-	.vertical-timeline {
-		margin: 0 auto;
-		&::before {
-			width: 2px;
-			background: @neutral-middark;
-			top: 45px;
-			height: ~"calc(100% - 45px)";
-			@media only screen and (max-width:@largestMobileScreen){
-                top: 30px;
-				height: ~"calc(100% - 30px)";
-            }
-		}
-		.vertical-timeline-element-icon {
-			width: 25px;
+	.vertical-timeline-element-icon {
+		left: 0;
+		box-shadow: 0 0 0 2px @white;
+	}
+	.vertical-timeline-element {
+		&:not(:first-child) .vertical-timeline-element-icon{
 			height: 25px;
-			left: 50%;
-			margin-left: -14px;
-			box-shadow: 0 0 0 2px @white;
-			background-color: @neutral-darkwhite;
-			@media only screen and (max-width : @largestSmallMonitor){
-				left: 21px;
-			}
-			@media only screen and (max-width:@largestMobileScreen){
-                top: 0px;
-            }
+			width: 25px;
+			left: 15px;
+			background-color: @neutral-darkwhite !important;
 		}
-		.vertical-timeline-element {
-			&.hide-date .vertical-timeline-element-date {
-				display: none;
-			}
-			&:not(.hide-date) {
-				@media only screen and (max-width : @largestSmallMonitor){
-					margin-top: @60px;
-				}
-				.vertical-timeline-element-date {
-					@media only screen and (max-width : @largestSmallMonitor){
-						left: -57px;
-						text-align: left;
-					}
-					@media only screen and (max-width:@largestMobileScreen){
-						left: -27px;
-					}
-				}
-			}
-			&:nth-child(even):not(.vertical-timeline-element--left) {
-				.vertical-timeline-element-content .vertical-timeline-element-date {
-					left: -180px;
-					right: auto;
-					text-align: center;
-					@media only screen and (max-width : @largestMobileScreen){
-						left: -27px;
-					}
-					@media only screen and (max-width : @largestSmallMonitor){
-						left: -57px;
-						text-align: left;
-					}
-				}
-			}
-			.ui.list .item {
-				border: 1px solid @neutral-darkwhite;
-			}
-		}
-	}
-
-	.vertical-timeline-element-content {
-		box-shadow: none;
-		padding: 0;
-		@media only screen and (max-width:@largestMobileScreen){
-			margin-left: 40px;
-		}
-		&::before {
-			@media only screen and (max-width:@largestMobileScreen){
-				display: none;
-			}
-		}
-		.ui.items {
-			>.item {
-				border-bottom: 1px solid @neutral-darkwhite;
-				padding-bottom: @14px;
-				font-weight: @bold;
-				color: @neutral;
-				.image {
-					>img {
-						border-radius: 50%;
-						@media only screen and (max-width:@largestMobileScreen){
-							max-height: 42px !important;
-						}
-					}
-					&+.content {
-						margin-left: 10px;
-						padding: 0;	
-					}
-				}
-				@media only screen and (max-width:@largestMobileScreen){
-					margin-top: 0;
-					flex-direction: row;
-				}
-			}
-			.ui.list .item {
-				border: 1px solid @neutral-darkwhite;
-				>.image+.content {
-					@media only screen and (max-width:@largestMobileScreen) {
-						padding-left: 3px;
-					}
-					>.description {
-						@media only screen and (max-width:@largestMobileScreen) {
-							padding: 0 !important;
-						}
-					}
-				}
-			}
-			p {
-				font-weight: @normal;
-				color: @neutral-middark;
-				font-size: @13px;
-				b{
-					color: @neutral;
-					font-size: @15px;
-				}
-				img {
-					width: 100%;
-				}
-			}
-		}
-		.vertical-timeline-element-date {
+		&.vertical-timeline-element--right .vertical-timeline-element-content .vertical-timeline-element-date {
 			position: absolute;
+			width: 78px;
 			top: -60px;
+			left: -162px;
+			right: auto;
+			padding: 0;
 			background: @white;
-			z-index: 9999;
-			opacity: 1;
-			left: auto;
-			right: -180px;
-			text-align: center;
 			font-size: @13px;
+			text-align: center;
 			color: @neutral-middark;
 			text-transform: uppercase;
-			padding: @5px 0;
-			width: 130px;
+			opacity: 1;
 		}
-	}
-	.no-updates {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 100%;
-		flex-direction: column;
-		text-align: center;
-		h3{
-			color: @neutral !important;
+		.ui.list .item {
+			border: 1px solid @neutral-darkwhite;
 		}
 	}
 }
+.campaign-updates .vertical-timeline-element-content {
+	width: 100%;
+	box-shadow: none;
+	padding: 0;
+	background: transparent;
+	left: 121px;
+	&::before {
+		display: none;
+	}
+	.ui.items {
+		>.item {
+			border-bottom: 1px solid @neutral-darkwhite;
+			padding-bottom: @14px;
+			font-weight: @bold;
+			color: @neutral;
+			.image {
+				>img {
+					border-radius: 50%;
+				}
+				&+.content {
+					margin-left: 34px;
+					padding: 0;	
+					text-transform: capitalize;
+					span {
+						font-size: @13px;
+						font-weight: @normal;
+						line-height: 20px;
+					}
+				}
+			}
+		}
+		.ui.list .item {
+			border: 1px solid @neutral-darkwhite;
+			>.image+.content {
+				@media only screen and (max-width:@largestMobileScreen) {
+					padding-left: 3px;
+				}
+				>.description {
+					@media only screen and (max-width:@largestMobileScreen) {
+						padding: 0 !important;
+					}
+				}
+			}
+		}
+		p {
+			font-weight: @normal;
+			color: @neutral-middark;
+			font-size: @13px;
+			b{
+				color: @neutral;
+				font-size: @15px;
+			}
+			img {
+				width: 100%;
+			}
+		}
+		.sb-avatar {
+			width: 60px;
+			height: 60px;
+			line-height: 60px;
+		}
+	}
+}
+
+// Vertical Timeline End
 .error-page{
 	padding:@80px @14px;
 	text-align:center;
@@ -1343,7 +1290,7 @@ a.icon-link {
 		top: 108px;
 	}
 	&.offering-side-menu{
-		top:116px;
+		top:136px;
 	}
 }
 .sticky-actions{
@@ -2568,13 +2515,13 @@ p.check-extra-info{
 	margin: 0 auto;
 }
 //	Avtar image on public pages
-.updates-modal, .campaign-updates {
-	.sb-avatar{
-		width:36px;
-		height:36px;
-		line-height:36px;
-	}
-}
+// .updates-modal, .campaign-updates {
+// 	.sb-avatar{
+// 		width:36px;
+// 		height:36px;
+// 		line-height:36px;
+// 	}
+// }
 //	investment-limit-calculator
 #investment-limit-calculator .form-group.row {
 	display: flex;

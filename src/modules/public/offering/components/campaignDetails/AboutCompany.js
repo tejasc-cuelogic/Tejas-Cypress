@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
@@ -34,7 +33,7 @@ class AboutCompany extends Component {
     const { campaign } = this.props.campaignStore;
     const emptyStatement = 'Detail not found';
     return (
-      <Aux>
+      <div className="campaign-content-wrapper">
         <CompanyTopThings emptyStatement={emptyStatement} campaign={campaign} />
         <Divider hidden section />
         <BusinessModel businessModelUrl={this.props.match.url} campaign={campaign} />
@@ -60,7 +59,7 @@ class AboutCompany extends Component {
           }
         </Switch>
         <Route path={`${this.props.match.url}/company-description`} component={CompanyDescriptionModal} />
-      </Aux>
+      </div>
     );
   }
 }

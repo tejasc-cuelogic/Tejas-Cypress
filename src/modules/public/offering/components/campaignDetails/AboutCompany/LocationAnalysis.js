@@ -23,7 +23,7 @@ class LocationAnalysis extends Component {
                 {Parser(campaign.offering.about.locationAnalysis)}
               </p>
               :
-              <section className="bg-offwhite">
+              <section>
                 <InlineLoader text="No data found" />
               </section>
         }

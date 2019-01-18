@@ -17,7 +17,7 @@
 }
 .menu-secondary-fixed .ui.list.horizontal{
     height:58px;
-    padding:@20px 0;
+    padding:@20px @16px;
     &.bulleted>.item:before{
         content:"|";
         margin-left:-@13px;
@@ -25,7 +25,7 @@
         color:@borderColor;
     }
     &.right.floated{
-        padding:@12px 0;
+        padding:@12px @16px;
     }
     >.item{
         padding:0;
