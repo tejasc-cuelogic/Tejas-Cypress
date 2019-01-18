@@ -14,7 +14,7 @@ class LocationAnalysis extends Component {
     //   campaign.media.locationHeroImage.url ? campaign.media.locationHeroImage.url : null;
     return (
       <Aux>
-        <Header as="h3">Location Analysis</Header>
+        <Header as="h3" id="location-analysis">Location Analysis</Header>
         {
           campaign && campaign.offering
             && campaign.offering.about
