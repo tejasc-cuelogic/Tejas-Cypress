@@ -54,7 +54,7 @@ export class NavItems extends Component {
             `}
             name={item.to}
             disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : e => this.doNothing(e, item.clickable ? item.to : false)}
+            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false)}
             text={
               <Aux>
                 {item.icon &&
