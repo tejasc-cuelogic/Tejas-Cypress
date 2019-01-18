@@ -531,6 +531,9 @@ footer{
 		i.icon {
 			margin-left:@7px;
 		}
+		img {
+			max-width: 100%;
+		}
 	}
 	.embed img{
 		margin-top: 0;

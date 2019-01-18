@@ -44,7 +44,7 @@ class InvestmentDetails extends Component {
               </p>
             </Aux>
             :
-            <section className="bg-offwhite">
+            <section>
               <InlineLoader text={emptyContent} />
             </section>
         }

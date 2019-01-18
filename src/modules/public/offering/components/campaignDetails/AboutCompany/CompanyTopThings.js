@@ -20,7 +20,7 @@ class CompanyTopThings extends Component {
               {Parser(campaign.offering.about.theCompany)}
             </p>
           :
-            <section className="bg-offwhite">
+            <section>
               <InlineLoader text={emptyStatement} />
             </section>
         }

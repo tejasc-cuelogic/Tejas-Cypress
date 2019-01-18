@@ -74,7 +74,7 @@ class BonusRewards extends Component {
             }
           </div>
           :
-          <section className="bg-offwhite">
+          <section>
             <InlineLoader text="No Bonus Rewards" />
           </section>
         }

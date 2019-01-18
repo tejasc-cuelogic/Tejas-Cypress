@@ -16,11 +16,12 @@ class KeyTerms extends Component {
   render() {
     const { campaign } = this.props;
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '[XX] Months';
-    const investmentMultiple = campaign && campaign.keyTerms &&
-    campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
+    // const investmentMultiple = campaign && campaign.keyTerms &&
+    // campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
     // const portal = campaign.portal ? (campaign.portal === 'BD' ? '2%' : '1%') : '';
-    const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
+    // const portal = campaign && campaign.regulation ?
+    // (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     return (
       <Aux>
         <Header as="h3" className="mb-30" id="investment-highlights">Investment Highlights</Header>
@@ -83,7 +84,7 @@ class KeyTerms extends Component {
               <Table.Cell collapsing><b>Revenue Sharing Percentage</b>{' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
-                  content="Lorem Ipsum"
+                  content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
                   position="top center"
                 />
               </Table.Cell>
@@ -93,11 +94,7 @@ class KeyTerms extends Component {
               <Table.Cell><b>Multiple</b>{' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
-                  content={`For every $100 you invest, you are paid a portion of this
-                  company's gross revenue every month until you are paid $${investmentMultiple ===
-                  'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth ===
-                  '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee
-                  is deducted from each payment.` : ''}`}
+                  content="The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the Key Terms for more details."
                   position="top center"
                 />
               </Table.Cell>

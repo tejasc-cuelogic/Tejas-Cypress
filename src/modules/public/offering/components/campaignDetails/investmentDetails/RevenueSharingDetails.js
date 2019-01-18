@@ -37,7 +37,11 @@ class RevenueSharingDetails extends Component {
           <Table.Body>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Offering Min{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                  position="top center"
+                />
               </Table.Cell>
               <Table.Cell>
                 <p>
@@ -50,7 +54,11 @@ class RevenueSharingDetails extends Component {
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Offering Max{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimumgoal, the issuer will receive the funds."
+                  position="top center"
+                />
               </Table.Cell>
               <Table.Cell>
                 <p>
@@ -63,7 +71,7 @@ class RevenueSharingDetails extends Component {
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Min Individual Investment{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="top center" />
               </Table.Cell>
               <Table.Cell>
                 <p>
@@ -79,7 +87,7 @@ class RevenueSharingDetails extends Component {
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultiple === 'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
-                  position="bottom center"
+                  position="top center"
                 />
               </Table.Cell>
               <Table.Cell>
@@ -98,7 +106,7 @@ class RevenueSharingDetails extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Revenue Sharing Percentage</b></Table.Cell>
+              <Table.Cell width={5} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
               <Table.Cell>
                 <p>
                   <b>
@@ -119,7 +127,7 @@ class RevenueSharingDetails extends Component {
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                  position="bottom center"
+                  position="top center"
                 />
               </Table.Cell>
               <Table.Cell>
@@ -141,7 +149,7 @@ class RevenueSharingDetails extends Component {
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
-                  position="bottom center"
+                  position="top center"
                 />
               </Table.Cell>
               <Table.Cell>
@@ -155,13 +163,17 @@ class RevenueSharingDetails extends Component {
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Security Interest{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="bottom center" />
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="The Issuer will grant a security interest in all of its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
+                  position="top center"
+                />
               </Table.Cell>
               <Table.Cell>
                 <p>
                   <b>
                     {KeyTerms && KeyTerms.securityInterest ?
-                      `${KeyTerms.securityInterest}` : 'NA'}
+                      `${KeyTerms.securityInterest}` : ' NA'}
                   </b>
                 </p>
               </Table.Cell>
@@ -200,7 +212,7 @@ class RevenueSharingDetails extends Component {
               {Parser(revenueShareSummary)}
             </p>
             :
-            <section className="bg-offwhite">
+            <section>
               <InlineLoader text="No data available" />
             </section>
           }

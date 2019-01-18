@@ -54,7 +54,7 @@ class AboutTheCompany extends Component {
               }
             </List>
           :
-            <section className="bg-offwhite">
+            <section>
               <InlineLoader text="No Data Found" />
             </section>
         }
