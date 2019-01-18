@@ -83,6 +83,7 @@ class KeyTerms extends Component {
             <Table.Row verticalAlign="top">
               <Table.Cell collapsing><b>Revenue Sharing Percentage</b>{' '}
                 <Popup
+                  hoverable
                   trigger={<Icon name="help circle" color="green" />}
                   content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
                   position="top center"
@@ -93,8 +94,9 @@ class KeyTerms extends Component {
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Multiple</b>{' '}
                 <Popup
+                  hoverable
                   trigger={<Icon name="help circle" color="green" />}
-                  content="The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the Key Terms for more details."
+                  content={(<span>The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the <Link to={`${this.props.refLink}/investment-details`}>Key Terms</Link> for more details.</span>)}
                   position="top center"
                 />
               </Table.Cell>
