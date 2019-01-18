@@ -23,7 +23,7 @@ class KeyTerms extends Component {
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     return (
       <Aux>
-        <Header as="h3" className="mb-30">Investment Highlights</Header>
+        <Header as="h3" className="mb-30" id="investment-highlights">Investment Highlights</Header>
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             <Table.Row verticalAlign="top">

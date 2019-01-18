@@ -512,12 +512,12 @@ footer{
 	margin: @30px auto;
 }
 .campaign-content-wrapper {
-	padding: @40px;
-	flex-grow: 1;
-	// background-color: @white;
-	@media only screen and (max-width : @largestMobileScreen){
-		padding: @40px 0;
-	}
+	// padding: @40px;
+	// flex-grow: 1;
+	// // background-color: @white;
+	// @media only screen and (max-width : @largestMobileScreen){
+	// 	padding: @40px 0;
+	// }
 	p {
 		color: @neutral-middark;
 		font-size: @15px;

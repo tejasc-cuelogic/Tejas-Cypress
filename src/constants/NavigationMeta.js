@@ -434,22 +434,23 @@ export const PUBLIC_NAV = [
         title: 'Overview',
         to: 'overview',
         component: 'Overview',
-        subPanel: 1,
-        clickable: true,
-        subNavigations: [
-          {
-            title: 'Top Things to Know', to: '#about', component: '', noSlash: true,
-          },
-          {
-            title: 'Investment Highlights', to: '#investment-highlights', component: '', noSlash: true,
-          },
-          {
-            title: 'Updates', to: '#updates', component: '', noSlash: true,
-          },
-          {
-            title: 'Gallery', to: '#gallery', component: '', noSlash: true,
-          },
-        ],
+        // subPanel: 1,
+        // clickable: true,
+        // subNavigations: [
+        //   {
+        //     title: 'Top Things to Know', to: '#top-things-to-know', component: '', noSlash: true,
+        //   },
+        //   {
+        //     title: 'Investment Highlights', to: '#investment-highlights',
+        // component: '', noSlash: true,
+        //   },
+        //   {
+        //     title: 'Updates', to: '#updates', component: '', noSlash: true,
+        //   },
+        //   {
+        //     title: 'Gallery', to: '#gallery', component: '', noSlash: true,
+        //   },
+        // ],
       },
       {
         title: 'About the Company', to: 'about', component: 'AboutCompany',

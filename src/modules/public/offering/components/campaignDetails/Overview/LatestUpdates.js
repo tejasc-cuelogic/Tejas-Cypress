@@ -32,7 +32,7 @@ class LatestUpdates extends Component {
     // };
     return (
       <Aux>
-        <Header as="h3" className="mb-30">Updates
+        <Header as="h3" className="mb-30" id="updates">Updates
           <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
         </Header>
         <Item.Group>

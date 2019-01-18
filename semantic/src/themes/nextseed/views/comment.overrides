@@ -3,7 +3,14 @@
 *******************************/
 .ui.comments {
     .comment {
+        border-bottom: 1px solid @neutral-darkwhite;
+        border-top: 0;
+        padding: @30px;
         &:first-child {
+            border-top: 0;
+            padding-top: @30px;
+        }
+        &:not(:last-child) {
             border-top: 0;
         }
         .author {
@@ -30,7 +37,6 @@
         &.issuer-comment {
             background: fade(@primary-two-darken, 8%);
             border-radius: 4px;
-            padding: 24px 30px;
             border-top: 0;
             +.issuer-comment {
                 margin-top: @24px;
@@ -40,13 +46,13 @@
             }
         }
         .comments {
+            margin: 0;
             &.reply-comments {
                 .comment {
-                    padding: @24px @30px;
+                    // padding: @24px @30px;
                     background: transparent;
-                    border-top: 1px solid #ccc;
+                    border-top: 1px solid @neutral-darkwhite;
                     &:first-child {
-                        padding-top: 0;
                         border-top: 0;
                     }
                     &:last-child {
@@ -55,8 +61,8 @@
                     &.issuer-comment {
                         background: fade(@primary-two-darken, 8%);
                         border-radius: 4px;
-                        padding: 24px 30px;
                         border-top: 0;
+                        margin: @30px 0 0;
                         +.issuer-comment {
                             margin-top: @24px;
                         }
