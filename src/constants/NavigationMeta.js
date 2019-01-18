@@ -438,16 +438,16 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Top Things to Know', to: '#top-things-to-know', component: '', noSlash: true,
+            title: 'Top Things to Know', to: '#top-things-to-know', component: '', useRefLink: true,
           },
           {
-            title: 'Investment Highlights', to: '#investment-highlights', component: '', noSlash: true,
+            title: 'Investment Highlights', to: '#investment-highlights', component: '', useRefLink: true,
           },
           {
-            title: 'Updates', to: '#updates', component: '', noSlash: true,
+            title: 'Updates', to: '#updates', component: '', useRefLink: true,
           },
           {
-            title: 'Gallery', to: '#gallery', component: '', noSlash: true,
+            title: 'Gallery', to: '#gallery', component: '', useRefLink: true,
           },
         ],
       },

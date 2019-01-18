@@ -39,7 +39,7 @@ export class NavItems extends Component {
   }
   render() {
     const {
-      location, isApp, roles, match, isMobile, onToggle,
+      location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
@@ -75,7 +75,7 @@ export class NavItems extends Component {
                   key={sn.to}
                   as={NavLink}
                   onClick={isMobile ? onToggle : this.doNothing}
-                  to={`${(isApp) ? '/app' : ''}${(item.to !== '' ? `${sn.noSlash ? '' : '/'}${item.to}` : '')}/${sn.to}`}
+                  to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                 >
                   {sn.title}
                 </Dropdown.Item>
