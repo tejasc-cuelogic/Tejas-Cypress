@@ -1165,8 +1165,6 @@ a.icon-link {
 	}
 	.ui.items {
 		>.item {
-			border-bottom: 1px solid @neutral-darkwhite;
-			padding-bottom: @14px;
 			font-weight: @bold;
 			color: @neutral;
 			.image {
