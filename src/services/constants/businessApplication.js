@@ -453,7 +453,7 @@ export const BUSINESS_SIGNUP = {
 
 export const BUSINESS_DETAILS = {
   businessPlan: {
-    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Upload your Business Plan, Investment Prospectus and/or Pitch Deck', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   debts: [{
     amount: {
