@@ -20,7 +20,7 @@ import {
   XML_SUBMISSION_TABS,
 } from '../../../../../constants/business';
 
-@inject('businessStore', 'uiStore')
+@inject('businessStore', 'uiStore', 'offeringsStore')
 @observer
 export default class XmlForm extends React.Component {
   state = {
@@ -396,6 +396,7 @@ export default class XmlForm extends React.Component {
         </div>
       );
     }
+    const { offer } = this.props.offeringsStore;
     return (
       <Aux>
         <div className="page-header-section">
@@ -457,7 +458,7 @@ export default class XmlForm extends React.Component {
                 {xmlActiveTabName === 'offering' && <OfferingInformation />}
                 {xmlActiveTabName === 'annual' && <AnnualReportDisclosureRequirements />}
                 {xmlActiveTabName === 'signature' && <Signature />}
-                {xmlActiveTabName === 'doc' && <FileSelector folderId={this.state.folderId} />}
+                {xmlActiveTabName === 'doc' && <FileSelector folderId={this.state.folderId} offeringDetails={offer} />}
               </Form>
             </Grid.Column>
             <FormErrors xmlErrors={xmlErrors} className="field-error-message" />

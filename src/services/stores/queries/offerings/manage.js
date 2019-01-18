@@ -53,7 +53,7 @@ export const allOfferings = gql`
         }
        phone {
         number
-      } 
+      }
       }
       offering {
         launch {
@@ -91,6 +91,7 @@ export const getOfferingDetails = gql`
       offeringSlug
       referralCode
       previewPassword
+      regulation
       leadDetails {
         id
         email {
@@ -115,7 +116,7 @@ export const getOfferingDetails = gql`
         }
        phone {
         number
-      } 
+      }
       }
       keyTerms {
         startupPeriod
