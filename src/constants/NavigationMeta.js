@@ -105,6 +105,7 @@ export const PRIVATE_NAV = [
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL'],
         component: 'BusinessDetails',
         showIcon: true,
+        toolTipTitle: 'This section is not complete, please fill out all the * fields.',
       },
       {
         icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
@@ -114,6 +115,7 @@ export const PRIVATE_NAV = [
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL'],
         component: 'Performance',
         showIcon: true,
+        toolTipTitle: 'This section is not complete, please fill out all the * fields.',
       },
       {
         icon: { COMPLETE: 'ns-check-circle', IN_PROGRESS: 'ns-warning-circle' },
@@ -123,6 +125,7 @@ export const PRIVATE_NAV = [
         accessFor: ['PRE_QUALIFICATION_SUBMITTED', 'APPLICATION_SUBMITTED', 'APPLICATION_SUCCESSFUL'],
         component: 'Documentation',
         showIcon: true,
+        toolTipTitle: 'This section is not complete, please fill out all the * fields.',
       },
     ],
   },

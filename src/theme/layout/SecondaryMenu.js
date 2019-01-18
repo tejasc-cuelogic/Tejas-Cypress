@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { NavLink, withRouter } from 'react-router-dom';
-import { Responsive, Menu, Dropdown, Icon, Header } from 'semantic-ui-react';
+import { Responsive, Menu, Dropdown, Icon, Header, Popup } from 'semantic-ui-react';
 import map from 'lodash/map';
 import mapKeys from 'lodash/mapKeys';
 import { MobileDropDownNav } from '../../theme/shared';
@@ -12,41 +12,54 @@ const NavItems = ({
 }) => navItems.map((item, key) => (
   <Aux>
     {(item.subNavigations) ?
-    (
-      <Dropdown
-        item
-        key={item.to}
-        name={item.to}
-        className={isActive(item.to, location) ? 'active' : ''}
-        onClick={navClick}
-        text={<span>{item.title}</span>}
-      >
-        <Dropdown.Menu className={isActive(item.to, location) ? 'visible' : ''}>
-          {item.subNavigations.map(sn => (
-            <Dropdown.Item
-              name="byPass"
-              key={sn.to}
-              as={NavLink}
-              to={`${(match.url)}/${sn.to}`}
-            >
-              {sn.title}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-  ) : (
-    <Menu.Item key={item.to} onClick={navCustomClick} as={NavLink} to={`${match.url}/${item.to}`}>
-      {item.showIcon &&
-        <Icon
-          color={item.icon_color[stepsStatus[key].status]}
-          name={item.icon[stepsStatus[key].status]}
-        />
-      }
-      {addon && addon.pos === 'left' && addon.data[item.to]}
-      {item.title}
-      {addon && addon.pos !== 'left' && addon.data[item.to]}
-    </Menu.Item>
-  )}
+      (
+        <Dropdown
+          item
+          key={item.to}
+          name={item.to}
+          className={isActive(item.to, location) ? 'active' : ''}
+          onClick={navClick}
+          text={<span>{item.title}</span>}
+        >
+          <Dropdown.Menu className={isActive(item.to, location) ? 'visible' : ''}>
+            {item.subNavigations.map(sn => (
+              <Dropdown.Item
+                name="byPass"
+                key={sn.to}
+                as={NavLink}
+                to={`${(match.url)}/${sn.to}`}
+              >
+                {sn.title}
+              </Dropdown.Item>
+            ))}
+          </Dropdown.Menu>
+        </Dropdown>
+      ) : (
+        <Menu.Item key={item.to} onClick={navCustomClick} as={NavLink} to={`${match.url}/${item.to}`}>
+          {item.showIcon ?
+            stepsStatus[key].status === 'IN_PROGRESS' ?
+              <Popup
+                trigger={
+                  <Icon
+                    name={item.icon[stepsStatus[key].status]}
+                    color={item.icon_color[stepsStatus[key].status]}
+                  />}
+                content={item.toolTipTitle || ''}
+                position="top center"
+              />
+              :
+              <Icon
+                color={item.icon_color[stepsStatus[key].status]}
+                name={item.icon[stepsStatus[key].status]}
+              />
+            :
+            null
+          }
+          {addon && addon.pos === 'left' && addon.data[item.to]}
+          {item.title}
+          {addon && addon.pos !== 'left' && addon.data[item.to]}
+        </Menu.Item>
+      )}
   </Aux>
 ));
 
@@ -68,7 +81,7 @@ class SecondaryMenu extends Component {
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
-          { heading &&
+          {heading &&
             <Header as="h6">{heading}</Header>
           }
           <Menu
@@ -102,7 +115,7 @@ class SecondaryMenu extends Component {
               location={location}
               className="legal-menu"
             />
-           :
+            :
             <Dropdown fluid selection options={mobNavItems} />
           }
         </Responsive>
