@@ -13,7 +13,7 @@ const InlineLoader = props => (
   <section className="center-align">
     {
       props.text ? (
-        <h3 style={{ color: '#31333d7d' }}>{Parser(props.text) || ''}</h3>
+        <h3 className="grey-header">{Parser(props.text) || ''}</h3>
       ) : (
         <svg
           version="1.1"
