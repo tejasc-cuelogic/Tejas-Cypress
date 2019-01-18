@@ -12,7 +12,7 @@ class CompanyHistory extends Component {
     const emptyHistoryStatement = 'History not found';
     return (
       <Aux>
-        <Header as="h3">History</Header>
+        <Header as="h3" id="history">History</Header>
         {
           campaign && campaign.offering && campaign.offering.about &&
             campaign.offering.about.history && campaign.offering.about.history.length ?

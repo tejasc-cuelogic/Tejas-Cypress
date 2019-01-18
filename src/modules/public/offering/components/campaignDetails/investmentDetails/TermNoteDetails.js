@@ -15,7 +15,7 @@ class TermNoteDetails extends Component {
     const edgarLink = launch && launch.edgarLink;
     return (
       <Aux>
-        <Header as="h3" className="mb-30">Key Terms</Header>
+        <Header as="h3" className="mb-30" id="key-terms">Key Terms</Header>
         <Grid columns={3} stackable divided className="vertical-gutter neutral-text">
           <Grid.Column>
             <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA'}</p>

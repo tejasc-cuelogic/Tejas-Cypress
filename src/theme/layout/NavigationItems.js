@@ -48,6 +48,7 @@ export class NavItems extends Component {
         {(item.subPanel === 1 && item.subNavigations) ? (
           <Dropdown
             item
+            defaultOpen={item.defaultOpen}
             key={item.to}
             className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''}
             ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
