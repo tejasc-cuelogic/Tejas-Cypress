@@ -431,6 +431,7 @@ export const PUBLIC_NAV = [
     to: 'offerings',
     subNavigations: [
       {
+        defaultOpen: true,
         title: 'Overview',
         to: 'overview',
         component: 'Overview',
