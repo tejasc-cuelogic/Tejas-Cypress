@@ -438,36 +438,36 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Top Things to Know', to: '#top-things-to-know', component: '', useRefLink: true,
+            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true,
           },
           {
-            title: 'Investment Highlights', to: '#investment-highlights', component: '', useRefLink: true,
+            title: 'Investment Highlights', to: '#investment-highlights', useRefLink: true,
           },
           {
-            title: 'Updates', to: '#updates', component: '', useRefLink: true,
+            title: 'Updates', to: '#updates', useRefLink: true,
           },
           {
-            title: 'Gallery', to: '#gallery', component: '', useRefLink: true,
+            title: 'Gallery', to: '#gallery', useRefLink: true,
           },
         ],
       },
       {
-        title: 'About the Company', to: 'about', component: 'AboutCompany',
+        clickable: true, title: 'About the Company', to: 'about', component: 'AboutCompany',
       },
       {
-        title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+        clickable: true, title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
       },
       {
-        title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
+        clickable: true, title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        title: 'Data Room', to: 'data-room', component: 'Disclosures',
+        clickable: true, title: 'Data Room', to: 'data-room', component: 'Disclosures',
       },
       {
-        title: 'Updates', to: 'updates', component: 'Updates',
+        clickable: true, title: 'Updates', to: 'updates', component: 'Updates',
       },
       {
-        title: 'Comments', to: 'comments', component: 'Comments',
+        clickable: true, title: 'Comments', to: 'comments', component: 'Comments',
       },
     ],
   },
