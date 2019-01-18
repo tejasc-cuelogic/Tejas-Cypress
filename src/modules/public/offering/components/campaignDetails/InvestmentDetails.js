@@ -13,6 +13,14 @@ import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 //   && document.documentElement.clientWidth < 1200;
 @inject('campaignStore')
 class InvestmentDetails extends Component {
+  componentDidMount() {
+    if (this.props.location.hash && this.props.location.hash !== '') {
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    }
+  }
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyContent = 'No data found.';
@@ -30,18 +38,14 @@ class InvestmentDetails extends Component {
       null;
     return (
       <Aux>
-        <Header as="h3" className="mb-30">Use of Proceeds</Header>
+        <Header as="h3" className="mb-30" id="use-of-proceeds">Use of Proceeds</Header>
         {campaign && campaign.legal &&
           campaign.legal.general && campaign.legal.general.useOfProceeds ?
             <Aux>
               <Header as="h6">If minimum offering amount is reached:</Header>
-              <p>
-                {minOfferingExpenseDesc || emptyContent}
-              </p>
+              <p>{minOfferingExpenseDesc || emptyContent}</p>
               <Header as="h6">If maximum offering amount is reached:</Header>
-              <p>
-                {maxOfferingExpenseDesc || emptyContent}
-              </p>
+              <p>{maxOfferingExpenseDesc || emptyContent}</p>
             </Aux>
             :
             <section>

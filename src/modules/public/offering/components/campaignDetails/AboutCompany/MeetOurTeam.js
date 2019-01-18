@@ -18,7 +18,7 @@ class MeetOurTeam extends Component {
     ));
     return (
       <Aux>
-        <Header as="h3">Meet the Team</Header>
+        <Header as="h3" id="team">Meet the Team</Header>
         {
           meetTeamOjb.length ?
             <Aux>

@@ -24,6 +24,14 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 @inject('campaignStore')
 @observer
 class AboutCompany extends Component {
+  componentDidMount() {
+    if (this.props.location.hash && this.props.location.hash !== '') {
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    }
+  }
   render() {
     const navItems = [
       { to: 'business', component: 'BusinessModal' },
