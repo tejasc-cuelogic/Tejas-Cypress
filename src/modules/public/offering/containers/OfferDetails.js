@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get, find } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, Link, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid, Icon, Header, Progress, Popup, Button, Statistic, Visibility, List } from 'semantic-ui-react';
+import { Responsive, Container, Grid, Button, Visibility, List } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
-import { Spinner, InlineLoader, MobileDropDownNav, Image64 } from '../../../../theme/shared';
+import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
+import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -15,11 +16,8 @@ import Congratulation from '../components/investNow/agreement/components/Congrat
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 import Footer from './../../../../theme/layout/Footer';
-import Helper from './../../../../helper/utility';
-import { DataFormatter } from '../../../../helper';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../constants/offering';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -107,23 +105,24 @@ class offerDetails extends Component {
       return <Spinner loaderMessage="Loading.." />;
     }
     const {
-      details, campaignSideBarShow, campaign, navCountData, offerStructure,
+      details, campaignSideBarShow, campaign, navCountData,
     } = campaignStore;
     const navItems =
     this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
       .subNavigations, get(campaign, 'legal.dataroom.documents'));
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-    && campaign.offering.launch.terminationDate;
-    const diff = DataFormatter.diffDays(terminationDate);
-    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
-    const minOffering = campaign && campaign.keyTerms &&
-      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
-    const flagStatus = collected >= minOffering;
-    const percent = (collected / maxOffering) * 100;
-    const address = campaign && campaign.keyTerms ?
-      `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
+    // const terminationDate = campaign && campaign.offering && campaign.offering.launch
+    // && campaign.offering.launch.terminationDate;
+    // const diff = DataFormatter.diffDays(terminationDate);
+    // const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    // const minOffering = campaign && campaign.keyTerms &&
+    //   campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
+    // const maxOffering = campaign && campaign.keyTerms &&
+    // campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    // const flagStatus = collected >= minOffering;
+    // const percent = (collected / maxOffering) * 100;
+    // const address = campaign && campaign.keyTerms ?
+    //   `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
+    // ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;
@@ -134,132 +133,7 @@ class offerDetails extends Component {
         {campaign &&
           <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
-        <section className="campaign-details-banner banner">
-          <Responsive minWidth={768} as={Container}>
-            <Grid relaxed>
-              <Grid.Column width={10}>
-                <div className="video-wrapper">
-                  {campaign && campaign.media &&
-                    campaign.media.heroVideo && campaign.media.heroVideo.url ?
-                      <Link to={`${this.props.match.url}/herovideo`}>
-                        <Image64
-                          srcUrl={campaign && campaign.media &&
-                            campaign.media.heroImage &&
-                            campaign.media.heroImage.url ?
-                            campaign.media.heroImage.url : null
-                          }
-                          imgType="heroImage"
-                        />
-                        <Icon className="ns-play play-icon" />
-                      </Link>
-                      :
-                      <Image64
-                        srcUrl={campaign && campaign.media &&
-                          campaign.media.heroImage &&
-                          campaign.media.heroImage.url ?
-                          campaign.media.heroImage.url : null
-                        }
-                        imgType="heroImage"
-                      />
-                  }
-                  <div className="offer-stats">
-                    <Statistic.Group>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Value>{diff || 0}</Statistic.Value>
-                        <Statistic.Label>Days left</Statistic.Label>
-                      </Statistic>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Value>
-                          {(campaign && campaign.closureSummary &&
-                            campaign.closureSummary.totalInvestorCount) || 0}
-                        </Statistic.Value>
-                        <Statistic.Label>Investors</Statistic.Label>
-                      </Statistic>
-                      <Statistic size="mini" className="basic">
-                        <Statistic.Value>
-                          {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount)
-                            || 0}
-                        </Statistic.Value>
-                        <Statistic.Label>Early Bird Rewards</Statistic.Label>
-                      </Statistic>
-                    </Statistic.Group>
-                  </div>
-                </div>
-                <div className="clearfix social-links mt-10">
-                  <div className="pull-left">
-                    <a href="/" target="_blank" rel="noopener noreferrer">
-                      <Icon color="white" name="instagram" />
-                    </a>
-                    <a href="/" target="_blank" rel="noopener noreferrer">
-                      <Icon color="white" name="twitter" />
-                    </a>
-                    <a href="/" target="_blank" rel="noopener noreferrer">
-                      <Icon color="white" name="facebook" />
-                    </a>
-                  </div>
-                  <Link to={this.props.match.url} onClick={this.handleViewGallery} className="pull-right">
-                    View gallery <Icon size="small" className="ns-chevron-right" />
-                  </Link>
-                </div>
-              </Grid.Column>
-              <Grid.Column width={6}>
-                <Header as="h3" inverted>
-                  {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
-                  <Header.Subheader>{address}</Header.Subheader>
-                </Header>
-                <Statistic inverted size="tiny" className="basic mb-0">
-                  <Statistic.Value>
-                    <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
-                  </Statistic.Value>
-                </Statistic>
-                {flagStatus &&
-                  <p className="flag-status">
-                    <Icon name="flag" /> Surpassed minimum goal
-                  </p>
-                }
-                <Progress inverted percent={percent} size="tiny" color="green" />
-                <Statistic inverted size="tiny" className="basic mb-0">
-                  <Statistic.Label>{Helper.CurrencyFormat(flagStatus ? maxOffering : minOffering)} {flagStatus ? 'max target' : 'min target'} {' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                      position="top center"
-                    />
-                  </Statistic.Label>
-                </Statistic>
-                {/* <Header as="h3" inverted>
-                  <span className="highlight-text">$35,000</span> raised
-                  <Header.Subheader>of $50,000 min{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="Lorem Ipsum"
-                      position="top center"
-                    />
-                  </Header.Subheader>
-                </Header> */}
-                <p className="raise-type mt-30">
-                  <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
-                  <Popup
-                    hoverable
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
-                    position="top center"
-                  />
-                  <br />
-                  Investment Multiple: 1.4–1.5x<br />
-                  Maturity: 60 Months
-                </p>
-                <div className="center-align">
-                  <Button fluid secondary content="Invest Now" as={Link} to={`${this.props.match.url}/invest-now`} />
-                  <small>
-                    ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
-                      || 0} min investment
-                  </small>
-                </div>
-              </Grid.Column>
-            </Grid>
-          </Responsive>
-        </section>
+        <CampaignHeader {...this.props} />
         {/* <Responsive minWidth={768} as={Aux}>
         <Responsive minWidth={768} as={Aux}>
           <CampaignSideBar navItems={navItems} />
