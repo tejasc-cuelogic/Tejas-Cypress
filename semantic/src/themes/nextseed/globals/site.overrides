@@ -37,7 +37,7 @@ h1, h1.ui.header{
 	@media only screen and (max-width : @largestMobileScreen){
 		font-size: @28px !important;
 		line-height: 38px;
-	} 
+	}
 }
 h2, h2.ui.header{
 	// line-height:34px;
@@ -294,7 +294,7 @@ footer{
 			display: flex;
 			flex-direction:column;
 			@media only screen and (max-width : @largestMobileScreen){
-				flex-direction: column; 
+				flex-direction: column;
 				align-items: center;
 			}
 			@media only screen and (min-width : @tabletBreakpoint) and (max-width : @largestTabletScreen){
@@ -373,7 +373,7 @@ footer{
 	.offer-filter-container {
 		background-color: @white;
 		width: 100%;
-		padding: @17px 0 @50px; 
+		padding: @17px 0 @50px;
 		h6.ui.header {
 			font-size: @13px;
 			font-weight: @bold;
@@ -384,7 +384,7 @@ footer{
 			label {
 				color:@neutral-middark;
 			}
-		} 
+		}
 		i {
 			font-size: @16px;
 			line-height: @16px;
@@ -397,7 +397,7 @@ footer{
 				color: @neutral-middark;
 				padding: 0;
 				padding-left: @3px;
-				font-weight: normal; 
+				font-weight: normal;
 			}
 		}
 		.slick-slider {
@@ -653,7 +653,7 @@ footer{
 		.fields {
 			justify-content: center;
 		}
-	} 
+	}
 }
 //	Business homepage
 .info-grid {
@@ -724,7 +724,7 @@ footer{
 					position: relative;
 					&:before {
 						counter-increment: section;
-						content: counter(section);  
+						content: counter(section);
 						position: absolute;
 						left: 0;
 						top: 5px;
@@ -808,7 +808,7 @@ footer{
 				}
 			}
 		}
-	} 
+	}
 	// &.slider-thumbnails {
 	// 	background: @fullBlack;
 	// 	.slick-slide {
@@ -910,7 +910,7 @@ footer{
 			position: relative;
 			&:before {
 				counter-increment: section;
-				content: counter(section);  
+				content: counter(section);
 				position: absolute;
 				left: 0;
 				top: 10px;
@@ -981,7 +981,7 @@ footer{
 }
 address p{
 	margin: 0;
-	font-style: normal;	
+	font-style: normal;
 }
 .press-list {
 	padding: @20px @50px;
@@ -997,10 +997,10 @@ address p{
 	}
 	a {
 		i {
-			color: @primary-two !important; 
-			margin-right: @10px !important;	
+			color: @primary-two !important;
+			margin-right: @10px !important;
 		}
-		color: @primary-two !important; 
+		color: @primary-two !important;
 	}
 }
 .insight-image-wrapper {
@@ -1009,10 +1009,10 @@ address p{
 		position: absolute;
 		bottom: 0;
 		left: 0;
-		padding: 20px; 
+		padding: 20px;
 		&:hover {
 			text-decoration: none;
-		}   
+		}
 		p {
 			background: @neutral;
 			padding: 5px 10px;
@@ -1045,7 +1045,7 @@ address p{
 	h2.ui.header {
 		margin-bottom: 0px;
 	}
-}	 
+}
 //	Education center
 .edu-center {
 	.ui.card {
@@ -1107,10 +1107,10 @@ a.icon-link {
 }
 .animation-container {
 	position: absolute;
-	top: 0; 
-	left: 0; 
-	width: 100%; 
-	height: 100%; 
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	z-index: 9999;
 	pointer-events:none;
 }
@@ -1173,7 +1173,7 @@ a.icon-link {
 				}
 				&+.content {
 					margin-left: 34px;
-					padding: 0;	 
+					padding: 0;
 					text-transform: capitalize;
 					span {
 						font-size: @13px;
@@ -2381,7 +2381,7 @@ p.check-extra-info{
 	}
 	a {
 		&:hover {
-			text-decoration: none;	
+			text-decoration: none;
 		}
 	}
 	.fixed-button {
@@ -2505,7 +2505,7 @@ p.check-extra-info{
     border-radius: 3px;
     padding: 5px 9px;
     opacity: .8;
-    color: @neutral-darkwhite; 
+    color: @neutral-darkwhite;
     background: fade(@fullBlack, 60%);
     z-index: 100;
 }
@@ -2549,15 +2549,15 @@ p.check-extra-info{
 		}
 	}
 }
-//	IRA account creation 
+//	IRA account creation
 .promitional-offer-block {
 	border: 1px solid @primary-one;
 	padding: @10px;
 	h5.ui.header {
-		margin: 0; 
+		margin: 0;
 	}
 }
-//	Profile setting new structure 
+//	Profile setting new structure
 .profile-settings .field-wrap {
 	padding: @20px;
 	.fields:last-child .field {
