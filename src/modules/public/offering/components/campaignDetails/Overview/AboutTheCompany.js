@@ -56,7 +56,7 @@ class AboutTheCompany extends Component {
               }
             </List>
           :
-            <InlineLoader text="No Data Found" />
+            <InlineLoader text="No Data Found" className="bg-offwhite" />
         }
         <Button fluid={isMobile} onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
           Learn More About the Company

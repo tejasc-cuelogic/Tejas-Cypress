@@ -32,7 +32,7 @@ class CompanyHistory extends Component {
               }
               </List>
             :
-              <InlineLoader text={emptyHistoryStatement} />
+              <InlineLoader text={emptyHistoryStatement} className="bg-offwhite" />
         }
       </Aux>
     );

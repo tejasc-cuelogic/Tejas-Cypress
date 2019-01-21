@@ -63,7 +63,7 @@ class BonusRewards extends Component {
                     </Segment>
                   </Grid.Column>
                 ))}
-              </Grid> : <InlineLoader text="No bonus rewards are available." />
+              </Grid> : <InlineLoader text="No bonus rewards are available." className="bg-offwhite" />
             }
             {offeringMISC &&
               <Segment padded className="reward-block">
@@ -72,7 +72,7 @@ class BonusRewards extends Component {
             }
           </div>
           :
-          <InlineLoader text="No Bonus Rewards" />
+          <InlineLoader text="No Bonus Rewards" className="bg-offwhite" />
         }
       </div>
     );

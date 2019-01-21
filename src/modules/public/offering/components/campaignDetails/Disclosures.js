@@ -31,7 +31,7 @@ export default class TermsOfUse extends Component {
         <div className="campaign-content-wrapper">
           <div className="updates-modal">
             <div className="no-updates">
-              <InlineLoader text="No Data Room Documents" />
+              <InlineLoader text="No Data Room Documents" className="bg-offwhite" />
             </div>
           </div>
         </div>

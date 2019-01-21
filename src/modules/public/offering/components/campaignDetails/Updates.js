@@ -102,7 +102,7 @@ class Updates extends Component {
             }
           </VerticalTimeline>
           :
-          <InlineLoader text="No Updates" />
+          <InlineLoader text="No Updates" className="bg-offwhite" />
         }
       </div>
     );

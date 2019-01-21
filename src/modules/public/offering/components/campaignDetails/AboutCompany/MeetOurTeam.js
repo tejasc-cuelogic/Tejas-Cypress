@@ -66,7 +66,7 @@ class MeetOurTeam extends Component {
               </Item.Group>
             </Aux>
             :
-            <InlineLoader text={emptyStatement} />
+            <InlineLoader text={emptyStatement} className="bg-offwhite" />
         }
       </Aux>
     );

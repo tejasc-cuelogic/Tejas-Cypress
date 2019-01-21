@@ -10,7 +10,7 @@ const pillersMeta = [
 ];
 
 const InlineLoader = props => (
-  <section className="center-align">
+  <section className={`center-align ${props.className}`}>
     {
       props.text ? (
         <h3 className="grey-header">{Parser(props.text) || ''}</h3>
