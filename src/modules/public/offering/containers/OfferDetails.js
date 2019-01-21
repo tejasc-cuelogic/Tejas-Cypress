@@ -15,9 +15,11 @@ import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
+import { DataFormatter } from '../../../../helper';
 import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
+import Helper from '../../../../helper/utility';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -111,10 +113,10 @@ class offerDetails extends Component {
     const navItems =
     this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
       .subNavigations, get(campaign, 'legal.dataroom.documents'));
-    // const terminationDate = campaign && campaign.offering && campaign.offering.launch
-    // && campaign.offering.launch.terminationDate;
-    // const diff = DataFormatter.diffDays(terminationDate);
-    // const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    const terminationDate = campaign && campaign.offering && campaign.offering.launch
+    && campaign.offering.launch.terminationDate;
+    const diff = DataFormatter.diffDays(terminationDate);
+    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
     // const minOffering = campaign && campaign.keyTerms &&
     //   campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
     // const maxOffering = campaign && campaign.keyTerms &&
@@ -144,18 +146,18 @@ class offerDetails extends Component {
             <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
               <Container fluid>
                 <List bulleted floated="right" horizontal>
-                  <List.Item>134 Investors</List.Item>
-                  <List.Item>8 Hours left</List.Item>
+                  <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
+                  <List.Item>{diff} days left</List.Item>
                   <Button secondary compact content="Invest Now" />
                 </List>
                 <List bulleted horizontal>
                   <List.Item>
-                    <List.Header>Carmelo’s Cucina Italiana</List.Header>
+                    <List.Header>{get(campaign, 'keyTerms.shorthandBusinessName')}</List.Header>
                   </List.Item>
                   <List.Item>
-                    <List.Header><span className="highlight-text">$100,000</span> raised</List.Header>
+                    <List.Header><span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised</List.Header>
                   </List.Item>
-                  <List.Item>1.4–1.5x Investment Multiple</List.Item>
+                  <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
                 </List>
               </Container>
             </div>

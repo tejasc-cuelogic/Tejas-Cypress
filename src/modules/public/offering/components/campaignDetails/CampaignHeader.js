@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
@@ -142,8 +143,8 @@ export default class CampaignHeader extends Component {
                     position="top center"
                   />
                   <br />
-                  Investment Multiple: 1.4–1.5x<br />
-                  Maturity: 60 Months
+                  Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}<br />
+                  Maturity: {get(campaign, 'keyTerms.maturity')} Months
                 </p>
                 <div className="center-align">
                   <Button fluid secondary content="Invest Now" as={Link} to={`${this.props.match.url}/invest-now`} />
