@@ -20,6 +20,7 @@ export const MAX_BENEFICIARY_LIMIT = 5;
 export const NS_SITE_EMAIL_SUPPORT = 'support@nextseed.com';
 
 export const NEXTSEED_BOX_URL = 'https://nextseed.app.box.com/';
+export const NEXTSEED_SECURITIES_BOX_URL = 'https://nextseedsecurities.app.box.com/';
 
 export const ACTIVITY_HISTORY_TYPES = {
   COMMENT: 'COMMENT',

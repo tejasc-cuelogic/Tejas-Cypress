@@ -200,12 +200,12 @@ export class CampaignStore {
   }
 
   @action
-  getBoxEmbedLink = (of, fileId) => {
+  getBoxEmbedLink = (of, fileId, accountType) => {
     this.docLoading = true;
     const boxFileId = fileId;
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
-      variables: { fileId: boxFileId },
+      variables: { fileId: boxFileId, accountType },
     }).then((res) => {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
       this.setLoading(false);
