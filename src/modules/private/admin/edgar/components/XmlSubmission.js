@@ -19,7 +19,7 @@ class XmlSubmission extends Component {
     this.props.history.push(`/app/edgar/${this.props.offeringId}/filing/${this.props.filingId}/xml`);
   }
   render() {
-    const { offeringId, filingId } = this.props.offeringId;
+    const { offeringId, filingId } = this.props;
     const xmlUrl = `/app/edgar/${offeringId}/filing/${filingId}/xml`;
     if (!_.isEmpty(this.props.xmlSubmissions)) {
       return (
