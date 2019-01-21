@@ -7,6 +7,8 @@ import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 // import Helper from '../../../../../../helper/utility';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
 class KeyTerms extends Component {
   handleViewInvestmentDetails = (e) => {
@@ -25,7 +27,7 @@ class KeyTerms extends Component {
     return (
       <Aux>
         <Header as="h3" className="mb-30" id="investment-highlights">Investment Highlights</Header>
-        <Table basic="very" className="key-terms-table">
+        <Table basic="very" className="key-terms-table neutral-text">
           <Table.Body>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Raise</b>{' '}
@@ -46,7 +48,7 @@ class KeyTerms extends Component {
                   )}
                 />
               </Table.Cell>
-              <Table.Cell />
+              <Table.Cell className="grey-header" />
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Investment Type</b>{' '}
@@ -56,7 +58,7 @@ class KeyTerms extends Component {
                   position="top center"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell className="grey-header">
                 {campaign && campaign.keyTerms &&
                   campaign.keyTerms.securities ?
                   CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
@@ -72,7 +74,7 @@ class KeyTerms extends Component {
                   position="top center"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell className="grey-header">
                 {maturityMonth ?
                   `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
                   :
@@ -89,7 +91,7 @@ class KeyTerms extends Component {
                   position="top center"
                 />
               </Table.Cell>
-              <Table.Cell />
+              <Table.Cell className="grey-header" />
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Multiple</b>{' '}
@@ -100,13 +102,13 @@ class KeyTerms extends Component {
                   position="top center"
                 />
               </Table.Cell>
-              <Table.Cell>
+              <Table.Cell className="grey-header">
                 {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : '-'}
               </Table.Cell>
             </Table.Row>
           </Table.Body>
         </Table>
-        <Button onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
+        <Button fluid={isMobile} onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
           View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
