@@ -49,8 +49,8 @@ class CommentsReplyModal extends Component {
                   <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(date).format('ll')}</span></Comment.Metadata>
                   <Comment.Text className="mt-20">
                     {this.state.readMore === message.id ?
-                      message.comment : message.comment.substr(0, readMoreLength)}
-                    {message.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, this.state.readMoreInner !== message.id ? message.id : false)}> {this.state.readMoreInner !== message.id ? '...Read More' : 'Read Less'}</Link>}
+                      message.comment : message.comment.length > readMoreLength ? `${message.comment.substr(0, readMoreLength)}...` : message.comment.substr(0, readMoreLength)}
+                    {message.comment.length > readMoreLength && <Link to="/" onClick={e => this.readMore(e, this.state.readMoreInner !== message.id ? message.id : false)}>{this.state.readMoreInner !== message.id ? 'read more' : 'read less'}</Link>}
                   </Comment.Text>
                 </Comment.Content>
               </Comment>
