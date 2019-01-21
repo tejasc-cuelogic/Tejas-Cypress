@@ -50,7 +50,7 @@ export default class BusinessDetails extends Component {
   handleLearnMore = () => {
     const { getBoxLink, setField, agreements } = this.props.agreementsStore;
     setField('docLoading', true);
-    getBoxLink(agreements[2].id).then((res) => {
+    getBoxLink(agreements[2].id, 'SECURITIES').then((res) => {
       setField('docLoading', false);
       window.open(res.data.getBoxEmbedLink, '_blank');
     });

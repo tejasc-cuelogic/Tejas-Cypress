@@ -60,12 +60,13 @@ export class AgreementsStore {
   }
 
   @action
-  getBoxEmbedLink = (of, fileId) => {
+  getBoxEmbedLink = (of, fileId, accountType) => {
     this.setField('docLoading', true);
     const fId = fileId || toJS(this.agreements).find(ele => ele.key === of).id;
+    const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     client.mutate({
       mutation: getBoxEmbedLink,
-      variables: { fileId: fId },
+      variables: { fileId: fId, accountType: accountTypeToPass },
     }).then((res) => {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
       this.setField('docLoading', false);
@@ -92,11 +93,15 @@ export class AgreementsStore {
     return navList;
   }
 
-  getBoxLink = fileId =>
+  getBoxLink = (fileId, accountType) => new Promise((resolve) => {
+    const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     client.mutate({
       mutation: getBoxEmbedLink,
-      variables: { fileId },
+      variables: { fileId, accountType: accountTypeToPass },
+    }).then((resp) => {
+      resolve(resp);
     });
+  })
 
   getLegalDocsFileIds = () => new Promise((resolve) => {
     this.setField('docIdsLoading', true);
