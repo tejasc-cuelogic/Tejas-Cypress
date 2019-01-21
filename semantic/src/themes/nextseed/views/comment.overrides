@@ -48,12 +48,12 @@
         .comments {
             margin: 0;
             &.reply-comments {
+                margin: @30px 0 0;
                 .comment {
                     // padding: @24px @30px;
                     background: transparent;
-                    border-top: 1px solid @neutral-darkwhite;
                     &:first-child {
-                        border-top: 0;
+                        border-top: 1px solid fade(@primary-two-darken, 8%);
                     }
                     &:last-child {
                         padding-bottom: 0;
@@ -62,12 +62,12 @@
                         background: fade(@primary-two-darken, 8%);
                         border-radius: 4px;
                         border-top: 0;
-                        margin: @30px 0 0;
+                        // margin: @30px 0 0;
                         +.issuer-comment {
                             margin-top: @24px;
                         }
                         +.comment {
-                            border-top: 0;
+                            border-top: 1px solid fade(@primary-two-darken, 8%);
                         }
                     }
                 }  
