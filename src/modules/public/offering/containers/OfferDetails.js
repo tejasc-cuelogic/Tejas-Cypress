@@ -15,9 +15,11 @@ import Congratulation from '../components/investNow/agreement/components/Congrat
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 import Footer from './../../../../theme/layout/Footer';
+import Helper from './../../../../helper/utility';
 import { DataFormatter } from '../../../../helper';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../constants/offering';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -72,8 +74,6 @@ class offerDetails extends Component {
     if (!dataRoomDocs) {
       return oldNav;
     }
-    console.log('oldNav', oldNav);
-    console.log('dataRoomDocs', dataRoomDocs);
     const tempNav = [];
     oldNav.forEach((item) => {
       const tempItem = item;
@@ -96,8 +96,18 @@ class offerDetails extends Component {
     const {
       match, campaignStore, location, navStore,
     } = this.props;
+    if (this.state.showPassDialog) {
+      return (<DevPassProtected
+        previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
+        offerPreview
+        authPreviewOffer={this.authPreviewOffer}
+      />);
+    }
+    if (!campaignStore.details || campaignStore.details.loading) {
+      return <Spinner loaderMessage="Loading.." />;
+    }
     const {
-      details, campaignSideBarShow, campaign, navCountData,
+      details, campaignSideBarShow, campaign, navCountData, offerStructure,
     } = campaignStore;
     const navItems =
     this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
@@ -108,19 +118,12 @@ class offerDetails extends Component {
     const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
     const minOffering = campaign && campaign.keyTerms &&
       campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
+    const maxOffering = campaign && campaign.keyTerms &&
+    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
     const flagStatus = collected >= minOffering;
+    const percent = (collected / maxOffering) * 100;
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
-    if (this.state.showPassDialog) {
-      return (<DevPassProtected
-        previewPassword={campaign && campaign.previewPassword}
-        offerPreview
-        authPreviewOffer={this.authPreviewOffer}
-      />);
-    }
-    if (!details || details.loading) {
-      return <Spinner loaderMessage="Loading.." />;
-    }
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;
@@ -206,9 +209,17 @@ class offerDetails extends Component {
                 </Header>
                 <Statistic inverted size="tiny" className="basic mb-0">
                   <Statistic.Value>
-                    <span className="highlight-text">$35,000</span> raised
+                    <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
                   </Statistic.Value>
-                  <Statistic.Label>of $50,000 min{' '}
+                </Statistic>
+                {flagStatus &&
+                  <p className="flag-status">
+                    <Icon name="flag" /> Surpassed minimum goal
+                  </p>
+                }
+                <Progress inverted percent={percent} size="tiny" color="green" />
+                <Statistic inverted size="tiny" className="basic mb-0">
+                  <Statistic.Label>{Helper.CurrencyFormat(flagStatus ? maxOffering : minOffering)} {flagStatus ? 'max target' : 'min target'} {' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
                       content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
@@ -226,14 +237,8 @@ class offerDetails extends Component {
                     />
                   </Header.Subheader>
                 </Header> */}
-                <Progress inverted percent={90} size="tiny" color="green" />
-                {flagStatus &&
-                  <p className="flag-status">
-                    <Icon name="flag" /> Surpassed minimum goal
-                  </p>
-                }
                 <p className="raise-type mt-30">
-                  <b>Revenue Sharing Note</b>{' '}
+                  <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
                   <Popup
                     hoverable
                     trigger={<Icon name="help circle" color="green" />}
