@@ -48,7 +48,7 @@ class InvestmentDetails extends Component {
               <p>{maxOfferingExpenseDesc || emptyContent}</p>
             </Aux>
             :
-            <InlineLoader text={emptyContent} />
+            <InlineLoader text={emptyContent} className="bg-offwhite" />
         }
         <Divider hidden />
         {/* <Image64

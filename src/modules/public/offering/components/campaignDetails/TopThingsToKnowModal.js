@@ -49,7 +49,7 @@ class TopThingsToKnowModal extends Component {
                   }
                 </List>
                 :
-                <InlineLoader text="No Data Found" />
+                <InlineLoader text="No Data Found" className="bg-offwhite" />
             }
           </Aux>
         </Modal.Content>
