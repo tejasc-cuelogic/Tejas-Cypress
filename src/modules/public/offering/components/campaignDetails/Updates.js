@@ -26,7 +26,7 @@ class Updates extends Component {
       <div className="campaign-content-wrapper">
         <Header as="h3">Updates</Header>
         {updates && updates.length ?
-          <VerticalTimeline className="campaign-updates" layout="one-column">
+          <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
             {updates && updates.length &&
               updates.map((dataItem, index) => (
                 <VerticalTimelineElement
@@ -34,7 +34,7 @@ class Updates extends Component {
                   className={`vertical-timeline-element--work ${(index - 1) > 0 && updates[index - 1].updated.date !== dataItem.updated.date ? '' : 'hide-date'}`}
                   iconStyle={
                     index === 0 ? {
-                        background: '#20C86D', height: 30, width: 30, marginLeft: -16,
+                        background: '#20C86D', height: 30, width: 30, marginLeft: -15,
                       } : {}}
                   date={(index - 1) > 0 ?
                     updates[index - 1].updated.date !== dataItem.updated.date ?

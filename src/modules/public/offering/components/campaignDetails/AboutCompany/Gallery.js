@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
 class Gallery extends Component {
   handleViewGallary = (e) => {
@@ -35,7 +37,7 @@ class Gallery extends Component {
               <Image64 fluid className="about-gallery-bg" srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
           }
         </div>
-        <Button onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
+        <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
           View Gallery
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>

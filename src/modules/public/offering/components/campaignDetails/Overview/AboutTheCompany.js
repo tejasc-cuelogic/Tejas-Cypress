@@ -8,6 +8,8 @@ import Parser from 'html-react-parser';
 // '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
 class AboutTheCompany extends Component {
   handleViewAboutCompany = (e) => {
@@ -56,7 +58,7 @@ class AboutTheCompany extends Component {
           :
             <InlineLoader text="No Data Found" />
         }
-        <Button onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
+        <Button fluid={isMobile} onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
           Learn More About the Company
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>

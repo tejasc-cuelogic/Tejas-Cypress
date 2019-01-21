@@ -158,8 +158,8 @@ class Comments extends Component {
                                 </Comment.Actions>
                                 <Comment.Text className="mt-20">
                                   {this.state.readMoreInner === tc.id ?
-                                  tc.comment : tc.comment.substr(0, readMoreLength)}
-                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}> {this.state.readMoreInner !== tc.id ? '...Read More' : 'Read Less'}</Link>}
+                                  tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}...` : tc.comment.substr(0, readMoreLength)}{' '}
+                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'read more' : 'read less'}</Link>}
                                 </Comment.Text>
                               </Comment.Content>
                             </Comment>

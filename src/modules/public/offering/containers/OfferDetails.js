@@ -25,6 +25,7 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
@@ -172,10 +173,12 @@ class offerDetails extends Component {
           <Container>
             <section>
               <Grid>
-                <Grid.Column width={4}>
-                  <CampaignSideBar navItems={navItems} />
-                </Grid.Column>
-                <Grid.Column width={12}>
+                {!isMobile &&
+                  <Grid.Column width={4}>
+                    <CampaignSideBar navItems={navItems} />
+                  </Grid.Column>
+                }
+                <Grid.Column computer={12} mobile={16}>
                   <Switch>
                     <Route exact path={match.url} component={getModule(navItems[0].component)} />
                     {

@@ -7,6 +7,8 @@ import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Image64 } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 @withRouter
 class LatestUpdates extends Component {
   handleViewUpdates = (e) => {
@@ -57,7 +59,7 @@ class LatestUpdates extends Component {
               {update ?
                 <Aux>
                   <Item.Description className="avatar-description">
-                    <Header as="h4">{update.title}</Header>
+                    <Header as="h4" className="grey-header">{update.title}</Header>
                     <p>
                       {Parser(update.content || '')}
                     </p>
@@ -72,7 +74,7 @@ class LatestUpdates extends Component {
             </Item.Content>
           </Item>
         </Item.Group>
-        <Button onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
+        <Button fluid={isMobile} onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
           View Updates
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>

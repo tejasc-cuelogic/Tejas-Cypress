@@ -19,11 +19,11 @@ class CompanyHistory extends Component {
               <List className="history-section">
                 {
                 campaign.offering.about.history.map(data => (
-                  <List.Item className="mb-10">
+                  <List.Item className="mb-30">
                     <Icon className="ns-flag-line" color="green" />
                     <List.Content>
                       <List.Header>{data.date}</List.Header>
-                      <List.Description className="mt-10">
+                      <List.Description>
                         {data.description}
                       </List.Description>
                     </List.Content>
