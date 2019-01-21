@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const getBoxEmbedLink = gql`
-  mutation _getBoxEmbedLink($fileId: String!) {
-    getBoxEmbedLink (fileId: $fileId)
+  mutation _getBoxEmbedLink($fileId: String!, $accountType: BoxAccountTypeEnum) {
+    getBoxEmbedLink (fileId: $fileId, accountType: $accountType)
   }
 `;
 
