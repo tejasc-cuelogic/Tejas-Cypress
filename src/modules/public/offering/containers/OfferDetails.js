@@ -266,6 +266,7 @@ class offerDetails extends Component {
           <CampaignSideBar navItems={navItems} />
         </Responsive> */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
+          {!isMobile &&
           <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
             <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
               <Container fluid>
@@ -286,6 +287,7 @@ class offerDetails extends Component {
               </Container>
             </div>
           </Visibility>
+          }
           <Responsive maxWidth={767} as={Aux}>
             <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
             <MobileDropDownNav
