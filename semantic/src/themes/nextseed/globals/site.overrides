@@ -1192,13 +1192,8 @@ a.icon-link {
 					border-radius: 50%;
 				}
 				&+.content {
-<<<<<<< HEAD
-					margin-left: 34px;
-					padding: 0;
-=======
 					margin-left: @34px;
-					padding: 0;	 
->>>>>>> 5ecd34c45dfacc18e5f2abd36bdbf2b6e7c14692
+					padding: 0;
 					text-transform: capitalize;
 					span {
 						font-size: @13px;
@@ -1214,7 +1209,7 @@ a.icon-link {
 				.image+.content {
 					margin-left: @14px;
 				}
-			}		
+			}
 		}
 		.ui.list .item {
 			border: 1px solid @neutral-darkwhite;
@@ -1245,7 +1240,7 @@ a.icon-link {
 			width: @60px;
 			height: @60px;
 			line-height: @60px;
-			@media only screen and (max-width : @largestMobileScreen){ 
+			@media only screen and (max-width : @largestMobileScreen){
 				width: @40px;
 				height: @40px;
 				line-height: @40px;

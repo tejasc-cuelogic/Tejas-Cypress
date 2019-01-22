@@ -45,6 +45,7 @@ class App extends Component {
   componentDidUpdate(prevProps) {
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
+    const currentLocation = this.props.location.pathname;
     const calculations = {
       topVisible: true,
       direction: 'up',
@@ -56,6 +57,9 @@ class App extends Component {
     } else if (isLoggingOut) {
       this.props.uiStore.clearRedirectURL();
       this.props.authStore.setUserLoggedIn(false);
+    }
+    if (!currentLocation.includes('offerings')) {
+      window.scrollTo(0, 0);
     }
     // window.scrollTo(0, 0);
     this.props.navStore.setNavStatus(calculations);
