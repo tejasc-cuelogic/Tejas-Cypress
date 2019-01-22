@@ -27,7 +27,7 @@ class TermNoteDetails extends Component {
             <p><b>Security</b><br />{KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
           </Grid.Column>
         </Grid>
-        <Divider />
+        {!isMobile && <Divider />}
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             <Table.Row verticalAlign="top">

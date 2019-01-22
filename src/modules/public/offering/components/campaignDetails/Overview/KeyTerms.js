@@ -31,8 +31,6 @@ class KeyTerms extends Component {
           <Table.Body>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Raise</b>{' '}
-                {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?
-                CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : ''}
                 <Popup
                   hoverable
                   position="top center"
@@ -48,7 +46,10 @@ class KeyTerms extends Component {
                   )}
                 />
               </Table.Cell>
-              <Table.Cell className="grey-header" />
+              <Table.Cell className="grey-header">
+                {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?
+                  CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : ''}
+              </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Investment Type</b>{' '}

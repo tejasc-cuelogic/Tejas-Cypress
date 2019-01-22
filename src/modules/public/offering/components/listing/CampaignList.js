@@ -114,7 +114,7 @@ export default class CampaignList extends Component {
                       </Card>
                     </Grid.Column>
                   ))}
-                </Grid> : <InlineLoader text="No data found." className="bg-offwhite" />
+                </Grid> : <InlineLoader text="No data found." />
             }
           </Container>
           {this.state.filters && <div className="overlay" />}
