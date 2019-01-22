@@ -40,10 +40,14 @@ class Gallery extends Component {
               <Image64 fluid className="about-gallery-bg" srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
           }
         </div>
-        <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
-          View Gallery
-          <Icon size="small" className="ns-chevron-right right" color="white" />
-        </Button>
+        {
+          campaign && campaign.media &&
+            campaign.media.gallery && campaign.media.gallery.length &&
+            <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
+              View Gallery
+              <Icon size="small" className="ns-chevron-right right" color="white" />
+            </Button>
+        }
       </Aux>
     );
   }

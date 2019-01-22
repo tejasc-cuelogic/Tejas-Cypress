@@ -31,12 +31,9 @@
 // .offer-details
 .campaign-details-banner .ui.progress {
     margin-bottom: @15px;
-    ~ p.flag-status{
+    ~ p{
         color: @white;
-        font-size: @12px;
+        font-size: @15px;
         line-height: 18px;
-        i.icon {
-            margin-left: 0;
-        }
     }
 }
