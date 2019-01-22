@@ -38,7 +38,10 @@ class InvestmentDetails extends Component {
       null;
     return (
       <Aux>
-        <Header as="h3" className="mb-30" id="use-of-proceeds">Use of Proceeds</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Use of Proceeds
+          <span className="anchor" id="use-of-proceeds" />
+        </Header>
         {campaign && campaign.legal &&
           campaign.legal.general && campaign.legal.general.useOfProceeds ?
             <Aux>

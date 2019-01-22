@@ -14,7 +14,10 @@ class BusinessModel extends Component {
     //   campaign.media.businessModelImage.url ? campaign.media.businessModelImage.url : null;
     return (
       <Aux>
-        <Header as="h3" id="business-model">Business Model</Header>
+        <Header as="h3" className="anchor-wrap">
+          Business Model
+          <span className="anchor" id="business-model" />
+        </Header>
         {
             campaign && campaign.offering && campaign.offering.about &&
               campaign.offering.about.businessModel ?

@@ -20,7 +20,10 @@ class RevenueSharingDetails extends Component {
     // ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Aux>
-        <Header as="h3" className="mb-30" id="key-terms">Key Terms</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Key Terms
+          <span className="anchor" id="key-terms" />
+        </Header>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
             <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA' }</p>
@@ -205,7 +208,10 @@ class RevenueSharingDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section hidden />
-        <Header as="h3" className="mb-30" id="revenue-sharing-summary">Revenue Sharing Summary*</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Revenue Sharing Summary*
+          <span className="anchor" id="revenue-sharing-summary" />
+        </Header>
         <p>
           {revenueShareSummary ?
             <p className="detail-section">

@@ -15,7 +15,10 @@ class TermNoteDetails extends Component {
     const edgarLink = launch && launch.edgarLink;
     return (
       <Aux>
-        <Header as="h3" className="mb-30" id="key-terms">Key Terms</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Key Terms
+          <span className="anchor" id="key-terms" />
+        </Header>
         <Grid columns={3} stackable divided className="vertical-gutter neutral-text">
           <Grid.Column>
             <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA'}</p>
@@ -178,7 +181,10 @@ class TermNoteDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section hidden />
-        <Header as="h3">Total Payment Calculator</Header>
+        <Header as="h3" className="anchor-wrap">
+          Total Payment Calculator
+          <span className="anchor" id="total-payment-calculator" />
+        </Header>
         <Grid columns={4} divided doubling stackable className="mb-30 mt-30 investment-grid">
           <Grid.Column>
             <Statistic className="basic" size="mini">
