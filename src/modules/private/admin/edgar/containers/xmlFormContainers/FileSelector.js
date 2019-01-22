@@ -27,8 +27,8 @@ export default class FileSelector extends React.Component {
   render() {
     const { offer } = this.props.offeringsStore;
     // const offering = this.props.offeringDetails;
-    const offeringRegulationArr = offer.regulation.split('_');
-    const regulationType = offeringRegulationArr[0];
+    const offeringRegulationArr = offer.regulation && offer.regulation.split('_');
+    const regulationType = offeringRegulationArr && offeringRegulationArr[0];
     const BOX_URL_TO_CONSIDER = regulationType === 'BD' ? NEXTSEED_SECURITIES_BOX_URL : NEXTSEED_BOX_URL;
     return (
       <div>
