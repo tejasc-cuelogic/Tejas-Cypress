@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { get, find } from 'lodash';
+import { get, find, has } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
@@ -93,6 +93,17 @@ class offerDetails extends Component {
     });
     return tempNav;
   }
+  removeSubNavs = (oldNav) => {
+    const newNavData = [];
+    oldNav.forEach((item) => {
+      const tempItem = { ...item };
+      if (has(item, 'subNavigations')) {
+        delete tempItem.subNavigations;
+      }
+      newNavData.push(tempItem);
+    });
+    return newNavData;
+  }
   render() {
     const {
       match, campaignStore, location, navStore,
@@ -110,9 +121,14 @@ class offerDetails extends Component {
     const {
       details, campaignSideBarShow, campaign, navCountData,
     } = campaignStore;
-    const navItems =
-    this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
-      .subNavigations, get(campaign, 'legal.dataroom.documents'));
+    let navItems = [];
+    if (isMobile) {
+      navItems = this.removeSubNavs(GetNavMeta(match.url, [], true).subNavigations);
+    } else {
+      navItems =
+      this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
+        .subNavigations, get(campaign, 'legal.dataroom.documents'));
+    }
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
     && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
