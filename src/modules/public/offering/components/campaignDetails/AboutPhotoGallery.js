@@ -14,7 +14,7 @@ class AboutPhotoGallery extends Component {
   handleClose = () => this.props.history.goBack();
   handlePagination = newIndex => this.setState({ activeSlide: newIndex });
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, gallarySelectedImageIndex } = this.props.campaignStore;
     const settings = {
       dots: false,
       infinite: false,
@@ -41,6 +41,7 @@ class AboutPhotoGallery extends Component {
               <NsCarousel
                 {...settings}
                 // thumbs={isTablet ? tabGalleryLength : galleryLength}
+                initialSlide={gallarySelectedImageIndex}
                 imageCount={galleryArray.length}
                 isTablet={isTablet}
                 refItems={galleryArray}
