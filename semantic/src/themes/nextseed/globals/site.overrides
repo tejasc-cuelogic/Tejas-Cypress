@@ -455,14 +455,10 @@ footer{
 // 	min-height:~"calc(100vh - 58px)";
 // }
 .offering-side-menu {
-	// background-color: @neutral ;
-	// padding: 0 0 74px;
-	// width: 280px;
-	// height: ~"calc(100vh - 58px)";
-	// position: fixed;
-	// z-index: 3;
-	// overflow: auto;
 	@media only screen and (max-width : @largestMobileScreen){
+		background:url(../../assets/images/banners/campaign-details.png) top center no-repeat / cover;
+		background-color: @neutral;
+		background-blend-mode:multiply;
 		position: static;
 		overflow: hidden;
 		width: 100%;
@@ -492,7 +488,7 @@ footer{
 .offering-intro {
 	padding: @20px @20px 0;
 	@media only screen and (max-width : @largestMobileScreen){
-		padding: 0 @20px @32px;
+		padding: @20px @32px;
 	}
 	h4.ui.header {
 		position: relative;
@@ -1323,6 +1319,9 @@ a.icon-link {
 	}
 	&.offering-side-menu{
 		top:136px;
+		@media only screen and (max-width : @largestMobileScreen){
+			top: 0;
+		}
 	}
 }
 .sticky-actions{

@@ -24,7 +24,7 @@ class Gallery extends Component {
     // 'media.gallery').length;
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mb-30 anchor-wrap mb-30">
           Gallery
           <span className="anchor" id="gallery" />
         </Header>
@@ -43,10 +43,14 @@ class Gallery extends Component {
               <Image64 fluid className="about-gallery-bg" srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
           }
         </div>
-        <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
-          View Gallery
-          <Icon size="small" className="ns-chevron-right right" color="white" />
-        </Button>
+        {
+          campaign && campaign.media &&
+            campaign.media.gallery && campaign.media.gallery.length &&
+            <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
+              View Gallery
+              <Icon size="small" className="ns-chevron-right right" color="white" />
+            </Button>
+        }
       </Aux>
     );
   }
