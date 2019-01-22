@@ -100,7 +100,7 @@ class MeetTeamModal extends Component {
                     </Aux>
                 ))
                 :
-                    <InlineLoader text={emptyStatement} />
+                    <InlineLoader text={emptyStatement} className="bg-offwhite" />
             }
           </Grid>
         </Modal.Content>

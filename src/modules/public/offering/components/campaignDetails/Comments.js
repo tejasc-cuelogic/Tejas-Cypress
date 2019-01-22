@@ -9,7 +9,7 @@ import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
 
-// const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 768;
 
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @observer
@@ -107,7 +107,7 @@ class Comments extends Component {
                     containerclassname="secondary"
                   />
                   {/* <Button onClick={this.handleClose}>Cancel</Button> */}
-                  <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                  <Button fluid={isMobile} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
                 </Form>
                 {/* <Form reply className="public-form clearfix">
                   <Button primary onClick={this.postNewComment}>
@@ -140,6 +140,7 @@ class Comments extends Component {
                             {(c.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
                           </Comment.Text>
                         </Comment.Content>
+                        {c.threadComment.length !== 0 &&
                         <Comment.Group className="reply-comments">
                           {c.threadComment &&
                           c.threadComment.map(tc =>
@@ -154,17 +155,18 @@ class Comments extends Component {
                                 </Comment.Author>
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
                                 <Comment.Actions>
-                                  <Comment.Action as={Link} to={`${this.props.match.url}/${c.id}`} >Reply</Comment.Action>
+                                  <Comment.Action className="grey-header" as={Link} to={`${this.props.match.url}/${c.id}`} >Reply</Comment.Action>
                                 </Comment.Actions>
                                 <Comment.Text className="mt-20">
                                   {this.state.readMoreInner === tc.id ?
-                                  tc.comment : tc.comment.substr(0, readMoreLength)}
-                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}> {this.state.readMoreInner !== tc.id ? '...Read More' : 'Read Less'}</Link>}
+                                  tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}...` : tc.comment.substr(0, readMoreLength)}{' '}
+                                  {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'read more' : 'read less'}</Link>}
                                 </Comment.Text>
                               </Comment.Content>
                             </Comment>
                           ))}
                         </Comment.Group>
+                        }
                       </Comment>
                     </Comment.Group>
                 )))

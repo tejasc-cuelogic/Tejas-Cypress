@@ -23,7 +23,7 @@ class VideoModal extends Component {
                 id={videoUrl}
                 source="vimeo"
               // icon="ns-play"
-              /> : <InlineLoader text="No video is uploaded." />
+              /> : <InlineLoader text="No video is uploaded." className="bg-offwhite" />
             }
           </Segment>
         </Grid.Column>
