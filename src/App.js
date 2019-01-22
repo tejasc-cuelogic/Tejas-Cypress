@@ -57,7 +57,7 @@ class App extends Component {
       this.props.uiStore.clearRedirectURL();
       this.props.authStore.setUserLoggedIn(false);
     }
-    window.scrollTo(0, 0);
+    // window.scrollTo(0, 0);
     this.props.navStore.setNavStatus(calculations);
   }
 
