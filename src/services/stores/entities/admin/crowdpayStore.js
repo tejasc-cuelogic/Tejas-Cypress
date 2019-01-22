@@ -4,7 +4,7 @@ import { isArray } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
-import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview } from '../../queries/CrowdPay';
+import { listCrowdPayUsers, crowdPayAccountProcess, crowdPayAccountReview, crowdPayAccountValidate } from '../../queries/CrowdPay';
 import { crowdPayAccountNotifyGs } from '../../queries/account';
 import { FILTER_META, CROWDPAY_FILTERS } from '../../../constants/crowdpayAccounts';
 import Helper from '../../../../helper/utility';
@@ -34,6 +34,13 @@ export class CrowdpayStore {
   };
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable db;
+  getMutation = {
+    GSPROCESS: crowdPayAccountProcess,
+    EMAIL: crowdPayAccountNotifyGs,
+    APPROVE: crowdPayAccountReview,
+    DECLINE: crowdPayAccountReview,
+    VALIDATE: crowdPayAccountValidate,
+  }
 
   @action
   setData = (key, value) => {
@@ -147,7 +154,7 @@ export class CrowdpayStore {
 
   @action
   crowdPayCtaHandler = (userId, accountId, ctaAction, sMsg) => {
-    const mutation = ctaAction === 'GSPROCESS' ? crowdPayAccountProcess : ctaAction === 'EMAIL' ? crowdPayAccountNotifyGs : (ctaAction === 'APPROVE' || ctaAction === 'DECLINE') ? crowdPayAccountReview : null;
+    const mutation = this.getMutation[ctaAction];
     if (!mutation) {
       return false;
     }

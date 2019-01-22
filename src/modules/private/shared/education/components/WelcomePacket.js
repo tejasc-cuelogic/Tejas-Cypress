@@ -7,8 +7,14 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class WelcomePacket extends Component {
   componentWillMount() {
-    const { getBoxEmbedLink } = this.props.agreementsStore;
-    getBoxEmbedLink('welcomeKit');
+    const {
+      getLegalDocsFileIds, getBoxEmbedLink, legalDocsList,
+    } = this.props.agreementsStore;
+    if (!legalDocsList.length) {
+      getLegalDocsFileIds().then(() => {
+        getBoxEmbedLink('welcomeKit');
+      });
+    }
   }
   render() {
     const { embedUrl, docLoading } = this.props.agreementsStore;

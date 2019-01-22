@@ -42,6 +42,9 @@
             }
         }
     }
+    .ui.fitted.checkbox{
+        display:block;
+    }
     &.sortable{
         thead th{
             color:@tertiary-text;
@@ -108,6 +111,10 @@
             > a{
                 font-family:inherit;
             }
+        }
+        .account-type{
+            float:left;
+            margin:@2px @4px @2px 0;
         }
     }
     a:not(.button){

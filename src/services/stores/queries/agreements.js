@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const getBoxEmbedLink = gql`
-  mutation _getBoxEmbedLink($fileId: String!) {
-    getBoxEmbedLink (fileId: $fileId)
+  mutation _getBoxEmbedLink($fileId: String!, $accountType: BoxAccountTypeEnum) {
+    getBoxEmbedLink (fileId: $fileId, accountType: $accountType)
   }
 `;
 
@@ -19,6 +19,7 @@ query _getlegalDocsFileIds{
     CROWDPAY_CUSTODIAL_AGREEMENT
     BUSINESS_PLAN_101
     IRS_W9_CERTIFICATION
+    INVESTOR_WELCOME_PACKET
   }
 }
 `;

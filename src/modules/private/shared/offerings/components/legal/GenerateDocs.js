@@ -6,7 +6,7 @@ import { Form, Header, Button, Divider } from 'semantic-ui-react';
 import EdgarFilingList from './EdgarFilingList';
 import { DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 
-@inject('offeringCreationStore', 'uiStore', 'userStore')
+@inject('offeringCreationStore', 'uiStore', 'userStore', 'offeringsStore')
 @observer
 export default class GenerateDocs extends Component {
   componentWillMount() {
@@ -35,6 +35,7 @@ export default class GenerateDocs extends Component {
     const { inProgress } = this.props.uiStore;
     const { offeringFilingList, ADMIN_DOCUMENTATION_FRM } = this.props.offeringCreationStore;
     const { isIssuer } = this.props.userStore;
+    const { offer } = this.props.offeringsStore;
     const { match } = this.props;
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'ui card fluid form-card'}>
@@ -48,7 +49,7 @@ export default class GenerateDocs extends Component {
             loading={inProgress}
           />
           <Divider section />
-          <EdgarFilingList offeringFilings={offeringFilingList} />
+          <EdgarFilingList offeringFilings={offeringFilingList} offeringDetails={offer} />
           {!isEmpty(offeringFilingList) &&
             <Aux>
               <Header as="h4">Upload Final Signed Docs</Header>

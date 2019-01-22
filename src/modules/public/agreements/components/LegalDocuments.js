@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { observer, inject } from 'mobx-react';
 import { Header, Grid, Segment, Button, Divider } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../theme/shared';
+import { InlineLoader, IframeModal } from '../../../../theme/shared';
 
 // const isSmallScreen = document.documentElement.clientWidth >= 1024
 // && document.documentElement.clientWidth < 1200;
@@ -30,28 +30,39 @@ const legalDocsMeta = [
 @inject('agreementsStore')
 @observer
 export default class LegalDocuments extends Component {
+  state = {
+    open: false,
+  };
   componentWillMount() {
     const {
-      setLoading, getLegalDocsFileIds, setFileIdsData, legalDocsList,
+      getLegalDocsFileIds, setFileIdsData, legalDocsList,
     } = this.props.agreementsStore;
     if (!legalDocsList.length) {
-      setLoading(true);
       getLegalDocsFileIds().then((res) => {
-        setLoading(false);
         setFileIdsData(legalDocsMeta, res.getLegalDocsFileIds);
       });
     }
   }
+  componentWillUnmount() {
+    this.props.agreementsStore.setField('alreadySet', false);
+  }
   getBoxUrl = (boxId) => {
-    this.props.agreementsStore.setLoading(true);
+    this.setState({ open: true });
+    this.props.agreementsStore.setField('docLoading', true);
     this.props.agreementsStore.getBoxLink(boxId).then((res) => {
-      this.props.agreementsStore.setLoading(false);
-      window.open(res.data.getBoxEmbedLink, '_blank');
+      this.setState({
+        open: true,
+        embedUrl: res.data.getBoxEmbedLink,
+      });
+      this.props.agreementsStore.setField('docLoading', false);
     });
   }
+  closeModal = () => {
+    this.setState({ open: false });
+  }
   render() {
-    const { legalDocsList, docLoading } = this.props.agreementsStore;
-    if (docLoading) {
+    const { legalDocsList, docLoading, docIdsLoading } = this.props.agreementsStore;
+    if (docIdsLoading) {
       return <InlineLoader />;
     }
     return (
@@ -70,6 +81,12 @@ export default class LegalDocuments extends Component {
             ))
           }
         </Grid>
+        <IframeModal
+          open={this.state.open}
+          close={this.closeModal}
+          srcUrl={this.state.embedUrl}
+          loading={docLoading}
+        />
       </Aux>
     );
   }
