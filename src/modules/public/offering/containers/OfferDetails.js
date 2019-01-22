@@ -136,7 +136,9 @@ class offerDetails extends Component {
         {campaign &&
           <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
-        <CampaignHeader {...this.props} />
+        {!isMobile &&
+          <CampaignHeader {...this.props} />
+        }
         {/* <Responsive minWidth={768} as={Aux}>
         <Responsive minWidth={768} as={Aux}>
           <CampaignSideBar navItems={navItems} />
