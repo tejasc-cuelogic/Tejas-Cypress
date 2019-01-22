@@ -17,7 +17,10 @@ export class CampaignStore {
   @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
   @observable embedUrl = null;
+  @observable documentsLoading = false;
+  @observable docsArray = [];
   @observable docLoading = false;
+  @observable gallarySelectedImageIndex = 0;
 
   @action
   setLoading = (status) => {
@@ -198,7 +201,6 @@ export class CampaignStore {
     });
     return navList;
   }
-
   @action
   getBoxEmbedLink = (of, fileId) => {
     this.docLoading = true;
