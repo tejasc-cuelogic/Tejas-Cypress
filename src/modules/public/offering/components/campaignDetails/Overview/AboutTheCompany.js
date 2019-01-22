@@ -26,7 +26,10 @@ class AboutTheCompany extends Component {
     // ));
     return (
       <Aux>
-        <Header as="h3" className="mb-30" id="top-things-to-know">Top Things to Know</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Top Things to Know
+          <span className="anchor" id="top-things-to-know" />
+        </Header>
         {/* <p className="mb-0 neutral-text">
           <b>Type of Raise: </b>
           {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?

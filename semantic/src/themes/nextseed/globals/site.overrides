@@ -2679,3 +2679,14 @@ p.check-extra-info{
 		}
 	}
 }
+
+.anchor-wrap{
+	position:relative;
+	>.anchor{
+		height:1px;
+		width:1px;
+		position:absolute;
+		left:0;
+		top:-116px;
+	}
+}
