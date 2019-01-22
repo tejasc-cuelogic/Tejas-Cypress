@@ -42,6 +42,9 @@
             }
         }
     }
+    .ui.fitted.checkbox{
+        display:block;
+    }
     &.sortable{
         thead th{
             color:@tertiary-text;

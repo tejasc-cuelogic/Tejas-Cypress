@@ -40,6 +40,7 @@ export default class AccountCreation extends React.Component {
       validateAddFunds,
       plaidAccDetails,
       formLinkBankManually,
+      depositMoneyNow,
     } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
@@ -47,7 +48,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Link Bank',
         component: <Plaid />,
-        isValid: '',
+        isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         stepToBeRendered: 1,
@@ -59,7 +60,7 @@ export default class AccountCreation extends React.Component {
         component: <AddFunds />,
         // isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
         // Done changes for saving link bank details - Alan's feedback point
-        isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
+        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : (stepToBeRendered === 1 || stepToBeRendered > 1) ? 'error' : '',
         validate: validateAddFunds,
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
@@ -68,7 +69,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Summary',
         component: <Summary />,
-        isValid: '',
+        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : (stepToBeRendered === 2 || stepToBeRendered > 2) ? 'error' : '',
       },
     ];
     return (
