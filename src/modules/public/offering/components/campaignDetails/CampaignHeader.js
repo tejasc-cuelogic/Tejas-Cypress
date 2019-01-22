@@ -33,29 +33,21 @@ export default class CampaignHeader extends Component {
       <Aux>
         <section className="campaign-details-banner banner">
           <Responsive minWidth={768} as={Container}>
-            <Grid relaxed>
+            <Grid relaxed stackable>
               <Grid.Column width={10}>
                 <div className="video-wrapper">
                   {campaign && campaign.media &&
                     campaign.media.heroVideo && campaign.media.heroVideo.url ?
                       <Link to={`${this.props.match.url}/herovideo`}>
                         <Image64
-                          srcUrl={campaign && campaign.media &&
-                            campaign.media.heroImage &&
-                            campaign.media.heroImage.url ?
-                            campaign.media.heroImage.url : null
-                          }
+                          srcUrl={get(campaign, 'media.heroImage.url')}
                           imgType="heroImage"
                         />
                         <Icon className="ns-play play-icon" />
                       </Link>
                       :
                       <Image64
-                        srcUrl={campaign && campaign.media &&
-                          campaign.media.heroImage &&
-                          campaign.media.heroImage.url ?
-                          campaign.media.heroImage.url : null
-                        }
+                        srcUrl={get(campaign, 'media.heroImage.url')}
                         imgType="heroImage"
                       />
                   }
