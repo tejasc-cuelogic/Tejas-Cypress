@@ -20,7 +20,10 @@ class MeetOurTeam extends Component {
     ));
     return (
       <Aux>
-        <Header as="h3" id="team">Meet the Team</Header>
+        <Header as="h3" className="anchor-wrap">
+          Meet the Team
+          <span className="anchor" id="team" />
+        </Header>
         {
           meetTeamOjb.length ?
             <Aux>

@@ -26,7 +26,10 @@ class KeyTerms extends Component {
     // (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     return (
       <Aux>
-        <Header as="h3" className="mb-30" id="investment-highlights">Investment Highlights</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Investment Highlights
+          <span className="anchor" id="investment-highlights" />
+        </Header>
         <Table basic="very" className="key-terms-table neutral-text">
           <Table.Body>
             <Table.Row verticalAlign="top">

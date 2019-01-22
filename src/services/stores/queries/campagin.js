@@ -65,6 +65,7 @@ export const campaignDetailsQuery = gql`
     issuerId
     offeringSlug
     referralCode
+    regulation
     selectedOffer {
       structure
     }

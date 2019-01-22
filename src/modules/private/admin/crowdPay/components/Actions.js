@@ -8,7 +8,7 @@ import { CROWDPAY_ACCOUNTS_STATUS } from '../../../../../services/constants/crow
 export default class Actions extends Component {
   ctaHandler = (e, userId, accountId, action, msg) => {
     e.preventDefault();
-    const availableActions = ['APPROVE', 'DECLINE', 'EMAIL', 'GSPROCESS'];
+    const availableActions = ['APPROVE', 'DECLINE', 'EMAIL', 'GSPROCESS', 'VALIDATE'];
     if (availableActions.includes(action)) {
       this.props.crowdPayCtaHandler(userId, accountId, action, msg);
     } else {

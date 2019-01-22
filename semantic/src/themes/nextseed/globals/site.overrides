@@ -1703,10 +1703,8 @@ div.login-form {
 		}
 	}
 }
-.footer{
-	.ui.header{
-		font-weight:400;
-	}
+.footer .ui.header{
+	font-weight:400;
 }
 
 //	Account type symbols
@@ -2676,5 +2674,16 @@ p.check-extra-info{
 			line-height: 1;
 			margin:0;
 		}
+	}
+}
+
+.anchor-wrap{
+	position:relative;
+	>.anchor{
+		height:1px;
+		width:1px;
+		position:absolute;
+		left:0;
+		top:-116px;
 	}
 }

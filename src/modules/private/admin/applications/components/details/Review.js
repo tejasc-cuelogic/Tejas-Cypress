@@ -7,7 +7,8 @@ import { mapValues } from 'lodash';
 import SecondaryMenu from '../../../../../../theme/layout/SecondaryMenu';
 import { DataFormatter } from '../../../../../../helper';
 import { InlineLoader } from '../../../../../../theme/shared';
-import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
+// import { NEXTSEED_BOX_URL } from '../../../../../../constants/common';
+import { NEXTSEED_SECURITIES_BOX_URL } from '../../../../../../constants/common';
 
 const getModule = component => Loadable({
   loader: () => import(`./review/${component}`),
@@ -76,7 +77,7 @@ export default class Review extends Component {
               <Button.Group size="mini">
                 <Button color="blue" content="Generate PA" loading={inProgress === 'GENERATE_PA'} onClick={generatePortalAgreement} />
                 {paBoxFolderId &&
-                <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
+                <Button color="blue" className="link-button" content="PA BOX Link" onClick={() => window.open(`${NEXTSEED_SECURITIES_BOX_URL}folder/${paBoxFolderId}`, '_blank')} />
                 }
               </Button.Group>
               }

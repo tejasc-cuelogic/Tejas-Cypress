@@ -24,7 +24,10 @@ class Gallery extends Component {
     // 'media.gallery').length;
     return (
       <Aux>
-        <Header as="h3" className="mb-30" id="gallery">Gallery</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Gallery
+          <span className="anchor" id="gallery" />
+        </Header>
         <div className="gallery-preview">
           {
             campaign && campaign.media &&
