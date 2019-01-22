@@ -131,7 +131,7 @@ export class CampaignStore {
     } else if (this.details.data && this.details.data.getOfferingDetailsById) {
       return toJS(this.details.data.getOfferingDetailsById);
     }
-    return null;
+    return {};
   }
 
   @computed get getOfferingId() {

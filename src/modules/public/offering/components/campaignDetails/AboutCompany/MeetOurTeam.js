@@ -6,6 +6,8 @@ import { filter } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
+const isMobile = document.documentElement.clientWidth < 768;
+
 class MeetOurTeam extends Component {
   render() {
     const {
@@ -28,7 +30,7 @@ class MeetOurTeam extends Component {
                     data.isPublic &&
                       <Item>
                         <Item.Content>
-                          <div className="campaign-avatar">
+                          <div className={`campaign-avatar ${isMobile && 'mobile-avatar'}`}>
                             <div className="avatar-image team-avatar">
                               {data && data.uploads && data.uploads.headshot &&
                                 data.uploads.headshot.url ? (
@@ -64,7 +66,7 @@ class MeetOurTeam extends Component {
               </Item.Group>
             </Aux>
             :
-            <InlineLoader text={emptyStatement} />
+            <InlineLoader text={emptyStatement} className="bg-offwhite" />
         }
       </Aux>
     );

@@ -43,7 +43,7 @@ class LocationAnalysisModal extends Component {
                 <p>
                   {Parser(campaign.offering.about.locationAnalysis)}
                 </p>
-                : <InlineLoader text="No data found." />
+                : <InlineLoader text="No data found." className="bg-offwhite" />
           }
         </Modal.Content>
       </Modal>

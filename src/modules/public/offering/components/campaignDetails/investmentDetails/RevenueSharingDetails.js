@@ -212,7 +212,7 @@ class RevenueSharingDetails extends Component {
               {Parser(revenueShareSummary)}
             </p>
             :
-            <InlineLoader text="No data available" />
+            <InlineLoader text="No data available" className="bg-offwhite" />
           }
         </p>
         <p className="note">

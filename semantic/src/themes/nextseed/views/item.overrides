@@ -82,6 +82,15 @@
                     margin:0;
                 }
             }
+            &.mobile-avatar {
+                flex-direction:column;
+                text-align: center;
+                .avatar-details {
+                    margin-left: 0;
+                    margin-top: @20px;
+
+                }
+            }
         }
         .avatar-description{
             img{

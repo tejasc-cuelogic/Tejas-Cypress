@@ -35,7 +35,7 @@ class SummaryModal extends Component {
             <p>
               {Parser(revenueShareSummary)}
             </p>
-          : <InlineLoader text="No data available" />
+          : <InlineLoader text="No data available" className="bg-offwhite" />
           }
         </Modal.Content>
       </Modal>

@@ -22,9 +22,7 @@ class BusinessModel extends Component {
                   {Parser(campaign.offering.about.businessModel)}
                 </p>
                 :
-                <section>
-                  <InlineLoader text="No data found" />
-                </section>
+                <InlineLoader text="No data found" className="bg-offwhite" />
           }
         {/* {<Image64 srcUrl={businessModelImage} fluid />} */}
       </Aux>

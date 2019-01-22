@@ -80,7 +80,7 @@ export default class Share extends Component {
                 }
               </div>
               :
-              <InlineLoader text="No Data Found." />
+              <InlineLoader text="No Data Found." className="bg-offwhite" />
           }
           {/* <div className="share-icons center-align">
             {
