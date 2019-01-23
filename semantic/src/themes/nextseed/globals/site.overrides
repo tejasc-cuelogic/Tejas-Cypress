@@ -2677,11 +2677,14 @@ p.check-extra-info{
 
 .anchor-wrap{
 	position:relative;
-	>.anchor{
+	>.anchor, >.anchor-scroll{
 		height:1px;
 		width:1px;
 		position:absolute;
 		left:0;
 		top:-116px;
+	}
+	>.anchor-scroll{
+		top:-60px;
 	}
 }
