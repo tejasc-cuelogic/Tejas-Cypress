@@ -27,7 +27,7 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
@@ -159,29 +159,33 @@ class offerDetails extends Component {
           <CampaignHeader {...this.props} />
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
-          {!isMobile &&
           <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
             <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
-              <Container fluid>
-                <List bulleted floated="right" horizontal>
-                  <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  <List.Item>{diff} days left</List.Item>
+              <Container fluid={!isMobile}>
+                <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
+                  {!isMobile &&
+                    <Aux>
+                      <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
+                      <List.Item>{diff} days left</List.Item>
+                    </Aux>
+                  }
                   <Button secondary compact content="Invest Now" />
                 </List>
-                <List bulleted horizontal>
+                <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
                   <List.Item>
                     <List.Header>{get(campaign, 'keyTerms.shorthandBusinessName')}</List.Header>
                   </List.Item>
                   <List.Item>
                     <List.Header><span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised</List.Header>
                   </List.Item>
-                  <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
+                  {!isMobile &&
+                    <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
+                  }
                 </List>
               </Container>
             </div>
           </Visibility>
-          }
-          <Responsive maxWidth={767} as={Aux}>
+          <Responsive maxWidth={991} as={Aux}>
             <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
             <MobileDropDownNav
               inverted

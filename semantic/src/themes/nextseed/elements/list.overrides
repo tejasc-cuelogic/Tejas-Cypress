@@ -373,3 +373,13 @@ ul.ui.list li{
 .offer-filter-container .ui.list > .item {
     cursor: pointer;
 }
+
+//offering secondary header
+.campaign-secondary-header .menu-secondary-fixed .ui.list > .item {
+    @media only screen and (max-width : @largestTabletScreen){
+        padding: 0;
+        &::after {
+            display: none;
+        }
+    }
+}

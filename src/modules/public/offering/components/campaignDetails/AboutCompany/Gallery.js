@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 import { Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 @inject('campaignStore')
 @withRouter
 @observer

@@ -7,7 +7,7 @@ import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Image64 } from '../../../../../../theme/shared';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 
 @withRouter
 class LatestUpdates extends Component {
