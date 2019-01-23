@@ -199,7 +199,7 @@ class offerDetails extends Component {
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           {!isMobile &&
             <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
-              <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
+              <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus}`}>
                 <Container fluid>
                   <List bulleted floated="right" horizontal>
                     <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
