@@ -128,6 +128,11 @@ class offerDetails extends Component {
           temNavList.push({
             title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
           });
+        } else {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
         }
         tempItem.subNavigations = uniqWith(temNavList, isEqual);
       }

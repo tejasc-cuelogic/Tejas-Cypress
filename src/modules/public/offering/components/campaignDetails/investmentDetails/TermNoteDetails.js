@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Route } from 'react-router-dom';
+// import { Route } from 'react-router-dom';
 import { Header, Divider, Statistic, Grid, Table, Icon, Popup } from 'semantic-ui-react';
-import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
+// import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
-import PaymentCalculator from './PaymentCalculator';
+// import PaymentCalculator from './PaymentCalculator';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -223,7 +223,8 @@ class TermNoteDetails extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid>
-            <PaymentCalculator />
+            {/* <PaymentCalculator propsDetails={this.props} /> */}
+            <p>Payment calculator graph goes here..</p>
             <p className="mt-30 note">
               * Payment for any given month (including the total payment at the end of the
               final month) indicates the cumulative amount contractually required to be paid
@@ -237,7 +238,10 @@ class TermNoteDetails extends Component {
           :
           <InlineLoader text="No data available" className="bg-offwhite" />
         }
-        <Route path={`${this.props.match.url}/paymentcalculator`} component={PaymentCalculatorModal} />
+        {/*
+          <Route path={`${this.props.match.url}/paymentcalculator`}
+          component={PaymentCalculatorModal} />
+         */}
       </Aux>
     );
   }

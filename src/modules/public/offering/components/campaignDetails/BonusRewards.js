@@ -17,6 +17,13 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 @inject('campaignStore')
 @observer
 class BonusRewards extends Component {
+  componentDidMount() {
+    const sel = 'bonusRewards-scroll';
+    document.querySelector(`.${sel}`).scrollIntoView({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
   render() {
     const { campaign } = this.props.campaignStore;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
@@ -30,6 +37,7 @@ class BonusRewards extends Component {
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mb-30">Bonus Rewards</Header>
+        <span className="bonusRewards-scroll" />
         {rewardsTiers && rewardsTiers.length ?
           <div>
             {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&

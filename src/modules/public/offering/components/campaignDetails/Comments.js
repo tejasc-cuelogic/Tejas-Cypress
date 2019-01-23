@@ -18,6 +18,13 @@ class Comments extends Component {
   componentWillMount() {
     this.props.messageStore.resetMessageForm();
   }
+  componentDidMount() {
+    const sel = 'comment-scroll';
+    document.querySelector(`.${sel}`).scrollIntoView({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
   postNewComment = () => {
     const { isUserLoggedIn } = this.props.authStore;
     if (!isUserLoggedIn) {
@@ -67,6 +74,7 @@ class Comments extends Component {
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mb-30">Comments</Header>
+        <span className="comment-scroll" />
         <p>
           Note that both NextSeed and issuers are notified of all comments immediately,
           but there may be a slight delay in response to questions submitted outside of
