@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import { Button, Comment, Form, Segment, Header, Label } from 'semantic-ui-react';
+import { Button, Comment, Form, Segment, Header, Label, Divider } from 'semantic-ui-react';
 import { Link, Route, Switch } from 'react-router-dom';
 import moment from 'moment';
 import CommentsReplyModal from './CommentsReplyModal';
@@ -130,7 +130,7 @@ class Comments extends Component {
                   <Button fluid={isMobile} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
                 </Form>
                 {/* <Form reply className="public-form clearfix">
-                  <Button primary onClick={this.postNewComment}>
+                  <Button secondary onClick={this.postNewComment}>
                     Post Comment
                   </Button>
                 </Form> */}
@@ -162,15 +162,31 @@ class Comments extends Component {
                             {(c.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
                           </Comment.Text>
                           {visible && c.id === this.state.commentId ? (
-                            <Form className="public-form mt-30" reply>
-                              <FormTextarea
-                                fielddata={MESSAGE_FRM.fields.comment}
-                                name="comment"
-                                changed={msgEleChange}
-                              />
-                              <Button onClick={this.toggleVisibility}>Cancel</Button>
-                              <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
-                            </Form>
+                            <Aux>
+                              <Form className="public-form mt-30" reply>
+                                <FormTextarea
+                                  fielddata={MESSAGE_FRM.fields.comment}
+                                  name="comment"
+                                  changed={msgEleChange}
+                                  containerclassname="secondary"
+                                />
+                                <Button onClick={this.toggleVisibility}>Cancel Reply</Button>
+                                <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                              </Form>
+                              <Divider hidden />
+                              <p>
+                                Note that both NextSeed and issuers are notified of all comments
+                                immediately, but there may be a slight delay in response to
+                                questions submitted outside of standard business hours (9am to
+                                5pm CST, Monday through Friday).Most questions will be answered
+                                by issuers in approximately two business days, although some
+                                questions require more thorough analyses and will take additional
+                                time.
+                              </p>
+                              <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
+                                please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+                              </p>
+                            </Aux>
                           ) : ''}
                         </Comment.Content>
                         {c.threadComment.length !== 0 &&
@@ -204,15 +220,31 @@ class Comments extends Component {
                                   {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'read more' : 'read less'}</Link>}
                                 </Comment.Text>
                                 {visible && tc.id === this.state.commentId ? (
-                                  <Form className="public-form mt-30" reply>
-                                    <FormTextarea
-                                      fielddata={MESSAGE_FRM.fields.comment}
-                                      name="comment"
-                                      changed={msgEleChange}
-                                    />
-                                    <Button onClick={this.toggleVisibility}>Cancel</Button>
-                                    <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
-                                  </Form>
+                                  <Aux>
+                                    <Form className="public-form mt-30" reply>
+                                      <FormTextarea
+                                        fielddata={MESSAGE_FRM.fields.comment}
+                                        name="comment"
+                                        changed={msgEleChange}
+                                        containerclassname="secondary"
+                                      />
+                                      <Button onClick={this.toggleVisibility}>Cancel Reply</Button>
+                                      <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                    </Form>
+                                    <Divider hidden />
+                                    <p>
+                                      Note that both NextSeed and issuers are notified of all
+                                      comments immediately, but there may be a slight delay in
+                                      response to questions submitted outside of standard
+                                      business hours (9am to 5pm CST, Monday through Friday).Most
+                                      questions will be answered by issuers in approximately two
+                                      business days, although some questions require more thorough
+                                      analyses and will take additional time.
+                                    </p>
+                                    <p>See our <Link to={`${this.props.match.url}/community-guidelines`}>community guidelines</Link> on posting. If you have any technical questions or questions about NextSeed,{' '}
+                                      please email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
+                                    </p>
+                                  </Aux>
                                 ) : ''}
                               </Comment.Content>
                             </Comment>
