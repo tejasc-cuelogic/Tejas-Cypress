@@ -19,6 +19,9 @@ class InvestmentDetails extends Component {
         block: 'start',
         behavior: 'smooth',
       });
+    } else {
+      const sel = 'use-of-proceeds';
+      document.querySelector(`#${sel}`).scrollIntoView(true);
     }
   }
   render() {

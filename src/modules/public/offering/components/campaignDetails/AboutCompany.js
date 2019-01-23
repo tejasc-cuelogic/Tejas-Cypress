@@ -30,6 +30,9 @@ class AboutCompany extends Component {
         block: 'start',
         behavior: 'smooth',
       });
+    } else {
+      const sel = 'company-description';
+      document.querySelector(`#${sel}`).scrollIntoView(true);
     }
   }
   render() {

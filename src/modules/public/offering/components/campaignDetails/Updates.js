@@ -17,11 +17,8 @@ class Updates extends Component {
     this.props.campaignStore.setInitialStateForReadMoreAndReadLess(updates);
   }
   componentDidMount() {
-    const sel = 'update-scroll';
-    document.querySelector(`.${sel}`).scrollIntoView({
-      top: 0,
-      behavior: 'smooth',
-    });
+    const sel = 'anchor-scroll';
+    document.querySelector(`.${sel}`).scrollIntoView(true);
   }
   handleClose = () => this.props.history.goBack();
   render() {
@@ -31,8 +28,10 @@ class Updates extends Component {
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30">Updates</Header>
-        <span className="update-scroll" />
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Updates
+          <span className="anchor-scroll" />
+        </Header>
         {updates && updates.length ?
           <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
             {updates && updates.length &&
