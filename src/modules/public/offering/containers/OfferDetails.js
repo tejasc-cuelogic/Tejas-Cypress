@@ -85,7 +85,7 @@ class offerDetails extends Component {
         const tempSubNav = [];
         dataRoomDocs.forEach((subItem, index) => {
           tempSubNav.push({
-            title: subItem.name, to: index, component: '', useRefLink: true,
+            title: subItem.name, to: `#doc-${index}`, component: '', useRefLink: true,
           });
         });
         tempItem.subNavigations = tempSubNav;
