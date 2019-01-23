@@ -81,6 +81,35 @@ class BonusRewards extends Component {
           :
           <InlineLoader text="No Bonus Rewards" className="bg-offwhite" />
         }
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
+        <h1>Click the buttons to scroll to the top or to the bottom of the element with.</h1>
       </div>
     );
   }
