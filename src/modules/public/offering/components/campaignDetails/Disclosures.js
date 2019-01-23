@@ -12,11 +12,13 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
-    const offeringRegulationArr = this.props.campaignStore.campaign.regulation.split('_');
-    const regulationType = offeringRegulationArr[0];
-    const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
-    this.props.campaignStore.getAllBoxLinks(accountType);
-    this.props.accreditationStore.getUserAccreditation();
+    if (this.props.campaignStore.docsWithBoxLink.length === 0) {
+      const offeringRegulationArr = this.props.campaignStore.campaign.regulation.split('_');
+      const regulationType = offeringRegulationArr[0];
+      const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
+      this.props.campaignStore.getAllBoxLinks(accountType);
+      this.props.accreditationStore.getUserAccreditation();
+    }
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
