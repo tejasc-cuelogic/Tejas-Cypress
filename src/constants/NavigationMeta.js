@@ -492,9 +492,12 @@ export const PUBLIC_NAV = [
           {
             title: 'Key Terms', to: '#key-terms', useRefLink: true,
           },
-          {
-            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
-          },
+          // {
+          //   title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
+          // },
+          // {
+          //   title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+          // },
         ],
       },
       {

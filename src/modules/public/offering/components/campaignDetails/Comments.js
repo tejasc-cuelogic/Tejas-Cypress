@@ -14,9 +14,18 @@ const isMobile = document.documentElement.clientWidth < 991;
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @observer
 class Comments extends Component {
-  state={ readMore: false, readMoreInner: false }
+  state={
+    readMore: false, readMoreInner: false, visible: false, commentId: null,
+  }
   componentWillMount() {
     this.props.messageStore.resetMessageForm();
+  }
+  componentDidMount() {
+    const sel = 'comment-scroll';
+    document.querySelector(`.${sel}`).scrollIntoView({
+      top: 0,
+      behavior: 'smooth',
+    });
   }
   postNewComment = () => {
     const { isUserLoggedIn } = this.props.authStore;
@@ -40,11 +49,21 @@ class Comments extends Component {
       this.props.history.push(`${this.props.refLink}/confirm-comment-login`);
     }
   }
-  send = (scope, campaignSlug) => {
-    this.props.messageStore.createNewComment(scope, campaignSlug);
+  send = (scope, campaignSlug, currentMessage) => {
+    // this.props.messageStore.setDataValue(
+    //   'currentMessageId',
+    //   !this.props.match.params.messageType ? this.props.match.params.id : null,
+    // );
+    // const currentMessage = this.props.messageStore.currentMessageId;
+    this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage);
+  }
+  toggleVisibility = (comment = null) => {
+    this.setState({ visible: !this.state.visible });
+    this.setState({ commentId: comment });
   }
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
+    const { visible } = this.state;
     const { isUserLoggedIn } = this.props.authStore;
     const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
@@ -67,6 +86,7 @@ class Comments extends Component {
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mb-30">Comments</Header>
+        <span className="comment-scroll" />
         <p>
           Note that both NextSeed and issuers are notified of all comments immediately,
           but there may be a slight delay in response to questions submitted outside of
@@ -107,7 +127,7 @@ class Comments extends Component {
                     containerclassname="secondary"
                   />
                   {/* <Button onClick={this.handleClose}>Cancel</Button> */}
-                  <Button fluid={isMobile} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                  <Button fluid={isMobile} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
                 </Form>
                 {/* <Form reply className="public-form clearfix">
                   <Button primary onClick={this.postNewComment}>
@@ -131,7 +151,9 @@ class Comments extends Component {
                           <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(c, 'updated') ? get(c, 'updated.date') : get(c, 'created.date')).format('ll')}</span></Comment.Metadata>
                           {isUserLoggedIn &&
                           <Comment.Actions>
-                            <Comment.Action as={Link} to={`${this.props.match.url}/${c.id}`} >Reply</Comment.Action>
+                            <Comment.Action onClick={() => this.toggleVisibility(c.id)}>
+                              Reply
+                            </Comment.Action>
                           </Comment.Actions>
                           }
                           <Comment.Text className="mt-20">
@@ -139,6 +161,17 @@ class Comments extends Component {
                             c.comment : c.comment.substr(0, readMoreLength)}
                             {(c.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMore', this.state.readMore !== c.id ? c.id : false)}> {this.state.readMore !== c.id ? '...ReadMore' : 'ReadLess'}</Link>}
                           </Comment.Text>
+                          {visible && c.id === this.state.commentId ? (
+                            <Form className="public-form mt-30" reply>
+                              <FormTextarea
+                                fielddata={MESSAGE_FRM.fields.comment}
+                                name="comment"
+                                changed={msgEleChange}
+                              />
+                              <Button onClick={this.toggleVisibility}>Cancel</Button>
+                              <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
+                            </Form>
+                          ) : ''}
                         </Comment.Content>
                         {c.threadComment.length !== 0 &&
                         <Comment.Group className="reply-comments">
@@ -155,13 +188,32 @@ class Comments extends Component {
                                 </Comment.Author>
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
                                 <Comment.Actions>
-                                  <Comment.Action className="grey-header" as={Link} to={`${this.props.match.url}/${c.id}`} >Reply</Comment.Action>
+                                  {/* <Comment.Action onClick={this.toggleVisibility}
+                                className="grey-header" as={Link}
+                                to={`${this.props.match.url}/${c.id}`} > */}
+                                  <Comment.Action
+                                    onClick={() => this.toggleVisibility(tc.id)}
+                                    className="grey-header"
+                                  >
+                                    Reply
+                                  </Comment.Action>
                                 </Comment.Actions>
                                 <Comment.Text className="mt-20">
                                   {this.state.readMoreInner === tc.id ?
                                   tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}...` : tc.comment.substr(0, readMoreLength)}{' '}
                                   {(tc.comment.length > readMoreLength) && <Link to="/" onClick={e => this.readMore(e, 'readMoreInner', this.state.readMoreInner !== tc.id ? tc.id : false)}>{this.state.readMoreInner !== tc.id ? 'read more' : 'read less'}</Link>}
                                 </Comment.Text>
+                                {visible && tc.id === this.state.commentId ? (
+                                  <Form className="public-form mt-30" reply>
+                                    <FormTextarea
+                                      fielddata={MESSAGE_FRM.fields.comment}
+                                      name="comment"
+                                      changed={msgEleChange}
+                                    />
+                                    <Button onClick={this.toggleVisibility}>Cancel</Button>
+                                    <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
+                                  </Form>
+                                ) : ''}
                               </Comment.Content>
                             </Comment>
                           ))}

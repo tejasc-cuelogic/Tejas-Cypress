@@ -26,6 +26,28 @@ const data = [
 ];
 
 export default class PaymentCalculator extends Component {
+  componentWillMount() {
+    console.log('here');
+  }
+  // constructor() {
+  //   super();
+  //   this.state = { a: false };
+  // }
+  // componentDidMount() {
+  //   this.newMethod();
+  // }
+  // componentDidUpdate(prevProps) {
+  //   console.log('OLD props==>', prevProps);
+  //   console.log('NEW props==>', this.props.propsDetails);
+  //   if (prevProps.propsDetails.match.url !== this.props.propsDetails.match.url) {
+  //     return true;
+  //   }
+  //   //     return false;
+  // }
+  // newMethod() {
+  //   this.setState({ a: !this.state.a });
+  // }
+
   formatY = item => Helper.CurrencyFormat(item);
   render() {
     return (
