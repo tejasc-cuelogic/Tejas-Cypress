@@ -1,13 +1,16 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Link } from 'react-router-dom';
 import { Grid, Header, Divider, Form, Button, Icon, Accordion, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { InlineLoader } from '../../../../theme/shared';
 import { FormInput, DropZoneConfirm as DropZone, MaskedInput } from '../../../../theme/form';
 import FormElementWrap from './FormElementWrap';
 import AppNavigation from './AppNavigation';
 
-@inject('businessAppStore')
+@inject('businessAppStore', 'agreementsStore')
 @observer
 export default class BusinessDetails extends Component {
   state = {
@@ -19,6 +22,12 @@ export default class BusinessDetails extends Component {
 
   componentWillMount() {
     this.props.businessAppStore.setFieldvalue('applicationStep', 'business-details');
+    const {
+      getLegalDocsFileIds, alreadySet,
+    } = this.props.agreementsStore;
+    if (!alreadySet) {
+      getLegalDocsFileIds();
+    }
   }
 
   removeForm = (e) => {
@@ -38,6 +47,14 @@ export default class BusinessDetails extends Component {
       currentIndex: index,
     });
   }
+  handleLearnMore = () => {
+    const { getBoxLink, setField, agreements } = this.props.agreementsStore;
+    setField('docLoading', true);
+    getBoxLink(agreements[2].id, 'SECURITIES').then((res) => {
+      setField('docLoading', false);
+      window.open(res.data.getBoxEmbedLink, '_blank');
+    });
+  }
 
   render() {
     const {
@@ -46,6 +63,10 @@ export default class BusinessDetails extends Component {
       formReadOnlyMode, businessDetailsDateChange, currentApplicationType,
     } = this.props.businessAppStore;
     const { hideFields } = this.props;
+    const { docLoading, docIdsLoading } = this.props.agreementsStore;
+    if (docLoading || docIdsLoading) {
+      return <InlineLoader />;
+    }
     return (
       <div className={hideFields ? 'inner-content-spacer' : 'ui container'}>
         <Form className="issuer-signup">
@@ -62,7 +83,7 @@ export default class BusinessDetails extends Component {
               <Aux>
                 Business Plan
                 {!hideFields && currentApplicationType === 'business' &&
-                  <Link to="/" className="link"><small>Learn More</small></Link>
+                <Link to={this.props.match.url} className="link" onClick={() => this.handleLearnMore()}><small>Learn More</small></Link>
                 }
               </Aux>
             }

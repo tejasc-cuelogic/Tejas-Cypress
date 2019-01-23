@@ -101,3 +101,12 @@ mutation crowdPayAccountProcess($userId: String!, $accountId: String!) {
   )
 }
 `;
+
+export const crowdPayAccountValidate = gql`
+mutation _crowdPayAccountValidate($userId: String!, $accountId: String!) {
+  crowdPayAccountValidate(
+    userId: $userId
+    accountId: $accountId
+  )
+}
+`;

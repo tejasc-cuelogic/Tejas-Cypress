@@ -33,3 +33,14 @@ export const checkOpeningDepositAmount = gql`
       accountId: $accountId
     )
   }`;
+
+export const updateLinkedAccount = gql`
+mutation _verifyLinkedBank($accountId: String!, $userId: String!) {
+  verifyLinkedBank(
+    userId: $userId
+    accountId: $accountId
+  ){
+    verified
+    message
+  }
+}`;

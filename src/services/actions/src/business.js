@@ -362,9 +362,10 @@ export class Business {
       });
   }
 
-  getFiles = ({ offeringId, filingId }) => {
+  getFiles = ({ offeringId, filingId }, accountType) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching details');
+    const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
       query: 'query fetchFilingById($offeringId: ID!, $filingId: ID!){businessFiling(offeringId: ' +
         '$offeringId, filingId: $filingId) { folderId } }',
@@ -376,7 +377,7 @@ export class Business {
     return new Promise((resolve, reject) => {
       ApiService.post(GRAPHQL, payload)
         .then((data) => {
-          this.fetchAttachedFiles(data.body.data.businessFiling.folderId)
+          this.fetchAttachedFiles(data.body.data.businessFiling.folderId, accountTypeToPass)
             .then(() => resolve(data.body.data.businessFiling.folderId));
         })
         .catch(err => reject(err))
@@ -408,13 +409,15 @@ export class Business {
   /**
    *
    */
-  fetchAttachedFiles = (folderId) => {
+  fetchAttachedFiles = (folderId, accountType) => {
     uiStore.setProgress();
     uiStore.setLoaderMessage('Fetching available files');
+    const accountTypeToPass = accountType && accountType === 'SECURITIES' ? accountType : 'SERVICES';
     const payload = {
-      query: 'query getFIles($folderId: ID!) { files(folderId: $folderId) { id name } }',
+      query: 'query getFIles($folderId: ID!, $accountType: BoxAccountTypeEnum) { files(folderId: $folderId, accountType: $accountType) { id name } }',
       variables: {
         folderId,
+        accountType: accountTypeToPass,
       },
     };
     return new Promise((resolve, reject) => {
@@ -548,10 +551,10 @@ export class Business {
     uiStore.setProgress();
     uiStore.setLoaderMessage(`${status} filing`);
     const payload = {
-      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){ 
-        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){ 
-          filingId 
-        } 
+      query: `mutation lockUnlockBusinessFiling($businessId: String!, $filingId: String!, $lockedStatus: Boolean!){
+        lockBusinessFiling(businessId: $businessId, filingId: $filingId, lockedStatus: $lockedStatus){
+          filingId
+        }
       }`,
       variables: {
         businessId, filingId, lockedStatus,
@@ -684,11 +687,11 @@ export class Business {
           businessStore.setSignatureInfo(key, (value || ''));
         }
       })
-      
+
       businessStore.setNewPersonalSignature([]);
-      
-      if (data.payload.signature) {        
-         _.map(data.payload.signature.signaturePersons, (signature) => {           
+
+      if (data.payload.signature) {
+         _.map(data.payload.signature.signaturePersons, (signature) => {
           const id = this.addPersonalSignature();
           _.map(signature, (value, key) => {
             if (dateFields.includes(key)) {
@@ -699,7 +702,7 @@ export class Business {
           });
         })
       }
-      
+
       if (businessStore.formSignatureInfo.fields.signaturePersons.length === 0) {
         this.addPersonalSignature();
       }
@@ -709,10 +712,10 @@ export class Business {
   }
 
   validateFilerInfo = (filerInformation, setError = true) => {
-    const newFiler = validationActions.validateXmlFormData(filerInformation);    
+    const newFiler = validationActions.validateXmlFormData(filerInformation);
     const errors = this.newValidationErrors(newFiler);
     businessStore.setFiler(newFiler);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
       if (businessStore.canSubmitFilerInfoXmlForm) {
         businessStore.setXmlSubStepsStatus('filer', true);
@@ -727,9 +730,9 @@ export class Business {
     const newIssuer = validationActions.validateXmlFormData(issuerInformation);
     const errors = this.newValidationErrors(newIssuer);
     businessStore.setIssuer(newIssuer);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
-      if (businessStore.canSubmitIssuerInfoXmlForm) {      
+      if (businessStore.canSubmitIssuerInfoXmlForm) {
         businessStore.setXmlSubStepsStatus('issuer', true);
         businessStore.updateStatusFlag('formIssuerInfo', 'meta', true);
       } else {
@@ -742,7 +745,7 @@ export class Business {
     const newOffering = validationActions.validateXmlFormData(offeringInformation);
     const errors = this.newValidationErrors(newOffering);
     businessStore.setOffering(newOffering);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
       if (businessStore.canSubmitOfferingInfoXmlForm) {
         businessStore.setXmlSubStepsStatus('offering', true);
@@ -757,7 +760,7 @@ export class Business {
     const newAnnualReport = validationActions.validateXmlFormData(annualReportRequirements);
     const errors = this.newValidationErrors(newAnnualReport);
     businessStore.setAnnualReport(newAnnualReport);
-    // check form is valid or not 
+    // check form is valid or not
     if (!setError) {
       if (businessStore.canSubmitAnnualReportXmlForm) {
         businessStore.setXmlSubStepsStatus('annual', true);
@@ -769,13 +772,13 @@ export class Business {
   }
 
   validateSignatureInfo = (signature, setError = true) => {
-    
+
     const newSignature = validationActions.validateXmlFormData({
       issuer: signature.issuer,
       issuerSignature: signature.issuerSignature,
       issuerTitle: signature.issuerTitle,
     });
-       
+
     const errors = this.newValidationErrors(newSignature);
     newSignature['signaturePersons'] = signature.signaturePersons;
     businessStore.setSignature(newSignature);
@@ -784,21 +787,21 @@ export class Business {
 
   validatePersonSign = (signaturePersons, setError = true) => {
     let personSignatureData = [];
-    _.map(signaturePersons, (field, index) => {      
+    _.map(signaturePersons, (field, index) => {
       personSignatureData.push(validationActions.validateXmlFormData({
         personSignature: field.personSignature,
         personTitle: field.personTitle,
         signatureDate: field.signatureDate,
       }));
-      
-      this.newValidationErrors(personSignatureData, true);      
+
+      this.newValidationErrors(personSignatureData, true);
       personSignatureData[index].id = field.id;
     });
-    
+
     businessStore.setNewPersonalSignature(personSignatureData);
 
     if (!setError) {
-      // check form is valid or not 
+      // check form is valid or not
       if (businessStore.canSubmitSigntureForm ||
         _.includes(businessStore.canSubmitSignaturePersonsForm, true)) {
           businessStore.setXmlSubStepsStatus('signature', true);
@@ -810,7 +813,7 @@ export class Business {
   }
 
   validateDocumentList = (documentList, setError = true) => {
-    const documentCount = documentList.length;    
+    const documentCount = documentList.length;
     let documnetCurrentCount = 0;
     _.map(documentList, (document) => {
       if (document.checked === false) {
@@ -826,36 +829,36 @@ export class Business {
         businessStore.setXmlError(errorMessage);
       }
       return errorMessage;
-    }    
+    }
   }
 
-  newValidationErrors = (data, isMultiple = false) => {    
+  newValidationErrors = (data, isMultiple = false) => {
     const xmlErrors = { ...businessStore.xmlErrors };
-        
+
     if (isMultiple) {
-      let errors = {};      
-      _.map(data, (key) => {        
+      let errors = {};
+      _.map(data, (key) => {
         errors = _.mapValues(key, input =>  input.error);
         _.merge(xmlErrors, errors);
-      })      
+      })
       return xmlErrors;
     } else {
-      const errors = _.mapValues(data, input => input.error);      
+      const errors = _.mapValues(data, input => input.error);
       return _.merge(xmlErrors, errors);
-    }    
+    }
   }
 
-  checkandUpdateValidationStepsStaus = () => {    
+  checkandUpdateValidationStepsStaus = () => {
     this.validateFilerInfo(businessStore.formFilerInfo.fields, false);
     this.validateIssuerInfo(businessStore.formIssuerInfo.fields, false);
     this.validateOfferingInfo(businessStore.formOfferingInfo.fields, false);
     this.validateAnnualReportInfo(businessStore.formAnnualInfo.fields, false);
     this.validateSignatureInfo(businessStore.formSignatureInfo.fields, false);
-    const errorMessage = this.validateDocumentList(businessStore.formDocumentInfo.documentList, false);      
+    const errorMessage = this.validateDocumentList(businessStore.formDocumentInfo.documentList, false);
 
     if (!errorMessage) {
       businessStore.setXmlSubStepsStatus('doc', true);
-    }   
+    }
   }
   // Private Methods ends here
 }

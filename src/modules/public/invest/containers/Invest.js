@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
+import { Helmet } from 'react-helmet';
 import Loadable from 'react-loadable';
 import { Visibility, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
@@ -36,6 +37,27 @@ class Invest extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
+        <Helmet>
+          <meta name="description" content="Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses." />
+          <link rel="canonical" href="https://dev.nextseed.qa/invest/" />
+          <meta property="og:locale" content="en_US" />
+          <meta property="og:type" content="article" />
+          <meta property="og:title" content="Exclusive Access to New Local Investments | NextSeed" />
+          <meta property="og:description" content="Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses." />
+          <meta property="og:url" content="https://dev.nextseed.qa/invest/" />
+          <meta property="og:site_name" content="NextSeed" />
+          <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
+          <meta property="og:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
+          <meta property="og:image:secure_url" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
+          <meta property="og:image:width" content="1600" />
+          <meta property="og:image:height" content="1067" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:description" content="Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses." />
+          <meta name="twitter:title" content="Exclusive Access to New Local Investments | NextSeed" />
+          <meta name="twitter:site" content="@thenextseed" />
+          <meta name="twitter:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
+          <meta name="twitter:creator" content="@thenextseed" />
+        </Helmet>
         {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner /> :
         <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
         }

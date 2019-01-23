@@ -15,22 +15,31 @@ export default class Experience extends Component {
       validateInvestmentExperience,
       INVESTMENT_EXP_FORM,
       updateInvestorProfileData,
+      isValidInvestorProfileForm,
     } = this.props.investorProfileStore;
     validateInvestmentExperience();
     if (INVESTMENT_EXP_FORM.meta.isValid &&
       this.props.investorProfileStore.isInvestmentExperienceValid) {
-      const currentStep = {
-        form: 'INVESTMENT_EXP_FORM',
-        stepToBeRendered: 6,
-      };
-      updateInvestorProfileData(currentStep).then(() => {
-        const { signupStatus } = this.props.userDetailsStore;
-        if (signupStatus.isMigratedFullAccount) {
-          this.props.history.push('/app/summary');
-        } else {
-          this.props.history.push('/app/summary/account-creation');
-        }
-      });
+      if (isValidInvestorProfileForm) {
+        this.props.uiStore.setErrors(undefined);
+        const currentStep = {
+          form: 'INVESTMENT_EXP_FORM',
+          stepToBeRendered: 5,
+        };
+        updateInvestorProfileData(currentStep).then(() => {
+          const { signupStatus } = this.props.userDetailsStore;
+          if (signupStatus.isMigratedFullAccount) {
+            this.props.history.push('/app/summary');
+          } else {
+            this.props.history.push('/app/summary/account-creation');
+          }
+        });
+      } else {
+        const errors = {
+          message: 'Investor Profile is not valid! Please complete all the steps.',
+        };
+        this.props.uiStore.setErrors(errors);
+      }
     }
   }
   render() {

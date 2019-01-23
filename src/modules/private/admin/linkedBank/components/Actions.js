@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import { Table, Button } from 'semantic-ui-react';
 
 const actions = {
@@ -11,7 +10,12 @@ export default class Actions extends Component {
       <Table.Cell collapsing textAlign="center">
         <Button.Group vertical compact size="mini">
           {Object.keys(actions).map(action => (
-            <Button as={Link} to={`${this.props.match.url}/${actions[action].actionValue}`} className={actions[action].color}>
+            <Button
+              className={actions[action].color}
+              onClick={
+                () => this.props.updateAccountChangeAction(this.props.accountId, this.props.userId)
+              }
+            >
               {actions[action].label}
             </Button>
           ))}
