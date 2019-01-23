@@ -32,7 +32,7 @@ export default class TermsOfUse extends Component {
   render() {
     const { docsWithBoxLink, dataRoomDocs } = this.props.campaignStore;
     if (!dataRoomDocs.length) {
-      return <InlineLoader text="No Documents to Display" />;
+      return <InlineLoader text="No Documents to Display" className="bg-offwhite" />;
     }
     if (!docsWithBoxLink.length) {
       return <InlineLoader />;

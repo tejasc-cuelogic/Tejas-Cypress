@@ -45,17 +45,20 @@
 		position: absolute;
 		top:0;
 		left:0;
-		@media only screen and (max-width : @largestMobileScreen){
+		@media only screen and (max-width : @largestTabletScreen){
 			background: transparent;
 			position: static;
 			padding: @15px 0;
 		}
 		.ui.statistics {
 			margin: 0;
+			@media only screen and (max-width : @largestTabletScreen){
+				justify-content: center;
+			}
 			.statistic {
 				padding: 0 @15px;
 				margin: 0;
-				@media only screen and (max-width : @largestMobileScreen){
+				@media only screen and (max-width : @largestTabletScreen){
 					padding: 0 @10px;
 				}
 				>.value {
