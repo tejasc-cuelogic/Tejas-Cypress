@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import Aux from 'react-aux';
-import { Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
+import { Header, Divider } from 'semantic-ui-react';
+import Aux from 'react-aux';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
@@ -30,18 +30,16 @@ export default class TermsOfUse extends Component {
       return <InlineLoader />;
     }
     return (
-      <Aux>
-        <div className="campaign-content-wrapper">
-          <Grid>
-            <Grid.Column widescreen={13} computer={13} tablet={12} mobile={16}>
-              {docsWithBoxLink && docsWithBoxLink.map(item => (
-                <Disclosure doc={item} />
-              ))
-              }
-            </Grid.Column>
-          </Grid>
-        </div>
-      </Aux>
+      <div className="campaign-content-wrapper">
+        <Header as="h3" className="mb-30">Data Rooms</Header>
+        {docsWithBoxLink && docsWithBoxLink.map(item => (
+          <Aux>
+            <Header as="h3" className="mb-20 grey-header">{item.name}</Header>
+            <Disclosure doc={item} />
+            <Divider section hidden />
+          </Aux>
+        ))}
+      </div>
     );
   }
 }
