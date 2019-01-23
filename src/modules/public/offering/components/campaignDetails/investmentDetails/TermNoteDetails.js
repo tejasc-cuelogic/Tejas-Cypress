@@ -17,10 +17,6 @@ class TermNoteDetails extends Component {
     const OfferingSecurity = (KeyTerms && KeyTerms.securities && KeyTerms.securities === 'TERM_NOTE') || null;
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
-          Key Terms
-          <span className="anchor" id="key-terms" />
-        </Header>
         <Grid columns={3} stackable divided className="vertical-gutter neutral-text">
           <Grid.Column>
             <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA'}</p>
@@ -185,7 +181,7 @@ class TermNoteDetails extends Component {
         <Divider section hidden />
         {OfferingSecurity ?
           <Aux>
-            <Header as="h3" className="anchor-wrap">
+            <Header as="h3" className="mb-30 anchor-wrap">
               Total Payment Calculator
               <span className="anchor" id="total-payment-calculator" />
             </Header>

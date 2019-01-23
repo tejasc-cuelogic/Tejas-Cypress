@@ -72,6 +72,10 @@ class InvestmentDetails extends Component {
           fluid
         />
         <Divider section hidden />
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Key Terms
+          <span className="anchor" id="key-terms" />
+        </Header>
         {campaign && campaign.keyTerms &&
           campaign.keyTerms.securities &&
           campaign.keyTerms.securities ===

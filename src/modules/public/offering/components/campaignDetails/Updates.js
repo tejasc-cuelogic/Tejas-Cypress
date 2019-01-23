@@ -24,7 +24,7 @@ class Updates extends Component {
     const readLessStatus = this.props.campaignStore.curretnStatusForReadLess;
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3">Updates</Header>
+        <Header as="h3" className="mb-30">Updates</Header>
         {updates && updates.length ?
           <VerticalTimeline className="campaign-updates" layout="one-column" animate={false}>
             {updates && updates.length &&

@@ -180,10 +180,6 @@ class offerDetails extends Component {
         {!isMobile &&
           <CampaignHeader {...this.props} />
         }
-        {/* <Responsive minWidth={768} as={Aux}>
-        <Responsive minWidth={768} as={Aux}>
-          <CampaignSideBar navItems={navItems} />
-        </Responsive> */}
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           {!isMobile &&
             <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">

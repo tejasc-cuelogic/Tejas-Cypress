@@ -12,7 +12,7 @@ class CompanyHistory extends Component {
     const emptyHistoryStatement = 'History not found';
     return (
       <Aux>
-        <Header as="h3" className="anchor-wrap">
+        <Header as="h3" className="anchor-wrap mb-30">
           History
           <span className="anchor" id="history" />
         </Header>

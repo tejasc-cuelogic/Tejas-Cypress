@@ -3,13 +3,14 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Route, Link } from 'react-router-dom';
 import { get } from 'lodash';
-import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Divider, Popup } from 'semantic-ui-react';
+import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 // import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
 import { ASSETS_URL } from '../../../../../constants/aws';
+import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 
 const nsvideos = {
   embed: '218642510',
@@ -38,12 +39,13 @@ export default class CampaignSideBar extends Component {
     ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     const diff = DataFormatter.diffDays(terminationDate);
     const rewardsTiers = get(campaign, 'rewardsTiers') || [];
+    const { offerStructure } = campaign;
     return (
       <Aux>
         <div className={`${className} offering-side-menu sticky-sidebar`}>
-          <div className="offering-intro center-align">
-            <Responsive maxWidth={767} as={Aux}>
-              <Header as="h4" textAlign="center">
+          <Responsive maxWidth={767} as={Aux}>
+            <div className="offering-intro center-align">
+              <Header as="h4" inverted>
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                 <Header.Subheader>{address}</Header.Subheader>
               </Header>
@@ -53,77 +55,76 @@ export default class CampaignSideBar extends Component {
                 source="vimeo"
                 icon="ns-play"
               />
-              <Statistic size="tiny" className="basic mb-0">
+              <Statistic inverted size="tiny" className="basic mb-0">
                 <Statistic.Value>
                   <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
                 </Statistic.Value>
+                {flagStatus &&
+                  <Statistic.Label className="flag-status">
+                    <Icon name="flag" /> Surpassed minimum goal
+                  </Statistic.Label>
+                }
               </Statistic>
-              {flagStatus &&
-              <p>
-                <Icon name="flag" /> Surpassed minimum goal
+              <Progress className="mb-0" inverted percent={percent} size="tiny" color="green" />
+              <p>{Helper.CurrencyFormat(flagStatus ? maxOffering : minOffering)} {flagStatus ? 'max target' : 'min target'} {' '}
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                  position="top center"
+                />
+              </p>
+              <div className="offer-stats">
+                <Statistic.Group>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Value>{diff || 0}</Statistic.Value>
+                    <Statistic.Label>Days left</Statistic.Label>
+                  </Statistic>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Value>
+                      {(campaign && campaign.closureSummary &&
+                        campaign.closureSummary.totalInvestorCount) || 0}
+                    </Statistic.Value>
+                    <Statistic.Label>Investors</Statistic.Label>
+                  </Statistic>
+                  <Statistic size="mini" className="basic">
+                    <Statistic.Value>
+                      {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount)
+                        || 0}
+                    </Statistic.Value>
+                    <Statistic.Label>Early Bird Rewards</Statistic.Label>
+                  </Statistic>
+                </Statistic.Group>
+              </div>
+              {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] &&
+              <p className="raise-type mt-20 mb-0">
+                <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
+                <Popup
+                  hoverable
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
+                  position="top center"
+                />
               </p>
               }
-              <Progress percent={percent} size="tiny" color="green">tiny</Progress>
-              <Statistic size="tiny" className="basic mb-0">
-                <Statistic.Label>{Helper.CurrencyFormat(flagStatus ? maxOffering : minOffering)} {flagStatus ? 'max target' : 'min target'} {' '}
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                    position="top center"
-                  />
-                </Statistic.Label>
-              </Statistic>
-              <Statistic.Group widths="three" className="center-align">
-                <Statistic size="mini" className="basic">
-                  <Statistic.Value>{diff || 0}</Statistic.Value>
-                  <Statistic.Label>Days left</Statistic.Label>
-                </Statistic>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Value>
-                    {(campaign && campaign.closureSummary &&
-                      campaign.closureSummary.totalInvestorCount) || 0}
-                  </Statistic.Value>
-                  <Statistic.Label>Investors</Statistic.Label>
-                </Statistic>
-                <Statistic size="mini" className="basic">
-                  <Statistic.Value>
-                    {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount) || 0}
-                  </Statistic.Value>
-                  <Statistic.Label>Early Birds</Statistic.Label>
-                </Statistic>
-              </Statistic.Group>
+              <p className="mb-half mt-half">
+              Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
+              </p>
+              <p className="mt-half">
+                Maturity: {get(campaign, 'keyTerms.maturity')} Months
+              </p>
               <Divider hidden />
               <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
               <p>
                 ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                   || 0} min investment
               </p>
-            </Responsive>
-            {isMobile &&
-              <Button.Group compact widths="2" className="mt-30">
-                <Button basic color="green">
-                  <Icon name="heart outline" /> Watch Deal
-                </Button>
-                <Button basic color="green" as={Link} to={`${this.props.match.url}/share`}>
-                  <Icon name="share alternate" /> Share
-                </Button>
-              </Button.Group>
-            }
-          </div>
+            </div>
+          </Responsive>
           {!isMobile &&
             <Aux>
               <Menu vertical>
                 <NavItems sub refLoc="public" refLink={this.props.match.url} location={this.props.location} navItems={this.props.navItems} countData={navCountData} bonusRewards={rewardsTiers.length} />
               </Menu>
-              {/* <Button.Group widths="2">
-                <Button compact basic inverted color="green">
-                  <Icon name="heart outline" /> Watch Deal
-                </Button>
-                <Button compact basic inverted color="green" as={Link}
-                to={`${this.props.match.url}/share`}>
-                  <Icon name="share alternate" /> Share
-                </Button>
-              </Button.Group> */}
             </Aux>
           }
           <Route path={`${this.props.match.url}/share`} component={share} />

@@ -20,10 +20,6 @@ class RevenueSharingDetails extends Component {
     // ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
-          Key Terms
-          <span className="anchor" id="key-terms" />
-        </Header>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
             <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA' }</p>

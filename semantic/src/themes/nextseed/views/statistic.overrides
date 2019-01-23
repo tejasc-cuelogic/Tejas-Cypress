@@ -38,29 +38,45 @@
 // 		}
 // 	}
 // }
-.campaign-details-banner .offer-stats {
-	padding: @15px;
-	background: @mutedTextColor;
-	position: absolute;
-	top:0;
-	left:0;
-	.ui.statistics {
-		margin: 0;
-		.statistic {
-			padding: 0 @15px;
+.campaign-details-banner, .offering-intro {
+	.offer-stats {
+		padding: @15px;
+		background: @mutedTextColor;
+		position: absolute;
+		top:0;
+		left:0;
+		@media only screen and (max-width : @largestMobileScreen){
+			background: transparent;
+			position: static;
+			padding: @15px 0;
+		}
+		.ui.statistics {
 			margin: 0;
-			>.value {
-				font-size: @20px !important;
-				color: @white;
-				~.label {
-					font-size: @15px;
+			.statistic {
+				padding: 0 @15px;
+				margin: 0;
+				@media only screen and (max-width : @largestMobileScreen){
+					padding: 0 @10px;
+				}
+				>.value {
+					font-size: @20px !important;
 					color: @white;
+					~.label {
+						font-size: @15px;
+						color: @white;
+					}
+				}
+				+.statistic {
+					margin: 0;
 				}
 			}
-			+.statistic {
-				margin: 0;
-			}
 		}
+	}
+	.ui.statistic >.label.flag-status{
+        font-size: @12px;
+		line-height: 18px;
+		margin-top: @10px;
+		color: @white;
 	}
 }
 /** About Us **/

@@ -100,22 +100,20 @@ export default class CampaignHeader extends Component {
                   <Statistic.Value>
                     <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
                   </Statistic.Value>
+                  {flagStatus &&
+                    <Statistic.Label className="flag-status">
+                      <Icon name="flag" /> Surpassed minimum goal
+                    </Statistic.Label>
+                  }
                 </Statistic>
-                {flagStatus &&
-                  <p className="flag-status">
-                    <Icon name="flag" /> Surpassed minimum goal
-                  </p>
-                }
                 <Progress inverted percent={percent} size="tiny" color="green" />
-                <Statistic inverted size="tiny" className="basic mb-0">
-                  <Statistic.Label>{Helper.CurrencyFormat(flagStatus ? maxOffering : minOffering)} {flagStatus ? 'max target' : 'min target'} {' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                      position="top center"
-                    />
-                  </Statistic.Label>
-                </Statistic>
+                <p>{Helper.CurrencyFormat(flagStatus ? maxOffering : minOffering)} {flagStatus ? 'max target' : 'min target'} {' '}
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
+                    position="top center"
+                  />
+                </p>
                 {/* <Header as="h3" inverted>
                   <span className="highlight-text">$35,000</span> raised
                   <Header.Subheader>of $50,000 min{' '}
@@ -126,6 +124,7 @@ export default class CampaignHeader extends Component {
                     />
                   </Header.Subheader>
                 </Header> */}
+                {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] &&
                 <p className="raise-type mt-30">
                   <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
                   <Popup
@@ -134,8 +133,12 @@ export default class CampaignHeader extends Component {
                     content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
                     position="top center"
                   />
-                  <br />
-                  Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}<br />
+                </p>
+                }
+                <p className="mb-half">
+                Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
+                </p>
+                <p>
                   Maturity: {get(campaign, 'keyTerms.maturity')} Months
                 </p>
                 <div className="center-align">
