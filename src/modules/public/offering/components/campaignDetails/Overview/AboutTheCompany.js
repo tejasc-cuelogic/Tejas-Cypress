@@ -8,7 +8,7 @@ import Parser from 'html-react-parser';
 // '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 
 @withRouter
 class AboutTheCompany extends Component {

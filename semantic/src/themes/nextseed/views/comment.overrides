@@ -52,9 +52,7 @@
                 .comment {
                     // padding: @24px @30px;
                     background: transparent;
-                    &:first-child {
-                        border-top: 1px solid fade(@primary-two-darken, 8%);
-                    }
+                    border-top: 1px solid fade(@primary-two-darken, 8%);
                     &:last-child {
                         padding-bottom: 0;
                     }
@@ -73,6 +71,9 @@
                 }  
             }
 
+        }
+        .public-form~p{
+            font-size: @12px;
         }
     }
     &.comments-modal {
