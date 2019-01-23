@@ -16,7 +16,11 @@ import { ErrorBoundry as CustomErrorBoundry } from './helper';
 let ErrorBoundary = CustomErrorBoundry;
 
 if (process.env.REACT_APP_BUG_SNAG_KEY) {
-  const bugsnagClient = bugsnag(process.env.REACT_APP_BUG_SNAG_KEY);
+  const bugsnagClient = bugsnag({
+    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+    appType: 'client',
+    releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
+  });
   // wrap your entire app tree in the ErrorBoundary provided
   ErrorBoundary = bugsnagClient.use(createPlugin(React));
 }
