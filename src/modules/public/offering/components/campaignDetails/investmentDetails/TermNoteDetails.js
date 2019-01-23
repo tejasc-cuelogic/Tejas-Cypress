@@ -5,7 +5,7 @@ import { Header, Divider, Statistic, Grid, Table, Icon, Popup } from 'semantic-u
 // import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
-// import PaymentCalculator from './PaymentCalculator';
+import PaymentCalculator from './PaymentCalculator';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
@@ -223,8 +223,7 @@ class TermNoteDetails extends Component {
                 </Statistic>
               </Grid.Column>
             </Grid>
-            {/* <PaymentCalculator propsDetails={this.props} /> */}
-            <p>Payment calculator graph goes here..</p>
+            <PaymentCalculator propsDetails={this.props} />
             <p className="mt-30 note">
               * Payment for any given month (including the total payment at the end of the
               final month) indicates the cumulative amount contractually required to be paid

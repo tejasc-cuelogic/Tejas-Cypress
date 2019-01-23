@@ -26,6 +26,9 @@ const data = [
 ];
 
 export default class PaymentCalculator extends Component {
+  componentWillMount() {
+    console.log('here');
+  }
   // constructor() {
   //   super();
   //   this.state = { a: false };
