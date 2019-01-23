@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { get, find, has, uniqWith, isEqual } from 'lodash';
+import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
@@ -113,10 +113,18 @@ class offerDetails extends Component {
       if (has(item, 'subNavigations') && item.title === 'Investment Details') {
         const temNavList = item.subNavigations;
         if (offeringSecurityType === 'REVENUE_SHARING_NOTE') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
           temNavList.push({
             title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
           });
         } else if (offeringSecurityType === 'TERM_NOTE') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
           temNavList.push({
             title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
           });
