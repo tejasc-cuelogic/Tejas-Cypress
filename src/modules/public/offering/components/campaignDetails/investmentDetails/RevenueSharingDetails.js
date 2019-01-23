@@ -15,7 +15,7 @@ class RevenueSharingDetails extends Component {
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const edgarLink = launch && launch.edgarLink;
     const revenueShareSummary =
-      (KeyTerms && KeyTerms.revShareSummary) || null;
+      (KeyTerms && KeyTerms.revShareSummary && KeyTerms.revShareSummary === 'REVENUE_SHARING_NOTE') || null;
     // const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a
     // ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (

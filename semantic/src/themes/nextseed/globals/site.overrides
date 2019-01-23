@@ -455,7 +455,7 @@ footer{
 // 	min-height:~"calc(100vh - 58px)";
 // }
 .offering-side-menu {
-	@media only screen and (max-width : @largestMobileScreen){
+	@media only screen and (max-width : @largestTabletScreen){
 		background:url(../../assets/images/banners/campaign-details.png) top center no-repeat / cover;
 		background-color: @neutral;
 		background-blend-mode:multiply;
@@ -466,6 +466,7 @@ footer{
 		height: auto;
 		transition: all 500ms ease-in-out;
 		padding: 0;
+		z-index: 1;
 		&.collapse {
 			max-height: 0;
 		}
@@ -487,7 +488,7 @@ footer{
 }
 .offering-intro {
 	padding: @20px @20px 0;
-	@media only screen and (max-width : @largestMobileScreen){
+	@media only screen and (max-width : @largestTabletScreen){
 		padding: @20px @32px;
 	}
 	h4.ui.header {
@@ -1110,7 +1111,7 @@ a.icon-link {
 // Vertical Timeline
 .vertical-timeline.campaign-updates {
 	margin: 0 auto;
-	@media only screen and (max-width : @largestMobileScreen){
+	@media only screen and (max-width : @largestTabletScreen){
 		padding-left: @20px;
 	}
 	&:before {
@@ -1120,7 +1121,7 @@ a.icon-link {
 		left: 0;
 		height: auto;
 		bottom: 30px;
-		@media only screen and (max-width : @largestMobileScreen){
+		@media only screen and (max-width : @largestTabletScreen){
 			left: auto;
 		}
 	}
@@ -1136,7 +1137,7 @@ a.icon-link {
 				width: @25px;
 				left: @16px;
 				background-color: @neutral-darkwhite !important;
-				@media only screen and (max-width : @largestMobileScreen){
+				@media only screen and (max-width : @largestTabletScreen){
 					left: -@13px;
 				}
 			}
@@ -1167,7 +1168,7 @@ a.icon-link {
 	padding: 0;
 	background: transparent;
 	left: 121px;
-	@media only screen and (max-width : @largestMobileScreen){
+	@media only screen and (max-width : @largestTabletScreen){
 		left: 0;
 		margin-left: @30px;
 		width: auto;
@@ -1197,7 +1198,7 @@ a.icon-link {
 			}
 		}
 		&:not(.unstackable) > .item {
-			@media only screen and (max-width : @largestMobileScreen){
+			@media only screen and (max-width : @largestTabletScreen){
 				flex-direction: row;
 				.image+.content {
 					margin-left: @14px;
@@ -1207,11 +1208,11 @@ a.icon-link {
 		.ui.list .item {
 			border: 1px solid @neutral-darkwhite;
 			>.image+.content {
-				@media only screen and (max-width:@largestMobileScreen) {
+				@media only screen and (max-width:@largestTabletScreen) {
 					padding-left: @3px;
 				}
 				>.description {
-					@media only screen and (max-width:@largestMobileScreen) {
+					@media only screen and (max-width:@largestTabletScreen) {
 						padding: 0 !important;
 					}
 				}
@@ -1233,7 +1234,7 @@ a.icon-link {
 			width: @60px;
 			height: @60px;
 			line-height: @60px;
-			@media only screen and (max-width : @largestMobileScreen){
+			@media only screen and (max-width : @largestTabletScreen){
 				width: @40px;
 				height: @40px;
 				line-height: @40px;
@@ -1316,7 +1317,7 @@ a.icon-link {
 	}
 	&.offering-side-menu{
 		top:136px;
-		@media only screen and (max-width : @largestMobileScreen){
+		@media only screen and (max-width : @largestTabletScreen){
 			top: 0;
 		}
 	}
@@ -2676,11 +2677,14 @@ p.check-extra-info{
 
 .anchor-wrap{
 	position:relative;
-	>.anchor{
+	>.anchor, >.anchor-scroll{
 		height:1px;
 		width:1px;
 		position:absolute;
 		left:0;
 		top:-116px;
+	}
+	>.anchor-scroll{
+		top:-60px;
 	}
 }

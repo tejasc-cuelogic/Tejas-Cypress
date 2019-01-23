@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { get, find, has } from 'lodash';
+import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
@@ -27,7 +27,7 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore', 'userStore', 'navStore')
 @withRouter
@@ -107,6 +107,42 @@ class offerDetails extends Component {
     });
     return newNavData;
   }
+  modifyInvestmentDetailsSubNav = (navList, campaign) => {
+    const newNavList = [];
+    const offeringSecurityType =
+      (campaign && campaign.keyTerms && campaign.keyTerms.securities) || null;
+    navList.forEach((item) => {
+      const tempItem = item;
+      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
+        const temNavList = item.subNavigations;
+        if (offeringSecurityType === 'REVENUE_SHARING_NOTE') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
+          });
+        } else if (offeringSecurityType === 'TERM_NOTE') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+          });
+        } else {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+        }
+        tempItem.subNavigations = uniqWith(temNavList, isEqual);
+      }
+      newNavList.push(tempItem);
+    });
+    return newNavList;
+  }
   render() {
     const {
       match, campaignStore, location, navStore,
@@ -129,11 +165,13 @@ class offerDetails extends Component {
       navItems = this.removeSubNavs(GetNavMeta(match.url, [], true).subNavigations);
     } else {
       navItems =
-      this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
-        .subNavigations, get(campaign, 'legal.dataroom.documents'));
+        this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
+          .subNavigations, get(campaign, 'legal.dataroom.documents'));
     }
+    navItems =
+      this.modifyInvestmentDetailsSubNav(navItems, campaign);
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
-    && campaign.offering.launch.terminationDate;
+      && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
     const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
     // const minOffering = campaign && campaign.keyTerms &&
@@ -159,29 +197,33 @@ class offerDetails extends Component {
           <CampaignHeader {...this.props} />
         }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
-          {!isMobile &&
           <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
-            <div className={`menu-secondary-fixed ${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}>
-              <Container fluid>
-                <List bulleted floated="right" horizontal>
-                  <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                  <List.Item>{diff} days left</List.Item>
+            <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus}`}>
+              <Container fluid={!isMobile}>
+                <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
+                  {!isMobile &&
+                    <Aux>
+                      <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
+                      <List.Item>{diff} days left</List.Item>
+                    </Aux>
+                  }
                   <Button secondary compact content="Invest Now" />
                 </List>
-                <List bulleted horizontal>
+                <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
                   <List.Item>
                     <List.Header>{get(campaign, 'keyTerms.shorthandBusinessName')}</List.Header>
                   </List.Item>
                   <List.Item>
                     <List.Header><span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised</List.Header>
                   </List.Item>
-                  <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
+                  {!isMobile &&
+                    <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
+                  }
                 </List>
               </Container>
             </div>
           </Visibility>
-          }
-          <Responsive maxWidth={767} as={Aux}>
+          <Responsive maxWidth={991} as={Aux}>
             <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
             <MobileDropDownNav
               inverted
