@@ -541,12 +541,9 @@ footer{
 	.pdf-viewer {
 		display: flex;
 		flex-direction: column;
-		min-height:~"calc(100vh - 180px)";
-		> object {
+		min-height:70vh;
+		> object, >iframe {
 			flex: 1;
-		}
-		&.disclosure-pdf {
-			height: 100%;
 		}
 	}
 	.ui.padded.segment h6.ui.header {

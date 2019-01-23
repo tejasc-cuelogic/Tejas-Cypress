@@ -160,7 +160,9 @@ section{
 }
 // business and invest pages
 .slide-down{
-    min-height:~"calc(100vh - 98px)";
+    &.process, &.all-inclusive, &.account-types, &.security, &.track {
+        min-height:~"calc(100vh - 98px)";
+    }
 	&.process{
         background:url(../../assets/images/business/process.png) 0% center no-repeat;
         @media only screen and (max-width : @largestMobileScreen){

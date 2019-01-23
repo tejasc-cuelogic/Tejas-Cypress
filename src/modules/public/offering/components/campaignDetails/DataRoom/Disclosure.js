@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Button, Header } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 
@@ -35,17 +34,15 @@ class Disclosure extends Component {
       );
     }
     return (
-      <Aux>
-        <div className="pdf-viewer disclosure-pdf">
-          <iframe
-            width="100%"
-            height="100%"
-            title="agreement"
-            src={doc.BoxUrl}
-            ref={(c) => { this.iframeComponent = c; }}
-          />
-        </div>
-      </Aux>
+      <div className="pdf-viewer">
+        <iframe
+          width="100%"
+          height="100%"
+          title="agreement"
+          src={doc.BoxUrl}
+          ref={(c) => { this.iframeComponent = c; }}
+        />
+      </div>
     );
   }
 }
