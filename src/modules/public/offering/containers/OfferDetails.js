@@ -56,6 +56,9 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
+  componentWillUnmount() {
+    this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
+  }
   getOgDataFromSocial = (obj, type, att) => {
     const data = find(obj, o => o.type === type);
     return get(data, att) || '';
