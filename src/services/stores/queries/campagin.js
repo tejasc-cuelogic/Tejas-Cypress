@@ -60,12 +60,12 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
-    portal
     stage
     applicationId
     issuerId
     offeringSlug
     referralCode
+    regulation
     selectedOffer {
       structure
     }
@@ -88,7 +88,6 @@ export const campaignDetailsQuery = gql`
       maxOfferingAmount
       industry
       minInvestAmt
-      maxInvestAmt
       appendixATitle
       revShareSummary
       investmentMultipleSummary
@@ -132,6 +131,9 @@ export const campaignDetailsQuery = gql`
           url
           shareLink
           blurb
+          featuredImageUpload {
+            url
+          }
         }
         googleMeta
         issuerWebsite
@@ -458,7 +460,6 @@ query getOfferingById($id: ID) {
       maxOfferingAmount
       industry
       minInvestAmt
-      maxInvestAmt
       revShareSummary
       investmentMultipleSummary
       locationRiskFactors

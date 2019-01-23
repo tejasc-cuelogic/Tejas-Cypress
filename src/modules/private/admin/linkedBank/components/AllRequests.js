@@ -77,7 +77,11 @@ export default class AllRequests extends Component {
                       <Button color="blue" onClick={e => this.setRoutingNumber(e, get(req, 'accountId'))} className="link-button"> Click for Routing # </Button>
                       }
                     </Table.Cell>
-                    <Actions {...this.props} />
+                    <Actions
+                      userId={req.userId}
+                      accountId={req.accountId}
+                      updateAccountChangeAction={bankAccountStore.updateAccountChangeAction}
+                    />
                   </Table.Row>
                 ))
               }

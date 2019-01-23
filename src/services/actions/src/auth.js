@@ -166,9 +166,9 @@ export class Auth {
             // Extract JWT from token
             commonStore.setToken(result.idToken.jwtToken);
             userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
-            if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
-              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE')).then(() => {
-                cookie.remove('REFERRAL_CODE');
+            if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
+                cookie.remove('ISSUER_REFERRAL_CODE');
               });
             }
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
@@ -278,9 +278,9 @@ export class Auth {
                   // Extract JWT from token
                   commonStore.setToken(data.idToken.jwtToken);
                   userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-                  if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
-                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE')).then(() => {
-                      cookie.remove('REFERRAL_CODE');
+                  if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
+                      cookie.remove('ISSUER_REFERRAL_CODE');
                     });
                   }
                   userDetailsStore.getUser(userStore.currentUser.sub);

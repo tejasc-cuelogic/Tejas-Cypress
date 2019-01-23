@@ -16,7 +16,7 @@ const ActivityFeed = ({ loading, activities }) => (
                 <UserAvatar
                   UserInfo={{
                     firstName: get(a.createdUserInfo, 'info.firstName') || '',
-                    lastName: get(a.createdUserInfo, 'info.firstName') || '',
+                    lastName: get(a.createdUserInfo, 'info.lastName') || '',
                     avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
                     roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
                   }}

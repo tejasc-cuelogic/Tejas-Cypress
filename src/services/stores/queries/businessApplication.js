@@ -398,15 +398,18 @@ mutation updateBusinessApplicationInformation(
   $issuerId: String!
   $businessName: String
   $signupCode: String
+  $utmSource: String
 ) {
   updateBusinessApplicationInformation(
     applicationId: $applicationId
     issuerId: $issuerId
     businessName: $businessName
     signupCode: $signupCode
+    utmSource: $utmSource
   ){
     applicationId
     signupCode
+    utmSource
   }
 }
 `;

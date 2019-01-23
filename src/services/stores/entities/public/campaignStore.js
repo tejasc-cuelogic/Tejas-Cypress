@@ -166,10 +166,6 @@ export class CampaignStore {
     return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.minInvestAmt : null;
   }
 
-  @computed get maxInvestAmt() {
-    return this.campaign && this.campaign.keyTerms ? this.campaign.keyTerms.maxInvestAmt : null;
-  }
-
   @computed get dataRoomDocs() {
     return this.campaign && this.campaign.legal && this.campaign.legal.dataroom
     && this.campaign.legal.dataroom.documents ?
@@ -204,12 +200,12 @@ export class CampaignStore {
   }
 
   @action
-  getBoxEmbedLink = (of, fileId) => {
+  getBoxEmbedLink = (of, fileId, accountType) => {
     this.docLoading = true;
     const boxFileId = fileId;
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
-      variables: { fileId: boxFileId },
+      variables: { fileId: boxFileId, accountType },
     }).then((res) => {
       this.setAgreementUrl(of, res.data.getBoxEmbedLink);
       this.setLoading(false);

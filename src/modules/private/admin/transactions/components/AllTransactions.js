@@ -1,56 +1,113 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { withRouter, Link } from 'react-router-dom';
+import Aux from 'react-aux';
+import { get } from 'lodash';
 import { Card, Table, Button } from 'semantic-ui-react';
+import { InlineLoader, DateTimeFormat, NsPagination } from '../../../../../theme/shared';
+import { STATUS_MAPPING, STATUS, TAB_WISE_STATUS } from '../../../../../services/constants/admin/transactions';
+import { NoR } from '../../../../../theme/table/NSTable';
+import Helper from '../../../../../helper/utility';
 
 @inject('transactionsStore')
+@withRouter
 @observer
 export default class AllTransactions extends Component {
   componentWillMount() {
-    this.props.transactionsStore.initRequest(); // load data
+    const { statusType } = this.props.match.params;
+    const transStatus = STATUS[statusType];
+    this.props.transactionsStore.initRequest(transStatus); // load data
   }
+
+  getUserName = info => (info ? `${info.firstName} ${info.lastName}` : '');
+
+  // handleConfirmModal = (reqId) => {
+
+  // }
+
+  paginate = params => this.props.transactionsStore.pageRequest(params);
+
   render() {
-    const { transactionsStore } = this.props;
-    const { allRecords } = transactionsStore;
+    const { transactionsStore, match } = this.props;
+    const { statusType } = this.props.match.params;
+    const {
+      allRecords, loading,
+      transactionCount, requestState,
+      transactionChange,
+    } = transactionsStore;
+    if (loading) {
+      return <InlineLoader />;
+    }
+    const totalRecords = transactionCount;
+    const transStatus = TAB_WISE_STATUS[statusType];
+    const columns = STATUS_MAPPING.filter(trans =>
+      trans.refStatus.includes(transStatus));
     return (
-      <Card fluid>
-        <div className="table-wrapper">
-          <Table unstackable striped sortable singleLine className="user-list">
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Requested Date</Table.HeaderCell>
-                <Table.HeaderCell>User</Table.HeaderCell>
-                <Table.HeaderCell>Transaction ID</Table.HeaderCell>
-                <Table.HeaderCell>Type</Table.HeaderCell>
-                <Table.HeaderCell>CP Account</Table.HeaderCell>
-                <Table.HeaderCell>Account ID</Table.HeaderCell>
-                <Table.HeaderCell>Amount</Table.HeaderCell>
-                <Table.HeaderCell textAlign="center">Actions</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {
-                allRecords.map(record => (
-                  <Table.Row key={record.id}>
-                    <Table.Cell>{record.requestedDate}</Table.Cell>
-                    <Table.Cell>{record.user}</Table.Cell>
-                    <Table.Cell>{record.transactionID}</Table.Cell>
-                    <Table.Cell>{record.type}</Table.Cell>
-                    <Table.Cell>{record.cpAccount}</Table.Cell>
-                    <Table.Cell>{record.accountID}</Table.Cell>
-                    <Table.Cell>{record.amount}</Table.Cell>
-                    <Table.Cell>
-                      <Button.Group vertical compact size="mini">
-                        <Button color="blue">Approve</Button>
-                        <Button color="red" inverted>Decline</Button>
-                      </Button.Group>
-                    </Table.Cell>
-                  </Table.Row>
-                ))
-              }
-            </Table.Body>
-          </Table>
-        </div>
-      </Card>
+      <Aux>
+        <Card fluid>
+          <div className="table-wrapper">
+            <Table unstackable striped sortable singleLine className="user-list">
+              <Table.Header>
+                <Table.Row>
+                  {
+                    columns.map(col => (
+                      <Table.HeaderCell key={col.field} textAlign={col.textAlign}>
+                        {col.title}
+                      </Table.HeaderCell>
+                    ))
+                  }
+                  {['PENDING', 'PROCESSING'].includes(STATUS[statusType]) &&
+                    <Table.HeaderCell key="actions">
+                    </Table.HeaderCell>
+                  }
+                </Table.Row>
+              </Table.Header>
+              <Table.Body>
+                { allRecords.length === 0 ? (
+                  <NoR cols={columns.length} msg="No record to display" />
+                ) :
+                  allRecords.map(row => (
+                    <Table.Row key={row.id}>
+                      {
+                        columns.map(col => (
+                          <Table.Cell key={col.field} textAlign={col.textAlign}>
+                            {
+                              ['startDate', 'failDate', 'estDateAvailable'].includes(col.field) ?
+                                row[col.field] !== null ? <DateTimeFormat unix format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
+                                this.getUserName(get(row, col.fieldLocation) || {}) : col.field === 'userId' ? get(row, col.fieldLocation) :
+                                col.field === 'agreements' ? get(row, col.fieldLocation) :
+                                col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field]) :
+                                row[col.field]
+                            }
+                          </Table.Cell>
+                        ))
+                      }
+                      {
+                      TAB_WISE_STATUS[statusType] === 'PENDING' ?
+                        <Table.Cell>
+                          <Button.Group vertical compact size="mini">
+                            <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, 'Approved')}>Approve</Button>
+                            <Button color="red" inverted onClick={() => transactionChange(row.requestId, transStatus, 'Declined')}>Decline</Button>
+                          </Button.Group>
+                        </Table.Cell> : TAB_WISE_STATUS[statusType] === 'PROCESSING' ?
+                          <Table.Cell>
+                            <Button.Group vertical compact size="mini">
+                              <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, 'Verified')}>Verified</Button>
+                              <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">Failed</Button>
+                            </Button.Group>
+                          </Table.Cell> : null
+                      }
+                    </Table.Row>
+                  ))
+                }
+              </Table.Body>
+            </Table>
+          </div>
+          {totalRecords > 0 &&
+            <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
+          }
+        </Card>
+      </Aux>
     );
   }
 }

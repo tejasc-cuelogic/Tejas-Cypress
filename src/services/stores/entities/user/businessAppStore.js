@@ -163,13 +163,13 @@ export class BusinessAppStore {
       onFetch: (data) => {
         this.setFieldvalue('currentApplicationType', data.businessApplicationsDetailsAdmin.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate');
         const {
-          prequalDetails, signupCode, businessGeneralInfo,
+          prequalDetails, signupCode, businessGeneralInfo, utmSource,
         } = data.businessApplicationsDetailsAdmin;
         businessAppAdminStore
           .setBusinessDetails(
             ((businessGeneralInfo && businessGeneralInfo.businessName) ||
             (prequalDetails.businessGeneralInfo.businessName)),
-            signupCode,
+            signupCode, utmSource,
           );
         this.setBusinessApplicationData(false, data.businessApplicationsDetailsAdmin);
         uiStore.setAppLoader(false);
@@ -622,7 +622,7 @@ export class BusinessAppStore {
         fullLegalName: this.getValidDataForString(item.fullLegalName),
         yearsOfExp: this.getValidDataForInt(item.yearsOfExp),
         ssn: this.getValidDataForString(item.ssn),
-        dateOfService: moment(item.dateOfService).format('MM-DD-YYYY'),
+        dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM-DD-YYYY') : null,
         companyOwnerShip: this.getValidDataForInt(item.companyOwnerShip, 1),
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),
         title: this.getValidDataForString(item.title),

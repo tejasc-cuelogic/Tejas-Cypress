@@ -31,7 +31,8 @@ export default class OffersPanel extends Component {
     this.setState({ showModal: false });
     this.props.addAdditionalTermsToFormData(index);
   }
-  openModal = (index) => {
+  openModal = (e, index) => {
+    e.stopPropagation();
     if (!this.props.isReadonly) {
       this.setState({ showModal: true });
       this.setState({ modalIndex: index });
@@ -273,17 +274,10 @@ export default class OffersPanel extends Component {
                         <Table.Cell>{offerFields.additionalTerms.label}</Table.Cell>
                         <Table.Cell>
                           {isReadonly && offer.additionalTerms.value &&
-                            <Button size="small" color="blue" className="link-button" onClick={() => selectOffer('selectedOfferIndex', index, 1)} >{offer.additionalTermsField.value}</Button>
+                            <Button type="button" size="small" color="blue" className="link-button" onClick={() => selectOffer('selectedOfferIndex', index, 1)} >{offer.additionalTermsField.value}</Button>
                           }
                           {!isReadonly &&
-                          <FormInput
-                            onClick={() => this.openModal(index)}
-                            containerclassname={isReadonly ? 'display-only' : ''}
-                            readOnly={isReadonly}
-                            name="additionalTermsField"
-                            fielddata={offer.additionalTermsField}
-                            ishidelabel
-                          />
+                            <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.openModal(e, index)} >{offer.additionalTermsField.value}</Button>
                           }
                         </Table.Cell>
                       </Table.Row>
@@ -316,6 +310,9 @@ export default class OffersPanel extends Component {
             </Header>
             <HtmlEditor
               name="additionalTerms"
+              overrides={{
+                toolbarButtons: ['html', 'bold', 'italic', 'strikeThrough', 'underline', 'superscript', 'subscript', 'insertLink', 'align', 'formatUL', 'formatOL', 'clearFormatting'],
+              }}
               changed={(name, value) => this.formChangeWithIndex(null, { name, value }, 'OFFERS_FRM', 'offer', this.state.modalIndex)}
               content={OFFERS_FRM.fields.offer[this.state.modalIndex].additionalTerms.value || null}
             />

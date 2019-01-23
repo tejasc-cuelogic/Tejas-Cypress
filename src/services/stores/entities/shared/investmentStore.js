@@ -27,7 +27,6 @@ export class InvestmentStore {
     campaignType: 0,
     rate: 5,
     rateMin: campaignStore.minInvestAmt,
-    rateMax: campaignStore.maxInvestAmt,
     annualReturn: 1000,
     targetTerm: 5000,
   }
@@ -183,29 +182,16 @@ export class InvestmentStore {
   @action
   calculateEstimatedReturn = () => {
     const {
-      rate,
       rateMin,
-      rateMax,
       campaignType,
     } = this.offeringMetaData;
     const investAmt = this.investmentAmount;
-    // const campaignType = 1;
     if (investAmt >= 100) {
       if (campaignType === 0) {
-        // const rate = rate;
-        // const rateMin = OfferingMeta.rateMin ? OfferingMeta.rateMin : OfferingMeta.rate;
-        // const rateMax = OfferingMeta.rateMax ? OfferingMeta.rateMax : OfferingMeta.rate;
-        if (rateMin === rateMax) {
-          this.estReturnVal = `${Helper.CurrencyFormat(Math.round(rate * investAmt))}`;
-        } else {
-          const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt));
-          const estReturnMAX = Helper.CurrencyFormat(Math.round(rateMax * investAmt));
-          this.estReturnVal = `${estReturnMIN} - ${estReturnMAX}`;
-          return this.estReturnVal;
-        }
+        const estReturnMIN = Helper.CurrencyFormat(Math.round(rateMin * investAmt));
+        this.estReturnVal = estReturnMIN;
+        return this.estReturnVal;
       } else if (campaignType === 1) {
-        // const annualReturn = 0;
-        // const targetTerm = 0;
         this.estReturnVal = `${Helper.CurrencyFormat(Math.round(this.calculateTotalPaymentTermLoan))}`;
         return this.estReturnVal;
       }
