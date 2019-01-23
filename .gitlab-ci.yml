@@ -258,5 +258,6 @@ deploy:prod:
   script: 
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - sh deployApp.sh ns-client-prod
+  when: manual
   dependencies:
     - build:prod
