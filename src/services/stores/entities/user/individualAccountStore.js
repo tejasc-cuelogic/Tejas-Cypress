@@ -6,6 +6,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
+import { updateInvestmentLimits } from '../../queries/investementLimits';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
@@ -50,6 +51,9 @@ class IndividualAccountStore {
             .then(action((result) => {
               if (result.data.createInvestorAccount || formStatus === 'FULL') {
                 userDetailsStore.getUser(userStore.currentUser.sub);
+              }
+              if (formStatus !== 'FULL') {
+                this.updateInvestmentLimits(result);
               }
               if (result.data.createInvestorAccount) {
                 const { linkedBank } = result.data.createInvestorAccount;
@@ -106,6 +110,33 @@ class IndividualAccountStore {
       });
     }
     return null;
+  }
+
+  updateInvestmentLimits = (result) => {
+    const accountId = result.data.createInvestorAccount ?
+      result.data.createInvestorAccount.accountId :
+      result.data.updateInvestorAccount ? result.data.updateInvestorAccount.accountId : null;
+
+    return new Promise((resolve) => {
+      client
+        .mutate({
+          mutation: updateInvestmentLimits,
+          variables: {
+            userId: userDetailsStore.currentUserId,
+            accountId,
+            annualIncome: userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+            netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
+            otherRegCfInvestments: 0,
+          },
+        })
+        .then(() => {
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+        });
+    });
   }
 
   @action
