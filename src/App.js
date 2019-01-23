@@ -46,12 +46,6 @@ class App extends Component {
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
     const currentLocation = this.props.location.pathname;
-    const calculations = {
-      topVisible: true,
-      direction: 'up',
-      bottomPassed: true,
-      isMoveTop: true,
-    };
     if (isLoggingIn) {
       this.props.history.push(this.props.uiStore.redireURL);
     } else if (isLoggingOut) {
@@ -60,8 +54,14 @@ class App extends Component {
     }
     if (!currentLocation.includes('offerings')) {
       window.scrollTo(0, 0);
+      const calculations = {
+        topVisible: true,
+        direction: 'up',
+        bottomPassed: true,
+        isMoveTop: true,
+      };
+      this.props.navStore.setNavStatus(calculations);
     }
-    this.props.navStore.setNavStatus(calculations);
   }
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
