@@ -10,11 +10,14 @@ import { InlineLoader } from '../../../../../../theme/shared';
 @observer
 class Disclosure extends Component {
   componentWillMount() {
-    const { getNavItemsForDataRoom, getBoxEmbedLink } = this.props.campaignStore;
+    const { getNavItemsForDataRoom, getBoxEmbedLink, campaign } = this.props.campaignStore;
     const { docKey } = this.props.match.params;
+    const offeringRegulationArr = campaign.regulation.split('_');
+    const regulationType = offeringRegulationArr[0];
+    const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
     const doc = docKey && docKey !== 'disclosure' ? getNavItemsForDataRoom.find(ele => ele.to === parseInt(docKey, 10)) :
       getNavItemsForDataRoom[0];
-    getBoxEmbedLink(doc.to, doc.url);
+    getBoxEmbedLink(doc.to, doc.url, accountType);
   }
   render() {
     const { embedUrl, docLoading, getNavItemsForDataRoom } = this.props.campaignStore;

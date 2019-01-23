@@ -26,7 +26,7 @@ const Actions = props => (
   </Aux>
 );
 
-const NoR = ({ cols, msg }) => (
+export const NoR = ({ cols, msg }) => (
   <Table.Row><Table.Cell textAlign="center" colSpan={cols}>{msg}</Table.Cell></Table.Row>
 );
 

@@ -30,12 +30,12 @@ export const securitySections = [
     description: 'Change your NextSeed Password.',
     action: ['change-password', 'Change Password'],
   },
-  {
-    title: 'Social Connect',
-    description: `Your NextSeed account is not connected to any social media.
-    If you wish to connect it now, click one of the button below.`,
-    action: ['social-connect'],
-  },
+  // {
+  //   title: 'Social Connect',
+  //   description: `Your NextSeed account is not connected to any social media.
+  //   If you wish to connect it now, click one of the button below.`,
+  //   action: ['social-connect'],
+  // },
   {
     title: 'Multi-factor Authentication',
     description: 'You can choose your Active MFA Factor.',

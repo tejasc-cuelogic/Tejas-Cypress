@@ -5,15 +5,23 @@ query insights{
   insightsArticles{
     id
     content
+    category
     featuredImage
+    tags
+    articleStatus
     minuteRead
     title
-    authorId
     updated {
       date
     }
     created {
       date
+    }
+    author {
+      info {
+        lastName
+        firstName
+      }
     }
     banner
   }
@@ -42,6 +50,33 @@ query _getArticleByCategoryId($id:ID! ) {
 }
 `;
 
+export const getArticleById = gql`
+query insight($id: ID!) {
+  insightsArticle(id: $id) {
+    id
+    title
+    featuredImage
+    content
+    category
+    tags
+    author {
+      id
+      info {
+        lastName
+        firstName
+      }
+    }
+    articleStatus
+    updated {
+      by
+      date
+      __typename
+    }
+    __typename
+  }
+}
+`;
+
 export const getArticleDetails = gql`
 query insight($id:ID! ) {
   insightsArticleById(id: $id){
@@ -52,3 +87,26 @@ query insight($id:ID! ) {
   }
 }
 `;
+
+export const createArticle = gql`
+mutation createArticle($payload:  InsightsArticleInput!, $isPartial: Boolean) {
+  createArticle(articleDetailsInput: $payload, isPartialData: $isPartial) {
+    id
+    title
+    articleStatus
+    category
+  }
+}
+`;
+
+export const updateArticle = gql`
+mutation updateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartial: Boolean) {
+  updateArticleInfo(id:$id, articleDetailsInput: $payload, isPartialData: $isPartial) {
+    id
+    title
+    articleStatus
+    category
+  }
+}
+`;
+

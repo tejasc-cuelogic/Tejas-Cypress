@@ -91,3 +91,64 @@ export const investmentsByOfferingId = gql`
     }
   }
 `;
+
+export const getTransactions = gql`
+  query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $limit: Int){
+    getTransactions(
+      status: $status
+      offset: $offset
+      limit: $limit
+    ) {
+      requestId
+      status
+      startDate
+      amount
+      accountId
+      gsTransactionId
+      type
+      userInfo{
+        id
+        info {
+          firstName
+          lastName
+        }
+      }
+      direction
+      estDateAvailable
+      agreement {
+        agreementId
+      }
+      failDate
+      failDesc
+    }
+  }
+`;
+
+export const approveTransactions = gql`
+  mutation _transactionApprove($id: Int!){
+    transactionApprove(
+    id: $id
+    )
+  }`;
+
+export const declineTransactions = gql`
+  mutation _transactionDecline($id: Int!){
+    transactionDecline(
+    id: $id
+    )
+  }`;
+
+export const verifiedTransactions = gql`
+  mutation _transactionVerified($id: Int!){
+    transactionVerified(
+    id: $id
+    )
+  }`;
+
+export const failedTransactions = gql`
+  mutation _transactionFailed($id: Int!, $reason: String!){
+    transactionFailed(
+    id: $id
+    reason: $reason
+    )
+  }`;
