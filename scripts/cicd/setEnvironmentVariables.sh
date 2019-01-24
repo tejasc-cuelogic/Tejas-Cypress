@@ -112,3 +112,5 @@ prod-temp)
 ;;
 
 esac
+
+mv ./.env ../../.env
