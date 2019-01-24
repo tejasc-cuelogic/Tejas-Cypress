@@ -38,7 +38,7 @@ export default class CampaignHeader extends Component {
                 <div className="video-wrapper">
                   {campaign && campaign.media &&
                     campaign.media.heroVideo && campaign.media.heroVideo.url ?
-                      <Link to={`${this.props.match.url}/herovideo`}>
+                      <Link to={`${this.props.match.url}/overview/herovideo`}>
                         <Image64
                           srcUrl={get(campaign, 'media.heroImage.url')}
                           imgType="heroImage"
@@ -86,7 +86,7 @@ export default class CampaignHeader extends Component {
                       <Icon color="white" name="facebook" />
                     </a>
                   </div>
-                  <Link to={this.props.match.url} onClick={this.handleViewGallery} className="pull-right">
+                  <Link to={`${this.props.match.url}/overview/photogallery`} onClick={this.handleViewGallery} className="pull-right">
                     View gallery <Icon size="small" className="ns-chevron-right" />
                   </Link>
                 </div>
