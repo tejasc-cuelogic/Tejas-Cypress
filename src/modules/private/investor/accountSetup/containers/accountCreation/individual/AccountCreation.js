@@ -60,7 +60,7 @@ export default class AccountCreation extends React.Component {
         component: <AddFunds />,
         // isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
         // Done changes for saving link bank details - Alan's feedback point
-        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : (stepToBeRendered === 1 || stepToBeRendered > 1) ? 'error' : '',
+        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 1 ? 'error' : '',
         validate: validateAddFunds,
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
@@ -69,7 +69,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Summary',
         component: <Summary />,
-        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : (stepToBeRendered === 2 || stepToBeRendered > 2) ? 'error' : '',
+        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 2 ? 'error' : '',
       },
     ];
     return (
