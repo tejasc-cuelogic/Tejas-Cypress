@@ -15,7 +15,10 @@ class Image64 extends React.Component {
         } else {
           this.setState({ data: this.props.srcUrl || emptyImage });
         }
-      }).catch(() => this.setState({ data: emptyImage }));
+      }).catch((err) => {
+        console.log(err);
+        this.setState({ data: emptyImage });
+      });
     } else {
       this.setState({ data: emptyImage });
     }

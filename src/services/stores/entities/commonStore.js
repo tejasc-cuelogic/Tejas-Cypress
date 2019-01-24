@@ -1,6 +1,6 @@
 import { observable, action, reaction } from 'mobx';
 import graphql from 'mobx-apollo';
-import { getBoxFileDetails, updateUserReferralCode } from '../queries/common';
+import { getBoxFileDetails, updateUserReferralCode, createCdnSignedUrl, deleteCdnS3File } from '../queries/common';
 import { GqlClient as client } from '../../../api/gqlApi';
 import Helper from '../../../helper/utility';
 
@@ -42,6 +42,34 @@ export class CommonStore {
     client
       .mutate({ mutation: updateUserReferralCode, variables: { cognitoUserId, referralCode } })
       .then(() => resolve())
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      });
+  });
+
+  @action
+  getCdnSignedUrl = key => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: createCdnSignedUrl,
+        variables: { key },
+      })
+      .then(res => resolve(res))
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      });
+  });
+
+  @action
+  deleteCdnS3File = key => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: deleteCdnS3File,
+        variables: { key },
+      })
+      .then(res => resolve(res))
       .catch(() => {
         Helper.toast('Something went wrong, please try again later.', 'error');
         reject();

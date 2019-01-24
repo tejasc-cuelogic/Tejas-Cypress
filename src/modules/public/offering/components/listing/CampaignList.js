@@ -82,7 +82,7 @@ export default class CampaignList extends Component {
                             <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
                             <List divided horizontal>
                               <List.Item>
-                                {Helper.CurrencyFormat(offering.fundedAmount, 0)}
+                                {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0)}
                               </List.Item>
                               <List.Item>
                                 Investors

@@ -24,7 +24,7 @@ export default class CampaignSideBar extends Component {
   render() {
     const { className, campaignStore } = this.props;
     const { campaign, navCountData } = campaignStore;
-    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = campaign && campaign.keyTerms &&
       campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
     const maxOffering = campaign && campaign.keyTerms &&
