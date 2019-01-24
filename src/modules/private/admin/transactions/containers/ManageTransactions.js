@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Grid, Form, Icon } from 'semantic-ui-react';
+import { Grid, Form, Label } from 'semantic-ui-react';
+import mapValues from 'lodash';
 import { Route, withRouter, Switch } from 'react-router-dom';
+import ConfirmModal from '../components/ConfirmModal';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import AllTransactions from '../components/AllTransactions';
 import { ByKeyword, DropdownFilter, DateRangeFilter, AmountRangeFilter } from '../../../../../theme/form/Filters';
@@ -17,22 +19,31 @@ export default class ManageTransactions extends Component {
       history.push(`${match.url}/status-1`);
     }
   }
+
   setSearchParam = (e, { name, value }) =>
-    this.props.transactionsStore.setInitiateSrch(name, value);
+    this.props.transactionsStore.setInitiateSrch({ value }, name);
   toggleSearch = () => this.props.transactionsStore.toggleSearch();
-  representAddon = () => <Icon color="red" name={12} />
+  executeSearch = (e) => {
+    this.props.transactionsStore.setInitiateSrch({ value: e.target.value }, 'keyword');
+  }
+  representAddon = summary => mapValues(summary, s => (
+    <Label circular color="red" size="mini">{s}</Label>
+  ));
   render() {
     const { match } = this.props;
-    const { filters, requestState, maskChange } = this.props.transactionsStore;
+    const {
+      filters, requestState, setInitiateSrch, summary,
+    } = this.props.transactionsStore;
     return (
       <PrivateLayout
         {...this.props}
-        subNavAddon={{ data: this.representAddon() }}
+        subNav
+        subNavAddon={{ data: this.representAddon(summary) }}
         P1={<ByKeyword
           {...this.props}
           w={[8]}
           filters={filters}
-          change={this.setSearchParam}
+          change={this.executeSearch}
           placeholder="Search by User / Transaction ID / CP Account  Account ID"
           toggleSearch={this.toggleSearch}
         />}
@@ -42,22 +53,22 @@ export default class ManageTransactions extends Component {
               <Grid stackable>
                 <Grid.Row>
                   <Grid.Column width={4}>
-                    <DateRangeFilter change={maskChange} value={requestState.search.transactionType} label="Date Range" name="dateRange" />
+                    <DateRangeFilter change={setInitiateSrch} label="Date Range" name="dateRange" />
                   </Grid.Column>
                   <Grid.Column width={4}>
-                    <AmountRangeFilter change={maskChange} label="Amount Range" name="dateRange" />
+                    <AmountRangeFilter change={setInitiateSrch} placeHolderMax="Enter Amount" placeHolderMin="Enter Amount" label="Amount Range" name="dateRange" />
                   </Grid.Column>
                   <Grid.Column width={3}>
-                    <DropdownFilter change={this.setSearchParam} value={requestState.search.transactionType} name="Transaction Type" keyName="transactionType" options={FILTER_META.transactionType} />
+                    <DropdownFilter change={this.setSearchParam} placeHolder="Choose transaction type" value={requestState.search.transactionType} name="Transaction Type" keyName="transactionType" options={FILTER_META.transactionType} />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>
             </Form>
           </div>}
-        subNav
       >
         <Switch>
-          <Route exact path={`${match.url}/:statusType`} component={AllTransactions} />
+          <Route exact path={`${match.url}/:statusType/`} component={AllTransactions} />
+          <Route exact path={`${match.url}/:statusType/:requestId`} render={() => <ConfirmModal refLink={match.url} />} />
         </Switch>
       </PrivateLayout>
     );
