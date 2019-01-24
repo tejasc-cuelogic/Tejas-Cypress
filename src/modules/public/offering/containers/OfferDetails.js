@@ -173,7 +173,7 @@ class offerDetails extends Component {
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
-    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const maxOffering = campaign && campaign.keyTerms &&
     campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
     if (details && details.data &&
