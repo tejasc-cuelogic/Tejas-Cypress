@@ -89,6 +89,9 @@ export const BUSINESS_DETAILS_EDIT_META = {
   signupCode: {
     value: '', label: 'Sign-Up Code', error: undefined, rule: 'optional', placeHolder: 'e.g. JB-123',
   },
+  utmSource: {
+    value: '', label: 'Utm Source', error: undefined, rule: 'optional', placeHolder: 'e.g. JB-123',
+  },
 };
 
 export const NEED_HELP = {
@@ -450,7 +453,7 @@ export const BUSINESS_SIGNUP = {
 
 export const BUSINESS_DETAILS = {
   businessPlan: {
-    value: [], label: 'Upload your business plan', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
+    value: [], label: 'Upload your Business Plan, Investment Prospectus and/or Pitch Deck', error: undefined, rule: 'required', showLoader: false, preSignedUrl: [], fileId: [], fileData: [], customErrors: { required: 'required' },
   },
   debts: [{
     amount: {

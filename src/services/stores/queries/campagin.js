@@ -5,7 +5,6 @@ query getOfferingList($filters: OfferingFilterInputType){
     getOfferingList(filters: $filters) {
       id
       offeringSlug
-      fundedAmount
       stage
       media {
         tombstoneImage {
@@ -21,6 +20,7 @@ query getOfferingList($filters: OfferingFilterInputType){
         }
       }
       closureSummary {
+        totalInvestmentAmount
         totalInvestorCount
       }
       keyTerms {
@@ -60,16 +60,15 @@ export const campaignDetailsQuery = gql`
   query getOfferingDetailsBySlug($id: String) {
     getOfferingDetailsBySlug (offeringSlug: $id) {
     id
-    portal
     stage
     applicationId
     issuerId
     offeringSlug
     referralCode
+    regulation
     selectedOffer {
       structure
     }
-    fundedAmount
     keyTerms {
       regulation
       startupPeriod
@@ -88,7 +87,6 @@ export const campaignDetailsQuery = gql`
       maxOfferingAmount
       industry
       minInvestAmt
-      maxInvestAmt
       appendixATitle
       revShareSummary
       investmentMultipleSummary
@@ -132,6 +130,9 @@ export const campaignDetailsQuery = gql`
           url
           shareLink
           blurb
+          featuredImageUpload {
+            url
+          }
         }
         googleMeta
         issuerWebsite
@@ -304,6 +305,7 @@ export const campaignDetailsQuery = gql`
       }
     }
     closureSummary {
+      totalInvestmentAmount
       totalInvestorCount
     }
     comments {
@@ -439,7 +441,9 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
-    fundedAmount
+    closureSummary {
+      totalInvestmentAmount
+    }
     keyTerms {
       regulation
       startupPeriod
@@ -458,7 +462,6 @@ query getOfferingById($id: ID) {
       maxOfferingAmount
       industry
       minInvestAmt
-      maxInvestAmt
       revShareSummary
       investmentMultipleSummary
       locationRiskFactors

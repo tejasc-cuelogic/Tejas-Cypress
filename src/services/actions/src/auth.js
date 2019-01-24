@@ -1,8 +1,7 @@
 import * as AWSCognito from 'amazon-cognito-identity-js';
 import * as AWS from 'aws-sdk';
-import camel from 'to-camel-case';
 import cookie from 'react-cookies';
-import _ from 'lodash';
+import { map, mapValues, camelCase } from 'lodash';
 import { GqlClient as client } from '../../../api/gqlApi';
 import {
   USER_POOL_ID, COGNITO_CLIENT_ID, AWS_REGION, COGNITO_IDENTITY_POOL_ID,
@@ -166,9 +165,9 @@ export class Auth {
             // Extract JWT from token
             commonStore.setToken(result.idToken.jwtToken);
             userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
-            if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
-              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE')).then(() => {
-                cookie.remove('REFERRAL_CODE');
+            if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
+                cookie.remove('ISSUER_REFERRAL_CODE');
               });
             }
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
@@ -278,9 +277,9 @@ export class Auth {
                   // Extract JWT from token
                   commonStore.setToken(data.idToken.jwtToken);
                   userStore.setCurrentUser(this.parseRoles(this.adjustRoles(data.idToken.payload)));
-                  if (cookie.load('REFERRAL_CODE') && cookie.load('REFERRAL_CODE') !== undefined) {
-                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('REFERRAL_CODE')).then(() => {
-                      cookie.remove('REFERRAL_CODE');
+                  if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+                    commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
+                      cookie.remove('ISSUER_REFERRAL_CODE');
                     });
                   }
                   userDetailsStore.getUser(userStore.currentUser.sub);
@@ -373,8 +372,8 @@ export class Auth {
   changeMyPassword() {
     uiStore.reset();
     uiStore.setProgress();
-    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
-    const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+    const passData = mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+    const loginData = mapValues(authStore.LOGIN_FRM.fields, f => f.value);
     const userEmail = userStore.getUserEmailAddress();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
       Username: loginData.email || userEmail,
@@ -416,8 +415,8 @@ export class Auth {
   updatePassword() {
     uiStore.reset();
     uiStore.setProgress();
-    const passData = _.mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
-    const loginData = _.mapValues(authStore.LOGIN_FRM.fields, f => f.value);
+    const passData = mapValues(authStore.CHANGE_PASS_FRM.fields, f => f.value);
+    const loginData = mapValues(authStore.LOGIN_FRM.fields, f => f.value);
     const userEmail = userStore.getUserEmailAddress();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
       Username: loginData.email || userEmail,
@@ -495,7 +494,6 @@ export class Auth {
     });
     this.cognitoUser.Session = authStore.cognitoUserSession;
     return new Promise((res, rej) => {
-      // const userData = _.mapValues(authStore.values, prop => prop.value);
       this.cognitoUser.completeNewPasswordChallenge(
         password.value,
         { email: authStore.values.email.value },
@@ -631,7 +629,7 @@ export class Auth {
    */
   mapCognitoToken = (data) => {
     const mappedUser = data.reduce((obj, item) => {
-      const key = camel(item.Name.replace(/^custom:/, ''));
+      const key = camelCase(item.Name.replace(/^custom:/, ''));
       const newObj = obj;
       if (key === 'userCapabilities') {
         newObj.capabilities = item.Value;
@@ -652,7 +650,7 @@ export class Auth {
    */
   adjustRoles = (data) => {
     const newData = {};
-    _.map(data, (val, key) => { (newData[camel(key)] = val); });
+    map(data, (val, key) => { (newData[camelCase(key)] = val); });
     newData.roles = data['custom:roles'];
     newData.capabilities = data['custom:user_capabilities'] || data['custom:capabilities'] || null;
     delete newData.customRoles;

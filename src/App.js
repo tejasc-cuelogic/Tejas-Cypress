@@ -3,6 +3,7 @@ import Aux from 'react-aux';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import { Helmet } from 'react-helmet';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner } from './theme/shared';
@@ -75,6 +76,26 @@ class App extends Component {
     }
     return (
       <Aux>
+        <Helmet>
+          <meta name="description" content="Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US." />
+          <link rel="canonical" href="https://dev.nextseed.qa/" />
+          <meta property="og:locale" content="en_US" />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding" />
+          <meta property="og:description" content="Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US." />
+          <meta property="og:url" content="https://dev.nextseed.qa/" />
+          <meta property="og:site_name" content="NextSeed" />
+          <meta property="og:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
+          <meta property="og:image:secure_url" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
+          <meta property="og:image:width" content="1600" />
+          <meta property="og:image:height" content="1067" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:description" content="Gain access to exclusive alternative investments in local businesses. Join thousands of members on the 1st Regulation Crowdfunding portal in the US." />
+          <meta name="twitter:title" content="NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding" />
+          <meta name="twitter:site" content="@thenextseed" />
+          <meta name="twitter:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
+          <meta name="twitter:creator" content="@thenextseed" />
+        </Helmet>
         {this.props.authStore.devPasswdProtection ?
           <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>

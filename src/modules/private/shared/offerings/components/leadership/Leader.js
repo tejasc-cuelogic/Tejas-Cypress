@@ -407,7 +407,7 @@ export default class Leader extends Component {
             submitted={submitted}
             isManager={isManager}
             approved={approved}
-            updateOffer={this.handleFormSubmit}
+            updateOffer={isApproved => this.handleFormSubmit(isApproved, 'Leadership has been Updated Successfully')}
             issuerSubmitted={issuerSubmitted}
           />
         </Form>

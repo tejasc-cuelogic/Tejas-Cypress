@@ -62,6 +62,9 @@ export default class BusinessApplication extends Component {
     });
   }
   submitHandler = (isRedirect = true) => {
+    if (this.props.businessAppStore.formReadOnlyMode) {
+      return;
+    }
     const {
       // checkFormisValid,
       currentApplicationId, applicationStep,
