@@ -442,7 +442,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true,
+            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true, defaultActive: true,
           },
           {
             title: 'Investment Highlights', to: '#investment-highlights', useRefLink: true,
@@ -463,7 +463,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Company Description', to: '#company-description', useRefLink: true,
+            title: 'Company Description', to: '#company-description', useRefLink: true, defaultActive: true,
           },
           {
             title: 'Business Model', to: '#business-model', useRefLink: true,
@@ -487,7 +487,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true,
+            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true,
           },
           {
             title: 'Key Terms', to: '#key-terms', useRefLink: true,

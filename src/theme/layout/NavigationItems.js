@@ -29,8 +29,18 @@ export class NavItems extends Component {
       ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
-  doNothing = (e, path = false) => {
-    e.stopPropagation();
+  isActiveSubMenu = (to, location) => location.hash === to;
+
+  isOpen = (to, location, subNavigations) => {
+    if (to !== '' && subNavigations) {
+      return location.pathname.includes(`/${to}`);
+    }
+    return false;
+  }
+  doNothing = (e, path = false, eHandeler = false) => {
+    if (eHandeler) {
+      e.stopPropagation();
+    }
     if (path) {
       this.props.history.push(path);
     } else {
@@ -47,6 +57,7 @@ export class NavItems extends Component {
       <Aux>
         {(item.subPanel === 1 && item.subNavigations) ? (
           <Dropdown
+            open={item.clickable && this.isOpen(item.to, location, item.subNavigations)}
             item
             defaultOpen={item.defaultOpen}
             key={item.to}
@@ -55,7 +66,7 @@ export class NavItems extends Component {
             `}
             name={item.to}
             disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false)}
+            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
                 {item.icon &&
@@ -74,8 +85,9 @@ export class NavItems extends Component {
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
+                  className={`${sn.defaultActive || this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
                   as={NavLink}
-                  onClick={isMobile ? onToggle : this.doNothing}
+                  onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
                   to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                 >
                   {sn.title}
