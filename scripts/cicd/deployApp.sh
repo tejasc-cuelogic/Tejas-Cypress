@@ -12,6 +12,7 @@ if [ "$env" = "review" ]; then
 	bucketName="${env}-${bucketName}"
 fi
 
-cd ../.. && \
-aws s3 rm s3://${bucketName} --recursive && echo "S3 bucket ${bucketName} cleaned successfully." && \
-aws s3 cp build/ s3://${bucketName}/ --recursive && echo "New files deployed successfully to s3 bucket ${bucketName}."
+#cd ../.. && \
+aws s3 sync ../../build/ s3://${bucketName}/ --delete
+# aws s3 rm s3://${bucketName} --recursive && echo "S3 bucket ${bucketName} cleaned successfully." && \
+# aws s3 cp build/ s3://${bucketName}/ --recursive && echo "New files deployed successfully to s3 bucket ${bucketName}."

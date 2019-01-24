@@ -1,4 +1,5 @@
-import bugsnag from '@bugsnag/plugin-react';
+import bugsnag from '@bugsnag/js';
+import bugsnagReact from '@bugsnag/plugin-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -18,9 +19,10 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
   const bugsnagClient = bugsnag({
     apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
     appType: 'client',
+    appVersion: process.env.CI_PIPELINE_ID,
     releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
-    overwrite: true,
   });
+  bugsnagClient.use(bugsnagReact, React);
   // wrap your entire app tree in the ErrorBoundary provided
   ErrorBoundary = bugsnagClient.getPlugin('react');
 }
