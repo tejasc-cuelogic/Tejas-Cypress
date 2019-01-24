@@ -29,7 +29,8 @@ export class NavItems extends Component {
       ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
-  isActiveSubMenu = (to, location) => location.hash === to;
+  isActiveSubMenu = (to, location, hashCheck = false) =>
+    (hashCheck ? location.hash === '' : location.hash === to);
 
   isOpen = (to, location, subNavigations) => {
     if (to !== '' && subNavigations) {
@@ -85,7 +86,7 @@ export class NavItems extends Component {
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
-                  className={`${sn.defaultActive || this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
+                  className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
                   as={NavLink}
                   onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
                   to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
