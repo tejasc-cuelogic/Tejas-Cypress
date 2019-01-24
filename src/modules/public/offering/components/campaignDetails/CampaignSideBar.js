@@ -15,7 +15,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering'
 const nsvideos = {
   embed: '218642510',
 };
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore')
 @withRouter
@@ -29,7 +29,8 @@ export default class CampaignSideBar extends Component {
       campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
     const maxOffering = campaign && campaign.keyTerms &&
     campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
-    const flagStatus = collected >= minOffering;
+    const minFlagStatus = collected >= minOffering;
+    const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percent = (collected / maxOffering) * 100;
     // const needValue = collected !== 0 && collected > minOffering ? maxOffering : minOffering;
     // const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
@@ -43,7 +44,7 @@ export default class CampaignSideBar extends Component {
     return (
       <Aux>
         <div className={`${className} offering-side-menu sticky-sidebar`}>
-          <Responsive maxWidth={767} as={Aux}>
+          <Responsive maxWidth={991} as={Aux}>
             <div className="offering-intro center-align">
               <Header as="h4" inverted>
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
@@ -59,14 +60,14 @@ export default class CampaignSideBar extends Component {
                 <Statistic.Value>
                   <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised
                 </Statistic.Value>
-                {flagStatus &&
+                {minFlagStatus &&
                   <Statistic.Label className="flag-status">
                     <Icon name="flag" /> Surpassed minimum goal
                   </Statistic.Label>
                 }
               </Statistic>
               <Progress className="mb-0" inverted percent={percent} size="tiny" color="green" />
-              <p>{Helper.CurrencyFormat(flagStatus ? maxOffering : minOffering)} {flagStatus ? 'max target' : 'min target'} {' '}
+              <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
                   content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
@@ -81,14 +82,13 @@ export default class CampaignSideBar extends Component {
                   </Statistic>
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
-                      {(campaign && campaign.closureSummary &&
-                        campaign.closureSummary.totalInvestorCount) || 0}
+                      {get(campaign, 'closureSummary.totalInvestorCount') || 0}
                     </Statistic.Value>
                     <Statistic.Label>Investors</Statistic.Label>
                   </Statistic>
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
-                      {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount)
+                      {get(campaign, 'keyTerms.earlyBirdsCount')
                         || 0}
                     </Statistic.Value>
                     <Statistic.Label>Early Bird Rewards</Statistic.Label>
@@ -113,7 +113,7 @@ export default class CampaignSideBar extends Component {
                 Maturity: {get(campaign, 'keyTerms.maturity')} Months
               </p>
               <Divider hidden />
-              <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary>Invest Now</Button>
+              <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
               <p>
                 ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                   || 0} min investment

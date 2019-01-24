@@ -15,15 +15,11 @@ class RevenueSharingDetails extends Component {
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const edgarLink = launch && launch.edgarLink;
     const revenueShareSummary =
-      (KeyTerms && KeyTerms.revShareSummary) || null;
+      (KeyTerms && KeyTerms.revShareSummary && KeyTerms.revShareSummary === 'REVENUE_SHARING_NOTE') || null;
     // const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a
     // ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
-          Key Terms
-          <span className="anchor" id="key-terms" />
-        </Header>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
             <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA' }</p>

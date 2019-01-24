@@ -64,6 +64,9 @@
         }
         &.active.animate{
             top:-58px;
+            @media only screen and (max-width : @largestTabletScreen){
+                top: 0;
+            }
             &.reverse{
                 top:0;
             }
@@ -195,12 +198,28 @@
     position:fixed;
     top:-58px;
     background-color:@white;
+    @media only screen and (max-width : @largestTabletScreen){
+        top: auto;
+        bottom: -58px;
+    }
     &.active{
         top:58px;
+        @media only screen and (max-width : @largestTabletScreen){
+            top: auto;
+            bottom: 0;
+        }
         &.animate{
             top:0;
+            @media only screen and (max-width : @largestTabletScreen){
+                top: auto;
+                bottom: 0;
+            }
             &.reverse{
                 top:58px;
+                @media only screen and (max-width : @largestTabletScreen){
+                    top: auto;
+                    bottom: 0;
+                }
             }
         }
     }

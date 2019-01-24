@@ -17,6 +17,10 @@ const isTabletLand = document.documentElement.clientWidth >= 992
 @inject('campaignStore')
 @observer
 class BonusRewards extends Component {
+  componentDidMount() {
+    const sel = 'anchor-scroll';
+    document.querySelector(`.${sel}`).scrollIntoView(true);
+  }
   render() {
     const { campaign } = this.props.campaignStore;
     let rewardsTiers = get(campaign, 'rewardsTiers') || [];
@@ -29,9 +33,12 @@ class BonusRewards extends Component {
       campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30">Bonus Rewards</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Bonus Rewards
+          <span className="anchor-scroll" />
+        </Header>
         {rewardsTiers && rewardsTiers.length ?
-          <div>
+          <Aux>
             {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&
             bonusRewards ?
               <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
@@ -70,7 +77,7 @@ class BonusRewards extends Component {
                 {Parser(offeringMISC)}
               </Segment>
             }
-          </div>
+          </Aux>
           :
           <InlineLoader text="No Bonus Rewards" className="bg-offwhite" />
         }

@@ -14,7 +14,7 @@ class LocationAnalysis extends Component {
     //   campaign.media.locationHeroImage.url ? campaign.media.locationHeroImage.url : null;
     return (
       <Aux>
-        <Header as="h3" className="anchor-wrap">
+        <Header as="h3" className="anchor-wrap mb-30">
           Location Analysis
           <span className="anchor" id="location-analysis" />
         </Header>

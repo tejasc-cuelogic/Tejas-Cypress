@@ -6,7 +6,7 @@ import { filter } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 
 class MeetOurTeam extends Component {
   render() {
@@ -20,7 +20,7 @@ class MeetOurTeam extends Component {
     ));
     return (
       <Aux>
-        <Header as="h3" className="anchor-wrap">
+        <Header as="h3" className="anchor-wrap mb-30">
           Meet the Team
           <span className="anchor" id="team" />
         </Header>
