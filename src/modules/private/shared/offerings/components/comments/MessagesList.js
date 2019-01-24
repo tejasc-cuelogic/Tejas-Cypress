@@ -34,7 +34,7 @@ const MessagesList = props => (
                 }}
               />
             }
-            {props.threadUsersList(msg.threadComments).length > 1 ?
+            {props.threadUsersList(msg.threadComments).length > 0 ?
             props.threadUsersList(msg.threadComments).map((u, i) => i < 3 && (
               <UserAvatar
                 size="mini"
