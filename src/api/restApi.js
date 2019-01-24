@@ -102,12 +102,12 @@ export class Api {
   getRemoteFile = url => (
     new Promise((resolve, reject) => {
       request
-        .get(`${url}`)
-        .end((err, data) => {
-          if (err) {
-            reject(err);
-          }
+        .get(url)
+        .then((data) => {
           resolve(data);
+        })
+        .catch((err) => {
+          reject(err);
         });
     })
   )
