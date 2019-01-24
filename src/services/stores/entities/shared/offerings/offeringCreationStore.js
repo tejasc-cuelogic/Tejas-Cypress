@@ -997,7 +997,7 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
           Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
-        if (this.APP_STATE.offeringCreationStore.DATA_ROOM_FRM.meta.isValid) {
+        if (this.DATA_ROOM_FRM.meta.isValid) {
           payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
         }
       } else if (keyName === 'offering') {
