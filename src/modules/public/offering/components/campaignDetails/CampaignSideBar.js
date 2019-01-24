@@ -82,14 +82,13 @@ export default class CampaignSideBar extends Component {
                   </Statistic>
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
-                      {(campaign && campaign.closureSummary &&
-                        campaign.closureSummary.totalInvestorCount) || 0}
+                      {get(campaign, 'closureSummary.totalInvestorCount') || 0}
                     </Statistic.Value>
                     <Statistic.Label>Investors</Statistic.Label>
                   </Statistic>
                   <Statistic size="mini" className="basic">
                     <Statistic.Value>
-                      {(campaign && campaign.keyTerms && campaign.keyTerms.earlyBirdsCount)
+                      {get(campaign, 'keyTerms.earlyBirdsCount')
                         || 0}
                     </Statistic.Value>
                     <Statistic.Label>Early Bird Rewards</Statistic.Label>
