@@ -20,6 +20,14 @@ export default class TermsOfUse extends Component {
       this.props.accreditationStore.getUserAccreditation();
     }
   }
+  componentDidMount() {
+    if (this.props.location.hash && this.props.location.hash !== '') {
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      });
+    }
+  }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
     const { docsWithBoxLink, dataRoomDocs } = this.props.campaignStore;
@@ -32,9 +40,9 @@ export default class TermsOfUse extends Component {
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mb-30">Data Rooms</Header>
-        {docsWithBoxLink && docsWithBoxLink.map(item => (
+        {docsWithBoxLink && docsWithBoxLink.map((item, index) => (
           <Aux>
-            <Header as="h3" className="mb-20 grey-header">{item.name}</Header>
+            <Header id={`doc-${index}`} as="h3" className="mb-20 grey-header">{item.name}</Header>
             <Disclosure doc={item} />
             <Divider section hidden />
           </Aux>
