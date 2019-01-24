@@ -197,7 +197,7 @@
     width:100%;
     position:fixed;
     top:-58px;
-    z-index:102;
+    z-index:100;
     background-color:@white;
     @media only screen and (max-width : @largestTabletScreen){
         top: auto;
