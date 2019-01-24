@@ -24,7 +24,6 @@ src/assets/semantic/*
 .eslintrc
 
 .env
-.env.bak
 
 .env.local
 
