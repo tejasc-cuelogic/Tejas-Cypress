@@ -58,8 +58,15 @@ class Comments extends Component {
     this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage);
   }
   toggleVisibility = (comment = null) => {
-    this.setState({ visible: !this.state.visible });
+    if (!this.state.visible) {
+      this.setState({ visible: true });
+    }
     this.setState({ commentId: comment });
+  }
+  closeTextBox = (commentId) => {
+    if (this.state.visible && commentId === this.state.commentId) {
+      this.setState({ visible: false });
+    }
   }
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
@@ -170,7 +177,9 @@ class Comments extends Component {
                                   changed={msgEleChange}
                                   containerclassname="secondary"
                                 />
-                                <Button onClick={this.toggleVisibility}>Cancel Reply</Button>
+                                <Button onClick={() => this.closeTextBox(c.id)}>
+                                  Cancel Reply
+                                </Button>
                                 <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                               </Form>
                               <Divider hidden />
@@ -204,9 +213,6 @@ class Comments extends Component {
                                 </Comment.Author>
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
                                 <Comment.Actions>
-                                  {/* <Comment.Action onClick={this.toggleVisibility}
-                                className="grey-header" as={Link}
-                                to={`${this.props.match.url}/${c.id}`} > */}
                                   <Comment.Action
                                     onClick={() => this.toggleVisibility(tc.id)}
                                     className="grey-header"
@@ -228,7 +234,9 @@ class Comments extends Component {
                                         changed={msgEleChange}
                                         containerclassname="secondary"
                                       />
-                                      <Button onClick={this.toggleVisibility}>Cancel Reply</Button>
+                                      <Button onClick={() => this.closeTextBox(tc.id)}>
+                                        Cancel Reply
+                                      </Button>
                                       <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                                     </Form>
                                     <Divider hidden />
