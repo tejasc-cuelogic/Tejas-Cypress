@@ -28,9 +28,9 @@ class Overview extends Component {
         block: 'start',
         behavior: 'smooth',
       });
-    } else {
-      const sel = 'top-things-to-know';
-      document.querySelector(`#${sel}`).scrollIntoView(true);
+    // } else {
+    //   const sel = 'top-things-to-know';
+    //   document.querySelector(`#${sel}`).scrollIntoView(true);
     }
   }
   render() {

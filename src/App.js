@@ -54,6 +54,8 @@ class App extends Component {
     }
     if (!currentLocation.includes('offerings')) {
       window.scrollTo(0, 0);
+    } else if ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview')) {
+      window.scrollTo(0, 0);
     }
     const calculations = {
       topVisible: true,
