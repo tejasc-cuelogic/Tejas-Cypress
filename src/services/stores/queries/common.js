@@ -31,3 +31,20 @@ export const getBoxFileDetails = gql`
     }
   }
 `;
+
+export const createCdnSignedUrl = gql`
+  mutation _createCdnSignedUrl($key: String!){
+    createCdnSignedUrl(
+      key: $key
+    )
+  }
+`;
+export const deleteCdnS3File = gql`
+mutation _deleteCdnS3File($key: String!){ 
+  deleteCdnS3File(
+    key: $key
+  )
+}
+
+`;
+

@@ -26,6 +26,10 @@ const data = [
 ];
 
 export default class PaymentCalculator extends Component {
+  componentWillMount() {
+    console.log('here');
+  }
+
   formatY = item => Helper.CurrencyFormat(item);
   render() {
     return (

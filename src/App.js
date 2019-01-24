@@ -45,19 +45,24 @@ class App extends Component {
   componentDidUpdate(prevProps) {
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
-    const calculations = {
-      topVisible: true,
-      direction: 'up',
-      bottomPassed: true,
-      isMoveTop: true,
-    };
+    const currentLocation = this.props.location.pathname;
     if (isLoggingIn) {
       this.props.history.push(this.props.uiStore.redireURL);
     } else if (isLoggingOut) {
       this.props.uiStore.clearRedirectURL();
       this.props.authStore.setUserLoggedIn(false);
     }
-    window.scrollTo(0, 0);
+    if (!currentLocation.includes('offerings')) {
+      window.scrollTo(0, 0);
+    } else if ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview')) {
+      window.scrollTo(0, 0);
+    }
+    const calculations = {
+      topVisible: true,
+      direction: 'down',
+      bottomPassed: true,
+      isMoveTop: true,
+    };
     this.props.navStore.setNavStatus(calculations);
   }
 

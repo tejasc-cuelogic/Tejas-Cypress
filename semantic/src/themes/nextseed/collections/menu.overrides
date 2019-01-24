@@ -55,13 +55,18 @@
                     color:@primary-one;
                 }
             }
+            &.active.animate{
+                background:@neutral;
+            }
         }
         &.slide-up {
             top: -100px;
         }
         &.active.animate{
             top:-58px;
-            background:@neutral;
+            @media only screen and (max-width : @largestTabletScreen){
+                top: 0;
+            }
             &.reverse{
                 top:0;
             }
@@ -102,13 +107,13 @@
     }
 }
 .ui.secondary.menu.menu-secondary-fixed {
-    border:none;
-    height:58px;
-    margin:0;
-    border-radius:0;
-    box-shadow:none;
-    background-color:@white;
-    transition: all .3s ease-in-out;
+    // border:none;
+    // height:58px;
+    // margin:0;
+    // border-radius:0;
+    // box-shadow:none;
+    // background-color:@white;
+    // transition: all .3s ease-in-out;
     .item{
         padding:@3px @18px;
         &:hover {
@@ -140,13 +145,37 @@
             }
         }
     }
+    &.insight-menu {
+        margin: 0 -@5px;
+        @media only screen and (max-width : @largestSmallMonitor){
+            margin: 0;
+        }
+        .ui.dropdown {
+            color: @primary-one !important;
+            padding-left: 0;
+            padding-right: 0;
+            >.dropdown.icon:before {
+                content: '\e914';
+                font-family: "nextseed";
+            } 
+        }
+    }
+}
+.menu-secondary-fixed{
+    // border:none;
+    height:58px;
+    margin:0 !important;
+    // border-radius:0;
+    // box-shadow:none;
+    // background-color:@white;
+    transition: all .3s ease-in-out;
     + .animate-placeholder{
         width:100%;
         height:0;
     }
     &.active {
-        background-color: @white;
-        box-shadow: 0 1px 2px 0 rgba(34,36,38,.15);
+        background-color: @white !important;
+        box-shadow: 0 1px 2px 0 rgba(34,36,38,.15) !important;
         position: fixed;
         top:58px;
         left: 0;
@@ -163,19 +192,36 @@
             height:58px;
         }
     }
-    &.insight-menu {
-        margin: 0 -@5px;
-        @media only screen and (max-width : @largestSmallMonitor){
-            margin: 0;
+}
+.campaign-secondary-header .menu-secondary-fixed{
+    width:100%;
+    position:fixed;
+    top:-58px;
+    z-index:102;
+    background-color:@white;
+    @media only screen and (max-width : @largestTabletScreen){
+        top: auto;
+        bottom: -58px;
+    }
+    &.active{
+        top:58px;
+        @media only screen and (max-width : @largestTabletScreen){
+            top: auto;
+            bottom: 0;
         }
-        .ui.dropdown {
-            color: @primary-one !important;
-            padding-left: 0;
-            padding-right: 0;
-            >.dropdown.icon:before {
-                content: '\e914';
-                font-family: "nextseed";
-            } 
+        &.animate{
+            top:0;
+            @media only screen and (max-width : @largestTabletScreen){
+                top: auto;
+                bottom: 0;
+            }
+            &.reverse{
+                top:58px;
+                @media only screen and (max-width : @largestTabletScreen){
+                    top: auto;
+                    bottom: 0;
+                }
+            }
         }
     }
 }
@@ -215,12 +261,12 @@ footer{
             flex-wrap: wrap;
         }
         &.vertical {
-            margin:0;
-            padding:0 @15px 0 0;
-            flex-direction:row;
-            vertical-align: top;
-            flex-wrap: wrap;
-            flex: 1;
+            // margin:0;
+            // padding:0 @15px 0 0;
+            // flex-direction:row;
+            // vertical-align: top;
+            // flex-wrap: wrap;
+            // flex: 1;
             @media only screen and (max-width : @largestMobileScreen){
                 padding: 0;
             }
@@ -276,33 +322,73 @@ footer{
         }
     }
 }
-.offer-details .offering-side-menu .ui.vertical.menu {
+// .offer-details
+.offering-side-menu .ui.vertical.menu {
     background-color: transparent;
     .item {
-        color: @white;
+        color: @neutral;
         line-height: 20px;
-        border-left: @4px solid transparent;
         border-radius: 0;
-        padding-left: @27px;
+        padding:0;
+        margin-bottom:@14px;
+        &:before{
+            background-color:transparent;
+        }
         &:hover, &.active {
-            background-color: @nav-hover;
+            background-color:transparent;
             border-color: @primary-one;
             color: @primary-one;
         }
-        >i.icon {
-            float: left;
-            margin-left: 0;
-            margin-right: @14px;
-            font-size: @20px;
-            line-height: 20px;
+        >i.icon.dropdown{
+            display:none;
+            // float: left;
+            // margin-left: 0;
+            // margin-right: @14px;
+            // font-size: @20px;
+            // line-height: 20px;
         }
         >.label.circular {
             float: none;
-            text-align: center;
+            height:@20px;
+            min-height:auto;
             margin:0 0 0 @10px;
+            line-height:10px;
         }
-        &.secondary-item {
-            color: @neutral-middark;
+        &.dropdown .menu{
+            position:relative;
+            top:100%;
+            left:0;
+            border:none;
+            box-shadow:none;
+        }
+    }
+    .ui.dropdown{
+        >.text{
+            display:block;
+        }
+        .menu>.item{
+            font-size:@14px !important;
+            font-weight:@fontMedium !important;
+            line-height:1;
+            &:last-child{
+                margin:0;
+            }
+            &:after{
+                content:"";
+                width:3px;
+                height:14px;
+                background-color:transparent;
+                position:absolute;
+                left:0;
+                top:50%;
+                transform:translate(0, -50%);
+            }
+            &.active, &:hover, &:focus{
+                background-color:transparent !important;
+                &:after{
+                    background-color:@primary-one;
+                }
+            }
         }
     }
 }
