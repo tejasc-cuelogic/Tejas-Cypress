@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter } from 'react-router-dom';
+import { Route, Switch, withRouter, Link } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import { Responsive, Container, Grid, Button, Visibility, List } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
@@ -176,8 +176,8 @@ class offerDetails extends Component {
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     // const minOffering = campaign && campaign.keyTerms &&
     //   campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    // const maxOffering = campaign && campaign.keyTerms &&
-    // campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const maxOffering = campaign && campaign.keyTerms &&
+    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
     // const flagStatus = collected >= minOffering;
     // const percent = (collected / maxOffering) * 100;
     // const address = campaign && campaign.keyTerms ?
@@ -188,6 +188,8 @@ class offerDetails extends Component {
       return <NotFound />;
     }
     const { navStatus, subNavStatus } = navStore;
+    const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
+    const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
         {campaign &&
@@ -207,7 +209,9 @@ class offerDetails extends Component {
                       <List.Item>{diff} days left</List.Item>
                     </Aux>
                   }
-                  <Button secondary compact content="Invest Now" />
+                  {!isClosed &&
+                    <Button compact secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
+                  }
                 </List>
                 <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
                   <List.Item>

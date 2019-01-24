@@ -41,6 +41,7 @@ export default class CampaignSideBar extends Component {
     const diff = DataFormatter.diffDays(terminationDate);
     const rewardsTiers = get(campaign, 'rewardsTiers') || [];
     const { offerStructure } = campaign;
+    const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
         <div className={`${className} offering-side-menu sticky-sidebar`}>
@@ -113,7 +114,9 @@ export default class CampaignSideBar extends Component {
                 Maturity: {get(campaign, 'keyTerms.maturity')} Months
               </p>
               <Divider hidden />
-              <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+              {!isClosed &&
+                <Button compact fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} disabled={maxFlagStatus} secondary>{`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`}</Button>
+              }
               <p>
                 ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                   || 0} min investment

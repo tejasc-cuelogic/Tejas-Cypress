@@ -29,6 +29,7 @@ export default class CampaignHeader extends Component {
     const percent = (collected / maxOffering) * 100;
     const address = campaign && campaign.keyTerms ?
       `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'}, ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
+    const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
         <section className="campaign-details-banner banner">
@@ -141,7 +142,9 @@ export default class CampaignHeader extends Component {
                   Maturity: {get(campaign, 'keyTerms.maturity')} Months
                 </p>
                 <div className="center-align">
-                  <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
+                  {!isClosed &&
+                    <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
+                  }
                   <small>
                     ${(campaign && campaign.keyTerms && campaign.keyTerms.minInvestAmt)
                       || 0} min investment
