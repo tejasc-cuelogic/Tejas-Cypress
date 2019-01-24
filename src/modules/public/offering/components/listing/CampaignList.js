@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { capitalize } from 'lodash';
+import { capitalize, get } from 'lodash';
 import Parser from 'html-react-parser';
 import { Container, Card, Image, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
 import Filters from './Filters';
@@ -85,8 +85,8 @@ export default class CampaignList extends Component {
                                 {Helper.CurrencyFormat(offering.fundedAmount, 0)}
                               </List.Item>
                               <List.Item>
-                                {(offering && offering.closureSummary &&
-                                  offering.closureSummary.totalInvestorCount) || 0} investors
+                                Investors
+                                {get(offering, 'closureSummary.totalInvestorCount') || 0} investors
                               </List.Item>
                             </List>
                           </Card.Content>
