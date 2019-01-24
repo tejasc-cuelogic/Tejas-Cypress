@@ -61,8 +61,7 @@ export default class CampaignHeader extends Component {
                       </Statistic>
                       <Statistic size="mini" className="basic">
                         <Statistic.Value>
-                          {get(campaign, 'keyTerms.earlyBirdsCount')
-                        || 0}
+                          {get(campaign, 'closureSummary.totalInvestorCount') || 0}
                         </Statistic.Value>
                         <Statistic.Label>Investors</Statistic.Label>
                       </Statistic>
