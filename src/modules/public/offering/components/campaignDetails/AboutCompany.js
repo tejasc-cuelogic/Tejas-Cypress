@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
-import { Route, Switch } from 'react-router-dom';
+// import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import Loadable from 'react-loadable';
+// import Loadable from 'react-loadable';
 import { Divider } from 'semantic-ui-react';
-import { InlineLoader } from '../../../../../theme/shared';
-import CompanyDescriptionModal from './CompanyDescriptionModal';
+// import { InlineLoader } from '../../../../../theme/shared';
+// import CompanyDescriptionModal from './CompanyDescriptionModal';
 import CompanyTopThings from './AboutCompany/CompanyTopThings';
 import MeetOurTeam from './AboutCompany/MeetOurTeam';
 import BusinessModel from './AboutCompany/BusinessModel';
 import LocationAnalysis from './AboutCompany/LocationAnalysis';
 import CompanyHistory from './AboutCompany/CompanyHistory';
 
-const getModule = component => Loadable({
-  loader: () => import(`../${component}`),
-  loading() {
-    return <InlineLoader />;
-  },
-});
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -36,11 +30,6 @@ class AboutCompany extends Component {
     }
   }
   render() {
-    const navItems = [
-      { to: 'business', component: 'BusinessModal' },
-      { to: 'locationanalysis', component: 'LocationAnalysisModal' },
-      { to: 'meetourteam', component: 'MeetTeamModal' },
-    ];
     const { campaign } = this.props.campaignStore;
     const emptyStatement = 'Detail not found';
     return (
@@ -62,14 +51,16 @@ class AboutCompany extends Component {
         />
         <Divider hidden section />
         <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
-        <Switch>
+        {/* <Switch>
           {
             navItems.map(item => (
-              <Route key={item.to} path={`${this.props.match.url}/${item.to}`} component={getModule(item.component)} />
+              <Route key={item.to} path={`${this.props.match.url}/${item.to}`}
+              component={getModule(item.component)} />
             ))
           }
-        </Switch>
-        <Route path={`${this.props.match.url}/company-description`} component={CompanyDescriptionModal} />
+        </Switch> */}
+        {/* <Route path={`${this.props.match.url}/company-description`}
+        component={CompanyDescriptionModal} /> */}
       </div>
     );
   }
