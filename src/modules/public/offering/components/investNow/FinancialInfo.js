@@ -61,7 +61,7 @@ class FinancialInfo extends Component {
             prefix="$ "
             fielddata={INVESTMONEY_FORM.fields.investmentAmount}
             changed={values => investMoneyChange(values, 'investmentAmount')}
-            onkeypress={validateInvestmentAmountInOffering}
+            onkeyup={validateInvestmentAmountInOffering}
           />
         </Form>
         {this.props.changeInvest &&
