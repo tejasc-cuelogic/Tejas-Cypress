@@ -139,7 +139,9 @@
     "build-assets": "cd ./semantic && gulp build &&  cd ..",
     "start": "node scripts/start.js",
     "build-js": "node --max_old_space_size=4096 scripts/build.js",
+    "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
+    "build:prod": "npm-run-all build-assets build-js:prod",
     "test": "node scripts/test.js --env=jsdom",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
