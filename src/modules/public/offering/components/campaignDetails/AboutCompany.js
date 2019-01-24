@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
-// import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-// import Loadable from 'react-loadable';
 import { Divider } from 'semantic-ui-react';
-// import { InlineLoader } from '../../../../../theme/shared';
-// import CompanyDescriptionModal from './CompanyDescriptionModal';
 import CompanyTopThings from './AboutCompany/CompanyTopThings';
 import MeetOurTeam from './AboutCompany/MeetOurTeam';
 import BusinessModel from './AboutCompany/BusinessModel';
@@ -51,16 +47,6 @@ class AboutCompany extends Component {
         />
         <Divider hidden section />
         <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
-        {/* <Switch>
-          {
-            navItems.map(item => (
-              <Route key={item.to} path={`${this.props.match.url}/${item.to}`}
-              component={getModule(item.component)} />
-            ))
-          }
-        </Switch> */}
-        {/* <Route path={`${this.props.match.url}/company-description`}
-        component={CompanyDescriptionModal} /> */}
       </div>
     );
   }

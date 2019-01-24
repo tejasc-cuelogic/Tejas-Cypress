@@ -115,16 +115,6 @@ export default class CampaignHeader extends Component {
                     position="top center"
                   />
                 </p>
-                {/* <Header as="h3" inverted>
-                  <span className="highlight-text">$35,000</span> raised
-                  <Header.Subheader>of $50,000 min{' '}
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content="Lorem Ipsum"
-                      position="top center"
-                    />
-                  </Header.Subheader>
-                </Header> */}
                 {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] &&
                 <p className="raise-type mt-30">
                   <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
-// import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -19,19 +18,9 @@ class CompanyTopThings extends Component {
         {campaign && campaign.offering
           && campaign.offering.about
           && campaign.offering.about.theCompany ?
-            <p className="detail-section">
-              {Parser(campaign.offering.about.theCompany)}
-            </p>
-          :
+            <p className="detail-section">{Parser(campaign.offering.about.theCompany)}</p> :
             <InlineLoader text={emptyStatement} className="bg-offwhite" />
         }
-        {/* {campaign && campaign.offering
-          && campaign.offering.about
-          && campaign.offering.about.theCompany &&
-          campaign.offering.about.theCompany.length &&
-          campaign.offering.about.theCompany.length > textContentMaxLength &&
-          <Link to={`${companyDescriptionUrl}/company-description`}>Read More</Link>
-        } */}
       </Aux>
     );
   }

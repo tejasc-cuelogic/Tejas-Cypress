@@ -1,21 +1,13 @@
-// used
 import React, { Component } from 'react';
-// import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
 import { Divider } from 'semantic-ui-react';
-// import KeyTermsModal from './investmentDetails/KeyTermsModal';
 import AboutTheCompany from './Overview/AboutTheCompany';
-// import BonusRewards from './Overview/BonusRewards';
 import KeyTerms from './Overview/KeyTerms';
 import LatestUpdates from './Overview/LatestUpdates';
-// import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
-// import OverviewModal from '../campaignDetails/Overview/OverviewModal';
-// import TopThingsToKnowModal from '../campaignDetails/TopThingsToKnowModal';
 import VideoModal from './Overview/VideoModal';
 import AboutPhotoGallery from './AboutPhotoGallery';
 import Gallery from './AboutCompany/Gallery';
-// import { Image64 } from '../../../../../theme/shared';
 
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
@@ -29,9 +21,6 @@ class Overview extends Component {
         block: 'start',
         behavior: 'smooth',
       });
-    // } else {
-    //   const sel = 'top-things-to-know';
-    //   document.querySelector(`#${sel}`).scrollIntoView(true);
     }
   }
   render() {
@@ -55,19 +44,7 @@ class Overview extends Component {
           galleryUrl={this.props.match.url}
           campaign={campaign}
         />
-        {/* <BonusRewards
-          refLink={this.props.refLink}
-          isTabletLand={isTabletLand}
-          campaign={campaign}
-        /> */}
         <Route path={`${this.props.match.url}/herovideo`} render={props => <VideoModal refLink={props.match} {...props} />} />
-        {/* <Route path={`${this.props.match.url}/keyterms`} render={props =>
-        <KeyTermsModal refLink={props.match} {...props} />} /> */}
-        {/* <Route path={`${this.props.match.url}/overview/summary`} component={SummaryModal} /> */}
-        {/* <Route path={`${this.props.match.url}/details`} component={OverviewModal} /> */}
-        {/* <Route path={`${this.props.match.url}/top-things-to-know`} render={props =>
-        <TopThingsToKnowModal refLink={this.props.match.ur} campaign={campaign}
-        {...props} />} /> */}
         <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
       </div>
     );

@@ -174,15 +174,8 @@ class offerDetails extends Component {
       && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
     const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
-    // const minOffering = campaign && campaign.keyTerms &&
-    //   campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
     const maxOffering = campaign && campaign.keyTerms &&
     campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
-    // const flagStatus = collected >= minOffering;
-    // const percent = (collected / maxOffering) * 100;
-    // const address = campaign && campaign.keyTerms ?
-    //   `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},
-    // ${campaign.keyTerms.state ? campaign.keyTerms.state : '-'}` : '--';
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;

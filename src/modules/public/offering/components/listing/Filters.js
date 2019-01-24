@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-// import { Link } from 'react-router-dom';
 import { Container, Grid, Menu, Image, Header, Checkbox, Form, Icon, Popup, List, Button } from 'semantic-ui-react';
-// import BusinessType from './BusinessType';
 import Slider from 'react-slick';
 import { ASSETS_URL } from '../../../../../constants/aws';
 import { BUSINESS_INDUSTRIES } from '../../../../../services/constants/offering';

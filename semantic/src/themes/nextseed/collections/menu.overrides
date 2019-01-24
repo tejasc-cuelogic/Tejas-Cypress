@@ -193,39 +193,33 @@
         }
     }
 }
-.campaign-secondary-header{
-    [class="menu-secondary-fixed false animate"]{
-        top:0 !important;
-        box-shadow: 0 1px 2px 0 rgba(34,36,38,.15) !important;
+.campaign-secondary-header .menu-secondary-fixed{
+    width:100%;
+    position:fixed;
+    top:-58px;
+    z-index:102;
+    background-color:@white;
+    @media only screen and (max-width : @largestTabletScreen){
+        top: auto;
+        bottom: -58px;
     }
-    .menu-secondary-fixed{
-        width:100%;
-        position:fixed;
-        top:-58px;
-        z-index:1;
-        background-color:@white;
+    &.active{
+        top:58px;
         @media only screen and (max-width : @largestTabletScreen){
             top: auto;
-            bottom: -58px;
+            bottom: 0;
         }
-        &.active{
-            top:58px;
+        &.animate{
+            top:0;
             @media only screen and (max-width : @largestTabletScreen){
                 top: auto;
                 bottom: 0;
             }
-            &.animate{
-                top:0;
+            &.reverse{
+                top:58px;
                 @media only screen and (max-width : @largestTabletScreen){
                     top: auto;
                     bottom: 0;
-                }
-                &.reverse{
-                    top:58px;
-                    @media only screen and (max-width : @largestTabletScreen){
-                        top: auto;
-                        bottom: 0;
-                    }
                 }
             }
         }

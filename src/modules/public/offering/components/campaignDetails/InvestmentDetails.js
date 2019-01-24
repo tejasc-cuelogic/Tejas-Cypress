@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
-// import { Route } from 'react-router-dom';
 import { Header, Divider } from 'semantic-ui-react';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-// import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 
-// const isTabletLand = document.documentElement.clientWidth >= 992
-//   && document.documentElement.clientWidth < 1200;
 @inject('campaignStore')
 class InvestmentDetails extends Component {
   componentDidMount() {
@@ -57,14 +53,6 @@ class InvestmentDetails extends Component {
             <InlineLoader text={emptyContent} className="bg-offwhite" />
         }
         <Divider hidden />
-        {/* <Image64
-          srcUrl={campaign && campaign.media &&
-            campaign.media.heroImage &&
-            campaign.media.heroImage.url ?
-            campaign.media.heroImage.url : null
-          }
-          imgType="heroImage"
-          /> */}
         <Image64
           srcUrl={campaign && campaign.media &&
             campaign.media.useOfProceeds &&
@@ -94,8 +82,6 @@ class InvestmentDetails extends Component {
               {...this.props}
             />
         }
-        {/* <Route path={`${this.props.match.url}/summary`} render={props => <SummaryModal
-        refLink={this.props.match.ur} campaign={campaign} {...props} />} /> */}
       </Aux>
     );
   }

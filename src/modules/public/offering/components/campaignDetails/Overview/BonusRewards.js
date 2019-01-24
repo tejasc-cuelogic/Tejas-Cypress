@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Header, Image } from 'semantic-ui-react';
-// import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { get } from 'lodash';
 import { ASSETS_URL } from '../../../../../../constants/aws';

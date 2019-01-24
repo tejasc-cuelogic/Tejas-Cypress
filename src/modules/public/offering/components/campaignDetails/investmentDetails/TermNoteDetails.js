@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-// import { Route } from 'react-router-dom';
 import { Header, Divider, Statistic, Grid, Table, Icon, Popup } from 'semantic-ui-react';
-// import PaymentCalculatorModal from './../investmentDetails/PaymentCalculatorModal';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -237,10 +235,6 @@ class TermNoteDetails extends Component {
           :
           <InlineLoader text="No data available" className="bg-offwhite" />
         }
-        {/*
-          <Route path={`${this.props.match.url}/paymentcalculator`}
-          component={PaymentCalculatorModal} />
-         */}
       </Aux>
     );
   }

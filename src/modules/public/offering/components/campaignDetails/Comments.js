@@ -47,11 +47,6 @@ class Comments extends Component {
     }
   }
   send = (scope, campaignSlug, currentMessage) => {
-    // this.props.messageStore.setDataValue(
-    //   'currentMessageId',
-    //   !this.props.match.params.messageType ? this.props.match.params.id : null,
-    // );
-    // const currentMessage = this.props.messageStore.currentMessageId;
     this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage);
   }
   toggleVisibility = (comment = null) => {
@@ -84,8 +79,6 @@ class Comments extends Component {
     const {
       MESSAGE_FRM, msgEleChange, buttonLoader,
     } = this.props.messageStore;
-    // this.props.messageStore.setDataValue('currentMessageId',
-    // !this.props.match.params.messageType ? this.props.match.params.id : null);
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
@@ -132,14 +125,8 @@ class Comments extends Component {
                     changed={msgEleChange}
                     containerclassname="secondary"
                   />
-                  {/* <Button onClick={this.handleClose}>Cancel</Button> */}
                   <Button fluid={isMobile} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
                 </Form>
-                {/* <Form reply className="public-form clearfix">
-                  <Button secondary onClick={this.postNewComment}>
-                    Post Comment
-                  </Button>
-                </Form> */}
               </Aux>
             }
             <Segment color="green" className="mt-50 offering-comment">

@@ -4,7 +4,6 @@ import Aux from 'react-aux';
 import { get } from 'lodash';
 import Parser from 'html-react-parser';
 import { Header, Grid, Segment, Label } from 'semantic-ui-react';
-// import { ASSETS_URL } from '../../../../../constants/aws';
 import { InlineLoader } from '../../../../../theme/shared';
 import BonusRewardsList from './BonusRewardsList';
 import Helper from '../../../../../helper/utility';

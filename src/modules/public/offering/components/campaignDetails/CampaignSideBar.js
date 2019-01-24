@@ -7,7 +7,6 @@ import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Pop
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
-// import CampaignProgress from './CampaignProgress';
 import share from '../campaignDetails/Share';
 import { ASSETS_URL } from '../../../../../constants/aws';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
@@ -32,8 +31,6 @@ export default class CampaignSideBar extends Component {
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percent = (collected / maxOffering) * 100;
-    // const needValue = collected !== 0 && collected > minOffering ? maxOffering : minOffering;
-    // const amountType = collected !== 0 && collected > minOffering ? 'max' : 'min';
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
       && campaign.offering.launch.terminationDate;
     const address = campaign && campaign.keyTerms ? `${campaign.keyTerms.city ? campaign.keyTerms.city : '-'},

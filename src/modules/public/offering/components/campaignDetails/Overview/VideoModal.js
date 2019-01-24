@@ -18,11 +18,9 @@ class VideoModal extends Component {
           <Segment padded>
             {videoUrl ?
               <Embed
-                // url={videoUrl.url}
                 active
                 id={videoUrl}
                 source="vimeo"
-              // icon="ns-play"
               /> : <InlineLoader text="No video is uploaded." className="bg-offwhite" />
             }
           </Segment>

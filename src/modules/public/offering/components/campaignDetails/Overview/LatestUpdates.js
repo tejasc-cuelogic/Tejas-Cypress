@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
-// import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
@@ -20,18 +19,6 @@ class LatestUpdates extends Component {
       updates, companyAvatarUrl, bussinessName,
     } = this.props;
     const update = (updates && updates.length && updates[0]) || null;
-    // let UserInfo = update && update.actingUserInfo ? update.actingUserInfo.info : null;
-    // UserInfo = UserInfo ? {
-    //   firstName: UserInfo.firstName,
-    //   lastName: UserInfo.lastName,
-    //   roles: ['investor'],
-    //   avatarUrl: UserInfo.avatar ? UserInfo.avatar.url : null,
-    // } : {
-    //   firstName: 'S',
-    //   lastName: 'T',
-    //   roles: ['investor'],
-    //   avatarUrl: null,
-    // };
     return (
       <Aux>
         <Header as="h3" className="mb-30 anchor-wrap">
@@ -62,10 +49,7 @@ class LatestUpdates extends Component {
                 <Aux>
                   <Item.Description className="avatar-description">
                     <Header as="h4" className="grey-header">{update.title}</Header>
-                    <p>
-                      {Parser(update.content || '')}
-                    </p>
-                    {/* <Link to={`${refLink}/updates`}>View Update</Link> */}
+                    <p>{Parser(update.content || '')}</p>
                   </Item.Description>
                 </Aux>
                   :

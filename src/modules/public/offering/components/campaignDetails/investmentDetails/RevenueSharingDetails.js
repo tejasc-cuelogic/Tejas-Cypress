@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import Parser from 'html-react-parser';
 import Aux from 'react-aux';
 import { Header, Table, Divider, Grid, Popup, Icon } from 'semantic-ui-react';
@@ -16,8 +15,6 @@ class RevenueSharingDetails extends Component {
     const edgarLink = launch && launch.edgarLink;
     const revenueShareSummary =
       (KeyTerms && KeyTerms.revShareSummary && KeyTerms.revShareSummary === 'REVENUE_SHARING_NOTE') || null;
-    // const maturityStartupPeriod = KeyTerms && KeyTerms.startupPeriod ? ` including a
-    // ${KeyTerms.startupPeriod} month startup period for ramp up` : '';
     return (
       <Aux>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">

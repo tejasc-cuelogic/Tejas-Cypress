@@ -5,7 +5,6 @@ import { Modal, Comment, Label, Form, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { FormTextarea } from '../../../../../theme/form';
-// import { InlineLoader } from '../../../../../theme/shared';
 
 @inject('messageStore')
 @observer
@@ -58,11 +57,11 @@ class CommentsReplyModal extends Component {
             {/* Add below div if signed up - do not remove */}
             <div className="mt-20">
               <p>
-            Note that both NextSeed and issuers are notified of all comments immediately,
-            but there may be a slight delay in response to questions submitted outside of
-            standard business hours (9am to 5pm CST, Monday through Friday). Most questions
-            will be answered by issuers in approximately two business days, although some
-            questions require more thorough analyses and will take additional time.
+                Note that both NextSeed and issuers are notified of all comments immediately,
+                but there may be a slight delay in response to questions submitted outside of
+                standard business hours (9am to 5pm CST, Monday through Friday). Most questions
+                will be answered by issuers in approximately two business days, although some
+                questions require more thorough analyses and will take additional time.
               </p>
               <p>
                 See our <Link to={`${this.props.refLink}/community-guidelines`}>community guidelines</Link> on posting. If you have any
@@ -79,7 +78,7 @@ class CommentsReplyModal extends Component {
                 <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC')} disabled={!MESSAGE_FRM.meta.isValid} primary content="Post Comment" />
               </Form>
             </div>
-            {/* end */}
+            {/* Add above div if signed up - do not remove */}
           </Comment.Group>
         </Modal.Content>
       </Modal>
