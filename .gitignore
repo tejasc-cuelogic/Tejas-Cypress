@@ -24,6 +24,7 @@ src/assets/semantic/*
 .eslintrc
 
 .env
+.env.bak
 
 .env.local
 
@@ -32,3 +33,5 @@ package-lock.json
 
 # ignore vscode folder
 .vscode
+
+Env.txt
