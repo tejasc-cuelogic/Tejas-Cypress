@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Item, Image, Icon } from 'semantic-ui-react';
 // import { Link } from 'react-router-dom';
+import Parser from 'html-react-parser';
 import { filter } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
@@ -59,9 +60,11 @@ class MeetOurTeam extends Component {
                               </Item.Extra>
                             </div>
                           </div>
+                          {data.bio &&
                           <Item.Description className="avatar-description mt-30">
-                            {data.bio && data.bio !== '' ? data.bio : emptyStatement}
+                            {Parser(data.bio)}
                           </Item.Description>
+                          }
                         </Item.Content>
                       </Item>
                   ))
