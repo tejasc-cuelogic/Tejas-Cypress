@@ -20,11 +20,10 @@ export default class CampaignHeader extends Component {
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
     && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
-    const collected = campaign && campaign.fundedAmount ? campaign.fundedAmount : 0;
+    const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
     const minOffering = campaign && campaign.keyTerms &&
       campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmount') || 0;
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percent = (collected / maxOffering) * 100;
