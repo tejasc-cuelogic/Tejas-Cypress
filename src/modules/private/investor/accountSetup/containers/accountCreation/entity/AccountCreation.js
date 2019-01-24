@@ -63,7 +63,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'General',
         component: <General />,
-        isValid: GEN_INFO_FRM.meta.isValid ? '' : (stepToBeRendered === 1 || stepToBeRendered > 1) ? 'error' : '',
+        isValid: GEN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
         isDirty: GEN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityGeneralInformation,
         form: 'GEN_INFO_FRM',
@@ -72,7 +72,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Trust Status',
         component: <FinancilInfo />,
-        isValid: TRUST_INFO_FRM.meta.isValid ? '' : (stepToBeRendered === 2 || stepToBeRendered > 2) ? 'error' : '',
+        isValid: TRUST_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
         isDirty: TRUST_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityInfo,
         form: 'TRUST_INFO_FRM',
@@ -81,7 +81,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Personal info',
         component: <PersonalInformation />,
-        isValid: PERSONAL_INFO_FRM.meta.isValid ? '' : (stepToBeRendered === 3 || stepToBeRendered > 3) ? 'error' : '',
+        isValid: PERSONAL_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
         isDirty: PERSONAL_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityPersonalInfo,
         form: 'PERSONAL_INFO_FRM',
@@ -90,7 +90,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Formation doc',
         component: <FormationDocuments />,
-        isValid: FORM_DOCS_FRM.meta.isValid ? '' : (stepToBeRendered === 4 || stepToBeRendered > 4) ? 'error' : '',
+        isValid: FORM_DOCS_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
         isDirty: FORM_DOCS_FRM.meta.isDirty,
         validate: validationActions.validateEntityFormationDoc,
         form: 'FORM_DOCS_FRM',
@@ -108,7 +108,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Summary',
         component: <Summary />,
-        isValid: isValidEntityForm ? '' : (stepToBeRendered === 6 || stepToBeRendered > 6) ? 'error' : '',
+        isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
       },
     ];
     return (

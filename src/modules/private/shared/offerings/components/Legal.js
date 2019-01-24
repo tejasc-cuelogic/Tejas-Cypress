@@ -54,7 +54,7 @@ export default class Legal extends Component {
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <div className="sticy-sidebar">
+            <div className="sticky-sidebar">
               <SecondaryMenu heading="User Legal Info" secondary vertical match={match} navItems={userLegalInfo} />
               {!isIssuer &&
                 <SecondaryMenu heading="Admin Legal Info" secondary vertical match={match} navItems={adminLegalInfo} />

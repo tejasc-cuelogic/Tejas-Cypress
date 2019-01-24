@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route, Link, withRouter } from 'react-router-dom';
-import { Card, Grid, Header, Divider, Label } from 'semantic-ui-react';
+import { Card, Grid, Header, Divider, Label, Button } from 'semantic-ui-react';
 import ChangePassword from '../../../../auth/containers/ChangePassword';
 import { securitySections } from './../../../../../services/constants/user';
 import ManageMultiFactorAuth from '../components/profileSettings/ManageMultiFactorAuth';
@@ -50,15 +50,26 @@ export default class Security extends Component {
                       ) : null}
                       {/* {section.action[0] === 'social-connect' ? (
                         <Button.Group>
-                          <Button color="facebook" icon={{ className: 'ns-facebook' }}
-                           content="Connect with Faceook" />
-                          <Button color="google plus" icon="google plus"
-                          content="Connect with Google" />
+                          <Button
+                            color="facebook"
+                            icon={{ className: 'ns-facebook' }}
+                            content="Connect with Faceook"
+                          />
+                          <Button
+                            color="google plus"
+                            icon="google plus"
+                            content="Connect with Google"
+                          />
                         </Button.Group>
                       ) : (
-                        <Button disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
-                        as={Link} to={`${match.url}/${section.action[0]}`}
-                        inverted color="green" content={section.action[1]} />
+                        <Button
+                          disabled={(section.action[0] === 'mfa' && !getUserMfaMode)}
+                          as={Link}
+                          to={`${match.url}/${section.action[0]}`}
+                          inverted
+                          color="green"
+                          content={section.action[1]}
+                        />
                       )
                       } */}
                     </Card.Description>
