@@ -1,6 +1,6 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
-import { pickBy, forEach, reduce, get } from 'lodash';
+import { pickBy, reduce, get } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
@@ -16,18 +16,9 @@ export class CampaignStore {
   @observable RECORDS_TO_DISPLAY = 12;
   @observable completedToDisplay = this.RECORDS_TO_DISPLAY;
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
-  @observable embedUrl = null;
-  @observable docLoading = false;
+  @observable gallarySelectedImageIndex = 0;
+  @observable docsWithBoxLink = [];
 
-  @action
-  setLoading = (status) => {
-    this.docLoading = status;
-  }
-
-  @action
-  setAgreementUrl = (of, url) => {
-    this.embedUrl = url;
-  }
 
   @action
   setFieldValue = (field, val) => {
@@ -128,7 +119,7 @@ export class CampaignStore {
     } else if (this.details.data && this.details.data.getOfferingDetailsById) {
       return toJS(this.details.data.getOfferingDetailsById);
     }
-    return null;
+    return {};
   }
 
   @computed get getOfferingId() {
@@ -169,9 +160,30 @@ export class CampaignStore {
   @computed get dataRoomDocs() {
     return this.campaign && this.campaign.legal && this.campaign.legal.dataroom
     && this.campaign.legal.dataroom.documents ?
-      this.campaign.legal.dataroom.documents : null;
+      this.campaign.legal.dataroom.documents : [];
   }
 
+  @action
+  getAllBoxLinks = (accountType) => {
+    this.docsWithBoxLink = [];
+    this.dataRoomDocs.forEach(async (ele) => {
+      const tempEle = { ...ele };
+      tempEle.BoxUrl = await this.getBoxLink(get(ele, 'upload.fileHandle.boxFileId'), accountType);
+      this.updateDocs(tempEle);
+    });
+  }
+
+  @action
+  updateDocs = ele => this.docsWithBoxLink.push(ele);
+
+  getBoxLink = (fileId, accountType) => new Promise((resolve) => {
+    clientPublic.mutate({
+      mutation: getBoxEmbedLink,
+      variables: { fileId, accountType },
+    }).then((res) => {
+      resolve(res.data.getBoxEmbedLink);
+    });
+  });
   @computed get navCountData() {
     const res = { updates: 0, comments: 0 };
     if (this.campaign) {
@@ -184,32 +196,6 @@ export class CampaignStore {
       }, 0);
     }
     return res;
-  }
-  @computed get getNavItemsForDataRoom() {
-    const documentsList = toJS(this.dataRoomDocs);
-    const navList = [];
-    forEach(documentsList, (ele, idx) => {
-      navList.push({
-        title: ele.name,
-        to: idx,
-        url: ele.upload && ele.upload.fileHandle ? ele.upload.fileHandle.boxFileId : null,
-        accreditedOnly: ele.accreditedOnly,
-      });
-    });
-    return navList;
-  }
-
-  @action
-  getBoxEmbedLink = (of, fileId, accountType) => {
-    this.docLoading = true;
-    const boxFileId = fileId;
-    clientPublic.mutate({
-      mutation: getBoxEmbedLink,
-      variables: { fileId: boxFileId, accountType },
-    }).then((res) => {
-      this.setAgreementUrl(of, res.data.getBoxEmbedLink);
-      this.setLoading(false);
-    }).catch(() => this.setLoading(false));
   }
 
   @computed get offerStructure() {

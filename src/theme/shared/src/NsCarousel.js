@@ -31,6 +31,7 @@ export default class NsCarousel extends Component {
       slidesToScroll: this.props.slidesToScroll,
       arrows: this.props.arrows,
       dots: this.props.dots,
+      initialSlide: this.props.initialSlide || 0,
       adaptiveHeight: this.props.adaptiveHeight,
       beforeChange: (current, next) => {
         if (this.props.handlePaginationFun) {

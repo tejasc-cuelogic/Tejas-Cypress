@@ -42,7 +42,7 @@ export default class Offering extends Component {
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <div className="sticy-sidebar">
+            <div className="sticky-sidebar">
               <SecondaryMenu secondary vertical match={match} navItems={navItems} />
             </div>
           </Grid.Column>

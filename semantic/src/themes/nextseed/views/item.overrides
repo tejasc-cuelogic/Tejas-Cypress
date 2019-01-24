@@ -9,15 +9,18 @@
     }
 }
 .ui.items{
-    >.item {
-        &:first-child {
-            margin-top: 0 !important;
+    >.item{
+        &:first-child{
+            margin-top:0 !important;
         }
-        &:last-child {
-            margin-bottom: 0 !important;
+        &:last-child{
+            margin-bottom:0 !important;
+            .campaign-avatar {
+                margin-bottom: 0;
+            }
         }
-        >.content>.description {
-            color: @neutral-middark;
+        >.content>.description{
+            color:@neutral-middark;
         }
         &.user-intro{
             .ui.tiny.image{
@@ -42,6 +45,61 @@
                 }
             }
         }
+        .campaign-avatar{
+            display:flex;
+            flex-direction:row;
+            align-items:center;
+            .avatar-image{
+                border-radius:50%;
+                width:36px;
+                height:36px;
+                background:@neutral-midwhite;
+                overflow:hidden;
+                &.team-avatar{
+                    width:125px;
+                    height:125px;
+                }
+                img.ui.image{
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+            }
+            .avatar-details{
+                margin-left:@14px;
+                &.team-details >.header:not(.ui){
+                    font-size:@20px;
+                    line-height:24px;
+                    color:@neutral;
+                    font-weight: @fontMedium;
+                }
+                >.header:not(.ui){
+                    font-size:@13px;
+                    line-height:20px;
+                }
+                .meta{
+                    font-size:@13px;
+                    line-height:20px;
+                    margin:0;
+                }
+            }
+            &.mobile-avatar {
+                flex-direction:column;
+                text-align: center;
+                .avatar-details {
+                    margin-left: 0;
+                    margin-top: @20px;
+
+                }
+            }
+        }
+        .avatar-description{
+            img{
+                width:100%;
+            }
+            .description .ui.header{
+                color:@neutral-middark;
+            }
+        }
     }
     &.messages{
         .item{
@@ -62,7 +120,7 @@
                     color:@neutral;
                     border-radius:@6px;
                     // background-color:@neutral-offwhite;
-                    white-space: pre-line;
+                    white-space:pre-line;
                 }
                 p{
                     margin:0 0 @21px;
@@ -183,143 +241,118 @@
         }
     }
     &.question-list{
-        .item {
-            >.content {
-                .header {
-                    margin-bottom: @10px;
+        .item{
+            >.content{
+                .header{
+                    margin-bottom:@10px;
                 }
-                >.description {
-                    margin-top: 0;
-                    font-size: @15px;
+                >.description{
+                    margin-top:0;
+                    font-size:@15px;
                 }
             }
-            @media only screen and (max-width : @largestMobileScreen){
-                margin: 0;
+            @media only screen and (max-width :@largestMobileScreen){
+                margin:0;
             }
         }
     }
-    &.campaign-updates{
-        margin: 0;
-        >.item{
-            .avatar-image{
-                border-radius: 50%;
-                width: 36px;
-                height:36px;
-                +.header {
-                    margin-left: 46px;
-                    +.meta {
-                        margin-left: 46px;
-                    }
-                }
-            }
-            .content>.header:not(.ui) {
-                font-size: @13px;
-                line-height: 20px;
-            }
-            .meta {
-                font-size: @13px;
-                line-height: 20px;
-                margin: 0;
-            }
-            img {
-                width: 100%;
-            }
-        }
+    &.meet-team >.item:not(:last-child) {
+        margin-bottom: @60px;
     }
 }
-.horizontal-items {
-	&.ui.items {
-		display: flex;
-		flex-wrap: wrap;
-		margin-left: -@14px;
-		margin-right: -@14px;
-		>.item {
-            width: 43%;
-            @media only screen and (max-width : @largestMobileScreen){
-                width: 100%;
+.horizontal-items{
+	&.ui.items{
+		display:flex;
+		flex-wrap:wrap;
+		margin-left:-@14px;
+		margin-right:-@14px;
+		>.item{
+            width:43%;
+            @media only screen and (max-width :@largestMobileScreen){
+                width:100%;
             }
-            margin: 0 auto @30px;
-			padding-left: @14px;
-			padding-right: @14px;
-			.ui.mini.image {
-                width: 45px;
-                @media only screen and (max-width : @largestMobileScreen){
-                    padding-left: 0;
-                    margin: 0;
+            margin:0 auto @30px;
+			padding-left:@14px;
+			padding-right:@14px;
+			.ui.mini.image{
+                width:45px;
+                @media only screen and (max-width :@largestMobileScreen){
+                    padding-left:0;
+                    margin:0;
                 }
-				+.content {
-                    padding-left: @10px;
-                    @media only screen and (max-width : @largestMobileScreen){
-                        padding: 14px 0 0;
+				+.content{
+                    padding-left:@10px;
+                    @media only screen and (max-width :@largestMobileScreen){
+                        padding:14px 0 0;
                     }
 				}
 			}
-			.meta {
-				line-height: 24px;
-				margin: 0;
+			.meta{
+				line-height:24px;
+				margin:0;
 			}
 		}
     }
 }
-.slick-list .ui.items>.item {
+.slick-list .ui.items>.item{
     >.content{
-        padding-left: @60px;
-        @media only screen and (max-width : @tabletBreakpoint){
-			padding-left: @14px;
+        padding-left:@60px;
+        @media only screen and (max-width :@tabletBreakpoint){
+			padding-left:@14px;
 		}
-        h2.header:not(.ui) {
-            font-size: @40px;
-            margin: 0;
-            @media only screen and (max-width : @largestMobileScreen){
-                font-size: @20px;
-                line-height: 24px;
+        h2.header:not(.ui){
+            font-size:@40px;
+            margin:0;
+            @media only screen and (max-width :@largestMobileScreen){
+                font-size:@20px;
+                line-height:24px;
             }
         }
         .description{
-            font-size: @28px;
-            line-height: 38px;
-            @media only screen and (max-width : @largestMobileScreen){
-                font-size: @15px;
-                line-height: 24px;
+            font-size:@28px;
+            line-height:38px;
+            @media only screen and (max-width :@largestMobileScreen){
+                font-size:@15px;
+                line-height:24px;
             }
         }
-        .extra {
-            margin: 0;
-            p {
-                color: @neutral;
-                margin-bottom: 0;
+        .extra{
+            margin:0;
+            p{
+                color:@neutral;
+                margin-bottom:0;
             }
-            span {
-                line-height: @24px;
-                color: @primary-one;
-                font-weight: @bold;
+            span{
+                line-height:@24px;
+                color:@primary-one;
+                font-weight:@bold;
             }
         }
     }
 }
-.inner-content-spacer .bg-offwhite, .inner-content-spacer .featured-section {
-    padding: @14px @20px;
-    .ui.items>.item .content {
-        .header {
-            color: @neutral;
-            font-size: @14px;
-            font-weight: @normal;
-            a {
-                color: @primary-two;
-                font-weight: @bold;
+.inner-content-spacer .bg-offwhite, .inner-content-spacer .featured-section{
+    padding:@14px @20px;
+    .ui.items>.item .content{
+        .header{
+            color:@neutral;
+            font-size:@14px;
+            font-weight:@normal;
+            a{
+                color:@primary-two;
+                font-weight:@bold;
             }
-            span {
-                margin: 0 @30px;
-                font-size: @13px;
+            span{
+                margin:0 @30px;
+                font-size:@13px;
             }
         }
-        .description {
-            color: @neutral;
+        .description{
+            color:@neutral;
         }
     }
 }
 .testimonial .ui.items>.item>.image>img{
-    @media only screen and (max-width : @largestMobileScreen){
-        height: 180px;
+    @media only screen and (max-width :@largestMobileScreen){
+        height:180px;
     }
 }
