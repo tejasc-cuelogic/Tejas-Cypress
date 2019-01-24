@@ -42,7 +42,7 @@ export default class TermsOfUse extends Component {
         <Header as="h3" className="mb-30">Data Rooms</Header>
         {docsWithBoxLink && docsWithBoxLink.map((item, index) => (
           <Aux>
-            <Header id={`doc-${index}`} as="h3" className="mb-20 grey-header">{item.name}</Header>
+            <Header id={`doc-${index}`} as="h4" className="mb-20 grey-header">{item.name}</Header>
             <Disclosure doc={item} />
             <Divider section hidden />
           </Aux>
