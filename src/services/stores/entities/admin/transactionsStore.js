@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isArray } from 'lodash';
+import { isArray, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { getTransactions, approveTransactions, declineTransactions, verifiedTransactions, failedTransactions } from '../../queries/transaction';
@@ -154,7 +154,7 @@ export class TransactionsStore {
 
   @action
   initiateFilters = () => {
-    this.setDb(DataFormatter.mapDatesToType(this.data.data.getTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
+    this.setDb(DataFormatter.mapDatesToType(get(this.data, 'data.getTransactions.transactions'), ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
     const {
       keyword, startDate, endDate, min, max,
       transactionType,
