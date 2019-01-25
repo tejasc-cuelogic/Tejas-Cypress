@@ -14,3 +14,11 @@ query getCategories($type: CategoryTypesEnum!) {
     }
   }
 `;
+
+export const createCategory = gql`
+mutation createCategory($categoryDetailsInput: CategoryInput!) {
+  createCategory(categoryDetailsInput: $categoryDetailsInput){
+    id
+  }
+}
+`;
