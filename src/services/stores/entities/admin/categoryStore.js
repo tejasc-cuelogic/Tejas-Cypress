@@ -21,6 +21,8 @@ export class CategoryStore {
         variables: { type },
       });
     }
+    // @action
+    // setForm = (id) => {
 
     @computed get getAllCategoriesData() {
       const formattedData = [

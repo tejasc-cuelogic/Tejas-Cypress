@@ -15,7 +15,6 @@ export default class AllCategories extends Component {
   // }
   componentWillMount() {
     this.props.categoryStore.initRequest('INV_FAQ');
-    console.log(this.props);
   }
 
   openModal = (index) => {
