@@ -680,8 +680,8 @@ footer{
 .content-spacer {
 	.column.side-section {
 		background-color:@invertedMutedTextColor;
-		padding-bottom: @60px;
-		padding-top: @60px;
+		padding-bottom: @40px;
+		padding-top: @40px;
 		@media only screen and (min-width: @tabletBreakpoint) {
 			min-height:~"calc(100vh - 424px)";
 		}
