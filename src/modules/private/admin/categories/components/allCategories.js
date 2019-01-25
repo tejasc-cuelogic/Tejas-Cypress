@@ -9,22 +9,16 @@ import { InlineLoader } from './../../../../../theme/shared';
 @withRouter
 @observer
 export default class AllCategories extends Component {
-  // state = {
-  //   showModal: false,
-  //   modalIndex: 0,
-  // }
   componentWillMount() {
-    this.props.categoryStore.initRequest('INV_FAQ');
+    this.props.categoryStore.initRequest();
   }
 
-  openModal = (index) => {
+  openModal = (index, title, type) => {
+    this.props.categoryStore.setFieldValue('selectedCategoryState', { title, type });
     this.props.history.push(`${this.props.match.url}/${index}`);
-  //   this.setState({ showModal: true });
-  //   this.setState({ modalIndex: index });
-  // }
-  // closeModal = () => {
-  //   this.setState({ showModal: false });
-  //   this.setState({ modalIndex: 0 });
+  }
+  handleDelete = (id) => {
+    this.props.categoryStore.deleteCategory(id);
   }
   render() {
     const { loading } = this.props.categoryStore;
@@ -39,35 +33,31 @@ export default class AllCategories extends Component {
       <Aux>
         {categories && categories.map(category => (
           <Accordion fluid styled className="card-style">
-            <Accordion.Title active={category.questions.length > 0} className="text-capitalize">
+            <Accordion.Title active={category.categories.length > 0} className="text-capitalize">
               <Icon className="ns-chevron-up" />
-              {category.title} <small>{category.questions.length} elements</small>
-              {/* <Link onClick={() => this.openModal(null)}
-            to={this.props.match.url} className="link pull-right"><small>+
-            Add Category</small></Link> */}
-              <Button onClick={() => this.openModal('new')} className="link-button pull-right"><small>+ Add Category</small></Button>
+              {category.title} <small>{category.categories.length} elements</small>
+              <Button onClick={() => this.openModal('new', category.title, category.categories[0].categoryType)} className="link-button pull-right"><small>+ Add Category</small></Button>
             </Accordion.Title>
-            <Accordion.Content active={category.questions.length > 0} className="categories-acc">
+            <Accordion.Content active={category.categories.length > 0} className="categories-acc">
               <div className="table-wrapper">
                 <Table unstackable basic className="form-table categories-table">
                   <Table.Body>
                     {
-                      category.questions && category.questions.map(question => (
+                      category.categories && category.categories.map(cat => (
                         <Table.Row>
                           <Table.Cell>
                             <Icon className="ns-drag-holder-large mr-10" />
-                            {question.categoryName}
+                            {cat.categoryName}
                           </Table.Cell>
                           <Table.Cell collapsing>
-                            {/* <Button className="link-button"> */}
-                            <Button onClick={() => this.openModal(question.id)} className="link-button">
+                            <Button onClick={() => this.openModal(cat.id, category.title, cat.categoryType)} className="link-button">
                               <Icon name="ns-pencil" />
                             </Button>
                             <Button className="link-button">
                               <Icon color="blue" name="ns-no-view" />
                             </Button>
                             <Button className="link-button">
-                              <Icon name="ns-trash" />
+                              <Icon name="ns-trash" onClick={() => this.handleDelete(cat.id)} />
                             </Button>
                           </Table.Cell>
                         </Table.Row>

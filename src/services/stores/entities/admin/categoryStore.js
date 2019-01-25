@@ -2,8 +2,8 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getCategories, createCategory } from '../../queries/category';
-import { CATEGORY_DETAILS } from '../../../constants/admin/offerings';
+import { getCategories, createCategory, updateCategoryInfo, deleteCategory } from '../../queries/category';
+import { CATEGORY_DETAILS } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../../../services/stores';
@@ -11,44 +11,66 @@ import { uiStore } from '../../../../services/stores';
 export class CategoryStore {
     @observable data = [];
     @observable CATEGORY_DETAILS_FRM = Validator.prepareFormObject(CATEGORY_DETAILS);
+    @observable selectedCategoryState = {
+      type: '',
+      title: '',
+    };
 
     @action
-    initRequest = (type) => {
+    setFieldValue = (key, val) => {
+      this[key] = val;
+    }
+
+    @action
+    initRequest = () => {
       const query = getCategories;
       this.data = graphql({
         client,
         query,
-        variables: { type },
+        fetchPolicy: 'network-only',
+        variables: { types: null },
       });
     }
-    // @action
-    // setForm = (id) => {
 
+    @action
+    setFormData = (id) => {
+      console.log('datasrc -> ', this.categories.find(obj => obj.id === id));
+      this.CATEGORY_DETAILS_FRM =
+      Validator.setFormData(this.CATEGORY_DETAILS_FRM, this.categories.find(obj => obj.id === id));
+      this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
+      Validator.validateForm(this.CATEGORY_DETAILS_FRM);
+    }
+
+    @action
+    reset = () => {
+      this.CATEGORY_DETAILS_FRM = Validator.prepareFormObject(CATEGORY_DETAILS);
+      this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
+    }
     @computed get getAllCategoriesData() {
       const formattedData = [
         {
           title: 'Investor FAQ',
-          questions: filter(this.categories, cat => cat.categoryType === 'INV_FAQ'),
+          categories: filter(this.categories, cat => cat.categoryType === 'INV_FAQ'),
         },
         {
           title: 'Issuer FAQ',
-          questions: filter(this.categories, cat => cat.categoryType === 'ISSUER_FAQ'),
+          categories: filter(this.categories, cat => cat.categoryType === 'ISSUER_FAQ'),
         },
         {
           title: 'Issuer Knowledge Base',
-          questions: filter(this.categories, cat => cat.categoryType === 'ISSUER_KB'),
+          categories: filter(this.categories, cat => cat.categoryType === 'ISSUER_KB'),
         },
         {
           title: 'Investor Knowledge Base',
-          questions: filter(this.categories, cat => cat.categoryType === 'INVESTOR_KB'),
+          categories: filter(this.categories, cat => cat.categoryType === 'INVESTOR_KB'),
         },
         {
           title: 'Offerings',
-          questions: filter(this.categories, cat => cat.categoryType === 'OFFERINGS'),
+          categories: filter(this.categories, cat => cat.categoryType === 'OFFERINGS'),
         },
         {
           title: 'Insights',
-          questions: filter(this.categories, cat => cat.categoryType === 'INSIGHTS'),
+          categories: filter(this.categories, cat => cat.categoryType === 'INSIGHTS'),
         }];
       return formattedData;
     }
@@ -71,21 +93,41 @@ export class CategoryStore {
     }
 
     @action
-    saveCategories = () => {
-      const type = 'INV_FAQ';
-      this.CATEGORY_DETAILS_FRM.fields.categoryType.value = 'INV_FAQ';
-      const categoryDetailsInput = Validator.evaluateFormData(this.CATEGORY_DETAILS_FRM.fields);
+    deleteCategory = (id) => {
       uiStore.setProgress();
       client
         .mutate({
-          mutation: createCategory,
-          variables: { categoryDetailsInput },
-          refetchQueries: [{
-            query: getCategories,
-            variables: { type },
-          }],
+          mutation: deleteCategory,
+          variables: { id },
+        }).then(() => {
+          this.initRequest();
+          Helper.toast('Category deleted successfully.', 'success');
+        }).catch(() => {
+          Helper.toast('Error while creating Category', 'error');
         })
-        .then(() => Helper.toast('Category created successfully.', 'success'))
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
+    }
+
+    @action
+    saveCategories = (id) => {
+      const mutation = id === 'new' ? createCategory : updateCategoryInfo;
+      const param = {};
+      param.categoryDetailsInput = Validator.evaluateFormData(this.CATEGORY_DETAILS_FRM.fields);
+      if (id !== 'new') {
+        param.id = id;
+      }
+      uiStore.setProgress();
+      client
+        .mutate({
+          mutation,
+          variables: param,
+        })
+        .then(() => {
+          this.initRequest();
+          Helper.toast('Category created successfully.', 'success');
+        })
         .catch(() => {
           Helper.toast('Error while creating Category', 'error');
         })

@@ -9,7 +9,7 @@ export default class Categories extends Component {
     return (
       <Switch>
         <Route exact path={`${match.url}`} component={ManageCategories} />
-        <Route exact path={`${match.url}/:id`} component={AddNewCategory} />
+        <Route exact path={`${match.url}/:id`} render={() => <AddNewCategory refLink={match.url} />} />
       </Switch>
     );
   }

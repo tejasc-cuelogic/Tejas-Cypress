@@ -23,3 +23,16 @@ mutation createCategory($categoryDetailsInput: CategoryInput!) {
   }
 }
 `;
+
+export const updateCategoryInfo = gql`
+mutation updateCategoryInfo($id: ID!, $categoryDetailsInput: CategoryInput!) {
+  updateCategoryInfo(id: $id, categoryDetailsInput: $categoryDetailsInput) {
+     id: id,
+   }
+ }
+`;
+export const deleteCategory = gql`
+mutation deleteCat($id: ID!) {
+  deleteCategory(id: $id) 
+}
+`;
