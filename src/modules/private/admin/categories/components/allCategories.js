@@ -5,39 +5,6 @@ import Aux from 'react-aux';
 import { Accordion, Table, Icon, Button } from 'semantic-ui-react';
 import { InlineLoader } from './../../../../../theme/shared';
 
-// const categories = [
-//   {
-//     title: 'Investor FAQ',
-//     questions: [],
-//   },
-//   {
-//     title: 'Issuer FAQ',
-//     questions: [
-//       {
-//         question: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
-//       },
-//       {
-//         question: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
-//       },
-//     ],
-//   },
-//   {
-//     title: 'Issuer Knowledge Base',
-//     questions: [],
-//   },
-//   {
-//     title: 'Investor Knowledge Base',
-//     questions: [],
-//   },
-//   {
-//     title: 'Offerings',
-//     questions: [],
-//   },
-//   {
-//     title: 'Insights',
-//     questions: [],
-//   },
-// ];
 
 @inject('categoryStore')
 @observer
@@ -50,7 +17,7 @@ export default class AllCategories extends Component {
     if (loading) {
       return <InlineLoader />;
     }
-    const categories = this.props.categoryStore.getAllCategoriesData();
+    const categories = this.props.categoryStore.getAllCategoriesData;
     if (categories.length === 0) {
       return <InlineLoader text="No data found." />;
     }

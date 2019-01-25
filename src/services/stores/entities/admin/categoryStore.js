@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { sortBy } from 'lodash';
+import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getCategories } from '../../queries/category';
 
@@ -16,42 +16,34 @@ export class CategoryStore {
       });
     }
 
-    @action
-    getAllCategoriesData = () => {
+    @computed get getAllCategoriesData() {
       const formattedData = [
         {
           title: 'Investor FAQ',
-          questions: this.categories,
+          questions: filter(this.categories, cat => cat.categoryType === 'INV_FAQ'),
         },
         {
           title: 'Issuer FAQ',
-          questions: [
-            {
-              categoryName: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
-            },
-            {
-              categoryName: 'Lorem Ipsum Dolor Sit Amet Consectetur Adipiscing Elit',
-            },
-          ],
+          questions: filter(this.categories, cat => cat.categoryType === 'ISSUER_FAQ'),
         },
         {
           title: 'Issuer Knowledge Base',
-          questions: [],
+          questions: filter(this.categories, cat => cat.categoryType === 'ISSUER_KB'),
         },
         {
           title: 'Investor Knowledge Base',
-          questions: [],
+          questions: filter(this.categories, cat => cat.categoryType === 'INVESTOR_KB'),
         },
         {
           title: 'Offerings',
-          questions: [],
+          questions: filter(this.categories, cat => cat.categoryType === 'OFFERINGS'),
         },
         {
           title: 'Insights',
-          questions: [],
+          questions: filter(this.categories, cat => cat.categoryType === 'INSIGHTS'),
         }];
       return formattedData;
-    };
+    }
 
     @computed get categories() {
       return (this.data.data && sortBy(toJS(this.data.data.categories), ['order'])) || [];
