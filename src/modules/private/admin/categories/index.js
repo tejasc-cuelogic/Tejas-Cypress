@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
+import AddNewCategory from '../categories/components/addNewCategoryModal';
 import ManageCategories from './containers/manageCatories';
 
 export default class Categories extends Component {
@@ -8,6 +9,7 @@ export default class Categories extends Component {
     return (
       <Switch>
         <Route exact path={`${match.url}`} component={ManageCategories} />
+        <Route exact path={`${match.url}/:id`} component={AddNewCategory} />
       </Switch>
     );
   }

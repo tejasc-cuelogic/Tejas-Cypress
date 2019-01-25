@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Switch, Route, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Accordion, Table, Icon, Button } from 'semantic-ui-react';
-import AddNewCategory from './addNewCategoryModal';
 import { InlineLoader } from './../../../../../theme/shared';
 
 @inject('categoryStore')
-@observer
 @withRouter
-
+@observer
 export default class AllCategories extends Component {
   // state = {
   //   showModal: false,
@@ -20,12 +18,6 @@ export default class AllCategories extends Component {
     console.log(this.props);
   }
 
-  addCategory = () => {
-    console.log('Category has been added');
-    const { saveCategories } = this.props.categoryStore;
-    saveCategories();
-    this.closeModal();
-  }
   openModal = (index) => {
     this.props.history.push(`${this.props.match.url}/${index}`);
   //   this.setState({ showModal: true });
@@ -88,11 +80,6 @@ export default class AllCategories extends Component {
             </Accordion.Content>
           </Accordion>
         ))}
-
-        <Switch>
-          <Route exact path={`${this.props.match.url}/:id`} component={AddNewCategory} />
-        </Switch>
-
       </Aux>
     );
   }
