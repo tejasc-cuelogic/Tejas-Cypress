@@ -1,56 +1,50 @@
 import React, { Component } from 'react';
-import { get } from 'lodash';
 import Aux from 'react-aux';
-import { Grid, Segment, Header, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { NsCarousel, Image64 } from '../../../../../../theme/shared';
+import { Header, Button, Icon } from 'semantic-ui-react';
+import { withRouter } from 'react-router-dom';
+import { inject, observer } from 'mobx-react';
+import { Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
+const isMobile = document.documentElement.clientWidth < 991;
+@inject('campaignStore')
+@withRouter
+@observer
 class Gallery extends Component {
+  handleViewGallary = (e, index) => {
+    e.preventDefault();
+    this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
+    this.props.history.push(`${this.props.galleryUrl}/photogallery`);
+  }
   render() {
-    const {
-      campaign, settings, isTabletLand, isTablet, galleryUrl,
-    } = this.props;
-    const isGallaryFilled = get(campaign, 'media.gallery') && get(campaign, 'media.gallery').length;
+    const { campaign } = this.props;
     return (
-      <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand || isTablet ? 'mt-30' : ''}>
-        <Segment padded>
-          <Header as="h6">
-            {isGallaryFilled ?
-              <Link to={`${galleryUrl}/photogallery`}>
-                Gallery
-                <Icon className="ns-chevron-right" color="green" />
-              </Link> :
+      <Aux>
+        <Header as="h3" className="mb-30 anchor-wrap mb-30">
+          Gallery
+          <span className="anchor" id="gallery" />
+        </Header>
+        <div className="gallery-preview">
+          {campaign && campaign.media &&
+            campaign.media.gallery && campaign.media.gallery.length ?
+            campaign.media.gallery.map((data, index) => (
               <Aux>
-                Gallery
-                <Icon className="ns-chevron-right" color="green" />
+                {index < 3 &&
+                  <Image64 onClick={e => this.handleViewGallary(e, index)} fluid className="about-gallery-bg" srcUrl={data.url} />
+                }
               </Aux>
+            )) :
+            <Image64 fluid className="about-gallery-bg" srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
           }
-          </Header>
-          {/* <Breadcrumb>
-            <Breadcrumb.Section as={isGallaryFilled && Link} to={isGallaryFilled &&
-              `${galleryUrl}/photogallery`}><b>Gallery</b></Breadcrumb.Section>
-            <Breadcrumb.Divider as={isGallaryFilled && Link} to={isGallaryFilled &&
-          `${galleryUrl}/photogallery`} icon={{ className: 'ns-chevron-right', color: 'green' }} />
-          </Breadcrumb> */}
-          <div className="about-carousel mt-10 mb-30">
-            <NsCarousel
-              {...settings}
-              handlePaginationFun={() => {}}
-            >
-              {
-                campaign && campaign.media &&
-                  campaign.media.gallery && campaign.media.gallery.length ?
-                  campaign.media.gallery.map(data => (
-                    <Image64 className="about-gallery-bg" bg srcUrl={data.url} />
-                  ))
-                  :
-                  <Image64 className="about-gallery-bg" bg srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
-              }
-            </NsCarousel>
-          </div>
-        </Segment>
-      </Grid.Column>
+        </div>
+        {campaign && campaign.media &&
+          campaign.media.gallery && campaign.media.gallery.length &&
+          <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
+            View Gallery
+            <Icon size="small" className="ns-chevron-right right" color="white" />
+          </Button>
+        }
+      </Aux>
     );
   }
 }

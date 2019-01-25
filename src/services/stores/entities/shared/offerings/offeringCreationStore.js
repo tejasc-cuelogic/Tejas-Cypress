@@ -19,7 +19,7 @@ import { deleteBonusReward, updateOffering,
   generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
@@ -242,7 +242,7 @@ export class OfferingCreationStore {
     } else {
       filename = this.MEDIA_FRM.fields[name].value[index];
     }
-    fileUpload.deleteFromS3(this.MEDIA_FRM.fields[name].value)
+    commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${this.MEDIA_FRM.fields[name].value}`)
       .then((res) => {
         Helper.toast(`${this.MEDIA_FRM.fields[name].label} removed successfully.`, 'success');
         this.resetFormField('MEDIA_FRM', name, undefined, index);
@@ -264,7 +264,7 @@ export class OfferingCreationStore {
     } else {
       filename = this.LEADERSHIP_FRM.fields.leadership[index][name].value[index];
     }
-    fileUpload.deleteFromS3(this.LEADERSHIP_FRM.fields.leadership[index][name].value)
+    commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${this.LEADERSHIP_FRM.fields.leadership[index][name].value}`)
       .then((res) => {
         Helper.toast(`${this.LEADERSHIP_FRM.fields.leadership[index][name].label} removed successfully.`, 'success');
         this.resetFormFieldForLeadership('LEADERSHIP_FRM', name, undefined, index);
@@ -285,16 +285,17 @@ export class OfferingCreationStore {
   uploadMedia = (name, form = 'MEDIA_FRM') => {
     const fileObj = {
       obj: this[form].fields[name].base64String,
-      type: this[form].fields[name].meta.type,
+      // type: this[form].fields[name].meta.type,
       name: this[form].fields[name].fileName,
     };
-    fileUpload.uploadToS3(fileObj)
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
       .then((res) => {
         Helper.toast(`${this[form].fields[name].label} uploaded successfully.`, 'success');
-        this.resetFormField(form, name, res);
+        this.resetFormField(form, name, { fileName: fileObj.name, location: res });
         this.updateOffering(this.currentOfferingId, this[form].fields, 'media', false, false);
       })
       .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
         console.log(err);
       });
   }
@@ -306,13 +307,16 @@ export class OfferingCreationStore {
       type: this[form].fields.leadership[index][name].meta.type,
       name: this[form].fields.leadership[index][name].fileName,
     };
-    fileUpload.uploadToS3(fileObj)
+    fileUpload.uploadToS3(fileObj, `offerings/${this.currentOfferingId}`)
       .then((res) => {
         Helper.toast(`${this[form].fields.leadership[index][name].label} uploaded successfully.`, 'success');
-        this.resetFormFieldForLeadership(form, name, res, undefined, index);
+        this.resetFormFieldForLeadership(form, name, {
+          fileName: fileObj.name, location: res,
+        }, undefined, index);
         this.updateOffering(this.currentOfferingId, this[form].fields, 'leadership', null, true, null, null, true, index);
       })
       .catch((err) => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
         console.log(err);
       });
   }
@@ -326,13 +330,13 @@ export class OfferingCreationStore {
       fileField = this[form].fields[name];
     }
     fileField.showLoader = true;
-    fileUpload.uploadToS3(files[0])
+    fileUpload.uploadToS3(files[0], `offerings/${this.currentOfferingId}`)
       .then(action((res) => {
         Helper.toast('file uploaded successfully', 'success');
-        fileField.value = res.fileName;
-        fileField.preSignedUrl = res.location;
-        fileField.fileId = `${res.fileName}${Date.now()}`;
-        fileField.fileName = `${res.fileName}${Date.now()}`;
+        fileField.value = files[0].name;
+        fileField.preSignedUrl = res;
+        fileField.fileId = `${files[0].name}${Date.now()}`;
+        fileField.fileName = `${files[0].name}${Date.now()}`;
       }))
       .catch(action((err) => {
         Helper.toast('Something went wrong, please try again later.', 'error');
@@ -345,7 +349,7 @@ export class OfferingCreationStore {
 
   @action
   removeFileFromS3 = (form, name) => {
-    fileUpload.deleteFromS3(this[form].fields[name].value)
+    commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${this[form].fields[name].value}`)
       .then(action((res) => {
         ['fileId', 'fileName', 'fileData', 'value', 'preSignedUrl'].forEach((subKey) => {
           this[form].fields[name][subKey] = '';
@@ -585,7 +589,7 @@ export class OfferingCreationStore {
       const fileList = toJS(this.removeFileNamesList);
       if (fileList.length) {
         forEach(fileList, (fileName) => {
-          fileUpload.deleteFromS3(fileName).then(() => {
+          commonStore.deleteCdnS3File(`offerings/${this.currentOfferingId}/${fileName}`).then(() => {
           }).catch((error) => {
             uiStore.setErrors(error.message);
           });
@@ -997,7 +1001,9 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
           Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
-        payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
+        if (this.DATA_ROOM_FRM.meta.isValid) {
+          payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
+        }
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);

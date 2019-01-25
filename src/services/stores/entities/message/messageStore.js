@@ -75,8 +75,9 @@ export class NewMessage {
   }
 
   @action
-  createNewComment = (scope, campaignSlug) => {
+  createNewComment = (scope, campaignSlug, currentMessageId) => {
     this.setDataValue('buttonLoader', scope);
+    this.currentMessageId = currentMessageId;
     const data = Validator.ExtractValues(this.MESSAGE_FRM.fields);
     const payload = {
       commentInput: {

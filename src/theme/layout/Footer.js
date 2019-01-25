@@ -38,8 +38,8 @@ class Footer extends Component {
       campaign.keyTerms.shorthandBusinessName ?
       campaign.keyTerms.shorthandBusinessName : '';
     return (
-      <footer>
-        <Container fluid={isCampaign}>
+      <footer className={isCampaign ? 'offering-footer' : ''}>
+        <Container>
           {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
               <b>{`${shorthandBusinessName} Disclaimer: `}</b>
@@ -48,7 +48,7 @@ class Footer extends Component {
           }
           <Grid stackable>
             <Grid.Column computer={6} tablet={16} mobile={16} className="footer-left">
-              <div className="footer-left-nav">
+              <div className="footer-left-nav mb-30">
                 {/* {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
                   <Aux path={path}>
                     <Menu text vertical={!isMobile} className={isMobile && 'mb-10'}>
@@ -79,14 +79,14 @@ class Footer extends Component {
                     <Menu.Item as={Link} to="/agreements/legal/legal-documents">Legal Documents</Menu.Item>
                   }
                 </Menu>
+                {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
+                  <Aux path={path}>
+                    <div className={isMobile && 'mb-30'}>
+                      <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
+                    </div>
+                  </Aux>
+                }
               </div>
-              {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
-                <Aux path={path}>
-                  <div className={`${isMobile && 'mb-30'} secure mt-20 mb-30`}>
-                    <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
-                  </div>
-                </Aux>
-              }
               <div className={`${isMobile && 'mb-20'} footer-social`}>
                 <SocialLinks />
                 <p className={isMobile && 'mt-10'}>© 2019 NextSeed Services LLC</p>

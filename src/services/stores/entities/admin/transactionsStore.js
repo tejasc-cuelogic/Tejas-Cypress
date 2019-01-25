@@ -74,14 +74,15 @@ export class TransactionsStore {
 
   @action
   transactionChange = (requestID, transStatus, actionName) => {
-    const payLoad = { status: transStatus, offset: 1, limit: 1000 };
     client
       .mutate({
         mutation: this.ctHandler[actionName],
         variables: { id: requestID },
-        refetchQueries: [{ query: getTransactions, variables: payLoad }],
       })
-      .then(() => Helper.toast(`Transaction ${actionName} successfully.`, 'success'))
+      .then(() => {
+        this.initRequest(transStatus);
+        Helper.toast(`Transaction ${actionName} successfully.`, 'success');
+      })
       .catch(() => Helper.toast('OOPs something went work', 'error'));
   };
 
@@ -89,11 +90,6 @@ export class TransactionsStore {
   @action
   failTransaction = (requestID, transStatus) => {
     const reason = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
-    const payLoad = {
-      status: transStatus,
-      offset: 1,
-      limit: 1000,
-    };
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -102,10 +98,10 @@ export class TransactionsStore {
             id: requestID,
             reason: reason.justifyDescription,
           },
-          refetchQueries: [{ query: getTransactions, variables: payLoad }],
         })
         .then(() => {
           Helper.toast('Transaction Failed successfully.', 'success');
+          this.initRequest(transStatus);
           resolve();
         })
         .catch(() => {

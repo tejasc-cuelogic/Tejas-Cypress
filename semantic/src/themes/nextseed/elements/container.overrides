@@ -128,6 +128,15 @@ section{
         &.all-inclusive {
             background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat / cover;
         }
+        &.campaign-details-banner{
+            height: 726px;
+            background:url(../../assets/images/banners/campaign-details.png) top center no-repeat / cover;
+            background-color: @neutral;
+            background-blend-mode:multiply;
+            >.ui.container{
+                justify-content: center;
+            }
+        }
     }
     &.modalbg-banner{
         height:100vh;
@@ -151,7 +160,9 @@ section{
 }
 // business and invest pages
 .slide-down{
-    min-height:~"calc(100vh - 98px)";
+    &.process, &.all-inclusive, &.account-types, &.security, &.track {
+        min-height:~"calc(100vh - 98px)";
+    }
 	&.process{
         background:url(../../assets/images/business/process.png) 0% center no-repeat;
         @media only screen and (max-width : @largestMobileScreen){
