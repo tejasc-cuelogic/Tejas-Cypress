@@ -1767,10 +1767,8 @@ div.login-form {
 		}
 	}
 }
-.footer{
-	.ui.header{
-		font-weight:400;
-	}
+.footer .ui.header{
+	font-weight:400;
 }
 
 //	Account type symbols

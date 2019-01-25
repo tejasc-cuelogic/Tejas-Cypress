@@ -42,7 +42,7 @@ export class UpdateStore {
   @action
   setDb = (data) => {
     const orderedData = orderBy(data, ['updated.date'], ['desc']);
-    this.db = ClientDb.initiateDb(orderedData);
+    this.db = ClientDb.initiateDb(orderedData, false, true);
   }
 
 

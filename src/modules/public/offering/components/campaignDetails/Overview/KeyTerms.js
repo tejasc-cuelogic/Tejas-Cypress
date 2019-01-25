@@ -10,7 +10,8 @@ class KeyTerms extends Component {
     const maturityMonth = campaign && campaign.keyTerms && campaign.keyTerms.maturity ? `${campaign.keyTerms.maturity} Months` : '[XX] Months';
     const investmentMultiple = campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : 'XXX';
     const maturityStartupPeriod = campaign && campaign.keyTerms && campaign.keyTerms.startupPeriod ? ` including a ${campaign.keyTerms.startupPeriod} month startup period for ramp up` : '';
-    const portal = campaign.portal ? (campaign.portal === 'BD' ? '2%' : '1%') : '';
+    // const portal = campaign.portal ? (campaign.portal === 'BD' ? '2%' : '1%') : '';
+    const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     return (
       <Grid.Column>
         <Segment padded className="clearfix">

@@ -1,10 +1,14 @@
 import TAFFY from 'taffy';
-import { uniqWith, isEqual, isArray } from 'lodash';
+import { uniqWith, isEqual, isArray, map } from 'lodash';
 
 class ClientDb {
   database = null;
-  initiateDb = (data, isUniqWith = false) => {
-    this.database = TAFFY(isUniqWith ? uniqWith(data, isEqual) : data);
+  initiateDb = (data, isUniqWith = false, isReplaceId = false, idReplaceKey = 'refId') => {
+    let updatedData = data;
+    if (isReplaceId) {
+      updatedData = map(data, e => ({ [idReplaceKey]: e.id, ...e }));
+    }
+    this.database = TAFFY(isUniqWith ? uniqWith(updatedData, isEqual) : updatedData);
     return this.getDatabase();
   };
 
@@ -65,7 +69,7 @@ class ClientDb {
           keyString = `${keyString} ${tempRef}`;
           return false;
         });
-        if (keyString.toLowerCase().includes(value)) {
+        if (keyString.toLowerCase().includes(value.toLowerCase())) {
           resultArray.push(e);
         }
         return false;
@@ -84,6 +88,16 @@ class ClientDb {
     const filterData = data.filter(e => parseInt((subkey ? e[key][subkey] : e[key]), 10)
       <= eDate && parseInt((subkey ? e[key][subkey] : e[key]), 10) >= sDate);
     this.initiateDb(filterData, true);
+  }
+
+  filterByNumber = (min, max, key, type = 'Integer') => {
+    const data = this.getDatabase();
+    const isInt = type === 'Integer';
+    const filterData = data.filter(e => (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10))
+    <= max && (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10)) >= min);
+    if (filterData.length > 0) {
+      this.initiateDb(filterData, true);
+    }
   }
 }
 

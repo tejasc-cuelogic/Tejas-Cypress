@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { capitalize } from 'lodash';
+import { capitalize, get } from 'lodash';
 import Parser from 'html-react-parser';
 import { Container, Card, Image, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
 import Filters from './Filters';
@@ -82,7 +82,7 @@ export default class CampaignList extends Component {
                             <p><b>{offering && offering.keyTerms && offering.keyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[offering.keyTerms.securities] : '-'}</b></p>
                             <List divided horizontal>
                               <List.Item>
-                                {Helper.CurrencyFormat(offering.fundedAmount, 0)}
+                                {Helper.CurrencyFormat(get(offering, 'closureSummary.totalInvestmentAmount') || 0)}
                               </List.Item>
                               <List.Item>
                                 {(offering && offering.closureSummary &&

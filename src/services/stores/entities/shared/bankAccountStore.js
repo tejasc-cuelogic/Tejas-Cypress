@@ -10,7 +10,7 @@ import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
-import { getlistLinkedBankUsers, checkOpeningDepositAmount } from '../../queries/bankAccount';
+import { getlistLinkedBankUsers, checkOpeningDepositAmount, updateLinkedAccount } from '../../queries/bankAccount';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -418,6 +418,32 @@ export class BankAccountStore {
             uiStore.setProgress(false);
           });
       }
+    });
+  }
+
+  @action
+  updateAccountChangeAction = (accountId, userId) => {
+    uiStore.setProgress();
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: updateLinkedAccount,
+          variables: {
+            accountId,
+            userId,
+          },
+          refetchQueries: [{ query: getlistLinkedBankUsers, variables: { page: 1, limit: 100 } }],
+        })
+        .then((res) => {
+          Helper.toast(res.data.verifyLinkedBank.message, 'success');
+          resolve();
+        })
+        .catch((error) => {
+          Helper.toast(error.message, 'error');
+          uiStore.setErrors(error.message);
+          reject();
+          uiStore.setProgress(false);
+        });
     });
   }
 }

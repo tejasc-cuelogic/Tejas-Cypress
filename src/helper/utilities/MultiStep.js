@@ -97,25 +97,25 @@ export default class MultiStep extends React.Component {
   }
 
   handleOnClick(evt) {
-    const isAnyStepInvalid = _.find(this.props.steps, { isValid: 'error' });
-    if (isAnyStepInvalid) {
-      console.log(isAnyStepInvalid);
-    } else if (this.props.setStepTobeRendered) {
-      this.props.setStepTobeRendered(evt.currentTarget.value);
-      if (evt.currentTarget.value === (this.props.steps.length - 1) &&
-        this.state.compState === (this.props.steps.length - 1)) {
-        this.setNavState(this.props.steps.length);
-      } else if (evt.currentTarget.value !== 0 &&
-      this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
-        this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
-        if (evt.currentTarget.value === (this.props.steps.length - 1)) {
+    // const isAnyStepInvalid = _.find(this.props.steps, { isValid: 'error' });
+    if (!this.props.steps[this.state.compState].onlyDisableNextButton) {
+      if (this.props.setStepTobeRendered) {
+        this.props.setStepTobeRendered(evt.currentTarget.value);
+        if (evt.currentTarget.value === (this.props.steps.length - 1) &&
+          this.state.compState === (this.props.steps.length - 1)) {
+          this.setNavState(this.props.steps.length);
+        } else if (evt.currentTarget.value !== 0 &&
+        this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+          this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
+          if (evt.currentTarget.value === (this.props.steps.length - 1)) {
+            this.setNavState(evt.currentTarget.value);
+          }
+        } else {
           this.setNavState(evt.currentTarget.value);
         }
       } else {
         this.setNavState(evt.currentTarget.value);
       }
-    } else {
-      this.setNavState(evt.currentTarget.value);
     }
   }
 

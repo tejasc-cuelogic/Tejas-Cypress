@@ -33,12 +33,12 @@ export default class Listing extends Component {
                 </Table.Row>
                 ) :
                 this.props.data.map(record => (
-                  <Table.Row key={record.id}>
+                  <Table.Row key={record.refId}>
                     <Table.Cell>
                       <Modal dimmer="inverted" closeOnEscape={false} onClose={this.close} closeOnDimmerClick={false} size="large" trigger={<Button className="link-button" >{record.title}</Button>} >
                         <NewUpdate
                           refLink={this.props.match.url}
-                          id={record.id}
+                          id={record.refId}
                           match={this.props.match}
                           status={record.status}
                         />

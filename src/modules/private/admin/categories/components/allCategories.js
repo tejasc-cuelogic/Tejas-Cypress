@@ -1,16 +1,31 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Accordion, Table, Icon, Button } from 'semantic-ui-react';
 import { InlineLoader } from './../../../../../theme/shared';
 
-
 @inject('categoryStore')
+@withRouter
 @observer
 export default class AllCategories extends Component {
+  // state = {
+  //   showModal: false,
+  //   modalIndex: 0,
+  // }
   componentWillMount() {
     this.props.categoryStore.initRequest('INV_FAQ');
+    console.log(this.props);
+  }
+
+  openModal = (index) => {
+    this.props.history.push(`${this.props.match.url}/${index}`);
+  //   this.setState({ showModal: true });
+  //   this.setState({ modalIndex: index });
+  // }
+  // closeModal = () => {
+  //   this.setState({ showModal: false });
+  //   this.setState({ modalIndex: 0 });
   }
   render() {
     const { loading } = this.props.categoryStore;
@@ -28,7 +43,10 @@ export default class AllCategories extends Component {
             <Accordion.Title active={category.questions.length > 0} className="text-capitalize">
               <Icon className="ns-chevron-up" />
               {category.title} <small>{category.questions.length} elements</small>
-              <Link to={this.props.match.url} className="link pull-right"><small>+ Add Category</small></Link>
+              {/* <Link onClick={() => this.openModal(null)}
+            to={this.props.match.url} className="link pull-right"><small>+
+            Add Category</small></Link> */}
+              <Button onClick={() => this.openModal('new')} className="link-button pull-right"><small>+ Add Category</small></Button>
             </Accordion.Title>
             <Accordion.Content active={category.questions.length > 0} className="categories-acc">
               <div className="table-wrapper">
@@ -42,7 +60,8 @@ export default class AllCategories extends Component {
                             {question.categoryName}
                           </Table.Cell>
                           <Table.Cell collapsing>
-                            <Button className="link-button">
+                            {/* <Button className="link-button"> */}
+                            <Button onClick={() => this.openModal(question.id)} className="link-button">
                               <Icon name="ns-pencil" />
                             </Button>
                             <Button className="link-button">

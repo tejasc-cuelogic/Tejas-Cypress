@@ -1,4 +1,4 @@
-import { camelCase, upperFirst } from 'lodash';
+import { camelCase, upperFirst, reduce, assign } from 'lodash';
 import moment from 'moment';
 import Handlebars from 'handlebars';
 
@@ -47,7 +47,22 @@ class DataFormatter {
     return iso ? moment(formatedDate).toISOString() :
       isUnix ? moment(formatedDate).unix() : formatedDate;
   }
+
   formatedDate = date => moment(date).format('MM/DD/YYYY');
+
+  mapDatesToType = (data, keys, dateType = 'iso') => data.map((d) => {
+    const convertedDates = keys.map(k => ({ [k]: this.convertDateType(d[k], dateType) }));
+    const filterInvalidDates = convertedDates
+      .filter(obj => moment(Object.values(obj)[0]).isValid());
+    const convDatesObj = reduce(filterInvalidDates, (old, current) => assign(old, current), {});
+    return {
+      ...d,
+      ...convDatesObj,
+    };
+  });
+
+  convertDateType = (date, dateType = 'iso') => (dateType === 'iso' ? moment(date).toISOString() : moment(date).unix())
+
   QueryStringToJSON = (search) => {
     const pairs = search.slice(1).split('&');
     const result = {};

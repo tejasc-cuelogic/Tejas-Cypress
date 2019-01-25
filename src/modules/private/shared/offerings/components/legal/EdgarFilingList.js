@@ -10,7 +10,7 @@ import { Header, Table, Message, Button, Confirm } from 'semantic-ui-react';
 import XmlSubmission from '../../../../admin/edgar/components/XmlSubmission';
 import Helper from '../../../../../../helper/utility';
 import { businessActions } from '../../../../../../services/actions';
-import { NEXTSEED_BOX_URL } from './../../../../../../constants/common';
+import { NEXTSEED_BOX_URL, NEXTSEED_SECURITIES_BOX_URL } from './../../../../../../constants/common';
 
 @withRouter
 @inject('businessStore', 'offeringCreationStore', 'uiStore')
@@ -95,6 +95,10 @@ export default class EdgarFilingList extends Component {
 
   render() {
     const offeringFilingList = this.props.offeringFilings;
+    const offering = this.props.offeringDetails;
+    const offeringRegulationArr = offering.regulation.split('_');
+    const regulationType = offeringRegulationArr[0];
+    const BOX_URL_TO_CONSIDER = regulationType === 'BD' ? NEXTSEED_SECURITIES_BOX_URL : NEXTSEED_BOX_URL;
     if (isEmpty(offeringFilingList)) {
       return (
         <Message className="center-align">No Generated Docs present in this offering.</Message>
@@ -114,7 +118,7 @@ export default class EdgarFilingList extends Component {
                         {filing.filingFolderName}
                         <div className="actions pull-right">
                           <a
-                            href={(`${NEXTSEED_BOX_URL}folder/${filing.folderId}`)}
+                            href={(`${BOX_URL_TO_CONSIDER}folder/${filing.folderId}`)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-link"
@@ -151,7 +155,7 @@ export default class EdgarFilingList extends Component {
                   handleDeleteCancel={this.handleDeleteCancel}
                   handleDeleteXMlSubmission={this.handleDeleteXMlSubmission}
                   handleXMLSubmissionLockUnlock={this.handleXMLSubmissionLockUnlock}
-                  boxFolderLink={(`${NEXTSEED_BOX_URL}folder/${filing.folderId}`)}
+                  boxFolderLink={(`${BOX_URL_TO_CONSIDER}folder/${filing.folderId}`)}
                 />
               </Table>
             </Aux>
