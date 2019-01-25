@@ -32,7 +32,7 @@ class FinancialInfo extends Component {
     return (
       <Aux>
         <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
-        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your investment amount' : 'How much would you like to invest?'}</Header>
+        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your investment amount' : 'How much would you like to invest? ?'}</Header>
         {this.props.changeInvest &&
           <OfferingInvestDetails
             offering={getInvestorAccountById}

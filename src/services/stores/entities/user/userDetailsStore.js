@@ -203,6 +203,7 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
+      details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&

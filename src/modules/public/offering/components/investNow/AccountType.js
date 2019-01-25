@@ -49,16 +49,19 @@ class AccountType extends Component {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
   }
   render() {
-    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    // partialAccounts
+    const { activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
     const {
       accTypeChanged,
       investAccTypes,
       prepareAccountTypes,
     } = this.props.investmentStore;
     prepareAccountTypes(activeAccounts);
+    const headerToShow = investAccTypes.length ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
+    const subHeaderToShow = frozenAccounts.length ? 'Please contact support@nextseed.com to unlock your account.' : 'Please finish your account setup.';
     return (
       <Aux>
-        <Header as="h3" textAlign="center">Which Investment Account would you like to invest from?</Header>
+        <Header as="h3" textAlign="center"> {headerToShow}</Header>
         <Form error className="account-type-tab">
           {investAccTypes.values.length ?
             <Aux>
@@ -72,11 +75,13 @@ class AccountType extends Component {
             </Aux>
             :
             <div className="center-align">
-              <p>Investment accounts are not yet created!</p>
+              <p>{subHeaderToShow}</p>
+              {!frozenAccounts.length &&
               <Link to="/app/summary" className="text-link">
                 <Icon className="ns-arrow-right" color="green" />
                 Go to My Accounts
               </Link>
+              }
             </div>
           }
         </Form>
