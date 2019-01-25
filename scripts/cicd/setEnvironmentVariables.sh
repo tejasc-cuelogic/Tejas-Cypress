@@ -74,7 +74,7 @@ settingEnv()
 		sed -i.bak "s#^\(REACT_APP_DEPLOY_ENV=\).*#\1review#" .envTEMPLATE
 	fi
 
-	cat .envTEMPLATE
+	# cat .envTEMPLATE
 }
 
 if [ "$region" = "" ]; then
