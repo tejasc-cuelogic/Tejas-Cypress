@@ -39,7 +39,7 @@ class Gallery extends Component {
         </div>
         {campaign && campaign.media &&
           campaign.media.gallery && campaign.media.gallery.length &&
-          <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
+          <Button fluid={isMobile} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
             View Gallery
             <Icon size="small" className="ns-chevron-right right" color="white" />
           </Button>
