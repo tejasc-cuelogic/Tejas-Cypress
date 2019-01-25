@@ -161,7 +161,7 @@ export class InvestmentStore {
 
   @computed get investmentAmount() {
     const val = this.INVESTMONEY_FORM.fields.investmentAmount.value;
-    return parseFloat(val || 0);
+    return money.floatToAmount(val || 0);
   }
 
   @computed get investmentLimitsChecked() {
