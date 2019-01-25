@@ -1,5 +1,5 @@
-import bugsnag from '@bugsnag/js';
-import bugsnagReact from '@bugsnag/plugin-react';
+// import bugsnag from '@bugsnag/js';
+// import bugsnagReact from '@bugsnag/plugin-react';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -13,19 +13,20 @@ import { ErrorBoundry as CustomErrorBoundry } from './helper';
 
 // Set the default error boundry to the customErrorBoundry
 // and reassign it if one from Bugsnag is present
-let ErrorBoundary = CustomErrorBoundry;
+// let ErrorBoundary = CustomErrorBoundry;
+const ErrorBoundary = CustomErrorBoundry;
 
-if (process.env.REACT_APP_BUG_SNAG_KEY) {
-  const bugsnagClient = bugsnag({
-    apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
-    appType: 'client',
-    appVersion: process.env.CI_PIPELINE_ID,
-    releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
-  });
-  bugsnagClient.use(bugsnagReact, React);
-  // wrap your entire app tree in the ErrorBoundary provided
-  ErrorBoundary = bugsnagClient.getPlugin('react');
-}
+// if (process.env.REACT_APP_BUG_SNAG_KEY) {
+//   const bugsnagClient = bugsnag({
+//     apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+//     appType: 'client',
+//     appVersion: process.env.CI_PIPELINE_ID,
+//     releaseStage: process.env.REACT_APP_BUG_SNAG_STAGE,
+//   });
+//   bugsnagClient.use(bugsnagReact, React);
+//   // wrap your entire app tree in the ErrorBoundary provided
+//   ErrorBoundary = bugsnagClient.getPlugin('react');
+// }
 
 // For easier debugging
 window.APP_STATE = stores;
