@@ -21,7 +21,10 @@ export class CategoryStore {
         variables: { type },
       });
     }
+    // @action
+    // setForm = (id) => {
 
+    // }
     @action
     getAllCategoriesData = () => {
       const formattedData = [

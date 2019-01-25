@@ -8,12 +8,15 @@ import { FormInput, FormTextarea } from '../../../../../theme/form';
 @inject('categoryStore')
 @observer
 class AddNewCategory extends Component {
+  componentWillMount() {
+    this.props.categoryStore.setForm();
+  }
     handleClose = () => this.props.history.goBack();
     addCategory = () => {
-      console.log('Category has been added');
+    //   console.log('Category has been added');
       const { saveCategories } = this.props.categoryStore;
       saveCategories();
-      this.closeModal();
+      this.handleClose();
     }
     render() {
       const { formChange, CATEGORY_DETAILS_FRM } = this.props.categoryStore;
