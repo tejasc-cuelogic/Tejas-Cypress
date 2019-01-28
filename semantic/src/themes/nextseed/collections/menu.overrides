@@ -197,7 +197,7 @@
     width:100%;
     position:fixed;
     top:-58px;
-    z-index:102;
+    z-index:100;
     background-color:@white;
     @media only screen and (max-width : @largestTabletScreen){
         top: auto;
@@ -214,6 +214,14 @@
             @media only screen and (max-width : @largestTabletScreen){
                 top: auto;
                 bottom: 0;
+                height: auto;
+                padding: 10px 0;
+                .ui.tiny.list {
+                    margin: 0;
+                    &.right.floated {
+                        margin-left: 5px;
+                    }
+                }
             }
             &.reverse{
                 top:58px;
@@ -266,7 +274,8 @@ footer{
             // flex-direction:row;
             // vertical-align: top;
             // flex-wrap: wrap;
-            // flex: 1;
+            flex: 1;
+            width: 100%;
             @media only screen and (max-width : @largestMobileScreen){
                 padding: 0;
             }
@@ -279,6 +288,10 @@ footer{
                 }
                 &.header {
                     margin-top: 0;
+                    ~a {
+                        display: inline-block;
+                        margin-right: @14px;
+                    }
                 }
                 &:hover {
                     background-color: transparent;

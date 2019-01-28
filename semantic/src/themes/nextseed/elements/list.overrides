@@ -24,14 +24,11 @@
         font-size:@14px;
         color:@borderColor;
     }
-    &.right.floated{
-        padding:@12px @16px;
-    }
     >.item{
         padding:0;
     }
     >.ui.button{
-        margin-left:1.75rem;
+        margin:-@8px 0 -@8px @25px;
     }
 }
 .ui.list {

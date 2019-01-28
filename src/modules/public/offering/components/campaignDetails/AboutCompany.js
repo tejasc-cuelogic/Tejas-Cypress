@@ -11,11 +11,15 @@ import CompanyHistory from './AboutCompany/CompanyHistory';
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 
-@inject('campaignStore')
+@inject('campaignStore', 'navStore')
 @observer
 class AboutCompany extends Component {
+  componentWillMount() {
+    window.addEventListener('scroll', this.handleOnScroll);
+  }
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
@@ -24,6 +28,17 @@ class AboutCompany extends Component {
       const sel = 'company-description';
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
+  }
+  componentWillUnmount() {
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  handleOnScroll = () => {
+    ['company-description', 'business-model', 'location-analysis', 'team', 'history'].forEach((item) => {
+      if (document.getElementById(item).getBoundingClientRect().top < 50) {
+        this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
+      }
+    });
   }
   render() {
     const { campaign } = this.props.campaignStore;

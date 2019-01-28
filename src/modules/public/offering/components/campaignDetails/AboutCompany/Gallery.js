@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 991;
 @inject('campaignStore')
 @withRouter
 @observer
@@ -14,7 +14,7 @@ class Gallery extends Component {
   handleViewGallary = (e, index) => {
     e.preventDefault();
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
-    this.props.history.push(`${this.props.galleryUrl}/photogallery`);
+    this.props.history.push(`${this.props.galleryUrl.replace(/\/$/, '')}/photogallery`);
   }
   render() {
     const { campaign } = this.props;
@@ -39,7 +39,7 @@ class Gallery extends Component {
         </div>
         {campaign && campaign.media &&
           campaign.media.gallery && campaign.media.gallery.length &&
-          <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
+          <Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
             View Gallery
             <Icon size="small" className="ns-chevron-right right" color="white" />
           </Button>

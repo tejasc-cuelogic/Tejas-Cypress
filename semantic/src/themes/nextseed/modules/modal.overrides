@@ -223,6 +223,21 @@
             }
         }
     }
+    &.video-modal{
+        >.close{
+            height:24px;
+            width:24px;
+            padding:@5px;
+            margin:0;
+            color:@white;
+            background-color:@mutedTextColor;
+            border-radius:@4px;
+            opacity:1;
+        }
+        .ui.embed{
+            background-color:@fullBlack;
+        }
+    }
 }
 //  Public pages Ends
 
