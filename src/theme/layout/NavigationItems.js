@@ -9,6 +9,7 @@ import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
+@inject('navStore')
 @observer
 export class NavItems extends Component {
   state = { active: '' };
@@ -29,8 +30,7 @@ export class NavItems extends Component {
       ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
-  isActiveSubMenu = (to, location, hashCheck = false) =>
-    (hashCheck ? location.hash === '' : location.hash === to);
+  isActiveSubMenu = (to, location, hashCheck = false) => (hashCheck ? (this.props.navStore.currentActiveHash === null && location.hash === '') : this.props.navStore.currentActiveHash === null ? location.hash === to : this.props.navStore.currentActiveHash === to);
 
   isOpen = (to, location, subNavigations) => {
     if (to !== '' && subNavigations) {

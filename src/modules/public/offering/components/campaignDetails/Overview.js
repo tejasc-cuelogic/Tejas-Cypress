@@ -12,9 +12,12 @@ import Gallery from './AboutCompany/Gallery';
 const isTabletLand = document.documentElement.clientWidth >= 992
   && document.documentElement.clientWidth < 1200;
 
-@inject('campaignStore')
+@inject('campaignStore', 'navStore')
 @observer
 class Overview extends Component {
+  componentWillMount() {
+    window.addEventListener('scroll', this.handleOnScroll);
+  }
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
@@ -22,6 +25,16 @@ class Overview extends Component {
         behavior: 'smooth',
       });
     }
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  handleOnScroll = () => {
+    ['top-things-to-know', 'investment-highlights', 'updates', 'gallery'].forEach((item) => {
+      if (document.getElementById(item).getBoundingClientRect().top < 50) {
+        this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
+      }
+    });
   }
   render() {
     const { campaign } = this.props.campaignStore;

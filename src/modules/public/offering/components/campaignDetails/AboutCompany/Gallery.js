@@ -14,7 +14,7 @@ class Gallery extends Component {
   handleViewGallary = (e, index) => {
     e.preventDefault();
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
-    this.props.history.push(`${this.props.galleryUrl}/photogallery`);
+    this.props.history.push(`${this.props.galleryUrl.replace(/\/$/, '')}/photogallery`);
   }
   render() {
     const { campaign } = this.props;
