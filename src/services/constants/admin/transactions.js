@@ -14,6 +14,14 @@ export const TAB_WISE_STATUS = {
   'status-4': 'FAILED',
 };
 
+export const COUNT_STATUS_MAPPING = {
+  pendingCount: 'status-1',
+  processingCount: 'status-2',
+  completedCount: 'status-3',
+  failedCount: 'status-4',
+  voidCount: 'status-4',
+};
+
 export const STATUS_MAPPING = [
   {
     title: 'Request Date',
