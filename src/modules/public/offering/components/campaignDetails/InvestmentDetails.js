@@ -37,7 +37,7 @@ class InvestmentDetails extends Component {
       null;
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>
