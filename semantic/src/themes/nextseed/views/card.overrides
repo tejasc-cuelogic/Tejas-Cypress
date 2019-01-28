@@ -11,7 +11,7 @@
     &.campaign{ 
         box-shadow:none;
         height: 100%;
-        &:hover {
+        &:hover, &:focus {
             text-decoration: none;
         }
         .campaign-image-wrap{
