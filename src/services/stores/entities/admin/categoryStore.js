@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getCategories, createCategory, updateCategoryInfo, deleteCategory } from '../../queries/category';
+import { getCategories, createCategory, updateCategoryInfo, deleteCategory, updateCategoryStaus } from '../../queries/category';
 import { CATEGORY_DETAILS } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
@@ -51,26 +51,32 @@ export class CategoryStore {
         {
           title: 'Investor FAQ',
           categories: filter(this.categories, cat => cat.categoryType === 'INV_FAQ'),
+          type: 'INV_FAQ',
         },
         {
           title: 'Issuer FAQ',
           categories: filter(this.categories, cat => cat.categoryType === 'ISSUER_FAQ'),
+          type: 'ISSUER_FAQ',
         },
         {
           title: 'Issuer Knowledge Base',
           categories: filter(this.categories, cat => cat.categoryType === 'ISSUER_KB'),
+          type: 'ISSUER_KB',
         },
         {
           title: 'Investor Knowledge Base',
           categories: filter(this.categories, cat => cat.categoryType === 'INVESTOR_KB'),
+          type: 'INVESTOR_KB',
         },
         {
           title: 'Offerings',
           categories: filter(this.categories, cat => cat.categoryType === 'OFFERINGS'),
+          type: 'OFFERINGS',
         },
         {
           title: 'Insights',
           categories: filter(this.categories, cat => cat.categoryType === 'INSIGHTS'),
+          type: 'INSIGHTS',
         }];
       return formattedData;
     }
@@ -111,13 +117,24 @@ export class CategoryStore {
     }
 
     @action
-    saveCategories = (id) => {
-      const mutation = id === 'new' ? createCategory : updateCategoryInfo;
+    saveCategories = (id, isPublished) => {
+      const mutation = id === 'new' ? createCategory : (isPublished === 'defaultPublished' ? updateCategoryInfo : updateCategoryStaus);
       const param = {};
-      param.categoryDetailsInput = Validator.evaluateFormData(this.CATEGORY_DETAILS_FRM.fields);
       if (id !== 'new') {
         param.id = id;
+        if (isPublished !== 'defaultPublished') {
+          param.isPublished = !isPublished;
+        } else {
+          param.categoryDetailsInput = Validator.evaluateFormData(this.CATEGORY_DETAILS_FRM.fields);
+        }
+      } else {
+        param.categoryDetailsInput = Validator.evaluateFormData(this.CATEGORY_DETAILS_FRM.fields);
       }
+      const successMessage = id === 'new' ?
+        'Category created successfully.' :
+        (isPublished === 'defaultPublished' ?
+          'Category Updated successfully.' :
+          'Category Status Updated successfully.');
       uiStore.setProgress();
       client
         .mutate({
@@ -126,10 +143,11 @@ export class CategoryStore {
         })
         .then(() => {
           this.initRequest();
-          Helper.toast('Category created successfully.', 'success');
+          Helper.toast(successMessage, 'success');
+          // Helper.toast('Category created successfully.', 'success');
         })
         .catch(() => {
-          Helper.toast('Error while creating Category', 'error');
+          Helper.toast('Error while Performing the Operation', 'error');
         })
         .finally(() => {
           uiStore.setProgress(false);

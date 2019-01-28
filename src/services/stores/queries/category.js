@@ -31,6 +31,15 @@ mutation updateCategoryInfo($id: ID!, $categoryDetailsInput: CategoryInput!) {
    }
  }
 `;
+
+export const updateCategoryStaus = gql`
+mutation updateCategoryStaus($id: ID!, $isPublished: Boolean) {
+  updateCategoryStaus(id: $id, isPublished: $isPublished) {
+    id
+  }
+}
+`;
+
 export const deleteCategory = gql`
 mutation deleteCat($id: ID!) {
   deleteCategory(id: $id) 

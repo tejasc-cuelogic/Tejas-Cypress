@@ -19,7 +19,7 @@ class AddNewCategory extends Component {
     handleClose = () => this.props.history.push(this.props.refLink);
     addCategory = () => {
       const { saveCategories } = this.props.categoryStore;
-      saveCategories(this.props.match.params.id);
+      saveCategories(this.props.match.params.id, 'defaultPublished');
       this.handleClose();
     }
     render() {
@@ -32,30 +32,32 @@ class AddNewCategory extends Component {
           onClose={this.handleClose}
           closeOnEscape={false}
           closeOnDimmerClick={false}
-          size="medium"
+          size="mini"
         >
-          <Modal.Content className="transaction-details">
-            <Header as="h3">
-              {id === 'new' ? `Add New ${selectedCategoryState.title} Category` : `Update ${selectedCategoryState.title} Category`}
+          <Modal.Header className="center-align signup-header">
+            <Header as="h3">{id === 'new' ? `Add New ${selectedCategoryState.title} Category` : `Update ${selectedCategoryState.title} Category`}
             </Header>
-            <div className="left-align mt-30">
-              <Form>
-                <FormInput
-                  key="categoryName"
-                  name="categoryName"
-                  fielddata={CATEGORY_DETAILS_FRM.fields.categoryName}
-                  changed={(e, result) => formChange(e, result, 'CATEGORY_DETAILS_FRM')}
-                />
-                <FormTextarea
-                  key="description"
-                  name="description"
-                  fielddata={CATEGORY_DETAILS_FRM.fields.description}
-                  changed={(e, result) => formChange(e, result, 'CATEGORY_DETAILS_FRM')}
-                  containerclassname="secondary"
-                />
-                <Button className="pull-right" color="green" disabled={!CATEGORY_DETAILS_FRM.meta.isValid} onClick={() => this.addCategory()} content="Add Category" />
-              </Form>
-            </div>
+          </Modal.Header>
+          <Modal.Content className="signup-content">
+            {/* <div className="left-align mt-30"> */}
+            <Form>
+              <FormInput
+                key="categoryName"
+                name="categoryName"
+                fielddata={CATEGORY_DETAILS_FRM.fields.categoryName}
+                changed={(e, result) => formChange(e, result, 'CATEGORY_DETAILS_FRM')}
+              />
+              <FormTextarea
+                key="description"
+                name="description"
+                fielddata={CATEGORY_DETAILS_FRM.fields.description}
+                changed={(e, result) => formChange(e, result, 'CATEGORY_DETAILS_FRM')}
+              />
+              <div className="center-align">
+                <Button primary disabled={!CATEGORY_DETAILS_FRM.meta.isValid} onClick={() => this.addCategory()} content={id === 'new' ? 'Add Category' : 'Update Category'} />
+              </div>
+            </Form>
+            {/* </div> */}
           </Modal.Content >
         </Modal>
       );

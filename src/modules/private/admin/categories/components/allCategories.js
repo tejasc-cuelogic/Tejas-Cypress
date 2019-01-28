@@ -1,27 +1,48 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
+// import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
 import Aux from 'react-aux';
-import { Accordion, Table, Icon, Button } from 'semantic-ui-react';
+import { Accordion, Table, Icon, Button, Confirm } from 'semantic-ui-react';
 import { InlineLoader } from './../../../../../theme/shared';
 
-@inject('categoryStore')
+@inject('uiStore', 'categoryStore')
 @withRouter
 @observer
 export default class AllCategories extends Component {
+  state = { activeIndex: 0 }
   componentWillMount() {
     this.props.categoryStore.initRequest();
   }
+  toggleAccordianContent = (titleProps) => {
+    // const { index } = titleProps;
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === titleProps ? -1 : titleProps;
 
+    this.setState({ activeIndex: newIndex });
+  }
   openModal = (index, title, type) => {
     this.props.categoryStore.setFieldValue('selectedCategoryState', { title, type });
     this.props.history.push(`${this.props.match.url}/${index}`);
   }
-  handleDelete = (id) => {
-    this.props.categoryStore.deleteCategory(id);
+  handleDeleteConfirm = (id) => {
+    this.props.uiStore.setConfirmBox('Delete', id);
+  }
+  handleDelete = () => {
+    this.props.categoryStore.deleteCategory(this.props.uiStore.confirmBox.refId);
+    this.props.uiStore.setConfirmBox('');
+  }
+  handleDeleteCancel = () => {
+    this.props.uiStore.setConfirmBox('');
+  }
+  publishStatus = (id, isPublished) => {
+    const { saveCategories } = this.props.categoryStore;
+    saveCategories(id, isPublished);
   }
   render() {
+    const { activeIndex } = this.state;
     const { loading } = this.props.categoryStore;
+    const { confirmBox } = this.props.uiStore;
     if (loading) {
       return <InlineLoader />;
     }
@@ -31,14 +52,14 @@ export default class AllCategories extends Component {
     }
     return (
       <Aux>
-        {categories && categories.map(category => (
+        {categories && categories.map((category, index) => (
           <Accordion fluid styled className="card-style">
-            <Accordion.Title active={category.categories.length > 0} className="text-capitalize">
-              <Icon className="ns-chevron-up" />
+            <Accordion.Title active={category.categories.length > 0} onClick={() => this.toggleAccordianContent(index)} className="text-capitalize">
+              <Icon className={activeIndex === index ? 'ns-chevron-up' : 'ns-chevron-down'} />
               {category.title} <small>{category.categories.length} elements</small>
-              <Button onClick={() => this.openModal('new', category.title, category.categories[0].categoryType)} className="link-button pull-right"><small>+ Add Category</small></Button>
+              <Button onClick={() => this.openModal('new', category.title, category.type)} className="link-button pull-right"><small>+ Add Category</small></Button>
             </Accordion.Title>
-            <Accordion.Content active={category.categories.length > 0} className="categories-acc">
+            <Accordion.Content active={activeIndex === index} className="categories-acc">
               <div className="table-wrapper">
                 <Table unstackable basic className="form-table categories-table">
                   <Table.Body>
@@ -54,10 +75,10 @@ export default class AllCategories extends Component {
                               <Icon name="ns-pencil" />
                             </Button>
                             <Button className="link-button">
-                              <Icon color="blue" name="ns-no-view" />
+                              <Icon onClick={() => this.publishStatus(cat.id, cat.isPublished)} color="blue" name={cat.isPublished ? 'ns-view' : 'ns-no-view'} />
                             </Button>
                             <Button className="link-button">
-                              <Icon name="ns-trash" onClick={() => this.handleDelete(cat.id)} />
+                              <Icon name="ns-trash" onClick={() => this.handleDeleteConfirm(cat.id)} />
                             </Button>
                           </Table.Cell>
                         </Table.Row>
@@ -69,6 +90,15 @@ export default class AllCategories extends Component {
             </Accordion.Content>
           </Accordion>
         ))}
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to delete this Category?"
+          open={confirmBox.entity === 'Delete'}
+          onCancel={this.handleDeleteCancel}
+          onConfirm={this.handleDelete}
+          size="mini"
+          className="deletion"
+        />
       </Aux>
     );
   }
