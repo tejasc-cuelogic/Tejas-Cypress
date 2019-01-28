@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isMobile = document.documentElement.clientWidth < 991;
 
 @withRouter
 class KeyTerms extends Component {

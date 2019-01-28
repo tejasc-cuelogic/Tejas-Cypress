@@ -266,7 +266,8 @@ footer{
             // flex-direction:row;
             // vertical-align: top;
             // flex-wrap: wrap;
-            // flex: 1;
+            flex: 1;
+            width: 100%;
             @media only screen and (max-width : @largestMobileScreen){
                 padding: 0;
             }
@@ -279,6 +280,10 @@ footer{
                 }
                 &.header {
                     margin-top: 0;
+                    ~a {
+                        display: inline-block;
+                        margin-right: @14px;
+                    }
                 }
                 &:hover {
                     background-color: transparent;
