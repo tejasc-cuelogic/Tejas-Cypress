@@ -11,7 +11,7 @@ import {
   ENTITY_FORMATION_DOCS,
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
-import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
+import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, referralsStore } from '../../index';
 import { createIndividual, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -442,6 +442,7 @@ class EntityAccountStore {
             }
           }
           if (formStatus === 'FULL') {
+            referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
             const data = {
               annualIncome:
                 userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,

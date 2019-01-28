@@ -1,34 +1,40 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 
-@inject('commonStore')
+@inject('referralsStore', 'userDetailsStore')
 @observer
 export default class ReferralsDetails extends Component {
+  componentWillMount() {
+    // this.props.referralsStore.upsertUserReferralCredits(() => {});
+  }
   componentDidMount() {
-    // const apiKey = 'TEST_ug3VYDEACdh2wPNXZyLbeByHEhDMK9Ci:';
-    // const auth = Buffer.from(`${apiKey}`).toString('base64');
-    // const jwtToken = `Basic ${auth}`;
-    // const jwtToken = this.props.commonStore.token;
-    window.squatch.ready(() => {
-      window.squatch.init({
-        tenantAlias: 'test_abcvl6vhwmkrk',
-      });
-      const initObj = {
-        user: {
-          id: 'abc_123',
-          accountId: 'abc_123',
-          email: 'john@example.com',
-          firstName: 'John',
-          lastName: 'Doe',
-        },
-        engagementMedium: 'EMBED',
-        widgetType: 'REFERRER_WIDGET',
-        // jwt: jwtToken,
-      };
-      window.squatch.widgets().upsertUser(initObj).then((response) => {
-        console.log(response.user);
-      }).catch((error) => {
-        console.log(error);
+    this.props.referralsStore.getJwtReferralEmbeddedWidget().then((data) => {
+      const { userDetails } = this.props.userDetailsStore;
+      const userId = userDetails.id;
+      console.log(userId);
+      window.squatch.ready(() => {
+        window.squatch.init({
+          tenantAlias: 'test_abcvl6vhwmkrk',
+        });
+        const initObj = {
+          user: {
+            id: userId,
+            accountId: userId,
+            // id: 'abc_123',
+            // accountId: 'abc_123',
+            // email: 'john@example.com',
+            // firstName: 'John',
+            // lastName: 'Doe',
+          },
+          engagementMedium: 'EMBED',
+          widgetType: 'REFERRER_WIDGET',
+          jwt: data.getJwtReferralEmbeddedWidget,
+        };
+        window.squatch.widgets().upsertUser(initObj).then((response) => {
+          console.log(response.user);
+        }).catch((error) => {
+          console.log(error);
+        });
       });
     });
   }

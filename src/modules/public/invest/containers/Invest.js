@@ -19,7 +19,7 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('navStore', 'userStore')
+@inject('navStore', 'userStore', 'referralsStore')
 @observer
 class Invest extends Component {
   componentWillMount() {
@@ -27,8 +27,9 @@ class Invest extends Component {
     const utmCampaign = get(urlParameter, 'utm_campaign') || null;
     const rsCode = get(urlParameter, 'rsCode') || null;
     if (utmCampaign === 'saasquatch' && rsCode) {
-      // getReferralCreditsInformation query
-      cookie.save('SAASQUATCH_REFERRAL_CODE', rsCode, { maxAge: 86400000 });
+      this.props.referralsStore.getReferralCreditsInformation(rsCode).then(() => {
+        cookie.save('SAASQUATCH_REFERRAL_CODE', rsCode, { maxAge: 86400000 });
+      });
     }
     if (this.props.match.isExact) {
       this.props.history.replace(`${this.props.match.url}/why-nextseed`);
