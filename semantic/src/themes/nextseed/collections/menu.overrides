@@ -214,6 +214,14 @@
             @media only screen and (max-width : @largestTabletScreen){
                 top: auto;
                 bottom: 0;
+                height: auto;
+                padding: 10px 0;
+                .ui.tiny.list {
+                    margin: 0;
+                    &.right.floated {
+                        margin-left: 5px;
+                    }
+                }
             }
             &.reverse{
                 top:58px;
