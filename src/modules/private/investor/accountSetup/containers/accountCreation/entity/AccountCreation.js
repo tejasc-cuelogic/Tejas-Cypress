@@ -46,6 +46,7 @@ export default class AccountCreation extends React.Component {
       FORM_DOCS_FRM,
       stepToBeRendered,
       createAccount,
+      isValidEntityForm,
     } = this.props.entityAccountStore;
     const { formAddFunds, plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     const steps =
@@ -53,7 +54,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Financial info',
         component: <FinancialInformation />,
-        isValid: FIN_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isValid: FIN_INFO_FRM.meta.isValid ? '' : 'error',
         isDirty: FIN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityFinancialInfo,
         form: 'FIN_INFO_FRM',
@@ -62,7 +63,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'General',
         component: <General />,
-        isValid: GEN_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isValid: GEN_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
         isDirty: GEN_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityGeneralInformation,
         form: 'GEN_INFO_FRM',
@@ -71,7 +72,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Trust Status',
         component: <FinancilInfo />,
-        isValid: TRUST_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isValid: TRUST_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
         isDirty: TRUST_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityInfo,
         form: 'TRUST_INFO_FRM',
@@ -80,7 +81,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Personal info',
         component: <PersonalInformation />,
-        isValid: PERSONAL_INFO_FRM.meta.isFieldValid ? '' : 'error',
+        isValid: PERSONAL_INFO_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
         isDirty: PERSONAL_INFO_FRM.meta.isDirty,
         validate: validationActions.validateEntityPersonalInfo,
         form: 'PERSONAL_INFO_FRM',
@@ -89,7 +90,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Formation doc',
         component: <FormationDocuments />,
-        isValid: FORM_DOCS_FRM.meta.isFieldValid ? '' : 'error',
+        isValid: FORM_DOCS_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
         isDirty: FORM_DOCS_FRM.meta.isDirty,
         validate: validationActions.validateEntityFormationDoc,
         form: 'FORM_DOCS_FRM',
@@ -98,7 +99,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Link bank',
         component: <Plaid />,
-        isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
+        isValid: (formAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : (stepToBeRendered === 5 || stepToBeRendered > 5) ? 'error' : '',
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         validate: validationActions.validateLinkBankForm,
@@ -107,7 +108,7 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Summary',
         component: <Summary />,
-        isValid: '',
+        isValid: isValidEntityForm ? '' : stepToBeRendered > 6 ? 'error' : '',
       },
     ];
     return (

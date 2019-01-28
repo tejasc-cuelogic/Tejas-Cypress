@@ -1,30 +1,28 @@
 import React, { Component } from 'react';
-import { Header, Grid, Segment, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
-import { Image64 } from '../../../../../../theme/shared';
+import { Header } from 'semantic-ui-react';
+import Aux from 'react-aux';
+import Parser from 'html-react-parser';
+import { inject, observer } from 'mobx-react';
+import { InlineLoader } from '../../../../../../theme/shared';
 
-const isTablet = document.documentElement.clientWidth >= 768
-  && document.documentElement.clientWidth < 992;
+@inject('campaignStore')
+@observer
 class LocationAnalysis extends Component {
   render() {
-    const {
-      LocationAnalysisDetailUrl,
-      campaign,
-    } = this.props;
-    const locationImage = campaign && campaign.media && campaign.media.locationHeroImage &&
-      campaign.media.locationHeroImage.url ? campaign.media.locationHeroImage.url : null;
+    const { campaign } = this.props.campaignStore;
     return (
-      <Grid.Column className={isTablet && 'mt-30'}>
-        <Segment padded>
-          <Header as="h4">
-            <Link to={`${LocationAnalysisDetailUrl}/locationanalysis`}>
-              Location Analysis
-              <Icon className="ns-chevron-right" color="green" />
-            </Link>
-          </Header>
-          {<Image64 fluid srcUrl={locationImage} />}
-        </Segment>
-      </Grid.Column>
+      <Aux>
+        <Header as="h3" className="anchor-wrap mb-30">
+          Location Analysis
+          <span className="anchor" id="location-analysis" />
+        </Header>
+        {campaign && campaign.offering
+          && campaign.offering.about
+          && campaign.offering.about.locationAnalysis ?
+            <p>{Parser(campaign.offering.about.locationAnalysis)}</p> :
+            <InlineLoader text="No data found" className="bg-offwhite" />
+        }
+      </Aux>
     );
   }
 }

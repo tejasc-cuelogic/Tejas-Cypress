@@ -46,6 +46,7 @@ export default class AccountCreation extends React.Component {
       IDENTITY_FRM,
       stepToBeRendered,
       createAccount,
+      isValidIraForm,
     } = this.props.iraAccountStore;
     const { formAddFunds, plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
@@ -54,7 +55,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Financial info',
           component: <FinancialInformation />,
-          isValid: FIN_INFO_FRM.meta.isFieldValid ? '' : 'error',
+          isValid: FIN_INFO_FRM.meta.isValid ? '' : 'error',
           isDirty: FIN_INFO_FRM.meta.isDirty,
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',
@@ -63,7 +64,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Account type',
           component: <AccountType />,
-          isValid: '',
+          isValid: ACC_TYPES_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
           stepToBeRendered: 2,
@@ -71,7 +72,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Funding',
           component: <Funding />,
-          isValid: '',
+          isValid: FUNDING_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
           stepToBeRendered: 3,
@@ -79,7 +80,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Link bank',
           component: <Plaid />,
-          isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
+          isValid: (formAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : stepToBeRendered > 3 ? 'error' : '',
           isDirty: !isEmpty(plaidAccDetails) ||
           formLinkBankManually.meta.isDirty,
           validate: validationActions.validateLinkBankForm,
@@ -88,7 +89,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Identity',
           component: <Identity />,
-          isValid: IDENTITY_FRM.meta.isFieldValid ? '' : 'error',
+          isValid: IDENTITY_FRM.meta.isValid ? '' : stepToBeRendered > 4 ? 'error' : '',
           isDirty: IDENTITY_FRM.meta.isDirty,
           validate: validationActions.validateIRAIdentityInfo,
           form: 'IDENTITY_FRM',
@@ -96,8 +97,8 @@ export default class AccountCreation extends React.Component {
         },
         {
           name: 'Summary',
+          isValid: isValidIraForm ? '' : stepToBeRendered > 5 ? 'error' : '',
           component: <Summary />,
-          isValid: '',
         },
       ];
     } else {
@@ -106,7 +107,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Financial info',
           component: <FinancialInformation />,
-          isValid: FIN_INFO_FRM.meta.isFieldValid ? '' : 'error',
+          isValid: FIN_INFO_FRM.meta.isValid ? '' : 'error',
           isDirty: FIN_INFO_FRM.meta.isDirty,
           validate: validationActions.validateIRAFinancialInfo,
           form: 'FIN_INFO_FRM',
@@ -115,7 +116,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Account type',
           component: <AccountType />,
-          isValid: '',
+          isValid: ACC_TYPES_FRM.meta.isValid ? '' : stepToBeRendered > 1 ? 'error' : '',
           isDirty: ACC_TYPES_FRM.meta.isDirty,
           form: 'ACC_TYPES_FRM',
           stepToBeRendered: 2,
@@ -123,7 +124,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Funding',
           component: <Funding />,
-          isValid: '',
+          isValid: FUNDING_FRM.meta.isValid ? '' : stepToBeRendered > 2 ? 'error' : '',
           isDirty: FUNDING_FRM.meta.isDirty,
           form: 'FUNDING_FRM',
           stepToBeRendered: 3,
@@ -131,7 +132,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Identity',
           component: <Identity />,
-          isValid: IDENTITY_FRM.meta.isFieldValid ? '' : 'error',
+          isValid: IDENTITY_FRM.meta.isValid ? '' : stepToBeRendered > 3 ? 'error' : '',
           isDirty: IDENTITY_FRM.meta.isDirty,
           validate: validationActions.validateIRAIdentityInfo,
           form: 'IDENTITY_FRM',
@@ -140,7 +141,7 @@ export default class AccountCreation extends React.Component {
         {
           name: 'Summary',
           component: <Summary />,
-          isValid: '',
+          isValid: isValidIraForm ? '' : stepToBeRendered > 4 ? 'error' : '',
         },
       ];
     }

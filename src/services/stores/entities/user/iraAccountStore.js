@@ -313,6 +313,16 @@ class IraAccountStore {
           }
           if (formStatus === 'FULL') {
             bankAccountStore.resetPlaidAccData();
+            const data = {
+              annualIncome:
+                userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+              netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
+              otherRegCfInvestments: 0,
+            };
+            const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
+            if (accountDetails) {
+              investmentLimitStore.updateInvestmentLimits(data, accountDetails.details.accountId);
+            }
             Helper.toast('IRA account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

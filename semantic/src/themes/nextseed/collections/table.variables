@@ -32,7 +32,7 @@
 
 /* Table Cell */
 @cellVerticalPadding: @12px;
-@cellHorizontalPadding: @20px;
+@cellHorizontalPadding: @18px;
 @cellVerticalAlign: inherit;
 @cellTextAlign: inherit;
 @cellBorder: 1px solid @internalBorderColor;

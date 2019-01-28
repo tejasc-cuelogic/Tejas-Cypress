@@ -42,6 +42,9 @@
             }
         }
     }
+    .ui.fitted.checkbox{
+        display:block;
+    }
     &.sortable{
         thead th{
             color:@tertiary-text;
@@ -70,23 +73,25 @@
     &.user-list{
         tr.locked{
             color:@neutral-offdark;
-            .user-image:after{
-                content:"\F023";
-                font-family:"Icons";
-                font-size:@20px;
-                color:@highlight-primary;
-                text-shadow:-2px 2px 0px @white, 2px 2px 0px @white, 2px -2px 0px @white, -2px -2px 0px @white, 0px -2px 0px @white;
-                position:absolute;
-                bottom:-4px;
-                right:-4px;
-                z-index:1;
+            .user-image{
+                position:relative;
+                &:after{
+                    content:"\F023";
+                    font-family:"Icons";
+                    font-size:@20px;
+                    color:@highlight-primary;
+                    text-shadow:-2px 2px 0px @white, 2px 2px 0px @white, 2px -2px 0px @white, -2px -2px 0px @white, 0px -2px 0px @white;
+                    position:absolute;
+                    bottom:-4px;
+                    right:-4px;
+                    z-index:1;
+                }
             }
             .user-status a{
                 color:@highlight-primary;
             }
         }
         .user-image{
-            position:relative;
             .ui.avatar.image{
                 margin-right:0;
                 border:1px solid @border-color;
@@ -106,6 +111,10 @@
             > a{
                 font-family:inherit;
             }
+        }
+        .account-type{
+            float:left;
+            margin:@2px @4px @2px 0;
         }
     }
     a:not(.button){
@@ -339,6 +348,17 @@
     }
     .ui.vertical.buttons{
         display:flex;
+    }
+    &.key-terms-table:not(.striped) {
+        color: @neutral-middark;
+        tr:last-child td{
+            border-bottom: 1px solid @neutral-darkwhite;
+        }
+        tr{
+            @media only screen and (max-width : @largestMobileScreen){
+                border-bottom: 0;
+            }
+        }
     }
 }
 

@@ -1,24 +1,9 @@
 import React, { Component } from 'react';
-// import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { map, filter } from 'lodash';
 import { Header, Icon, Modal, Input } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 
-// const shareVia = [
-//   {
-//     class: 'default', title: 'yelp', action: '', name: 'envelope outline',
-//   },
-//   {
-//     class: 'in-color', title: 'linkedin', action: '', name: 'linkedin in',
-//   },
-//   {
-//     class: 'tw-color', title: 'twitter', action: '', name: 'twitter',
-//   },
-//   {
-//     class: 'fb-color', title: 'facebook', action: '', name: 'facebook f',
-//   },
-// ];
 @inject('campaignStore')
 @observer
 export default class Share extends Component {
@@ -73,25 +58,12 @@ export default class Share extends Component {
                     <Icon name={socalObj.name} circular inverted className={socalObj.class} size="big" />
                     {socalObj.title}
                   </a>
-                  // <a href={`https://${socalObj.url}`} target="_blank" rel="noopener noreferrer" className="icon-link mr-10">
-                  //   <Icon color="grey" name={socalObj.type} />
-                  // </a>
                 ))
                 }
               </div>
               :
-              <InlineLoader text="No Data Found." />
+              <InlineLoader text="No Data Found." className="bg-offwhite" />
           }
-          {/* <div className="share-icons center-align">
-            {
-              shareVia.map(share => (
-                <Link to="/">
-                <Icon name={share.name} circular inverted className={share.class} size="big" />
-                {share.title}
-                </Link>
-              ))
-            }
-          </div> */}
           <Input readOnly action={{ color: 'green', content: 'COPY' }} fluid value="https://nextseed.com/offerings/buffbrew-taproom" />
         </Modal.Content>
       </Modal>

@@ -351,11 +351,11 @@ export const BUSINESS_TYPE_VALUES = [
 ];
 
 export const REGULATION_VALUES = [
-  { key: 'Rule 147, TX', value: 'REGULATION_RULE_147_TX', text: 'Rule 147, TX' },
-  { key: 'Reg CF - US', value: 'REGULATION_CF_US', text: 'Reg CF - US' },
-  { key: 'Reg CF - Securities', value: 'REGULATION_D_506C_SECURITIES', text: 'Reg CF - Securities' },
-  { key: 'Reg D 506(c) - Securities', value: 'REGULATION_CF_D_506C_SECURITIES', text: 'Reg D 506(c) - Securities' },
-  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'REGULATION_CF_SECURITIES', text: 'Reg CF + Reg D 506(c) - Securities' },
+  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
+  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
+  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
+  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
 ];
 
 export const OFFERING_OVERVIEW = {

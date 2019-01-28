@@ -15,6 +15,14 @@ export default class Summary extends Component {
   state = {
     open: false,
   };
+  componentWillMount() {
+    const {
+      getLegalDocsFileIds, alreadySet,
+    } = this.props.agreementsStore;
+    if (!alreadySet) {
+      getLegalDocsFileIds();
+    }
+  }
   handleCreateAccount = () => {
     const { isCipExpired, signupStatus } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {

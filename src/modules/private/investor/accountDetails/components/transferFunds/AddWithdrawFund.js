@@ -125,12 +125,25 @@ export default class AddWithdrawFund extends Component {
                   </div>
                   <Statistic className="mt-10 mb-10">
                     <Header as="h5" className="text-capitalize">
-                      <Header.Subheader>From</Header.Subheader>
-                      {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
-                      <Divider hidden />
-                      <Header.Subheader>To</Header.Subheader>
-                      NextSeed {currentActiveAccountDetails && currentActiveAccountDetails.name ?
-                        currentActiveAccountDetails.name : null} Investment Account
+                      {match.params.action === 'withdraw' ?
+                        <Aux>
+                          <Header.Subheader>From</Header.Subheader>
+                          NextSeed {currentActiveAccountDetails &&
+                          currentActiveAccountDetails.name ?
+                            currentActiveAccountDetails.name : null} Investment Account
+                          <Divider hidden />
+                          <Header.Subheader>To</Header.Subheader>
+                          {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
+                        </Aux> :
+                        <Aux>
+                          <Header.Subheader>From</Header.Subheader>
+                          {linkBankDetials && linkBankDetials.bankName ? linkBankDetials.bankName : 'N/A'} <span>{linkBankDetials && linkBankDetials.accountNumber ? `...${DataFormatter.fetchLastDigitsOfAccountNumber(linkBankDetials.accountNumber)}` : null}</span>
+                          <Divider hidden />
+                          <Header.Subheader>To</Header.Subheader>
+                          NextSeed {currentActiveAccountDetails &&
+                          currentActiveAccountDetails.name ?
+                            currentActiveAccountDetails.name : null} Investment Account
+                        </Aux>}
                     </Header>
                   </Statistic>
                 </Aux>

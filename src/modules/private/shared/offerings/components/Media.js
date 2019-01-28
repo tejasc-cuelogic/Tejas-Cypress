@@ -92,7 +92,9 @@ export default class Media extends Component {
             <Form className="cropper-wrap hero-img">
               {MEDIA_FRM.fields.heroImage.preSignedUrl ? (
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('heroImage')} circular icon={{ className: 'ns-close-light' }} />
+                  {!isReadonly &&
+                    <Button onClick={() => this.showConfirmModal('heroImage')} circular icon={{ className: 'ns-close-light' }} />
+                  }
                   <Image64 srcUrl={MEDIA_FRM.fields.heroImage.preSignedUrl} />
                 </div>
               ) : (
@@ -143,7 +145,9 @@ export default class Media extends Component {
             <Form className="cropper-wrap tombstone-img">
               {MEDIA_FRM.fields.tombstoneImage.preSignedUrl ? (
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('tombstoneImage')} circular icon={{ className: 'ns-close-light' }} />
+                  {!isReadonly &&
+                    <Button onClick={() => this.showConfirmModal('tombstoneImage')} circular icon={{ className: 'ns-close-light' }} />
+                  }
                   <Image64 srcUrl={MEDIA_FRM.fields.tombstoneImage.preSignedUrl} />
                 </div>
               ) : (
@@ -169,7 +173,9 @@ export default class Media extends Component {
             <Form className="cropper-wrap tombstone-img">
               {MEDIA_FRM.fields.locationHeroImage.preSignedUrl ? (
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('locationHeroImage')} circular icon={{ className: 'ns-close-light' }} />
+                  {!isReadonly &&
+                    <Button onClick={() => this.showConfirmModal('locationHeroImage')} circular icon={{ className: 'ns-close-light' }} />
+                  }
                   <Image64 srcUrl={MEDIA_FRM.fields.locationHeroImage.preSignedUrl} />
                 </div>
               ) : (
@@ -198,7 +204,9 @@ export default class Media extends Component {
             <Form className="cropper-wrap tombstone-img">
               {MEDIA_FRM.fields.useOfProceeds.preSignedUrl ? (
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('useOfProceeds')} circular icon={{ className: 'ns-close-light' }} />
+                  {!isReadonly &&
+                    <Button onClick={() => this.showConfirmModal('useOfProceeds')} circular icon={{ className: 'ns-close-light' }} />
+                  }
                   <Image64 srcUrl={MEDIA_FRM.fields.useOfProceeds.preSignedUrl} />
                 </div>
               ) : (
@@ -224,7 +232,9 @@ export default class Media extends Component {
             <Form className="cropper-wrap tombstone-img">
               {MEDIA_FRM.fields.businessModelImage.preSignedUrl ? (
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('businessModelImage')} circular icon={{ className: 'ns-close-light' }} />
+                  {!isReadonly &&
+                    <Button onClick={() => this.showConfirmModal('businessModelImage')} circular icon={{ className: 'ns-close-light' }} />
+                  }
                   <Image64 srcUrl={MEDIA_FRM.fields.businessModelImage.preSignedUrl} />
                 </div>
               ) : (
@@ -255,7 +265,9 @@ export default class Media extends Component {
               MEDIA_FRM.fields.gallery.preSignedUrl.map((url, i) => (
                 <List.Item key={`gallery${url}`}>
                   <div className="file-uploader attached">
-                    <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
+                    {!isReadonly &&
+                      <Button onClick={() => this.showConfirmModal('gallery', i)} circular icon={{ className: 'ns-close-light' }} />
+                    }
                     <Image64 srcUrl={url} />
                   </div>
                 </List.Item>
@@ -285,7 +297,9 @@ export default class Media extends Component {
             <Form className="cropper-wrap headshot-img">
               {MEDIA_FRM.fields.logo.preSignedUrl ? (
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('logo')} circular icon={{ className: 'ns-close-light' }} />
+                  {!isReadonly &&
+                    <Button onClick={() => this.showConfirmModal('logo')} circular icon={{ className: 'ns-close-light' }} />
+                  }
                   <Image64 srcUrl={MEDIA_FRM.fields.logo.preSignedUrl} />
                 </div>
           ) : (
@@ -311,7 +325,9 @@ export default class Media extends Component {
             <Form className="cropper-wrap  headshot-img">
               {MEDIA_FRM.fields.avatar.preSignedUrl ? (
                 <div className="file-uploader attached">
-                  <Button onClick={() => this.showConfirmModal('avatar')} circular icon={{ className: 'ns-close-light' }} />
+                  {!isReadonly &&
+                    <Button onClick={() => this.showConfirmModal('avatar')} circular icon={{ className: 'ns-close-light' }} />
+                  }
                   <Image64 srcUrl={MEDIA_FRM.fields.avatar.preSignedUrl} />
                 </div>
           ) : (

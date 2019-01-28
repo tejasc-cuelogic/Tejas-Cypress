@@ -1,27 +1,18 @@
 import React, { Component } from 'react';
-import { inject, observer } from 'mobx-react';
+import { inject } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import Aux from 'react-aux';
 import { Button, Header } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 @inject('campaignStore', 'accreditationStore', 'userStore', 'navStore')
 @withRouter
-@observer
 class Disclosure extends Component {
-  componentWillMount() {
-    const { getNavItemsForDataRoom, getBoxEmbedLink } = this.props.campaignStore;
-    const { docKey } = this.props.match.params;
-    const doc = docKey && docKey !== 'disclosure' ? getNavItemsForDataRoom.find(ele => ele.to === parseInt(docKey, 10)) :
-      getNavItemsForDataRoom[0];
-    getBoxEmbedLink(doc.to, doc.url);
-  }
   render() {
-    const { embedUrl, docLoading, getNavItemsForDataRoom } = this.props.campaignStore;
+    const { doc } = this.props;
+    if (!doc) {
+      return <InlineLoader />;
+    }
     const { stepInRoute } = this.props.navStore;
-    const { docKey } = this.props.match.params;
-    const doc = docKey && docKey !== 'disclosure' ? getNavItemsForDataRoom.find(ele => ele.to === parseInt(docKey, 10)) :
-      getNavItemsForDataRoom[0];
     if (doc.accreditedOnly && (!this.props.userStore.currentUser ||
       (this.props.userStore.currentUser && this.props.userStore.currentUser.roles &&
       this.props.userStore.currentUser.roles.includes('investor') &&
@@ -43,19 +34,15 @@ class Disclosure extends Component {
       );
     }
     return (
-      <Aux>
-        <div className="pdf-viewer disclosure-pdf">
-          {(docLoading || !embedUrl) ? <InlineLoader /> :
-          <iframe
-            width="100%"
-            height="100%"
-            title="agreement"
-            src={embedUrl}
-            ref={(c) => { this.iframeComponent = c; }}
-          />
-          }
-        </div>
-      </Aux>
+      <div className="pdf-viewer">
+        <iframe
+          width="100%"
+          height="100%"
+          title="agreement"
+          src={doc.BoxUrl}
+          ref={(c) => { this.iframeComponent = c; }}
+        />
+      </div>
     );
   }
 }
