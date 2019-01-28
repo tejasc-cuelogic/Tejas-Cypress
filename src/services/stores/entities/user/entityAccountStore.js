@@ -475,6 +475,7 @@ class EntityAccountStore {
   @action
   setFormData = (form, accountDetails) => {
     const isDirty = false;
+
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
         if (f === 'cfInvestment' && accountDetails.limits && accountDetails.limits.otherContributions) {
