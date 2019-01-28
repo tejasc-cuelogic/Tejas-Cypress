@@ -20,6 +20,7 @@ class Overview extends Component {
   }
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
@@ -27,6 +28,7 @@ class Overview extends Component {
     }
   }
   componentWillUnmount() {
+    this.props.navStore.setFieldValue('currentActiveHash', null);
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
