@@ -6,6 +6,9 @@
         border-bottom: 1px solid @neutral-darkwhite;
         border-top: 0;
         padding: @30px;
+        @media only screen and (max-width : @mobileBreakpoint){
+			padding: @15px;
+		}
         &:first-child {
             border-top: 0;
             padding-top: @30px;

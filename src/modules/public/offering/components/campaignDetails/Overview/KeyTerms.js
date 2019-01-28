@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 991;
 
 @withRouter
 class KeyTerms extends Component {
@@ -105,7 +105,7 @@ class KeyTerms extends Component {
             </Table.Row>
           </Table.Body>
         </Table>
-        <Button fluid={isMobile} onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
+        <Button fluid={isTablet} onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
           View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>

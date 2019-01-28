@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 991;
 
 @withRouter
 class AboutTheCompany extends Component {
@@ -17,7 +17,7 @@ class AboutTheCompany extends Component {
     const { campaign } = this.props;
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
           Top Things to Know
           <span className="anchor" id="top-things-to-know" />
         </Header>
@@ -38,7 +38,7 @@ class AboutTheCompany extends Component {
           :
             <InlineLoader text="No Data Found" className="bg-offwhite" />
         }
-        <Button fluid={isMobile} onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
+        <Button fluid={isTablet} onClick={this.handleViewAboutCompany} basic compact className="highlight-text mt-40">
           Learn More About the Company
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
