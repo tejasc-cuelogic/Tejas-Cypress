@@ -99,30 +99,39 @@ export const getTransactions = gql`
       offset: $offset
       limit: $limit
     ) {
-      requestId
-      status
-      startDate
-      amount
-      accountId
-      gsTransactionId
-      type
-      userInfo{
-        id
-        info {
-          firstName
-          lastName
+      transactions {
+        requestId
+        status
+        startDate
+        amount
+        accountId
+        gsTransactionId
+        type
+        userInfo{
+          id
+          info {
+            firstName
+            lastName
+          }
         }
+        direction
+        estDateAvailable
+        agreement {
+          agreementId
+        }
+        failDate
+        failDesc
       }
-      direction
-      estDateAvailable
-      agreement {
-        agreementId
-      }
-      failDate
-      failDesc
+     transactionCount {
+      pendingCount
+      processingCount
+      completedCount
+      failedCount
+      voidCount
     }
   }
-`;
+}`;
+
 
 export const approveTransactions = gql`
   mutation _transactionApprove($id: Int!){

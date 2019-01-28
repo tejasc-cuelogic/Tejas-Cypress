@@ -10,7 +10,7 @@ import { InlineLoader } from '../../../../../theme/shared';
 @observer
 export default class KnowledgeBase extends Component {
   componentWillMount() {
-    this.props.educationStore.initRequest('Faq', null, this.props.userStore.isIssuer ? 'ISSUER_FAQ' : '');
+    this.props.educationStore.initRequest('Faq', null, this.props.userStore.isIssuer ? 'ISSUER_FAQ' : 'INV_FAQ');
   }
   search = (e) => {
     this.props.educationStore.setSrchParam('Faq', e.target.value);
