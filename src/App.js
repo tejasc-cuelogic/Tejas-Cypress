@@ -77,13 +77,6 @@ class App extends Component {
     } else if ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview')) {
       window.scrollTo(0, 0);
     }
-    const calculations = {
-      topVisible: true,
-      direction: 'down',
-      bottomPassed: true,
-      isMoveTop: true,
-    };
-    this.props.navStore.setNavStatus(calculations);
   }
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();

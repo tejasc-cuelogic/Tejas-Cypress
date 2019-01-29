@@ -1,5 +1,4 @@
 import React from 'react';
-import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../helper';
@@ -160,19 +159,28 @@ export default class InvestNow extends React.Component {
         },
       ];
     const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length);
-    // const closeOnDimmerClickAction = !!(activeAccounts && activeAccounts.length);
     const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length);
     return (
       <div className="step-progress" >
-        {!this.state.submitLoading ?
-          <MultiStep isStepButtonsVisible={isMultiStepButtonsVisible} closeOnDimmerClick={closeOnDimmerClickAction} createAccount={this.multiClickHandler} setIsEnterPressed={setIsEnterPressed} disableNxtbtn={this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
-          :
-          <Dimmer active>
-            <Loader>
-              Please wait...<br /><br />
-              We are generating your agreement. This can take up to a minute.
-            </Loader>
-          </Dimmer>
+        {
+          <MultiStep
+            loaderMsg={this.state.submitLoading ? `Please wait...<br /><br />
+            We are generating your agreement. This can take up to a minute.` : ''}
+            inProgress={this.state.submitLoading || inProgress}
+            createAccount={this.multiClickHandler}
+            setIsEnterPressed={setIsEnterPressed}
+            disableNxtbtn={this.props.investmentStore.disableNextbtn}
+            isEnterPressed={isEnterPressed}
+            resetEnterPressed={resetIsEnterPressed}
+            hideHeader
+            setStepTobeRendered={this.handleStepChange}
+            stepToBeRendered={this.props.investmentStore.stepToBeRendered}
+            steps={steps}
+            formTitle="Entity Account Creation"
+            handleMultiStepModalclose={this.handleMultiStepModalclose}
+            isStepButtonsVisible={isMultiStepButtonsVisible}
+            closeOnDimmerClick={closeOnDimmerClickAction}
+          />
         }
       </div>
     );

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { withRouter, Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Icon, Form, Divider } from 'semantic-ui-react';
+import { Header, Icon, Form, Divider, Button } from 'semantic-ui-react';
 import { FormInput, MaskedInput } from '../../../../../../../../theme/form';
 
 @inject('userDetailsStore')
@@ -12,9 +12,12 @@ export default class Basic extends Component {
   state = { displayMode: true };
   componentWillMount() {
     this.props.userDetailsStore.setFormData('USER_BASIC', false);
+    this.props.userDetailsStore.setAddressCheck();
   }
   render() {
-    const { detailsOfUser, USER_BASIC, formChange } = this.props.userDetailsStore;
+    const {
+      detailsOfUser, USER_BASIC, formChange, isAddressSkip, toggleAddressVerification,
+    } = this.props.userDetailsStore;
     const formName = 'USER_BASIC';
     const details = toJS({ ...detailsOfUser.data.user });
     const { displayMode } = this.state;
@@ -22,7 +25,10 @@ export default class Basic extends Component {
       <Form>
         <Header as="h4">
           Basic Profile Info
-          <Link to={this.props.match.url} className="link pull-right"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
+          <Button.Group floated="right">
+            <Link to={this.props.match.url} className="link mr-10"><small><Icon className="ns-pencil" /> Edit profile data</small></Link>
+            <Button compact onClick={() => toggleAddressVerification()} color={isAddressSkip ? 'green' : 'blue'}>{isAddressSkip ? 'Force Address Check' : 'Skip Address Check'}</Button>
+          </Button.Group>
         </Header>
         <Header as="h6">Personal Info</Header>
         <Form.Group widths={4}>

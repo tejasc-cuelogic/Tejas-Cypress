@@ -14,6 +14,7 @@ import { ACCREDITATION_STATUS_LABEL } from './../../../../../../services/constan
 @observer
 export default class FinancialInfo extends Component {
   componentWillMount() {
+    this.props.investmentLimitStore.getInvestedAmount();
     this.props.investmentLimitStore.setAccountsLimits();
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
@@ -43,7 +44,7 @@ export default class FinancialInfo extends Component {
   }
   getStatus = (accName) => {
     let status = '';
-    status = accName ? (accName.status === 'REQUESTED' && accName.expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accName.expiration)) === 0)) ? 'Expired' : (accName.status && ACCREDITATION_STATUS_LABEL[accName.status]) : '-';
+    status = accName ? (accName.status === 'REQUESTED' && accName.expiration && (DataFormatter.diffDays(DataFormatter.formatedDate(accName.expiration), false, true) < 0)) ? 'Expired' : (accName.status && ACCREDITATION_STATUS_LABEL[accName.status]) : '-';
     return status;
   }
   getDate = (accName) => {
@@ -105,7 +106,7 @@ export default class FinancialInfo extends Component {
                               trigger={<Icon className="ns-help-circle" />}
                               content="Your current investment limit as of today"
                               position="top center"
-                              className="center-align"
+                              className="left-align"
                             />
                           </Statistic.Label>
                           <Statistic.Value>

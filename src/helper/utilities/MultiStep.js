@@ -1,6 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { Modal, Header, Button, Dimmer, Loader } from 'semantic-ui-react';
 
 const getNavStates = (indx, length) => {
@@ -102,8 +103,8 @@ export default class MultiStep extends React.Component {
   }
 
   handleOnClick(evt) {
-    // const isAnyStepInvalid = _.find(this.props.steps, { isValid: 'error' });
-    if (!this.props.steps[this.state.compState].onlyDisableNextButton) {
+    if (!this.props.steps[this.state.compState].onlyDisableNextButton &&
+      !this.props.formHeaderClick) {
       if (this.props.setStepTobeRendered) {
         this.props.setStepTobeRendered(evt.currentTarget.value);
         if (evt.currentTarget.value === (this.props.steps.length - 1) &&
@@ -191,7 +192,9 @@ export default class MultiStep extends React.Component {
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
             <Dimmer active={this.props.inProgress}>
-              <Loader active={this.props.inProgress} />
+              <Loader active={this.props.inProgress} >
+                {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
+              </Loader>
             </Dimmer>
             {this.props.isStepButtonsVisible === undefined ||
               (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true) ?

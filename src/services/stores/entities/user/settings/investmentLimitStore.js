@@ -1,11 +1,13 @@
 import { observable, action, computed, toJS } from 'mobx';
 import { mapValues, filter, find, map } from 'lodash';
 import graphql from 'mobx-apollo';
+import moment from 'moment';
+import money from 'money-math';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import { uiStore, userDetailsStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestorAmountInvested } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
@@ -19,6 +21,7 @@ export class InvestmentLimitStore {
   @observable currentAccountId = null;
   @observable entityCurrentLimit = 0;
   @observable individualIRACurrentLimit = 0;
+  @observable investedAmount = 0;
 
   @action
   setFieldValue = (field, value) => {
@@ -72,7 +75,15 @@ export class InvestmentLimitStore {
         limit = (calculatedLimit < 2200) ? 2200 : calculatedLimit;
       }
     }
-    return limit;
+
+    const remainingAmount = limit - (data.cfInvestments || 0 + parseFloat(this.investedAmount));
+    let remaining = Math.max(0, remainingAmount);
+    if ((this.investedAmount + data.cfInvestments) >= maxLimit) {
+      remaining = 0;
+    }
+
+    remaining -= remaining % 100;
+    return remaining;
   }
 
   @action
@@ -194,5 +205,55 @@ export class InvestmentLimitStore {
         });
     });
   }
+
+  @action
+  getInvestedAmount = () => {
+    const { accountList, isIndAccExist } = this.getActiveAccountList;
+    const dateFilterStart = moment().subtract(1, 'y').toISOString();
+    const dateFilterStop = moment().toISOString();
+
+    accountList.forEach((account) => {
+      if (account.name === this.currentAccountType) {
+        this.getInvestorAmountInvested(
+          account.details.accountId,
+          dateFilterStart,
+          dateFilterStop,
+        ).then((data) => {
+          this.setFieldValue('investedAmount', money.floatToAmount(data.getInvestorAmountInvested || 0));
+        });
+      }
+    });
+    if (isIndAccExist && this.currentAccountType === 'ira') {
+      const individualAccount = find(this.activeAccounts, acc => acc.name === 'individual');
+      this.getInvestorAmountInvested(
+        individualAccount.details.accountId,
+        dateFilterStart,
+        dateFilterStop,
+      ).then((data) => {
+        const investedAmount = money.floatToAmount(data.getInvestorAmountInvested || 0) +
+        this.investedAmount;
+        this.setFieldValue('investedAmount', investedAmount);
+      });
+    }
+  }
+
+  getInvestorAmountInvested =
+  (accountId, dateFilterStart, dateFilterStop) => new Promise((resolve) => {
+    this.investorInvestmentLimit = graphql({
+      client,
+      query: getInvestorAmountInvested,
+      variables: {
+        userId: userDetailsStore.currentUserId,
+        accountId,
+        dateFilterStart,
+        dateFilterStop,
+      },
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
+    });
+  });
 }
 export default new InvestmentLimitStore();

@@ -17,13 +17,14 @@ import {
   investorProfileStore,
   authStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount } from '../../queries/users';
+import { userDetailsQuery, toggleUserAccount, skipAddressValidation } from '../../queries/users';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
 export class UserDetailsStore {
   @observable currentUser = {};
   @observable currentActiveAccount = null;
+  @observable isAddressSkip = false;
   @observable detailsOfUser = {};
   @observable editCard = 0;
   @observable deleting = 0;
@@ -110,6 +111,24 @@ export class UserDetailsStore {
       }
       investorProfileStore.populateData(this.userDetails);
     }
+  }
+
+  @action
+  setAddressCheck = () => {
+    this.isAddressSkip = this.userDetails.skipAddressVerifyCheck || false;
+  }
+
+  @action
+  toggleAddressVerification = () => {
+    const payLoad = { userId: this.currentUserId, shouldSkip: !this.isAddressSkip };
+    client
+      .mutate({
+        mutation: skipAddressValidation,
+        variables: payLoad,
+      })
+      .then(action((res) => {
+        this.isAddressSkip = res.data.skipAddressValidationCheck;
+      }));
   }
 
   @action

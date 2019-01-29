@@ -131,7 +131,7 @@ export default class PopulateAccreditationSteps extends React.Component {
           handleMultiStepModalclose={this.handleMultiStepModalclose}
           setStepTobeRendered={this.handleStepChange}
           stepToBeRendered={this.props.accreditationStore.stepToBeRendered}
-          isStepButtonsVisible
+          formHeaderClick
         />
       </div>
     );
