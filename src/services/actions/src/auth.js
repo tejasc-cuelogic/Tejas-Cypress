@@ -170,6 +170,9 @@ export class Auth {
                 cookie.remove('ISSUER_REFERRAL_CODE');
               });
             }
+            if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+              cookie.remove('SAASQUATCH_REFERRAL_CODE');
+            }
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
               res();
             });
