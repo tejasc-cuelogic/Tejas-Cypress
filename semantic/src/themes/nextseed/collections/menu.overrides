@@ -396,7 +396,7 @@ footer{
                 top:50%;
                 transform:translate(0, -50%);
             }
-            &.active, &:hover, &:focus{
+            &.active, &:hover{
                 background-color:transparent !important;
                 &:after{
                     background-color:@primary-one;
