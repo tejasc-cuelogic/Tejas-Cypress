@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { SAASQUATCH_TENANT_ALIAS } from '../../../../../constants/common';
+import { InlineLoader } from './../../../../../theme/shared';
 
 @inject('referralsStore', 'userDetailsStore')
 @observer
 export default class ReferralsDetails extends Component {
+  state = { loading: true };
   componentWillMount() {
     const { userDetails } = this.props.userDetailsStore;
     const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
@@ -40,19 +42,24 @@ export default class ReferralsDetails extends Component {
           };
           window.squatch.widgets().upsertUser(initObj).then((response) => {
             console.log(response.user);
+            this.setState({ loading: false });
             if (!saasQuatchUserId) {
               this.props.referralsStore.getReferralCreditsInformation(response.user.referralCode);
             }
           }).catch((error) => {
+            this.setState({ loading: false });
             console.log(error);
           });
         });
-      });
+      }).catch(() => this.setState({ loading: false }));
     }
   }
   render() {
     return (
       <div>
+        {this.state.loading ?
+          <InlineLoader /> : null
+        }
         <div className="squatchembed" />
       </div>
     );

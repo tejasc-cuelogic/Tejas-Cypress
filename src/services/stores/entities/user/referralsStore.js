@@ -11,7 +11,7 @@ export class ReferralStore {
   @observable referralCode = null;
 
   @action
-  getJwtReferralEmbeddedWidget = () => new Promise((resolve) => {
+  getJwtReferralEmbeddedWidget = () => new Promise((resolve, reject) => {
     const { userDetails } = userDetailsStore;
     const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
     const userId = saasQuatchUserId || userDetails.id;
@@ -30,7 +30,7 @@ export class ReferralStore {
       variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: data => resolve(data),
-      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+      onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); reject(); },
     });
   });
 
