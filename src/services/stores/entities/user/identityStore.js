@@ -1,5 +1,6 @@
 import graphql from 'mobx-apollo';
 import { observable, action, computed } from 'mobx';
+import moment from 'moment';
 import { mapValues, keyBy, find, flatMap, map, omit } from 'lodash';
 import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
@@ -12,7 +13,6 @@ import Helper from '../../../../helper/utility';
 import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
-import apiService from '../../../../api/restApi';
 import { US_STATES_FOR_INVESTOR, FILE_UPLOAD_STEPS } from '../../../../constants/account';
 import { NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
@@ -546,18 +546,17 @@ export class IdentityStore {
   uploadProfilePhoto = () => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
-      const profileData = this.ID_PROFILE_INFO.fields.profilePhoto.base64String;
-      const b64Text = profileData.split(',')[1];
-      const payload = {
-        userId: userStore.currentUser.sub,
-        base64String: b64Text,
+      // const b64Text = profileData.split(',')[1];
+      const fileObj = {
+        name: `${moment().unix()}.jpg`,
+        obj: this.ID_PROFILE_INFO.fields.profilePhoto.base64String,
       };
-      apiService.post('/upload/file', payload)
+      fileUpload.uploadToS3(fileObj, `profile-photo/${userStore.currentUser.sub}`)
         .then(action((response) => {
-          if (!response.body.errorMessage) {
-            this.setProfilePhoto('responseUrl', response.body.fileFullPath);
+          if (response) {
+            this.setProfilePhoto('responseUrl', response);
             this.updateUserProfileData().then(() => {
-              userDetailsStore.setProfilePhoto(response.body.fileFullPath, response.body.name);
+              userDetailsStore.setProfilePhoto(response);
               Helper.toast('Profile photo updated successfully', 'success');
               this.resetProfilePhoto();
               resolve(response);
@@ -586,7 +585,7 @@ export class IdentityStore {
           },
         })
         .then(() => {
-          resolve();
+          userDetailsStore.getUser(userStore.currentUser.sub).then(() => resolve());
         })
         .catch((err) => {
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
