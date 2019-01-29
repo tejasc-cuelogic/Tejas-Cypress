@@ -11,12 +11,13 @@ import FormationDocuments from './FormationDocuments';
 import { Plaid } from '../../../../../shared/bankAccount';
 import Summary from './Summary';
 
-@inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore')
+@inject('uiStore', 'accountStore', 'bankAccountStore', 'entityAccountStore', 'userDetailsStore', 'userStore', 'investmentLimitStore')
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
     this.props.userDetailsStore.setUserAccDetails('entity');
     this.props.accountStore.setAccTypeChange(2);
+    this.props.investmentLimitStore.getInvestedAmount();
   }
   handleMultiStepModalclose = () => {
     this.updateUser();
