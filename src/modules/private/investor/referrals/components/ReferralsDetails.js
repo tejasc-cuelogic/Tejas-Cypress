@@ -1,31 +1,38 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
+import { SAASQUATCH_TENANT_ALIAS } from '../../../../../constants/common';
 
 @inject('referralsStore', 'userDetailsStore')
 @observer
 export default class ReferralsDetails extends Component {
   componentWillMount() {
-    // this.props.referralsStore.upsertUserReferralCredits(() => {});
+    const { userDetails } = this.props.userDetailsStore;
+    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
+    if (saasQuatchUserId) {
+      this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
+    }
   }
   componentDidMount() {
     this.props.referralsStore.getJwtReferralEmbeddedWidget().then((data) => {
       const { userDetails } = this.props.userDetailsStore;
-      const userId = userDetails.id;
-      console.log(userId);
+      const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
+      const userId = saasQuatchUserId || userDetails.id;
+      const payLoad = {
+        id: userId,
+        accountId: userId,
+      };
+      if (!saasQuatchUserId) {
+        payLoad.email = get(userDetails, 'email.address');
+        payLoad.firstName = get(userDetails, 'info.firstName');
+        payLoad.lastName = get(userDetails, 'info.lastName');
+      }
       window.squatch.ready(() => {
         window.squatch.init({
-          tenantAlias: 'test_abcvl6vhwmkrk',
+          tenantAlias: SAASQUATCH_TENANT_ALIAS,
         });
         const initObj = {
-          user: {
-            id: userId,
-            accountId: userId,
-            // id: 'abc_123',
-            // accountId: 'abc_123',
-            // email: 'john@example.com',
-            // firstName: 'John',
-            // lastName: 'Doe',
-          },
+          user: payLoad,
           engagementMedium: 'EMBED',
           widgetType: 'REFERRER_WIDGET',
           jwt: data.getJwtReferralEmbeddedWidget,

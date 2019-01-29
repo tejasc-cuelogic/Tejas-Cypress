@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import graphql from 'mobx-apollo';
+import { get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getJwtReferralEmbeddedWidget, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
 import Helper from '../../../../helper/utility';
@@ -11,12 +12,21 @@ export class ReferralStore {
   @action
   getJwtReferralEmbeddedWidget = () => new Promise((resolve) => {
     const { userDetails } = userDetailsStore;
-    const userId = userDetails.id;
-    // const userId = 'abc_123';
+    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
+    const userId = saasQuatchUserId || userDetails.id;
+    const payLoad = {
+      userId,
+      accountId: userId,
+    };
+    if (!saasQuatchUserId) {
+      payLoad.email = get(userDetails, 'email.address');
+      payLoad.firstName = get(userDetails, 'info.firstName');
+      payLoad.lastName = get(userDetails, 'info.lastName');
+    }
     graphql({
       client,
       query: getJwtReferralEmbeddedWidget,
-      variables: { userId, accountId: userId },
+      variables: payLoad,
       fetchPolicy: 'network-only',
       onFetch: data => resolve(data),
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),

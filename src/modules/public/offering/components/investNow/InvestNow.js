@@ -1,6 +1,7 @@
 import React from 'react';
 import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
@@ -9,7 +10,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -29,6 +30,12 @@ export default class InvestNow extends React.Component {
       const { offeringId } = this.props.match.params;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       this.props.campaignStore.getCampaignDetails(offeringId);
+    }
+    // syncing data between saasquatch and RDS
+    const { userDetails } = this.props.userDetailsStore;
+    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
+    if (saasQuatchUserId) {
+      this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
     }
   }
   componentDidMount() {

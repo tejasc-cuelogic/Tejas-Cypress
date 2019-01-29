@@ -1,11 +1,13 @@
 import gql from 'graphql-tag';
 
 export const getJwtReferralEmbeddedWidget = gql`
-  query getJwtReferralEmbeddedWidget($userId: String, $accountId: String, $allowAnonymous: Boolean) {
+  query getJwtReferralEmbeddedWidget($userId: String!, $accountId: String!, $email: String, $firstName: String, $lastName: String) {
     getJwtReferralEmbeddedWidget(
       userId: $userId,
       accountId: $accountId,
-      allowAnonymous: $allowAnonymous
+      email: $email,
+      firstName: $firstName,
+      lastName: $lastName
     )
   }
 `;
