@@ -74,7 +74,6 @@ export default class Public extends React.Component {
         <Responsive minWidth={768} as={Aux}>
           <Header
             location={location}
-            navStatus={this.props.navStore.navStatus}
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             handleLogOut={this.handleLogOut}
@@ -95,7 +94,6 @@ export default class Public extends React.Component {
             location={location}
             match={match}
             isMobile
-            navStatus={this.props.navStore.navStatus}
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             publicContent={this.getRoutes()}
