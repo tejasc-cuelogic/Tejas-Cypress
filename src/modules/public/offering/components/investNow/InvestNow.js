@@ -160,7 +160,8 @@ export default class InvestNow extends React.Component {
         },
       ];
     const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length);
-    const closeOnDimmerClickAction = !!(activeAccounts && activeAccounts.length);
+    // const closeOnDimmerClickAction = !!(activeAccounts && activeAccounts.length);
+    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length);
     return (
       <div className="step-progress" >
         {!this.state.submitLoading ?

@@ -4,9 +4,11 @@ import { includes } from 'lodash';
 import { Header, Form, Icon } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
+import cookie from 'react-cookies';
 import { FormRadioGroup } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore')
+
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore')
 @withRouter
 @observer
 class AccountType extends Component {
@@ -15,8 +17,11 @@ class AccountType extends Component {
       byDefaultRender,
       setStepToBeRendered,
     } = this.props.investmentStore;
-    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
-    const { setPartialInvestmenSession } = this.props.userDetailsStore;
+    const { activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
+    const {
+      setPartialInvestmenSession,
+      sendAdminNotificationEmail,
+    } = this.props.userDetailsStore;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (this.props.changeInvest || (activeAccounts && activeAccounts.length === 1)) {
@@ -27,7 +32,18 @@ class AccountType extends Component {
         }
       });
     }
-    setPartialInvestmenSession(false);
+    setPartialInvestmenSession();
+    if (frozenAccounts.length) {
+      const { campaign } = this.props.campaignStore;
+      const offeringId = campaign && campaign.id;
+      if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
+        const offeringDetailObj = { offeringId, isEmailSent: true };
+        cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
+        // send email to admin
+        sendAdminNotificationEmail('FROZEN');
+        console.log('Send email function call....');
+      }
+    }
   }
   componentDidMount() {
     const {
@@ -64,11 +80,17 @@ class AccountType extends Component {
     prepareAccountTypes(activeAccounts);
     const { userDetails, setPartialInvestmenSession } = this.props.userDetailsStore;
     const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
-    setPartialInvestmenSession(userProfileFullStatus !== 'FULL');
-    const { roles } = this.props.userStore.currentUser;
-    const redirectURL = roles && roles.includes('investor') ?
+    const offeringInvestnowURL = this.props.match.url;
+    if (userProfileFullStatus !== 'FULL') {
+      setPartialInvestmenSession(offeringInvestnowURL);
+    } else {
+      setPartialInvestmenSession();
+    }
+    const { currentUser } = this.props.userStore;
+    const redirectURL = currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
       `${this.props.userDetailsStore.pendingStep}` : '/app/summary';
     const headerToShow = (activeAccounts.length || investAccTypes.values.length) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
+    const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerToShow}</Header>
@@ -89,7 +111,7 @@ class AccountType extends Component {
                 <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>. to unlock your account.</p>
                 :
                 null}
-              {(partialAccounts && partialAccounts.length) || (!(frozenAccounts.length) && userProfileFullStatus !== 'FULL') ?
+              {(partialAccounts && partialAccounts.length && isParitalSectionNeedtoShow) || (!(frozenAccounts.length) && userProfileFullStatus !== 'FULL' && isParitalSectionNeedtoShow) ?
                 <Link to={redirectURL} className="text-link">
                   <Icon className="ns-arrow-right" color="green" />
                   Please finish your account setup.

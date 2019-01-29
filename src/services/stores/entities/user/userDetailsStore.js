@@ -31,7 +31,7 @@ export class UserDetailsStore {
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
   @observable accountForWhichCipExpired = '';
-  @observable partialInvestNowSession = false;
+  @observable partialInvestNowSessionURL = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -408,9 +408,11 @@ export class UserDetailsStore {
     }
   }
 
-  @action setPartialInvestmenSession = (accountStatus) => {
-    this.partialInvestNowSession = accountStatus;
+  @action setPartialInvestmenSession = (redirectURL = '') => {
+    this.partialInvestNowSessionURL = redirectURL;
   }
+  // Admin notify email send functioanlity goes
+  @action sendAdminNotificationEmail = status => status
 }
 
 export default new UserDetailsStore();
