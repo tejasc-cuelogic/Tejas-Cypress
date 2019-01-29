@@ -98,7 +98,8 @@ export default class MultiStep extends React.Component {
   }
 
   handleOnClick(evt) {
-    if (!this.props.steps[this.state.compState].onlyDisableNextButton) {
+    if (!this.props.steps[this.state.compState].onlyDisableNextButton &&
+      !this.props.formHeaderClick) {
       if (this.props.setStepTobeRendered) {
         this.props.setStepTobeRendered(evt.currentTarget.value);
         if (evt.currentTarget.value === (this.props.steps.length - 1) &&
