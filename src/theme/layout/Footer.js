@@ -82,7 +82,7 @@ class Footer extends Component {
                 {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
                   <Aux path={path}>
                     <div className={isMobile && 'mb-30'}>
-                      <Image src={`${ASSETS_URL}images/secure-horizontal-1.png`} />
+                      <Image src={`${ASSETS_URL}images/secure-horizontal-1.jpg`} />
                     </div>
                   </Aux>
                 }

@@ -2682,7 +2682,7 @@ p.check-extra-info{
 		width:1px;
 		position:absolute;
 		left:0;
-		top:-116px;
+		top:-114px;
 	}
 	>.anchor-scroll{
 		top:-60px;

@@ -46,8 +46,8 @@ section{
                 line-height: @20px;
                 @media only screen and (max-width: @largestMobileScreen) {
                     background: fade(@neutral-darkwhite, 90%);
-                    width: ~"calc(100% + "(@relative28px)~")";
-                    margin: 0 -@relative14px;
+                    width: ~"calc(100% + "(@relative42px)~")";
+                    margin: 0 -@relative21px;
                     padding: @relative14px;
                 }
             }

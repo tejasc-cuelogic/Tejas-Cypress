@@ -394,7 +394,7 @@ export const ENTITY_TYPES = [
 export const ENTITY_TRUST_INFO = {
   isTrust: {
     key: 'isTrust',
-    value: true,
+    value: '',
     values: [{ label: 'Yes', value: true }, { label: 'No', value: false }],
     error: undefined,
     rule: 'required',

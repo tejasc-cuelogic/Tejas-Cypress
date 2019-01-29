@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import { Helmet } from 'react-helmet';
 import cookie from 'react-cookies';
 import Loadable from 'react-loadable';
 import { Visibility, Responsive } from 'semantic-ui-react';
@@ -11,6 +10,7 @@ import { DataFormatter } from '../../../../helper';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import Banner from '../components/Banner';
 import { PublicSubNav, InlineLoader } from '../../../../theme/shared/';
+import MetaTagGenerator from '../../../shared/MetaTagGenerator';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/${component}`),
@@ -18,6 +18,27 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
+const metaTagsData = [
+  { type: 'meta', name: 'description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
+  { type: 'ogTag', property: 'og:locale', content: 'en_US' },
+  { type: 'ogTag', property: 'og:type', content: 'article' },
+  { type: 'ogTag', property: 'og:title', content: 'Exclusive Access to New Local Investments | NextSeed' },
+  { type: 'ogTag', property: 'og:description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
+  { type: 'ogTag', property: 'og:url', content: window.location.href },
+  { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
+  { type: 'ogTag', property: 'article:publisher', content: 'https://www.facebook.com/thenextseed' },
+  // { type: 'ogTag', property: 'fb:app_id', content: '1806635959569619' },
+  { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'ogTag', property: 'og:image:width', content: '1600' },
+  { type: 'ogTag', property: 'og:image:height', content: '1067' },
+  { type: 'meta', name: 'twitter:card', content: 'summary_large_image' },
+  { type: 'meta', name: 'twitter:description', content: 'Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses.' },
+  { type: 'meta', name: 'twitter:title', content: 'Exclusive Access to New Local Investments | NextSeed' },
+  { type: 'meta', name: 'twitter:site', content: '@thenextseed' },
+  { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
+];
 
 @inject('navStore', 'userStore', 'referralsStore')
 @observer
@@ -47,27 +68,7 @@ class Invest extends Component {
     const navItems = GetNavMeta(match.url, [], true).subNavigations;
     return (
       <Aux>
-        <Helmet>
-          <meta name="description" content="Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses." />
-          <link rel="canonical" href="https://dev.nextseed.qa/invest/" />
-          <meta property="og:locale" content="en_US" />
-          <meta property="og:type" content="article" />
-          <meta property="og:title" content="Exclusive Access to New Local Investments | NextSeed" />
-          <meta property="og:description" content="Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses." />
-          <meta property="og:url" content="https://dev.nextseed.qa/invest/" />
-          <meta property="og:site_name" content="NextSeed" />
-          <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
-          <meta property="og:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
-          <meta property="og:image:secure_url" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
-          <meta property="og:image:width" content="1600" />
-          <meta property="og:image:height" content="1067" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:description" content="Learn more about debt crowdfunding on NextSeed. Diversify your investment portfolio by investing in local businesses." />
-          <meta name="twitter:title" content="Exclusive Access to New Local Investments | NextSeed" />
-          <meta name="twitter:site" content="@thenextseed" />
-          <meta name="twitter:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
-          <meta name="twitter:creator" content="@thenextseed" />
-        </Helmet>
+        <MetaTagGenerator metaTagsData={metaTagsData} />
         {location.pathname === '/invest/why-nextseed' || location.pathname === '/invest' ? <Banner /> :
         <Responsive as="section" maxWidth={767} className={`banner ${location.pathname.split('/')[2]}`} />
         }

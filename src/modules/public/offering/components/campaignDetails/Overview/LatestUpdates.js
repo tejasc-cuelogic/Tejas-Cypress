@@ -6,7 +6,7 @@ import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Image64 } from '../../../../../../theme/shared';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 991;
 
 @withRouter
 class LatestUpdates extends Component {
@@ -60,7 +60,7 @@ class LatestUpdates extends Component {
             </Item.Content>
           </Item>
         </Item.Group>
-        <Button fluid={isMobile} onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
+        <Button fluid={isTablet} onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
           View Updates
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>

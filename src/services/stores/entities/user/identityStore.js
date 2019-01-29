@@ -5,7 +5,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, checkValidAddress, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -14,6 +14,7 @@ import { fileUpload } from '../../../actions';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import apiService from '../../../../api/restApi';
 import { US_STATES_FOR_INVESTOR, FILE_UPLOAD_STEPS } from '../../../../constants/account';
+import { NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -715,6 +716,42 @@ export class IdentityStore {
       },
     });
   })
+
+  @action
+  checkValidAddress = () => new Promise((resolve) => {
+    const {
+      residentalStreet, state, city, zipCode,
+    } = this.ID_VERIFICATION_FRM.fields;
+    const payLoad = {
+      street: residentalStreet.value,
+      city: city.value,
+      state: state.value,
+      zipCode: zipCode.value,
+    };
+    uiStore.setProgress();
+    graphql({
+      client,
+      query: checkValidAddress,
+      fetchPolicy: 'network-only',
+      variables: payLoad,
+      onFetch: (res) => {
+        resolve(res.checkValidInvestorAddress);
+      },
+    });
+  })
+
+  @action
+  showErrorMessage = (message) => {
+    const setErrorMessage = (
+      `<span>
+        There was an issue with the information you submitted.
+        ${message}
+        If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href="mailto:${NS_SITE_EMAIL_SUPPORT}">${NS_SITE_EMAIL_SUPPORT}</a>
+      </span>`
+    );
+    uiStore.setProgress(false);
+    uiStore.setErrors(setErrorMessage);
+  }
 
   @action
   resetStoreData = () => {
