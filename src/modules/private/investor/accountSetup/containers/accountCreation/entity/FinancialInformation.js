@@ -6,7 +6,7 @@ import { Header, Form, Message, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'investmentLimitStore')
+@inject('entityAccountStore')
 @observer
 export default class FinancialInformation extends Component {
   componentWillMount() {
@@ -40,7 +40,7 @@ export default class FinancialInformation extends Component {
               />
             ))}
             <Divider hidden />
-            <p className="grey-header">Your investment limit1:
+            <p className="grey-header">Your investment limit:
               <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`} >
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>

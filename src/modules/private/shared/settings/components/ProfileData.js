@@ -14,7 +14,7 @@ import NewEmailAddress from './profileSettings/NewEmailAddress';
 import ConfirmEmailAddress from '../../../../../modules/auth/containers/ConfirmEmailAddress';
 import UpdateProfilePhoto from './profileSettings/UpdateProfilePhoto';
 import Helper from '../../../../../helper/utility';
-import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
+import { InlineLoader, UserAvatar, Image64 } from '../../../../../theme/shared';
 import ConfirmPhoneNumber from './/profileSettings/ConfirmPhoneNumber';
 import EstablishProfile from '../../../investor/accountSetup/containers/establishProfile';
 
@@ -90,7 +90,15 @@ export default class ProfileData extends Component {
                   <Table.Row>
                     <Table.Cell rowSpan="2">
                       <div className="profile-pic-wrapper">
-                        <UserAvatar UserInfo={userAvatar} />
+                        {userAvatar.avatarUrl ?
+                          <Image64
+                            avatar
+                            circular
+                            size=""
+                            srcUrl={userAvatar.avatarUrl}
+                          /> :
+                          <UserAvatar UserInfo={userAvatar} />
+                        }
                         <Button as={Link} to={`${this.props.match.url}/update-profile-photo`} circular icon={{ className: 'ns-pencil' }} className="change-profile-icon" color="green" />
                       </div>
                     </Table.Cell>

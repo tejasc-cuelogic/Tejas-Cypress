@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isArray, get } from 'lodash';
+import { isArray, get, forOwn } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { getTransactions, approveTransactions, declineTransactions, verifiedTransactions, failedTransactions } from '../../queries/transaction';
@@ -7,7 +7,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
 import DataFormatter from '../../../../../src/helper/utilities/DataFormatter';
-import { TRANSACTION_FAILURE } from '../../../constants/admin/transactions';
+import { TRANSACTION_FAILURE, COUNT_STATUS_MAPPING } from '../../../constants/admin/transactions';
 
 export class TransactionsStore {
   ctHandler = {
@@ -22,7 +22,7 @@ export class TransactionsStore {
   @observable transactionStatus = null;
   @observable db = [];
   @observable summary = {
-    status1: 0, status2: 0, status3: 0, status4: 0,
+    'status-1': 0, 'status-2': 0, 'status-3': 0, 'status-4': 0,
   };
   @observable requestState = {
     page: 1,
@@ -66,10 +66,37 @@ export class TransactionsStore {
         if (res) {
           this.requestState.search.transactionType = '';
           this.filters = false;
-          this.setDb(DataFormatter.mapDatesToType(res.getTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
+          this.resetData(res);
         }
       },
     });
+  }
+
+  @action
+  setTabCount = (countObj) => {
+    this.summary = {
+      'status-1': 0, 'status-2': 0, 'status-3': 0, 'status-4': 0,
+    };
+    forOwn(countObj, (v, k) => {
+      this.summary[COUNT_STATUS_MAPPING[k]] += v;
+    });
+  }
+
+  @action
+  resetData = (data) => {
+    if (get(data, 'getTransactions')) {
+      this.resetPagination();
+      this.setDb(DataFormatter.mapDatesToType(data.getTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
+      this.setTabCount(data.getTransactions.transactionCount);
+    }
+  }
+
+  @action
+  resetPagination = () => {
+    this.requestState.skip = 0;
+    this.requestState.page = 1;
+    this.requestState.perPage = 10;
+    this.requestState.displayTillIndex = 10;
   }
 
   @action
@@ -154,7 +181,7 @@ export class TransactionsStore {
 
   @action
   initiateFilters = () => {
-    this.setDb(DataFormatter.mapDatesToType(get(this.data, 'data.getTransactions.transactions'), ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
+    this.resetData(get(this.data, 'data') || []);
     const {
       keyword, startDate, endDate, min, max,
       transactionType,

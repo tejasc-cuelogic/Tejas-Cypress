@@ -230,3 +230,14 @@ export const checkMigrationByEmail = gql`
   mutation checkMigrationByEmail($migrationByEmailData: CheckMigrationByEmailInput!) {
     checkMigrationByEmail(migrationByEmailData: $migrationByEmailData)
  }`;
+
+export const checkValidAddress = gql`
+  query checkValidInvestorAddress($street: String!, $city: String!, $state: String!, $zipCode: String!) {
+    checkValidInvestorAddress(
+      street: $street,
+      city: $city,
+      state: $state,
+      zipCode: $zipCode
+    )
+  }
+`;

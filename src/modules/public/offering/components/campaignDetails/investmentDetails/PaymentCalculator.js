@@ -1,5 +1,6 @@
+/* eslint-disable jsx-a11y/mouse-events-have-key-events */
 import React, { Component } from 'react';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Cell } from 'recharts';
 import Helper from '../../../../../../helper/utility';
 
 const data = [
@@ -25,9 +26,24 @@ const data = [
   { month: '20', 'Projected total payment': 2000 },
 ];
 
+
 export default class PaymentCalculator extends Component {
+  state = {
+    activeIndex: 0,
+  }
   componentWillMount() {
     console.log('here');
+  }
+  // CustomTooltip = index => (
+  //   <div className="ui right center popup transition">
+  //     <p className="label">Projected total payment</p>
+  //     <p className="intro">{data[index]['Projected total payment']}</p>
+  //   </div>
+  // );
+  handleHover = (data1, index) => {
+    this.setState({
+      activeIndex: index,
+    });
   }
 
   formatY = item => Helper.CurrencyFormat(item);
@@ -43,10 +59,18 @@ export default class PaymentCalculator extends Component {
           }}
         >
           <XAxis dataKey="month" />
-          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="right" />
+          <YAxis tickFormatter={this.formatY} axisLine={false} orientation="left" />
+          {/* <Tooltip content={() => this.CustomTooltip(this.state.activeIndex)} /> */}
           <Tooltip />
           <Legend />
-          <Bar dataKey="Projected total payment" barSize={7} fill="#1781FB" />
+          <Bar dataKey="Projected total payment" barSize={7} onMouseOver={this.handleHover}>
+            {
+              data.map((entry, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Cell cursor="pointer" fill={index === this.state.activeIndex ? '#263E64' : '#1781FB'} key={`cell-${index}`} />
+              ))
+            }
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     );
