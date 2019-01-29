@@ -2,6 +2,7 @@ import { observable, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { getJwtReferralEmbeddedWidget, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../index';
@@ -15,7 +16,7 @@ export class ReferralStore {
     const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
     const userId = saasQuatchUserId || userDetails.id;
     const payLoad = {
-      userId,
+      id: userId,
       accountId: userId,
     };
     if (!saasQuatchUserId) {
@@ -36,7 +37,7 @@ export class ReferralStore {
   @action
   getReferralCreditsInformation = code => new Promise((resolve) => {
     graphql({
-      client,
+      client: clientPublic,
       query: getReferralCreditsInformation,
       variables: { code },
       fetchPolicy: 'network-only',
