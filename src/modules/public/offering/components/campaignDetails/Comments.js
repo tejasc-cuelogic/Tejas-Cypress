@@ -9,7 +9,8 @@ import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @observer
@@ -82,7 +83,7 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
           Comments
           <span className="anchor-scroll" />
         </Header>
@@ -125,7 +126,7 @@ class Comments extends Component {
                     changed={msgEleChange}
                     containerclassname="secondary"
                   />
-                  <Button fluid={isMobile} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+                  <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
                 </Form>
               </Aux>
             }
@@ -163,10 +164,10 @@ class Comments extends Component {
                                   changed={msgEleChange}
                                   containerclassname="secondary"
                                 />
-                                <Button onClick={() => this.closeTextBox(c.id)}>
+                                <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)}>
                                   Cancel Reply
                                 </Button>
-                                <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                               </Form>
                               <Divider hidden />
                               <p>
@@ -220,10 +221,10 @@ class Comments extends Component {
                                         changed={msgEleChange}
                                         containerclassname="secondary"
                                       />
-                                      <Button onClick={() => this.closeTextBox(tc.id)}>
+                                      <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
                                         Cancel Reply
                                       </Button>
-                                      <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                      <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                                     </Form>
                                     <Divider hidden />
                                     <p>

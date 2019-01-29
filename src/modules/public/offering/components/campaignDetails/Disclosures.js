@@ -7,11 +7,12 @@ import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
 import { InlineLoader } from '../../../../../theme/shared';
 
-@inject('campaignStore', 'accreditationStore')
+@inject('campaignStore', 'accreditationStore', 'navStore')
 @withRouter
 @observer
 export default class TermsOfUse extends Component {
   componentWillMount() {
+    window.addEventListener('scroll', this.handleOnScroll);
     if (this.props.campaignStore.docsWithBoxLink.length === 0) {
       const offeringRegulationArr = this.props.campaignStore.campaign.regulation.split('_');
       const regulationType = offeringRegulationArr[0];
@@ -22,11 +23,25 @@ export default class TermsOfUse extends Component {
   }
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       });
     }
+  }
+  componentWillUnmount() {
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  handleOnScroll = () => {
+    const { docsWithBoxLink } = this.props.campaignStore;
+    docsWithBoxLink.map((item, index) => {
+      if (document.getElementById(`doc-${index}`).getBoundingClientRect().top < 50) {
+        this.props.navStore.setFieldValue('currentActiveHash', `#doc-${index}`);
+      }
+      return null;
+    });
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {

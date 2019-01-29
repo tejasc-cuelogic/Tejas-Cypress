@@ -7,10 +7,14 @@ import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 
-@inject('campaignStore')
+@inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
+  componentWillMount() {
+    window.addEventListener('scroll', this.handleOnScroll);
+  }
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
       document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
@@ -19,6 +23,17 @@ class InvestmentDetails extends Component {
       const sel = 'use-of-proceeds';
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
+  }
+  componentWillUnmount() {
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  handleOnScroll = () => {
+    ['use-of-proceeds', 'key-terms'].forEach((item) => {
+      if (document.getElementById(item).getBoundingClientRect().top < 50) {
+        this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
+      }
+    });
   }
   render() {
     const { campaign } = this.props.campaignStore;
@@ -37,7 +52,7 @@ class InvestmentDetails extends Component {
       null;
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>

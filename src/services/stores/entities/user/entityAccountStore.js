@@ -23,7 +23,7 @@ import AccCreationHelper from '../../../../modules/private/investor/accountSetup
 class EntityAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(ENTITY_FIN_INFO);
   @observable GEN_INFO_FRM = FormValidator.prepareFormObject(ENTITY_GEN_INFO);
-  @observable TRUST_INFO_FRM = FormValidator.prepareFormObject(ENTITY_TRUST_INFO);
+  @observable TRUST_INFO_FRM = FormValidator.prepareFormObject(ENTITY_TRUST_INFO, true);
   @observable PERSONAL_INFO_FRM = FormValidator.prepareFormObject(ENTITY_PERSONAL_INFO);
   @observable FORM_DOCS_FRM = FormValidator.prepareFormObject(ENTITY_FORMATION_DOCS);
   @observable entityData = {};
@@ -474,7 +474,6 @@ class EntityAccountStore {
 
   @action
   setFormData = (form, accountDetails) => {
-    let isDirty = false;
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
         if (f === 'cfInvestment' && accountDetails.limits && accountDetails.limits.otherContributions) {
@@ -490,13 +489,8 @@ class EntityAccountStore {
         }
       } else if (form === 'TRUST_INFO_FRM') {
         if (f === 'isTrust') {
-          if (accountDetails && accountDetails[f]) {
+          if (accountDetails && (accountDetails[f] === true || accountDetails[f] === false)) {
             this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
-          } else {
-            this.TRUST_INFO_FRM.fields[f].value = false;
-            if (accountDetails && typeof accountDetails[f] === 'undefined') {
-              isDirty = true;
-            }
           }
         } else if (f === 'trustDate' && accountDetails && accountDetails[f]) {
           this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
@@ -523,7 +517,7 @@ class EntityAccountStore {
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '', isDirty);
+    FormValidator.onChange(this[form], '', '', false);
   }
 
   @action

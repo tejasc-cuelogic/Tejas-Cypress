@@ -11,7 +11,7 @@ class CompanyTopThings extends Component {
     } = this.props;
     return (
       <Aux>
-        <Header as="h3" className="anchor-wrap mb-30">
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
           Company Description
           <span className="anchor" id="company-description" />
         </Header>
