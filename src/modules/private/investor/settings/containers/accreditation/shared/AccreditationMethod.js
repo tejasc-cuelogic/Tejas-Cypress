@@ -9,6 +9,7 @@ import { FormInput } from '../../../../../../../theme/form';
 @withRouter
 @observer
 export default class AccreditationMethod extends Component {
+  com
   render() {
     const accreditationMethods = this.props.isTrust ?
       ENTITY_TRUST_ACCREDITATION_METHODS_META.slice() : ACCREDITATION_METHODS_META.slice();
@@ -36,7 +37,7 @@ export default class AccreditationMethod extends Component {
                 <Grid.Column
                   onClick={e => accreditationMethodChange(e, 'ACCREDITATION_FORM', { name: 'method', value: method.value })}
                 >
-                  <div className={`user-type ${(ACCREDITATION_FORM.fields.method.value === method.value || method.value === 'INCOME' ? 'active' : '')}`}>
+                  <div className={`user-type ${(ACCREDITATION_FORM.fields.method.value === method.value ? 'active' : '')}`}>
                     <Header as="h4">{method.header}</Header>
                     <p>
                       {method.desc}

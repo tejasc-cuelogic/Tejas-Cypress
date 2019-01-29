@@ -111,7 +111,7 @@ export const ENTITY_ACCREDITATION_METHODS = {
 
 export const ACCREDITATION_METHODS = {
   method: {
-    value: '',
+    value: 'INCOME',
     values:
       [
         {
