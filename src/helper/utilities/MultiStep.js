@@ -42,6 +42,11 @@ export default class MultiStep extends React.Component {
     if (this.props.stepToBeRendered > -1 && _.has(this.props.steps[this.props.stepToBeRendered], 'disableNxtBtn')) {
       this.setState({ showNextBtn: !this.props.steps[this.props.stepToBeRendered].disableNxtBtn });
     }
+    // if (!this.props.isStepButtonsVisible) {
+    //   this.setState({ showNextBtn: false, showPreviousBtn: false });
+    // } else {
+    //   this.setState({ showNextBtn: true, showPreviousBtn: true });
+    // }
   }
   componentWillReceiveProps(nextProps) {
     if (typeof nextProps.stepToBeRendered !== 'undefined' && nextProps.stepToBeRendered !== '') {
@@ -105,7 +110,7 @@ export default class MultiStep extends React.Component {
           this.state.compState === (this.props.steps.length - 1)) {
           this.setNavState(this.props.steps.length);
         } else if (evt.currentTarget.value !== 0 &&
-        this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
+          this.props.steps[(evt.currentTarget.value - 1)].isDirty) {
           this.props.createAccount(this.props.steps[(evt.currentTarget.value - 1)]);
           if (evt.currentTarget.value === (this.props.steps.length - 1)) {
             this.setNavState(evt.currentTarget.value);
@@ -168,40 +173,44 @@ export default class MultiStep extends React.Component {
           open
           closeIcon
           className="multistep-modal"
-          closeOnDimmerClick={false}
+          closeOnDimmerClick={!this.props.closeOnDimmerClick}
           onClose={() => this.props.handleMultiStepModalclose()}
         >
           {!this.props.hideHeader &&
-          <Aux>
-            <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
-            <ol className="progtrckr">
-              {!this.props.steps[this.state.compState].isHideLabel &&
-                this.renderSteps()
-              }
-            </ol>
-          </Aux>
+            <Aux>
+              <Header as="h2" textAlign="center">{this.props.formTitle}</Header>
+              <ol className="progtrckr">
+                {!this.props.steps[this.state.compState].isHideLabel &&
+                  this.renderSteps()
+                }
+              </ol>
+            </Aux>
           }
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
             <Dimmer active={this.props.inProgress}>
               <Loader active={this.props.inProgress} />
             </Dimmer>
-            {!this.props.steps[this.state.compState].disablePrevButton &&
-            <Button
-              circular
-              icon={{ className: 'ns-arrow-left' }}
-              className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
-              onClick={this.previous}
-            />
-            }
-            {!this.props.steps[this.state.compState].disableNextButton &&
-            <Button
-              type="submit"
-              circular
-              icon={{ className: 'ns-arrow-right' }}
-              className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
-              onClick={this.next}
-            />
+            {this.props.isStepButtonsVisible &&
+              <Aux>
+                {!this.props.steps[this.state.compState].disablePrevButton &&
+                  <Button
+                    circular
+                    icon={{ className: 'ns-arrow-left' }}
+                    className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
+                    onClick={this.previous}
+                  />
+                }
+                {!this.props.steps[this.state.compState].disableNextButton &&
+                  <Button
+                    type="submit"
+                    circular
+                    icon={{ className: 'ns-arrow-right' }}
+                    className={(this.state.showNextBtn && !this.props.steps[this.state.compState].onlyDisableNextButton) ? 'multistep__btn next active' : 'multistep__btn next disabled'}
+                    onClick={this.next}
+                  />
+                }
+              </Aux>
             }
           </Modal.Content>
         </Modal>

@@ -6,7 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { FormRadioGroup } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore')
 @withRouter
 @observer
 class AccountType extends Component {
@@ -16,6 +16,7 @@ class AccountType extends Component {
       setStepToBeRendered,
     } = this.props.investmentStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const { setPartialInvestmenSession } = this.props.userDetailsStore;
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (this.props.changeInvest || (activeAccounts && activeAccounts.length === 1)) {
@@ -26,6 +27,7 @@ class AccountType extends Component {
         }
       });
     }
+    setPartialInvestmenSession(false);
   }
   componentDidMount() {
     const {
@@ -60,7 +62,13 @@ class AccountType extends Component {
       prepareAccountTypes,
     } = this.props.investmentStore;
     prepareAccountTypes(activeAccounts);
-    const headerToShow = investAccTypes.values.length ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
+    const { userDetails, setPartialInvestmenSession } = this.props.userDetailsStore;
+    const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
+    setPartialInvestmenSession(userProfileFullStatus !== 'FULL');
+    const { roles } = this.props.userStore.currentUser;
+    const redirectURL = roles && roles.includes('investor') ?
+      `${this.props.userDetailsStore.pendingStep}` : '/app/summary';
+    const headerToShow = (activeAccounts.length || investAccTypes.values.length) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerToShow}</Header>
@@ -78,11 +86,11 @@ class AccountType extends Component {
             :
             <div className="center-align">
               {frozenAccounts && frozenAccounts.length ?
-                <p>Please contact support@nextseed.com to unlock your account.</p>
+                <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>. to unlock your account.</p>
                 :
                 null}
-              {partialAccounts && partialAccounts.length ?
-                <Link to="/app/summary" className="text-link">
+              {(partialAccounts && partialAccounts.length) || (!(frozenAccounts.length) && userProfileFullStatus !== 'FULL') ?
+                <Link to={redirectURL} className="text-link">
                   <Icon className="ns-arrow-right" color="green" />
                   Please finish your account setup.
                 </Link>

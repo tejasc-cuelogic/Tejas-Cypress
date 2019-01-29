@@ -9,7 +9,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -126,42 +126,45 @@ export default class InvestNow extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
     } = uiStore;
+    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     const steps =
-    [
-      {
-        name: 'Account Type',
-        component: <AccountType
-          refLink={this.props.refLink}
-          changeInvest={changeInvest}
-        />,
-        isValid: '',
-        stepToBeRendered: 1,
-        isDirty: true,
-      },
-      {
-        name: 'Financial Info',
-        component: <FinancialInfo
-          refLink={this.props.refLink}
-          changeInvest={changeInvest}
-        />,
-        isValid: '',
-        stepToBeRendered: 2,
-        isDirty: true,
-      },
-      {
-        name: 'TransferRequest',
-        component: <TransferRequest
-          changeInvest={changeInvest}
-          confirm={this.handleConfirm}
-          cancel={this.handleCancel}
-        />,
-        isValid: '',
-      },
-    ];
+      [
+        {
+          name: 'Account Type',
+          component: <AccountType
+            refLink={this.props.refLink}
+            changeInvest={changeInvest}
+          />,
+          isValid: '',
+          stepToBeRendered: 1,
+          isDirty: true,
+        },
+        {
+          name: 'Financial Info',
+          component: <FinancialInfo
+            refLink={this.props.refLink}
+            changeInvest={changeInvest}
+          />,
+          isValid: '',
+          stepToBeRendered: 2,
+          isDirty: true,
+        },
+        {
+          name: 'TransferRequest',
+          component: <TransferRequest
+            changeInvest={changeInvest}
+            confirm={this.handleConfirm}
+            cancel={this.handleCancel}
+          />,
+          isValid: '',
+        },
+      ];
+    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length);
+    const closeOnDimmerClickAction = !!(activeAccounts && activeAccounts.length);
     return (
       <div className="step-progress" >
         {!this.state.submitLoading ?
-          <MultiStep createAccount={this.multiClickHandler} setIsEnterPressed={setIsEnterPressed} disableNxtbtn={this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+          <MultiStep isStepButtonsVisible={isMultiStepButtonsVisible} closeOnDimmerClick={closeOnDimmerClickAction} createAccount={this.multiClickHandler} setIsEnterPressed={setIsEnterPressed} disableNxtbtn={this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
           :
           <Dimmer active>
             <Loader>

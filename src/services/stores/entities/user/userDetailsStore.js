@@ -31,6 +31,7 @@ export class UserDetailsStore {
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
   @observable accountForWhichCipExpired = '';
+  @observable partialInvestNowSession = false;
 
   @action
   setFieldValue = (field, value) => {
@@ -405,6 +406,10 @@ export class UserDetailsStore {
       authStore.SIGNUP_FRM.fields.role.value = 'investor';
       authStore.SIGNUP_FRM.fields.familyName.value = userDetails.info.lastName;
     }
+  }
+
+  @action setPartialInvestmenSession = (accountStatus) => {
+    this.partialInvestNowSession = accountStatus;
   }
 }
 
