@@ -1315,7 +1315,7 @@ a.icon-link {
 	&.legal-sidebar, &.comment-sidebar {
 		top: 108px;
 	}
-	&.offering-side-menu{
+	&.offering-side-menu,&.team{
 		top:136px;
 		@media only screen and (max-width : @largestTabletScreen){
 			top: 0;
