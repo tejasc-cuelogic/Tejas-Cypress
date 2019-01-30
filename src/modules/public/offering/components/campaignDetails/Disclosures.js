@@ -24,10 +24,10 @@ export default class TermsOfUse extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      });
+      }), 100);
     }
   }
   componentWillUnmount() {
@@ -37,7 +37,8 @@ export default class TermsOfUse extends Component {
   handleOnScroll = () => {
     const { docsWithBoxLink } = this.props.campaignStore;
     docsWithBoxLink.map((item, index) => {
-      if (document.getElementById(`doc-${index}`).getBoundingClientRect().top < 50) {
+      if (document.getElementById(`doc-${index}`).getBoundingClientRect().top < 100 &&
+      document.getElementById(item).getBoundingClientRect().top > 0) {
         this.props.navStore.setFieldValue('currentActiveHash', `#doc-${index}`);
       }
       return null;
