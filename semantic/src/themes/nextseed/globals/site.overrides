@@ -1315,7 +1315,7 @@ a.icon-link {
 	&.legal-sidebar, &.comment-sidebar {
 		top: 108px;
 	}
-	&.offering-side-menu{
+	&.offering-side-menu,&.team{
 		top:136px;
 		@media only screen and (max-width : @largestTabletScreen){
 			top: 0;
@@ -2699,6 +2699,19 @@ p.check-extra-info{
 			vertical-align: middle;
 			line-height: 1;
 			margin:0;
+		}
+	}
+	&.campaign {
+		padding-top: 56.25%;
+		a, [imgtype="heroImage"]{
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background-size: cover;
+			background-repeat: no-repeat;
+			background-position: center center;
 		}
 	}
 }
