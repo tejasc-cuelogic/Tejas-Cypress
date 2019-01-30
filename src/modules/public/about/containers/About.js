@@ -34,7 +34,7 @@ class About extends Component {
         {location.pathname === '/about/mission' && <Banner />}
         <Visibility onUpdate={this.handleUpdate} continuous className="slide-down">
           <PublicSubNav
-            navStatus={navStore.navStatus}
+            // navStatus={navStore.navStatus}
             stepInRoute={navStore.stepInRoute}
             location={location}
             currentUser={this.props.userStore.currentUser}
