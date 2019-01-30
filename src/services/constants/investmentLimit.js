@@ -111,7 +111,7 @@ export const ENTITY_ACCREDITATION_METHODS = {
 
 export const ACCREDITATION_METHODS = {
   method: {
-    value: '',
+    value: 'INCOME',
     values:
       [
         {
@@ -304,7 +304,7 @@ export const NET_WORTH = {
           value: 'FIVE_MILLION',
         },
         {
-          label: '$2,000,000',
+          label: '$2,100,000',
           value: 'TWO_MILLION',
         },
         {

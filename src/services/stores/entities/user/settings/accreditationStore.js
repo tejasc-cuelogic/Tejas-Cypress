@@ -245,6 +245,9 @@ export class AccreditationStore {
       }
     } else {
       const srchParams = { ...this.requestState.search };
+      const temp = { ...this.requestState };
+      temp.search[name] = { ...this.requestState.search };
+      this.requestState = temp;
       if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
         srchParams[name] = value;
       } else {

@@ -26,7 +26,7 @@ class DataFormatter {
 
   getJsonFormattedError = err => JSON.parse(err.message.substring(err.message.indexOf('{')));
 
-  diffDays = (timeStamp2, inHours = false) => {
+  diffDays = (timeStamp2, inHours = false, returnNegative = false) => {
     const d1 = moment().format('MM/DD/YYYY');
     const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY') : null;
     const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
@@ -36,7 +36,7 @@ class DataFormatter {
       const difference = convertedtimeStamp2.getTime() - date.getTime();
       return Math.floor(difference / 1000 / 60 / 60);
     }
-    if (diff <= 0) {
+    if (!returnNegative && diff <= 0) {
       return 0;
     }
     return diff;

@@ -6,7 +6,7 @@ import { Responsive, Sidebar, Menu, Button, Icon } from 'semantic-ui-react';
 import { Scrollbars } from 'react-custom-scrollbars';
 import NotificationPanel from './NotificationPanel';
 import { SidebarNav, GetNavItem } from './SidebarNav';
-import { UserAvatar, Logo } from '../shared';
+import { UserAvatar, Logo, Image64 } from '../shared';
 import FireworksAnimation from '../../modules/public/offering/components/investNow/agreement/components/FireworkAnimation';
 
 @inject('uiStore')
@@ -67,7 +67,15 @@ const MySidebar = observer(props => (
             </Link>
             {props.mobile && <Icon onClick={props.toggle} className="ns-close-light" />}
             <div className="user-picture">
-              <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
+              {props.UserInfo.avatarUrl ?
+                <Image64
+                  avatar
+                  size={!props.layoutState.leftPanel ? 'mini' : 'huge'}
+                  circular
+                  srcUrl={props.UserInfo.avatarUrl}
+                /> :
+                <UserAvatar UserInfo={props.UserInfo} size={!props.layoutState.leftPanel ? 'mini' : 'huge'} />
+              }
               <h2>{props.UserInfo.fullname}</h2>
               {GetNavItem('profile-settings', props.UserInfo.roles)}
             </div>
