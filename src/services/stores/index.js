@@ -1,5 +1,6 @@
 export { default as adminStore } from './entities/adminStore';
 export { default as authStore } from './entities/shared/authStore';
+export { default as imageStore } from './entities/shared/imageStore';
 export { default as businessStore } from './entities/businessStore';
 export { default as commonStore } from './entities/commonStore';
 export { default as userStore } from './entities/userStore';

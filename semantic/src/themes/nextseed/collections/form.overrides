@@ -518,7 +518,21 @@
 		&:last-child{
 			margin-bottom:0;
 		}
-	}
+    }
+    &.story-form{
+        height:100%;
+        display:flex;
+        flex-direction:column;
+        >.ui.header{
+            flex:0;
+        }
+        >.field{
+            flex:1;
+            textarea{
+                min-height:100%;
+            }
+        }
+    }
 }
 textarea{
 	font-family:@pageFont;
@@ -655,7 +669,7 @@ textarea{
         min-width:100%;
     }
     + .file-uploader-wrap{
-        margin-top:30px;
+        margin-top:@14px;
     }
     label{
         font-size:@13px;

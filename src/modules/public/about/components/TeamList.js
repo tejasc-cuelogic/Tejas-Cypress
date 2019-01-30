@@ -1,7 +1,8 @@
 import React from 'react';
-import { Header, Icon, Grid, Reveal, Image } from 'semantic-ui-react';
+import { Header, Icon, Grid, Reveal } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
+import { Image64 } from '../../../../theme/shared';
 
 const TeamList = ({
   members,
@@ -23,7 +24,7 @@ const TeamList = ({
             </Reveal.Content>
             <Reveal.Content visible>
               <LazyLoad height={100} >
-                <Image src={member.avatar} />
+                <Image64 srcUrl={member.avatar} alt={member.memberName} />
               </LazyLoad>
             </Reveal.Content>
           </Reveal>
