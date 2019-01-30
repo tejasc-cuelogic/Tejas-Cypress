@@ -53,6 +53,7 @@ export const userDetailsQuery = gql`
         userId
         accountId
       }
+      skipAddressVerifyCheck
       cip {
         expiration
         failType
@@ -361,3 +362,11 @@ export const adminAddUser = gql`
       }
   }
 `;
+
+export const skipAddressValidation = gql`
+mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
+  skipAddressValidationCheck(
+     userId: $userId
+     shouldSkip: $shouldSkip
+   )
+ }`;
