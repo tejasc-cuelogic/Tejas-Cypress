@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore } from '../../index';
+import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore, referralsStore } from '../../index';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
@@ -79,6 +79,7 @@ class IndividualAccountStore {
                 if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
                   userDetailsStore.userDetails.cip.failType &&
                   userDetailsStore.userDetails.cip.failType !== null) {
+                  referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
                   client.mutate({
                     mutation: crowdPayAccountNotifyGs,
                     variables: {

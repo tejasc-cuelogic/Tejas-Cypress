@@ -170,6 +170,9 @@ export class Auth {
                 cookie.remove('ISSUER_REFERRAL_CODE');
               });
             }
+            if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
+              cookie.remove('SAASQUATCH_REFERRAL_CODE');
+            }
             userDetailsStore.getUser(userStore.currentUser.sub).then(() => {
               res();
             });
@@ -282,6 +285,7 @@ export class Auth {
                       cookie.remove('ISSUER_REFERRAL_CODE');
                     });
                   }
+                  // userPartialSignupWithReferralCode
                   userDetailsStore.getUser(userStore.currentUser.sub);
                   AWS.config.region = AWS_REGION;
                   if (userStore.isCurrentUserWithRole('admin')) {

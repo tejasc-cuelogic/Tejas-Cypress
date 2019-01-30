@@ -12,7 +12,7 @@ import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -68,6 +68,15 @@ export default class ConfirmEmailAddress extends Component {
             .then(() => {
               const { roles } = this.props.userStore.currentUser;
               if (roles.includes('investor')) {
+                if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
+                  const referralCode = cookie.load('SAASQUATCH_REFERRAL_CODE');
+                  this.props.referralsStore.userPartialFullSignupWithReferralCode(referralCode)
+                    .then((data) => {
+                      if (data) {
+                        cookie.remove('SAASQUATCH_REFERRAL_CODE');
+                      }
+                    });
+                }
                 this.props.identityStore.setIsOptConfirmed(true);
               } else {
                 const redirectUrl = !roles ? '/auth/login' :

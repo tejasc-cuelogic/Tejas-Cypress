@@ -39,7 +39,6 @@ class Users extends Component {
         {...this.props}
         P1={<P1
           executeSearch={this.executeSearch}
-          toggleSearch={this.toggleSearch}
           requestState={requestState}
           filters={filters}
           addon={<P3 />}
