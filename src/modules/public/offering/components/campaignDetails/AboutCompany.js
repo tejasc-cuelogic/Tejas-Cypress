@@ -35,7 +35,7 @@ class AboutCompany extends Component {
   }
   handleOnScroll = () => {
     ['company-description', 'business-model', 'location-analysis', 'team', 'history'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top <= 100 &&
+      if (document.getElementById(item).getBoundingClientRect().top <= 200 &&
       document.getElementById(item).getBoundingClientRect().top >= 0) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
       }
