@@ -47,6 +47,12 @@ export const userDetailsQuery = gql`
     user(id: $userId) {
       id
       status
+      saasquatch {
+        signupCode
+        referredBy
+        userId
+        accountId
+      }
       skipAddressVerifyCheck
       cip {
         expiration
