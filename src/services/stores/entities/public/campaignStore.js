@@ -18,6 +18,7 @@ export class CampaignStore {
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
   @observable gallarySelectedImageIndex = null;
   @observable docsWithBoxLink = [];
+  @observable investmentDetailsSubNavs = [];
 
 
   @action

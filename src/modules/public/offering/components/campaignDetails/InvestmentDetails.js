@@ -15,10 +15,10 @@ class InvestmentDetails extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      });
+      }), 100);
     } else {
       const sel = 'use-of-proceeds';
       document.querySelector(`#${sel}`).scrollIntoView(true);
@@ -29,9 +29,11 @@ class InvestmentDetails extends Component {
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
-    ['use-of-proceeds', 'key-terms'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < 50) {
-        this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
+    const { investmentDetailsSubNavs } = this.props.campaignStore;
+    investmentDetailsSubNavs.forEach((item) => {
+      if (document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 100 &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top > 0) {
+        this.props.navStore.setFieldValue('currentActiveHash', item.to);
       }
     });
   }

@@ -20,10 +20,10 @@ class AboutCompany extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      });
+      }), 100);
     } else {
       const sel = 'company-description';
       document.querySelector(`#${sel}`).scrollIntoView(true);
@@ -35,7 +35,8 @@ class AboutCompany extends Component {
   }
   handleOnScroll = () => {
     ['company-description', 'business-model', 'location-analysis', 'team', 'history'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < 50) {
+      if (document.getElementById(item).getBoundingClientRect().top <= 100 &&
+      document.getElementById(item).getBoundingClientRect().top >= 0) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
       }
     });
