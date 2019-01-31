@@ -3,7 +3,7 @@ import graphql from 'mobx-apollo';
 import { get } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
-import { getJwtReferralEmbeddedWidget, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
+import { getJwtReferralEmbeddedWidget, getUserRewardBalance, getReferralCreditsInformation, userPartialSignupWithReferralCode, userFullSignupWithReferralCode, upsertUserReferralCredits } from '../../queries/referrals';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore } from '../../index';
 
@@ -31,6 +31,31 @@ export class ReferralStore {
       fetchPolicy: 'network-only',
       onFetch: data => resolve(data),
       onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); reject(); },
+    });
+  });
+
+  @action
+  getUserRewardBalance = () => new Promise((resolve) => {
+    const { userDetails } = userDetailsStore;
+    graphql({
+      client,
+      query: getUserRewardBalance,
+      variables: { userId: userDetails.id },
+      fetchPolicy: 'network-only',
+      onFetch: data => resolve(data),
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
+    });
+  });
+
+  @action
+  getReferralCreditsInformation = code => new Promise((resolve) => {
+    graphql({
+      client: clientPublic,
+      query: getReferralCreditsInformation,
+      variables: { code },
+      fetchPolicy: 'network-only',
+      onFetch: data => resolve(data),
+      onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
     });
   });
 

@@ -12,6 +12,12 @@ export const getJwtReferralEmbeddedWidget = gql`
   }
 `;
 
+export const getUserRewardBalance = gql`
+  query getUserRewardBalance($userId: String) {
+    getUserRewardBalance(userId: $userId)
+  }
+`;
+
 export const getReferralCreditsInformation = gql`
   query getReferralCreditsInformation($code: String!) {
     getReferralCreditsInformation(code: $code) {
