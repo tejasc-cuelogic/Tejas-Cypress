@@ -75,11 +75,11 @@ class IndividualAccountStore {
               }
               if (formStatus === 'FULL') {
                 Helper.toast('Individual account created successfully.', 'success');
+                referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
                 this.submited = true;
                 if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
                   userDetailsStore.userDetails.cip.failType &&
                   userDetailsStore.userDetails.cip.failType !== null) {
-                  referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
                   client.mutate({
                     mutation: crowdPayAccountNotifyGs,
                     variables: {
