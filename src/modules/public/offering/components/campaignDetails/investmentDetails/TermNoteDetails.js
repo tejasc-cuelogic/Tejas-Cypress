@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { get } from 'lodash';
+import { inject, observer } from 'mobx-react';
 import { Header, Divider, Statistic, Grid, Table, Icon, Popup } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
@@ -7,9 +9,18 @@ import PaymentCalculator from './PaymentCalculator';
 import { InlineLoader } from '../../../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
+@inject('campaignStore')
+@observer
 class TermNoteDetails extends Component {
+  handleRangeChange = (e) => {
+    this.props.campaignStore.calculateTotalPaymentData(e.target.value);
+  }
   render() {
-    const { KeyTerms, launch } = this.props;
+    const {
+      campaign, totalPayment, principalAmt, totalPaymentChart,
+    } = this.props.campaignStore;
+    const KeyTerms = campaign && campaign.keyTerms;
+    const launch = get(campaign, 'offering.launch');
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = launch && launch.edgarLink;
     const OfferingSecurity = (KeyTerms && KeyTerms.securities && KeyTerms.securities === 'TERM_NOTE') || null;
@@ -187,27 +198,28 @@ class TermNoteDetails extends Component {
               <Grid.Column>
                 <Statistic className="basic" size="mini">
                   <Statistic.Label className={isMobile && 'center-align'}>Interest Rate*</Statistic.Label>
-                  <Statistic.Value className={isMobile && 'center-align'}>16.00%</Statistic.Value>
+                  <Statistic.Value className={isMobile && 'center-align'}>{parseFloat(get(KeyTerms, 'interestRate')) || ' - '}%</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
                 <Statistic className="basic" size="mini">
                   <Statistic.Label className={isMobile && 'center-align'}>Term</Statistic.Label>
-                  <Statistic.Value className={isMobile && 'center-align'}>60 months</Statistic.Value>
+                  <Statistic.Value className={isMobile && 'center-align'}>{get(KeyTerms, 'maturity') || ' - '} months</Statistic.Value>
                 </Statistic>
               </Grid.Column>
               <Grid.Column>
                 <Statistic className="basic" size="mini">
                   <Statistic.Label className={isMobile && 'center-align'}>Principal</Statistic.Label>
                   <Statistic.Value className={`${isMobile && 'center-align'} highlight-text`}>
-                    $100
+                    {Helper.CurrencyFormat(principalAmt)}
                   </Statistic.Value>
                   <div className="slidecontainer">
                     <input
                       type="range"
-                      min="1"
-                      max="100"
-                      value="10"
+                      min={get(KeyTerms, 'minOfferingAmount') || 0}
+                      max={get(KeyTerms, 'maxOfferingAmount') || 0}
+                      value={principalAmt}
+                      onChange={this.handleRangeChange}
                       className="slider mt-10 mb-10"
                       id="myRange"
                     />
@@ -217,11 +229,14 @@ class TermNoteDetails extends Component {
               <Grid.Column>
                 <Statistic className="basic" size="mini">
                   <Statistic.Label className={isMobile && 'center-align'}>Total Payment*</Statistic.Label>
-                  <Statistic.Value className={`highlight-text ${isMobile && 'center-align'}`}>$146</Statistic.Value>
+                  <Statistic.Value className={`highlight-text ${isMobile && 'center-align'}`}>{Helper.CurrencyFormat(totalPayment)}</Statistic.Value>
                 </Statistic>
               </Grid.Column>
             </Grid>
-            <PaymentCalculator propsDetails={this.props} />
+            {totalPaymentChart.length === parseFloat(get(KeyTerms, 'maturity')) ?
+              <PaymentCalculator data={totalPaymentChart} propsDetails={this.props} /> :
+              <p><InlineLoader text="Insufficient Data To Display Payment Calculator" /></p>
+            }
             <p className="mt-30 note">
               * Payment for any given month (including the total payment at the end of the
               final month) indicates the cumulative amount contractually required to be paid
