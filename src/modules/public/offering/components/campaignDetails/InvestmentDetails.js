@@ -10,6 +10,7 @@ import { InlineLoader, Image64 } from '../../../../../theme/shared';
 @inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
   componentWillMount() {
+    this.props.campaignStore.calculateTotalPaymentData();
     window.addEventListener('scroll', this.handleOnScroll);
   }
   componentDidMount() {
