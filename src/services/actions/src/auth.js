@@ -166,9 +166,7 @@ export class Auth {
             commonStore.setToken(result.idToken.jwtToken);
             userStore.setCurrentUser(this.parseRoles(this.adjustRoles(result.idToken.payload)));
             if (cookie.load('ISSUER_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
-              commonStore.updateUserReferralCode(userStore.currentUser.sub, cookie.load('ISSUER_REFERRAL_CODE')).then(() => {
-                cookie.remove('ISSUER_REFERRAL_CODE');
-              });
+              cookie.remove('ISSUER_REFERRAL_CODE');
             }
             if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('ISSUER_REFERRAL_CODE') !== undefined) {
               cookie.remove('SAASQUATCH_REFERRAL_CODE');
