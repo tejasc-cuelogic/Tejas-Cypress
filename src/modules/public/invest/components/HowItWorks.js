@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Divider, Item, Image } from 'semantic-ui-react';
-import { ASSETS_URL } from '../../../../constants/aws';
+import { Header, Grid, Button, Container, List, Divider, Item } from 'semantic-ui-react';
+import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -40,7 +40,7 @@ const HowItWorks = () => (
           <Grid.Column>
             <div className="flex-content">
               <Header as="h3">
-                <Image src={`${ASSETS_URL}images/icons/termnotes.svg`} />
+                <NSImage path="icons/termnotes.svg" />
                 <span>Term Notes</span>
               </Header>
               <Item.Group relaxed="very">
@@ -76,7 +76,7 @@ const HowItWorks = () => (
           <Grid.Column>
             <div className="flex-content">
               <Header as="h3">
-                <Image src={`${ASSETS_URL}images/icons/applied.svg`} />
+                <NSImage path="icons/applied.svg" />
                 <span>Revenue Sharing Notes</span>
               </Header>
               <Item.Group relaxed="very" className="question-list">
@@ -114,7 +114,7 @@ const HowItWorks = () => (
           <Grid.Column>
             <div className="flex-content">
               <Header as="h3">
-                <Image src={`${ASSETS_URL}images/icons/equity.svg`} />
+                <NSImage path="icons/equity.svg" />
                 <span>Preferred Equity</span>
               </Header>
               <Item.Group relaxed="very" className="question-list">

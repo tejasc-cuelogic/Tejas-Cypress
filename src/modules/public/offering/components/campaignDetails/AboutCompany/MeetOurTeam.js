@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Header, Item, Image, Icon } from 'semantic-ui-react';
+import { Header, Item, Icon } from 'semantic-ui-react';
 import Parser from 'html-react-parser';
 import { filter } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../../constants/aws';
+import NSImage from '../../../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 991;
 
@@ -37,7 +37,7 @@ class MeetOurTeam extends Component {
                             data.uploads.headshot.url ? (
                               <Image64 srcUrl={data.uploads.headshot.url} />
                             ) : (
-                              <Image src={`${ASSETS_URL}images/leader-placeholder.jpg`} />
+                              <NSImage path="leader-placeholder.jpg" />
                             )
                           }
                         </div>

@@ -1,9 +1,9 @@
 import React from 'react';
 import { get } from 'lodash';
-import { Feed, Image, Transition } from 'semantic-ui-react';
+import { Feed, Transition } from 'semantic-ui-react';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared/';
 import DateTimeFormat from '../../../../../theme/shared/src/DateTimeFormat';
-import { ASSETS_URL } from '../../../../../constants/aws';
+import NSImage from '../../../../shared/NSImage';
 
 const ActivityFeed = ({ loading, activities }) => (
   <Transition.Group animation="glow" className="activities" as={Feed} duration={900}>
@@ -21,7 +21,7 @@ const ActivityFeed = ({ loading, activities }) => (
                     roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
                   }}
                 /> :
-                <Image src={`${ASSETS_URL}images/logo-icon.svg`} />
+                <NSImage path="logo-icon.svg" />
               }
             </Feed.Label>
             <Feed.Content>

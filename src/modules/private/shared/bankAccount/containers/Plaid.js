@@ -4,10 +4,10 @@ import { withRouter, Link } from 'react-router-dom';
 import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer, Message } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
-import defaultBankLogo from '../../../../../assets/images/banks/default.png';
 import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
+import NSImage from '../../../shared/NSImage';
 
 @inject('bankAccountStore', 'uiStore', 'transactionStore')
 @withRouter
@@ -90,7 +90,7 @@ export default class Plaid extends Component {
                     >
                       <span>
                         {bankData.logo !== null && <Image centered size="mini" src={`data:image/png;base64, ${bankData.logo}`} />}
-                        {bankData.logo === null && <Image centered size="mini" src={defaultBankLogo} />}
+                        {bankData.logo === null && <NSImage centered size="mini" path="banks/default.png" />}
                         <span>{bankData.name}</span>
                       </span>
                     </Link>
@@ -110,7 +110,7 @@ export default class Plaid extends Component {
                     >
                       {/* eslint-disable import/no-dynamic-require */}
                       {/* eslint-disable global-require */}
-                      <Image centered src={require(`../../../../../assets/images/banks/${bankData.institutionID}.png`)} />
+                      <NSImage centered path={`banks/${bankData.institutionID}.png`} />
                     </Link>
                   </Grid.Column>
                 ))
