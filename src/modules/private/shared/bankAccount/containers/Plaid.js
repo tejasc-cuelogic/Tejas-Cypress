@@ -7,7 +7,7 @@ import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
 import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
-import NSImage from '../../../shared/NSImage';
+import NSImage from '../../../../shared/NSImage';
 
 @inject('bankAccountStore', 'uiStore', 'transactionStore')
 @withRouter

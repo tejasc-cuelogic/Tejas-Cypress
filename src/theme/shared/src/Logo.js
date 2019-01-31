@@ -2,7 +2,6 @@ import React from 'react';
 import NSImage from '../../../modules/shared/NSImage';
 
 const getSrc = (src) => {
-  console.log(src);
   switch (src) {
     case 'LogoColor':
       return 'logo-color.svg';
