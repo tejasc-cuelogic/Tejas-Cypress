@@ -2476,3 +2476,4 @@ export const POC_DETAILS = {
     placeHolder: 'MM/DD/YYYY',
   },
 };
+

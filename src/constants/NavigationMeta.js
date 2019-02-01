@@ -248,7 +248,7 @@ export const PRIVATE_NAV = [
     ],
   },
   {
-    icon: 'lightbulb outline',
+    icon: 'list layout',
     title: 'Categories',
     capability: 'INSIGHTS_ANY',
     to: 'categories',
