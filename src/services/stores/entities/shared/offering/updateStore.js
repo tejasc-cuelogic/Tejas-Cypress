@@ -32,9 +32,11 @@ export class UpdateStore {
         query: allUpdates,
         variables,
         onFetch: (res) => {
-          this.requestState.page = 1;
-          this.requestState.skip = 0;
-          this.setDb(res.offeringUpdatesByOfferId);
+          if (res && res.offeringUpdatesByOfferId) {
+            this.requestState.page = 1;
+            this.requestState.skip = 0;
+            this.setDb(res.offeringUpdatesByOfferId);
+          }
         },
       });
     }

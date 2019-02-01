@@ -1,6 +1,8 @@
 import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, reduce, get } from 'lodash';
+import money from 'money-math';
+import { Calculator } from 'amortizejs';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { allOfferings, campaignDetailsQuery, getOfferingById, campaignDetailsForInvestmentQuery, getOfferingsReferral } from '../../queries/campagin';
 import { STAGES } from '../../../constants/admin/offerings';
@@ -18,6 +20,10 @@ export class CampaignStore {
   @observable activeToDisplay = this.RECORDS_TO_DISPLAY;
   @observable gallarySelectedImageIndex = null;
   @observable docsWithBoxLink = [];
+  @observable investmentDetailsSubNavs = [];
+  @observable totalPayment = 0;
+  @observable principalAmt = 0;
+  @observable totalPaymentChart = [];
 
 
   @action
@@ -207,6 +213,28 @@ export class CampaignStore {
       offerStructure = keyTerms.securities;
     }
     return offerStructure;
+  }
+
+  @action
+  calculateTotalPaymentData = (amt = null) => {
+    this.principalAmt = amt !== null ? amt : get(this.campaign, 'keyTerms.minOfferingAmount');
+    const data = {
+      method: 'mortgage',
+      apr: parseFloat(get(this.campaign, 'keyTerms.interestRate')) || 0,
+      balance: this.principalAmt || 0,
+      loanTerm: parseFloat(get(this.campaign, 'keyTerms.maturity')) || 0,
+    };
+    const { totalPayment, schedule } = Calculator.calculate(data);
+    this.totalPayment = money.floatToAmount(totalPayment, 2);
+    const payChart = [];
+    schedule.forEach((item, index) => {
+      payChart.push({
+        month: index + 1,
+        'Projected total payment': money.floatToAmount(totalPayment - item.remainingBalance, 2),
+      });
+    });
+    this.totalPaymentChart = payChart;
+    console.log('data is ->', schedule);
   }
 }
 

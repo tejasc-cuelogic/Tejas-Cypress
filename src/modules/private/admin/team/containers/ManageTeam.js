@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PrivateLayout from '../../../shared/PrivateHOC';
-import { ByKeyword as Search } from '../../../../../theme/form/Filters';
 import AllTeam from '../components/AllTeam';
 
 export default class ManageTeam extends Component {
@@ -14,7 +13,6 @@ export default class ManageTeam extends Component {
     return (
       <PrivateLayout
         {...this.props}
-        P1={<Search {...this.props} w={[9]} placeholder="Type keyword" executeSearch={this.search} />}
       >
         <AllTeam match={match} />
       </PrivateLayout>

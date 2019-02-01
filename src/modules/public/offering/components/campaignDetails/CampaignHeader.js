@@ -36,11 +36,12 @@ export default class CampaignHeader extends Component {
           <Responsive minWidth={768} as={Container}>
             <Grid relaxed stackable>
               <Grid.Column width={10}>
-                <div className="video-wrapper">
+                <div className="video-wrapper campaign">
                   {campaign && campaign.media &&
                     campaign.media.heroVideo && campaign.media.heroVideo.url ?
                       <Link to={`${this.props.match.url}/overview/herovideo`}>
                         <Image64
+                          bg
                           srcUrl={get(campaign, 'media.heroImage.url')}
                           imgType="heroImage"
                         />
@@ -48,6 +49,7 @@ export default class CampaignHeader extends Component {
                       </Link>
                       :
                       <Image64
+                        bg
                         srcUrl={get(campaign, 'media.heroImage.url')}
                         imgType="heroImage"
                       />

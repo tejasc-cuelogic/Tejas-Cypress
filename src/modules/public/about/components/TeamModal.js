@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 // import { Link } from 'react-router-dom';
 import { inject } from 'mobx-react';
-import { Header, Modal, Item, Image, Divider } from 'semantic-ui-react';
+import { Header, Modal, Item } from 'semantic-ui-react';
+import { Image64 } from '../../../../theme/shared';
 
 const isMobile = document.documentElement.clientWidth < 768;
 @inject('teamStore')
@@ -30,7 +31,10 @@ class TeamModal extends Component {
         <Modal.Content scrolling={isMobile}>
           <Item.Group>
             <Item>
-              <Image src={member.avatar} />
+              <Image64
+                srcUrl={member.avatar}
+                alt={member.memberName}
+              />
               <Item.Content verticalAlign="middle" className="team-details-container">
                 <div className={isMobile ? '' : 'scrollable-content'}>
                   <Header as="h4">
@@ -40,8 +44,8 @@ class TeamModal extends Component {
                   <p>
                     {member.story}
                   </p>
-                  <Divider hidden />
-                  {/* <div>
+                  {/* <Divider hidden />
+                    <div>
                     {member.social.map(stype => (
                       <Link to={stype.url === null ? '/' : stype.url} className="icon-link">
                         <Icon

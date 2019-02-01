@@ -43,6 +43,8 @@ class App extends Component {
     const { authStore, location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
+      const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
+      this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
       history.push('/password-protected');
     }
     authActions.verifySession()

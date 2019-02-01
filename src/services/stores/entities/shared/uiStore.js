@@ -16,6 +16,7 @@ export class UiStore {
   @observable errors = undefined;
   @observable success = undefined;
   @observable redirectURL = undefined;
+  @observable passwordPreviewURL = null;
   @observable asyncCheckLoader = false;
   @observable devBanner = !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
   @observable confirmBox = {

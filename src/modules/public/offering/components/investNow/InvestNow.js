@@ -1,5 +1,6 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
@@ -28,6 +29,12 @@ export default class InvestNow extends React.Component {
       const { offeringId } = this.props.match.params;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       this.props.campaignStore.getCampaignDetails(offeringId);
+    }
+    // syncing data between saasquatch and RDS
+    const { userDetails } = this.props.userDetailsStore;
+    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
+    if (saasQuatchUserId) {
+      this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
     }
   }
   componentDidMount() {
