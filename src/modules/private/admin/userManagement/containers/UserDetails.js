@@ -88,7 +88,7 @@ export default class AccountDetails extends Component {
                 <Button.Group floated="right">
                   <Button inverted color="red" content="Delete Profile" />
                   <Button onClick={() => this.toggleState(details.id, details.locked && details.locked.lock === 'LOCKED' ? 'UNLOCKED' : 'LOCKED')} color="red">
-                    <Icon className="ns-lock" />  {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
+                    <Icon className="ns-lock" /> {details.locked && details.locked.lock === 'LOCKED' ? 'Unlock' : 'Lock'} Profile
                   </Button>
                 </Button.Group>
               </Item.Content>

@@ -32,9 +32,9 @@ class BonusRewards extends Component {
       campaign.offering.misc.additionalBonusRewardsContent : null;
     return (
       <div className="campaign-content-wrapper">
+        <span className="anchor-scroll" />
         <Header as="h3" className="mb-30 anchor-wrap">
           Bonus Rewards
-          <span className="anchor-scroll" />
         </Header>
         {rewardsTiers && rewardsTiers.length ?
           <Aux>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Divider } from 'semantic-ui-react';
+import { get } from 'lodash';
 import Aux from 'react-aux';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
@@ -14,8 +15,10 @@ export default class TermsOfUse extends Component {
   componentWillMount() {
     window.addEventListener('scroll', this.handleOnScroll);
     if (this.props.campaignStore.docsWithBoxLink.length === 0) {
-      const offeringRegulationArr = this.props.campaignStore.campaign.regulation.split('_');
-      const regulationType = offeringRegulationArr[0];
+      const { campaign } = this.props.campaignStore;
+      const regulation = get(campaign, 'regulation');
+      const offeringRegulationArr = (regulation && regulation.split('_')) || '';
+      const regulationType = get(offeringRegulationArr, '[0]');
       const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
       this.props.campaignStore.getAllBoxLinks(accountType);
       this.props.accreditationStore.getUserAccreditation();
@@ -24,10 +27,10 @@ export default class TermsOfUse extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      });
+      }), 100);
     }
   }
   componentWillUnmount() {
@@ -37,7 +40,8 @@ export default class TermsOfUse extends Component {
   handleOnScroll = () => {
     const { docsWithBoxLink } = this.props.campaignStore;
     docsWithBoxLink.map((item, index) => {
-      if (document.getElementById(`doc-${index}`).getBoundingClientRect().top < 50) {
+      if (document.getElementById(`doc-${index}`).getBoundingClientRect().top < 100 &&
+      document.getElementById(item).getBoundingClientRect().top > 0) {
         this.props.navStore.setFieldValue('currentActiveHash', `#doc-${index}`);
       }
       return null;

@@ -109,6 +109,7 @@ export default class NewUpdate extends Component {
                   changed={FChange}
                   name="content"
                   content={PBUILDER_FRM.fields.content.value}
+                  overrides={{ heightMin: '70vh' }}
                 />
               </Form>
             </Grid.Column>
