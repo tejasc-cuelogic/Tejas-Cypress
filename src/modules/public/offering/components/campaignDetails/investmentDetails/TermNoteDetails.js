@@ -210,7 +210,7 @@ class TermNoteDetails extends Component {
               <Grid.Column>
                 <Statistic className="basic" size="mini">
                   <Statistic.Label className={isMobile && 'center-align'}>Principal</Statistic.Label>
-                  <Statistic.Value className={`${isMobile && 'center-align'} highlight-text`}>
+                  <Statistic.Value className={`${isMobile && 'center-align'} highlight-text mb-10`}>
                     {Helper.CurrencyFormat(principalAmt)}
                   </Statistic.Value>
                   <div className="slidecontainer">
