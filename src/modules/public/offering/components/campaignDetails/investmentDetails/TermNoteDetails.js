@@ -12,7 +12,12 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('campaignStore')
 @observer
 class TermNoteDetails extends Component {
+  state = {
+    offeringAmt: 0,
+  }
   handleRangeChange = (e) => {
+    const offeringAmt = (e.target.value / e.target.max) * 100;
+    this.setState({ offeringAmt });
     this.props.campaignStore.calculateTotalPaymentData(e.target.value);
   }
   render() {
@@ -213,7 +218,8 @@ class TermNoteDetails extends Component {
                   <Statistic.Value className={`${isMobile && 'center-align'} highlight-text mb-10`}>
                     {Helper.CurrencyFormat(principalAmt)}
                   </Statistic.Value>
-                  <div className="slidecontainer">
+                  <div className="slider-container">
+                    <p style={{ width: `${this.state.offeringAmt}%` }} />
                     <input
                       type="range"
                       min={get(KeyTerms, 'minOfferingAmount') || 0}
