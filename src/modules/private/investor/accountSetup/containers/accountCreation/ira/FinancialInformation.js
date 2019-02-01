@@ -38,7 +38,7 @@ export default class FinancialInformation extends React.Component {
               ))
             }
             <Divider hidden />
-            <p className="grey-header">Your investment limit2:
+            <p className="grey-header">Your investment limit:
               <span className={`large ml-10 ${FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '' ? 'negative-text' : 'highlight-text'}`} >
                 {Helper.CurrencyFormat(FIN_INFO_FRM.fields.investmentLimit.value)}
               </span>

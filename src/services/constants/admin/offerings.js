@@ -1456,7 +1456,7 @@ export const NEW_OFFER = {
     value: '',
     label: 'Regulation',
     error: undefined,
-    rule: 'string',
+    rule: 'required',
     placeHolder: 'Choose here',
   },
 };
@@ -2476,3 +2476,4 @@ export const POC_DETAILS = {
     placeHolder: 'MM/DD/YYYY',
   },
 };
+

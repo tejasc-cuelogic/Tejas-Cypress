@@ -22,6 +22,10 @@ export default class Summary extends React.Component {
       getLegalDocsFileIds();
     }
   }
+  componentDidMount() {
+    const { plaidAccDetails } = this.props.bankAccountStore;
+    this.props.uiStore.setProgress(isEmpty(plaidAccDetails));
+  }
   handleCreateAccount = () => {
     const {
       isCipExpired,

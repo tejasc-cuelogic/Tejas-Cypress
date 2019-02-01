@@ -234,7 +234,6 @@ export class CampaignStore {
       });
     });
     this.totalPaymentChart = payChart;
-    console.log('data is ->', schedule);
   }
 }
 

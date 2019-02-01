@@ -27,6 +27,17 @@ export default class PaymentCalculator extends Component {
       activeIndex: index,
     });
   }
+  // CustomTooltip = index => (
+  //   <div className="ui right center popup transition">
+  //     <p className="label">Projected total payment</p>
+  //     <p className="intro">{data[index]['Projected total payment']}</p>
+  //   </div>
+  // );
+  handleHover = (data1, index) => {
+    this.setState({
+      activeIndex: index,
+    });
+  }
 
   formatY = item => Helper.CurrencyFormat(item);
   render() {
