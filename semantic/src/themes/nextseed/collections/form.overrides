@@ -180,6 +180,7 @@
         min-width:300px;
         margin-top:@28px;
         margin-bottom:@7px;
+        display: block !important;
         label{
             font-size:@14px;
         }

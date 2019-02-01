@@ -36,7 +36,9 @@ export default class HtmlEditor extends React.Component {
             name: get(images, '[0].name'),
           };
           fileUpload.uploadToS3(fileObj, 'offering').then((res) => {
-            editor.image.insert(res);
+            if (editor && editor.image) {
+              editor.image.insert(res);
+            }
           });
         },
         // 'froalaEditor.image.error': (e, editor, error) => {
