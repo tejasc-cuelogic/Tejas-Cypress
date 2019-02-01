@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Divider } from 'semantic-ui-react';
+import { get } from 'lodash';
 import Aux from 'react-aux';
 import { DataFormatter } from '../../../../../helper';
 import Disclosure from './DataRoom/Disclosure';
@@ -14,8 +15,10 @@ export default class TermsOfUse extends Component {
   componentWillMount() {
     window.addEventListener('scroll', this.handleOnScroll);
     if (this.props.campaignStore.docsWithBoxLink.length === 0) {
-      const offeringRegulationArr = this.props.campaignStore.campaign.regulation.split('_');
-      const regulationType = offeringRegulationArr[0];
+      const { campaign } = this.props.campaignStore;
+      const regulation = get(campaign, 'regulation');
+      const offeringRegulationArr = (regulation && regulation.split('_')) || '';
+      const regulationType = get(offeringRegulationArr, '[0]');
       const accountType = regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
       this.props.campaignStore.getAllBoxLinks(accountType);
       this.props.accreditationStore.getUserAccreditation();
