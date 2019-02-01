@@ -1,5 +1,6 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find } from 'lodash';
+import { forEach, isArray, find, mapValues } from 'lodash';
+
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
 import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
@@ -18,10 +19,10 @@ export class AccreditationStore {
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
   @observable ENTITY_ACCREDITATION_FORM =
-  Validator.prepareFormObject(ENTITY_ACCREDITATION_METHODS);
+    Validator.prepareFormObject(ENTITY_ACCREDITATION_METHODS);
   @observable INCOME_EVIDENCE_FORM = Validator.prepareFormObject(INCOME_EVIDENCE);
   @observable TRUST_ENTITY_ACCREDITATION_FRM =
-  Validator.prepareFormObject(TRUST_ENTITY_ACCREDITATION);
+    Validator.prepareFormObject(TRUST_ENTITY_ACCREDITATION);
   @observable VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
   @observable INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
   @observable ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
@@ -38,6 +39,12 @@ export class AccreditationStore {
     },
   };
   @observable data = [];
+  @observable accreditationDetails = {
+    inactiveAccreditation: {},
+    pendingAccreditation: {},
+    notEligibleAccreditation: {},
+    eligibleAccreditation: {},
+  };
   @action
   initRequest = (reqParams) => {
     const {
@@ -110,7 +117,7 @@ export class AccreditationStore {
   @action
   incomeEvidenceChange = (e, result) => {
     this.INCOME_EVIDENCE_FORM =
-    Validator.onChange(this.INCOME_EVIDENCE_FORM, Validator.pullValues(e, result));
+      Validator.onChange(this.INCOME_EVIDENCE_FORM, Validator.pullValues(e, result));
   }
 
   @action
@@ -227,7 +234,7 @@ export class AccreditationStore {
   @action
   setAccreditationMethod = (form, value) => {
     this[form] =
-        Validator.onChange(this[form], { name: 'method', value });
+      Validator.onChange(this[form], { name: 'method', value });
   }
   @action
   initiateSearch = (srchParams) => {
@@ -386,7 +393,7 @@ export class AccreditationStore {
     }
     if (formType) {
       userAccreditationDetails.isPartialProfile =
-      !this.isAllFormValidCheck(this.formType(formType));
+        !this.isAllFormValidCheck(this.formType(formType));
     }
     const payLoad = {
       id: userDetailsStore.currentUserId,
@@ -523,7 +530,7 @@ export class AccreditationStore {
   setFormData = (form, ref, accountType) => {
     const { userDetails } = this;
     const entityAccreditation = userDetails && userDetails.roles &&
-    userDetails.roles.find(role => role.name === accountType);
+      userDetails.roles.find(role => role.name === accountType);
     const appData = accountType === 'entity' ? entityAccreditation && entityAccreditation.details : userDetails;
     if (!appData) {
       return false;
@@ -548,11 +555,11 @@ export class AccreditationStore {
   initiateAccreditation = () => {
     const { userDetails } = this;
     const entityAccreditation = userDetails && userDetails.roles &&
-    userDetails.roles.find(role => role.name === 'entity');
+      userDetails.roles.find(role => role.name === 'entity');
     this.accreditationData.individual = userDetails && userDetails.accreditation;
     this.accreditationData.ira = userDetails && userDetails.accreditation;
     this.accreditationData.entity = entityAccreditation && entityAccreditation.details &&
-    entityAccreditation.details.accreditation;
+      entityAccreditation.details.accreditation;
   }
 
   @computed get isUserAccreditated() {
@@ -564,13 +571,23 @@ export class AccreditationStore {
       if ((this.userData.data.user.accreditation &&
         this.userData.data.user.accreditation.status === 'APPROVED') ||
         (entityAccountDetails && entityAccountDetails.details &&
-        entityAccountDetails.details.accreditation
-        && entityAccountDetails.details.accreditation.status === 'APPROVED')
+          entityAccountDetails.details.accreditation
+          && entityAccountDetails.details.accreditation.status === 'APPROVED')
       ) {
         return true;
       }
     }
     return false;
+  }
+
+  @action
+  accreditatedAccounts() {
+    const aggreditationDetails = this.accreditationData;
+    this.accreditationDetails.inactiveAccreditation =
+      mapValues(aggreditationDetails, a => a && a.status === null);
+    this.accreditationDetails.pendingAccreditation = mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED');
+    this.accreditationDetails.notEligibleAccreditation = mapValues(aggreditationDetails, a => a && a.status === 'DECLINED');
+    this.accreditationDetails.eligibleAccreditation = mapValues(aggreditationDetails, a => a && a.status === 'APPROVED');
   }
 }
 export default new AccreditationStore();

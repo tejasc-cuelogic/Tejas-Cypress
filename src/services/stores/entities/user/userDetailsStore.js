@@ -229,18 +229,18 @@ export class UserDetailsStore {
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
       details.isMigratedUser =
-      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
+        (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount =
-      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
-      this.userDetails.status === 'MIGRATION_FULL');
+        (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
+          this.userDetails.status === 'MIGRATION_FULL');
       details.investorProfileCompleted =
-      this.userDetails.investorProfileData === null ?
-        false : this.userDetails.investorProfileData ?
-          !this.userDetails.investorProfileData.isPartialProfile : false;
+        this.userDetails.investorProfileData === null ?
+          false : this.userDetails.investorProfileData ?
+            !this.userDetails.investorProfileData.isPartialProfile : false;
       details.isCipDoneForMigratedUser =
-      this.userDetails.cip && this.userDetails.cip.requestId !== null;
+        this.userDetails.cip && this.userDetails.cip.requestId !== null;
       details.isEmailConfirmed = this.userDetails.email && this.userDetails.email.verified
-      && this.userDetails.email.verified !== null;
+        && this.userDetails.email.verified !== null;
       details.finalStatus = (details.activeAccounts.length > 2 &&
         this.validAccStatus.includes(details.idVerification) &&
         details.phoneVerification === 'DONE');
@@ -319,13 +319,13 @@ export class UserDetailsStore {
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.partialAccounts.length > 0) {
       const accValue =
-      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.inActiveAccounts.length > 0) {
       const accValue =
-      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
     } else {
@@ -361,7 +361,7 @@ export class UserDetailsStore {
       if (details.investorProfileData && details.investorProfileData.annualIncome) {
         ['annualIncomeCurrentYear'].map((item, index) => {
           this.USER_INVESTOR_PROFILE.fields[item].value =
-          details.investorProfileData.annualIncome[index].income;
+            details.investorProfileData.annualIncome[index].income;
           return true;
         });
       }
@@ -411,8 +411,8 @@ export class UserDetailsStore {
 
   @computed get isBasicVerDoneForMigratedFullUser() {
     if (this.signupStatus.phoneVerification === 'DONE' &&
-    this.signupStatus.isEmailConfirmed &&
-    this.signupStatus.isCipDoneForMigratedUser) {
+      this.signupStatus.isEmailConfirmed &&
+      this.signupStatus.isCipDoneForMigratedUser) {
       return true;
     }
     return false;

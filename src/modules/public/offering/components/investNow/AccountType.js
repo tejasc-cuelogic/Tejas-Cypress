@@ -8,7 +8,7 @@ import cookie from 'react-cookies';
 import { FormRadioGroup } from '../../../../../theme/form';
 
 
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore')
 @withRouter
 @observer
 class AccountType extends Component {
@@ -44,6 +44,10 @@ class AccountType extends Component {
         console.log('Send email function call....');
       }
     }
+    this.props.accreditationStore.getUserAccreditation().then(() => {
+      this.props.accreditationStore.initiateAccreditation();
+      this.props.accreditationStore.accreditatedAccounts();
+    });
   }
   componentDidMount() {
     const {
@@ -91,6 +95,10 @@ class AccountType extends Component {
       `${this.props.userDetailsStore.pendingStep}` : '/app/summary';
     const headerToShow = (activeAccounts.length || investAccTypes.values.length) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
+    const { accreditationData } = this.props.accreditationStore;
+    console.log('accreditationData ==>', accreditationData);
+    const { accreditationDetails } = this.props.accreditationStore;
+    console.log('details==>', accreditationDetails);
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerToShow}</Header>

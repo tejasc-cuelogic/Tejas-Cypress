@@ -7,7 +7,7 @@ import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner } from './theme/shared';
 import Layout from './theme/layout/Layout';
-import Private from './modules/private';
+// import Private from './modules/private';
 import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
@@ -99,7 +99,7 @@ class App extends Component {
           <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
               <Switch>
-                <Route exact path="/app/*" component={Private} />
+                {/* <Route exact path="/app/*" component={Private} /> */}
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>
