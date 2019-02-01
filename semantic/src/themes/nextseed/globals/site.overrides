@@ -2485,23 +2485,23 @@ p.check-extra-info{
 .slider:hover {
 	opacity: 1;
 }
-.slider::-webkit-slider-thumb {
+input[type='range']::-webkit-slider-thumb {
 	-webkit-appearance: none;
-	appearance: none;
-	width: @25px;
-	height: @25px;
+	width: @20px;
+	height: @20px;
 	background: @white;
 	cursor: pointer;
 	border-radius: 50px;
-	box-shadow: 0px 1px rgba(0, 0, 0, 0.25);
-	border: 1px solid @neutral-darkwhite inset;
+	border: 2px solid @primary-one;
+	color: @primary-one;
 }
 .slider::-moz-range-thumb {
-	width: @25px;
-	height: @25px;
+	width: @20px;
+	height: @20px;
 	background: @white;
 	cursor: pointer;
 	border-radius: 50px;
+	color: @primary-one;
 }
 //	Range slider Ends
 //	About company carousel
@@ -2733,4 +2733,30 @@ p.check-extra-info{
 	background-color: @white;
 	padding: @14px;
 	font-weight: @bold;
+	position: relative;
+	box-shadow: @commonShadow;
+	&.recharts-tooltip-wrapper-right::before {
+		content: '';
+		position: absolute;
+		left: -14px;
+		top: 50%;
+		transform: translate(0, -50%);
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 15px 15px 15px 0;
+		border-color: transparent @white transparent transparent;
+	}
+	&.recharts-tooltip-wrapper-left::after {
+		content: '';
+		height: 15px;
+		width: 15px;
+		position: absolute;
+		right: -14px;
+		top: 50%;
+		transform: translate(0, -50%);
+		border-style: solid;
+		border-width: 15px 0 15px 15px;
+		border-color: transparent transparent transparent @white;
+	}
 }
