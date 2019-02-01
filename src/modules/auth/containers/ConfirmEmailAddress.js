@@ -12,7 +12,7 @@ import Helper from '../../../helper/utility';
 import { SIGNUP_REDIRECT_ROLEWISE } from '../../../constants/user';
 import ConfirmCreateOrCancel from './ConfirmCreateOrCancel';
 
-@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore')
+@inject('authStore', 'uiStore', 'userStore', 'userDetailsStore', 'identityStore', 'referralsStore')
 @withRouter
 @observer
 export default class ConfirmEmailAddress extends Component {
@@ -68,6 +68,15 @@ export default class ConfirmEmailAddress extends Component {
             .then(() => {
               const { roles } = this.props.userStore.currentUser;
               if (roles.includes('investor')) {
+                if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
+                  const referralCode = cookie.load('SAASQUATCH_REFERRAL_CODE');
+                  this.props.referralsStore.userPartialFullSignupWithReferralCode(referralCode)
+                    .then((data) => {
+                      if (data) {
+                        cookie.remove('SAASQUATCH_REFERRAL_CODE');
+                      }
+                    });
+                }
                 this.props.identityStore.setIsOptConfirmed(true);
               } else {
                 const redirectUrl = !roles ? '/auth/login' :
@@ -141,7 +150,7 @@ export default class ConfirmEmailAddress extends Component {
       return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
     }
     return (
-      <Modal closeOnDimmerClick={false} size="mini" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
+      <Modal closeOnDimmerClick={false} size="tiny" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
         <Route exact path={`${this.props.match.url}/create-or-cancel`} render={() => <ConfirmCreateOrCancel refLink={this.props.match.url} />} />
         <Modal.Header className="center-align signup-header">
           <Header as="h3">Confirm your e-mail address</Header>
@@ -158,13 +167,14 @@ export default class ConfirmEmailAddress extends Component {
           <FormInput
             ishidelabel
             type="email"
-            size="huge"
             name="email"
             fielddata={CONFIRM_FRM.fields.email}
             changed={ConfirmChange}
             readOnly
             displayMode
-            className="display-only"
+            disabled
+            title={CONFIRM_FRM.fields.email.value}
+            className={`${CONFIRM_FRM.fields.email.value.length > 38 ? 'font-16' : 'font-20'} display-only`}
           />
           {!isMigratedUser &&
             <Link to={changeEmailAddressLink} className="grey-link green-hover">Change email address</Link>

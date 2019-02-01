@@ -21,10 +21,10 @@ class Overview extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      });
+      }), 100);
     }
   }
   componentWillUnmount() {
@@ -33,7 +33,8 @@ class Overview extends Component {
   }
   handleOnScroll = () => {
     ['top-things-to-know', 'investment-highlights', 'updates', 'gallery'].forEach((item) => {
-      if (document.getElementById(item).getBoundingClientRect().top < 50) {
+      if (document.getElementById(item).getBoundingClientRect().top < 100 &&
+      document.getElementById(item).getBoundingClientRect().top > 0) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
       }
     });

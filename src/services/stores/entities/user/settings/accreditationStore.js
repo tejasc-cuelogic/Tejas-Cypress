@@ -38,6 +38,7 @@ export class AccreditationStore {
     },
   };
   @observable data = [];
+  @observable accreditaionMethod = null;
   @action
   initRequest = (reqParams) => {
     const {
@@ -282,6 +283,9 @@ export class AccreditationStore {
   formValidCheck = (forms) => {
     const notOkForms = forms.filter((form) => {
       this.checkFormIsValid(form);
+      if (form === 'ACCREDITATION_FORM' && !this.accreditaionMethod) {
+        return true;
+      }
       return !this[form].meta.isValid;
     });
     return notOkForms;
@@ -535,6 +539,9 @@ export class AccreditationStore {
       this.setIncomeEvidenceData(appData.accreditation);
     } else if (form !== 'INCOME_UPLOAD_DOC_FORM' && form !== 'ASSETS_UPLOAD_DOC_FORM') {
       this[form] = Validator.setFormData(this[form], appData, ref);
+      if (form === 'ACCREDITATION_FORM') {
+        this.accreditaionMethod = appData.accreditation.method;
+      }
     } else {
       this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
       this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);

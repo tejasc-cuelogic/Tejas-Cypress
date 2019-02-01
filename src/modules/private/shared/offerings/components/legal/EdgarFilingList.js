@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
-import {
-  isEmpty,
-  find,
-} from 'lodash';
+import { isEmpty, find, get } from 'lodash';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
@@ -96,8 +93,9 @@ export default class EdgarFilingList extends Component {
   render() {
     const offeringFilingList = this.props.offeringFilings;
     const offering = this.props.offeringDetails;
-    const offeringRegulationArr = offering.regulation.split('_');
-    const regulationType = offeringRegulationArr[0];
+    const regulation = get(offering, 'regulation');
+    const offeringRegulationArr = (regulation && regulation.split('_')) || '';
+    const regulationType = get(offeringRegulationArr, '[0]');
     const BOX_URL_TO_CONSIDER = regulationType === 'BD' ? NEXTSEED_SECURITIES_BOX_URL : NEXTSEED_BOX_URL;
     if (isEmpty(offeringFilingList)) {
       return (

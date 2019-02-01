@@ -135,6 +135,7 @@ class offerDetails extends Component {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
           }
         }
+        this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
         tempItem.subNavigations = uniqWith(temNavList, isEqual);
       }
       newNavList.push(tempItem);

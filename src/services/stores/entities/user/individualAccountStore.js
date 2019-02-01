@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore } from '../../index';
+import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore, referralsStore } from '../../index';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
@@ -75,6 +75,7 @@ class IndividualAccountStore {
               }
               if (formStatus === 'FULL') {
                 Helper.toast('Individual account created successfully.', 'success');
+                referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
                 this.submited = true;
                 if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
                   userDetailsStore.userDetails.cip.failType &&
