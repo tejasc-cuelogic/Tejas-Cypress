@@ -6,6 +6,7 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
 import { FormRadioGroup } from '../../../../../theme/form';
+import { OFFERING_ACCRDITATION_STATUS_MESSAGE } from '../../../../../constants/offering';
 
 
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore')
@@ -47,6 +48,7 @@ class AccountType extends Component {
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
       this.props.accreditationStore.accreditatedAccounts();
+      this.props.accreditationStore.validInvestmentAccounts();
     });
   }
   componentDidMount() {
@@ -82,6 +84,8 @@ class AccountType extends Component {
       prepareAccountTypes,
     } = this.props.investmentStore;
     prepareAccountTypes(activeAccounts);
+    const { campaign } = this.props.campaignStore;
+    const offeringReuglation = campaign && campaign.regulation;
     const { userDetails, setPartialInvestmenSession } = this.props.userDetailsStore;
     const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
     const offeringInvestnowURL = this.props.match.url;
@@ -93,25 +97,43 @@ class AccountType extends Component {
     const { currentUser } = this.props.userStore;
     const redirectURL = currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
       `${this.props.userDetailsStore.pendingStep}` : '/app/summary';
-    const headerToShow = (activeAccounts.length || investAccTypes.values.length) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
+    let headerToShow = (activeAccounts.length || investAccTypes.values.length) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
+    let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
-    const { accreditationData } = this.props.accreditationStore;
-    console.log('accreditationData ==>', accreditationData);
-    const { accreditationDetails } = this.props.accreditationStore;
-    console.log('details==>', accreditationDetails);
+    const { userAccreditatedStatus } = this.props.accreditationStore;
+    const userAccredetiationState = userAccreditatedStatus;
+    if (offeringReuglation && offeringReuglation === 'BD_506C') {
+      headerToShow = userAccredetiationState !== '' ? OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].header : headerToShow;
+      subHeaderToShow = userAccredetiationState !== '' ? OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].subHeader : subHeaderToShow;
+    }
     return (
       <Aux>
         <Header as="h3" textAlign="center"> {headerToShow}</Header>
         <Form error className="account-type-tab">
           {investAccTypes.values.length ?
             <Aux>
-              <p className="center-align">Choose an account type</p>
-              <FormRadioGroup
-                name="investAccountType"
-                containerclassname="button-radio center-align"
-                fielddata={investAccTypes}
-                changed={accTypeChanged}
-              />
+              <p className="center-align">{subHeaderToShow}</p>
+              {userAccredetiationState === 'ELGIBLE' || userAccredetiationState === '' ?
+                <FormRadioGroup
+                  name="investAccountType"
+                  containerclassname="button-radio center-align"
+                  fielddata={investAccTypes}
+                  changed={accTypeChanged}
+                />
+                :
+                <Aux>
+                  <div className="center-align">
+                    {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
+                      <Link to={redirectURL} className="text-link">
+                        <Icon className="ns-arrow-right" color="green" />
+                        Apply for accrditation
+                      </Link>
+                      :
+                      null
+                    }
+                  </div>
+                </Aux>
+              }
             </Aux>
             :
             <div className="center-align">

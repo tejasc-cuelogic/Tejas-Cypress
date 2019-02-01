@@ -9,7 +9,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -133,6 +133,8 @@ export default class InvestNow extends React.Component {
       setIsEnterPressed,
     } = uiStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const { userAccreditatedStatus } = this.props.accreditationStore;
+    const userAccredetiationState = userAccreditatedStatus;
     const steps =
       [
         {
@@ -165,8 +167,8 @@ export default class InvestNow extends React.Component {
           isValid: '',
         },
       ];
-    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length);
-    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length);
+    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === ''));
+    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === ''));
     return (
       <div className="step-progress" >
         {

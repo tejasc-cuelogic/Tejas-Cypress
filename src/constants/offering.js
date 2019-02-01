@@ -64,3 +64,11 @@ export const OFFERING_COMMENTS_SCOPE = {
     titleITo: 'Note to NS', titleIFrom: 'Note from NS', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
   },
 };
+
+export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {
+  PENDING: { header: 'Accrditation Verification In Review', subHeader: 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.' },
+  NOT_ELGIBLE: { header: 'Accrditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
+  INACTIVE: { header: 'Accrditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
+  EXPIRED: { header: 'Accrditation Expired - Renewal Required', subHeader: '' },
+  ELGIBLE: { header: 'ELGIBLE', subHeader: '' },
+};

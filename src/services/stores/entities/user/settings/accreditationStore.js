@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove } from 'lodash';
 
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
@@ -7,7 +7,7 @@ import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, V
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { uiStore, userDetailsStore } from '../../../index';
+import { uiStore, userDetailsStore, investmentStore } from '../../../index';
 import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
@@ -40,12 +40,13 @@ export class AccreditationStore {
   };
   @observable data = [];
   @observable accreditaionMethod = null;
-  @observable accreditationDetails = {
-    inactiveAccreditation: {},
-    pendingAccreditation: {},
-    notEligibleAccreditation: {},
-    eligibleAccreditation: {},
-  };
+  // @observable accreditationDetails = {
+  //   inactiveAccreditation: [],
+  //   pendingAccreditation: [],
+  //   notEligibleAccreditation: [],
+  //   eligibleAccreditation: [],
+  // };
+  @observable accreditationDetails = {};
   @action
   initRequest = (reqParams) => {
     const {
@@ -590,11 +591,64 @@ export class AccreditationStore {
   @action
   accreditatedAccounts() {
     const aggreditationDetails = this.accreditationData;
-    this.accreditationDetails.inactiveAccreditation =
-      mapValues(aggreditationDetails, a => a && a.status === null);
-    this.accreditationDetails.pendingAccreditation = mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED');
-    this.accreditationDetails.notEligibleAccreditation = mapValues(aggreditationDetails, a => a && a.status === 'DECLINED');
-    this.accreditationDetails.eligibleAccreditation = mapValues(aggreditationDetails, a => a && a.status === 'APPROVED');
+    const inactiveResult =
+      this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === null));
+    const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
+    const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
+    const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'APPROVED'));
+    this.accreditationDetails.inactiveAccreditation = inactiveResult;
+    this.accreditationDetails.pendingAccreditation = pendingResult;
+    this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
+    this.accreditationDetails.eligibleAccreditation = eligibalResult;
+  }
+  getKeyResult = (dataObj) => {
+    const resultArr = [];
+    if (dataObj) {
+      forOwn(dataObj, (value, key) => {
+        if (value === true) {
+          resultArr.push(key);
+        }
+      });
+    }
+    return resultArr;
+  }
+  @computed get userAccreditatedStatus() {
+    let userAccredetiationState = '';
+    const {
+      eligibleAccreditation,
+      inactiveAccreditation,
+      notEligibleAccreditation,
+      pendingAccreditation,
+    } = this.accreditationDetails;
+    if (eligibleAccreditation) {
+      if (eligibleAccreditation.length <= 0) {
+        if (pendingAccreditation.length) {
+          userAccredetiationState = 'PENDING';
+        } else if (notEligibleAccreditation.length) {
+          userAccredetiationState = 'NOT_ELGIBLE';
+        } else if (inactiveAccreditation) {
+          userAccredetiationState = 'INACTIVE';
+        }
+      } else {
+        userAccredetiationState = 'ELGIBLE';
+      }
+      return userAccredetiationState;
+    }
+    return userAccredetiationState;
+  }
+  @action
+  validInvestmentAccounts() {
+    const { eligibleAccreditation } = this.accreditationDetails;
+    // if (eligibleAccreditation) {
+    //   eligibleAccreditation.push('individual', 'ira');
+    // }
+    if (eligibleAccreditation &&
+      eligibleAccreditation.length &&
+      investmentStore.investAccTypes.values.length) {
+      forEach(eligibleAccreditation, (account) => {
+        remove(investmentStore.investAccTypes.values, { value: account });
+      });
+    }
   }
 }
 export default new AccreditationStore();
