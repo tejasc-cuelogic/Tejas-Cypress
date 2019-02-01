@@ -1459,6 +1459,7 @@ export class OfferingCreationStore {
     } else {
       this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.splice(index, 1);
     }
+    Validator.validateForm(this.ADD_NEW_BONUS_REWARD_FRM, false, false, false);
   }
 
   @action
