@@ -1,4 +1,4 @@
-# 0.0.0 (2019-01-31)
+# 0.0.0 (2019-02-01)
 
 
 ### Bug Fixes
@@ -87,8 +87,8 @@
 * **Demo[Issue [123](https://chaos.ns.team/nsv2/ns-ops/issues/123) - Demo]:** Demo ([0c04c4c](https://chaos.ns.team/nsv2/ns-client/commits/0c04c4c))
 * **Demo[Issue [222](https://chaos.ns.team/nsv2/ns-ops/issues/222) - Demo]:** Demo ([ff83a8a](https://chaos.ns.team/nsv2/ns-client/commits/ff83a8a))
 * **demo[Issue [233](https://chaos.ns.team/nsv2/ns-ops/issues/233) - demo]:** demo ([38719e8](https://chaos.ns.team/nsv2/ns-client/commits/38719e8))
-* **demo[Issue [234](https://chaos.ns.team/nsv2/ns-ops/issues/234) - demo]:** demo ([047d5a4](https://chaos.ns.team/nsv2/ns-client/commits/047d5a4))
 * **demo[Issue [234](https://chaos.ns.team/nsv2/ns-ops/issues/234) - demo]:** demo ([0df58c9](https://chaos.ns.team/nsv2/ns-client/commits/0df58c9))
+* **demo[Issue [234](https://chaos.ns.team/nsv2/ns-ops/issues/234) - demo]:** demo ([047d5a4](https://chaos.ns.team/nsv2/ns-client/commits/047d5a4))
 * **Demo[Issue [311](https://chaos.ns.team/nsv2/ns-ops/issues/311) - Demo]:** Demo ([1381e31](https://chaos.ns.team/nsv2/ns-client/commits/1381e31))
 * **demo[Issue [333](https://chaos.ns.team/nsv2/ns-ops/issues/333) - demo]:** demo ([e53bafe](https://chaos.ns.team/nsv2/ns-client/commits/e53bafe))
 * **demo[Issue [333](https://chaos.ns.team/nsv2/ns-ops/issues/333) - demo]:** demo ([527a8b7](https://chaos.ns.team/nsv2/ns-client/commits/527a8b7))
@@ -106,6 +106,7 @@
 * **demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([c2c7a53](https://chaos.ns.team/nsv2/ns-client/commits/c2c7a53))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([16a38ce](https://chaos.ns.team/nsv2/ns-client/commits/16a38ce))
+* **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demo ([0c26501](https://chaos.ns.team/nsv2/ns-client/commits/0c26501))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([eae9081](https://chaos.ns.team/nsv2/ns-client/commits/eae9081))
 * **Demo[Issue [347](https://chaos.ns.team/nsv2/ns-ops/issues/347) - demo]:** demoOneLoginhttps://chaos.ns.team ([92d7999](https://chaos.ns.team/nsv2/ns-client/commits/92d7999))
 * **demo[Issue [445](https://chaos.ns.team/nsv2/ns-ops/issues/445) - demo]:** demo ([ed880e6](https://chaos.ns.team/nsv2/ns-client/commits/ed880e6))

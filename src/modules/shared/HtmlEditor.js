@@ -1,8 +1,8 @@
 /* eslint-disable import/no-extraneous-dependencies  */
 import React from 'react';
 import $ from 'jquery';
+import { get } from 'lodash';
 import Parser from 'html-react-parser';
-import { S3 } from 'wysiwyg-editor-node-sdk/lib/s3';
 import 'froala-editor/js/froala_editor.pkgd.min';
 
 // Require Editor CSS files.
@@ -13,32 +13,50 @@ import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'font-awesome/css/font-awesome.css';
 
 import FroalaEditor from 'react-froala-wysiwyg';
-import { UPLOADS_CONFIG } from '../../constants/aws';
+import { fileUpload } from '../../services/actions';
 
 window.$ = $;
 window.jQuery = $;
 
-const uploadsConfig = { ...UPLOADS_CONFIG, ...{ acl: 'public-read', keyStart: 'offerings/' } };
-const getConfig = (keyStart, overrides) => {
-  const config = {
-    placeholderText: 'Enter here..',
-    toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
-    charCounterCount: false,
-    imageUploadURL: false,
-    // height: '70vh',
-    editorClass: 'html-editor',
-    linkList: [],
-    heightMin: 244,
-    heightMax: '70vh',
-    imageManager: false,
-    imageUploadToS3: S3.getHash({ ...uploadsConfig }),
-  };
-  return { ...config, ...overrides };
-};
-
 export default class HtmlEditor extends React.Component {
+  getConfig = (keyStart, overrides) => {
+    const config = {
+      placeholderText: 'Enter here..',
+      toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
+      charCounterCount: false,
+      editorClass: 'html-editor',
+      linkList: [],
+      heightMin: 244,
+      heightMax: '70vh',
+      imageManager: false,
+      events: {
+        'froalaEditor.image.beforeUpload': (e, editor, images) => {
+          const fileObj = {
+            obj: this.getBase64(get(images, '[0]')),
+            name: get(images, '[0].name'),
+          };
+          fileUpload.uploadToS3(fileObj, 'offering').then((res) => {
+            editor.image.insert(res);
+          });
+        },
+        // 'froalaEditor.image.error': (e, editor, error) => {
+        //   console.log(error);
+        // },
+      },
+    };
+    return { ...config, ...overrides };
+  };
+  getBase64 = file => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
   handleModelChange = (content) => {
     this.props.changed(this.props.name, content, this.props.form, this.props.index);
+  }
+  handelUpload = () => {
+    console.log('d');
   }
   render() {
     const { keyStart, readOnly } = this.props;
@@ -49,7 +67,7 @@ export default class HtmlEditor extends React.Component {
       <FroalaEditor
         tag="textarea"
         model={this.props.content}
-        config={getConfig(keyStart, this.props.overrides)}
+        config={this.getConfig(keyStart, this.props.overrides)}
         onModelChange={this.handleModelChange}
       />
     );
