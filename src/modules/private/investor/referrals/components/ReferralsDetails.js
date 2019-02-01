@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
+import { Header, Popup, Icon } from 'semantic-ui-react';
 import { SAASQUATCH_TENANT_ALIAS } from '../../../../../constants/common';
 import { InlineLoader } from './../../../../../theme/shared';
+import Helper from '../../../../../helper/utility';
 
 @inject('referralsStore', 'userDetailsStore')
 @observer
 export default class ReferralsDetails extends Component {
-  state = { loading: true };
+  state = { loading: true, availableCredit: '0' };
   componentWillMount() {
     const { userDetails } = this.props.userDetailsStore;
     const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
     if (saasQuatchUserId) {
       this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
     }
+    this.props.referralsStore.getUserRewardBalance()
+      .then(data => this.setState({
+        availableCredit: data.getUserRewardBalance,
+      }));
   }
   componentDidMount() {
     const { userDetails } = this.props.userDetailsStore;
@@ -41,14 +47,12 @@ export default class ReferralsDetails extends Component {
             jwt: data.getJwtReferralEmbeddedWidget,
           };
           window.squatch.widgets().upsertUser(initObj).then((response) => {
-            console.log(response.user);
             this.setState({ loading: false });
             if (!saasQuatchUserId) {
               this.props.referralsStore.getReferralCreditsInformation(response.user.referralCode);
             }
-          }).catch((error) => {
+          }).catch(() => {
             this.setState({ loading: false });
-            console.log(error);
           });
         });
       }).catch(() => this.setState({ loading: false }));
@@ -58,7 +62,12 @@ export default class ReferralsDetails extends Component {
     return (
       <div>
         {this.state.loading ?
-          <InlineLoader /> : null
+          <InlineLoader /> :
+          <Header as="h3" textAlign="center">
+            Available Credit{' '}
+            <Popup trigger={<small><Icon name="help circle" color="green" size="small" /></small>} content="Credits can be used for investment purposes only and cannot be withdrawn. Uninvested credits do not bear interest." position="bottom center" />
+            {Helper.MoneyMathDisplayCurrency(this.state.availableCredit)}
+          </Header>
         }
         <div className="squatchembed" />
       </div>
