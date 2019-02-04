@@ -1,11 +1,53 @@
+/* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-// import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import Aux from 'react-aux';
-import { Accordion, Table, Icon, Button, Confirm } from 'semantic-ui-react';
+import { Accordion, Icon, Button, Confirm } from 'semantic-ui-react';
 import { InlineLoader } from './../../../../../theme/shared';
 
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+
+const SortableItem = SortableElement(({
+  cat, openModal, publishStatus, handleDeleteConfirm, category, categoryTypeIndex,
+}) => (
+  <div className="row-wrap">
+    <div>
+      <DragHandle />
+      {cat.categoryName}
+    </div>
+    <div className="action">
+      <Button onClick={() => openModal(cat.id, category.title, cat.categoryType, categoryTypeIndex)} className="link-button">
+        <Icon name="ns-pencil" />
+      </Button>
+      <Button className="link-button">
+        <Icon onClick={() => publishStatus(cat.id, cat.isPublished)} color="blue" name={cat.isPublished ? 'ns-view' : 'ns-no-view'} />
+      </Button>
+      <Button className="link-button">
+        <Icon name="ns-trash" onClick={() => handleDeleteConfirm(cat.id)} />
+      </Button>
+    </div>
+  </div>
+));
+
+const SortableList = SortableContainer(({
+  docs, openModal, handleDeleteConfirm, category, publishStatus, categoryTypeIndex,
+}) => (
+  <div>
+    {docs.map((doc, index) => (
+      <SortableItem
+        key={`item-${index}`}
+        categoryTypeIndex={categoryTypeIndex}
+        cat={doc}
+        publishStatus={publishStatus}
+        openModal={openModal}
+        handleDeleteConfirm={handleDeleteConfirm}
+        category={category}
+      />
+    ))}
+  </div>
+));
 @inject('uiStore', 'categoryStore')
 @withRouter
 @observer
@@ -19,18 +61,12 @@ export default class AllCategories extends Component {
       this.toggleAccordianContent();
     }
   }
-  toggleAccordianContent = (categoryIndex = null) => {
-    let index = categoryIndex;
-    if (categoryIndex === null) {
-      const { currentCategoryIndex } = this.props.categoryStore;
-      if (currentCategoryIndex !== null) {
-        index = currentCategoryIndex;
-      }
-      this.state.activeIndex = index === 0 ? -1 : this.state.activeIndex;
+  onSortEnd = ({ oldIndex, newIndex }, index) => {
+    const { allCategoriesData, setCategoryOrder } = this.props.categoryStore;
+    const categories = allCategoriesData;
+    if (oldIndex !== newIndex) {
+      setCategoryOrder(arrayMove(categories[index].categories, oldIndex, newIndex), index);
     }
-    const { activeIndex } = this.state;
-    const newIndex = activeIndex === index ? -1 : index;
-    this.setState({ activeIndex: newIndex });
   }
   openModal = (id, title, type, index) => {
     this.props.categoryStore.setFieldValue('selectedCategoryState', { title, type, index });
@@ -50,6 +86,19 @@ export default class AllCategories extends Component {
     const { saveCategories } = this.props.categoryStore;
     saveCategories(id, isPublished);
   }
+  toggleAccordianContent = (categoryIndex = null) => {
+    let index = categoryIndex;
+    if (categoryIndex === null) {
+      const { currentCategoryIndex } = this.props.categoryStore;
+      if (currentCategoryIndex !== null) {
+        index = currentCategoryIndex;
+      }
+      this.state.activeIndex = index === 0 ? -1 : this.state.activeIndex;
+    }
+    const { activeIndex } = this.state;
+    const newIndex = activeIndex === index ? -1 : index;
+    this.setState({ activeIndex: newIndex });
+  }
   render() {
     const { activeIndex } = this.state;
     const { loading } = this.props.categoryStore;
@@ -57,7 +106,7 @@ export default class AllCategories extends Component {
     if (loading) {
       return <InlineLoader />;
     }
-    const categories = this.props.categoryStore.getAllCategoriesData;
+    const categories = this.props.categoryStore.allCategoriesData;
     if (categories.length === 0) {
       return <InlineLoader text="No data found." />;
     }
@@ -71,33 +120,19 @@ export default class AllCategories extends Component {
               <Button onClick={() => this.openModal('new', category.title, category.type, index)} className="link-button pull-right"><small>+ Add Category</small></Button>
             </Accordion.Title>
             <Accordion.Content active={activeIndex === index} className="categories-acc">
-              <div className="table-wrapper">
-                <Table unstackable basic className="form-table categories-table">
-                  <Table.Body>
-                    {
-                      category.categories && category.categories.length ?
-                      category.categories.map(cat => (
-                        <Table.Row>
-                          <Table.Cell>
-                            <Icon className="ns-drag-holder-large mr-10" />
-                            {cat.categoryName}
-                          </Table.Cell>
-                          <Table.Cell collapsing>
-                            <Button onClick={() => this.openModal(cat.id, category.title, cat.categoryType, index)} className="link-button">
-                              <Icon name="ns-pencil" />
-                            </Button>
-                            <Button className="link-button">
-                              <Icon onClick={() => this.publishStatus(cat.id, cat.isPublished)} color="blue" name={cat.isPublished ? 'ns-view' : 'ns-no-view'} />
-                            </Button>
-                            <Button className="link-button">
-                              <Icon name="ns-trash" onClick={() => this.handleDeleteConfirm(cat.id)} />
-                            </Button>
-                          </Table.Cell>
-                        </Table.Row>
-                      )) : <Table.Row> No Category To Display! </Table.Row>
-                    }
-                  </Table.Body>
-                </Table>
+              <div className="ui basic compact table form-table categories-table">
+                <SortableList
+                  docs={category.categories}
+                  pressDelay={100}
+                  categoryTypeIndex={index}
+                  onSortEnd={e => this.onSortEnd(e, index)}
+                  openModal={this.openModal}
+                  publishStatus={this.publishStatus}
+                  handleDeleteConfirm={this.handleDeleteConfirm}
+                  lockAxis="y"
+                  category={category}
+                  useDragHandle
+                />
               </div>
             </Accordion.Content>
           </Accordion>

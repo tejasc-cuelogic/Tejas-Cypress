@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getCategories, createCategory, updateCategoryInfo, deleteCategory, updateCategoryStaus } from '../../queries/category';
+import { getCategories, createCategory, updateCategoryInfo, deleteCategory, updateCategoryStaus, setCategoryOrderForCategoryType } from '../../queries/category';
 import { CATEGORY_DETAILS, CATEGORY_DATA } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
@@ -19,6 +19,8 @@ export class CategoryStore {
     @observable ifApiHitFirstTime = true;
     @observable currentCategoryIndex = null;
     @observable uniqueCategoryError = null;
+    @observable updateOrderLoading = false;
+    @observable allCategoriesData = [];
 
     @action
     setFieldValue = (key, val) => {
@@ -32,6 +34,9 @@ export class CategoryStore {
         query: getCategories,
         fetchPolicy: 'network-only',
         variables: { types: null },
+        onFetch: () => {
+          this.setAllCategoriesData();
+        },
       });
     }
 
@@ -48,7 +53,8 @@ export class CategoryStore {
       this.CATEGORY_DETAILS_FRM = Validator.prepareFormObject(CATEGORY_DETAILS);
       this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
     }
-    @computed get getAllCategoriesData() {
+    @action
+    setAllCategoriesData = () => {
       const formattedData = [];
       CATEGORY_DATA.map((data) => {
         const categoryData = {
@@ -59,7 +65,7 @@ export class CategoryStore {
         formattedData.push(categoryData);
         return null;
       });
-      return formattedData;
+      this.allCategoriesData = formattedData;
     }
 
     @computed get categories() {
@@ -146,6 +152,33 @@ export class CategoryStore {
             uiStore.setProgress(false);
           });
       });
+    }
+
+    @action
+    setCategoryOrder = (newArr, catIndex) => {
+      // this.updateOrderLoading = true;
+      this.allCategoriesData[catIndex].categories = newArr;
+      const categoryDetails = [];
+      newArr.forEach((item, index) => {
+        categoryDetails.push({
+          categoryId: item.id,
+          order: index + 1,
+        });
+      });
+      uiStore.setProgress();
+      client
+        .mutate({
+          mutation: setCategoryOrderForCategoryType,
+          variables: { categoryDetails },
+        }).then(() => {
+          this.setFieldValue('updateOrderLoading', false);
+          Helper.toast('Category Order Changed successfully.', 'success');
+        }).catch(() => {
+          Helper.toast('Error while creating Category', 'error');
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
+        });
     }
 }
 
