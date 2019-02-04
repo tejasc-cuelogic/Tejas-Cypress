@@ -47,6 +47,7 @@ export class AccreditationStore {
   //   eligibleAccreditation: [],
   // };
   @observable accreditationDetails = {};
+  @observable userAccredetiationState = undefined;
   @action
   initRequest = (reqParams) => {
     const {
@@ -589,7 +590,7 @@ export class AccreditationStore {
   }
 
   @action
-  accreditatedAccounts() {
+  accreditatedAccounts = () => {
     const aggreditationDetails = this.accreditationData;
     const inactiveResult =
       this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === null));
@@ -612,8 +613,9 @@ export class AccreditationStore {
     }
     return resultArr;
   }
-  @computed get userAccreditatedStatus() {
-    let userAccredetiationState = '';
+  @action
+  userAccreditatedStatus = () => {
+    // let userAccredetiationState = '';
     const {
       eligibleAccreditation,
       inactiveAccreditation,
@@ -623,21 +625,21 @@ export class AccreditationStore {
     if (eligibleAccreditation) {
       if (eligibleAccreditation.length <= 0) {
         if (pendingAccreditation.length) {
-          userAccredetiationState = 'PENDING';
+          this.userAccredetiationState = 'PENDING';
         } else if (notEligibleAccreditation.length) {
-          userAccredetiationState = 'NOT_ELGIBLE';
+          this.userAccredetiationState = 'NOT_ELGIBLE';
         } else if (inactiveAccreditation) {
-          userAccredetiationState = 'INACTIVE';
+          this.userAccredetiationState = 'INACTIVE';
         }
       } else {
-        userAccredetiationState = 'ELGIBLE';
+        this.userAccredetiationState = 'ELGIBLE';
       }
-      return userAccredetiationState;
+      // return userAccredetiationState;
     }
-    return userAccredetiationState;
+    // return userAccredetiationState;
   }
   @action
-  validInvestmentAccounts() {
+  validInvestmentAccounts = () => {
     const { eligibleAccreditation } = this.accreditationDetails;
     // if (eligibleAccreditation) {
     //   eligibleAccreditation.push('individual', 'ira');
@@ -649,6 +651,10 @@ export class AccreditationStore {
         remove(investmentStore.investAccTypes.values, { value: account });
       });
     }
+  }
+  @action
+  resetUserAccreditatedStatus = () => {
+    this.userAccredetiationState = undefined;
   }
 }
 export default new AccreditationStore();

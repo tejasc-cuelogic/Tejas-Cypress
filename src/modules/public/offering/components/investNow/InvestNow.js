@@ -133,8 +133,8 @@ export default class InvestNow extends React.Component {
       setIsEnterPressed,
     } = uiStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
-    const { userAccreditatedStatus } = this.props.accreditationStore;
-    const userAccredetiationState = userAccreditatedStatus;
+    const { userAccredetiationState } = this.props.accreditationStore;
+    // const userAccredetiationState = userAccreditatedStatus;
     const steps =
       [
         {
@@ -167,8 +167,8 @@ export default class InvestNow extends React.Component {
           isValid: '',
         },
       ];
-    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === ''));
-    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === ''));
+    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === undefined));
+    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === undefined));
     return (
       <div className="step-progress" >
         {

@@ -12,10 +12,13 @@ import { ASSETS_URL } from '../../../../../constants/aws';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 
-@inject('campaignStore')
+@inject('campaignStore', 'accreditationStore')
 @observer
 export default class CampaignList extends Component {
   state = { filters: false };
+  componentWillMount() {
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+  }
   componentWillUnmount() {
     this.props.campaignStore.resetDisplayCounts();
   }
