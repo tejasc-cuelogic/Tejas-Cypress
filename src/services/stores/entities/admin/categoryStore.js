@@ -19,7 +19,6 @@ export class CategoryStore {
     @observable ifApiHitFirstTime = true;
     @observable currentCategoryIndex = null;
     @observable uniqueCategoryError = null;
-    @observable updateOrderLoading = false;
     @observable allCategoriesData = [];
 
     @action
@@ -156,7 +155,6 @@ export class CategoryStore {
 
     @action
     setCategoryOrder = (newArr, catIndex) => {
-      // this.updateOrderLoading = true;
       this.allCategoriesData[catIndex].categories = newArr;
       const categoryDetails = [];
       newArr.forEach((item, index) => {
@@ -171,7 +169,6 @@ export class CategoryStore {
           mutation: setCategoryOrderForCategoryType,
           variables: { categoryDetails },
         }).then(() => {
-          this.setFieldValue('updateOrderLoading', false);
           Helper.toast('Category Order Changed successfully.', 'success');
         }).catch(() => {
           Helper.toast('Error while creating Category', 'error');

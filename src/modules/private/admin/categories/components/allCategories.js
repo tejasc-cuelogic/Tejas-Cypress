@@ -44,6 +44,7 @@ const SortableList = SortableContainer(({
         openModal={openModal}
         handleDeleteConfirm={handleDeleteConfirm}
         category={category}
+        index={index}
       />
     ))}
   </div>
