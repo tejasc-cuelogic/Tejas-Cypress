@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Header, Form, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { startsWith } from 'lodash';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import ButtonGroupType2 from './ButtonGroupType2';
 
@@ -34,18 +34,9 @@ export default class KeyTerms extends Component {
       offer.keyTerms.approved : null;
     const isReadonly = ((submitted && !isManager) || (isManager && approved && approved.status));
     let MODIFIED_REGULATION_VALUES = null;
-    const bdRegulationValue = [
-      { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
-      { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
-      { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
-    ];
-    const fpRegulationValue = [
-      { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
-      { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
-    ];
     if (KEY_TERMS_FRM && KEY_TERMS_FRM.fields && KEY_TERMS_FRM.fields.regulation
       && KEY_TERMS_FRM.fields.regulation.value) {
-      MODIFIED_REGULATION_VALUES = startsWith(KEY_TERMS_FRM.fields.regulation.value, 'BD_') ? bdRegulationValue : fpRegulationValue;
+      MODIFIED_REGULATION_VALUES = startsWith(KEY_TERMS_FRM.fields.regulation.value, 'BD_') ? BD_REGULATION_VALUES : FP_REGULATION_VALUES;
     } else {
       MODIFIED_REGULATION_VALUES = REGULATION_VALUES;
     }
