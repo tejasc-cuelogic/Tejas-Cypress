@@ -50,7 +50,7 @@ export default class BusinessDetails extends Component {
   handleLearnMore = () => {
     const { getBoxLink, setField, agreements } = this.props.agreementsStore;
     setField('docLoading', true);
-    getBoxLink(agreements[2].id, 'SECURITIES').then((res) => {
+    getBoxLink(agreements[2].id, 'SERVICES').then((res) => {
       setField('docLoading', false);
       window.open(res.data.getBoxEmbedLink, '_blank');
     });
@@ -112,7 +112,7 @@ export default class BusinessDetails extends Component {
                   <div className="field-wrap">
                     <Header as={hideFields ? 'h6' : 'h5'} className="mb-20">Existing Debt {index + 1}
                       {!hideFields && BUSINESS_DETAILS_FRM.fields.debts.length > 1 &&
-                        <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
+                        <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('debts', index)}>
                           <Icon color="red" size="small" className="ns-trash" />
                         </Button>
                       }
@@ -166,7 +166,7 @@ export default class BusinessDetails extends Component {
             }
             <Divider hidden />
             {!hideFields &&
-              <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
+              <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'debts')} color="violet" className="ghost-button additional-field" content="+ Add additional debt" />
             }
           </FormElementWrap>
           <FormElementWrap
@@ -209,7 +209,7 @@ export default class BusinessDetails extends Component {
                 <Grid.Column largeScreen={14} computer={14} tablet={16} mobile={16}>
                   <Header as={hideFields ? 'h6' : 'h5'}>Owner {index + 1}
                     {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length > 1 &&
-                      <Button disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
+                      <Button type="button" disabled={formReadOnlyMode} icon className="link-button pull-right" onClick={() => this.toggleConfirm('owners', index)}>
                         <Icon color="red" size="small" className="ns-trash" />
                       </Button>
                     }
@@ -298,7 +298,7 @@ export default class BusinessDetails extends Component {
             {!hideFields && BUSINESS_DETAILS_FRM.fields.owners.length !== 5 &&
               <Aux>
                 <Divider hidden />
-                <Button disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
+                <Button type="button" disabled={formReadOnlyMode} size="tiny" onClick={e => addMoreForms(e, 'owners')} color="violet" className="ghost-button additional-field" content="+ Add other owners" />
               </Aux>
             }
           </FormElementWrap>
