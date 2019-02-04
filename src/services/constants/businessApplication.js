@@ -562,8 +562,8 @@ export const BUSINESS_DOC = {
   personalGuarantee: {
     value: '',
     values: [
-      { label: 'Yes', value: 'true' },
-      { label: 'No', value: 'false' },
+      { label: 'Yes', value: true },
+      { label: 'No', value: false },
     ],
     error: undefined,
     rule: 'required',
