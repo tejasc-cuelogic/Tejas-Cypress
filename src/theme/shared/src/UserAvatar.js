@@ -13,7 +13,7 @@ const UserAvatar = observer((props) => {
   const { UserInfo, size, base64url } = props;
   const isBase64ImgTag = !!(UserInfo.avatarUrl || (UserInfo.firstName !== '' && UserInfo.lastName !== '') || UserInfo.name);
   const imgSize = size || 'tiny';
-  const avatarName = (UserInfo.firstName && UserInfo.lastName) ? `${UserInfo.name} ${UserInfo.lastName}` : UserInfo.firstName ? UserInfo.firstName : '';
+  const avatarName = (UserInfo.firstName && UserInfo.lastName) ? `${UserInfo.firstName} ${UserInfo.lastName}` : UserInfo.name ? UserInfo.name : '';
   const avatarProfile = UserInfo.avatarUrl || (UserInfo.firstName && UserInfo.lastName) || UserInfo.name ? UserInfo.avatarUrl : `${ASSETS_URL}images/leader-placeholder.jpg`;
   if (avatarProfile) {
     return (
