@@ -12,14 +12,12 @@ class TransferRequest extends Component {
     const {
       getTransferRequestAmount,
       setStepToBeRendered,
-      // setFieldValue,
     } = this.props.investmentStore;
     if (getTransferRequestAmount > 0) {
       setStepToBeRendered(2);
     } else {
       this.props.history.push('agreement');
     }
-    // setFieldValue('investmentFlowErrorMessage', null);
   }
   componentDidMount() {
     const { setStepToBeRendered, setFieldValue } = this.props.investmentStore;

@@ -3,7 +3,17 @@
 *******************************/
 .ui.comments {
     .comment {
+        border-bottom: 1px solid @neutral-darkwhite;
+        border-top: 0;
+        padding: @30px;
+        @media only screen and (max-width : @mobileBreakpoint){
+			padding: @15px;
+		}
         &:first-child {
+            border-top: 0;
+            padding-top: @30px;
+        }
+        &:not(:last-child) {
             border-top: 0;
         }
         .author {
@@ -30,7 +40,6 @@
         &.issuer-comment {
             background: fade(@primary-two-darken, 8%);
             border-radius: 4px;
-            padding: 24px 30px;
             border-top: 0;
             +.issuer-comment {
                 margin-top: @24px;
@@ -40,33 +49,34 @@
             }
         }
         .comments {
+            margin: 0;
             &.reply-comments {
+                margin: @30px 0 0;
                 .comment {
-                    padding: @24px @30px;
+                    // padding: @24px @30px;
                     background: transparent;
-                    border-top: 1px solid #ccc;
-                    &:first-child {
-                        padding-top: 0;
-                        border-top: 0;
-                    }
+                    border-top: 1px solid fade(@primary-two-darken, 8%);
                     &:last-child {
                         padding-bottom: 0;
                     }
                     &.issuer-comment {
                         background: fade(@primary-two-darken, 8%);
                         border-radius: 4px;
-                        padding: 24px 30px;
                         border-top: 0;
+                        // margin: @30px 0 0;
                         +.issuer-comment {
                             margin-top: @24px;
                         }
                         +.comment {
-                            border-top: 0;
+                            border-top: 1px solid fade(@primary-two-darken, 8%);
                         }
                     }
                 }  
             }
 
+        }
+        .public-form~p{
+            font-size: @12px;
         }
     }
     &.comments-modal {

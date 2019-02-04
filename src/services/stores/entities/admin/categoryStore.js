@@ -3,18 +3,22 @@ import graphql from 'mobx-apollo';
 import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { getCategories, createCategory, updateCategoryInfo, deleteCategory, updateCategoryStaus } from '../../queries/category';
-import { CATEGORY_DETAILS } from '../../../constants/admin/categories';
+import { CATEGORY_DETAILS, CATEGORY_DATA } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../../../services/stores';
-// import { createCategory } from '../../../../services/stores/queries/category';
+
 export class CategoryStore {
     @observable data = [];
     @observable CATEGORY_DETAILS_FRM = Validator.prepareFormObject(CATEGORY_DETAILS);
     @observable selectedCategoryState = {
       type: '',
       title: '',
+      index: '',
     };
+    @observable ifApiHitFirstTime = true;
+    @observable currentCategoryIndex = null;
+    @observable uniqueCategoryError = null;
 
     @action
     setFieldValue = (key, val) => {
@@ -23,10 +27,9 @@ export class CategoryStore {
 
     @action
     initRequest = () => {
-      const query = getCategories;
       this.data = graphql({
         client,
-        query,
+        query: getCategories,
         fetchPolicy: 'network-only',
         variables: { types: null },
       });
@@ -34,7 +37,6 @@ export class CategoryStore {
 
     @action
     setFormData = (id) => {
-      console.log('datasrc -> ', this.categories.find(obj => obj.id === id));
       this.CATEGORY_DETAILS_FRM =
       Validator.setFormData(this.CATEGORY_DETAILS_FRM, this.categories.find(obj => obj.id === id));
       this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
@@ -47,37 +49,16 @@ export class CategoryStore {
       this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
     }
     @computed get getAllCategoriesData() {
-      const formattedData = [
-        {
-          title: 'Investor FAQ',
-          categories: filter(this.categories, cat => cat.categoryType === 'INV_FAQ'),
-          type: 'INV_FAQ',
-        },
-        {
-          title: 'Issuer FAQ',
-          categories: filter(this.categories, cat => cat.categoryType === 'ISSUER_FAQ'),
-          type: 'ISSUER_FAQ',
-        },
-        {
-          title: 'Issuer Knowledge Base',
-          categories: filter(this.categories, cat => cat.categoryType === 'ISSUER_KB'),
-          type: 'ISSUER_KB',
-        },
-        {
-          title: 'Investor Knowledge Base',
-          categories: filter(this.categories, cat => cat.categoryType === 'INVESTOR_KB'),
-          type: 'INVESTOR_KB',
-        },
-        {
-          title: 'Offerings',
-          categories: filter(this.categories, cat => cat.categoryType === 'OFFERINGS'),
-          type: 'OFFERINGS',
-        },
-        {
-          title: 'Insights',
-          categories: filter(this.categories, cat => cat.categoryType === 'INSIGHTS'),
-          type: 'INSIGHTS',
-        }];
+      const formattedData = [];
+      CATEGORY_DATA.map((data) => {
+        const categoryData = {
+          title: data.title,
+          categories: filter(this.categories, cat => cat.categoryType === data.enum),
+          type: data.enum,
+        };
+        formattedData.push(categoryData);
+        return null;
+      });
       return formattedData;
     }
 
@@ -105,8 +86,11 @@ export class CategoryStore {
         .mutate({
           mutation: deleteCategory,
           variables: { id },
+          refetchQueries: [{
+            query: getCategories,
+            variables: { types: null },
+          }],
         }).then(() => {
-          this.initRequest();
           Helper.toast('Category deleted successfully.', 'success');
         }).catch(() => {
           Helper.toast('Error while creating Category', 'error');
@@ -136,22 +120,32 @@ export class CategoryStore {
           'Category Updated successfully.' :
           'Category Status Updated successfully.');
       uiStore.setProgress();
-      client
-        .mutate({
-          mutation,
-          variables: param,
-        })
-        .then(() => {
-          this.initRequest();
-          Helper.toast(successMessage, 'success');
-          // Helper.toast('Category created successfully.', 'success');
-        })
-        .catch(() => {
-          Helper.toast('Error while Performing the Operation', 'error');
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
-        });
+      return new Promise((resolve, reject) => {
+        client
+          .mutate({
+            mutation,
+            variables: param,
+            refetchQueries: [{
+              query: getCategories,
+              variables: { types: null },
+            }],
+          })
+          .then(() => {
+            this.currentCategoryIndex = this.selectedCategoryState.index;
+            Helper.toast(successMessage, 'success');
+            resolve();
+          })
+          .catch((res) => {
+            const error = res.graphQLErrors[0] ? res.graphQLErrors[0].message : '';
+            const customError = error && error.includes('already exists') ? 'This category name already exists' :
+              Helper.toast('Error while Performing the Operation', 'error');
+            uiStore.setErrors(customError);
+            reject();
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      });
     }
 }
 

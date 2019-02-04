@@ -1,18 +1,43 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
-import { Route } from 'react-router-dom';
-import { Grid, Header, Segment, Responsive } from 'semantic-ui-react';
+import { Header, Divider } from 'semantic-ui-react';
 import TermNoteDetails from './investmentDetails/TermNoteDetails';
 import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import SummaryModal from '../campaignDetails/investmentDetails/SummaryModal';
 
-const isTabletLand = document.documentElement.clientWidth >= 992
-  && document.documentElement.clientWidth < 1200;
-@inject('campaignStore')
+@inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
+  componentWillMount() {
+    this.props.campaignStore.calculateTotalPaymentData();
+    window.addEventListener('scroll', this.handleOnScroll);
+  }
+  componentDidMount() {
+    if (this.props.location.hash && this.props.location.hash !== '') {
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
+      }), 100);
+    } else {
+      const sel = 'use-of-proceeds';
+      document.querySelector(`#${sel}`).scrollIntoView(true);
+    }
+  }
+  componentWillUnmount() {
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  handleOnScroll = () => {
+    const { investmentDetailsSubNavs } = this.props.campaignStore;
+    investmentDetailsSubNavs.forEach((item) => {
+      if (document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 100 &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top > 0) {
+        this.props.navStore.setFieldValue('currentActiveHash', item.to);
+      }
+    });
+  }
   render() {
     const { campaign } = this.props.campaignStore;
     const emptyContent = 'No data found.';
@@ -29,80 +54,53 @@ class InvestmentDetails extends Component {
       :
       null;
     return (
-      <div className="campaign-content-wrapper">
-        <Aux>
-          <Grid stackable doubling>
-            <Grid.Row>
-              <Responsive maxWidth={767} as={Aux}>
-                <Grid.Column tablet={16}>
-                  <Segment padded>
-                    <Image64
-                      srcUrl={campaign && campaign.media &&
-                        campaign.media.heroImage &&
-                        campaign.media.heroImage.url ?
-                        campaign.media.heroImage.url : null
-                      }
-                      imgType="heroImage"
-                    />
-                  </Segment>
-                </Grid.Column>
-              </Responsive>
-              <Grid.Column widescreen={6} largeScreen={6} computer={16} tablet={16}>
-                <Segment padded>
-                  <div className="segment-container small">
-                    <Header as="h3">Use of Proceeds</Header>
-                    {campaign && campaign.legal &&
-                      campaign.legal.general && campaign.legal.general.useOfProceeds ?
-                        <Aux>
-                          <Header as="h6">If minimum offering amount is reached:</Header>
-                          <p>
-                            {minOfferingExpenseDesc || emptyContent}
-                          </p>
-                          <Header as="h6">If maximum offering amount is reached:</Header>
-                          <p>
-                            {maxOfferingExpenseDesc || emptyContent}
-                          </p>
-                        </Aux>
-                        :
-                        <InlineLoader text={emptyContent} />
-                    }
-                  </div>
-                </Segment>
-              </Grid.Column>
-              <Responsive minWidth={768} as={Aux}>
-                <Grid.Column widescreen={10} largeScreen={10} computer={16} tablet={16} className={isTabletLand && 'mt-30'}>
-                  <Segment padded className="overview-video">
-                    <Image64
-                      srcUrl={campaign && campaign.media &&
-                        campaign.media.useOfProceeds &&
-                        campaign.media.useOfProceeds.url ?
-                        campaign.media.useOfProceeds.url : null
-                      }
-                      imgType="useOfProceeds"
-                    />
-                  </Segment>
-                </Grid.Column>
-              </Responsive>
-            </Grid.Row>
-            {campaign && campaign.keyTerms &&
-              campaign.keyTerms.securities &&
-              campaign.keyTerms.securities ===
-              CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
-                <RevenueSharingDetails
-                  refLink={this.props.refLink}
-                  KeyTerms={campaign && campaign.keyTerms}
-                  {...this.props}
-                /> :
-                <TermNoteDetails
-                  refLink={this.props.refLink}
-                  KeyTerms={campaign && campaign.keyTerms}
-                  {...this.props}
-                />
-            }
-          </Grid>
-          <Route path={`${this.props.match.url}/summary`} render={props => <SummaryModal refLink={this.props.match.ur} campaign={campaign} {...props} />} />
-        </Aux>
-      </div>
+      <Aux>
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
+          Use of Proceeds
+          <span className="anchor" id="use-of-proceeds" />
+        </Header>
+        {campaign && campaign.legal &&
+          campaign.legal.general && campaign.legal.general.useOfProceeds ?
+            <Aux>
+              <Header as="h6">If minimum offering amount is reached:</Header>
+              <p>{minOfferingExpenseDesc || emptyContent}</p>
+              <Header as="h6">If maximum offering amount is reached:</Header>
+              <p>{maxOfferingExpenseDesc || emptyContent}</p>
+            </Aux>
+            :
+            <InlineLoader text={emptyContent} className="bg-offwhite" />
+        }
+        <Divider hidden />
+        <Image64
+          srcUrl={campaign && campaign.media &&
+            campaign.media.useOfProceeds &&
+            campaign.media.useOfProceeds.url ?
+            campaign.media.useOfProceeds.url : null
+          }
+          imgType="useOfProceeds"
+          fluid
+        />
+        <Divider section hidden />
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Key Terms
+          <span className="anchor" id="key-terms" />
+        </Header>
+        {campaign && campaign.keyTerms &&
+          campaign.keyTerms.securities &&
+          campaign.keyTerms.securities ===
+          CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
+            <RevenueSharingDetails
+              refLink={this.props.refLink}
+              KeyTerms={campaign && campaign.keyTerms}
+              {...this.props}
+            /> :
+            <TermNoteDetails
+              refLink={this.props.refLink}
+              KeyTerms={campaign && campaign.keyTerms}
+              {...this.props}
+            />
+        }
+      </Aux>
     );
   }
 }

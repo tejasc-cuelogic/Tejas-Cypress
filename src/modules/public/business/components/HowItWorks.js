@@ -84,8 +84,8 @@ const HowItWorks = () => (
       <Container>
         <Responsive maxWidth={767} as={Aux}>
           <Header as="h2">Accelerate your growth with the power of the crowd.</Header>
-          <div className="center-align">
-            <Button.Group>
+          <div className={`${isMobile ? 'left-align' : 'center-align'}`}>
+            <Button.Group size={isMobile && 'tiny'}>
               <Button as={Link} to="business-application/business" secondary content="Business Application" />
               <Button as={Link} to="business-application/commercial-real-estate" secondary content="CRE Application" />
             </Button.Group>
@@ -256,7 +256,7 @@ const HowItWorks = () => (
             </p>
           </Grid.Column>
           <Grid.Column>
-            <Link to="/business/how-it-works/video" className="how-it-works-video">
+            <Link to="/business/how-it-works/video" className="video-wrapper">
               <Image src={`${ASSETS_URL}images/677134021.jpg`} />
               <Icon
                 className="ns-play play-icon"

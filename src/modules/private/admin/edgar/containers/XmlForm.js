@@ -32,7 +32,7 @@ export default class XmlForm extends React.Component {
     this.props.businessStore.setFilingId(this.props.match.params.filingId);
     this.props.businessStore.setXmlSubmissionId(this.props.match.params.xmlId);
     const { offer } = this.props.offeringsStore;
-    const offeringRegulationArr = offer && offer.regulation.split('_');
+    const offeringRegulationArr = offer && offer.regulation && offer.regulation.split('_');
     const regulationType = offeringRegulationArr && offeringRegulationArr[0];
     const accountTypeToConsider = regulationType && regulationType === 'BD' ? 'SECURITIES' : 'SERVICES';
     businessActions.getFiles(this.props.match.params, accountTypeToConsider)

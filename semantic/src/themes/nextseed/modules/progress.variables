@@ -100,7 +100,7 @@
 @attachedBorderRadius: @borderRadius;
 
 /* Inverted */
-@invertedBackground: @transparentWhite;
+@invertedBackground: @neutral;
 @invertedBorder: none;
 @invertedBarBackground: @barBackground;
 @invertedProgressColor: @offWhite;

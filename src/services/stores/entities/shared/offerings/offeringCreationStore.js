@@ -1001,7 +1001,9 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin = {};
         payloadData[keyName].documentation.admin =
           Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
-        payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
+        if (this.DATA_ROOM_FRM.meta.isValid) {
+          payloadData[keyName].dataroom = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields);
+        }
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);
@@ -1457,6 +1459,7 @@ export class OfferingCreationStore {
     } else {
       this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.splice(index, 1);
     }
+    Validator.validateForm(this.ADD_NEW_BONUS_REWARD_FRM, false, false, false);
   }
 
   @action

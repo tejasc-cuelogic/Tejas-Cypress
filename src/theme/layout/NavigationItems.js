@@ -9,6 +9,7 @@ import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
+@inject('navStore')
 @observer
 export class NavItems extends Component {
   state = { active: '' };
@@ -29,10 +30,27 @@ export class NavItems extends Component {
       ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
-  doNothing = () => console.log('nothing');
+  isActiveSubMenu = (to, location, hashCheck = false) => (hashCheck ? (this.props.navStore.currentActiveHash === null && location.hash === '') : this.props.navStore.currentActiveHash === null ? location.hash === to : this.props.navStore.currentActiveHash === to);
+
+  isOpen = (to, location, subNavigations) => {
+    if (to !== '' && subNavigations) {
+      return location.pathname.includes(`/${to}`);
+    }
+    return false;
+  }
+  doNothing = (e, path = false, eHandeler = false) => {
+    if (eHandeler) {
+      e.stopPropagation();
+    }
+    if (path) {
+      this.props.history.push(path);
+    } else {
+      console.log('nothing');
+    }
+  }
   render() {
     const {
-      location, isApp, roles, match, isMobile, onToggle,
+      location, isApp, roles, match, isMobile, onToggle, refLink,
     } = this.props;
     const app = (isApp) ? 'app' : '';
     const myNavItems = this.props.navItems.filter(n => n.noNav !== true);
@@ -40,14 +58,16 @@ export class NavItems extends Component {
       <Aux>
         {(item.subPanel === 1 && item.subNavigations) ? (
           <Dropdown
+            open={item.clickable && this.isOpen(item.to, location, item.subNavigations)}
             item
+            defaultOpen={item.defaultOpen}
             key={item.to}
             className={`${this.isActive(item.to, location, app, item.subNavigations) ? 'active really' : ''}
             ${item.title === 'How NextSeed Works' && isMobile ? 'visible' : ''}
             `}
             name={item.to}
             disabled={isMobile && item.title === 'How NextSeed Works'}
-            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : this.doNothing}
+            onClick={item.title !== 'How NextSeed Works' && isMobile ? this.navClick : e => this.doNothing(e, item.clickable ? `${refLink}/${item.to}` : false, item.clickable)}
             text={
               <Aux>
                 {item.icon &&
@@ -66,9 +86,10 @@ export class NavItems extends Component {
               {item.subNavigations.map(sn => (
                 <Dropdown.Item
                   key={sn.to}
+                  className={`${((sn.defaultActive && this.isActiveSubMenu(`${sn.to}`, location, true))) ? 'active' : ''} ${this.isActiveSubMenu(sn.to, location) ? 'active' : ''}`}
                   as={NavLink}
-                  onClick={isMobile ? onToggle : this.doNothing}
-                  to={`${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
+                  onClick={isMobile ? onToggle : e => this.doNothing(e, false, item.clickable)}
+                  to={sn.useRefLink ? `${refLink}/${item.to}/${sn.to}` : `${(isApp) ? '/app' : ''}${(item.to !== '' ? `/${item.to}` : '')}/${sn.to}`}
                 >
                   {sn.title}
                 </Dropdown.Item>
@@ -128,7 +149,7 @@ export class NavigationItems extends Component {
       <Menu
         stackable
         borderless
-        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' })}
+        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' }) || navStatus === 'sub'}
         fixed="top"
         // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}

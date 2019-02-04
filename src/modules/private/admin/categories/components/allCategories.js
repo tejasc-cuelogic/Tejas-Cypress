@@ -12,18 +12,29 @@ import { InlineLoader } from './../../../../../theme/shared';
 export default class AllCategories extends Component {
   state = { activeIndex: 0 }
   componentWillMount() {
-    this.props.categoryStore.initRequest();
+    if (this.props.categoryStore.ifApiHitFirstTime) {
+      this.props.categoryStore.initRequest();
+      this.props.categoryStore.ifApiHitFirstTime = false;
+    } else {
+      this.toggleAccordianContent();
+    }
   }
-  toggleAccordianContent = (titleProps) => {
-    // const { index } = titleProps;
+  toggleAccordianContent = (categoryIndex = null) => {
+    let index = categoryIndex;
+    if (categoryIndex === null) {
+      const { currentCategoryIndex } = this.props.categoryStore;
+      if (currentCategoryIndex !== null) {
+        index = currentCategoryIndex;
+      }
+      this.state.activeIndex = index === 0 ? -1 : this.state.activeIndex;
+    }
     const { activeIndex } = this.state;
-    const newIndex = activeIndex === titleProps ? -1 : titleProps;
-
+    const newIndex = activeIndex === index ? -1 : index;
     this.setState({ activeIndex: newIndex });
   }
-  openModal = (index, title, type) => {
-    this.props.categoryStore.setFieldValue('selectedCategoryState', { title, type });
-    this.props.history.push(`${this.props.match.url}/${index}`);
+  openModal = (id, title, type, index) => {
+    this.props.categoryStore.setFieldValue('selectedCategoryState', { title, type, index });
+    this.props.history.push(`${this.props.match.url}/${id}`);
   }
   handleDeleteConfirm = (id) => {
     this.props.uiStore.setConfirmBox('Delete', id);
@@ -52,26 +63,27 @@ export default class AllCategories extends Component {
     }
     return (
       <Aux>
-        {categories && categories.map((category, index) => (
+        {categories && categories.length && categories.map((category, index) => (
           <Accordion fluid styled className="card-style">
-            <Accordion.Title active={category.categories.length > 0} onClick={() => this.toggleAccordianContent(index)} className="text-capitalize">
+            <Accordion.Title onClick={() => this.toggleAccordianContent(index)} className="text-capitalize">
               <Icon className={activeIndex === index ? 'ns-chevron-up' : 'ns-chevron-down'} />
               {category.title} <small>{category.categories.length} elements</small>
-              <Button onClick={() => this.openModal('new', category.title, category.type)} className="link-button pull-right"><small>+ Add Category</small></Button>
+              <Button onClick={() => this.openModal('new', category.title, category.type, index)} className="link-button pull-right"><small>+ Add Category</small></Button>
             </Accordion.Title>
             <Accordion.Content active={activeIndex === index} className="categories-acc">
               <div className="table-wrapper">
                 <Table unstackable basic className="form-table categories-table">
                   <Table.Body>
                     {
-                      category.categories && category.categories.map(cat => (
+                      category.categories && category.categories.length ?
+                      category.categories.map(cat => (
                         <Table.Row>
                           <Table.Cell>
                             <Icon className="ns-drag-holder-large mr-10" />
                             {cat.categoryName}
                           </Table.Cell>
                           <Table.Cell collapsing>
-                            <Button onClick={() => this.openModal(cat.id, category.title, cat.categoryType)} className="link-button">
+                            <Button onClick={() => this.openModal(cat.id, category.title, cat.categoryType, index)} className="link-button">
                               <Icon name="ns-pencil" />
                             </Button>
                             <Button className="link-button">
@@ -82,7 +94,7 @@ export default class AllCategories extends Component {
                             </Button>
                           </Table.Cell>
                         </Table.Row>
-                      ))
+                      )) : <Table.Row> No Category To Display! </Table.Row>
                     }
                   </Table.Body>
                 </Table>

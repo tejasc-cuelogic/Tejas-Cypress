@@ -347,6 +347,7 @@ export const campaignDetailsQuery = gql`
         }
       }
       threadComment {
+        id
         offeringId
         thread
         scope

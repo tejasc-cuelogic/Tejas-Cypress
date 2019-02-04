@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { get, find } from 'lodash';
+import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive } from 'semantic-ui-react';
+import { Responsive, Container, Grid } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
+import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
+import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
 import Footer from './../../../../theme/layout/Footer';
+import OfferingMetaTags from '../components/OfferingMetaTags';
+import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -23,8 +26,10 @@ const getModule = component => Loadable({
     return <InlineLoader />;
   },
 });
+const isMobile = document.documentElement.clientWidth < 991;
 
-@inject('campaignStore', 'userStore')
+@inject('campaignStore', 'userStore', 'navStore')
+@withRouter
 @observer
 class offerDetails extends Component {
   state = {
@@ -50,6 +55,9 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
+  componentWillUnmount() {
+    this.props.campaignStore.setFieldValue('docsWithBoxLink', []);
+  }
   getOgDataFromSocial = (obj, type, att) => {
     const data = find(obj, o => o.type === type);
     return get(data, att) || '';
@@ -60,89 +68,167 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
+  handleViewGallery = (e) => {
+    e.preventDefault();
+    this.props.history.push(`${this.props.match.url}/photogallery`);
+  }
+  addDataRoomSubnavs = (oldNav, dataRoomDocs) => {
+    if (!dataRoomDocs) {
+      return oldNav;
+    }
+    const tempNav = [];
+    oldNav.forEach((item) => {
+      const tempItem = item;
+      if (item.title === 'Data Room') {
+        const tempSubNav = [];
+        dataRoomDocs.forEach((subItem, index) => {
+          tempSubNav.push({
+            title: subItem.name, to: `#doc-${index}`, useRefLink: true, defaultActive: index === 0,
+          });
+        });
+        tempItem.subNavigations = tempSubNav;
+        tempItem.clickable = true;
+        tempItem.subPanel = 1;
+      }
+      tempNav.push(tempItem);
+    });
+    return tempNav;
+  }
+  removeSubNavs = (oldNav) => {
+    const newNavData = [];
+    oldNav.forEach((item) => {
+      const tempItem = { ...item };
+      if (has(item, 'subNavigations')) {
+        delete tempItem.subNavigations;
+      }
+      newNavData.push(tempItem);
+    });
+    return newNavData;
+  }
+  modifyInvestmentDetailsSubNav = (navList, campaign) => {
+    const newNavList = [];
+    const offeringSecurityType =
+      (campaign && campaign.keyTerms && campaign.keyTerms.securities) || null;
+    navList.forEach((item) => {
+      const tempItem = item;
+      if (has(item, 'subNavigations') && item.title === 'Investment Details') {
+        const temNavList = item.subNavigations;
+        if (offeringSecurityType === 'REVENUE_SHARING_NOTE') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
+          });
+        } else if (offeringSecurityType === 'TERM_NOTE') {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+          temNavList.push({
+            title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+          });
+        } else {
+          const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
+          if (existanceResult.length) {
+            remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
+          }
+        }
+        this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
+        tempItem.subNavigations = uniqWith(temNavList, isEqual);
+      }
+      newNavList.push(tempItem);
+    });
+    return newNavList;
+  }
   render() {
-    const { match, campaignStore, location } = this.props;
-    const navItems = GetNavMeta(match.url, [], true).subNavigations;
     const {
-      details, campaignSideBarShow, campaign, navCountData,
-    } = campaignStore;
+      match, campaignStore, location,
+    } = this.props;
     if (this.state.showPassDialog) {
       return (<DevPassProtected
-        previewPassword={campaign && campaign.previewPassword}
+        previewPassword={campaignStore.campaign && campaignStore.campaign.previewPassword}
         offerPreview
         authPreviewOffer={this.authPreviewOffer}
       />);
     }
-    if (!details || details.loading) {
+    if (!campaignStore.details || campaignStore.details.loading) {
       return <Spinner loaderMessage="Loading.." />;
     }
+    const {
+      details, campaignSideBarShow, campaign, navCountData,
+    } = campaignStore;
+    let navItems = [];
+    if (isMobile) {
+      navItems = this.removeSubNavs(GetNavMeta(match.url, [], true).subNavigations);
+    } else {
+      navItems =
+        this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
+          .subNavigations, get(campaign, 'legal.dataroom.documents'));
+    }
+    navItems =
+      this.modifyInvestmentDetailsSubNav(navItems, campaign);
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;
     }
     return (
-      <div className="offer-details">
+      <Aux>
         {campaign &&
-          <Helmet>
-            <meta name="description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
-            <link rel="canonical" href={window.location.href} />
-            <meta property="og:locale" content="en_US" />
-            <meta property="og:type" content="article" />
-            <meta property="og:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
-            <meta property="og:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'blurb')} />
-            <meta property="og:url" content={window.location.href} />
-            <meta property="og:site_name" content="NextSeed" />
-            <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
-            <meta property="article:tag" content={`${get(campaign, 'keyTerms.securities') === 'REVENUE_SHARING_NOTE' ? 'Revenue Share Loan' : 'Term Loan'}`} />
-            <meta property="article:section" content="Restaurant" />
-            <meta property="og:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
-            <meta property="og:image:secure_url" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
-            <meta property="og:image:width" content="1218" />
-            <meta property="og:image:height" content="542" />
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:description" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'blurb')} />
-            <meta name="twitter:title" content={`${get(campaign, 'keyTerms.shorthandBusinessName')} | NextSeed`} />
-            <meta name="twitter:site" content="@thenextseed" />
-            <meta name="twitter:image" content={this.getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'twitter', 'featuredImageUpload.url')} />
-            <meta name="twitter:creator" content="@thenextseed" />
-          </Helmet>
+          <OfferingMetaTags campaign={campaign} getOgDataFromSocial={this.getOgDataFromSocial} />
         }
-        <Responsive minWidth={768} as={Aux}>
-          <CampaignSideBar navItems={navItems} />
-        </Responsive>
-        <Responsive maxWidth={767} as={Aux}>
-          <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
-          <MobileDropDownNav
-            inverted
-            refMatch={match}
-            navCountData={navCountData}
-            navItems={navItems}
-            location={location}
-          />
-        </Responsive>
-        <div className="offering-wrapper">
-          <Switch>
-            <Route exact path={match.url} component={getModule(navItems[0].component)} />
-            {
-              navItems.map((item) => {
-                const CurrentComponent = getModule(item.component);
-                return (
-                  <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
-                );
-              })
-            }
-            <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
-            <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
-            <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
-            <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
-            <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
-            <Route component={NotFound} />
-          </Switch>
-          <Responsive minWidth={768} as={Aux}>
-            <Footer path={location.pathname} campaign={campaign} />
+        {!isMobile &&
+          <CampaignHeader {...this.props} />
+        }
+        <div className={`slide-down ${location.pathname.split('/')[2]}`}>
+          <SecondaryMenu {...this.props} />
+          <Responsive maxWidth={991} as={Aux}>
+            <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
+            <MobileDropDownNav
+              inverted
+              refMatch={match}
+              navCountData={navCountData}
+              navItems={navItems}
+              location={location}
+            />
           </Responsive>
+          <Container>
+            <section>
+              <Grid>
+                {!isMobile &&
+                  <Grid.Column width={4}>
+                    <CampaignSideBar navItems={navItems} />
+                  </Grid.Column>
+                }
+                <Grid.Column computer={12} mobile={16}>
+                  <Switch>
+                    <Route exact path={match.url} component={getModule(navItems[0].component)} />
+                    {
+                      navItems.map((item) => {
+                        const CurrentComponent = getModule(item.component);
+                        return (
+                          <Route key={item.to} path={`${match.url}/${item.to}`} render={props => <CurrentComponent refLink={this.props.match.url} {...props} />} />
+                        );
+                      })
+                    }
+                    <Route path={`${match.url}/invest-now`} render={props => <InvestNow refLink={this.props.match.url} {...props} />} />
+                    <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
+                    <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
+                    <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                    <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
+                    <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </Grid.Column>
+              </Grid>
+            </section>
+          </Container>
         </div>
-      </div>
+        <Responsive minWidth={768} as={Aux}>
+          <Footer path={location.pathname} campaign={campaign} />
+        </Responsive>
+      </Aux>
     );
   }
 }

@@ -11,10 +11,18 @@ class AboutPhotoGallery extends Component {
   state = {
     activeSlide: 0,
   };
-  handleClose = () => this.props.history.goBack();
-  handlePagination = newIndex => this.setState({ activeSlide: newIndex });
+  handleClose = () => {
+    this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', null);
+    this.props.history.goBack();
+  }
+  handlePagination = (newIndex) => {
+    if (this.props.campaignStore.gallarySelectedImageIndex !== null) {
+      this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', null);
+    }
+    this.setState({ activeSlide: newIndex });
+  }
   render() {
-    const { campaign } = this.props.campaignStore;
+    const { campaign, gallarySelectedImageIndex } = this.props.campaignStore;
     const settings = {
       dots: false,
       infinite: false,
@@ -25,8 +33,6 @@ class AboutPhotoGallery extends Component {
     };
     const galleryArray = campaign && campaign.media && campaign.media.gallery &&
       campaign.media.gallery.length ? campaign.media.gallery : [];
-    // const galleryLength = galleryArray.length < 8 ? galleryArray.length : 8;
-    // const tabGalleryLength = galleryArray < 4 ? galleryArray.length : 4;
     return (
       <Modal
         open
@@ -40,23 +46,20 @@ class AboutPhotoGallery extends Component {
             <Container fluid>
               <NsCarousel
                 {...settings}
-                // thumbs={isTablet ? tabGalleryLength : galleryLength}
+                initialSlide={gallarySelectedImageIndex || 0}
                 imageCount={galleryArray.length}
                 isTablet={isTablet}
                 refItems={galleryArray}
                 handlePaginationFun={this.handlePagination}
                 fade={!isTablet}
               >
-                {
-                  galleryArray.length ?
-                  galleryArray.map(data => (
-                    <div className="about-carousel">
-                      <div className="carousel-counter">{this.state.activeSlide + 1}/{galleryArray.length}</div>
-                      <Image64 srcUrl={data.url} />
-                    </div>
-                  ))
-                  :
-                  <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
+                {galleryArray.length ? galleryArray.map(data => (
+                  <div className="about-carousel">
+                    <div className="carousel-counter">{gallarySelectedImageIndex !== null ? (gallarySelectedImageIndex + 1) : (this.state.activeSlide + 1)}/{galleryArray.length}</div>
+                    <Image64 srcUrl={data.url} />
+                  </div>
+                  )) :
+                <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
                 }
               </NsCarousel>
             </Container>

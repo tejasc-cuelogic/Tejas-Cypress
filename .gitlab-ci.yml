@@ -6,8 +6,14 @@ variables:
 stages:
   - build
   - version
+  - package
   - deploy
   - cleanup
+
+# force usage of AWS role
+before_script:
+  - unset AWS_ACCESS_KEY_ID
+  - unset AWS_SECRET_ACCESS_KEY
 #---------------------------------Anchors--------------------------------------
 .build_template: &build_definition
   tags:
@@ -216,9 +222,30 @@ build:prod:
       - master
   <<: *before_script_defination
   script: 
-    - sh setEnvironmentVariables.sh $REGION prod $CI_COMMIT_REF_NAME
+    - sh ./scripts/cicd/setEnvironmentVariables.sh $REGION prod $CI_COMMIT_REF_NAME
     - npm install
     - npm run build
+
+package:prod:
+  tags:
+    - ns-client
+  stage: package
+  only:
+    refs:
+      - master
+  script:
+    - rm -rf /tmp/$CI_COMMIT_REF_NAME.zip  # just in case
+    - git archive HEAD --format zip --worktree-attributes --output /tmp/$CI_COMMIT_REF_NAME.zip
+    - creds_json=$(aws sts assume-role --role-arn arn:aws:iam::119055100940:role/DevOpsRoleExternal --role-session-name tempSession)
+    - export AWS_ACCESS_KEY_ID=$(echo "$creds_json" | jq .Credentials.AccessKeyId |tr -d '"')
+    - export AWS_SECRET_ACCESS_KEY=$(echo "$creds_json" | jq .Credentials.SecretAccessKey| tr -d '"')
+    - export AWS_SESSION_TOKEN=$(echo "$creds_json" | jq .Credentials.SessionToken|tr -d '"')
+    - aws s3 cp /tmp/$CI_COMMIT_REF_NAME.zip s3://$AWS_DEPLOYMENT_BUCKET/deployments/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME.zip --metadata CommitHash=$CI_COMMIT_SHA,CIPipelineID=$CI_PIPELINE_ID
+    # - aws s3 cp /tmp/$CI_COMMIT_REF_NAME.zip s3://$AWS_DEPLOYMENT_BUCKET_BACKUP/deployments/$CI_PROJECT_NAME/$CI_COMMIT_REF_NAME.zip --metadata CommitHash=$CI_COMMIT_SHA,CIPipelineID=$CI_PIPELINE_ID
+    - rm -rf /tmp/$CI_COMMIT_REF_NAME.zip  # clean up
+    - rm -rf ~/.aws/cli/cache
+
+
 #Deploying code to s3 bucket
 deploy:prod:
   <<: *deploy_defination
@@ -227,9 +254,10 @@ deploy:prod:
       - master
   environment:
     name: prod
-    url: http://$PROD_URL
+    url: http://$PROD_URL_QA
   script: 
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - sh deployApp.sh ns-client-prod
+  when: manual
   dependencies:
     - build:prod

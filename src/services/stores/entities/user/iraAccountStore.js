@@ -9,7 +9,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, userStore, bankAccountStore, userDetailsStore, investmentLimitStore } from '../../index';
+import { uiStore, userStore, bankAccountStore, userDetailsStore, investmentLimitStore, referralsStore } from '../../index';
 import { createIndividual, updateAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -312,7 +312,18 @@ class IraAccountStore {
             this.setStepToBeRendered(currentStep.stepToBeRendered);
           }
           if (formStatus === 'FULL') {
+            referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
             bankAccountStore.resetPlaidAccData();
+            const data = {
+              annualIncome:
+                userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+              netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
+              otherRegCfInvestments: 0,
+            };
+            const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
+            if (accountDetails) {
+              investmentLimitStore.updateInvestmentLimits(data, accountDetails.details.accountId);
+            }
             Helper.toast('IRA account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

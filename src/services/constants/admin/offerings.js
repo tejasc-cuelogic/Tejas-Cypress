@@ -1456,7 +1456,7 @@ export const NEW_OFFER = {
     value: '',
     label: 'Regulation',
     error: undefined,
-    rule: 'string',
+    rule: 'required',
     placeHolder: 'Choose here',
   },
 };

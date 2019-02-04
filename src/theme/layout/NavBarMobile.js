@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, matchPath } from 'react-router-dom';
-import { Divider, Sidebar, Menu, Icon, Header, Button } from 'semantic-ui-react';
+import { Divider, Sidebar, Menu, Icon, Header } from 'semantic-ui-react';
 import { Logo, SocialLinks } from '../shared';
 import { NavItems } from './NavigationItems';
 import Footer from './../../theme/layout/Footer';
@@ -40,7 +40,7 @@ export default class NavBarMobile extends Component {
     } else if (location.pathname.startsWith('/agreements/legal')) {
       navTitle = 'Legal';
     }
-    const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
+    // const investBtn = matchPath(location.pathname, { path: '/offerings/:id/:section?' });
     return (
       <Aux>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
@@ -78,11 +78,12 @@ export default class NavBarMobile extends Component {
               </Link>
             )
             }
-            {investBtn && (
-              <Button fluid={isMobile} as={Link} to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
+            {/* {investBtn && (
+              <Button fluid={isMobile} as={Link}
+              to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
                 Invest Now
               </Button>
-            )}
+            )} */}
           </div>
           <Sidebar
             as={Menu}

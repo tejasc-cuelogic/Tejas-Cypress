@@ -11,7 +11,7 @@ import {
   ENTITY_FORMATION_DOCS,
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
-import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
+import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, referralsStore } from '../../index';
 import { createIndividual, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -23,7 +23,7 @@ import AccCreationHelper from '../../../../modules/private/investor/accountSetup
 class EntityAccountStore {
   @observable FIN_INFO_FRM = FormValidator.prepareFormObject(ENTITY_FIN_INFO);
   @observable GEN_INFO_FRM = FormValidator.prepareFormObject(ENTITY_GEN_INFO);
-  @observable TRUST_INFO_FRM = FormValidator.prepareFormObject(ENTITY_TRUST_INFO);
+  @observable TRUST_INFO_FRM = FormValidator.prepareFormObject(ENTITY_TRUST_INFO, true);
   @observable PERSONAL_INFO_FRM = FormValidator.prepareFormObject(ENTITY_PERSONAL_INFO);
   @observable FORM_DOCS_FRM = FormValidator.prepareFormObject(ENTITY_FORMATION_DOCS);
   @observable entityData = {};
@@ -442,6 +442,17 @@ class EntityAccountStore {
             }
           }
           if (formStatus === 'FULL') {
+            referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
+            const data = {
+              annualIncome:
+                userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+              netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
+              otherRegCfInvestments: 0,
+            };
+            const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
+            if (accountDetails) {
+              investmentLimitStore.updateInvestmentLimits(data, accountDetails.details.accountId);
+            }
             Helper.toast('Entity account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
@@ -464,7 +475,6 @@ class EntityAccountStore {
 
   @action
   setFormData = (form, accountDetails) => {
-    let isDirty = false;
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
         if (f === 'cfInvestment' && accountDetails.limits && accountDetails.limits.otherContributions) {
@@ -480,13 +490,8 @@ class EntityAccountStore {
         }
       } else if (form === 'TRUST_INFO_FRM') {
         if (f === 'isTrust') {
-          if (accountDetails && accountDetails[f]) {
+          if (accountDetails && (accountDetails[f] === true || accountDetails[f] === false)) {
             this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
-          } else {
-            this.TRUST_INFO_FRM.fields[f].value = false;
-            if (accountDetails && typeof accountDetails[f] === 'undefined') {
-              isDirty = true;
-            }
           }
         } else if (f === 'trustDate' && accountDetails && accountDetails[f]) {
           this.TRUST_INFO_FRM.fields[f].value = accountDetails[f];
@@ -513,7 +518,7 @@ class EntityAccountStore {
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '', isDirty);
+    FormValidator.onChange(this[form], '', '', false);
   }
 
   @action

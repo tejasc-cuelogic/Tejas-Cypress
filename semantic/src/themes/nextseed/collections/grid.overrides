@@ -106,45 +106,13 @@
             width: ~"calc(100% + 14px)";
             margin-left: -14px!important;
         }
-        >.column:last-child {
-            background-color: @primary-one;
-            position: relative;
-            &:before {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: -1px;
-                border-style: solid;
-                border-width: 10px 0px 10px 12px;
-                border-color: transparent @white;
-                display: block;
-                width: 0;
-                z-index: 0;
-                -webkit-transform: translate(0,-50%);
-                -ms-transform: translate(0,-50%);
-                transform: translate(0,-50%);
-                @media only screen and (max-width : @largestMobileScreen){
-                    top: -1px;
-                    left: 50%;
-                    border-width: 12px 10px 0px 10px;
-                    border-color: @white transparent;
-                    transform: translate(-50%,0);
-                }
-            }
-            .ui.statistic {
-                >.label{
-                    color: @white;
-                }
-                >.value {
-                    color: @white;
-                }
-            }
-        }
         .ui.statistic{ 
             width: 100%;
-            >.label{
-                padding-bottom: 10px;
-                text-transform: uppercase;
+        }
+        &.stackable.ui.grid {
+            @media only screen and (max-width : @largestMobileScreen){
+                margin-left: 0 !important;
+                margin-right: 0 !important;
             }
         }
     }
@@ -171,6 +139,14 @@
         >.column {
             margin-top: @14px;
             margin-bottom: @14px;
+        }
+        &.stackable.ui.grid {
+            @media only screen and (max-width : @largestMobileScreen){
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                border-bottom: 1px solid @neutral-darkwhite;
+                margin-bottom: 0;
+            }
         }
     }
     &.team-list {

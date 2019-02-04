@@ -7,7 +7,6 @@ import LegalDocuments from '../../components/identityVerification/LegalDocuments
 import LegalIdentityQuestions from '../../components/identityVerification/LegalIdentityQuestions';
 import ConfirmPhoneNumber from '../../../../../auth/containers/ConfirmPhoneNumber';
 import { DataFormatter } from '../../../../../../helper';
-import { NS_SITE_EMAIL_SUPPORT } from '../../../../../../constants/common';
 
 @inject('uiStore', 'identityStore', 'userStore', 'userDetailsStore')
 @withRouter
@@ -47,60 +46,62 @@ export default class IdentityVerification extends Component {
     e.preventDefault();
     this.props.identityStore.setFormError();
     if (this.props.identityStore.ID_VERIFICATION_FRM.meta.isValid) {
-      const ssnValue = this.props.identityStore.ID_VERIFICATION_FRM.fields.ssn.value;
-      this.props.identityStore.isSsnExist(ssnValue)
-        .then((isSSNPresent) => {
-          if (isSSNPresent) {
-            // set error
-            const setErrorMessage = (
-              `<span>
-                There was an issue with the information you submitted.
-                Please double-check and try again.
-                If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href="mailto:${NS_SITE_EMAIL_SUPPORT}">${NS_SITE_EMAIL_SUPPORT}</a>
-              </span>`
-            );
-            this.props.uiStore.setProgress(false);
-            this.props.uiStore.setErrors(setErrorMessage);
-            throw new Error('Stop the execution');
+      this.props.identityStore.checkValidAddress()
+        .then((isAddressValid) => {
+          if (isAddressValid) {
+            const ssnValue = this.props.identityStore.ID_VERIFICATION_FRM.fields.ssn.value;
+            this.props.identityStore.isSsnExist(ssnValue)
+              .then((isSSNPresent) => {
+                if (isSSNPresent) {
+                  // set error
+                  this.props.identityStore.showErrorMessage('The SSN entered is already in use.');
+                  throw new Error('Stop the execution');
+                }
+                this.props.uiStore.setErrors(null);
+                this.props.identityStore.verifyUserIdentity()
+                  .then(() => {
+                    this.props.uiStore.setProgress(false);
+                    const {
+                      key,
+                      alertMsg,
+                      msgType,
+                      route,
+                    } = this.props.identityStore.userVerficationStatus;
+                    if (key === 'id.success') {
+                      const { phoneVerification } = this.props.userDetailsStore.signupStatus;
+                      const {
+                        isCipExpired,
+                        accountForWhichCipExpired,
+                      } = this.props.userDetailsStore;
+                      if (phoneVerification === 'DONE') {
+                        Helper.toast(alertMsg, msgType);
+                        if (isCipExpired && accountForWhichCipExpired) {
+                          this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
+                        } else {
+                          this.props.history.push(route);
+                        }
+                      } else {
+                        this.props.identityStore.startPhoneVerification().then(() => {
+                          this.props.history.push('/app/summary/identity-verification/3');
+                        })
+                          .catch((err) => {
+                            this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
+                          });
+                      }
+                    } else {
+                      Helper.toast(alertMsg, msgType);
+                      if (key === 'id.failure') {
+                        this.props.identityStore.setIdentityQuestions();
+                      }
+                      this.props.history.push(route);
+                    }
+                  });
+              })
+              .catch(() => { });
+          } else {
+            this.props.identityStore.showErrorMessage('Please enter a valid residential address.');
           }
-          this.props.uiStore.setErrors(null);
-          this.props.identityStore.verifyUserIdentity()
-            .then(() => {
-              this.props.uiStore.setProgress(false);
-              const {
-                key,
-                alertMsg,
-                msgType,
-                route,
-              } = this.props.identityStore.userVerficationStatus;
-              if (key === 'id.success') {
-                const { phoneVerification } = this.props.userDetailsStore.signupStatus;
-                const { isCipExpired, accountForWhichCipExpired } = this.props.userDetailsStore;
-                if (phoneVerification === 'DONE') {
-                  Helper.toast(alertMsg, msgType);
-                  if (isCipExpired && accountForWhichCipExpired) {
-                    this.props.history.push(`/app/summary/account-creation/${accountForWhichCipExpired}`);
-                  } else {
-                    this.props.history.push(route);
-                  }
-                } else {
-                  this.props.identityStore.startPhoneVerification().then(() => {
-                    this.props.history.push('/app/summary/identity-verification/3');
-                  })
-                    .catch((err) => {
-                      this.props.uiStore.setErrors(DataFormatter.getJsonFormattedError(err));
-                    });
-                }
-              } else {
-                Helper.toast(alertMsg, msgType);
-                if (key === 'id.failure') {
-                  this.props.identityStore.setIdentityQuestions();
-                }
-                this.props.history.push(route);
-              }
-            });
-        })
-        .catch(() => { });
+        });
     }
   }
 
