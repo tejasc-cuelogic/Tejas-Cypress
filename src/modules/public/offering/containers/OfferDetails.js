@@ -156,7 +156,7 @@ class offerDetails extends Component {
       />);
     }
     if (!campaignStore.details || campaignStore.details.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner page loaderMessage="Loading.." />;
     }
     const {
       details, campaignSideBarShow, campaign, navCountData,

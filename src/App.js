@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
+// import Aux from 'react-aux';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
@@ -95,7 +95,7 @@ class App extends Component {
       );
     }
     return (
-      <Aux>
+      <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection ?
           <Route exact path="/password-protected" component={DevPassProtected} /> : (
@@ -111,7 +111,7 @@ class App extends Component {
         {this.props.uiStore.devBanner &&
           <DevBanner toggle={this.playDevBanner} />
         }
-      </Aux>
+      </div>
     );
   }
 }
