@@ -3,21 +3,17 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
-import Firework from './FireworkAnimation';
 import Helper from '../../../../../../../helper/utility';
 
 @inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore')
 @withRouter
 @observer
 export default class Congratulation extends React.Component {
-  state = {
-    showFireworks: false,
-  }
   componentWillMount() {
     if (this.props.changeInvestment) {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
     } else {
-      this.setState({ showFireworks: true });
+      this.props.campaignStore.setFieldValue('showFireworkAnimation', true);
     }
   }
   handleCloseModal = () => {
@@ -31,14 +27,11 @@ export default class Congratulation extends React.Component {
       if (this.props.changeInvestment) {
         this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
       } else {
-        this.setState({ showFireworks: false });
+        this.props.campaignStore.setFieldValue('showFireworkAnimation', false);
       }
     }, 8500);
     return (
       <Aux>
-        {this.state.showFireworks &&
-        <Firework />
-        }
         <Modal open closeIcon closeOnRootNodeClick={false} onClose={this.handleCloseModal}>
           <Modal.Header className="center-align signup-header">
             <Header as="h2">Congratulations!</Header>

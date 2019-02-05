@@ -183,7 +183,9 @@ class offerDetails extends Component {
         {!isMobile &&
           <CampaignHeader {...this.props} />
         }
+        {campaignStore && campaignStore.showFireworkAnimation &&
         <Firework />
+        }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
