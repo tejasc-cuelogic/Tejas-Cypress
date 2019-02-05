@@ -34,7 +34,7 @@ class AccountType extends Component {
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (this.props.changeInvest || (activeAccounts && activeAccounts.length === 1)) {
-      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || !isRegulationCheck) {
+      if ((isRegulationCheck && userAccredetiationState && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING')) || !isRegulationCheck) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
           if (this.props.investmentStore.getSelectedAccountTypeId) {
@@ -58,8 +58,8 @@ class AccountType extends Component {
       this.props.accreditationStore.initiateAccreditation();
       if (isRegulationCheck) {
         this.props.accreditationStore.accreditatedAccounts();
-        this.props.accreditationStore.validInvestmentAccounts();
         this.props.accreditationStore.userAccreditatedStatus();
+        this.props.accreditationStore.validInvestmentAccounts();
       }
     });
   }
@@ -67,6 +67,7 @@ class AccountType extends Component {
     const {
       setStepToBeRendered,
       setFieldValue,
+      investAccTypes,
       byDefaultRender,
     } = this.props.investmentStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
@@ -80,8 +81,8 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (activeAccounts && activeAccounts.length === 1) {
-      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || !isRegulationCheck) {
+    } else if ((activeAccounts && activeAccounts.length === 1) || (isRegulationCheck && investAccTypes.values.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING'))) {
+      if ((isRegulationCheck && userAccredetiationState && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING')) || !isRegulationCheck) {
         setFieldValue('disableNextbtn', false);
         setStepToBeRendered(1);
       }
@@ -114,11 +115,6 @@ class AccountType extends Component {
     const { userDetails, setPartialInvestmenSession } = this.props.userDetailsStore;
     const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
     const offeringInvestnowURL = this.props.match.url;
-    if (userProfileFullStatus !== 'FULL') {
-      setPartialInvestmenSession(offeringInvestnowURL);
-    } else {
-      setPartialInvestmenSession();
-    }
     const { currentUser } = this.props.userStore;
     const redirectURL = !isRegulationCheck ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
       `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : '/app/profile-settings/investment-limits';
@@ -131,6 +127,11 @@ class AccountType extends Component {
       ACCREDITATION_EXPIRY_FORM,
       expirationChange,
     } = this.props.accreditationStore;
+    if (userProfileFullStatus !== 'FULL' || (userAccredetiationState && (userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE'))) {
+      setPartialInvestmenSession(offeringInvestnowURL);
+    } else {
+      setPartialInvestmenSession();
+    }
     if (isRegulationCheck && (!accreditationData.ira || !userAccredetiationState)) {
       return <Spinner loaderMessage="Loading.." />;
     }
@@ -147,7 +148,7 @@ class AccountType extends Component {
           {investAccTypes.values.length ?
             <Aux>
               <p className="center-align">{subHeaderToShow}</p>
-              {userAccredetiationState === 'ELGIBLE' || userAccredetiationState === '' || !isRegulationCheck ?
+              {userAccredetiationState === undefined || userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING' || !isRegulationCheck ?
                 <FormRadioGroup
                   name="investAccountType"
                   containerclassname="button-radio center-align"

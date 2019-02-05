@@ -131,6 +131,11 @@ export class InvestmentStore {
   });
 
   @action
+  resetAccTypeChanged = () => {
+    this.investAccTypes = { ...INVEST_ACCOUNT_TYPES };
+  }
+
+  @action
   prepareAccountTypes = (UserAccounts) => {
     if (this.investAccTypes.values.length === 0 && UserAccounts.length) {
       UserAccounts.map((acc) => {

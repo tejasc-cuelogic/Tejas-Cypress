@@ -640,21 +640,29 @@ export class AccreditationStore {
   }
   @action
   validInvestmentAccounts = () => {
-    const { eligibleAccreditation } = this.accreditationDetails;
-    // if (eligibleAccreditation) {
-    //   eligibleAccreditation.push('individual', 'ira');
-    // }
-    if (eligibleAccreditation &&
-      eligibleAccreditation.length &&
+    const { eligibleAccreditation, pendingAccreditation } = this.accreditationDetails;
+    let validAccreditedArr = [];
+    const investAccountArr = investmentStore.investAccTypes.values;
+    let resultArr = [];
+    if (this.userAccredetiationState === 'ELGIBLE' && eligibleAccreditation.length) {
+      validAccreditedArr = [...eligibleAccreditation];
+    } else if (this.userAccredetiationState === 'PENDING' && pendingAccreditation.length) {
+      validAccreditedArr = [...pendingAccreditation];
+    }
+    if (validAccreditedArr &&
+      validAccreditedArr.length &&
       investmentStore.investAccTypes.values.length) {
-      forEach(eligibleAccreditation, (account) => {
-        remove(investmentStore.investAccTypes.values, { value: account });
+      forEach(validAccreditedArr, (account) => {
+        const tempArr = remove(investAccountArr, { value: account });
+        resultArr = [...resultArr, ...tempArr];
       });
+      investmentStore.investAccTypes.values = resultArr;
     }
   }
   @action
   resetUserAccreditatedStatus = () => {
     this.userAccredetiationState = undefined;
+    investmentStore.resetAccTypeChanged();
   }
   checkIsAccreditationExpired = (expirationDate) => {
     let dateDiff = '';
