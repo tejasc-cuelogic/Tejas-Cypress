@@ -90,8 +90,9 @@ class KeyTerms extends Component {
               </Table.Cell>
               <Table.Cell className="grey-header" >
                 {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? campaign.keyTerms.revSharePercentage : '-'}
-                <br />
-                {campaign && campaign.keyTerms && campaign.keyTerms.revShareSummary ? campaign.keyTerms.revShareSummary : ' '}
+                {/* <br />
+                {campaign && campaign.keyTerms && campaign.keyTerms.revShareSummary ?
+                campaign.keyTerms.revShareSummary : ' '} */}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
