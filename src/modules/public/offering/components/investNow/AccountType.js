@@ -9,7 +9,6 @@ import { FormRadioGroup } from '../../../../../theme/form';
 import { OFFERING_ACCRDITATION_STATUS_MESSAGE } from '../../../../../constants/offering';
 import { Spinner } from '../../../../../theme/shared';
 
-
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore')
 @withRouter
 @observer
@@ -86,18 +85,6 @@ class AccountType extends Component {
   }
   radioChnaged = (e, res) => {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
-  }
-  handleVerifyAccreditation = (e, accountType, accountId) => {
-    e.preventDefault();
-    if (accountType === 'entity') {
-      if (this.props.userDetailsStore.isEntityTrust) {
-        this.props.history.push(`${this.props.match.url}/verify-trust-entity-accreditation/${accountId}/${accountType}`);
-      } else {
-        this.props.history.push(`${this.props.match.url}/verify-entity-accreditation/${accountId}/${accountType}`);
-      }
-    } else {
-      this.props.history.push(`${this.props.match.url}/verify-accreditation/${accountId}/${accountType}`);
-    }
   }
   render() {
     const {

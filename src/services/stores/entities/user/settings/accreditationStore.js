@@ -597,10 +597,12 @@ export class AccreditationStore {
     const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
     const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
     const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'APPROVED'));
+    const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED'));
     this.accreditationDetails.inactiveAccreditation = inactiveResult;
     this.accreditationDetails.pendingAccreditation = pendingResult;
     this.accreditationDetails.notEligibleAccreditation = notEligibalResult;
     this.accreditationDetails.eligibleAccreditation = eligibalResult;
+    this.accreditationDetails.expiredAccreditation = expiredResult;
   }
   getKeyResult = (dataObj) => {
     const resultArr = [];
@@ -621,6 +623,7 @@ export class AccreditationStore {
       inactiveAccreditation,
       notEligibleAccreditation,
       pendingAccreditation,
+      expiredAccreditation,
     } = this.accreditationDetails;
     if (eligibleAccreditation) {
       if (eligibleAccreditation.length <= 0) {
@@ -630,6 +633,8 @@ export class AccreditationStore {
           this.userAccredetiationState = 'NOT_ELGIBLE';
         } else if (inactiveAccreditation) {
           this.userAccredetiationState = 'INACTIVE';
+        } else if (expiredAccreditation) {
+          this.userAccredetiationState = 'EXPIRED';
         }
       } else {
         this.userAccredetiationState = 'ELGIBLE';
@@ -655,6 +660,14 @@ export class AccreditationStore {
   @action
   resetUserAccreditatedStatus = () => {
     this.userAccredetiationState = undefined;
+  }
+  checkIsAccreditationExpired = (expirationDate) => {
+    if (expirationDate) {
+      const validDate = new Date(expirationDate);
+      const dateDiff = DataFormatter.diffDays(validDate);
+      return dateDiff === 0 ? 'EXPIRED' : 'ACTIVE';
+    }
+    return 'ACTIVE';
   }
 }
 export default new AccreditationStore();
