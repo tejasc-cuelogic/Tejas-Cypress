@@ -383,7 +383,7 @@ export class BankAccountStore {
   }
 
   @action
-  checkOpeningDepositAmount = () => {
+  checkOpeningDepositAmount = (resetProgress = true) => {
     uiStore.setProgress();
     const variables = {
       accountType: accountStore.investmentAccType.toUpperCase(),
@@ -415,7 +415,9 @@ export class BankAccountStore {
             reject();
           })
           .finally(() => {
-            uiStore.setProgress(false);
+            if (resetProgress) {
+              uiStore.setProgress(false);
+            }
           });
       }
     });
