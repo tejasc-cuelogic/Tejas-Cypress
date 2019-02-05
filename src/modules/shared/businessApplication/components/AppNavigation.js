@@ -67,7 +67,7 @@ export default class AppNavigation extends Component {
               <Aux>
                 {this.state.step > 0 &&
                   <div className="pull-left">
-                    <Button circular icon className="multistep__btn prev" onClick={() => this.actualSubmit(-1)}>
+                    <Button type="button" circular icon className="multistep__btn prev" onClick={() => this.actualSubmit(-1)}>
                       <Icon className="ns-arrow-left" />
                     </Button>
                     {this.state.navItems[this.state.step - 1].title}
@@ -77,7 +77,7 @@ export default class AppNavigation extends Component {
                   {this.state.step < (this.state.navItems.length - 1) ? (
                     <Aux>
                       {this.state.navItems[this.state.step + 1].title}
-                      <Button circular icon primary className="multistep__btn next active" disabled={isFileUploading} onClick={() => this.actualSubmit(1)}>
+                      <Button type="button" circular icon primary className="multistep__btn next active" disabled={isFileUploading} onClick={() => this.actualSubmit(1)}>
                         <Icon className="ns-arrow-right" />
                       </Button>
                     </Aux>
@@ -86,7 +86,7 @@ export default class AppNavigation extends Component {
                       {/* <Button onClick={() => this.actualSubmit(0)} disabled={isFileUploading}
                     primary className="very relaxed" content={isFileUploading
                     ? 'File operation in process' : 'Save'} /> */}
-                      <Button loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
+                      <Button type="button" loading={inProgress} onClick={this.submit} disabled={isFileUploading} primary className="very relaxed" content={isFileUploading ? 'File operation in process' : ButtonTextToggle} />
                     </Aux>
                   }
                 </div>
