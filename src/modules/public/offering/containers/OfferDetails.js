@@ -10,6 +10,8 @@ import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shar
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
+
+import Firework from '../components/investNow/agreement/components/FireworkAnimation';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -181,6 +183,7 @@ class offerDetails extends Component {
         {!isMobile &&
           <CampaignHeader {...this.props} />
         }
+        <Firework />
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
           <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>

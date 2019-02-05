@@ -45,3 +45,10 @@ mutation deleteCat($id: ID!) {
   deleteCategory(id: $id) 
 }
 `;
+
+export const setCategoryOrderForCategoryType = gql`
+mutation setCategoryOrderForCategoryType($categoryDetails: [CategoryOrderInput]) {
+  setCategoryOrderForCategoryType(categoryDetails: $categoryDetails)
+}
+`;
+
