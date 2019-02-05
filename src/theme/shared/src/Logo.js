@@ -18,6 +18,8 @@ const getSrc = (src) => {
       return `${ASSETS_URL}images/lendio_logo.svg`;
     case 'LogoNsAndLendio':
       return `${ASSETS_URL}images/nextseed_and_lendio.svg`;
+    case 'LogoGreenGrey':
+      return `${ASSETS_URL}images/logo.png`;
     default:
       return `${ASSETS_URL}images/logo-color.svg`;
   }

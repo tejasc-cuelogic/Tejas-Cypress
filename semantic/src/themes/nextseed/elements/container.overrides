@@ -3,7 +3,7 @@
 *******************************/
 section{
     &.banner { 
-        height:817px;
+        height:568px;
         @media only screen and (max-width : @computerBreakpoint) {
             height:400px;
             padding-top: 80px;
@@ -15,8 +15,8 @@ section{
             padding: 0;
         }
         background-position: top center;
-        padding-top:118px;
-        margin-top:-58px;
+        padding-top: 0;
+        // margin-top: -72px;
         >.ui.container{
             display: flex;
             height: 100%;
@@ -65,11 +65,7 @@ section{
             }
         }
         &.campaign-list-banner{
-            height:535px;
             background:url(../../assets/images/banners/campaign-list-banner.jpg) top center no-repeat / cover;
-            @media only screen and (max-width : @computerBreakpoint) {
-                height:260px;
-            }
             @media only screen and (max-width : @largestMobileScreen){
                 height:226px;
                 background:url(../../assets/images/banners/campaign-list-mobile.jpg) center center no-repeat / cover;
@@ -88,7 +84,6 @@ section{
             }
         }
         &.resources-banner {
-            height:535px ;
             background:url(../../assets/images/banners/resources-banner.jpg) top center no-repeat / cover;  
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -99,14 +94,9 @@ section{
             }
         }
         &.edu-center-business-banner {
-            height:535px;
             background:url(../../assets/images/banners/ed-center-business.jpg) top center no-repeat / cover;
-            @media only screen and (max-width : @computerBreakpoint) {
-                height:260px;
-            }
         }
         &.edu-center-investor-banner {
-            height:535px;
             background:url(../../assets/images/banners/ed-center-investor-banner.jpg) top center no-repeat / cover;
             @media only screen and (max-width : @computerBreakpoint) {
                 height:260px;
@@ -129,10 +119,10 @@ section{
             background:url(../../assets/images/business/inclusive_mobile.jpg) center center no-repeat / cover;
         }
         &.campaign-details-banner{
-            height: 726px;
             background:url(../../assets/images/banners/campaign-details.png) top center no-repeat / cover;
             background-color: @neutral;
             background-blend-mode:multiply;
+            margin-top: 0;
             >.ui.container{
                 justify-content: center;
             }
