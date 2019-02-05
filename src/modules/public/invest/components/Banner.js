@@ -11,8 +11,8 @@ const Banner = () => (
     <Container>
       <Responsive minWidth={768} as={Aux}>
         <div className="banner-caption">
-          <Header as="h1">
-            Get access to<br />pre-vetted, local<br />investments.
+          <Header as="h2">
+            Get access to pre-vetted,<br />local investments.
           </Header>
           <Button as={Link} to="/offerings" secondary className={!isTablet && 'mt-30'}>Explore Campaigns</Button>
         </div>

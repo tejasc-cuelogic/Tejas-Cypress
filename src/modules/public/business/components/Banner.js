@@ -11,7 +11,7 @@ const Banner = () => (
     <Container>
       <Responsive minWidth={768} as={Aux}>
         <div className="banner-caption">
-          <Header as="h1">
+          <Header as="h2">
           Accelerate your<br />
           growth with the<br />
           power of the crowd.

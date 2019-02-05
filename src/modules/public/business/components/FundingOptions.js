@@ -32,8 +32,8 @@ export default class FundingOption extends Component {
     const { match, location } = this.props;
     return (
       <Aux>
-        <Container>
-          <section className="funding-option">
+        <section className="funding-option">
+          <Container>
             <Grid centered>
               <Grid.Column computer={15} tablet={16} mobile={16} textAlign={isMobile ? 'left' : 'center'}>
                 <Header as="h2">
@@ -85,8 +85,8 @@ export default class FundingOption extends Component {
                 </List.Content>
               </List.Item>
             </List>
-          </section>
-        </Container>
+          </Container>
+        </section>
       </Aux>
     );
   }
