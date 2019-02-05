@@ -126,7 +126,6 @@ export class ArticleStore {
     getCategoryList = () => {
       this.Categories = graphql({
         client: clientPublic,
-        // query: getCategoryList,
         query: getCategories,
         variables: { types: ['INSIGHTS'] },
         fetchPolicy: 'network-only',

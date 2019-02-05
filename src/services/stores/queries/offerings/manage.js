@@ -845,9 +845,6 @@ export const getOfferingDetails = gql`
         }
       }
       closureSummary {
-        disbursementDate
-        disbursementAmount
-        totalRepayment
         totalCommittedAmount
         totalInvestorCount
       }
