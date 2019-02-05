@@ -334,3 +334,17 @@ export const ENTITY_TRUST_NET_WORTH = {
     rule: 'required',
   },
 };
+
+export const ACCREDITATION_EXPIRY = {
+  financialStatus: {
+    value: [],
+    values: [
+      {
+        label: 'My financial status has not change.',
+        value: 'checked',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+};

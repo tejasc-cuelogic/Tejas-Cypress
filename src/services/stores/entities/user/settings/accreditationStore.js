@@ -3,7 +3,7 @@ import { forEach, isArray, find, mapValues, forOwn, remove } from 'lodash';
 
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
-import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
+import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION, ACCREDITATION_EXPIRY } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -27,6 +27,7 @@ export class AccreditationStore {
   @observable INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
   @observable ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
   @observable NET_WORTH_FORM = Validator.prepareFormObject(NET_WORTH);
+  @observable ACCREDITATION_EXPIRY_FORM = Validator.prepareFormObject(ACCREDITATION_EXPIRY);
   @observable removeFileIdsList = [];
   @observable stepToBeRendered = '';
   @observable filters = false;
@@ -40,12 +41,6 @@ export class AccreditationStore {
   };
   @observable data = [];
   @observable accreditaionMethod = null;
-  // @observable accreditationDetails = {
-  //   inactiveAccreditation: [],
-  //   pendingAccreditation: [],
-  //   notEligibleAccreditation: [],
-  //   eligibleAccreditation: [],
-  // };
   @observable accreditationDetails = {};
   @observable userAccredetiationState = undefined;
   @action
@@ -627,14 +622,14 @@ export class AccreditationStore {
     } = this.accreditationDetails;
     if (eligibleAccreditation) {
       if (eligibleAccreditation.length <= 0) {
-        if (pendingAccreditation.length) {
+        if (expiredAccreditation.length) {
+          this.userAccredetiationState = 'EXPIRED';
+        } else if (pendingAccreditation.length) {
           this.userAccredetiationState = 'PENDING';
         } else if (notEligibleAccreditation.length) {
           this.userAccredetiationState = 'NOT_ELGIBLE';
-        } else if (inactiveAccreditation) {
+        } else if (inactiveAccreditation.length) {
           this.userAccredetiationState = 'INACTIVE';
-        } else if (expiredAccreditation) {
-          this.userAccredetiationState = 'EXPIRED';
         }
       } else {
         this.userAccredetiationState = 'ELGIBLE';
@@ -662,12 +657,25 @@ export class AccreditationStore {
     this.userAccredetiationState = undefined;
   }
   checkIsAccreditationExpired = (expirationDate) => {
+    let dateDiff = '';
     if (expirationDate) {
       const validDate = new Date(expirationDate);
-      const dateDiff = DataFormatter.diffDays(validDate);
+      dateDiff = DataFormatter.diffDays(validDate);
       return dateDiff === 0 ? 'EXPIRED' : 'ACTIVE';
     }
-    return 'ACTIVE';
+    return dateDiff;
+  }
+  @action
+  updateAccreditationExpiray = () => {
+
+  }
+  @action
+  expirationChange = (e, result) => {
+    this.formChange(e, result, 'ACCREDITATION_EXPIRY_FORM');
+  }
+  @action
+  resetAccreditationExpirayForm = (form) => {
+    Validator.resetFormData(this[form]);
   }
 }
 export default new AccreditationStore();
