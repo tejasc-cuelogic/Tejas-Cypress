@@ -8,7 +8,7 @@ import Parser from 'html-react-parser';
 import { Container, Card, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
 import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 
@@ -90,7 +90,10 @@ export default class CampaignList extends Component {
                             </List>
                           </Card.Content>
                           <Message attached="bottom" color="teal">
-                            Offered by NextSeed US LLC
+                          Offered by NextSeed {offering && offering.regulation ?
+                            (CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.regulation] ||
+                            CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING[offering.keyTerms.regulation])
+                            : 'US'} LLC
                           </Message>
                         </Aux>
                         {offering.stage === 'LOCK' && (
