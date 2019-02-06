@@ -109,6 +109,7 @@ class InvestorSignup extends Component {
               }}
               changed={signupChange}
               fielddata={SIGNUP_FRM.fields.password}
+              showRequiredError
             />
             <FormInput
               key="verify"
