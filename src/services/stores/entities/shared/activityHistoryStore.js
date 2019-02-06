@@ -34,6 +34,10 @@ export class ActivityHistoryStore {
     const srchParams = { ...this.requestState.filters };
     if ((isArray(value) && value.length > 0) || (typeof value === 'string' && value !== '')) {
       srchParams[name] = value;
+      if (isArray(value) && value.length > 0) {
+        // eslint-disable-next-line prefer-destructuring
+        srchParams[name] = value[0];
+      }
     } else {
       delete srchParams[name];
     }

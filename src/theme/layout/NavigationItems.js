@@ -126,8 +126,8 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoColor' :
-    (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
+  (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoGreenGrey' :
+    (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoGreenGrey'))
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
@@ -149,7 +149,9 @@ export class NavigationItems extends Component {
       <Menu
         stackable
         borderless
-        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' }) || navStatus === 'sub'}
+        // inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' })
+        // || navStatus === 'sub'}
+        // inverted={navStatus === 'sub'}
         fixed="top"
         // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}

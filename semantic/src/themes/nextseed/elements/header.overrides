@@ -3,7 +3,7 @@
 *******************************/
 
 .header-wrap{
-    height:58px;
+    height:72px;
     &.large{
         height:80px;
     }

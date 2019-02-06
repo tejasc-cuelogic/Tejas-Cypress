@@ -166,7 +166,7 @@ export class InvestmentLimitStore {
   })
 
   @action
-  updateInvestmentLimits = (data, accountId, userId = null) => {
+  updateInvestmentLimits = (data, accountId, userId = null, resetProgress = true) => {
     uiStore.setProgress();
     return new Promise((resolve) => {
       client
@@ -201,7 +201,9 @@ export class InvestmentLimitStore {
           uiStore.setErrors(error.message);
         })
         .finally(() => {
-          uiStore.setProgress(false);
+          if (resetProgress) {
+            uiStore.setProgress(false);
+          }
         });
     });
   }
