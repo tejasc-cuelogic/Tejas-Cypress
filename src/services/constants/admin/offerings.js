@@ -357,7 +357,15 @@ export const REGULATION_VALUES = [
   { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
   { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
 ];
-
+export const BD_REGULATION_VALUES = [
+  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
+  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
+  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
+];
+export const FP_REGULATION_VALUES = [
+  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
+  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {
     value: '',
@@ -654,25 +662,28 @@ export const OFFER_CLOSE = {
     error: undefined,
     rule: 'array',
   },
-  disbursementDate: {
+  date: {
     value: '',
     label: 'Disbursement Date',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'date|required',
     placeHolder: 'MM-DD-YYYY',
   },
-  disbursementAmount: {
+  amount: {
     value: '',
     label: 'Disbursement Amount',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  totalRepayment: {
+  currentRepaidAmount: {
     value: '',
     label: 'Total Repayment',
     error: undefined,
     rule: 'numeric|required',
+    objRef: 'closureSummary.repayment',
     placeHolder: 'Enter here',
   },
   totalCommittedAmount: {
@@ -1456,7 +1467,7 @@ export const NEW_OFFER = {
     value: '',
     label: 'Regulation',
     error: undefined,
-    rule: 'string',
+    rule: 'required',
     placeHolder: 'Choose here',
   },
 };
@@ -2476,3 +2487,4 @@ export const POC_DETAILS = {
     placeHolder: 'MM/DD/YYYY',
   },
 };
+

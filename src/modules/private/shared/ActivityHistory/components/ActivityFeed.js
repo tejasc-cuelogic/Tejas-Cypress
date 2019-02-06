@@ -20,6 +20,7 @@ const ActivityFeed = ({ loading, activities }) => (
                     avatarUrl: get(a.createdUserInfo, 'info.avatar.url') || '',
                     roles: get(a.createdUserInfo, 'roles').map(r => r.scope),
                   }}
+                  base64url
                 /> :
                 <NSImage path="logo-icon.svg" />
               }

@@ -7,8 +7,8 @@ const Banner = () => (
     <Container>
       <Responsive minWidth={768} as={Aux}>
         <div className="banner-caption">
-          <Header as="h1">
-            Build an investment<br />portfolio you care<br />about.
+          <Header as="h2">
+            Build an investment<br />portfolio you care about.
           </Header>
         </div>
       </Responsive>

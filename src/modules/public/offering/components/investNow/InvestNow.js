@@ -9,7 +9,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };

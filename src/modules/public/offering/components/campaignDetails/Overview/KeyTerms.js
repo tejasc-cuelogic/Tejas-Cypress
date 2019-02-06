@@ -44,7 +44,7 @@ class KeyTerms extends Component {
               </Table.Cell>
               <Table.Cell className="grey-header">
                 {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?
-                  CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : ''}
+                  CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -60,7 +60,7 @@ class KeyTerms extends Component {
                   campaign.keyTerms.securities ?
                   CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
                   :
-                ''}
+                '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -88,7 +88,9 @@ class KeyTerms extends Component {
                   position="top center"
                 />
               </Table.Cell>
-              <Table.Cell className="grey-header" />
+              <Table.Cell className="grey-header" >
+                {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? campaign.keyTerms.revSharePercentage : '-'}
+              </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Multiple</b>{' '}

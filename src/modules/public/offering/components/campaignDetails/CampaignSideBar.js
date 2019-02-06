@@ -3,17 +3,18 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Route, Link } from 'react-router-dom';
 import { get } from 'lodash';
-import { Header, Icon, Statistic, Button, Menu, Embed, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
+import { Header, Icon, Statistic, Button, Menu, Responsive, Progress, Popup, Divider } from 'semantic-ui-react';
 import { NavItems } from '../../../../../theme/layout/NavigationItems';
 import { DataFormatter } from '../../../../../helper';
 import Helper from '../../../../../helper/utility';
 import share from '../campaignDetails/Share';
-import { ASSETS_URL } from '../../../../../constants/aws';
+// import { ASSETS_URL } from '../../../../../constants/aws';
+import { Image64 } from '../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
 
-const nsvideos = {
-  embed: '218642510',
-};
+// const nsvideos = {
+//   embed: '218642510',
+// };
 const isMobile = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore')
@@ -48,12 +49,25 @@ export default class CampaignSideBar extends Component {
                 {campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName}
                 <Header.Subheader>{address}</Header.Subheader>
               </Header>
-              <Embed
-                id={nsvideos.embed}
-                placeholder={`${ASSETS_URL}images/636206632.jpg`}
-                source="vimeo"
-                icon="ns-play"
-              />
+              <div className="video-wrapper campaign">
+                {campaign && campaign.media &&
+                  campaign.media.heroVideo && campaign.media.heroVideo.url ?
+                    <Link to={`${this.props.match.url}/overview/herovideo`}>
+                      <Image64
+                        bg
+                        srcUrl={get(campaign, 'media.heroImage.url')}
+                        imgType="heroImage"
+                      />
+                      <Icon className="ns-play play-icon" />
+                    </Link>
+                    :
+                    <Image64
+                      bg
+                      srcUrl={get(campaign, 'media.heroImage.url')}
+                      imgType="heroImage"
+                    />
+                }
+              </div>
               <Statistic inverted size="tiny" className="basic mb-0">
                 <Statistic.Value>
                   <span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised

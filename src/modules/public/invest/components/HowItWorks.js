@@ -8,8 +8,8 @@ const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
 const HowItWorks = () => (
   <Aux>
-    <section className="mb-80 mt-80">
-      <Container>
+    <section>
+      <Container className="mb-80 mt-80">
         <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign={isMobile ? 'left' : 'center'}>Investing, simplified.</Header>
         <div className="how-it-works-steps">
           <Grid stackable centered columns={3}>
@@ -32,8 +32,8 @@ const HowItWorks = () => (
       </Container>
     </section>
     <Divider fitted as={Container} />
-    <section className="mb-80 mt-80">
-      <Container textAlign={isMobile ? 'left' : 'center'}>
+    <section>
+      <Container className="mb-80 mt-80" textAlign={isMobile ? 'left' : 'center'}>
         <Header as="h2">Choose how you want to invest.</Header>
         <p className={isMobile ? 'mb-50' : 'mb-80'}>Understand and choose the right opportunities with the right payment terms for you.</p>
         <Grid doubling columns={3} relaxed={!isTablet && 'very'} className="flex-column" textAlign="left">
@@ -161,8 +161,8 @@ const HowItWorks = () => (
         </Grid>
       </Container>
     </section>
-    <section className="mt-50">
-      <Container className="center-align">
+    <section>
+      <Container className="center-align mt-50">
         <Header as="h2" className="mb-30">Register for an account.</Header>
         <Button.Group vertical={isMobile} className="mb-50">
           <Button as={Link} to="/auth/register" secondary>Sign Up Free</Button>

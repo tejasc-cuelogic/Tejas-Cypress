@@ -16,11 +16,17 @@ export default class AllRequests extends Component {
   componentWillMount() {
     this.props.bankAccountStore.initRequest();
   }
-  setRoutingNumber = (e, accNum) => {
+  getRoutingNumber = (e, accountId, userId) => {
     e.stopPropagation();
     const oldObj = this.state.routingNums;
-    oldObj[accNum] = true;
+    oldObj[accountId] = {};
+    oldObj[accountId].loading = true;
     this.setState({ routingNums: oldObj });
+    this.props.bankAccountStore.getDecryptedRoutingNum(accountId, userId).then((res) => {
+      oldObj[accountId].decryptedRoutingNumber = res;
+      oldObj[accountId].loading = false;
+      this.setState({ routingNums: oldObj });
+    });
   }
   paginate = params => this.props.bankAccountStore.pageRequest(params);
   render() {
@@ -73,8 +79,9 @@ export default class AllRequests extends Component {
                       {(req.linkedBank && req.linkedBank.changeRequest
                         && req.linkedBank.changeRequest.accountNumber && Helper.encryptNumberWithX(req.linkedBank.changeRequest.accountNumber)) || 'N/A'}
                       <br />
-                      {this.state.routingNums[get(req, 'accountId')] ? get(req, 'linkedBank.changeRequest.routingNumber') :
-                      <Button color="blue" onClick={e => this.setRoutingNumber(e, get(req, 'accountId'))} className="link-button"> Click for Routing # </Button>
+                      {this.state.routingNums[get(req, 'accountId')] && this.state.routingNums[get(req, 'accountId')].decryptedRoutingNumber ? this.state.routingNums[get(req, 'accountId')].decryptedRoutingNumber :
+                      this.state.routingNums[get(req, 'accountId')] && this.state.routingNums[get(req, 'accountId')].loading ? <p>Loading...</p> :
+                      <Button color="blue" onClick={e => this.getRoutingNumber(e, get(req, 'accountId'), get(req, 'userId'))} className="link-button"> Click for Routing # </Button>
                       }
                     </Table.Cell>
                     <Actions

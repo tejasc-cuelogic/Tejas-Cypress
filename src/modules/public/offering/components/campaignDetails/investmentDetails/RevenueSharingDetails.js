@@ -14,7 +14,7 @@ class RevenueSharingDetails extends Component {
     const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const edgarLink = launch && launch.edgarLink;
     const revenueShareSummary =
-      (KeyTerms && KeyTerms.revShareSummary && KeyTerms.revShareSummary === 'REVENUE_SHARING_NOTE') || null;
+      KeyTerms && KeyTerms.revShareSummary && KeyTerms.securities === 'REVENUE_SHARING_NOTE' ? KeyTerms.revShareSummary : null;
     return (
       <Aux>
         <Grid columns={3} divided stackable className="vertical-gutter neutral-text">

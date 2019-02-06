@@ -1,15 +1,17 @@
 /* eslint-disable */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { SortableContainer, SortableElement, arrayMove } from 'react-sortable-hoc';
+import { SortableContainer, SortableElement, sortableHandle, arrayMove } from 'react-sortable-hoc';
 import { Form, Header, Button, Divider, Icon, Confirm } from 'semantic-ui-react';
 import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/form';
 import ButtonGroupType2 from '../ButtonGroupType2';
 
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
 const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName }) => {
   return (
     <div className="row-wrap">
       <div className="balance-half simple-drag-row-title">
+        <DragHandle />
         <FormInput
           displayMode={isReadonly}
           name="name"
@@ -147,6 +149,7 @@ export default class DataRoom extends Component {
               toggleConfirmModal={this.toggleConfirmModal}
               formName={formName}
               lockAxis="y"
+              useDragHandle
             />
           </div>
           <Divider hidden />

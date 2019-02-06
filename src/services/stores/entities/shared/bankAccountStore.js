@@ -4,7 +4,7 @@ import { isEmpty, map, uniqWith, isEqual, find } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
-import { changeLinkedBank, changeBankManually, cancelBankRequest } from '../../queries/banking';
+import { changeLinkedBank, changeBankManually, cancelBankRequest, getDecryptedRoutingNumber } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
@@ -383,7 +383,7 @@ export class BankAccountStore {
   }
 
   @action
-  checkOpeningDepositAmount = () => {
+  checkOpeningDepositAmount = (resetProgress = true) => {
     uiStore.setProgress();
     const variables = {
       accountType: accountStore.investmentAccType.toUpperCase(),
@@ -415,7 +415,9 @@ export class BankAccountStore {
             reject();
           })
           .finally(() => {
-            uiStore.setProgress(false);
+            if (resetProgress) {
+              uiStore.setProgress(false);
+            }
           });
       }
     });
@@ -446,6 +448,24 @@ export class BankAccountStore {
         });
     });
   }
+
+  @action
+  getDecryptedRoutingNum = (accountId, userId) => new Promise((resolve, reject) => {
+    client
+      .mutate({
+        mutation: getDecryptedRoutingNumber,
+        variables: {
+          userId,
+          accountId,
+          requestType: 'CHANGE_REQUEST',
+        },
+      })
+      .then(res => resolve(res.data.getDecryptedRoutingNumber))
+      .catch(() => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
+      });
+  });
 }
 
 export default new BankAccountStore();

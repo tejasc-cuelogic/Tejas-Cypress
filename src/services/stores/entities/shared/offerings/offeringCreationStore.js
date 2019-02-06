@@ -766,6 +766,9 @@ export class OfferingCreationStore {
     }
     this[form] = Validator.setFormData(this[form], offer, ref, keepAtLeastOne);
     this.initLoad.push(form);
+    if (form === 'KEY_TERMS_FRM') {
+      this.KEY_TERMS_FRM.fields.regulation.value = offer.regulation;
+    }
     if (form === 'LEADERSHIP_FRM') {
       forEach(offer.leadership, (emp, key) => {
         this.LEADERSHIP_EXP_FRM =
@@ -1080,6 +1083,9 @@ export class OfferingCreationStore {
       }
     } else {
       payloadData = { ...payloadData, ...Validator.evaluateFormData(fields) };
+    }
+    if (keyName === 'keyTerms') {
+      payloadData.regulation = this.KEY_TERMS_FRM.fields.regulation.value;
     }
     if (keyName !== 'BonusRewardTier' && keyName !== 'contingencies' && keyName !== 'editForm' && keyName !== 'editPocForm') {
       const payLoadDataOld = keyName ? subKey ? subKey === 'issuer' ? payloadData[keyName].documentation[subKey] : payloadData[keyName][subKey] :
@@ -1459,6 +1465,7 @@ export class OfferingCreationStore {
     } else {
       this.ADD_NEW_BONUS_REWARD_FRM.fields[seqNum].value.splice(index, 1);
     }
+    Validator.validateForm(this.ADD_NEW_BONUS_REWARD_FRM, false, false, false);
   }
 
   @action

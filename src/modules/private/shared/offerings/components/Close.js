@@ -148,15 +148,15 @@ export default class Close extends Component {
                   <Header as="h4" className="mt-40 mb-30">Finalize closure</Header>
                   <Form>
                     <Form.Group widths={3}>
-                      {['disbursementDate', 'disbursementAmount', 'totalRepayment', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
+                      {['date', 'amount', 'currentRepaidAmount', 'totalCommittedAmount', 'totalInvestorCount'].map(field => (
                         <MaskedInput
                           name={field}
                           fielddata={OFFERING_CLOSE_FRM.fields[field]}
                           changed={(values, name) => maskChange(values, formName, name)}
-                          dateOfBirth={field === 'disbursementDate'}
+                          dateOfBirth={field === 'date'}
                           number={field === 'totalInvestorCount'}
-                          currency={field !== 'totalInvestorCount' && field !== 'disbursementDate'}
-                          prefix={field !== 'totalInvestorCount' && field !== 'disbursementDate' ? '$' : false}
+                          currency={field !== 'totalInvestorCount' && field !== 'date'}
+                          prefix={field !== 'totalInvestorCount' && field !== 'date' ? '$' : false}
                         />
                       ))
                       }
