@@ -3,6 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
+import cookie from 'react-cookies';
 import { concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
@@ -16,8 +17,9 @@ import {
   entityAccountStore,
   investorProfileStore,
   authStore,
+  campaignStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount, skipAddressValidation } from '../../queries/users';
+import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin } from '../../queries/users';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
@@ -144,11 +146,12 @@ export class UserDetailsStore {
         res();
         const user = { ...this.currentUser };
         this.currentUser.data &&
-        this.currentUser.data.user &&
-        this.currentUser.data.user.roles && this.currentUser.data.user.roles.map((role, index) => {
-          this.currentUser.data.user.roles[index].name = lowerCase(role.name);
-          return this.currentUser;
-        });
+          this.currentUser.data.user &&
+          this.currentUser.data.user.roles &&
+          this.currentUser.data.user.roles.map((role, index) => {
+            this.currentUser.data.user.roles[index].name = lowerCase(role.name);
+            return this.currentUser;
+          });
         if (user && user.data && user.data.user && user.data.user.capabilities) {
           authStore.setCurrentUserCapabilites(user.data.user.capabilities);
         }
@@ -430,8 +433,25 @@ export class UserDetailsStore {
   @action setPartialInvestmenSession = (redirectURL = '') => {
     this.partialInvestNowSessionURL = redirectURL;
   }
-  // Admin notify email send functioanlity goes
-  @action sendAdminNotificationEmail = status => status
+  @action sendAdminEmailOfFrozenAccount = (activity) => {
+    const selectedAccount = this.currentActiveAccountDetails;
+    const forzenAccountId =
+      selectedAccount && selectedAccount.details && selectedAccount.details.accountId ? selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
+    const payLoad = { userId: this.currentUserId, accountId: forzenAccountId, activity };
+    client
+      .mutate({
+        mutation: frozenEmailToAdmin,
+        variables: payLoad,
+      })
+      .then((res) => {
+        if (res.data.notifyAdminFrozenAccountActivity) {
+          const offeringId = campaignStore.campaign && campaignStore.campaign.id;
+          const offeringDetailObj = { offeringId, isEmailSent: true };
+          cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
+          Helper.toast('Email has been sent to admin.', 'success');
+        }
+      });
+  }
 }
 
 export default new UserDetailsStore();

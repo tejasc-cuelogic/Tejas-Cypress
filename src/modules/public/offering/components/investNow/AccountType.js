@@ -21,11 +21,12 @@ class AccountType extends Component {
     const { activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
     const {
       setPartialInvestmenSession,
-      sendAdminNotificationEmail,
+      sendAdminEmailOfFrozenAccount,
     } = this.props.userDetailsStore;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
-    const isRegulationCheck = !!(offeringReuglation && offeringReuglation === 'BD_506C');
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const regulationType = offeringReuglation;
     const {
       userAccredetiationState,
       resetAccreditationExpirayForm,
@@ -34,7 +35,7 @@ class AccountType extends Component {
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (this.props.changeInvest || (activeAccounts && activeAccounts.length === 1)) {
-      if ((isRegulationCheck && userAccredetiationState && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING')) || !isRegulationCheck) {
+      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || !isRegulationCheck) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
           if (this.props.investmentStore.getSelectedAccountTypeId) {
@@ -45,13 +46,9 @@ class AccountType extends Component {
     }
     setPartialInvestmenSession();
     if (frozenAccounts.length) {
-      const offeringId = campaign && campaign.id;
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
-        const offeringDetailObj = { offeringId, isEmailSent: true };
-        cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
         // send email to admin
-        sendAdminNotificationEmail('FROZEN');
-        console.log('Send email function call....');
+        sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
     this.props.accreditationStore.getUserAccreditation().then(() => {
@@ -73,7 +70,8 @@ class AccountType extends Component {
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
-    const isRegulationCheck = !!(offeringReuglation && offeringReuglation === 'BD_506C');
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const regulationType = offeringReuglation;
     const { userAccredetiationState } = this.props.accreditationStore;
     if (this.props.investmentStore.getSelectedAccountTypeId) {
       this.props.investmentLimitStore
@@ -81,8 +79,8 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((activeAccounts && activeAccounts.length === 1) || (isRegulationCheck && investAccTypes.values.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING'))) {
-      if ((isRegulationCheck && userAccredetiationState && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING')) || !isRegulationCheck) {
+    } else if ((activeAccounts && activeAccounts.length === 1) || (isRegulationCheck && investAccTypes.values.length && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && investAccTypes.values.length && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')) {
+      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || !isRegulationCheck) {
         setFieldValue('disableNextbtn', false);
         setStepToBeRendered(1);
       }
@@ -111,7 +109,8 @@ class AccountType extends Component {
     prepareAccountTypes(activeAccounts);
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
-    const isRegulationCheck = !!(offeringReuglation && offeringReuglation === 'BD_506C');
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const regulationType = offeringReuglation;
     const { userDetails, setPartialInvestmenSession } = this.props.userDetailsStore;
     const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
     const offeringInvestnowURL = this.props.match.url;
@@ -148,7 +147,7 @@ class AccountType extends Component {
           {investAccTypes.values.length ?
             <Aux>
               <p className="center-align">{subHeaderToShow}</p>
-              {userAccredetiationState === undefined || userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING' || !isRegulationCheck ?
+              {userAccredetiationState === undefined || userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || !isRegulationCheck ?
                 <FormRadioGroup
                   name="investAccountType"
                   containerclassname="button-radio center-align"

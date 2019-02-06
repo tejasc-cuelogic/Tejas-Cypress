@@ -31,7 +31,7 @@ export const allUsersQuery = gql`
         roles {
           scope
           name
-          
+
         }
         lastLoginDate
         created {
@@ -368,5 +368,14 @@ mutation skipAddressValidationCheck($userId: String!, $shouldSkip: Boolean!) {
   skipAddressValidationCheck(
      userId: $userId
      shouldSkip: $shouldSkip
+   )
+ }`;
+
+export const frozenEmailToAdmin = gql`
+mutation notifyAdminFrozenAccountActivity($userId: String!, $accountId: String!, $activity: FreezeAccountActivityEnum!) {
+  notifyAdminFrozenAccountActivity(
+     userId: $userId
+     accountId: $accountId
+     activity: $activity
    )
  }`;

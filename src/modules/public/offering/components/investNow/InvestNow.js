@@ -134,7 +134,9 @@ export default class InvestNow extends React.Component {
     } = uiStore;
     const { activeAccounts } = this.props.userDetailsStore.signupStatus;
     const { userAccredetiationState } = this.props.accreditationStore;
-    // const userAccredetiationState = userAccreditatedStatus;
+    const { campaign } = this.props.campaignStore;
+    const offeringReuglation = campaign && campaign.regulation;
+    const regulationType = offeringReuglation;
     const steps =
       [
         {
@@ -167,8 +169,8 @@ export default class InvestNow extends React.Component {
           isValid: '',
         },
       ];
-    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING' || userAccredetiationState === undefined));
-    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || userAccredetiationState === 'PENDING' || userAccredetiationState === undefined));
+    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined));
+    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined));
     return (
       <div className="step-progress" >
         {
