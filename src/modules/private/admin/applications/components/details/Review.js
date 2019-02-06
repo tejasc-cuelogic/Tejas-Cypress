@@ -64,7 +64,7 @@ export default class Review extends Component {
       <div className="inner-content-spacer">
         <Grid>
           <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
-            <div className="sticy-sidebar">
+            <div className="sticky-sidebar">
               <SecondaryMenu
                 addon={{ data: this.representAddon(subNavPresentation) }}
                 secondary

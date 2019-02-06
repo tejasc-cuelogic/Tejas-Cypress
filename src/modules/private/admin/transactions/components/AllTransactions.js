@@ -58,6 +58,7 @@ export default class AllTransactions extends Component {
                   }
                   {['PENDING', 'PROCESSING'].includes(STATUS[statusType]) &&
                     <Table.HeaderCell key="actions">
+                      &nbsp;
                     </Table.HeaderCell>
                   }
                 </Table.Row>

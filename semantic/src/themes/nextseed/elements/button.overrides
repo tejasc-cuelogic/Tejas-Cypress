@@ -9,6 +9,10 @@
     &.basic {
         border: 1px solid @thumbBackground;
         box-shadow: none !important;
+        &.highlight-text {
+            color: @primary-one !important;
+            font-weight: @fontMedium;
+        }
     }
 }
 .offering-side-menu {

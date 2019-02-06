@@ -442,6 +442,16 @@ class EntityAccountStore {
             }
           }
           if (formStatus === 'FULL') {
+            const data = {
+              annualIncome:
+                userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+              netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
+              otherRegCfInvestments: 0,
+            };
+            const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
+            if (accountDetails) {
+              investmentLimitStore.updateInvestmentLimits(data, accountDetails.details.accountId);
+            }
             Helper.toast('Entity account created successfully.', 'success');
           } else {
             Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');

@@ -1,86 +1,70 @@
 import React, { Component } from 'react';
-import { Grid, Segment, Item, Divider, Header, Label, Icon } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
+import { Button, Icon, Item, Header, Label, Divider } from 'semantic-ui-react';
 import moment from 'moment';
+import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
 import { Image64 } from '../../../../../../theme/shared';
 
+const isMobile = document.documentElement.clientWidth < 991;
 
+@withRouter
 class LatestUpdates extends Component {
+  handleViewUpdates = (e) => {
+    e.preventDefault();
+    this.props.history.push(`${this.props.refLink}/updates`);
+  }
   render() {
     const {
-      updates, isTabletLand, refLink, companyAvatarUrl, bussinessName,
+      updates, companyAvatarUrl, bussinessName,
     } = this.props;
     const update = (updates && updates.length && updates[0]) || null;
-    // let UserInfo = update && update.actingUserInfo ? update.actingUserInfo.info : null;
-    // UserInfo = UserInfo ? {
-    //   firstName: UserInfo.firstName,
-    //   lastName: UserInfo.lastName,
-    //   roles: ['investor'],
-    //   avatarUrl: UserInfo.avatar ? UserInfo.avatar.url : null,
-    // } : {
-    //   firstName: 'S',
-    //   lastName: 'T',
-    //   roles: ['investor'],
-    //   avatarUrl: null,
-    // };
     return (
-      <Grid.Column className={isTabletLand && 'mt-30'}>
-        <Segment padded>
-          <Header as="h4">
-            {updates && updates.length ?
-              <Link to={`${refLink}/updates`}>
-                Updates
-                <Label circular horizontal color="blue">{(updates && updates.length) || 0}</Label>
-                <Icon className="ns-chevron-right" color="green" />
-              </Link>
-              :
-              <Aux>
-                Updates
-                <Label circular horizontal color="blue">{(updates && updates.length) || 0}</Label>
-                <Icon className="ns-chevron-right" color="green" />
-              </Aux>
-            }
-          </Header>
-          <Item.Group className="campaign-updates">
-            <Item>
-              <Item.Content>
-                <div className="clearfix">
-                  {companyAvatarUrl && companyAvatarUrl.length ?
-                    <div className="avatar-image pull-left">
-                      <Image64 size="mini" srcUrl={companyAvatarUrl} circular />
-                    </div> : null
-                  }
-                  <Item.Header className="neutral-text">
+      <Aux>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Updates
+          <Label circular horizontal color="green">{(updates && updates.length) || 0}</Label>
+          <span className="anchor" id="updates" />
+        </Header>
+        <Item.Group>
+          <Item>
+            <Item.Content>
+              <div className="campaign-avatar">
+                {companyAvatarUrl && companyAvatarUrl.length ?
+                  <div className="avatar-image">
+                    <Image64 size="mini" srcUrl={companyAvatarUrl} />
+                  </div> : null
+                }
+                <div className="avatar-details">
+                  <Item.Header>
                     <b>{bussinessName && bussinessName.length && `${bussinessName}`}</b>
                   </Item.Header>
-                </div>
-                {update ?
-                  <Aux>
+                  {update &&
                     <Item.Meta>{moment(update.updated.date).format('ll')}</Item.Meta>
-                    <Divider />
-                    <Item.Description>
-                      <div className="segment-container mini">
-                        <p><b>{update.title}</b></p>
-                        <p>
-                          {Parser(update.content || '')}
-                        </p>
-                      </div>
-                      <Link to={`${refLink}/updates`}>View Update</Link>
-                    </Item.Description>
-                  </Aux>
-                    :
-                  <Aux>
-                    <Divider />
-                    <Item.Description className="neutral-text"><b>No updates yet</b></Item.Description>
-                  </Aux>
-                }
-              </Item.Content>
-            </Item>
-          </Item.Group>
-        </Segment>
-      </Grid.Column>
+                  }
+                </div>
+              </div>
+              <Divider hidden />
+              {update ?
+                <Aux>
+                  <Item.Description className="avatar-description">
+                    <Header as="h4" className="grey-header">{update.title}</Header>
+                    <p>{Parser(update.content || '')}</p>
+                  </Item.Description>
+                </Aux>
+                  :
+                <Aux>
+                  <Item.Description className="neutral-text"><b>No updates yet</b></Item.Description>
+                </Aux>
+              }
+            </Item.Content>
+          </Item>
+        </Item.Group>
+        <Button fluid={isMobile} onClick={this.handleViewUpdates} basic compact className="highlight-text mt-40">
+          View Updates
+          <Icon size="small" className="ns-chevron-right right" color="white" />
+        </Button>
+      </Aux>
     );
   }
 }

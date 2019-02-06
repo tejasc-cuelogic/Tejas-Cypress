@@ -2,49 +2,84 @@
          Theme Overrides
 *******************************/
 //  Public page Starts
-.offer-details {
-	.offering-side-menu {
-        .ui.statistics {
-			.statistic {
-				>.value, >.label {
-					font-size: @13px !important;
-					color: @white;
-					font-weight: normal;
-					text-transform: none;
-				}
+// .offer-details {
+// 	.offering-side-menu .ui.statistics .statistic{
+// 			>.value, >.label {
+// 				font-size: @13px !important;
+// 				color: @white;
+// 				font-weight: normal;
+// 				text-transform: none;
+// 			}
+// 	}
+// 	.offering-wrapper .ui.statistic {
+// 		width: 100%;
+// 		padding: 0;
+// 		>.label{
+// 			color:@neutral;
+// 			font-size: @13px;
+// 		}
+// 		>.value {
+// 			font-size: @28px !important;
+// 			color:@neutral-middark;
+// 			font-weight: @bold;
+// 			text-transform: none;
+// 			line-height: 30px;
+// 			margin-top: @30px;
+// 			@media only screen and (max-width : @largestSmallMonitor){
+// 				margin-top: 0;
+// 			}
+// 		}
+// 		&.mini >.value {
+// 			font-size: @13px !important;
+// 			color: @neutral;
+// 			line-height: 18px;
+// 			font-weight: @normal;
+// 			margin-top: @8px;
+// 		}
+// 	}
+// }
+.campaign-details-banner, .offering-intro {
+	.offer-stats {
+		padding: @15px;
+		background: @mutedTextColor;
+		position: absolute;
+		top:0;
+		left:0;
+		@media only screen and (max-width : @largestTabletScreen){
+			background: transparent;
+			position: static;
+			padding: @15px 0;
+		}
+		.ui.statistics {
+			margin: 0;
+			@media only screen and (max-width : @largestTabletScreen){
+				justify-content: center;
 			}
-			&.three .statistic {
-				margin-bottom: @20px;
+			.statistic {
+				padding: 0 @15px;
+				margin: 0;
+				@media only screen and (max-width : @largestTabletScreen){
+					padding: 0 @10px;
+				}
+				>.value {
+					font-size: @20px !important;
+					color: @white;
+					~.label {
+						font-size: @15px;
+						color: @white;
+					}
+				}
+				+.statistic {
+					margin: 0;
+				}
 			}
 		}
 	}
-	.offering-wrapper {
-		.ui.statistic {
-			width: 100%;
-			padding: 0;
-			>.label{
-				color:@neutral;
-				font-size: @13px;
-			}
-			>.value {
-				font-size: @28px !important;
-				color:@neutral-middark;
-				font-weight: @bold;
-				text-transform: none;
-				line-height: 30px;
-				margin-top: @30px;
-				@media only screen and (max-width : @largestSmallMonitor){
-					margin-top: 0;
-				}
-			}
-			&.mini >.value {
-				font-size: @13px !important;
-				color: @neutral;
-				line-height: 18px;
-				font-weight: @normal;
-				margin-top: @8px;
-			}
-		}
+	.ui.statistic >.label.flag-status{
+        font-size: @12px;
+		line-height: 18px;
+		margin-top: @10px;
+		color: @white;
 	}
 }
 /** About Us **/

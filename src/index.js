@@ -6,7 +6,6 @@ import { BrowserRouter } from 'react-router-dom';
 import promiseFinally from 'promise.prototype.finally';
 import { useStrict } from 'mobx';
 import { Provider } from 'mobx-react';
-import 'react-datepicker/dist/react-datepicker.css';
 import App from './App';
 import * as stores from './services/stores';
 import { ErrorBoundry as CustomErrorBoundry } from './helper';
@@ -35,12 +34,12 @@ promiseFinally.shim();
 useStrict(true);
 
 ReactDOM.render(
-  <ErrorBoundary >
+  <CustomErrorBoundry >
     <Provider {...stores}>
       <BrowserRouter >
         <App />
       </BrowserRouter>
     </Provider>
-  </ErrorBoundary>,
+  </CustomErrorBoundry>,
   document.getElementById('root'),
 );

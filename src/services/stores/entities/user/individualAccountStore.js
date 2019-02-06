@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
+import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore } from '../../index';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
@@ -50,6 +50,21 @@ class IndividualAccountStore {
             .then(action((result) => {
               if (result.data.createInvestorAccount || formStatus === 'FULL') {
                 userDetailsStore.getUser(userStore.currentUser.sub);
+              }
+              if (formStatus !== 'FULL') {
+                const accountId = result.data.createInvestorAccount ?
+                  result.data.createInvestorAccount.accountId :
+                  result.data.updateInvestorAccount ?
+                    result.data.updateInvestorAccount.accountId : null;
+                if (accountId) {
+                  const data = {
+                    annualIncome:
+                      userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+                    netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
+                    otherRegCfInvestments: 0,
+                  };
+                  investmentLimitStore.updateInvestmentLimits(data, accountId);
+                }
               }
               if (result.data.createInvestorAccount) {
                 const { linkedBank } = result.data.createInvestorAccount;

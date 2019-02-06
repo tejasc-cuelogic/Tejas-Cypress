@@ -434,25 +434,83 @@ export const PUBLIC_NAV = [
     to: 'offerings',
     subNavigations: [
       {
-        icon: 'ns-home-line', title: 'Overview', to: 'overview', component: 'Overview',
+        defaultOpen: true,
+        title: 'Overview',
+        to: 'overview',
+        component: 'Overview',
+        subPanel: 1,
+        clickable: true,
+        subNavigations: [
+          {
+            title: 'Top Things to Know', to: '#top-things-to-know', useRefLink: true, defaultActive: true,
+          },
+          {
+            title: 'Investment Highlights', to: '#investment-highlights', useRefLink: true,
+          },
+          {
+            title: 'Updates', to: '#updates', useRefLink: true,
+          },
+          {
+            title: 'Gallery', to: '#gallery', useRefLink: true,
+          },
+        ],
       },
       {
-        icon: 'ns-edu-center', title: 'About the Company', to: 'about', component: 'AboutCompany',
+        title: 'About the Company',
+        to: 'about',
+        component: 'AboutCompany',
+        subPanel: 1,
+        clickable: true,
+        subNavigations: [
+          {
+            title: 'Company Description', to: '#company-description', useRefLink: true, defaultActive: true,
+          },
+          {
+            title: 'Business Model', to: '#business-model', useRefLink: true,
+          },
+          {
+            title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
+          },
+          {
+            title: 'Team', to: '#team', useRefLink: true,
+          },
+          {
+            title: 'History', to: '#history', useRefLink: true,
+          },
+        ],
       },
       {
-        icon: 'ns-investment', title: 'Investment Details', to: 'investment-details', component: 'InvestmentDetails',
+        title: 'Investment Details',
+        to: 'investment-details',
+        component: 'InvestmentDetails',
+        subPanel: 1,
+        clickable: true,
+        subNavigations: [
+          {
+            title: 'Use of Proceeds', to: '#use-of-proceeds', useRefLink: true, defaultActive: true,
+          },
+          {
+            title: 'Key Terms', to: '#key-terms', useRefLink: true,
+          },
+          // {
+          //   title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
+          // },
+          // {
+          //   title: 'Total Payment Calculator', to: '#total-payment-calculator', useRefLink: true,
+          // },
+        ],
       },
       {
-        icon: 'ns-rewards', title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
+        clickable: true, title: 'Bonus Rewards', to: 'bonus-rewards', component: 'BonusRewards',
       },
       {
-        icon: 'ns-document-search', title: 'Data Room', to: 'data-room', component: 'Disclosures',
+        clickable: true, title: 'Data Room', to: 'data-room', component: 'Disclosures',
       },
       {
-        icon: 'ns-updates', title: 'Updates', to: 'updates', component: 'Updates',
+        clickable: true, title: 'Updates', to: 'updates', component: 'Updates',
       },
       {
-        icon: 'ns-comments-q-a', title: 'Comments', to: 'comments', component: 'Comments',
+        clickable: true, title: 'Comments', to: 'comments', component: 'Comments',
       },
     ],
   },
