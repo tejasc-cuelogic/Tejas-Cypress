@@ -9,7 +9,7 @@ const getSrc = (src) => {
     case 'LogoWhite':
       return `${ASSETS_URL}images/logo-white.svg`;
     case 'LogoWhiteGreen':
-      return `${ASSETS_URL}images/logo-white-green.svg`;
+      return `${ASSETS_URL}images/logo.png`;
     case 'LogoSmall':
       return `${ASSETS_URL}images/logo-icon.svg`;
     case 'LogoSmallWhite':
