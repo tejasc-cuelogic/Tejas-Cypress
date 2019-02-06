@@ -10,7 +10,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES } from '../../../constants/admin/article';
 import { allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
-import { getCategoryList } from '../../queries/categoryArticle';
+import { getCategories } from '../../queries/category';
 
 export class ArticleStore {
     @observable data = [];
@@ -102,7 +102,7 @@ export class ArticleStore {
 
     @action
     getArticle = (id) => {
-      this.article = graphql({ client, query: getArticleDetails, variables: { id } });
+      this.article = graphql({ client: clientPublic, query: getArticleDetails, variables: { id } });
     }
 
     @computed get InsightArticles() {
@@ -126,8 +126,8 @@ export class ArticleStore {
     getCategoryList = () => {
       this.Categories = graphql({
         client: clientPublic,
-        query: getCategoryList,
-        variables: { categoryType: 'INSIGHTS' },
+        query: getCategories,
+        variables: { types: ['INSIGHTS'] },
         fetchPolicy: 'network-only',
       });
     }
