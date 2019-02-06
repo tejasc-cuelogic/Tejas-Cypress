@@ -49,7 +49,9 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             state
           }
           closureSummary {
-            disbursementDate
+            disbursement {
+              date
+            }
           }
         }
       }
@@ -67,7 +69,9 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             state
           }
           closureSummary {
-            disbursementDate
+            disbursement {
+              date
+            }
           }
         }
       }
