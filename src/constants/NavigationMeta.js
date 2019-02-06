@@ -409,6 +409,18 @@ export const PRIVATE_NAV = [
     path: 'admin/accreditation',
     accessibleTo: ['admin', 'manager', 'support'],
   },
+  {
+    icon: 'payment',
+    title: 'Dev',
+    capability: 'ACCREDITATION_ANY',
+    to: 'dev',
+    path: 'admin/dev',
+    accessibleTo: ['admin', 'manager', 'support'],
+    subPanel: 1,
+    subNavigations: [
+      { title: 'Elastic Search', to: 'elasticsearch', component: 'ElasticSearch' },
+    ],
+  },
 ];
 
 export const PUBLIC_NAV = [
