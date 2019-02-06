@@ -86,7 +86,7 @@ mutation submitApplication($applicationId: String!) {
 `;
 
 export const helpAndQuestion = gql`
-mutation helpAndQuestion($question: helpAndQuestionInput!) {
+mutation helpAndQuestion($question: HelpAndQuestionInput!) {
   helpAndQuestion(question: $question)
 }
 `;
