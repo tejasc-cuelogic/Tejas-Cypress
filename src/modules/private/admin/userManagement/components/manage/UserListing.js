@@ -74,7 +74,7 @@ class UserListing extends Component {
                     {get(user, 'info.mailingAddress.zipCode')
                     }
                   </Table.Cell>
-                  <Table.Cell>{Helper.phoneNumberFormatter(user.phone ? user.phone.number : '')}</Table.Cell>
+                  <Table.Cell>{Helper.phoneNumberFormatter(get(user, 'phone.number') ? get(user, 'phone.number') : '')}</Table.Cell>
                   <Table.Cell><UserTypeIcon role={user.roles} /></Table.Cell>
                   <Table.Cell>
                     {user.created ?
