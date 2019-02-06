@@ -30,7 +30,7 @@ export class CategoryStore {
     initRequest = () => {
       this.data = graphql({
         client,
-        query: getCategories,
+        query: getCategories(false),
         fetchPolicy: 'network-only',
         variables: { types: null },
         onFetch: () => {
@@ -92,7 +92,7 @@ export class CategoryStore {
           mutation: deleteCategory,
           variables: { id },
           refetchQueries: [{
-            query: getCategories,
+            query: getCategories(false),
             variables: { types: null },
           }],
         }).then(() => {
@@ -131,7 +131,7 @@ export class CategoryStore {
             mutation,
             variables: param,
             refetchQueries: [{
-              query: getCategories,
+              query: getCategories(false),
               variables: { types: null },
             }],
           })

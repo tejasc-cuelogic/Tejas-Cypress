@@ -33,6 +33,7 @@ query getOfferingList($filters: OfferingFilterInputType){
         state
         city
       }
+      regulation
     }
   }
 `;
