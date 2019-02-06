@@ -107,15 +107,17 @@ class IndividualAccountStore {
                 Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
               }
               uiStore.setErrors(null);
+              uiStore.setProgress(false);
               resolve(result);
             }))
             .catch(action((err) => {
+              uiStore.setProgress(false);
               uiStore.setErrors(DataFormatter.getSimpleErr(err));
               reject();
-            }))
-            .finally(() => {
-              uiStore.setProgress(false);
-            });
+            }));
+          // .finally(() => {
+          //   uiStore.setProgress(false);
+          // });
         })
           .catch(() => {
             reject();
