@@ -24,7 +24,7 @@ export default class CrowdPay extends Component {
     const navItems = GetNavMeta(match.url, [], false).subNavigations;
     return (
       <PrivateLayout
-        hideSubNav
+        // hideSubNav
         {...this.props}
       >
         <Switch>

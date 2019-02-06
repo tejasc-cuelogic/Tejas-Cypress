@@ -12,7 +12,7 @@ export class ElasticSearchStore {
   }
 
   @action
-  updateApplicationStatus = (mutation) => {
+  elasticSearchHandler = (mutation) => {
     this.setFieldValue('inProgress', mutation);
     return new Promise((resolve, reject) => {
       client
@@ -20,7 +20,7 @@ export class ElasticSearchStore {
           mutation: elasticSearchQueries[mutation],
         })
         .then((result) => {
-          Helper.toast('Application status updated successfully.', 'success');
+          Helper.toast('Your request is processed.', 'success');
           resolve(result);
           this.setFieldValue('inProgress', false);
         })
