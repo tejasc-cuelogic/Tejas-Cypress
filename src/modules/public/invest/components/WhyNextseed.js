@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { Header, Grid, Button, Container, List, Item, Responsive, Divider, Image } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
 import { ASSETS_URL } from '../../../../constants/aws';
+import NSImage from '../../../shared/NSImage';
 
 const highlights = [
   {
@@ -52,34 +53,34 @@ const businesses = [
   [
     {
       title: 'Houston, TX',
-      image: `${ASSETS_URL}images/investors/img-2.png`,
+      image: 'investors/img-2.png',
       description: 'The Sugar Refinery raised $273,800 from 213 investors',
     },
     {
       title: 'San Francisco, CA',
-      image: `${ASSETS_URL}images/investors/img.png`,
+      image: 'investors/img.png',
       description: 'Rambler raised $150,000 from 131 investors',
     },
     {
       title: 'Austin, TX',
-      image: `${ASSETS_URL}images/investors/img-1.png`,
+      image: 'investors/img-1.png',
       description: 'The Brewer’s Table raised $3000,000 from 190 investors',
     },
   ],
   [
     {
       title: 'San Diego, CA',
-      image: `${ASSETS_URL}images/investors/img-5.png`,
+      image: 'investors/img-5.png',
       description: '619 Distillery & Tasting Room raised $191,600 from 238 investors',
     },
     {
       title: 'Brooklyn, NY',
-      image: `${ASSETS_URL}images/investors/img-3.png`,
+      image: 'investors/img-3.png',
       description: 'California 88 raised $124,900 from 180 investors',
     },
     {
       title: 'Salt Lake City, UT',
-      image: `${ASSETS_URL}images/investors/img-4.png`,
+      image: 'investors/img-4.png',
       description: 'MOB Cycle raised $117,400 from 132 investors',
     },
   ],
@@ -162,7 +163,7 @@ const WhyNextseed = () => (
                     {
                       row.map(b => (
                         <Grid.Column textAlign="center" width={4}>
-                          <Image src={b.image} centered />
+                          <NSImage path={b.image} centered />
                           <Header as="h5">{b.title}</Header>
                           <p>{b.description}</p>
                         </Grid.Column>
@@ -181,7 +182,7 @@ const WhyNextseed = () => (
                       row.map(b => (
                         <Grid.Row>
                           <Grid.Column className="center-align">
-                            <Image src={b.image} centered />
+                            <NSImage path={b.image} centered />
                             <Header as="h5">{b.title}</Header>
                             <p>{b.description}</p>
                           </Grid.Column>

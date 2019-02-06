@@ -1,7 +1,8 @@
 /* eslint-disable import/no-dynamic-require, global-require */
 import React from 'react';
-import { Header, Container, Grid, Image, Responsive } from 'semantic-ui-react';
+import { Header, Container, Grid, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
+import NSImage from '../../../shared/NSImage';
 
 const featuredOn = [
   ['bloomberg', 'forbes', 'ny-times', 'w-journal', 'npr', 'time', 'msn-money', 'crowdfund-insider', 'mashable', 'us-news'],
@@ -17,7 +18,7 @@ const FeaturedOn = () => (
             <Grid.Row> */}
           {featuredOn.map(row => row.map(f => (
             <Grid.Column>
-              <Image centered src={require(`../../../../assets/images/featured/${f}.png`)} />
+              <NSImage centered path={`featured/${f}.png`} />
             </Grid.Column>
           )))}
           {/* </Grid.Row>
@@ -26,7 +27,7 @@ const FeaturedOn = () => (
         <Responsive maxWidth="767" as={Aux}>
           {featuredOn.map(row => row.map(f => (
             <Grid.Column className="featured-logos">
-              <Image centered src={require(`../../../../assets/images/featured/${f}.png`)} />
+              <NSImage centered path={`featured/${f}.png`} />
             </Grid.Column>
           )))}
         </Responsive>

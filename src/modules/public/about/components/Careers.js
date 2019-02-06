@@ -1,7 +1,7 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Grid, Button, Image, Responsive } from 'semantic-ui-react';
-import { ASSETS_URL } from '../../../../constants/aws';
+import { Header, Container, Grid, Button, Responsive } from 'semantic-ui-react';
+import NSImage from '../../../shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Careers = () => (
@@ -29,7 +29,7 @@ const Careers = () => (
               See Job Listings
               </Button>
             </div>
-            <Image src={`${ASSETS_URL}images/collage.jpg`} className="careers-banner" />
+            <NSImage path="collage.jpg" className="careers-banner" />
           </Grid.Column>
         </Grid>
       </Container>

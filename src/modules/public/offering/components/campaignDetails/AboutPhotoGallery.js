@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Modal, Image, Container } from 'semantic-ui-react';
+import { Modal, Container } from 'semantic-ui-react';
 import { NsCarousel, Image64 } from '../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../constants/aws';
+import NSImage from '../../../../shared/NSImage';
 
 const isTablet = document.documentElement.clientWidth < 1024;
 @inject('campaignStore')
@@ -59,7 +59,7 @@ class AboutPhotoGallery extends Component {
                     <Image64 srcUrl={data.url} />
                   </div>
                   )) :
-                <Image src={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
+                <NSImage path="gallery-placeholder-16-9.jpg" />
                 }
               </NsCarousel>
             </Container>
