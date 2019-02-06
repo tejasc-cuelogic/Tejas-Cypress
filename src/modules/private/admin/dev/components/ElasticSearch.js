@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Card, Button, Confirm, Divider } from 'semantic-ui-react';
+import { Grid, Card, Button, Confirm } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import ActivityHistory from '../../../shared/ActivityHistory';
@@ -81,7 +81,7 @@ const elasticSearchModules = [
 ];
 
 const ButtonGroup = props => (
-  <Button.Group compact>
+  <Button.Group compact widths={2}>
     {props.es.cta.map(b => b.pos === props.pos && (
       <Button onClick={() => props.toggleConfirmModal(b.mutation, `${b.title} ${props.es.title}`)} loading={props.inProgress === b.mutation} size="mini" content={b.title} color={b.color} />
     ))
@@ -113,7 +113,7 @@ export default class ElasticSearch extends Component {
       <Grid>
         <Grid.Column width={4}>
           {elasticSearchModules.map(es => (
-            <Card fluid>
+            <Card fluid className="elastic-search">
               <Card.Content header={es.title} />
               <Card.Content>
                 <Card.Description>
@@ -123,7 +123,6 @@ export default class ElasticSearch extends Component {
                     pos={1}
                     inProgress={inProgress}
                   />
-                  <Divider hidden />
                   <ButtonGroup
                     toggleConfirmModal={this.toggleConfirmModal}
                     es={es}

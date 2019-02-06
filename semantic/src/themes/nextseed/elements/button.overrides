@@ -168,13 +168,8 @@
             }
         }
     }
-    &.elastic-search {
-        flex-wrap: wrap;
-        margin: 0 -@10px -@10px;
-        .ui.button {
-            flex: 0 1 auto;
-            margin: 0 @10px @10px;
-        }
+    +.ui.buttons {
+        margin-top: @10px;
     }
 }
 
