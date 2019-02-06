@@ -5,12 +5,12 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { capitalize, get } from 'lodash';
 import Parser from 'html-react-parser';
-import { Container, Card, Image, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
+import { Container, Card, Label, Icon, List, Grid, Message } from 'semantic-ui-react';
 import Filters from './Filters';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../constants/aws';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING } from '../../../../../constants/offering';
 import Helper from '../../../../../helper/utility';
+import NSImage from '../../../../shared/NSImage';
 
 @inject('campaignStore')
 @observer
@@ -99,7 +99,7 @@ export default class CampaignList extends Component {
                         {offering.stage === 'LOCK' && (
                           <Card.Content className="card-hidden">
                             <div className="lock-image">
-                              <Image mini src={`${ASSETS_URL}images/icon_lock.png`} />
+                              <NSImage mini path="icon_lock.png" />
                             </div>
                             <div className="details">
                               <div className="tags mb-10">
