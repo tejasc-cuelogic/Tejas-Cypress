@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, Card, Button, Divider } from 'semantic-ui-react';
+import { Grid, Card, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import ActivityHistory from '../../../shared/ActivityHistory';
@@ -69,14 +69,11 @@ export default class ElasticSearch extends Component {
             <Card.Content header="Users Index" />
             <Card.Content>
               <Card.Description>
-                <Button.Group compact>
-                  <Button size="mini" content="Create" primary />
-                  <Button size="mini" content="Generate" secondary />
-                </Button.Group>
-                <Divider hidden />
-                <Button.Group compact>
-                  <Button size="mini" content="Update" primary />
-                  <Button size="mini" content="Delete" color="red" />
+                <Button.Group widths={2} className="elastic-search">
+                  <Button content="Create" primary />
+                  <Button content="Generate" secondary />
+                  <Button content="Update" primary />
+                  <Button content="Delete" color="red" />
                 </Button.Group>
               </Card.Description>
             </Card.Content>

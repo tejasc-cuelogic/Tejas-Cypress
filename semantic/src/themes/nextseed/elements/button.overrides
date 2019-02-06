@@ -15,28 +15,6 @@
         }
     }
 }
-.offering-side-menu {
-    // .ui.secondary.button {
-    //     margin: @20px auto 0;
-    // }
-    @media only screen and (min-width : @tabletBreakpoint){
-        .ui.buttons{
-            padding:@20px @26px @20px @16px;
-            position: fixed;
-            width: 280px;
-            bottom: 0;
-            background-color: @neutral;
-        }
-    }
-    @media only screen and (max-width : @largestMobileScreen){
-        .ui.buttons{
-            padding-right:@10px;
-        }
-    }
-    .ui.compact.button {
-        padding: @10px;
-    }
-}
 //  Public Page Ends
 
 
@@ -188,6 +166,14 @@
             &:last-child{
                 margin-right:0 !important;
             }
+        }
+    }
+    &.elastic-search {
+        flex-wrap: wrap;
+        margin: 0 -@10px -@10px;
+        .ui.button {
+            flex: 0 1 auto;
+            margin: 0 @10px @10px;
         }
     }
 }
