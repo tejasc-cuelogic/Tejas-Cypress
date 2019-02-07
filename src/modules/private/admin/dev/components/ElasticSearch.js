@@ -6,42 +6,10 @@ import ActivityHistory from '../../../shared/ActivityHistory';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 
 const elasticSearchModules = [
-  {
-    module: 'users',
-    title: 'Users Index',
-    cta: [
-      { title: 'Create', color: 'green', mutation: 'userCreateIndices' },
-      { title: 'Populate', color: 'blue', mutation: 'userPopulateIndex' },
-      { title: 'Delete', color: 'red', mutation: 'userDeleteIndices' },
-    ],
-  },
-  {
-    module: 'crowdPay',
-    title: 'CrowdPay Index',
-    cta: [
-      { title: 'Create', color: 'green', mutation: 'crowdPayCreateIndices' },
-      { title: 'Populate', color: 'blue', mutation: 'crowdPayPopulateIndex' },
-      { title: 'Delete', color: 'red', mutation: 'crowdPayDeleteIndices' },
-    ],
-  },
-  {
-    module: 'accreditation',
-    title: 'Accreditation Index',
-    cta: [
-      { title: 'Create', color: 'green', mutation: 'accreditationCreateIndices' },
-      { title: 'Populate', color: 'blue', mutation: 'accreditationPopulateIndex' },
-      { title: 'Delete', color: 'red', mutation: 'accreditationDeleteIndices' },
-    ],
-  },
-  {
-    module: 'linkedBank',
-    title: 'LinkedBank Index',
-    cta: [
-      { title: 'Create', color: 'green', mutation: 'linkedBankCreateIndices' },
-      { title: 'Populate', color: 'blue', mutation: 'linkedBankPopulateIndex' },
-      { title: 'Delete', color: 'red', mutation: 'linkedBankDeleteIndices' },
-    ],
-  },
+  { module: 'user', title: 'Users Index' },
+  { module: 'crowdPay', title: 'CrowdPay Index' },
+  { module: 'accreditation', title: 'Accreditation Index' },
+  { module: 'linkedBank', title: 'LinkedBank Index' },
 ];
 
 @inject('elasticSearchStore')
@@ -74,10 +42,9 @@ export default class ElasticSearch extends Component {
               <Card.Content>
                 <Card.Description>
                   <Button.Group compact size="mini" widths={3}>
-                    {es.cta.map(b => (
-                      <Button onClick={() => this.toggleConfirmModal(b.mutation, `${b.title} ${es.title}`)} loading={inProgress === b.mutation} content={b.title} color={b.color} />
-                    ))
-                    }
+                    <Button onClick={() => this.toggleConfirmModal(`${es.module}CreateIndices`, `Create ${es.title}`)} loading={inProgress === `${es.module}CreateIndices`} content="Create" color="green" />
+                    <Button onClick={() => this.toggleConfirmModal(`${es.module}PopulateIndex`, `Populate ${es.title}`)} loading={inProgress === `${es.module}PopulateIndex`} content="Populate" color="blue" />
+                    <Button onClick={() => this.toggleConfirmModal(`${es.module}DeleteIndices`, `Delete ${es.title}`)} loading={inProgress === `${es.module}DeleteIndices`} content="Delete" color="red" />
                   </Button.Group>
                 </Card.Description>
               </Card.Content>
