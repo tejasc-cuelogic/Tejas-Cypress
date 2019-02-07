@@ -48,11 +48,11 @@ export default class AccountCreation extends React.Component {
       {
         name: 'Link Bank',
         component: <Plaid />,
-        isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
+        // isValid: (!isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : 'error',
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         stepToBeRendered: 1,
-        onlyDisableNextButton: !isEmpty(plaidAccDetails) ||
+        onlyDisableNextButton: isEmpty(plaidAccDetails) &&
         !formLinkBankManually.meta.isValid,
       },
       {
@@ -60,7 +60,8 @@ export default class AccountCreation extends React.Component {
         component: <AddFunds />,
         // isValid: formAddFunds.meta.isFieldValid ? '' : 'error',
         // Done changes for saving link bank details - Alan's feedback point
-        isValid: formAddFunds.meta.isValid || !depositMoneyNow ? '' : stepToBeRendered > 1 ? 'error' : '',
+        // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
+        // : stepToBeRendered > 1 ? 'error' : '',
         validate: validateAddFunds,
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,

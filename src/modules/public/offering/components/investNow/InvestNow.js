@@ -1,6 +1,6 @@
 import React from 'react';
-import { Loader, Dimmer } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
@@ -9,7 +9,7 @@ import FinancialInfo from './FinancialInfo';
 import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('uiStore', 'portfolioStore', 'campaignStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore')
+@inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore')
 @observer
 export default class InvestNow extends React.Component {
   state = { submitLoading: false };
@@ -29,6 +29,12 @@ export default class InvestNow extends React.Component {
       const { offeringId } = this.props.match.params;
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       this.props.campaignStore.getCampaignDetails(offeringId);
+    }
+    // syncing data between saasquatch and RDS
+    const { userDetails } = this.props.userDetailsStore;
+    const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
+    if (saasQuatchUserId) {
+      this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
     }
   }
   componentDidMount() {
@@ -160,15 +166,23 @@ export default class InvestNow extends React.Component {
     ];
     return (
       <div className="step-progress" >
-        {!this.state.submitLoading ?
-          <MultiStep createAccount={this.multiClickHandler} setIsEnterPressed={setIsEnterPressed} disableNxtbtn={this.props.investmentStore.disableNextbtn} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} hideHeader setStepTobeRendered={this.handleStepChange} stepToBeRendered={this.props.investmentStore.stepToBeRendered} steps={steps} formTitle="Entity Account Creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
-          :
-          <Dimmer active>
-            <Loader>
-              Please wait...<br /><br />
-              We are generating your agreement. This can take up to a minute.
-            </Loader>
-          </Dimmer>
+        {
+          <MultiStep
+            loaderMsg={this.state.submitLoading ? `Please wait...<br /><br />
+            We are generating your agreement. This can take up to a minute.` : ''}
+            inProgress={this.state.submitLoading || inProgress}
+            createAccount={this.multiClickHandler}
+            setIsEnterPressed={setIsEnterPressed}
+            disableNxtbtn={this.props.investmentStore.disableNextbtn}
+            isEnterPressed={isEnterPressed}
+            resetEnterPressed={resetIsEnterPressed}
+            hideHeader
+            setStepTobeRendered={this.handleStepChange}
+            stepToBeRendered={this.props.investmentStore.stepToBeRendered}
+            steps={steps}
+            formTitle="Entity Account Creation"
+            handleMultiStepModalclose={this.handleMultiStepModalclose}
+          />
         }
       </div>
     );

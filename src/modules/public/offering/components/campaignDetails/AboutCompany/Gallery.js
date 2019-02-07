@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Button, Icon } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Image64 } from '../../../../../../theme/shared';
 import { ASSETS_URL } from '../../../../../../constants/aws';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isTablet = document.documentElement.clientWidth < 991;
 @inject('campaignStore')
 @withRouter
 @observer
@@ -14,7 +15,7 @@ class Gallery extends Component {
   handleViewGallary = (e, index) => {
     e.preventDefault();
     this.props.campaignStore.setFieldValue('gallarySelectedImageIndex', index);
-    this.props.history.push(`${this.props.galleryUrl}/photogallery`);
+    this.props.history.push(`${this.props.galleryUrl.replace(/\/$/, '')}/photogallery`);
   }
   render() {
     const { campaign } = this.props;
@@ -25,8 +26,7 @@ class Gallery extends Component {
           <span className="anchor" id="gallery" />
         </Header>
         <div className="gallery-preview">
-          {campaign && campaign.media &&
-            campaign.media.gallery && campaign.media.gallery.length ?
+          {get(campaign && 'media.gallery') ?
             campaign.media.gallery.map((data, index) => (
               <Aux>
                 {index < 3 &&
@@ -37,9 +37,8 @@ class Gallery extends Component {
             <Image64 fluid className="about-gallery-bg" srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
           }
         </div>
-        {campaign && campaign.media &&
-          campaign.media.gallery && campaign.media.gallery.length &&
-          <Button fluid={isMobile} onClick={this.handleViewGallary} basic compact className="highlight-text mt-40">
+        {get(campaign && 'media.gallery') &&
+          <Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
             View Gallery
             <Icon size="small" className="ns-chevron-right right" color="white" />
           </Button>

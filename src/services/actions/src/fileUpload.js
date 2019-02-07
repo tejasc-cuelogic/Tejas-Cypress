@@ -72,8 +72,9 @@ export class FileUpload {
   }
 
   uploadToS3 = (fileObj, dir) => new Promise((resolve, reject) => {
-    commonStore.getCdnSignedUrl(`${dir}/${fileObj.name}`).then((res) => {
-      apiService.uploadOnS3(res.data.createCdnSignedUrl, fileObj.obj).then(() => resolve(`https://${UPLOADS_CONFIG.bucket}/${dir}/${fileObj.name}`))
+    const key = `${dir}/${fileObj.name}`;
+    commonStore.getCdnSignedUrl(key).then((res) => {
+      apiService.uploadOnS3(res.data.createCdnSignedUrl, fileObj.obj).then(() => resolve(`https://${UPLOADS_CONFIG.bucket}/${key}`))
         .catch((err) => {
           reject(err);
         });

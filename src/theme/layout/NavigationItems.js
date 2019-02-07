@@ -9,6 +9,7 @@ import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
 @withRouter
+@inject('navStore')
 @observer
 export class NavItems extends Component {
   state = { active: '' };
@@ -29,8 +30,7 @@ export class NavItems extends Component {
       ((this.props.refLoc !== 'public' && location.pathname.startsWith(`/${app}/${to}`)) ||
         (this.props.refLoc === 'public' && to !== '' && location.pathname.startsWith(`/${to}`))));
   }
-  isActiveSubMenu = (to, location, hashCheck = false) =>
-    (hashCheck ? location.hash === '' : location.hash === to);
+  isActiveSubMenu = (to, location, hashCheck = false) => (hashCheck ? (this.props.navStore.currentActiveHash === null && location.hash === '') : this.props.navStore.currentActiveHash === null ? location.hash === to : this.props.navStore.currentActiveHash === to);
 
   isOpen = (to, location, subNavigations) => {
     if (to !== '' && subNavigations) {
@@ -126,8 +126,8 @@ export class NavItems extends Component {
 }
 
 const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoColor' :
-    (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoWhite'))
+  (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoGreenGrey' :
+    (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoGreenGrey'))
 ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
@@ -149,7 +149,9 @@ export class NavigationItems extends Component {
       <Menu
         stackable
         borderless
-        inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' }) || navStatus === 'sub'}
+        // inverted={!matchPath(location.pathname, { path: '/offerings/:id/:section?' })
+        // || navStatus === 'sub'}
+        // inverted={navStatus === 'sub'}
         fixed="top"
         // className={navStatus === 'sub' ? 'slide-up1' : ''}
         className={`${navStatus === 'sub' ? 'active' : ''} ${subNavStatus}`}

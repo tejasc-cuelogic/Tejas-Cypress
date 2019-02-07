@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
+// import Aux from 'react-aux';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
-import { Helmet } from 'react-helmet';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner } from './theme/shared';
@@ -12,9 +11,30 @@ import Private from './modules/private';
 import Public from './modules/public';
 import SecureGateway from './modules/public/shared/SecureGateway';
 import { authActions, activityActions } from './services/actions';
+import MetaTagGenerator from './modules/shared/MetaTagGenerator';
 /**
  * Main App
  */
+const metaTagsData = [
+  { type: 'meta', name: 'description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US.' },
+  { type: 'ogTag', property: 'og:locale', content: 'en_US' },
+  { type: 'ogTag', property: 'og:type', content: 'website' },
+  { type: 'ogTag', property: 'og:title', content: 'NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding' },
+  { type: 'ogTag', property: 'og:description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US.' },
+  { type: 'ogTag', property: 'og:url', content: window.location.href },
+  { type: 'ogTag', property: 'og:site_name', content: 'NextSeed' },
+  { type: 'ogTag', property: 'og:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'ogTag', property: 'og:image:secure_url', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'ogTag', property: 'og:image:width', content: '1600' },
+  { type: 'ogTag', property: 'og:image:height', content: '1067' },
+  { type: 'meta', name: 'twitter:card', content: 'summary_large_image' },
+  { type: 'meta', name: 'twitter:description', content: 'Gain access to exclusive alternative investments in local businesses. Join thousands of members on the 1st Regulation Crowdfunding portal in the US.' },
+  { type: 'meta', name: 'twitter:title', content: 'NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding' },
+  { type: 'meta', name: 'twitter:site', content: '@thenextseed' },
+  { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
+  { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
+];
+
 @inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
@@ -23,6 +43,8 @@ class App extends Component {
     const { authStore, location, history } = this.props;
     this.props.authStore.setFieldvalue('isOfferPreviewUrl', location.pathname.includes('preview'));
     if (authStore.devPasswdProtection && location.pathname !== '/password-protected') {
+      const setUrl = `${location.pathname}${location.search && location.search !== '' ? location.search : ''}`;
+      this.props.uiStore.setFieldvalue('passwordPreviewURL', setUrl);
       history.push('/password-protected');
     }
     authActions.verifySession()
@@ -57,13 +79,6 @@ class App extends Component {
     } else if ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview')) {
       window.scrollTo(0, 0);
     }
-    const calculations = {
-      topVisible: true,
-      direction: 'down',
-      bottomPassed: true,
-      isMoveTop: true,
-    };
-    this.props.navStore.setNavStatus(calculations);
   }
 
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
@@ -80,27 +95,8 @@ class App extends Component {
       );
     }
     return (
-      <Aux>
-        <Helmet>
-          <meta name="description" content="Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US." />
-          <link rel="canonical" href="https://dev.nextseed.qa/" />
-          <meta property="og:locale" content="en_US" />
-          <meta property="og:type" content="website" />
-          <meta property="og:title" content="NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding" />
-          <meta property="og:description" content="Gain access to exclusive alternative investments in local businesses. Join thousands of local members on the first Regulation Crowdfunding portal in the US." />
-          <meta property="og:url" content="https://dev.nextseed.qa/" />
-          <meta property="og:site_name" content="NextSeed" />
-          <meta property="og:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
-          <meta property="og:image:secure_url" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
-          <meta property="og:image:width" content="1600" />
-          <meta property="og:image:height" content="1067" />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:description" content="Gain access to exclusive alternative investments in local businesses. Join thousands of members on the 1st Regulation Crowdfunding portal in the US." />
-          <meta name="twitter:title" content="NextSeed | Diversify with Investments in Local Businesses through Debt Crowdfunding" />
-          <meta name="twitter:site" content="@thenextseed" />
-          <meta name="twitter:image" content="https://cdn.nextseed.co/app/uploads/IMG_2710.jpg" />
-          <meta name="twitter:creator" content="@thenextseed" />
-        </Helmet>
+      <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
+        <MetaTagGenerator metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection ?
           <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
@@ -115,7 +111,7 @@ class App extends Component {
         {this.props.uiStore.devBanner &&
           <DevBanner toggle={this.playDevBanner} />
         }
-      </Aux>
+      </div>
     );
   }
 }

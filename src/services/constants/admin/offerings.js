@@ -357,7 +357,15 @@ export const REGULATION_VALUES = [
   { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
   { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
 ];
-
+export const BD_REGULATION_VALUES = [
+  { key: 'Reg CF - Securities', value: 'BD_CF', text: 'Reg CF - Securities' },
+  { key: 'Reg D 506(c) - Securities', value: 'BD_506C', text: 'Reg D 506(c) - Securities' },
+  { key: 'Reg CF + Reg D 506(c) - Securities', value: 'BD_CF_506C', text: 'Reg CF + Reg D 506(c) - Securities' },
+];
+export const FP_REGULATION_VALUES = [
+  { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
+  { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {
     value: '',
@@ -1456,7 +1464,7 @@ export const NEW_OFFER = {
     value: '',
     label: 'Regulation',
     error: undefined,
-    rule: 'string',
+    rule: 'required',
     placeHolder: 'Choose here',
   },
 };
@@ -2476,3 +2484,4 @@ export const POC_DETAILS = {
     placeHolder: 'MM/DD/YYYY',
   },
 };
+

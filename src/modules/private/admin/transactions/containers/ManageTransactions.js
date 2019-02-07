@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Grid, Form, Label } from 'semantic-ui-react';
-import mapValues from 'lodash';
+import { mapValues } from 'lodash';
 import { Route, withRouter, Switch } from 'react-router-dom';
 import ConfirmModal from '../components/ConfirmModal';
 import PrivateLayout from '../../../shared/PrivateLayout';
@@ -26,6 +26,7 @@ export default class ManageTransactions extends Component {
   executeSearch = (e) => {
     this.props.transactionsStore.setInitiateSrch({ value: e.target.value }, 'keyword');
   }
+
   representAddon = summary => mapValues(summary, s => (
     <Label circular color="red" size="mini">{s}</Label>
   ));

@@ -1,7 +1,8 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore } from '../../index';
-import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
+import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore, referralsStore } from '../../index';
+// import AccCreationHelper from '../../../../modules/private/investor
+// accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
@@ -41,7 +42,7 @@ class IndividualAccountStore {
         }
       }
       return new Promise((resolve, reject) => {
-        bankAccountStore.checkOpeningDepositAmount().then(() => {
+        bankAccountStore.checkOpeningDepositAmount(false).then(() => {
           client
             .mutate({
               mutation,
@@ -63,7 +64,7 @@ class IndividualAccountStore {
                     netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
                     otherRegCfInvestments: 0,
                   };
-                  investmentLimitStore.updateInvestmentLimits(data, accountId);
+                  investmentLimitStore.updateInvestmentLimits(data, accountId, null, false);
                 }
               }
               if (result.data.createInvestorAccount) {
@@ -75,6 +76,7 @@ class IndividualAccountStore {
               }
               if (formStatus === 'FULL') {
                 Helper.toast('Individual account created successfully.', 'success');
+                referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
                 this.submited = true;
                 if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
                   userDetailsStore.userDetails.cip.failType &&
@@ -139,13 +141,13 @@ class IndividualAccountStore {
           });
           bankAccountStore.linkBankFormChange();
         }
-        if (!this.isManualLinkBankSubmitted && (
-          bankAccountStore.formLinkBankManually.meta.isValid ||
-          !isEmpty(bankAccountStore.plaidAccDetails))) {
-          const getIndividualStep = AccCreationHelper.individualSteps();
-          this.setStepToBeRendered(getIndividualStep.summary);
-          this.setIsManualLinkBankSubmitted(false);
-        }
+        // if (!this.isManualLinkBankSubmitted && (
+        //   bankAccountStore.formLinkBankManually.meta.isValid ||
+        //   !isEmpty(bankAccountStore.plaidAccDetails))) {
+        //   const getIndividualStep = AccCreationHelper.individualSteps();
+        //   this.setStepToBeRendered(getIndividualStep.summary);
+        //   this.setIsManualLinkBankSubmitted(false);
+        // }
       }
     }
   }

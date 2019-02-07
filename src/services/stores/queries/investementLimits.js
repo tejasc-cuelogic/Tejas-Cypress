@@ -21,3 +21,13 @@ export const getInvestorInvestmentLimit = gql`
   }
 `;
 
+export const getInvestorAmountInvested = gql`
+  query getInvestorAmountInvested($userId: String, $accountId: String, $dateFilterStart: String, $dateFilterStop: String) {
+    getInvestorAmountInvested(
+      userId: $userId
+      accountId: $accountId
+      dateFilterStart: $dateFilterStart
+      dateFilterStop: $dateFilterStop
+    )
+  }
+`;

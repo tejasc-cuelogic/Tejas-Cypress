@@ -25,3 +25,9 @@ export const cancelBankRequest = gql`
     cancelBankChangeRequest(accountId: $accountId)
   }
 `;
+
+export const getDecryptedRoutingNumber = gql`
+mutation getDecryptedRoutingNumber($userId: String, $accountId: String, $requestType:RequestTypeEnum!) {
+  getDecryptedRoutingNumber(userId: $userId, accountId: $accountId, requestType: $requestType) 
+ }
+`;

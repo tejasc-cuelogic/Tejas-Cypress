@@ -7,18 +7,36 @@ import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
 import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 
-@inject('campaignStore')
+@inject('campaignStore', 'navStore')
 class InvestmentDetails extends Component {
+  componentWillMount() {
+    this.props.campaignStore.calculateTotalPaymentData();
+    window.addEventListener('scroll', this.handleOnScroll);
+  }
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
-      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      this.props.navStore.setFieldValue('currentActiveHash', null);
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      });
+      }), 100);
     } else {
       const sel = 'use-of-proceeds';
       document.querySelector(`#${sel}`).scrollIntoView(true);
     }
+  }
+  componentWillUnmount() {
+    this.props.navStore.setFieldValue('currentActiveHash', null);
+    window.removeEventListener('scroll', this.handleOnScroll);
+  }
+  handleOnScroll = () => {
+    const { investmentDetailsSubNavs } = this.props.campaignStore;
+    investmentDetailsSubNavs.forEach((item) => {
+      if (document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 100 &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top > 0) {
+        this.props.navStore.setFieldValue('currentActiveHash', item.to);
+      }
+    });
   }
   render() {
     const { campaign } = this.props.campaignStore;
@@ -37,7 +55,7 @@ class InvestmentDetails extends Component {
       null;
     return (
       <Aux>
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
           Use of Proceeds
           <span className="anchor" id="use-of-proceeds" />
         </Header>

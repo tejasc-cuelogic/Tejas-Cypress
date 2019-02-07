@@ -166,13 +166,14 @@ export const PRIVATE_NAV = [
   //   path: 'investor/rewardsWallet/containers/RewardsWallet',
   //   accessibleTo: ['ira', 'individual', 'entity'],
   // },
-  // {
-  //   icon: 'ns-comments-edit',
-  //   title: 'Referrals',
-  //   to: 'referrals',
-  //   path: 'investor/referrals/containers/Referrals',
-  //   accessibleTo: ['ira', 'individual', 'entity'],
-  // },
+  {
+    icon: 'ns-comments-edit',
+    title: 'Referrals',
+    to: 'referrals',
+    path: 'investor/referrals/containers/Referrals',
+    // accessibleTo: ['ira', 'individual', 'entity'],
+    accessibleTo: ['investor'],
+  },
   {
     icon: 'gift',
     title: 'Offering',
@@ -247,7 +248,7 @@ export const PRIVATE_NAV = [
     ],
   },
   {
-    icon: 'lightbulb outline',
+    icon: 'list layout',
     title: 'Categories',
     capability: 'INSIGHTS_ANY',
     to: 'categories',

@@ -11,7 +11,7 @@
     &.campaign{ 
         box-shadow:none;
         height: 100%;
-        &:hover {
+        &:hover, &:focus {
             text-decoration: none;
         }
         .campaign-image-wrap{
@@ -188,6 +188,9 @@
 }
 //  Public page Ends
 
+.ui.card.full-height{
+    height:100%;
+}
 .card.form-card, .cards>.card.form-card{
     border-radius:@relative10px;
     padding:@32px;

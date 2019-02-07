@@ -2,24 +2,25 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { get, find, has, uniqWith, isEqual, filter, remove } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Route, Switch, withRouter, Link } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 import Loadable from 'react-loadable';
-import { Responsive, Container, Grid, Button, Visibility, List } from 'semantic-ui-react';
+import { Responsive, Container, Grid } from 'semantic-ui-react';
 import { GetNavMeta } from '../../../../theme/layout/SidebarNav';
 import { Spinner, InlineLoader, MobileDropDownNav } from '../../../../theme/shared';
 import CampaignSideBar from '../components/campaignDetails/CampaignSideBar';
 import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
+
+import Firework from '../components/investNow/agreement/components/FireworkAnimation';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
+import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
 import Congratulation from '../components/investNow/agreement/components/Congratulation';
 import DevPassProtected from '../../../auth/containers/DevPassProtected';
 import NotFound from '../../../shared/NotFound';
-import { DataFormatter } from '../../../../helper';
 import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
-import Helper from '../../../../helper/utility';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -69,7 +70,6 @@ class offerDetails extends Component {
       this.props.campaignStore.getCampaignDetails(this.props.match.params.id);
     }
   }
-  handleUpdate = (e, { calculations }) => this.props.navStore.setNavStatus(calculations);
   handleViewGallery = (e) => {
     e.preventDefault();
     this.props.history.push(`${this.props.match.url}/photogallery`);
@@ -137,6 +137,7 @@ class offerDetails extends Component {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
           }
         }
+        this.props.campaignStore.setFieldValue('investmentDetailsSubNavs', tempItem.subNavigations);
         tempItem.subNavigations = uniqWith(temNavList, isEqual);
       }
       newNavList.push(tempItem);
@@ -145,7 +146,7 @@ class offerDetails extends Component {
   }
   render() {
     const {
-      match, campaignStore, location, navStore,
+      match, campaignStore, location,
     } = this.props;
     if (this.state.showPassDialog) {
       return (<DevPassProtected
@@ -155,7 +156,7 @@ class offerDetails extends Component {
       />);
     }
     if (!campaignStore.details || campaignStore.details.loading) {
-      return <Spinner loaderMessage="Loading.." />;
+      return <Spinner page loaderMessage="Loading.." />;
     }
     const {
       details, campaignSideBarShow, campaign, navCountData,
@@ -170,19 +171,10 @@ class offerDetails extends Component {
     }
     navItems =
       this.modifyInvestmentDetailsSubNav(navItems, campaign);
-    const terminationDate = campaign && campaign.offering && campaign.offering.launch
-      && campaign.offering.launch.terminationDate;
-    const diff = DataFormatter.diffDays(terminationDate);
-    const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;
     }
-    const { navStatus, subNavStatus } = navStore;
-    const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
-    const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
         {campaign &&
@@ -191,35 +183,11 @@ class offerDetails extends Component {
         {!isMobile &&
           <CampaignHeader {...this.props} />
         }
+        {campaignStore && campaignStore.showFireworkAnimation &&
+        <Firework />
+        }
         <div className={`slide-down ${location.pathname.split('/')[2]}`}>
-          <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
-            <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus}`}>
-              <Container fluid={!isMobile}>
-                <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
-                  {!isMobile &&
-                    <Aux>
-                      <List.Item>{get(campaign, 'closureSummary.totalInvestorCount') || 0} Investors</List.Item>
-                      <List.Item>{diff} days left</List.Item>
-                    </Aux>
-                  }
-                  {!isClosed &&
-                    <Button compact secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
-                  }
-                </List>
-                <List size={isMobile && 'tiny'} bulleted={!isMobile} horizontal={!isMobile}>
-                  <List.Item>
-                    <List.Header>{get(campaign, 'keyTerms.shorthandBusinessName')}</List.Header>
-                  </List.Item>
-                  <List.Item>
-                    <List.Header><span className="highlight-text">{Helper.CurrencyFormat(collected)}</span> raised</List.Header>
-                  </List.Item>
-                  {!isMobile &&
-                    <List.Item>{get(campaign, 'keyTerms.investmentMultiple')} Investment Multiple</List.Item>
-                  }
-                </List>
-              </Container>
-            </div>
-          </Visibility>
+          <SecondaryMenu {...this.props} />
           <Responsive maxWidth={991} as={Aux}>
             <CampaignSideBar navItems={navItems} className={campaignSideBarShow ? '' : 'collapse'} />
             <MobileDropDownNav

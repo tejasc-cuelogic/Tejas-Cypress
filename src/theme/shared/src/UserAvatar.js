@@ -2,30 +2,46 @@ import React from 'react';
 import { observer } from 'mobx-react';
 import { Image } from 'semantic-ui-react';
 import Avatar from 'react-avatar';
+import { Image64 } from '../../../theme/shared';
+import { ASSETS_URL } from '../../../constants/aws';
 
 const userRoles = {
   admin: 'admin', issuer: 'issuer', bowner: 'issuer', investor: 'investor', default: 'investor',
 };
 
 const UserAvatar = observer((props) => {
-  const { UserInfo, size } = props;
-  if (UserInfo.avatarUrl) {
+  const { UserInfo, size, base64url } = props;
+  const isBase64ImgTag = !!(UserInfo.avatarUrl || (UserInfo.firstName !== '' && UserInfo.lastName !== '') || UserInfo.name);
+  const imgSize = size || 'tiny';
+  const avatarName = (UserInfo.firstName && UserInfo.lastName) ? `${UserInfo.firstName} ${UserInfo.lastName}` : UserInfo.name ? UserInfo.name : '';
+  const avatarProfile = UserInfo.avatarUrl || (UserInfo.firstName && UserInfo.lastName) || UserInfo.name ? UserInfo.avatarUrl : `${ASSETS_URL}images/leader-placeholder.jpg`;
+  if (avatarProfile) {
     return (
-      <Image
-        src={UserInfo.avatarUrl}
-        alt={UserInfo.firstName}
-        size={size}
-        avatar
-        circular
-      />);
+      base64url && isBase64ImgTag ?
+        <Image64
+          srcUrl={avatarProfile}
+          alt={UserInfo.firstName}
+          size={imgSize}
+          avatar
+          circular
+        />
+        :
+        <Image
+          src={avatarProfile}
+          alt={UserInfo.firstName}
+          size={imgSize}
+          avatar
+          circular
+        />
+    );
   }
-
   return (
     <Avatar
-      name={`${UserInfo.firstName} ${UserInfo.lastName}`}
+      name={avatarName}
       round
       unstyled
-      className={`${userRoles[UserInfo.roles[0]] || userRoles.default}`}
+      size={imgSize}
+      className={`${(UserInfo.roles && UserInfo.roles.length) ? userRoles[UserInfo.roles[0]] : userRoles.default} ${props.className}`}
     />
   );
 });

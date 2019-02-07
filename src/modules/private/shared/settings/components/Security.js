@@ -48,7 +48,7 @@ export default class Security extends Component {
                           <dd>{userDetails.phone && userDetails.phone.number ? userDetails.phone.number : '--'} <Link className="link pull-right" to="/app/profile-settings/profile-data/new-phone-number">Update Phone</Link></dd>
                         </dl>
                       ) : null}
-                      {/* {section.action[0] === 'social-connect' ? (
+                      {section.action[0] === 'social-connect' ? (
                         <Button.Group>
                           <Button
                             color="facebook"
@@ -71,7 +71,7 @@ export default class Security extends Component {
                           content={section.action[1]}
                         />
                       )
-                      } */}
+                      }
                     </Card.Description>
                   </Card.Content>
                 </Card>

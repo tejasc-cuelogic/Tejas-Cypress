@@ -15,13 +15,17 @@ export class NavStore {
   @observable navMeta = [];
   @observable specificNavMeta = [];
   @observable everLogsIn = cookie.load('EVER_LOGS_IN') || false;
+  @observable currentActiveHash = null;
 
   constructor() {
     if (userStore.currentUser) {
       userDetailsStore.getUser(userStore.currentUser.sub);
     }
   }
-
+  @action
+  setFieldValue = (key, val) => {
+    this[key] = val;
+  }
   canAccessBasedOnCapability = (capab) => {
     const rest = capab.substring(0, capab.lastIndexOf('_'));
     const last = capab.substring(capab.lastIndexOf('_') + 1, capab.length);

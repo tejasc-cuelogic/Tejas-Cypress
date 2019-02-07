@@ -16,6 +16,7 @@ const OfferingMetaTags = ({ campaign, getOgDataFromSocial }) => (
     <meta property="article:publisher" content="https://www.facebook.com/thenextseed" />
     <meta property="article:tag" content={get(find(SECURITIES_VALUES, b => b.value === get(campaign, 'keyTerms.securities')), 'text')} />
     <meta property="article:section" content={get(find(BUSINESS_INDUSTRIES, b => b.value === get(campaign, 'keyTerms.industry')), 'text')} />
+    {/* <meta property="fb:app_id" content="1806635959569619" /> */}
     <meta property="og:image" content={getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
     <meta property="og:image:secure_url" content={getOgDataFromSocial(get(campaign, 'offering.overview.social'), 'facebook', 'featuredImageUpload.url')} />
     <meta property="og:image:width" content="1218" />

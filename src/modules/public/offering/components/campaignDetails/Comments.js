@@ -9,7 +9,8 @@ import CommentsReplyModal from './CommentsReplyModal';
 import CommunityGuideline from './CommunityGuideline';
 import { FormTextarea } from '../../../../../theme/form';
 
-const isMobile = document.documentElement.clientWidth < 991;
+const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 991;
 
 @inject('campaignStore', 'authStore', 'uiStore', 'userStore', 'userDetailsStore', 'navStore', 'messageStore')
 @observer
@@ -82,7 +83,7 @@ class Comments extends Component {
     this.props.messageStore.setDataValue('currentOfferingId', campaignId);
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
+        <Header as="h3" className="mt-10 mb-30 anchor-wrap">
           Comments
           <span className="anchor-scroll" />
         </Header>
@@ -101,34 +102,34 @@ class Comments extends Component {
           If you have any technical questions or questions about NextSeed, please
           email <a href="mailto:support@nextseed.com">support@nextseed.com</a>.
         </p>
-        {comments && comments.length ?
-          <Aux>
-            {!isRightToPostComment ?
-              <section className="center-align mt-30">
-                {loggedInAsInvestor && !accountStatusFull ?
-                  <p>In order to leave comments, please create any type of account first.</p>
+        {!isRightToPostComment ?
+          <section className="center-align mt-30">
+            {loggedInAsInvestor && !accountStatusFull ?
+              <p>In order to leave comments, please create any type of account first.</p>
                 : <p>In order to leave comments, please sign up and verify your identity.</p>
                 }
-                <Form reply className="public-form clearfix">
-                  {loggedInAsInvestor && !accountStatusFull ?
-                    <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
+            <Form reply className="public-form clearfix">
+              {loggedInAsInvestor && !accountStatusFull ?
+                <Link to="/app/summary" className="ui button secondary">Finish Account Setup</Link>
                   : <Link onClick={e => this.handleLogin(e, true)} to="/" className="ui button secondary">{get(loginOrSignup, 'title')}</Link>
                   }
-                </Form>
-              </section>
+            </Form>
+          </section>
               :
-              <Aux>
-                <Form className="public-form mt-30 clearfix" reply>
-                  <FormTextarea
-                    fielddata={MESSAGE_FRM.fields.comment}
-                    name="comment"
-                    changed={msgEleChange}
-                    containerclassname="secondary"
-                  />
-                  <Button fluid={isMobile} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
-                </Form>
-              </Aux>
-            }
+          <Aux>
+            <Form className="public-form mt-30 clearfix" reply>
+              <FormTextarea
+                fielddata={MESSAGE_FRM.fields.comment}
+                name="comment"
+                changed={msgEleChange}
+                containerclassname="secondary"
+              />
+              <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+            </Form>
+          </Aux>
+        }
+        {comments && comments.length ?
+          <Aux>
             <Segment color="green" className="mt-50 offering-comment">
               {comments &&
                 comments.map(c => (((c.createdUserInfo && c.createdUserInfo.id === issuerId
@@ -163,10 +164,10 @@ class Comments extends Component {
                                   changed={msgEleChange}
                                   containerclassname="secondary"
                                 />
-                                <Button onClick={() => this.closeTextBox(c.id)}>
+                                <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(c.id)}>
                                   Cancel Reply
                                 </Button>
-                                <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                               </Form>
                               <Divider hidden />
                               <p>
@@ -198,6 +199,7 @@ class Comments extends Component {
                                   {(tc.createdUserInfo && tc.createdUserInfo.id === issuerId) && <Label color="blue" size="mini">ISSUER</Label>}
                                 </Comment.Author>
                                 <Comment.Metadata className="text-uppercase"><span className="time-stamp">{moment(get(tc, 'updated') ? get(tc, 'updated.date') : get(tc, 'created.date')).format('ll')}</span></Comment.Metadata>
+                                {isUserLoggedIn &&
                                 <Comment.Actions>
                                   <Comment.Action
                                     onClick={() => this.toggleVisibility(tc.id)}
@@ -206,6 +208,7 @@ class Comments extends Component {
                                     Reply
                                   </Comment.Action>
                                 </Comment.Actions>
+                                }
                                 <Comment.Text className="mt-20">
                                   {this.state.readMoreInner === tc.id ?
                                   tc.comment : tc.comment.length > readMoreLength ? `${tc.comment.substr(0, readMoreLength)}...` : tc.comment.substr(0, readMoreLength)}{' '}
@@ -220,10 +223,10 @@ class Comments extends Component {
                                         changed={msgEleChange}
                                         containerclassname="secondary"
                                       />
-                                      <Button onClick={() => this.closeTextBox(tc.id)}>
+                                      <Button size={isMobile && 'mini'} onClick={() => this.closeTextBox(tc.id)}>
                                         Cancel Reply
                                       </Button>
-                                      <Button floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
+                                      <Button size={isMobile && 'mini'} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, c.id)} disabled={!MESSAGE_FRM.meta.isValid} secondary content="Post Comment" />
                                     </Form>
                                     <Divider hidden />
                                     <p>

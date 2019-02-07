@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Icon, Popup, Table, Header, Button } from 'semantic-ui-react';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
 
-const isMobile = document.documentElement.clientWidth < 768;
+const isTablet = document.documentElement.clientWidth < 991;
 
 @withRouter
 class KeyTerms extends Component {
@@ -44,7 +44,7 @@ class KeyTerms extends Component {
               </Table.Cell>
               <Table.Cell className="grey-header">
                 {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?
-                  CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : ''}
+                  CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -60,7 +60,7 @@ class KeyTerms extends Component {
                   campaign.keyTerms.securities ?
                   CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
                   :
-                ''}
+                '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -88,7 +88,9 @@ class KeyTerms extends Component {
                   position="top center"
                 />
               </Table.Cell>
-              <Table.Cell className="grey-header" />
+              <Table.Cell className="grey-header" >
+                {campaign && campaign.keyTerms && campaign.keyTerms.revSharePercentage ? campaign.keyTerms.revSharePercentage : '-'}
+              </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Multiple</b>{' '}
@@ -105,7 +107,7 @@ class KeyTerms extends Component {
             </Table.Row>
           </Table.Body>
         </Table>
-        <Button fluid={isMobile} onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
+        <Button fluid={isTablet} onClick={this.handleViewInvestmentDetails} basic compact className="highlight-text mt-40">
           View Investment Details
           <Icon size="small" className="ns-chevron-right right" color="white" />
         </Button>
