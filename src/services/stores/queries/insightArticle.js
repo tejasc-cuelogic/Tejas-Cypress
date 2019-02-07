@@ -5,7 +5,7 @@ query insights{
   insightsArticles{
     id
     content
-    category
+    categoryName
     featuredImage
     tags
     articleStatus
