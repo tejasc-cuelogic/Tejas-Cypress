@@ -10,84 +10,40 @@ const elasticSearchModules = [
     module: 'users',
     title: 'Users Index',
     cta: [
-      {
-        title: 'Create', color: 'green', mutation: 'userCreateIndices', pos: 1,
-      },
-      {
-        title: 'Generate', color: 'blue', mutation: 'userPopulateIndex', pos: 1,
-      },
-      {
-        title: 'Update', color: 'blue', mutation: 'userPopulateIndex', pos: 2,
-      },
-      {
-        title: 'Delete', color: 'red', mutation: 'userDeleteIndices', pos: 2,
-      },
+      { title: 'Create', color: 'green', mutation: 'userCreateIndices' },
+      { title: 'Populate', color: 'blue', mutation: 'userPopulateIndex' },
+      { title: 'Delete', color: 'red', mutation: 'userDeleteIndices' },
     ],
   },
   {
     module: 'crowdPay',
     title: 'CrowdPay Index',
     cta: [
-      {
-        title: 'Create', color: 'green', mutation: 'crowdPayCreateIndices', pos: 1,
-      },
-      {
-        title: 'Generate', color: 'blue', mutation: 'crowdPayPopulateIndex', pos: 1,
-      },
-      {
-        title: 'Update', color: 'blue', mutation: 'crowdPayPopulateIndex', pos: 2,
-      },
-      {
-        title: 'Delete', color: 'red', mutation: 'crowdPayDeleteIndices', pos: 2,
-      },
+      { title: 'Create', color: 'green', mutation: 'crowdPayCreateIndices' },
+      { title: 'Populate', color: 'blue', mutation: 'crowdPayPopulateIndex' },
+      { title: 'Delete', color: 'red', mutation: 'crowdPayDeleteIndices' },
     ],
   },
   {
     module: 'accreditation',
     title: 'Accreditation Index',
     cta: [
-      {
-        title: 'Create', color: 'green', mutation: 'accreditationCreateIndices', pos: 1,
-      },
-      {
-        title: 'Generate', color: 'blue', mutation: 'accreditationPopulateIndex', pos: 1,
-      },
-      {
-        title: 'Update', color: 'blue', mutation: 'accreditationPopulateIndex', pos: 2,
-      },
-      {
-        title: 'Delete', color: 'red', mutation: 'accreditationDeleteIndices', pos: 2,
-      },
+      { title: 'Create', color: 'green', mutation: 'accreditationCreateIndices' },
+      { title: 'Populate', color: 'blue', mutation: 'accreditationPopulateIndex' },
+      { title: 'Delete', color: 'red', mutation: 'accreditationDeleteIndices' },
     ],
   },
   {
     module: 'linkedBank',
     title: 'LinkedBank Index',
     cta: [
-      {
-        title: 'Create', color: 'green', mutation: 'linkedBankCreateIndices', pos: 1,
-      },
-      {
-        title: 'Generate', color: 'blue', mutation: 'linkedBankPopulateIndex', pos: 1,
-      },
-      {
-        title: 'Update', color: 'blue', mutation: 'linkedBankPopulateIndex', pos: 2,
-      },
-      {
-        title: 'Delete', color: 'red', mutation: 'linkedBankDeleteIndices', pos: 2,
-      },
+      { title: 'Create', color: 'green', mutation: 'linkedBankCreateIndices' },
+      { title: 'Populate', color: 'blue', mutation: 'linkedBankPopulateIndex' },
+      { title: 'Delete', color: 'red', mutation: 'linkedBankDeleteIndices' },
     ],
   },
 ];
 
-const ButtonGroup = props => (
-  <Button.Group compact widths={2}>
-    {props.es.cta.map(b => b.pos === props.pos && (
-      <Button onClick={() => props.toggleConfirmModal(b.mutation, `${b.title} ${props.es.title}`)} loading={props.inProgress === b.mutation} size="mini" content={b.title} color={b.color} />
-    ))
-    }
-  </Button.Group>
-);
 @inject('elasticSearchStore')
 @withRouter
 @observer
@@ -107,35 +63,29 @@ export default class ElasticSearch extends Component {
     const { match, elasticSearchStore } = this.props;
     const { inProgress } = elasticSearchStore;
     const navItems = [
-      { title: 'Activity History', to: 'activity-history' },
+      { title: 'Activity History', to: '' },
     ];
     return (
       <Grid>
-        <Grid.Column width={4}>
+        <Grid.Column width={5}>
           {elasticSearchModules.map(es => (
             <Card fluid className="elastic-search">
               <Card.Content header={es.title} />
               <Card.Content>
                 <Card.Description>
-                  <ButtonGroup
-                    toggleConfirmModal={this.toggleConfirmModal}
-                    es={es}
-                    pos={1}
-                    inProgress={inProgress}
-                  />
-                  <ButtonGroup
-                    toggleConfirmModal={this.toggleConfirmModal}
-                    es={es}
-                    pos={2}
-                    inProgress={inProgress}
-                  />
+                  <Button.Group compact size="mini" widths={3}>
+                    {es.cta.map(b => (
+                      <Button onClick={() => this.toggleConfirmModal(b.mutation, `${b.title} ${es.title}`)} loading={inProgress === b.mutation} content={b.title} color={b.color} />
+                    ))
+                    }
+                  </Button.Group>
                 </Card.Description>
               </Card.Content>
             </Card>
           ))
           }
         </Grid.Column>
-        <Grid.Column width={12}>
+        <Grid.Column width={11}>
           <div className="sticky-sidebar">
             <Card fluid>
               <SecondaryMenu match={match} navItems={navItems} />
