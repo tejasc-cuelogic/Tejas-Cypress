@@ -540,7 +540,7 @@ export const OFFERS = {
     },
     expirationDate: {
       value: '',
-      label: 'Campaign Approval Exp. Date',
+      label: 'Offer Expiration Date',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'date',

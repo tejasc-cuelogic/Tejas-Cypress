@@ -430,7 +430,7 @@ export class BusinessAppReviewStore {
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
-    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
+    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : approveOrSubmitted === 'REVIEW_FAILED' ? 'REVIEW_FAILED' : 'SAVE';
     if (showLoader) {
       this.setFieldvalue('inProgress', progressButton);
     }

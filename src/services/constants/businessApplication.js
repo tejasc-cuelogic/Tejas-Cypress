@@ -31,6 +31,8 @@ export const BUSINESS_APPLICATION_STATUS = {
   LENDIO_PRE_QUALIFICATION_SUCCESSFUL: 'LENDIO_PRE_QUALIFICATION_SUCCESSFUL',
   LENDIO_PRE_QUALIFICATION_FAILED: 'LENDIO_PRE_QUALIFICATION_FAILED',
   LENDIO_SUCCESS: 'SUCCESS',
+  REVIEW_FAILED: 'REVIEW_FAILED',
+  ISSUER_DECLINED: 'ISSUER_DECLINED',
 };
 
 export const BUSINESS_APP_ADMIN_STATUS = [
@@ -45,18 +47,48 @@ export const BUSINESS_APP_ADMIN_STATUS = [
 ];
 
 export const BUSINESS_APP_USER_STATUS = {
-  PRE_QUALIFICATION_FAILED: { status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange' },
-  PRE_QUALIFICATION_SUCCESSFUL: { status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange' },
-  PRE_QUALIFICATION_SUBMITTED: { status: 'In-progress', icon: 'ns-pencil-circle-line', color: '' },
-  PRE_QUALIFICATION_PROMOTED: { status: 'Promoted', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_SUBMITTED: { status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange' },
-  APPLICATION_OFFERED: { status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange' },
-  APPLICATION_REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_FAILED: { status: 'Failed', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_SUCCESSFUL: { status: 'Signed', icon: 'ns-check-circle-line', color: 'green' },
-  REVIEWED: { status: 'Reviewed', icon: 'ns-reload-circle-line', color: '' },
-  DECLINED: { status: 'Declined Offer', icon: 'ns-reload-circle-line', color: '' },
-  APPLICATION_DELETED: { status: 'Deleted', icon: 'ns-reload-circle-line', color: '' },
+  PRE_QUALIFICATION_FAILED: {
+    status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+  },
+  PRE_QUALIFICATION_SUCCESSFUL: {
+    status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+  },
+  PRE_QUALIFICATION_SUBMITTED: {
+    status: 'In-progress', icon: 'ns-pencil-circle-line', color: '', dateTitle: 'Last Updated Date',
+  },
+  PRE_QUALIFICATION_PROMOTED: {
+    status: 'Promoted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+  },
+  APPLICATION_SUBMITTED: {
+    status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Submitted Date',
+  },
+  APPLICATION_OFFERED: {
+    status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+  },
+  APPLICATION_REVIEWED: {
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+  },
+  APPLICATION_FAILED: {
+    status: 'Failed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+  },
+  APPLICATION_SUCCESSFUL: {
+    status: 'Signed', icon: 'ns-check-circle-line', color: 'green', dateTitle: 'Last Updated Date',
+  },
+  REVIEWED: {
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+  },
+  DECLINED: {
+    status: 'Declined Offer', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+  },
+  APPLICATION_DELETED: {
+    status: 'Deleted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+  },
+  ISSUER_DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+  },
+  REVIEW_FAILED: {
+    status: 'Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Reviewed Date',
+  },
 };
 
 export const BUSINESS_APP_FILE_UPLOAD_ENUMS = {

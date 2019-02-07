@@ -4,7 +4,8 @@ import moment from 'moment';
 import { Button, Icon, Divider } from 'semantic-ui-react';
 
 const ButtonGroup = ({
-  formName, submitted, approved, isManager, submitWithApproval, inProgress, isReadonly,
+  formName, submitted, approved, isManager, submitWithApproval,
+  inProgress, isReadonly, showDeclinedBtn,
 }) => (
   <Aux>
     {((isManager && !submitted) ||
@@ -25,6 +26,9 @@ const ButtonGroup = ({
             <Button secondary className="relaxed" content="Save" loading={inProgress === 'SAVE'} />
             }
             <Button loading={inProgress === 'REVIEW_SUBMITTED'} onClick={() => submitWithApproval(formName, 'REVIEW_SUBMITTED')} disabled={!((isManager && !submitted) || (!isManager && !submitted))} primary={((isManager && !submitted) || (!isManager && !submitted))}>{((isManager && !submitted) || (!isManager && !submitted)) ? 'Submit for Approval' : 'Awaiting Manager Approval'}</Button>
+            {showDeclinedBtn &&
+              <Button loading={inProgress === 'REVIEW_FAILED'} onClick={() => submitWithApproval(formName, 'REVIEW_FAILED')} color="red" >Decline Application</Button>
+            }
           </Button.Group>
         </div>
       </Aux> :

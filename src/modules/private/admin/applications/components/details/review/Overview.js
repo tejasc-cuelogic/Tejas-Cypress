@@ -77,6 +77,7 @@ export default class Overview extends Component {
             ))
           }
           <ButtonGroup
+            showDeclinedBtn
             inProgress={inProgress}
             formName="OVERVIEW_FRM"
             isReadonly={isReadonly}

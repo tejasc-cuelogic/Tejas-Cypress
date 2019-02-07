@@ -48,13 +48,9 @@ export default class ApplicationCards extends Component {
                     <dl className="dl-horizontal">
                       <dt>Application status</dt>
                       <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
-                      <dt>Started</dt>
+                      <dt>Started on</dt>
                       <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
-                      <dt>{application.applicationStatus ===
-                        BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ?
-                        'Submitted' : 'Last updated'
-                      }
-                      </dt>
+                      <dt>{BUSINESS_APP_USER_STATUS[application.applicationStatus].dateTitle}</dt>
                       <dd>{application.updated ? <DateTimeFormat datetime={application.updated.date} /> : '--'}</dd>
                     </dl>
                     {application.applicationStatus ===
