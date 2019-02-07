@@ -340,7 +340,7 @@ export class BusinessAppReviewStore {
   }
 
  @action
-  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag, comment = '') => {
+  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '') => {
     const applicationSource = applStatus ===
     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
@@ -349,9 +349,13 @@ export class BusinessAppReviewStore {
       actionType: 'APPLICATION_STATUS',
       applicationId,
       applicationSource,
-      applicationFlag,
       comments: comment !== '' ? { text: comment } : formInputData,
     };
+    if (applicationFlag !== '') {
+      payload = { ...payload, applicationFlag };
+    } else if (applicationStatus !== '') {
+      payload = { ...payload, applicationStatus };
+    }
     if (userId !== 'new') {
       payload = { ...payload, userId };
     }

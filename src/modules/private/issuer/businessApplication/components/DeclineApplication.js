@@ -11,16 +11,15 @@ import { ListErrors } from '../../../../../theme/shared';
 @observer
 export default class DeclineApplication extends Component {
   componentWillMount() {
-    // this.props.uiStore.setFieldvalue('showFireworkAnimation', true);
   }
   handleCloseModal = () => {
-    this.props.history.push(this.props.refLink);
+    this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers`);
   }
   render() {
     const { uiStore, businessAppReviewStore } = this.props;
     const { APPLICATION_STATUS_COMMENT_FRM, formChange } = businessAppReviewStore;
     const { fields } = APPLICATION_STATUS_COMMENT_FRM;
-    const { errors } = uiStore;
+    const { errors, inProgress } = uiStore;
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="medium" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
@@ -51,7 +50,7 @@ export default class DeclineApplication extends Component {
             }
             <div className="center-align">
               <Button.Group>
-                <Button primary loading={this.props.uiStore.inProgress} content="Yes - Decline Offer" onClick={this.handleCloseModal} />
+                <Button primary disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} loading={inProgress} content="Yes - Decline Offer" onClick={this.handleCloseModal} />
                 <Button color="red" content="No - Back to Offers" onClick={this.handleCloseModal} />
               </Button.Group>
             </div>

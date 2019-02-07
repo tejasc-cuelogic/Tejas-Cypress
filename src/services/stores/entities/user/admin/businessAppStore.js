@@ -145,7 +145,7 @@ export class BusinessAppStore {
     const { data } = this.businessApplicationsList;
     if (applicationStatus && applicationStatus.length && data && data.businessApplicationsAdmin) {
       data.businessApplicationsAdmin.businessApplications = filter(this.backup, app =>
-        includes(toJS(applicationStatus), app.status));
+        includes(toJS(applicationStatus), app.applicationStatus));
     } else if (data && data.businessApplicationsAdmin) {
       data.businessApplicationsAdmin.businessApplications = this.backup;
     }

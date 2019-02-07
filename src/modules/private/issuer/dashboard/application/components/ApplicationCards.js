@@ -60,7 +60,9 @@ export default class ApplicationCards extends Component {
                     {(application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
                     || application.applicationStatus ===
-                    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL) &&
+                    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ||
+                    application.applicationStatus ===
+                    BUSINESS_APPLICATION_STATUS.REVIEW_FAILED) &&
                       <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
                     {(application.applicationStatus ===

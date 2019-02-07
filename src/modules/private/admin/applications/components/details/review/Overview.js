@@ -29,8 +29,10 @@ export default class Overview extends Component {
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OVERVIEW_FRM');
   }
-  submitWithApproval = (form, action) => {
-    this.props.businessAppReviewStore.saveReviewForms(form, action);
+  updateApplicationStatus = (applicationId, userId) => {
+    this.props.businessAppReviewStore.updateApplicationStatus(applicationId, userId, 'APPLICATION_COMPLETED', '', '', 'REVIEW_FAILED').then(() => {
+      this.props.history.push('/app/applications/in-progress');
+    });
   }
   render() {
     const {
@@ -42,7 +44,9 @@ export default class Overview extends Component {
     const {
       businessApplicationDetailsAdmin, applicationReviewLoading,
     } = this.props.businessAppStore;
-    const { review, applicationStatus } = businessApplicationDetailsAdmin;
+    const {
+      review, applicationStatus, applicationId, userId,
+    } = businessApplicationDetailsAdmin;
     const submitted = (review && review.overview && review.overview.criticalPoint &&
       review.overview.criticalPoint.submitted) ? review.overview.criticalPoint.submitted : null;
     const approved = (review && review.overview && review.overview.criticalPoint &&
@@ -85,6 +89,7 @@ export default class Overview extends Component {
             submitted={submitted}
             approved={approved}
             formValid={OVERVIEW_FRM.meta.isValid}
+            updateApplicationStatus={() => this.updateApplicationStatus(applicationId, userId)}
             submitWithApproval={this.submitWithApproval}
           />
         </Form>
