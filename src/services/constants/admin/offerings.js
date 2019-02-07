@@ -2458,6 +2458,7 @@ export const DATA_ROOM = {
       label: '',
       value: false,
       error: undefined,
+      default: false,
       rule: 'required',
     },
   }],
