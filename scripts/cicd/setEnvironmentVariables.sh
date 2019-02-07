@@ -46,6 +46,9 @@ settingEnv()
 	REACT_APP_PLAID_ENV=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/plaid\/env/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_PLAID_ENV=\).*/\1${REACT_APP_PLAID_ENV}/" .envTEMPLATE
 
+	REACT_APP_SEGMENT_WRITE_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/segment\/writeKey/ { print $3 }')
+	sed -i.bak "s/^\(REACT_APP_SEGMENT_WRITE_KEY=\).*/\1${REACT_APP_SEGMENT_WRITE_KEY}/" .envTEMPLATE
+
 	#Timestamp
 	sed -i.bak "s#^\(REACT_APP_DEPLOY_TIME=\).*#\1$(git show -s --format=%cI HEAD)#" .envTEMPLATE
 
