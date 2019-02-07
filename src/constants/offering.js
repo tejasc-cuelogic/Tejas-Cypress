@@ -56,6 +56,13 @@ export const CAMPAIGN_KEYTERMS_REGULATION = {
   BD_506C: 'Reg D 506(c) - Securities',
   BD_CF_506C: 'Reg CF + Reg D 506(c) - Securities',
 };
+export const CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING = {
+  FP_TX: 'TX',
+  FP_CF: 'US',
+  BD_CF: 'Securities',
+  BD_506C: 'Securities',
+  BD_CF_506C: 'Securities',
+};
 
 export const OFFERING_COMMENTS_SCOPE = {
   NEXTSEED: { title: 'Private Note', color: 'orange' },

@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable react/no-array-index-key */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
@@ -15,7 +17,9 @@ const SortableItem = SortableElement(({
   <div className="row-wrap">
     <div>
       <DragHandle />
-      {cat.categoryName}
+      <a onClick={() => openModal(cat.id, category.title, cat.categoryType, categoryTypeIndex)}>
+        {cat.categoryName}
+      </a>
     </div>
     <div className="action">
       <Button onClick={() => openModal(cat.id, category.title, cat.categoryType, categoryTypeIndex)} className="link-button">

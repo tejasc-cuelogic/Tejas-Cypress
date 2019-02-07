@@ -11,7 +11,7 @@ import AllInsights from '../components/AllInsights';
 @observer
 export default class ManageInsights extends Component {
   componentWillMount() {
-    this.props.articleStore.getCategoryList();
+    this.props.articleStore.getCategoryList(false);
   }
   setSearchParam = (e, { name, value }) =>
     this.props.articleStore.setInitiateSrch(name, value);
