@@ -6,6 +6,7 @@ import { Header, Grid, Button, Image, Container, List, Statistic, Divider, Respo
 import { NsCarousel } from '../../../../theme/shared';
 import { ASSETS_URL } from '../../../../constants/aws';
 import VideoModal from './VideoModal';
+import NSImage from '../../../shared/NSImage';
 
 const nsvideos = {
   embed: '247714163',
@@ -20,34 +21,34 @@ const businesses = [
   [
     {
       title: 'Breweries & Distilleries',
-      image: `${ASSETS_URL}images/business/img-2.png`,
+      image: 'business/img-2.png',
       description: 'Wichita Falls Brewery raised $125,000 to build out a new taproom',
     },
     {
       title: 'Restaurants & Bars',
-      image: `${ASSETS_URL}images/business/img.png`,
+      image: 'business/img.png',
       description: 'PORTERS raised $500,000 to open a new steakhouse.',
     },
     {
       title: 'Fitness Studios',
-      image: `${ASSETS_URL}images/business/img-1.png`,
+      image: 'business/img-1.png',
       description: 'Alkalign Studios raised $100,000 to expand franchising opportunities.',
     },
   ],
   [
     {
       title: 'Health & Wellness',
-      image: `${ASSETS_URL}images/business/img-5.png`,
+      image: 'business/img-5.png',
       description: 'Healing Waters raised $110,000 to open a new floatation spa.',
     },
     {
       title: 'Hospitality',
-      image: `${ASSETS_URL}images/business/img-3.png`,
+      image: 'business/img-3.png',
       description: 'The Native raised $396,500 to open a boutique hostel and bar.',
     },
     {
       title: 'Office',
-      image: `${ASSETS_URL}images/business/img-4.png`,
+      image: 'business/img-4.png',
       description: 'The Annex HTX raised $230,500 to build a co-working and retail space.',
     },
   ],
@@ -97,7 +98,7 @@ const HowItWorks = () => (
         </Header>
         <Grid stackable columns={3} doubling>
           <Grid.Column className="info-grid">
-            <Image src={`${ASSETS_URL}images/icons/selling.svg`} verticalAlign="top" />
+            <NSImage path="icons/selling.svg" verticalAlign="top" />
             <div>
               <Header as="h5">New, community-driven approach</Header>
               <p>
@@ -107,7 +108,7 @@ const HowItWorks = () => (
             </div>
           </Grid.Column>
           <Grid.Column className="info-grid">
-            <Image src={`${ASSETS_URL}images/icons/support.svg`} verticalAlign="top" />
+            <NSImage path="icons/support.svg" verticalAlign="top" />
             <div>
               <Header as="h5">Simpler, easier, with support built in</Header>
               <p>
@@ -118,7 +119,7 @@ const HowItWorks = () => (
             </div>
           </Grid.Column>
           <Grid.Column className="info-grid">
-            <Image src={`${ASSETS_URL}images/icons/network.svg`} verticalAlign="top" />
+            <NSImage path="icons/network.svg" verticalAlign="top" />
             <div>
               <Header as="h5">Cost-effective capital, with benefits</Header>
               <p>
@@ -150,7 +151,7 @@ const HowItWorks = () => (
                 {
                   row.map(b => (
                     <Grid.Column textAlign="center" width={isTablet ? 5 : 4}>
-                      <Image src={b.image} centered />
+                      <NSImage path={b.image} centered />
                       <Header as="h5">{b.title}</Header>
                       <p>{b.description}</p>
                     </Grid.Column>
@@ -169,7 +170,7 @@ const HowItWorks = () => (
                 row.map(b => (
                   <Grid.Row>
                     <Grid.Column className="center-align">
-                      <Image src={b.image} centered />
+                      <NSImage path={b.image} centered />
                       <Header as="h5">{b.title}</Header>
                       <p>{b.description}</p>
                     </Grid.Column>

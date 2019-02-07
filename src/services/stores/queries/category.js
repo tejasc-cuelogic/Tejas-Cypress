@@ -1,20 +1,17 @@
 import gql from 'graphql-tag';
 
-export const getCategories = gql`
-query getCategories($types: [CategoryTypesEnum]) {
+export const getCategories = isPublic => gql`
+query getCategories($types: ${isPublic ? '[CategoryTypeEnum]' : '[CategoryTypesEnum]'}) {
     categories(categoryType: $types) {
       id
       categoryName
       description
       categoryType
-      isPublished
-      created {
-        date
-      }
+      ${isPublic ? 'isPublished created { date }' : ''}
       order
     }
-  }
-`;
+  }`;
+
 
 export const createCategory = gql`
 mutation createCategory($categoryDetailsInput: CategoryInput!) {
