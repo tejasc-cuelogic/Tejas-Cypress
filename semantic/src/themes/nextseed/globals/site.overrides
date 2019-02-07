@@ -2283,6 +2283,9 @@ p.check-extra-info{
 	display:inline-block;
 	vertical-align:middle;
 	border-radius:100%;
+	width: 36px;
+    height: 36px;
+    line-height: 36px;
 	&.large{
 		width:60px !important;
 		height:60px !important;
