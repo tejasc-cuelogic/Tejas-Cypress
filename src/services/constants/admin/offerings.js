@@ -662,25 +662,28 @@ export const OFFER_CLOSE = {
     error: undefined,
     rule: 'array',
   },
-  disbursementDate: {
+  date: {
     value: '',
     label: 'Disbursement Date',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'date|required',
     placeHolder: 'MM-DD-YYYY',
   },
-  disbursementAmount: {
+  amount: {
     value: '',
     label: 'Disbursement Amount',
     error: undefined,
+    objRef: 'closureSummary.disbursement',
     rule: 'numeric|required',
     placeHolder: 'Enter here',
   },
-  totalRepayment: {
+  currentRepaidAmount: {
     value: '',
     label: 'Total Repayment',
     error: undefined,
     rule: 'numeric|required',
+    objRef: 'closureSummary.repayment',
     placeHolder: 'Enter here',
   },
   totalCommittedAmount: {

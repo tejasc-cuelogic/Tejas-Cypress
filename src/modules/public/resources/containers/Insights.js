@@ -17,7 +17,7 @@ export default class Insights extends Component {
     } else {
       this.props.articleStore.requestAllArticles();
     }
-    this.props.articleStore.getCategoryList();
+    this.props.articleStore.getCategoryList(false);
     this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
