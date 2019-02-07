@@ -18,7 +18,7 @@ export class TeamStore {
   @observable requestState = {
     skip: 0,
     page: 1,
-    perPage: 10,
+    perPage: 50,
     displayTillIndex: 10,
     filters: false,
     search: {

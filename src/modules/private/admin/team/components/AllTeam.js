@@ -83,7 +83,7 @@ export default class AllTeam extends Component {
               <Table.Header>
                 <Table.Row>
                   <Table.HeaderCell>Name</Table.HeaderCell>
-                  <Table.HeaderCell>Postion</Table.HeaderCell>
+                  <Table.HeaderCell>Title</Table.HeaderCell>
                   <Table.HeaderCell>Links</Table.HeaderCell>
                   <Table.HeaderCell>Order</Table.HeaderCell>
                   {/* <Table.HeaderCell>Status</Table.HeaderCell> */}
@@ -95,7 +95,7 @@ export default class AllTeam extends Component {
                   <Table.Row><Table.Cell colSpan={5} textAlign="center">No Team Member to display !</Table.Cell></Table.Row>
                 ) :
                   teamMembers.map(teamMember => (
-                    <Table.Row key={teamMember.id}>
+                    <Table.Row key={teamMember.id} onClick={() => this.handleEdit(teamMember.id)}>
                       <Table.Cell>
                         <div className="user-image">
                           <UserAvatar
