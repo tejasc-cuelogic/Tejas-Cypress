@@ -20,7 +20,7 @@ export class ElasticSearchStore {
           mutation: elasticSearchQueries[mutation],
         })
         .then((result) => {
-          Helper.toast('Your request is processed.', 'success');
+          Helper.toast('Your request is processed successfully.', 'success');
           resolve(result);
           this.setFieldValue('inProgress', false);
         })
