@@ -448,6 +448,9 @@
         box-shadow:none;
         height:~"calc(100vh - 353px)";
     }
+    &.elastic-search .content .description {
+        padding-right: @10px;
+    }
 }
 .ui{
     &.card, &.cards>.card{
