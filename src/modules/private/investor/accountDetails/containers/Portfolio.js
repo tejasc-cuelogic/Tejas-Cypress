@@ -34,16 +34,16 @@ export default class Portfolio extends Component {
       className: 'investment-summary',
       summary: [
         {
-          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Your Total Balance as of today',
+          title: 'Total Balance', content: getInvestorAccounts && getInvestorAccounts.totalBalance, type: 1, info: 'Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits.',
         },
         {
-          title: 'Total Deposit', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Your Total Deposit as of today',
+          title: 'Net Deposits', content: getInvestorAccounts && getInvestorAccounts.totalDeposit, type: 1, info: 'Deposits made from your external accounts, minus withdrawals.',
         },
         {
-          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Your Net Payments as of today',
+          title: 'Net Payments', content: getInvestorAccounts && getInvestorAccounts.netPayments, type: 1, info: 'Payments received to date from all prior investments, minus NextSeed fees.',
         },
         {
-          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: 'Your TNAR as of today',
+          title: 'TNAR', content: getInvestorAccounts && getInvestorAccounts.tnar, type: 1, info: 'The Total Net Annualized Return (TNAR) approximates the overall financial return on your investment portfolio. See the Education Center [link to Education Center article] for a full explanation of how TNAR is calculated.',
         },
       ],
     };

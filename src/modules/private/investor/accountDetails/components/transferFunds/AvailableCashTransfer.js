@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Route, Link, withRouter } from 'react-router-dom';
-import { Grid, Card, Button, Statistic } from 'semantic-ui-react';
+import { Grid, Card, Button, Statistic, Icon, Popup } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
 import AddWithdrawFund from './AddWithdrawFund';
 import TransferFundVerifyModal from './previewModel/TransferFundVerifyModal';
@@ -19,7 +19,14 @@ class AvailableCashTransfer extends Component {
               <Grid.Row>
                 <Grid.Column>
                   <Statistic size="tiny">
-                    <Statistic.Label>Available cash</Statistic.Label>
+                    <Statistic.Label>Available cash
+                      <Popup
+                        trigger={<Icon className="ns-help-circle" />}
+                        content="Available cash includes funds that are immediately available for investment. This includes pending incoming deposits and investment credits."
+                        position="top center"
+                        wide
+                      />
+                    </Statistic.Label>
                     <Statistic.Value>{Helper.MoneyMathDisplayCurrency(props.cash)}</Statistic.Value>
                   </Statistic>
                 </Grid.Column>
