@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Popup, Icon, Header, Grid, Image, Divider, Table, List, Accordion } from 'semantic-ui-react';
+import { Popup, Icon, Header, Grid, Divider, Table, List, Accordion } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import object from '../../../../../../assets/images/Object.jpg';
+import NSImage from '../../../../../shared/NSImage';
 
 export default class RevenueShare extends Component {
   state = { activeIndex: 0 }
@@ -32,7 +32,7 @@ export default class RevenueShare extends Component {
             </p>
           </Grid.Column>
           <Grid.Column>
-            <Image src={object} />
+            <NSImage path="Object.jpg" />
           </Grid.Column>
         </Grid>
         <Header as="h3">Key Terms</Header>

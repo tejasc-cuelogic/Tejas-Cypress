@@ -123,10 +123,11 @@ export class ArticleStore {
     }
 
     @action
-    getCategoryList = () => {
+    getCategoryList = (isPublic = true) => {
+      const apiClient = isPublic ? clientPublic : client;
       this.Categories = graphql({
-        client: clientPublic,
-        query: getCategories,
+        client: apiClient,
+        query: getCategories(isPublic),
         variables: { types: ['INSIGHTS'] },
         fetchPolicy: 'network-only',
       });
