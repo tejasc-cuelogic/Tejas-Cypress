@@ -1,11 +1,85 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-no-target-blank */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Icon, Grid, Button, Form, Confirm } from 'semantic-ui-react';
-import { InlineLoader, UserAvatar, NsPagination } from './../../../../../theme/shared';
+import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
+import { InlineLoader, NsPagination, UserAvatar } from './../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
+
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+
+const SortableItem = SortableElement(({
+  teamMember,
+}) => (
+  <Table.Row key={teamMember.id}>
+    <Table.Cell>
+      <div className="user-image">
+        <DragHandle />
+        <UserAvatar
+          UserInfo={{
+            avatarUrl: teamMember.avatar ? teamMember.avatar : '',
+            name: teamMember.memberName ? teamMember.memberName : '',
+          }}
+          size="mini"
+          base64url
+        />
+        &nbsp;&nbsp;&nbsp;
+        {teamMember.memberName}
+      </div>
+    </Table.Cell>
+    <Table.Cell>{teamMember.title}</Table.Cell>
+    <Table.Cell>{teamMember.social ?
+      teamMember.social.map(site => (
+        <Aux>
+          {site.url &&
+            <a target="_blank" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
+          }
+        </Aux>
+      )) : ''}
+    </Table.Cell>
+    <Table.Cell>{teamMember.order}</Table.Cell>
+    {/* <Table.Cell>Status</Table.Cell> */}
+    <Table.Cell textAlign="right">
+      <Button.Group>
+        <Button icon className="link-button" >
+          <Icon className="ns-pencil" onClick={() => this.handleEdit(teamMember.id)} />
+        </Button>
+        <Button icon className="link-button" >
+          <Icon className="ns-trash" onClick={() => this.handleAction(teamMember.id)} />
+        </Button>
+        <Button className="link-button">
+          <Icon name="ns-pencil" />
+        </Button>
+        <Button className="link-button">
+          <Icon color="blue" name="ns-view" />
+        </Button>
+        <Button className="link-button">
+          <Icon name="ns-trash" />
+        </Button>
+      </Button.Group>
+    </Table.Cell>
+  </Table.Row>
+));
+
+const SortableList = SortableContainer(({
+  teamMembers, openModal, handleDeleteConfirm, category, publishStatus,
+}) => (
+  teamMembers.map((teamMember, index) => (
+    <SortableItem
+      categoryTypeIndex={index}
+      teamMember={teamMember}
+      publishStatus={publishStatus}
+      openModal={openModal}
+      handleDeleteConfirm={handleDeleteConfirm}
+      category={category}
+      index={index}
+    />
+  ))
+));
 
 @inject('teamStore')
 @withRouter
@@ -13,6 +87,12 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 export default class AllTeam extends Component {
   componentWillMount() {
     this.props.teamStore.initRequest(true);
+  }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const { teamMembers, setTeamMemberOrder } = this.props.teamStore;
+    if (oldIndex !== newIndex) {
+      setTeamMemberOrder(arrayMove(teamMembers.categories, oldIndex, newIndex));
+    }
   }
   deleteTeamMember = () => {
     this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId);
@@ -94,46 +174,18 @@ export default class AllTeam extends Component {
                 {teamMembers.length === 0 ? (
                   <Table.Row><Table.Cell colSpan={5} textAlign="center">No Team Member to display !</Table.Cell></Table.Row>
                 ) :
-                  teamMembers.map(teamMember => (
-                    <Table.Row key={teamMember.id} onClick={() => this.handleEdit(teamMember.id)}>
-                      <Table.Cell>
-                        <div className="user-image">
-                          <UserAvatar
-                            UserInfo={{
-                              avatarUrl: teamMember.avatar ? teamMember.avatar : '',
-                              name: teamMember.memberName ? teamMember.memberName : '',
-                            }}
-                            size="mini"
-                            base64url
-                          />
-                          &nbsp;&nbsp;&nbsp;
-                          {teamMember.memberName}
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell>{teamMember.title}</Table.Cell>
-                      <Table.Cell>{teamMember.social ?
-                        teamMember.social.map(site => (
-                          <Aux>
-                            {site.url &&
-                              <a target="_blank" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
-                            }
-                          </Aux>
-                        )) : ''}
-                      </Table.Cell>
-                      <Table.Cell>{teamMember.order}</Table.Cell>
-                      {/* <Table.Cell>Status</Table.Cell> */}
-                      <Table.Cell textAlign="right">
-                        <Button.Group>
-                          <Button icon className="link-button" >
-                            <Icon className="ns-pencil" onClick={() => this.handleEdit(teamMember.id)} />
-                          </Button>
-                          <Button icon className="link-button" >
-                            <Icon className="ns-trash" onClick={() => this.handleAction(teamMember.id)} />
-                          </Button>
-                        </Button.Group>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))
+                (
+                  <SortableList
+                    teamMembers={teamMembers}
+                    pressDelay={100}
+                    openModal={this.openModal}
+                    publishStatus={this.publishStatus}
+                    onSortEnd={e => this.onSortEnd(e)}
+                    handleDeleteConfirm={this.handleDeleteConfirm}
+                    lockAxis="y"
+                    useDragHandle
+                  />
+                )
                 }
               </Table.Body>
             </Table>
