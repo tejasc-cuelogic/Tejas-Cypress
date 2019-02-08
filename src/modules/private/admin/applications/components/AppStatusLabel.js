@@ -15,6 +15,8 @@ export const AppStatusLabel = (props) => {
   cStatus = deleted ? 'DELETED' : cStatus;
   cStatus = appStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED ? 'OFFERED' : cStatus;
   cStatus = appStatus === BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'SIGNED' : cStatus;
+  cStatus = appStatus === BUSINESS_APPLICATION_STATUS.REVIEW_FAILED ? 'NS_DECLINED' : cStatus;
+  cStatus = appStatus === BUSINESS_APPLICATION_STATUS.ISSUER_DECLINED ? 'ISSUER_DECLINED' : cStatus;
 
   appStatusLabel = find(BUSINESS_APP_ADMIN_STATUS, status => status.status === cStatus);
   return (
