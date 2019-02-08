@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
-import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form } from 'semantic-ui-react';
+import { Card, Table, Checkbox, Button, Icon, Label, Grid, Form, Confirm } from 'semantic-ui-react';
 import { GLOBAL_ACTIONS } from '../../../../../services/constants/admin/article';
 import { DropdownFilter } from '../../../../../theme/form/Filters';
 import { DateTimeFormat, InlineLoader } from '../../../../../theme/shared';
@@ -23,13 +23,26 @@ export default class AllInsights extends Component {
     this.props.articleStore.setGlobalAction(name, value);
   handleAction = (action, articleId) => {
     if (action === 'Delete') {
-      this.props.uiStore.setConfirmBox(action, articleId);
+      // this.props.uiStore.setConfirmBox(action, articleId);
+      this.handleDeleteConfirm(articleId);
     } else if (action === 'Edit') {
       this.props.history.push(`${this.props.match.url}/${articleId}`);
     }
   }
+  handleDeleteConfirm = (id) => {
+    this.props.uiStore.setConfirmBox('Delete', id);
+  }
+  handleDelete = () => {
+    this.props.articleStore.deleteArticle(this.props.uiStore.confirmBox.refId);
+    this.props.uiStore.setConfirmBox('');
+  }
+  handleDeleteCancel = () => {
+    this.props.uiStore.setConfirmBox('');
+  }
+
   render() {
     const { articleStore } = this.props;
+    const { confirmBox } = this.props.uiStore;
     const {
       InsightArticles,
       loading,
@@ -108,6 +121,15 @@ export default class AllInsights extends Component {
             </Table>
           </div>
         </Card>
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to delete this Article?"
+          open={confirmBox.entity === 'Delete'}
+          onCancel={this.handleDeleteCancel}
+          onConfirm={this.handleDelete}
+          size="mini"
+          className="deletion"
+        />
       </Aux>
     );
   }

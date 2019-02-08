@@ -9,8 +9,10 @@ import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES } from '../../../constants/admin/article';
-import { allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
+import { deleteArticle, allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
 import { getCategories } from '../../queries/category';
+import Helper from '../../../../helper/utility';
+import { uiStore } from '../../../../services/stores';
 
 export class ArticleStore {
     @observable data = [];
@@ -92,6 +94,29 @@ export class ArticleStore {
           mutation: id === 'new' ? createArticle : updateArticle,
           variables: id === 'new' ? { payload: data } :
             { ...{ payload: data }, id },
+          refetchQueries: [{
+            query: allInsightArticles,
+          }],
+        });
+    }
+
+    @action
+    deleteArticle = (id) => {
+      uiStore.setProgress();
+      client
+        .mutate({
+          mutation: deleteArticle,
+          variables: { id },
+          refetchQueries: [{
+            query: allInsightArticles,
+          }],
+        }).then(() => {
+          Helper.toast('Category deleted successfully.', 'success');
+        }).catch(() => {
+          Helper.toast('Error while Deleting Category', 'error');
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
         });
     }
     featuredRequestArticlesByCategoryId = () => {

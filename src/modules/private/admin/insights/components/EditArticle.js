@@ -23,8 +23,8 @@ export default class EditArticle extends Component {
       this.props.articleStore.reset();
     }
   }
-  handleCloseModal = (e) => {
-    e.stopPropagation();
+  handleCloseModal = () => {
+    // e.stopPropagation();
     this.props.history.replace(this.props.refLink);
   };
 
@@ -35,7 +35,8 @@ export default class EditArticle extends Component {
     // const isManager = access.asManager;
     // this.props.articleStore.save(this.props.match.params.id,
     // status, isManager, this.props.status === 'PUBLISHED');
-    // this.props.history.push(this.props.refLink);
+    this.props.history.push(this.props.refLink);
+    this.handleCloseModal();
   }
   render() {
     const {

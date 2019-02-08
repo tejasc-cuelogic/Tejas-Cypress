@@ -5,7 +5,7 @@ query insights{
   insightsArticles{
     id
     content
-    categoryName
+    category
     featuredImage
     tags
     articleStatus
@@ -103,6 +103,12 @@ mutation updateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartia
     articleStatus
     category
   }
+}
+`;
+
+export const deleteArticle = gql`
+mutation deleteArticle($id: ID!) {
+  deleteArticle(id: $id) 
 }
 `;
 
