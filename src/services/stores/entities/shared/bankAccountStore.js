@@ -285,6 +285,9 @@ export class BankAccountStore {
           uiStore.setErrors(error.message);
           Helper.toast(error.message, 'error');
           reject(error.message);
+        }).finally(() => {
+          this.setLinkedBankCancelRequestStatus(false);
+          uiStore.setProgress(false);
         });
       // .catch (() => Helper.toast('Error', 'error'));
     });
@@ -314,6 +317,9 @@ export class BankAccountStore {
           uiStore.setErrors(error.message);
           Helper.toast(error.message, 'error');
           reject(error.message);
+        }).finally(() => {
+          this.setLinkedBankCancelRequestStatus(false);
+          uiStore.setProgress(false);
         });
       // .catch((error) => Helper.toast('Error', 'error'));
     });
@@ -341,6 +347,7 @@ export class BankAccountStore {
         })
         .finally(() => {
           this.setLinkedBankCancelRequestStatus(false);
+          uiStore.setProgress(false);
         });
     });
   }

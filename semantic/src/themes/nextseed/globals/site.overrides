@@ -1345,7 +1345,7 @@ a.icon-link {
 .sticky-actions{
 	position:sticky;
 	padding:@14px 0 0;
-	border-top:@neutral-offdark 1px solid;
+	// border-top:@neutral-offdark 1px solid;
 	bottom:0;
 	background-color:@white;
 	display:flex;
@@ -2283,6 +2283,9 @@ p.check-extra-info{
 	display:inline-block;
 	vertical-align:middle;
 	border-radius:100%;
+	width: 36px;
+    height: 36px;
+    line-height: 36px;
 	&.large{
 		width:60px !important;
 		height:60px !important;
