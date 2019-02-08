@@ -79,6 +79,8 @@ export const FILTER_META = {
       { label: 'Unstashed', value: 'UNSTASH', applicable: ['in-progress'] },
       { label: 'Stashed', value: 'STASH', applicable: ['in-progress'] },
       { label: 'Deleted', value: 'DELETED', applicable: ['prequal-failed', 'in-progress', 'completed'] },
+      { label: 'NS Declined', value: 'REVIEW_FAILED', applicable: ['completed'] },
+      { label: 'Issuer Declined', value: 'ISSUER_DECLINED', applicable: ['completed'] },
     ],
   },
   activityType: [
