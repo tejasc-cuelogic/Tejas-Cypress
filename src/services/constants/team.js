@@ -93,7 +93,7 @@ export const TEAM = {
     label: 'Instagram',
     error: undefined,
     rule: 'optional',
-    placeHolder: 'Paste omstagra, profile URL',
+    placeHolder: 'Paste instagram profile URL',
     // objRef: 'offering.overview.social',
     find: 'type',
     skipField: true,
