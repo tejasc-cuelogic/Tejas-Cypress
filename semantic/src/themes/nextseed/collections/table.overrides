@@ -344,8 +344,18 @@
                 vertical-align: middle;
                 cursor: pointer;
             }
-            >div.action {
-                width: 100px;
+            >div {
+                a {
+                    width: ~'calc(100% - 117px)';
+                    display: inline-block;
+                    cursor: pointer;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+                &.action {
+                    width: 100px;
+                }
             }
         }
         &.form-table {

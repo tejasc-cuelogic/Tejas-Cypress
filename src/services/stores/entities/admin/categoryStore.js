@@ -2,7 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { sortBy, filter } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { getCategories, createCategory, updateCategoryInfo, deleteCategory, updateCategoryStaus, setCategoryOrderForCategoryType } from '../../queries/category';
+import { getCategoriesList, createCategory, updateCategoryInfo, deleteCategory, updateCategoryStaus, setCategoryOrderForCategoryType } from '../../queries/category';
 import { CATEGORY_DETAILS, CATEGORY_DATA } from '../../../constants/admin/categories';
 import { FormValidator as Validator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
@@ -30,7 +30,7 @@ export class CategoryStore {
     initRequest = () => {
       this.data = graphql({
         client,
-        query: getCategories,
+        query: getCategoriesList,
         fetchPolicy: 'network-only',
         variables: { types: null },
         onFetch: () => {
@@ -92,7 +92,7 @@ export class CategoryStore {
           mutation: deleteCategory,
           variables: { id },
           refetchQueries: [{
-            query: getCategories,
+            query: getCategoriesList,
             variables: { types: null },
           }],
         }).then(() => {
@@ -131,7 +131,7 @@ export class CategoryStore {
             mutation,
             variables: param,
             refetchQueries: [{
-              query: getCategories,
+              query: getCategoriesList,
               variables: { types: null },
             }],
           })

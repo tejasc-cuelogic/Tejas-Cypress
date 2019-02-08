@@ -17,7 +17,8 @@ body{
 	position: relative;
 	max-width: 1680px;
 	min-height: 100vh;
-    margin: 0 auto;
+	margin: 0 auto;
+	box-shadow: 0px 4px 10px @thumbInactiveBackground;
 	&:before{
 		content: '';
 		position: absolute;
@@ -25,7 +26,7 @@ body{
 		right: -100%;
 		top: 0;
 		bottom: 0;
-		background-color: @neutral;
+		background-color: @white;
 		z-index: -1;
 	}
 }
@@ -2282,6 +2283,9 @@ p.check-extra-info{
 	display:inline-block;
 	vertical-align:middle;
 	border-radius:100%;
+	width: 36px;
+    height: 36px;
+    line-height: 36px;
 	&.large{
 		width:60px !important;
 		height:60px !important;

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Header, Image } from 'semantic-ui-react';
+import { Header } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
-import { ASSETS_URL } from '../../../../../../constants/aws';
 import ChartPieForBonusRewards from './ChartPieForBonusRewards';
 import Helper from '../../../../../../helper/utility';
+import NSImage from '../../../../../shared/NSImage';
 
 class BonusRewards extends Component {
   render() {
@@ -28,7 +28,7 @@ class BonusRewards extends Component {
         {rewardsTiers && rewardsTiers.length ?
           (!isEarlyBirdExists ?
             <Aux>
-              <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
+              <NSImage path="illustration.png" className="no-early-bird" />
               <p className="center-align neutral-text mb-0"><b>Invest more, receive more.</b></p>
               <p className="early-bird-desc center-align">
                 {`See the bonus rewards ${shorthandBusinessName} is offering for higher
@@ -51,7 +51,7 @@ class BonusRewards extends Component {
             </Aux>)
           :
             <Aux>
-              <Image src={`${ASSETS_URL}images/illustration.png`} className="no-early-bird" />
+              <NSImage path="illustration.png" className="no-early-bird" />
               <p className="center-align neutral-text mb-0"><b>No Bonus Rewards for this Campaign.</b></p>
             </Aux>
         }
