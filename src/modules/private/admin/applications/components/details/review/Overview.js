@@ -12,6 +12,7 @@ import { InlineLoader } from '../../../../../../../theme/shared';
 @inject('businessAppReviewStore', 'businessAppStore', 'userStore')
 @observer
 export default class Overview extends Component {
+  state = { showModal: false }
   componentWillMount() {
     if (!this.props.businessAppReviewStore.initLoad.includes('OVERVIEW_FRM')) {
       this.props.businessAppReviewStore.setFormData('OVERVIEW_FRM', 'review.overview.criticalPoint');
@@ -22,12 +23,19 @@ export default class Overview extends Component {
     e.preventDefault();
     this.props.businessAppReviewStore.addMore('OVERVIEW_FRM', 'description');
   }
+  toggleDeclineConfirmModal = (e) => {
+    e.preventDefault();
+    this.setState({ showModal: !this.state.showModal });
+  }
   toggleConfirmModal = (e, index, formName) => {
     e.preventDefault();
     this.props.businessAppReviewStore.toggleConfirmModal(index, formName);
   }
   submit = () => {
     this.props.businessAppReviewStore.saveReviewForms('OVERVIEW_FRM');
+  }
+  submitWithApproval = (form, action) => {
+    this.props.businessAppReviewStore.saveReviewForms(form, action);
   }
   updateApplicationStatus = (applicationId, userId) => {
     this.props.businessAppReviewStore.updateApplicationStatus(applicationId, userId, 'APPLICATION_COMPLETED', '', '', 'REVIEW_FAILED').then(() => {
@@ -89,7 +97,7 @@ export default class Overview extends Component {
             submitted={submitted}
             approved={approved}
             formValid={OVERVIEW_FRM.meta.isValid}
-            updateApplicationStatus={() => this.updateApplicationStatus(applicationId, userId)}
+            updateApplicationStatus={this.toggleDeclineConfirmModal}
             submitWithApproval={this.submitWithApproval}
           />
         </Form>
@@ -99,6 +107,15 @@ export default class Overview extends Component {
           open={confirmModal}
           onCancel={toggleConfirmModal}
           onConfirm={() => removeData(confirmModalName, 'description')}
+          size="mini"
+          className="deletion"
+        />
+        <Confirm
+          header="Confirm"
+          content="Are you sure you want to decline this application?"
+          open={this.state.showModal}
+          onCancel={this.toggleDeclineConfirmModal}
+          onConfirm={() => this.updateApplicationStatus(applicationId, userId)}
           size="mini"
           className="deletion"
         />
