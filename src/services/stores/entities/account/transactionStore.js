@@ -249,7 +249,7 @@ export class TransactionStore {
         });
     });
   }
-  confirmAccountLinking = () => {
+  confirmAccountLinking = (setProgress = true) => {
     uiStore.setProgress();
     return new Promise((resolve, reject) => {
       client
@@ -274,7 +274,9 @@ export class TransactionStore {
           reject(err);
         }))
         .finally(() => {
-          uiStore.setProgress(false);
+          if (setProgress) {
+            uiStore.setProgress(false);
+          }
         });
     });
   }

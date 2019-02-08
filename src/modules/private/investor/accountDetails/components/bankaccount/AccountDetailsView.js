@@ -5,9 +5,9 @@ import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Button, Item, Grid, Card } from 'semantic-ui-react';
 import Helper from '../../../../../../helper/utility';
-import Banklogo from '../../../../../../assets/images/banks/default.png';
 import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
+import NSImage from '../../../../../shared/NSImage';
 
 @inject('bankAccountStore', 'transactionStore')
 @withRouter
@@ -59,7 +59,9 @@ export default class AccountDetailsView extends Component {
                 {pladidLogo ?
                   <Item.Image size="tiny" src={`data:image/png;base64,${pladidLogo}`} />
                   :
-                  <Item.Image size="tiny" src={Banklogo} />
+                  <div className="ui tiny image">
+                    <NSImage path="banks/default.png" />
+                  </div>
                 }
               </Item>
             </Grid.Column>

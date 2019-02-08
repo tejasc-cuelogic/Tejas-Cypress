@@ -59,21 +59,21 @@ const testimonial = [
     description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
     name: 'Brian Ching | Pitch 25',
     investment: '$549,900 from 392 investors',
-    image: `${ASSETS_URL}images/business/lian.png`,
+    image: 'business/lian.png',
   },
   {
     title: 'Real Success Stories.',
     description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
     name: 'Jess Hughes | Citizen Pilates',
     investment: '$100,000 from 75 investors',
-    image: `${ASSETS_URL}images/business/jess.png`,
+    image: 'business/jess.png',
   },
   {
     title: 'Real Success Stories.',
     description: 'Your patrons get to be part of what you’re creating. It’s the best way to access this many investors while retaining 100% ownership.',
     name: 'Michael Dickson, Native Hostel',
     investment: '$396,500 from 227 investors',
-    image: `${ASSETS_URL}images/business/michael.png`,
+    image: 'business/michael.png',
   },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
@@ -190,7 +190,9 @@ const HowItWorks = () => (
           {testimonial.map(t => (
             <Item.Group key={t}>
               <Item>
-                <Item.Image size="medium" src={t.image} circular />
+                <div className="ui medium image">
+                  <NSImage path={t.image} />
+                </div>
                 <Item.Content verticalAlign="middle">
                   <Item.Header as="h2">{t.title}</Item.Header>
                   <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>

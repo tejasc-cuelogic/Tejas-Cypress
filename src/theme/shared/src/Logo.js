@@ -18,11 +18,12 @@ const getSrc = (src) => {
     case 'LogoNsAndLendio':
       return 'nextseed_and_lendio.svg';
     case 'LogoGreenGrey':
+      return 'logo.png';
     default:
       return 'logo-color.svg';
   }
 };
 
-const Logo = props => <NSImage {...props} path={getSrc(props)} className="logo" />;
+const Logo = props => <NSImage {...props} path={getSrc(props.dataSrc)} className="logo" />;
 
 export default Logo;

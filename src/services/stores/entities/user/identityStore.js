@@ -563,13 +563,18 @@ export class IdentityStore {
             })
               .catch((err) => {
                 uiStore.setErrors(DataFormatter.getSimpleErr(err));
+                Helper.toast('Something went wrong, please try again later.', 'error');
                 reject(err);
               });
           } else {
             this.setProfilePhoto('error', 'Something went wrong.');
             this.setProfilePhoto('value', '');
           }
-        }))
+        })).catch((err) => {
+          uiStore.setErrors(DataFormatter.getSimpleErr(err));
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          reject(err);
+        })
         .finally(action(() => { uiStore.setProgress(false); }));
     });
   }
@@ -620,7 +625,7 @@ export class IdentityStore {
 
   @action
   resetProfilePhoto = () => {
-    const attributes = ['src', 'error', 'value', 'base64String'];
+    const attributes = ['src', 'error', 'value', 'base64String', 'fileName'];
     attributes.forEach((val) => {
       this.ID_PROFILE_INFO.fields.profilePhoto[val] = '';
     });
@@ -699,7 +704,7 @@ export class IdentityStore {
 
   @computed
   get canUpdateProfilePhoto() {
-    return this.ID_PROFILE_INFO.fields.profilePhoto.fileName !== '';
+    return this.ID_PROFILE_INFO.fields.profilePhoto.base64String !== '';
   }
 
   @action

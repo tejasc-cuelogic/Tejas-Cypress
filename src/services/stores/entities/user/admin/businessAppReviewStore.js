@@ -11,7 +11,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -340,7 +340,7 @@ export class BusinessAppReviewStore {
   }
 
  @action
-  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag, comment = '') => {
+  updateApplicationStatus = (applicationId, userId, applStatus, applicationFlag = '', comment = '', applicationStatus = '') => {
     const applicationSource = applStatus ===
     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_FAILED ? 'APPLICATIONS_PREQUAL_FAILED' : 'APPLICATION_COMPLETED';
     const formInputData = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
@@ -349,9 +349,13 @@ export class BusinessAppReviewStore {
       actionType: 'APPLICATION_STATUS',
       applicationId,
       applicationSource,
-      applicationFlag,
       comments: comment !== '' ? { text: comment } : formInputData,
     };
+    if (applicationFlag !== '') {
+      payload = { ...payload, applicationFlag };
+    } else if (applicationStatus !== '') {
+      payload = { ...payload, applicationStatus };
+    }
     if (userId !== 'new') {
       payload = { ...payload, userId };
     }
@@ -382,6 +386,34 @@ export class BusinessAppReviewStore {
         .finally(() => {
           uiStore.setProgress(false);
         });
+    });
+  }
+
+  @action
+  applicationDeclineByIssuer = (applicationId) => {
+    const comment = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
+    uiStore.setProgress();
+    const payload = {
+      applicationId,
+      comments: comment,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: applicationDeclinedByIssuer,
+          variables: payload,
+          refetchQueries: [{ query: getBusinessApplications }],
+        })
+        .then((result) => {
+          Helper.toast('Application declined successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => uiStore.setProgress(false));
     });
   }
 
@@ -430,7 +462,7 @@ export class BusinessAppReviewStore {
     if (applicationSource === 'APPLICATION_COMPLETED') {
       reFetchPayLoad = { ...reFetchPayLoad, userId };
     }
-    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : 'SAVE';
+    const progressButton = approveOrSubmitted === 'REVIEW_APPROVED' ? approvedStatus ? 'REVIEW_APPROVED' : 'REVIEW_DECLINED' : approveOrSubmitted === 'REVIEW_SUBMITTED' ? 'REVIEW_SUBMITTED' : approveOrSubmitted === 'REVIEW_FAILED' ? 'REVIEW_FAILED' : 'SAVE';
     if (showLoader) {
       this.setFieldvalue('inProgress', progressButton);
     }
