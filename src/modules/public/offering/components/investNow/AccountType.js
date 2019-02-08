@@ -53,11 +53,11 @@ class AccountType extends Component {
     }
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
-      if (isRegulationCheck) {
-        this.props.accreditationStore.accreditatedAccounts();
-        this.props.accreditationStore.userAccreditatedStatus();
-        this.props.accreditationStore.validInvestmentAccounts();
-      }
+      // if (isRegulationCheck) {
+      //   this.props.accreditationStore.accreditatedAccounts();
+      //   this.props.accreditationStore.userAccreditatedStatus();
+      //   this.props.accreditationStore.validInvestmentAccounts();
+      // }
     });
   }
   componentDidMount() {
@@ -86,6 +86,9 @@ class AccountType extends Component {
       }
     }
   }
+  componentDidUpdate(prevProps) {
+    console.log('component did update call==>', prevProps);
+  }
   radioChnaged = (e, res) => {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
   }
@@ -110,7 +113,7 @@ class AccountType extends Component {
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
-    const regulationType = offeringReuglation;
+    // const regulationType = offeringReuglation;
     const { userDetails, setPartialInvestmenSession } = this.props.userDetailsStore;
     const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
     const offeringInvestnowURL = this.props.match.url;
@@ -125,13 +128,18 @@ class AccountType extends Component {
       userAccredetiationState,
       ACCREDITATION_EXPIRY_FORM,
       expirationChange,
+      showAccountList,
+      userAccreditatedStatus,
     } = this.props.accreditationStore;
+    if (!showAccountList) {
+      userAccreditatedStatus();
+    }
     if (userProfileFullStatus !== 'FULL' || (userAccredetiationState && (userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE'))) {
       setPartialInvestmenSession(offeringInvestnowURL);
     } else {
       setPartialInvestmenSession();
     }
-    if (isRegulationCheck && (!accreditationData.ira || !userAccredetiationState)) {
+    if (isRegulationCheck && (!accreditationData.ira)) {
       return <Spinner loaderMessage="Loading.." />;
     }
     if ((activeAccounts.length || investAccTypes.values.length) && isRegulationCheck) {
@@ -147,7 +155,10 @@ class AccountType extends Component {
           {investAccTypes.values.length ?
             <Aux>
               <p className="center-align">{subHeaderToShow}</p>
-              {userAccredetiationState === undefined || userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || !isRegulationCheck ?
+              {showAccountList ?
+                // userAccredetiationState === undefined || userAccredetiationState === 'ELGIBLE' ||
+                // (regulationType && regulationType === 'BD_CF_506C' &&
+                // userAccredetiationState === 'PENDING') || !isRegulationCheck ?
                 <FormRadioGroup
                   name="investAccountType"
                   containerclassname="button-radio center-align"

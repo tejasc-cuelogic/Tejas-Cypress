@@ -43,6 +43,7 @@ export class AccreditationStore {
   @observable accreditaionMethod = null;
   @observable accreditationDetails = {};
   @observable userAccredetiationState = undefined;
+  @observable showAccountList = true;
   @action
   initRequest = (reqParams) => {
     const {
@@ -612,31 +613,88 @@ export class AccreditationStore {
   }
   @action
   userAccreditatedStatus = () => {
-    // let userAccredetiationState = '';
-    const {
-      eligibleAccreditation,
-      inactiveAccreditation,
-      notEligibleAccreditation,
-      pendingAccreditation,
-      expiredAccreditation,
-    } = this.accreditationDetails;
-    if (eligibleAccreditation) {
-      if (eligibleAccreditation.length <= 0) {
-        if (expiredAccreditation.length) {
-          this.userAccredetiationState = 'EXPIRED';
-        } else if (pendingAccreditation.length) {
-          this.userAccredetiationState = 'PENDING';
-        } else if (notEligibleAccreditation.length) {
-          this.userAccredetiationState = 'NOT_ELGIBLE';
-        } else if (inactiveAccreditation.length) {
-          this.userAccredetiationState = 'INACTIVE';
-        }
-      } else {
-        this.userAccredetiationState = 'ELGIBLE';
-      }
-      // return userAccredetiationState;
+    // let userAccredetiationStateValue = '';
+    // const {
+    //   eligibleAccreditation,
+    //   inactiveAccreditation,
+    //   notEligibleAccreditation,
+    //   pendingAccreditation,
+    //   expiredAccreditation,
+    // } = this.accreditationDetails;
+
+    // if (eligibleAccreditation) {
+    //   if (eligibleAccreditation.length <= 0) {
+    //     if (expiredAccreditation.length) {
+    //       this.userAccredetiationState = 'EXPIRED';
+    //     } else if (pendingAccreditation.length) {
+    //       this.userAccredetiationState = 'PENDING';
+    //     } else if (notEligibleAccreditation.length) {
+    //       this.userAccredetiationState = 'NOT_ELGIBLE';
+    //     } else if (inactiveAccreditation.length) {
+    //       this.userAccredetiationState = 'INACTIVE';
+    //     }
+    //   } else {
+    //     this.userAccredetiationState = 'ELGIBLE';
+    //   }
+    // }
+
+    const aggreditationDetails = this.accreditationData;
+    const currentSelectedAccount = userDetailsStore.currentActiveAccountDetails.name;
+    let currentAcitveObject = {};
+    if (aggreditationDetails) {
+      currentAcitveObject =
+        find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
     }
-    // return userAccredetiationState;
+    console.log('currentAcitveObject==>', currentAcitveObject);
+    const accountStatus = this.checkIsAccreditationExpired(currentAcitveObject.expiration)
+      === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status;
+    switch (accountStatus) {
+      case 'REQUESTED':
+        this.userAccredetiationState = 'PENDING';
+        break;
+      case 'DECLINED':
+        this.userAccredetiationState = 'NOT_ELGIBLE';
+        break;
+      case 'APPROVED':
+        this.userAccredetiationState = 'ELGIBLE';
+        break;
+      case 'EXPIRED':
+        this.userAccredetiationState = 'EXPIRED';
+        break;
+      default:
+        this.userAccredetiationState = 'INACTIVE';
+        break;
+    }
+  }
+  @computed get accountAccreditatedStatus() {
+    let userAccredetiationStateValue = '';
+    const aggreditationDetails = this.accreditationData;
+    const currentSelectedAccount = userDetailsStore.currentActiveAccountDetails.name;
+    let currentAcitveObject = {};
+    if (aggreditationDetails) {
+      currentAcitveObject =
+        find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
+    }
+    console.log('currentAcitveObject==>', currentAcitveObject);
+    const accountStatus = this.checkIsAccreditationExpired(currentAcitveObject.expiration) === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status;
+    switch (accountStatus) {
+      case 'REQUESTED':
+        userAccredetiationStateValue = 'PENDING';
+        break;
+      case 'DECLINED':
+        userAccredetiationStateValue = 'NOT_ELGIBLE';
+        break;
+      case 'APPROVED':
+        userAccredetiationStateValue = 'ELGIBLE';
+        break;
+      case 'EXPIRED':
+        userAccredetiationStateValue = 'EXPIRED';
+        break;
+      default:
+        userAccredetiationStateValue = 'INACTIVE';
+        break;
+    }
+    return userAccredetiationStateValue;
   }
   @action
   validInvestmentAccounts = () => {
@@ -662,6 +720,7 @@ export class AccreditationStore {
   @action
   resetUserAccreditatedStatus = () => {
     this.userAccredetiationState = undefined;
+    this.showAccountList = true;
     investmentStore.resetAccTypeChanged();
   }
   checkIsAccreditationExpired = (expirationDate) => {
@@ -684,6 +743,10 @@ export class AccreditationStore {
   @action
   resetAccreditationExpirayForm = (form) => {
     Validator.resetFormData(this[form]);
+  }
+  @action
+  changeShowAccountListFlag = (statusValue) => {
+    this.showAccountList = statusValue;
   }
 }
 export default new AccreditationStore();

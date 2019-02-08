@@ -48,12 +48,19 @@ export default class InvestNow extends React.Component {
     this.props.history.push(this.props.refLink);
     this.props.investmentStore.resetData();
     this.props.investmentStore.setByDefaultRender(true);
+    this.props.accreditationStore.resetUserAccreditatedStatus();
   }
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
       this.props.investmentStore.setFieldValue('disableNextbtn', false);
     }
+    this.props.investmentStore.setStepToBeRendered(step);
+  }
+  handleStepChangeForPartialAccounts = (step) => {
+    this.props.accreditationStore.changeShowAccountListFlag(false);
+    this.props.investmentStore.setFieldValue('disableNextbtn', false);
+    this.props.investmentStore.setFieldValue('disablePrevButton', true);
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleCancel = () => {
@@ -116,11 +123,26 @@ export default class InvestNow extends React.Component {
         }
       });
     } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
-      this.props.investmentLimitStore
-        .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId)
-        .then(() => {
-          this.handleStepChange(step.stepToBeRendered);
-        });
+      const { campaign } = this.props.campaignStore;
+      const offeringReuglation = campaign && campaign.regulation;
+      const regulationType = offeringReuglation;
+      const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+      const {
+        accountAccreditatedStatus,
+        changeShowAccountListFlag,
+      } = this.props.accreditationStore;
+      changeShowAccountListFlag(false);
+      const accredtedStatus = accountAccreditatedStatus;
+      console.log(accredtedStatus);
+      if (accredtedStatus === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && accredtedStatus === 'PENDING') || accredtedStatus === undefined || !isRegulationCheck) {
+        this.props.investmentLimitStore
+          .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId)
+          .then(() => {
+            this.handleStepChange(step.stepToBeRendered);
+          });
+      } else {
+        this.handleStepChangeForPartialAccounts(0);
+      }
     }
   }
 
@@ -132,11 +154,11 @@ export default class InvestNow extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
     } = uiStore;
-    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
-    const { userAccredetiationState } = this.props.accreditationStore;
-    const { campaign } = this.props.campaignStore;
-    const offeringReuglation = campaign && campaign.regulation;
-    const regulationType = offeringReuglation;
+    // const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    // const { userAccredetiationState } = this.props.accreditationStore;
+    // const { campaign } = this.props.campaignStore;
+    // const offeringReuglation = campaign && campaign.regulation;
+    // const regulationType = offeringReuglation;
     const steps =
       [
         {
@@ -169,8 +191,14 @@ export default class InvestNow extends React.Component {
           isValid: '',
         },
       ];
-    const isMultiStepButtonsVisible = !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined));
-    const closeOnDimmerClickAction = !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined));
+    const isMultiStepButtonsVisible = true;
+    // !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' ||
+    // (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')
+    // || userAccredetiationState === undefined));
+    const closeOnDimmerClickAction = false;
+    // !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' ||
+    // (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')
+    // || userAccredetiationState === undefined));
     return (
       <div className="step-progress" >
         {
