@@ -24,7 +24,7 @@ export default class NeedHelpModal extends Component {
   submit = (e) => {
     e.preventDefault();
     this.props.businessAppStore.needHelpFormSubmit().then(() => {
-      Helper.toast('Business application saved!', 'success');
+      Helper.toast('Got your message! NextSeed support should be reaching out to you soon. Thanks!', 'success');
       this.props.history.goBack();
     });
   }
