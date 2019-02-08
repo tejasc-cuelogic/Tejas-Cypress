@@ -155,6 +155,7 @@
 * **Feedback[Issue [345](https://chaos.ns.team/nsv2/ns-ops/issues/345) - 345]:** Feedback ([82536d4](https://chaos.ns.team/nsv2/ns-client/commits/82536d4))
 * **Feedback[Issue [356](https://chaos.ns.team/nsv2/ns-ops/issues/356) - Feedback]:** Feedback ([c7003ac](https://chaos.ns.team/nsv2/ns-client/commits/c7003ac))
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([0094905](https://chaos.ns.team/nsv2/ns-client/commits/0094905))
+* **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([52807b7](https://chaos.ns.team/nsv2/ns-client/commits/52807b7))
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([dd35301](https://chaos.ns.team/nsv2/ns-client/commits/dd35301))
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([52807b7](https://chaos.ns.team/nsv2/ns-client/commits/52807b7))
 * **feedback[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - feedback]:** feedback ([8bd12c1](https://chaos.ns.team/nsv2/ns-client/commits/8bd12c1))
