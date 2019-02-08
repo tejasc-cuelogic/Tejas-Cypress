@@ -108,7 +108,7 @@ export class BusinessAppStore {
   }
 
   @computed get getPersonalGuaranteeCondition() {
-    return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true';
+    return this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === true;
   }
 
   @action
@@ -694,12 +694,13 @@ export class BusinessAppStore {
           data.businessTaxReturn.value,
           this.BUSINESS_DOC_FRM.fields.businessTaxReturn,
         ),
-        personalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true' ? this.getFilesArray(
-          data.personalGuaranteeForm.value,
-          this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
-        ) : [],
+        personalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === true ?
+          this.getFilesArray(
+            data.personalGuaranteeForm.value,
+            this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
+          ) : [],
         blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value === '' ? null : this.BUSINESS_DOC_FRM.fields.blanketLien.value,
-        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === '' ? null : this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === 'true',
+        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === '' ? null : this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === true,
       };
     } else {
       inputData = {
