@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable react/jsx-no-target-blank */
@@ -70,7 +71,7 @@ const SortableList = SortableContainer(({
 }) => (
   teamMembers.map((teamMember, index) => (
     <SortableItem
-      categoryTypeIndex={index}
+      key={`item-${index}`}
       teamMember={teamMember}
       publishStatus={publishStatus}
       openModal={openModal}
