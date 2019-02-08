@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared/index';
@@ -51,7 +52,7 @@ export default class ApplicationCards extends Component {
                       <dt>Started on</dt>
                       <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
                       <dt>{BUSINESS_APP_USER_STATUS[application.applicationStatus].dateTitle}</dt>
-                      <dd>{application.updated ? <DateTimeFormat datetime={application.updated.date} /> : '--'}</dd>
+                      <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat datetime={(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date)} /> : '--'}</dd>
                     </dl>
                     {application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&

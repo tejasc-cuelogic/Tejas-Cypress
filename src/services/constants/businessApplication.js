@@ -50,43 +50,43 @@ export const BUSINESS_APP_ADMIN_STATUS = [
 
 export const BUSINESS_APP_USER_STATUS = {
   PRE_QUALIFICATION_FAILED: {
-    status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+    status: 'Not Eligible', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   PRE_QUALIFICATION_SUCCESSFUL: {
-    status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+    status: 'In-progress', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   PRE_QUALIFICATION_SUBMITTED: {
-    status: 'In-progress', icon: 'ns-pencil-circle-line', color: '', dateTitle: 'Last Updated Date',
+    status: 'In-progress', icon: 'ns-pencil-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   PRE_QUALIFICATION_PROMOTED: {
-    status: 'Promoted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+    status: 'Promoted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_SUBMITTED: {
-    status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Submitted Date',
+    status: 'Pending Review', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Submitted Date', datePath: 'applicationSubmittedDate',
   },
   APPLICATION_OFFERED: {
-    status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+    status: 'Offer Extended', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Offer Date', datePath: 'offers.approved.date',
   },
   APPLICATION_REVIEWED: {
-    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_FAILED: {
-    status: 'Failed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+    status: 'Failed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_SUCCESSFUL: {
-    status: 'Signed', icon: 'ns-check-circle-line', color: 'green', dateTitle: 'Last Updated Date',
+    status: 'Signed', icon: 'ns-check-circle-line', color: 'green', dateTitle: 'Signed Date', datePath: 'envelopeStatusChangedDateTime',
   },
   REVIEWED: {
-    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+    status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   DECLINED: {
-    status: 'Declined Offer', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_DELETED: {
-    status: 'Deleted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date',
+    status: 'Deleted', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   ISSUER_DECLINED: {
-    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Last Updated Date',
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Declined Date', datePath: 'updated.date',
   },
   REVIEW_FAILED: {
     status: 'Declined', icon: 'ns-reload-circle-line', color: 'orange', dateTitle: 'Reviewed Date',

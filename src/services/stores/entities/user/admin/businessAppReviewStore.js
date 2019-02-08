@@ -11,7 +11,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { applicationDeclineByIssuer, getBusinessApplications, generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { applicationDeclinedByIssuer, getBusinessApplications, generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -400,7 +400,7 @@ export class BusinessAppReviewStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: applicationDeclineByIssuer,
+          mutation: applicationDeclinedByIssuer,
           variables: payload,
           refetchQueries: [{ query: getBusinessApplications }],
         })
