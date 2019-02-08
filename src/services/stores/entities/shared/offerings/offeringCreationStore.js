@@ -19,10 +19,11 @@ import { deleteBonusReward, updateOffering,
   generateBusinessFiling, allOfferings, upsertOffering } from '../../../queries/offerings/manage';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
-import { offeringsStore, uiStore, userDetailsStore, commonStore } from '../../../index';
+import { offeringsStore, uiStore, userDetailsStore, commonStore, activityHistoryStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { XML_STATUSES } from '../../../../../constants/business';
 import { INDUSTRY_TYPES } from '../../../../../constants/offering';
+import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../constants/common';
 
 export class OfferingCreationStore {
   @observable NEW_OFFER_FRM = Validator.prepareFormObject(NEW_OFFER);
@@ -908,6 +909,16 @@ export class OfferingCreationStore {
     return { social, highlight };
   }
 
+  generateActivityHistory = (resourceId, activityType, activityTitle, subType) => {
+    const payload = {
+      resourceId,
+      activityType,
+      activityTitle,
+      subType,
+      scope: ACTIVITY_HISTORY_SCOPE.DEV,
+    };
+    activityHistoryStore.createActivityHistory(payload);
+  }
   addNewOffer = () => {
     const offeringDetails = Validator.evaluateFormData(this.NEW_OFFER_FRM.fields);
     uiStore.setProgress();
@@ -920,7 +931,10 @@ export class OfferingCreationStore {
           variables: { stage: ['CREATION'] },
         }],
       })
-      .then(() => Helper.toast('Offering created successfully.', 'success'))
+      .then((res) => {
+        this.generateActivityHistory(res.data.upsertOffering.id, ACTIVITY_HISTORY_TYPES.CREATION, 'Application Created by Admin.', 'STARTED');
+        Helper.toast('Offering created successfully.', 'success');
+      })
       .catch(() => {
         Helper.toast('Error while creating offer', 'error');
       })
@@ -933,7 +947,7 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success',
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false,
   ) => {
     uiStore.setProgress();
     const variables = {
@@ -959,6 +973,15 @@ export class OfferingCreationStore {
           Helper.toast(`${startCase(keyName) || 'Offering'} has been saved successfully.`, 'success');
         }
         offeringsStore.getOne(id, false);
+        if (keyName === 'contingencies' && successMsg === null) {
+          const activityTitle = isLaunchContingency ? 'All launch contingencies have been signed off' : 'All close contingencies have been signed off';
+          this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.OFFERING, activityTitle, isLaunchContingency ? 'LAUNCH_CONTINGENCIES' : 'CLOSE_CONTINGENCIES');
+        } else if (keyName === 'offering' && successMsg === null) {
+          const activityTitle = `Issuer has confirmed the launch (${variables.offeringDetails.offering.launch.targetDate}), close (${variables.offeringDetails.offering.launch.terminationDate}), and expected opening (${variables.offeringDetails.offering.launch.expectedOpsDate}) dates`;
+          this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.OFFERING, activityTitle, 'LAUNCH_CONFIRMATION');
+        } else if (keyName === false && payload.stage === 'LIVE') {
+          this.generateActivityHistory(id, ACTIVITY_HISTORY_TYPES.LIVE, 'Application launched!', 'LAUNCHED');
+        }
         res();
       })
       .catch((err) => {
@@ -984,7 +1007,7 @@ export class OfferingCreationStore {
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
-    approvedObj, fromS3 = false, leaderIndex, msgType = 'success',
+    approvedObj, fromS3 = false, leaderIndex, msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -1185,7 +1208,7 @@ export class OfferingCreationStore {
     }
     this.updateOfferingMutation(
       id, payloadData, keyName, notify, successMsg,
-      fromS3, res, rej, msgType,
+      fromS3, res, rej, msgType, isLaunchContingency,
     );
   });
 
