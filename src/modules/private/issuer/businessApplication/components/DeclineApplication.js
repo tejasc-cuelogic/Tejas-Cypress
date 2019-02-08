@@ -11,9 +11,15 @@ import { ListErrors } from '../../../../../theme/shared';
 @observer
 export default class DeclineApplication extends Component {
   componentWillMount() {
+    this.props.businessAppReviewStore.resetCommentFrm();
   }
   handleCloseModal = () => {
     this.props.history.push(`/app/dashboard/${this.props.match.params.applicationId}/offers`);
+  }
+  declineApplicationHandler = () => {
+    const { match, businessAppReviewStore } = this.props;
+    const { applicationId } = match.params;
+    businessAppReviewStore.applicationDeclineByIssuer(applicationId);
   }
   render() {
     const { uiStore, businessAppReviewStore } = this.props;
@@ -50,7 +56,7 @@ export default class DeclineApplication extends Component {
             }
             <div className="center-align">
               <Button.Group>
-                <Button primary disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} loading={inProgress} content="Yes - Decline Offer" onClick={this.handleCloseModal} />
+                <Button primary disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} loading={inProgress} content="Yes - Decline Offer" onClick={this.declineApplicationHandler} />
                 <Button color="red" content="No - Back to Offers" onClick={this.handleCloseModal} />
               </Button.Group>
             </div>

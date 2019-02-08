@@ -11,7 +11,7 @@ import { FormValidator as Validator } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
 import { BUSINESS_APPLICATION_STATUS, BUSINESS_APP_FILE_UPLOAD_ENUMS } from '../../../../constants/businessApplication';
-import { generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
+import { applicationDeclineByIssuer, getBusinessApplications, generatePortalAgreement, createOffering, getPortalAgreementStatus, signPortalAgreement, updateApplicationStatusAndReview, getBusinessApplicationsDetailsAdmin, getBusinessApplicationOffers } from '../../../queries/businessApplication';
 import { businessAppStore, uiStore, userStore } from '../../../index';
 import { fileUpload } from '../../../../actions';
 import { allOfferingsCompact } from '../../../queries/offerings/manage';
@@ -386,6 +386,34 @@ export class BusinessAppReviewStore {
         .finally(() => {
           uiStore.setProgress(false);
         });
+    });
+  }
+
+  @action
+  applicationDeclineByIssuer = (applicationId) => {
+    const comment = Validator.evaluateFormData(this.APPLICATION_STATUS_COMMENT_FRM.fields);
+    uiStore.setProgress();
+    const payload = {
+      applicationId,
+      comments: comment,
+    };
+    return new Promise((resolve, reject) => {
+      client
+        .mutate({
+          mutation: applicationDeclineByIssuer,
+          variables: payload,
+          refetchQueries: [{ query: getBusinessApplications }],
+        })
+        .then((result) => {
+          Helper.toast('Application declined successfully.', 'success');
+          resolve(result);
+        })
+        .catch((error) => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          uiStore.setErrors(error.message);
+          reject(error);
+        })
+        .finally(() => uiStore.setProgress(false));
     });
   }
 

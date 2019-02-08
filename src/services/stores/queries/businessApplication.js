@@ -548,3 +548,12 @@ mutation _generatePortalAgreement($applicationId: String!, $userId: String!){
   )
 }
 `;
+
+export const applicationDeclineByIssuer = gql`
+mutation applicationDeclineByIssuer($applicationId: String!, $comments: [BusinessApplicationCommentInput]){
+  applicationDeclineByIssuer(
+    applicationId: $applicationId
+    comments: $comments
+  )
+}
+`;
