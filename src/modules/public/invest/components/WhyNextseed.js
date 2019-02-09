@@ -3,42 +3,41 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { Header, Grid, Button, Container, List, Item, Responsive, Divider } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
 import NSImage from '../../../shared/NSImage';
 
 const highlights = [
   {
     title: 'Businesses you understand',
-    icon: `${ASSETS_URL}images/icons/businesses.svg`,
+    icon: 'icons/businesses.svg',
     meta: `Investments in Main Street businesses and local properties 
       generating real cash flow.`,
   },
   {
     title: 'Impactful investments',
-    icon: `${ASSETS_URL}images/icons/entrepreneurs.svg`,
+    icon: 'icons/entrepreneurs.svg',
     meta: `Local business owners, local jobs and local growth.
     Create real impact in local communities nationwide`,
   },
   {
     title: 'Pre-vetted opportunities',
-    icon: `${ASSETS_URL}images/icons/prevetted.svg`,
+    icon: 'icons/prevetted.svg',
     meta: `Every business must meet our proprietary financial
     criteria in addition to federal regulatory requirements. `,
   },
   {
     title: 'Flexible amounts',
-    icon: `${ASSETS_URL}images/icons/investments.svg`,
+    icon: 'icons/investments.svg',
     meta: 'Never invest more than you can risk. Investments may start as low as $100.',
   },
   {
     title: 'Exclusive deals',
-    icon: `${ASSETS_URL}images/icons/ventures.svg`,
+    icon: 'icons/ventures.svg',
     meta: `Uncover opportunities that were once privately reserved for wealthy
       and well-connected investors.`,
   },
   {
     title: 'Returns processed for you',
-    icon: `${ASSETS_URL}images/icons/returns.svg`,
+    icon: 'icons/returns.svg',
     meta: `No need to chase payments from business owners. NextSeed facilitates
      payment processing from your investments automatically.`,
   },
@@ -108,7 +107,9 @@ const WhyNextseed = () => (
               {
                 highlights.map(h => (
                   <Item>
-                    <Item.Image size="mini" src={h.icon} />
+                    <div className="ui mini image">
+                      <NSImage path={h.icon} />
+                    </div>
                     <Item.Content>
                       <Item.Header as="h5">{h.title}</Item.Header>
                       <Item.Meta>{h.meta}</Item.Meta>

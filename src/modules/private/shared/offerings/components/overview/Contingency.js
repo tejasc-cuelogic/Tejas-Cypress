@@ -25,7 +25,7 @@ export default class Contingency extends Component {
     const currStatus = this.state.visibilityStatus;
     this.setState({ visibilityStatus: !currStatus });
   }
-  handleSubmitComment = (successMsg) => {
+  handleSubmitComment = (successMsg, formName) => {
     const {
       updateOffering,
       currentOfferingId,
@@ -33,7 +33,8 @@ export default class Contingency extends Component {
       CLOSING_CONTITNGENCIES_FRM,
     } = this.props.offeringCreationStore;
     const fields = { ...LAUNCH_CONTITNGENCIES_FRM.fields, ...CLOSING_CONTITNGENCIES_FRM.fields };
-    updateOffering(currentOfferingId, fields, 'contingencies', '', true, successMsg);
+    const isLaunchContingency = formName === 'LAUNCH_CONTITNGENCIES_FRM';
+    updateOffering(currentOfferingId, fields, 'contingencies', '', true, successMsg, undefined, false, undefined, 'success', isLaunchContingency);
   }
   formArrayChange = (e, result, formName, dataKey, index) => {
     if (result) {
@@ -188,7 +189,7 @@ export default class Contingency extends Component {
                     <Button type="button" color="red" content="Delete" onClick={e => this.toggleConfirmModal(e, index, formName)} />
                   </Aux>
                 }
-                <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null)} />
+                <Button type="button" primary content="Submit" onClick={() => this.handleSubmitComment(null, formName)} />
                 {contingenciesData && contingenciesData[dataKey] &&
                 contingenciesData[dataKey][index] && contingenciesData[dataKey][index].accepted &&
                 contingenciesData[dataKey][index].accepted.status &&

@@ -21,7 +21,8 @@ export default class OfferingLaunch extends Component {
       updateOffering,
       currentOfferingId,
     } = this.props.offeringCreationStore;
-    updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, undefined, isApproved);
+    const successMsg = isApproved && isApproved.status === 'manager_approved' ? null : undefined;
+    updateOffering(currentOfferingId, COMPANY_LAUNCH_FRM.fields, 'offering', 'launch', true, successMsg, isApproved);
   }
   launch = () => {
     const {
