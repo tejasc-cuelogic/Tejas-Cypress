@@ -26,8 +26,8 @@ class KeyTerms extends Component {
         <Table basic="very" className="key-terms-table neutral-text">
           <Table.Body>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Type of Raise</b>{' '}
-                <Popup
+              <Table.Cell><b>Type of Raise</b>
+                {/* <Popup
                   hoverable
                   position="top center"
                   trigger={<Icon
@@ -40,7 +40,7 @@ class KeyTerms extends Component {
                       <Link to="/resources/education-center">Education Center</Link>.
                     </span>
                   )}
-                />
+                /> */}
               </Table.Cell>
               <Table.Cell className="grey-header">
                 {campaign && campaign.keyTerms && campaign.keyTerms.regulation ?
@@ -48,13 +48,7 @@ class KeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Investment Type</b>{' '}
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="Lorem Ipsum"
-                  position="top center"
-                />
-              </Table.Cell>
+              <Table.Cell><b>Investment Type</b></Table.Cell>
               <Table.Cell className="grey-header">
                 {campaign && campaign.keyTerms &&
                   campaign.keyTerms.securities ?
@@ -64,19 +58,16 @@ class KeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell width={5}><b>Maturity</b>{' '}
+              <Table.Cell><b>Multiple</b>{' '}
                 <Popup
+                  hoverable
                   trigger={<Icon name="help circle" color="green" />}
-                  content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                  content={(<span>The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the <Link to={`${this.props.refLink}/investment-details`}>Key Terms</Link> for more details.</span>)}
                   position="top center"
                 />
               </Table.Cell>
               <Table.Cell className="grey-header">
-                {maturityMonth ?
-                  `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
-                  :
-                  '-'
-                }
+                {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -93,16 +84,19 @@ class KeyTerms extends Component {
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
-              <Table.Cell><b>Multiple</b>{' '}
+              <Table.Cell width={5}><b>Maturity</b>{' '}
                 <Popup
-                  hoverable
                   trigger={<Icon name="help circle" color="green" />}
-                  content={(<span>The business will pay you a percent of its gross revenues until a multiple of your investment is paid back to you. See the <Link to={`${this.props.refLink}/investment-details`}>Key Terms</Link> for more details.</span>)}
+                  content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
                   position="top center"
                 />
               </Table.Cell>
               <Table.Cell className="grey-header">
-                {campaign && campaign.keyTerms && campaign.keyTerms.investmentMultiple ? campaign.keyTerms.investmentMultiple : '-'}
+                {maturityMonth ?
+                  `${maturityMonth} ${maturityStartupPeriod && maturityStartupPeriod}`
+                  :
+                  '-'
+                }
               </Table.Cell>
             </Table.Row>
           </Table.Body>

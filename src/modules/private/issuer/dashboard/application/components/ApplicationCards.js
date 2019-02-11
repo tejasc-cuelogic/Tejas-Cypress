@@ -33,7 +33,9 @@ export default class ApplicationCards extends Component {
           <Card fluid>
             <Card.Content>
               <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
-              <p>Want to start a new campaing? Start new application process to proceed</p>
+              <p>Want to launch a new campaign?<br />
+                Let&#39;s get started with an application for your project.
+              </p>
               <Divider hidden />
               <Button primary as={Link} to="/app/dashboard/select-application-type">Start application</Button>
             </Card.Content>
