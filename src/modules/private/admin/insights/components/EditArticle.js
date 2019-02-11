@@ -14,13 +14,14 @@ import Actions from './Actions';
 export default class EditArticle extends Component {
   // state = { displayMode: false };
   componentWillMount() {
-    this.initiateFlow(this.props.match.params.id);
     const { id } = this.props.match.params;
     if (id !== 'new') {
+      this.initiateFlow(id);
       this.props.articleStore.setFormData(id);
-    } else {
-      this.props.articleStore.reset();
     }
+    // else {
+    //   this.props.articleStore.reset();
+    // }
     // this.props.articleStore.reset();
   }
   onDrop = (files, name) => {
@@ -35,6 +36,9 @@ export default class EditArticle extends Component {
   }
   handleCloseModal = () => {
     // e.stopPropagation();
+    if (this.props.match.params.id !== 'new') {
+      this.props.articleStore.reset();
+    }
     this.props.history.replace(this.props.refLink);
   };
 

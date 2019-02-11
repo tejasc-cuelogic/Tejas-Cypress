@@ -181,10 +181,10 @@ export class ArticleStore {
     @computed get loading() {
       return this.data.loading;
     }
-    @action
-    reset = () => {
-      this.ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
-    }
+    // @action
+    // reset = () => {
+    //   this.ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
+    // }
     @action
     htmlContentChange = (field, value) => {
       this.ARTICLE_FRM.fields[field].value = value;

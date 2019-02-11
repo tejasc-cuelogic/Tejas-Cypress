@@ -86,6 +86,14 @@ query insight($id:ID! ) {
     title
     featuredImage
     content
+    author {
+      id
+      info {
+        lastName
+        firstName
+      }
+    }
+    category
   }
 }
 `;
