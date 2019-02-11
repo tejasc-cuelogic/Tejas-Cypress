@@ -56,7 +56,7 @@ export class InvestmentLimitStore {
   });
 
   @computed get getCurrentLimitForAccount() {
-    return (this.investorInvestmentLimit.data &&
+    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
       this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
   }
 

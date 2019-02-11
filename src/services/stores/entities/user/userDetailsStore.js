@@ -228,6 +228,7 @@ export class UserDetailsStore {
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
       details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
+      details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';

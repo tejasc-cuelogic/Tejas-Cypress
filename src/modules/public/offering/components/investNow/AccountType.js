@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { includes } from 'lodash';
+import { includes, uniq } from 'lodash';
 import { Header, Form, Icon, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -18,7 +18,12 @@ class AccountType extends Component {
       byDefaultRender,
       setStepToBeRendered,
     } = this.props.investmentStore;
-    const { activeAccounts, frozenAccounts } = this.props.userDetailsStore.signupStatus;
+    const {
+      activeAccounts,
+      frozenAccounts,
+      inprogressAccounts,
+    } = this.props.userDetailsStore.signupStatus;
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ? ['individual', 'ira', 'entity'] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     const {
       setPartialInvestmenSession,
       sendAdminEmailOfFrozenAccount,
@@ -30,22 +35,23 @@ class AccountType extends Component {
     const {
       userAccredetiationState,
       resetAccreditationExpirayForm,
+      selectedAccountStatus,
     } = this.props.accreditationStore;
     resetAccreditationExpirayForm('ACCREDITATION_EXPIRY_FORM');
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if (this.props.changeInvest || (activeAccounts && activeAccounts.length === 1)) {
-      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || !isRegulationCheck) {
+    } else if (this.props.changeInvest || (accountToConsider && accountToConsider.length === 1)) {
+      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
         this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
-          if (this.props.investmentStore.getSelectedAccountTypeId) {
+          if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId) {
             setStepToBeRendered(1);
           }
         });
       }
     }
     setPartialInvestmenSession();
-    if (frozenAccounts.length) {
+    if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
         // send email to admin
         sendAdminEmailOfFrozenAccount('INVESTMENT');
@@ -53,11 +59,6 @@ class AccountType extends Component {
     }
     this.props.accreditationStore.getUserAccreditation().then(() => {
       this.props.accreditationStore.initiateAccreditation();
-      // if (isRegulationCheck) {
-      //   this.props.accreditationStore.accreditatedAccounts();
-      //   this.props.accreditationStore.userAccreditatedStatus();
-      //   this.props.accreditationStore.validInvestmentAccounts();
-      // }
     });
   }
   componentDidMount() {
@@ -67,27 +68,28 @@ class AccountType extends Component {
       investAccTypes,
       byDefaultRender,
     } = this.props.investmentStore;
-    const { activeAccounts } = this.props.userDetailsStore.signupStatus;
+    const { activeAccounts, inprogressAccounts } = this.props.userDetailsStore.signupStatus;
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ? ['individual', 'ira', 'entity'] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
-    const { userAccredetiationState } = this.props.accreditationStore;
-    if (this.props.investmentStore.getSelectedAccountTypeId) {
-      this.props.investmentLimitStore
-        .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId);
+    const { userAccredetiationState, selectedAccountStatus } = this.props.accreditationStore;
+
+    if (activeAccounts.length && selectedAccountStatus) {
+      if (this.props.investmentStore.getSelectedAccountTypeId) {
+        this.props.investmentLimitStore
+          .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId);
+      }
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((activeAccounts && activeAccounts.length === 1) || (isRegulationCheck && investAccTypes.values.length && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && investAccTypes.values.length && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')) {
-      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || !isRegulationCheck) {
+    } else if ((accountToConsider && accountToConsider.length === 1) || (isRegulationCheck && investAccTypes.values.length && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && investAccTypes.values.length && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')) {
+      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         setFieldValue('disableNextbtn', false);
         setStepToBeRendered(1);
       }
     }
-  }
-  componentDidUpdate(prevProps) {
-    console.log('component did update call==>', prevProps);
   }
   radioChnaged = (e, res) => {
     this.setState({ investAccountType: { ...this.state.investAccountType, value: res.value } });
@@ -103,37 +105,32 @@ class AccountType extends Component {
       activeAccounts,
       frozenAccounts,
       partialAccounts,
+      inprogressAccounts,
     } = this.props.userDetailsStore.signupStatus;
     const {
       accTypeChanged,
       investAccTypes,
       prepareAccountTypes,
     } = this.props.investmentStore;
-    prepareAccountTypes(activeAccounts);
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
-    // const regulationType = offeringReuglation;
-    const { userDetails, setPartialInvestmenSession } = this.props.userDetailsStore;
+    const {
+      userDetails,
+      setPartialInvestmenSession,
+      sendAdminEmailOfFrozenAccount,
+    } = this.props.userDetailsStore;
     const userProfileFullStatus = userDetails && userDetails.status && userDetails.status === 'FULL' ? userDetails.status : 'PARTIAL';
     const offeringInvestnowURL = this.props.match.url;
-    const { currentUser } = this.props.userStore;
-    const redirectURL = !isRegulationCheck ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
-      `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : '/app/profile-settings/investment-limits';
-    let headerToShow = (activeAccounts.length || investAccTypes.values.length) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
-    let subHeaderToShow = 'Choose an account type';
-    const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
     const {
       accreditationData,
       userAccredetiationState,
       ACCREDITATION_EXPIRY_FORM,
       expirationChange,
       showAccountList,
+      selectedAccountStatus,
       userAccreditatedStatus,
     } = this.props.accreditationStore;
-    if (!showAccountList) {
-      userAccreditatedStatus();
-    }
     if (userProfileFullStatus !== 'FULL' || (userAccredetiationState && (userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE'))) {
       setPartialInvestmenSession(offeringInvestnowURL);
     } else {
@@ -142,11 +139,30 @@ class AccountType extends Component {
     if (isRegulationCheck && (!accreditationData.ira)) {
       return <Spinner loaderMessage="Loading.." />;
     }
-    if ((activeAccounts.length || investAccTypes.values.length) && isRegulationCheck) {
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
+      [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
+        activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    prepareAccountTypes(accountToConsider);
+    userAccreditatedStatus(investAccTypes.value, isRegulationCheck);
+    const { currentUser } = this.props.userStore;
+    const redirectURL = (!isRegulationCheck || (isRegulationCheck && accountToConsider.length === 0)) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
+      `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : '/app/profile-settings/investment-limits';
+    let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
+    let subHeaderToShow = 'Choose an account type';
+    const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
+    if ((activeAccounts.length || investAccTypes.values.length) && isRegulationCheck && selectedAccountStatus === 'FULL' && !showAccountList) {
       headerToShow = userAccredetiationState ?
         OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].header : headerToShow;
       subHeaderToShow = userAccredetiationState ?
         OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].subHeader : subHeaderToShow;
+    } else if (!showAccountList && selectedAccountStatus !== 'FULL') {
+      headerToShow = selectedAccountStatus === 'PROCESSING' ? 'New Account Request In Review' : selectedAccountStatus === 'PARTIAL' ? 'You do not have a full investment account.' : 'Your investment account is frozen for investments.';
+    }
+    if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
+      if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
+        // send email to admin
+        sendAdminEmailOfFrozenAccount('INVESTMENT');
+      }
     }
     return (
       <Aux>
@@ -154,11 +170,7 @@ class AccountType extends Component {
         <Form error className="account-type-tab">
           {investAccTypes.values.length ?
             <Aux>
-              <p className="center-align">{subHeaderToShow}</p>
-              {showAccountList ?
-                // userAccredetiationState === undefined || userAccredetiationState === 'ELGIBLE' ||
-                // (regulationType && regulationType === 'BD_CF_506C' &&
-                // userAccredetiationState === 'PENDING') || !isRegulationCheck ?
+              {showAccountList && investAccTypes.values.length >= 2 ?
                 <FormRadioGroup
                   name="investAccountType"
                   containerclassname="button-radio center-align"
@@ -167,53 +179,78 @@ class AccountType extends Component {
                 />
                 :
                 <Aux>
-                  <div className="center-align">
-                    {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
-                      <Link to={redirectURL} className="text-link">
-                        <Icon className="ns-arrow-right" color="green" />
-                        Apply for accrditation
-                      </Link>
-                      :
-                      userAccredetiationState === 'EXPIRED' ?
-                        <Aux>
-                          <Form error>
-                            <FormCheckbox
-                              fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
-                              name="financialStatus"
-                              changed={expirationChange}
-                              defaults
-                              containerclassname="ui relaxed list"
-                            />
-                            <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
-                          </Form>
-                          {/* <Link
-                            to="/"
-                            className="text-link"
-                            onClick={e => this.handlUpdateExpiration(e)}
-                            disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)}
-                          >
-                            <Icon className="ns-arrow-right" color="green" />
-                            Update accrditation
-                          </Link> */}
-                        </Aux>
+                  {selectedAccountStatus === 'FULL' ?
+                    <div className="center-align">
+                      <p className="center-align">{subHeaderToShow}</p>
+                      {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
+                        <Link to={redirectURL} className="text-link">
+                          <Icon className="ns-arrow-right" color="green" />
+                          Apply for accrditation
+                        </Link>
                         :
-                        null
-                    }
-                  </div>
+                        userAccredetiationState === 'EXPIRED' ?
+                          <Aux>
+                            <Form error>
+                              <FormCheckbox
+                                fielddata={ACCREDITATION_EXPIRY_FORM.fields.financialStatus}
+                                name="financialStatus"
+                                changed={expirationChange}
+                                defaults
+                                containerclassname="ui relaxed list"
+                              />
+                              <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
+                            </Form>
+                          </Aux>
+                          :
+                          null
+                      }
+                    </div>
+                    :
+                    <div className="center-align">
+                      {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
+                        <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>. to unlock your account.</p>
+                        :
+                        null}
+                      {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) ?
+                        <Link to={redirectURL} className="text-link">
+                          <Icon className="ns-arrow-right" color="green" />
+                          Please finish your account setup.
+                        </Link>
+                        :
+                        null}
+                      {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
+                        <p>
+                          We are currently processing your new account request.
+                          You will recive notification when your account is ready for investment.
+                          Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
+                        </p>
+                        :
+                        null}
+                    </div>
+                  }
                 </Aux>
               }
             </Aux>
             :
             <div className="center-align">
-              {frozenAccounts && frozenAccounts.length ?
+              {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
                 <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>. to unlock your account.</p>
                 :
                 null}
-              {(partialAccounts && partialAccounts.length && isParitalSectionNeedtoShow) || (!(frozenAccounts.length) && userProfileFullStatus !== 'FULL' && isParitalSectionNeedtoShow) ?
-                <Link to={redirectURL} className="text-link">
-                  <Icon className="ns-arrow-right" color="green" />
-                  Please finish your account setup.
-                </Link>
+              {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
+                ?
+                  <Link to={redirectURL} className="text-link">
+                    <Icon className="ns-arrow-right" color="green" />
+                    Please finish your account setup.
+                  </Link>
+                :
+                null}
+              {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
+                <p>
+                  We are currently processing your new account request.
+                  You will recive notification when your account is ready for investment.
+                Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
+                </p>
                 :
                 null}
             </div>

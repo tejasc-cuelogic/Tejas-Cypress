@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter } from 'lodash';
 
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
@@ -43,6 +43,7 @@ export class AccreditationStore {
   @observable accreditaionMethod = null;
   @observable accreditationDetails = {};
   @observable userAccredetiationState = undefined;
+  @observable selectedAccountStatus = undefined;
   @observable showAccountList = true;
   @action
   initRequest = (reqParams) => {
@@ -612,7 +613,7 @@ export class AccreditationStore {
     return resultArr;
   }
   @action
-  userAccreditatedStatus = () => {
+  userAccreditatedStatus = (accountSelected = undefined, regulationCheck = false) => {
     // let userAccredetiationStateValue = '';
     // const {
     //   eligibleAccreditation,
@@ -637,34 +638,45 @@ export class AccreditationStore {
     //     this.userAccredetiationState = 'ELGIBLE';
     //   }
     // }
-
     const aggreditationDetails = this.accreditationData;
-    const currentSelectedAccount = userDetailsStore.currentActiveAccountDetails.name;
-    let currentAcitveObject = {};
-    if (aggreditationDetails) {
-      currentAcitveObject =
-        find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
+    const currentSelectedAccount = accountSelected === '' ? '' :
+      accountSelected || userDetailsStore.currentActiveAccountDetails.name;
+    const intialAccountStatus = this.userSelectedAccountStatus(currentSelectedAccount);
+    this.setUserSelectedAccountStatus(intialAccountStatus);
+    if (intialAccountStatus === 'FULL' && regulationCheck) {
+      let currentAcitveObject = {};
+      if (aggreditationDetails) {
+        currentAcitveObject =
+          find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
+      }
+      console.log('currentAcitveObject==>', currentAcitveObject);
+      const accountStatus = this.checkIsAccreditationExpired(currentAcitveObject.expiration)
+        === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status;
+      switch (accountStatus) {
+        case 'REQUESTED':
+          this.userAccredetiationState = 'PENDING';
+          break;
+        case 'DECLINED':
+          this.userAccredetiationState = 'NOT_ELGIBLE';
+          break;
+        case 'APPROVED':
+          this.userAccredetiationState = 'ELGIBLE';
+          break;
+        case 'EXPIRED':
+          this.userAccredetiationState = 'EXPIRED';
+          break;
+        default:
+          this.userAccredetiationState = 'INACTIVE';
+          break;
+      }
+    } else if (intialAccountStatus === 'FULL') {
+      this.userAccredetiationState = 'ELGIBLE';
     }
-    console.log('currentAcitveObject==>', currentAcitveObject);
-    const accountStatus = this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-      === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status;
-    switch (accountStatus) {
-      case 'REQUESTED':
-        this.userAccredetiationState = 'PENDING';
-        break;
-      case 'DECLINED':
-        this.userAccredetiationState = 'NOT_ELGIBLE';
-        break;
-      case 'APPROVED':
-        this.userAccredetiationState = 'ELGIBLE';
-        break;
-      case 'EXPIRED':
-        this.userAccredetiationState = 'EXPIRED';
-        break;
-      default:
-        this.userAccredetiationState = 'INACTIVE';
-        break;
-    }
+    // this.selectedAccountStatus = intialAccountStatus;
+  }
+  @action
+  setUserSelectedAccountStatus = (intialAccountStatus) => {
+    this.selectedAccountStatus = intialAccountStatus;
   }
   @computed get accountAccreditatedStatus() {
     let userAccredetiationStateValue = '';
@@ -696,6 +708,39 @@ export class AccreditationStore {
     }
     return userAccredetiationStateValue;
   }
+  userSelectedAccountStatus = (selectedAccount) => {
+    const {
+      activeAccounts,
+      frozenAccounts,
+      partialAccounts,
+      processingAccounts,
+    } = userDetailsStore.signupStatus;
+    let accountStatusFound = '';
+    if (selectedAccount) {
+      const activeArr = activeAccounts.length ?
+        filter(activeAccounts, o => o === selectedAccount) : activeAccounts;
+      const frozenArr = frozenAccounts.length ?
+        filter(frozenAccounts, o => o === selectedAccount) : frozenAccounts;
+      const PartialArr = partialAccounts.length ?
+        filter(partialAccounts, o => o === selectedAccount) : partialAccounts;
+      const ProcessingArr = processingAccounts.length ?
+        filter(processingAccounts, o => o === selectedAccount) : processingAccounts;
+      if (activeArr.length) {
+        accountStatusFound = 'FULL';
+      } else if (ProcessingArr.length) {
+        accountStatusFound = 'PROCESSING';
+      } else if (frozenArr.length) {
+        accountStatusFound = 'FROZEN';
+      } else if (PartialArr.length) {
+        accountStatusFound = 'PARTIAL';
+      } else {
+        accountStatusFound = 'PARTIAL';
+      }
+    } else {
+      accountStatusFound = 'PARTIAL';
+    }
+    return accountStatusFound;
+  }
   @action
   validInvestmentAccounts = () => {
     const { eligibleAccreditation, pendingAccreditation } = this.accreditationDetails;
@@ -720,6 +765,7 @@ export class AccreditationStore {
   @action
   resetUserAccreditatedStatus = () => {
     this.userAccredetiationState = undefined;
+    this.selectedAccountStatus = undefined;
     this.showAccountList = true;
     investmentStore.resetAccTypeChanged();
   }

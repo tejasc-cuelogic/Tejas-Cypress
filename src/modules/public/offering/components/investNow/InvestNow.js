@@ -54,14 +54,18 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
       this.props.investmentStore.setFieldValue('disableNextbtn', false);
+    } else if (step === 0) {
+      this.handleStepChnageOnPreviousForAlert();
     }
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleStepChangeForPartialAccounts = (step) => {
-    this.props.accreditationStore.changeShowAccountListFlag(false);
     this.props.investmentStore.setFieldValue('disableNextbtn', false);
-    this.props.investmentStore.setFieldValue('disablePrevButton', true);
+    this.props.investmentStore.setFieldValue('disablePrevButton', false);
     this.props.investmentStore.setStepToBeRendered(step);
+  }
+  handleStepChnageOnPreviousForAlert = () => {
+    this.props.accreditationStore.changeShowAccountListFlag(true);
   }
   handleCancel = () => {
     this.props.investmentStore.setStepToBeRendered(0);
@@ -98,6 +102,7 @@ export default class InvestNow extends React.Component {
   }
 
   multiClickHandler = (step) => {
+    const { inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     if (step.name === 'Financial Info') {
       this.props.investmentStore.getInvestorAvailableCash().then(() => {
         const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
@@ -128,12 +133,11 @@ export default class InvestNow extends React.Component {
       const regulationType = offeringReuglation;
       const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
       const {
-        accountAccreditatedStatus,
         changeShowAccountListFlag,
+        accountAccreditatedStatus,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
       const accredtedStatus = accountAccreditatedStatus;
-      console.log(accredtedStatus);
       if (accredtedStatus === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && accredtedStatus === 'PENDING') || accredtedStatus === undefined || !isRegulationCheck) {
         this.props.investmentLimitStore
           .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId)
@@ -143,6 +147,10 @@ export default class InvestNow extends React.Component {
       } else {
         this.handleStepChangeForPartialAccounts(0);
       }
+    } else if (step.name === 'Account Type' && inprogressAccounts.length) {
+      const { changeShowAccountListFlag } = this.props.accreditationStore;
+      changeShowAccountListFlag(false);
+      this.handleStepChangeForPartialAccounts(0);
     }
   }
 
@@ -213,6 +221,7 @@ export default class InvestNow extends React.Component {
             resetEnterPressed={resetIsEnterPressed}
             hideHeader
             setStepTobeRendered={this.handleStepChange}
+            setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}
             steps={steps}
             formTitle="Entity Account Creation"
