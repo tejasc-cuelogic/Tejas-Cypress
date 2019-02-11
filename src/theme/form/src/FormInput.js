@@ -46,7 +46,7 @@ export default class FormInput extends Component {
               />
             }
             {props.removed &&
-              <Link to={props.linkto} onClick={e => props.removed(e)}>
+              <Link to={props.linkto || '/'} onClick={e => props.removed(e)}>
                 <Icon className="ns-close-circle" color="grey" />
               </Link>
             }
