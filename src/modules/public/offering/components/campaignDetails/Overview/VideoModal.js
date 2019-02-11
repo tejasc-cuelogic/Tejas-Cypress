@@ -11,7 +11,7 @@ class VideoModal extends Component {
     const { campaign } = this.props.campaignStore;
     const { isTabletLand } = this.props;
     const videoUrl = (campaign && campaign.media &&
-     campaign.media.heroVideo && campaign.media.heroVideo.url) || null;
+     campaign.media.heroVideo && campaign.media.heroVideo.fileName) || null;
     return (
       <Modal open onClose={this.handleClose} size="large" closeIcon className="video-modal">
         <div className={isTabletLand && 'mt-30'}>

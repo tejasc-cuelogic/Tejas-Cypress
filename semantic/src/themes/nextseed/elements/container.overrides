@@ -123,6 +123,7 @@ section{
             background-color: @neutral;
             background-blend-mode:multiply;
             margin-top: 0;
+            padding:0;
             >.ui.container{
                 justify-content: center;
             }
