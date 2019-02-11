@@ -26,6 +26,7 @@ export default class AllInsights extends Component {
       // this.props.uiStore.setConfirmBox(action, articleId);
       this.handleDeleteConfirm(articleId);
     } else if (action === 'Edit') {
+      this.props.articleStore.currentArticleId = articleId;
       this.props.history.push(`${this.props.match.url}/${articleId}`);
     }
   }

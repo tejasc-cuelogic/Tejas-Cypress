@@ -12,9 +12,19 @@ import Actions from './Actions';
 @withRouter
 @observer
 export default class EditArticle extends Component {
+  // state = { displayMode: false };
   componentWillMount() {
     this.initiateFlow(this.props.match.params.id);
-    this.props.articleStore.reset();
+    const { id } = this.props.match.params;
+    if (id !== 'new') {
+      this.props.articleStore.setFormData(id);
+    } else {
+      this.props.articleStore.reset();
+    }
+    // this.props.articleStore.reset();
+  }
+  onDrop = (files, name) => {
+    this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files);
   }
   initiateFlow = (id) => {
     if (id !== 'new') {
@@ -39,6 +49,7 @@ export default class EditArticle extends Component {
     this.handleCloseModal();
   }
   render() {
+    // const { displayMode } = this.state;
     const {
       ARTICLE_FRM,
       articleChange,
@@ -144,6 +155,15 @@ export default class EditArticle extends Component {
                         fielddata={ARTICLE_FRM.fields.minuteRead}
                         changed={articleChange}
                       />
+                      {/* <MaskedInput
+                        containerclassname={displayMode ? 'display-only' : ''}
+                        readOnly={displayMode}
+                        name="minuteRead"
+                        number
+                        value={ARTICLE_FRM.fields.minuteRead.value}
+                        fielddata={ARTICLE_FRM.fields.minuteRead}
+                        changed={articleChange}
+                      /> */}
                       <FormInput
                         name="banner"
                         fielddata={ARTICLE_FRM.fields.banner}

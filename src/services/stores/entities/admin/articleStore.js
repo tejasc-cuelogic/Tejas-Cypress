@@ -2,6 +2,7 @@ import { observable, action, computed, toJS } from 'mobx';
 import moment from 'moment';
 import graphql from 'mobx-apollo';
 import map from 'lodash/map';
+// import { sortBy } from 'lodash';
 import isArray from 'lodash/isArray';
 import mapKeys from 'lodash/mapKeys';
 import mapValues from 'lodash/mapValues';
@@ -13,6 +14,7 @@ import { deleteArticle, allInsightArticles, getArticleDetails, getArticlesByCatI
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../../../services/stores';
+import { fileUpload } from '../../../actions';
 
 export class ArticleStore {
     @observable data = [];
@@ -25,6 +27,7 @@ export class ArticleStore {
     @observable requestState = {
       search: {},
     };
+    @observable currentArticleId = null;
     @observable globalAction = '';
 
     @action
@@ -97,6 +100,13 @@ export class ArticleStore {
           refetchQueries: [{
             query: allInsightArticles,
           }],
+        }).then(() => {
+          Helper.toast('Category Saved successfully.', 'success');
+        }).catch(() => {
+          Helper.toast('Error while Saving Category', 'error');
+        })
+        .finally(() => {
+          uiStore.setProgress(false);
         });
     }
 
@@ -156,6 +166,8 @@ export class ArticleStore {
         variables: { types: ['INSIGHTS'] },
         fetchPolicy: 'network-only',
       });
+      // this.Categories = (this.Categories && sortBy(toJS(this.Categories),
+      // ['created.date'])) || [];
     }
 
     @computed get InsightCategories() {
@@ -203,6 +215,42 @@ export class ArticleStore {
         return categoriesArray;
       }
       return null;
+    }
+
+    @action
+    setFileUploadData = (form, name, files) => {
+      let fileField = '';
+      fileField = this[form].fields[name];
+      fileField.showLoader = true;
+      fileUpload.uploadToS3(files[0], 'insights')
+        .then(action((res) => {
+          Helper.toast('file uploaded successfully', 'success');
+          fileField.value = files[0].name;
+          fileField.preSignedUrl = res;
+          fileField.fileId = `${files[0].name}${Date.now()}`;
+          fileField.fileName = `${files[0].name}${Date.now()}`;
+        }))
+        .catch(action(() => {
+          Helper.toast('Something went wrong, please try again later.', 'error');
+          fileField.showLoader = false;
+        }))
+        .finally(action(() => {
+          fileField.showLoader = false;
+        }));
+    }
+
+    @action
+    setFormData = (id) => {
+      this.ARTICLE_FRM =
+      Validator.setFormData(this.ARTICLE_FRM, this.InsightArticles.find(obj => obj.id === id));
+      // this.CATEGORY_DETAILS_FRM.fields.categoryType.value = this.selectedCategoryState.type;
+      Validator.validateForm(this.ARTICLE_FRM);
+    }
+    @action
+    reset = () => {
+      // this.ARTICLE_FRM = Validator.prepareFormObject(ARTICLE);
+      Validator.resetFormData('ARTICLE_FRM');
+      // this.ARTICLE_FRM.fields.categoryType.value = this.selectedCategoryState.type;
     }
 }
 

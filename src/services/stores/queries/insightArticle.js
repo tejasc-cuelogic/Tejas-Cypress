@@ -11,6 +11,12 @@ query insights{
     articleStatus
     minuteRead
     title
+    author{
+      info{
+        firstName
+        lastName
+      }
+    }
     updated {
       date
     }
@@ -107,7 +113,7 @@ mutation updateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartia
 `;
 
 export const deleteArticle = gql`
-mutation deleteArticle($id: ID!) {
+mutation deleteArticle($id: [ID]) {
   deleteArticle(id: $id) 
 }
 `;
