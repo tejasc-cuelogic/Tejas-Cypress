@@ -1,4 +1,4 @@
-# 0.0.0 (2019-02-08)
+# 0.0.0 (2019-02-11)
 
 
 ### Bug Fixes
@@ -21,6 +21,7 @@
 * **6novdemo[Issue [357](https://chaos.ns.team/nsv2/ns-ops/issues/357) - 6novdemo]:** 6novdemo ([4f42ecf](https://chaos.ns.team/nsv2/ns-client/commits/4f42ecf))
 * **711[Issue [711](https://chaos.ns.team/nsv2/ns-ops/issues/711) - feedback]:** payment chart ([a784a1d](https://chaos.ns.team/nsv2/ns-client/commits/a784a1d))
 * **843-campaign-re-design[Issue [843](https://chaos.ns.team/nsv2/ns-ops/issues/843) - 843-campaign-re-design]:** updated z-index ([3ed99ff](https://chaos.ns.team/nsv2/ns-client/commits/3ed99ff))
+* **975figmacomments[Issue [975](https://chaos.ns.team/nsv2/ns-ops/issues/975) - 975 figma comments]:** 975 figma comments ([01ba608](https://chaos.ns.team/nsv2/ns-client/commits/01ba608))
 * **accreditation[Issue [611](https://chaos.ns.team/nsv2/ns-ops/issues/611) - accreditation]:** accreditation ([6a5d16f](https://chaos.ns.team/nsv2/ns-client/commits/6a5d16f))
 * **AccreditationInvestor[Issue [634](https://chaos.ns.team/nsv2/ns-ops/issues/634) - admin-accreditation-listing-api-integration]:** accreditation call feedback done ([3abda2e](https://chaos.ns.team/nsv2/ns-client/commits/3abda2e))
 * **ActivityHistory[Issue [940](https://chaos.ns.team/nsv2/ns-ops/issues/940) - offerings activity history updates]:** offerings activity history updates ([b77ae72](https://chaos.ns.team/nsv2/ns-client/commits/b77ae72))
