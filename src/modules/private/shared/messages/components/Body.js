@@ -2,10 +2,10 @@ import React from 'react';
 import moment from 'moment';
 import Aux from 'react-aux';
 import { Label, Item } from 'semantic-ui-react';
-import ProfilePicTemp from '../../../../../assets/images/james-wright.png';
+import NSImage from '../../../../shared/NSImage';
 
 const D_FORMAT = 'MMMM D, YYYY';
-const Avatar = () => <Item.Image size="mini" avatar src={ProfilePicTemp} />;
+const Avatar = () => <div className="ui mini image"><NSImage path="james-wright.png" /></div>;
 const MsgContent = ({ body }) => (
   <Item.Content>
     <Item.Description><p>{body}</p></Item.Description>

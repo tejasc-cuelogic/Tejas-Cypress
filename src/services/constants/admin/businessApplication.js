@@ -463,7 +463,7 @@ export const OFFERS = {
   offer: [{
     structure: {
       value: 'TERM_NOTE',
-      label: 'Structure',
+      label: 'Security Type',
       error: undefined,
       rule: 'optional',
       default: 'TERM_NOTE',
@@ -484,7 +484,7 @@ export const OFFERS = {
     },
     maturity: {
       value: '',
-      label: 'Maturity (# of Months)',
+      label: 'Maturity (months)',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
@@ -505,7 +505,7 @@ export const OFFERS = {
     },
     amortizationAmount: {
       value: '',
-      label: 'Monthly Amortization Amount',
+      label: 'Monthly Payment',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
@@ -540,7 +540,7 @@ export const OFFERS = {
     },
     expirationDate: {
       value: '',
-      label: 'Campaign Approval Exp. Date',
+      label: 'Offer Expiration Date',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'date',

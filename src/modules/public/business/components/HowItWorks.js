@@ -2,9 +2,8 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
 // Embed
-import { Header, Grid, Button, Image, Container, List, Statistic, Divider, Responsive, Item, Icon } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Statistic, Divider, Responsive, Item, Icon } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
 import VideoModal from './VideoModal';
 import NSImage from '../../../shared/NSImage';
 
@@ -59,21 +58,21 @@ const testimonial = [
     description: 'The NextSeed process was extremely smooth and allowed me to focus on getting Pitch 25 up and running. The amount of community buzz that we got through this process gave our business a huge boost.',
     name: 'Brian Ching | Pitch 25',
     investment: '$549,900 from 392 investors',
-    image: `${ASSETS_URL}images/business/lian.png`,
+    image: 'business/lian.png',
   },
   {
     title: 'Real Success Stories.',
     description: 'The all-in-one platform allowed us to expand quickly and build a new customer base. Our partnership with NextSeed is a win-win.',
     name: 'Jess Hughes | Citizen Pilates',
     investment: '$100,000 from 75 investors',
-    image: `${ASSETS_URL}images/business/jess.png`,
+    image: 'business/jess.png',
   },
   {
     title: 'Real Success Stories.',
     description: 'Your patrons get to be part of what you’re creating. It’s the best way to access this many investors while retaining 100% ownership.',
     name: 'Michael Dickson, Native Hostel',
     investment: '$396,500 from 227 investors',
-    image: `${ASSETS_URL}images/business/michael.png`,
+    image: 'business/michael.png',
   },
 ];
 const isMobile = document.documentElement.clientWidth < 768;
@@ -190,7 +189,9 @@ const HowItWorks = () => (
           {testimonial.map(t => (
             <Item.Group key={t}>
               <Item>
-                <Item.Image size="medium" src={t.image} circular />
+                <div className="ui medium image">
+                  <NSImage path={t.image} />
+                </div>
                 <Item.Content verticalAlign="middle">
                   <Item.Header as="h2">{t.title}</Item.Header>
                   <Item.Description className={isMobile ? 'mb-20' : 'mb-50 mt-20'}>
@@ -258,7 +259,7 @@ const HowItWorks = () => (
           </Grid.Column>
           <Grid.Column>
             <Link to="/business/how-it-works/video" className="video-wrapper">
-              <Image src={`${ASSETS_URL}images/677134021.jpg`} />
+              <NSImage path="677134021.jpg" />
               <Icon
                 className="ns-play play-icon"
               />

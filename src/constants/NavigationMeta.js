@@ -410,9 +410,9 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin', 'manager', 'support'],
   },
   {
-    icon: 'payment',
+    icon: 'ns-setting',
     title: 'Dev',
-    capability: 'ACCREDITATION_ANY',
+    capability: 'ELASTICSEARCH_ANY',
     to: 'dev',
     path: 'admin/dev',
     accessibleTo: ['admin', 'manager', 'support'],

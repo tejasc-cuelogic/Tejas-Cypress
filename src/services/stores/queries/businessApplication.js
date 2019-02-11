@@ -152,6 +152,12 @@ query _getBusinessApplications {
         businessName
       }
     }
+    offers {
+      approved {
+        date
+      }
+    }
+    envelopeStatusChangedDateTime
   }
 }
 `;
@@ -545,6 +551,15 @@ mutation _generatePortalAgreement($applicationId: String!, $userId: String!){
   generatePortalAgreement(
     applicationId: $applicationId
     userId: $userId
+  )
+}
+`;
+
+export const applicationDeclinedByIssuer = gql`
+mutation applicationDeclinedByIssuer($applicationId: String!, $comments: [BusinessApplicationCommentInput]){
+  applicationDeclinedByIssuer(
+    applicationId: $applicationId
+    comments: $comments
   )
 }
 `;
