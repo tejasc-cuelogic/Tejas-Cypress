@@ -2,9 +2,8 @@ import React from 'react';
 import Aux from 'react-aux';
 import { Route, Link } from 'react-router-dom';
 // Embed
-import { Header, Grid, Button, Image, Container, List, Statistic, Divider, Responsive, Item, Icon } from 'semantic-ui-react';
+import { Header, Grid, Button, Container, List, Statistic, Divider, Responsive, Item, Icon } from 'semantic-ui-react';
 import { NsCarousel } from '../../../../theme/shared';
-import { ASSETS_URL } from '../../../../constants/aws';
 import VideoModal from './VideoModal';
 import NSImage from '../../../shared/NSImage';
 
@@ -260,7 +259,7 @@ const HowItWorks = () => (
           </Grid.Column>
           <Grid.Column>
             <Link to="/business/how-it-works/video" className="video-wrapper">
-              <Image src={`${ASSETS_URL}images/677134021.jpg`} />
+              <NSImage path="677134021.jpg" />
               <Icon
                 className="ns-play play-icon"
               />

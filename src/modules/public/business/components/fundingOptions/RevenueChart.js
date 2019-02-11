@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import NSImage from '../../../../shared/NSImage';
 // import { ResponsiveContainer } from 'recharts';
-import { Image } from 'semantic-ui-react';
 // import { LineChart, Line, XAxis, Legend, ResponsiveContainer } from 'recharts';
-import { ASSETS_URL } from '../../../../../constants/aws';
 /*
 const data1 = [
   { name: '0 MOS.', 'Your Payments': 5000, 'Your Revenue': 5000 },
@@ -60,7 +59,7 @@ export default class RevenueChart extends Component {
       //     <Line type="monotone" dataKey="Your Payments" stroke="#263E64" strokeWidth={2} />
       //   </LineChart>
       // </ResponsiveContainer>
-      <Image src={`${ASSETS_URL}images/${data}`} />
+      <NSImage path={data} />
     );
   }
 }
