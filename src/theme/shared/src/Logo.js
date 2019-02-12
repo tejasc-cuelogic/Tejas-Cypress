@@ -18,7 +18,7 @@ const getSrc = (src) => {
     case 'LogoNsAndLendio':
       return 'nextseed_and_lendio.svg';
     case 'LogoGreenGrey':
-      return 'logo.png';
+      return 'logo.svg';
     default:
       return 'logo-color.svg';
   }
