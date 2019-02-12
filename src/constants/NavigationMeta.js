@@ -199,6 +199,9 @@ export const PRIVATE_NAV = [
       },
       { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
       { title: 'Offering Creation', to: 'offering-creation', accessFor: [2] },
+      {
+        title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
     ],
   },
   {
