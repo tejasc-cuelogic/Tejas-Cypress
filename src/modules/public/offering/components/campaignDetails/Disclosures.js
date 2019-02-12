@@ -40,8 +40,8 @@ export default class TermsOfUse extends Component {
   handleOnScroll = () => {
     const { docsWithBoxLink } = this.props.campaignStore;
     docsWithBoxLink.map((item, index) => {
-      if (document.getElementById(`doc-${index}`).getBoundingClientRect().top < 100 &&
-      document.getElementById(item).getBoundingClientRect().top > 0) {
+      if (document.getElementById(`doc-${index}`) && document.getElementById(`doc-${index}`).getBoundingClientRect().top < 100 &&
+      document.getElementById(`doc-${index}`).getBoundingClientRect().top > 0) {
         this.props.navStore.setFieldValue('currentActiveHash', `#doc-${index}`);
       }
       return null;

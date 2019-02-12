@@ -238,6 +238,7 @@ export const campaignDetailsQuery = gql`
       }
       heroVideo {
         url
+        fileName
         isPublic
       }
       tombstoneImage {

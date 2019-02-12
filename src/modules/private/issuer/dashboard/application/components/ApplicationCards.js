@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link, Route, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared/index';
@@ -32,7 +33,9 @@ export default class ApplicationCards extends Component {
           <Card fluid>
             <Card.Content>
               <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
-              <p>Want to start a new campaing? Start new application process to proceed</p>
+              <p>Want to launch a new campaign?<br />
+                Let&#39;s get started with an application for your project.
+              </p>
               <Divider hidden />
               <Button primary as={Link} to="/app/dashboard/select-application-type">Start application</Button>
             </Card.Content>
@@ -48,14 +51,10 @@ export default class ApplicationCards extends Component {
                     <dl className="dl-horizontal">
                       <dt>Application status</dt>
                       <dd>{BUSINESS_APP_USER_STATUS[application.applicationStatus].status}</dd>
-                      <dt>Started</dt>
+                      <dt>Started on</dt>
                       <dd>{application.created ? <DateTimeFormat datetime={application.created.date} /> : '--'}</dd>
-                      <dt>{application.applicationStatus ===
-                        BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED ?
-                        'Submitted' : 'Last updated'
-                      }
-                      </dt>
-                      <dd>{application.updated ? <DateTimeFormat datetime={application.updated.date} /> : '--'}</dd>
+                      <dt>{BUSINESS_APP_USER_STATUS[application.applicationStatus].dateTitle}</dt>
+                      <dd>{(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated) ? <DateTimeFormat datetime={(get(application, BUSINESS_APP_USER_STATUS[application.applicationStatus].datePath) || application.updated.date)} /> : '--'}</dd>
                     </dl>
                     {application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
@@ -64,7 +63,9 @@ export default class ApplicationCards extends Component {
                     {(application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
                     || application.applicationStatus ===
-                    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL) &&
+                    BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ||
+                    application.applicationStatus ===
+                    BUSINESS_APPLICATION_STATUS.REVIEW_FAILED) &&
                       <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
                     {(application.applicationStatus ===
