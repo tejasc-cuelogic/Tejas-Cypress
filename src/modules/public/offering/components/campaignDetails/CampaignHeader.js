@@ -77,17 +77,14 @@ export default class CampaignHeader extends Component {
                   </div>
                 </div>
                 <div className="clearfix social-links mt-10">
-                  <div className="pull-left">
-                    <a href="/" target="_blank" rel="noopener noreferrer">
-                      <Icon color="white" name="instagram" />
-                    </a>
-                    <a href="/" target="_blank" rel="noopener noreferrer">
-                      <Icon color="white" name="twitter" />
-                    </a>
-                    <a href="/" target="_blank" rel="noopener noreferrer">
-                      <Icon color="white" name="facebook" />
-                    </a>
-                  </div>
+                  {campaign && campaign.offering.overview.social ?
+                    campaign.offering.overview.social.map(site => (
+                      <Aux>
+                        {site.url &&
+                          <a target="_blank" rel="noopener noreferrer" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
+                        }
+                      </Aux>
+                    )) : ''}
                   <Link to={`${this.props.match.url}/overview/photogallery`} onClick={this.handleViewGallery} className="pull-right">
                     View gallery <Icon size="small" className="ns-chevron-right" />
                   </Link>
