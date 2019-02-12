@@ -134,11 +134,10 @@ export default class InvestNow extends React.Component {
       const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
       const {
         changeShowAccountListFlag,
-        accountAccreditatedStatus,
+        userAccredetiationState,
       } = this.props.accreditationStore;
       changeShowAccountListFlag(false);
-      const accredtedStatus = accountAccreditatedStatus;
-      if (accredtedStatus === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && accredtedStatus === 'PENDING') || accredtedStatus === undefined || !isRegulationCheck) {
+      if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
         this.props.investmentLimitStore
           .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId)
           .then(() => {
@@ -162,11 +161,6 @@ export default class InvestNow extends React.Component {
       resetIsEnterPressed,
       setIsEnterPressed,
     } = uiStore;
-    // const { activeAccounts } = this.props.userDetailsStore.signupStatus;
-    // const { userAccredetiationState } = this.props.accreditationStore;
-    // const { campaign } = this.props.campaignStore;
-    // const offeringReuglation = campaign && campaign.regulation;
-    // const regulationType = offeringReuglation;
     const steps =
       [
         {

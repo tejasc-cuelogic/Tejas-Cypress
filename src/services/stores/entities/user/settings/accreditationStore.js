@@ -585,7 +585,7 @@ export class AccreditationStore {
     }
     return false;
   }
-
+  // Not usable below function, check and remove
   @action
   accreditatedAccounts = () => {
     const aggreditationDetails = this.accreditationData;
@@ -614,30 +614,6 @@ export class AccreditationStore {
   }
   @action
   userAccreditatedStatus = (accountSelected = undefined, regulationCheck = false) => {
-    // let userAccredetiationStateValue = '';
-    // const {
-    //   eligibleAccreditation,
-    //   inactiveAccreditation,
-    //   notEligibleAccreditation,
-    //   pendingAccreditation,
-    //   expiredAccreditation,
-    // } = this.accreditationDetails;
-
-    // if (eligibleAccreditation) {
-    //   if (eligibleAccreditation.length <= 0) {
-    //     if (expiredAccreditation.length) {
-    //       this.userAccredetiationState = 'EXPIRED';
-    //     } else if (pendingAccreditation.length) {
-    //       this.userAccredetiationState = 'PENDING';
-    //     } else if (notEligibleAccreditation.length) {
-    //       this.userAccredetiationState = 'NOT_ELGIBLE';
-    //     } else if (inactiveAccreditation.length) {
-    //       this.userAccredetiationState = 'INACTIVE';
-    //     }
-    //   } else {
-    //     this.userAccredetiationState = 'ELGIBLE';
-    //   }
-    // }
     const aggreditationDetails = this.accreditationData;
     const currentSelectedAccount = accountSelected === '' ? '' :
       accountSelected || userDetailsStore.currentActiveAccountDetails.name;
@@ -649,9 +625,9 @@ export class AccreditationStore {
         currentAcitveObject =
           find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
       }
-      console.log('currentAcitveObject==>', currentAcitveObject);
-      const accountStatus = this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-        === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status;
+      const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
+        this.checkIsAccreditationExpired(currentAcitveObject.expiration)
+          === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status : currentAcitveObject;
       switch (accountStatus) {
         case 'REQUESTED':
           this.userAccredetiationState = 'PENDING';
@@ -672,41 +648,10 @@ export class AccreditationStore {
     } else if (intialAccountStatus === 'FULL') {
       this.userAccredetiationState = 'ELGIBLE';
     }
-    // this.selectedAccountStatus = intialAccountStatus;
   }
   @action
   setUserSelectedAccountStatus = (intialAccountStatus) => {
     this.selectedAccountStatus = intialAccountStatus;
-  }
-  @computed get accountAccreditatedStatus() {
-    let userAccredetiationStateValue = '';
-    const aggreditationDetails = this.accreditationData;
-    const currentSelectedAccount = userDetailsStore.currentActiveAccountDetails.name;
-    let currentAcitveObject = {};
-    if (aggreditationDetails) {
-      currentAcitveObject =
-        find(aggreditationDetails, (value, key) => key === currentSelectedAccount);
-    }
-    console.log('currentAcitveObject==>', currentAcitveObject);
-    const accountStatus = this.checkIsAccreditationExpired(currentAcitveObject.expiration) === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status;
-    switch (accountStatus) {
-      case 'REQUESTED':
-        userAccredetiationStateValue = 'PENDING';
-        break;
-      case 'DECLINED':
-        userAccredetiationStateValue = 'NOT_ELGIBLE';
-        break;
-      case 'APPROVED':
-        userAccredetiationStateValue = 'ELGIBLE';
-        break;
-      case 'EXPIRED':
-        userAccredetiationStateValue = 'EXPIRED';
-        break;
-      default:
-        userAccredetiationStateValue = 'INACTIVE';
-        break;
-    }
-    return userAccredetiationStateValue;
   }
   userSelectedAccountStatus = (selectedAccount) => {
     const {
@@ -741,6 +686,7 @@ export class AccreditationStore {
     }
     return accountStatusFound;
   }
+  // Not usable below function, check and remove
   @action
   validInvestmentAccounts = () => {
     const { eligibleAccreditation, pendingAccreditation } = this.accreditationDetails;
@@ -780,7 +726,7 @@ export class AccreditationStore {
   }
   @action
   updateAccreditationExpiray = () => {
-
+    console.log('going to update accreditation expiray date');
   }
   @action
   expirationChange = (e, result) => {

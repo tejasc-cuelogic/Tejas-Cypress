@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { includes, uniq } from 'lodash';
+import { includes, uniq, capitalize } from 'lodash';
 import { Header, Form, Icon, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
@@ -17,13 +17,18 @@ class AccountType extends Component {
     const {
       byDefaultRender,
       setStepToBeRendered,
+      prepareAccountTypes,
+      investAccTypes,
     } = this.props.investmentStore;
     const {
       activeAccounts,
       frozenAccounts,
       inprogressAccounts,
     } = this.props.userDetailsStore.signupStatus;
-    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ? ['individual', 'ira', 'entity'] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
+      [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
+        activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    prepareAccountTypes(accountToConsider);
     const {
       setPartialInvestmenSession,
       sendAdminEmailOfFrozenAccount,
@@ -36,7 +41,12 @@ class AccountType extends Component {
       userAccredetiationState,
       resetAccreditationExpirayForm,
       selectedAccountStatus,
+      initiateAccreditation,
+      userSelectedAccountStatus,
+      setUserSelectedAccountStatus,
     } = this.props.accreditationStore;
+    const userStatusFound = userSelectedAccountStatus(investAccTypes.value);
+    setUserSelectedAccountStatus(userStatusFound);
     resetAccreditationExpirayForm('ACCREDITATION_EXPIRY_FORM');
     if (!byDefaultRender) {
       setStepToBeRendered(2);
@@ -58,7 +68,7 @@ class AccountType extends Component {
       }
     }
     this.props.accreditationStore.getUserAccreditation().then(() => {
-      this.props.accreditationStore.initiateAccreditation();
+      initiateAccreditation();
     });
   }
   componentDidMount() {
@@ -67,15 +77,23 @@ class AccountType extends Component {
       setFieldValue,
       investAccTypes,
       byDefaultRender,
+      prepareAccountTypes,
     } = this.props.investmentStore;
+    const {
+      userAccredetiationState,
+      selectedAccountStatus,
+      userAccreditatedStatus,
+    } = this.props.accreditationStore;
     const { activeAccounts, inprogressAccounts } = this.props.userDetailsStore.signupStatus;
-    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ? ['individual', 'ira', 'entity'] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ? activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
+      [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
+        activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
+    prepareAccountTypes(accountToConsider);
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
-    const { userAccredetiationState, selectedAccountStatus } = this.props.accreditationStore;
-
+    userAccreditatedStatus(investAccTypes.value, isRegulationCheck);
     if (activeAccounts.length && selectedAccountStatus) {
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         this.props.investmentLimitStore
@@ -105,12 +123,10 @@ class AccountType extends Component {
       activeAccounts,
       frozenAccounts,
       partialAccounts,
-      inprogressAccounts,
     } = this.props.userDetailsStore.signupStatus;
     const {
       accTypeChanged,
       investAccTypes,
-      prepareAccountTypes,
     } = this.props.investmentStore;
     const { campaign } = this.props.campaignStore;
     const offeringReuglation = campaign && campaign.regulation;
@@ -136,23 +152,20 @@ class AccountType extends Component {
     } else {
       setPartialInvestmenSession();
     }
-    if (isRegulationCheck && (!accreditationData.ira)) {
+    if ((isRegulationCheck && (!accreditationData.ira)) || (!selectedAccountStatus)) {
       return <Spinner loaderMessage="Loading.." />;
     }
-    const accountToConsider = (activeAccounts.length === 0 && inprogressAccounts.length === 0) ?
-      [] : (activeAccounts.length === 1 && inprogressAccounts.length === 0) ?
-        activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
-    prepareAccountTypes(accountToConsider);
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck);
     const { currentUser } = this.props.userStore;
-    const redirectURL = (!isRegulationCheck || (isRegulationCheck && accountToConsider.length === 0)) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
+    const redirectURL = (!isRegulationCheck || (isRegulationCheck && investAccTypes.value.length === 0)) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
       `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : '/app/profile-settings/investment-limits';
-    let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : 'You do not have a full investment account.';
+    let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : selectedAccountStatus && selectedAccountStatus === 'PROCESSING' ? 'New Account Request In Review' : 'You do not have a full investment account.';
     let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
     if ((activeAccounts.length || investAccTypes.values.length) && isRegulationCheck && selectedAccountStatus === 'FULL') {
-      headerToShow = userAccredetiationState ?
-        OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].header : headerToShow;
+      headerToShow = (showAccountList && investAccTypes.values.length >= 2) ?
+        headerToShow : userAccredetiationState ?
+          OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].header : headerToShow;
       subHeaderToShow = userAccredetiationState ?
         OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].subHeader : subHeaderToShow;
     } else if (!showAccountList && selectedAccountStatus !== 'FULL') {
@@ -164,11 +177,12 @@ class AccountType extends Component {
         sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
+    const headerWithAccountName = (showAccountList && investAccTypes.values.length >= 2) || (investAccTypes.values.length <= 0) ? headerToShow : `${investAccTypes.value === 'ira' ? 'IRA' : capitalize(investAccTypes.value)}: ${headerToShow}`;
     return (
       <Aux>
-        <Header as="h3" textAlign="center"> {headerToShow}</Header>
+        <Header as="h3" textAlign="center"> {headerWithAccountName}</Header>
         <Form error className="account-type-tab">
-          {investAccTypes.values.length ?
+          {investAccTypes.values.length && selectedAccountStatus ?
             <Aux>
               {showAccountList && investAccTypes.values.length >= 2 ?
                 <FormRadioGroup
