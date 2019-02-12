@@ -286,7 +286,7 @@ footer{
             // vertical-align: top;
             // flex-wrap: wrap;
             flex: 1;
-            // width: 100%;
+            width: 140px;
             @media only screen and (max-width : @largestMobileScreen){
                 padding: 0;
             }
@@ -755,5 +755,4 @@ footer{
 .slide-down .ui.secondary.menu {
     max-width: 1680px;
     margin: auto !important;
-    background: fade(@neutral-offwhite, 50%);
 }

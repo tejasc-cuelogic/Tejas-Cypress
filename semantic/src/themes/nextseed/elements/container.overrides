@@ -15,7 +15,6 @@ section{
             padding: 0;
         }
         background-position: top center;
-        padding-top: 0;
         // margin-top: -72px;
         >.ui.container{
             display: flex;
