@@ -63,7 +63,6 @@ class AccountType extends Component {
     setPartialInvestmenSession();
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
-        // send email to admin
         sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
