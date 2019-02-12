@@ -1,7 +1,10 @@
 import React from 'react';
 import Aux from 'react-aux';
-import { Header, Container, Responsive } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Header, Container, Responsive, Button } from 'semantic-ui-react';
 
+const isTablet = document.documentElement.clientWidth >= 768
+&& document.documentElement.clientWidth < 992;
 const Banner = () => (
   <section className="banner home-banner">
     <Container>
@@ -10,6 +13,7 @@ const Banner = () => (
           <Header as="h2">
             Build an investment<br />portfolio you care about.
           </Header>
+          <Button className={`${!isTablet && 'mt-30'} relaxed`} primary content="Get Started" as={Link} to="/auth/register" />
         </div>
       </Responsive>
       <div className="banner-meta">
