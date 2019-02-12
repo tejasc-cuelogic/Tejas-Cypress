@@ -270,10 +270,10 @@ export class BusinessAppStore {
         this.BUSINESS_APP_FRM.fields[ele].value = data.businessExperience[ele];
       });
       data.fundUsage.forEach((ele) => {
-        this.BUSINESS_APP_FRM.fields.fundUsage.value = ele;
+        this.BUSINESS_APP_FRM.fields.fundUsage.value.push(ele);
       });
       data.industryTypes.forEach((ele) => {
-        this.BUSINESS_APP_FRM.fields.industryTypes.value = ele;
+        this.BUSINESS_APP_FRM.fields.industryTypes.value.push(ele);
       });
       data.legalConfirmations.forEach((ele) => {
         this.BUSINESS_APP_FRM.fields.legalConfirmation.value.push(ele.value && ele.label);
@@ -305,7 +305,7 @@ export class BusinessAppStore {
         data.realEstateTypes.forEach((ele) => {
           this.BUSINESS_APP_FRM.fields.realEstateType.value.push(ele);
         });
-        ['investmentType', 'ownOrOperateProperty'].forEach((ele) => {
+        ['investmentType', 'ownOrOperateProperty', 'businessEntityStructure'].forEach((ele) => {
           this.BUSINESS_APP_FRM.fields[ele].value = data[ele];
         });
         ['investorIRR', 'annualInvestorRoi', 'holdTimeInYears'].forEach((ele) => {
