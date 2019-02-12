@@ -1,11 +1,11 @@
 /* eslint-disable arrow-body-style  */
 import React, { Component } from 'react';
 import { Link, matchPath } from 'react-router-dom';
-import { Container, Menu, Image, Grid } from 'semantic-ui-react';
+import { Container, Menu, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import Parser from 'html-react-parser';
-import { ASSETS_URL } from '../../constants/aws';
 import { SocialLinks } from '../shared';
+import NSImage from '../../modules/shared/NSImage';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -82,7 +82,7 @@ class Footer extends Component {
                 {(!OfferFooter.find(item => matchPath(path, { path: item }))) &&
                   <Aux path={path}>
                     <div className={isMobile && 'mb-30'}>
-                      <Image src={`${ASSETS_URL}images/secure-horizontal-1.jpg`} />
+                      <NSImage path="secure-horizontal-1.jpg" />
                     </div>
                   </Aux>
                 }
