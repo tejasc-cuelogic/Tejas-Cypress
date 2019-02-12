@@ -755,5 +755,5 @@ footer{
 .slide-down .ui.secondary.menu {
     max-width: 1680px;
     margin: auto !important;
-    background: @neutral-offwhite;
+    background: fade(@neutral-offwhite, 50%);
 }
