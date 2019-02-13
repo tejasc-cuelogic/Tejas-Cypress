@@ -362,6 +362,40 @@
             padding-bottom: 0;
         }
     }
+    &.basic.team-table {
+        .tbody {
+            background: @neutral-offwhite;
+            .row-wrap:nth-child(2n) {
+                background: @white;
+            }
+        }
+        .row-wrap>div{
+            padding: @12px @18px;
+            i.icon {
+                color: @neutral-middark;
+                height: auto;
+                vertical-align: middle;
+                cursor: pointer;
+            }
+            &.balance-half{
+                width:auto;
+                flex: 2;
+                &:nth-child(2){
+                    margin-right: 0;
+                }
+                &:nth-child(4){
+                    flex: 1;
+                }
+                .ui.image.avatar, .sb-avatar {
+                    margin-right: @10px;
+                }
+            }
+            &.action{
+                flex: 1;
+                width: auto;
+            }
+        }
+    }
     .ui.vertical.buttons{
         display:flex;
     }
