@@ -200,7 +200,7 @@ class AccountType extends Component {
     }
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
-        // send email to admin
+        // send email to admin:
         sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
