@@ -11,12 +11,6 @@ query insights{
     articleStatus
     minuteRead
     title
-    author{
-      info{
-        firstName
-        lastName
-      }
-    }
     updated {
       date
     }
@@ -123,6 +117,34 @@ mutation updateArticleInfo($id: ID!, $payload:  InsightsArticleInput!, $isPartia
 export const deleteArticle = gql`
 mutation deleteArticle($id: [ID]) {
   deleteArticle(id: $id) 
+}
+`;
+
+export const insightArticlesListByFilter = gql`
+query insightArticlesListByFilter($articleStatus: ArticleStatusEnum, $title: String){
+  insightArticlesListByFilter(articleStatus: $articleStatus, title: $title ){
+    id
+    content
+    category
+    featuredImage
+    tags
+    articleStatus
+    minuteRead
+    title
+    author {
+      info {
+        firstName
+        lastName
+      }
+    }
+    updated {
+      date
+    }
+    created {
+      date
+    }
+    banner
+  }
 }
 `;
 

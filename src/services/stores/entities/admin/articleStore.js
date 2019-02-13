@@ -10,7 +10,7 @@ import { FormValidator as Validator } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { ARTICLES } from '../../../constants/admin/article';
-import { deleteArticle, allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle } from '../../queries/insightArticle';
+import { deleteArticle, allInsightArticles, getArticleDetails, getArticlesByCatId, getArticleById, createArticle, updateArticle, insightArticlesListByFilter } from '../../queries/insightArticle';
 import { getCategories } from '../../queries/category';
 import Helper from '../../../../helper/utility';
 import { uiStore } from '../../../../services/stores';
@@ -29,6 +29,7 @@ export class ArticleStore {
     };
     @observable currentArticleId = null;
     @observable globalAction = '';
+    @observable allInsightsList = [];
 
     @action
     setGlobalAction = (name, globalAction) => {
@@ -98,7 +99,7 @@ export class ArticleStore {
           variables: id === 'new' ? { payload: data } :
             { ...{ payload: data }, id },
           refetchQueries: [{
-            query: allInsightArticles,
+            query: insightArticlesListByFilter,
           }],
         }).then(() => {
           Helper.toast('Category Saved successfully.', 'success');
@@ -111,6 +112,15 @@ export class ArticleStore {
     }
 
     @action
+    sortArticlesByFilter = (status, title) => {
+      this.allInsightsList = graphql({
+        client,
+        query: insightArticlesListByFilter,
+        variables: { status, title },
+      });
+    }
+
+    @action
     deleteArticle = (id) => {
       uiStore.setProgress();
       client
@@ -118,7 +128,7 @@ export class ArticleStore {
           mutation: deleteArticle,
           variables: { id },
           refetchQueries: [{
-            query: allInsightArticles,
+            query: insightArticlesListByFilter,
           }],
         }).then(() => {
           Helper.toast('Category deleted successfully.', 'success');
@@ -249,7 +259,7 @@ export class ArticleStore {
     @action
     reset = () => {
       // this.ARTICLE_FRM = Validator.prepareFormObject(ARTICLE);
-      Validator.resetFormData('ARTICLE_FRM');
+      Validator.resetFormData(this.ARTICLE_FRM);
       // this.ARTICLE_FRM.fields.categoryType.value = this.selectedCategoryState.type;
     }
 }

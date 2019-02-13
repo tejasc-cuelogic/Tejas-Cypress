@@ -17,7 +17,9 @@ const actions = {
 @observer
 export default class AllInsights extends Component {
   componentWillMount() {
-    this.props.articleStore.requestAllArticles(false); // load data
+    // this.props.articleStore.requestAllArticles(false); // load data
+    this.props.articleStore.sortArticlesByFilter();
+    console.log('allInsightsList ->', this.props.articleStore.allInsightsList);
   }
   globalActionChange = (e, { name, value }) =>
     this.props.articleStore.setGlobalAction(name, value);
@@ -45,7 +47,8 @@ export default class AllInsights extends Component {
     const { articleStore } = this.props;
     const { confirmBox } = this.props.uiStore;
     const {
-      InsightArticles,
+      // InsightArticles,
+      allInsightsList,
       loading,
       globalAction,
     } = articleStore;
@@ -84,7 +87,9 @@ export default class AllInsights extends Component {
               </Table.Header>
               <Table.Body>
                 {
-                  InsightArticles.map(record => (
+                  allInsightsList && allInsightsList.data &&
+                  allInsightsList.data.insightArticlesListByFilter &&
+                  allInsightsList.data.insightArticlesListByFilter.map(record => (
                     <Table.Row key={record.id}>
                       <Table.Cell><Checkbox /></Table.Cell>
                       <Table.Cell>{record.title}</Table.Cell>
