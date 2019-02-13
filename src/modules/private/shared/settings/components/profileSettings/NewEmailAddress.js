@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import isEmpty from 'lodash/isEmpty';
-import cookie from 'react-cookies';
 import { withRouter } from 'react-router-dom';
 import { Header, Modal, Button, Form, Message } from 'semantic-ui-react';
 import { FieldError, ListErrors } from '../../../../../../theme/shared';
@@ -16,8 +15,7 @@ export default class NewEmailAddress extends Component {
       this.props.uiStore.clearErrors();
       Helper.toast('Email Change request has been accepted', 'success');
       const { email, password } = this.props.authStore.CONFIRM_FRM.fields;
-      const userCredentials = { email: email.value, password: btoa(password.value) };
-      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+      this.props.authStore.setCredentials({ email: email.value, password: password.value });
       this.props.history.push('/app/profile-settings/profile-data/confirm-email-address');
     })
       .catch(() => {});
