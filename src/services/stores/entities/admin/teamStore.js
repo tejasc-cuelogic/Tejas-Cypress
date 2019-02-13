@@ -328,9 +328,9 @@ export class TeamStore {
     }
   }
   @action
-    setTeamMemberOrder = (newArr) => {
-      this.teamMembers = newArr;
-    }
+  setTeamMemberOrder = (newArr) => {
+    this.setDb(newArr);
+  }
 }
 
 
