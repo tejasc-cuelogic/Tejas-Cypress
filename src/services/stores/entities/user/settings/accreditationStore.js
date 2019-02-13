@@ -613,7 +613,11 @@ export class AccreditationStore {
     return resultArr;
   }
   @action
-  userAccreditatedStatus = (accountSelected = undefined, regulationCheck = false) => {
+  userAccreditatedStatus = (
+    accountSelected = undefined,
+    regulationCheck = false,
+    regulationType = undefined,
+  ) => {
     const aggreditationDetails = this.accreditationData;
     const currentSelectedAccount = accountSelected === '' ? '' :
       accountSelected || userDetailsStore.currentActiveAccountDetails.name;
@@ -627,7 +631,7 @@ export class AccreditationStore {
       }
       const accountStatus = currentAcitveObject && currentAcitveObject.expiration ?
         this.checkIsAccreditationExpired(currentAcitveObject.expiration)
-          === 'EXPIRED' ? 'EXPIRED' : currentAcitveObject.status : currentAcitveObject;
+          === 'EXPIRED' ? 'EXPIRED' : regulationType && regulationType === 'BD_CF_506C' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null : regulationType && regulationType === 'BD_CF_506C' ? 'REQUESTED' : currentAcitveObject && currentAcitveObject.status ? currentAcitveObject.status : null;
       switch (accountStatus) {
         case 'REQUESTED':
           this.userAccredetiationState = 'PENDING';
@@ -739,6 +743,13 @@ export class AccreditationStore {
   @action
   changeShowAccountListFlag = (statusValue) => {
     this.showAccountList = statusValue;
+  }
+  pendingStepForAccreditation = (selectedAccountName) => {
+    const userCreatedAccountList = userDetailsStore.userDetails.roles;
+    const selectedAccountDetails = find(userCreatedAccountList, { name: selectedAccountName });
+    const selectedAccountId = selectedAccountDetails.details.accountId;
+    const urlToReturn = selectedAccountName === 'entity' ? `/app/profile-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/app/profile-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
+    return urlToReturn;
   }
 }
 export default new AccreditationStore();

@@ -93,7 +93,7 @@ class AccountType extends Component {
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
-    userAccreditatedStatus(investAccTypes.value, isRegulationCheck);
+    userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     if (activeAccounts.length && selectedAccountStatus) {
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         this.props.investmentLimitStore
@@ -102,7 +102,31 @@ class AccountType extends Component {
     }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
-    } else if ((accountToConsider && accountToConsider.length === 1) || (isRegulationCheck && investAccTypes.values.length && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && investAccTypes.values.length && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')) {
+    } else if (accountToConsider && accountToConsider.length === 1) {
+      if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
+        setFieldValue('disableNextbtn', false);
+        setStepToBeRendered(1);
+      }
+    }
+  }
+  componentDidUpdate() {
+    const {
+      setStepToBeRendered,
+      setFieldValue,
+      byDefaultRender,
+      investAccTypes,
+    } = this.props.investmentStore;
+    const {
+      userAccredetiationState,
+      selectedAccountStatus,
+    } = this.props.accreditationStore;
+    const { campaign } = this.props.campaignStore;
+    const offeringReuglation = campaign && campaign.regulation;
+    const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
+    const regulationType = offeringReuglation;
+    if (!byDefaultRender) {
+      setStepToBeRendered(2);
+    } else if (investAccTypes && investAccTypes.values.length === 1) {
       if ((isRegulationCheck && userAccredetiationState && userAccredetiationState === 'ELGIBLE') || (isRegulationCheck && regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState && userAccredetiationState === 'PENDING') || (!isRegulationCheck && selectedAccountStatus === 'FULL')) {
         setFieldValue('disableNextbtn', false);
         setStepToBeRendered(1);
@@ -155,10 +179,13 @@ class AccountType extends Component {
     if ((isRegulationCheck && (!accreditationData.ira)) || (!selectedAccountStatus)) {
       return <Spinner loaderMessage="Loading.." />;
     }
-    userAccreditatedStatus(investAccTypes.value, isRegulationCheck);
+    userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
     const { currentUser } = this.props.userStore;
-    const redirectURL = (!isRegulationCheck || (isRegulationCheck && investAccTypes.value.length === 0)) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
-      `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : '/app/profile-settings/investment-limits';
+    let redirectURL = '';
+    if (!showAccountList || investAccTypes.values.length <= 1) {
+      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL')) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
+        `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
+    }
     let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : selectedAccountStatus && selectedAccountStatus === 'PROCESSING' ? 'New Account Request In Review' : 'You do not have a full investment account.';
     let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
@@ -225,14 +252,14 @@ class AccountType extends Component {
                         <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>. to unlock your account.</p>
                         :
                         null}
-                      {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) ?
+                      {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL') ?
                         <Link to={redirectURL} className="text-link">
                           <Icon className="ns-arrow-right" color="green" />
                           Please finish your account setup.
                         </Link>
                         :
                         null}
-                      {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
+                      {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING') ?
                         <p>
                           We are currently processing your new account request.
                           You will recive notification when your account is ready for investment.
