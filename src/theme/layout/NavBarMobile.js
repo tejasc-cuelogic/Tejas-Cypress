@@ -51,18 +51,17 @@ export default class NavBarMobile extends Component {
           >
             <Logo
               alt="NextSeed.com"
-              dataSrc={getLogo(location.pathname)}
+              dataSrc={visible ? 'LogoWhite' : getLogo(location.pathname)}
               as={visible ? Link : Logo}
               to="/"
             />
           </div>
           <div
             className={`public-header-section ${visible ? 'active' : ''}
-            ${!location.pathname.includes('/offerings') ? 'inverted' : ''}
             ${navStatus === 'sub' ? 'slide-up' : ''}`}
           >
             {/* <Icon className="ns-nextseed-icon hamburger" /> */}
-            <Header as="h5" inverted>{navTitle}</Header>
+            <Header as="h5">{navTitle}</Header>
             {!currentUser ? (
               <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in">
                 {stepInRoute.title}
