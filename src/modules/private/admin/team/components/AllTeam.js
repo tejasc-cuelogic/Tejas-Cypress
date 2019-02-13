@@ -8,14 +8,12 @@ import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'r
 import { InlineLoader, NsPagination, UserAvatar } from './../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 
-const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
 const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) => {
   return (
     <div className="row-wrap">
-      <div>
+      <div className="balance-half">
         <DragHandle />
-      </div>
-      <div>
         <UserAvatar
           UserInfo={{
             avatarUrl: teamMember.avatar ? teamMember.avatar : '',
@@ -24,8 +22,6 @@ const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) 
           size="mini"
           base64url
         />
-      </div>
-      <div className="balance-half">
         {teamMember.memberName}
       </div>
       <div className="balance-half">
@@ -44,7 +40,7 @@ const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) 
       <div className="balance-half">
         {teamMember.order}
       </div>
-      <div className="action">
+      <div className="action right-align">
       <Button.Group>
         <Button icon className="link-button" >
           <Icon className="ns-pencil" onClick={() => handleEdit(teamMember.id)} />
@@ -63,7 +59,7 @@ const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) 
 
 const SortableList = SortableContainer(({ teamMembers, handleAction, handleEdit }) => {
   return (
-    <div>
+    <div className="tbody">
       {teamMembers.map((teamMember, index) => (
         <SortableItem
           key={`item-${index}`}
@@ -154,16 +150,14 @@ export default class AllTeam extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <div className="ui card fluid form-card">
-          <div className="ui basic compact table form-table">
+        <div className="ui card fluid">
+          <div className="ui basic table team-table striped">
             <div className="row-wrap thead">
-              <div />
-              <div />
               <div className="balance-half">Name</div>
-              <div className="balance-half">Title</div>
+              <div className="balance-half">Postion</div>
               <div className="balance-half">Links</div>
               <div className="balance-half">Order</div>
-              <div className="action">Actions</div>
+              <div className="action right-align"></div>
             </div>
             <SortableList
               teamMembers={teamMembers}
