@@ -10,9 +10,7 @@ import { GetNavMeta } from '../../theme/layout/SidebarNav';
 import { PUBLIC_NAV, FOOTER_NAV } from '../../constants/NavigationMeta';
 
 const hasFooter = ['/'];
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (path.includes('business-application') || path.includes('offerings') ? 'LogoColor' : 'LogoWhite')
-));
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoGreenGrey');
 @inject('uiStore')
 @observer
 export default class NavBarMobile extends Component {
