@@ -20,10 +20,8 @@ export default class ConfirmEmailAddress extends Component {
     if (this.props.refLink) {
       this.props.uiStore.setAuthRef(this.props.refLink);
     }
-    this.props.authStore.resetForm('CONFIRM_FRM');
-    const credentials = cookie.load('USER_CREDENTIALS');
-    if (credentials) {
-      this.props.authStore.setCredentials(credentials);
+    if (!this.props.authStore.CONFIRM_FRM.fields.email.value) {
+      this.props.history.push(this.props.refLink || '/auth/login');
     }
     if (this.props.userDetailsStore.signupStatus.isMigratedUser
       && !this.props.userDetailsStore.signupStatus.isEmailConfirmed
@@ -32,7 +30,7 @@ export default class ConfirmEmailAddress extends Component {
     }
   }
   componentWillUnmount() {
-    // cookie.remove('USER_CREDENTIALS', { maxAge: 1200 });
+    this.props.authStore.resetForm('CONFIRM_FRM');
     this.props.uiStore.clearErrors();
   }
 
