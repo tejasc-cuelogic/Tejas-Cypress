@@ -77,7 +77,7 @@ export default class CampaignHeader extends Component {
                   </div>
                 </div>
                 <div className="clearfix social-links mt-10">
-                  {campaign && campaign.offering.overview.social ?
+                  {campaign && get(campaign, 'offering.overview.social') ?
                     campaign.offering.overview.social.map(site => (
                       <Aux>
                         {site.url &&

@@ -157,7 +157,7 @@ export default class TeamDetails extends Component {
                         <UserAvatar
                           className="large"
                           UserInfo={{
-                            firstName: TEAM_FRM.fields.memberName.value,
+                            name: TEAM_FRM.fields.memberName.value,
                             avatarUrl: TEAM_FRM.fields.avatar.preSignedUrl,
                             roles: [],
                           }}
