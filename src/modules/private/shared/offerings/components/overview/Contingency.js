@@ -40,16 +40,6 @@ export default class Contingency extends Component {
     if (result) {
       this.props.formArrayChange(e, result, formName, dataKey, index);
     }
-    if (result && !result.checked) {
-      const {
-        updateOffering,
-        currentOfferingId,
-        LAUNCH_CONTITNGENCIES_FRM,
-        CLOSING_CONTITNGENCIES_FRM,
-      } = this.props.offeringCreationStore;
-      const fields = { ...LAUNCH_CONTITNGENCIES_FRM.fields, ...CLOSING_CONTITNGENCIES_FRM.fields };
-      updateOffering(currentOfferingId, fields, 'contingencies', '', true);
-    }
   }
   handleSubmitForm = () => {
     const {

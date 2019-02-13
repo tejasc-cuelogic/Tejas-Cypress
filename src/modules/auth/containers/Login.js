@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
-import cookie from 'react-cookies';
 import { inject, observer } from 'mobx-react';
 import { Modal, Button, Header, Form, Message } from 'semantic-ui-react';
 import { FormInput } from '../../../theme/form';
@@ -22,7 +21,7 @@ class Login extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     const { email, password } = this.props.authStore.LOGIN_FRM.fields;
-    let userCredentials = { email: email.value, password: password.value };
+    const userCredentials = { email: email.value, password: password.value };
     this.props.authStore.checkMigrationByEmail(userCredentials).then((res) => {
       if (res) {
         authActions.login()
@@ -32,8 +31,7 @@ class Login extends Component {
               this.props.history.push('/auth/change-password');
             } else {
               const { roles } = this.props.userStore.currentUser;
-              userCredentials = { email: email.value, password: btoa(password.value) };
-              cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+              this.props.authStore.setCredentials({ email: email.value, password: password.value });
               this.props.authStore.resetForm('LOGIN_FRM');
               this.props.history.push(redirectURL ? redirectURL.pathname : (roles && roles.includes('investor') ?
                 `${this.props.userDetailsStore.pendingStep}` : '/app/dashboard'));
@@ -63,8 +61,7 @@ class Login extends Component {
     }
     if (errors && errors.code === 'UserNotConfirmedException') {
       const { email, password } = this.props.authStore.LOGIN_FRM.fields;
-      const userCredentials = { email: email.value, password: btoa(password.value) };
-      cookie.save('USER_CREDENTIALS', userCredentials, { maxAge: 1200 });
+      this.props.authStore.setCredentials({ email: email.value, password: password.value });
       this.props.history.push('/auth/confirm-email');
     }
     return (

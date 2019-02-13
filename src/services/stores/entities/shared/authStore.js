@@ -188,7 +188,7 @@ export class AuthStore {
     );
     this.CONFIRM_FRM = Validator.onChange(
       this.CONFIRM_FRM,
-      { name: 'password', value: atob(credentials.password) },
+      { name: 'password', value: credentials.password },
     );
   }
 
