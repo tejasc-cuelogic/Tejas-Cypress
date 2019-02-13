@@ -2701,6 +2701,11 @@ input[type='range']::-webkit-slider-thumb {
 		right:-5px;
 		bottom:-5px;
 	}
+	.ui.image.avatar {
+		height: 60px;
+		width: 60px;
+		line-height:28px;
+	}
 }
 //	Team Member Details Modal ENDS
 
