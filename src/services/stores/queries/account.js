@@ -17,11 +17,10 @@ export const createAccount = gql`
   }`;
 
 export const updateAccount = gql`
-  mutation _updateAccount($accountId: String! $accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: InvestorAccountTypeEnum!) {
-    updateInvestorAccount(
+  mutation _upsertInvestorAccount($accountId: String $accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum!) {
+    upsertInvestorAccount(
       accountId: $accountId
       accountAttributes: $accountAttributes
-      accountStatus: $accountStatus
       accountType: $accountType
     ) {
       accountId

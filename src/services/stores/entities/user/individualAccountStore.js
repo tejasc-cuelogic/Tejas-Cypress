@@ -4,7 +4,7 @@ import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimit
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
+import { updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -26,7 +26,7 @@ class IndividualAccountStore {
   createAccount = (currentStep, formStatus = 'PARTIAL') => {
     if (bankAccountStore.formAddFunds.meta.isFieldValid) {
       uiStore.setProgress();
-      let mutation = createIndividual;
+      let mutation = updateAccount;
       const variables = {
         accountAttributes: bankAccountStore.accountAttributes,
         accountStatus: formStatus,
