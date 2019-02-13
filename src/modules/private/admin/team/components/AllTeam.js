@@ -1,46 +1,44 @@
-/* eslint-disable */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Icon, Grid, Button, Form, Confirm } from 'semantic-ui-react';
+import { Icon, Grid, Button, Form, Confirm } from 'semantic-ui-react';
 import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
 import { InlineLoader, NsPagination, UserAvatar } from './../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
-const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) => {
-  return (
-    <div className="row-wrap">
-      <div className="balance-half">
-        <DragHandle />
-        <UserAvatar
-          UserInfo={{
-            avatarUrl: teamMember.avatar ? teamMember.avatar : '',
-            name: teamMember.memberName ? teamMember.memberName : '',
-          }}
-          size="mini"
-          base64url
-        />
-        {teamMember.memberName}
-      </div>
-      <div className="balance-half">
-        {teamMember.title}
-      </div>
-      <div className="balance-half">
-        {teamMember && teamMember.social ?
-          teamMember.social.map(site => (
-            <Aux>
-              {site.url &&
-                <a target="_blank" rel="noopener noreferrer" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
-              }
-            </Aux>
-          )) : ''}
-      </div>
-      <div className="balance-half">
-        {teamMember.order}
-      </div>
-      <div className="action right-align">
+const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) => (
+  <div className="row-wrap">
+    <div className="balance-half">
+      <DragHandle />
+      <UserAvatar
+        UserInfo={{
+          avatarUrl: teamMember.avatar ? teamMember.avatar : '',
+          name: teamMember.memberName ? teamMember.memberName : '',
+        }}
+        size="mini"
+        base64url
+      />
+      {teamMember.memberName}
+    </div>
+    <div className="balance-half">
+      {teamMember.title}
+    </div>
+    <div className="balance-half">
+      {teamMember && teamMember.social ?
+        teamMember.social.map(site => (
+          <Aux>
+            {site.url &&
+              <a target="_blank" rel="noopener noreferrer" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
+            }
+          </Aux>
+        )) : ''}
+    </div>
+    <div className="balance-half">
+      {teamMember.order}
+    </div>
+    <div className="action right-align">
       <Button.Group>
         <Button icon className="link-button" >
           <Icon className="ns-pencil" onClick={() => handleEdit(teamMember.id)} />
@@ -52,27 +50,25 @@ const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) 
           <Icon className="ns-trash" onClick={() => handleAction(teamMember.id)} />
         </Button>
       </Button.Group>
-      </div>
     </div>
-  );
-});
+  </div>
+));
 
-const SortableList = SortableContainer(({ teamMembers, handleAction, handleEdit }) => {
-  return (
-    <div className="tbody">
-      {teamMembers.map((teamMember, index) => (
-        <SortableItem
-          key={`item-${index}`}
-          docIndx={index}
-          teamMember={teamMember}
-          handleAction={handleAction}
-          handleEdit={handleEdit}
-          index={index}
-        />
-      ))}
-    </div>
-  );
-});
+const SortableList = SortableContainer(({ teamMembers, handleAction, handleEdit }) => (
+  <div className="tbody">
+    {teamMembers.map((teamMember, index) => (
+      <SortableItem
+        // eslint-disable-next-line react/no-array-index-key
+        key={`item-${index}`}
+        docIndx={index}
+        teamMember={teamMember}
+        handleAction={handleAction}
+        handleEdit={handleEdit}
+        index={index}
+      />
+    ))}
+  </div>
+));
 
 @inject('teamStore')
 @withRouter
@@ -157,7 +153,7 @@ export default class AllTeam extends Component {
               <div className="balance-half">Postion</div>
               <div className="balance-half">Links</div>
               <div className="balance-half">Order</div>
-              <div className="action right-align"></div>
+              <div className="action right-align" />
             </div>
             <SortableList
               teamMembers={teamMembers}
