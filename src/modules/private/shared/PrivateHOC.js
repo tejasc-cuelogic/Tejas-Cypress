@@ -18,7 +18,7 @@ class PrivateHOC extends Component {
         <div className="page-header-section">
           <Grid columns="equal" stackable>
             <Grid.Row>
-              <Grid.Column>
+              <Grid.Column verticalAlign="middle">
                 {!this.props.P0 ?
                   <Header as="h1">{this.props.forceTitle || pageMeta.heading || pageMeta.title}</Header> :
                   this.props.P0
