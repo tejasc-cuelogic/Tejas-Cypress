@@ -11,6 +11,7 @@ import Transactions from './Transactions';
 import Updates from './Updates';
 import Comments from './Comments';
 import OfferingCreation from './OfferingCreation';
+import ActivityHistory from '../../../shared/ActivityHistory';
 
 const OfferingModule = (to) => {
   let module = null;
@@ -28,6 +29,7 @@ const OfferingModule = (to) => {
     case 'transactions': module = Transactions; break;
     case 'updates': module = Updates; break;
     case 'offering-creation': module = OfferingCreation; break;
+    case 'activity-history': module = ActivityHistory; break;
     default: module = Overview; break;
   }
   return module;

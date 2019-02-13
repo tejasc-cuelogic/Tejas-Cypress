@@ -533,7 +533,7 @@ export const OFFERS = {
     },
     businessBlanket: {
       value: '',
-      label: 'Business Blanket',
+      label: 'Collateral',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',
