@@ -88,7 +88,7 @@ export default class AllInsights extends Component {
               <Table.Body>
                 {
                   allInsightsList && allInsightsList.data &&
-                  allInsightsList.data.insightArticlesListByFilter &&
+                  allInsightsList.data.insightArticlesListByFilter ?
                   allInsightsList.data.insightArticlesListByFilter.map(record => (
                     <Table.Row key={record.id}>
                       <Table.Cell><Checkbox /></Table.Cell>
@@ -121,7 +121,7 @@ export default class AllInsights extends Component {
                         </Button.Group>
                       </Table.Cell>
                     </Table.Row>
-                  ))
+                  )) : 'No Records To Display'
                 }
               </Table.Body>
             </Table>
