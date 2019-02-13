@@ -155,31 +155,29 @@ export default class AllTeam extends Component {
           </Grid>
         </Form>
         <div className="ui card fluid form-card">
-          <Form>
-            <div className="ui basic compact table form-table">
-              <div className="row-wrap thead">
-                <div />
-                <div />
-                <div className="balance-half">Name</div>
-                <div className="balance-half">Title</div>
-                <div className="balance-half">Links</div>
-                <div className="balance-half">Order</div>
-                <div className="action">Actions</div>
-              </div>
-              <SortableList
-                teamMembers={teamMembers}
-                pressDelay={100}
-                openModal={this.openModal}
-                publishStatus={this.publishStatus}
-                handleEdit={this.handleEdit}
-                handleAction={this.handleAction}
-                onSortEnd={e => this.onSortEnd(e)}
-                handleDeleteConfirm={this.handleDeleteConfirm}
-                lockAxis="y"
-                useDragHandle
-              />
+          <div className="ui basic compact table form-table">
+            <div className="row-wrap thead">
+              <div />
+              <div />
+              <div className="balance-half">Name</div>
+              <div className="balance-half">Title</div>
+              <div className="balance-half">Links</div>
+              <div className="balance-half">Order</div>
+              <div className="action">Actions</div>
             </div>
-          </Form>
+            <SortableList
+              teamMembers={teamMembers}
+              pressDelay={100}
+              openModal={this.openModal}
+              publishStatus={this.publishStatus}
+              handleEdit={this.handleEdit}
+              handleAction={this.handleAction}
+              onSortEnd={e => this.onSortEnd(e)}
+              handleDeleteConfirm={this.handleDeleteConfirm}
+              lockAxis="y"
+              useDragHandle
+            />
+          </div>
           {totalRecords > 0 &&
             <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
           }
