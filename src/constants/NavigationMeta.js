@@ -199,6 +199,9 @@ export const PRIVATE_NAV = [
       },
       { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
       { title: 'Offering Creation', to: 'offering-creation', accessFor: [2] },
+      {
+        title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
     ],
   },
   {
@@ -356,10 +359,10 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'credit card',
-    title: 'Transactions',
+    title: 'Transfer Requests',
     capability: 'TRANSACTIONS_ANY',
-    to: 'transactions',
-    path: 'admin/transactions',
+    to: 'transfer-requests',
+    path: 'admin/transfer-requests',
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 0,
     subNavigations: [

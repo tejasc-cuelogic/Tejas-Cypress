@@ -5,6 +5,7 @@ import { startsWith } from 'lodash';
 import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import ButtonGroupType2 from './ButtonGroupType2';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('offeringCreationStore', 'uiStore', 'offeringsStore', 'userStore')
 @observer
@@ -22,6 +23,8 @@ export default class KeyTerms extends Component {
     const { KEY_TERMS_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, KEY_TERMS_FRM.fields, 'keyTerms', null, true, undefined, isApproved);
   }
+  editorChange =
+  (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const { KEY_TERMS_FRM, formChange, maskChange } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
@@ -176,14 +179,16 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Form.Group widths={2}>
             {['investmentMultipleSummary', 'offeringDisclaimer', 'revShareSummary', 'revSharePercentageDescription'].map(field => (
-              <FormTextarea
-                readOnly={isReadonly}
-                key={field}
-                name={field}
-                fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
-                containerclassname="secondary"
-              />
+              <Form.Field>
+                <Header as="h6">{KEY_TERMS_FRM.fields[field].label}</Header>
+                <HtmlEditor
+                  readOnly={isReadonly}
+                  changed={this.editorChange}
+                  name={field}
+                  form={formName}
+                  content={KEY_TERMS_FRM.fields[field].value}
+                />
+              </Form.Field>
             ))}
           </Form.Group>
           <Header as="h4">Legal</Header>

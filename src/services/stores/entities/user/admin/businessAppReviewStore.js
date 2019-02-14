@@ -274,7 +274,7 @@ export class BusinessAppReviewStore {
       this[form],
       { name: field, value: fieldValue }, arrayName, index,
     );
-    if (field === 'amount' || field === 'interestRate' || field === 'maturity') {
+    if (form === 'OFFERS_FRM' && (field === 'amount' || field === 'interestRate' || field === 'maturity')) {
       this.showFormAmortisation(index);
     }
     if (field === 'maturity') {

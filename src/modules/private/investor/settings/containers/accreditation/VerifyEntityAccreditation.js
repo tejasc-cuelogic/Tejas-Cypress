@@ -27,6 +27,11 @@ export default class VerifyEntityAccreditation extends React.Component {
   }
   multiClickHandler = (step) => {
     const { params } = this.props.match;
+    if (step.formName === 'ENTITY_ACCREDITATION_FORM' && this.props.accreditationStore[step.formName].fields.method.value !== 'ASSETS') {
+      this.props.accreditationStore.setFieldVal('accType', 'nonTrust');
+      this.props.history.push(`${this.props.refLink}/falied`);
+      return;
+    }
     if (step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
         .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 2)

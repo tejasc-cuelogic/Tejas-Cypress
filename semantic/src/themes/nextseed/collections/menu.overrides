@@ -143,7 +143,7 @@
             &:hover, &:active, &:focus, &.active {
                 border-color:@primary-one;
                 background-color:transparent;
-                color: @primary-one;
+                color: @neutral;
             }
             &.header{
                 border-color:transparent;
@@ -182,7 +182,7 @@
         height:0;
     }
     &.active {
-        background-color: @white !important;
+        background-color: @neutral-offwhite !important;
         box-shadow: 0 1px 2px 0 rgba(34,36,38,.15) !important;
         position: fixed;
         top:@primaryHeaderHeight;
@@ -209,7 +209,7 @@
     top:-@primaryHeaderHeight;
     position:fixed;
     z-index:100;
-    background-color:@white;
+    background-color:@neutral-offwhite;
     @media only screen and (max-width : @largestTabletScreen){
         top: auto;
         bottom: -58px;
@@ -286,7 +286,7 @@ footer{
             // vertical-align: top;
             // flex-wrap: wrap;
             flex: 1;
-            width: 100%;
+            width: 140px;
             @media only screen and (max-width : @largestMobileScreen){
                 padding: 0;
             }
@@ -299,10 +299,10 @@ footer{
                 }
                 &.header {
                     margin-top: 0;
-                    ~a {
-                        display: inline-block;
-                        margin-right: @14px;
-                    }
+                    // ~a {
+                    //     display: inline-block;
+                    //     margin-right: @14px;
+                    // }
                 }
                 &:hover {
                     background-color: transparent;
@@ -706,7 +706,7 @@ footer{
                 background-color: @primary-one !important;
                 color: @white !important;
             }
-            &.active.no-active,{
+            &.active.no-active{
                 background-color: transparent !important;
                 color: @white !important;
             }
@@ -755,5 +755,4 @@ footer{
 .slide-down .ui.secondary.menu {
     max-width: 1680px;
     margin: auto !important;
-    background: @white;
 }
