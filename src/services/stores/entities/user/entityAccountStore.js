@@ -12,7 +12,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, referralsStore } from '../../index';
-import { createIndividual, updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
+import { updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
@@ -393,7 +393,7 @@ class EntityAccountStore {
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
-    let mutation = createIndividual;
+    let mutation = updateAccount;
     const variables = {
       accountAttributes,
       accountStatus: formStatus,
