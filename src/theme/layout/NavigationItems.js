@@ -163,7 +163,6 @@ export class NavigationItems extends Component {
           <Menu.Item as={Link} to="/" header>
             <Logo
               alt="NextSeed.com"
-              size="small"
               dataSrc={getLogo(location.pathname)}
               style={getLogoStyle(location.pathname)}
             />
