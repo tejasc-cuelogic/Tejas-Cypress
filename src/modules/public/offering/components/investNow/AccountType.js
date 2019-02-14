@@ -211,9 +211,6 @@ class AccountType extends Component {
       subHeaderToShow = userAccredetiationState ?
         offeringAccreditatoinStatusMessage(userAccredetiationState).subHeader : subHeaderToShow;
     } else if (!showAccountList && selectedAccountStatus !== 'FULL') {
-      // headerToShow = selectedAccountStatus === 'PROCESSING' ? 'New Account Request In Review'
-      // : selectedAccountStatus === 'PARTIAL' ? 'You do not have a full investment account.' :
-      //  'Your investment account is frozen for investments.';
       headerToShow = offeringAccreditatoinStatusMessage(selectedAccountStatus).header;
     }
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
