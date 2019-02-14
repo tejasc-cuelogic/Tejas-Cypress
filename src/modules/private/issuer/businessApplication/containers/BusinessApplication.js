@@ -130,7 +130,6 @@ export default class BusinessApplication extends Component {
         P0={
           <Link to="/app/dashboard">
             <Logo
-              size="small"
               alt="NextSeed.com"
               dataSrc={logoUrl}
               style={this.getLogoStyle(this.props.location.pathname)}

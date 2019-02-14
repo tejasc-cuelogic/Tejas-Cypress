@@ -706,7 +706,7 @@ footer{
                 background-color: @primary-one !important;
                 color: @white !important;
             }
-            &.active.no-active,{
+            &.active.no-active{
                 background-color: transparent !important;
                 color: @white !important;
             }
