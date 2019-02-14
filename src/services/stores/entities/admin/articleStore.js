@@ -34,6 +34,7 @@ export class ArticleStore {
     @action
     initiateSearch = (srchParams) => {
       this.requestState.search = srchParams;
+      this.sortArticlesByFilter();
     }
     @action
     setInitiateSrch = (name, value) => {
@@ -109,12 +110,24 @@ export class ArticleStore {
     }
 
     @action
-    sortArticlesByFilter = (status, title) => {
+    sortArticlesByFilter = () => {
+      const {
+        articleStatus, categoryId, tags,
+      } = this.requestState.search;
       this.allInsightsList = graphql({
         client,
         query: insightArticlesListByFilter,
-        variables: { status, title },
+        variables: { articleStatus, categoryId, tags },
       });
+    }
+
+    @computed get getInsightArticleListing() {
+      return (this.allInsightsList.data && (toJS(this.data.data.insightsArticles)
+        || toJS(this.allInsightsList.data.insightArticlesByCategoryId))) || [];
+    }
+
+    @computed get articleListingLoader() {
+      return this.allInsightsList.loading;
     }
 
     @action

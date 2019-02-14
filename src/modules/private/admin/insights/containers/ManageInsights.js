@@ -55,13 +55,13 @@ export default class ManageInsights extends Component {
               <Grid stackable columns="equal">
                 <Grid.Row>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.categoryName} change={this.setSearchParam} name="Category" keyName="categoryName" options={CATEGORY_VALUES} />
+                    <DropdownFilter value={requestState.search.categoryId} change={this.setSearchParam} name="Category" keyName="categoryName" options={CATEGORY_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
                     <DropdownFilter value={requestState.search.tags} change={this.setSearchParam} name="Tags" keyName="tags" options={TAGS} isMultiple />
                   </Grid.Column>
                   <Grid.Column>
-                    <DropdownFilter value={requestState.search.status} change={this.setSearchParam} name="Status" keyName="status" options={ARTICLE_STATUS_VALUES} />
+                    <DropdownFilter value={requestState.search.articleStatus} change={this.setSearchParam} name="Status" keyName="articleStatus" options={ARTICLE_STATUS_VALUES} />
                   </Grid.Column>
                   <Grid.Column>
                     <DropdownFilter value={requestState.search.author} change={this.setSearchParam} name="Author" keyName="author" options={AUTHORS} />

@@ -49,10 +49,10 @@ export default class AllInsights extends Component {
     const {
       // InsightArticles,
       allInsightsList,
-      loading,
+      articleListingLoader,
       globalAction,
     } = articleStore;
-    if (loading) {
+    if (articleListingLoader) {
       return <InlineLoader />;
     }
     return (
@@ -121,7 +121,12 @@ export default class AllInsights extends Component {
                         </Button.Group>
                       </Table.Cell>
                     </Table.Row>
-                  )) : 'No Records To Display'
+                  )) :
+                  <Table.Row>
+                    <Table.Cell colSpan="7">
+                      <InlineLoader text="No data available." />
+                    </Table.Cell>
+                  </Table.Row>
                 }
               </Table.Body>
             </Table>

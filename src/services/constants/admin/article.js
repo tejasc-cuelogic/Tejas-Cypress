@@ -47,7 +47,7 @@ export const TAGS = [
 ];
 
 export const ARTICLE_STATUS_VALUES = [
-  { key: 'All', value: 'All', text: 'All' },
+  { key: 'All', value: '', text: 'All' },
   { key: 'PUBLISHED', value: 'PUBLISHED', text: 'PUBLISHED' },
   { key: 'DRAFT', value: 'DRAFT', text: 'DRAFT' },
   { key: 'IN_REVIEW', value: 'IN_REVIEW', text: 'IN_REVIEW' },

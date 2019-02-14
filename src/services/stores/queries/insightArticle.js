@@ -121,8 +121,8 @@ mutation deleteArticle($id: [ID]) {
 `;
 
 export const insightArticlesListByFilter = gql`
-query insightArticlesListByFilter($articleStatus: ArticleStatusEnum, $title: String){
-  insightArticlesListByFilter(articleStatus: $articleStatus, title: $title ){
+query insightArticlesListByFilter($categoryId: String, $articleStatus: ArticleStatusEnum, $title: String, $tags: [String], $author: String, $fromDate: String, $toDate: String){
+  insightArticlesListByFilter(categoryId: $categoryId, articleStatus: $articleStatus, title: $title, tags: $tags, author: $author, fromDate: $fromDate, toDate: $toDate){
     id
     content
     category
