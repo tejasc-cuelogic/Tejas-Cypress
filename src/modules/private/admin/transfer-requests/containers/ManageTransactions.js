@@ -34,6 +34,7 @@ export default class ManageTransactions extends Component {
     const { match } = this.props;
     const {
       filters, requestState, setInitiateSrch, summary,
+      isNonTerminatedState,
     } = this.props.transactionsStore;
     return (
       <PrivateLayout
@@ -45,8 +46,10 @@ export default class ManageTransactions extends Component {
           w={[8]}
           filters={filters}
           change={this.executeSearch}
+          requestState={requestState}
           placeholder="Search by User / Transaction ID / CP Account  Account ID"
           toggleSearch={this.toggleSearch}
+          enableSearch={!isNonTerminatedState}
         />}
         P2={
           <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>
@@ -54,13 +57,13 @@ export default class ManageTransactions extends Component {
               <Grid stackable>
                 <Grid.Row>
                   <Grid.Column width={4}>
-                    <DateRangeFilter change={setInitiateSrch} label="Date Range" name="dateRange" />
+                    <DateRangeFilter change={setInitiateSrch} nameStart="dateFilterStart" nameEnd="dateFilterStop" label="Date Range" name="dateRange" />
                   </Grid.Column>
                   <Grid.Column width={4}>
-                    <AmountRangeFilter change={setInitiateSrch} placeHolderMax="Enter Amount" placeHolderMin="Enter Amount" label="Amount Range" name="dateRange" />
+                    <AmountRangeFilter change={setInitiateSrch} placeHolderMax="Enter Amount" placeHolderMin="Enter Amount" nameMin="minAmount" nameMax="maxAmount" label="Amount Range" name="dateRange" />
                   </Grid.Column>
                   <Grid.Column width={3}>
-                    <DropdownFilter change={this.setSearchParam} placeHolder="Choose transaction type" value={requestState.search.transactionType} name="Transaction Type" keyName="transactionType" options={FILTER_META.transactionType} />
+                    <DropdownFilter change={this.setSearchParam} placeHolder="Choose transaction type" value={requestState.search.direction} name="Transaction Type" keyName="direction" options={FILTER_META.transactionType} />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

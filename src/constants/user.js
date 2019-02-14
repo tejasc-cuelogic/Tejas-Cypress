@@ -127,7 +127,7 @@ export const NEW_USER = {
     value: '', label: 'Email address', error: undefined, rule: 'required|email',
   },
   TemporaryPassword: {
-    value: '', label: 'Temporary Password', error: undefined, rule: 'required|min:8|max:15',
+    value: '', label: 'Temporary Password', error: undefined, rule: 'required|min:8|max:40',
   },
   verifyPassword: {
     value: '', label: 'Verify Password', error: undefined, rule: 'required|same:TemporaryPassword',
