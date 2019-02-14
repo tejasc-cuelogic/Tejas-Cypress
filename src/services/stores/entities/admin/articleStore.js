@@ -68,7 +68,7 @@ export class ArticleStore {
     }
 
     @action
-    getArticle = (id, isPublic = true) => {
+    getArticleAdminListing = (id, isPublic = true) => {
       const query = isPublic ? getArticleDetails : getArticleById;
       const apiClient = isPublic ? clientPublic : client;
       this.article = graphql({

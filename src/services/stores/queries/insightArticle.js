@@ -73,13 +73,15 @@ query insight($id: ID!) {
 }
 `;
 
-export const getArticleDetails = gql`
-query insight($id:ID! ) {
-  insightsArticleById(id: $id){
+export const getInsightById = gql`
+query insight($id: ID!) {
+  insightsArticle(id: $id) {
     id
     title
     featuredImage
     content
+    category
+    tags
     author {
       id
       info {
@@ -87,6 +89,25 @@ query insight($id:ID! ) {
         firstName
       }
     }
+    articleStatus
+    updated {
+      by
+      date
+      __typename
+    }
+    __typename
+  }
+}
+`;
+
+export const getArticleDetails = gql`
+query insight($id:ID! ) {
+  insightsArticleById(id: $id){
+    id
+    title
+    featuredImage
+    content
+    authorId
     category
   }
 }

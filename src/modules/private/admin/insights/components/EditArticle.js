@@ -27,9 +27,12 @@ export default class EditArticle extends Component {
   onDrop = (files, name) => {
     this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files);
   }
+  handleDelDoc = (field) => {
+    this.props.articleStore.removeUploadedDataMultiple('TEAM_FRM', field);
+  }
   initiateFlow = (id) => {
     if (id !== 'new') {
-      this.props.articleStore.getArticle(id, false);
+      this.props.articleStore.getArticleAdminListing(id, false);
     } else {
       this.props.articleStore.reset();
     }
