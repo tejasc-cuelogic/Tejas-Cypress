@@ -93,44 +93,51 @@ export const investmentsByOfferingId = gql`
 `;
 
 export const getTransactions = gql`
-  query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $limit: Int){
-    getTransactions(
-      status: $status
-      offset: $offset
-      limit: $limit
+query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $direction: TransactionDirectionEnum, $limit: Int, $minAmount: Int, $maxAmount: Int, $dateFilterStart: String, $dateFilterStop: String) {
+  getTransactions(
+    status: $status, 
+    offset: $offset, 
+    direction: $direction,
+    limit: $limit, 
+    maxAmount: $maxAmount, 
+    minAmount: $minAmount, 
+    dateFilterStart: $dateFilterStart, 
+    dateFilterStop: $dateFilterStop 
     ) {
-      transactions {
-        requestId
-        status
-        startDate
-        amount
-        accountId
-        gsTransactionId
-        type
-        userInfo{
-          id
-          info {
-            firstName
-            lastName
-          }
+    transactions {
+      requestId
+      status
+      startDate
+      amount
+      accountId
+      gsTransactionId
+      type
+      userInfo {
+        id
+        info {
+          firstName
+          lastName
         }
-        direction
-        estDateAvailable
-        agreement {
-          agreementId
-        }
-        failDate
-        failDesc
       }
-     transactionCount {
+      direction
+      estDateAvailable
+      agreement {
+        agreementId
+      }
+      failDate
+      failDesc
+    }
+    transactionCount {
       pendingCount
       processingCount
       completedCount
       failedCount
       voidCount
+      searchCount
     }
   }
-}`;
+}
+`;
 
 
 export const approveTransactions = gql`

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toJS } from 'mobx';
 import { inject, observer } from 'mobx-react';
 import { Link, Route } from 'react-router-dom';
-import { isEmpty, find } from 'lodash';
+import { isEmpty, find, capitalize } from 'lodash';
 import { Grid, Form, Card, Header, Button, Table } from 'semantic-ui-react';
 import { FormInput, MaskedInput, AutoComplete, FormDropDown } from '../../../../../theme/form';
 import { US_STATES_FOR_INVESTOR } from '../../../../../constants/account';
@@ -40,8 +40,9 @@ export default class ProfileData extends Component {
   }
   handleUpdateProfileInfo = (e) => {
     e.preventDefault();
+    const userRole = capitalize(this.props.userStore.currentUser.roles[0]);
     this.props.identityStore.updateUserProfileData().then(() => {
-      Helper.toast('Investor profile has been updated.', 'success');
+      Helper.toast(`${userRole} profile has been updated.`, 'success');
     })
       .catch(() => { });
   }

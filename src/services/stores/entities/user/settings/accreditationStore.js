@@ -1,8 +1,8 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find } from 'lodash';
+import { forEach, isArray, find, findKey } from 'lodash';
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
-import { INCOME_EVIDENCE, ACCREDITATION_METHODS_ENTITY, ACCREDITATION_METHODS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
+import { INCOME_QAL, INCOME_EVIDENCE, NETWORTH_QAL, FILLING_STATUS, VERIFICATION_REQUEST, INCOME_UPLOAD_DOCUMENTS, ASSETS_UPLOAD_DOCUMENTS, NET_WORTH, ENTITY_ACCREDITATION_METHODS, TRUST_ENTITY_ACCREDITATION } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator, DataFormatter } from '../../../../../helper';
 import { GqlClient as client } from '../../../../../api/gqlApi';
 import Helper from '../../../../../helper/utility';
@@ -10,11 +10,10 @@ import { uiStore, userDetailsStore } from '../../../index';
 import { updateAccreditation, listAccreditation, approveOrDeclineForAccreditationRequest } from '../../../queries/accreditation';
 import { userAccreditationQuery } from '../../../queries/users';
 import { fileUpload } from '../../../../actions';
-import { ACCREDITATION_FILE_UPLOAD_ENUMS } from '../../../../constants/accreditation';
+import { ACCREDITATION_FILE_UPLOAD_ENUMS, UPLOAD_ASSET_ENUMS } from '../../../../constants/accreditation';
 import { FILTER_META, CONFIRM_ACCREDITATION } from '../../../../constants/accreditationRequests';
 
 export class AccreditationStore {
-  @observable ACCREDITATION_FORM = Validator.prepareFormObject(ACCREDITATION_METHODS);
   @observable FILTER_FRM = Validator.prepareFormObject(FILTER_META);
   @observable CONFIRM_ACCREDITATION_FRM = Validator.prepareFormObject(CONFIRM_ACCREDITATION);
   @observable ENTITY_ACCREDITATION_FORM =
@@ -22,6 +21,9 @@ export class AccreditationStore {
   @observable INCOME_EVIDENCE_FORM = Validator.prepareFormObject(INCOME_EVIDENCE);
   @observable TRUST_ENTITY_ACCREDITATION_FRM =
   Validator.prepareFormObject(TRUST_ENTITY_ACCREDITATION);
+  @observable NETWORTH_QAL_FORM = Validator.prepareFormObject(NETWORTH_QAL);
+  @observable ACCREDITATION_FORM = Validator.prepareFormObject(INCOME_QAL);
+  @observable FILLING_STATUS_FORM = Validator.prepareFormObject(FILLING_STATUS);
   @observable VERIFICATION_REQUEST_FORM = Validator.prepareFormObject(VERIFICATION_REQUEST);
   @observable INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
   @observable ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
@@ -39,6 +41,7 @@ export class AccreditationStore {
   };
   @observable data = [];
   @observable accreditaionMethod = null;
+  @observable accType = '';
   @action
   initRequest = (reqParams) => {
     const {
@@ -96,9 +99,28 @@ export class AccreditationStore {
 
   @action
   formChange = (e, result, form) => {
+    if (result && (result.type === 'checkbox')) {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+        'checkbox',
+        true,
+        result.checked,
+      );
+    } else {
+      this[form] = Validator.onChange(
+        this[form],
+        Validator.pullValues(e, result),
+      );
+    }
+  }
+
+  @action
+  maskChange = (values, form, field) => {
+    const fieldValue = field === 'expiration' ? values.formattedValue : values.floatValue;
     this[form] = Validator.onChange(
       this[form],
-      Validator.pullValues(e, result),
+      { name: field, value: fieldValue },
     );
   }
 
@@ -217,7 +239,7 @@ export class AccreditationStore {
 
   @action
   resetAllForms = () => {
-    const forms = ['ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
+    const forms = ['NETWORTH_QAL_FORM', 'FILLING_STATUS_FORM', 'ACCREDITATION_FORM', 'FILTER_FRM', 'CONFIRM_ACCREDITATION_FRM', 'ENTITY_ACCREDITATION_FORM', 'INCOME_EVIDENCE_FORM', 'TRUST_ENTITY_ACCREDITATION_FRM', 'VERIFICATION_REQUEST_FORM', 'INCOME_UPLOAD_DOC_FORM', 'ASSETS_UPLOAD_DOC_FORM', 'NET_WORTH_FORM'];
     forms.forEach((formName) => {
       Validator.resetFormData(this[formName]);
     });
@@ -283,9 +305,6 @@ export class AccreditationStore {
   formValidCheck = (forms) => {
     const notOkForms = forms.filter((form) => {
       this.checkFormIsValid(form);
-      if (form === 'ACCREDITATION_FORM' && !this.accreditaionMethod) {
-        return true;
-      }
       return !this[form].meta.isValid;
     });
     return notOkForms;
@@ -294,12 +313,13 @@ export class AccreditationStore {
   isAllFormValidCheck = (type) => {
     const forms = {
       ACCREDITATION_FORM: [1, 2, 3, 4, 5, 6, 9, 10, 11, 12],
-      NET_WORTH_FORM: [3, 4, 7, 8, 11, 12],
+      // NET_WORTH_FORM: [3, 4, 7, 8, 11, 12],
       INCOME_EVIDENCE_FORM: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
       VERIFICATION_REQUEST_FORM: [1, 3, 5, 7, 9, 11],
       ASSETS_UPLOAD_DOC_FORM: [4, 6, 8, 10],
       INCOME_UPLOAD_DOC_FORM: [2, 12],
       ENTITY_ACCREDITATION_FORM: [],
+      FILLING_STATUS_FORM: [],
       TRUST_ENTITY_ACCREDITATION_FRM: [7, 8, 9, 10, 11, 12],
     };
     const formList = [];
@@ -314,19 +334,19 @@ export class AccreditationStore {
 
   formType = (accreditationType) => {
     let formType = 0;
-    if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
+    if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
       if (accreditationType === 1) {
         formType = 1;
       } else if (accreditationType === 3) {
         formType = 11;
       }
-    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'INCOME') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
       if (accreditationType === 1) {
         formType = 2;
       } else if (accreditationType === 3) {
         formType = 12;
       }
-    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest') {
       if (accreditationType === 1) {
         formType = 3;
       } else if (accreditationType === 2) {
@@ -338,7 +358,7 @@ export class AccreditationStore {
           formType = 9;
         }
       }
-    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS' || this.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
+    } else if ((this.ACCREDITATION_FORM.fields.method.value === 'ASSETS') && this.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') {
       if (accreditationType === 1) {
         formType = 4;
       } else if (accreditationType === 2) {
@@ -377,7 +397,7 @@ export class AccreditationStore {
       userAccreditationDetails.assetsUpload = [];
       forEach(fileUploadData, (file, key) => {
         const fileObj = {};
-        fileObj.type = key === 'statementDoc' ? 'ASSETS' : key === 'incomeDocLastYear' ? 'INCOME_2017' : 'INCOME_2016';
+        fileObj.type = UPLOAD_ASSET_ENUMS[key];
         fileObj.fileInfo = file;
         userAccreditationDetails.assetsUpload.push(fileObj);
       });
@@ -426,7 +446,7 @@ export class AccreditationStore {
   @action
   updateAccreditationAction = (accreditationAction, accountId, userId, accountType) => {
     uiStore.setProgress();
-    const comment = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
+    const data = Validator.evaluateFormData(this.CONFIRM_ACCREDITATION_FRM.fields);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -436,7 +456,8 @@ export class AccreditationStore {
             accountId,
             userId,
             accountType,
-            comment: comment.justifyDescription,
+            comment: data.justifyDescription,
+            expiration: data.expiration,
           },
           refetchQueries: [{ query: listAccreditation, variables: { page: 1 } }],
         })
@@ -455,8 +476,21 @@ export class AccreditationStore {
     if (filesData && filesData.length) {
       this.INCOME_UPLOAD_DOC_FORM = Validator.prepareFormObject(INCOME_UPLOAD_DOCUMENTS);
       this.ASSETS_UPLOAD_DOC_FORM = Validator.prepareFormObject(ASSETS_UPLOAD_DOCUMENTS);
+      const filingStatus = find(filesData, obj => obj.type === 'INCOME_2018');
+      if (filingStatus) {
+        this.FILLING_STATUS_FORM.fields.method.value = true;
+        this.changeRuleAsPerFilingStatus(true);
+      } else {
+        this.FILLING_STATUS_FORM.fields.method.value = false;
+        this.changeRuleAsPerFilingStatus(false);
+      }
+      if (filesData) {
+        this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.value = ['ACCEPTED'];
+        this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.value = ['ACCEPTED'];
+        this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = ['ACCEPTED'];
+      }
       forEach(filesData, (file) => {
-        const field = file.type === 'ASSETS' ? 'statementDoc' : file.type === 'INCOME_2017' ? 'incomeDocLastYear' : 'incomeDocSecondLastYear';
+        const field = findKey(UPLOAD_ASSET_ENUMS, obj => obj === file.type);
         if (file.fileInfo) {
           if (file.type === 'ASSETS') {
             forEach(file.fileInfo, (f) => {
@@ -477,7 +511,6 @@ export class AccreditationStore {
   @action
   setTrustEntityAccreditationData = (data) => {
     if (data) {
-      this.ACCREDITATION_FORM = Validator.prepareFormObject(ACCREDITATION_METHODS_ENTITY);
       this.TRUST_ENTITY_ACCREDITATION_FRM = Validator.prepareFormObject(TRUST_ENTITY_ACCREDITATION);
       if (data.method === 'ASSETS') {
         this.TRUST_ENTITY_ACCREDITATION_FRM.fields.method.value = 'ASSETS';
@@ -519,7 +552,7 @@ export class AccreditationStore {
   })
 
   @computed get userDetails() {
-    const details = (this.userData.data && toJS(this.userData.data.user)) || {};
+    const details = (this.userData && this.userData.data && toJS(this.userData.data.user)) || {};
     return details;
   }
 
@@ -541,11 +574,14 @@ export class AccreditationStore {
       this[form] = Validator.setFormData(this[form], appData, ref);
       if (form === 'ACCREDITATION_FORM') {
         this.accreditaionMethod = appData.accreditation.method;
+        this.NETWORTH_QAL_FORM.fields.method.value = appData.accreditation.method;
+        this.ENTITY_ACCREDITATION_FORM.fields.method.value = appData.accreditation.method;
       }
     } else {
       this.setFileFormData(appData.accreditation && appData.accreditation.assetsUpload);
       this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
       this.checkFormValid('ASSETS_UPLOAD_DOC_FORM', false, false);
+      this.checkFormValid('ENTITY_ACCREDITATION_FORM', false, false);
     }
     this.checkFormValid(form, false, false);
     return false;
@@ -569,15 +605,32 @@ export class AccreditationStore {
         entityAccountDetails = find(this.userData.data.user.roles, { name: 'entity' });
       }
       if ((this.userData.data.user.accreditation &&
-        this.userData.data.user.accreditation.status === 'APPROVED') ||
+        this.userData.data.user.accreditation.status === 'CONFIRMED') ||
         (entityAccountDetails && entityAccountDetails.details &&
         entityAccountDetails.details.accreditation
-        && entityAccountDetails.details.accreditation.status === 'APPROVED')
+        && entityAccountDetails.details.accreditation.status === 'CONFIRMED')
       ) {
         return true;
       }
     }
     return false;
+  }
+
+  @action
+  changeRuleAsPerFilingStatus = (isFilingTrue) => {
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling.rule = isFilingTrue ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling.rule = isFilingTrue ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.rule = isFilingTrue ? 'optional' : 'required';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.rule = isFilingTrue ? 'required' : 'optional';
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.skipField = isFilingTrue;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.skipField = !isFilingTrue;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value = isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocThirdLastYear.value;
+    this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value = !isFilingTrue ? '' : this.INCOME_UPLOAD_DOC_FORM.fields.incomeDocLastYear.value;
+    this.checkFormValid('INCOME_UPLOAD_DOC_FORM', false, false);
+  }
+  @action
+  setDefaultCheckboxVal = () => {
+    this.ASSETS_UPLOAD_DOC_FORM.fields.isAccepted.value = [true];
   }
 }
 export default new AccreditationStore();

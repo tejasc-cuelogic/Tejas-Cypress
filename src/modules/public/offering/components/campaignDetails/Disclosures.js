@@ -58,7 +58,10 @@ export default class TermsOfUse extends Component {
     }
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30">Data Rooms</Header>
+        <Header as="h3" className="mb-30 anchor-wrap">
+          Data Rooms
+          <span className="anchor-scroll" />
+        </Header>
         {docsWithBoxLink && docsWithBoxLink.map((item, index) => (
           <Aux>
             <Header id={`doc-${index}`} as="h4" className="mb-20 grey-header">{item.name}</Header>

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
 import { Card, Table, Button } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 import Actions from './Actions';
@@ -62,7 +63,7 @@ export default class AllRequests extends Component {
                 changeRequests.map((req, index) => (
                   <Table.Row key={`${req.userId}_${index}`}>
                     <Table.Cell>
-                      <p><b>{req.firstName} {req.lastName}</b></p>
+                      <Link to={`/app/users/${req.userId}/profile-data`}><p><b>{req.firstName} {req.lastName}</b></p></Link>
                     </Table.Cell>
                     <Table.Cell>
                       <DateTimeFormat datetime={req.dateRequested} />

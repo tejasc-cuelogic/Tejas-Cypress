@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { get } from 'lodash';
+import { get, upperFirst } from 'lodash';
 import { Card, Table, Button } from 'semantic-ui-react';
 import { InlineLoader, DateTimeFormat, NsPagination } from '../../../../../theme/shared';
 import { STATUS_MAPPING, STATUS, TAB_WISE_STATUS } from '../../../../../services/constants/admin/transactions';
@@ -16,14 +16,17 @@ export default class AllTransactions extends Component {
   componentWillMount() {
     const { statusType } = this.props.match.params;
     const transStatus = STATUS[statusType];
-    this.props.transactionsStore.initRequest(transStatus); // load data
+    this.props.transactionsStore.resetData();
+    this.props.transactionsStore.initRequest(transStatus, statusType); // load data
   }
 
-  getUserName = info => (info ? `${info.firstName} ${info.lastName}` : '');
-
-  // handleConfirmModal = (reqId) => {
-
-  // }
+  getUserName = (info, userId) => (
+    <span className="user-name">
+      {userId !== undefined ?
+        <Link to={`/app/users/${userId}/profile-data`}>
+          {`${info ? info.firstName : ''} ${info ? info.lastName : ''}`}
+        </Link> : ''}
+    </span>)
 
   paginate = params => this.props.transactionsStore.pageRequest(params);
 
@@ -33,7 +36,7 @@ export default class AllTransactions extends Component {
     const {
       allRecords, loading,
       transactionCount, requestState,
-      transactionChange,
+      transactionChange, isNonTerminatedState,
     } = transactionsStore;
     if (loading) {
       return <InlineLoader />;
@@ -46,7 +49,7 @@ export default class AllTransactions extends Component {
       <Aux>
         <Card fluid>
           <div className="table-wrapper">
-            <Table unstackable striped sortable singleLine className="user-list">
+            <Table unstackable striped sortable className="user-list">
               <Table.Header>
                 <Table.Row>
                   {
@@ -56,7 +59,7 @@ export default class AllTransactions extends Component {
                       </Table.HeaderCell>
                     ))
                   }
-                  {['PENDING', 'PROCESSING'].includes(STATUS[statusType]) &&
+                  {isNonTerminatedState &&
                     <Table.HeaderCell key="actions">
                       &nbsp;
                     </Table.HeaderCell>
@@ -71,14 +74,15 @@ export default class AllTransactions extends Component {
                     <Table.Row key={row.id}>
                       {
                         columns.map(col => (
-                          <Table.Cell key={col.field} textAlign={col.textAlign}>
+                          <Table.Cell key={col.field} textAlign={col.textAlign} collapsing={col.field === 'userName'}>
                             {
                               ['startDate', 'failDate', 'estDateAvailable'].includes(col.field) ?
-                                row[col.field] !== null ? <DateTimeFormat unix format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
-                                this.getUserName(get(row, col.fieldLocation) || {}) : col.field === 'userId' ? get(row, col.fieldLocation) :
+                                row[col.field] !== null ? <DateTimeFormat format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
+                                this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation) :
                                 col.field === 'agreements' ? get(row, col.fieldLocation) :
                                 col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field]) :
-                                row[col.field]
+                                col.field === 'direction' ? upperFirst(row[col.field]) :
+                                get(row, col.field) === undefined ? 'N/A' : row[col.field]
                             }
                           </Table.Cell>
                         ))
@@ -88,7 +92,7 @@ export default class AllTransactions extends Component {
                         <Table.Cell>
                           <Button.Group vertical compact size="mini">
                             <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, 'Approved')}>Approve</Button>
-                            <Button color="red" inverted onClick={() => transactionChange(row.requestId, transStatus, 'Declined')}>Decline</Button>
+                            <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">Decline</Button>
                           </Button.Group>
                         </Table.Cell> : TAB_WISE_STATUS[statusType] === 'PROCESSING' ?
                           <Table.Cell>

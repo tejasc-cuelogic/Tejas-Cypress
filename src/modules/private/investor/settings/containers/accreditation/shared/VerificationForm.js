@@ -14,8 +14,8 @@ export default class VerificationForm extends Component {
     return (
       <div>
         <Header as="h3" textAlign="center">Send verification request</Header>
-        <p className="center-align">Your lawyer, CPA, investment advisor or investment broker can verify that they have seen evidence of your accredited status.</p>
-        <p className="center-align"> No documentation is required</p>
+        <p className="center-align">We will send a request to your lawyer, CPA, investment advisor or investment broker asking them to confirm in writing that they have seen evidence of your status as an accredited investor.</p>
+        <p className="center-align">By submitting the below information, you are giving us permission to contact the listed verifier to verify your status, and you are giving the listed verifier permission to advise us of your status.</p>
         <Form error>
           <div className="field-wrap">
             <FormDropDown

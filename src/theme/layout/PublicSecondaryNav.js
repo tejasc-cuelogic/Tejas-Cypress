@@ -34,7 +34,6 @@ class PublicSecondaryNav extends Component {
           <Container fluid>
             <Menu.Item as={Link} to="/" header>
               <Logo
-                size="small"
                 alt="NextSeed.com"
                 dataSrc={getLogo(this.props.location.pathname)}
               />

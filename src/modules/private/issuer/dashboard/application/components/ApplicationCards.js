@@ -7,8 +7,9 @@ import { Header, Card, Button, Icon, Divider } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../../theme/shared/index';
 import { BUSINESS_APP_USER_STATUS, BUSINESS_APPLICATION_STATUS } from '../../../../../../services/constants/businessApplication';
 import ApplicationTypeModal from './ApplicationTypeModal';
+import { ACTIVITY_HISTORY_TYPES, ACTIVITY_HISTORY_SCOPE } from '../../../../../../constants/common';
 import DateTimeFormat from '../../../../../../theme/shared/src/DateTimeFormat';
-@inject('businessAppStore')
+@inject('businessAppStore', 'activityHistoryStore')
 @withRouter
 @observer
 export default class ApplicationCards extends Component {
@@ -18,6 +19,17 @@ export default class ApplicationCards extends Component {
       this.props.businessAppStore.getBusinessApplications();
       this.props.businessAppStore.setFieldvalue('isFetchedData', null);
     }
+  }
+  signPortalAgreementHandler = (e, url, resourceId) => {
+    const payload = {
+      resourceId,
+      activityType: ACTIVITY_HISTORY_TYPES.OFFER,
+      activityTitle: 'Issuer reviewed offer.',
+      subType: 'REVIEWED',
+      scope: ACTIVITY_HISTORY_SCOPE.DEV,
+    };
+    this.props.activityHistoryStore.createActivityHistory(payload);
+    this.props.history.push(url);
   }
   render() {
     const { fetchBusinessApplication, businessApplicationsList } = this.props.businessAppStore;
@@ -33,7 +45,9 @@ export default class ApplicationCards extends Component {
           <Card fluid>
             <Card.Content>
               <Header as="h4"><Icon className="ns-paper-plane" color="green" /> Create new application</Header>
-              <p>Want to start a new campaing? Start new application process to proceed</p>
+              <p>Want to launch a new campaign?<br />
+                Let&#39;s get started with an application for your project.
+              </p>
               <Divider hidden />
               <Button primary as={Link} to="/app/dashboard/select-application-type">Start application</Button>
             </Card.Content>
@@ -56,7 +70,7 @@ export default class ApplicationCards extends Component {
                     </dl>
                     {application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.PRE_QUALIFICATION_SUBMITTED &&
-                      <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
+                      <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>Continue application</Button>
                     }
                     {(application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.APPLICATION_SUBMITTED
@@ -64,13 +78,13 @@ export default class ApplicationCards extends Component {
                     BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ||
                     application.applicationStatus ===
                     BUSINESS_APPLICATION_STATUS.REVIEW_FAILED) &&
-                      <Button inverted color="green" as={Link} to={`business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
+                      <Button inverted color="green" as={Link} to={`/app/business-application/${application.applicationType === 'BUSINESS' ? 'business' : 'commercial-real-estate'}/${application.applicationId}/pre-qualification`}>View application</Button>
                     }
                     {(application.applicationStatus ===
                       BUSINESS_APPLICATION_STATUS.APPLICATION_OFFERED ||
                       application.applicationStatus ===
                       BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL) &&
-                      <Button inverted color="green" as={Link} to={`dashboard/${application.applicationId}/offers`}>
+                      <Button inverted color="green" onClick={e => this.signPortalAgreementHandler(e, `/app/dashboard/${application.applicationId}/offers`, application.applicationId)} >
                         { application.applicationStatus ===
                         BUSINESS_APPLICATION_STATUS.APPLICATION_SUCCESSFUL ? 'View Offer' : 'Sign agreement'
                       }

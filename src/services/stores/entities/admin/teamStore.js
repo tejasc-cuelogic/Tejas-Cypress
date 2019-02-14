@@ -1,13 +1,14 @@
+/* eslint-disable no-param-reassign */
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { forEach, sortBy, uniqWith, isEqual, map } from 'lodash';
+import { forEach, uniqWith, isEqual, map } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import { allTeamMembers, getTeamMemberById, deleteTeamMemberById, filteredTeamMembers, newTeamMember, editTeamMember } from '../../queries/Team';
+import { allTeamMembers, getTeamMemberById, deleteTeamMemberById, filteredTeamMembers, newTeamMember, editTeamMember, setMemberOrderInTeam } from '../../queries/Team';
 import { TEAM } from '../../../constants/team';
-// import { uiStore, userStore, userDetailsStore } from '../../index';
+import { uiStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class TeamStore {
@@ -18,7 +19,7 @@ export class TeamStore {
   @observable requestState = {
     skip: 0,
     page: 1,
-    perPage: 10,
+    perPage: 50,
     displayTillIndex: 10,
     filters: false,
     search: {
@@ -57,7 +58,7 @@ export class TeamStore {
 
   @computed get teamMembers() {
     return (this.db && this.db.length &&
-      sortBy(toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)), ['order'])) || [];
+      toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
   }
 
   @computed get loading() {
@@ -163,8 +164,16 @@ export class TeamStore {
   }
 
   @action
-  save = (id) => {
-    const data = this.getTeamFormData();
+  save = (id, teamMember = undefined) => {
+    let data = {};
+    if (!teamMember) {
+      data = this.getTeamFormData();
+      data.isPublished = false;
+    } else {
+      this.setFormData(teamMember);
+      data = this.getTeamFormData();
+      data.isPublished = !teamMember.isPublished;
+    }
     clientPrivate
       .mutate({
         mutation: id === 'new' ? newTeamMember : editTeamMember,
@@ -188,6 +197,7 @@ export class TeamStore {
       name: this[form].fields[name].fileName,
     };
     const fileField = this[form].fields[name];
+    uiStore.setFieldvalue('inProgress', true);
     return new Promise((resolve, reject) => {
       fileUpload.uploadToS3(fileObj, 'team')
         .then(action((res) => {
@@ -201,10 +211,12 @@ export class TeamStore {
           // this.updateOffering(this.currentOfferingId, this[form].fields,
           // 'leadership', null, true, null, null, true, index);
           // this.save('new');
+          uiStore.setFieldvalue('inProgress', false);
           resolve(res);
         }))
         .catch((err) => {
           console.log(err);
+          uiStore.setFieldvalue('inProgress', false);
           reject(err);
         });
     });
@@ -323,6 +335,32 @@ export class TeamStore {
     } else {
       this.setDb(this.data.data.teamMembers);
     }
+  }
+  @action
+  setTeamMemberOrder = (newArr) => {
+    const teamDetails = [];
+    newArr.forEach((item, index) => {
+      teamDetails.push({
+        id: item.id,
+        order: index + 1,
+      });
+      // eslint-disable-next-line no-param-reassign
+      newArr[index].order = index + 1;
+    });
+    this.setDb(newArr);
+    uiStore.setProgress();
+    clientPrivate
+      .mutate({
+        mutation: setMemberOrderInTeam,
+        variables: { teamDetails },
+      }).then(() => {
+        Helper.toast('Order updated successfully.', 'success');
+      }).catch(() => {
+        Helper.toast('Error while updating order', 'error');
+      })
+      .finally(() => {
+        uiStore.setProgress(false);
+      });
   }
 }
 

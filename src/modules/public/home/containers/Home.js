@@ -56,11 +56,9 @@ class Home extends Component {
             </Aux>
           }
         />
-        <section>
-          <div className="center-align">
-            <Button secondary content="Explore Campaigns" as={Link} to="/offerings" />
-          </div>
-        </section>
+        <div className="center-align mb-50">
+          <Button secondary content="Explore Campaigns" as={Link} to="/offerings" />
+        </div>
         <FeaturedOn />
         <section className="learn-more">
           <Container textAlign="center">

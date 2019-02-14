@@ -15,7 +15,6 @@ section{
             padding: 0;
         }
         background-position: top center;
-        padding-top: 0;
         // margin-top: -72px;
         >.ui.container{
             display: flex;
@@ -123,6 +122,7 @@ section{
             background-color: @neutral;
             background-blend-mode:multiply;
             margin-top: 0;
+            padding:0;
             >.ui.container{
                 justify-content: center;
             }

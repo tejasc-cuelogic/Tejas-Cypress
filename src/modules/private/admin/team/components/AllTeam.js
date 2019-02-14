@@ -1,11 +1,79 @@
-/* eslint-disable react/jsx-no-target-blank */
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Card, Table, Icon, Grid, Button, Form, Confirm } from 'semantic-ui-react';
-import { InlineLoader, UserAvatar, NsPagination } from './../../../../../theme/shared';
+import { Icon, Grid, Button, Form, Confirm } from 'semantic-ui-react';
+import { SortableContainer, SortableElement, arrayMove, sortableHandle } from 'react-sortable-hoc';
+import { InlineLoader, NsPagination, UserAvatar } from './../../../../../theme/shared';
 import { ByKeyword } from '../../../../../theme/form/Filters';
+
+const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
+const SortableItem = SortableElement(({
+  teamMember, handleAction, handleEdit, save,
+}) => (
+  <div className="row-wrap">
+    <div className="balance-half">
+      <DragHandle />
+      <UserAvatar
+        UserInfo={{
+          avatarUrl: teamMember.avatar ? teamMember.avatar : '',
+          name: teamMember.memberName ? teamMember.memberName : '',
+        }}
+        size="mini"
+        base64url
+      />
+      {teamMember.memberName}
+    </div>
+    <div className="balance-half">
+      {teamMember.title}
+    </div>
+    <div className="balance-half">
+      {teamMember && teamMember.social ?
+        teamMember.social.map(site => (
+          <Aux>
+            {site.url &&
+              <a target="_blank" rel="noopener noreferrer" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
+            }
+          </Aux>
+        )) : ''}
+    </div>
+    <div className="balance-half">
+      {teamMember.order}
+    </div>
+    <div className="action right-align">
+      <Button.Group>
+        <Button icon className="link-button" >
+          <Icon className="ns-pencil" onClick={() => handleEdit(teamMember.id)} />
+        </Button>
+        <Button className="link-button">
+          <Icon onClick={() => save(teamMember)} color="blue" name={teamMember.isPublished ? 'ns-view' : 'ns-no-view'} />
+        </Button>
+        <Button icon className="link-button" >
+          <Icon className="ns-trash" onClick={() => handleAction(teamMember.id)} />
+        </Button>
+      </Button.Group>
+    </div>
+  </div>
+));
+
+const SortableList = SortableContainer(({
+  teamMembers, handleAction, handleEdit, save,
+}) => (
+  <div className="tbody">
+    {teamMembers.map((teamMember, index) => (
+      <SortableItem
+        // eslint-disable-next-line react/no-array-index-key
+        key={`item-${index}`}
+        docIndx={index}
+        teamMember={teamMember}
+        save={save}
+        handleAction={handleAction}
+        handleEdit={handleEdit}
+        index={index}
+      />
+    ))}
+  </div>
+));
 
 @inject('teamStore')
 @withRouter
@@ -13,6 +81,12 @@ import { ByKeyword } from '../../../../../theme/form/Filters';
 export default class AllTeam extends Component {
   componentWillMount() {
     this.props.teamStore.initRequest(true);
+  }
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const { teamMembers, setTeamMemberOrder } = this.props.teamStore;
+    if (oldIndex !== newIndex) {
+      setTeamMemberOrder(arrayMove(teamMembers, oldIndex, newIndex));
+    }
   }
   deleteTeamMember = () => {
     this.props.teamStore.deleteTeamMemberById(this.props.teamStore.confirmBox.refId);
@@ -37,6 +111,10 @@ export default class AllTeam extends Component {
   handleEdit = (id) => {
     const { match } = this.props;
     this.props.history.push(`${match.url}/${id}`);
+  }
+  save = (teamMember) => {
+    this.props.teamStore.save(teamMember.id, teamMember);
+    this.props.history.push(this.props.refLink);
   }
   render() {
     const {
@@ -77,66 +155,27 @@ export default class AllTeam extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Card fluid>
-          <div className="table-wrapper">
-            <Table unstackable striped sortable singleLine className="user-list">
-              <Table.Header>
-                <Table.Row>
-                  <Table.HeaderCell>Name</Table.HeaderCell>
-                  <Table.HeaderCell>Postion</Table.HeaderCell>
-                  <Table.HeaderCell>Links</Table.HeaderCell>
-                  <Table.HeaderCell>Order</Table.HeaderCell>
-                  {/* <Table.HeaderCell>Status</Table.HeaderCell> */}
-                  <Table.HeaderCell textAlign="right" />
-                </Table.Row>
-              </Table.Header>
-              <Table.Body>
-                {teamMembers.length === 0 ? (
-                  <Table.Row><Table.Cell colSpan={5} textAlign="center">No Team Member to display !</Table.Cell></Table.Row>
-                ) :
-                  teamMembers.map(teamMember => (
-                    <Table.Row key={teamMember.id}>
-                      <Table.Cell>
-                        <div className="user-image">
-                          <UserAvatar
-                            UserInfo={{
-                              avatarUrl: teamMember.avatar ? teamMember.avatar : '',
-                              name: teamMember.memberName ? teamMember.memberName : '',
-                            }}
-                            size="mini"
-                            base64url
-                          />
-                          &nbsp;&nbsp;&nbsp;
-                          {teamMember.memberName}
-                        </div>
-                      </Table.Cell>
-                      <Table.Cell>{teamMember.title}</Table.Cell>
-                      <Table.Cell>{teamMember.social ?
-                        teamMember.social.map(site => (
-                          <Aux>
-                            {site.url &&
-                              <a target="_blank" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
-                            }
-                          </Aux>
-                        )) : ''}
-                      </Table.Cell>
-                      <Table.Cell>{teamMember.order}</Table.Cell>
-                      {/* <Table.Cell>Status</Table.Cell> */}
-                      <Table.Cell textAlign="right">
-                        <Button.Group>
-                          <Button icon className="link-button" >
-                            <Icon className="ns-pencil" onClick={() => this.handleEdit(teamMember.id)} />
-                          </Button>
-                          <Button icon className="link-button" >
-                            <Icon className="ns-trash" onClick={() => this.handleAction(teamMember.id)} />
-                          </Button>
-                        </Button.Group>
-                      </Table.Cell>
-                    </Table.Row>
-                  ))
-                }
-              </Table.Body>
-            </Table>
+        <div className="ui card fluid">
+          <div className="ui basic table team-table striped">
+            <div className="row-wrap thead">
+              <div className="balance-half">Name</div>
+              <div className="balance-half">Postion</div>
+              <div className="balance-half">Links</div>
+              <div className="balance-half">Order</div>
+              <div className="action right-align" />
+            </div>
+            <SortableList
+              teamMembers={teamMembers}
+              pressDelay={100}
+              openModal={this.openModal}
+              save={this.save}
+              handleEdit={this.handleEdit}
+              handleAction={this.handleAction}
+              onSortEnd={e => this.onSortEnd(e)}
+              handleDeleteConfirm={this.handleDeleteConfirm}
+              lockAxis="y"
+              useDragHandle
+            />
           </div>
           {totalRecords > 0 &&
             <NsPagination floated="right" initRequest={this.paginate} meta={{ totalRecords, requestState }} />
@@ -150,7 +189,7 @@ export default class AllTeam extends Component {
             size="mini"
             className="deletion"
           />
-        </Card>
+        </div>
       </Aux>
     );
   }
