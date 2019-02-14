@@ -24,28 +24,17 @@ export class ArticleStore {
     @observable featuredData = [];
     @observable featuredCategoryId = 'a25924d6-8136-4514-aee7-1ad8d78bb609';
     @observable filters = false;
-    @observable requestState = {
-      search: {},
-    };
     @observable currentArticleId = null;
     @observable globalAction = '';
     @observable allInsightsList = [];
-
-    @action
-    setGlobalAction = (name, globalAction) => {
-      this[name] = globalAction;
-    }
-
-    @action
-    toggleSearch = () => {
-      this.filters = !this.filters;
-    }
+    @observable requestState = {
+      search: {},
+    };
 
     @action
     initiateSearch = (srchParams) => {
       this.requestState.search = srchParams;
     }
-
     @action
     setInitiateSrch = (name, value) => {
       const srchParams = { ...this.requestState.search };
@@ -56,6 +45,14 @@ export class ArticleStore {
       }
       this.requestState.page = 1;
       this.initiateSearch(srchParams);
+    }
+    @action
+    setGlobalAction = (name, globalAction) => {
+      this[name] = globalAction;
+    }
+    @action
+    toggleSearch = () => {
+      this.filters = !this.filters;
     }
 
     @action
