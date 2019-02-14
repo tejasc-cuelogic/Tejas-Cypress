@@ -49,7 +49,8 @@ export default class AccountDetails extends Component {
     this.props.userDetailsStore.toggleState(id, accountStatus);
     Helper.toast('User Account status updated successfully.', 'success');
   }
-  handleCloseModal = () => this.props.history.push('/app/users');
+  handleCloseModal = () => this.props.history.goBack();
+
   render() {
     const { match } = this.props;
     const { detailsOfUser } = this.props.userDetailsStore;

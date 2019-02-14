@@ -14,6 +14,11 @@ export const TAB_WISE_STATUS = {
   'status-4': 'FAILED',
 };
 
+export const FAILED_STATUS = {
+  'status-1': 'Declined',
+  'status-2': 'Failed',
+};
+
 export const COUNT_STATUS_MAPPING = {
   pendingCount: 'status-1',
   processingCount: 'status-2',
@@ -31,28 +36,28 @@ export const STATUS_MAPPING = [
   {
     title: 'User',
     field: 'userName',
+    fieldId: 'userInfo.id',
     fieldLocation: 'userInfo.info',
-    refStatus: ['PENDING', 'FAILED'],
-  },
-  {
-    title: 'User ID',
-    field: 'userId',
-    fieldLocation: 'userInfo.id',
-    refStatus: ['COMPLETE', 'PROCESSING'],
+    refStatus: ['PENDING', 'FAILED', 'COMPLETE', 'PROCESSING'],
   },
   {
     title: 'NS Transaction ID',
     field: 'requestId',
-    refStatus: ['PROCESSING', 'COMPLETE', 'FAILED'],
+    refStatus: ['COMPLETE', 'FAILED'],
+  },
+  {
+    title: 'Transfer ID',
+    field: 'requestId',
+    refStatus: ['PENDING', 'PROCESSING'],
   },
   {
     title: 'GS Transaction ID',
-    field: 'gsTransactionId',
-    refStatus: ['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'],
+    field: 'gstransactionId',
+    refStatus: ['PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {
     title: 'Type',
-    field: 'type',
+    field: 'direction',
     refStatus: ['PENDING', 'PROCESSING', 'COMPLETE', 'FAILED'],
   },
   {

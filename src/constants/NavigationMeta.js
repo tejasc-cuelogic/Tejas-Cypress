@@ -359,10 +359,10 @@ export const PRIVATE_NAV = [
   },
   {
     icon: 'credit card',
-    title: 'Transactions',
+    title: 'Transfer Requests',
     capability: 'TRANSACTIONS_ANY',
-    to: 'transactions',
-    path: 'admin/transactions',
+    to: 'transfer-requests',
+    path: 'admin/transfer-requests',
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 0,
     subNavigations: [
