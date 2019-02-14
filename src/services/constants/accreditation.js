@@ -2,8 +2,13 @@ export const ACCREDITATION_FILE_UPLOAD_ENUMS = {
   individual: 'PROFILE_ACCREDITATION_INDIVIDUAL_IRA_PROCESSING',
   ira: 'PROFILE_ACCREDITATION_INDIVIDUAL_IRA_PROCESSING',
   entity: 'PROFILE_ACCREDITATION_ENTITY_PROCESSING',
-  incomeDocSecondLastYear: '2016',
-  incomeDocLastYear: '2017',
+};
+
+export const UPLOAD_ASSET_ENUMS = {
+  statementDoc: 'ASSETS',
+  incomeDocSecondLastYear: 'INCOME_2017',
+  incomeDocLastYear: 'INCOME_2018',
+  incomeDocThirdLastYear: 'INCOME_2016',
 };
 
 export const ACCREDITATION_METHOD_ENUMS = {
