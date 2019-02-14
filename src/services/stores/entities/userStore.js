@@ -72,6 +72,11 @@ export class UserStore {
     return this.currentUser.roles.includes(role);
   }
 
+  @computed get isInvestor() {
+    const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
+    return roles.includes('investor');
+  }
+
   @computed get isIssuer() {
     const roles = (this.currentUser && toJS(this.currentUser.roles)) || [];
     return roles.includes('issuer');
