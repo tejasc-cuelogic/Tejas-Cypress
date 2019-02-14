@@ -195,12 +195,6 @@ class AccountType extends Component {
         `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     // let headerToShow = (activeAccounts.length ||
-    // (investAccTypes.values.length && investAccTypes.values.length >= 2)) ?
-    // 'Which Investment Account would you like to invest from ?' : frozenAccounts.length ?
-    // 'Your investment account is frozen for investments.' : selectedAccountStatus &&
-    // selectedAccountStatus === 'PROCESSING' ?
-    //  offeringAccreditatoinStatusMessage(selectedAccountStatus) :
-    // 'You do not have a full investment account.';
     let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : offeringAccreditatoinStatusMessage(selectedAccountStatus);
     let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
