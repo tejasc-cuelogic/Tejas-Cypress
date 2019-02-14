@@ -340,7 +340,7 @@ export const ACCREDITATION_EXPIRY = {
     value: [],
     values: [
       {
-        label: 'My financial status has not change.',
+        label: 'I hereby certify that I have a reasonable expectation that my income will meet or exceed the requirement to be considered an accredited investor in 2019.',
         value: 'checked',
       },
     ],

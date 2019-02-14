@@ -67,6 +67,9 @@ export default class InvestNow extends React.Component {
   handleStepChnageOnPreviousForAlert = () => {
     this.props.accreditationStore.changeShowAccountListFlag(true);
   }
+  // handleStepChnageOnNextForAlert = () => {
+  //   this.props.accreditationStore.changeShowAccountListFlag(false);
+  // }
   handleCancel = () => {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
@@ -155,6 +158,7 @@ export default class InvestNow extends React.Component {
 
   render() {
     const { changeInvest, uiStore } = this.props;
+    // const { showAccountList } = this.props.accreditationStore;
     const {
       inProgress,
       isEnterPressed,
@@ -193,6 +197,7 @@ export default class InvestNow extends React.Component {
           isValid: '',
         },
       ];
+    // !!showAccountList;
     const isMultiStepButtonsVisible = true;
     // !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' ||
     // (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')
@@ -216,6 +221,7 @@ export default class InvestNow extends React.Component {
             hideHeader
             setStepTobeRendered={this.handleStepChange}
             setStepTobeRenderedForAlert={this.handleStepChnageOnPreviousForAlert}
+            // setStepTobeRenderedForNextAlert={this.handleStepChnageOnNextForAlert}
             stepToBeRendered={this.props.investmentStore.stepToBeRendered}
             steps={steps}
             formTitle="Entity Account Creation"

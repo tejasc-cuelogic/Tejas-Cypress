@@ -194,17 +194,17 @@ export default class MultiStep extends React.Component {
                 {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
               </Loader>
             </Dimmer>
+            {!this.props.steps[this.state.compState].disablePrevButton &&
+              <Button
+                circular
+                icon={{ className: 'ns-arrow-left' }}
+                className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
+                onClick={this.previous}
+              />
+            }
             {this.props.isStepButtonsVisible === undefined ||
               (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true) ?
                 <Aux>
-                  {!this.props.steps[this.state.compState].disablePrevButton &&
-                    <Button
-                      circular
-                      icon={{ className: 'ns-arrow-left' }}
-                      className={(this.state.showPreviousBtn ? 'multistep__btn prev' : 'multistep__btn prev disabled')}
-                      onClick={this.previous}
-                    />
-                  }
                   {!this.props.steps[this.state.compState].disableNextButton &&
                     <Button
                       type="submit"

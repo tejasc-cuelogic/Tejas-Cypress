@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { includes, uniq, capitalize } from 'lodash';
+import { includes, uniq } from 'lodash';
 import { Header, Form, Icon, Button } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
 import { FormRadioGroup, FormCheckbox } from '../../../../../theme/form';
-import { OFFERING_ACCRDITATION_STATUS_MESSAGE } from '../../../../../constants/offering';
+// import { OFFERING_ACCRDITATION_STATUS_MESSAGE } from '../../../../../constants/offering';
 import { Spinner } from '../../../../../theme/shared';
 
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore')
@@ -142,6 +142,11 @@ class AccountType extends Component {
     updateAccreditationExpiray();
     this.props.history.push(this.props.refLink);
   }
+  handlBackToOffering = (e) => {
+    e.preventDefault();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.history.push(this.props.refLink);
+  }
   render() {
     const {
       activeAccounts,
@@ -170,6 +175,9 @@ class AccountType extends Component {
       showAccountList,
       selectedAccountStatus,
       userAccreditatedStatus,
+      headerSubheaderObj,
+      offeringAccreditatoinStatusMessage,
+      setHeaderAndSubHeader,
     } = this.props.accreditationStore;
     if (userProfileFullStatus !== 'FULL' || (userAccredetiationState && (userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE'))) {
       setPartialInvestmenSession(offeringInvestnowURL);
@@ -186,17 +194,27 @@ class AccountType extends Component {
       redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL')) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
         `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
-    let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : frozenAccounts.length ? 'Your investment account is frozen for investments.' : selectedAccountStatus && selectedAccountStatus === 'PROCESSING' ? 'New Account Request In Review' : 'You do not have a full investment account.';
+    // let headerToShow = (activeAccounts.length ||
+    // (investAccTypes.values.length && investAccTypes.values.length >= 2)) ?
+    // 'Which Investment Account would you like to invest from ?' : frozenAccounts.length ?
+    // 'Your investment account is frozen for investments.' : selectedAccountStatus &&
+    // selectedAccountStatus === 'PROCESSING' ?
+    //  offeringAccreditatoinStatusMessage(selectedAccountStatus) :
+    // 'You do not have a full investment account.';
+    let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : offeringAccreditatoinStatusMessage(selectedAccountStatus);
     let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
     if ((activeAccounts.length || investAccTypes.values.length) && isRegulationCheck && selectedAccountStatus === 'FULL') {
       headerToShow = (showAccountList && investAccTypes.values.length >= 2) ?
         headerToShow : userAccredetiationState ?
-          OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].header : headerToShow;
+          offeringAccreditatoinStatusMessage(userAccredetiationState).header : headerToShow;
       subHeaderToShow = userAccredetiationState ?
-        OFFERING_ACCRDITATION_STATUS_MESSAGE[userAccredetiationState].subHeader : subHeaderToShow;
+        offeringAccreditatoinStatusMessage(userAccredetiationState).subHeader : subHeaderToShow;
     } else if (!showAccountList && selectedAccountStatus !== 'FULL') {
-      headerToShow = selectedAccountStatus === 'PROCESSING' ? 'New Account Request In Review' : selectedAccountStatus === 'PARTIAL' ? 'You do not have a full investment account.' : 'Your investment account is frozen for investments.';
+      // headerToShow = selectedAccountStatus === 'PROCESSING' ? 'New Account Request In Review'
+      // : selectedAccountStatus === 'PARTIAL' ? 'You do not have a full investment account.' :
+      //  'Your investment account is frozen for investments.';
+      headerToShow = offeringAccreditatoinStatusMessage(selectedAccountStatus).header;
     }
     if (frozenAccounts.length && selectedAccountStatus === 'FROZEN') {
       if (!cookie.load('ADMIN_FROZEN_EMAIL') && cookie.load('ADMIN_FROZEN_EMAIL') === undefined) {
@@ -204,10 +222,10 @@ class AccountType extends Component {
         sendAdminEmailOfFrozenAccount('INVESTMENT');
       }
     }
-    const headerWithAccountName = (showAccountList && investAccTypes.values.length >= 2) || (investAccTypes.values.length <= 0) ? headerToShow : `${investAccTypes.value === 'ira' ? 'IRA' : capitalize(investAccTypes.value)}: ${headerToShow}`;
+    setHeaderAndSubHeader(headerToShow, subHeaderToShow);
     return (
       <Aux>
-        <Header as="h3" textAlign="center"> {headerWithAccountName}</Header>
+        <Header as="h3" textAlign="center"> {headerSubheaderObj.header}</Header>
         <Form error className="account-type-tab">
           {investAccTypes.values.length && selectedAccountStatus ?
             <Aux>
@@ -222,12 +240,15 @@ class AccountType extends Component {
                 <Aux>
                   {selectedAccountStatus === 'FULL' ?
                     <div className="center-align">
-                      <p className="center-align">{subHeaderToShow}</p>
+                      <p className="center-align">{headerSubheaderObj.subHeader}</p>
                       {userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE' ?
-                        <Link to={redirectURL} className="text-link">
-                          <Icon className="ns-arrow-right" color="green" />
-                          Apply for accrditation
-                        </Link>
+                        <Aux>
+                          <Link to={redirectURL} className="text-link">
+                            <Icon className="ns-arrow-right" color="green" />
+                            Apply for accrditation
+                          </Link>
+                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                        </Aux>
                         :
                         userAccredetiationState === 'EXPIRED' ?
                           <Aux>
@@ -240,31 +261,41 @@ class AccountType extends Component {
                                 containerclassname="ui relaxed list"
                               />
                               <Button as={Link} to="/" onClick={e => this.handlUpdateExpiration(e)} primary className="relaxed" content="Update accrditation" disabled={!(ACCREDITATION_EXPIRY_FORM.meta.isValid)} />
+                              <Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" />
                             </Form>
                           </Aux>
                           :
-                          null
-                      }
+                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                          }
                     </div>
                     :
                     <div className="center-align">
                       {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
-                        <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>. to unlock your account.</p>
+                        <Aux>
+                          <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
+                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                        </Aux>
                         :
                         null}
                       {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL') ?
-                        <Link to={redirectURL} className="text-link">
-                          <Icon className="ns-arrow-right" color="green" />
-                          Please finish your account setup.
-                        </Link>
+                        <Aux>
+                          <Link to={redirectURL} className="text-link">
+                            <Icon className="ns-arrow-right" color="green" />
+                            Please finish your account setup.
+                          </Link>
+                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                        </Aux>
                         :
                         null}
                       {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING') ?
-                        <p>
-                          We are currently processing your new account request.
-                          You will recive notification when your account is ready for investment.
-                          Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
-                        </p>
+                        <Aux>
+                          <p>
+                            We are currently processing your new {investAccTypes.value} account.
+                            You will recive notification when your account is ready.
+                            Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
+                          </p>
+                          <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                        </Aux>
                         :
                         null}
                     </div>
@@ -275,23 +306,32 @@ class AccountType extends Component {
             :
             <div className="center-align">
               {selectedAccountStatus && selectedAccountStatus === 'FROZEN' ?
-                <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a>. to unlock your account.</p>
+                <Aux>
+                  <p>Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> to unlock your account.</p>
+                  <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                </Aux>
                 :
                 null}
               {(selectedAccountStatus && selectedAccountStatus === 'PARTIAL' && isParitalSectionNeedtoShow) || (userProfileFullStatus !== 'PARTIAL' && isParitalSectionNeedtoShow)
                 ?
-                  <Link to={redirectURL} className="text-link">
-                    <Icon className="ns-arrow-right" color="green" />
+                  <Aux>
+                    <Link to={redirectURL} className="text-link">
+                      <Icon className="ns-arrow-right" color="green" />
                     Please finish your account setup.
-                  </Link>
+                    </Link>
+                    <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                  </Aux>
                 :
                 null}
               {(selectedAccountStatus && selectedAccountStatus === 'PROCESSING' && isParitalSectionNeedtoShow) ?
-                <p>
-                  We are currently processing your new account request.
-                  You will recive notification when your account is ready for investment.
-                Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
-                </p>
+                <Aux>
+                  <p>
+                    We are currently processing your new {investAccTypes.value} account.
+                    You will recive notification when your account is ready.
+                    Please contact <a href="mailto:support@nextseed.com">support@nextseed.com</a> if you have any question.
+                  </p>
+                  <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
+                </Aux>
                 :
                 null}
             </div>

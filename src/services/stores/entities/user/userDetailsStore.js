@@ -449,7 +449,6 @@ export class UserDetailsStore {
           const offeringId = campaignStore.campaign && campaignStore.campaign.id;
           const offeringDetailObj = { offeringId, isEmailSent: true };
           cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
-          Helper.toast('Email has been sent to admin.', 'success');
         }
       });
   }

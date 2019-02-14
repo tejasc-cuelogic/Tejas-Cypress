@@ -1,5 +1,5 @@
 import { observable, action, toJS, computed } from 'mobx';
-import { forEach, isArray, find, mapValues, forOwn, remove, filter } from 'lodash';
+import { forEach, isArray, find, mapValues, forOwn, remove, filter, capitalize } from 'lodash';
 
 import graphql from 'mobx-apollo';
 import cleanDeep from 'clean-deep';
@@ -45,6 +45,7 @@ export class AccreditationStore {
   @observable userAccredetiationState = undefined;
   @observable selectedAccountStatus = undefined;
   @observable showAccountList = true;
+  @observable headerSubheaderObj = {};
   @action
   initRequest = (reqParams) => {
     const {
@@ -750,6 +751,55 @@ export class AccreditationStore {
     const selectedAccountId = selectedAccountDetails.details.accountId;
     const urlToReturn = selectedAccountName === 'entity' ? `/app/profile-settings/investment-limits/verify-entity-accreditation/${selectedAccountId}/entity` : `/app/profile-settings/investment-limits/verify-accreditation/${selectedAccountId}/${selectedAccountName}`;
     return urlToReturn;
+  }
+  offeringAccreditatoinStatusMessage = (currentStatus) => {
+    const headerSubheaderTextObj = {};
+    if (currentStatus) {
+      const accountType = investmentStore.investAccTypes.value === 'ira' ? 'IRA' : capitalize(investmentStore.investAccTypes.value);
+      switch (currentStatus) {
+        case 'PENDING':
+          headerSubheaderTextObj.header = `Accreditation Verification for ${accountType} Investor Account In Review`;
+          headerSubheaderTextObj.subHeader = 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.';
+          break;
+        case 'NOT_ELGIBLE':
+          headerSubheaderTextObj.header = `Accrditation Verification for ${accountType} Investor Account Required`;
+          headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
+          break;
+        case 'INACTIVE':
+          headerSubheaderTextObj.header = `Accrditation Verification for ${accountType} Investor Account Required`;
+          headerSubheaderTextObj.subHeader = 'You must be an accredited investor to make an investment in this offering.';
+          break;
+        case 'EXPIRED':
+          // headerSubheaderTextObj.header = `Accrditation Expired for ${accountType}
+          //  Investor Account- Renewal Required`;
+          headerSubheaderTextObj.header = 'Accredited Status Expired';
+          headerSubheaderTextObj.subHeader = 'Please confirm the following to renew your status.';
+          break;
+        case 'PROCESSING':
+          headerSubheaderTextObj.header = `New ${accountType} Account Processing`;
+          headerSubheaderTextObj.subHeader = '';
+          break;
+        case 'PARTIAL':
+          headerSubheaderTextObj.header = `You do not have a full ${accountType} Investment Account.`;
+          headerSubheaderTextObj.subHeader = '';
+          break;
+        case 'FROZEN':
+          headerSubheaderTextObj.header = `Your ${accountType} Account Is Frozen For Investments.`;
+          headerSubheaderTextObj.subHeader = '';
+          break;
+        default:
+          headerSubheaderTextObj.header = '';
+          headerSubheaderTextObj.subHeader = '';
+          break;
+      }
+      return headerSubheaderTextObj;
+    }
+    return headerSubheaderTextObj;
+  }
+  @action
+  setHeaderAndSubHeader = (headerText, subHeaderText) => {
+    this.headerSubheaderObj.header = headerText;
+    this.headerSubheaderObj.subHeader = subHeaderText;
   }
 }
 export default new AccreditationStore();
