@@ -29,3 +29,4 @@ Thanks to the following projects that have helped form the base of NextSeed V2 C
 - https://github.com/gothinkster/react-mobx-realworld-example-app/
 - https://github.com/shoaibbhimani/React-Mobx-RRV4
 - https://github.com/nightwolfz/mobx-starter
+  
