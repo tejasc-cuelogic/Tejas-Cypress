@@ -27,7 +27,7 @@ export default class FaqsCombined extends Component {
     this.setState(stateChange);
   }
   search = (e) => {
-    this.props.educationStore.setSrchParam('Faq', e.target.value);
+    this.props.educationStore.setSrchParam(e.target.value);
     if (this.props.location.pathname !== '/resources/education-center/investor/faq') {
       this.props.history.replace('/resources/education-center/investor/faq');
     }
