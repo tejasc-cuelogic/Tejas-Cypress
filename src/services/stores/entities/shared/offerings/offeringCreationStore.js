@@ -810,7 +810,7 @@ export class OfferingCreationStore {
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
       MEDIA_FRM: { isMultiForm: false },
-      KEY_TERMS_FRM: { isMultiForm: false },
+      KEY_TERMS_FRM: { isMultiForm: true },
       OFFERING_OVERVIEW_FRM: { isMultiForm: true },
       OFFERING_COMPANY_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },

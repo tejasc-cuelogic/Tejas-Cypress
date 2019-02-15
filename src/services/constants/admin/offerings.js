@@ -326,17 +326,17 @@ export const KEY_TERMS = {
     placeHolder: 'Enter here',
   },
   unitPrice: {
-    value: '',
+    value: null,
     label: 'Unit Price',
     error: undefined,
-    rule: 'optional',
+    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   premoneyValuation: {
-    value: '',
+    value: null,
     label: 'Pre-Money Valuation',
     error: undefined,
-    rule: 'optional',
+    rule: 'numeric',
     placeHolder: 'Enter here',
   },
   additionalKeyterms: [{

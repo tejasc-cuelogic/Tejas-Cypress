@@ -13,7 +13,7 @@ import HtmlEditor from '../../../../shared/HtmlEditor';
 @observer
 export default class KeyTerms extends Component {
   componentWillMount() {
-    // this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
+    this.props.offeringCreationStore.setFormData('KEY_TERMS_FRM', 'keyTerms');
   }
   onProFormasDrop = (files) => {
     this.props.offeringCreationStore.setFileUploadData('KEY_TERMS_FRM', 'uploadProformas', files, '', null, 'KEY_TERMS_PROFORMAS');
@@ -38,7 +38,7 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
   render() {
     const {
-      KEY_TERMS_FRM, formChange, maskChange, formArrayChange,
+      KEY_TERMS_FRM, formArrayChange, maskArrayChange,
       confirmModal, confirmModalName, removeData,
     } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
@@ -68,7 +68,7 @@ export default class KeyTerms extends Component {
                 key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formArrayChange(e, result, formName)}
               />
             ))}
             <FormDropDown
@@ -79,7 +79,7 @@ export default class KeyTerms extends Component {
               name="industry"
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={BUSINESS_INDUSTRIES}
-              onChange={(e, result) => formChange(e, result, formName)}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
             />
@@ -89,7 +89,7 @@ export default class KeyTerms extends Component {
                 key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formArrayChange(e, result, formName)}
               />
             ))}
             <FormDropDown
@@ -102,14 +102,14 @@ export default class KeyTerms extends Component {
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
               name="securities"
               options={SECURITIES_VALUES}
-              onChange={(e, result) => formChange(e, result, formName)}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
             />
             {['minOfferingAmount', 'maxOfferingAmount'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(values, name) => maskChange(values, formName, name)}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
                 prefix="$"
               />
@@ -124,7 +124,7 @@ export default class KeyTerms extends Component {
               name="legalBusinessType"
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={BUSINESS_TYPE_VALUES}
-              onChange={(e, result) => formChange(e, result, formName)}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
             />
           </Form.Group>
           <Header as="h4">Key Terms</Header>
@@ -133,13 +133,13 @@ export default class KeyTerms extends Component {
               displayMode={isReadonly}
               name="maturity"
               fielddata={KEY_TERMS_FRM.fields.maturity}
-              changed={(e, result) => formChange(e, result, formName)}
+              changed={(e, result) => formArrayChange(e, result, formName)}
             />
             <MaskedInput
               displayMode={isReadonly}
               name="startupPeriod"
               fielddata={KEY_TERMS_FRM.fields.startupPeriod}
-              changed={(values, name) => maskChange(values, formName, name)}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
               number
             />
             <FormDropDown
@@ -152,7 +152,7 @@ export default class KeyTerms extends Component {
               name="regulation"
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={MODIFIED_REGULATION_VALUES}
-              onChange={(e, result) => formChange(e, result, formName)}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
             />
             {['investmentMultiple', 'revSharePercentage', 'interestRate'].map(field => (
               <FormInput
@@ -160,14 +160,14 @@ export default class KeyTerms extends Component {
                 key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formArrayChange(e, result, formName)}
               />
             ))}
             <MaskedInput
               displayMode={isReadonly}
               name="minInvestAmt"
               fielddata={KEY_TERMS_FRM.fields.minInvestAmt}
-              changed={(values, name) => maskChange(values, formName, name)}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
               currency
               prefix="$"
             />
@@ -175,20 +175,20 @@ export default class KeyTerms extends Component {
               displayMode={isReadonly}
               name="securityInterest"
               fielddata={KEY_TERMS_FRM.fields.securityInterest}
-              changed={(e, result) => formChange(e, result, formName)}
+              changed={(e, result) => formArrayChange(e, result, formName)}
             />
             <MaskedInput
               displayMode={isReadonly}
               name="securitiesOwnershipPercentage"
               fielddata={KEY_TERMS_FRM.fields.securitiesOwnershipPercentage}
-              changed={(values, name) => maskChange(values, formName, name)}
+              changed={(values, name) => maskArrayChange(values, formName, name)}
               percentage
             />
             <FormInput
               displayMode={isReadonly}
               name="frequencyOfPayments"
               fielddata={KEY_TERMS_FRM.fields.frequencyOfPayments}
-              changed={(e, result) => formChange(e, result, formName)}
+              changed={(e, result) => formArrayChange(e, result, formName)}
             />
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
@@ -200,14 +200,14 @@ export default class KeyTerms extends Component {
               name="roundType"
               placeholder={isReadonly ? 'N/A' : 'Choose here'}
               options={ROUND_TYPE_VALUES}
-              onChange={(e, result) => formChange(e, result, formName)}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
             />
             {['unitPrice', 'premoneyValuation'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(values, name) => maskChange(values, formName, name)}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
                 prefix="$"
               />
@@ -226,43 +226,43 @@ export default class KeyTerms extends Component {
                 />
               </Form.Field>
             ))}
-            <Header as="h6">
-            Additional Key Terms
-              {!isReadonly &&
-              <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
-              }
-            </Header>
-            {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
-              <Aux>
-                <Header as="h6">{`Term ${index + 1}`}
-                  {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1 &&
-                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')} >
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
-                  }
-                </Header>
-                <div className="featured-section">
-                  <FormInput
-                    displayMode={isReadonly}
-                    name="label"
-                    fielddata={field.label}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'additionalKeyterms', index)}
-                  />
-                  <Form.Field>
-                    <Header as="h6">{field.description.label}</Header>
-                    <HtmlEditor
-                      readOnly={isReadonly}
-                      changed={this.editorChange}
-                      name="description"
-                      form={formName}
-                      index={index}
-                      content={field.description.value}
-                    />
-                  </Form.Field>
-                </div>
-              </Aux>
-            ))}
           </Form.Group>
+          <Header as="h4">
+            Additional Key Terms
+            {!isReadonly &&
+            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
+            }
+          </Header>
+          {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
+            <Aux>
+              <Header as="h6">{`Term ${index + 1}`}
+                {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1 &&
+                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')} >
+                  <Icon className="ns-close-circle" color="grey" />
+                </Link>
+                }
+              </Header>
+              <div className="featured-section">
+                <FormInput
+                  displayMode={isReadonly}
+                  name="label"
+                  fielddata={field.label}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'additionalKeyterms', index)}
+                />
+                <Form.Field>
+                  <Header as="h6">{field.description.label}</Header>
+                  <HtmlEditor
+                    readOnly={isReadonly}
+                    changed={this.editorChange}
+                    name="description"
+                    form={formName}
+                    index={index}
+                    content={field.description.value}
+                  />
+                </Form.Field>
+              </div>
+            </Aux>
+          ))}
           <Header as="h4">Legal</Header>
           <Form.Group widths={3}>
             {['locationRiskFactors', 'stateOfFormation', 'appendixATitle'].map(field => (
@@ -271,7 +271,7 @@ export default class KeyTerms extends Component {
                 key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formArrayChange(e, result, formName)}
               />
             ))}
             {['nsMinFees', 'nsMaxFees'].map(field => (
@@ -279,7 +279,7 @@ export default class KeyTerms extends Component {
                 displayMode={isReadonly}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(values, name) => maskChange(values, formName, name)}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
                 currency
                 prefix="$"
               />
@@ -288,7 +288,7 @@ export default class KeyTerms extends Component {
               displayMode={isReadonly}
               name="stockType"
               fielddata={KEY_TERMS_FRM.fields.stockType}
-              changed={(e, result) => formChange(e, result, formName)}
+              changed={(e, result) => formArrayChange(e, result, formName)}
             />
           </Form.Group>
           <Form.Group widths={2}>
@@ -298,7 +298,7 @@ export default class KeyTerms extends Component {
                 key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formChange(e, result, formName)}
+                changed={(e, result) => formArrayChange(e, result, formName)}
                 containerclassname="secondary large"
               />
             ))}
@@ -312,7 +312,7 @@ export default class KeyTerms extends Component {
                   containerclassname={isReadonly ? 'display-only' : ''}
                   fielddata={KEY_TERMS_FRM.fields[field]}
                   name={field}
-                  changed={(e, result) => formChange(e, result, formName)}
+                  changed={(e, result) => formArrayChange(e, result, formName)}
                 />
               </div>
             ))}
@@ -333,7 +333,7 @@ export default class KeyTerms extends Component {
                   readOnly={isReadonly}
                   fielddata={KEY_TERMS_FRM.fields[field]}
                   name={field}
-                  changed={(e, result) => formChange(e, result, formName)}
+                  changed={(e, result) => formArrayChange(e, result, formName)}
                 />
               </div>
             ))}
