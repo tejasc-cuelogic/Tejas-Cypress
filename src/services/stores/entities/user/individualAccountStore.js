@@ -4,7 +4,7 @@ import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimit
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
+import { submitinvestorAccount, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -21,6 +21,24 @@ class IndividualAccountStore {
   @action
   setStepToBeRendered(step) {
     this.stepToBeRendered = step;
+  }
+
+  submitAccount = () => {
+    const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+    const payLoad = {
+      accountId: accountDetails.details.accountId,
+      accountType: 'INDIVIDUAL',
+    };
+    return new Promise((resolve) => {
+      bankAccountStore.checkOpeningDepositAmount(false).then(() => {
+        client
+          .mutate({
+            mutation: submitinvestorAccount,
+            variables: payLoad,
+          })
+          .then(() => (resolve()));
+      });
+    });
   }
 
   createAccount = (currentStep, formStatus = 'PARTIAL') => {
