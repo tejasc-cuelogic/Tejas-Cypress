@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { get, upperFirst } from 'lodash';
+import { get, capitalize } from 'lodash';
 import { Card, Table, Button } from 'semantic-ui-react';
 import { InlineLoader, DateTimeFormat, NsPagination } from '../../../../../theme/shared';
 import { STATUS_MAPPING, STATUS, TAB_WISE_STATUS } from '../../../../../services/constants/admin/transactions';
@@ -77,11 +77,11 @@ export default class AllTransactions extends Component {
                           <Table.Cell key={col.field} textAlign={col.textAlign} collapsing={col.field === 'userName'}>
                             {
                               ['startDate', 'failDate', 'estDateAvailable'].includes(col.field) ?
-                                row[col.field] !== null ? <DateTimeFormat format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
+                                row[col.field] !== null ? <DateTimeFormat unix format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
                                 this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation) :
                                 col.field === 'agreements' ? get(row, col.fieldLocation) :
                                 col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field]) :
-                                col.field === 'direction' ? upperFirst(row[col.field]) :
+                                col.field === 'direction' ? capitalize(row[col.field]) :
                                 get(row, col.field) === undefined ? 'N/A' : row[col.field]
                             }
                           </Table.Cell>

@@ -34,7 +34,7 @@ export default class OfferSigning extends Component {
         this.getPortalAgreementStatus('Button');
       } else if (e.data === 'viewing_complete') {
         this.props.history.push(`/app/dashboard/${match.params.applicationId}/gettingStarted`);
-      } else if (!e.data.includes('__fs')) {
+      } else if (e && e.data && !e.data.includes('__fs')) {
         this.props.history.push('/app/dashboard');
       }
     }, 2000);
