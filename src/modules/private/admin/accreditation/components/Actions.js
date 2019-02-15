@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import { Table, Button } from 'semantic-ui-react';
 
 const actions = {
-  approve: { label: 'Approve', color: 'green', actionValue: 'APPROVED' },
-  decline: { label: 'Decline', color: 'red', actionValue: 'DECLINED' },
+  approve: { label: 'Approve', color: 'green', actionValue: 'CONFIRMED' },
+  decline: { label: 'Decline', color: 'red', actionValue: 'INVALID' },
 };
 export default class Actions extends Component {
   actionUrl = (action) => {

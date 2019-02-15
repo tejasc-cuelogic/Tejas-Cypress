@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
-import { Route } from 'react-router-dom';
-import { Header, Card } from 'semantic-ui-react';
+import { Link, Route } from 'react-router-dom';
+import { Header, Card, Button } from 'semantic-ui-react';
 import Aux from 'react-aux';
 import { InlineLoader } from '../../../../../theme/shared';
 import PrivateLayout from '../../../shared/PrivateLayout';
@@ -53,6 +53,9 @@ export default class Dashboard extends Component {
         <Route path="/app/summary/establish-profile" component={EstablishProfile} />
         <PrivateLayout
           {...this.props}
+          P4={
+            <Button secondary as={Link} to="/offerings" content="Invest Now" />
+          }
         >
           <Header as="h4">Values Performance</Header>
           <SummaryHeader details={summaryDetails(summary)} />

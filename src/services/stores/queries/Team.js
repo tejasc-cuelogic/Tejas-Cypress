@@ -14,6 +14,7 @@ export const allTeamMembers = gql`
         url
       }
       order
+      isPublished
     }
   }
 `;
@@ -76,6 +77,7 @@ export const editTeamMember = gql`
         url
       }
       order
+      isPublished
     }
   }
 `;
@@ -96,4 +98,10 @@ export const filteredTeamMembers = gql`
       order
     }
   }
+`;
+
+export const setMemberOrderInTeam = gql`
+mutation setMemberOrderInTeam($teamDetails: [TeamOrderInput]) {
+  setMemberOrderInTeam(teamDetails: $teamDetails)
+}
 `;

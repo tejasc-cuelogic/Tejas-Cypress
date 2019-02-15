@@ -6,17 +6,32 @@ import { MultiStep } from '../../../../../../helper';
 import NetWorth from './assets/NetWorth';
 import IncomeEvidence from './shared/IncomeEvidence';
 import Verification from './shared/Verification';
-import AccreditationMethod from './shared/AccreditationMethod';
+import IncomeQualCheck from './shared/IncomeQualCheck';
+import NetWorthCheck from './shared/NetWorthQualCheck';
+import FillingStatus from './shared/FillingStatus';
 import EntityAccreditationMethod from './shared/EntityAcceditationMethod';
 import TrustEntityAccreditationMethod from './shared/TrustEntityAccreditationMethod';
 
 const StepsMetaData = {
   ACCREDITATION_FORM: {
     name: '',
-    component: <AccreditationMethod />,
+    component: <IncomeQualCheck />,
     isHideLabel: true,
     formName: 'ACCREDITATION_FORM',
     isDirty: true,
+  },
+  NETWORTH_QAL_FORM: {
+    name: 'Net worth',
+    component: <NetWorthCheck />,
+    formName: 'NETWORTH_QAL_FORM',
+    isDirty: true,
+  },
+  FILLING_STATUS_FORM: {
+    name: 'Evidence',
+    component: <FillingStatus />,
+    formName: 'FILLING_STATUS_FORM',
+    isDirty: true,
+    isValid: true,
   },
   NET_WORTH_FORM: {
     name: 'Net worth',
@@ -85,13 +100,13 @@ export default class PopulateAccreditationSteps extends React.Component {
           accreditationStore.ACCREDITATION_FORM.fields.method.value === 'INCOME' ? !accreditationStore.INCOME_UPLOAD_DOC_FORM.meta.isValid : !accreditationStore.ASSETS_UPLOAD_DOC_FORM.meta.isValid;
         formObj.formName = accreditationStore.INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ? 'VERIFICATION_REQUEST_FORM' : (accreditationStore.ACCREDITATION_FORM.fields.method.value === 'INCOME' || accreditationStore.ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME') ? 'INCOME_UPLOAD_DOC_FORM' : 'ASSETS_UPLOAD_DOC_FORM';
       } else if (form.key === 'ENTITY_ACCREDITATION_FORM') {
-        formObj.isValid = accreditationStore.ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error';
-        formObj.disableNxtBtn = !accreditationStore.ACCREDITATION_FORM.meta.isValid;
+        formObj.isValid = accreditationStore.ENTITY_ACCREDITATION_FORM.meta.isFieldValid ? '' : 'error';
+        formObj.disableNxtBtn = !accreditationStore.ENTITY_ACCREDITATION_FORM.meta.isValid;
       } else {
         formObj.isValid = accreditationStore[form.key].meta.isFieldValid ? '' : 'error';
         formObj.disableNxtBtn = !accreditationStore[form.key].meta.isValid;
       }
-      if (index === (formArray.length - 1)) {
+      if (index === (formArray.length - 1) && !form.enableNextBtn) {
         formObj.disableNextButton = true;
       }
       return formObj;
@@ -123,7 +138,7 @@ export default class PopulateAccreditationSteps extends React.Component {
         <MultiStep
           createAccount={this.props.multiClickHandler}
           steps={steps}
-          formTitle={this.props.formTitle || 'Verify your accreditation'}
+          formTitle="Verify your status"
           setIsEnterPressed={setIsEnterPressed}
           isEnterPressed={isEnterPressed}
           resetEnterPressed={resetIsEnterPressed}

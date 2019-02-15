@@ -17,8 +17,10 @@ const getSrc = (src) => {
       return 'lendio_logo.svg';
     case 'LogoNsAndLendio':
       return 'nextseed_and_lendio.svg';
+    case 'LogoNsAndLendioWhite':
+      return 'nextseed_and_lendio_white.svg';
     case 'LogoGreenGrey':
-      return 'logo.png';
+      return 'logo.svg';
     default:
       return 'logo-color.svg';
   }

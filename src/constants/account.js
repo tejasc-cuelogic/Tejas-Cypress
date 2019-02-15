@@ -250,7 +250,7 @@ export const IRA_ACC_TYPES = {
       {
         label: 'Roth',
         value: 1,
-        description: 'Earnings from investments on a Roth Retirement Account grow tax free.',
+        description: 'Earnings from investments in a Roth Retirement Account grow tax free.',
         rawValue: 'roth',
       },
     ],

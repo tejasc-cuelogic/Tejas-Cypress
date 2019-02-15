@@ -1007,7 +1007,8 @@ export class OfferingCreationStore {
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
-    approvedObj, fromS3 = false, leaderIndex, msgType = 'success', isLaunchContingency = false,
+    approvedObj, fromS3 = false, leaderIndex,
+    msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
