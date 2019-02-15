@@ -25,18 +25,23 @@ class IndividualAccountStore {
 
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+    uiStore.setProgress();
     const payLoad = {
       accountId: accountDetails.details.accountId,
       accountType: 'INDIVIDUAL',
     };
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       bankAccountStore.checkOpeningDepositAmount(false).then(() => {
         client
           .mutate({
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => (resolve()));
+          .then(() => (resolve()))
+          .catch(() => {
+            uiStore.setProgress(false);
+            reject();
+          });
       });
     });
   }
