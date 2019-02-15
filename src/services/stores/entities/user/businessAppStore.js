@@ -21,6 +21,7 @@ import {
   NEED_HELP,
   BUSINESS_PRE_QUALIFICATION_REAL_ESTATE,
   BUSINESS_DOC_REAL_ESTATE,
+  BUSINESS_APPLICATION_NOTIFICATION_CARD,
 } from '../../../constants/businessApplication';
 import Helper from '../../../../helper/utility';
 import {
@@ -36,7 +37,7 @@ import {
   submitApplication,
   helpAndQuestion,
 } from '../../queries/businessApplication';
-import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore } from '../../index';
+import { uiStore, navStore, userDetailsStore, businessAppLendioStore, businessAppAdminStore, offeringsStore } from '../../index';
 import { fileUpload } from '../../../actions';
 
 export class BusinessAppStore {
@@ -1240,6 +1241,13 @@ export class BusinessAppStore {
   performanceReset = (field) => {
     this.BUSINESS_PERF_FRM = Validator.onChange(this.BUSINESS_PERF_FRM, { name: field, value: '' });
   };
+
+  @computed get notificationCard() {
+    return find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e =>
+      find(this.fetchBusinessApplication, a => a.applicationStatus === e.applicationStatus)) ||
+      find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e =>
+        find(offeringsStore.data.data.getOfferings, a => e.offeringStage.includes(a.stage)));
+  }
 }
 
 export default new BusinessAppStore();

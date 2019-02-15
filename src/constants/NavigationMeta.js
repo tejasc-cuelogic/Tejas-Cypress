@@ -171,8 +171,8 @@ export const PRIVATE_NAV = [
     title: 'Referrals',
     to: 'referrals',
     path: 'investor/referrals/containers/Referrals',
-    // accessibleTo: ['ira', 'individual', 'entity'],
-    accessibleTo: ['investor'],
+    accessibleTo: ['ira', 'individual', 'entity'],
+    // accessibleTo: ['investor'],
   },
   {
     icon: 'gift',

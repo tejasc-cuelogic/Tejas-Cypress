@@ -716,3 +716,65 @@ export const LENDIO = {
     1000001: 'GREATER_THAN_1M', // 'Over $1M'
   },
 };
+
+export const BUSINESS_APPLICATION_NOTIFICATION_CARD = {
+
+  applicationStatus: [
+    {
+      congratulations: '',
+      header: 'You have been pre-qualified for a NextSeed campaign',
+      message: 'Thanks for starting your NextSeed application! We’re excited to explore this opportunity with you further. Please complete the rest of the Business Application and submit the requested documents. If you have any questions, please connect with us at apply@nextseedsecurities.com.',
+      applicationStatus: 'PRE_QUALIFICATION_SUBMITTED',
+    },
+    {
+      congratulations: '',
+      header: 'You’re almost there',
+      message: 'Once you complete your application, we’ll review quickly and get back to you within a few days. Please finish submitting your materials. If you have any questions, you can reach us at apply@nextseedsecurities.com.',
+      applicationStage: 'IN_PROGRESS',
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'We’re reviewing your application',
+      message: 'Thanks for submitting your application! We will be reaching out with any questions or open items that require follow-up. You should expect to hear from a NextSeed team member within a few days. If you have any questions, please connect with us at apply@nextseedsecurities.com.',
+      applicationStatus: 'APPLICATION_SUBMITTED',
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'You’ve received an offer!',
+      message: 'We’re excited about the opportunity to work with you. Please review the terms of your offer, and select the option you want to move forward with. If you have any questions, please contact us at apply@nextseedsecurities.com.',
+      applicationStatus: 'APPLICATION_OFFERED',
+    },
+  ],
+  offeringStage: [
+    {
+      congratulations: 'Congratulations!',
+      header: 'We’re looking forward to working with you on your campaign!',
+      message: 'You should expect a member of the NextSeed Operations team to reach out shortly to schedule your kickoff call.',
+      offeringStage: ['CREATION'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Your NextSeed campaign is live!',
+      message: 'Let’s get the word out. Remember to use your team’s personalized Share Link when communicating with your network. That will help us keep track of your referrals.',
+      offeringStage: ['LIVE'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Your campaign has successfully closed',
+      message: 'We’ll be reaching out to confirm closing contingencies and to ensure your funds are properly tracked and distributed.',
+      offeringStage: ['PROCESSING', 'LOCK'],
+    },
+    {
+      congratulations: 'Congratulations!',
+      header: 'Funds have been disbursed',
+      message: 'Congrats! Please check your account and confirm that you have received your funds.',
+      offeringStage: ['STARTUP_PREIOD'],
+    },
+    {
+      congratulations: '!',
+      header: 'How are things progressing?',
+      message: 'It’s time to provide your monthly update. Please go to your Updates section to share the latest with your investors.',
+      offeringStage: ['STARTUP_PREIOD', 'IN_REPAYMENT'],
+    },
+  ],
+};
