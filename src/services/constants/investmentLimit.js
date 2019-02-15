@@ -1,7 +1,7 @@
 export const ACCREDITATION_STATUS_LABEL = {
   REQUESTED: 'Requested',
-  APPROVED: 'Approved',
-  DECLINED: 'Declined',
+  CONFIRMED: 'Approved',
+  INVALID: 'Declined',
 };
 
 export const INVESTEMENT_LIMIT = {
@@ -49,107 +49,29 @@ export const INVESTEMENT_LIMIT = {
   },
 };
 
-export const ACCREDITATION_METHODS_META = [
+export const INCOME_QUALIFICATION_CHECK_META = [
   {
-    header: 'Income',
-    value: 'INCOME',
-    desc: 'Income of $200k, or $300k with spouse, in each of past 2 years and expecting same or more this year',
+    value: true,
+    desc: 'Yes, I have had an income of $200k+ or $300k+ with my spouse in each of the past 2 years and expect the same or higher this year.',
   },
   {
-    header: 'Assets',
-    value: 'ASSETS',
-    desc: 'Net worth of $1M individually or joint with spouse, excluding your primary residence',
-  },
-];
-
-export const ENTITY_TRUST_ACCREDITATION_METHODS_META = [
-  {
-    header: 'Income',
-    value: 'REVOCABLE_TRUST_INCOME',
-    desc: 'Income of $200k, or $300k with spouse, in each of past 2 years and expecting same or more this year',
-  },
-  {
-    header: 'Assets',
-    value: 'REVOCABLE_TRUST_ASSETS',
-    desc: 'Net worth of $1M individually or joint with spouse, excluding your primary residence',
-  },
-];
-
-export const ENTITY_ACCREDITATION_METHODS_META = [
-  {
-    value: 'TWENTY_FIVE_MILLION',
-    desc: '$25,000,000 in company assets',
-  },
-  {
-    value: 'FIVE_MILLION',
-    desc: '$5,000,000 in company assets',
-  },
-  {
-    value: 'OWNERS_ACCREDITATED',
-    desc: 'All owners are accredited investors',
-  },
-  {
-    value: 'OWNERS_QUALIFIED',
-    desc: 'All equity owners are qualified purchasers',
-    tooltip: 'In order to be a qualified purchase you must have over $5 million in investmetns.',
+    value: false,
+    desc: 'No, my income does not meet this criteria.',
   },
 ];
 
 export const ENTITY_ACCREDITATION_METHODS = {
   method: {
     value: '',
-    values: [
-      { value: 'TWENTY_FIVE_MILLION' },
-      { value: 'FIVE_MILLION' },
-      { value: 'OWNERS_ACCREDITATED' },
-      { value: 'OWNERS_QUALIFIED' },
-    ],
-    error: undefined,
-    rule: 'required',
-  },
-};
-
-export const ACCREDITATION_METHODS = {
-  method: {
-    value: 'INCOME',
     values:
       [
         {
-          label: 'have an income of $200,000 or more (or $300,000 or more with my spouse) in each of the past 2 years and am expecting the same or more this year.',
-          value: 'INCOME',
-        },
-        {
-          label: 'I have a net worth of $1M or more (individually or with my spouse), exclusing my primary residence.',
+          label: 'Yes, my entity is an accredited investor because (a) it has total assets in excess of $5,000,000 or (b) all equity owners of the entity are accredited investors',
           value: 'ASSETS',
         },
-      ],
-    error: undefined,
-    rule: 'required',
-  },
-};
-
-export const ACCREDITATION_METHODS_ENTITY = {
-  grantorName: {
-    value: '',
-    label: 'Grantor Name',
-    error: undefined,
-    rule: 'required',
-    placeHolder: 'Enter here',
-    customErrors: {
-      required: 'required.',
-    },
-  },
-  method: {
-    value: '',
-    values:
-      [
         {
-          label: 'Income of $200k, or $300k with spouse, in each of past 2 years and expecting same or more this year',
-          value: 'REVOCABLE_TRUST_INCOME',
-        },
-        {
-          label: 'Net worth of $1M individually or joint with spouse, excluding your primary residence',
-          value: 'REVOCABLE_TRUST_ASSETS',
+          label: 'No, my entity does not qualify to be an accredited investor.',
+          value: 'ZERO',
         },
       ],
     error: undefined,
@@ -159,31 +81,23 @@ export const ACCREDITATION_METHODS_ENTITY = {
 
 export const INCOME_EVIDENCE_META = [
   {
-    header: 'Send verification request to my lawyer, CPA, registered investment adviser or broker dealer',
+    header1: 'Send verification request to my personal lawyer, CPA, registered investment adviser or broker dealer',
+    header2: 'Send verification request to my lawyer, CPA, registered investment adviser or broker dealer',
     value: 'verificationrequest',
-    desc: 'They`ll be asked to confirm in writing that they have reviewed and confirmed the evidence of your accredited investor status.',
+    desc1: 'They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your accredited investor status.',
+    desc2: 'They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your entity`s accredited investor status',
+    desc3: 'They`ll be asked to confirm in writing that they have reviewed and confirmed evidence of your trust`s accredited investor status.',
   },
   {
-    header: 'Upload document',
+    header1: 'Upload documentation',
+    header2: 'Upload verification letter',
     value: 'uploaddocument',
-    desc: 'W2, 1040, or other official IRS or foreign tax authority document containing salary information for the past 2 years; or a letter from your lawyer, CPA, registered investment advisor or broker-dealer.',
-    desc2: 'Asset-based verification should be bank statements, brokerage statements that shows value of accounts. There should also be a note that we need to do a soft pull of their credit to see their liabilities in order to determine net worth.',
+    desc1: 'Documentation could include tax returns, W-2s, or other official IRS or foreign tax authority documents containing salary information for the past 2 years, or a letter from your personal lawyer, CPA, registered investment advisor or broker-dealer.',
+    desc2: 'Documentation could include a signed letter from a professional advisor, personal financial statements, bank statements, brokerage statements that show value of accounts, etc. We may also check your credit to verify any liabilities affecting your net worth. This will not affect your credit score.',
+    desc3: 'Upload a signed letter from your lawyer, CPA, registered investment advisor or broker-dealer confirming your entity`s accredited investor status.',
+    desc4: 'Upload a signed letter from your lawyer, CPA, registered investment advisor or broker-dealer confirming your trust`s accredited investor status.',
   },
 ];
-
-export const VERIFY_ACC_WITH_META = [
-  {
-    header: 'Trusts Assets',
-    value: 'ASSETS',
-    desc: 'My trust is irrevocable and has more than $5,000,000 in assets.',
-  },
-  {
-    header: 'My trust is revocable and I am accredited',
-    value: 'REVOCABLE_TRUST_ASSETS',
-    desc: 'Grantor must provide evidence of revocability and accreditation.',
-  },
-];
-
 
 export const TRUST_ENTITY_ACCREDITATION = {
   method: {
@@ -191,12 +105,67 @@ export const TRUST_ENTITY_ACCREDITATION = {
     values:
       [
         {
-          label: 'Trusts Assets',
+          label: 'Yes, my trust qualifies as an accredited investor.',
           value: 'ASSETS',
         },
         {
-          label: 'My trust is revocable and I am accredited',
-          value: 'REVOCABLE_TRUST_ASSETS',
+          label: 'No, my trust does not qualify as an accredited investor.',
+          value: 'INCOME',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+
+export const INCOME_QAL = {
+  method: {
+    value: '',
+    values:
+      [
+        {
+          label: 'Yes, I have had an income of $200,000 or more (or $300,000 or more with my spouse) in each of the past 2 years and expect the same or higher this year.',
+          value: 'INCOME',
+        },
+        {
+          label: 'No, my income does not meet this criteria.',
+          value: 'ASSETS',
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+export const FILLING_STATUS = {
+  method: {
+    value: '',
+    values:
+      [
+        {
+          label: 'Yes',
+          value: true,
+        },
+        {
+          label: 'No',
+          value: false,
+        },
+      ],
+    error: undefined,
+    rule: 'required',
+  },
+};
+export const NETWORTH_QAL = {
+  method: {
+    value: '',
+    values:
+      [
+        {
+          label: 'Yes, I have a net worth of $1M or more (individually or with my spouse), excluding my primary residence.',
+          value: 'ASSETS',
+        },
+        {
+          label: 'No, my net worth does not meet this criteria.',
+          value: 'NONETWORTH',
         },
       ],
     error: undefined,
@@ -231,7 +200,6 @@ export const VERIFICATION_REQUEST = {
     rule: 'required',
     placeHolder: 'Choose verifier role',
     label: 'Verifier role',
-    tooltip: 'Lawyer, CPA, investment advisor or investment broker',
     objRefOutput: 'verifier',
     objRef: 'verifier',
   },
@@ -247,8 +215,32 @@ export const VERIFICATION_REQUEST = {
 };
 
 export const INCOME_UPLOAD_DOCUMENTS = {
+  isAcceptedForfilling: {
+    skipField: true,
+    value: [],
+    values: [
+      {
+        label: 'I hereby certify that I have a reasonable expectation that my income will meet or exceed the requirement to be considered an accredited investor in 2019.',
+        value: 'ACCEPTED',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
+  isAcceptedForUnfilling: {
+    skipField: true,
+    value: [],
+    values: [
+      {
+        label: 'There are not yet tax returns, Form W-2s, or other IRS or foreign tax authority documents that evidence my income for 2018. I hereby certify that my income in 2018 met or exceeded the requirement to be considered an accredited investor, and I have a reasonable expectation that my income will meet or exceed such requirement in 2019. I acknowledge that I must provide appropriate documentation for 2018 once it becomes available.',
+        value: 'ACCEPTED',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
   incomeDocSecondLastYear: {
-    label: '2016 Income Documentation',
+    label: '2017 Income Documentation',
     value: '',
     error: undefined,
     rule: 'required',
@@ -262,7 +254,21 @@ export const INCOME_UPLOAD_DOCUMENTS = {
     objType: 'FileObjectType',
   },
   incomeDocLastYear: {
-    label: '2017 Income Documentation',
+    label: '2018 Income Documentation',
+    value: '',
+    error: undefined,
+    rule: 'required',
+    showLoader: false,
+    preSignedUrl: '',
+    fileId: '',
+    fileData: '',
+    customErrors: { required: 'required' },
+    objRefOutput: 'assetsUpload',
+    objRef: 'assetsUpload',
+    objType: 'FileObjectType',
+  },
+  incomeDocThirdLastYear: {
+    label: '2016 Income Documentation',
     value: '',
     error: undefined,
     rule: 'required',
@@ -278,6 +284,18 @@ export const INCOME_UPLOAD_DOCUMENTS = {
 };
 
 export const ASSETS_UPLOAD_DOCUMENTS = {
+  isAccepted: {
+    skipField: true,
+    value: [],
+    values: [
+      {
+        label: 'My net worth is greater than $1,000,000, excluding my primary residence, and the documents I have uploaded to verify my status are less than 90 days old.',
+        value: 'ACCEPTED',
+      },
+    ],
+    error: undefined,
+    rule: 'required',
+  },
   statementDoc: {
     label: '',
     value: [],
@@ -300,34 +318,12 @@ export const NET_WORTH = {
     values:
       [
         {
-          label: '$5,000,000',
+          label: 'Yes, my entity is an accredited investor because (a) it has total assets in excess of $5,000,000 or (b) all equity owners of the entity are accredited investors',
           value: 'FIVE_MILLION',
         },
         {
-          label: '$2,100,000',
-          value: 'TWO_MILLION',
-        },
-        {
-          label: '$1,000,000',
-          value: 'ONE_MILLION',
-        },
-      ],
-    error: undefined,
-    rule: 'required',
-  },
-};
-export const ENTITY_TRUST_NET_WORTH = {
-  netWorth: {
-    value: '',
-    values:
-      [
-        {
-          label: '$5,000,000',
-          value: 'FIVE_MILLION',
-        },
-        {
-          label: '$25,000,000',
-          value: 'TWENTY_FIVE_MILLION',
+          label: 'No, my entity does not qualify to be an accredited investor.',
+          value: 'ZERO',
         },
       ],
     error: undefined,

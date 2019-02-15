@@ -108,7 +108,7 @@ export default class AllAccreditationRequests extends Component {
                         {...this.props}
                       /> :
                       <Table.Cell>
-                        <p className={`${accreditation.accreditationStatus === 'APPROVED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
+                        <p className={`${accreditation.accreditationStatus === 'CONFIRMED' ? 'positive' : 'negative'}-text`}><b>{ACCREDITATION_STATUS_LABEL[accreditation.accreditationStatus]}</b></p>
                       </Table.Cell>
                     }
                   </Table.Row>

@@ -2,12 +2,16 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Header, Form, Divider, Button, Grid } from 'semantic-ui-react';
 import { withRouter } from 'react-router-dom';
-import { DropZoneConfirm as DropZone } from '../../../../../../../theme/form';
+import { DropZoneConfirm as DropZone, FormCheckbox } from '../../../../../../../theme/form';
 
 @inject('uiStore', 'accreditationStore')
 @withRouter
 @observer
 export default class UploadDocument extends Component {
+  componentWillMount() {
+    const { changeRuleAsPerFilingStatus, FILLING_STATUS_FORM } = this.props.accreditationStore;
+    changeRuleAsPerFilingStatus(FILLING_STATUS_FORM.fields.method.value);
+  }
   onFileDrop = (files, field) => {
     this.props.accreditationStore.setFileUploadData('INCOME_UPLOAD_DOC_FORM', field, files, this.props.accountType, 'Income');
   }
@@ -22,7 +26,13 @@ export default class UploadDocument extends Component {
   }
 
   render() {
-    const { INCOME_UPLOAD_DOC_FORM } = this.props.accreditationStore;
+    const {
+      INCOME_UPLOAD_DOC_FORM, FILLING_STATUS_FORM, formChange,
+    } = this.props.accreditationStore;
+    let docsToUpload = ['incomeDocSecondLastYear', 'incomeDocLastYear'];
+    if (!FILLING_STATUS_FORM.fields.method.value) {
+      docsToUpload = ['incomeDocThirdLastYear', 'incomeDocSecondLastYear'];
+    }
     return (
       <div>
         <Header as="h3" textAlign="center">Upload documents</Header>
@@ -31,7 +41,7 @@ export default class UploadDocument extends Component {
         <Form error>
           <Grid stackable columns="equal">
             {
-              ['incomeDocSecondLastYear', 'incomeDocLastYear'].map(field => (
+              docsToUpload.map(field => (
                 <Grid.Column>
                   <DropZone
                     name={field}
@@ -45,6 +55,17 @@ export default class UploadDocument extends Component {
             }
           </Grid>
           <Divider hidden />
+          <FormCheckbox
+            fielddata={
+              FILLING_STATUS_FORM.fields.method.value ?
+              INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForfilling
+              : INCOME_UPLOAD_DOC_FORM.fields.isAcceptedForUnfilling
+            }
+            name={FILLING_STATUS_FORM.fields.method.value ? 'isAcceptedForfilling' : 'isAcceptedForUnfilling'}
+            changed={(e, result) => formChange(e, result, 'INCOME_UPLOAD_DOC_FORM')}
+            defaults
+            containerclassname="ui relaxed list"
+          />
           <div className="center-align">
             <Button onClick={() => this.props.clicked('INCOME_UPLOAD_DOC_FORM')} primary size="large" disabled={!INCOME_UPLOAD_DOC_FORM.meta.isValid}>Submit</Button>
           </div>

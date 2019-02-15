@@ -3,7 +3,7 @@ import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import Verification from './shared/Verification';
 import PopulateAccreditationSteps from './PopulateAccreditationSteps';
-import { NET_WORTH, ACCREDITATION_METHODS } from './../../../../../../services/constants/investmentLimit';
+import { NET_WORTH, INCOME_QAL } from './../../../../../../services/constants/investmentLimit';
 
 @inject('accreditationStore')
 @withRouter
@@ -13,7 +13,7 @@ export default class Accreditation extends React.Component {
     const { match } = this.props;
     const { accountType } = match.params;
     this.props.accreditationStore.getUserAccreditation().then(() => {
-      this.props.accreditationStore.changeFormObject('ACCREDITATION_FORM', ACCREDITATION_METHODS);
+      this.props.accreditationStore.changeFormObject('ACCREDITATION_FORM', INCOME_QAL);
       this.props.accreditationStore.setFormData('ACCREDITATION_FORM', 'accreditation', accountType);
       this.props.accreditationStore.changeFormObject('NET_WORTH_FORM', NET_WORTH);
       this.props.accreditationStore.setFormData('NET_WORTH_FORM', 'accreditation', accountType);
@@ -31,7 +31,11 @@ export default class Accreditation extends React.Component {
   }
   multiClickHandler = (step) => {
     const { params } = this.props.match;
-    if (step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
+    if (step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') {
+      this.props.history.push(`${this.props.refLink}/falied`);
+      return;
+    }
+    if (!(step.formName === 'ACCREDITATION_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'ASSETS') && step.formName !== 'FILLING_STATUS_FORM' && !(step.formName === 'NETWORTH_QAL_FORM' && this.props.accreditationStore[step.formName].fields.method.value === 'NONETWORTH') && step.formName !== 'VERIFICATION_REQUEST_FORM' && step.formName !== 'INCOME_UPLOAD_DOC_FORM' && step.formName !== 'ASSETS_UPLOAD_DOC_FORM' && step.formName !== 'INCOME_EVIDENCE_FORM') {
       this.props.accreditationStore
         .updateAccreditation(step.formName, params.accountId, params.accountType.toUpperCase(), 1)
         .then(() => {
@@ -44,18 +48,18 @@ export default class Accreditation extends React.Component {
   render() {
     const {
       ACCREDITATION_FORM,
+      INCOME_EVIDENCE_FORM,
+      NETWORTH_QAL_FORM,
     } = this.props.accreditationStore;
-    const formArray = ACCREDITATION_FORM.fields.method.value === 'ASSETS' ?
-      [
-        { key: 'ACCREDITATION_FORM' },
-        { key: 'NET_WORTH_FORM' },
-        { key: 'INCOME_EVIDENCE_FORM' },
-        {
-          key: 'VERIFICATION',
-          component: <Verification step={3} refLink={this.props.refLink} type={1} />,
-        },
-      ]
-      :
+    const formArray = (ACCREDITATION_FORM.fields.method.value === 'INCOME' && INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'uploaddocument') ? [
+      { key: 'ACCREDITATION_FORM' },
+      { key: 'INCOME_EVIDENCE_FORM' },
+      { key: 'FILLING_STATUS_FORM' },
+      {
+        key: 'VERIFICATION',
+        component: <Verification step={3} refLink={this.props.refLink} type={1} />,
+      },
+    ] : ACCREDITATION_FORM.fields.method.value === 'INCOME' ?
       [
         { key: 'ACCREDITATION_FORM' },
         { key: 'INCOME_EVIDENCE_FORM' },
@@ -63,7 +67,25 @@ export default class Accreditation extends React.Component {
           key: 'VERIFICATION',
           component: <Verification step={2} refLink={this.props.refLink} type={1} />,
         },
-      ];
+      ]
+      : NETWORTH_QAL_FORM.fields.method.value === 'ASSETS' ? [
+        { key: 'ACCREDITATION_FORM' },
+        { key: 'NETWORTH_QAL_FORM' },
+        { key: 'INCOME_EVIDENCE_FORM' },
+        {
+          key: 'VERIFICATION',
+          component: <Verification step={3} refLink={this.props.refLink} type={1} />,
+        },
+      ] :
+        [
+          { key: 'ACCREDITATION_FORM' },
+          { key: 'NETWORTH_QAL_FORM', enableNextBtn: true },
+          { key: 'INCOME_EVIDENCE_FORM' },
+          {
+            key: 'VERIFICATION',
+            component: <Verification step={3} refLink={this.props.refLink} type={1} />,
+          },
+        ];
     return (
       <PopulateAccreditationSteps
         multiClickHandler={this.multiClickHandler}
