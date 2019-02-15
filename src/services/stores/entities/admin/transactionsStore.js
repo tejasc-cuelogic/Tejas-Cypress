@@ -89,7 +89,7 @@ export class TransactionsStore {
   @action
   setData = (data) => {
     if (get(data, 'getTransactions')) {
-      this.setDb(data.getTransactions.transactions);
+      this.setDb(DataFormatter.mapDatesToType(data.getTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
       this.searchCount = data.getTransactions.transactionCount.searchCount;
       this.setTabCount(data.getTransactions.transactionCount);
     }
@@ -136,7 +136,7 @@ export class TransactionsStore {
           },
         })
         .then(() => {
-          Helper.toast('Transaction Failed successfully.', 'success');
+          Helper.toast(`Transaction ${FAILED_STATUS[transStatus]} successfully.`, 'success');
           this.initRequest(this.transactionStatus);
           resolve();
         })
@@ -220,7 +220,7 @@ export class TransactionsStore {
   setInitiateSrch = (valueObj, name) => {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
-      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, true, name, false) : '';
+      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonTerminatedState, name, this.isNonTerminatedState) : '';
       if (this.requestState.search.dateFilterStart === '' ||
         this.requestState.search.dateFilterStop === '') {
         delete searchparams[name];

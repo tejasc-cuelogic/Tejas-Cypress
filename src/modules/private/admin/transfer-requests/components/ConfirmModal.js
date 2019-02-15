@@ -48,7 +48,7 @@ export default class ConfirmModal extends Component {
               changed={(e, result) => formChange(e, result, 'TRANSACTION_FAILURE')}
             />
             <div className="center-align mt-30">
-              <Button className="red relaxed" content="Confirm Failure" loading={inProgress} disabled={!TRANSACTION_FAILURE.meta.isValid} onClick={this.handleConfirm} />
+              <Button className="red relaxed" content={`Confirm ${statusType === 'status-1' ? 'Decline' : 'Failure'}`} loading={inProgress} disabled={!TRANSACTION_FAILURE.meta.isValid} onClick={this.handleConfirm} />
             </div>
           </Form>
         </Modal.Content>
