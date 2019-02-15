@@ -158,6 +158,7 @@ export const verifiedTransactions = gql`
   mutation _transactionVerified($id: Int!){
     transactionVerified(
     id: $id
+    reason: $reason
     )
   }`;
 
