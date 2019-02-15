@@ -225,42 +225,42 @@ export default class KeyTerms extends Component {
                 />
               </Form.Field>
             ))}
-            <Header as="h6">
-            Additional Key Terms
-              {!isReadonly &&
-              <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
-              }
-            </Header>
-            {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
-              <Aux>
-                <Header as="h6">{`Term ${index + 1}`}
-                  {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1 &&
-                  <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')} >
-                    <Icon className="ns-close-circle" color="grey" />
-                  </Link>
-                  }
-                </Header>
-                <div className="featured-section">
-                  <FormInput
-                    displayMode={isReadonly}
-                    name="label"
-                    fielddata={field.label}
-                    changed={(e, result) => formArrayChange(e, result, formName, 'additionalKeyterms', index)}
-                  />
-                  <Form.Field>
-                    <Header as="h6">{field.description.label}</Header>
-                    <HtmlEditor
-                      readOnly={isReadonly}
-                      changed={this.editorChange}
-                      name="description"
-                      form={formName}
-                      content={field.description.value}
-                    />
-                  </Form.Field>
-                </div>
-              </Aux>
-            ))}
           </Form.Group>
+          <Header as="h4">
+            Additional Key Terms
+            {!isReadonly &&
+            <Link to={this.props.match.url} className="link" onClick={e => this.addMore(e, formName, 'additionalKeyterms')}><small>+ Add New Term</small></Link>
+            }
+          </Header>
+          {KEY_TERMS_FRM.fields.additionalKeyterms.map((field, index) => (
+            <Aux>
+              <Header as="h6">{`Term ${index + 1}`}
+                {KEY_TERMS_FRM.fields.additionalKeyterms.length > 1 &&
+                <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'additionalKeyterms')} >
+                  <Icon className="ns-close-circle" color="grey" />
+                </Link>
+                }
+              </Header>
+              <div className="featured-section">
+                <FormInput
+                  displayMode={isReadonly}
+                  name="label"
+                  fielddata={field.label}
+                  changed={(e, result) => formArrayChange(e, result, formName, 'additionalKeyterms', index)}
+                />
+                <Form.Field>
+                  <Header as="h6">{field.description.label}</Header>
+                  <HtmlEditor
+                    readOnly={isReadonly}
+                    changed={this.editorChange}
+                    name="description"
+                    form={formName}
+                    content={field.description.value}
+                  />
+                </Form.Field>
+              </div>
+            </Aux>
+          ))}
           <Header as="h4">Legal</Header>
           <Form.Group widths={3}>
             {['locationRiskFactors', 'stateOfFormation', 'appendixATitle'].map(field => (
