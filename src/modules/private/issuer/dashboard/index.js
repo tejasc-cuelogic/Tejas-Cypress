@@ -9,15 +9,16 @@ import OfferSigning from '../businessApplication/components/OfferSigning';
 import GettingStarted from '../businessApplication/components/GettingStarted';
 import DeclineApplication from '../businessApplication/components/DeclineApplication';
 
-@inject('userStore')
+@inject('userStore', 'businessAppStore')
 @observer
 class Dashboard extends Component {
   render() {
+    const { notificationCard } = this.props.businessAppStore;
     const { match } = this.props;
     return (
       <PrivateLayout
         {...this.props}
-        P5={<StickyNotification />}
+        P5={<StickyNotification notificationCard={notificationCard} />}
       >
         <ApplicationCard />
         <Route path={`${match.url}/:applicationId/offers`} component={ChooseOffer} />

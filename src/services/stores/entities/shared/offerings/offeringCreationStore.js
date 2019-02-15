@@ -1007,8 +1007,7 @@ export class OfferingCreationStore {
   updateOffering = (
     id,
     fields, keyName, subKey, notify = true, successMsg = undefined,
-    approvedObj, fromS3 = false, leaderIndex,
-    msgType = 'success', isLaunchContingency = false,
+    approvedObj, fromS3 = false, leaderIndex, msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     const { getOfferingById } = offeringsStore.offerData.data;
     let payloadData = {
@@ -1029,9 +1028,14 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin =
           Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
         const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
-        const emptyDocIndex = dataRoomDocs.findIndex(x => x.name === '');
-        dataRoomDocs.splice(emptyDocIndex, 1);
-        payloadData[keyName].dataroom = { documents: dataRoomDocs };
+        const finalDataRoomDocs = [];
+        dataRoomDocs.map((data, index) => {
+          if (data.name !== '' || data.upload.fileId !== '') {
+            finalDataRoomDocs.push(data);
+          }
+          return finalDataRoomDocs;
+        });
+        payloadData[keyName].dataroom = { documents: finalDataRoomDocs };
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);

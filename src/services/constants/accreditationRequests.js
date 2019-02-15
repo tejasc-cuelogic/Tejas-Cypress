@@ -13,8 +13,8 @@ export const FILTER_META = {
     value: [],
     values: [
       { text: 'Requested', value: 'REQUESTED' },
-      { text: 'Approved', value: 'APPROVED' },
-      { text: 'Declined', value: 'DECLINED' },
+      { text: 'Approved', value: 'CONFIRMED' },
+      { text: 'Declined', value: 'INVALID' },
     ],
     error: undefined,
     rule: 'empty',
@@ -42,6 +42,16 @@ export const CONFIRM_ACCREDITATION = {
     error: undefined,
     rule: 'required',
     placeHolder: 'Type your comment here...',
+  },
+  expiration: {
+    value: '12/31/2019',
+    label: 'Expiration Date',
+    placeHolder: 'Enter here',
+    error: undefined,
+    rule: 'required|date',
+    customErrors: {
+      date: 'Date format is invalid.',
+    },
   },
 };
 

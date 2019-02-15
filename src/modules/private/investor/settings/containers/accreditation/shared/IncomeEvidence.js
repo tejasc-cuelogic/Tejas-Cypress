@@ -17,8 +17,14 @@ export default class IncomeEvidence extends Component {
     const incEvidenceMethods = INCOME_EVIDENCE_META.slice();
     return (
       <div>
-        <Header as="h3" textAlign="center">{this.props.isEntity ? 'Provide evidence of accreditation' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income evidence' : 'Evidence of Assets' }</Header>
-        <p className="center-align">You can provide evidence of accreditation either through the verification of a professional advisor or by uploading the required documents.</p>
+        <Header as="h3" textAlign="center">{this.props.isEntity ? 'Provide evidence of status' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ? 'Income' : 'NetWorth' }</Header>
+        <p className="center-align">
+          {this.props.isEntity ? 'How would you like to confirm your status as an accredited investor?' : ACCREDITATION_FORM.fields.method.value === 'INCOME' ?
+        'You can provide evidence of your status as an accredited investor either by verification from a professional advisor or by uploading documentation evidencing your income for the prior two years.'
+        :
+          'You can provide evidence of your status as an accredited investor either by verification from a professional advisor or by uploading documentation evidencing your net worth.          '
+        }
+        </p>
         <Form error className="account-type-tab">
           <Grid columns={1}>
             {incEvidenceMethods.map(method => (
@@ -26,16 +32,26 @@ export default class IncomeEvidence extends Component {
                 onClick={e => incomeEvidenceChange(e, { name: 'incEvidenceMethods', value: method.value })}
               >
                 <div className={`user-type ${(INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === method.value ? 'active' : '')}`}>
-                  <Header as="h6">{method.header}</Header>
-                  {((this.props.isTrust || ACCREDITATION_FORM.fields.method.value === 'ASSETS' || ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_ASSETS') && method.value === 'uploaddocument' && !this.props.isEntity) ?
-                    <p> {method.desc2} </p> :
-                    <p> {method.desc} </p>
+                  <Header as="h6">{this.props.isEntity ? method.header2 : method.header1}</Header>
+                  <p>
+                    {method.value === 'uploaddocument' ? this.props.isTrust ? method.desc4 : this.props.isEntity ? method.desc3 :
+                    ACCREDITATION_FORM.fields.method.value === 'ASSETS' ? method.desc2 : method.desc1 : ''}
+                    {method.value === 'verificationrequest' ?
+                    this.props.isTrust ? method.desc3 : this.props.isEntity ? method.desc2 :
+                    method.desc1 : ''
                     }
+                  </p>
                 </div>
               </Grid.Column>
             ))}
           </Grid>
         </Form>
+        {ACCREDITATION_FORM.fields.method.value === false &&
+          <p className="center-align">
+            Note: Verification of your accredited investor status using net worth is only valid for
+            90 days from the date of your most recently submitted documentation.
+          </p>
+        }
       </div>
     );
   }

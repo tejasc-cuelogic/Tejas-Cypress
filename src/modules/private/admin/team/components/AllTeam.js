@@ -8,7 +8,9 @@ import { InlineLoader, NsPagination, UserAvatar } from './../../../../../theme/s
 import { ByKeyword } from '../../../../../theme/form/Filters';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder-large mr-10" />);
-const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) => (
+const SortableItem = SortableElement(({
+  teamMember, handleAction, handleEdit, save,
+}) => (
   <div className="row-wrap">
     <div className="balance-half">
       <DragHandle />
@@ -30,7 +32,7 @@ const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) 
         teamMember.social.map(site => (
           <Aux>
             {site.url &&
-              <a target="_blank" rel="noopener noreferrer" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
+              <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
             }
           </Aux>
         )) : ''}
@@ -44,7 +46,7 @@ const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) 
           <Icon className="ns-pencil" onClick={() => handleEdit(teamMember.id)} />
         </Button>
         <Button className="link-button">
-          <Icon color="blue" name="ns-view" />
+          <Icon onClick={() => save(teamMember)} color="blue" name={teamMember.isPublished ? 'ns-view' : 'ns-no-view'} />
         </Button>
         <Button icon className="link-button" >
           <Icon className="ns-trash" onClick={() => handleAction(teamMember.id)} />
@@ -54,7 +56,9 @@ const SortableItem = SortableElement(({ teamMember, handleAction, handleEdit }) 
   </div>
 ));
 
-const SortableList = SortableContainer(({ teamMembers, handleAction, handleEdit }) => (
+const SortableList = SortableContainer(({
+  teamMembers, handleAction, handleEdit, save,
+}) => (
   <div className="tbody">
     {teamMembers.map((teamMember, index) => (
       <SortableItem
@@ -62,6 +66,7 @@ const SortableList = SortableContainer(({ teamMembers, handleAction, handleEdit 
         key={`item-${index}`}
         docIndx={index}
         teamMember={teamMember}
+        save={save}
         handleAction={handleAction}
         handleEdit={handleEdit}
         index={index}
@@ -106,6 +111,10 @@ export default class AllTeam extends Component {
   handleEdit = (id) => {
     const { match } = this.props;
     this.props.history.push(`${match.url}/${id}`);
+  }
+  save = (teamMember) => {
+    this.props.teamStore.save(teamMember.id, teamMember);
+    this.props.history.push(this.props.refLink);
   }
   render() {
     const {
@@ -159,7 +168,7 @@ export default class AllTeam extends Component {
               teamMembers={teamMembers}
               pressDelay={100}
               openModal={this.openModal}
-              publishStatus={this.publishStatus}
+              save={this.save}
               handleEdit={this.handleEdit}
               handleAction={this.handleAction}
               onSortEnd={e => this.onSortEnd(e)}
