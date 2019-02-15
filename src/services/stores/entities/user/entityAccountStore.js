@@ -376,7 +376,7 @@ class EntityAccountStore {
           }
         }
         accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
-        bankAccountStore.checkOpeningDepositAmount().then(() => {
+        bankAccountStore.isValidOpeningDepositAmount().then(() => {
           this.submitForm(currentStep, formStatus, accountAttributes)
             .then(() => res()).catch(() => rej());
         })
@@ -415,11 +415,11 @@ class EntityAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.createInvestorAccount || formStatus === 'FULL') {
+          if (result.data.upsertInvestorAccount || formStatus === 'FULL') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
-          if (result.data.updateInvestorAccount && currentStep.name === 'Link bank') {
-            const { linkedBank } = result.data.updateInvestorAccount;
+          if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+            const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }
           if (formStatus !== 'FULL') {

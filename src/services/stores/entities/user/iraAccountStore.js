@@ -215,7 +215,7 @@ class IraAccountStore {
             }
           }
           accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
-          bankAccountStore.checkOpeningDepositAmount().then(() => {
+          bankAccountStore.isValidOpeningDepositAmount().then(() => {
             this.submitForm(currentStep, formStatus, accountAttributes).then(() => {
               res();
             })
