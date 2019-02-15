@@ -119,6 +119,13 @@ export const getOfferingDetails = gql`
       }
       }
       keyTerms {
+        unitPrice
+        roundType
+        premoneyValuation
+        additionalKeyterms {
+          label
+          description
+        }
         startupPeriod
         revSharePercentageDescription
         useOfProceedFootnote
