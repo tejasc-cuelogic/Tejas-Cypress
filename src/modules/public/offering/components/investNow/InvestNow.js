@@ -65,6 +65,7 @@ export default class InvestNow extends React.Component {
     this.props.investmentStore.setStepToBeRendered(step);
   }
   handleStepChnageOnPreviousForAlert = () => {
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
     this.props.accreditationStore.changeShowAccountListFlag(true);
   }
   // handleStepChnageOnNextForAlert = () => {
@@ -73,7 +74,9 @@ export default class InvestNow extends React.Component {
   handleCancel = () => {
     this.props.investmentStore.setStepToBeRendered(0);
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
-    this.props.history.push('invest-now');
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.handleStepChange(0);
+    // this.props.history.push('invest-now');
   }
 
   handleConfirm = () => {
@@ -158,7 +161,7 @@ export default class InvestNow extends React.Component {
 
   render() {
     const { changeInvest, uiStore } = this.props;
-    // const { showAccountList } = this.props.accreditationStore;
+    const { showAccountList } = this.props.accreditationStore;
     const {
       inProgress,
       isEnterPressed,
@@ -198,7 +201,7 @@ export default class InvestNow extends React.Component {
         },
       ];
     // !!showAccountList;
-    const isMultiStepButtonsVisible = true;
+    const isMultiStepButtonsVisible = !!showAccountList;
     // !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' ||
     // (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')
     // || userAccredetiationState === undefined));

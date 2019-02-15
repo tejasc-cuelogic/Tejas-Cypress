@@ -6,7 +6,7 @@ import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @withRouter
 @observer
 export default class Agreement extends React.Component {
@@ -51,6 +51,7 @@ export default class Agreement extends React.Component {
   }
   handleCancelAgreement = (e) => {
     e.preventDefault();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.setState({ open: true });
   }
   handleCancel = () => {

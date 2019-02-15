@@ -18,7 +18,6 @@ const getNavStates = (indx, length) => {
   }
   return { current: indx, styles };
 };
-
 export default class MultiStep extends React.Component {
   constructor(props) {
     super(props);
@@ -202,7 +201,7 @@ export default class MultiStep extends React.Component {
                 onClick={this.previous}
               />
             }
-            {this.props.isStepButtonsVisible === undefined ||
+            {this.props.isStepButtonsVisible === undefined || this.state.compState !== 0 ||
               (this.props.isStepButtonsVisible && this.props.isStepButtonsVisible === true) ?
                 <Aux>
                   {!this.props.steps[this.state.compState].disableNextButton &&

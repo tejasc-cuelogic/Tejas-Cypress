@@ -452,6 +452,24 @@ export class UserDetailsStore {
         }
       });
   }
+  @computed
+  get pendingStepForPartialAndProcessingAccount() {
+    let routingUrl = '/app/summary';
+    if (this.signupStatus.partialAccounts.length > 0) {
+      const accValue =
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      accountStore.setAccTypeChange(accValue);
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+    } else if (this.signupStatus.inActiveAccounts.length > 0) {
+      const accValue =
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      accountStore.setAccTypeChange(accValue);
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+    } else {
+      routingUrl = '/app/summary';
+    }
+    return routingUrl;
+  }
 }
 
 export default new UserDetailsStore();

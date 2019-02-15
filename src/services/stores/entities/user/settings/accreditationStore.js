@@ -630,7 +630,7 @@ export class AccreditationStore {
       this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === null));
     const pendingResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'REQUESTED'));
     const notEligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'DECLINED'));
-    const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'APPROVED'));
+    const eligibalResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && a.status === 'CONFIRMED'));
     const expiredResult = this.getKeyResult(mapValues(aggreditationDetails, a => a && this.checkIsAccreditationExpired(a.expiration) === 'EXPIRED'));
     this.accreditationDetails.inactiveAccreditation = inactiveResult;
     this.accreditationDetails.pendingAccreditation = pendingResult;
@@ -676,7 +676,7 @@ export class AccreditationStore {
         case 'DECLINED':
           this.userAccredetiationState = 'NOT_ELGIBLE';
           break;
-        case 'APPROVED':
+        case 'CONFIRMED':
           this.userAccredetiationState = 'ELGIBLE';
           break;
         case 'EXPIRED':
@@ -834,8 +834,8 @@ export class AccreditationStore {
   }
   @action
   setHeaderAndSubHeader = (headerText, subHeaderText) => {
-    this.headerSubheaderObj.header = headerText;
-    this.headerSubheaderObj.subHeader = subHeaderText;
+    this.headerSubheaderObj.header = headerText.header || headerText;
+    this.headerSubheaderObj.subHeader = headerText.subHeader || subHeaderText;
   }
   @action
   changeRuleAsPerFilingStatus = (isFilingTrue) => {

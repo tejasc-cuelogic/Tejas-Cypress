@@ -140,6 +140,7 @@ class AccountType extends Component {
     e.preventDefault();
     const { updateAccreditationExpiray } = this.props.accreditationStore;
     updateAccreditationExpiray();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(this.props.refLink);
   }
   handlBackToOffering = (e) => {
@@ -191,10 +192,9 @@ class AccountType extends Component {
     const { currentUser } = this.props.userStore;
     let redirectURL = '';
     if (!showAccountList || investAccTypes.values.length <= 1) {
-      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL')) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
-        `${this.props.userDetailsStore.pendingStep}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
+      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL' && selectedAccountStatus !== 'PARTIAL')) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
+        `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && isRegulationCheck && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
-    // let headerToShow = (activeAccounts.length ||
     let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : offeringAccreditatoinStatusMessage(selectedAccountStatus);
     let subHeaderToShow = 'Choose an account type';
     const isParitalSectionNeedtoShow = !(partialAccounts.length && frozenAccounts.length);
