@@ -31,7 +31,7 @@ class IndividualAccountStore {
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
-      bankAccountStore.checkOpeningDepositAmount(false).then(() => {
+      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
         client
           .mutate({
             mutation: submitinvestorAccount,
@@ -65,21 +65,21 @@ class IndividualAccountStore {
         }
       }
       return new Promise((resolve, reject) => {
-        bankAccountStore.checkOpeningDepositAmount(false).then(() => {
+        bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
           client
             .mutate({
               mutation,
               variables,
             })
             .then(action((result) => {
-              if (result.data.createInvestorAccount || formStatus === 'FULL') {
+              if (result.data.upsertInvestorAccount || formStatus === 'FULL') {
                 userDetailsStore.getUser(userStore.currentUser.sub);
               }
               if (formStatus !== 'FULL') {
                 const accountId = result.data.createInvestorAccount ?
-                  result.data.createInvestorAccount.accountId :
-                  result.data.updateInvestorAccount ?
-                    result.data.updateInvestorAccount.accountId : null;
+                  result.data.upsertInvestorAccount.accountId :
+                  result.data.upsertInvestorAccount ?
+                    result.data.upsertInvestorAccount.accountId : null;
                 if (accountId) {
                   const data = {
                     annualIncome:
@@ -90,11 +90,11 @@ class IndividualAccountStore {
                   investmentLimitStore.updateInvestmentLimits(data, accountId, null, false);
                 }
               }
-              if (result.data.createInvestorAccount) {
-                const { linkedBank } = result.data.createInvestorAccount;
+              if (result.data.upsertInvestorAccount) {
+                const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               } else {
-                const { linkedBank } = result.data.updateInvestorAccount;
+                const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }
               if (formStatus === 'FULL') {
@@ -108,9 +108,9 @@ class IndividualAccountStore {
                     mutation: crowdPayAccountNotifyGs,
                     variables: {
                       userId: userStore.currentUser.sub,
-                      accountId: result.data.createInvestorAccount ?
-                        result.data.createInvestorAccount.accountId :
-                        result.data.updateInvestorAccount.accountId,
+                      accountId: result.data.upsertInvestorAccount ?
+                        result.data.upsertInvestorAccount.accountId :
+                        result.data.upsertInvestorAccount.accountId,
                     },
                   })
                     .then(() => {})
@@ -143,6 +143,7 @@ class IndividualAccountStore {
           // });
         })
           .catch(() => {
+            uiStore.setProgress(false);
             reject();
           });
       });
