@@ -34,7 +34,8 @@ export default class KeyTerms extends Component {
     this.props.offeringCreationStore.toggleConfirmModal(index, formName);
   }
   editorChange =
-  (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
+  (field, value, form, index) =>
+    this.props.offeringCreationStore.rtEditorChange(field, value, form, 'additionalKeyterms', index);
   render() {
     const {
       KEY_TERMS_FRM, formChange, maskChange, formArrayChange,
@@ -254,6 +255,7 @@ export default class KeyTerms extends Component {
                       changed={this.editorChange}
                       name="description"
                       form={formName}
+                      index={index}
                       content={field.description.value}
                     />
                   </Form.Field>
