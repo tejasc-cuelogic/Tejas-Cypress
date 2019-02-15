@@ -13,7 +13,7 @@ export const COMMON = {
     value: '',
     label: 'Password',
     placeHolder: 'Type your password',
-    rule: 'required|min:8|max:15',
+    rule: 'required|min:8|max:40',
     error: undefined,
     customErrors: {
       required: '* required field.',
@@ -90,12 +90,12 @@ export const CHANGE_PASS = {
     value: '',
     error: undefined,
     label: 'Old Password',
-    rule: 'required|min:8',
+    rule: 'required|min:8|max:40',
   },
   newPasswd: {
     value: '',
     label: 'New Password',
-    rule: 'required|min:8',
+    rule: 'required|min:8|max:40',
   },
   retypePasswd: {
     value: '',

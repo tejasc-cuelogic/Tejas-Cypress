@@ -119,7 +119,7 @@ export default class BusinessApplication extends Component {
     const showSubNav = this.calculateShowSubNav(['failed', 'success', 'lendio'], pathname, appStepsStatus[0].status, formReadOnlyMode);
     const preQualPage = pathname.includes('pre-qualification');
     const navItems = GetNavMeta(match.url).subNavigations;
-    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendio' : 'LogoWhiteGreen';
+    const logoUrl = this.checkIncludes([`${match.url}/lendio`, `${match.url}/success/lendio`], pathname) ? 'LogoNsAndLendioWhite' : 'LogoWhiteGreen';
     return (
       <PrivateLayout
         navCustomClick={this.navCustomClick}
@@ -130,7 +130,6 @@ export default class BusinessApplication extends Component {
         P0={
           <Link to="/app/dashboard">
             <Logo
-              size="small"
               alt="NextSeed.com"
               dataSrc={logoUrl}
               style={this.getLogoStyle(this.props.location.pathname)}

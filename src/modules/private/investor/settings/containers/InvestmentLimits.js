@@ -8,6 +8,7 @@ import VerifyEntityAccreditation from './accreditation/VerifyEntityAccreditation
 import UpdateInvestmentLimits from '../components/investmentLimits/UpdateInvestmentLimits';
 import VerifyTrustEntityAccreditation from './accreditation/VerifyTrustEntityAccreditation';
 import ThanksNote from '../components/investmentLimits/accreditation/ThanksNote';
+import FailedAccreditation from '../components/investmentLimits/accreditation/failedAccreditation';
 
 @inject('investmentLimitStore', 'accreditationStore')
 @withRouter
@@ -31,6 +32,7 @@ export default class InvestmentLimits extends Component {
         <Route exact path={`${this.props.match.url}/verify-entity-accreditation/:accountId/:accountType`} render={() => <VerifyEntityAccreditation refLink={this.props.match.url} />} />
         <Route exact path={`${this.props.match.url}/verify-trust-entity-accreditation/:accountId/:accountType`} render={() => <VerifyTrustEntityAccreditation refLink={this.props.match.url} />} />
         <Route exact path={`${this.props.match.url}/success`} render={() => <ThanksNote closeModal={this.closeModal} />} />
+        <Route exact path={`${this.props.match.url}/falied`} render={() => <FailedAccreditation closeModal={this.closeModal} />} />
         <Route exact path={`${this.props.match.url}/update`} render={() => <UpdateInvestmentLimits refLink={this.props.match.url} />} />
         <Grid columns={1} stackable>
           <FinancialInfo />

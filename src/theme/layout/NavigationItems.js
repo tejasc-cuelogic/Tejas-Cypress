@@ -1,6 +1,6 @@
 /* eslint-disable react/no-multi-comp  */
 import React, { Component } from 'react';
-import { Link, NavLink, withRouter, matchPath } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Container, Icon, Menu, Dropdown, Label, Button } from 'semantic-ui-react';
@@ -125,10 +125,11 @@ export class NavItems extends Component {
   }
 }
 
-const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
-  (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoGreenGrey' :
-    (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoGreenGrey'))
-));
+const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : 'LogoGreenGrey');
+// const getLogo = path => (path.includes('/lendio') ? 'LogoNsAndLendio' : (
+//   (matchPath(path, { path: '/offerings/:id/:section?' }) ? 'LogoGreenGrey' :
+//     (path.includes('business-application') ? 'LogoWhiteGreen' : 'LogoGreenGrey'))
+// ));
 
 const getLogoStyle = path => (path.includes('/lendio') ? { height: '28px', width: 'auto' } : {});
 

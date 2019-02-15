@@ -171,7 +171,7 @@ export class CategoryStore {
         }).then(() => {
           Helper.toast('Category Order Changed successfully.', 'success');
         }).catch(() => {
-          Helper.toast('Error while creating Category', 'error');
+          Helper.toast('Error while updating Category Order', 'error');
         })
         .finally(() => {
           uiStore.setProgress(false);
