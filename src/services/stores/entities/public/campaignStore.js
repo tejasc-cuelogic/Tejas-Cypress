@@ -217,8 +217,9 @@ export class CampaignStore {
   }
 
   @action
-  calculateTotalPaymentData = (amt = null) => {
-    this.principalAmt = amt !== null ? amt : get(this.campaign, 'keyTerms.minOfferingAmount');
+  calculateTotalPaymentData = (amt = 0) => {
+    const ranges = [100, 500, 1000, 5000, 10000, 25000, 50000];
+    this.principalAmt = ranges[amt];
     const data = {
       method: 'mortgage',
       apr: parseFloat(get(this.campaign, 'keyTerms.interestRate')) || 0,

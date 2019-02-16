@@ -27,12 +27,6 @@ export default class PaymentCalculator extends Component {
       activeIndex: index,
     });
   }
-  // CustomTooltip = index => (
-  //   <div className="ui right center popup transition">
-  //     <p className="label">Projected total payment</p>
-  //     <p className="intro">{data[index]['Projected total payment']}</p>
-  //   </div>
-  // );
   handleHover = (data1, index) => {
     this.setState({
       activeIndex: index,
@@ -56,7 +50,6 @@ export default class PaymentCalculator extends Component {
           <Tooltip
             content={<CustomTooltip data={this.props.data[this.state.activeIndex]} />}
           />
-          {/* <Tooltip content={() => this.CustomTooltip(this.state.activeIndex)} /> */}
           <Legend />
           <Bar dataKey="Projected total payment" barSize={7} onMouseOver={this.handleHover}>
             {

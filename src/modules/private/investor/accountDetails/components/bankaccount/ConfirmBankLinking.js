@@ -17,7 +17,7 @@ export default class ConfirmBankLinking extends Component {
 
   submit = (e) => {
     e.preventDefault();
-    this.props.transactionStore.confirmAccountLinking(false).then(() => {
+    this.props.transactionStore.confirmAccountLinking(true).then(() => {
       const bankInterFace = this.props.bankAccountStore.bankLinkInterface;
       const {
         newPlaidAccDetails,
