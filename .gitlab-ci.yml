@@ -41,9 +41,9 @@ before_script:
   tags:
     - ns-client
 
-.before_script_template: &before_script_defination
-  before_script:
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
+#.before_script_template: &before_script_defination
+#  before_script:
+#    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FsetEnvironmentVariables%2Esh/raw?ref=$BRANCH > setEnvironmentVariables.sh"
     
     
 #---------------------------------Review----------------------------------------  
@@ -55,12 +55,12 @@ build:review:
     key: $CI_COMMIT_REF_SLUG
     paths:
     - node_modules/
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3BucketCreationScript%2Esh/raw?ref=$BRANCH > s3BucketCreationScript.sh"
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2Fs3PublicReadAccessPolicy%2Ejson/raw?ref=$BRANCH > s3PublicReadAccessPolicy.json"
     - sh s3BucketCreationScript.sh $CI_COMMIT_REF_SLUG $REGION
-    - sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build 
   
@@ -74,7 +74,7 @@ deploy:review:
     on_stop: delete:review
   script: 
     - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $CI_COMMIT_REF_SLUG
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $CI_COMMIT_REF_SLUG && cd ../.. # - sh deployApp.sh $CI_COMMIT_REF_SLUG
   dependencies:
     - build:review
 
@@ -100,9 +100,9 @@ build:dev:
   only:
     refs:
       - develop
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build
 
@@ -147,8 +147,8 @@ deploy:dev:
     name: dev
     url: http://$DEV_URL
   script: 
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $DEV_URL
+    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
   dependencies:
     - build:dev
 
@@ -162,9 +162,9 @@ build:qa:
   only:
     refs:
       - qa
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build  
 
@@ -178,8 +178,8 @@ deploy:qa:
     name: qa
     url: http://$QA_URL
   script: 
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $QA_URL
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $QA_URL && cd ../.. #- sh deployApp.sh $QA_URL
   dependencies:
     - build:qa
 
@@ -191,9 +191,9 @@ build:demo:
   only:
     refs:
       - demo
-  <<: *before_script_defination
+  # <<: *before_script_defination
   script:
-    - sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build  
 
@@ -207,8 +207,8 @@ deploy:demo:
     name: demo
     url: http://$DEMO_URL
   script: 
-    - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
-    - sh deployApp.sh $DEMO_URL
+    # - "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $DEMO_URL && cd ../.. #- sh deployApp.sh $DEMO_URL
   dependencies:
     - build:demo
 
