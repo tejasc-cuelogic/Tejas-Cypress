@@ -277,6 +277,8 @@ if (process.env.REACT_APP_BUG_SNAG_KEY) {
   // that will be released, rather than for every development build
   module.exports.plugins.push(new BugsnagSourceMapUploaderPlugin({
     apiKey: process.env.REACT_APP_BUG_SNAG_KEY,
+    publicPath,
     appVersion: process.env.CI_PIPELINE_ID,
+    overwrite: true,
   }));
 }
