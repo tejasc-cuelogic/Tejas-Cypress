@@ -259,6 +259,21 @@ export class ArticleStore {
         }));
     }
 
+
+    @action
+    removeUploadedData(field) {
+      const { fileId } = this.ARTICLE_FRM.fields[field];
+      fileUpload.removeUploadedData(fileId).then(action(() => {
+        this.ARTICLE_FRM = Validator.onChange(
+          this.ARTICLE_FRM,
+          { name: field, value: '' },
+        );
+        this.ARTICLE_FRM.fields[field].fileId = '';
+        this.ARTICLE_FRM.fields[field].preSignedUrl = '';
+      }))
+        .catch(() => { });
+    }
+
     @action
     setFormData = (id) => {
       this.ARTICLE_FRM =

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form } from 'semantic-ui-react';
-import { FormInput, FormDropDown, DropZoneConfirm as DropZone } from '../../../../../theme/form';
+import { MaskedInput, FormInput, FormDropDown, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import HtmlEditor from '../../../../shared/HtmlEditor';
 import { ARTICLE_STATUS_VALUES, AUTHORS } from '../../../../../services/constants/admin/article';
 import Actions from './Actions';
@@ -12,7 +12,7 @@ import Actions from './Actions';
 @withRouter
 @observer
 export default class EditArticle extends Component {
-  // state = { displayMode: false };
+  state = { displayMode: false };
   componentWillMount() {
     const { id } = this.props.match.params;
     if (id !== 'new') {
@@ -28,7 +28,7 @@ export default class EditArticle extends Component {
     this.props.articleStore.setFileUploadData('ARTICLE_FRM', name, files);
   }
   handleDelDoc = (field) => {
-    this.props.articleStore.removeUploadedDataMultiple('TEAM_FRM', field);
+    this.props.articleStore.removeUploadedData(field);
   }
   initiateFlow = (id) => {
     if (id !== 'new') {
@@ -56,7 +56,7 @@ export default class EditArticle extends Component {
     this.handleCloseModal();
   }
   render() {
-    // const { displayMode } = this.state;
+    const { displayMode } = this.state;
     const {
       ARTICLE_FRM,
       articleChange,
@@ -157,20 +157,20 @@ export default class EditArticle extends Component {
                         fielddata={ARTICLE_FRM.fields.tags}
                         changed={articleChange}
                       />
-                      <FormInput
+                      {/* <FormInput
                         name="minuteRead"
                         fielddata={ARTICLE_FRM.fields.minuteRead}
                         changed={articleChange}
-                      />
-                      {/* <MaskedInput
+                      /> */}
+                      <MaskedInput
                         containerclassname={displayMode ? 'display-only' : ''}
-                        readOnly={displayMode}
+                        readOnly={false}
                         name="minuteRead"
                         number
                         value={ARTICLE_FRM.fields.minuteRead.value}
                         fielddata={ARTICLE_FRM.fields.minuteRead}
                         changed={articleChange}
-                      /> */}
+                      />
                       <FormInput
                         name="banner"
                         fielddata={ARTICLE_FRM.fields.banner}
