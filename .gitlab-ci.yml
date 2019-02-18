@@ -134,6 +134,7 @@ version:dev:
     - git commit -m "Updated CHANGELOG.md [skip ci]"
     # Push the changes back to the develop branch
     - git push https://gitlab-ci-token:${CI_USER_PERSONAL_TOKEN}@chaos.ns.team/nsv2/ns-client.git/ HEAD:develop
+  allow_failure: true
   dependencies:
     - build:dev
 
@@ -164,7 +165,7 @@ build:qa:
       - qa
   # <<: *before_script_defination
   script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION qa $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build  
 
@@ -193,7 +194,7 @@ build:demo:
       - demo
   # <<: *before_script_defination
   script:
-    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION dev $CI_COMMIT_REF_NAME && cd ../..
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION demo $CI_COMMIT_REF_NAME && cd ../..
     - npm install
     - npm run build  
 
