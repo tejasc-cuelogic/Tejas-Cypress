@@ -30,7 +30,7 @@ export default class HtmlEditor extends React.Component {
       toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
       charCounterCount: false,
       editorClass: 'html-editor',
-      embedlyKey: FROALA_EDITOR_LICENSE,
+      key: FROALA_EDITOR_LICENSE,
       linkList: [],
       heightMin: 244,
       heightMax: '70vh',
@@ -45,12 +45,14 @@ export default class HtmlEditor extends React.Component {
         //   return false;
         // },
         'froalaEditor.image.beforeUpload': (e, editor, images) => {
+          const fileName = get(images, '[0].name');
           this.getBase64(get(images, '[0]')).then((img) => {
             this.setState({ imgUrl: img });
             console.log(img, this.state.imgUrl);
+            const buffer = Buffer.from(img, 'base64');
             const fileObj = {
-              obj: img,
-              name: get(images, '[0].name'),
+              obj: buffer,
+              name: fileName,
             };
             fileUpload.uploadToS3(fileObj, 'offering').then((res) => {
               if (editor && editor.image) {
