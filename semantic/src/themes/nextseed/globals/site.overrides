@@ -692,11 +692,11 @@ footer{
 		margin-left: 56px;
 	}
 }
-.funding-option {
-	.ui.secondary.button {
-		display: block;
-	}
-}
+// .funding-option {
+// 	.ui.secondary.button {
+// 		display: block;
+// 	}
+// }
 .content-spacer {
 	.column.side-section {
 		background-color:@invertedMutedTextColor;

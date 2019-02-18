@@ -97,7 +97,7 @@ export class ArticleStore {
     featuredRequestArticlesByCategoryId = () => {
       const id = this.featuredCategoryId;
       this.featuredData =
-        graphql({ client, query: getArticlesByCatId, variables: { id } });
+        graphql({ client: clientPublic, query: getArticlesByCatId, variables: { id } });
     }
 
     @action
