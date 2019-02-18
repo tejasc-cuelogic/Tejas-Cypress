@@ -134,7 +134,7 @@
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",
     "start": "node scripts/start.js",
-    "build-js": "node --max_old_space_size=12000 scripts/build.js",
+    "build-js": "node --max_old_space_size=7500 scripts/build.js",
     "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
     "build:prod": "npm-run-all build-assets build-js:prod",
