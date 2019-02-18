@@ -1,4 +1,8 @@
-image: nextseed/v2-builder
+image: nextseed:v2-builder
+
+services:
+  - docker:dind
+
 
 variables:
   CI: "false"
