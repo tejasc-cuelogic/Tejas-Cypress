@@ -1,4 +1,4 @@
-image: nextseed:v2-builder
+image: nextseed/v2-builder:master
 
 services:
   - docker:dind
