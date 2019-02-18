@@ -20,8 +20,8 @@ before_script:
   - unset AWS_SECRET_ACCESS_KEY
 #---------------------------------Anchors--------------------------------------
 .build_template: &build_definition
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: build
   artifacts:
     paths:
@@ -29,8 +29,8 @@ before_script:
     expire_in: 1 day
 
 .deploy_template: &deploy_defination
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: deploy
 
 .review_template: &review_defination
@@ -42,8 +42,8 @@ before_script:
     - develop
     - qa
     - demo
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
 
 #.before_script_template: &before_script_defination
 #  before_script:
@@ -115,8 +115,8 @@ version:dev:
   only:
     refs:
       - develop
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: version
   script: 
     # Make a folder for the changelog utility
@@ -232,8 +232,8 @@ deploy:demo:
 #    - npm run build
 
 package:prod:
-  tags:
-    - ns-client
+#  tags:
+#    - ns-client
   stage: package
   only:
     refs:
