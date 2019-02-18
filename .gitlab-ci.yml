@@ -1,4 +1,4 @@
-image: awscli:custom
+image: nextseed/v2-builder
 
 variables:
   CI: "false"
