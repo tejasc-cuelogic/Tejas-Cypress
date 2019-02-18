@@ -1,4 +1,4 @@
-
+'use strict';
 
 const path = require('path');
 const webpack = require('webpack');
@@ -21,7 +21,7 @@ const publicPath = '/';
 const publicUrl = '';
 // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
-// Get custom configuration for injecting plugins, presets and loaders
+//Get custom configuration for injecting plugins, presets and loaders
 const customConfig = getCustomConfig(true);
 
 // This is the development configuration.
@@ -68,10 +68,10 @@ module.exports = {
     // There are also additional JS chunk files if you use code splitting.
     chunkFilename: 'static/js/[name].chunk.js',
     // This is the URL that app is served from. We use "/" in development.
-    publicPath,
+    publicPath: publicPath,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
-      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+        path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
   resolve: {
     // This allows you to set a fallback for where Webpack should look for modules.
@@ -79,8 +79,9 @@ module.exports = {
     // if there are any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
     modules: ['node_modules', paths.appNodeModules].concat(
-      // It is guaranteed to exist because we tweak it in `env.js`
-      process.env.NODE_PATH.split(path.delimiter).filter(Boolean)),
+        // It is guaranteed to exist because we tweak it in `env.js`
+        process.env.NODE_PATH.split(path.delimiter).filter(Boolean)
+    ),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
@@ -102,8 +103,8 @@ module.exports = {
       // Make sure your source files are compiled, as they will not be processed in any way.
       new ModuleScopePlugin(paths.appSrc, [paths.appPackageJson]),
       new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
+        $: "jquery",
+        jQuery: "jquery"
       }),
     ],
   },
@@ -154,7 +155,9 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             options: {
               babelrc: false,
-              presets: [require.resolve('babel-preset-react-app')].concat(customConfig.babelPresets),
+              presets: [require.resolve('babel-preset-react-app')].concat(
+                  customConfig.babelPresets
+              ),
               plugins: customConfig.babelPlugins,
               // This is a feature of `babel-loader` for webpack (not Babel itself).
               // It enables caching results in ./node_modules/.cache/babel-loader/
