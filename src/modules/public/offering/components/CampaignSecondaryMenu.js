@@ -27,7 +27,7 @@ export default class CampaignSecondaryMenu extends Component {
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const isClosed = campaign.stage !== 'LIVE';
     return (
-      <Visibility offset={[58, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
+      <Visibility offset={[72, 10]} onUpdate={this.handleUpdate} continuous className="campaign-secondary-header">
         <div className={`menu-secondary-fixed ${navStatus && navStatus === 'sub' && 'active'} ${subNavStatus}`}>
           <Container fluid={!isMobile}>
             <List size={isMobile && 'tiny'} bulleted={!isMobile} floated="right" horizontal={!isMobile}>
