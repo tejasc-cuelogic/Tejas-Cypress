@@ -171,8 +171,8 @@ export const PRIVATE_NAV = [
     title: 'Referrals',
     to: 'referrals',
     path: 'investor/referrals/containers/Referrals',
-    // accessibleTo: ['ira', 'individual', 'entity'],
-    accessibleTo: ['investor'],
+    accessibleTo: ['ira', 'individual', 'entity'],
+    // accessibleTo: ['investor'],
   },
   {
     icon: 'gift',
@@ -421,7 +421,7 @@ export const PRIVATE_NAV = [
     accessibleTo: ['admin', 'manager', 'support'],
     subPanel: 1,
     subNavigations: [
-      { title: 'Elastic Search', to: 'elasticsearch', component: 'ElasticSearch' },
+      { title: 'Elasticsearch', to: 'elasticsearch', component: 'ElasticSearch' },
     ],
   },
 ];
