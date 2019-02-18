@@ -173,12 +173,16 @@ export default class HowItWorks extends Component {
         </section>
         <section>
           <Container className="center-align mt-50">
-            <Header as="h2" className="mb-30">Register for an account.</Header>
-            <Button.Group vertical={isMobile} className="mb-50">
-              {authStore.isUserLoggedIn === false && <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>}
-            </Button.Group>
-            <Divider section hidden />
-            <Divider />
+            {!authStore.isUserLoggedIn &&
+            <Aux>
+              <Header as="h2" className="mb-30">Register for an account.</Header>
+              <Button.Group vertical={isMobile} className="mb-50">
+                <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+              </Button.Group>
+              <Divider section hidden />
+              <Divider />
+            </Aux>
+            }
             <List className="learn-more-list">
               <List.Item>
                 <List.Content as={Link} to="/invest/account-types" className="text-uppercase" floated="right">

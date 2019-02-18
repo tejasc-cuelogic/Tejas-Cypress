@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { Header, Button, Container, Grid, Responsive } from 'semantic-ui-react';
-import { authStore } from '../../../../services/stores/index';
+
 @inject('authStore')
 @observer
 export default class Track extends Component {
   render() {
+    const { authStore } = this.props;
     return (
       <Aux>
         <section className="content-spacer">
@@ -22,14 +23,18 @@ export default class Track extends Component {
                       <Responsive as={Aux} minWidth={1200}><br /></Responsive>
                        easy-to-use dashboard.
                     </p>
-                    <Responsive as={Aux} minWidth={768}>
-                      {authStore.isUserLoggedIn === false && <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>}
-                    </Responsive>
-                    <Responsive as={Aux} maxWidth={767}>
-                      <div className="center-align">
-                        {authStore.isUserLoggedIn === false && <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>}
-                      </div>
-                    </Responsive>
+                    {!authStore.isUserLoggedIn &&
+                    <Aux>
+                      <Responsive as={Aux} minWidth={768}>
+                        <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                      </Responsive>
+                      <Responsive as={Aux} maxWidth={767}>
+                        <div className="center-align">
+                          <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
+                        </div>
+                      </Responsive>
+                    </Aux>
+                    }
                   </div>
                 </Grid.Column>
               </Grid.Row>

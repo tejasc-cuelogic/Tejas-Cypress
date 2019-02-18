@@ -126,9 +126,11 @@ export default class WhyNextseed extends Component {
               </Grid.Column>
             </Grid>
             <div className="center-align mb-50">
+              { !authStore.isUserLoggedIn &&
               <Button.Group vertical={isMobile} className={!isMobile ? 'mt-50' : ''}>
-                {authStore.isUserLoggedIn === false && <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>}
+                <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
+            }
             </div>
             {/* <Grid className="business-learn-more mb-30">
             <Grid.Row>
