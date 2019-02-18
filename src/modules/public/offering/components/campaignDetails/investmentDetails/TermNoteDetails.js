@@ -14,10 +14,15 @@ const isMobile = document.documentElement.clientWidth < 768;
 class TermNoteDetails extends Component {
   state = {
     offeringAmt: 0,
+    RangeValue: 0,
+  }
+  componentWillMount() {
+    this.props.campaignStore.calculateTotalPaymentData();
   }
   handleRangeChange = (e) => {
     const offeringAmt = (e.target.value / e.target.max) * 100;
     this.setState({ offeringAmt });
+    this.setState({ RangeValue: e.target.value });
     this.props.campaignStore.calculateTotalPaymentData(e.target.value);
   }
   render() {
@@ -222,9 +227,9 @@ class TermNoteDetails extends Component {
                     <p style={{ width: `${this.state.offeringAmt}%` }} />
                     <input
                       type="range"
-                      min={get(KeyTerms, 'minOfferingAmount') || 0}
-                      max={get(KeyTerms, 'maxOfferingAmount') || 0}
-                      value={principalAmt}
+                      min={0}
+                      max={6}
+                      value={this.state.RangeValue}
                       onChange={this.handleRangeChange}
                       className="slider mt-10 mb-10"
                       id="myRange"

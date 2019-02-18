@@ -15,8 +15,7 @@ import Helper from '../../../../../helper/utility';
 export default class CampaignHeader extends Component {
   render() {
     const { campaignStore } = this.props;
-    const { campaign } = campaignStore;
-    const { offerStructure } = campaign;
+    const { campaign, offerStructure } = campaignStore;
     const terminationDate = campaign && campaign.offering && campaign.offering.launch
     && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
@@ -114,21 +113,29 @@ export default class CampaignHeader extends Component {
                   />
                 </p>
                 {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] &&
-                <p className="raise-type mt-30">
-                  <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
-                  <Popup
-                    hoverable
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={(<span>To learn more about how Revenue Sharing works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>)}
-                    position="top center"
-                  />
-                </p>
+                  <p className="raise-type mt-30">
+                    <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
+                    <Popup
+                      hoverable
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={
+                        <span>To learn more about how {offerStructure === 'TERM_NOTE' ? 'Term Note' : 'Revenue Sharing'} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
+                      }
+                      position="top center"
+                    />
+                  </p>
                 }
                 <p className="mb-half">
-                Investment Multiple: {get(campaign, 'keyTerms.investmentMultiple')}
+                  {offerStructure === 'TERM_NOTE' ?
+                    <Aux>
+                    Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
+                    </Aux> :
+                    <Aux>
+                      Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? `${get(campaign, 'keyTerms.investmentMultiple')}` : '-'}
+                    </Aux>}
                 </p>
                 <p>
-                  Maturity: {get(campaign, 'keyTerms.maturity')} Months
+                  Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
                 </p>
                 <div className="center-align">
                   {!isClosed &&
