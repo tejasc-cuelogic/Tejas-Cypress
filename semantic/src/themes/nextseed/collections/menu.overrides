@@ -551,7 +551,7 @@ footer{
         &.active{
             position:fixed;
             width:100%;
-            top:@primaryHeaderHeight;
+            top:58px;
             z-index:9;
         }
         &.inverted {
@@ -648,7 +648,7 @@ footer{
 //Public Responsive Menu Start
 .public-mobile-nav {
     position: relative;
-    padding: @primaryHeaderHeight 0 0;
+    padding: 58px 0 0;
     height: 100%;
     overflow: hidden;
     .mobile-nav-inner-container {
