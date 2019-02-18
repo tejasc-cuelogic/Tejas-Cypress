@@ -5,7 +5,7 @@ query insights{
   insightsArticles{
     id
     content
-    categoryName
+    category
     featuredImage
     tags
     articleStatus
@@ -32,9 +32,7 @@ query _getArticleByCategoryId($id:ID! ) {
     featuredImage
     minuteRead
     title
-    author {
-      id
-    }
+    authorId
     updated {
       date
     }
