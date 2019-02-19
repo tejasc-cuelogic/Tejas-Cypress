@@ -1,10 +1,10 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore, referralsStore } from '../../index';
+import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { submitinvestorAccount, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
+import { submitinvestorAccount, updateAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -72,14 +72,14 @@ class IndividualAccountStore {
               variables,
             })
             .then(action((result) => {
-              if (result.data.upsertInvestorAccount || formStatus === 'FULL') {
+              if (result.data.upsertInvestorAccount) {
                 userDetailsStore.getUser(userStore.currentUser.sub);
+                const { linkedBank } = result.data.upsertInvestorAccount;
+                bankAccountStore.setPlaidAccDetails(linkedBank);
               }
-              if (formStatus !== 'FULL') {
-                const accountId = result.data.createInvestorAccount ?
-                  result.data.upsertInvestorAccount.accountId :
-                  result.data.upsertInvestorAccount ?
-                    result.data.upsertInvestorAccount.accountId : null;
+              if (formStatus === 'PARTIAL') {
+                const accountId = result.data.upsertInvestorAccount ?
+                  result.data.upsertInvestorAccount.accountId : null;
                 if (accountId) {
                   const data = {
                     annualIncome:
@@ -90,36 +90,7 @@ class IndividualAccountStore {
                   investmentLimitStore.updateInvestmentLimits(data, accountId, null, false);
                 }
               }
-              if (result.data.upsertInvestorAccount) {
-                const { linkedBank } = result.data.upsertInvestorAccount;
-                bankAccountStore.setPlaidAccDetails(linkedBank);
-              } else {
-                const { linkedBank } = result.data.upsertInvestorAccount;
-                bankAccountStore.setPlaidAccDetails(linkedBank);
-              }
-              if (formStatus === 'FULL') {
-                Helper.toast('Individual account created successfully.', 'success');
-                referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
-                this.submited = true;
-                if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
-                  userDetailsStore.userDetails.cip.failType &&
-                  userDetailsStore.userDetails.cip.failType !== null) {
-                  client.mutate({
-                    mutation: crowdPayAccountNotifyGs,
-                    variables: {
-                      userId: userStore.currentUser.sub,
-                      accountId: result.data.upsertInvestorAccount ?
-                        result.data.upsertInvestorAccount.accountId :
-                        result.data.upsertInvestorAccount.accountId,
-                    },
-                  })
-                    .then(() => {})
-                    .catch(action((err) => {
-                      uiStore.setErrors(DataFormatter.getSimpleErr(err));
-                      reject();
-                    }));
-                }
-              } else if (currentStep) {
+              if (currentStep) {
                 this.setStepToBeRendered(currentStep.stepToBeRendered);
                 if (!bankAccountStore.depositMoneyNow) {
                   Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
