@@ -31,7 +31,7 @@ export default class CampaignHeader extends Component {
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
-        <section className="campaign-details-banner banner">
+        <section className="campaign-details-banner banner" style={{ backgroundImage: `url(${get(campaign, 'media.heroBackground.url')})` }}>
           <Responsive minWidth={768} as={Container}>
             <Grid relaxed stackable>
               <Grid.Column width={10}>
