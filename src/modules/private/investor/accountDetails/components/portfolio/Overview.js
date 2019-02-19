@@ -6,7 +6,7 @@ import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
 import Parser from 'html-react-parser';
 import { AccTypeTitle } from '../../../../../../theme/shared';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
 
 @inject('portfolioStore', 'campaignStore')
@@ -16,7 +16,7 @@ class Overview extends Component {
     const { campaign } = this.props.campaignStore;
     const { keyTerms, offering } = campaign;
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities &&
-      campaign.keyTerms.securities === 'REVENUE_SHARING_NOTE' ? 'REVENUE' : 'TERM';
+      campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     return (
       <Aux>
         <div className="inner-content-spacer bg-offwhite">

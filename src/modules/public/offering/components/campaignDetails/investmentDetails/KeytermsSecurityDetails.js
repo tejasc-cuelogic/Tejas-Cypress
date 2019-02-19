@@ -3,7 +3,7 @@ import Parser from 'html-react-parser';
 import { get } from 'lodash';
 import Aux from 'react-aux';
 import { Table, Popup, Icon } from 'semantic-ui-react';
-import { ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../../constants/offering';
+import { ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 
 class KeyTermsSecurityDetails extends Component {
@@ -17,7 +17,7 @@ class KeyTermsSecurityDetails extends Component {
     const { offerStructure } = this.props.campaignStore;
     return (
       <Aux>
-        {offerStructure === 'REVENUE_SHARING_NOTE' &&
+        {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
         <Aux>
           <Table.Row verticalAlign="top">
             <Table.Cell width={5} className="neutral-text"><b>Investment Multiple{' '}</b>
@@ -62,7 +62,7 @@ class KeyTermsSecurityDetails extends Component {
           </Table.Row>
         </Aux>
     }
-        {offerStructure === 'TERM_NOTE' &&
+        {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
           <Aux>
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
@@ -102,7 +102,7 @@ class KeyTermsSecurityDetails extends Component {
             </Table.Row>
           </Aux>
     }
-        {offerStructure === 'PREFERRED_EQUITY_506C' &&
+        {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
         <Aux>
           <Table.Row verticalAlign="top">
             <Table.Cell width={5} className="neutral-text"><b>Round Type{' '}</b>

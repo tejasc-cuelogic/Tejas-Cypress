@@ -4,7 +4,7 @@ import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
@@ -37,7 +37,8 @@ class KeyTermsDetails extends Component {
     const { offerStructure } = this.props.campaignStore;
     const edgarLink = launch && launch.edgarLink;
     const revenueShareSummary =
-      KeyTerms && KeyTerms.revShareSummary && KeyTerms.securities === 'REVENUE_SHARING_NOTE' ? KeyTerms.revShareSummary : null;
+      KeyTerms && KeyTerms.revShareSummary && KeyTerms.securities ===
+      CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? KeyTerms.revShareSummary : null;
     const keytermsMeta = [
       { key: 'minOfferingAmount', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
       { key: 'maxOfferingAmount', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimumgoal, the issuer will receive the funds.' },
@@ -149,7 +150,7 @@ class KeyTermsDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section hidden />
-        {offerStructure === 'TERM_NOTE' ?
+        {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
           <Aux>
             <Header as="h3" className="mb-30 anchor-wrap">
               Total Payment Calculator
@@ -209,7 +210,7 @@ class KeyTermsDetails extends Component {
               some or all of the principal invested if the Issuer cannot make its payments.
             </p>
           </Aux>
-          : offerStructure === 'REVENUE_SHARING_NOTE' ?
+          : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
             <Aux>
               <Header as="h3" className="mb-30 anchor-wrap">
                 Revenue Sharing Summary*
