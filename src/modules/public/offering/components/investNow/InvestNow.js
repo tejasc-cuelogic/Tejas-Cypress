@@ -159,6 +159,8 @@ export default class InvestNow extends React.Component {
   render() {
     const { changeInvest, uiStore } = this.props;
     const { showAccountList } = this.props.accreditationStore;
+    const { investAccTypes } = this.props.investmentStore;
+    const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
     const {
       inProgress,
       isEnterPressed,
@@ -198,7 +200,7 @@ export default class InvestNow extends React.Component {
         },
       ];
     // !!showAccountList;
-    const isMultiStepButtonsVisible = !!showAccountList;
+    const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
     // !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' ||
     // (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')
     // || userAccredetiationState === undefined));

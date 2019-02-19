@@ -153,6 +153,7 @@ class AccountType extends Component {
       activeAccounts,
       frozenAccounts,
       partialAccounts,
+      inActiveAccounts,
     } = this.props.userDetailsStore.signupStatus;
     const {
       accTypeChanged,
@@ -180,6 +181,7 @@ class AccountType extends Component {
       offeringAccreditatoinStatusMessage,
       setHeaderAndSubHeader,
     } = this.props.accreditationStore;
+    const isAccountCreated = !(inActiveAccounts && inActiveAccounts.length >= 3);
     if (userProfileFullStatus !== 'FULL' || (userAccredetiationState && (userAccredetiationState === 'NOT_ELGIBLE' || userAccredetiationState === 'INACTIVE'))) {
       setPartialInvestmenSession(offeringInvestnowURL);
     } else {
@@ -192,7 +194,7 @@ class AccountType extends Component {
     const { currentUser } = this.props.userStore;
     let redirectURL = '';
     if (!showAccountList || investAccTypes.values.length <= 1) {
-      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL' && selectedAccountStatus !== 'PARTIAL')) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
+      redirectURL = (!isRegulationCheck || (isRegulationCheck && selectedAccountStatus !== 'FULL') || !isAccountCreated) ? currentUser && currentUser.roles && currentUser.roles.includes('investor') ?
         `${this.props.userDetailsStore.pendingStep}` : (currentUser && currentUser.roles && currentUser.roles.includes('investor') && isRegulationCheck && selectedAccountStatus === 'PARTIAL') ? `${this.props.userDetailsStore.pendingStepForPartialAndProcessingAccount}` : '/app/summary' : `${this.props.accreditationStore.pendingStepForAccreditation(investAccTypes.value)}`;
     }
     let headerToShow = (activeAccounts.length || (investAccTypes.values.length && investAccTypes.values.length >= 2)) ? 'Which Investment Account would you like to invest from ?' : offeringAccreditatoinStatusMessage(selectedAccountStatus);

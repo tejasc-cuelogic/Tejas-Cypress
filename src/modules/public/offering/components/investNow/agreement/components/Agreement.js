@@ -146,7 +146,7 @@ export default class Agreement extends React.Component {
               }
               <div className="center-align mt-30">
                 <Button primary content="Invest" loading={inProgress} onClick={this.submit} />
-                <Button type="button" color="gray" content="Cancel" onClick={this.handleCancelAgreement} />
+                <Button type="button" color="gray" content="Back" onClick={this.handleCancelAgreement} />
               </div>
               {this.state.showError &&
               !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid &&
