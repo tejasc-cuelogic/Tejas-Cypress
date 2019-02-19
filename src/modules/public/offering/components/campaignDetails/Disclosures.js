@@ -27,7 +27,7 @@ export default class TermsOfUse extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`) && document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       }), 100);
@@ -49,11 +49,11 @@ export default class TermsOfUse extends Component {
   }
   module = name => DataFormatter.upperCamelCase(name);
   render() {
-    const { docsWithBoxLink, dataRoomDocs } = this.props.campaignStore;
+    const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
     if (!dataRoomDocs.length) {
       return <InlineLoader text="No Documents to Display" className="bg-offwhite" />;
     }
-    if (!docsWithBoxLink.length) {
+    if (!sortedDocswithBoxLink.length) {
       return <InlineLoader />;
     }
     return (
@@ -62,7 +62,7 @@ export default class TermsOfUse extends Component {
           Data Rooms
           <span className="anchor-scroll" />
         </Header>
-        {docsWithBoxLink && docsWithBoxLink.map((item, index) => (
+        {sortedDocswithBoxLink && sortedDocswithBoxLink.map((item, index) => (
           <Aux>
             <Header id={`doc-${index}`} as="h4" className="mb-20 grey-header">{item.name}</Header>
             <Disclosure doc={item} />
