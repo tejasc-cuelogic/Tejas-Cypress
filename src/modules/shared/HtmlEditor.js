@@ -30,7 +30,7 @@ export default class HtmlEditor extends React.Component {
       toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
       charCounterCount: false,
       editorClass: 'html-editor',
-      embedlyKey: FROALA_EDITOR_LICENSE,
+      key: FROALA_EDITOR_LICENSE,
       linkList: [],
       heightMin: 244,
       heightMax: '70vh',
