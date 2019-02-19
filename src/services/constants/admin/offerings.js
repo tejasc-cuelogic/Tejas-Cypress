@@ -318,6 +318,43 @@ export const KEY_TERMS = {
     placeHolder: 'Enter here',
     defaultValue: 'Because the Issuer was formed recently, the Issuer’s current financial statements only reflect the startup costs incurred thus far. Please see Appendix A for the financial statements as well as the full review report by the Issuer’s accountant.',
   },
+  roundType: {
+    value: '',
+    label: 'Round type',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  unitPrice: {
+    value: null,
+    label: 'Unit Price',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  premoneyValuation: {
+    value: null,
+    label: 'Pre-Money Valuation',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  additionalKeyterms: [{
+    label: {
+      label: 'Label',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+    description: {
+      label: 'Description',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+  }],
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -340,6 +377,12 @@ export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
+];
+
+export const ROUND_TYPE_VALUES = [
+  { key: 'Seed', value: 'SEED', text: 'Seed' },
+  { key: 'Series A', value: 'SERIES_A', text: 'Series A' },
+  { key: 'Series B', value: 'SERIES_B', text: 'Series B' },
 ];
 
 export const BUSINESS_TYPE_VALUES = [
@@ -790,6 +833,9 @@ export const MEDIA = {
   heroImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
+  heroBackground: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Background Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
   tombstoneImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
@@ -812,7 +858,7 @@ export const MEDIA = {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   avatar: {
-    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Company Avatar', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 

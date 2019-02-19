@@ -32,3 +32,6 @@ package-lock.json
 
 # ignore vscode folder
 .vscode
+
+Env.txt
+*.bak

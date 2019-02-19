@@ -15,9 +15,11 @@
     "gh-pages": "^1.0.0",
     "semantic-ui": "2.4.0",
     "jest": "20.0.4",
-    "webpack-bugsnag-plugins": "^1.1.1"
+    "webpack-bugsnag-plugins": "^1.3.0"
   },
   "dependencies": {
+    "@bugsnag/js": "^5.2.0",
+    "@bugsnag/plugin-react": "^5.2.0",
     "amazon-cognito-identity-js": "^1.23.0",
     "amortizejs": "^1.0.3",
     "apollo-client-preset": "^1.0.8",
@@ -132,8 +134,10 @@
   "scripts": {
     "build-assets": "cd ./semantic && gulp build &&  cd ..",
     "start": "node scripts/start.js",
-    "build-js": "node --max_old_space_size=4096 scripts/build.js",
+    "build-js": "node --max_old_space_size=7500 scripts/build.js",
+    "build-js:prod": "node --max_old_space_size=14000 scripts/build.js",
     "build": "npm-run-all build-assets build-js",
+    "build:prod": "npm-run-all build-assets build-js:prod",
     "test": "node scripts/test.js --env=jsdom",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
@@ -177,6 +181,11 @@
     ]
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": "react-app",
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    }
   }
 }

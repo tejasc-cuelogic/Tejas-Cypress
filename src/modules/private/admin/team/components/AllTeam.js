@@ -32,7 +32,7 @@ const SortableItem = SortableElement(({
         teamMember.social.map(site => (
           <Aux>
             {site.url &&
-              <a target="_blank" rel="noopener noreferrer" href={site.url}><Icon disabled name={site.type.toLowerCase()} /></a>
+              <a target="_blank" rel="noopener noreferrer" href={site.url.includes('http') ? site.url : `http://${site.url}`}><Icon disabled name={site.type.toLowerCase()} /></a>
             }
           </Aux>
         )) : ''}

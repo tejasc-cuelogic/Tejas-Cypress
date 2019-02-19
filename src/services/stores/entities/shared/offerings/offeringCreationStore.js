@@ -810,7 +810,7 @@ export class OfferingCreationStore {
   getActionType = (formName, getField = 'actionType') => {
     const metaDataMapping = {
       MEDIA_FRM: { isMultiForm: false },
-      KEY_TERMS_FRM: { isMultiForm: false },
+      KEY_TERMS_FRM: { isMultiForm: true },
       OFFERING_OVERVIEW_FRM: { isMultiForm: true },
       OFFERING_COMPANY_FRM: { isMultiForm: true },
       OFFERING_MISC_FRM: { isMultiForm: false },
@@ -1029,9 +1029,14 @@ export class OfferingCreationStore {
         payloadData[keyName].documentation.admin =
           Validator.evaluateFormData(this.ADMIN_DOCUMENTATION_FRM.fields);
         const dataRoomDocs = Validator.evaluateFormData(this.DATA_ROOM_FRM.fields).documents || [];
-        const emptyDocIndex = dataRoomDocs.findIndex(x => x.name === '');
-        dataRoomDocs.splice(emptyDocIndex, 1);
-        payloadData[keyName].dataroom = { documents: dataRoomDocs };
+        const finalDataRoomDocs = [];
+        dataRoomDocs.map((data, index) => {
+          if (data.name !== '' || data.upload.fileId !== '') {
+            finalDataRoomDocs.push(data);
+          }
+          return finalDataRoomDocs;
+        });
+        payloadData[keyName].dataroom = { documents: finalDataRoomDocs };
       } else if (keyName === 'offering') {
         payloadData[keyName] = {};
         payloadData[keyName].about = Validator.evaluateFormData(this.OFFERING_COMPANY_FRM.fields);

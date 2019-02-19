@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import { inject } from 'mobx-react';
 import { Header, Grid, Item, Divider, Button } from 'semantic-ui-react';
 import RevenueChart from './RevenueChart';
-
+@inject('authStore')
 export default class TermNotes extends Component {
   render() {
+    const { isUserLoggedIn } = this.props.authStore;
+    const link = '/auth/register';
+
     return (
       <Grid reversed="computer" doubling columns={2} relaxed="very">
         <Grid.Column>
@@ -45,7 +50,11 @@ export default class TermNotes extends Component {
             </Item>
           </Item.Group>
           <Divider hidden />
-          <Button secondary>Apply Now</Button>
+          {
+            isUserLoggedIn ?
+            '' :
+            <Button as={Link} to={link} secondary>Apply Now</Button>
+          }
           {/* <List horizontal className="learn-more-list mt-20">
             <List.Item>
               <List.Header>Learn more</List.Header>

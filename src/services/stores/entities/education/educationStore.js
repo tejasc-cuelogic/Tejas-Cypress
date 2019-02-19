@@ -74,8 +74,9 @@ export class EducationStore {
   }
 
   @action
-  setSrchParam = (module, value) => {
-    this.searchParam[module] = value || '';
+  setSrchParam = (value) => {
+    this.searchParam.Faq = value || '';
+    this.searchParam.KnowledgeBase = value || '';
   }
 
   @computed get allData() {
