@@ -32,9 +32,7 @@ query _getArticleByCategoryId($id:ID! ) {
     featuredImage
     minuteRead
     title
-    author {
-      id
-    }
+    authorId
     updated {
       date
     }
