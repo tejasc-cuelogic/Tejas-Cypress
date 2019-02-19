@@ -3,7 +3,7 @@ import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
@@ -251,28 +251,50 @@ export class InvestmentStore {
   @action
   validateInvestmentAmountInOffering = () => {
     if (this.investmentAmount) {
-      this.details = graphql({
-        client,
-        query: validateInvestmentAmountInOffering,
-        variables: {
-          investmentAmount: this.investmentAmount,
-          offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-          userId: userDetailsStore.currentUserId,
-          accountId: this.getSelectedAccountTypeId,
-        },
-        onFetch: (res) => {
-          const { status, message } = res.validateInvestmentAmountInOffering;
-          this.setFieldValue('isValidInvestAmtInOffering', status);
-          this.setFieldValue('disableNextbtn', status);
-          this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
-          this.INVESTMONEY_FORM.meta.isValid = status;
-        },
-        onError: () => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-        fetchPolicy: 'network-only',
-      });
+      if (this.checkLockinPeriod()) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+      } else {
+        this.details = graphql({
+          client,
+          query: validateInvestmentAmountInOffering,
+          variables: {
+            investmentAmount: this.investmentAmount,
+            offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+            userId: userDetailsStore.currentUserId,
+            accountId: this.getSelectedAccountTypeId,
+          },
+          onFetch: (res) => {
+            const { status, message } = res.validateInvestmentAmountInOffering;
+            this.setFieldValue('isValidInvestAmtInOffering', status);
+            this.setFieldValue('disableNextbtn', status);
+            this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
+            this.INVESTMONEY_FORM.meta.isValid = status;
+          },
+          onError: () => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          },
+          fetchPolicy: 'network-only',
+        });
+      }
     }
+  }
+  checkLockinPeriod = () => {
+    let resultToReturn = false;
+    const offeringDetails = portfolioStore.getInvestorAccountById;
+    if (offeringDetails) {
+      const isLokcinPeriod = DataFormatter.diffDays(offeringDetails && offeringDetails.offering &&
+        offeringDetails.offering.offering && offeringDetails.offering.offering.launch &&
+        offeringDetails.offering.offering.launch.terminationDate ?
+        offeringDetails.offering.offering.launch.terminationDate : null) <= 2;
+      if (isLokcinPeriod) {
+        const alreadyInvestedAmount = offeringDetails.investedAmount;
+        resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
+      }
+    }
+    return resultToReturn;
   }
 
   @action

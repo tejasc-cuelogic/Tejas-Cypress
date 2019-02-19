@@ -102,7 +102,7 @@ class TransferRequest extends Component {
         }
         <Button.Group widths="2" className="inline mt-30">
           <Button primary content="Confirm" onClick={this.props.confirm} />
-          <Button content="Cancel" type="button" onClick={this.props.cancel} />
+          <Button content="Back" type="button" onClick={this.props.cancel} />
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from

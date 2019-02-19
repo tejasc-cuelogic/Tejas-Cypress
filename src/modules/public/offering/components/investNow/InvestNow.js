@@ -69,7 +69,9 @@ export default class InvestNow extends React.Component {
     this.props.accreditationStore.changeShowAccountListFlag(true);
   }
   handleCancel = () => {
-    this.props.investmentStore.setStepToBeRendered(0);
+    const currentStep = this.props.investmentStore.stepToBeRendered;
+    const stepRendered = currentStep && currentStep > 0 ? currentStep - 1 : 0;
+    this.props.investmentStore.setStepToBeRendered(stepRendered);
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     // this.props.accreditationStore.resetUserAccreditatedStatus();
     // this.handleStepChange(0);
