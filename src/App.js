@@ -101,7 +101,7 @@ class App extends Component {
           <Route exact path="/password-protected" component={DevPassProtected} /> : (
             <Layout>
               <Switch>
-                <Route exact path="/app/*" component={Private} />
+                {<Route exact path="/app/*" component={Private} /> }
                 <Route path="/" component={Public} />
               </Switch>
             </Layout>

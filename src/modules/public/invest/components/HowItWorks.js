@@ -172,7 +172,7 @@ export default class HowItWorks extends Component {
           </Container>
         </section>
         <section>
-          <Container className="center-align mt-50">
+          <Container className={`${!authStore.isUserLoggedIn && 'mt-50'} center-align`}>
             {!authStore.isUserLoggedIn &&
             <Aux>
               <Header as="h2" className="mb-30">Register for an account.</Header>
@@ -180,9 +180,9 @@ export default class HowItWorks extends Component {
                 <Button as={Link} to="/auth/register-investor" secondary>Sign Up Free</Button>
               </Button.Group>
               <Divider section hidden />
-              <Divider />
             </Aux>
             }
+            <Divider />
             <List className="learn-more-list">
               <List.Item>
                 <List.Content as={Link} to="/invest/account-types" className="text-uppercase" floated="right">
