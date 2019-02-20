@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header, Divider, List, Container, Grid, Image, Responsive } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import { ASSETS_URL } from '../../../../constants/aws';
+import secureImage from '../../../../assets/images/secure-horizontal.png';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const Security = () => (
@@ -22,7 +22,7 @@ const Security = () => (
                   </p>
                   <Header as="h5">Keep your information protected.</Header>
                   <p>We safeguard your information with bank-level security measures</p>
-                  <Responsive as={Image} minWidth={768} src={`${ASSETS_URL}images/secure-horizontal.png`} />
+                  <Responsive as={Image} minWidth={768} src={secureImage} />
                 </Grid.Column>
                 <Grid.Column>
                   <Header as="h5">SEC-registered broker-dealer and funding portal</Header>

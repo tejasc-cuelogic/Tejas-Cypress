@@ -26,7 +26,7 @@ class Gallery extends Component {
           <span className="anchor" id="gallery" />
         </Header>
         <div className="gallery-preview">
-          {get(campaign && 'media.gallery') ?
+          {get(campaign, 'media.gallery') ?
             campaign.media.gallery.map((data, index) => (
               <Aux>
                 {index < 3 &&
@@ -37,7 +37,7 @@ class Gallery extends Component {
             <Image64 fluid className="about-gallery-bg" srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
           }
         </div>
-        {get(campaign && 'media.gallery') &&
+        {get(campaign, 'media.gallery') &&
           <Button fluid={isTablet} onClick={e => this.handleViewGallary(e, null)} basic compact className="highlight-text mt-40">
             View Gallery
             <Icon size="small" className="ns-chevron-right right" color="white" />
