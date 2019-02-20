@@ -40,7 +40,6 @@ export default class ApplicationsList extends Component {
       getBusinessApplication, requestState, filterApplicationStatus, columnTitle,
       totalRecords, businessApplicationsList, setKeyword,
     } = this.props.businessAppAdminStore;
-
     if (businessApplicationsList.loading) {
       return <InlineLoader />;
     }
@@ -119,8 +118,12 @@ export default class ApplicationsList extends Component {
                               }
                             </p>
                             <p>
-                              {/* <p>Sign-up Code <b>-</b><br /> */}
-                              Started <b>{application.created ? moment(application.created.date).format('MM/DD/YYYY') : '-'}</b><br />
+                              Started
+                              <b>
+                                {
+                                  match.params.applicationType === 'prequal-failed' ? (` ${application.submittedDate}` ? moment(` ${application.submittedDate}`).format('MM/DD/YYYY') : '-') : (` ${application.created.date}` ? moment(` ${application.created.date}`).format('MM/DD/YYYY') : '-')
+                                }
+                              </b><br />
                               Updated <b>{application.updated ? moment(application.updated.date).format('MM/DD/YYYY') : '-'}</b>
                             </p>
                           </div>
