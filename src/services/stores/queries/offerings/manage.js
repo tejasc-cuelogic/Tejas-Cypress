@@ -251,6 +251,12 @@ export const getOfferingDetails = gql`
           isPublic
           fileName
         }
+        heroBackground {
+          id
+          url
+          isPublic
+          fileName
+        }
         useOfProceeds {
           id
           url
