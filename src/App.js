@@ -34,12 +34,7 @@ const metaTagsData = [
   { type: 'meta', name: 'twitter:image', content: 'https://cdn.nextseed.co/app/uploads/IMG_2710.jpg' },
   { type: 'meta', name: 'twitter:creator', content: '@thenextseed' },
 ];
-const restictedMoveToTopPathArr = [
-  'offerings',
-  '/business/funding-options/',
-  '/education-center/investor/',
-  '/education-center/business/',
-];
+const restictedScrollToTopPathArr = ['offerings', '/business/funding-options/', '/education-center/investor/', '/education-center/business/'];
 @inject('userStore', 'commonStore', 'authStore', 'uiStore', 'userDetailsStore', 'navStore')
 @withRouter
 @observer
@@ -79,10 +74,7 @@ class App extends Component {
       this.props.uiStore.clearRedirectURL();
       this.props.authStore.setUserLoggedIn(false);
     }
-    if (!this.checkPathRestictedForScrollTop(restictedMoveToTopPathArr, currentLocation)) {
-      window.scrollTo(0, 0);
-      // }
-    } else if ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview')) {
+    if ((!this.checkPathRestictedForScrollTop(restictedScrollToTopPathArr, currentLocation)) || ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview'))) {
       window.scrollTo(0, 0);
     }
   }
