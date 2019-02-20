@@ -18,6 +18,15 @@ class IndividualAccountStore {
     this.isManualLinkBankSubmitted = status;
   }
 
+  initialSteptobeRendered = () => {
+    const { userDetails } = userDetailsStore;
+    const account = find(userDetails.roles, { name: 'individual' });
+    if (!isEmpty(account)) {
+      this.setStepToBeRendered(this.stepToBeRendered === 0 ? 1
+        : this.stepToBeRendered);
+    }
+  }
+
   @action
   setStepToBeRendered = (step) => {
     this.stepToBeRendered = step;
