@@ -46,7 +46,7 @@ class EntityAccountStore {
   maskedFinInfoChange = (values, field) => {
     this.FIN_INFO_FRM.fields.investmentLimit.value =
     investmentLimitStore.getInvestmentLimit({
-      annualIncome: this.FIN_INFO_FRM.fields.cfInvestment.value,
+      annualIncome: this.FIN_INFO_FRM.fields.annualIncome.value,
       netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
     });
     this.FIN_INFO_FRM = FormValidator.onChange(
@@ -106,15 +106,9 @@ class EntityAccountStore {
 
   @action
   createAccount = (currentStep, formStatus = 'PARTIAL', removeUploadedData = false, field = null) => new Promise((resolve) => {
-    if (formStatus === 'FULL') {
-      this.submitForm(currentStep, formStatus, this.accountAttributes).then(() => {
-        resolve();
-      });
-    } else {
-      this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field).then(() => {
-        resolve();
-      });
-    }
+    this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field).then(() => {
+      resolve();
+    });
   })
 
   @action
@@ -197,7 +191,7 @@ class EntityAccountStore {
     payload = {
       limits: {
         netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
-        otherContributions: this.FIN_INFO_FRM.fields.cfInvestment.value,
+        otherContributions: this.FIN_INFO_FRM.fields.annualIncome.value,
       },
       name: this.GEN_INFO_FRM.fields.name.value,
       taxId: this.GEN_INFO_FRM.fields.taxId.value,
@@ -308,11 +302,10 @@ class EntityAccountStore {
       isValidCurrentStep = this[currentStep.form].meta.isValid;
       if (isValidCurrentStep) {
         if (currentStep.name === 'Financial info') {
-          const limitsValues = {
+          accountAttributes.limits = {
             netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
-            otherContributions: this.FIN_INFO_FRM.fields.cfInvestment.value,
+            income: this.FIN_INFO_FRM.fields.annualIncome.value,
           };
-          accountAttributes.limits = limitsValues;
         } else if (currentStep.name === 'General' || currentStep.name === 'Trust Status') {
           accountAttributes = this.setEntityAttributes(currentStep.name);
         }
@@ -447,7 +440,7 @@ class EntityAccountStore {
               annualIncome:
                 userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
               netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
-              otherRegCfInvestments: 0,
+              otherRegannualIncomes: 0,
             };
             const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
             if (accountDetails) {
@@ -477,7 +470,7 @@ class EntityAccountStore {
   setFormData = (form, accountDetails) => {
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
-        if (f === 'cfInvestment' && accountDetails.limits && accountDetails.limits.otherContributions) {
+        if (f === 'annualIncome' && accountDetails.limits && accountDetails.limits.otherContributions) {
           this.FIN_INFO_FRM.fields[f].value = accountDetails.limits.otherContributions;
         } else if (accountDetails.limits && accountDetails.limits.netWorth && f !== 'investmentLimit') {
           this.FIN_INFO_FRM.fields[f].value = accountDetails.limits.netWorth;
