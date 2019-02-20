@@ -39,7 +39,7 @@ export default class KeyTerms extends Component {
   render() {
     const {
       KEY_TERMS_FRM, formArrayChange, maskArrayChange,
-      confirmModal, confirmModalName, removeData,
+      confirmModal, confirmModalName, removeData, currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
     const { offer } = this.props.offeringsStore;
@@ -214,6 +214,7 @@ export default class KeyTerms extends Component {
               <Form.Field>
                 <Header as="h6">{KEY_TERMS_FRM.fields[field].label}</Header>
                 <HtmlEditor
+                  imageUploadPath={`offerings/${currentOfferingId}`}
                   readOnly={isReadonly}
                   changed={this.editorChange}
                   name={field}
@@ -248,6 +249,7 @@ export default class KeyTerms extends Component {
                 <Form.Field>
                   <Header as="h6">{field.description.label}</Header>
                   <HtmlEditor
+                    imageUploadPath={`offerings/${currentOfferingId}`}
                     readOnly={isReadonly}
                     changed={this.editorChange}
                     name="description"

@@ -33,7 +33,7 @@ export default class OfferingCompany extends Component {
     const {
       OFFERING_COMPANY_FRM,
       formArrayChange,
-      rtEditorChange,
+      rtEditorChange, currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_COMPANY_FRM';
     const { isIssuer } = this.props.userStore;
@@ -52,6 +52,7 @@ export default class OfferingCompany extends Component {
       <Form>
         <Header as="h4">About the Company</Header>
         <HtmlEditor
+          imageUploadPath={`offerings/${currentOfferingId}`}
           readOnly={isReadonly}
           changed={this.editorChange}
           name="theCompany"
@@ -93,6 +94,7 @@ export default class OfferingCompany extends Component {
               <Divider section />
               <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
               <HtmlEditor
+                imageUploadPath={`offerings/${currentOfferingId}`}
                 readOnly={isReadonly}
                 changed={rtEditorChange}
                 name={field}
