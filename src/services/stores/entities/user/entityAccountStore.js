@@ -440,7 +440,7 @@ class EntityAccountStore {
               annualIncome:
                 userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
               netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
-              otherRegannualIncomes: 0,
+              otherRegCfInvestments: 0,
             };
             const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
             if (accountDetails) {

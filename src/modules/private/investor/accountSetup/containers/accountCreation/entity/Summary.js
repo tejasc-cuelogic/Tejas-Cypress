@@ -77,8 +77,8 @@ export default class Summary extends Component {
                 </Table.Row>
                 <Table.Row>
                   <Table.Cell>Other CF Investments</Table.Cell>
-                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.cfInvestment.value ?
-                      FIN_INFO_FRM.fields.cfInvestment.value : 0)}
+                  <Table.Cell>{Helper.CurrencyFormat(FIN_INFO_FRM.fields.annualIncome.value ?
+                      FIN_INFO_FRM.fields.annualIncome.value : 0)}
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row>
