@@ -16,7 +16,7 @@ export const createAccount = gql`
     }
   }`;
 
-export const updateAccount = gql`
+export const upsertInvestorAccount = gql`
   mutation _upsertInvestorAccount($accountId: String $accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum!) {
     upsertInvestorAccount(
       accountId: $accountId

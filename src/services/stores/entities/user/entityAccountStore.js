@@ -12,7 +12,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, referralsStore } from '../../index';
-import { updateAccount, checkEntityTaxIdCollision } from '../../queries/account';
+import { upsertInvestorAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
@@ -393,7 +393,7 @@ class EntityAccountStore {
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
-    let mutation = updateAccount;
+    let mutation = upsertInvestorAccount;
     const variables = {
       accountAttributes,
       accountStatus: formStatus,
@@ -403,7 +403,7 @@ class EntityAccountStore {
     if (userDetailsStore.currentUser.data) {
       const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
       if (accountDetails) {
-        mutation = updateAccount;
+        mutation = upsertInvestorAccount;
         variables.accountId = accountDetails.details.accountId;
         actionPerformed = 'updated';
       }

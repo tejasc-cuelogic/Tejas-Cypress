@@ -11,6 +11,8 @@ import Summary from './Summary';
 export default class AccountCreation extends React.Component {
   componentWillMount() {
     this.props.userDetailsStore.setUserAccDetails('individual');
+    const { stepToBeRendered, setStepToBeRendered } = this.props.individualAccountStore;
+    setStepToBeRendered(stepToBeRendered === 0 ? 1 : stepToBeRendered);
     this.props.accountStore.setAccTypeChange(0);
   }
   handleMultiStepModalclose = () => {

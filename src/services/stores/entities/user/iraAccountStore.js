@@ -10,7 +10,7 @@ import {
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 import { uiStore, userStore, bankAccountStore, userDetailsStore, investmentLimitStore, referralsStore } from '../../index';
-import { updateAccount } from '../../queries/account';
+import { upsertInvestorAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -271,7 +271,7 @@ class IraAccountStore {
   @action
   submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
-    let mutation = updateAccount;
+    let mutation = upsertInvestorAccount;
     const variables = {
       accountAttributes,
       accountStatus: formStatus,
@@ -281,7 +281,7 @@ class IraAccountStore {
     if (userDetailsStore.currentUser.data) {
       const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
       if (accountDetails) {
-        mutation = updateAccount;
+        mutation = upsertInvestorAccount;
         variables.accountId = accountDetails.details.accountId;
         actionPerformed = 'updated';
       }
