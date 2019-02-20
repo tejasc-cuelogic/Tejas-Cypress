@@ -67,7 +67,7 @@ class App extends Component {
   componentDidUpdate(prevProps) {
     const isLoggingOut = prevProps.authStore.isUserLoggedIn && !this.props.authStore.isUserLoggedIn;
     const isLoggingIn = !prevProps.authStore.isUserLoggedIn && this.props.authStore.isUserLoggedIn;
-    const previousLocation = prevProps.location.pathname;
+    // const previousLocation = prevProps.location.pathname;
     const currentLocation = this.props.location.pathname;
     if (isLoggingIn) {
       this.props.history.push(this.props.uiStore.redireURL);
@@ -76,7 +76,7 @@ class App extends Component {
       this.props.authStore.setUserLoggedIn(false);
     }
     if (!currentLocation.includes('offerings')) {
-      if ((previousLocation.includes('term-notes') !== currentLocation.includes('revenue-sharing-notes')) || (previousLocation.includes('education-center') !== currentLocation.includes('education-center'))) {
+      if ((!currentLocation.includes('/business/funding-options/') && !currentLocation.includes('/business/funding-options/')) && (!currentLocation.includes('/education-center/investor/') && !currentLocation.includes('/education-center/business/'))) {
         window.scrollTo(0, 0);
       }
     } else if ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview')) {
