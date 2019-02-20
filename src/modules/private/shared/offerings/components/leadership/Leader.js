@@ -105,7 +105,7 @@ export default class Leader extends Component {
     const index = leaderNumber || 0;
     const {
       LEADERSHIP_EXP_FRM, confirmModal, confirmModalName, removeIndex, LEADERSHIP_FRM,
-      formArrayChange, maskArrayChange, setAddressFields,
+      formArrayChange, maskArrayChange, setAddressFields, currentOfferingId,
     } = this.props.offeringCreationStore;
     const { match } = this.props;
     const { isIssuer } = this.props.userStore;
@@ -234,6 +234,7 @@ export default class Leader extends Component {
           </Form.Group>
           <HeaderWithTooltip header="Bio" tooltip="To be used on the public offering page" />
           <HtmlEditor
+            imageUploadPath={`offerings/${currentOfferingId}`}
             readOnly={isReadonly}
             changed={this.editorChange}
             index={index}

@@ -134,6 +134,7 @@ export default class BusinessApplication extends Component {
               dataSrc={logoUrl}
               style={this.getLogoStyle(this.props.location.pathname)}
               verticalAlign="middle"
+              size="small"
             />
           </Link>
         }

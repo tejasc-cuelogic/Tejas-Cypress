@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
+import { UPLOADS_CONFIG } from '../../../constants/aws';
 import emptyImage1 from '../../../assets/images/gallery-placeholder-3-2.jpg';
 import emptyImage2 from '../../../assets/images/gallery-placeholder-16-9.jpg';
 
@@ -11,7 +12,8 @@ class Image64 extends React.Component {
   componentWillMount() {
     const emptyImage = this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (this.props.srcUrl) {
-      this.props.imageStore.getBase64Content(this.props.srcUrl).then((res) => {
+      const imgUrl = (this.props.srcUrl.includes('https://') || this.props.srcUrl.includes('http://')) ? this.props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${this.props.srcUrl}`;
+      this.props.imageStore.getBase64Content(imgUrl).then((res) => {
         if (res.includes('data:')) {
           this.setState({ data: res || emptyImage });
         } else {
@@ -28,7 +30,8 @@ class Image64 extends React.Component {
   componentWillReceiveProps() {
     const emptyImage = this.props.imgType && this.props.imgType === 'heroImage' ? emptyImage2 : emptyImage1;
     if (this.props.srcUrl) {
-      this.props.imageStore.getBase64Content(this.props.srcUrl).then((res) => {
+      const imgUrl = (this.props.srcUrl.includes('https://') || this.props.srcUrl.includes('http://')) ? this.props.srcUrl : `https://${UPLOADS_CONFIG.bucket}/${this.props.srcUrl}`;
+      this.props.imageStore.getBase64Content(imgUrl).then((res) => {
         if (res.includes('data:')) {
           this.setState({ data: res || emptyImage });
         } else {

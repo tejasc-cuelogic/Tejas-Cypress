@@ -37,6 +37,7 @@ export class UiStore {
   @observable isEnterPressed = false;
   @observable showFireworkAnimation = false;
   @observable authRef = '';
+  @observable htmlEditorImageLoading = false;
 
   @action
   setFieldvalue = (field, value) => {

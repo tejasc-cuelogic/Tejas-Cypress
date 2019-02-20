@@ -176,6 +176,7 @@ section{
         top: 0;
         bottom: 0;
         right: 0;
+        color:  @white;
     }
 }
 // business and invest pages

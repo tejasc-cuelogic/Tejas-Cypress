@@ -85,11 +85,11 @@ export class Api {
     })
   )
 
-  uploadOnS3 = (url, file) => (
+  uploadOnS3 = (url, file, type = 'text/plain') => (
     new Promise((resolve, reject) => {
       request
         .put(`${url}`)
-        .set('Content-Type', 'text/plain') // File upload (Binary Mode)
+        .set('Content-Type', type) // File upload (Binary Mode)
         .send(file)
         .end((err, data) => {
           if (err) {
