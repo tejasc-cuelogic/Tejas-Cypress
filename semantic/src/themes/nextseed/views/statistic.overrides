@@ -38,7 +38,7 @@
 // 		}
 // 	}
 // }
-.campaign-details-banner, .offering-intro {
+.campaign-banner, .offering-intro {
 	.offer-stats {
 		padding: @15px;
 		background: @mutedTextColor;
