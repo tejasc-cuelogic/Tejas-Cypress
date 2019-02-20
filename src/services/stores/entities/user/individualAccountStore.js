@@ -77,19 +77,6 @@ class IndividualAccountStore {
                 const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }
-              if (formStatus === 'PARTIAL') {
-                const accountId = result.data.upsertInvestorAccount ?
-                  result.data.upsertInvestorAccount.accountId : null;
-                if (accountId) {
-                  const data = {
-                    annualIncome:
-                      userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
-                    netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
-                    otherRegCfInvestments: 0,
-                  };
-                  investmentLimitStore.updateInvestmentLimits(data, accountId, null, false);
-                }
-              }
               if (currentStep) {
                 this.setStepToBeRendered(currentStep.stepToBeRendered);
                 if (!bankAccountStore.depositMoneyNow) {
