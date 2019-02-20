@@ -129,19 +129,15 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Header as="h4">Key Terms</Header>
           <Form.Group widths={3}>
-            <FormInput
-              displayMode={isReadonly}
-              name="maturity"
-              fielddata={KEY_TERMS_FRM.fields.maturity}
-              changed={(e, result) => formArrayChange(e, result, formName)}
-            />
-            <MaskedInput
-              displayMode={isReadonly}
-              name="startupPeriod"
-              fielddata={KEY_TERMS_FRM.fields.startupPeriod}
-              changed={(values, name) => maskArrayChange(values, formName, name)}
-              number
-            />
+            {['maturity', 'startupPeriod'].map(field => (
+              <MaskedInput
+                displayMode={isReadonly}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                number
+              />
+            ))}
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}

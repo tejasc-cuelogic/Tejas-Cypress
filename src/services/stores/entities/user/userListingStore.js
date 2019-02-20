@@ -184,10 +184,11 @@ export class UserListingStore {
       issuer: [],
     };
     this.users.map((user) => {
-      usersOptions[user.roles[0].scope].push({
-        text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
-        value: user.id,
-        icon:
+      if (user.roles[0] && user.roles[0].scope && usersOptions[user.roles[0].scope]) {
+        usersOptions[user.roles[0].scope].push({
+          text: `${capitalize(user.info.firstName)} ${capitalize(user.info.lastName)}`,
+          value: user.id,
+          icon:
   <UserAvatar
     UserInfo={{
       firstName: user.info ? user.info.firstName : '',
@@ -196,8 +197,8 @@ export class UserListingStore {
       roles: user.roles.map(r => r.scope),
     }}
   />,
-      // image: { avatar: user.info.avatar, src: (user.info.avatar && user.info.avatar.url) || '' },
-      });
+        });
+      }
       return false;
     });
     return usersOptions;

@@ -5,7 +5,7 @@ import { get } from 'lodash';
 import { withRouter, Link } from 'react-router-dom';
 import { Responsive, Icon, Header, Container, Progress, Popup, Statistic, Grid, Button } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
-import { CAMPAIGN_KEYTERMS_SECURITIES } from '../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
 import { Image64 } from '../../../../../theme/shared';
 import Helper from '../../../../../helper/utility';
 
@@ -31,7 +31,7 @@ export default class CampaignHeader extends Component {
     const isClosed = campaign.stage !== 'LIVE';
     return (
       <Aux>
-        <section className="campaign-details-banner banner">
+        <section className="campaign-details-banner banner" style={{ backgroundImage: `url(${get(campaign, 'media.heroBackground.url')})` }}>
           <Responsive minWidth={768} as={Container}>
             <Grid relaxed stackable>
               <Grid.Column width={10}>
@@ -119,14 +119,14 @@ export default class CampaignHeader extends Component {
                       hoverable
                       trigger={<Icon name="help circle" color="green" />}
                       content={
-                        <span>To learn more about how {offerStructure === 'TERM_NOTE' ? 'Term Note' : 'Revenue Sharing'} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
+                        <span>To learn more about how {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? 'Term Note' : 'Revenue Sharing'} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
                       }
                       position="top center"
                     />
                   </p>
                 }
                 <p className="mb-half">
-                  {offerStructure === 'TERM_NOTE' ?
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
                     <Aux>
                     Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
                     </Aux> :
