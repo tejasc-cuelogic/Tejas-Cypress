@@ -186,6 +186,13 @@ class KeyTermsDetails extends Component {
                       className="slider mt-10 mb-10"
                       id="myRange"
                     />
+                    <span className="one" />
+                    <span className="two" />
+                    <span className="three" />
+                    <span className="four" />
+                    <span className="five" />
+                    <span className="six" />
+                    <span className="seven" />
                   </div>
                 </Statistic>
               </Grid.Column>

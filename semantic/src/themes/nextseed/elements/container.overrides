@@ -150,6 +150,35 @@ section{
         }
     }
 }
+.campaign-banner {
+    position: relative;
+    height: 568px;
+    background-color: @neutral;
+    .campaign-details-banner{
+        background-position: top center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: @neutral;
+        background-blend-mode: multiply;
+        margin-top: 0;
+        padding: 0;
+        height: 568px;
+        width: 100%;
+    }
+    section.banner{
+        position: absolute;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        color:  @white;
+    }
+}
 // business and invest pages
 .slide-down{
 	&.process{
