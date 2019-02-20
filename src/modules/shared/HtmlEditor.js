@@ -16,6 +16,7 @@ import 'font-awesome/css/font-awesome.css';
 import FroalaEditor from 'react-froala-wysiwyg';
 import { fileUpload } from '../../services/actions';
 import { FROALA_EDITOR_LICENSE } from '../../constants/common';
+import { UPLOADS_CONFIG } from '../../constants/aws';
 
 window.$ = $;
 window.jQuery = $;
@@ -55,10 +56,11 @@ export default class HtmlEditor extends React.Component {
             type: file.type,
             name: fileName,
           };
-          fileUpload.uploadToS3(fileObj, 'offering').then((res) => {
+          fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
             if (editor && editor.image) {
-              editor.image.insert(res);
-              this.setState({ imgUrl: res });
+              const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
+              editor.image.insert(imgUrl);
+              this.setState({ imgUrl });
             }
           }).catch(() => this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false));
         },

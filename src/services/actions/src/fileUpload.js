@@ -3,7 +3,6 @@ import { GqlClient as client } from '../../../api/gqlApi';
 import { DataFormatter } from '../../../helper';
 import { uiStore, commonStore } from '../../stores';
 import apiService from '../../../api/restApi';
-import { UPLOADS_CONFIG } from '../../../constants/aws';
 
 export class FileUpload {
   setFileUploadData = (applicationId, fileData, stepName, userRole, applicationIssuerId = '', offeringId = '', tags) =>
@@ -74,7 +73,7 @@ export class FileUpload {
   uploadToS3 = (fileObj, dir) => new Promise((resolve, reject) => {
     const key = `${dir}/${fileObj.name}`;
     commonStore.getCdnSignedUrl(key).then((res) => {
-      apiService.uploadOnS3(res.data.createCdnSignedUrl, fileObj.obj, fileObj.type).then(() => resolve(`https://${UPLOADS_CONFIG.bucket}/${key}`))
+      apiService.uploadOnS3(res.data.createCdnSignedUrl, fileObj.obj, fileObj.type).then(() => resolve(`${key}`))
         .catch(err => reject(err));
     }).catch(err => reject(err));
   });
