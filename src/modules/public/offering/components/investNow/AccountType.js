@@ -58,6 +58,13 @@ class AccountType extends Component {
             setStepToBeRendered(1);
           }
         });
+      } else if (this.props.changeInvest) {
+        const accountType = this.props.changeInvest ? includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity' : activeAccounts[0];
+        this.props.investmentStore.accTypeChanged(null, { value: accountType }).then(() => {
+          if (activeAccounts.length && this.props.investmentStore.getSelectedAccountTypeId) {
+            setStepToBeRendered(1);
+          }
+        });
       }
     }
     setPartialInvestmenSession();
@@ -146,6 +153,7 @@ class AccountType extends Component {
   handlBackToOffering = (e) => {
     e.preventDefault();
     this.props.accreditationStore.resetUserAccreditatedStatus();
+    this.props.investmentStore.setFieldValue('disableNextbtn', true);
     this.props.history.push(this.props.refLink);
   }
   render() {
@@ -222,7 +230,7 @@ class AccountType extends Component {
         <Form error className="account-type-tab">
           {investAccTypes.values.length && selectedAccountStatus ?
             <Aux>
-              {showAccountList && investAccTypes.values.length >= 2 ?
+              {showAccountList && investAccTypes.values.length >= 2 && !this.props.changeInvest ?
                 <FormRadioGroup
                   name="investAccountType"
                   containerclassname="button-radio center-align"
@@ -259,7 +267,7 @@ class AccountType extends Component {
                           </Aux>
                           :
                           <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
-                          }
+                      }
                     </div>
                     :
                     <div className="center-align">
@@ -310,7 +318,7 @@ class AccountType extends Component {
                   <Aux>
                     <Link to={redirectURL} className="text-link">
                       <Icon className="ns-arrow-right" color="green" />
-                    Please finish your account setup.
+                      Please finish your account setup.
                     </Link>
                     <div className="mt-30"><Button as={Link} to="/" onClick={e => this.handlBackToOffering(e)} primary className="relaxed" content="Back to Offering" /></div>
                   </Aux>

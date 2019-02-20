@@ -755,6 +755,7 @@ export class AccreditationStore {
     this.selectedAccountStatus = undefined;
     this.showAccountList = true;
     investmentStore.resetAccTypeChanged();
+    investmentStore.setFieldValue('disableNextbtn', true);
   }
   checkIsAccreditationExpired = (expirationDate) => {
     let dateDiff = '';

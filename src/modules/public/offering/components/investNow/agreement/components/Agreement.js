@@ -29,6 +29,7 @@ export default class Agreement extends React.Component {
   }
   handleCloseModal = (e) => {
     this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     if (this.state.showDocuSign) {
       this.docuSignHandeler(e, false);
     } else if (this.props.changeInvestment) {

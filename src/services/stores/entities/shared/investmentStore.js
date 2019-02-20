@@ -12,6 +12,7 @@ import {
   validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment,
 } from '../../queries/investNow';
+import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
@@ -396,6 +397,13 @@ export class InvestmentStore {
               agreementId: this.agreementDetails.agreementId,
               transferAmount: this.getTransferRequestAmount,
             },
+            refetchQueries: [{
+              query: getInvestorAccountPortfolio,
+              variables: {
+                userId: userDetailsStore.currentUserId,
+                accountId: this.getSelectedAccountTypeId,
+              },
+            }],
           })
           .then((data) => {
             // resolve(data.data.finishInvestment);
