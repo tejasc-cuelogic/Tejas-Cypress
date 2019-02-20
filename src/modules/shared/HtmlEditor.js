@@ -16,11 +16,12 @@ import 'font-awesome/css/font-awesome.css';
 import FroalaEditor from 'react-froala-wysiwyg';
 import { fileUpload } from '../../services/actions';
 import { FROALA_EDITOR_LICENSE } from '../../constants/common';
+import { UPLOADS_CONFIG } from '../../constants/aws';
 
 window.$ = $;
 window.jQuery = $;
 
-@inject('imageStore')
+@inject('imageStore', 'uiStore')
 @observer
 export default class HtmlEditor extends React.Component {
   state = { imgUrl: null }
@@ -30,35 +31,38 @@ export default class HtmlEditor extends React.Component {
       toolbarButtons: ['html', '|', 'undo', 'redo', '|', 'paragraphFormat', '|', 'bold', 'italic', 'strikeThrough', 'underline', '|', 'superscript', 'subscript', '|', 'insertLink', 'insertTable', '|', 'insertImage', '|', 'align', 'formatUL', 'formatOL', '|', 'insertHR', '|', 'clearFormatting', 'fullscreen'],
       charCounterCount: false,
       editorClass: 'html-editor',
-      embedlyKey: FROALA_EDITOR_LICENSE,
+      key: FROALA_EDITOR_LICENSE,
       linkList: [],
       heightMin: 244,
       heightMax: '70vh',
       imageManager: false,
       imageUploadRemoteUrls: false,
       events: {
-        // 'froalaEditor.image.loaded': (e, editor, image) => {
-        //   if (image.attr('src').includes('blob:') && this.state.imgUrl) {
-        //     image.attr('src', this.state.imgUrl);
-        //     this.setState({ imgUrl: null });
-        //   }
-        //   return false;
-        // },
+        'froalaEditor.image.loaded': (e, editor, image) => {
+          if (image.attr('src').includes('blob:') && this.state.imgUrl) {
+            console.log('changed src img');
+            image.attr('src', this.state.imgUrl);
+            this.setState({ imgUrl: null });
+            this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+          }
+          return false;
+        },
         'froalaEditor.image.beforeUpload': (e, editor, images) => {
-          this.getBase64(get(images, '[0]')).then((img) => {
-            this.setState({ imgUrl: img });
-            console.log(img, this.state.imgUrl);
-            const fileObj = {
-              obj: img,
-              name: get(images, '[0].name'),
-            };
-            fileUpload.uploadToS3(fileObj, 'offering').then((res) => {
-              if (editor && editor.image) {
-                editor.image.insert(res);
-                this.setState({ imgUrl: res });
-              }
-            });
-          });
+          this.props.uiStore.setFieldvalue('htmlEditorImageLoading', true);
+          const fileName = get(images, '[0].name');
+          const file = get(images, '[0]');
+          const fileObj = {
+            obj: file,
+            type: file.type,
+            name: fileName,
+          };
+          fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
+            if (editor && editor.image) {
+              const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
+              editor.image.insert(imgUrl);
+              this.setState({ imgUrl });
+            }
+          }).catch(() => this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false));
         },
         'froalaEditor.image.error': (e, editor, error) => {
           console.log(error);
@@ -67,12 +71,6 @@ export default class HtmlEditor extends React.Component {
     };
     return { ...config, ...overrides };
   };
-  getBase64 = file => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result);
-    reader.onerror = error => reject(error);
-  });
   handleModelChange = (content) => {
     this.props.changed(this.props.name, content, this.props.form, this.props.index);
   }

@@ -3,11 +3,15 @@ export const CAMPAIGN_KEYTERMS_SECURITIES = {
   REVENUE_SHARING_NOTE: 'Revenue Sharing Note',
   PREFERRED_EQUITY_506C: 'Preferred Equity',
 };
-
 export const CAMPAIGN_KEYTERMS_SECURITIES_ENUM = {
   TERM_NOTE: 'TERM_NOTE',
   REVENUE_SHARING_NOTE: 'REVENUE_SHARING_NOTE',
   PREFERRED_EQUITY_506C: 'PREFERRED_EQUITY_506C',
+};
+export const ROUND_TYPES_ENUM = {
+  SEED: 'Seed',
+  SERIES_A: 'Series A',
+  SERIES_B: 'Series B',
 };
 
 export const INDUSTRY_TYPES = {

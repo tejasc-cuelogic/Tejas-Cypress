@@ -51,7 +51,7 @@ const AllInclusive = () => (
                     <NSImage path="business/payment.svg" />
                   </div>
                   <Item.Content>
-                    <Item.Header as="h5">Payment Processing</Item.Header>
+                    <Item.Header as="h5">Investment Processing</Item.Header>
                     <Item.Meta>Collecting commitments and distributing funds.</Item.Meta>
                   </Item.Content>
                 </Item>

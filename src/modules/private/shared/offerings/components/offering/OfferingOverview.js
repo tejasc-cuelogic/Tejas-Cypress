@@ -42,6 +42,7 @@ export default class OfferingOverview extends Component {
   render() {
     const {
       OFFERING_OVERVIEW_FRM, formArrayChange, confirmModal, confirmModalName, removeIndex,
+      currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'OFFERING_OVERVIEW_FRM';
     const { isIssuer } = this.props.userStore;
@@ -60,6 +61,7 @@ export default class OfferingOverview extends Component {
       <Form>
         <Header as="h4">Elevator pitch</Header>
         <HtmlEditor
+          imageUploadPath={`offerings/${currentOfferingId}`}
           readOnly={isReadonly}
           changed={this.editorChange}
           name="elevatorPitch"
