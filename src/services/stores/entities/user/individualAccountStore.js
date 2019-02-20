@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore } from '../../index';
+import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
