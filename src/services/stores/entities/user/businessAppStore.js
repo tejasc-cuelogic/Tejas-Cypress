@@ -429,7 +429,7 @@ export class BusinessAppStore {
       this.appStepsStatus[3].status = data.stepStatus;
       if (this.currentApplicationType === 'business') {
         this.BUSINESS_DOC_FRM.fields.blanketLien.value = data.blanketLien !== '' ? data.blanketLien : '';
-        this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGuarantee !== '' ? data.providePersonalGuarantee : '';
+        this.BUSINESS_DOC_FRM.fields.personalGuarantee.value = data.providePersonalGuarantee === '' ? '' : data.providePersonalGuarantee;
         if (data.personalGuarantee && data.personalGuarantee.length) {
           this.setFileObjectToForm(data.personalGuarantee, 'BUSINESS_DOC_FRM', 'personalGuaranteeForm');
         }
@@ -700,8 +700,8 @@ export class BusinessAppStore {
             data.personalGuaranteeForm.value,
             this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
           ) : [],
-        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value === '' ? null : this.BUSINESS_DOC_FRM.fields.blanketLien.value,
-        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === '' ? null : this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === true,
+        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value === '' ? '' : this.BUSINESS_DOC_FRM.fields.blanketLien.value,
+        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === '' ? '' : this.BUSINESS_DOC_FRM.fields.personalGuarantee.value,
       };
     } else {
       inputData = {
