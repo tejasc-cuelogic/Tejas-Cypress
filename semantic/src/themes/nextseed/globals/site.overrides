@@ -692,11 +692,11 @@ footer{
 		margin-left: 56px;
 	}
 }
-.funding-option {
-	.ui.secondary.button {
-		display: block;
-	}
-}
+// .funding-option {
+// 	.ui.secondary.button {
+// 		display: block;
+// 	}
+// }
 .content-spacer {
 	.column.side-section {
 		background-color:@invertedMutedTextColor;
@@ -2507,6 +2507,32 @@ p.check-extra-info{
 		top: 10px;
 		border-radius: 50px;
 		-webkit-appearance: none;
+	}
+	span{
+		position: absolute;
+		width: 4px;
+		height: 6px;
+		top: 4px;
+		background:  @neutral-darkwhite;
+		&.one{left: 4%}
+		&.two{
+			left: 19%;
+		}
+		&.three{
+			left: 34.5%;
+		}
+		&.four{
+			left: 49%;
+		}
+		&.five{
+			left: 64%;
+		}
+		&.six{
+			left: 79%;
+		}
+		&.seven{
+			left: 93.5%;
+		}
 	}
 }
 .slider {

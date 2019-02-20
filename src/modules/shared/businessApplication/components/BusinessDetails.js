@@ -309,7 +309,7 @@ export default class BusinessDetails extends Component {
         </Form>
         <Confirm
           header="Confirm"
-          content={`Are you sure you want to remove this ${this.state.currentForm}?`}
+          content={`Are you sure you want to remove this ${this.state.currentForm.slice(0, -1)}?`}
           open={this.state.showPartialSaveModal}
           onCancel={this.toggleConfirm}
           onConfirm={e => this.removeForm(e)}

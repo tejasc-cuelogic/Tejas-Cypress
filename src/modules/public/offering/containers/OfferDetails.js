@@ -12,6 +12,7 @@ import CampaignHeader from '../components/campaignDetails/CampaignHeader';
 import InvestNow from '../components/investNow/InvestNow';
 
 import Firework from '../components/investNow/agreement/components/FireworkAnimation';
+import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../constants/offering';
 import ConfirmLoginModal from '../components/ConfirmLoginModal';
 import SecondaryMenu from '../components/CampaignSecondaryMenu';
 import Agreement from '../components/investNow/agreement/components/Agreement';
@@ -115,7 +116,7 @@ class offerDetails extends Component {
       const tempItem = item;
       if (has(item, 'subNavigations') && item.title === 'Investment Details') {
         const temNavList = item.subNavigations;
-        if (offeringSecurityType === 'REVENUE_SHARING_NOTE') {
+        if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE) {
           const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
           if (existanceResult.length) {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');
@@ -123,7 +124,7 @@ class offerDetails extends Component {
           temNavList.push({
             title: 'Revenue Sharing Summary', to: '#revenue-sharing-summary', useRefLink: true,
           });
-        } else if (offeringSecurityType === 'TERM_NOTE') {
+        } else if (offeringSecurityType === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE) {
           const existanceResult = filter(temNavList, o => o.title === 'Revenue Sharing Summary' || o.title === 'Total Payment Calculator');
           if (existanceResult.length) {
             remove(temNavList, n => n.title === 'Revenue Sharing Summary' || n.title === 'Total Payment Calculator');

@@ -49,6 +49,10 @@ settingEnv()
 	REACT_APP_SEGMENT_WRITE_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/segment\/writeKey/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_SEGMENT_WRITE_KEY=\).*/\1${REACT_APP_SEGMENT_WRITE_KEY}/" .envTEMPLATE
 
+   #SAASQUATCH
+	REACT_APP_SAASQUATCH_TENANT_ALIAS=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/saasquatch\/tenant\/alias/ { print $3 }')
+	sed -i.bak "s#^\(REACT_APP_SAASQUATCH_TENANT_ALIAS=\).*#\1${REACT_APP_SAASQUATCH_TENANT_ALIAS}#" .envTEMPLATE
+
 	#Timestamp
 	sed -i.bak "s#^\(REACT_APP_DEPLOY_TIME=\).*#\1$(git show -s --format=%cI HEAD)#" .envTEMPLATE
 
