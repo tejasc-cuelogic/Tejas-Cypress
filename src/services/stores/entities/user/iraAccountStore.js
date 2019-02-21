@@ -133,7 +133,6 @@ class IraAccountStore {
     }
     return payload;
   }
-
   submitAccount = () => {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
     uiStore.setProgress();
@@ -156,7 +155,6 @@ class IraAccountStore {
       });
     });
   }
-
   @action
   createAccount = (currentStep, removeUploadedData = false) => new Promise((resolve) => {
     this.validateAndSubmitStep(currentStep, removeUploadedData).then(() => {
@@ -188,7 +186,6 @@ class IraAccountStore {
         }
         break;
       case 'Account type':
-        currentStep.validate();
         isValidCurrentStep = this.ACC_TYPES_FRM.meta.isValid;
         accountAttributes.iraAccountType = this.accountType ? this.accountType.rawValue : '';
         if (isValidCurrentStep) {
@@ -203,7 +200,6 @@ class IraAccountStore {
         }
         break;
       case 'Funding':
-        currentStep.validate();
         isValidCurrentStep = this.FUNDING_FRM.meta.isValid;
         accountAttributes.fundingType = this.fundingOption ? this.fundingOption.rawValue : '';
         if (isValidCurrentStep) {
