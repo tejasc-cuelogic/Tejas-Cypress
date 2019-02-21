@@ -1,5 +1,6 @@
 import React from 'react';
 import { toJS } from 'mobx';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Loadable from 'react-loadable';
 import { Route, Switch, withRouter } from 'react-router-dom';
@@ -55,8 +56,8 @@ export default class Private extends React.Component {
     const { info } = userDetails;
     const { match } = this.props;
     const UserInfo = {
-      firstName: User.givenName,
-      lastName: User.familyName,
+      firstName: get(userDetails, 'info.firstName'),
+      lastName: get(userDetails, 'info.lastName'),
       avatarUrl: info ? info.avatar ? info.avatar.url : '' : '',
       roles: toJS(User.roles),
     };
