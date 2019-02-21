@@ -58,7 +58,7 @@ export class TeamStore {
 
   @computed get teamMembers() {
     return (this.db && this.db.length &&
-      sortBy(toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex), ['order']))) || [];
+      sortBy(toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)), ['order'])) || [];
   }
 
   @computed get loading() {
@@ -353,6 +353,7 @@ export class TeamStore {
       .mutate({
         mutation: setMemberOrderInTeam,
         variables: { teamDetails },
+        refetchQueries: [{ query: allTeamMembers }],
       }).then(() => {
         Helper.toast('Order updated successfully.', 'success');
       }).catch(() => {
