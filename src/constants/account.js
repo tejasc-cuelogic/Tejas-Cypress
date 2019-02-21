@@ -463,6 +463,12 @@ export const ACC_TYPE = {
   },
 };
 
+export const ACC_LINK_BANK_MAPPING = {
+  0: { store: 'individualAccountStore', location: 1 },
+  1: { store: 'iraAccountStore', location: 3 },
+  2: { store: 'entityAccountStore', location: 5 },
+};
+
 export const BROKERAGE_EMPLOYMENT = {
   brokerageEmployment: {
     key: 'brokerageEmployment',

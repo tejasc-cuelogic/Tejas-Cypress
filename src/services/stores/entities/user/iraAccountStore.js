@@ -404,6 +404,7 @@ class IraAccountStore {
         }
       }
     }
+    uiStore.setProgress(false);
   }
 
   @action
@@ -416,7 +417,7 @@ class IraAccountStore {
           this.IDENTITY_FRM.fields[f].value = accountDetails[f].fileName;
           this.IDENTITY_FRM.fields[f].fileId = accountDetails[f].fileId;
         }
-      } else if (form === 'FUNDING_FRM' || form === 'ACC_TYPES_FRM') {
+      } else if ((form === 'FUNDING_FRM' || form === 'ACC_TYPES_FRM') && accountDetails && accountDetails[f]) {
         let value = '';
         if (form === 'FUNDING_FRM') {
           value = AccCreationHelper.getFundingTypeIndex(accountDetails[f]);

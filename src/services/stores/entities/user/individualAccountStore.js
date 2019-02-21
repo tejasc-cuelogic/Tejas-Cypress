@@ -152,6 +152,7 @@ class IndividualAccountStore {
         //   this.setIsManualLinkBankSubmitted(false);
         // }
       }
+      uiStore.setProgress(false);
     }
   }
 
