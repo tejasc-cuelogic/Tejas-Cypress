@@ -41,7 +41,7 @@ export default class BusinessDocumentation extends Component {
                 trigger={<Icon className="ns-help-circle" />}
                 content="If your campaign is successfully funded, an executed lease will be required at closing in order for you to receive funds."
                 position="top center"
-                className="center-align"
+                className="left-align justify-text"
                 wide
               />
             </span>
@@ -61,6 +61,7 @@ export default class BusinessDocumentation extends Component {
                     ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
                     onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
                     tooltip={fields[field].tooltip}
+                    toolTipClassName="left-align justify-text"
                   />
                 </Grid.Column>
               ))

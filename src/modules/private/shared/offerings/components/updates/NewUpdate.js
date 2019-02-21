@@ -9,7 +9,7 @@ import { InlineLoader } from '../../../../../../theme/shared';
 import Actions from './Actions';
 import Status from './Status';
 
-@inject('updateStore', 'userStore', 'offeringCreationStore')
+@inject('updateStore', 'userStore')
 @withRouter
 @observer
 export default class NewUpdate extends Component {

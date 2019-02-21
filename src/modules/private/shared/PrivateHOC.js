@@ -29,8 +29,8 @@ class PrivateHOC extends Component {
               {this.props.P3}
               {!this.props.P4 ? (
                 <span className="item notification">
-                  {/* <Icon className="ns-bell"
-                  onClick={() => this.props.uiStore.updateLayoutState('notificationPanel')} />
+                  {/* <Icon className="ns-bell" onClick={() =>
+                  this.props.uiStore.updateLayoutState('notificationPanel')} />
                   <span className="unread-count">3</span> */}
                 </span>
                 ) : (

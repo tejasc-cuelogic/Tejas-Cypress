@@ -15,16 +15,16 @@ export default class Insights extends Component {
     if (this.props.match.params && this.props.match.params.id) {
       this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
     } else {
-      this.props.articleStore.requestAllArticles();
+      this.props.articleStore.requestAllArticles(true);
     }
-    this.props.articleStore.getCategoryList(false);
+    this.props.articleStore.getCategoryList(true);
     this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
       this.props.articleStore.requestArticlesByCategoryId(nextProps.match.params.id);
     } else {
-      this.props.articleStore.requestAllArticles();
+      this.props.articleStore.requestAllArticles(true);
     }
   }
   activeText = () => {

@@ -198,7 +198,6 @@ export class CampaignStore {
       res.updates = updates && updates.length ? updates.length : 0;
       // eslint-disable-next-line arrow-body-style
       res.comments = reduce(comments, (sum, c) => {
-        console.log('name', get(c, 'createdUserInfo.roles[0].name'));
         return (c.scope === 'PUBLIC' && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved)) ? (sum + 1) : sum);
       }, 0);
     }
@@ -211,14 +210,15 @@ export class CampaignStore {
     if (selectedOffer && selectedOffer.structure !== '') {
       offerStructure = selectedOffer.structure;
     } else {
-      offerStructure = keyTerms.securities;
+      offerStructure = get(keyTerms, 'securities') || '';
     }
     return offerStructure;
   }
 
   @action
-  calculateTotalPaymentData = (amt = null) => {
-    this.principalAmt = amt !== null ? amt : get(this.campaign, 'keyTerms.minOfferingAmount');
+  calculateTotalPaymentData = (amt = 0) => {
+    const ranges = [100, 500, 1000, 5000, 10000, 25000, 50000];
+    this.principalAmt = ranges[amt];
     const data = {
       method: 'mortgage',
       apr: parseFloat(get(this.campaign, 'keyTerms.interestRate')) || 0,

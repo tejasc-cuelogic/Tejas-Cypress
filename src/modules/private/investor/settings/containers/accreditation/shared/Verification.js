@@ -23,19 +23,26 @@ export default class Verification extends Component {
       }).catch(() => this.props.accreditationStore.setStepToBeRendered(this.props.step));
   }
   render() {
-    const { ACCREDITATION_FORM, INCOME_EVIDENCE_FORM } = this.props.accreditationStore;
+    const {
+      ACCREDITATION_FORM, INCOME_EVIDENCE_FORM,
+    } = this.props.accreditationStore;
     const { isEntity } = this.props;
     const { params } = this.props.match;
     return (
       INCOME_EVIDENCE_FORM.fields.incEvidenceMethods.value === 'verificationrequest' ?
-        <VerificationForm clicked={this.submit} /> :
-        ((ACCREDITATION_FORM.fields.method.value === 'INCOME' || ACCREDITATION_FORM.fields.method.value === 'REVOCABLE_TRUST_INCOME')) ?
-          <IncomeUploadDocument accountType={params.accountType} clicked={this.submit} /> :
+        <VerificationForm clicked={this.submit} /> : isEntity ?
           <AssetsUploadDocument
             accountType={params.accountType}
             clicked={this.submit}
             isEntity={isEntity}
-          />
+          /> :
+          (ACCREDITATION_FORM.fields.method.value === 'INCOME') ?
+            <IncomeUploadDocument accountType={params.accountType} clicked={this.submit} /> :
+            <AssetsUploadDocument
+              accountType={params.accountType}
+              clicked={this.submit}
+              isEntity={isEntity}
+            />
     );
   }
 }

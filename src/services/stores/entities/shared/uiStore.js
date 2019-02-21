@@ -18,7 +18,7 @@ export class UiStore {
   @observable redirectURL = undefined;
   @observable passwordPreviewURL = null;
   @observable asyncCheckLoader = false;
-  @observable devBanner = !['production', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
+  @observable devBanner = !['production', 'prod', 'master', 'localhost'].includes(REACT_APP_DEPLOY_ENV);
   @observable confirmBox = {
     entity: '',
     refId: '',
@@ -37,6 +37,7 @@ export class UiStore {
   @observable isEnterPressed = false;
   @observable showFireworkAnimation = false;
   @observable authRef = '';
+  @observable htmlEditorImageLoading = false;
 
   @action
   setFieldvalue = (field, value) => {

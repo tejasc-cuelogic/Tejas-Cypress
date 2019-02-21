@@ -10,6 +10,7 @@ import { ListErrors } from '../../../../../../theme/shared';
 @withRouter
 @observer
 export default class Experience extends Component {
+  state = { errorMessage: '' };
   handleSubmitInvestmentExperience = () => {
     const {
       validateInvestmentExperience,
@@ -35,10 +36,8 @@ export default class Experience extends Component {
           }
         });
       } else {
-        const errors = {
-          message: 'Investor Profile is not valid! Please complete all the steps.',
-        };
-        this.props.uiStore.setErrors(errors);
+        const errorMessage = 'Investor Profile is not valid! Please complete all the steps.';
+        this.setState({ errorMessage });
       }
     }
   }
@@ -48,7 +47,7 @@ export default class Experience extends Component {
       isInvestmentExperienceValid,
       experiencesChange,
     } = this.props.investorProfileStore;
-    const { errors } = this.props.uiStore;
+    const { errorMessage } = this.state;
     return (
       <Aux>
         <Header as="h3" textAlign="center">Investment Experience</Header>
@@ -78,9 +77,9 @@ export default class Experience extends Component {
             defaults
             containerclassname="ui relaxed list"
           />
-          {errors &&
+          {errorMessage &&
           <Message error className="mt-20">
-            <ListErrors errors={errors.message ? [errors.message] : [errors]} />
+            <ListErrors errors={errorMessage ? [errorMessage] : ['']} />
           </Message>
           }
           <div className="center-align mt-20">

@@ -318,6 +318,43 @@ export const KEY_TERMS = {
     placeHolder: 'Enter here',
     defaultValue: 'Because the Issuer was formed recently, the Issuer’s current financial statements only reflect the startup costs incurred thus far. Please see Appendix A for the financial statements as well as the full review report by the Issuer’s accountant.',
   },
+  roundType: {
+    value: '',
+    label: 'Round type',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Enter here',
+  },
+  unitPrice: {
+    value: null,
+    label: 'Unit Price',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  premoneyValuation: {
+    value: null,
+    label: 'Pre-Money Valuation',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  additionalKeyterms: [{
+    label: {
+      label: 'Label',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+    description: {
+      label: 'Description',
+      value: '',
+      error: undefined,
+      rule: 'optional',
+      placeHolder: 'Type your text here...',
+    },
+  }],
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -340,6 +377,12 @@ export const SECURITIES_VALUES = [
   { key: 'Term Note', value: 'TERM_NOTE', text: 'Term Note' },
   { key: 'Revenue Sharing Note', value: 'REVENUE_SHARING_NOTE', text: 'Revenue Sharing Note' },
   { key: 'Preferred Equity 506C', value: 'PREFERRED_EQUITY_506C', text: 'Preferred Equity' },
+];
+
+export const ROUND_TYPE_VALUES = [
+  { key: 'Seed', value: 'SEED', text: 'Seed' },
+  { key: 'Series A', value: 'SERIES_A', text: 'Series A' },
+  { key: 'Series B', value: 'SERIES_B', text: 'Series B' },
 ];
 
 export const BUSINESS_TYPE_VALUES = [
@@ -790,6 +833,9 @@ export const MEDIA = {
   heroImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
+  heroBackground: {
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Hero Background Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+  },
   tombstoneImage: {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Tombstone Image', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
@@ -812,7 +858,7 @@ export const MEDIA = {
     fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
   avatar: {
-    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Logo', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
+    fileName: '', value: '', base64String: '', objType: 's3File', src: '', meta: {}, label: 'Company Avatar', error: undefined, rule: 'required', showLoader: false, preSignedUrl: '', fileId: '', fileData: '', customErrors: { required: 'required' },
   },
 };
 
@@ -1857,6 +1903,8 @@ export const RISK_FACTORS = {
     refSelector: 'isRegulatoryRisks',
     error: undefined,
     rule: 'optional',
+    keyTerms: ['isFood'],
+    dependantValue: [false],
     defaultValue: 'Products and services offered by us are subject to regulation. Regulatory action could substantially increase costs, damage reputation and materially affect operating results. Increased costs in complying with these requirements or failure to obtain required licenses or permits in a timely fashion may materially affect operations.   ""Regulations regarding climate change, energy usage and emissions controls may impact us directly through higher cost of goods. The potential impacts of climate change and climate change regulations are highly uncertain at this time, and we cannot anticipate or predict the material adverse effects on the business as a result of climate change or climate change regulation. For instance, changes in the prevailing climates may result in a reduction in, or increased prices of available goods, which may adversely affect our revenue and operating margins.  """"We are subject to various federal, state and local regulations, including regulations related to  zoning and building codes, land use and employee, health, sanitation and safety matters. We are also subject to the U.S. Fair Labor Standards Act, which governs such matters as working conditions, family leave mandates and other employment law matters. In recent years, there has been an increased legislative, regulatory and consumer focus. Compliance with additional regulations can become costly and affect operating results.',
   },
   isRegulatoryFoodRisks: {

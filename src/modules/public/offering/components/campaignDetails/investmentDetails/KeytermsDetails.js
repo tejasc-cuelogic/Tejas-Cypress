@@ -1,115 +1,87 @@
 import React, { Component } from 'react';
-import Aux from 'react-aux';
+import Parser from 'html-react-parser';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
-import { Header, Divider, Statistic, Grid, Table, Icon, Popup } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION } from '../../../../../../constants/offering';
+import Aux from 'react-aux';
+import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
+import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
-import { InlineLoader } from '../../../../../../theme/shared';
+import KeytermsSecurityDetails from './KeytermsSecurityDetails';
 
 const isMobile = document.documentElement.clientWidth < 768;
+
 @inject('campaignStore')
 @observer
-class TermNoteDetails extends Component {
+class KeyTermsDetails extends Component {
   state = {
     offeringAmt: 0,
+    RangeValue: 0,
+  }
+  componentWillMount() {
+    this.props.campaignStore.calculateTotalPaymentData();
   }
   handleRangeChange = (e) => {
     const offeringAmt = (e.target.value / e.target.max) * 100;
     this.setState({ offeringAmt });
+    this.setState({ RangeValue: e.target.value });
     this.props.campaignStore.calculateTotalPaymentData(e.target.value);
   }
   render() {
+    const { KeyTerms, launch } = this.props;
     const {
-      campaign, totalPayment, principalAmt, totalPaymentChart,
+      totalPayment, principalAmt, totalPaymentChart,
     } = this.props.campaignStore;
-    const KeyTerms = campaign && campaign.keyTerms;
-    const launch = get(campaign, 'offering.launch');
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
+    const { offerStructure } = this.props.campaignStore;
     const edgarLink = launch && launch.edgarLink;
-    const OfferingSecurity = (KeyTerms && KeyTerms.securities && KeyTerms.securities === 'TERM_NOTE') || null;
+    const revenueShareSummary =
+      KeyTerms && KeyTerms.revShareSummary && KeyTerms.securities ===
+      CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? KeyTerms.revShareSummary : null;
+    const keytermsMeta = [
+      { key: 'minOfferingAmount', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
+      { key: 'maxOfferingAmount', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimumgoal, the issuer will receive the funds.' },
+      { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor' },
+    ];
     return (
       <Aux>
-        <Grid columns={3} stackable divided className="vertical-gutter neutral-text">
+        <Grid columns={3} divided stackable className="vertical-gutter neutral-text">
           <Grid.Column>
-            <p><b>Issuer</b><br />{KeyTerms && KeyTerms.legalBusinessName ? KeyTerms.legalBusinessName : 'NA'}</p>
+            <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Regulation</b><br />{KeyTerms && KeyTerms.regulation ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
+            <p><b>Regulation</b><br />{get(KeyTerms, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Security</b><br />{KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
+            <p><b>Security</b><br />{get(KeyTerms, 'securities') ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
           </Grid.Column>
         </Grid>
-        {!isMobile && <Divider />}
+        <Divider />
         <Table basic="very" className="key-terms-table">
           <Table.Body>
-            <Table.Row verticalAlign="top">
-              <Table.Cell width={5} className="neutral-text"><b>Offering Min{' '}</b>
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account."
-                  position="top center"
-                />
-              </Table.Cell>
-              <Table.Cell>
-                <p>
-                  {KeyTerms && KeyTerms.minOfferingAmount ?
-                    Helper.CurrencyFormat(KeyTerms.minOfferingAmount)
-                    :
-                    'NA'}
-                </p>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row verticalAlign="top">
-              <Table.Cell width={5} className="neutral-text"><b>Offering Max{' '}</b>
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimumgoal, the issuer will receive the funds."
-                  position="top center"
-                />
-              </Table.Cell>
-              <Table.Cell>
-                <p>
-                  {KeyTerms && KeyTerms.maxOfferingAmount ?
-                    Helper.CurrencyFormat(KeyTerms.maxOfferingAmount)
-                    :
-                    'NA'}
-                </p>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row verticalAlign="top">
-              <Table.Cell width={5} className="neutral-text"><b>Min Individual Investment{' '}</b>
-                <Popup trigger={<Icon name="help circle" color="green" />} content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" position="top center" />
-              </Table.Cell>
-              <Table.Cell>
-                <p>
-                  {KeyTerms && KeyTerms.minInvestAmt ?
-                    Helper.CurrencyFormat(KeyTerms.minInvestAmt)
-                    :
-                    'NA'}
-                </p>
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row verticalAlign="top">
-              <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="Interest payment is calculated at a gross annualized interest rate of 16.0% each month on the remaining balance of your investment from the prior month."
-                  position="top center"
-                />
-              </Table.Cell>
-              <Table.Cell>
-                {KeyTerms && KeyTerms.interestRate ?
+            {keytermsMeta.map(type => (
+              <Table.Row verticalAlign="top">
+                <Table.Cell width={5} className="neutral-text"><b>{type.label}{' '}</b>
+                  {type.popupContent &&
+                    <Popup
+                      trigger={<Icon name="help circle" color="green" />}
+                      content={type.popupContent}
+                      position="top center"
+                    />
+                  }
+                </Table.Cell>
+                <Table.Cell>
                   <p>
-                    <b>{KeyTerms.interestRate}%</b>
+                    {get(KeyTerms, type.key) ?
+                      Helper.CurrencyFormat(get(KeyTerms, type.key))
+                      :
+                      'NA'}
                   </p>
-                  :
-                  'NA'
-                }
-              </Table.Cell>
-            </Table.Row>
+                </Table.Cell>
+              </Table.Row>
+            ))
+            }
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Maturity{' '}</b>
                 <Popup
@@ -132,7 +104,7 @@ class TermNoteDetails extends Component {
                 }
               </Table.Cell>
             </Table.Row>
-            <Table.Row verticalAlign="top">
+            <Table.Row verticalAlign="top" >
               <Table.Cell width={5} className="neutral-text"><b>Payments{' '}</b>
                 <Popup
                   trigger={<Icon name="help circle" color="green" />}
@@ -142,30 +114,15 @@ class TermNoteDetails extends Component {
               </Table.Cell>
               <Table.Cell>
                 <p>
-                  <b>
-                    {KeyTerms && KeyTerms.frequencyOfPayments ?
-                      `${KeyTerms.frequencyOfPayments}` : 'NA'}
-                  </b>
+                  {KeyTerms && KeyTerms.frequencyOfPayments ?
+                    <b>
+                      {KeyTerms.frequencyOfPayments}
+                    </b>
+                      : 'NA'}
                 </p>
               </Table.Cell>
             </Table.Row>
-            <Table.Row verticalAlign="top">
-              <Table.Cell width={5} className="neutral-text"><b>Security Interest{' '}</b>
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="The Issuer will grant a security interest in all of its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
-                  position="top center"
-                />
-              </Table.Cell>
-              <Table.Cell>
-                <p>
-                  <b>
-                    {KeyTerms && KeyTerms.securityInterest ?
-                      `${KeyTerms.securityInterest}` : 'NA'}
-                  </b>
-                </p>
-              </Table.Cell>
-            </Table.Row>
+            <KeytermsSecurityDetails {...this.props} />
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text">
                 <b>Ownership % Represented by Securities</b>
@@ -193,7 +150,7 @@ class TermNoteDetails extends Component {
           </Table.Body>
         </Table>
         <Divider section hidden />
-        {OfferingSecurity ?
+        {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
           <Aux>
             <Header as="h3" className="mb-30 anchor-wrap">
               Total Payment Calculator
@@ -222,13 +179,20 @@ class TermNoteDetails extends Component {
                     <p style={{ width: `${this.state.offeringAmt}%` }} />
                     <input
                       type="range"
-                      min={get(KeyTerms, 'minOfferingAmount') || 0}
-                      max={get(KeyTerms, 'maxOfferingAmount') || 0}
-                      value={principalAmt}
+                      min={0}
+                      max={6}
+                      value={this.state.RangeValue}
                       onChange={this.handleRangeChange}
                       className="slider mt-10 mb-10"
                       id="myRange"
                     />
+                    <span className="one" />
+                    <span className="two" />
+                    <span className="three" />
+                    <span className="four" />
+                    <span className="five" />
+                    <span className="six" />
+                    <span className="seven" />
                   </div>
                 </Statistic>
               </Grid.Column>
@@ -253,12 +217,32 @@ class TermNoteDetails extends Component {
               some or all of the principal invested if the Issuer cannot make its payments.
             </p>
           </Aux>
+          : offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
+            <Aux>
+              <Header as="h3" className="mb-30 anchor-wrap">
+                Revenue Sharing Summary*
+                <span className="anchor" id="revenue-sharing-summary" />
+              </Header>
+              <p>
+                {revenueShareSummary ?
+                  <p className="detail-section">
+                    {Parser(revenueShareSummary)}
+                  </p>
+                  :
+                  <InlineLoader text="No data available" className="bg-offwhite" />
+                }
+              </p>
+            </Aux>
           :
-          <InlineLoader text="No data available" className="bg-offwhite" />
+            null
         }
+        <p className="note">
+          * For illustration only. See expanded Payment Calculator view to read more
+          regarding actual performance variables.
+        </p>
       </Aux>
     );
   }
 }
 
-export default TermNoteDetails;
+export default KeyTermsDetails;
