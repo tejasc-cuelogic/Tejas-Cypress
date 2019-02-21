@@ -71,6 +71,13 @@ export const campaignDetailsQuery = gql`
       structure
     }
     keyTerms {
+      unitPrice
+      roundType
+      premoneyValuation
+      additionalKeyterms {
+        label
+        description
+      }
       regulation
       startupPeriod
       offeringDisclaimer
@@ -229,6 +236,10 @@ export const campaignDetailsQuery = gql`
     }
     media {
       heroImage {
+        url
+        isPublic
+      }
+      heroBackground {
         url
         isPublic
       }

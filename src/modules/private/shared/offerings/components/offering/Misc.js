@@ -19,7 +19,9 @@ export default class Misc extends Component {
     updateOffering(currentOfferingId, OFFERING_MISC_FRM.fields, 'offering', 'misc', true, undefined, isApproved);
   }
   render() {
-    const { OFFERING_MISC_FRM, rtEditorChange } = this.props.offeringCreationStore;
+    const {
+      OFFERING_MISC_FRM, rtEditorChange, currentOfferingId,
+    } = this.props.offeringCreationStore;
     const formName = 'OFFERING_MISC_FRM';
     const { offer } = this.props.offeringsStore;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -33,6 +35,7 @@ export default class Misc extends Component {
       <Form>
         <Header as="h4">Additional Bonus Rewards Content</Header>
         <HtmlEditor
+          imageUploadPath={`offerings/${currentOfferingId}`}
           readOnly={isReadonly}
           changed={rtEditorChange}
           name="additionalBonusRewardsContent"

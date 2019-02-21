@@ -39,7 +39,7 @@ export default class KeyTerms extends Component {
   render() {
     const {
       KEY_TERMS_FRM, formArrayChange, maskArrayChange,
-      confirmModal, confirmModalName, removeData,
+      confirmModal, confirmModalName, removeData, currentOfferingId,
     } = this.props.offeringCreationStore;
     const formName = 'KEY_TERMS_FRM';
     const { offer } = this.props.offeringsStore;
@@ -129,19 +129,15 @@ export default class KeyTerms extends Component {
           </Form.Group>
           <Header as="h4">Key Terms</Header>
           <Form.Group widths={3}>
-            <FormInput
-              displayMode={isReadonly}
-              name="maturity"
-              fielddata={KEY_TERMS_FRM.fields.maturity}
-              changed={(e, result) => formArrayChange(e, result, formName)}
-            />
-            <MaskedInput
-              displayMode={isReadonly}
-              name="startupPeriod"
-              fielddata={KEY_TERMS_FRM.fields.startupPeriod}
-              changed={(values, name) => maskArrayChange(values, formName, name)}
-              number
-            />
+            {['maturity', 'startupPeriod'].map(field => (
+              <MaskedInput
+                displayMode={isReadonly}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                number
+              />
+            ))}
             <FormDropDown
               containerclassname={isReadonly ? 'display-only' : ''}
               className={isReadonly ? 'display-only' : ''}
@@ -218,6 +214,7 @@ export default class KeyTerms extends Component {
               <Form.Field>
                 <Header as="h6">{KEY_TERMS_FRM.fields[field].label}</Header>
                 <HtmlEditor
+                  imageUploadPath={`offerings/${currentOfferingId}`}
                   readOnly={isReadonly}
                   changed={this.editorChange}
                   name={field}
@@ -252,6 +249,7 @@ export default class KeyTerms extends Component {
                 <Form.Field>
                   <Header as="h6">{field.description.label}</Header>
                   <HtmlEditor
+                    imageUploadPath={`offerings/${currentOfferingId}`}
                     readOnly={isReadonly}
                     changed={this.editorChange}
                     name="description"
