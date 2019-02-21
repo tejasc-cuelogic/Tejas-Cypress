@@ -34,7 +34,7 @@ export default class Summary extends Component {
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {
-      this.props.iraAccountStore.createAccount('Summary', 'FULL').then(() => {
+      this.props.iraAccountStore.submitAccount().then(() => {
         this.props.history.push('/app/summary');
       });
     }

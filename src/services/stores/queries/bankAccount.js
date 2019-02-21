@@ -25,9 +25,9 @@ query getlistLinkedBankUsers($page: Int, $limit: Int!, $status: [ChangeBankReque
   }
 `;
 
-export const checkOpeningDepositAmount = gql`
-  mutation checkOpeningDepositAmount($accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum! $accountId: String) {
-    checkOpeningDepositAmount(
+export const isValidOpeningDepositAmount = gql`
+  query isValidOpeningDepositAmount($accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum! $accountId: String) {
+    isValidOpeningDepositAmount(
       accountAttributes: $accountAttributes
       accountType: $accountType,
       accountId: $accountId
