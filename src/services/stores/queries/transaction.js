@@ -126,6 +126,7 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
       }
       failDate
       failDesc
+      autodraft
     }
     transactionCount {
       pendingCount

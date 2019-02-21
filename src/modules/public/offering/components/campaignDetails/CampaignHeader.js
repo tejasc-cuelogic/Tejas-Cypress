@@ -123,20 +123,23 @@ export default class CampaignHeader extends Component {
                         hoverable
                         trigger={<Icon name="help circle" color="green" />}
                         content={
-                          <span>To learn more about how {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ? 'Term Note' : 'Revenue Sharing'} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
+                          <span>To learn more about how {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]} works, check out the <Link to="/resources/education-center">Education Center</Link>.</span>
                         }
                         position="top center"
                       />
                     </p>
                   }
                   <p className="mb-half">
-                    {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE ?
+                    {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
                       <Aux>
                       Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
-                      </Aux> :
+                      </Aux>
+                    }
+                    {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
                       <Aux>
                         Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? `${get(campaign, 'keyTerms.investmentMultiple')}` : '-'}
-                      </Aux>}
+                      </Aux>
+                    }
                   </p>
                   <p>
                     Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
