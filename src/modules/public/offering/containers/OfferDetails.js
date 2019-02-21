@@ -76,10 +76,15 @@ class offerDetails extends Component {
     this.props.history.push(`${this.props.match.url}/photogallery`);
   }
   addDataRoomSubnavs = (oldNav, dataRoomDocs) => {
+    let tempNav = [];
     if (!dataRoomDocs) {
-      return oldNav;
+      tempNav = [...oldNav];
+      if (has(tempNav[4], 'subNavigations')) {
+        delete tempNav[4].subNavigations;
+        delete tempNav[4].subPanel;
+      }
+      return tempNav;
     }
-    const tempNav = [];
     oldNav.forEach((item) => {
       const tempItem = item;
       if (item.title === 'Data Room') {
