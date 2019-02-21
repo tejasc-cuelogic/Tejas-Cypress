@@ -51,10 +51,10 @@ class KeyTermsDetails extends Component {
             <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Regulation</b><br />{get(KeyTerms, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
+            <p><b>Type of Offering</b><br />{get(KeyTerms, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Security</b><br />{get(KeyTerms, 'securities') ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
+            <p><b>Type of Securities</b><br />{get(KeyTerms, 'securities') ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
           </Grid.Column>
         </Grid>
         <Divider />
