@@ -33,8 +33,8 @@ class BonusRewards extends Component {
     return (
       <div className="campaign-content-wrapper">
         <Header as="h3" className="mb-30 anchor-wrap">
-          Bonus Rewards
           <span className="anchor-scroll" />
+          Bonus Rewards
         </Header>
         {rewardsTiers && rewardsTiers.length ?
           <Aux>

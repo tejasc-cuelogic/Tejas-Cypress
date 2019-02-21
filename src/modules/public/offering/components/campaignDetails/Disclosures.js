@@ -26,12 +26,12 @@ export default class TermsOfUse extends Component {
     }
   }
   componentDidMount() {
-    if (this.props.location.hash && this.props.location.hash !== '') {
+    if (this.props.location.hash && this.props.location.hash !== '' && document.querySelector(`${this.props.location.hash}`)) {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      setTimeout(() => document.querySelector(`${this.props.location.hash}`) && document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
-      }), 100);
+      });
     }
   }
   componentWillUnmount() {
@@ -41,8 +41,8 @@ export default class TermsOfUse extends Component {
   handleOnScroll = () => {
     const { docsWithBoxLink } = this.props.campaignStore;
     docsWithBoxLink.map((item, index) => {
-      if (document.getElementById(`doc-${index}`) && document.getElementById(`doc-${index}`).getBoundingClientRect().top < 100 &&
-      document.getElementById(`doc-${index}`).getBoundingClientRect().top > 0) {
+      if (document.getElementById(`doc-${index}`) && document.getElementById(`doc-${index}`).getBoundingClientRect().top < 200 &&
+      document.getElementById(`doc-${index}`).getBoundingClientRect().top > -1) {
         this.props.navStore.setFieldValue('currentActiveHash', `#doc-${index}`);
       }
       return null;
