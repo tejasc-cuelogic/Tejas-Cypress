@@ -34,7 +34,7 @@ export default class Summary extends Component {
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
     } else {
-      this.props.entityAccountStore.createAccount('Summary', 'FULL').then(() => {
+      this.props.entityAccountStore.submitAccount().then(() => {
         this.props.history.push('summary');
       });
     }

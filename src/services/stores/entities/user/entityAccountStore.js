@@ -11,8 +11,8 @@ import {
   ENTITY_FORMATION_DOCS,
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
-import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore, referralsStore } from '../../index';
-import { upsertInvestorAccount, checkEntityTaxIdCollision } from '../../queries/account';
+import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
+import { upsertInvestorAccount, submitinvestorAccount, checkEntityTaxIdCollision } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
@@ -103,10 +103,35 @@ class EntityAccountStore {
   setAddressFields = (place) => {
     FormValidator.setAddressFields(place, this.GEN_INFO_FRM);
   }
+  submitAccount = () => {
+    const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
+    uiStore.setProgress();
+    const payLoad = {
+      accountId: accountDetails.details.accountId,
+      accountType: 'ENTITY',
+    };
+    return new Promise((resolve, reject) => {
+      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+        client
+          .mutate({
+            mutation: submitinvestorAccount,
+            variables: payLoad,
+          })
+          .then(() => (resolve()))
+          .catch(() => {
+            uiStore.setProgress(false);
+            reject();
+          });
+      });
+    });
+  }
 
   @action
-  createAccount = (currentStep, formStatus = 'PARTIAL', removeUploadedData = false, field = null) => new Promise((resolve) => {
-    this.validateAndSubmitStep(currentStep, formStatus, removeUploadedData, field).then(() => {
+  createAccount = (
+    currentStep,
+    removeUploadedData = false, field = null,
+  ) => new Promise((resolve) => {
+    this.validateAndSubmitStep(currentStep, removeUploadedData, field).then(() => {
       resolve();
     });
   })
@@ -292,7 +317,7 @@ class EntityAccountStore {
 
   @action
   validateAndSubmitStep =
-  (currentStep, formStatus, removeUploadedData, field) => new Promise((res, rej) => {
+  (currentStep, removeUploadedData, field) => new Promise((res, rej) => {
     let isValidCurrentStep = true;
     let accountAttributes = {};
     const array1 = ['Financial info', 'General', 'Trust Status'];
@@ -315,12 +340,12 @@ class EntityAccountStore {
               rej();
             } else {
               uiStore.setErrors(null);
-              this.submitForm(currentStep, formStatus, accountAttributes)
+              this.submitForm(currentStep, accountAttributes)
                 .then(() => res()).catch(() => rej());
             }
           });
         } else {
-          this.submitForm(currentStep, formStatus, accountAttributes)
+          this.submitForm(currentStep, accountAttributes)
             .then(() => res()).catch(() => rej());
         }
       } else {
@@ -330,14 +355,14 @@ class EntityAccountStore {
       if (removeUploadedData) {
         accountAttributes =
         this.setEntityAttributes(currentStep.name, removeUploadedData, field);
-        this.submitForm(currentStep, formStatus, accountAttributes, removeUploadedData)
+        this.submitForm(currentStep, accountAttributes, removeUploadedData)
           .then(() => res()).catch(() => rej());
       } else {
         currentStep.validate();
         isValidCurrentStep = this[currentStep.form].meta.isValid;
         if (isValidCurrentStep) {
           accountAttributes = this.setEntityAttributes(currentStep.name);
-          this.submitForm(currentStep, formStatus, accountAttributes)
+          this.submitForm(currentStep, accountAttributes)
             .then(() => res()).catch(() => rej());
         } else {
           rej();
@@ -370,7 +395,7 @@ class EntityAccountStore {
         }
         accountAttributes.initialDepositAmount = bankAccountStore.formAddFunds.fields.value.value;
         bankAccountStore.isValidOpeningDepositAmount().then(() => {
-          this.submitForm(currentStep, formStatus, accountAttributes)
+          this.submitForm(currentStep, accountAttributes)
             .then(() => res()).catch(() => rej());
         })
           .catch(() => {
@@ -384,12 +409,11 @@ class EntityAccountStore {
   })
 
   @action
-  submitForm = (currentStep, formStatus, accountAttributes, removeUploadedData = false) => {
+  submitForm = (currentStep, accountAttributes, removeUploadedData = false) => {
     uiStore.setProgress();
     let mutation = upsertInvestorAccount;
     const variables = {
       accountAttributes,
-      accountStatus: formStatus,
       accountType: 'ENTITY',
     };
     let actionPerformed = 'submitted';
@@ -408,48 +432,32 @@ class EntityAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.upsertInvestorAccount || formStatus === 'FULL') {
+          if (currentStep.name === 'Financial info') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }
-          if (formStatus !== 'FULL') {
-            if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
-              if (removeUploadedData) {
-                if (currentStep.name === 'Personal info') {
-                  validationActions.validateEntityPersonalInfo();
-                } else {
-                  validationActions.validateEntityFormationDoc();
-                }
+          if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
+            if (removeUploadedData) {
+              if (currentStep.name === 'Personal info') {
+                validationActions.validateEntityPersonalInfo();
               } else {
-                FormValidator.setIsDirty(this[currentStep.form], false);
-                this.setStepToBeRendered(currentStep.stepToBeRendered);
+                validationActions.validateEntityFormationDoc();
               }
             } else {
-              if (currentStep.name !== 'Link bank') {
-                FormValidator.setIsDirty(this[currentStep.form], false);
-              }
+              FormValidator.setIsDirty(this[currentStep.form], false);
               this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
-          }
-          if (formStatus === 'FULL') {
-            referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
-            const data = {
-              annualIncome:
-                userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
-              netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
-              otherRegCfInvestments: 0,
-            };
-            const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
-            if (accountDetails) {
-              investmentLimitStore.updateInvestmentLimits(data, accountDetails.details.accountId);
-            }
-            Helper.toast('Entity account created successfully.', 'success');
           } else {
-            Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
+            if (currentStep.name !== 'Link bank') {
+              FormValidator.setIsDirty(this[currentStep.form], false);
+            }
+            this.setStepToBeRendered(currentStep.stepToBeRendered);
           }
+
+          Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           uiStore.setErrors(null);
           resolve(result);
         }))
