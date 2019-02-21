@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-indent */
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
@@ -27,7 +28,7 @@ export default class TermsOfUse extends Component {
   componentDidMount() {
     if (this.props.location.hash && this.props.location.hash !== '') {
       this.props.navStore.setFieldValue('currentActiveHash', null);
-      setTimeout(() => document.querySelector(`${this.props.location.hash}`).scrollIntoView({
+      setTimeout(() => document.querySelector(`${this.props.location.hash}`) && document.querySelector(`${this.props.location.hash}`).scrollIntoView({
         block: 'start',
         behavior: 'smooth',
       }), 100);
@@ -48,21 +49,26 @@ export default class TermsOfUse extends Component {
     });
   }
   module = name => DataFormatter.upperCamelCase(name);
+  dataRoomHeader = (<Header as="h3" className="mb-30 anchor-wrap">
+                      Data Rooms
+    <span className="anchor-scroll" />
+                    </Header>)
   render() {
-    const { docsWithBoxLink, dataRoomDocs } = this.props.campaignStore;
+    const { dataRoomDocs, sortedDocswithBoxLink } = this.props.campaignStore;
     if (!dataRoomDocs.length) {
-      return <InlineLoader text="No Documents to Display" className="bg-offwhite" />;
+      return (
+        <div className="campaign-content-wrapper">
+        {this.dataRoomHeader}
+      <InlineLoader text="No Documents to Display" className="bg-offwhite" />
+        </div>);
     }
-    if (!docsWithBoxLink.length) {
+    if (!sortedDocswithBoxLink.length) {
       return <InlineLoader />;
     }
     return (
       <div className="campaign-content-wrapper">
-        <Header as="h3" className="mb-30 anchor-wrap">
-          Data Rooms
-          <span className="anchor-scroll" />
-        </Header>
-        {docsWithBoxLink && docsWithBoxLink.map((item, index) => (
+        {this.dataRoomHeader}
+        {sortedDocswithBoxLink && sortedDocswithBoxLink.map((item, index) => (
           <Aux>
             <Header id={`doc-${index}`} as="h4" className="mb-20 grey-header">{item.name}</Header>
             <Disclosure doc={item} />

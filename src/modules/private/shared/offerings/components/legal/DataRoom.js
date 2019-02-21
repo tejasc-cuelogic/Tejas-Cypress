@@ -34,10 +34,10 @@ const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, o
         />
       </div>
       <div className="action">
-        <Button icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
+        <Button disabled={isReadonly} icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
           <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => handleLockUnlock(docIndx)} />
         </Button>
-        <Button icon circular className="link-button">
+        <Button disabled={isReadonly} icon circular className="link-button">
           <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
         </Button>
       </div>
@@ -95,9 +95,11 @@ export default class DataRoom extends Component {
     const { DATA_ROOM_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, DATA_ROOM_FRM.fields, 'legal', 'dataroom', true, undefined, isApproved);
   }
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const docs = [...this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents];
-    this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex));
+  onSortEnd = ({ oldIndex, newIndex }, isReadonly) => {
+    if (!isReadonly) {
+      const docs = [...this.props.offeringCreationStore.DATA_ROOM_FRM.fields.documents];
+      this.props.offeringCreationStore.setDataRoomDocsOrder(arrayMove(docs, oldIndex, newIndex));
+    }
   };
   render() {
     const { match } = this.props;
@@ -138,7 +140,7 @@ export default class DataRoom extends Component {
             <SortableList
               docs={docs}
               pressDelay={100}
-              onSortEnd={this.onSortEnd}
+              onSortEnd={(e) => this.onSortEnd(e, isReadonly)}
               formArrayChange={formArrayChange}
               isReadonly={isReadonly}
               onFileDrop={this.onFileDrop}
