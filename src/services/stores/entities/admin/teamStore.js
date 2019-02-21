@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { forEach, uniqWith, isEqual, map } from 'lodash';
+import { forEach, uniqWith, isEqual, map, sortBy } from 'lodash';
 import { GqlClient as clientPublic } from '../../../../api/publicApi';
 import { GqlClient as clientPrivate } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb } from '../../../../helper';
@@ -20,7 +20,7 @@ export class TeamStore {
     skip: 0,
     page: 1,
     perPage: 50,
-    displayTillIndex: 10,
+    displayTillIndex: 50,
     filters: false,
     search: {
     },
@@ -58,7 +58,7 @@ export class TeamStore {
 
   @computed get teamMembers() {
     return (this.db && this.db.length &&
-      toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex))) || [];
+      sortBy(toJS(this.db.slice(this.requestState.skip, this.requestState.displayTillIndex)), ['order'])) || [];
   }
 
   @computed get loading() {
