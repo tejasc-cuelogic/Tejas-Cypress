@@ -95,9 +95,7 @@ class ClientDb {
     const isInt = type === 'Integer';
     const filterData = data.filter(e => (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10))
     <= max && (isInt ? parseInt(e[key], 10) : parseFloat(e[key], 10)) >= min);
-    if (filterData.length > 0) {
-      this.initiateDb(filterData, true);
-    }
+    this.initiateDb(filterData, true);
   }
 }
 
