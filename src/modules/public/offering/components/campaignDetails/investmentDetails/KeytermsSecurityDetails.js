@@ -146,7 +146,7 @@ class KeyTermsSecurityDetails extends Component {
             </Table.Cell>
           </Table.Row>
           <Table.Row verticalAlign="top">
-            <Table.Cell width={5} className="neutral-text"><b>Pre-money valuation{' '}</b>
+            <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
             </Table.Cell>
             <Table.Cell>
               <p>

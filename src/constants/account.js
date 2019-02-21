@@ -341,8 +341,8 @@ export const ENTITY_FIN_INFO = {
     rule: 'required|numeric',
     maxLength: 15,
   },
-  cfInvestment: {
-    key: 'cfInvestment',
+  annualIncome: {
+    key: 'annualIncome',
     value: '',
     label: 'Entity Annual Income',
     error: undefined,

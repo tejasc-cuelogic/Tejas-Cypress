@@ -1155,18 +1155,15 @@ a.icon-link {
 			.vertical-timeline-element-icon{
 				height: @25px;
 				width: @25px;
-				left: @16px;
+				left: -@13px;
 				background-color: @neutral-darkwhite !important;
-				@media only screen and (max-width : @largestTabletScreen){
-					left: -@13px;
-				}
 			}
 		}
 		&.vertical-timeline-element--right .vertical-timeline-element-content .vertical-timeline-element-date {
 			position: absolute;
 			width: 78px;
 			top: -60px;
-			left: -162px;
+			left: -220px;
 			right: auto;
 			padding: 0;
 			background: @white;
@@ -1247,7 +1244,8 @@ a.icon-link {
 				font-size: @15px;
 			}
 			img {
-				width: 100%;
+				max-width: 100%;
+				height: auto;
 			}
 		}
 		.sb-avatar {
@@ -1259,6 +1257,14 @@ a.icon-link {
 				height: @40px;
 				line-height: @40px;
 			}
+		}
+	}
+	.wp-content {
+		max-width: 100%;
+		height: auto;
+		img {
+			max-width: 100%;
+			height: auto;
 		}
 	}
 }

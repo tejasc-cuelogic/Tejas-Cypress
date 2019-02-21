@@ -16,12 +16,11 @@ export const createAccount = gql`
     }
   }`;
 
-export const updateAccount = gql`
-  mutation _updateAccount($accountId: String! $accountAttributes: AccountInputType! $accountStatus: InvestorAccountStatusEnum! $accountType: InvestorAccountTypeEnum!) {
-    updateInvestorAccount(
+export const upsertInvestorAccount = gql`
+  mutation _upsertInvestorAccount($accountId: String $accountAttributes: AccountInputType! $accountType: InvestorAccountTypeEnum!) {
+    upsertInvestorAccount(
       accountId: $accountId
       accountAttributes: $accountAttributes
-      accountStatus: $accountStatus
       accountType: $accountType
     ) {
       accountId
@@ -32,6 +31,14 @@ export const updateAccount = gql`
       }
       accountType
     }
+  }`;
+
+export const submitinvestorAccount = gql`
+  mutation _submitInvestorAccount($accountId: String!, $accountType: InvestorAccountTypeEnum!){
+    submitInvestorAccount(
+      accountId: $accountId,
+      accountType: $accountType
+    )
   }`;
 
 export const updateInvestorProfileData = gql`
