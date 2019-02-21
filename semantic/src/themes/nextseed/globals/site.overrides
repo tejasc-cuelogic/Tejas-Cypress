@@ -2508,6 +2508,32 @@ p.check-extra-info{
 		border-radius: 50px;
 		-webkit-appearance: none;
 	}
+	span{
+		position: absolute;
+		width: 4px;
+		height: 6px;
+		top: 4px;
+		background:  @neutral-darkwhite;
+		&.one{left: 4%}
+		&.two{
+			left: 19%;
+		}
+		&.three{
+			left: 34.5%;
+		}
+		&.four{
+			left: 49%;
+		}
+		&.five{
+			left: 64%;
+		}
+		&.six{
+			left: 79%;
+		}
+		&.seven{
+			left: 93.5%;
+		}
+	}
 }
 .slider {
 	-webkit-appearance: none;

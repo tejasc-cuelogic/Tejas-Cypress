@@ -206,7 +206,6 @@ export class CampaignStore {
       res.updates = updates && updates.length ? updates.length : 0;
       // eslint-disable-next-line arrow-body-style
       res.comments = reduce(comments, (sum, c) => {
-        console.log('name', get(c, 'createdUserInfo.roles[0].name'));
         return (c.scope === 'PUBLIC' && ((get(c, 'createdUserInfo.roles[0].name') === 'admin' || get(c, 'createdUserInfo.roles[0].name') === 'investor') || (get(c, 'createdUserInfo.roles[0].name') === 'issuer' && c.approved)) ? (sum + 1) : sum);
       }, 0);
     }
@@ -219,7 +218,7 @@ export class CampaignStore {
     if (selectedOffer && selectedOffer.structure !== '') {
       offerStructure = selectedOffer.structure;
     } else {
-      offerStructure = keyTerms.securities;
+      offerStructure = get(keyTerms, 'securities') || '';
     }
     return offerStructure;
   }

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject } from 'mobx-react';
 import { Header, Divider } from 'semantic-ui-react';
-import TermNoteDetails from './investmentDetails/TermNoteDetails';
-import RevenueSharingDetails from './investmentDetails/RevenueSharingDetails';
-import { CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../constants/offering';
+import KeytermsDetails from './investmentDetails/KeytermsDetails';
 import { InlineLoader, Image64 } from '../../../../../theme/shared';
 
 @inject('campaignStore', 'navStore')
@@ -32,7 +30,8 @@ class InvestmentDetails extends Component {
   handleOnScroll = () => {
     const { investmentDetailsSubNavs } = this.props.campaignStore;
     investmentDetailsSubNavs.forEach((item) => {
-      if (document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 100 &&
+      if (document.getElementById(item.to.slice(1)) &&
+      document.getElementById(item.to.slice(1)).getBoundingClientRect().top < 100 &&
       document.getElementById(item.to.slice(1)).getBoundingClientRect().top > 0) {
         this.props.navStore.setFieldValue('currentActiveHash', item.to);
       }
@@ -85,21 +84,11 @@ class InvestmentDetails extends Component {
           Key Terms
           <span className="anchor" id="key-terms" />
         </Header>
-        {campaign && campaign.keyTerms &&
-          campaign.keyTerms.securities &&
-          campaign.keyTerms.securities ===
-          CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ?
-            <RevenueSharingDetails
-              refLink={this.props.refLink}
-              KeyTerms={campaign && campaign.keyTerms}
-              {...this.props}
-            /> :
-            <TermNoteDetails
-              refLink={this.props.refLink}
-              KeyTerms={campaign && campaign.keyTerms}
-              {...this.props}
-            />
-        }
+        <KeytermsDetails
+          refLink={this.props.refLink}
+          KeyTerms={campaign && campaign.keyTerms}
+          {...this.props}
+        />
       </Aux>
     );
   }
