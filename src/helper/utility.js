@@ -90,6 +90,12 @@ export class Utility {
     return encryptedNumber;
   }
 
+  replaceKeysDeep = (obj, keysMap) => _.transform(obj, (result, value, key) => {
+    const resultTmp = result;
+    const currentKey = keysMap[key] || key;
+    resultTmp[currentKey] = _.isObject(value) ? this.replaceKeysDeep(value, keysMap) : value;
+  });
+
   getFormattedFileData = (file) => {
     const fileData = {};
     if (file) {
