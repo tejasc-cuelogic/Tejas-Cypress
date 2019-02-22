@@ -491,7 +491,7 @@ export const OFFERS = {
     },
     mthRevenueSharing: {
       value: '',
-      label: 'Mth Revenue Shareing %',
+      label: 'Mth Revenue Sharing %',
       placeHolder: 'Enter here',
       error: undefined,
       rule: 'optional',

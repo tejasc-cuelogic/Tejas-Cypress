@@ -51,10 +51,10 @@ class KeyTermsDetails extends Component {
             <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Regulation</b><br />{get(KeyTerms, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
+            <p><b>Type of Offering</b><br />{get(KeyTerms, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Security</b><br />{get(KeyTerms, 'securities') ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
+            <p><b>Type of Securities</b><br />{get(KeyTerms, 'securities') ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
           </Grid.Column>
         </Grid>
         <Divider />
@@ -91,17 +91,11 @@ class KeyTermsDetails extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                {KeyTerms && KeyTerms.maturity ?
-                  <p>
-                    <b>{KeyTerms.maturity} Months</b>
-                    {
-                      KeyTerms && KeyTerms.startupPeriod &&
-                      ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
-                    }
-                  </p>
-                  :
-                  'NA'
-                }
+                {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : 'NA'}
+                {
+                    KeyTerms && KeyTerms.startupPeriod &&
+                    ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
+                  }
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top" >
@@ -114,10 +108,7 @@ class KeyTermsDetails extends Component {
               </Table.Cell>
               <Table.Cell>
                 <p>
-                  {KeyTerms && KeyTerms.frequencyOfPayments ?
-                    <b>
-                      {KeyTerms.frequencyOfPayments}
-                    </b>
+                  {KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
                       : 'NA'}
                 </p>
               </Table.Cell>

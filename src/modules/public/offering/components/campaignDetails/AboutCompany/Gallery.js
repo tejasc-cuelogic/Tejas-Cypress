@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Image64 } from '../../../../../../theme/shared';
-import { ASSETS_URL } from '../../../../../../constants/aws';
+import NSImage from '../../../../../shared/NSImage';
 
 const isTablet = document.documentElement.clientWidth < 991;
 @inject('campaignStore')
@@ -34,7 +34,7 @@ class Gallery extends Component {
                 }
               </Aux>
             )) :
-            <Image64 fluid className="about-gallery-bg" srcUrl={`${ASSETS_URL}images/gallery-placeholder-16-9.jpg`} />
+            <NSImage fluid className="about-gallery-bg" path="gallery-placeholder-16-9.jpg" />
           }
         </div>
         {get(campaign, 'media.gallery') &&

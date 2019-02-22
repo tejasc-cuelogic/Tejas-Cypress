@@ -15,7 +15,7 @@ class teamList extends Component {
     return (
       <Grid.Column>
         <Grid columns={columns} className={className} doubling>
-          { teamMembers.map(member => (
+          { teamMembers.map(member => member.isPublished && (
             <Grid.Column>
               <Reveal as={Link} to={`${match.url}/${member.id}`} animated="fade">
                 <Reveal.Content hidden>
