@@ -1103,3 +1103,14 @@ mutation _deleteBonusReward($id: String! $offeringId: String!){
   }
 }
 `;
+
+export const getTotalAmount = gql`
+query getTotalAmount{
+  getNSOfferingAmountRaised
+    {
+    amountRaisedUS
+    amountRaisedTX
+    totalInvestorsUS
+  }  
+  }
+  `;
