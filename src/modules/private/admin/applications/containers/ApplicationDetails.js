@@ -217,7 +217,13 @@ export default class ApplicationDetails extends Component {
                     <Route
                       key={item.to}
                       path={`${match.url}/${item.to}`}
-                      render={props => <CurrentComponent resourceId={params.appId} {...props} />}
+                      render={props =>
+                        (<CurrentComponent
+                          resourceId={params.appId}
+                          appType={params.id}
+                          {...props}
+                        />)
+                      }
                     />
                   );
                 })
