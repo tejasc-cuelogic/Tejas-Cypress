@@ -3,9 +3,10 @@ import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import { pickBy, mapValues, values, map } from 'lodash';
 import { GqlClient as client } from '../../../../../api/gqlApi';
+import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
-  allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails,
+  allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails, getTotalAmount,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore } from '../../../index';
 import { ClientDb } from '../../../../../helper';
@@ -34,6 +35,7 @@ export class OfferingsStore {
   @observable db;
   @observable currentId = '';
   @observable initLoad = [];
+  @observable totalRaisedAmount = [];
 
   @action
   initRequest = (props) => {
@@ -53,7 +55,24 @@ export class OfferingsStore {
         this.requestState.skip = 0;
         this.setDb(res.getOfferings);
       },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
     });
+  }
+
+  @action
+  getTotalAmount = () => {
+    this.totalRaisedAmount = graphql({
+      client: clientPublic,
+      query: getTotalAmount,
+      fetchPolicy: 'network-only',
+    });
+  }
+
+  @computed get totalAmountRaised() {
+    return (this.totalRaisedAmount.data &&
+      toJS(this.totalRaisedAmount.data.getNSOfferingAmountRaised)) || [];
   }
 
   @action
@@ -118,7 +137,7 @@ export class OfferingsStore {
     this.offerData = graphql({
       client,
       query: getOfferingDetails,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: () => {
         this.currentId = id;
@@ -129,6 +148,9 @@ export class OfferingsStore {
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
         // offeringCreationStore.resetInitLoad();
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
   }

@@ -81,14 +81,12 @@ export default class AccountDetailsView extends Component {
               <Item>
                 <Item.Content>
                   <Item.Extra>
-                    {accountDetails && pendingAccoungDetails ? 'Date linked' : 'Date Requested'
+                    {accountDetails && accountDetails.dateLinked ? 'Date linked' : 'Date Requested'
                     }
                   </Item.Extra>
                   <Item.Header>
-                  {accountDetails && pendingAccoungDetails && accountDetails.changeRequest &&
-                      accountDetails.changeRequest.dateRequested ?
-                      moment(accountDetails.changeRequest.dateRequested).format('MM/DD/YYYY') :
-                      moment(accountDetails.dateLinked).format('MM/DD/YYYY')
+                    {
+                      moment(accountDetails.dateLinked || accountDetails.dateRequested).format('MM/DD/YYYY')
                     }
                   </Item.Header>
                 </Item.Content>

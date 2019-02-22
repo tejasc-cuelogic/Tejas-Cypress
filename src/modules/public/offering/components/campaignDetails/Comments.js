@@ -16,7 +16,7 @@ const isTablet = document.documentElement.clientWidth < 991;
 @observer
 class Comments extends Component {
   state={
-    readMore: false, readMoreInner: false, visible: false, commentId: null,
+    readMore: false, readMoreInner: false, visible: false, commentId: null, visiblePost: true,
   }
   componentWillMount() {
     this.props.messageStore.resetMessageForm();
@@ -51,19 +51,28 @@ class Comments extends Component {
     this.props.messageStore.createNewComment(scope, campaignSlug, currentMessage);
   }
   toggleVisibility = (comment = null) => {
+    this.props.messageStore.resetCommentField();
     if (!this.state.visible) {
       this.setState({ visible: true });
+      this.setState({ visiblePost: false });
+    }
+    if (this.state.visiblePost) {
+      this.setState({ visiblePost: false });
     }
     this.setState({ commentId: comment });
   }
   closeTextBox = (commentId) => {
     if (this.state.visible && commentId === this.state.commentId) {
       this.setState({ visible: false });
+      this.props.messageStore.resetCommentField();
+    }
+    if (!this.state.visiblePost) {
+      this.setState({ visiblePost: true });
     }
   }
   readMore = (e, field, id) => { e.preventDefault(); this.setState({ [field]: id }); }
   render() {
-    const { visible } = this.state;
+    const { visible, visiblePost } = this.state;
     const { isUserLoggedIn } = this.props.authStore;
     const loginOrSignup = this.props.navStore.stepInRoute;
     const { currentUser } = this.props.userStore;
@@ -117,15 +126,17 @@ class Comments extends Component {
           </section>
               :
           <Aux>
-            <Form className="public-form mt-30 clearfix" reply>
-              <FormTextarea
-                fielddata={MESSAGE_FRM.fields.comment}
-                name="comment"
-                changed={msgEleChange}
-                containerclassname="secondary"
-              />
-              <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
-            </Form>
+            { visiblePost ?
+              <Form className="public-form mt-30 clearfix" reply>
+                <FormTextarea
+                  fielddata={MESSAGE_FRM.fields.comment}
+                  name="comment"
+                  changed={msgEleChange}
+                  containerclassname="secondary"
+                />
+                <Button size={isMobile && 'mini'} fluid={isTablet} floated="right" loading={buttonLoader === 'PUBLIC'} onClick={() => this.send('PUBLIC', campaignSlug, null)} disabled={!MESSAGE_FRM.meta.isValid} secondary compact content="Post Comment" />
+              </Form> : ''
+            }
           </Aux>
         }
         {comments && comments.length ?

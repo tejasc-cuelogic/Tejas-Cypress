@@ -21,6 +21,7 @@ export const DropdownFilter = props => (
       fluid
       multiple={props.isMultiple}
       selection
+      clearable
       options={props.options}
     />
     <div className="dropdown-effect">{props.name}</div>

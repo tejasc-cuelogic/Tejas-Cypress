@@ -67,7 +67,7 @@ export default class AppNavigation extends Component {
               <Aux>
                 {this.state.step > 0 &&
                   <div className="pull-left">
-                    <Button type="button" circular icon className="multistep__btn prev" onClick={() => this.actualSubmit(-1)}>
+                    <Button type="button" circular icon className="multistep__btn prev" disabled={isFileUploading} onClick={() => this.actualSubmit(-1)}>
                       <Icon className="ns-arrow-left" />
                     </Button>
                     {this.state.navItems[this.state.step - 1].title}
@@ -77,7 +77,7 @@ export default class AppNavigation extends Component {
                   {this.state.step < (this.state.navItems.length - 1) ? (
                     <Aux>
                       {this.state.navItems[this.state.step + 1].title}
-                      <Button type="button" circular icon primary className="multistep__btn next active" disabled={isFileUploading} onClick={() => this.actualSubmit(1)}>
+                      <Button type="button" circular icon primary className={`multistep__btn next ${isFileUploading ? '' : 'active'}`} disabled={isFileUploading} onClick={() => this.actualSubmit(1)}>
                         <Icon className="ns-arrow-right" />
                       </Button>
                     </Aux>
