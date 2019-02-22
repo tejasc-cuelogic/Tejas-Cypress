@@ -2,7 +2,6 @@ import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import apiService from '../../../api/restApi';
-// eslint-disable-next-line no-unused-vars
 import { bankAccountStore, accountStore, uiStore, individualAccountStore, iraAccountStore, entityAccountStore } from '../../stores';
 import Helper from '../../../helper/utility';
 

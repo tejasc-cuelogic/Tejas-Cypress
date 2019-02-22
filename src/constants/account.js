@@ -333,7 +333,7 @@ export const IRA_IDENTITY = {
 };
 
 export const ENTITY_FIN_INFO = {
-  netAssets: {
+  netWorth: {
     key: 'netAssets',
     value: '',
     label: 'Entity Net Assets',
@@ -461,12 +461,6 @@ export const ACC_TYPE = {
     error: undefined,
     rule: 'required',
   },
-};
-
-export const ACC_LINK_BANK_MAPPING = {
-  0: { store: 'individualAccountStore', location: 1 },
-  1: { store: 'iraAccountStore', location: 3 },
-  2: { store: 'entityAccountStore', location: 5 },
 };
 
 export const BROKERAGE_EMPLOYMENT = {
