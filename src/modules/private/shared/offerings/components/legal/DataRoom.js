@@ -126,9 +126,11 @@ export default class DataRoom extends Component {
         <Form>
           <Header as="h4">
             Data Room Documents
-            <Button.Group size="mini" floated="right">
-              <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
-            </Button.Group>
+            {!isReadonly &&
+              <Button.Group size="mini" floated="right">
+                <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
+              </Button.Group>
+            }
           </Header>
           <Divider hidden />
           <div className="ui basic compact table form-table">
