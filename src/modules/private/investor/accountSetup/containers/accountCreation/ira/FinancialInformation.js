@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Message, Divider } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
