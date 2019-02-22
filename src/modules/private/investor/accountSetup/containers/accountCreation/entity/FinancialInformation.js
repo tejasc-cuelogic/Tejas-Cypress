@@ -30,7 +30,7 @@ export default class FinancialInformation extends Component {
               <MaskedInput
                 key={field}
                 name={field}
-                placeHolder={field === 'annualIncome' ? '$ 1,000,000' : '$ 5,000'}
+                placeHolder={field === 'netAssets' ? '$ 1,000,000' : '$ 5,000'}
                 fielddata={FIN_INFO_FRM.fields[field]}
                 maxLength={FIN_INFO_FRM.fields[field].maxLength}
                 changed={values => maskedFinInfoChange(values, field)}
