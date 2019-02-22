@@ -11,8 +11,8 @@ import Helper from '../../../../../../../helper/utility';
 export default class FinancialInformation extends Component {
   componentWillMount() {
     const { FIN_INFO_FRM, maskedFinInfoChange } = this.props.entityAccountStore;
-    if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netWorth.value !== '' && FIN_INFO_FRM.fields.income.value !== ''))) && !(FIN_INFO_FRM.fields.netWorth.value === '' && FIN_INFO_FRM.fields.income.value === '')) {
-      maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netWorth.value }, name: 'netWorth' });
+    if ((FIN_INFO_FRM.fields.investmentLimit.value === undefined || (FIN_INFO_FRM.fields.investmentLimit.value === '' || (FIN_INFO_FRM.fields.netAssets.value !== '' && FIN_INFO_FRM.fields.annualIncome.value !== ''))) && !(FIN_INFO_FRM.fields.netAssets.value === '' && FIN_INFO_FRM.fields.annualIncome.value === '')) {
+      maskedFinInfoChange({ value: { floatValue: FIN_INFO_FRM.fields.netAssets.value }, name: 'netAssets' });
     }
   }
   render() {
@@ -26,11 +26,11 @@ export default class FinancialInformation extends Component {
         </p>
         <Form error>
           <div className="field-wrap">
-            {['netWorth', 'income'].map(field => (
+            {['netAssets', 'annualIncome'].map(field => (
               <MaskedInput
                 key={field}
                 name={field}
-                placeHolder={field === 'income' ? '$ 1,000,000' : '$ 5,000'}
+                placeHolder={field === 'annualIncome' ? '$ 1,000,000' : '$ 5,000'}
                 fielddata={FIN_INFO_FRM.fields[field]}
                 maxLength={FIN_INFO_FRM.fields[field].maxLength}
                 changed={values => maskedFinInfoChange(values, field)}
