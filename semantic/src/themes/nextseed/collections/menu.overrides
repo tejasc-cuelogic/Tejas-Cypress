@@ -350,6 +350,7 @@ footer{
 .offering-side-menu .ui.vertical.menu {
     background-color: transparent;
     .item {
+        font-size: @15px;
         color: @neutral;
         line-height: 20px;
         border-radius: 0;
