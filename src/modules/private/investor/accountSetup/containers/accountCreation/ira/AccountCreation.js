@@ -14,6 +14,7 @@ import { Plaid } from '../../../../../shared/bankAccount';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.uiStore.setProgress();
     this.props.userDetailsStore.setUserAccDetails('ira');
     this.props.accountStore.setAccTypeChange(1);
   }

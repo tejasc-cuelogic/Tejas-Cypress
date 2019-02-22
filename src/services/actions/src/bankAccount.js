@@ -2,11 +2,16 @@ import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import apiService from '../../../api/restApi';
-import { bankAccountStore, individualAccountStore, accountStore, uiStore, iraAccountStore, entityAccountStore } from '../../stores';
+import { bankAccountStore, accountStore, uiStore, individualAccountStore, iraAccountStore, entityAccountStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
 const sharedPublicPayload = { public_key: PLAID_PUBLIC_KEY };
+const ACC_LINK_BANK_MAPPING = {
+  0: { store: individualAccountStore, location: 1 },
+  1: { store: iraAccountStore, location: 3 },
+  2: { store: entityAccountStore, location: 5 },
+};
 export class BankAccount {
   bankSearch = (e) => {
     if (e.charCode === 13) {
@@ -71,13 +76,9 @@ export class BankAccount {
           bankAccountStore.setPlaidBankVerificationStatus(true);
         } else {
           Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
-          if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 0) {
-            individualAccountStore.setStepToBeRendered(1);
-          } else if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 1) {
-            iraAccountStore.setStepToBeRendered(3);
-          } else if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 2) {
-            entityAccountStore.setStepToBeRendered(5);
-          }
+          const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
+          ACC_LINK_BANK_MAPPING[accountValue].store
+            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
           bankAccountStore.setShowAddFunds();
         }
       },
