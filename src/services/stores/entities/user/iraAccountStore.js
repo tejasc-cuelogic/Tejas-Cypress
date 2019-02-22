@@ -459,7 +459,7 @@ class IraAccountStore {
             form: 'IDENTITY_FRM',
             stepToBeRendered: 5,
           };
-          this.createAccount(currentStep, 'PARTIAL', false);
+          this.createAccount(currentStep, false);
         })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
@@ -477,7 +477,7 @@ class IraAccountStore {
       this.IDENTITY_FRM.fields[field].value = '';
       this.IDENTITY_FRM.fields[field].fileId = '';
       this.IDENTITY_FRM.fields[field].preSignedUrl = '';
-      this.createAccount(currentStep, 'PARTIAL', true);
+      this.createAccount(currentStep, true);
     }))
       .catch(() => { });
   }
