@@ -1757,7 +1757,7 @@ div.login-form {
 			background-color:@fullBlack;
 		}
 	}
-	&.investor{
+	&.investor, &.ira, &.entity, &.individual{
 		color:@primary-one-darken;
 		border-color:@primary-one-darken;
 		&.accredited:after{
