@@ -39,15 +39,20 @@ export default class HtmlEditor extends React.Component {
       imageUploadRemoteUrls: false,
       events: {
         'froalaEditor.image.loaded': (e, editor, image) => {
+          console.log('beforeupload');
+          console.log(image);
           if (image.attr('src').includes('blob:') && this.state.imgUrl) {
-            console.log('changed src img');
             image.attr('src', this.state.imgUrl);
             this.setState({ imgUrl: null });
+            this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+          } else {
             this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
           }
           return false;
         },
         'froalaEditor.image.beforeUpload': (e, editor, images) => {
+          console.log('beforeupload');
+          console.log(images);
           this.props.uiStore.setFieldvalue('htmlEditorImageLoading', true);
           const fileName = get(images, '[0].name');
           const file = get(images, '[0]');
@@ -59,10 +64,11 @@ export default class HtmlEditor extends React.Component {
           fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
             if (editor && editor.image) {
               const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
+              console.log(editor);
               editor.image.insert(imgUrl);
               this.setState({ imgUrl });
             }
-          }).catch(() => this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false));
+          }).catch(() => { this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false); return false; });
         },
         'froalaEditor.image.error': (e, editor, error) => {
           console.log(error);

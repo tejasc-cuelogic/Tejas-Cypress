@@ -2,7 +2,7 @@ import React from 'react';
 import Aux from 'react-aux';
 // import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Header, Form, Message, Divider } from 'semantic-ui-react';
+import { Header, Form, Divider } from 'semantic-ui-react';
 import { MaskedInput } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
@@ -46,13 +46,15 @@ export default class FinancialInformation extends React.Component {
               </span>
             </p>
           </div>
-          {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
-          <Message error className="center-align">
-            Based on your reported Net Worth and Annual Income, your 12-month investment limit
-            under Regulation Crowdfunding is below the $5,000 minimum opening
-            deposit for IRA accounts.
-          </Message>
-          }
+          {/* Commented because server side validations are removed
+            {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 &&
+              FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
+            <Message error className="center-align">
+              Based on your reported Net Worth and Annual Income, your 12-month investment limit
+              under Regulation Crowdfunding is below the $5,000 minimum opening
+              deposit for IRA accounts.
+            </Message>
+          } */}
         </Form>
       </Aux>
     );

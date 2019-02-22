@@ -25,11 +25,17 @@ export default class OfferingDetails extends Component {
     this.props.navStore.setAccessParams('specificNav', '/app/offering/2/overview');
     this.props.offeringCreationStore.setCurrentOfferingId(this.props.match.params.offeringid);
   }
+  componentDidMount() {
+    window.onpopstate = this.handleCloseModal;
+  }
+
   handleCloseModal = (e) => {
     e.stopPropagation();
     this.props.offeringCreationStore.resetOfferingId();
     this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
+    window.onpopstate = null;
   };
+
   render() {
     const { match, offeringsStore, navStore } = this.props;
     let navItems = navStore.specificNavs.subNavigations;

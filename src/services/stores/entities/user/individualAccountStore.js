@@ -1,10 +1,10 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore, investmentLimitStore, referralsStore } from '../../index';
+import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
-import { createIndividual, updateAccount, crowdPayAccountNotifyGs } from '../../queries/account';
+import { submitinvestorAccount, upsertInvestorAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
 
@@ -18,85 +18,85 @@ class IndividualAccountStore {
     this.isManualLinkBankSubmitted = status;
   }
 
+  initialSteptobeRendered = () => {
+    const { userDetails } = userDetailsStore;
+    const account = find(userDetails.roles, { name: 'individual' });
+    if (!isEmpty(account)) {
+      this.setStepToBeRendered(this.stepToBeRendered === 0 ? 1
+        : this.stepToBeRendered);
+    }
+  }
+
   @action
-  setStepToBeRendered(step) {
+  setStepToBeRendered = (step) => {
     this.stepToBeRendered = step;
   }
 
-  createAccount = (currentStep, formStatus = 'PARTIAL') => {
+  submitAccount = () => {
+    const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
+    uiStore.setProgress();
+    const payLoad = {
+      accountId: accountDetails.details.accountId,
+      accountType: 'INDIVIDUAL',
+    };
+    return new Promise((resolve, reject) => {
+      bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
+        client
+          .mutate({
+            mutation: submitinvestorAccount,
+            variables: payLoad,
+          })
+          .then(() => (resolve()))
+          .catch(() => {
+            uiStore.setProgress(false);
+            reject();
+          });
+      });
+    });
+  }
+
+  investmentLimitsAttributes = () => {
+    const data = {};
+    data.limits = {
+      income:
+        userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+      netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
+      otherContributions: 0,
+    };
+    return data;
+  }
+  createAccount = (currentStep) => {
     if (bankAccountStore.formAddFunds.meta.isFieldValid) {
       uiStore.setProgress();
-      let mutation = createIndividual;
+      const mutation = upsertInvestorAccount;
       const variables = {
-        accountAttributes: bankAccountStore.accountAttributes,
-        accountStatus: formStatus,
+        accountAttributes: {
+          ...bankAccountStore.accountAttributes,
+          ...this.investmentLimitsAttributes(),
+        },
         accountType: 'INDIVIDUAL',
       };
-      let actionPerformed = 'submitted';
+      const actionPerformed = 'submitted';
       if (userDetailsStore.currentUser.data) {
         const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
         if (accountDetails) {
-          mutation = updateAccount;
           variables.accountId = accountDetails.details.accountId;
-          actionPerformed = 'updated';
         }
       }
       return new Promise((resolve, reject) => {
-        bankAccountStore.checkOpeningDepositAmount(false).then(() => {
+        bankAccountStore.isValidOpeningDepositAmount(false).then(() => {
           client
             .mutate({
               mutation,
               variables,
             })
             .then(action((result) => {
-              if (result.data.createInvestorAccount || formStatus === 'FULL') {
+              if (result.data.upsertInvestorAccount) {
                 userDetailsStore.getUser(userStore.currentUser.sub);
-              }
-              if (formStatus !== 'FULL') {
-                const accountId = result.data.createInvestorAccount ?
-                  result.data.createInvestorAccount.accountId :
-                  result.data.updateInvestorAccount ?
-                    result.data.updateInvestorAccount.accountId : null;
-                if (accountId) {
-                  const data = {
-                    annualIncome:
-                      userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
-                    netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
-                    otherRegCfInvestments: 0,
-                  };
-                  investmentLimitStore.updateInvestmentLimits(data, accountId, null, false);
-                }
-              }
-              if (result.data.createInvestorAccount) {
-                const { linkedBank } = result.data.createInvestorAccount;
-                bankAccountStore.setPlaidAccDetails(linkedBank);
-              } else {
-                const { linkedBank } = result.data.updateInvestorAccount;
+                const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }
-              if (formStatus === 'FULL') {
-                Helper.toast('Individual account created successfully.', 'success');
-                referralsStore.userPartialFullSignupWithReferralCode(userStore.currentUser.sub, 'FULL');
-                this.submited = true;
-                if (userDetailsStore.userDetails && userDetailsStore.userDetails.cip &&
-                  userDetailsStore.userDetails.cip.failType &&
-                  userDetailsStore.userDetails.cip.failType !== null) {
-                  client.mutate({
-                    mutation: crowdPayAccountNotifyGs,
-                    variables: {
-                      userId: userStore.currentUser.sub,
-                      accountId: result.data.createInvestorAccount ?
-                        result.data.createInvestorAccount.accountId :
-                        result.data.updateInvestorAccount.accountId,
-                    },
-                  })
-                    .then(() => {})
-                    .catch(action((err) => {
-                      uiStore.setErrors(DataFormatter.getSimpleErr(err));
-                      reject();
-                    }));
-                }
-              } else if (currentStep) {
+              if (currentStep) {
                 this.setStepToBeRendered(currentStep.stepToBeRendered);
                 if (!bankAccountStore.depositMoneyNow) {
                   Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
@@ -120,6 +120,7 @@ class IndividualAccountStore {
           // });
         })
           .catch(() => {
+            uiStore.setProgress(false);
             reject();
           });
       });

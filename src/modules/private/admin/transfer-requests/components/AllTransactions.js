@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
 import Aux from 'react-aux';
-import { get, capitalize } from 'lodash';
+import { get, capitalize, has } from 'lodash';
 import { Card, Table, Button } from 'semantic-ui-react';
 import { InlineLoader, DateTimeFormat, NsPagination } from '../../../../../theme/shared';
-import { STATUS_MAPPING, STATUS, TAB_WISE_STATUS } from '../../../../../services/constants/admin/transactions';
+import { STATUS_MAPPING, STATUS_META } from '../../../../../services/constants/admin/transactions';
 import { NoR } from '../../../../../theme/table/NSTable';
 import Helper from '../../../../../helper/utility';
 
@@ -15,7 +15,7 @@ import Helper from '../../../../../helper/utility';
 export default class AllTransactions extends Component {
   componentWillMount() {
     const { statusType } = this.props.match.params;
-    const transStatus = STATUS[statusType];
+    const transStatus = STATUS_MAPPING[statusType].status;
     this.props.transactionsStore.resetData();
     this.props.transactionsStore.initRequest(transStatus, statusType); // load data
   }
@@ -42,9 +42,9 @@ export default class AllTransactions extends Component {
       return <InlineLoader />;
     }
     const totalRecords = transactionCount;
-    const transStatus = TAB_WISE_STATUS[statusType];
-    const columns = STATUS_MAPPING.filter(trans =>
-      trans.refStatus.includes(transStatus));
+    const transStatus = STATUS_MAPPING[statusType].status;
+    const columns = STATUS_META.filter(trans =>
+      trans.refStatus.includes(transStatus[0]));
     return (
       <Aux>
         <Card fluid>
@@ -79,7 +79,6 @@ export default class AllTransactions extends Component {
                               ['startDate', 'failDate', 'estDateAvailable'].includes(col.field) ?
                                 row[col.field] !== null ? <DateTimeFormat unix format="MM/DD/YYYY" datetime={row[col.field] || ''} /> : '' : col.field === 'userName' ?
                                 this.getUserName(get(row, col.fieldLocation) || {}, get(row, col.fieldId)) : col.field === 'userId' ? get(row, col.fieldLocation) :
-                                col.field === 'agreements' ? get(row, col.fieldLocation) :
                                 col.field === 'amount' ? Helper.MoneyMathDisplayCurrency(row[col.field]) :
                                 col.field === 'direction' ? capitalize(row[col.field]) :
                                 get(row, col.field) === undefined ? 'N/A' : row[col.field]
@@ -87,20 +86,17 @@ export default class AllTransactions extends Component {
                           </Table.Cell>
                         ))
                       }
-                      {
-                      TAB_WISE_STATUS[statusType] === 'PENDING' ?
+                      {has(STATUS_MAPPING[statusType], ['affirmativeCta', 'failedCta']) &&
                         <Table.Cell>
                           <Button.Group vertical compact size="mini">
-                            <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, 'Approved')}>Approve</Button>
-                            <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">Decline</Button>
+                            <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action)}>
+                              {STATUS_MAPPING[statusType].affirmativeCta.title}
+                            </Button>
+                            <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">
+                              {STATUS_MAPPING[statusType].failedCta.title}
+                            </Button>
                           </Button.Group>
-                        </Table.Cell> : TAB_WISE_STATUS[statusType] === 'PROCESSING' ?
-                          <Table.Cell>
-                            <Button.Group vertical compact size="mini">
-                              <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, 'Verified')}>Verified</Button>
-                              <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">Failed</Button>
-                            </Button.Group>
-                          </Table.Cell> : null
+                        </Table.Cell>
                       }
                     </Table.Row>
                   ))

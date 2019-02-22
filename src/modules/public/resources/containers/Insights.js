@@ -40,6 +40,9 @@ export default class Insights extends Component {
     }
     return 'All';
   }
+  requestAllArticles = (isPublic, sortBy) => {
+    this.props.articleStore.requestAllArticles(isPublic, sortBy);
+  }
   render() {
     const {
       InsightCategories,
@@ -84,11 +87,23 @@ export default class Insights extends Component {
             </Menu.Menu>
             <Menu.Item position="right">
               SORT BY
-              <Dropdown item text="NEWEST">
+              <Dropdown item>
                 <Dropdown.Menu>
-                  <Dropdown.Item as={Link} to="/">Newest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Oldest</Dropdown.Item>
-                  <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item>
+                  <Dropdown.Item
+                    key="newest"
+                    as={Link}
+                    to="#"
+                    onClick={() => this.requestAllArticles(true, true)}
+                  >Newest
+                  </Dropdown.Item>
+                  <Dropdown.Item
+                    key="oldest"
+                    as={Link}
+                    to="#"
+                    onClick={() => this.requestAllArticles(true, false)}
+                  >Oldest
+                  </Dropdown.Item>
+                  {/* <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item> */}
                 </Dropdown.Menu>
               </Dropdown>
             </Menu.Item>

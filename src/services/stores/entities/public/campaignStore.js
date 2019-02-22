@@ -183,6 +183,15 @@ export class CampaignStore {
   @action
   updateDocs = ele => this.docsWithBoxLink.push(ele);
 
+   getIndexValue = vale => this.campaign.legal.dataroom.documents
+      && this.campaign.legal.dataroom.documents
+        .findIndex(x => x.upload.fileId === vale);
+
+  @computed get sortedDocswithBoxLink() {
+     return this.docsWithBoxLink.sort((a, b) =>
+       (this.getIndexValue(a.upload.fileId) > this.getIndexValue(b.upload.fileId) ? 1 : -1));
+   }
+
   getBoxLink = (fileId, accountType) => new Promise((resolve) => {
     clientPublic.mutate({
       mutation: getBoxEmbedLink,
