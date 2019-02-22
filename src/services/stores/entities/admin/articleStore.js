@@ -53,9 +53,14 @@ export class ArticleStore {
     }
 
     @action
-    requestAllArticles = (isPublic = true) => {
+    requestAllArticles = (isPublic = true, sortAsc = true) => {
       const apiClient = isPublic ? clientPublic : client;
-      this.data = graphql({ client: apiClient, query: allInsightArticles });
+      this.data = graphql({
+        client: apiClient,
+        query: allInsightArticles,
+        fetchPolicy: 'network-only',
+        variables: { sortByCreationDateAsc: sortAsc },
+      });
     }
 
     @action
