@@ -29,11 +29,7 @@ class KeyTermsSecurityDetails extends Component {
             </Table.Cell>
             <Table.Cell>
               <p>
-                {get(KeyTerms, 'investmentMultiple') ?
-                  <b>
-                    {get(KeyTerms, 'investmentMultiple')}
-                  </b>
-                  : 'NA'}
+                {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
               </p>
               <p>
                 {Parser(get(KeyTerms, 'investmentMultipleSummary') ?
@@ -47,9 +43,7 @@ class KeyTermsSecurityDetails extends Component {
             <Table.Cell width={5} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
             <Table.Cell>
               <p> {get(KeyTerms, 'revSharePercentage') ?
-                <b>
-                  {KeyTerms.revSharePercentage}
-                </b>
+                  KeyTerms.revSharePercentage
                     : 'NA'}
               </p>
               <p>
@@ -73,13 +67,7 @@ class KeyTermsSecurityDetails extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                {KeyTerms && KeyTerms.interestRate ?
-                  <p>
-                    <b>{KeyTerms.interestRate}%</b>
-                  </p>
-                  :
-                  'NA'
-              }
+                {KeyTerms && KeyTerms.interestRate ? `${KeyTerms.interestRate}%` : 'NA'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
@@ -91,13 +79,7 @@ class KeyTermsSecurityDetails extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                <p>
-                  {KeyTerms && KeyTerms.securityInterest ?
-                    <b>
-                      {KeyTerms.securityInterest}
-                    </b>
-                      : ' NA'}
-                </p>
+                {KeyTerms && KeyTerms.securityInterest ? KeyTerms.securityInterest : ' NA'}
               </Table.Cell>
             </Table.Row>
           </Aux>
@@ -109,13 +91,7 @@ class KeyTermsSecurityDetails extends Component {
             </Table.Cell>
             <Table.Cell>
               <p>
-                {KeyTerms && KeyTerms.roundType ?
-                  <b>
-                    {ROUND_TYPES_ENUM[KeyTerms.roundType]}
-                  </b>
-                :
-                ' NA'
-              }
+                {KeyTerms && KeyTerms.roundType ? ROUND_TYPES_ENUM[KeyTerms.roundType] : ' NA'}
               </p>
             </Table.Cell>
           </Table.Row>
@@ -124,11 +100,7 @@ class KeyTermsSecurityDetails extends Component {
             </Table.Cell>
             <Table.Cell>
               <p>
-                {KeyTerms && KeyTerms.securities ?
-                  <b>
-                    {CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities]}
-                  </b> : ' NA'
-                  }
+                {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : ' NA'}
               </p>
             </Table.Cell>
           </Table.Row>
@@ -137,11 +109,7 @@ class KeyTermsSecurityDetails extends Component {
             </Table.Cell>
             <Table.Cell>
               <p>
-                {KeyTerms && KeyTerms.unitPrice ?
-                  <b>
-                    {Helper.CurrencyFormat(KeyTerms.unitPrice)}
-                  </b> : ' NA'
-                  }
+                {KeyTerms && KeyTerms.unitPrice ? Helper.CurrencyFormat(KeyTerms.unitPrice) : ' NA'}
               </p>
             </Table.Cell>
           </Table.Row>
@@ -150,11 +118,7 @@ class KeyTermsSecurityDetails extends Component {
             </Table.Cell>
             <Table.Cell>
               <p>
-                {KeyTerms && KeyTerms.premoneyValuation ?
-                  <b>
-                    {Helper.CurrencyFormat(KeyTerms.premoneyValuation)}
-                  </b>
-                     : ' NA'}
+                {KeyTerms && KeyTerms.premoneyValuation ? Helper.CurrencyFormat(KeyTerms.premoneyValuation) : ' NA'}
               </p>
             </Table.Cell>
           </Table.Row>
@@ -164,11 +128,7 @@ class KeyTermsSecurityDetails extends Component {
                 <Table.Cell width={5} className="neutral-text"><b>{item.label}{' '}</b>
                 </Table.Cell>
                 <Table.Cell>
-                  <p>
-                    <b>
-                      {Parser(item.description || '')}
-                    </b>
-                  </p>
+                  {Parser(item.description || '')}
                 </Table.Cell>
               </Table.Row>
             ))

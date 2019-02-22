@@ -53,6 +53,9 @@ export class OfferingsStore {
         this.requestState.skip = 0;
         this.setDb(res.getOfferings);
       },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
+      },
     });
   }
 
@@ -118,7 +121,7 @@ export class OfferingsStore {
     this.offerData = graphql({
       client,
       query: getOfferingDetails,
-      fetchPolicy: 'network-only',
+      fetchPolicy: 'no-cache',
       variables: { id },
       onFetch: () => {
         this.currentId = id;
@@ -129,6 +132,9 @@ export class OfferingsStore {
         setFormData('LAUNCH_CONTITNGENCIES_FRM', 'contingencies', false);
         setFormData('CLOSING_CONTITNGENCIES_FRM', 'contingencies', false);
         // offeringCreationStore.resetInitLoad();
+      },
+      onError: () => {
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
   }
