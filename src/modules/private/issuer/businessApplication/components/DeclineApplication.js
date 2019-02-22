@@ -56,8 +56,8 @@ export default class DeclineApplication extends Component {
             }
             <div className="center-align">
               <Button.Group>
-                <Button primary disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} loading={inProgress} content="Yes - Decline Offer" onClick={this.declineApplicationHandler} />
                 <Button color="red" content="No - Back to Offers" onClick={this.handleCloseModal} />
+                <Button primary disabled={!APPLICATION_STATUS_COMMENT_FRM.meta.isValid} loading={inProgress} content="Yes - Decline Offer" onClick={this.declineApplicationHandler} />
               </Button.Group>
             </div>
           </Form>

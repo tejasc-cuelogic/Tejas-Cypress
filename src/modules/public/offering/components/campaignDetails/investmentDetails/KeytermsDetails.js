@@ -29,13 +29,13 @@ class KeyTermsDetails extends Component {
     this.props.campaignStore.calculateTotalPaymentData(e.target.value);
   }
   render() {
-    const { KeyTerms, launch } = this.props;
+    const { KeyTerms } = this.props;
     const {
-      totalPayment, principalAmt, totalPaymentChart,
+      totalPayment, principalAmt, totalPaymentChart, campaign,
     } = this.props.campaignStore;
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const { offerStructure } = this.props.campaignStore;
-    const edgarLink = launch && launch.edgarLink;
+    const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const revenueShareSummary =
       KeyTerms && KeyTerms.revShareSummary && KeyTerms.securities ===
       CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? KeyTerms.revShareSummary : null;
@@ -91,17 +91,11 @@ class KeyTermsDetails extends Component {
                 />
               </Table.Cell>
               <Table.Cell>
-                {KeyTerms && KeyTerms.maturity ?
-                  <p>
-                    <b>{KeyTerms.maturity} Months</b>
-                    {
-                      KeyTerms && KeyTerms.startupPeriod &&
-                      ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
-                    }
-                  </p>
-                  :
-                  'NA'
-                }
+                {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : 'NA'}
+                {
+                    KeyTerms && KeyTerms.startupPeriod &&
+                    ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
+                  }
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top" >
@@ -114,10 +108,7 @@ class KeyTermsDetails extends Component {
               </Table.Cell>
               <Table.Cell>
                 <p>
-                  {KeyTerms && KeyTerms.frequencyOfPayments ?
-                    <b>
-                      {KeyTerms.frequencyOfPayments}
-                    </b>
+                  {KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
                       : 'NA'}
                 </p>
               </Table.Cell>
@@ -140,13 +131,14 @@ class KeyTermsDetails extends Component {
                 }
               </Table.Cell>
             </Table.Row>
+            { edgarLink &&
             <Table.Row verticalAlign="top">
               <Table.Cell colSpan={2} className="center-align">
-                <a href={edgarLink} target="blank" className="highlight-text">
+                <a href={edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`} target="blank" className="highlight-text">
                   View the Issuer&apos;s SEC Form C filing
                 </a>
               </Table.Cell>
-            </Table.Row>
+            </Table.Row>}
           </Table.Body>
         </Table>
         <Divider section hidden />

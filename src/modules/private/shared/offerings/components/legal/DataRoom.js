@@ -7,7 +7,7 @@ import { FormInput, DropZoneConfirm as DropZone } from '../../../../../../theme/
 import ButtonGroupType2 from '../ButtonGroupType2';
 
 const DragHandle = sortableHandle(() => <Icon className="ns-drag-holder mr-10" />);
-const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName }) => {
+const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, docIndx, formName, length }) => {
   return (
     <div className="row-wrap">
       <div className="balance-half simple-drag-row-title">
@@ -37,7 +37,7 @@ const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, o
         <Button disabled={isReadonly} icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
           <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => handleLockUnlock(docIndx)} />
         </Button>
-        <Button disabled={isReadonly} icon circular className="link-button">
+        <Button disabled={isReadonly || length === 1} icon circular className="link-button">
           <Icon className="ns-trash" onClick={e => toggleConfirmModal(e, docIndx, formName)} />
         </Button>
       </div>
@@ -60,6 +60,7 @@ const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onF
           handleLockUnlock={handleLockUnlock}
           toggleConfirmModal={toggleConfirmModal}
           formName={formName}
+          length={docs.length}
           index={index}
         />
       ))}
@@ -126,9 +127,11 @@ export default class DataRoom extends Component {
         <Form>
           <Header as="h4">
             Data Room Documents
-            <Button.Group size="mini" floated="right">
-              <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
-            </Button.Group>
+            {!isReadonly &&
+              <Button.Group size="mini" floated="right">
+                <Button onClick={e => this.addMore(e, formName)} primary compact content="Add" />
+              </Button.Group>
+            }
           </Header>
           <Divider hidden />
           <div className="ui basic compact table form-table">

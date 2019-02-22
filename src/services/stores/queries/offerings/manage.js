@@ -21,6 +21,7 @@ export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
       id
+      isAvailablePublicly
       keyTerms {
         legalBusinessName
         shorthandBusinessName
@@ -1103,3 +1104,14 @@ mutation _deleteBonusReward($id: String! $offeringId: String!){
   }
 }
 `;
+
+export const getTotalAmount = gql`
+query getTotalAmount{
+  getNSOfferingAmountRaised
+    {
+    amountRaisedUS
+    amountRaisedTX
+    totalInvestorsUS
+  }  
+  }
+  `;

@@ -11,6 +11,7 @@ import Helper from '../../../../../helper/utility';
 const actions = {
   edit: { label: 'Edit', icon: 'pencil' },
   delete: { label: 'Delete', icon: 'trash' },
+  publish: { label: 'Publish', icon: 'view', icon1: 'no-view' },
 };
 
 @inject('uiStore', 'offeringsStore')
@@ -20,16 +21,23 @@ export default class Listing extends Component {
   componentWillMount() {
     this.props.offeringsStore.resetInitLoad();
   }
-  handleAction = (action, offeringId) => {
+  handleAction = (action, offeringId, isPublished = false) => {
     if (action === 'Delete') {
       this.props.uiStore.setConfirmBox(action, offeringId);
     } else if (action === 'Edit') {
       this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
+    } else if (action === 'Publish') {
+      this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
     }
   }
   paginate = params => this.props.offeringsStore.pageRequest(params);
 
   handleDeleteCancel = () => {
+    this.props.uiStore.setConfirmBox('');
+  }
+  handlePublishOffering = () => {
+    const { offeringsStore, uiStore } = this.props;
+    offeringsStore.updateOfferingPublicaly(uiStore.confirmBox.refId, uiStore.confirmBox.subRefId);
     this.props.uiStore.setConfirmBox('');
   }
   handleDeleteOffering = () => {
@@ -114,7 +122,7 @@ export default class Listing extends Component {
                       <Button.Group>
                         {Object.keys(actions).map(action => (
                           <Button icon className="link-button" >
-                            <Icon className={`ns-${actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id)} />
+                            <Icon className={`ns-${actions[action].label === 'Publish' ? offering.isAvailablePublicly ? actions[action].icon : actions[action].icon1 : actions[action].icon}`} onClick={() => this.handleAction(actions[action].label, offering.id, !offering.isAvailablePublicly)} />
                           </Button>
                         ))}
                       </Button.Group>
@@ -130,10 +138,10 @@ export default class Listing extends Component {
         }
         <Confirm
           header="Confirm"
-          content="Are you sure you want to delete this offering?"
-          open={confirmBox.entity === 'Delete'}
+          content={confirmBox.entity === 'Publish' ? 'Are you sure you want to make this offering public?' : 'Are you sure you want to delete this offering?'}
+          open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
           onCancel={this.handleDeleteCancel}
-          onConfirm={this.handleDeleteOffering}
+          onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteOffering}
           size="mini"
           className="deletion"
         />

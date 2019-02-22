@@ -54,7 +54,7 @@ export default class Review extends Component {
     s !== '' && <Icon color={s === 'ns-check-circle' ? 'green' : 'orange'} name={s} />
   ));
   render() {
-    const { match, businessAppReviewStore } = this.props;
+    const { match, businessAppReviewStore, appType } = this.props;
     const {
       subNavPresentation, updateStatuses, paBoxFolderId,
       generatePortalAgreement, showGeneratePA, inProgress,
@@ -87,9 +87,22 @@ export default class Review extends Component {
             <Switch>
               <Route exact path={match.url} component={getModule(this.module(navItems[0].title))} />
               {
-                navItems.map(item => (
-                  <Route exact={false} key={item.to} path={`${match.url}/${item.to}`} component={getModule(this.module(item.title))} />
-                ))
+                navItems.map((item) => {
+                  const CurrentComponent = (item.component || getModule(this.module(item.title)));
+                  return (
+                    <Route
+                      exact={false}
+                      key={item.to}
+                      path={`${match.url}/${item.to}`}
+                      render={props =>
+                        (<CurrentComponent
+                          appType={appType}
+                          {...props}
+                        />)
+                      }
+                    />
+                  );
+                })
               }
             </Switch>
           </Grid.Column>
