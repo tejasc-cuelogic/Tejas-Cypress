@@ -1094,6 +1094,14 @@ pre.migrated-content{
 //	Insight
 .insight-post{
 	min-height:~"calc(100vh - 98px)";
+	.wp-caption{
+		max-width: 100%;
+		height: auto;
+	}
+	img{
+		max-width: 100%;
+		height: auto;
+	}
 }
 .insight-image-wrapper {
 	position: relative;
