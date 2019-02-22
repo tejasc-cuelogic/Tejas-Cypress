@@ -7,7 +7,7 @@ query getCategories($types: ${isPublic ? '[CategoryTypeEnum]' : '[CategoryTypesE
       categoryName
       description
       categoryType
-      ${isPublic ? 'isPublished created { date }' : ''}
+      ${isPublic ? '' : 'isPublished created { date }'}
       order
     }
   }`;
