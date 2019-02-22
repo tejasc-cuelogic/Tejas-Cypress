@@ -134,6 +134,7 @@ export default class InvestNow extends React.Component {
       });
     } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
       const { campaign } = this.props.campaignStore;
+      const offeringId = campaign && campaign.id;
       const offeringReuglation = campaign && campaign.regulation;
       const regulationType = offeringReuglation;
       const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
@@ -144,7 +145,7 @@ export default class InvestNow extends React.Component {
       changeShowAccountListFlag(false);
       if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
         this.props.investmentLimitStore
-          .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId)
+          .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
           .then(() => {
             this.handleStepChange(step.stepToBeRendered);
           });

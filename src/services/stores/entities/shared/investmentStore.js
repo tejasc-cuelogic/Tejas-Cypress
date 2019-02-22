@@ -8,9 +8,10 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import {
-  getAmountInvestedInCampaign, getInvestorAvailableCash,
-  validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
+  validateInvestmentAmountInOffering, getAmountInvestedInCampaign, getInvestorAvailableCash,
+  validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment,
+  investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
 import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
@@ -250,7 +251,7 @@ export class InvestmentStore {
   });
 
   @action
-  validateInvestmentAmountInOffering = () => {
+  validateInvestmentAmountInOfferingOld = () => {
     if (this.investmentAmount) {
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
@@ -282,6 +283,46 @@ export class InvestmentStore {
       }
     }
   }
+
+  @action
+  validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
+    if (this.investmentAmount) {
+      if (this.checkLockinPeriod()) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+        resolve();
+      } else {
+        client
+          .mutate({
+            mutation: investNowGeneratePurchaseAgreement,
+            variables: {
+              investmentAmount: this.investmentAmount,
+              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+              // transferAmount: this.getTransferRequestAmount,
+            },
+          })
+          .then(action((resp) => {
+            const { status, message } = resp.data.investNowGeneratePurchaseAgreement;
+            this.setFieldValue('isValidInvestAmtInOffering', status);
+            this.setFieldValue('disableNextbtn', status);
+            this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
+            this.INVESTMONEY_FORM.meta.isValid = status;
+            resolve();
+          }))
+          .catch(() => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            reject();
+          });
+      }
+    } else {
+      resolve();
+    }
+  });
+
   checkLockinPeriod = () => {
     let resultToReturn = false;
     const offeringDetails = portfolioStore.getInvestorAccountById;

@@ -27,8 +27,13 @@ class FinancialInfo extends Component {
       getDiffInvestmentLimitAmount,
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
+    const {
+      // getCurrentLimitForAccount,
+      getCurrentInvestNowHealthCheck,
+    } = this.props.investmentLimitStore;
     const { match, refLink } = this.props;
+    const currentInvestmentLimit = getCurrentInvestNowHealthCheck.investmentLimit;
+    console.log(getCurrentInvestNowHealthCheck, currentInvestmentLimit);
     return (
       <Aux>
         <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
@@ -39,7 +44,7 @@ class FinancialInfo extends Component {
             accType={investAccTypes.value}
             changeInvest={this.props.changeInvest}
             match={this.props.match}
-            getCurrentLimitForAccount={getCurrentLimitForAccount}
+            getCurrentLimitForAccount={currentInvestmentLimit}
             setStepToBeRendered={setStepToBeRendered}
           />
         }
@@ -48,7 +53,7 @@ class FinancialInfo extends Component {
             changeInvest={this.props.changeInvest}
             match={this.props.match}
             refLink={refLink}
-            getCurrentLimitForAccount={getCurrentLimitForAccount}
+            getCurrentLimitForAccount={currentInvestmentLimit}
             setStepToBeRendered={setStepToBeRendered}
             diffLimitAmount={getDiffInvestmentLimitAmount}
           />
@@ -61,14 +66,14 @@ class FinancialInfo extends Component {
             prefix="$ "
             fielddata={INVESTMONEY_FORM.fields.investmentAmount}
             changed={values => investMoneyChange(values, 'investmentAmount')}
-            onkeyup={validateInvestmentAmountInOffering}
+            onblur={validateInvestmentAmountInOffering}
           />
         </Form>
         {this.props.changeInvest &&
           <InvestmentLimit
             changeInvest={this.props.changeInvest}
             match={this.props.match}
-            getCurrentLimitForAccount={getCurrentLimitForAccount}
+            getCurrentLimitForAccount={currentInvestmentLimit}
             setStepToBeRendered={setStepToBeRendered}
             diffLimitAmount={getDiffInvestmentLimitAmount}
           />

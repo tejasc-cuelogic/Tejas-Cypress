@@ -97,14 +97,15 @@ class AccountType extends Component {
         activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     prepareAccountTypes(accountToConsider);
     const { campaign } = this.props.campaignStore;
+    const offeringId = campaign && campaign.id;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
-    if (activeAccounts.length && selectedAccountStatus) {
+    if (activeAccounts.length && investAccTypes.values.length === 1 && selectedAccountStatus) {
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         this.props.investmentLimitStore
-          .getInvestorInvestmentLimit(this.props.investmentStore.getSelectedAccountTypeId);
+          .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
       }
     }
     if (!byDefaultRender) {

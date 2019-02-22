@@ -31,3 +31,15 @@ export const getInvestorAmountInvested = gql`
     )
   }
 `;
+
+export const getInvestNowHealthCheck = gql`
+  query investNowHealthCheck($userId: String!, $accountId: String!, $offeringId: String!) {
+    investNowHealthCheck(userId: $userId, accountId: $accountId, offeringId: $offeringId)
+    {
+      investmentLimit
+      availableCash
+      rewardBalance
+      previousAmountInvested
+    }
+  }
+`;
