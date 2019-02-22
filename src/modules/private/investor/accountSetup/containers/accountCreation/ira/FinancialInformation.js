@@ -47,7 +47,7 @@ export default class FinancialInformation extends React.Component {
             </p>
           </div>
           {/* Commented because server side validations are removed
-            {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 && 
+            {(FIN_INFO_FRM.fields.investmentLimit.value < 5000 &&
               FIN_INFO_FRM.fields.investmentLimit.value !== '') &&
             <Message error className="center-align">
               Based on your reported Net Worth and Annual Income, your 12-month investment limit
