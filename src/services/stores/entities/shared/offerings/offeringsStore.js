@@ -6,7 +6,8 @@ import { GqlClient as client } from '../../../../../api/gqlApi';
 import { GqlClient as clientPublic } from '../../../../../api/publicApi';
 import { STAGES } from '../../../../constants/admin/offerings';
 import {
-  allOfferings, allOfferingsCompact, deleteOffering, getOfferingDetails, getTotalAmount,
+  allOfferings, allOfferingsCompact, updateOffering,
+  deleteOffering, getOfferingDetails, getTotalAmount,
 } from '../../../queries/offerings/manage';
 import { offeringCreationStore, userStore } from '../../../index';
 import { ClientDb } from '../../../../../helper';
@@ -59,6 +60,22 @@ export class OfferingsStore {
         Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
+  }
+
+  @action
+  updateOfferingPublicaly = (id, isAvailablePublicly) => {
+    const variables = {
+      id,
+      offeringDetails: { isAvailablePublicly },
+    };
+    client
+      .mutate({
+        mutation: updateOffering,
+        variables,
+      }).then(() => {
+        this.initRequest(this.requestState);
+        Helper.toast('Offering updated successfully.', 'success');
+      }).catch(() => Helper.toast('Error while updating offering', 'error'));
   }
 
   @action
