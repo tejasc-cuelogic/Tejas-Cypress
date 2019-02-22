@@ -333,7 +333,7 @@ export const IRA_IDENTITY = {
 };
 
 export const ENTITY_FIN_INFO = {
-  netWorth: {
+  netAssets: {
     key: 'netAssets',
     value: '',
     label: 'Entity Net Assets',
@@ -341,8 +341,8 @@ export const ENTITY_FIN_INFO = {
     rule: 'required|numeric',
     maxLength: 15,
   },
-  income: {
-    key: 'income',
+  annualIncome: {
+    key: 'annualIncome',
     value: '',
     label: 'Entity Annual Income',
     error: undefined,
