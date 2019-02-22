@@ -34,7 +34,7 @@ const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, o
         />
       </div>
       <div className="action">
-        <Button disabled={isReadonly || length === 1} icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
+        <Button disabled={isReadonly} icon circular color={document.accreditedOnly.value ? 'red' : 'green'} className="link-button">
           <Icon className={document.accreditedOnly.value ? 'ns-lock' : 'ns-unlock'} onClick={() => handleLockUnlock(docIndx)} />
         </Button>
         <Button disabled={isReadonly || length === 1} icon circular className="link-button">
@@ -45,7 +45,7 @@ const SortableItem = SortableElement(({ document, isReadonly, formArrayChange, o
   );
 });
 
-const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName, length }) => {
+const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onFileDrop, handleDelDoc, handleLockUnlock, toggleConfirmModal, formName }) => {
   return (
     <div>
       {docs.map((doc, index) => (
@@ -60,7 +60,7 @@ const SortableList = SortableContainer(({ docs, isReadonly, formArrayChange, onF
           handleLockUnlock={handleLockUnlock}
           toggleConfirmModal={toggleConfirmModal}
           formName={formName}
-          length={length}
+          length={docs.length}
           index={index}
         />
       ))}
@@ -122,7 +122,6 @@ export default class DataRoom extends Component {
     } = this.props.offeringCreationStore;
     const formName = 'DATA_ROOM_FRM';
     const docs = [...DATA_ROOM_FRM.fields.documents];
-    const length = docs.length;
     return (
       <div className={isIssuer || (isIssuer && !match.url.includes('offering-creation')) ? 'ui card fluid form-card' : ''}>
         <Form>
@@ -152,7 +151,6 @@ export default class DataRoom extends Component {
               handleLockUnlock={this.handleLockUnlock}
               toggleConfirmModal={this.toggleConfirmModal}
               formName={formName}
-              length={length}
               lockAxis="y"
               useDragHandle
             />
