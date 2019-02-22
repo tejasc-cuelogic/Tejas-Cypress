@@ -478,8 +478,8 @@ class EntityAccountStore {
   setFormData = (form, accountDetails) => {
     Object.keys(this[form].fields).map((f) => {
       if (form === 'FIN_INFO_FRM') {
-        if (f === 'annualIncome' && accountDetails.limits && accountDetails.limits.otherContributions) {
-          this.FIN_INFO_FRM.fields[f].value = accountDetails.limits.otherContributions;
+        if (f === 'annualIncome' && accountDetails.limits && accountDetails.limits.income) {
+          this.FIN_INFO_FRM.fields[f].value = accountDetails.limits.income;
         } else if (accountDetails.limits && accountDetails.limits.netWorth && f !== 'investmentLimit') {
           this.FIN_INFO_FRM.fields[f].value = accountDetails.limits.netWorth;
         }
