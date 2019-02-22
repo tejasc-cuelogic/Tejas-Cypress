@@ -1,8 +1,10 @@
 import { toJS, observable, computed, action } from 'mobx';
 import { forEach } from 'lodash';
 import graphql from 'mobx-apollo';
+import { uiStore } from '../../../index';
 import { GqlClient as client } from '../../../../../api/publicApi';
 import { getBoxEmbedLink, getLegalDocsFileIds } from '../../../queries/agreements';
+import Helper from '../../../../../helper/utility';
 
 export class AgreementsStore {
   @observable legalDocsList = [];
@@ -115,6 +117,10 @@ export class AgreementsStore {
           this.setField('docIdsLoading', false);
           resolve(data);
         }
+      },
+      onError: () => {
+        uiStore.setProgress(false);
+        Helper.toast('OOPS something went worng', 'error');
       },
     });
   });

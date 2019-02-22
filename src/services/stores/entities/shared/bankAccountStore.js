@@ -10,7 +10,7 @@ import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
-import { getlistLinkedBankUsers, checkOpeningDepositAmount, updateLinkedAccount } from '../../queries/bankAccount';
+import { getlistLinkedBankUsers, isValidOpeningDepositAmount, updateLinkedAccount } from '../../queries/bankAccount';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -390,7 +390,7 @@ export class BankAccountStore {
   }
 
   @action
-  checkOpeningDepositAmount = (resetProgress = true) => {
+  isValidOpeningDepositAmount = (resetProgress = true) => {
     uiStore.setProgress();
     const variables = {
       accountType: accountStore.investmentAccType.toUpperCase(),
@@ -409,23 +409,22 @@ export class BankAccountStore {
       if (!this.depositMoneyNow) {
         resolve();
       } else {
-        client
-          .mutate({
-            mutation: checkOpeningDepositAmount,
-            variables,
-          })
-          .then(() => {
-            resolve();
-          })
-          .catch((err) => {
-            uiStore.setErrors(DataFormatter.getSimpleErr(err));
-            reject();
-          })
-          .finally(() => {
+        graphql({
+          client,
+          query: isValidOpeningDepositAmount,
+          variables,
+          fetchPolicy: 'network-only',
+          onFetch: () => {
             if (resetProgress) {
               uiStore.setProgress(false);
             }
-          });
+            resolve();
+          },
+          onError: (err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            reject();
+          },
+        });
       }
     });
   }

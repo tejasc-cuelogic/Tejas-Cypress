@@ -2,7 +2,7 @@ import {
   PLAID_ENV, PLAID_URL, PLAID_PUBLIC_KEY,
 } from '../../../constants/account';
 import apiService from '../../../api/restApi';
-import { bankAccountStore, individualAccountStore, accountStore, uiStore } from '../../stores';
+import { bankAccountStore, individualAccountStore, accountStore, uiStore, iraAccountStore, entityAccountStore } from '../../stores';
 import Helper from '../../../helper/utility';
 
 const sharedPayload = { key: PLAID_PUBLIC_KEY };
@@ -73,6 +73,10 @@ export class BankAccount {
           Helper.toast(`Account with Bank ${metadata.institution.name} successfully linked.`, 'success');
           if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 0) {
             individualAccountStore.setStepToBeRendered(1);
+          } else if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 1) {
+            iraAccountStore.setStepToBeRendered(3);
+          } else if (accountStore.INVESTMENT_ACC_TYPES.fields.accType.value === 2) {
+            entityAccountStore.setStepToBeRendered(5);
           }
           bankAccountStore.setShowAddFunds();
         }

@@ -42,15 +42,14 @@ export default class Summary extends React.Component {
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
-      this.props.individualAccountStore.createAccount('Summary', 'FULL').then(() => {
+      this.props.individualAccountStore.submitAccount().then(() => {
         if (partialInvestNowSessionURL) {
           this.props.history.push(partialInvestNowSessionURL);
           setPartialInvestmenSession();
         } else {
           this.props.history.push('summary');
         }
-      })
-        .catch(() => { });
+      }).catch(() => { });
     }
   }
   openModal = (type) => {

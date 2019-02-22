@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars, arrow-body-style, no-param-reassign, no-underscore-dangle */
 import { observable, toJS, action, computed } from 'mobx';
-import { sortBy, get, has, map, startCase, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
+import { sortBy, get, has, map, startCase, mapKeys, filter, forEach, find, orderBy, kebabCase, mergeWith } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import omitDeep from 'omit-deep';
@@ -1010,7 +1010,8 @@ export class OfferingCreationStore {
     approvedObj, fromS3 = false, leaderIndex,
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
-    const { getOfferingById } = offeringsStore.offerData.data;
+    let { getOfferingById } = offeringsStore.offerData.data;
+    getOfferingById = Helper.replaceKeysDeep(getOfferingById, { aliasId: 'id' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
