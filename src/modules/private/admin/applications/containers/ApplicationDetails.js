@@ -38,6 +38,9 @@ export default class ApplicationDetails extends Component {
         });
     }
   }
+  componentDidMount() {
+    window.onpopstate = this.handleCloseModal;
+  }
   module = name => DataFormatter.upperCamelCase(name);
   handleCloseModal = (e) => {
     e.stopPropagation();
@@ -46,6 +49,8 @@ export default class ApplicationDetails extends Component {
     this.props.businessAppReviewStore.setFieldvalue('initLoad', []);
     this.props.businessAppReviewStore.setFieldvalue('expAnnualRevCount', 4);
     this.props.history.push(`/app/applications/${params.id}`);
+    this.props.businessAppReviewStore.resetForm('OFFERS_FRM');
+    window.onpopstate = null;
   };
   editBusinessDetails = (e) => {
     e.preventDefault();
