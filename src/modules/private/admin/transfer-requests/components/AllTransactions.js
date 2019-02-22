@@ -36,7 +36,7 @@ export default class AllTransactions extends Component {
     const {
       allRecords, loading,
       transactionCount, requestState,
-      transactionChange, isNonTerminatedState,
+      transactionChange, isNonTerminatedStatus,
     } = transactionsStore;
     if (loading) {
       return <InlineLoader />;
@@ -59,7 +59,7 @@ export default class AllTransactions extends Component {
                       </Table.HeaderCell>
                     ))
                   }
-                  {isNonTerminatedState &&
+                  {isNonTerminatedStatus &&
                     <Table.HeaderCell key="actions">
                       &nbsp;
                     </Table.HeaderCell>
@@ -86,7 +86,7 @@ export default class AllTransactions extends Component {
                           </Table.Cell>
                         ))
                       }
-                      {has(STATUS_MAPPING[statusType], ['affirmativeCta', 'failedCta']) &&
+                      {(has(STATUS_MAPPING[statusType], 'affirmativeCta') || has(STATUS_MAPPING[statusType], 'failedCta')) &&
                         <Table.Cell>
                           <Button.Group vertical compact size="mini">
                             <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action)}>

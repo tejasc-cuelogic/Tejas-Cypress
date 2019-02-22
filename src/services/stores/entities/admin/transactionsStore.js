@@ -2,7 +2,7 @@ import { observable, action, computed } from 'mobx';
 import { isArray, get, forOwn, intersection } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
-import { getTransactions, approveTransactions, declineTransactions, verifiedTransactions, failedTransactions } from '../../queries/transaction';
+import { transferRequestAdminSync, getTransactions, transferRequestAdminApprove, transferRequestAdminDecline, transferRequestAdminVerified, transactionFailed } from '../../queries/transaction';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
@@ -12,15 +12,16 @@ import { TRANSACTION_FAILURE, COUNT_STATUS_MAPPING } from '../../../constants/ad
 export class TransactionsStore {
   nonTerminatedStatuses = ['PRE_PENDING', 'PENDING', 'PROCESSING']
   ctHandler = {
-    Approved: approveTransactions,
-    Declined: declineTransactions,
-    Verified: verifiedTransactions,
-    Failed: failedTransactions,
+    Approved: transferRequestAdminApprove,
+    Declined: transferRequestAdminDecline,
+    Verified: transferRequestAdminVerified,
+    Failed: transactionFailed,
+    Synced: transferRequestAdminSync,
   }
   @observable filters = false;
   @observable TRANSACTION_FAILURE = Validator.prepareFormObject(TRANSACTION_FAILURE);
   @observable data = [];
-  @observable isNonterminatedStatus = false
+  @observable isNonTerminatedStatus = false
   @observable searchCount = null;
   @observable db = [];
   @observable summary = {
@@ -54,7 +55,7 @@ export class TransactionsStore {
   @action
   initRequest = (transStatus) => {
     this.transactionStatus = transStatus;
-    this.isNonterminatedStatus = intersection(
+    this.isNonTerminatedStatus = intersection(
       this.nonTerminatedStatuses,
       this.transactionStatus,
     ).length > 0;
@@ -172,7 +173,7 @@ export class TransactionsStore {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    if (this.isNonterminatedStatus) {
+    if (this.isNonTerminatedStatus) {
       this.requestState.skip = (skip === pageWiseCount) ?
         pageWiseCount - this.requestState.perPage : skip;
     } else {
@@ -182,7 +183,7 @@ export class TransactionsStore {
 
   @computed get allRecords() {
     const transactions = this.db || [];
-    if (this.isNonterminatedStatus) {
+    if (this.isNonTerminatedStatus) {
       return transactions.slice(
         this.requestState.skip,
         this.requestState.displayTillIndex,
@@ -192,7 +193,7 @@ export class TransactionsStore {
   }
 
   @computed get transactionCount() {
-    return this.isNonterminatedStatus ?
+    return this.isNonTerminatedStatus ?
       this.db.length
       : this.searchCount;
   }
@@ -201,7 +202,7 @@ export class TransactionsStore {
     return this.data.loading;
   }
 
-  statusWiseLimt = () => (this.isNonterminatedStatus ? 100 : 10)
+  statusWiseLimt = () => (this.isNonTerminatedStatus ? 100 : 10)
 
   @action
   initiateFilters = () => {
@@ -232,7 +233,7 @@ export class TransactionsStore {
   setInitiateSrch = (valueObj, name) => {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
-      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonterminatedStatus, name, this.isNonterminatedStatus) : '';
+      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonTerminatedStatus, name, this.isNonTerminatedStatus) : '';
       if (this.requestState.search.dateFilterStart === '' ||
         this.requestState.search.dateFilterStop === '') {
         delete searchparams[name];
@@ -246,7 +247,7 @@ export class TransactionsStore {
       }
     }
     this.requestState.search = searchparams;
-    return this.isNonterminatedStatus ? this.initiateFilters()
+    return this.isNonTerminatedStatus ? this.initiateFilters()
       : this.initRequest(this.transactionStatus);
   }
 }
