@@ -622,7 +622,7 @@ class EntityAccountStore {
                 stepToBeRendered: 5,
                 validate: validationActions.validateEntityFormationDoc,
               };
-            this.createAccount(currentStep, 'PARTIAL', false);
+            this.createAccount(currentStep, false);
           }
           uiStore.setProgress(false);
         })
@@ -644,7 +644,7 @@ class EntityAccountStore {
       );
       this[form].fields[field].fileId = '';
       this[form].fields[field].preSignedUrl = '';
-      this.createAccount(currentStep, 'PARTIAL', true, field);
+      this.createAccount(currentStep, true, field);
     }))
       .catch(() => { });
   }
