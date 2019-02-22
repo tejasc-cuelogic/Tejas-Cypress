@@ -335,6 +335,11 @@ export class BusinessAppReviewStore {
   }
 
   @action
+  resetForm = (form) => {
+    this[form] = Validator.resetFormData(this[form]);
+  }
+
+  @action
   resetCommentFrm = () => {
     this.APPLICATION_STATUS_COMMENT_FRM = Validator.prepareFormObject(APPLICATION_STATUS_COMMENT);
   }

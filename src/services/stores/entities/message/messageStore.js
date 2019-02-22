@@ -29,6 +29,11 @@ export class NewMessage {
   }
 
   @action
+  resetCommentField = () => {
+    this.MESSAGE_FRM = Validator.prepareFormObject(DRAFT_NEW);
+  }
+
+  @action
   setCommentForEdit = (id, comment, scope) => {
     this.editMessageId = id;
     this.editScope = scope;
