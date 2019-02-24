@@ -75,6 +75,15 @@ class offerDetails extends Component {
     e.preventDefault();
     this.props.history.push(`${this.props.match.url}/photogallery`);
   }
+  addRemoveUpdatesSubnav = (oldNav, updates) => {
+    const tempNav = [...oldNav];
+    if (updates.length === 0 && tempNav[0].subNavigations.length === 4) {
+      tempNav[0].subNavigations.splice(2, 1);
+    } else if (updates.length !== 0 && tempNav[0].subNavigations.length !== 4) {
+      tempNav[0].subNavigations.splice(2, 0, { title: 'Updates', to: '#updates', useRefLink: true });
+    }
+    return tempNav;
+  }
   addDataRoomSubnavs = (oldNav, dataRoomDocs) => {
     let tempNav = [];
     if (!dataRoomDocs) {
@@ -174,6 +183,7 @@ class offerDetails extends Component {
       navItems =
         this.addDataRoomSubnavs(GetNavMeta(match.url, [], true)
           .subNavigations, get(campaign, 'legal.dataroom.documents'));
+      navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
     navItems =
       this.modifyInvestmentDetailsSubNav(navItems, campaign);
