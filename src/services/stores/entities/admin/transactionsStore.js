@@ -7,9 +7,10 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { ClientDb, FormValidator as Validator } from '../../../../helper';
 import DataFormatter from '../../../../../src/helper/utilities/DataFormatter';
-import { TRANSACTION_FAILURE, COUNT_STATUS_MAPPING, FAILED_STATUS } from '../../../constants/admin/transactions';
+import { TRANSACTION_FAILURE, COUNT_STATUS_MAPPING } from '../../../constants/admin/transactions';
 
 export class TransactionsStore {
+  nonTerminatedStatuses = ['PRE_PENDING', 'PENDING', 'PROCESSING']
   ctHandler = {
     Approved: approveTransactions,
     Declined: declineTransactions,
@@ -19,11 +20,11 @@ export class TransactionsStore {
   @observable filters = false;
   @observable TRANSACTION_FAILURE = Validator.prepareFormObject(TRANSACTION_FAILURE);
   @observable data = [];
-  @observable isNonTerminatedState = false
+  @observable isNonterminatedStatus = false
   @observable searchCount = null;
   @observable db = [];
   @observable summary = {
-    'status-1': 0, 'status-2': 0, 'status-3': 0, 'status-4': 0,
+    'pre-pending': 0, pending: 0, processing: 0, complete: 0, failed: 0,
   };
   @observable requestState = {
     page: 1,
@@ -53,7 +54,10 @@ export class TransactionsStore {
   @action
   initRequest = (transStatus) => {
     this.transactionStatus = transStatus;
-    this.isNonTerminatedState = intersection(['PENDING', 'PROCESSING'], this.transactionStatus).length > 0;
+    this.isNonterminatedStatus = intersection(
+      this.nonTerminatedStatuses,
+      this.transactionStatus,
+    ).length > 0;
     const payLoad = {
       status: transStatus,
       offset: this.requestState.page,
@@ -70,6 +74,9 @@ export class TransactionsStore {
           this.setData(res);
         }
       },
+      onError: () => {
+        this.resetData();
+      },
     });
   }
 
@@ -79,7 +86,7 @@ export class TransactionsStore {
   @action
   setTabCount = (countObj) => {
     this.summary = {
-      'status-1': 0, 'status-2': 0, 'status-3': 0, 'status-4': 0,
+      'pre-pending': 0, pending: 0, processing: 0, complete: 0, failed: 0,
     };
     forOwn(countObj, (v, k) => {
       this.summary[COUNT_STATUS_MAPPING[k]] += v;
@@ -92,6 +99,8 @@ export class TransactionsStore {
       this.setDb(DataFormatter.mapDatesToType(data.getTransactions.transactions, ['startDate', 'failDate', 'estDateAvailable'], 'unix'));
       this.searchCount = data.getTransactions.transactionCount.searchCount;
       this.setTabCount(data.getTransactions.transactionCount);
+    } else {
+      this.resetData();
     }
   }
 
@@ -99,6 +108,9 @@ export class TransactionsStore {
   resetData = () => {
     this.requestState.search = {};
     this.resetPagination();
+    this.searchCount = null;
+    this.data = [];
+    this.setDb([]);
   }
 
   @action
@@ -124,19 +136,19 @@ export class TransactionsStore {
   };
 
   @action
-  failTransaction = (requestID, transStatus) => {
+  failTransaction = (requestID, actionName) => {
     const reason = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: this.ctHandler[FAILED_STATUS[transStatus]],
+          mutation: this.ctHandler[actionName],
           variables: {
             id: requestID,
             reason: reason.justifyDescription,
           },
         })
         .then(() => {
-          Helper.toast(`Transaction ${FAILED_STATUS[transStatus]} successfully.`, 'success');
+          Helper.toast(`Transaction ${actionName} successfully.`, 'success');
           this.initRequest(this.transactionStatus);
           resolve();
         })
@@ -160,7 +172,7 @@ export class TransactionsStore {
     const pageWiseCount = this.requestState.perPage * page;
     this.requestState.displayTillIndex = pageWiseCount;
     this.requestState.page = page;
-    if (this.isNonTerminatedState) {
+    if (this.isNonterminatedStatus) {
       this.requestState.skip = (skip === pageWiseCount) ?
         pageWiseCount - this.requestState.perPage : skip;
     } else {
@@ -170,7 +182,7 @@ export class TransactionsStore {
 
   @computed get allRecords() {
     const transactions = this.db || [];
-    if (this.isNonTerminatedState) {
+    if (this.isNonterminatedStatus) {
       return transactions.slice(
         this.requestState.skip,
         this.requestState.displayTillIndex,
@@ -180,7 +192,7 @@ export class TransactionsStore {
   }
 
   @computed get transactionCount() {
-    return this.isNonTerminatedState ?
+    return this.isNonterminatedStatus ?
       this.db.length
       : this.searchCount;
   }
@@ -189,7 +201,7 @@ export class TransactionsStore {
     return this.data.loading;
   }
 
-  statusWiseLimt = () => (this.isNonTerminatedState ? 100 : 10)
+  statusWiseLimt = () => (this.isNonterminatedStatus ? 100 : 10)
 
   @action
   initiateFilters = () => {
@@ -220,7 +232,7 @@ export class TransactionsStore {
   setInitiateSrch = (valueObj, name) => {
     const searchparams = { ...this.requestState.search };
     if (name === 'dateFilterStart' || name === 'dateFilterStop') {
-      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonTerminatedState, name, this.isNonTerminatedState) : '';
+      searchparams[name] = valueObj && moment(valueObj.formattedValue, 'MM-DD-YYYY', true).isValid() ? DataFormatter.getDate(valueObj.formattedValue, !this.isNonterminatedStatus, name, this.isNonterminatedStatus) : '';
       if (this.requestState.search.dateFilterStart === '' ||
         this.requestState.search.dateFilterStop === '') {
         delete searchparams[name];
@@ -234,7 +246,7 @@ export class TransactionsStore {
       }
     }
     this.requestState.search = searchparams;
-    return this.isNonTerminatedState ? this.initiateFilters()
+    return this.isNonterminatedStatus ? this.initiateFilters()
       : this.initRequest(this.transactionStatus);
   }
 }

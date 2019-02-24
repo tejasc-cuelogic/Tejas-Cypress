@@ -7,7 +7,7 @@ import ConfirmModal from '../components/ConfirmModal';
 import PrivateLayout from '../../../shared/PrivateLayout';
 import AllTransactions from '../components/AllTransactions';
 import { ByKeyword, DropdownFilter, DateRangeFilter, AmountRangeFilter } from '../../../../../theme/form/Filters';
-import { FILTER_META } from '../../../../../constants/transaction';
+import { FILTER_META, STATUS_MAPPING } from '../../../../../services/constants/admin/transactions';
 
 @inject('transactionsStore')
 @withRouter
@@ -16,7 +16,7 @@ export default class ManageTransactions extends Component {
   componentWillMount() {
     const { match, history } = this.props;
     if (match.isExact) {
-      history.push(`${match.url}/status-1`);
+      history.push(`${match.url}/${Object.keys(STATUS_MAPPING)[0]}`);
     }
   }
 
@@ -34,7 +34,7 @@ export default class ManageTransactions extends Component {
     const { match } = this.props;
     const {
       filters, requestState, setInitiateSrch, summary,
-      isNonTerminatedState,
+      isNonterminatedStatus,
     } = this.props.transactionsStore;
     return (
       <PrivateLayout
@@ -49,7 +49,7 @@ export default class ManageTransactions extends Component {
           requestState={requestState}
           placeholder="Search by User / Transaction ID / CP Account  Account ID"
           toggleSearch={this.toggleSearch}
-          enableSearch={!isNonTerminatedState}
+          enableSearch={!isNonterminatedStatus}
         />}
         P2={
           <div className={`more search-filters ${filters ? '' : 'collapsed'}`}>

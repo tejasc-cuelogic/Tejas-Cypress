@@ -18,7 +18,7 @@ export class ArticleStore {
     @observable article = null;
     @observable ARTICLE_FRM = Validator.prepareFormObject(ARTICLES);
     @observable featuredData = [];
-    @observable featuredCategoryId = 'a25924d6-8136-4514-aee7-1ad8d78bb609';
+    @observable featuredCategoryId = '406735f5-f83f-43f5-8272-180a1ea570b0';
     @observable filters = false;
     @observable requestState = {
       search: {},
@@ -53,9 +53,14 @@ export class ArticleStore {
     }
 
     @action
-    requestAllArticles = (isPublic = true) => {
+    requestAllArticles = (isPublic = true, sortAsc = true) => {
       const apiClient = isPublic ? clientPublic : client;
-      this.data = graphql({ client: apiClient, query: allInsightArticles });
+      this.data = graphql({
+        client: apiClient,
+        query: allInsightArticles,
+        fetchPolicy: 'network-only',
+        variables: { sortByCreationDateAsc: sortAsc },
+      });
     }
 
     @action
@@ -94,6 +99,8 @@ export class ArticleStore {
             { ...{ payload: data }, id },
         });
     }
+
+    @action
     featuredRequestArticlesByCategoryId = () => {
       const id = this.featuredCategoryId;
       this.featuredData =

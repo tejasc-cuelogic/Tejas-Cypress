@@ -25,7 +25,7 @@ export default class AddFunds extends Component {
   handleSubmitForm = (e) => {
     e.preventDefault();
     this.props.bankAccountStore.setDepositMoneyNow(true);
-    this.props.bankAccountStore.checkOpeningDepositAmount().then(() => {
+    this.props.bankAccountStore.isValidOpeningDepositAmount().then(() => {
       this.renderStep();
     });
   }

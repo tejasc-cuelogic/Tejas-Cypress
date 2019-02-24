@@ -19,16 +19,17 @@ body{
 	min-height: 100vh;
 	margin: 0 auto;
 	box-shadow: 0px 4px 10px @thumbInactiveBackground;
-	&:before{
-		content: '';
-		position: absolute;
-		left: -100%;
-		right: -100%;
-		top: 0;
-		bottom: 0;
-		background-color: @white;
-		z-index: -1;
-	}
+	// removed because it was creating issue in data room section - moving UI to left
+	// &:before{
+	// 	content: '';
+	// 	position: absolute;
+	// 	left: -100%;
+	// 	right: -100%;
+	// 	top: 0;
+	// 	bottom: 0;
+	// 	background-color: @white;
+	// 	z-index: -1;
+	// }
 }
 .clearfix::after{
 	content: "";
@@ -1093,6 +1094,14 @@ pre.migrated-content{
 //	Insight
 .insight-post{
 	min-height:~"calc(100vh - 98px)";
+	.wp-caption{
+		max-width: 100%;
+		height: auto;
+	}
+	img{
+		max-width: 100%;
+		height: auto;
+	}
 }
 .insight-image-wrapper {
 	position: relative;
@@ -1155,18 +1164,15 @@ a.icon-link {
 			.vertical-timeline-element-icon{
 				height: @25px;
 				width: @25px;
-				left: @16px;
+				left: -@13px;
 				background-color: @neutral-darkwhite !important;
-				@media only screen and (max-width : @largestTabletScreen){
-					left: -@13px;
-				}
 			}
 		}
 		&.vertical-timeline-element--right .vertical-timeline-element-content .vertical-timeline-element-date {
 			position: absolute;
 			width: 78px;
 			top: -60px;
-			left: -162px;
+			left: -220px;
 			right: auto;
 			padding: 0;
 			background: @white;
@@ -1247,7 +1253,8 @@ a.icon-link {
 				font-size: @15px;
 			}
 			img {
-				width: 100%;
+				max-width: 100%;
+				height: auto;
 			}
 		}
 		.sb-avatar {
@@ -1259,6 +1266,14 @@ a.icon-link {
 				height: @40px;
 				line-height: @40px;
 			}
+		}
+	}
+	.wp-content {
+		max-width: 100%;
+		height: auto;
+		img {
+			max-width: 100%;
+			height: auto;
 		}
 	}
 }
@@ -1757,7 +1772,7 @@ div.login-form {
 			background-color:@fullBlack;
 		}
 	}
-	&.investor{
+	&.investor, &.ira, &.entity, &.individual{
 		color:@primary-one-darken;
 		border-color:@primary-one-darken;
 		&.accredited:after{

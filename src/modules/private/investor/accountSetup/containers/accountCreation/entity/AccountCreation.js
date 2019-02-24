@@ -15,6 +15,7 @@ import Summary from './Summary';
 @observer
 export default class AccountCreation extends React.Component {
   componentWillMount() {
+    this.props.uiStore.setProgress();
     this.props.userDetailsStore.setUserAccDetails('entity');
     this.props.accountStore.setAccTypeChange(2);
     this.props.investmentLimitStore.getInvestedAmount();
