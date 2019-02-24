@@ -724,7 +724,9 @@ export class OfferingCreationStore {
   @action
   addMore = (form, key) => {
     this[form] = Validator.addMoreRecordToSubSection(this[form], key, 1, true);
-    if (form === 'LEADER_FRM') {
+    if (form === 'DATA_ROOM_FRM' && key === 'documents') {
+      this[form].fields[key][this[form].fields[key].length - 1].upload.showLoader = false;
+    } else if (form === 'LEADER_FRM') {
       this.initLoad.push('LEADERS_ADDED');
     }
   }

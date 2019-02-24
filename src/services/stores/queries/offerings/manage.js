@@ -21,6 +21,7 @@ export const allOfferings = gql`
   query _getOfferings($stage: [OfferingStageEnumType]){
     getOfferings(filters: { stage: $stage }){
       id
+      isAvailablePublicly
       keyTerms {
         legalBusinessName
         shorthandBusinessName
