@@ -77,9 +77,9 @@ class offerDetails extends Component {
   }
   addRemoveUpdatesSubnav = (oldNav, updates) => {
     const tempNav = [...oldNav];
-    if (updates.length === 0 && tempNav[0].subNavigations.length === 4) {
+    if (updates && updates.length === 0 && tempNav[0].subNavigations.length === 4) {
       tempNav[0].subNavigations.splice(2, 1);
-    } else if (updates.length !== 0 && tempNav[0].subNavigations.length !== 4) {
+    } else if (updates && updates.length !== 0 && tempNav[0].subNavigations.length !== 4) {
       tempNav[0].subNavigations.splice(2, 0, { title: 'Updates', to: '#updates', useRefLink: true });
     }
     return tempNav;
