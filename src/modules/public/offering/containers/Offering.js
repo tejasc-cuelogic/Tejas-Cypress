@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Header, Container, Button } from 'semantic-ui-react';
+import { Header, Container, Button, Responsive } from 'semantic-ui-react';
 import Banner from '../components/Banner';
 import CampaignList from '../components/listing/CampaignList';
 import SubscribeForNewsletter from '../../shared/components/SubscribeForNewsletter';
@@ -29,6 +29,13 @@ class Offering extends Component {
     return (
       <Aux>
         <Banner />
+        <section>
+          <Responsive maxWidth={767} as={Container}>
+            <Header as="h2">
+            Invest in growing local<br /> businesses
+            </Header>
+          </Responsive>
+        </section>
         <CampaignList
           loading={loading}
           campaigns={active}
