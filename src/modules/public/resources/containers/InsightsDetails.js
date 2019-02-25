@@ -35,7 +35,7 @@ export default class InsightsDetails extends Component {
                 srcUrl={ArticlesDetails.featuredImage}
                 className="mb-30 mt-30"
               />
-              <pre className="migrated-content">
+              <pre className="migrated-content justify-text">
                 {Parser(ArticlesDetails.content || '')}
               </pre>
             </Grid.Column>
