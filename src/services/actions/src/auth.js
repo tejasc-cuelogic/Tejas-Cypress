@@ -422,7 +422,7 @@ export class Auth {
     const userEmail = userStore.getUserEmailAddress();
     const authenticationDetails = new AWSCognito.AuthenticationDetails({
       Username: loginData.email || userEmail,
-      Password: loginData.password || passData.oldPasswd,
+      Password: passData.oldPasswd,
     });
     this.cognitoUser = new AWSCognito.CognitoUser({
       Username: loginData.email || userEmail,
