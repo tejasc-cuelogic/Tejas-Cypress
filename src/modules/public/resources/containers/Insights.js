@@ -93,14 +93,14 @@ export default class Insights extends Component {
                     key="newest"
                     as={Link}
                     to="#"
-                    onClick={() => this.requestAllArticles(true, true)}
+                    onClick={() => this.requestAllArticles(true, false)}
                   >Newest
                   </Dropdown.Item>
                   <Dropdown.Item
                     key="oldest"
                     as={Link}
                     to="#"
-                    onClick={() => this.requestAllArticles(true, false)}
+                    onClick={() => this.requestAllArticles(true, true)}
                   >Oldest
                   </Dropdown.Item>
                   {/* <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item> */}
