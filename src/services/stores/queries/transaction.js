@@ -152,6 +152,7 @@ export const declineTransactions = gql`
   mutation _transactionDecline($id: Int!){
     transactionDecline(
     id: $id
+    reason: $reason
     )
   }`;
 
@@ -159,7 +160,6 @@ export const verifiedTransactions = gql`
   mutation _transactionVerified($id: Int!){
     transactionVerified(
     id: $id
-    reason: $reason
     )
   }`;
 
