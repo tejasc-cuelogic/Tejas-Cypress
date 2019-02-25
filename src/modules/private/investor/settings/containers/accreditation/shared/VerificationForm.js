@@ -18,6 +18,11 @@ export default class VerificationForm extends Component {
         <p className="center-align">By submitting the below information, you are giving us permission to contact the listed verifier to verify your status, and you are giving the listed verifier permission to advise us of your status.</p>
         <Form error>
           <div className="field-wrap">
+            <FormInput
+              name="name"
+              fielddata={VERIFICATION_REQUEST_FORM.fields.name}
+              changed={verificationFormChange}
+            />
             <FormDropDown
               fielddata={VERIFICATION_REQUEST_FORM.fields.role}
               selection
