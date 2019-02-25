@@ -265,6 +265,7 @@ export const userAccreditationQuery = gql`
               verifier {
                 role
                 email
+                name
               }
             }
             name
