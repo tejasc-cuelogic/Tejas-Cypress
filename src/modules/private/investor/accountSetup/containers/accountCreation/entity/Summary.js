@@ -133,13 +133,13 @@ export default class Summary extends Component {
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
             CrowdPay Custodial Account Agreement
           </span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
             NextSeed US LLC Member Agreement
           </span>,
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
             NextSeed Securities LLC Investor Agreement
           </span>, and {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
             Substitute IRS Form W-9 Certification
           </span>.
           <IframeModal
