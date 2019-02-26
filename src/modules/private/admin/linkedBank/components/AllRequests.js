@@ -8,7 +8,7 @@ import { DateTimeFormat, InlineLoader, NsPagination } from './../../../../../the
 import Helper from '../../../../../helper/utility';
 import Actions from './Actions';
 
-@inject('bankAccountStore')
+@inject('bankAccountStore', 'uiStore')
 @observer
 export default class AllRequests extends Component {
   state = {
@@ -31,7 +31,8 @@ export default class AllRequests extends Component {
   }
   paginate = params => this.props.bankAccountStore.pageRequest(params);
   render() {
-    const { bankAccountStore } = this.props;
+    const { bankAccountStore, uiStore } = this.props;
+    const { inProgress } = uiStore;
     const {
       changeRequests, loading, count, requestState,
     } = bankAccountStore;
@@ -86,6 +87,7 @@ export default class AllRequests extends Component {
                       }
                     </Table.Cell>
                     <Actions
+                      inProgress={inProgress}
                       userId={req.userId}
                       accountId={req.accountId}
                       updateAccountChangeAction={bankAccountStore.updateAccountChangeAction}

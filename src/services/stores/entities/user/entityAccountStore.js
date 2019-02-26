@@ -117,8 +117,12 @@ class EntityAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => (resolve()))
-          .catch(() => {
+          .then(() => {
+            Helper.toast('Individual account submitted successfully.', 'success');
+            resolve();
+          })
+          .catch((err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
           });
@@ -432,9 +436,6 @@ class EntityAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (currentStep.name === 'Financial info') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);

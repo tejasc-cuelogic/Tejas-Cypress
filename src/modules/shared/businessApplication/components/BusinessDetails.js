@@ -311,7 +311,7 @@ export default class BusinessDetails extends Component {
           header="Confirm"
           content={`Are you sure you want to remove this ${this.state.currentForm.slice(0, -1)}?`}
           open={this.state.showPartialSaveModal}
-          onCancel={this.toggleConfirm}
+          onCancel={() => this.toggleConfirm(this.state.currentForm, this.state.currentIndex)}
           onConfirm={e => this.removeForm(e)}
           size="mini"
           className="deletion"

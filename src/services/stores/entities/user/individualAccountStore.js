@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
 import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
+import { bankAccountStore, uiStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -46,8 +46,12 @@ class IndividualAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => (resolve()))
-          .catch(() => {
+          .then(() => {
+            Helper.toast('Individual account submitted successfully.', 'success');
+            resolve();
+          })
+          .catch((err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
           });
@@ -92,7 +96,6 @@ class IndividualAccountStore {
             })
             .then(action((result) => {
               if (result.data.upsertInvestorAccount) {
-                userDetailsStore.getUser(userStore.currentUser.sub);
                 const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }
