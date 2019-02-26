@@ -111,6 +111,7 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
       amount
       accountId
       gsTransactionId
+      gsProcessId
       type
       userInfo {
         id
@@ -141,32 +142,39 @@ query _getTransactions($status: [TransactionStatusEnum], $offset: Int, $directio
 `;
 
 
-export const approveTransactions = gql`
-  mutation _transactionApprove($id: Int!){
-    transactionApprove(
+export const transferRequestAdminApprove = gql`
+  mutation transferRequestAdminApprove($id: Int!){
+    transferRequestAdminApprove(
     id: $id
     )
   }`;
 
-export const declineTransactions = gql`
-  mutation _transactionDecline($id: Int!){
-    transactionDecline(
+export const transferRequestAdminDecline = gql`
+  mutation transferRequestAdminDecline($id: Int!, $reason: String){
+    transferRequestAdminDecline(
     id: $id
     reason: $reason
     )
   }`;
 
-export const verifiedTransactions = gql`
-  mutation _transactionVerified($id: Int!){
-    transactionVerified(
+export const transferRequestAdminVerified = gql`
+  mutation transferRequestAdminVerified($id: Int!){
+    transferRequestAdminVerified(
     id: $id
     )
   }`;
 
-export const failedTransactions = gql`
-  mutation _transactionFailed($id: Int!, $reason: String!){
+export const transactionFailed = gql`
+  mutation transactionFailed($id: Int!, $reason: String){
     transactionFailed(
     id: $id
     reason: $reason
     )
   }`;
+
+export const transferRequestAdminSync = gql`
+mutation transferRequestAdminSync($id: Int!){
+  transferRequestAdminSync(
+  id: $id
+  )
+}`;
