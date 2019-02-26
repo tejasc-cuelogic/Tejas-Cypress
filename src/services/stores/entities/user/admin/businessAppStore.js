@@ -22,7 +22,7 @@ export class BusinessAppStore {
     sort: { by: 'applicationSubmittedDate|desc' },
     search: {},
     page: 1,
-    perPage: 25,
+    perPage: 100,
   };
 
   @observable filterApplicationStatus = FILTER_META.applicationStatus;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { Route } from 'react-router-dom';
+import { get } from 'lodash';
 import { Divider } from 'semantic-ui-react';
 import AboutTheCompany from './Overview/AboutTheCompany';
 import KeyTerms from './Overview/KeyTerms';
@@ -32,7 +33,9 @@ class Overview extends Component {
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
-    ['top-things-to-know', 'investment-highlights', 'updates', 'gallery'].forEach((item) => {
+    const { campaign } = this.props.campaignStore;
+    const arr = get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery'] : ['top-things-to-know', 'investment-highlights', 'gallery'];
+    arr.forEach((item) => {
       if (document.getElementById(item).getBoundingClientRect().top < 200 &&
       document.getElementById(item).getBoundingClientRect().top > -1) {
         this.props.navStore.setFieldValue('currentActiveHash', `#${item}`);
@@ -47,6 +50,7 @@ class Overview extends Component {
         <Divider hidden section />
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
+        {get(campaign, 'updates').length !== 0 &&
         <LatestUpdates
           updates={campaign && campaign.updates}
           refLink={this.props.refLink}
@@ -55,6 +59,7 @@ class Overview extends Component {
           bussinessName={campaign && campaign.keyTerms &&
             campaign.keyTerms.shorthandBusinessName}
         />
+        }
         <Divider hidden section />
         <Gallery
           galleryUrl={this.props.match.url}

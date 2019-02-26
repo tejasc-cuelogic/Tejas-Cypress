@@ -34,7 +34,7 @@ class AboutCompany extends Component {
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
-    ['company-description', 'business-model', 'location-analysis', 'team', 'history'].forEach((item) => {
+    ['company-description', 'business-model', 'location-analysis', 'history', 'team'].forEach((item) => {
       if (item === 'business-model' || item === 'company-description') {
         console.log(item, document.getElementById(item).getBoundingClientRect().top);
       }
@@ -59,13 +59,13 @@ class AboutCompany extends Component {
           campaign={campaign}
         />
         <Divider hidden section />
+        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
+        <Divider hidden section />
         <MeetOurTeam
           campaign={campaign}
           emptyStatement={emptyStatement}
           meetOurTeamUrl={this.props.match.url}
         />
-        <Divider hidden section />
-        <CompanyHistory campaign={campaign} emptyStatement={emptyStatement} />
       </div>
     );
   }

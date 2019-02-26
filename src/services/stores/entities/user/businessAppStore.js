@@ -1,5 +1,5 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { forEach, includes, find, isEmpty, has } from 'lodash';
+import { forEach, includes, find, isEmpty, has, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import { FormValidator as Validator } from '../../../../helper';
@@ -1245,8 +1245,8 @@ export class BusinessAppStore {
   @computed get notificationCard() {
     return find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e =>
       find(this.fetchBusinessApplication, a => a.applicationStatus === e.applicationStatus)) ||
-      find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e =>
-        find(offeringsStore.data.data.getOfferings, a => e.offeringStage.includes(a.stage)));
+      (get(offeringsStore, 'data.data.getOfferings') && find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e =>
+        find(offeringsStore.data.data.getOfferings, a => e.offeringStage.includes(a.stage))));
   }
 }
 

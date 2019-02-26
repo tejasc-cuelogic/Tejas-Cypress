@@ -140,9 +140,19 @@ export default class CampaignHeader extends Component {
                         Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? `${get(campaign, 'keyTerms.investmentMultiple')}` : '-'}
                       </Aux>
                     }
-                  </p>
-                  <p>
-                    Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
+                    {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
+                      <Aux>
+                        Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
+                      </Aux> :
+                      <Aux>
+                        <p>
+                        Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
+                        </p>
+                        <p>
+                        Share Price Valuation: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
+                        </p>
+                      </Aux>
+                    }
                   </p>
                   <div className="center-align">
                     {!isClosed &&
