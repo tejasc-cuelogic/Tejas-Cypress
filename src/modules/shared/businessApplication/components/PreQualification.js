@@ -106,6 +106,7 @@ export default class PreQualification extends Component {
                       containerclassname={isPrequalQulify ? 'display-only' : ''}
                       key={field}
                       type="text"
+                      asterisk="true"
                       name={field}
                       fielddata={BUSINESS_APP_FRM_BASIC.fields[field]}
                       changed={(e, res) => businessAppEleChange(e, res, 'BUSINESS_APP_FRM_BASIC')}

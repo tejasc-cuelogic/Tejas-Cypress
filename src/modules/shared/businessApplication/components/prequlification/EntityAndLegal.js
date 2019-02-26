@@ -5,7 +5,7 @@ import FormElementWrap from '../FormElementWrap';
 
 const EntityAndLegal = props => (
   <Aux>
-    <FormElementWrap hideFields={props.hideFields} header="What is your company’s entity structure?">
+    <FormElementWrap hideFields={props.hideFields} header="What is your company’s entity structure? *">
       <FormRadioGroup
         disabled={props.preQualFormDisabled}
         fielddata={props.fields.businessEntityStructure}

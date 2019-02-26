@@ -22,7 +22,7 @@ export default class AutoComplete extends Component {
         error={(!!error && this.state.showError) || (!!error && props.showerror)}
         className={classes}
       >
-        <label>{label}</label>
+        <label>{(props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}</label>
         {props.readOnly ?
           <p className="address-line">{value}</p> :
           <Autocomplete

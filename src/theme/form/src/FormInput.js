@@ -34,7 +34,7 @@ export default class FormInput extends Component {
       >
         {!props.ishidelabel && label !== '' &&
           <label>
-            {props.label || label}
+            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip &&
               <Popup
                 hoverable={props.hoverable}

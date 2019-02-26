@@ -112,7 +112,7 @@ export default class Listing extends Component {
                             <br />
                             {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : ''}
                             <br />
-                            {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : ''}
+                            {offering.issuerDetails && offering.issuerDetails.phone && offering.issuerDetails.phone.number ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : ''}
                           </Aux> :
                           <b>N/A</b>
                         }
