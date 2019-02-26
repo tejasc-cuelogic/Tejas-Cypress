@@ -949,9 +949,9 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj,
   ) => {
-    uiStore.setProgress();
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     const variables = {
       id,
       offeringDetails: payload,
@@ -1217,7 +1217,7 @@ export class OfferingCreationStore {
     }
     this.updateOfferingMutation(
       id, payloadData, keyName, notify, successMsg,
-      fromS3, res, rej, msgType, isLaunchContingency,
+      fromS3, res, rej, msgType, isLaunchContingency, approvedObj,
     );
   });
 
