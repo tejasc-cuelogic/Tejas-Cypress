@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const allInsightArticles = gql`
-query insights($sortByCreationDateAsc: Boolean!){
-  insightsArticles(sortByCreationDateAsc: $sortByCreationDateAsc){
+query insights($sortByCreationDateAsc: Boolean!, $categoryId: String){
+  insightsArticles(sortByCreationDateAsc: $sortByCreationDateAsc, categoryId: $categoryId){
     id
     content
     category
