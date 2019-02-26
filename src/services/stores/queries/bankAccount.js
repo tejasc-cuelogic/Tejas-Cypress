@@ -34,13 +34,21 @@ export const isValidOpeningDepositAmount = gql`
     )
   }`;
 
-export const updateLinkedAccount = gql`
-mutation _verifyLinkedBank($accountId: String!, $userId: String!) {
-  verifyLinkedBank(
+export const linkBankRequestApprove = gql`
+mutation linkBankRequestApprove($accountId: String!, $userId: String!) {
+  linkBankRequestApprove(
     userId: $userId
     accountId: $accountId
   ){
     verified
     message
   }
+}`;
+
+export const linkBankRequestDeny = gql`
+mutation linkBankRequestDeny($accountId: String!, $userId: String!) {
+  linkBankRequestDeny(
+    userId: $userId
+    accountId: $accountId
+  )
 }`;

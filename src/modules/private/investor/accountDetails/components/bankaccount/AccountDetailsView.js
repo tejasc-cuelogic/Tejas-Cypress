@@ -9,7 +9,7 @@ import { LINKED_ACCOUND_STATUS } from '../../../../../../constants/account';
 import { bankAccountActions } from '../../../../../../services/actions';
 import NSImage from '../../../../../shared/NSImage';
 
-@inject('bankAccountStore', 'transactionStore')
+@inject('bankAccountStore', 'transactionStore', 'uiStore')
 @withRouter
 @observer
 export default class AccountDetailsView extends Component {
@@ -36,11 +36,7 @@ export default class AccountDetailsView extends Component {
   }
   render() {
     const {
-      accountDetails,
-      click,
-      match,
-      accountType,
-      pendingAccoungDetails,
+      accountDetails, click, match, accountType, pendingAccoungDetails, uiStore,
     } = this.props;
     const { activeBankPladLogo, pendingBankPladLogo } = this.props.bankAccountStore;
     const pladidLogo = accountType === 'pending' ? pendingBankPladLogo : activeBankPladLogo;
@@ -113,7 +109,7 @@ export default class AccountDetailsView extends Component {
                 accountDetails && !pendingAccoungDetails &&
                 <Button as={Link} inverted onClick={click} to={`${match.url}/link-bank-account`} color="green" content="Change Linked Bank" />
                 :
-                <Button inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
+                <Button loading={uiStore.inProgress} inverted onClick={this.handleCancelRequest} color="red" content="Cancel Request" />
               }
             </Grid.Column>
           </Grid.Row>
