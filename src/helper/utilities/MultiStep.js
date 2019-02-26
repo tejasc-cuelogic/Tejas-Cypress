@@ -123,10 +123,12 @@ export default class MultiStep extends React.Component {
   next() {
     if (!this.props.steps[this.state.compState].isDirty) {
       this.setNavState(this.state.compState + 1);
+      this.props.setStepTobeRendered(this.state.compState + 1);
     } else {
       this.props.createAccount(this.props.steps[this.state.compState]);
       if (!this.props.steps[this.state.compState].isDirty) {
         this.setNavState(this.state.compState + 1);
+        this.props.setStepTobeRendered(this.state.compState + 1);
       }
     }
   }

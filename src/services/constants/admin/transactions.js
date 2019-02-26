@@ -106,6 +106,7 @@ export const TRANSACTION_FAILURE = {
 
 export const FILTER_META = {
   transactionType: [
+    { text: 'Select Type', key: '', value: '' },
     { text: 'Withdrawl', key: 'Withdrawl', value: 'WITHDRAWAL' },
     { text: 'Deposit', key: 'Deposit', value: 'DEPOSIT' },
   ],

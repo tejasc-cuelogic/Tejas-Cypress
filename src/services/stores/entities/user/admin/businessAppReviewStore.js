@@ -774,10 +774,14 @@ export class BusinessAppReviewStore {
     };
     const data = Calculator.calculate(Formdata);
     const amortizationAmount = data && data.schedule.length ?
-      data.schedule[0].interest + data.schedule[0].principal : 0;
-    const returnedAmount = amortizationAmount * maturity;
-    this.OFFERS_FRM.fields.offer[index].totalCapital.value = ceil(returnedAmount);
-    this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = ceil(amortizationAmount);
+      money.add(
+        money.floatToAmount(data.schedule[0].interest),
+        money.floatToAmount(data.schedule[0].principal),
+      ) : 0;
+    const returnedAmount =
+    money.floatToAmount(money.mul(amortizationAmount, money.floatToAmount(maturity)));
+    this.OFFERS_FRM.fields.offer[index].totalCapital.value = returnedAmount;
+    this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = amortizationAmount;
   }
 }
 export default new BusinessAppReviewStore();

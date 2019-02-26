@@ -1,9 +1,9 @@
 import React from 'react';
 import Aux from 'react-aux';
 import { Header, Container, Embed, Grid, Responsive } from 'semantic-ui-react';
-import Image from '../../../../assets/images/636206632.jpg';
+import Image from '../../../../assets/images/video.jpg';
 
-const nsvideos = { embed: '218642510' };
+const nsvideos = { embed: '307106547' };
 
 const HowItWorks = () => (
   <section className="how-it-works">

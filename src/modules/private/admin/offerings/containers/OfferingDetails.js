@@ -31,6 +31,7 @@ export default class OfferingDetails extends Component {
 
   handleCloseModal = (e) => {
     e.stopPropagation();
+    this.props.offeringCreationStore.resetAllForms();
     this.props.offeringCreationStore.resetOfferingId();
     this.props.history.push(`${this.props.refLink}/${this.props.match.params.stage}`);
     window.onpopstate = null;
