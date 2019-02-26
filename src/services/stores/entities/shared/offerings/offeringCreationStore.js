@@ -182,6 +182,11 @@ export class OfferingCreationStore {
   }
 
   @action
+  resetAllForms = () => {
+    this.LEADERSHIP_FRM = Validator.resetFormData(this.LEADERSHIP_FRM);
+  }
+
+  @action
   resetFormField = (form, field, fileObj, RemoveIndex) => {
     if (fileObj && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.push(fileObj.location);
@@ -1013,7 +1018,7 @@ export class OfferingCreationStore {
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(getOfferingById, { aliasId: 'id' });
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
