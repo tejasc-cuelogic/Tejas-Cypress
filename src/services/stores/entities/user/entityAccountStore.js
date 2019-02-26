@@ -117,8 +117,12 @@ class EntityAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => (resolve()))
-          .catch(() => {
+          .then(() => {
+            Helper.toast('Individual account submitted successfully.', 'success');
+            resolve();
+          })
+          .catch((err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
           });
