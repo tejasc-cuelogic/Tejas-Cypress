@@ -194,6 +194,15 @@ export const INCOME_EVIDENCE = {
 };
 
 export const VERIFICATION_REQUEST = {
+  name: {
+    value: '',
+    error: undefined,
+    placeHolder: 'Name here',
+    rule: 'required',
+    label: 'Verifier Name',
+    objRefOutput: 'verifier',
+    objRef: 'verifier',
+  },
   role: {
     value: '',
     error: undefined,

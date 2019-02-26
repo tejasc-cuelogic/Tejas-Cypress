@@ -114,6 +114,17 @@ build:dev:
     - npm install
     - npm run build
 
+build:predev:
+  <<: *build_definition
+  only:
+    refs:
+      - develop
+  # <<: *before_script_defination
+  script:
+    - cd ./scripts/cicd/ && sh setEnvironmentVariables.sh $REGION predev $CI_COMMIT_REF_NAME && cd ../..
+    - npm install
+    - npm run build
+
 #Bump version code to patch 
 version:dev:
   only:
@@ -158,9 +169,24 @@ deploy:dev:
   script: 
     #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
     - cd ./scripts/cicd/ && sh ./deployApp.sh $DEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
+    #- aws cloudfront create-invalidation --distribution-id $DEV_DISTRIBUTION_ID --paths "/*"
   dependencies:
     - build:dev
 
+deploy:predev:
+  <<: *deploy_defination
+  only:
+    refs:
+      - develop
+  environment:
+    name: dev
+    url: http://$PREDEV_URL
+  script:
+    #- "curl --request GET --header 'PRIVATE-TOKEN: '$CI_USER_PERSONAL_TOKEN $GITLAB_API_URL/$PROJECT_ID/repository/files/cicd%2FdeployApp%2Esh/raw?ref=$BRANCH > deployApp.sh"
+    - cd ./scripts/cicd/ && sh ./deployApp.sh $PREDEV_URL && cd ../.. #- sh deployApp.sh $DEV_URL
+    - aws cloudfront create-invalidation --distribution-id $PREDEV_DISTRIBUTION_ID --paths "/*"
+  dependencies:
+    - build:predev
 
 
 #---------------------------------Qa--------------------------------------------

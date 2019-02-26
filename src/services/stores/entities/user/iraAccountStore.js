@@ -404,6 +404,7 @@ class IraAccountStore {
         }
       }
     }
+    uiStore.setProgress(false);
   }
 
   @action
@@ -416,7 +417,7 @@ class IraAccountStore {
           this.IDENTITY_FRM.fields[f].value = accountDetails[f].fileName;
           this.IDENTITY_FRM.fields[f].fileId = accountDetails[f].fileId;
         }
-      } else if (form === 'FUNDING_FRM' || form === 'ACC_TYPES_FRM') {
+      } else if ((form === 'FUNDING_FRM' || form === 'ACC_TYPES_FRM') && accountDetails && accountDetails[f]) {
         let value = '';
         if (form === 'FUNDING_FRM') {
           value = AccCreationHelper.getFundingTypeIndex(accountDetails[f]);
@@ -458,7 +459,7 @@ class IraAccountStore {
             form: 'IDENTITY_FRM',
             stepToBeRendered: 5,
           };
-          this.createAccount(currentStep, 'PARTIAL', false);
+          this.createAccount(currentStep, false);
         })
         .catch((err) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
@@ -476,7 +477,7 @@ class IraAccountStore {
       this.IDENTITY_FRM.fields[field].value = '';
       this.IDENTITY_FRM.fields[field].fileId = '';
       this.IDENTITY_FRM.fields[field].preSignedUrl = '';
-      this.createAccount(currentStep, 'PARTIAL', true);
+      this.createAccount(currentStep, true);
     }))
       .catch(() => { });
   }

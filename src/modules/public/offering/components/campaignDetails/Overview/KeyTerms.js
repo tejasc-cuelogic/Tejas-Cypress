@@ -132,7 +132,7 @@ class KeyTerms extends Component {
                   </Table.Cell>
                 </Table.Row>
                 <Table.Row verticalAlign="top">
-                  <Table.Cell width={5} className="neutral-text"><b>Unit Price{' '}</b>
+                  <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
                     <p>
