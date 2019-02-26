@@ -16,7 +16,7 @@ export class TransactionsStore {
     Declined: transferRequestAdminDecline,
     Verified: transferRequestAdminVerified,
     Failed: transactionFailed,
-    Synced: transferRequestAdminSync,
+    Sync: transferRequestAdminSync,
   }
   @observable filters = false;
   @observable TRANSACTION_FAILURE = Validator.prepareFormObject(TRANSACTION_FAILURE);
@@ -36,6 +36,12 @@ export class TransactionsStore {
     search: {
     },
   };
+  @observable btnLoader = null;
+
+  @action
+  setDataValue = (key, value) => {
+    this[key] = value;
+  }
 
   @action
   toggleSearch = () => {
@@ -124,21 +130,24 @@ export class TransactionsStore {
 
   @action
   transactionChange = (requestID, transStatus, actionName) => {
+    this.setDataValue('btnLoader', requestID);
     client
       .mutate({
         mutation: this.ctHandler[actionName],
         variables: { id: requestID },
       })
       .then(() => {
+        this.setDataValue('btnLoader', false);
         this.initRequest(transStatus);
         Helper.toast(`Transaction ${actionName} successfully.`, 'success');
       })
-      .catch(() => Helper.toast('OOPs something went work', 'error'));
+      .catch(() => { Helper.toast('Something went wrong please try again after sometime.', 'error'); this.setDataValue('btnLoader', false); });
   };
 
   @action
   failTransaction = (requestID, actionName) => {
     const reason = Validator.evaluateFormData(this.TRANSACTION_FAILURE.fields);
+    this.setDataValue('btnLoader', requestID);
     return new Promise((resolve, reject) => {
       client
         .mutate({
@@ -149,12 +158,14 @@ export class TransactionsStore {
           },
         })
         .then(() => {
+          this.setDataValue('btnLoader', false);
           Helper.toast(`Transaction ${actionName} successfully.`, 'success');
           this.initRequest(this.transactionStatus);
           resolve();
         })
         .catch(() => {
-          Helper.toast('OOPs something went work', 'error');
+          this.setDataValue('btnLoader', false);
+          Helper.toast('Something went wrong please try again after sometime.', 'error');
           reject();
         });
     });
