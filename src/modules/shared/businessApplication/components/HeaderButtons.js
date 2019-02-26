@@ -30,7 +30,7 @@ export const HeaderButtons = props => (
         />
       </Button.Group> : props.preQualPage &&
       <Button.Group>
-        <Button as={Link} to="/app/dashboard" inverted color="red">Cancel</Button>
+        <Button as={Link} loading={props.inProgress} to="/app/dashboard" inverted color="red">Cancel</Button>
         <SubmitButton
           loading={props.inProgress}
           click={props.preQualSubmit}
