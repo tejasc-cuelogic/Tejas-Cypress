@@ -4,7 +4,7 @@ import { inject, observer } from 'mobx-react';
 import cookie from 'react-cookies';
 import { Link, withRouter, Route } from 'react-router-dom';
 import ReactCodeInput from 'react-code-input';
-import { Modal, Button, Header, Form, Message, Divider } from 'semantic-ui-react';
+import { Modal, Button, Header, Form, Message, Divider, Dimmer, Loader } from 'semantic-ui-react';
 import { authActions } from '../../../services/actions';
 import { FormInput } from '../../../theme/form';
 import { ListErrors, SuccessScreen } from '../../../theme/shared';
@@ -36,7 +36,9 @@ export default class ConfirmEmailAddress extends Component {
 
   handleSubmitForm = (e) => {
     e.preventDefault();
+    const { uiStore } = this.props;
     this.props.authStore.setProgress('confirm');
+    uiStore.setProgress();
     if (this.props.refLink) {
       this.props.authStore.verifyAndUpdateEmail().then(() => {
         this.props.identityStore.setIsOptConfirmed(true);
@@ -64,6 +66,7 @@ export default class ConfirmEmailAddress extends Component {
         this.props.identityStore.verifyOTPWrapper().then(() => {
           authActions.register()
             .then(() => {
+              uiStore.setProgress(false);
               const { roles } = this.props.userStore.currentUser;
               if (roles.includes('investor')) {
                 if (cookie.load('SAASQUATCH_REFERRAL_CODE') && cookie.load('SAASQUATCH_REFERRAL_CODE') !== undefined) {
@@ -146,6 +149,11 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push('/auth/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
       return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
+    } else if (inProgress) {
+      return (
+        <Dimmer active={inProgress}>
+          <Loader active={inProgress} />
+        </Dimmer>);
     }
     return (
       <Modal closeOnDimmerClick={false} size="tiny" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
