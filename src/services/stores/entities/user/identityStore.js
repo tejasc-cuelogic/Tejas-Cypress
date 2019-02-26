@@ -605,6 +605,7 @@ export class IdentityStore {
   @computed
   get profileDetails() {
     const { fields } = this.ID_PROFILE_INFO;
+    const selectedState = find(US_STATES_FOR_INVESTOR, { value: fields.state.value });
     const profileDetails = {
       salutation: fields.firstName.value,
       firstName: fields.firstName.value,
@@ -612,7 +613,7 @@ export class IdentityStore {
       mailingAddress: {
         street: fields.street.value,
         city: fields.city.value,
-        state: fields.state.value,
+        state: selectedState ? selectedState.key : null,
         zipCode: fields.zipCode.value,
       },
       avatar: {

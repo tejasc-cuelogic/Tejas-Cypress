@@ -21,20 +21,20 @@ export default class ConfirmBankLinking extends Component {
       const bankInterFace = this.props.bankAccountStore.bankLinkInterface;
       const {
         newPlaidAccDetails,
-        cancelBankChangeRequest,
+        linkBankRequestCancel,
         isLinkedBankCancelRequest,
       } = this.props.bankAccountStore;
       const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
       const redirectUrl = `/app/account-details/${accountType}/bank-accounts/link-bank-account/verify-update`;
 
       if (isLinkedBankCancelRequest) {
-        cancelBankChangeRequest().then(() => {
+        linkBankRequestCancel().then(() => {
           const redirectCancelUrl = `/app/account-details/${accountType}/bank-accounts`;
           Helper.toast('Cancel linked bank successfully.', 'success');
           this.props.history.push(redirectCancelUrl);
         });
       } else if (bankInterFace === 'form') {
-        this.props.bankAccountStore.changeBankManually().then(() => {
+        this.props.bankAccountStore.linkBankRequestManual().then(() => {
           this.props.history.push(redirectUrl);
         });
       } else {

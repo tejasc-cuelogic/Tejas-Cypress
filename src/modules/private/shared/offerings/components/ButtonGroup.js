@@ -37,28 +37,28 @@ export default class ButtonGroup extends Component {
         <Button.Group>
           {isManager && submitted ? (
             <Aux>
-              <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" inverted onClick={() => updateOffer({ isApproved: true, status: 'support_decline' })} color="red" content="Decline to NS Support" />
+              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'support_decline'} type="button" inverted onClick={() => updateOffer({ isApproved: true, status: 'support_decline' })} color="red" content="Decline to NS Support" />
               {(!approved || (approved && !approved.status)) &&
-              <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
               }
-              <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" color="green" onClick={() => updateOffer({ isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed">{approved && approved.status ? 'Edit' : 'Approve'}</Button>
+              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'manager_edit' || inProgress === 'manager_approved'} type="button" color="green" onClick={() => updateOffer({ isApproved: true, status: approved && approved.status ? 'manager_edit' : 'manager_approved' })} className="relaxed">{approved && approved.status ? 'Edit' : 'Approve'}</Button>
             </Aux>
           ) : isIssuer && (!approved || (approved && !approved.status)) ? (
             <Aux>
               {!issuerSubmitted &&
-              <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
               }
-              <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" primary={!issuerSubmitted} onClick={() => updateOffer({ isApproved: true, status: 'issuer_submitted' })} className="relaxed">{issuerSubmitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'issuer_submitted'} type="button" primary={!issuerSubmitted} onClick={() => updateOffer({ isApproved: true, status: 'issuer_submitted' })} className="relaxed">{issuerSubmitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Aux>
           ) : (!approved || (approved && !approved.status)) && (
             <Aux>
               {issuerSubmitted && !submitted &&
-                <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" inverted onClick={() => updateOffer({ isApproved: true, status: 'issuer_decline' })} color="red" content="Unlock for Issuer" />
+                <Button disabled={htmlEditorImageLoading} loading={inProgress === 'issuer_decline'} type="button" inverted onClick={() => updateOffer({ isApproved: true, status: 'issuer_decline' })} color="red" content="Unlock for Issuer" />
               }
               {!submitted &&
-              <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
+              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
               }
-              <Button disabled={htmlEditorImageLoading} loading={inProgress} type="button" primary={!submitted} onClick={() => updateOffer({ isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'support_submitted'} type="button" primary={!submitted} onClick={() => updateOffer({ isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Aux>
           )}
         </Button.Group>
