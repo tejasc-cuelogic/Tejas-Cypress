@@ -62,7 +62,7 @@ export default class TermsOfUse extends Component {
       <InlineLoader text="No Documents to Display" className="bg-offwhite" />
         </div>);
     }
-    if (!sortedDocswithBoxLink.length) {
+    if (dataRoomDocs.length !== sortedDocswithBoxLink.length) {
       return <InlineLoader />;
     }
     return (

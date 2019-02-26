@@ -18,6 +18,7 @@ query insights($sortByCreationDateAsc: Boolean!){
       date
     }
     banner
+    createdDate
   }
 }
 `;

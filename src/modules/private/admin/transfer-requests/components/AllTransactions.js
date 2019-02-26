@@ -34,9 +34,9 @@ export default class AllTransactions extends Component {
     const { transactionsStore, match } = this.props;
     const { statusType } = this.props.match.params;
     const {
-      allRecords, loading,
+      allRecords, loading, btnLoader,
       transactionCount, requestState,
-      transactionChange, isNonTerminatedState,
+      transactionChange,
     } = transactionsStore;
     if (loading) {
       return <InlineLoader />;
@@ -59,7 +59,7 @@ export default class AllTransactions extends Component {
                       </Table.HeaderCell>
                     ))
                   }
-                  {isNonTerminatedState &&
+                  { (has(STATUS_MAPPING[statusType], 'syncCta') || has(STATUS_MAPPING[statusType], 'affirmativeCta') || has(STATUS_MAPPING[statusType], 'failedCta')) &&
                     <Table.HeaderCell key="actions">
                       &nbsp;
                     </Table.HeaderCell>
@@ -86,18 +86,24 @@ export default class AllTransactions extends Component {
                           </Table.Cell>
                         ))
                       }
-                      {has(STATUS_MAPPING[statusType], ['affirmativeCta', 'failedCta']) &&
-                        <Table.Cell>
-                          <Button.Group vertical compact size="mini">
-                            <Button color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action)}>
+                      <Table.Cell>
+                        <Button.Group vertical compact size="mini">
+                          {(has(STATUS_MAPPING[statusType], 'syncCta') && row.gsProcessId && !row.gsTransactionId) ?
+                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].syncCta.action)}>
+                              {STATUS_MAPPING[statusType].syncCta.title}
+                            </Button> :
+                            has(STATUS_MAPPING[statusType], 'affirmativeCta') &&
+                            <Button loading={btnLoader === row.requestId} color="blue" onClick={() => transactionChange(row.requestId, transStatus, STATUS_MAPPING[statusType].affirmativeCta.action)}>
                               {STATUS_MAPPING[statusType].affirmativeCta.title}
                             </Button>
+                          }
+                          { has(STATUS_MAPPING[statusType], 'failedCta') &&
                             <Button as={Link} to={`${match.url}/${row.requestId}`} inverted color="red">
                               {STATUS_MAPPING[statusType].failedCta.title}
                             </Button>
-                          </Button.Group>
-                        </Table.Cell>
-                      }
+                          }
+                        </Button.Group>
+                      </Table.Cell>
                     </Table.Row>
                   ))
                 }
