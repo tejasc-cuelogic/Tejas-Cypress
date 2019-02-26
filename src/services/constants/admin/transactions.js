@@ -2,7 +2,9 @@
 export const STATUS_MAPPING = {
   // eslint-disable-next-line max-len
   // 'pre-pending': { status: ['PRE_PENDING'], affirmativeCta: { action: 'Approved', title: 'Approve' }, failedCta: { action: 'Declined', title: 'Decline' } },
-  pending: { status: ['PENDING'], affirmativeCta: { action: 'Approved', title: 'Approve' }, failedCta: { action: 'Declined', title: 'Decline' } },
+  pending: {
+    status: ['PENDING'], affirmativeCta: { action: 'Approved', title: 'Approve' }, failedCta: { action: 'Declined', title: 'Decline' }, syncCta: { action: 'Sync', title: 'Sync' },
+  },
   processing: { status: ['PROCESSING'], affirmativeCta: { action: 'Verified', title: 'Verified' }, failedCta: { action: 'Failed', title: 'Failed' } },
   complete: { status: ['COMPLETE'] },
   failed: { status: ['FAILED', 'VOIDED'] },
