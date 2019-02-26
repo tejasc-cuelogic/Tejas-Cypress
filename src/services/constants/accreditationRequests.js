@@ -2,6 +2,7 @@ export const FILTER_META = {
   method: {
     value: [],
     values: [
+      { text: 'Select Method', key: '', value: '' },
       { text: 'All', value: 'ALL' },
       { text: 'Verifier', value: 'VERIFIER' },
       { text: 'Upload', value: 'UPLOAD' },
@@ -12,6 +13,7 @@ export const FILTER_META = {
   status: {
     value: [],
     values: [
+      { text: 'Select Status', key: '', value: '' },
       { text: 'Requested', value: 'REQUESTED' },
       { text: 'Approved', value: 'CONFIRMED' },
       { text: 'Declined', value: 'INVALID' },
@@ -22,6 +24,7 @@ export const FILTER_META = {
   type: {
     value: [],
     values: [
+      { text: 'Select Type', key: '', value: '' },
       { text: 'All', value: 'ALL' },
       { text: 'Asset', value: 'ASSETS' },
       { text: 'Income', value: 'INCOME' },
