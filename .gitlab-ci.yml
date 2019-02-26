@@ -29,7 +29,7 @@ before_script:
   stage: build
   artifacts:
     paths:
-    - build/
+      - build/
     expire_in: 1 day
 
 .deploy_template: &deploy_defination

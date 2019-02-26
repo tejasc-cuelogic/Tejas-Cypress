@@ -116,6 +116,9 @@ prod)
 prod-temp)
 	settingEnv
 ;;
+predev)
+	settingEnv
+;;
 
 *)
 	echo "Specified environment : $environment is not available."
