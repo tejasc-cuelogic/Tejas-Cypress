@@ -53,7 +53,7 @@ export default class InvestNow extends React.Component {
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
-      this.props.investmentStore.setFieldValue('disableNextbtn', false);
+      this.props.investmentStore.setFieldValue('disableNextbtn', true);
     } else if (step === 0) {
       this.handleStepChnageOnPreviousForAlert();
     }
@@ -109,29 +109,32 @@ export default class InvestNow extends React.Component {
   multiClickHandler = (step) => {
     const { inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     if (step.name === 'Financial Info') {
-      this.props.investmentStore.getInvestorAvailableCash().then(() => {
-        const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
-        if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
-          this.handleStepChange(step.stepToBeRendered);
-        } else {
-          this.setState({ submitLoading: true });
-          this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
-            this.setState({ submitLoading: isValid });
-            if (isValid) {
-              this.props.investmentStore.generateAgreement().then(() => {
-                Helper.toast('Agreement has been generated successfully!', 'success');
-                this.props.investmentStore.setStepToBeRendered(0);
-                this.setState({ submitLoading: false });
-                this.props.history.push('agreement');
-              }).finally(() => {
-                this.setState({ submitLoading: false });
-              });
-            }
-          }).catch(() => {
+      // this.props.investmentStore.getInvestorAvailableCash().then(() => {
+      const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
+      if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
+        this.handleStepChange(step.stepToBeRendered);
+      } else {
+        // this.setState({ submitLoading: true });
+        this.props.investmentStore.validateInvestmentAmountInOffering().then((isValid) => {
+          this.setState({ submitLoading: isValid });
+          if (isValid) {
+            // this.props.investmentStore.generateAgreement().then(() => {
+            Helper.toast('Agreement has been generated successfully!', 'success');
+            this.props.investmentStore.setStepToBeRendered(0);
+            this.setState({ submitLoading: false });
+            this.props.history.push('agreement');
+            // }).finally(() => {
+            //   this.setState({ submitLoading: false });
+            // });
+          }
+        }).catch(() => {
+          this.setState({ submitLoading: false });
+        })
+          .finally(() => {
             this.setState({ submitLoading: false });
           });
-        }
-      });
+      }
+      // });
     } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
       const { campaign } = this.props.campaignStore;
       const offeringId = campaign && campaign.id;

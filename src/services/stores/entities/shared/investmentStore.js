@@ -79,18 +79,34 @@ export class InvestmentStore {
       || 0;
   }
   @computed get getTransferRequestAmount() {
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+    const getPreviousInvestedAmount =
+      (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
     const transferAmount = money.subtract(
       this.investmentAmount,
-      money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
+      // money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
+      money.add(getCurrCashAvailable, getCurrCreditAvailable, getPreviousInvestedAmount),
     );
-    return transferAmount < 0 ? 0 : transferAmount;
+    return money.isNegative(transferAmount) || money.isZero(transferAmount) ? 0 : transferAmount;
+    // return transferAmount < 0 ? 0 : transferAmount;
   }
   @computed get getSpendCreditValue() {
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
     let spendAmount = 0;
-    if (this.getCurrCashAvailable < this.investmentAmount) {
-      const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
-      if (rewardStore.getCurrCreditAvailable < lowValue) {
-        spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
+    // if (this.getCurrCashAvailable < this.investmentAmount) {
+    //   const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
+    //   if (rewardStore.getCurrCreditAvailable < lowValue) {
+    //     spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
+    //   }
+    // }
+    if (getCurrCashAvailable < this.investmentAmount) {
+      const lowValue = money.subtract(this.investmentAmount, getCurrCashAvailable);
+      if (getCurrCreditAvailable < lowValue) {
+        spendAmount = money.subtract(lowValue, getCurrCreditAvailable);
       }
     }
     return parseFloat(spendAmount, 2);
@@ -286,6 +302,7 @@ export class InvestmentStore {
 
   @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
+    uiStore.setProgress();
     if (this.investmentAmount) {
       if (this.checkLockinPeriod()) {
         this.setFieldValue('isValidInvestAmtInOffering', false);
@@ -302,7 +319,9 @@ export class InvestmentStore {
               offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
               userId: userDetailsStore.currentUserId,
               accountId: this.getSelectedAccountTypeId,
-              // transferAmount: this.getTransferRequestAmount,
+              transferAmount: this.getTransferRequestAmount,
+              // creditToSpend: this.getSpendCreditValue,
+              callbackUrl: `${window.location.origin}/secure-gateway`,
             },
           })
           .then(action((resp) => {
@@ -311,11 +330,23 @@ export class InvestmentStore {
             this.setFieldValue('disableNextbtn', status);
             this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
             this.INVESTMONEY_FORM.meta.isValid = status;
-            resolve();
+            // Validated investment amount fields:
+            const errorMessage = !status ? message : null;
+            this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            if (!resp.data.investNowGeneratePurchaseAgreement) {
+              this.setShowTransferRequestErr(true);
+            }
+            this.setFieldValue('agreementDetails', resp.data.investNowGeneratePurchaseAgreement);
+            resolve(status);
           }))
-          .catch(() => {
+          .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
+            this.setShowTransferRequestErr(true);
+            uiStore.setErrors(error.message);
             reject();
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
           });
       }
     } else {

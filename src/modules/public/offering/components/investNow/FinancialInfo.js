@@ -10,14 +10,14 @@ import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
 
 @withRouter
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore')
 @observer
 class FinancialInfo extends Component {
   componentWillMount() {
     if (this.props.changeInvest) {
       const { getInvestNowHealthCheck } = this.props.investmentLimitStore;
-      const { campaign } = this.props.campaignStore;
-      const offeringId = campaign && campaign.id;
+      const { match } = this.props;
+      const offeringId = match && match.params && match.params.offeringId;
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
       }
@@ -33,7 +33,7 @@ class FinancialInfo extends Component {
       calculateEstimatedReturn,
       validBonusRewards,
       setStepToBeRendered,
-      validateInvestmentAmountInOffering,
+      // validateInvestmentAmountInOffering,
       getDiffInvestmentLimitAmount,
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
@@ -99,7 +99,7 @@ class FinancialInfo extends Component {
             prefix="$ "
             fielddata={INVESTMONEY_FORM.fields.investmentAmount}
             changed={values => investMoneyChange(values, 'investmentAmount')}
-            onblur={validateInvestmentAmountInOffering}
+            // onblur={validateInvestmentAmountInOffering}
           />
         </Form>
         {this.props.changeInvest &&

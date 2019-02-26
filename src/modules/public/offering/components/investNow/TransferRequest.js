@@ -4,7 +4,7 @@ import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore')
+@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'investmentLimitStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
@@ -35,15 +35,18 @@ class TransferRequest extends Component {
     this.props.investmentStore.setShowTransferRequestErr(false);
   }
   render() {
-    const { rewardStore, investmentStore } = this.props;
+    const { investmentStore, investmentLimitStore } = this.props;
     const {
       getTransferRequestAmount,
-      getCurrCashAvailable,
+      // getCurrCashAvailable,
       showTransferRequestErr,
       investmentAmount,
       investmentFlowErrorMessage,
     } = investmentStore;
-    const { getCurrCreditAvailable } = rewardStore;
+    // const { getCurrCreditAvailable } = rewardStore;
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
     if (showTransferRequestErr) {
       return (
         <div className="center-align">
