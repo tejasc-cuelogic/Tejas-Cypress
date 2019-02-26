@@ -35,7 +35,7 @@ export default class Summary extends Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {
       this.props.iraAccountStore.submitAccount().then(() => {
-        this.props.history.push('/app/summary');
+        this.props.history.replace('/app/summary');
       });
     }
   }

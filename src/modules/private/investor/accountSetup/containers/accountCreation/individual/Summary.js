@@ -38,7 +38,7 @@ export default class Summary extends React.Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
       this.props.individualAccountStore.submitAccount().then(() => {
-        this.props.history.push('summary');
+        this.props.history.replace('app/summary');
       })
         .catch(() => {});
     }

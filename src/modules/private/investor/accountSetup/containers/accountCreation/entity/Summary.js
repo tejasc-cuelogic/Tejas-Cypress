@@ -35,7 +35,7 @@ export default class Summary extends Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
     } else {
       this.props.entityAccountStore.submitAccount().then(() => {
-        this.props.history.push('summary');
+        this.props.history.replace('app/summary');
       });
     }
   }
