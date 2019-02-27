@@ -24,7 +24,7 @@ export default class PreQualBusiness extends Component {
       <Aux>
         <FormElementWrap
           hideFields={hideFields}
-          header="What is your Business Model? *"
+          header="What is your Business Model?*"
           subHeader="Only Business to Consumer models are accepted at this time."
         >
           <FormRadioGroup
@@ -45,7 +45,7 @@ export default class PreQualBusiness extends Component {
           currentApplicationType={this.props.applicationType || currentApplicationType}
           setAddressFields={setAddressFields}
         />
-        <FormElementWrap hideFields={hideFields} header="What industry are you in? *" subHeader="Please select all that apply.">
+        <FormElementWrap hideFields={hideFields} header="What industry are you in?*" subHeader="Please select all that apply.">
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.industryTypes}
@@ -54,7 +54,7 @@ export default class PreQualBusiness extends Component {
             containerclassname="iconic-checkbox"
           />
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="What can NextSeed help you with? *" subHeader="Select in which area NextSeed can help your business.">
+        <FormElementWrap hideFields={hideFields} header="What can NextSeed help you with?*" subHeader="Select in which area NextSeed can help your business.">
           <FormRadioGroup
             disabled={preQualFormDisabled}
             fielddata={fields.businessGoal}
@@ -113,7 +113,7 @@ export default class PreQualBusiness extends Component {
             </Grid.Column>
           </Grid>
         </FormElementWrap>
-        <FormElementWrap hideFields={hideFields} header="What will the funds be used for? *" subHeader="Please select all that apply.">
+        <FormElementWrap hideFields={hideFields} header="What will the funds be used for?*" subHeader="Please select all that apply.">
           <FormCheckbox
             disabled={preQualFormDisabled}
             fielddata={fields.fundUsage}

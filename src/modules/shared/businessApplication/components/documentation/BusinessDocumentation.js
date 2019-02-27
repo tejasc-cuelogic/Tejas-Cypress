@@ -106,7 +106,7 @@ export default class BusinessDocumentation extends Component {
         </FormElementWrap>
         <FormElementWrap
           hideFields={hideFields}
-          header="Will you accept a blanket lien on the business if your campaign is successfully funded? *"
+          header="Will you accept a blanket lien on the business if your campaign is successfully funded?*"
           subHeader="NextSeed will require it. (Note that if you have existing debt with liens attached, a second lien will be accepted.)"
         >
           <FormRadioGroup
@@ -120,7 +120,7 @@ export default class BusinessDocumentation extends Component {
         <FormElementWrap
           hideFields={hideFields}
           noDivider={hideFields || formReadOnlyMode}
-          header="Are you willing to provide a personal guarantee? *"
+          header="Are you willing to provide a personal guarantee?*"
           subHeader="(This is not a requirement, but a personal guarantee can positively impact the terms provided.)"
         >
           <FormRadioGroup
