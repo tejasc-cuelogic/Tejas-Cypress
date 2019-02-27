@@ -47,7 +47,7 @@ export default class Summary extends React.Component {
           this.props.history.push(partialInvestNowSessionURL);
           setPartialInvestmenSession();
         } else {
-          this.props.history.push('summary');
+          this.props.history.replace('app/summary');
         }
       }).catch(() => { });
     }
@@ -127,8 +127,8 @@ export default class Summary extends React.Component {
         <p className="center-align grey-header mt-30">
           By continuing, I acknowledge that I have read and agree to the terms of the{' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>CrowdPay Custodial Account Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed US LLC Member Agreement</span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>NextSeed US LLC Member Agreement</span>,{' '}
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>NextSeed Securities LLC Investor Agreement</span>, and {' '}
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>Substitute IRS Form W-9 Certification</span>.
           <IframeModal
             open={this.state.open}

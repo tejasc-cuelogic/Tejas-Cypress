@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { withRouter } from 'react-router-dom';
+import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
@@ -110,9 +111,9 @@ export default class Listing extends Component {
                               {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
                             </b>
                             <br />
-                            {offering.issuerDetails && offering.issuerDetails.email ? offering.issuerDetails.email.address : ''}
+                            {get(offering, 'offering.issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
                             <br />
-                            {offering.issuerDetails && offering.issuerDetails.phone ? Helper.maskPhoneNumber(offering.issuerDetails.phone.number) : ''}
+                            {get(offering, 'offering.issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'offering.issuerDetails.phone.number')) : ''}
                           </Aux> :
                           <b>N/A</b>
                         }

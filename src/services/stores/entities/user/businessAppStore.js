@@ -621,10 +621,11 @@ export class BusinessAppStore {
       })),
       owners: data.owners.map(item => ({
         fullLegalName: this.getValidDataForString(item.fullLegalName),
-        yearsOfExp: this.getValidDataForInt(item.yearsOfExp),
+        yearsOfExp: item.yearsOfExp.value ? this.getValidDataForInt(item.yearsOfExp) : null,
         ssn: this.getValidDataForString(item.ssn),
         dateOfService: item.dateOfService.value ? moment(item.dateOfService).format('MM-DD-YYYY') : null,
-        companyOwnerShip: this.getValidDataForInt(item.companyOwnerShip, 1),
+        companyOwnerShip: item.companyOwnerShip.value ?
+          this.getValidDataForInt(item.companyOwnerShip, 1) : null,
         linkedInUrl: this.getValidDataForString(item.linkedInUrl),
         title: this.getValidDataForString(item.title),
         resume: [
@@ -1245,8 +1246,8 @@ export class BusinessAppStore {
   @computed get notificationCard() {
     return find(BUSINESS_APPLICATION_NOTIFICATION_CARD.applicationStatus, e =>
       find(this.fetchBusinessApplication, a => a.applicationStatus === e.applicationStatus)) ||
-      (get(offeringsStore, 'data.data.getOfferings') && find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e =>
-        find(offeringsStore.data.data.getOfferings, a => e.offeringStage.includes(a.stage))));
+      find(BUSINESS_APPLICATION_NOTIFICATION_CARD.offeringStage, e =>
+        find(get(offeringsStore, 'data.data.getOfferings') || [], a => e.offeringStage.includes(a.stage)));
   }
 }
 

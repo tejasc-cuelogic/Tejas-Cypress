@@ -197,6 +197,17 @@ class FormValidator {
           currentForm.fields[field].fileData = [];
           currentForm.fields[field].preSignedUrl = [];
         }
+      } else if (Array.isArray(toJS(currentForm.fields[field]))) {
+        const arr = toJS(currentForm.fields[field]);
+        arr.map((item, index) => {
+          const fieldKeys = Object.keys(currentForm.fields[field][index]);
+          fieldKeys.map((f) => {
+            currentForm.fields[field][index][f].value = '';
+            return true;
+          });
+          return true;
+        });
+        currentForm.fields[field].splice(1);
       } else {
         currentForm.fields[field].value = '';
         if (currentForm.fields[field].objType === 'FileObjectType') {
