@@ -312,14 +312,15 @@ export class BankAccountStore {
           this.resetFormData('formLinkBankManually');
           userDetailsStore.getUser(userStore.currentUser.sub);
           resolve();
+          uiStore.setProgress(false);
         })
         .catch((error) => {
+          uiStore.setProgress(false);
           uiStore.setErrors(error.message);
           Helper.toast(error.message, 'error');
           reject(error.message);
         }).finally(() => {
           this.setLinkedBankCancelRequestStatus(false);
-          uiStore.setProgress(false);
         });
       // .catch((error) => Helper.toast('Error', 'error'));
     });
