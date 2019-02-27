@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -35,7 +35,8 @@ export default class Summary extends Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
     } else {
       this.props.entityAccountStore.submitAccount().then(() => {
-        this.props.history.replace('app/summary');
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        this.props.history.push('app/summary');
       });
     }
   }

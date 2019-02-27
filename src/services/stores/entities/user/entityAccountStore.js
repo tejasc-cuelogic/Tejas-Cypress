@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find } from 'lodash';
+import { isEmpty, find, get } from 'lodash';
 import graphql from 'mobx-apollo';
 import React from 'react';
 import moment from 'moment';
@@ -28,6 +28,8 @@ class EntityAccountStore {
   @observable FORM_DOCS_FRM = FormValidator.prepareFormObject(ENTITY_FORMATION_DOCS);
   @observable entityData = {};
   @observable stepToBeRendered = '';
+  @observable entityAccountId = null;
+
 
   @action
   setStepToBeRendered(step) {
@@ -107,7 +109,7 @@ class EntityAccountStore {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
     uiStore.setProgress();
     const payLoad = {
-      accountId: accountDetails.details.accountId,
+      accountId: get(accountDetails, 'details.accountId') || this.entityAccountId,
       accountType: 'ENTITY',
     };
     return new Promise((resolve, reject) => {
@@ -118,7 +120,7 @@ class EntityAccountStore {
             variables: payLoad,
           })
           .then(() => {
-            Helper.toast('Individual account submitted successfully.', 'success');
+            Helper.toast('Entity account submitted successfully.', 'success');
             resolve();
           })
           .catch((err) => {
@@ -421,11 +423,12 @@ class EntityAccountStore {
       accountType: 'ENTITY',
     };
     let actionPerformed = 'submitted';
+    const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
-      if (accountDetails) {
+      if (accountDetails || this.entityAccountId) {
         mutation = upsertInvestorAccount;
-        variables.accountId = accountDetails.details.accountId;
+        variables.accountId = get(accountDetails, 'details.accountId')
+          || this.entityAccountId;
         actionPerformed = 'updated';
       }
     }
@@ -436,6 +439,7 @@ class EntityAccountStore {
           variables,
         })
         .then(action((result) => {
+          this.entityAccountId = result.data.upsertInvestorAccount.accountId;
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
@@ -670,6 +674,7 @@ class EntityAccountStore {
     this.TRUST_INFO_FRM.meta.error = '';
     this.entityData = {};
     this.stepToBeRendered = '';
+    this.entityAccountId = null;
   };
 }
 

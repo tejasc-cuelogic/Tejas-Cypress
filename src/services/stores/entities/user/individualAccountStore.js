@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { isEmpty, find } from 'lodash';
+import { isEmpty, find, get } from 'lodash';
 import { bankAccountStore, uiStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
@@ -12,6 +12,8 @@ class IndividualAccountStore {
   @observable stepToBeRendered = 0;
   @observable submited = false;
   @observable isManualLinkBankSubmitted = false;
+  @observable individualAccId = null;
+
 
   @action
   setIsManualLinkBankSubmitted = (status) => {
@@ -36,7 +38,7 @@ class IndividualAccountStore {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
     uiStore.setProgress();
     const payLoad = {
-      accountId: accountDetails.details.accountId,
+      accountId: get(accountDetails, 'details.accountId') || this.individualAccId,
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
@@ -96,6 +98,7 @@ class IndividualAccountStore {
             })
             .then(action((result) => {
               if (result.data.upsertInvestorAccount) {
+                this.individualAccId = result.data.upsertInvestorAccount;
                 const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }

@@ -422,6 +422,7 @@ export class BankAccountStore {
             resolve();
           },
           onError: (err) => {
+            uiStore.setProgress(false);
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
             reject();
           },
