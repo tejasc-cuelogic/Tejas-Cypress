@@ -87,7 +87,7 @@ export class TransactionStore {
   }
 
   @computed get getAllTransactions() {
-    return (this.data && this.data.data.getAccountTransactions &&
+    return (this.data && this.data.data && this.data.data.getAccountTransactions &&
       toJS(this.data.data.getAccountTransactions)) || [];
   }
 
