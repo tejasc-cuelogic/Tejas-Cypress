@@ -2,6 +2,7 @@ import React from 'react';
 import { inject, observer } from 'mobx-react';
 // import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
+import money from 'money-math';
 import { MultiStep } from '../../../../../helper';
 import TransferRequest from './TransferRequest';
 import AccountType from './AccountType';
@@ -12,10 +13,11 @@ import Helper from '../../../../../helper/utility';
 @inject('uiStore', 'portfolioStore', 'campaignStore', 'referralsStore', 'investmentStore', 'authStore', 'userStore', 'investmentLimitStore', 'userDetailsStore', 'accreditationStore')
 @observer
 export default class InvestNow extends React.Component {
-  state = { submitLoading: false };
+  state = { submitLoading: false, isInvestmentUpdate: false };
 
   componentWillMount() {
     this.props.investmentStore.setStepToBeRendered(0);
+    this.setState({ isInvestmentUpdate: false });
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
     if (!isUserLoggedIn) {
@@ -30,12 +32,6 @@ export default class InvestNow extends React.Component {
       this.props.portfolioStore.setFieldValue('currentOfferingId', offeringId);
       this.props.campaignStore.getCampaignDetails(offeringId);
     }
-    // syncing data between saasquatch and RDS
-    // const { userDetails } = this.props.userDetailsStore;
-    // const saasQuatchUserId = get(userDetails, 'saasquatch.userId');
-    // if (saasQuatchUserId) {
-    //   this.props.referralsStore.upsertUserReferralCredits(saasQuatchUserId);
-    // }
   }
   componentDidMount() {
     window.addEventListener('message', this.handleIframeTask);
@@ -53,7 +49,7 @@ export default class InvestNow extends React.Component {
   handleStepChange = (step) => {
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
     if (step === 1) {
-      this.props.investmentStore.setFieldValue('disableNextbtn', true);
+      this.props.investmentStore.setFieldValue('disableNextbtn', false);
     } else if (step === 0) {
       this.handleStepChnageOnPreviousForAlert();
     }
@@ -109,31 +105,30 @@ export default class InvestNow extends React.Component {
   multiClickHandler = (step) => {
     const { inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     if (step.name === 'Financial Info') {
-      // this.props.investmentStore.getInvestorAvailableCash().then(() => {
-      const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
-      if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
-        this.handleStepChange(step.stepToBeRendered);
-      } else {
-        // this.setState({ submitLoading: true });
-        this.props.investmentStore.validateInvestmentAmountInOffering().then((isValid) => {
-          this.setState({ submitLoading: isValid });
-          if (isValid) {
-            // this.props.investmentStore.generateAgreement().then(() => {
-            Helper.toast('Agreement has been generated successfully!', 'success');
-            this.props.investmentStore.setStepToBeRendered(0);
-            this.setState({ submitLoading: false });
-            this.props.history.push('agreement');
-            // }).finally(() => {
-            //   this.setState({ submitLoading: false });
-            // });
-          }
-        }).catch(() => {
+      // if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
+      //   this.handleStepChange(step.stepToBeRendered);
+      // } else {
+      // this.setState({ submitLoading: true });
+      this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
+        this.setState({ submitLoading: response.isValid });
+        if (response.isValid) {
+          Helper.toast('Agreement has been generated successfully!', 'success');
+          this.props.investmentStore.setStepToBeRendered(0);
           this.setState({ submitLoading: false });
-        })
-          .finally(() => {
-            this.setState({ submitLoading: false });
-          });
-      }
+          this.props.history.push('agreement');
+        } else if (response.flag === 1) {
+          const { getTransferRequestAmount, investAccTypes } = this.props.investmentStore;
+          if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
+            this.handleStepChange(step.stepToBeRendered);
+          }
+        }
+      }).catch(() => {
+        this.setState({ submitLoading: false });
+      })
+        .finally(() => {
+          this.setState({ submitLoading: false });
+        });
+      // }
       // });
     } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
       const { campaign } = this.props.campaignStore;
@@ -149,7 +144,13 @@ export default class InvestNow extends React.Component {
       if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
-          .then(() => {
+          .then((data) => {
+            const invesHealthCheckDetail = data && data.investNowHealthCheck ?
+              data.investNowHealthCheck : null;
+            if (invesHealthCheckDetail && invesHealthCheckDetail.previousAmountInvested &&
+              !money.isZero(invesHealthCheckDetail.previousAmountInvested)) {
+              this.setState({ isInvestmentUpdate: true });
+            }
             this.handleStepChange(step.stepToBeRendered);
           });
       } else {
@@ -167,6 +168,7 @@ export default class InvestNow extends React.Component {
     const { showAccountList } = this.props.accreditationStore;
     const { investAccTypes } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
+    const { campaign } = this.props.campaignStore;
     const {
       inProgress,
       isEnterPressed,
@@ -189,7 +191,9 @@ export default class InvestNow extends React.Component {
           name: 'Financial Info',
           component: <FinancialInfo
             refLink={this.props.refLink}
-            changeInvest={changeInvest}
+            changeInvest={changeInvest || this.state.isInvestmentUpdate}
+            offeringDetails={this.state.isInvestmentUpdate && campaign}
+            isFromPublicPage={this.state.isInvestmentUpdate}
           />,
           isValid: '',
           stepToBeRendered: 2,
@@ -198,7 +202,7 @@ export default class InvestNow extends React.Component {
         {
           name: 'TransferRequest',
           component: <TransferRequest
-            changeInvest={changeInvest}
+            changeInvest={changeInvest || this.state.isInvestmentUpdate}
             confirm={this.handleConfirm}
             cancel={this.handleCancel}
           />,

@@ -38,6 +38,7 @@ export class InvestmentStore {
   @observable byDefaultRender = true;
   @observable showTransferRequestErr = false;
   @observable investmentFlowErrorMessage = null;
+  @observable isGetTransferRequestCall = false;
 
   @action
   setShowTransferRequestErr = (status) => {
@@ -82,12 +83,13 @@ export class InvestmentStore {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
     const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+    const cashAndCreditBalance = money.add(getCurrCashAvailable, getCurrCreditAvailable);
     const getPreviousInvestedAmount =
       (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
     const transferAmount = money.subtract(
       this.investmentAmount,
       // money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
-      money.add(getCurrCashAvailable, getCurrCreditAvailable, getPreviousInvestedAmount),
+      money.add(cashAndCreditBalance, getPreviousInvestedAmount),
     );
     return money.isNegative(transferAmount) || money.isZero(transferAmount) ? 0 : transferAmount;
     // return transferAmount < 0 ? 0 : transferAmount;
@@ -319,25 +321,29 @@ export class InvestmentStore {
               offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
               userId: userDetailsStore.currentUserId,
               accountId: this.getSelectedAccountTypeId,
-              transferAmount: this.getTransferRequestAmount,
+              transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount : 0,
               // creditToSpend: this.getSpendCreditValue,
               callbackUrl: `${window.location.origin}/secure-gateway`,
             },
           })
           .then(action((resp) => {
-            const { status, message } = resp.data.investNowGeneratePurchaseAgreement;
+            const { status, message, flag } = resp.data.investNowGeneratePurchaseAgreement;
             this.setFieldValue('isValidInvestAmtInOffering', status);
             this.setFieldValue('disableNextbtn', status);
             this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
             this.INVESTMONEY_FORM.meta.isValid = status;
             // Validated investment amount fields:
-            const errorMessage = !status ? message : null;
-            this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            if (flag === 1) {
+              this.isGetTransferRequestCall = true;
+            } else {
+              const errorMessage = !status ? message : null;
+              this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            }
             if (!resp.data.investNowGeneratePurchaseAgreement) {
               this.setShowTransferRequestErr(true);
             }
             this.setFieldValue('agreementDetails', resp.data.investNowGeneratePurchaseAgreement);
-            resolve(status);
+            resolve({ isValid: status, flag });
           }))
           .catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
@@ -479,7 +485,7 @@ export class InvestmentStore {
           })
           .then((data) => {
             // resolve(data.data.finishInvestment);
-            const { status, message } = data.data.finishInvestment;
+            const { status, message } = data.data.investNowSubmit;
             const errorMessage = !status ? message : null;
             this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             resolve(status);
@@ -598,6 +604,14 @@ export class InvestmentStore {
     this.INVESTMENT_LIMITS_FORM = Validator
       .setFormData(this.INVESTMENT_LIMITS_FORM, investments);
     this.INVESTMENT_LIMITS_FORM.meta.isValid = true;
+  }
+  @action
+  validateMaskedInputForAmount = () => {
+    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
+      this.setFieldValue('disableNextbtn', true);
+    } else {
+      this.setFieldValue('disableNextbtn', false);
+    }
   }
 }
 

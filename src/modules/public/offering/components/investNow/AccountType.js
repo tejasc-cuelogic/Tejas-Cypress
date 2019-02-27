@@ -102,7 +102,8 @@ class AccountType extends Component {
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
-    if (activeAccounts.length && investAccTypes.values.length === 1 && selectedAccountStatus) {
+    if (activeAccounts.length && selectedAccountStatus &&
+      (investAccTypes.values.length === 1 || this.props.changeInvest)) {
       if (this.props.investmentStore.getSelectedAccountTypeId) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);

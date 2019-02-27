@@ -14,7 +14,8 @@ import Helper from '../../../../../helper/utility';
 @observer
 class FinancialInfo extends Component {
   componentWillMount() {
-    if (this.props.changeInvest) {
+    if (this.props.changeInvest &&
+      !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
       const { getInvestNowHealthCheck } = this.props.investmentLimitStore;
       const { match } = this.props;
       const offeringId = match && match.params && match.params.offeringId;
@@ -33,7 +34,7 @@ class FinancialInfo extends Component {
       calculateEstimatedReturn,
       validBonusRewards,
       setStepToBeRendered,
-      // validateInvestmentAmountInOffering,
+      validateMaskedInputForAmount,
       getDiffInvestmentLimitAmount,
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
@@ -41,15 +42,19 @@ class FinancialInfo extends Component {
       // getCurrentLimitForAccount,
       getCurrentInvestNowHealthCheck,
     } = this.props.investmentLimitStore;
-    const { match, refLink } = this.props;
+    const { match, refLink, offeringDetails } = this.props;
     const currentInvestmentLimit = getCurrentInvestNowHealthCheck &&
       getCurrentInvestNowHealthCheck.investmentLimit ?
       getCurrentInvestNowHealthCheck.investmentLimit : 0;
-    const currentInvestedAmount = getInvestorAccountById && getInvestorAccountById.investedAmount ?
-      getInvestorAccountById.investedAmount : 0;
+    // const currentInvestedAmount = getInvestorAccountById &&
+    // getInvestorAccountById.investedAmount ?
+    //   getInvestorAccountById.investedAmount : 0;
+    const currentInvestedAmount = getCurrentInvestNowHealthCheck &&
+      getCurrentInvestNowHealthCheck.previousAmountInvested ?
+      getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
     const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
       getInvestorAccountById.offering.keyTerms &&
-      getInvestorAccountById.offering.keyTerms.shorthandBusinessName ? getInvestorAccountById.offering.keyTerms.shorthandBusinessName : '-';
+      getInvestorAccountById.offering.keyTerms.shorthandBusinessName ? getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails && offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ? offeringDetails.keyTerms.shorthandBusinessName : '-';
     return (
       <Aux>
         <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
@@ -61,7 +66,7 @@ class FinancialInfo extends Component {
             <Header as="h4" className="mb-half">Enter new investment amount. </Header>
             <p>
               Your investment limit:
-              {Helper.MoneyMathDisplayCurrency(currentInvestedAmount || 0)}
+              {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0)}
               <Popup
                 wide
                 trigger={<Icon className="ns-help-circle ml-10" color="green" />}
@@ -77,7 +82,7 @@ class FinancialInfo extends Component {
                 position="top center"
                 hoverable
               />
-              <Link to={this.props.changeInvest ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+              <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
             </p>
           </Aux>
         }
@@ -99,7 +104,7 @@ class FinancialInfo extends Component {
             prefix="$ "
             fielddata={INVESTMONEY_FORM.fields.investmentAmount}
             changed={values => investMoneyChange(values, 'investmentAmount')}
-            // onblur={validateInvestmentAmountInOffering}
+            onkeyup={validateMaskedInputForAmount}
           />
         </Form>
         {this.props.changeInvest &&

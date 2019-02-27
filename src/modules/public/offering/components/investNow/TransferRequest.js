@@ -35,7 +35,7 @@ class TransferRequest extends Component {
     this.props.investmentStore.setShowTransferRequestErr(false);
   }
   render() {
-    const { investmentStore, investmentLimitStore } = this.props;
+    const { investmentStore, investmentLimitStore, changeInvest } = this.props;
     const {
       getTransferRequestAmount,
       // getCurrCashAvailable,
@@ -47,6 +47,8 @@ class TransferRequest extends Component {
     const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
     const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
     const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+    const getPreviousInvestedAmount =
+      (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
     if (showTransferRequestErr) {
       return (
         <div className="center-align">
@@ -70,6 +72,14 @@ class TransferRequest extends Component {
                 {Helper.CurrencyFormat(investmentAmount)}
               </Table.Cell>
             </Table.Row>
+            {changeInvest &&
+            <Table.Row>
+              <Table.Cell>Previous Investment:</Table.Cell>
+              <Table.Cell collapsing>
+                {Helper.MoneyMathDisplayCurrency(getPreviousInvestedAmount)}
+              </Table.Cell>
+            </Table.Row>
+            }
             <Table.Row>
               <Table.Cell>
                 Cash Available:
