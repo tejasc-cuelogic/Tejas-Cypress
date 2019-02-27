@@ -10,6 +10,7 @@ import {
   ENTITY_PERSONAL_INFO,
   ENTITY_FORMATION_DOCS,
   FILE_UPLOAD_STEPS,
+  US_STATES_FOR_INVESTOR,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount, checkEntityTaxIdCollision } from '../../queries/account';
@@ -144,6 +145,8 @@ class EntityAccountStore {
 
   @action
   setEntityAttributes = (step, removeUploadedData, field) => {
+    const selectedState =
+    find(US_STATES_FOR_INVESTOR, { value: this.GEN_INFO_FRM.fields.state.value });
     switch (step) {
       case 'General':
         this.entityData.name = this.GEN_INFO_FRM.fields.name.value;
@@ -151,7 +154,7 @@ class EntityAccountStore {
         this.entityData.address = {
           street: this.GEN_INFO_FRM.fields.street.value,
           city: this.GEN_INFO_FRM.fields.city.value,
-          state: this.GEN_INFO_FRM.fields.state.value,
+          state: selectedState ? selectedState.key : '',
           zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
         };
         this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
@@ -219,6 +222,8 @@ class EntityAccountStore {
   get accountAttributes() {
     /* eslint-disable camelcase */
     let payload = {};
+    const selectedState =
+          find(US_STATES_FOR_INVESTOR, { value: this.GEN_INFO_FRM.fields.state.value });
     payload = {
       limits: {
         netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
@@ -232,7 +237,7 @@ class EntityAccountStore {
       address: {
         street: this.GEN_INFO_FRM.fields.street.value,
         city: this.GEN_INFO_FRM.fields.city.value,
-        state: this.GEN_INFO_FRM.fields.state.value,
+        state: selectedState ? selectedState.key : '',
         zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
       },
       legalInfo: {
@@ -491,6 +496,9 @@ class EntityAccountStore {
       } else if (form === 'GEN_INFO_FRM') {
         if ((f === 'taxId' || f === 'name' || f === 'entityType') && accountDetails && accountDetails[f]) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails[f];
+        } else if (f === 'state' && accountDetails && accountDetails.address && accountDetails.address.state) {
+          this.GEN_INFO_FRM.fields[f].value =
+          find(US_STATES_FOR_INVESTOR, { key: accountDetails.address.state }).value;
         } else if (accountDetails && accountDetails.address) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails.address[f];
         }
