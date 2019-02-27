@@ -41,7 +41,7 @@ export default class FormInput extends Component {
                 trigger={<Icon className="ns-help-circle" />}
                 content={tooltip}
                 position="top center"
-                className="center-align"
+                className={props.name === 'securitiesExemption' ? 'left-align' : 'center-align'}
                 wide
               />
             }
