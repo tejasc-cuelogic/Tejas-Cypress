@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, omit } from 'lodash';
+import { isEmpty, find, omit, get } from 'lodash';
 import { DataFormatter, FormValidator } from '../../../../helper';
 import {
   IRA_ACC_TYPES,
@@ -20,6 +20,7 @@ class IraAccountStore {
   @observable IDENTITY_FRM = FormValidator.prepareFormObject(IRA_IDENTITY);
   @observable ACC_TYPES_FRM = FormValidator.prepareFormObject(IRA_ACC_TYPES);
   @observable FUNDING_FRM = FormValidator.prepareFormObject(IRA_FUNDING);
+  @observable iraAccountId = null;
 
   @observable stepToBeRendered = 0;
   @observable accountNotSet = '';
@@ -137,7 +138,7 @@ class IraAccountStore {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
     uiStore.setProgress();
     const payLoad = {
-      accountId: accountDetails.details.accountId,
+      accountId: get(accountDetails, 'details.accountId') || this.iraAccountId,
       accountType: 'IRA',
     };
     return new Promise((resolve, reject) => {
@@ -210,7 +211,9 @@ class IraAccountStore {
           this.submitForm(currentStep, accountAttributes).then(() => {
             res();
           })
-            .catch(() => {
+            .catch((err) => {
+              uiStore.setErrors(DataFormatter.getSimpleErr(err));
+              uiStore.setProgress(false);
               rej();
             });
         } else {
@@ -281,7 +284,9 @@ class IraAccountStore {
             this.submitForm(currentStep, accountAttributes).then(() => {
               res();
             })
-              .catch(() => {
+              .catch((err) => {
+                uiStore.setErrors(DataFormatter.getSimpleErr(err));
+                uiStore.setProgress(false);
                 rej();
               });
           } else {
@@ -306,9 +311,10 @@ class IraAccountStore {
     let actionPerformed = 'submitted';
     if (userDetailsStore.currentUser.data) {
       const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'ira' });
-      if (accountDetails) {
+      if (accountDetails || this.iraAccountId) {
         mutation = upsertInvestorAccount;
-        variables.accountId = accountDetails.details.accountId;
+        variables.accountId = get(accountDetails, 'details.accountId')
+          || this.iraAccountId;
         actionPerformed = 'updated';
       }
     }
@@ -319,8 +325,9 @@ class IraAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (result.data.updateInvestorAccount && currentStep.name === 'Link bank') {
-            const { linkedBank } = result.data.updateInvestorAccount;
+          this.iraAccountId = result.data.upsertInvestorAccount.accountId;
+          if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+            const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }
           if (currentStep.name === 'Identity') {
@@ -458,7 +465,7 @@ class IraAccountStore {
             name: 'Identity',
             validate: validationActions.validateIRAIdentityInfo,
             form: 'IDENTITY_FRM',
-            stepToBeRendered: 5,
+            stepToBeRendered: this.stepToBeRendered === 3 ? 4 : 5,
           };
           this.createAccount(currentStep, false);
         })
@@ -497,6 +504,7 @@ class IraAccountStore {
     this.resetFormData('FUNDING_FRM');
     this.stepToBeRendered = 0;
     this.accountNotSet = '';
+    this.iraAccountId = null;
   }
 }
 export default new IraAccountStore();

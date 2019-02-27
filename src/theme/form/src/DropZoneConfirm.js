@@ -55,7 +55,7 @@ export default class DropZone extends Component {
       <div className={`file-uploader-wrap ${this.props.containerclassname}`}>
         {label &&
           <label>
-            {label}
+            {(this.props.asterisk && this.props.asterisk === 'true' ? `${label}*` : label)}
             {this.props.tooltip &&
             <Popup
               trigger={<Icon className="ns-help-circle" />}
