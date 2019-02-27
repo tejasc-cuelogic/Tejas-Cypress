@@ -66,7 +66,10 @@ export default class Summary extends Component {
       FUNDING_FRM.fields.fundingType.values,
       { value: FUNDING_FRM.fields.fundingType.value },
     );
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      plaidAccDetails, formLinkBankManually,
+      formAddFunds, depositMoneyNow,
+    } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
@@ -111,6 +114,15 @@ export default class Summary extends Component {
                     <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                   </Table.Row>
                 }
+                <Table.Row>
+                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell>
+                    {!depositMoneyNow ?
+                    Helper.CurrencyFormat(0) :
+                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                    Helper.CurrencyFormat(0)}
+                  </Table.Cell>
+                </Table.Row>
               </Table.Body>
             </Table>
           </div>
