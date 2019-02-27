@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -35,7 +35,8 @@ export default class Summary extends Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {
       this.props.iraAccountStore.submitAccount().then(() => {
-        this.props.history.replace('/app/summary');
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        this.props.history.push('app/summary');
       });
     }
   }

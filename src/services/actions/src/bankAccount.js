@@ -67,6 +67,9 @@ export class BankAccount {
       product: ['auth, transactions'],
       onLoad: () => {
         // The Link module finished loading.
+        const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
+        ACC_LINK_BANK_MAPPING[accountValue].store
+          .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);
