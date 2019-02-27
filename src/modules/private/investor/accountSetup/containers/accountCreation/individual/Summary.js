@@ -7,7 +7,7 @@ import { Header, Button, Message, Table } from 'semantic-ui-react';
 import { isEmpty } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
-@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore')
+@inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends React.Component {
@@ -47,6 +47,7 @@ export default class Summary extends React.Component {
           this.props.history.push(partialInvestNowSessionURL);
           setPartialInvestmenSession();
         } else {
+          this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
           this.props.history.replace('app/summary');
         }
       }).catch(() => { });

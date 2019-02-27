@@ -56,9 +56,9 @@ export const CAMPAIGN_OFFERING_STATUS = {
 export const CAMPAIGN_KEYTERMS_REGULATION = {
   FP_TX: 'Rule 147, TX',
   FP_CF: 'Reg CF - US',
-  BD_CF: 'Reg CF - Securities',
-  BD_506C: 'Reg D 506(c) - Securities',
-  BD_CF_506C: 'Reg CF + Reg D 506(c) - Securities',
+  BD_CF: 'Reg CF Offering',
+  BD_506C: 'Reg D Offering',
+  BD_CF_506C: 'Parallel Offering',
 };
 export const CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING = {
   FP_TX: 'TX',

@@ -124,8 +124,7 @@ class offerDetails extends Component {
   }
   modifyInvestmentDetailsSubNav = (navList, campaign) => {
     const newNavList = [];
-    const offeringSecurityType =
-      (campaign && campaign.keyTerms && campaign.keyTerms.securities) || null;
+    const offeringSecurityType = campaign.offerStructure;
     navList.forEach((item) => {
       const tempItem = item;
       if (has(item, 'subNavigations') && item.title === 'Investment Details') {

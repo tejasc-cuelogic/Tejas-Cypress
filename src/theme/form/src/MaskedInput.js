@@ -38,7 +38,7 @@ export default class MaskedInput extends Component {
       >
         {!props.hidelabel &&
           <label>
-            {props.label || label}
+            {(props.label && (props.asterisk && props.asterisk === 'true' ? `${props.label}*` : props.label)) || (props.asterisk && props.asterisk === 'true' ? `${label}*` : label)}
             {tooltip &&
               <Popup
                 hoverable={props.hoverable}

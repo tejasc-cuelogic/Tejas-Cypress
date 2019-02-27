@@ -13,6 +13,7 @@ const Experience = props => (
           key={field}
           name={field}
           number
+          asterisk="true"
           tooltip={props.fields[field].tooltip}
           value={props.fields[field].value}
           fielddata={props.fields[field]}
@@ -30,6 +31,7 @@ const Experience = props => (
           prefix="$ "
           name={field}
           currency
+          asterisk="true"
           tooltip={props.fields[field].tooltip}
           value={props.fields[field].value}
           fielddata={props.fields[field]}
