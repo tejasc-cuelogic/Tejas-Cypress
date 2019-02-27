@@ -11,20 +11,22 @@ const isMobile = document.documentElement.clientWidth < 768;
 @inject('articleStore')
 @observer
 export default class Insights extends Component {
+  state = {
+    sortAsc: false,
+  };
   componentWillMount() {
     if (this.props.match.params && this.props.match.params.id) {
-      this.props.articleStore.requestArticlesByCategoryId(this.props.match.params.id);
+      this.props.articleStore.requestAllArticles(true, false, this.props.match.params.id);
     } else {
-      this.props.articleStore.requestAllArticles(true);
+      this.props.articleStore.requestAllArticles(true, false);
     }
     this.props.articleStore.getCategoryList(true);
     this.props.articleStore.featuredRequestArticlesByCategoryId();
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.match.params && nextProps.match.params.id) {
-      this.props.articleStore.requestArticlesByCategoryId(nextProps.match.params.id);
-    } else {
-      this.props.articleStore.requestAllArticles(true);
+      this.props.articleStore
+        .requestAllArticles(true, this.state.sortAsc, nextProps.match.params.id);
     }
   }
   activeText = () => {
@@ -41,7 +43,10 @@ export default class Insights extends Component {
     return 'All';
   }
   requestAllArticles = (isPublic, sortBy) => {
-    this.props.articleStore.requestAllArticles(isPublic, sortBy);
+    this.setState({
+      sortAsc: sortBy,
+    });
+    this.props.articleStore.requestAllArticles(isPublic, this.state.sortAsc);
   }
   render() {
     const {
@@ -94,6 +99,7 @@ export default class Insights extends Component {
                     as={Link}
                     to="#"
                     onClick={() => this.requestAllArticles(true, false)}
+                    className={this.state.sortAsc ? 'active' : ''}
                   >Newest
                   </Dropdown.Item>
                   <Dropdown.Item
@@ -101,6 +107,7 @@ export default class Insights extends Component {
                     as={Link}
                     to="#"
                     onClick={() => this.requestAllArticles(true, true)}
+                    className={this.state.sortAsc ? '' : 'active'}
                   >Oldest
                   </Dropdown.Item>
                   {/* <Dropdown.Item as={Link} to="/">Popular</Dropdown.Item> */}
