@@ -31,18 +31,26 @@ class KeyTerms extends Component {
         <Table basic="very" className="key-terms-table neutral-text">
           <Table.Body>
             <Table.Row verticalAlign="top">
+              <Table.Cell><b>Issuer</b>
+              </Table.Cell>
+              <Table.Cell className="grey-header">
+                {get(campaign, 'keyTerms.legalBusinessName') ?
+                  get(campaign, 'keyTerms.legalBusinessName') : '-'}
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Offering</b>
               </Table.Cell>
               <Table.Cell className="grey-header">
-                {get(campaign, 'keyTerms.regulation') ?
-                  CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : '-'}
+                {get(campaign, 'regulation') ?
+                  CAMPAIGN_KEYTERMS_REGULATION[campaign.regulation] : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Securities</b></Table.Cell>
               <Table.Cell className="grey-header">
-                {get(campaign, 'keyTerms.securities') ?
-                  CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
+                {offerStructure ?
+                  CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                   :
                 '-'}
               </Table.Cell>
@@ -58,8 +66,8 @@ class KeyTerms extends Component {
                   />
                 </Table.Cell>
                 <Table.Cell>
-                  {KeyTerms && KeyTerms.interestRate ?
-                      `${KeyTerms.interestRate}%`
+                  {get(campaign, 'keyTerms.interestRate') ?
+                      `${get(campaign, 'keyTerms.interestRate')}%`
                     :
                     'NA'
                 }
@@ -127,7 +135,7 @@ class KeyTerms extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {KeyTerms && KeyTerms.premoneyValuation ? Helper.CurrencyFormat(KeyTerms.premoneyValuation) : ' NA'}
+                      {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>
@@ -136,7 +144,7 @@ class KeyTerms extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {KeyTerms && KeyTerms.unitPrice ? Helper.CurrencyFormat(KeyTerms.unitPrice) : ' NA'}
+                      {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>

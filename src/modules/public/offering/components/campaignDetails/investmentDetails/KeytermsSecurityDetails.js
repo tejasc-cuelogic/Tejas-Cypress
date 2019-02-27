@@ -3,7 +3,7 @@ import Parser from 'html-react-parser';
 import { get } from 'lodash';
 import Aux from 'react-aux';
 import { Table, Popup, Icon } from 'semantic-ui-react';
-import { ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import Helper from '../../../../../../helper/utility';
 
 class KeyTermsSecurityDetails extends Component {
@@ -86,42 +86,39 @@ class KeyTermsSecurityDetails extends Component {
     }
         {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
         <Aux>
+          {KeyTerms && KeyTerms.roundType &&
           <Table.Row verticalAlign="top">
             <Table.Cell width={5} className="neutral-text"><b>Round Type{' '}</b>
             </Table.Cell>
             <Table.Cell>
               <p>
-                {KeyTerms && KeyTerms.roundType ? ROUND_TYPES_ENUM[KeyTerms.roundType] : ' NA'}
+                {ROUND_TYPES_ENUM[KeyTerms.roundType]}
               </p>
             </Table.Cell>
           </Table.Row>
-          <Table.Row verticalAlign="top">
-            <Table.Cell width={5} className="neutral-text"><b>Security Type{' '}</b>
-            </Table.Cell>
-            <Table.Cell>
-              <p>
-                {KeyTerms && KeyTerms.securities ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : ' NA'}
-              </p>
-            </Table.Cell>
-          </Table.Row>
+          }
+          {KeyTerms && KeyTerms.unitPrice &&
           <Table.Row verticalAlign="top">
             <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
             </Table.Cell>
             <Table.Cell>
               <p>
-                {KeyTerms && KeyTerms.unitPrice ? Helper.CurrencyFormat(KeyTerms.unitPrice) : ' NA'}
+                {Helper.CurrencyFormat(KeyTerms.unitPrice)}
               </p>
             </Table.Cell>
           </Table.Row>
+          }
+          {KeyTerms && KeyTerms.premoneyValuation &&
           <Table.Row verticalAlign="top">
             <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
             </Table.Cell>
             <Table.Cell>
               <p>
-                {KeyTerms && KeyTerms.premoneyValuation ? Helper.CurrencyFormat(KeyTerms.premoneyValuation) : ' NA'}
+                {Helper.CurrencyFormat(KeyTerms.premoneyValuation)}
               </p>
             </Table.Cell>
           </Table.Row>
+          }
           {get(KeyTerms, 'additionalKeyterms') && get(KeyTerms, 'additionalKeyterms').length !== 0 &&
             KeyTerms.additionalKeyterms.map(item => (
               <Table.Row verticalAlign="top">

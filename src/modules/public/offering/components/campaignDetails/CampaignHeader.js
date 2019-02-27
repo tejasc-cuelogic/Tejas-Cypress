@@ -131,25 +131,25 @@ export default class CampaignHeader extends Component {
                   }
                   <p className="mb-half">
                     {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
-                      <Aux>
+                      <p>
                       Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
-                      </Aux>
+                      </p>
                     }
                     {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
-                      <Aux>
+                      <p>
                         Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? `${get(campaign, 'keyTerms.investmentMultiple')}` : '-'}
-                      </Aux>
+                      </p>
                     }
                     {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
-                      <Aux>
+                      <p>
                         Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
-                      </Aux> :
+                      </p> :
                       <Aux>
                         <p>
                         Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
                         </p>
                         <p>
-                        Share Price Valuation: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
+                        Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
                         </p>
                       </Aux>
                     }
