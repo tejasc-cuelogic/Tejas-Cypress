@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -35,7 +35,8 @@ export default class Summary extends Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
     } else {
       this.props.entityAccountStore.submitAccount().then(() => {
-        this.props.history.replace('app/summary');
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        this.props.history.push('app/summary');
       });
     }
   }
@@ -58,7 +59,10 @@ export default class Summary extends Component {
     }
       = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      plaidAccDetails, formLinkBankManually,
+      depositMoneyNow, formAddFunds,
+    } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
@@ -115,6 +119,15 @@ export default class Summary extends Component {
                 <Table.Row>
                   <Table.Cell>Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell>
+                    {!depositMoneyNow ?
+                    Helper.CurrencyFormat(0) :
+                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                    Helper.CurrencyFormat(0)}
+                  </Table.Cell>
                 </Table.Row>
               </Table.Body>
             </Table>

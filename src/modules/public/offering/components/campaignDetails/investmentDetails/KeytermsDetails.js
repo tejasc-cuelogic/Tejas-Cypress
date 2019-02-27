@@ -31,13 +31,12 @@ class KeyTermsDetails extends Component {
   render() {
     const { KeyTerms } = this.props;
     const {
-      totalPayment, principalAmt, totalPaymentChart, campaign,
+      totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
-    const { offerStructure } = this.props.campaignStore;
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const revenueShareSummary =
-      KeyTerms && KeyTerms.revShareSummary && KeyTerms.securities ===
+      KeyTerms && KeyTerms.revShareSummary && offerStructure ===
       CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? KeyTerms.revShareSummary : null;
     const keytermsMeta = [
       { key: 'minOfferingAmount', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
@@ -51,87 +50,105 @@ class KeyTermsDetails extends Component {
             <p><b>Issuer</b><br />{get(KeyTerms, 'legalBusinessName') || 'NA' }</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Offering</b><br />{get(KeyTerms, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[KeyTerms.regulation] : 'NA'}</p>
+            <p><b>Type of Offering</b><br />{get(campaign, 'regulation') ? CAMPAIGN_KEYTERMS_REGULATION[campaign.regulation] : 'NA'}</p>
           </Grid.Column>
           <Grid.Column>
-            <p><b>Type of Securities</b><br />{get(KeyTerms, 'securities') ? CAMPAIGN_KEYTERMS_SECURITIES[KeyTerms.securities] : 'NA'}</p>
+            <p><b>Type of Securities</b><br />{offerStructure ? CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] : 'NA'}</p>
           </Grid.Column>
         </Grid>
         <Divider />
         <Table basic="very" className="key-terms-table">
           <Table.Body>
             {keytermsMeta.map(type => (
+              <Aux>
+                {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
+                get(KeyTerms, type.key)) ||
+                (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
+                  <Table.Row verticalAlign="top">
+                    <Table.Cell width={5} className="neutral-text"><b>{type.label}{' '}</b>
+                      {type.popupContent &&
+                        <Popup
+                          trigger={<Icon name="help circle" color="green" />}
+                          content={type.popupContent}
+                          position="top center"
+                        />
+                      }
+                    </Table.Cell>
+                    <Table.Cell>
+                      <p>
+                        {get(KeyTerms, type.key) ?
+                          Helper.CurrencyFormat(get(KeyTerms, type.key))
+                          :
+                          'NA'}
+                      </p>
+                    </Table.Cell>
+                  </Table.Row>
+                }
+              </Aux>
+            ))
+            }
+            {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
+              get(KeyTerms, 'maturity')) ||
+              (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
               <Table.Row verticalAlign="top">
-                <Table.Cell width={5} className="neutral-text"><b>{type.label}{' '}</b>
-                  {type.popupContent &&
-                    <Popup
-                      trigger={<Icon name="help circle" color="green" />}
-                      content={type.popupContent}
-                      position="top center"
-                    />
-                  }
+                <Table.Cell width={5} className="neutral-text"><b>Maturity{' '}</b>
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                    position="top center"
+                  />
+                </Table.Cell>
+                <Table.Cell>
+                  {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : 'NA'}
+                  {
+                      KeyTerms && KeyTerms.startupPeriod &&
+                      ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
+                    }
+                </Table.Cell>
+              </Table.Row>
+            }
+            {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
+              get(KeyTerms, 'frequencyOfPayments')) ||
+              (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
+              <Table.Row verticalAlign="top" >
+                <Table.Cell width={5} className="neutral-text"><b>Payments{' '}</b>
+                  <Popup
+                    trigger={<Icon name="help circle" color="green" />}
+                    content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
+                    position="top center"
+                  />
                 </Table.Cell>
                 <Table.Cell>
                   <p>
-                    {get(KeyTerms, type.key) ?
-                      Helper.CurrencyFormat(get(KeyTerms, type.key))
-                      :
-                      'NA'}
+                    {KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
+                        : 'NA'}
                   </p>
                 </Table.Cell>
               </Table.Row>
-            ))
             }
-            <Table.Row verticalAlign="top">
-              <Table.Cell width={5} className="neutral-text"><b>Maturity{' '}</b>
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                  position="top center"
-                />
-              </Table.Cell>
-              <Table.Cell>
-                {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : 'NA'}
-                {
-                    KeyTerms && KeyTerms.startupPeriod &&
-                    ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
-                  }
-              </Table.Cell>
-            </Table.Row>
-            <Table.Row verticalAlign="top" >
-              <Table.Cell width={5} className="neutral-text"><b>Payments{' '}</b>
-                <Popup
-                  trigger={<Icon name="help circle" color="green" />}
-                  content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
-                  position="top center"
-                />
-              </Table.Cell>
-              <Table.Cell>
-                <p>
-                  {KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
-                      : 'NA'}
-                </p>
-              </Table.Cell>
-            </Table.Row>
             <KeytermsSecurityDetails {...this.props} />
-            <Table.Row verticalAlign="top">
-              <Table.Cell width={5} className="neutral-text">
-                <b>Ownership % Represented by Securities</b>
-              </Table.Cell>
-              <Table.Cell>
-                {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
-                  <p>
-                    <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
-                    Investors will not receive any equity interests in the Issuer or
-                    any voting or management rights with respect to the Issuer as a result of
-                    an investment in Securities.
-                  </p>
-                  :
-                  'NA'
-                }
-              </Table.Cell>
-            </Table.Row>
-            { edgarLink &&
+            {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
+              get(KeyTerms, 'securitiesOwnershipPercentage')) ||
+              (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
+              <Table.Row verticalAlign="top">
+                <Table.Cell width={5} className="neutral-text">
+                  <b>Ownership % Represented by Securities</b>
+                </Table.Cell>
+                <Table.Cell>
+                  {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
+                    <p>
+                      <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
+                      Investors will not receive any equity interests in the Issuer or
+                      any voting or management rights with respect to the Issuer as a result of
+                      an investment in Securities.
+                    </p>
+                    :
+                    'NA'
+                  }
+                </Table.Cell>
+              </Table.Row>
+            }
+            {edgarLink &&
             <Table.Row verticalAlign="top">
               <Table.Cell colSpan={2} className="center-align">
                 <a href={edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`} target="blank" className="highlight-text">

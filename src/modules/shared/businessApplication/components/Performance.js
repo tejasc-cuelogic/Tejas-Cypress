@@ -47,6 +47,7 @@ export default class Performance extends Component {
                       multiple
                       key={field}
                       name={field}
+                      asterisk="true"
                       fielddata={fields[field]}
                       ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_PERF_FRM')}
                       onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_PERF_FRM', index)}
@@ -77,6 +78,7 @@ export default class Performance extends Component {
                             name={field}
                             prefix="$ "
                             currency
+                            asterisk="true"
                             value={fields[field].value}
                             fielddata={fields[field]}
                             changed={businessPerfMaskingChange}
@@ -98,6 +100,7 @@ export default class Performance extends Component {
                           name={field}
                           prefix="$ "
                           currency
+                          asterisk="true"
                           value={fields[field].value}
                           fielddata={fields[field]}
                           changed={businessPerfMaskingChange}
