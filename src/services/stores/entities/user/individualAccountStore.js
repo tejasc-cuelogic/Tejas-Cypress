@@ -24,7 +24,7 @@ class IndividualAccountStore {
     const { userDetails } = userDetailsStore;
     const account = find(userDetails.roles, { name: 'individual' });
     if (!isEmpty(account)) {
-      this.setStepToBeRendered(this.stepToBeRendered === 0 ? 1
+      this.setStepToBeRendered(this.stepToBeRendered === 0 ? 2
         : this.stepToBeRendered);
     }
   }
@@ -98,7 +98,7 @@ class IndividualAccountStore {
             })
             .then(action((result) => {
               if (result.data.upsertInvestorAccount) {
-                this.individualAccId = result.data.upsertInvestorAccount;
+                this.individualAccId = result.data.upsertInvestorAccount.accountId;
                 const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }
