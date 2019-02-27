@@ -13,6 +13,7 @@ const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const getCustomConfig = require('./custom-react-scripts/config');
+const SriPlugin = require('webpack-subresource-integrity');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -196,6 +197,10 @@ module.exports = {
     // It is absolutely essential that NODE_ENV was set to production here.
     // Otherwise React will be compiled in the very slow development mode.
     new webpack.DefinePlugin(env.stringified),
+    // Enable SRI on the NS App
+    new SriPlugin({
+      hashFuncNames: ['sha256', 'sha512'],
+    }),
     // Minify the code.
     new webpack.optimize.UglifyJsPlugin({
       compress: {
