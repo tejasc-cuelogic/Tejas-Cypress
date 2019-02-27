@@ -4,13 +4,13 @@ import { isEmpty, map, uniqWith, isEqual, find } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
-import { changeLinkedBank, changeBankManually, cancelBankRequest, getDecryptedRoutingNumber } from '../../queries/banking';
+import { linkBankRequestPlaid, linkBankRequestManual, linkBankRequestCancel, getDecryptedRoutingNumber } from '../../queries/banking';
 import Helper from '../../../../helper/utility';
 import {
   IND_LINK_BANK_MANUALLY, IND_BANK_ACC_SEARCH, IND_ADD_FUND, FILTER_META,
 } from '../../../../constants/account';
 import validationService from '../../../../api/validation';
-import { getlistLinkedBankUsers, isValidOpeningDepositAmount, updateLinkedAccount } from '../../queries/bankAccount';
+import { getlistLinkedBankUsers, isValidOpeningDepositAmount, linkBankRequestApprove, linkBankRequestDeny } from '../../queries/bankAccount';
 
 export class BankAccountStore {
   @observable bankLinkInterface = 'list';
@@ -272,7 +272,7 @@ export class BankAccountStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: changeLinkedBank,
+          mutation: linkBankRequestPlaid,
           variables: data,
         })
         .then(() => {
@@ -294,7 +294,7 @@ export class BankAccountStore {
   }
 
   @action
-  changeBankManually = () => {
+  linkBankRequestManual = () => {
     const data = Validator.ExtractValues(this.formLinkBankManually.fields);
     const updatedData = {
       bankRoutingNumber: data.routingNumber,
@@ -304,7 +304,7 @@ export class BankAccountStore {
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: changeBankManually,
+          mutation: linkBankRequestManual,
           variables: updatedData,
         })
         .then(() => {
@@ -326,14 +326,14 @@ export class BankAccountStore {
   }
 
   @action
-  cancelBankChangeRequest = () => {
+  linkBankRequestCancel = () => {
     const canceldData = {
       accountId: this.CurrentAccountId,
     };
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: cancelBankRequest,
+          mutation: linkBankRequestCancel,
           variables: canceldData,
         })
         .then(() => {
@@ -430,12 +430,12 @@ export class BankAccountStore {
   }
 
   @action
-  updateAccountChangeAction = (accountId, userId) => {
-    uiStore.setProgress();
+  updateAccountChangeAction = (accountId, userId, isDeny = false) => {
+    uiStore.setProgress(`${accountId}_${isDeny ? 'deny' : 'approve'}`);
     return new Promise((resolve, reject) => {
       client
         .mutate({
-          mutation: updateLinkedAccount,
+          mutation: isDeny ? linkBankRequestDeny : linkBankRequestApprove,
           variables: {
             accountId,
             userId,
@@ -443,7 +443,8 @@ export class BankAccountStore {
           refetchQueries: [{ query: getlistLinkedBankUsers, variables: { page: 1, limit: 100 } }],
         })
         .then((res) => {
-          Helper.toast(res.data.verifyLinkedBank.message, 'success');
+          uiStore.setProgress(false);
+          Helper.toast(isDeny ? res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.' : res.data.verifyLinkedBank.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
           resolve();
         })
         .catch((error) => {
