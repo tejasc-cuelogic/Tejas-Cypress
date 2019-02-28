@@ -6,7 +6,7 @@ import Validator from 'validatorjs';
 import { USER_IDENTITY, IDENTITY_DOCUMENTS, PHONE_VERIFICATION, UPDATE_PROFILE_INFO } from '../../../constants/user';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { uiStore, authStore, userStore, userDetailsStore } from '../../index';
-import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, checkValidAddress, isSsnExistQuery, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
+import { requestOtpWrapper, verifyOTPWrapper, verifyOtp, requestOtp, checkValidAddress, isUniqueSSN, verifyCIPUser, updateUserCIPInfo, verifyCIPAnswers, updateUserPhoneDetail, updateUserProfileData } from '../../queries/profile';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { GqlClient as publicClient } from '../../../../api/publicApi';
 import Helper from '../../../../helper/utility';
@@ -14,7 +14,6 @@ import validationService from '../../../../api/validation';
 import { fileUpload } from '../../../actions';
 import identityHelper from '../../../../modules/private/investor/accountSetup/containers/identityVerification/helper';
 import { US_STATES_FOR_INVESTOR, FILE_UPLOAD_STEPS } from '../../../../constants/account';
-import { NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
 export class IdentityStore {
   @observable ID_VERIFICATION_FRM = FormValidator.prepareFormObject(USER_IDENTITY);
@@ -713,11 +712,11 @@ export class IdentityStore {
     uiStore.setProgress();
     graphql({
       client,
-      query: isSsnExistQuery,
+      query: isUniqueSSN,
       fetchPolicy: 'network-only',
       variables: { ssn },
       onFetch: (data) => {
-        resolve(data.checkUserSSNCollision.alreadyExists);
+        resolve(data.isUniqueSSN.alreadyExists);
       },
     });
   })
@@ -744,19 +743,6 @@ export class IdentityStore {
       },
     });
   })
-
-  @action
-  showErrorMessage = (message) => {
-    const setErrorMessage = (
-      `<span>
-        There was an issue with the information you submitted.
-        ${message}
-        If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href="mailto:${NS_SITE_EMAIL_SUPPORT}">${NS_SITE_EMAIL_SUPPORT}</a>
-      </span>`
-    );
-    uiStore.setProgress(false);
-    uiStore.setErrors(setErrorMessage);
-  }
 
   @action
   resetStoreData = () => {

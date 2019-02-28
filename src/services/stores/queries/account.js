@@ -59,9 +59,9 @@ export const updateInvestorProfileData = gql`
     }
   }`;
 
-export const checkEntityTaxIdCollision = gql`
-query checkEntityTaxIdCollision($taxId: String!) {
-  checkEntityTaxIdCollision(taxId: $taxId) {
+export const isUniqueTaxId = gql`
+query isUniqueTaxId($taxId: String!) {
+  isUniqueTaxId(taxId: $taxId) {
     alreadyExists
   }
 }`;
