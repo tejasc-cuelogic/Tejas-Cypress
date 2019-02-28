@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isEmpty, map, uniqWith, isEqual, find } from 'lodash';
+import { isEmpty, map, uniqWith, isEqual, find, get } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
@@ -402,7 +402,7 @@ export class BankAccountStore {
         userDetailsStore.currentUser.data.user.roles,
         { name: accountStore.investmentAccType },
       );
-      if (accountDetails) {
+      if (get(accountDetails, 'details.accountId')) {
         variables.accountId = accountDetails.details.accountId;
       }
     }

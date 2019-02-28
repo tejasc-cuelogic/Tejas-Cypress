@@ -190,7 +190,7 @@ export default class MultiStep extends React.Component {
           }
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
-            <Dimmer active={this.props.inProgress}>
+            <Dimmer page={this.props.page} active={this.props.inProgress}>
               <Loader active={this.props.inProgress} >
                 {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
               </Loader>

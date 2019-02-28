@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
-import { Button, Modal, Divider, Header, Form, Message } from 'semantic-ui-react';
+import { Button, Modal, Divider, Header, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import { USER_TITLE } from '../../../../../../services/constants/user';
 import { FormInput, FormSelect, AutoComplete, MaskedInput, FormDropDown } from '../../../../../../theme/form';
 import { CipErrors, ListErrors } from '../../../../../../theme/shared';
@@ -22,6 +22,9 @@ const LegalDetails = observer(({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
+      <Dimmer page active={inProgress}>
+        <Loader active={inProgress} />
+      </Dimmer>
       <Form error onSubmit={onSubmit}>
         <Form.Group widths="equal">
           <FormSelect
@@ -114,7 +117,7 @@ const LegalDetails = observer(({
           </Message>
         }
         <div className="center-align mt-30">
-          <Button primary size="large" className="very relaxed" content="Verify my identity" loading={inProgress} />
+          <Button primary size="large" className="very relaxed" content="Verify my identity" />
         </div>
       </Form>
     </Modal.Content>
