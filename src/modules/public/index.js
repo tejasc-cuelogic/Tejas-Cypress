@@ -68,20 +68,24 @@ export default class Public extends React.Component {
     const NoFooter = [
       '/offerings/:id/:section?', '/business-application', '/auth/:section',
     ];
+    const NoHeader = ['/invest/get-started'];
+    const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
-          <Header
-            location={location}
-            stepInRoute={this.props.navStore.stepInRoute}
-            currentUser={this.props.userStore.currentUser}
-            handleLogOut={this.handleLogOut}
-            canSubmitApp={isValid}
-            isPrequalQulify={isPrequalQulify}
-            preQualSubmit={this.preQualSubmit}
-            loading={inProgress}
-          />
+          {hasHeader && (
+            <Header
+              location={location}
+              stepInRoute={this.props.navStore.stepInRoute}
+              currentUser={this.props.userStore.currentUser}
+              handleLogOut={this.handleLogOut}
+              canSubmitApp={isValid}
+              isPrequalQulify={isPrequalQulify}
+              preQualSubmit={this.preQualSubmit}
+              loading={inProgress}
+            />
+          )}
           {this.getRoutes()}
           {(!NoFooter.find(item => matchPath(location.pathname, { path: item }))) &&
           <Footer path={location.pathname} />}
@@ -97,6 +101,7 @@ export default class Public extends React.Component {
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             publicContent={this.getRoutes()}
+            hasHeader={hasHeader}
           />
         </Responsive>
       </Aux>

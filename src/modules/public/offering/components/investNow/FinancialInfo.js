@@ -1,17 +1,29 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Link } from 'react-router-dom';
 import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
-import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
+import Helper from '../../../../../helper/utility';
+import { Spinner } from '../../../../../theme/shared';
 
 @withRouter
-@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore')
+@inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore')
 @observer
 class FinancialInfo extends Component {
+  componentWillMount() {
+    if (this.props.changeInvest &&
+      !this.props.investmentLimitStore.getCurrentInvestNowHealthCheck) {
+      const { getInvestNowHealthCheck } = this.props.investmentLimitStore;
+      const { match } = this.props;
+      const offeringId = match && match.params && match.params.offeringId;
+      if (this.props.investmentStore.getSelectedAccountTypeId) {
+        getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
+      }
+    }
+  }
   render() {
     const {
       investmentAmount,
@@ -22,33 +34,63 @@ class FinancialInfo extends Component {
       calculateEstimatedReturn,
       validBonusRewards,
       setStepToBeRendered,
-      investAccTypes,
-      validateInvestmentAmountInOffering,
+      validateMaskedInputForAmount,
       getDiffInvestmentLimitAmount,
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const { getCurrentLimitForAccount } = this.props.investmentLimitStore;
-    const { match, refLink } = this.props;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const { match, refLink, offeringDetails } = this.props;
+    const currentInvestmentLimit = getCurrentInvestNowHealthCheck &&
+      getCurrentInvestNowHealthCheck.investmentLimit ?
+      getCurrentInvestNowHealthCheck.investmentLimit : 0;
+    const currentInvestedAmount = getCurrentInvestNowHealthCheck &&
+      getCurrentInvestNowHealthCheck.previousAmountInvested ?
+      getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
+    const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
+      getInvestorAccountById.offering.keyTerms &&
+      getInvestorAccountById.offering.keyTerms.shorthandBusinessName ? getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails && offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ? offeringDetails.keyTerms.shorthandBusinessName : '-';
+
+    if (!getCurrentInvestNowHealthCheck) {
+      return <Spinner loaderMessage="Loading.." />;
+    }
+
     return (
       <Aux>
         <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />
-        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your investment amount' : 'How much would you like to invest?'}</Header>
+        <Header as="h3" textAlign="center">{this.props.changeInvest ? 'Update your Investment' : 'How much would you like to invest ?'}</Header>
         {this.props.changeInvest &&
-          <OfferingInvestDetails
-            offering={getInvestorAccountById}
-            accType={investAccTypes.value}
-            changeInvest={this.props.changeInvest}
-            match={this.props.match}
-            getCurrentLimitForAccount={getCurrentLimitForAccount}
-            setStepToBeRendered={setStepToBeRendered}
-          />
+          <Aux>
+            <Header as="h4" textAlign="center" className="grey-header">Your current investment in {offerName}: <span className="highlight-text">{Helper.MoneyMathDisplayCurrency(currentInvestedAmount)}</span></Header>
+            <Divider section className="small" />
+            <Header as="h4" className="mb-half">Enter new investment amount. </Header>
+            <p>
+              Your investment limit:
+              {Helper.MoneyMathDisplayCurrency(currentInvestmentLimit || 0)}
+              <Popup
+                wide
+                trigger={<Icon className="ns-help-circle ml-10" color="green" />}
+                content={(
+                  <span>
+                    Under Regulation Crowdfunding, you have a limit as to how much you may invest
+                    in Reg CF offerings over a 12-month period.
+                     This limit is calculated based on your
+            annual income and net worth. <Link to={`${refLink}/investment-details/#total-payment-calculator`}>Click here</Link> for how this is calculated. If you believe
+            your limit is innacurate, please update your <Link to="/app/profile-settings/profile-data">Investor Profile</Link>
+                  </span>
+                )}
+                position="top center"
+                hoverable
+              />
+              <Link to={this.props.changeInvest && !this.props.isFromPublicPage ? 'change-investment-limit' : `${match.url}/change-investment-limit`} className="link"><small>Update</small></Link>
+            </p>
+          </Aux>
         }
         {!this.props.changeInvest &&
           <InvestmentLimit
             changeInvest={this.props.changeInvest}
             match={this.props.match}
             refLink={refLink}
-            getCurrentLimitForAccount={getCurrentLimitForAccount}
+            getCurrentLimitForAccount={currentInvestmentLimit}
             setStepToBeRendered={setStepToBeRendered}
             diffLimitAmount={getDiffInvestmentLimitAmount}
           />
@@ -61,37 +103,30 @@ class FinancialInfo extends Component {
             prefix="$ "
             fielddata={INVESTMONEY_FORM.fields.investmentAmount}
             changed={values => investMoneyChange(values, 'investmentAmount')}
-            onkeyup={validateInvestmentAmountInOffering}
+            onkeyup={validateMaskedInputForAmount}
           />
         </Form>
         {this.props.changeInvest &&
-          <InvestmentLimit
-            changeInvest={this.props.changeInvest}
-            match={this.props.match}
-            getCurrentLimitForAccount={getCurrentLimitForAccount}
-            setStepToBeRendered={setStepToBeRendered}
-            diffLimitAmount={getDiffInvestmentLimitAmount}
-          />
+          <p className="mt-10">Your investment will be {getDiffInvestmentLimitAmount > 0 ? 'increased' : 'decreased'} by <span className="negative-text">{Helper.CurrencyFormat(getDiffInvestmentLimitAmount || 0)}</span></p>
         }
         <Divider hidden />
         {isValidInvestAmtInOffering &&
           investmentAmount ?
-            <p>
-              <b>Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}</b>
+            <Header as="h4">Total Investment Return: {estReturnVal === '-' ? calculateEstimatedReturn() : estReturnVal}
               <Popup
                 wide
-                trigger={<Icon name="help circle" color="green" />}
+                trigger={<Icon className="ns-help-circle" color="green" />}
                 content="This calculates the total amount that the issuer agrees to pay you under the note purchase agrrement, based on what you enter above. Payment is not guaranteed or ensured and investors may lose some or all of the principal invested. "
                 position="top center"
               />
-            </p>
+            </Header>
           :
           null
         }
         {
           isValidInvestAmtInOffering &&
           validBonusRewards.map(reward => (
-            <p>+ {reward.title}</p>
+            <p className="grey-header">+ {reward.title}</p>
           ))
         }
       </Aux>

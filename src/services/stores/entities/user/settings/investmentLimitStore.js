@@ -4,10 +4,10 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import money from 'money-math';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { uiStore, userDetailsStore } from '../../../index';
+import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
-import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestorAmountInvested } from '../../../queries/investementLimits';
+import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorAmountInvested } from '../../../queries/investementLimits';
 import Helper from '../../../../../helper/utility';
 import { userDetailsQuery } from '../../../queries/users';
 
@@ -22,6 +22,7 @@ export class InvestmentLimitStore {
   @observable entityCurrentLimit = 0;
   @observable individualIRACurrentLimit = 0;
   @observable investedAmount = 0;
+  @observable investNowHealthCheckDetails = null;
 
   @action
   setFieldValue = (field, value) => {
@@ -55,9 +56,33 @@ export class InvestmentLimitStore {
     });
   });
 
+  @action
+  getInvestNowHealthCheck = (accountId, offeringId) => new Promise((resolve) => {
+    this.investNowHealthCheckDetails = graphql({
+      client,
+      query: getInvestNowHealthCheck,
+      variables: {
+        userId: userDetailsStore.currentUserId,
+        accountId,
+        offeringId,
+      },
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
+      fetchPolicy: 'network-only',
+    });
+  });
+
   @computed get getCurrentLimitForAccount() {
-    return (this.investorInvestmentLimit.data &&
+    return (this.investorInvestmentLimit && this.investorInvestmentLimit.data &&
       this.investorInvestmentLimit.data.getInvestorInvestmentLimit) || 0;
+  }
+
+  @computed get getCurrentInvestNowHealthCheck() {
+    return (this.investNowHealthCheckDetails && this.investNowHealthCheckDetails.data &&
+      this.investNowHealthCheckDetails.data.investNowHealthCheck) || null;
   }
 
   //  Reference: https://www.sec.gov/oiea/investor-alerts-and-bulletins/ib_crowdfundingincrease
@@ -161,13 +186,13 @@ export class InvestmentLimitStore {
   @action
   updateInvestmentLimit = () => new Promise((resolve) => {
     const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
-    // const currentLimit = parseInt(this.getInvestmentLimit(data), 10);
     this.updateInvestmentLimits(data, this.currentAccountId).then(() => resolve());
   })
 
   @action
   updateInvestmentLimits = (data, accountId, userId = null, resetProgress = true) => {
     uiStore.setProgress();
+    const { campaign } = campaignStore;
     return new Promise((resolve) => {
       client
         .mutate({
@@ -180,10 +205,11 @@ export class InvestmentLimitStore {
             otherRegCfInvestments: data.cfInvestments,
           },
           refetchQueries: [{
-            query: getInvestorInvestmentLimit,
+            query: getInvestNowHealthCheck,
             variables: {
-              userId: userId || userDetailsStore.currentUserId,
+              userId: userDetailsStore.currentUserId,
               accountId,
+              offeringId: campaign.id,
             },
           },
           {

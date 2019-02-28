@@ -48,7 +48,7 @@ export default class ButtonGroup extends Component {
               {!issuerSubmitted &&
               <Button disabled={htmlEditorImageLoading} loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
               }
-              <Button disabled={htmlEditorImageLoading} loading={inProgress === 'issuer_submitted'} type="button" primary={!issuerSubmitted} onClick={() => updateOffer({ isApproved: true, status: 'issuer_submitted' })} className="relaxed">{issuerSubmitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+              <Button disabled={htmlEditorImageLoading || issuerSubmitted} loading={inProgress === 'issuer_submitted'} type="button" primary={!issuerSubmitted} onClick={() => updateOffer({ isApproved: true, status: 'issuer_submitted' })} className="relaxed">{issuerSubmitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
             </Aux>
           ) : (!approved || (approved && !approved.status)) && (
             <Aux>

@@ -170,9 +170,9 @@ export const updateUserPhoneDetail = gql`
     }
   }`;
 
-export const isSsnExistQuery = gql`
-  query getSsnCollisionsample($ssn: String!) {
-    checkUserSSNCollision(ssn: $ssn) {
+export const isUniqueSSN = gql`
+  query isUniqueSSN($ssn: String!) {
+    isUniqueSSN(ssn: $ssn) {
       alreadyExists
     }
   }`;
