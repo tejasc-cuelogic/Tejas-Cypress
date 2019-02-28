@@ -1,6 +1,5 @@
 import React from 'react';
 import { inject, observer } from 'mobx-react';
-// import { get } from 'lodash';
 import { withRouter } from 'react-router-dom';
 import money from 'money-math';
 import { MultiStep } from '../../../../../helper';
@@ -69,31 +68,19 @@ export default class InvestNow extends React.Component {
     const stepRendered = currentStep && currentStep > 0 ? currentStep - 1 : 0;
     this.props.investmentStore.setStepToBeRendered(stepRendered);
     this.props.investmentStore.setFieldValue('disableNextbtn', true);
-    // this.props.accreditationStore.resetUserAccreditatedStatus();
-    // this.handleStepChange(0);
     this.props.history.push('invest-now');
   }
 
   handleConfirm = () => {
     this.props.investmentStore.setByDefaultRender(false);
     this.setState({ submitLoading: true });
-    this.props.investmentStore.validateInvestmentAmount().then((isValid) => {
-      if (isValid) {
-        this.props.investmentStore.transferFundsForInvestment().then((status) => {
-          if (status) {
-            this.props.investmentStore.generateAgreement().then(() => {
-              this.props.investmentStore.setByDefaultRender(true);
-              Helper.toast('Transfer request is in process!', 'success');
-              this.props.investmentStore.setStepToBeRendered(0);
-              this.setState({ submitLoading: false });
-              this.props.history.push('agreement');
-            }).catch(() => {
-              this.setState({ submitLoading: false });
-            });
-          }
-        }).catch(() => {
-          this.setState({ submitLoading: false });
-        });
+    this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
+      if (response.isValid) {
+        this.props.investmentStore.setByDefaultRender(true);
+        Helper.toast('Transfer request is in process!', 'success');
+        this.props.investmentStore.setStepToBeRendered(0);
+        this.setState({ submitLoading: false });
+        this.props.history.push('agreement');
       } else {
         this.setState({ submitLoading: false });
       }
@@ -105,10 +92,6 @@ export default class InvestNow extends React.Component {
   multiClickHandler = (step) => {
     const { inprogressAccounts } = this.props.userDetailsStore.signupStatus;
     if (step.name === 'Financial Info') {
-      // if (getTransferRequestAmount > 0 && investAccTypes.value !== 'ira') {
-      //   this.handleStepChange(step.stepToBeRendered);
-      // } else {
-      // this.setState({ submitLoading: true });
       this.props.investmentStore.validateInvestmentAmountInOffering().then((response) => {
         this.setState({ submitLoading: response.isValid });
         if (response.isValid) {
@@ -128,8 +111,6 @@ export default class InvestNow extends React.Component {
         .finally(() => {
           this.setState({ submitLoading: false });
         });
-      // }
-      // });
     } else if (step.name === 'Account Type' && this.props.investmentStore.getSelectedAccountTypeId) {
       const { campaign } = this.props.campaignStore;
       const offeringId = campaign && campaign.id;
@@ -144,13 +125,7 @@ export default class InvestNow extends React.Component {
       if (userAccredetiationState === 'ELGIBLE' || (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING') || userAccredetiationState === undefined || !isRegulationCheck) {
         this.props.investmentLimitStore
           .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId)
-          .then((data) => {
-            const invesHealthCheckDetail = data && data.investNowHealthCheck ?
-              data.investNowHealthCheck : null;
-            if (invesHealthCheckDetail && invesHealthCheckDetail.previousAmountInvested &&
-              !money.isZero(invesHealthCheckDetail.previousAmountInvested)) {
-              this.setState({ isInvestmentUpdate: true });
-            }
+          .then(() => {
             this.handleStepChange(step.stepToBeRendered);
           });
       } else {
@@ -166,9 +141,15 @@ export default class InvestNow extends React.Component {
   render() {
     const { changeInvest, uiStore } = this.props;
     const { showAccountList } = this.props.accreditationStore;
-    const { investAccTypes } = this.props.investmentStore;
+    const { investAccTypes, stepToBeRendered } = this.props.investmentStore;
     const multipleAccountExsists = !!(investAccTypes && investAccTypes.values.length >= 2);
     const { campaign } = this.props.campaignStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    if (stepToBeRendered === 1 && !this.state.isInvestmentUpdate &&
+      getCurrentInvestNowHealthCheck && getCurrentInvestNowHealthCheck.previousAmountInvested &&
+      !money.isZero(getCurrentInvestNowHealthCheck.previousAmountInvested)) {
+      this.setState({ isInvestmentUpdate: true });
+    }
     const {
       inProgress,
       isEnterPressed,
@@ -209,15 +190,8 @@ export default class InvestNow extends React.Component {
           isValid: '',
         },
       ];
-    // !!showAccountList;
     const isMultiStepButtonsVisible = !!showAccountList && multipleAccountExsists;
-    // !!(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' ||
-    // (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')
-    // || userAccredetiationState === undefined));
     const closeOnDimmerClickAction = false;
-    // !(activeAccounts && activeAccounts.length && (userAccredetiationState === 'ELGIBLE' ||
-    // (regulationType && regulationType === 'BD_CF_506C' && userAccredetiationState === 'PENDING')
-    // || userAccredetiationState === undefined));
     return (
       <div className="step-progress" >
         {

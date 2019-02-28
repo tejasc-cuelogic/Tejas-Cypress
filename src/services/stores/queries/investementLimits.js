@@ -40,6 +40,7 @@ export const getInvestNowHealthCheck = gql`
       availableCash
       rewardBalance
       previousAmountInvested
+      bankNameAndAccountNumber
     }
   }
 `;

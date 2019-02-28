@@ -5,9 +5,9 @@ import { Header, Form, Popup, Icon, Divider } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import { MaskedInput } from '../../../../../theme/form';
 import InvestmentLimit from './financialInfo/InvestmentLimit';
-// import OfferingInvestDetails from './financialInfo/OfferingInvestDetails';
 import ChangeInvestmentLimit from './ChangeInvestmentLimit';
 import Helper from '../../../../../helper/utility';
+import { Spinner } from '../../../../../theme/shared';
 
 @withRouter
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'portfolioStore', 'campaignStore')
@@ -38,23 +38,22 @@ class FinancialInfo extends Component {
       getDiffInvestmentLimitAmount,
     } = this.props.investmentStore;
     const { getInvestorAccountById } = this.props.portfolioStore;
-    const {
-      // getCurrentLimitForAccount,
-      getCurrentInvestNowHealthCheck,
-    } = this.props.investmentLimitStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
     const { match, refLink, offeringDetails } = this.props;
     const currentInvestmentLimit = getCurrentInvestNowHealthCheck &&
       getCurrentInvestNowHealthCheck.investmentLimit ?
       getCurrentInvestNowHealthCheck.investmentLimit : 0;
-    // const currentInvestedAmount = getInvestorAccountById &&
-    // getInvestorAccountById.investedAmount ?
-    //   getInvestorAccountById.investedAmount : 0;
     const currentInvestedAmount = getCurrentInvestNowHealthCheck &&
       getCurrentInvestNowHealthCheck.previousAmountInvested ?
       getCurrentInvestNowHealthCheck.previousAmountInvested : 0;
     const offerName = getInvestorAccountById && getInvestorAccountById.offering &&
       getInvestorAccountById.offering.keyTerms &&
       getInvestorAccountById.offering.keyTerms.shorthandBusinessName ? getInvestorAccountById.offering.keyTerms.shorthandBusinessName : offeringDetails && offeringDetails.keyTerms && offeringDetails.keyTerms.shorthandBusinessName ? offeringDetails.keyTerms.shorthandBusinessName : '-';
+
+    if (!getCurrentInvestNowHealthCheck) {
+      return <Spinner loaderMessage="Loading.." />;
+    }
+
     return (
       <Aux>
         <Route path={`${match.url}/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={match.url} {...props} />} />

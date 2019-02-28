@@ -49,6 +49,7 @@ class TransferRequest extends Component {
     const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
     const getPreviousInvestedAmount =
       (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
+    const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
     if (showTransferRequestErr) {
       return (
         <div className="center-align">
@@ -119,7 +120,7 @@ class TransferRequest extends Component {
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from
-          my <Link to="/">Banco do Brasil account (x-1923)</Link> to my NextSeed account in the
+          my <Link to="/">{bankAndAccountName}</Link> to my NextSeed account in the
           amount equal to the Transfer Requested above. I understand this transfer will
           be <Link to="/">initiated within 1 business day</Link>.
         </p>

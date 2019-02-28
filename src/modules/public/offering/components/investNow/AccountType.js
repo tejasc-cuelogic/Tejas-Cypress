@@ -6,7 +6,6 @@ import { inject, observer } from 'mobx-react';
 import { Link, withRouter } from 'react-router-dom';
 import cookie from 'react-cookies';
 import { FormRadioGroup, FormCheckbox } from '../../../../../theme/form';
-// import { OFFERING_ACCRDITATION_STATUS_MESSAGE } from '../../../../../constants/offering';
 import { Spinner } from '../../../../../theme/shared';
 
 @inject('investmentStore', 'userDetailsStore', 'investmentLimitStore', 'userStore', 'campaignStore', 'accreditationStore')
@@ -34,6 +33,7 @@ class AccountType extends Component {
       sendAdminEmailOfFrozenAccount,
     } = this.props.userDetailsStore;
     const { campaign } = this.props.campaignStore;
+    const offeringId = campaign && campaign.id;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
@@ -48,6 +48,12 @@ class AccountType extends Component {
     const userStatusFound = userSelectedAccountStatus(investAccTypes.value);
     setUserSelectedAccountStatus(userStatusFound);
     resetAccreditationExpirayForm('ACCREDITATION_EXPIRY_FORM');
+    if (activeAccounts.length && (investAccTypes.values.length === 1 || this.props.changeInvest)) {
+      if (this.props.investmentStore.getSelectedAccountTypeId) {
+        this.props.investmentLimitStore
+          .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
+      }
+    }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (this.props.changeInvest || (accountToConsider && accountToConsider.length === 1)) {
@@ -97,18 +103,10 @@ class AccountType extends Component {
         activeAccounts : uniq([...activeAccounts, ...inprogressAccounts]);
     prepareAccountTypes(accountToConsider);
     const { campaign } = this.props.campaignStore;
-    const offeringId = campaign && campaign.id;
     const offeringReuglation = campaign && campaign.regulation;
     const isRegulationCheck = !!(offeringReuglation && (offeringReuglation === 'BD_506C' || offeringReuglation === 'BD_CF_506C'));
     const regulationType = offeringReuglation;
     userAccreditatedStatus(investAccTypes.value, isRegulationCheck, offeringReuglation);
-    if (activeAccounts.length && selectedAccountStatus &&
-      (investAccTypes.values.length === 1 || this.props.changeInvest)) {
-      if (this.props.investmentStore.getSelectedAccountTypeId) {
-        this.props.investmentLimitStore
-          .getInvestNowHealthCheck(this.props.investmentStore.getSelectedAccountTypeId, offeringId);
-      }
-    }
     if (!byDefaultRender) {
       setStepToBeRendered(2);
     } else if (accountToConsider && accountToConsider.length === 1) {

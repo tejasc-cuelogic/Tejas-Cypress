@@ -8,7 +8,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import {
-  validateInvestmentAmountInOffering, getAmountInvestedInCampaign, getInvestorAvailableCash,
+  getAmountInvestedInCampaign, getInvestorAvailableCash,
   validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment,
   investNowGeneratePurchaseAgreement,
@@ -267,40 +267,6 @@ export class InvestmentStore {
       fetchPolicy: 'network-only',
     });
   });
-
-  @action
-  validateInvestmentAmountInOfferingOld = () => {
-    if (this.investmentAmount) {
-      if (this.checkLockinPeriod()) {
-        this.setFieldValue('isValidInvestAmtInOffering', false);
-        this.setFieldValue('disableNextbtn', false);
-        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
-        this.INVESTMONEY_FORM.meta.isValid = false;
-      } else {
-        this.details = graphql({
-          client,
-          query: validateInvestmentAmountInOffering,
-          variables: {
-            investmentAmount: this.investmentAmount,
-            offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-            userId: userDetailsStore.currentUserId,
-            accountId: this.getSelectedAccountTypeId,
-          },
-          onFetch: (res) => {
-            const { status, message } = res.validateInvestmentAmountInOffering;
-            this.setFieldValue('isValidInvestAmtInOffering', status);
-            this.setFieldValue('disableNextbtn', status);
-            this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
-            this.INVESTMONEY_FORM.meta.isValid = status;
-          },
-          onError: () => {
-            Helper.toast('Something went wrong, please try again later.', 'error');
-          },
-          fetchPolicy: 'network-only',
-        });
-      }
-    }
-  }
 
   @action
   validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {

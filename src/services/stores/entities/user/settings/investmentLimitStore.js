@@ -4,7 +4,7 @@ import graphql from 'mobx-apollo';
 import moment from 'moment';
 import money from 'money-math';
 import { GqlClient as client } from '../../../../../api/gqlApi';
-import { uiStore, userDetailsStore } from '../../../index';
+import { uiStore, userDetailsStore, campaignStore } from '../../../index';
 import { INVESTEMENT_LIMIT } from '../../../../constants/investmentLimit';
 import { FormValidator as Validator } from '../../../../../helper';
 import { updateInvestmentLimits, getInvestorInvestmentLimit, getInvestNowHealthCheck, getInvestorAmountInvested } from '../../../queries/investementLimits';
@@ -186,13 +186,13 @@ export class InvestmentLimitStore {
   @action
   updateInvestmentLimit = () => new Promise((resolve) => {
     const data = mapValues(this.INVESTEMENT_LIMIT_META.fields, f => parseInt(f.value, 10));
-    // const currentLimit = parseInt(this.getInvestmentLimit(data), 10);
     this.updateInvestmentLimits(data, this.currentAccountId).then(() => resolve());
   })
 
   @action
   updateInvestmentLimits = (data, accountId, userId = null, resetProgress = true) => {
     uiStore.setProgress();
+    const { campaign } = campaignStore;
     return new Promise((resolve) => {
       client
         .mutate({
@@ -205,10 +205,11 @@ export class InvestmentLimitStore {
             otherRegCfInvestments: data.cfInvestments,
           },
           refetchQueries: [{
-            query: getInvestorInvestmentLimit,
+            query: getInvestNowHealthCheck,
             variables: {
-              userId: userId || userDetailsStore.currentUserId,
+              userId: userDetailsStore.currentUserId,
               accountId,
+              offeringId: campaign.id,
             },
           },
           {

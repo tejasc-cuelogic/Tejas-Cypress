@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 import { MaskedInput } from '../../../../../theme/form';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore')
+@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'investmentLimitStore')
 @withRouter
 @observer
 class ChangeInvestmentLimit extends Component {
@@ -36,6 +36,8 @@ class ChangeInvestmentLimit extends Component {
       INVESTMENT_LIMITS_FORM,
       changedInvestmentLimit,
     } = this.props.investmentStore;
+    const { getCurrentInvestNowHealthCheck } = this.props.investmentLimitStore;
+    const bankAndAccountName = getCurrentInvestNowHealthCheck && getCurrentInvestNowHealthCheck.bankNameAndAccountNumber ? getCurrentInvestNowHealthCheck.bankNameAndAccountNumber : '-';
     return (
       <Modal open closeIcon onClose={this.handleCloseModal}>
         <Modal.Content>
@@ -112,7 +114,7 @@ class ChangeInvestmentLimit extends Component {
             <Divider hidden />
             <p className="center-align mb-40">
               By clicking the “Confirm” button, I authorize the transfer from
-              my <Link to={this.props.match.url}>Banco do Brasil account (x-1923)</Link>
+              my <Link to={this.props.match.url}>{bankAndAccountName}</Link>
               to my NextSeed account in the amount equal to the Transfer Requested above.
               I understand this transfer will
               be <Link to={this.props.match.url}>initiated within 1 business day</Link>.

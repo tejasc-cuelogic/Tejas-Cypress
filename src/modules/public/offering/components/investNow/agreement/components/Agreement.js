@@ -63,6 +63,8 @@ export default class Agreement extends React.Component {
     const { agreementDetails } = this.props.investmentStore;
     const { cancelAgreement } = this.props.portfolioStore;
     cancelAgreement(agreementDetails.agreementId);
+    this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(`${this.props.refLink}/invest-now`);
     this.setState({ open: false });
   }
