@@ -193,14 +193,9 @@ export default class News extends Component {
               <Grid.Row>
                 <Grid.Column width={10} textAlign="center">
                   <Header as="h2">Start investing today</Header>
-                  {/* {!authStore.isUserLoggedIn &&
-                    <Aux>
-                      <Header as="h2" className="mb-30">Register for an account.</Header> */}
                   <Button.Group vertical={isMobile}>
                     <Button as={Link} to="/auth/register-investor" primary>Sign Up Free</Button>
                   </Button.Group>
-                  {/* </Aux>
-                  } */}
                 </Grid.Column>
               </Grid.Row>
             </Grid>
