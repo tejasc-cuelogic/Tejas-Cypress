@@ -26,7 +26,7 @@ export default class GettingStarted extends Component {
       this.props.uiStore.setFieldvalue('showFireworkAnimation', false);
     }, 8500);
     return (
-      <Modal open closeIcon onClose={this.handleCloseModal} size="mini" closeOnDimmerClick={false}>
+      <Modal open closeIcon onClose={this.createOffer} size="mini" closeOnDimmerClick={false}>
         <Modal.Header className="center-align signup-header">
           <Header as="h2">Congratulations!</Header>
         </Modal.Header>

@@ -9,7 +9,7 @@ import {
   FILE_UPLOAD_STEPS,
 } from '../../../../constants/account';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
-import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore } from '../../index';
+import { uiStore, bankAccountStore, userDetailsStore, investmentLimitStore, userStore } from '../../index';
 import { upsertInvestorAccount, submitinvestorAccount } from '../../queries/account';
 import { validationActions, fileUpload } from '../../../actions';
 import { GqlClient as client } from '../../../../api/gqlApi';
@@ -327,6 +327,7 @@ class IraAccountStore {
         .then(action((result) => {
           this.iraAccountId = result.data.upsertInvestorAccount.accountId;
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }

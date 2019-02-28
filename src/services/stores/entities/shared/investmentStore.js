@@ -3,15 +3,17 @@ import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
 import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
-import { FormValidator as Validator } from '../../../../helper';
+import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
 import { uiStore, userDetailsStore, rewardStore, campaignStore, portfolioStore, investmentLimitStore } from '../../index';
 import {
   getAmountInvestedInCampaign, getInvestorAvailableCash,
-  validateInvestmentAmountInOffering, validateInvestmentAmount, getInvestorInFlightCash,
+  validateInvestmentAmount, getInvestorInFlightCash,
   generateAgreement, finishInvestment, transferFundsForInvestment,
+  investNowGeneratePurchaseAgreement,
 } from '../../queries/investNow';
+import { getInvestorAccountPortfolio } from '../../queries/portfolio';
 // import { getInvestorInvestmentLimit } from '../../queries/investementLimits';
 
 export class InvestmentStore {
@@ -36,6 +38,7 @@ export class InvestmentStore {
   @observable byDefaultRender = true;
   @observable showTransferRequestErr = false;
   @observable investmentFlowErrorMessage = null;
+  @observable isGetTransferRequestCall = false;
 
   @action
   setShowTransferRequestErr = (status) => {
@@ -77,18 +80,35 @@ export class InvestmentStore {
       || 0;
   }
   @computed get getTransferRequestAmount() {
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+    const cashAndCreditBalance = money.add(getCurrCashAvailable, getCurrCreditAvailable);
+    const getPreviousInvestedAmount =
+      (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
     const transferAmount = money.subtract(
       this.investmentAmount,
-      money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
+      // money.add(this.getCurrCashAvailable, rewardStore.getCurrCreditAvailable),
+      money.add(cashAndCreditBalance, getPreviousInvestedAmount),
     );
-    return transferAmount < 0 ? 0 : transferAmount;
+    return money.isNegative(transferAmount) || money.isZero(transferAmount) ? 0 : transferAmount;
+    // return transferAmount < 0 ? 0 : transferAmount;
   }
   @computed get getSpendCreditValue() {
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
     let spendAmount = 0;
-    if (this.getCurrCashAvailable < this.investmentAmount) {
-      const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
-      if (rewardStore.getCurrCreditAvailable < lowValue) {
-        spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
+    // if (this.getCurrCashAvailable < this.investmentAmount) {
+    //   const lowValue = money.subtract(this.investmentAmount, this.getCurrCashAvailable);
+    //   if (rewardStore.getCurrCreditAvailable < lowValue) {
+    //     spendAmount = money.subtract(lowValue, rewardStore.getCurrCreditAvailable);
+    //   }
+    // }
+    if (getCurrCashAvailable < this.investmentAmount) {
+      const lowValue = money.subtract(this.investmentAmount, getCurrCashAvailable);
+      if (getCurrCreditAvailable < lowValue) {
+        spendAmount = money.subtract(lowValue, getCurrCreditAvailable);
       }
     }
     return parseFloat(spendAmount, 2);
@@ -129,6 +149,11 @@ export class InvestmentStore {
     this.investAccTypes.value = res.value;
     resolve(res.value);
   });
+
+  @action
+  resetAccTypeChanged = () => {
+    this.investAccTypes = { ...INVEST_ACCOUNT_TYPES };
+  }
 
   @action
   prepareAccountTypes = (UserAccounts) => {
@@ -244,30 +269,77 @@ export class InvestmentStore {
   });
 
   @action
-  validateInvestmentAmountInOffering = () => {
+  validateInvestmentAmountInOffering = () => new Promise((resolve, reject) => {
+    uiStore.setProgress();
     if (this.investmentAmount) {
-      this.details = graphql({
-        client,
-        query: validateInvestmentAmountInOffering,
-        variables: {
-          investmentAmount: this.investmentAmount,
-          offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
-          userId: userDetailsStore.currentUserId,
-          accountId: this.getSelectedAccountTypeId,
-        },
-        onFetch: (res) => {
-          const { status, message } = res.validateInvestmentAmountInOffering;
-          this.setFieldValue('isValidInvestAmtInOffering', status);
-          this.setFieldValue('disableNextbtn', status);
-          this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
-          this.INVESTMONEY_FORM.meta.isValid = status;
-        },
-        onError: () => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-        },
-        fetchPolicy: 'network-only',
-      });
+      if (this.checkLockinPeriod()) {
+        this.setFieldValue('isValidInvestAmtInOffering', false);
+        this.setFieldValue('disableNextbtn', false);
+        this.INVESTMONEY_FORM.fields.investmentAmount.error = 'Investment can not be lesser thant invested maount';
+        this.INVESTMONEY_FORM.meta.isValid = false;
+        resolve();
+      } else {
+        client
+          .mutate({
+            mutation: investNowGeneratePurchaseAgreement,
+            variables: {
+              investmentAmount: this.investmentAmount,
+              offeringId: campaignStore.getOfferingId || portfolioStore.currentOfferingId,
+              userId: userDetailsStore.currentUserId,
+              accountId: this.getSelectedAccountTypeId,
+              transferAmount: this.isGetTransferRequestCall ? this.getTransferRequestAmount : 0,
+              // creditToSpend: this.getSpendCreditValue,
+              callbackUrl: `${window.location.origin}/secure-gateway`,
+            },
+          })
+          .then(action((resp) => {
+            const { status, message, flag } = resp.data.investNowGeneratePurchaseAgreement;
+            this.setFieldValue('isValidInvestAmtInOffering', status);
+            this.setFieldValue('disableNextbtn', status);
+            this.INVESTMONEY_FORM.fields.investmentAmount.error = !status ? message : undefined;
+            this.INVESTMONEY_FORM.meta.isValid = status;
+            // Validated investment amount fields:
+            if (flag === 1) {
+              this.isGetTransferRequestCall = true;
+            } else {
+              const errorMessage = !status ? message : null;
+              this.setFieldValue('investmentFlowErrorMessage', errorMessage);
+            }
+            if (!resp.data.investNowGeneratePurchaseAgreement) {
+              this.setShowTransferRequestErr(true);
+            }
+            this.setFieldValue('agreementDetails', resp.data.investNowGeneratePurchaseAgreement);
+            resolve({ isValid: status, flag });
+          }))
+          .catch((error) => {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+            this.setShowTransferRequestErr(true);
+            uiStore.setErrors(error.message);
+            reject();
+          })
+          .finally(() => {
+            uiStore.setProgress(false);
+          });
+      }
+    } else {
+      resolve();
     }
+  });
+
+  checkLockinPeriod = () => {
+    let resultToReturn = false;
+    const offeringDetails = portfolioStore.getInvestorAccountById;
+    if (offeringDetails) {
+      const isLokcinPeriod = DataFormatter.diffDays(offeringDetails && offeringDetails.offering &&
+        offeringDetails.offering.offering && offeringDetails.offering.offering.launch &&
+        offeringDetails.offering.offering.launch.terminationDate ?
+        offeringDetails.offering.offering.launch.terminationDate : null) <= 2;
+      if (isLokcinPeriod) {
+        const alreadyInvestedAmount = offeringDetails.investedAmount;
+        resultToReturn = money.cmp(this.investmentAmount, alreadyInvestedAmount) < 0;
+      }
+    }
+    return resultToReturn;
   }
 
   @action
@@ -369,10 +441,17 @@ export class InvestmentStore {
               agreementId: this.agreementDetails.agreementId,
               transferAmount: this.getTransferRequestAmount,
             },
+            refetchQueries: [{
+              query: getInvestorAccountPortfolio,
+              variables: {
+                userId: userDetailsStore.currentUserId,
+                accountId: this.getSelectedAccountTypeId,
+              },
+            }],
           })
           .then((data) => {
             // resolve(data.data.finishInvestment);
-            const { status, message } = data.data.finishInvestment;
+            const { status, message } = data.data.investNowSubmit;
             const errorMessage = !status ? message : null;
             this.setFieldValue('investmentFlowErrorMessage', errorMessage);
             resolve(status);
@@ -491,6 +570,14 @@ export class InvestmentStore {
     this.INVESTMENT_LIMITS_FORM = Validator
       .setFormData(this.INVESTMENT_LIMITS_FORM, investments);
     this.INVESTMENT_LIMITS_FORM.meta.isValid = true;
+  }
+  @action
+  validateMaskedInputForAmount = () => {
+    if (this.investmentAmount && !money.isZero(this.investmentAmount)) {
+      this.setFieldValue('disableNextbtn', true);
+    } else {
+      this.setFieldValue('disableNextbtn', false);
+    }
   }
 }
 

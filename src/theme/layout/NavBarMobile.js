@@ -22,6 +22,7 @@ export default class NavBarMobile extends Component {
       onPusherClick, onToggle, visible,
       publicContent, location, isMobile,
       navStatus, currentUser, stepInRoute,
+      hasHeader,
     } = this.props;
     const nav = GetNavMeta(location.pathname, [], true);
     let navTitle = nav ? nav.title : '';
@@ -42,46 +43,50 @@ export default class NavBarMobile extends Component {
     return (
       <Aux>
         <Sidebar.Pushable className={visible && 'show-pushable'}>
-          <div
-            className={`${visible ? 'visible-logo' : (location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
-            onClick={!visible ? onToggle : false}
-            onKeyPress={!visible ? onToggle : false}
-            role="button"
-            tabIndex="0"
-          >
-            <Logo
-              alt="NextSeed.com"
-              dataSrc={visible ? 'LogoWhite' : getLogo(location.pathname)}
-              as={visible ? Link : Logo}
-              to="/"
-            />
-          </div>
-          <div
-            className={`public-header-section ${visible ? 'active' : ''}
-            ${navStatus === 'sub' ? 'slide-up' : ''}`}
-          >
-            {/* <Icon className="ns-nextseed-icon hamburger" /> */}
-            <Header as="h5">{navTitle}</Header>
-            {!currentUser ? (
-              <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in">
-                {stepInRoute.title}
-              </Link>
-            ) : (
-              <Link
-                to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
-                className="sign-in"
+          {hasHeader && (
+            <Aux>
+              <div
+                className={`${visible ? 'visible-logo' : (location.pathname.startsWith('/offerings')) ? 'offering-logo' : ''} full-logo`}
+                onClick={!visible ? onToggle : false}
+                onKeyPress={!visible ? onToggle : false}
+                role="button"
+                tabIndex="0"
               >
-                Dashboard
-              </Link>
-            )
-            }
-            {/* {investBtn && (
-              <Button fluid={isMobile} as={Link}
-              to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
-                Invest Now
-              </Button>
-            )} */}
-          </div>
+                <Logo
+                  alt="NextSeed.com"
+                  dataSrc={visible ? 'LogoWhite' : getLogo(location.pathname)}
+                  as={visible ? Link : Logo}
+                  to="/"
+                />
+              </div>
+              <div
+                className={`public-header-section ${visible ? 'active' : ''}
+                ${navStatus === 'sub' ? 'slide-up' : ''}`}
+              >
+                {/* <Icon className="ns-nextseed-icon hamburger" /> */}
+                <Header as="h5">{navTitle}</Header>
+                {!currentUser ? (
+                  <Link onClick={this.setAuthRef} to={`/auth/${stepInRoute.to}`} className="sign-in">
+                    {stepInRoute.title}
+                  </Link>
+                ) : (
+                  <Link
+                    to={`/app/${currentUser.roles && currentUser.roles.includes('investor') ? 'summary' : 'dashboard'}`}
+                    className="sign-in"
+                  >
+                    Dashboard
+                  </Link>
+                )
+                }
+                {/* {investBtn && (
+                  <Button fluid={isMobile} as={Link}
+                  to={`${this.props.match.url}/invest-now`} secondary className="fixed-button">
+                    Invest Now
+                  </Button>
+                )} */}
+              </div>
+            </Aux>
+          )}
           <Sidebar
             as={Menu}
             animation="overlay"
@@ -126,7 +131,7 @@ export default class NavBarMobile extends Component {
           <Sidebar.Pusher
             dimmed={visible}
             onClick={onPusherClick}
-            className="public-pusher"
+            className={`public-pusher ${!hasHeader && 'noheader'}`}
           >
             {publicContent}
             {(hasFooter.find(item => matchPath(location.pathname, { path: item }))) &&

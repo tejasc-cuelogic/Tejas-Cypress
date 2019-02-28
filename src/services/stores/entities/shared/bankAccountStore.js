@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isEmpty, map, uniqWith, isEqual, find } from 'lodash';
+import { isEmpty, map, uniqWith, isEqual, find, get } from 'lodash';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { accountStore, userDetailsStore, uiStore, userStore, iraAccountStore } from '../../index';
@@ -402,7 +402,7 @@ export class BankAccountStore {
         userDetailsStore.currentUser.data.user.roles,
         { name: accountStore.investmentAccType },
       );
-      if (accountDetails) {
+      if (get(accountDetails, 'details.accountId')) {
         variables.accountId = accountDetails.details.accountId;
       }
     }
@@ -446,14 +446,16 @@ export class BankAccountStore {
         })
         .then((res) => {
           uiStore.setProgress(false);
-          Helper.toast(isDeny ? res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.' : res.data.verifyLinkedBank.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
+          Helper.toast(isDeny ? (res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
           resolve();
         })
         .catch((error) => {
-          Helper.toast(error.message, 'error');
-          uiStore.setErrors(error.message);
-          reject();
-          uiStore.setProgress(false);
+          if (error) {
+            Helper.toast(error.message, 'error');
+            uiStore.setErrors(error.message);
+            reject();
+            uiStore.setProgress(false);
+          }
         });
     });
   }
