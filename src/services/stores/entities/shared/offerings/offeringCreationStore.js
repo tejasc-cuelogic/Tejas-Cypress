@@ -183,7 +183,10 @@ export class OfferingCreationStore {
 
   @action
   resetAllForms = () => {
-    this.LEADERSHIP_FRM = Validator.resetFormData(this.LEADERSHIP_FRM);
+    const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    forms.forEach((f) => {
+      this[f] = Validator.resetFormData(this[f]);
+    });
   }
 
   @action
@@ -586,7 +589,7 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM'));
+    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM' || form === 'KEY_TERMS_FRM'));
   }
 
   @action
@@ -617,7 +620,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false, isMultiform = false) => {
     if (stepName) {
       uiStore.setProgress();
       const file = files[0];
@@ -630,7 +633,7 @@ export class OfferingCreationStore {
         this[form].fields[field].fileId = fileId;
         this[form].fields[field].preSignedUrl = preSignedUrl;
         this[form].fields[field].fileData = file;
-        if (index !== null) {
+        if (index !== null || isMultiform) {
           this[form] = Validator.onArrayFieldChange(
             this[form],
             { name: field, value: fileData.fileName }, subForm, index,

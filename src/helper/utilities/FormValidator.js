@@ -202,7 +202,21 @@ class FormValidator {
         arr.map((item, index) => {
           const fieldKeys = Object.keys(currentForm.fields[field][index]);
           fieldKeys.map((f) => {
-            currentForm.fields[field][index][f].value = '';
+            if (Array.isArray(toJS(currentForm.fields[field][index][f].value))) {
+              currentForm.fields[field][index][f].value = [];
+              if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
+                currentForm.fields[field][index][f].fileId = [];
+                currentForm.fields[field][index][f].fileData = [];
+                currentForm.fields[field][index][f].preSignedUrl = [];
+              }
+            } else {
+              currentForm.fields[field][index][f].value = '';
+              if (currentForm.fields[field][index][f].objType === 'FileObjectType') {
+                currentForm.fields[field][index][f].fileId = '';
+                currentForm.fields[field][index][f].fileData = '';
+                currentForm.fields[field][index][f].preSignedUrl = '';
+              }
+            }
             return true;
           });
           return true;
