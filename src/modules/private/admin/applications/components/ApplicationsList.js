@@ -129,15 +129,17 @@ export default class ApplicationsList extends Component {
                         <Table.Cell>
                           <Item>
                             <Item.Header><Rating size="large" disabled defaultRating={application.rating || 0} maxRating={5} /></Item.Header>
-                            <Item.Content>
-                              <Item.Description>
-                                {application.comments && application.comments.length ? application.comments[application.comments.length - 1].text : '-'}
-                              </Item.Description>
-                              <Item.Extra>
-                                <b>{application.comments && application.comments.length ? moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA') : '-'}</b>
-                                <b> {application.comments && application.comments.length ? application.comments[application.comments.length - 1].commentor.by : '-'}</b>
-                              </Item.Extra>
-                            </Item.Content>
+                            {application.comments && application.comments.length &&
+                              <Item.Content>
+                                <Item.Description>
+                                  {application.comments[application.comments.length - 1].text}
+                                </Item.Description>
+                                <Item.Extra>
+                                  <b>{moment(application.comments[application.comments.length - 1].commentor.date).format('MM/DD/YYYY  |  h:mmA')}</b>
+                                  <b>{application.comments[application.comments.length - 1].commentor.by}</b>
+                                </Item.Extra>
+                              </Item.Content>
+                            }
                           </Item>
                         </Table.Cell>
                         <ApplicationListStepColumn
