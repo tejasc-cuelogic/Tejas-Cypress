@@ -6,6 +6,10 @@ const actions = {
   deny: { label: 'Deny', color: 'red', actionValue: 'Denied' },
 };
 export default class Actions extends Component {
+  handleOnClickAction(action) {
+    const { updateAccountChangeAction, accountId, userId } = this.props;
+    updateAccountChangeAction(accountId, userId, action === 'deny').then().catch();
+  }
   render() {
     return (
       <Table.Cell collapsing textAlign="center">
@@ -15,8 +19,7 @@ export default class Actions extends Component {
               loading={this.props.inProgress === `${this.props.accountId}_${action}`}
               className={actions[action].color}
               onClick={
-                () => this.props.updateAccountChangeAction(this.props.accountId, this.props.userId, action === 'deny')
-              }
+                () => this.handleOnClickAction(action)}
             >
               {actions[action].label}
             </Button>
