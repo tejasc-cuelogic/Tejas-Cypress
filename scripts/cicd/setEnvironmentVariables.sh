@@ -49,9 +49,13 @@ settingEnv()
 	REACT_APP_SEGMENT_WRITE_KEY=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/segment\/writeKey/ { print $3 }')
 	sed -i.bak "s/^\(REACT_APP_SEGMENT_WRITE_KEY=\).*/\1${REACT_APP_SEGMENT_WRITE_KEY}/" .envTEMPLATE
 
-   #SAASQUATCH
+   	#SAASQUATCH
 	REACT_APP_SAASQUATCH_TENANT_ALIAS=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/saasquatch\/tenant\/alias/ { print $3 }')
 	sed -i.bak "s#^\(REACT_APP_SAASQUATCH_TENANT_ALIAS=\).*#\1${REACT_APP_SAASQUATCH_TENANT_ALIAS}#" .envTEMPLATE
+
+	#FROALA
+	REACT_APP_FROALA_API_KEY_NEW=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/froala\/apiKey/ { print $3 }')
+	sed -i.bak "s#^\(REACT_APP_FROALA_API_KEY_NEW=\).*#\1${REACT_APP_FROALA_API_KEY_NEW}#" .envTEMPLATE
 
 	#HONEYPOT URL
 	REACT_APP_HONEYPOT_URL=$(cat Env.txt | awk '/\/ns-client\/'$environment'\/honeypot\/url/ { print $3 }')
