@@ -10,7 +10,7 @@ import VerifyTrustEntityAccreditation from './accreditation/VerifyTrustEntityAcc
 import ThanksNote from '../components/investmentLimits/accreditation/ThanksNote';
 import FailedAccreditation from '../components/investmentLimits/accreditation/failedAccreditation';
 
-@inject('investmentLimitStore', 'accreditationStore')
+@inject('investmentLimitStore', 'accreditationStore', 'userDetailsStore')
 @withRouter
 @observer
 export default class InvestmentLimits extends Component {
@@ -21,8 +21,17 @@ export default class InvestmentLimits extends Component {
   }
 
   closeModal = () => {
+    const {
+      partialInvestNowSessionURL,
+      setPartialInvestmenSession,
+    } = this.props.userDetailsStore;
     this.props.accreditationStore.resetAllForms();
-    this.props.history.push(this.props.match.url);
+    if (partialInvestNowSessionURL) {
+      this.props.history.push(partialInvestNowSessionURL);
+      setPartialInvestmenSession();
+    } else {
+      this.props.history.push(this.props.match.url);
+    }
   }
 
   render() {

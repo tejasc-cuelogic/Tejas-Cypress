@@ -4,7 +4,7 @@ import { Header, Button, Table, Popup, Icon, Message } from 'semantic-ui-react';
 import { Link, withRouter } from 'react-router-dom';
 import Helper from '../../../../../helper/utility';
 
-@inject('investmentStore', 'userDetailsStore', 'rewardStore')
+@inject('investmentStore', 'userDetailsStore', 'rewardStore', 'investmentLimitStore')
 @withRouter
 @observer
 class TransferRequest extends Component {
@@ -35,15 +35,21 @@ class TransferRequest extends Component {
     this.props.investmentStore.setShowTransferRequestErr(false);
   }
   render() {
-    const { rewardStore, investmentStore } = this.props;
+    const { investmentStore, investmentLimitStore, changeInvest } = this.props;
     const {
       getTransferRequestAmount,
-      getCurrCashAvailable,
+      // getCurrCashAvailable,
       showTransferRequestErr,
       investmentAmount,
       investmentFlowErrorMessage,
     } = investmentStore;
-    const { getCurrCreditAvailable } = rewardStore;
+    // const { getCurrCreditAvailable } = rewardStore;
+    const userAmountDetails = investmentLimitStore.getCurrentInvestNowHealthCheck;
+    const getCurrCashAvailable = (userAmountDetails && userAmountDetails.availableCash) || 0;
+    const getCurrCreditAvailable = (userAmountDetails && userAmountDetails.rewardBalance) || 0;
+    const getPreviousInvestedAmount =
+      (userAmountDetails && userAmountDetails.previousAmountInvested) || 0;
+    const bankAndAccountName = userAmountDetails && userAmountDetails.bankNameAndAccountNumber ? userAmountDetails.bankNameAndAccountNumber : '-';
     if (showTransferRequestErr) {
       return (
         <div className="center-align">
@@ -67,6 +73,14 @@ class TransferRequest extends Component {
                 {Helper.CurrencyFormat(investmentAmount)}
               </Table.Cell>
             </Table.Row>
+            {changeInvest &&
+            <Table.Row>
+              <Table.Cell>Previous Investment:</Table.Cell>
+              <Table.Cell collapsing>
+                {Helper.MoneyMathDisplayCurrency(getPreviousInvestedAmount)}
+              </Table.Cell>
+            </Table.Row>
+            }
             <Table.Row>
               <Table.Cell>
                 Cash Available:
@@ -102,11 +116,11 @@ class TransferRequest extends Component {
         }
         <Button.Group widths="2" className="inline mt-30">
           <Button primary content="Confirm" onClick={this.props.confirm} />
-          <Button content="Cancel" type="button" onClick={this.props.cancel} />
+          <Button content="Back" type="button" onClick={this.props.cancel} />
         </Button.Group>
         <p className="mt-50">
           By clicking the “Confirm” button, I authorize the transfer from
-          my <Link to="/">Banco do Brasil account (x-1923)</Link> to my NextSeed account in the
+          my <Link to="/">{bankAndAccountName}</Link> to my NextSeed account in the
           amount equal to the Transfer Requested above. I understand this transfer will
           be <Link to="/">initiated within 1 business day</Link>.
         </p>

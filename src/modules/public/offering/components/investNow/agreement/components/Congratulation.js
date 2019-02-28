@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { Modal, Header, Button, Icon, Divider } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @withRouter
 @observer
 export default class Congratulation extends React.Component {
@@ -17,6 +17,8 @@ export default class Congratulation extends React.Component {
     }
   }
   handleCloseModal = () => {
+    this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push('overview');
   }
   render() {
