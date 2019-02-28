@@ -187,6 +187,7 @@ export class OfferingCreationStore {
     forms.forEach((f) => {
       this[f] = Validator.resetFormData(this[f]);
     });
+    this.initLoad = [];
   }
 
   @action
