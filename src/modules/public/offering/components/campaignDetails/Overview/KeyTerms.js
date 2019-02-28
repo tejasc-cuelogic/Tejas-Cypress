@@ -61,13 +61,14 @@ class KeyTerms extends Component {
                 <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content="Interest payment is calculated at a gross annualized interest rate of 16.0% each month on the remaining balance of your investment from the prior month."
+                    content={`Interest payment is calculated at a gross annualized interest rate of ${campaign && campaign.keyTerms && campaign.keyTerms.interestRate ?
+                      `${campaign.keyTerms.interestRate}%` : 'NA'} each month on the remaining balance of your investment from the prior month.`}
                     position="top center"
                   />
                 </Table.Cell>
                 <Table.Cell>
-                  {get(campaign, 'keyTerms.interestRate') ?
-                      `${get(campaign, 'keyTerms.interestRate')}%`
+                  {campaign && campaign.keyTerms && campaign.keyTerms.interestRate ?
+                  `${campaign.keyTerms.interestRate}%`
                     :
                     'NA'
                 }
