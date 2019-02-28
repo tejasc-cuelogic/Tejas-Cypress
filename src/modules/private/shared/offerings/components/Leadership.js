@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import { Grid, Button } from 'semantic-ui-react';
+import { Grid, Button, List } from 'semantic-ui-react';
 import { Switch, Route } from 'react-router-dom';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import { FaqWidget } from '../../../../../theme/shared';
@@ -37,19 +38,36 @@ export default class Leadership extends Component {
       {
         id: 1,
         title: 'Who does a “Control Person” include?',
-        description: `1. An officer, director, general partner or managing member of the company
-        2. A person or entity that owns 20% or more of the voting securities of the company
-        3. Any predecessor of the company or any affiliated company
-        4. Any promoter connected with the company in any capacity
-        5. Any person that has been paid or will be paid for solicitation of purchasers in connection with the offering
-        6. Any control person of the person described in (5). `,
+        description: (
+          <Aux>
+            <List ordered>
+              <List.Item>
+                An officer, director, general partner or managing member of the company
+              </List.Item>
+              <List.Item>
+                A person or entity that owns 20% or more of the voting securities of the company
+              </List.Item>
+              <List.Item>
+                Any predecessor of the company or any affiliated company
+              </List.Item>
+              <List.Item>
+                Any promoter connected with the company in any capacity
+              </List.Item>
+              <List.Item>
+                Any person that has been paid or will be paid for solicitation of
+                purchasers in connection with the offering
+              </List.Item>
+              <List.Item>Any control person of the person described in (5).</List.Item>
+            </List>
+          </Aux>
+        ),
       },
     ];
     const { isIssuer } = this.props.userStore;
     return (
       <div className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? 'inner-content-spacer' : ''}>
         <Grid>
-          <Grid.Column widescreen={4} computer={3} tablet={3} mobile={16}>
+          <Grid.Column widescreen={4} computer={4} tablet={3} mobile={16}>
             <div className="sticky-sidebar">
               <SecondaryMenu secondary vertical match={match} navItems={navItems} />
               {LEADERSHIP_FRM.fields.leadership.length < 5 &&
@@ -58,7 +76,7 @@ export default class Leadership extends Component {
               <FaqWidget fullHeading="FAQ" faqs={faqsOfModule} />
             </div>
           </Grid.Column>
-          <Grid.Column widescreen={12} computer={13} tablet={13} mobile={16}>
+          <Grid.Column widescreen={12} computer={12} tablet={13} mobile={16}>
             <Switch>
               <Route
                 exact
