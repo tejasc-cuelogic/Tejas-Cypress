@@ -69,11 +69,12 @@ export default class Public extends React.Component {
       '/offerings/:id/:section?', '/business-application', '/auth/:section',
     ];
     const NoHeader = ['/invest/get-started'];
+    const hasHeader = !NoHeader.find(item => matchPath(location.pathname, { path: item }));
     const { visible } = this.state;
     return (
       <Aux>
         <Responsive minWidth={768} as={Aux}>
-          {(!NoHeader.find(item => matchPath(location.pathname, { path: item }))) && (
+          {hasHeader && (
             <Header
               location={location}
               stepInRoute={this.props.navStore.stepInRoute}
@@ -100,6 +101,7 @@ export default class Public extends React.Component {
             stepInRoute={this.props.navStore.stepInRoute}
             currentUser={this.props.userStore.currentUser}
             publicContent={this.getRoutes()}
+            hasHeader={hasHeader}
           />
         </Responsive>
       </Aux>
