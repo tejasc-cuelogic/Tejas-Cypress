@@ -54,7 +54,7 @@ export default class IdentityVerification extends Component {
               .then((isSSNPresent) => {
                 if (isSSNPresent) {
                   // set error
-                  this.props.identityStore.showErrorMessage('The SSN entered is already in use.');
+                  this.props.uiStore.showErrorMessage('The SSN entered is already in use.');
                   throw new Error('Stop the execution');
                 }
                 this.props.uiStore.setErrors(null);
@@ -99,7 +99,7 @@ export default class IdentityVerification extends Component {
               })
               .catch(() => { });
           } else {
-            this.props.identityStore.showErrorMessage('Please enter a valid residential address.');
+            this.props.uiStore.showErrorMessage('Please enter a valid residential address.');
           }
         });
     }
