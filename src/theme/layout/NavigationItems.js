@@ -8,6 +8,7 @@ import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
+const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
 @inject('navStore')
 @observer
@@ -165,6 +166,7 @@ export class NavigationItems extends Component {
               alt="NextSeed.com"
               dataSrc={getLogo(location.pathname)}
               style={getLogoStyle(location.pathname)}
+              size={isTablet && 'small'}
             />
           </Menu.Item>
           <Menu.Menu position="right">

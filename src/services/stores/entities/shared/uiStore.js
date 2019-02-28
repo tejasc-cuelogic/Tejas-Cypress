@@ -1,5 +1,5 @@
 import { action, observable } from 'mobx';
-import { REACT_APP_DEPLOY_ENV } from '../../../../constants/common';
+import { REACT_APP_DEPLOY_ENV, NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 
 export class UiStore {
   @observable
@@ -184,6 +184,19 @@ export class UiStore {
     this.loaderMessage = '';
     this.appLoader = false;
     this.submitButtonDisabled = false;
+  }
+
+  @action
+  showErrorMessage = (message) => {
+    const setErrorMessage = (
+      `<span>
+        There was an issue with the information you submitted.
+        ${message}
+        If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href="mailto:${NS_SITE_EMAIL_SUPPORT}">${NS_SITE_EMAIL_SUPPORT}</a>
+      </span>`
+    );
+    this.setProgress(false);
+    this.setErrors(setErrorMessage);
   }
 
   @action

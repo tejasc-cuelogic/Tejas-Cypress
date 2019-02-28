@@ -446,14 +446,16 @@ export class BankAccountStore {
         })
         .then((res) => {
           uiStore.setProgress(false);
-          Helper.toast(isDeny ? res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.' : res.data.verifyLinkedBank.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
+          Helper.toast(isDeny ? (res.data.linkBankRequestDeny ? 'Link bank requested is denied successfully.' : 'Something went wrong, please try again later.') : res.data.linkBankRequestApprove.message, (isDeny && !res.data.linkBankRequestDeny) ? 'error' : 'success');
           resolve();
         })
         .catch((error) => {
-          Helper.toast(error.message, 'error');
-          uiStore.setErrors(error.message);
-          reject();
-          uiStore.setProgress(false);
+          if (error) {
+            Helper.toast(error.message, 'error');
+            uiStore.setErrors(error.message);
+            reject();
+            uiStore.setProgress(false);
+          }
         });
     });
   }

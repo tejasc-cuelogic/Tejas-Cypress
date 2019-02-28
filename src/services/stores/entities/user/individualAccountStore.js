@@ -85,8 +85,8 @@ class IndividualAccountStore {
       const actionPerformed = 'submitted';
       if (userDetailsStore.currentUser.data) {
         const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-        if (accountDetails) {
-          variables.accountId = accountDetails.details.accountId;
+        if (accountDetails || this.individualAccId) {
+          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
         }
       }
       return new Promise((resolve, reject) => {

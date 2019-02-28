@@ -20,7 +20,7 @@ class FaqWidget extends React.Component {
         <Card fluid>
           <Card.Content>
             <Header as="h4">{fullHeading || `${heading} FAQs`}</Header>
-            <Accordion>
+            <Accordion className="faq-acc">
               {
                 faqs.map(faq => (
                   <Aux key={faq.id}>
