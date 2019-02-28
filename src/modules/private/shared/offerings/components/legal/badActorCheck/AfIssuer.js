@@ -65,8 +65,10 @@ export default class AfIssuer extends Component {
         <Form className={!isIssuer || (isIssuer && match.url.includes('offering-creation')) ? '' : 'inner-content-spacer'}>
           <div className="clearfix mt-10 mb-10">
             <Button.Group floated="right">
-              <Button color="red" className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName, afIssuerId)}>Delete Selected Issuer</Button>
-              <Button color="blue" className="link-button" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
+              {AFFILIATED_ISSUER_FRM.fields.getOfferingBac.length !== 1 &&
+                <Button color="red" disabled={isReadonly} className="link-button" onClick={e => this.toggleConfirmModal(e, index, formName, afIssuerId)}>Delete Selected Issuer</Button>
+              }
+              <Button color="blue" disabled={isReadonly} className="link-button" onClick={e => this.addMore(e, formName)}>+ Add Affiliated Issuer</Button>
             </Button.Group>
           </div>
           <FormInput
