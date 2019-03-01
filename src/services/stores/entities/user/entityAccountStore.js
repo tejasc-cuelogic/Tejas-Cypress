@@ -438,6 +438,7 @@ class EntityAccountStore {
         .then(action((result) => {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }

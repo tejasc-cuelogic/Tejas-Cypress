@@ -12,10 +12,13 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KE
 import Helper from '../../../../../helper/utility';
 import NSImage from '../../../../shared/NSImage';
 
-@inject('campaignStore')
+@inject('campaignStore', 'accreditationStore')
 @observer
 export default class CampaignList extends Component {
   state = { filters: false };
+  componentWillMount() {
+    this.props.accreditationStore.resetUserAccreditatedStatus();
+  }
   componentWillUnmount() {
     this.props.campaignStore.resetDisplayCounts();
   }

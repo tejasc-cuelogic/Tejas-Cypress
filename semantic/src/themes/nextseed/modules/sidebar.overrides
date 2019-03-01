@@ -28,6 +28,9 @@
 				min-height:auto;
 				height:auto;
 				background-color: transparent;
+				&.noheader{
+					padding-top: 0;
+				}
 			}
 			&.dimmed {
 				overflow: hidden;
