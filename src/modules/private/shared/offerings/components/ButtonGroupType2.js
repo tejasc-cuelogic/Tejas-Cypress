@@ -60,7 +60,7 @@ export default class ButtonGroupType2 extends Component {
                 {!submitted &&
                 <Button loading={inProgress === 'save'} type="button" primary onClick={updateOffer} color="green" className="relaxed">Save</Button>
                 }
-                <Button loading={inProgress === 'support_submitted'} type="button" primary={!submitted} onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
+                <Button disabled={submitted} loading={inProgress === 'support_submitted'} type="button" primary={!submitted} onClick={() => updateOffer({ isAdminOnly: true, isApproved: true, status: 'support_submitted' })} className="relaxed">{submitted ? 'Awaiting Manager Approval' : 'Submit for Approval'}</Button>
               </Aux>
             )}
           </Button.Group>
