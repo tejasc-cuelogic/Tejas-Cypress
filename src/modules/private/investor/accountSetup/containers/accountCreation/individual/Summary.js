@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
@@ -86,7 +86,7 @@ export default class Summary extends React.Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Investor: </Table.Cell>
-                  <Table.Cell>{`${userDetails.info.firstName} ${userDetails.info.lastName}`}</Table.Cell>
+                  <Table.Cell>{`${get(userDetails, 'info.firstName')} ${get(userDetails, 'info.lastName')}`}</Table.Cell>
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
                   <Table.Row>
