@@ -3,7 +3,7 @@ import { Table, Button } from 'semantic-ui-react';
 
 const actions = {
   approve: { label: 'Verify', color: 'green', actionValue: 'Verified' },
-  deny: { label: 'Deny', color: 'red', actionValue: 'Denied' },
+  // deny: { label: 'Deny', color: 'red', actionValue: 'Denied' },
 };
 export default class Actions extends Component {
   handleOnClickAction(action) {
