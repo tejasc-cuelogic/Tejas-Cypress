@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { DataFormatter } from '../../../../../helper';
 
-@inject('businessAppReviewStore', 'uiStore')
+@inject('businessAppReviewStore', 'uiStore', 'offeringsStore')
 @withRouter
 @observer
 export default class GettingStarted extends Component {
@@ -17,6 +17,7 @@ export default class GettingStarted extends Component {
   createOffer = () => {
     const { match, businessAppReviewStore } = this.props;
     businessAppReviewStore.createOffering(match.params.applicationId).then(() => {
+      this.props.offeringsStore.initRequest({ stage: 'active' });
       this.props.history.push('/app/dashboard');
     });
   }

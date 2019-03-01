@@ -19,7 +19,7 @@ const getModule = component => Loadable({
 export default class Legal extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
-      this.props.history.push(`${this.props.match.url}/risk-factors`);
+      this.props.history.push(`${this.props.match.url}/general`);
     }
   }
 
@@ -27,7 +27,7 @@ export default class Legal extends Component {
 
   render() {
     const userLegalInfo = [
-      // { title: 'General', to: 'general' },
+      { title: 'General', to: 'general' },
       { title: 'Risk Factors', to: 'risk-factors' },
       { title: 'Documentation', to: 'documentation' },
     ];
