@@ -79,9 +79,7 @@ class App extends Component {
       window.scrollTo(0, 0);
     }
   }
-  onIdle = (e) => {
-    console.log('user is idle', e);
-    console.log('last active', this.props.authStore.idleTimer.getLastActiveTime());
+  onIdle = () => {
     if (this.props.authStore.isUserLoggedIn) {
       authActions.logout().then(() => {
         this.props.history.push('/auth/login');
