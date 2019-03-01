@@ -14,6 +14,7 @@ export default class AccountCreation extends React.Component {
     this.props.accountStore.setAccTypeChange(0);
   }
   handleMultiStepModalclose = () => {
+    this.updateUser();
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetLinkBank();
@@ -62,8 +63,7 @@ export default class AccountCreation extends React.Component {
         // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
         // : stepToBeRendered > 1 ? 'error' : '',
         validate: validateAddFunds,
-        isDirty: !isEmpty(plaidAccDetails) ||
-        formLinkBankManually.meta.isDirty,
+        isDirty: formLinkBankManually.meta.isDirty,
         stepToBeRendered: 2,
       },
       {

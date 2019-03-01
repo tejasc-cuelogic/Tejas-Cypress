@@ -72,6 +72,9 @@ class EntityAccountStore {
   @action
   trustInfoChange = (e, result) => {
     this.formChange(e, result, 'TRUST_INFO_FRM');
+    if (!result.fielddata.value) {
+      this.TRUST_INFO_FRM.fields.trustDate.error = false;
+    }
   }
 
   @action
@@ -573,7 +576,6 @@ class EntityAccountStore {
         this.renderAfterPopulate();
       }
     }
-    uiStore.setProgress(false);
   }
 
   renderAfterPopulate = () => {
