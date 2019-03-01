@@ -107,7 +107,7 @@ class App extends Component {
           ref={(ref) => { this.props.authStore.idleTimer = ref; }}
           element={document}
           onIdle={this.onIdle}
-          debounce={0}
+          debounce={250}
           timeout={1000 * 60 * 15}
           stopOnIdle
         />
