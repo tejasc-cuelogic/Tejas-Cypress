@@ -93,6 +93,7 @@ export default class PreQualBusiness extends Component {
                             readOnly={preQualFormDisabled}
                             key={field}
                             name={field}
+                            asterisk="true"
                             number
                             value={fields[field].value}
                             fielddata={fields[field]}
@@ -141,6 +142,7 @@ export default class PreQualBusiness extends Component {
                         readOnly={preQualFormDisabled}
                         key={field}
                         name={field}
+                        asterisk="true"
                         prefix="$ "
                         currency
                         value={fields[field].value}
