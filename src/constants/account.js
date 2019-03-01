@@ -147,8 +147,8 @@ export const US_STATES = [
 export const FILE_UPLOAD_STEPS = {
   photoId: 'PROFILE_CIP_LICENSE',
   proofOfResidence: 'PROFILE_CIP_RESIDENCE',
-  identityDoc: 'ACCOUNT_IRA_PHOTO_ID',
-  legalDocUrl: 'ACCOUNT_ENTITY_PHOTO_ID',
+  identityDoc: 'ACCOUNT_IRA_CREATION',
+  legalDocUrl: 'ACCOUNT_ENTITY_CREATION',
   formationDoc: 'ACCOUNT_ENTITY_FORMATION',
   operatingAgreementDoc: 'ACCOUNT_ENTITY_OPERATING_AGREEMENT',
   einVerificationDoc: 'ACCOUNT_ENTITY_EIN_VERIFICATION',

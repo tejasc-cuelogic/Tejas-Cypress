@@ -48,8 +48,8 @@ export default class ChooseOffer extends Component {
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
-      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, selectedOfferIndex,
-      offerLoading, fetchBusinessApplicationOffers,
+      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex,
+      selectedOfferIndex, offerLoading, fetchBusinessApplicationOffers,
     } = businessAppReviewStore;
     const navItems = [
       { title: 'General Conditions', to: 'general-conditions' },
@@ -57,16 +57,11 @@ export default class ChooseOffer extends Component {
       { title: 'Tax Reporting', to: 'tax-reporting' },
       { title: 'Payment Chart', to: 'payment-chart' },
     ];
-    // let offersToShow = OFFERS_FRM;
     if (fetchBusinessApplicationOffers) {
       const offer = fetchBusinessApplicationOffers.offers.offer[selectedOfferIndex];
       if (offer && offer.additionalTerms) {
         navItems.push({ title: 'Additional Terms', to: 'additional-terms' });
       }
-      // if (fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL') {
-      //   offersToShow = { ...OFFERS_FRM };
-      //   offersToShow.fields.offer = OFFERS_FRM.fields.offer.find(obj => obj.isAccepted === true);
-      // }
     }
     return (
       <Modal open closeIcon onClose={this.handleCloseModal} size="extra large" closeOnDimmerClick={false}>

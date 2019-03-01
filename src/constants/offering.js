@@ -56,9 +56,9 @@ export const CAMPAIGN_OFFERING_STATUS = {
 export const CAMPAIGN_KEYTERMS_REGULATION = {
   FP_TX: 'Rule 147, TX',
   FP_CF: 'Reg CF - US',
-  BD_CF: 'Reg CF - Securities',
-  BD_506C: 'Reg D 506(c) - Securities',
-  BD_CF_506C: 'Reg CF + Reg D 506(c) - Securities',
+  BD_CF: 'Reg CF Offering',
+  BD_506C: 'Reg D Offering',
+  BD_CF_506C: 'Parallel Offering',
 };
 export const CAMPAIGN_KEYTERMS_REGULATION_FOR_LISTING = {
   FP_TX: 'TX',
@@ -74,4 +74,12 @@ export const OFFERING_COMMENTS_SCOPE = {
   ISSUER: {
     titleITo: 'Note to NS', titleIFrom: 'Note from NS', titleTo: 'Note to Issuer', titleFrom: 'Note from Issuer', color: 'blue',
   },
+};
+
+export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {
+  PENDING: { header: 'Accrditation Verification In Review', subHeader: 'We are processing your accreditation request.  Please check back to make an investment after your accreditation has been approved.' },
+  NOT_ELGIBLE: { header: 'Accrditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
+  INACTIVE: { header: 'Accrditation Verification Required', subHeader: 'You must be an accredited investor to make an investment in this offering.' },
+  EXPIRED: { header: 'Accrditation Expired - Renewal Required', subHeader: 'Your accreditation status has expired.  Please confirm the following to renew.' },
+  ELGIBLE: { header: 'ELGIBLE', subHeader: '' },
 };

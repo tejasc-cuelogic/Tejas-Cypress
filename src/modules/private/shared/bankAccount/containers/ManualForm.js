@@ -25,7 +25,7 @@ export default class ManualForm extends Component {
         this.props.history.push(confirmUrl);
       });
     } else {
-      this.props[accTypeStore].createAccount(currentStep, 'PARTIAL').then(() => {
+      this.props[accTypeStore].createAccount(currentStep).then(() => {
         if (investmentAccType === 'individual') {
           this.props[accTypeStore].setStepToBeRendered(1);
           this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
@@ -43,7 +43,7 @@ export default class ManualForm extends Component {
   }
 
   render() {
-    const { errors } = this.props.uiStore;
+    const { errors, inProgress } = this.props.uiStore;
     const {
       showAddFunds,
       isEncrypted,
@@ -83,7 +83,7 @@ export default class ManualForm extends Component {
               <ListErrors errors={[errors.message]} />
             </Message>
           }
-          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
+          <Button primary size="large" loading={inProgress} className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
         <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
       </div>

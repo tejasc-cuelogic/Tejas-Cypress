@@ -120,7 +120,7 @@ export class AgreementsStore {
       },
       onError: () => {
         uiStore.setProgress(false);
-        Helper.toast('OOPS something went worng', 'error');
+        Helper.toast('Something went wrong, please try again later.', 'error');
       },
     });
   });

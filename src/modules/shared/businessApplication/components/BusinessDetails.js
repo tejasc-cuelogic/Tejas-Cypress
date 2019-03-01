@@ -94,6 +94,7 @@ export default class BusinessDetails extends Component {
               tooltip={currentApplicationType === 'commercial-real-estate' ? 'Property description (as-is), related parties, legal/entity structure, control persons, sponsor/issuer overview, current capital stack (if applicable), proposed capital stack, source(s) of funds, uses of funds, debt assumptions, exit plan including targeted buyer,  construction, property management including day-to-day operations and services, leasing and marketing plans including target tenants and competitive position, potential regulatory restrictions.' : false}
               disabled={formReadOnlyMode}
               multiple
+              asterisk="true"
               name="businessPlan"
               fielddata={BUSINESS_DETAILS_FRM.fields.businessPlan}
               ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DETAILS_FRM')}
@@ -223,6 +224,7 @@ export default class BusinessDetails extends Component {
                             containerclassname={formReadOnlyMode ? 'display-only' : ''}
                             key={field}
                             type="text"
+                            asterisk="true"
                             name={field}
                             fielddata={owner[field]}
                             changed={(e, res) => businessDetailsChange(e, res, 'owners', index)}
@@ -237,6 +239,7 @@ export default class BusinessDetails extends Component {
                         number
                         type="text"
                         name="yearsOfExp"
+                        asterisk="true"
                         fielddata={owner.yearsOfExp}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
@@ -245,6 +248,7 @@ export default class BusinessDetails extends Component {
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         percentage
                         type="text"
+                        asterisk="true"
                         name="companyOwnerShip"
                         fielddata={owner.companyOwnerShip}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
@@ -256,6 +260,7 @@ export default class BusinessDetails extends Component {
                         readOnly={formReadOnlyMode}
                         containerclassname={formReadOnlyMode ? 'display-only' : ''}
                         fielddata={owner.dateOfService}
+                        asterisk="true"
                         format="##/##/####"
                         changed={values => businessDetailsDateChange('dateOfService', values.formattedValue, index)}
                         dateOfBirth
@@ -266,6 +271,7 @@ export default class BusinessDetails extends Component {
                         ssn
                         type="text"
                         name="ssn"
+                        asterisk="true"
                         fielddata={owner.ssn}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'owners', index)}
                       />
@@ -311,7 +317,7 @@ export default class BusinessDetails extends Component {
           header="Confirm"
           content={`Are you sure you want to remove this ${this.state.currentForm.slice(0, -1)}?`}
           open={this.state.showPartialSaveModal}
-          onCancel={this.toggleConfirm}
+          onCancel={() => this.toggleConfirm(this.state.currentForm, this.state.currentIndex)}
           onConfirm={e => this.removeForm(e)}
           size="mini"
           className="deletion"

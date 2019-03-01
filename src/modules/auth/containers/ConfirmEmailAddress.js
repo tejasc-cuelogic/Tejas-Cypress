@@ -149,11 +149,6 @@ export default class ConfirmEmailAddress extends Component {
       this.props.history.push('/auth/login');
     } else if (isOptConfirmed && this.props.userStore.currentUser && this.props.userStore.currentUser.roles && this.props.userStore.currentUser.roles.includes('investor')) {
       return <SuccessScreen successMsg={`${this.props.refLink ? 'Your e-mail address has been updated.' : 'Your e-mail address has been confirmed.'}`} handleContinue={this.handleContinue} />;
-    } else if (inProgress) {
-      return (
-        <Dimmer active={inProgress}>
-          <Loader active={inProgress} />
-        </Dimmer>);
     }
     return (
       <Modal closeOnDimmerClick={false} size="tiny" open closeIcon closeOnRootNodeClick={false} onClose={() => this.handleCloseModal()}>
@@ -170,6 +165,11 @@ export default class ConfirmEmailAddress extends Component {
           </p>
         </Modal.Header>
         <Modal.Content className="signup-content center-align">
+          { (confirmProgress === 'confirm' && inProgress) &&
+          <Dimmer page active={inProgress}>
+            <Loader active={inProgress} />
+          </Dimmer>
+         }
           <FormInput
             ishidelabel
             type="email"
@@ -203,7 +203,7 @@ export default class ConfirmEmailAddress extends Component {
                 <ListErrors errors={[errors.message]} />
               </Message>
             }
-            <Button primary size="large" className="very relaxed" content="Confirm" loading={confirmProgress === 'confirm' && inProgress} disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
+            <Button primary size="large" className="very relaxed" content="Confirm" disabled={!((CONFIRM_FRM.meta.isValid && !this.props.refLink) || (this.props.refLink && canSubmitConfirmEmail))} />
           </Form>
         </Modal.Content>
       </Modal>

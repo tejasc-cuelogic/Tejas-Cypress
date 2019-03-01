@@ -1,7 +1,6 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find } from 'lodash';
+import { isEmpty, find, get } from 'lodash';
 import graphql from 'mobx-apollo';
-import React from 'react';
 import moment from 'moment';
 import {
   ENTITY_FIN_INFO,
@@ -10,14 +9,14 @@ import {
   ENTITY_PERSONAL_INFO,
   ENTITY_FORMATION_DOCS,
   FILE_UPLOAD_STEPS,
+  US_STATES_FOR_INVESTOR,
 } from '../../../../constants/account';
 import { bankAccountStore, userDetailsStore, userStore, uiStore, investmentLimitStore } from '../../index';
-import { upsertInvestorAccount, submitinvestorAccount, checkEntityTaxIdCollision } from '../../queries/account';
+import { upsertInvestorAccount, submitinvestorAccount, isUniqueTaxId } from '../../queries/account';
 import { FormValidator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { validationActions, fileUpload } from '../../../actions';
 import Helper from '../../../../helper/utility';
-import { NS_SITE_EMAIL_SUPPORT } from '../../../../constants/common';
 import AccCreationHelper from '../../../../modules/private/investor/accountSetup/containers/accountCreation/helper';
 
 class EntityAccountStore {
@@ -28,6 +27,8 @@ class EntityAccountStore {
   @observable FORM_DOCS_FRM = FormValidator.prepareFormObject(ENTITY_FORMATION_DOCS);
   @observable entityData = {};
   @observable stepToBeRendered = '';
+  @observable entityAccountId = null;
+
 
   @action
   setStepToBeRendered(step) {
@@ -107,7 +108,7 @@ class EntityAccountStore {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
     uiStore.setProgress();
     const payLoad = {
-      accountId: accountDetails.details.accountId,
+      accountId: get(accountDetails, 'details.accountId') || this.entityAccountId,
       accountType: 'ENTITY',
     };
     return new Promise((resolve, reject) => {
@@ -117,8 +118,12 @@ class EntityAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => (resolve()))
-          .catch(() => {
+          .then(() => {
+            Helper.toast('Entity account submitted successfully.', 'success');
+            resolve();
+          })
+          .catch((err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
           });
@@ -138,6 +143,8 @@ class EntityAccountStore {
 
   @action
   setEntityAttributes = (step, removeUploadedData, field) => {
+    const selectedState =
+    find(US_STATES_FOR_INVESTOR, { value: this.GEN_INFO_FRM.fields.state.value });
     switch (step) {
       case 'General':
         this.entityData.name = this.GEN_INFO_FRM.fields.name.value;
@@ -145,7 +152,7 @@ class EntityAccountStore {
         this.entityData.address = {
           street: this.GEN_INFO_FRM.fields.street.value,
           city: this.GEN_INFO_FRM.fields.city.value,
-          state: this.GEN_INFO_FRM.fields.state.value,
+          state: selectedState ? selectedState.key : '',
           zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
         };
         this.entityData.entityType = this.GEN_INFO_FRM.fields.entityType.value;
@@ -213,6 +220,8 @@ class EntityAccountStore {
   get accountAttributes() {
     /* eslint-disable camelcase */
     let payload = {};
+    const selectedState =
+          find(US_STATES_FOR_INVESTOR, { value: this.GEN_INFO_FRM.fields.state.value });
     payload = {
       limits: {
         netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
@@ -226,7 +235,7 @@ class EntityAccountStore {
       address: {
         street: this.GEN_INFO_FRM.fields.street.value,
         city: this.GEN_INFO_FRM.fields.city.value,
-        state: this.GEN_INFO_FRM.fields.state.value,
+        state: selectedState ? selectedState.key : '',
         zipCode: this.GEN_INFO_FRM.fields.zipCode.value,
       },
       legalInfo: {
@@ -292,23 +301,17 @@ class EntityAccountStore {
   checkTaxIdCollision = () => new Promise(async (resolve) => {
     graphql({
       client,
-      query: checkEntityTaxIdCollision,
+      query: isUniqueTaxId,
       variables: {
         taxId: this.GEN_INFO_FRM.fields.taxId.value,
       },
       fetchPolicy: 'network-only',
       onFetch: (fData) => {
         if (fData) {
-          if (fData.checkEntityTaxIdCollision.alreadyExists) {
-            const setErrorMessage = (
-              <span>
-                There was an issue with the information you submitted.
-                Please double-check and try again. If you have any questions please contact <a target="_blank" rel="noopener noreferrer" href={`mailto:${NS_SITE_EMAIL_SUPPORT}`}>{ NS_SITE_EMAIL_SUPPORT }</a>
-              </span>
-            );
-            uiStore.setErrors(setErrorMessage);
+          if (fData.isUniqueTaxId.alreadyExists) {
+            uiStore.showErrorMessage('Please double-check and try again.');
           }
-          resolve(fData.checkEntityTaxIdCollision.alreadyExists);
+          resolve(fData.isUniqueTaxId.alreadyExists);
         }
       },
       onError: () => Helper.toast('Something went wrong, please try again later.', 'error'),
@@ -417,11 +420,12 @@ class EntityAccountStore {
       accountType: 'ENTITY',
     };
     let actionPerformed = 'submitted';
+    const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
     if (userDetailsStore.currentUser.data) {
-      const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'entity' });
-      if (accountDetails) {
+      if (accountDetails || this.entityAccountId) {
         mutation = upsertInvestorAccount;
-        variables.accountId = accountDetails.details.accountId;
+        variables.accountId = get(accountDetails, 'details.accountId')
+          || this.entityAccountId;
         actionPerformed = 'updated';
       }
     }
@@ -432,10 +436,9 @@ class EntityAccountStore {
           variables,
         })
         .then(action((result) => {
-          if (currentStep.name === 'Financial info') {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
+          this.entityAccountId = result.data.upsertInvestorAccount.accountId;
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }
@@ -486,6 +489,9 @@ class EntityAccountStore {
       } else if (form === 'GEN_INFO_FRM') {
         if ((f === 'taxId' || f === 'name' || f === 'entityType') && accountDetails && accountDetails[f]) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails[f];
+        } else if (f === 'state' && accountDetails && accountDetails.address && accountDetails.address.state) {
+          this.GEN_INFO_FRM.fields[f].value =
+          find(US_STATES_FOR_INVESTOR, { key: accountDetails.address.state }).value;
         } else if (accountDetails && accountDetails.address) {
           this.GEN_INFO_FRM.fields[f].value = accountDetails.address[f];
         }
@@ -669,6 +675,7 @@ class EntityAccountStore {
     this.TRUST_INFO_FRM.meta.error = '';
     this.entityData = {};
     this.stepToBeRendered = '';
+    this.entityAccountId = null;
   };
 }
 

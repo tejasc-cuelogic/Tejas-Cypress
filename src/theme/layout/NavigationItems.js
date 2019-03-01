@@ -8,6 +8,7 @@ import { PUBLIC_NAV } from '../../constants/NavigationMeta';
 import { Logo } from '../shared';
 import { SubmitButton } from '../../modules/shared/businessApplication/components/HeaderButtons';
 
+const isTablet = document.documentElement.clientWidth < 992;
 @withRouter
 @inject('navStore')
 @observer
@@ -165,6 +166,7 @@ export class NavigationItems extends Component {
               alt="NextSeed.com"
               dataSrc={getLogo(location.pathname)}
               style={getLogoStyle(location.pathname)}
+              size={isTablet && 'small'}
             />
           </Menu.Item>
           <Menu.Menu position="right">
@@ -180,7 +182,7 @@ export class NavigationItems extends Component {
           {location.pathname.includes('/business-application') && !location.pathname.includes('business/') && !location.pathname.includes('commercial-real-estate/') ?
             <Menu.Item>
               <Button.Group>
-                <Button as={Link} to="/business/how-it-works" inverted color="red">Cancel</Button>
+                <Button as={Link} to="/business/how-it-works" loading={loading} inverted color="red">Cancel</Button>
                 {isPrequalQulify &&
                   <SubmitButton
                     canSubmitApp={canSubmitApp}

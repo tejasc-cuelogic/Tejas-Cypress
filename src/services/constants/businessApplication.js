@@ -27,6 +27,7 @@ export const BUSINESS_APPLICATION_STATUS = {
   APPLICATION_SUCCESSFUL: 'APPLICATION_SUCCESSFUL',
   REVIEWED: 'REVIEWED',
   DECLINED: 'DECLINED',
+  APPLICATION_DECLINED: 'DECLINED',
   APPLICATION_DELETED: 'APPLICATION_DELETED',
   LENDIO_PRE_QUALIFICATION_SUCCESSFUL: 'LENDIO_PRE_QUALIFICATION_SUCCESSFUL',
   LENDIO_PRE_QUALIFICATION_FAILED: 'LENDIO_PRE_QUALIFICATION_FAILED',
@@ -80,6 +81,9 @@ export const BUSINESS_APP_USER_STATUS = {
     status: 'Reviewed', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   DECLINED: {
+    status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
+  },
+  APPLICATION_DECLINED: {
     status: 'Offer Declined', icon: 'ns-reload-circle-line', color: '', dateTitle: 'Last Updated Date', datePath: 'updated.date',
   },
   APPLICATION_DELETED: {

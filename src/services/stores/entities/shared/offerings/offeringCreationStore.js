@@ -182,6 +182,15 @@ export class OfferingCreationStore {
   }
 
   @action
+  resetAllForms = () => {
+    const forms = ['KEY_TERMS_FRM', 'OFFERING_OVERVIEW_FRM', 'OFFERING_COMPANY_FRM', 'COMPANY_LAUNCH_FRM', 'OFFERING_MISC_FRM', 'LAUNCH_CONTITNGENCIES_FRM', 'CLOSING_CONTITNGENCIES_FRM', 'ADD_NEW_CONTINGENCY_FRM', 'OFFERING_DETAILS_FRM', 'OFFERING_CLOSE_FRM', 'MEDIA_FRM', 'LEADERSHIP_FRM', 'LEADERSHIP_EXP_FRM', 'GENERAL_FRM', 'ISSUER_FRM', 'AFFILIATED_ISSUER_FRM', 'LEADER_FRM', 'RISK_FACTORS_FRM', 'ADD_NEW_TIER_FRM', 'ADD_NEW_BONUS_REWARD_FRM', 'DOCUMENTATION_FRM', 'EDIT_CONTINGENCY_FRM', 'ADMIN_DOCUMENTATION_FRM', 'DATA_ROOM_FRM', 'POC_DETAILS_FRM'];
+    forms.forEach((f) => {
+      this[f] = Validator.resetFormData(this[f]);
+    });
+    this.initLoad = [];
+  }
+
+  @action
   resetFormField = (form, field, fileObj, RemoveIndex) => {
     if (fileObj && Array.isArray(toJS(this.MEDIA_FRM.fields[field].preSignedUrl))) {
       this.MEDIA_FRM.fields[field].preSignedUrl.push(fileObj.location);
@@ -581,7 +590,7 @@ export class OfferingCreationStore {
     this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
     this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
     this.setFormFileArray(form, arrayName, field, 'preSignedUrl', '', index);
-    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM'));
+    this.checkFormValid(form, (form === 'LEADERSHIP_FRM' || form === 'DATA_ROOM_FRM' || form === 'KEY_TERMS_FRM'));
   }
 
   @action
@@ -612,7 +621,7 @@ export class OfferingCreationStore {
   }
 
   @action
-  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false) => {
+  setFileUploadData = (form, field, files, subForm = '', index = null, stepName, updateOnUpload = false, isMultiform = false) => {
     if (stepName) {
       uiStore.setProgress();
       const file = files[0];
@@ -625,7 +634,7 @@ export class OfferingCreationStore {
         this[form].fields[field].fileId = fileId;
         this[form].fields[field].preSignedUrl = preSignedUrl;
         this[form].fields[field].fileData = file;
-        if (index !== null) {
+        if (index !== null || isMultiform) {
           this[form] = Validator.onArrayFieldChange(
             this[form],
             { name: field, value: fileData.fileName }, subForm, index,
@@ -949,9 +958,9 @@ export class OfferingCreationStore {
   updateOfferingMutation = (
     id,
     payload, keyName, notify = true,
-    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false,
+    successMsg = undefined, fromS3 = false, res, rej, msgType = 'success', isLaunchContingency = false, approvedObj,
   ) => {
-    uiStore.setProgress();
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     const variables = {
       id,
       offeringDetails: payload,
@@ -1013,7 +1022,7 @@ export class OfferingCreationStore {
     msgType = 'success', isLaunchContingency = false,
   ) => new Promise((res, rej) => {
     let { getOfferingById } = offeringsStore.offerData.data;
-    getOfferingById = Helper.replaceKeysDeep(getOfferingById, { aliasId: 'id' });
+    getOfferingById = Helper.replaceKeysDeep(toJS(getOfferingById), { aliasId: 'id' });
     let payloadData = {
       applicationId: getOfferingById.applicationId,
       issuerId: getOfferingById.issuerId,
@@ -1217,7 +1226,7 @@ export class OfferingCreationStore {
     }
     this.updateOfferingMutation(
       id, payloadData, keyName, notify, successMsg,
-      fromS3, res, rej, msgType, isLaunchContingency,
+      fromS3, res, rej, msgType, isLaunchContingency, approvedObj,
     );
   });
 

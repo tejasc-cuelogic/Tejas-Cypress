@@ -8,7 +8,7 @@ import { inject, observer } from 'mobx-react';
 import Helper from '../../../../../../../helper/utility';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 
-@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
+@inject('iraAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -35,7 +35,8 @@ export default class Summary extends Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('ira');
     } else {
       this.props.iraAccountStore.submitAccount().then(() => {
-        this.props.history.push('/app/summary');
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        this.props.history.push('app/summary');
       });
     }
   }
@@ -65,7 +66,10 @@ export default class Summary extends Component {
       FUNDING_FRM.fields.fundingType.values,
       { value: FUNDING_FRM.fields.fundingType.value },
     );
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      plaidAccDetails, formLinkBankManually,
+      formAddFunds, depositMoneyNow,
+    } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
@@ -110,6 +114,15 @@ export default class Summary extends Component {
                     <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                   </Table.Row>
                 }
+                <Table.Row>
+                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell>
+                    {!depositMoneyNow ?
+                    Helper.CurrencyFormat(0) :
+                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                    Helper.CurrencyFormat(0)}
+                  </Table.Cell>
+                </Table.Row>
               </Table.Body>
             </Table>
           </div>

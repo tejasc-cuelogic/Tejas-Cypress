@@ -10,6 +10,7 @@ import BusinessSignup from './public/businessSignup/containers/Signup';
 import Business from './public/business/containers/Business';
 import Resources from './public/resources';
 import Partners from './public/partners';
+import News from './public/news';
 
 import Edgar from './private/admin/edgar/containers/Business';
 import EdgarForm from './private/admin/edgar/containers/EdgarForm';
@@ -49,6 +50,10 @@ export const publicRoutes = [
   {
     path: '/blog',
     component: Blog,
+  },
+  {
+    path: '/invest/get-started',
+    component: News,
   },
   {
     path: '/invest',

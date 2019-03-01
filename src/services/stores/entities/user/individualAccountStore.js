@@ -1,30 +1,23 @@
 import { action, observable } from 'mobx';
-import { isEmpty, find } from 'lodash';
-import { bankAccountStore, uiStore, userStore, userDetailsStore } from '../../index';
+import { isEmpty, find, get } from 'lodash';
+import { bankAccountStore, uiStore, userDetailsStore } from '../../index';
 // import AccCreationHelper from '../../../../modules/private/investor
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { submitinvestorAccount, upsertInvestorAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
+import userStore from '../userStore';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
   @observable submited = false;
   @observable isManualLinkBankSubmitted = false;
+  @observable individualAccId = null;
 
   @action
   setIsManualLinkBankSubmitted = (status) => {
     this.isManualLinkBankSubmitted = status;
-  }
-
-  initialSteptobeRendered = () => {
-    const { userDetails } = userDetailsStore;
-    const account = find(userDetails.roles, { name: 'individual' });
-    if (!isEmpty(account)) {
-      this.setStepToBeRendered(this.stepToBeRendered === 0 ? 1
-        : this.stepToBeRendered);
-    }
   }
 
   @action
@@ -36,7 +29,7 @@ class IndividualAccountStore {
     const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
     uiStore.setProgress();
     const payLoad = {
-      accountId: accountDetails.details.accountId,
+      accountId: get(accountDetails, 'details.accountId') || this.individualAccId,
       accountType: 'INDIVIDUAL',
     };
     return new Promise((resolve, reject) => {
@@ -46,8 +39,12 @@ class IndividualAccountStore {
             mutation: submitinvestorAccount,
             variables: payLoad,
           })
-          .then(() => (resolve()))
-          .catch(() => {
+          .then(() => {
+            Helper.toast('Individual account submitted successfully.', 'success');
+            resolve();
+          })
+          .catch((err) => {
+            uiStore.setErrors(DataFormatter.getSimpleErr(err));
             uiStore.setProgress(false);
             reject();
           });
@@ -79,8 +76,8 @@ class IndividualAccountStore {
       const actionPerformed = 'submitted';
       if (userDetailsStore.currentUser.data) {
         const accountDetails = find(userDetailsStore.currentUser.data.user.roles, { name: 'individual' });
-        if (accountDetails) {
-          variables.accountId = accountDetails.details.accountId;
+        if (accountDetails || this.individualAccId) {
+          variables.accountId = get(accountDetails, 'details.accountId') || this.individualAccId;
         }
       }
       return new Promise((resolve, reject) => {
@@ -91,8 +88,9 @@ class IndividualAccountStore {
               variables,
             })
             .then(action((result) => {
+              userDetailsStore.getUser(userStore.currentUser.sub);
               if (result.data.upsertInvestorAccount) {
-                userDetailsStore.getUser(userStore.currentUser.sub);
+                this.individualAccId = result.data.upsertInvestorAccount.accountId;
                 const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }

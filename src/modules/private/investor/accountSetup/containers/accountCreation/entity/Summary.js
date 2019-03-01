@@ -8,7 +8,7 @@ import { isEmpty } from 'lodash';
 import { DateTimeFormat, ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore')
+@inject('entityAccountStore', 'uiStore', 'bankAccountStore', 'userDetailsStore', 'agreementsStore', 'userStore')
 @withRouter
 @observer
 export default class Summary extends Component {
@@ -35,7 +35,8 @@ export default class Summary extends Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('entity');
     } else {
       this.props.entityAccountStore.submitAccount().then(() => {
-        this.props.history.push('summary');
+        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+        this.props.history.push('app/summary');
       });
     }
   }
@@ -58,7 +59,10 @@ export default class Summary extends Component {
     }
       = this.props.entityAccountStore;
     const { errors } = this.props.uiStore;
-    const { plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      plaidAccDetails, formLinkBankManually,
+      depositMoneyNow, formAddFunds,
+    } = this.props.bankAccountStore;
     const bankAccountNumber = !isEmpty(plaidAccDetails) ?
       plaidAccDetails.accountNumber ? plaidAccDetails.accountNumber : '' : formLinkBankManually.fields.accountNumber.value;
     const { embedUrl, docLoading } = this.props.agreementsStore;
@@ -116,6 +120,15 @@ export default class Summary extends Component {
                   <Table.Cell>Bank Account</Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
+                <Table.Row>
+                  <Table.Cell>Your Initial Deposit</Table.Cell>
+                  <Table.Cell>
+                    {!depositMoneyNow ?
+                    Helper.CurrencyFormat(0) :
+                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                    Helper.CurrencyFormat(0)}
+                  </Table.Cell>
+                </Table.Row>
               </Table.Body>
             </Table>
           </div>
@@ -133,13 +146,13 @@ export default class Summary extends Component {
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('cCAgreement')}>
             CrowdPay Custodial Account Agreement
           </span>,{' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('fPAgreemnt')}>
             NextSeed US LLC Member Agreement
           </span>,
           <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('bDIAgreemnt')}>
             NextSeed Securities LLC Investor Agreement
           </span>, and {' '}
-          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('membershipAgreement')}>
+          <span className="highlight-text" style={{ cursor: 'pointer' }} onClick={() => this.openModal('irsCertification')}>
             Substitute IRS Form W-9 Certification
           </span>.
           <IframeModal

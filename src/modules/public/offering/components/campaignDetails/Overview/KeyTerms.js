@@ -31,18 +31,26 @@ class KeyTerms extends Component {
         <Table basic="very" className="key-terms-table neutral-text">
           <Table.Body>
             <Table.Row verticalAlign="top">
+              <Table.Cell><b>Issuer</b>
+              </Table.Cell>
+              <Table.Cell className="grey-header">
+                {get(campaign, 'keyTerms.legalBusinessName') ?
+                  get(campaign, 'keyTerms.legalBusinessName') : '-'}
+              </Table.Cell>
+            </Table.Row>
+            <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Offering</b>
               </Table.Cell>
               <Table.Cell className="grey-header">
-                {get(campaign, 'keyTerms.regulation') ?
-                  CAMPAIGN_KEYTERMS_REGULATION[campaign.keyTerms.regulation] : '-'}
+                {get(campaign, 'regulation') ?
+                  CAMPAIGN_KEYTERMS_REGULATION[campaign.regulation] : '-'}
               </Table.Cell>
             </Table.Row>
             <Table.Row verticalAlign="top">
               <Table.Cell><b>Type of Securities</b></Table.Cell>
               <Table.Cell className="grey-header">
-                {get(campaign, 'keyTerms.securities') ?
-                  CAMPAIGN_KEYTERMS_SECURITIES[campaign.keyTerms.securities]
+                {offerStructure ?
+                  CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]
                   :
                 '-'}
               </Table.Cell>
@@ -53,13 +61,14 @@ class KeyTerms extends Component {
                 <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
                   <Popup
                     trigger={<Icon name="help circle" color="green" />}
-                    content="Interest payment is calculated at a gross annualized interest rate of 16.0% each month on the remaining balance of your investment from the prior month."
+                    content={`Interest payment is calculated at a gross annualized interest rate of ${campaign && campaign.keyTerms && campaign.keyTerms.interestRate ?
+                      `${campaign.keyTerms.interestRate}%` : 'NA'} each month on the remaining balance of your investment from the prior month.`}
                     position="top center"
                   />
                 </Table.Cell>
                 <Table.Cell>
-                  {KeyTerms && KeyTerms.interestRate ?
-                      `${KeyTerms.interestRate}%`
+                  {campaign && campaign.keyTerms && campaign.keyTerms.interestRate ?
+                  `${campaign.keyTerms.interestRate}%`
                     :
                     'NA'
                 }
@@ -127,7 +136,7 @@ class KeyTerms extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {KeyTerms && KeyTerms.premoneyValuation ? Helper.CurrencyFormat(KeyTerms.premoneyValuation) : ' NA'}
+                      {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>
@@ -136,7 +145,7 @@ class KeyTerms extends Component {
                   </Table.Cell>
                   <Table.Cell>
                     <p>
-                      {KeyTerms && KeyTerms.unitPrice ? Helper.CurrencyFormat(KeyTerms.unitPrice) : ' NA'}
+                      {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.unitPrice')) : ' NA'}
                     </p>
                   </Table.Cell>
                 </Table.Row>

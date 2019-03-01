@@ -53,7 +53,7 @@ export class ArticleStore {
     }
 
     @action
-    requestAllArticles = (isPublic = true, sortAsc = true, categoryId = null) => {
+    requestAllArticles = (isPublic = true, sortAsc = false, categoryId = null) => {
       const apiClient = isPublic ? clientPublic : client;
       this.data = graphql({
         client: apiClient,
@@ -114,7 +114,8 @@ export class ArticleStore {
 
     @computed get InsightArticles() {
       return (this.data.data && (toJS(this.data.data.insightsArticles)
-        || toJS(this.data.data.insightArticlesByCategoryId))) || [];
+        || toJS(this.data.data.insightArticlesByCategoryId)
+        || toJS(this.data.data.getInsightsArticles))) || [];
     }
     @computed get InsightFeaturedArticles() {
       return (this.featuredData.data && (toJS(this.featuredData.data.insightsArticles)
