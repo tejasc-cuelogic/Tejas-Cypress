@@ -70,7 +70,7 @@ export default class PreQualBusiness extends Component {
               <div className="field-wrap">
                 {getFranchiseCondition &&
                   <Aux>
-                    <Header as="h6" content="Are you an existing or previous franchise holder?" />
+                    <Header as="h6" content="Are you an existing or previous franchise holder?*" />
                     <FormRadioGroup
                       disabled={preQualFormDisabled}
                       fielddata={fields.franchiseHolder}
