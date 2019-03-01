@@ -12,6 +12,7 @@ import { ListErrors } from '../../../theme/shared';
 class Login extends Component {
   componentWillMount() {
     this.props.uiStore.clearErrors();
+    this.props.uiStore.setProgress(false);
     this.props.authStore.resetForm('LOGIN_FRM');
     this.props.authStore.setDefaultPwdType();
   }
