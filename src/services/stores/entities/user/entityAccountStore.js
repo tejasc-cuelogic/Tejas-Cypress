@@ -576,6 +576,7 @@ class EntityAccountStore {
         this.renderAfterPopulate();
       }
     }
+    uiStore.setProgress(false);
   }
 
   renderAfterPopulate = () => {
