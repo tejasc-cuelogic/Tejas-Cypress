@@ -124,13 +124,14 @@ class KeyTerms extends Component {
                 </Table.Cell>
               </Table.Row> :
               <Aux>
-                <Table.Row verticalAlign="top">
+                {/* <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Total Round Size{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
-                    -
+                    NA
                   </Table.Cell>
-                </Table.Row>
+                </Table.Row> */}
+                {get(campaign, 'keyTerms.premoneyValuation') &&
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
                   </Table.Cell>
@@ -140,6 +141,8 @@ class KeyTerms extends Component {
                     </p>
                   </Table.Cell>
                 </Table.Row>
+                }
+                {get(campaign, 'keyTerms.unitPrice') &&
                 <Table.Row verticalAlign="top">
                   <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
                   </Table.Cell>
@@ -149,6 +152,7 @@ class KeyTerms extends Component {
                     </p>
                   </Table.Cell>
                 </Table.Row>
+                }
               </Aux>
             }
           </Table.Body>
