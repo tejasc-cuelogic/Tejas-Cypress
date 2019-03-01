@@ -140,10 +140,12 @@ export class UserDetailsStore {
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
       variables: { userId },
-      onFetch: () => {
+      onFetch: (result) => {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
-        res();
+        if (result) {
+          res();
+        }
         const user = { ...this.currentUser };
         this.currentUser.data &&
           this.currentUser.data.user &&

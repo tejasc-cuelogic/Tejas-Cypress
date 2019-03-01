@@ -16,6 +16,7 @@ export default class InvestNow extends React.Component {
 
   componentWillMount() {
     this.props.investmentStore.setStepToBeRendered(0);
+    this.props.uiStore.setProgress(false);
     this.setState({ isInvestmentUpdate: false });
     const { isUserLoggedIn } = this.props.authStore;
     const { currentUser } = this.props.userStore;
