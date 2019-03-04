@@ -77,6 +77,15 @@ class App extends Component {
     if ((!this.checkPathRestictedForScrollTop(restictedScrollToTopPathArr, currentLocation)) || ((!this.props.location.hash || this.props.location.hash === '') && currentLocation.includes('overview'))) {
       window.scrollTo(0, 0);
     }
+    if (currentLocation === '/') {
+      const calculations = {
+        topVisible: true,
+        direction: 'down',
+        bottomPassed: false,
+        isMoveTop: true,
+      };
+      this.props.navStore.setNavStatus(calculations, 'main');
+    }
   }
   playDevBanner = () => this.props.uiStore.toggleDevBanner();
   checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));

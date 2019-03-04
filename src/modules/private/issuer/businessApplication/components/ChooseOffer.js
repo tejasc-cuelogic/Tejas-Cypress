@@ -48,8 +48,8 @@ export default class ChooseOffer extends Component {
   render() {
     const { match, businessAppReviewStore } = this.props;
     const {
-      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex, selectedOfferIndex,
-      offerLoading, fetchBusinessApplicationOffers,
+      OFFERS_FRM, formChangeWithIndex, maskChangeWithIndex,
+      selectedOfferIndex, offerLoading, fetchBusinessApplicationOffers,
     } = businessAppReviewStore;
     const navItems = [
       { title: 'General Conditions', to: 'general-conditions' },

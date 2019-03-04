@@ -89,7 +89,7 @@ class Footer extends Component {
               </div>
               <div className={`${isMobile && 'mb-20'} footer-social`}>
                 <SocialLinks />
-                <p className={isMobile && 'mt-10'}>© 2019 NextSeed Services LLC</p>
+                <p className={isMobile && 'mt-10'}>© 2019 NextSeed Technologies LLC</p>
               </div>
             </Grid.Column>
             <Grid.Column computer={10} tablet={16} mobile={16} className="copyright-info">

@@ -21,10 +21,10 @@ import { UPLOADS_CONFIG } from '../../constants/aws';
 window.$ = $;
 window.jQuery = $;
 
-@inject('imageStore', 'uiStore')
+@inject('uiStore')
 @observer
 export default class HtmlEditor extends React.Component {
-  state = { imgUrl: null }
+  state = { inProgress: false };
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
@@ -36,39 +36,39 @@ export default class HtmlEditor extends React.Component {
       heightMin: 244,
       heightMax: '70vh',
       imageManager: false,
-      imageUploadRemoteUrls: false,
       events: {
-        'froalaEditor.image.loaded': (e, editor, image) => {
-          console.log('beforeupload');
-          console.log(image);
-          if (image.attr('src').includes('blob:') && this.state.imgUrl) {
-            image.attr('src', this.state.imgUrl);
-            this.setState({ imgUrl: null });
-            this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
-          } else {
-            this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
-          }
-          return false;
-        },
         'froalaEditor.image.beforeUpload': (e, editor, images) => {
-          console.log('beforeupload');
-          console.log(images);
           this.props.uiStore.setFieldvalue('htmlEditorImageLoading', true);
-          const fileName = get(images, '[0].name');
-          const file = get(images, '[0]');
-          const fileObj = {
-            obj: file,
-            type: file.type,
-            name: fileName,
-          };
-          fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
-            if (editor && editor.image) {
-              const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
-              console.log(editor);
-              editor.image.insert(imgUrl);
-              this.setState({ imgUrl });
-            }
-          }).catch(() => { this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false); return false; });
+          this.setState({ inProgress: true });
+          if (images.length) {
+            const fileName = get(images, '[0].name');
+            const file = get(images, '[0]');
+            const fileObj = {
+              obj: file,
+              type: file.type,
+              name: fileName,
+            };
+            fileUpload.uploadToS3(fileObj, this.props.imageUploadPath || 'RichTextEditor').then((res) => {
+              if (editor && editor.image && editor.image.get()) {
+                const imgUrl = `https://${UPLOADS_CONFIG.bucket}/${res}`;
+                // console.log(editor.image.get(), 'heyyyy');
+                editor.image.get().attr('src', imgUrl);
+                editor.image.insert(imgUrl, null, null, editor.image.get());
+                this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+                this.setState({ inProgress: false });
+              } else {
+                console.log('else block');
+                this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+                this.setState({ inProgress: false });
+              }
+              return false;
+            }).catch((err) => {
+              console.log('catch image', err);
+              this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+              this.setState({ inProgress: false });
+              return false;
+            });
+          }
         },
         'froalaEditor.image.error': (e, editor, error) => {
           console.log(error);
@@ -80,21 +80,20 @@ export default class HtmlEditor extends React.Component {
   handleModelChange = (content) => {
     this.props.changed(this.props.name, content, this.props.form, this.props.index);
   }
-  handelUpload = () => {
-    console.log('d');
-  }
   render() {
     const { keyStart, readOnly } = this.props;
     if (readOnly) {
       return <div>{Parser(this.props.content || '')}</div>;
     }
     return (
-      <FroalaEditor
-        tag="textarea"
-        model={this.props.content}
-        config={this.getConfig(keyStart, this.props.overrides)}
-        onModelChange={this.handleModelChange}
-      />
+      <div className={this.state.inProgress ? 'no-pointer-events' : ''}>
+        <FroalaEditor
+          tag="textarea"
+          model={this.props.content}
+          config={this.getConfig(keyStart, this.props.overrides)}
+          onModelChange={this.handleModelChange}
+        />
+      </div>
     );
   }
 }

@@ -11,7 +11,6 @@ import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
-  bankAccountStore,
   individualAccountStore,
   iraAccountStore,
   entityAccountStore,
@@ -103,7 +102,7 @@ export class UserDetailsStore {
   @action
   setUserAccDetails = (investmentAccType) => {
     if (!isEmpty(this.userDetails)) {
-      bankAccountStore.resetLinkBank();
+      // bankAccountStore.resetLinkBank();
       if (investmentAccType === 'ira') {
         iraAccountStore.populateData(this.userDetails);
       } else if (investmentAccType === 'individual') {
