@@ -198,7 +198,9 @@ export const PRIVATE_NAV = [
         title: 'Close', to: 'close', accessFor: [2], accessibleTo: ['admin', 'manager', 'support'],
       },
       { title: 'Bonus Rewards', to: 'bonus-rewards', accessFor: [1, 2, 3, 4] },
-      { title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4] },
+      {
+        title: 'Offering Creation', to: 'offering-creation', accessFor: [2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
+      },
       {
         title: 'Activity History', to: 'activity-history', accessFor: [1, 2, 3, 4], accessibleTo: ['admin', 'manager', 'support'],
       },
@@ -452,7 +454,7 @@ export const PUBLIC_NAV = [
     subNavigations: [
       {
         defaultOpen: true,
-        title: 'Overview',
+        title: 'Summary',
         to: 'overview',
         component: 'Overview',
         subPanel: 1,
@@ -480,7 +482,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Company Description', to: '#company-description', useRefLink: true, defaultActive: true,
+            title: 'Overview', to: '#company-description', useRefLink: true, defaultActive: true,
           },
           {
             title: 'Business Model', to: '#business-model', useRefLink: true,
@@ -489,10 +491,10 @@ export const PUBLIC_NAV = [
             title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
           },
           {
-            title: 'History', to: '#history', useRefLink: true,
+            title: 'Team', to: '#team', useRefLink: true,
           },
           {
-            title: 'Team', to: '#team', useRefLink: true,
+            title: 'History', to: '#history', useRefLink: true,
           },
         ],
       },

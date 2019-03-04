@@ -158,6 +158,7 @@ class IndividualAccountStore {
     this.stepToBeRendered = 0;
     this.submited = false;
     this.isManualLinkBankSubmitted = false;
+    this.individualAccId = null;
   }
 }
 export default new IndividualAccountStore();

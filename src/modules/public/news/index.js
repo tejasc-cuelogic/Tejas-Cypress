@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Container, Header, Grid, Item, Responsive, Button, Segment, Form } from 'semantic-ui-react';
+import { Container, Header, Grid, Item, Responsive, Button, Segment, Form, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Logo, NsCarousel } from '../../../theme/shared';
@@ -62,7 +62,9 @@ export default class News extends Component {
       <Aux>
         <Container>
           <section className="center-align">
-            <Logo centered dataSrc="LogoBlack" />
+            <Link to="/">
+              <Logo centered dataSrc="LogoBlack" />
+            </Link>
           </section>
           <Header as="h2" className="center-align mt-0">Small business investing, <span className="highlight-text">made easy.</span></Header>
           <section>
@@ -117,7 +119,8 @@ export default class News extends Component {
             </Grid>
           </section>
         </Container>
-        <section className="bg-offwhite">
+        <Divider fitted as={Container} />
+        <section>
           <Container className="mt-30">
             <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign="center">Investing, simplified.</Header>
             <div className="how-it-works-steps mb-30">
@@ -142,7 +145,7 @@ export default class News extends Component {
             </div>
           </Container>
         </section>
-        <section>
+        <section className="bg-offwhite">
           <Container textAlign={isMobile ? 'left' : 'center'} className="mt-30">
             <Header as="h2" className="mb-30">
             Build an investment portfolio{' '}
@@ -187,7 +190,7 @@ export default class News extends Component {
             </Aux>
         }
         </section>
-        <section className="bg-offwhite">
+        <section>
           <Container>
             <Grid relaxed={!isTablet && 'very'} stackable centered className={!isMobile && 'mt-40 mb-40'}>
               <Grid.Row>

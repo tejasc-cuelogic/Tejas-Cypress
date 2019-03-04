@@ -229,7 +229,8 @@ class IraAccountStore {
           bankAccountStore.isValidLinkBank;
         if (isValidCurrentStep && bankAccountStore.formAddFunds.meta.isFieldValid) {
           uiStore.setProgress();
-          if (!isEmpty(bankAccountStore.plaidAccDetails)) {
+          if (!isEmpty(bankAccountStore.plaidAccDetails) &&
+          !bankAccountStore.manualLinkBankSubmitted) {
             const { public_token, account_id } = bankAccountStore.plaidAccDetails;
             accountAttributes.linkedBank = {};
             accountAttributes.linkedBank.plaidPublicToken = public_token;
@@ -330,13 +331,13 @@ class IraAccountStore {
             userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
+            FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
           }
           if (currentStep.name === 'Identity') {
             if (removeUploadedData) {
               validationActions.validateIRAIdentityInfo();
             } else {
               FormValidator.setIsDirty(this[currentStep.form], false);
-              this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
           } else if (currentStep.name !== 'Link bank') {
             FormValidator.setIsDirty(this[currentStep.form], false);
@@ -344,6 +345,7 @@ class IraAccountStore {
           this.setStepToBeRendered(currentStep.stepToBeRendered);
           Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           uiStore.setErrors(null);
+          uiStore.setProgress(false);
           resolve(result);
         }))
         .catch((err) => {
@@ -352,10 +354,10 @@ class IraAccountStore {
           }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
           reject(err);
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 
@@ -368,8 +370,7 @@ class IraAccountStore {
         this.setFormData('FUNDING_FRM', account.details);
         this.setFormData('ACC_TYPES_FRM', account.details);
         this.setFormData('IDENTITY_FRM', account.details);
-        if (account.details.linkedBank &&
-          account.details.linkedBank.plaidItemId) {
+        if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {
@@ -396,9 +397,10 @@ class IraAccountStore {
           this.setStepToBeRendered(getIraStep.ACC_TYPES_FRM);
         } else if (!this.FUNDING_FRM.meta.isValid) {
           this.setStepToBeRendered(getIraStep.FUNDING_FRM);
-        } else if (this.FUNDING_FRM.fields.fundingType.value === 0 &&
+        } else if (bankAccountStore.manualLinkBankSubmitted ||
+          (this.FUNDING_FRM.fields.fundingType.value === 0 &&
           !bankAccountStore.formLinkBankManually.meta.isValid &&
-          isEmpty(bankAccountStore.plaidAccDetails)) {
+          isEmpty(bankAccountStore.plaidAccDetails))) {
           this.setStepToBeRendered(getIraStep.LINK_BANK);
         } else if (!this.IDENTITY_FRM.meta.isValid) {
           if (this.FUNDING_FRM.fields.fundingType.value === 0) {
