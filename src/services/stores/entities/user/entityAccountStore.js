@@ -71,10 +71,12 @@ class EntityAccountStore {
 
   @action
   trustInfoChange = (e, result) => {
+    this.TRUST_INFO_FRM.fields.trustDate.rule = result.fielddata.value ? 'optional' : 'required';
+    this.TRUST_INFO_FRM.fields.trustDate.value = result.fielddata.value ? '' :
+      moment(`${new Date().getFullYear()}-01-01`).format('MM-DD-YYYY');
+    this.TRUST_INFO_FRM.fields.trustDate.error = result.fielddata.value ? undefined :
+      this.TRUST_INFO_FRM.fields.trustDate.error;
     this.formChange(e, result, 'TRUST_INFO_FRM');
-    if (!result.fielddata.value) {
-      this.TRUST_INFO_FRM.fields.trustDate.error = false;
-    }
   }
 
   @action
