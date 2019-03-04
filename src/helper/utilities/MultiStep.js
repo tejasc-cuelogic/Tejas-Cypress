@@ -174,7 +174,7 @@ export default class MultiStep extends React.Component {
           basic
           open
           closeIcon
-          className="multistep-modal"
+          className={`${this.props.inProgress && 'dimmer-visible'} multistep-modal`}
           closeOnDimmerClick={closeDimmerClickAction}
           onClose={() => this.props.handleMultiStepModalclose()}
         >
@@ -188,13 +188,13 @@ export default class MultiStep extends React.Component {
               </ol>
             </Aux>
           }
+          <Dimmer active={this.props.inProgress} className={this.props.inProgress && 'fullscreen'}>
+            <Loader active={this.props.inProgress} >
+              {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
+            </Loader>
+          </Dimmer>
           <Modal.Content className="multistep">
             {this.props.steps[this.state.compState].component}
-            <Dimmer page={this.props.page} active={this.props.inProgress}>
-              <Loader active={this.props.inProgress} >
-                {this.props.loaderMsg ? Parser(this.props.loaderMsg) : ''}
-              </Loader>
-            </Dimmer>
             {!this.props.steps[this.state.compState].disablePrevButton &&
               <Button
                 circular

@@ -10,6 +10,9 @@
         @media only screen and (max-width:@largestSmallMonitor){
             position: relative;
         }
+        &.dimmer-visible {
+            height: 100%;
+        }
     }
 }
 //  Public pages Starts
