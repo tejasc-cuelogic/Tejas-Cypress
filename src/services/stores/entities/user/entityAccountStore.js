@@ -45,15 +45,15 @@ class EntityAccountStore {
 
   @action
   maskedFinInfoChange = (values, field) => {
-    this.FIN_INFO_FRM.fields.investmentLimit.value =
-    investmentLimitStore.getInvestmentLimit({
-      annualIncome: this.FIN_INFO_FRM.fields.annualIncome.value,
-      netWorth: this.FIN_INFO_FRM.fields.netAssets.value,
-    });
     this.FIN_INFO_FRM = FormValidator.onChange(
       this.FIN_INFO_FRM,
       { name: field, value: values.floatValue },
     );
+    this.FIN_INFO_FRM.fields.investmentLimit.value =
+    investmentLimitStore.getInvestmentLimit({
+      annualIncome: typeof this.FIN_INFO_FRM.fields.annualIncome.value === 'string' ? parseFloat(this.FIN_INFO_FRM.fields.annualIncome.value) : this.FIN_INFO_FRM.fields.annualIncome.value,
+      netWorth: typeof this.FIN_INFO_FRM.fields.netAssets.value === 'string' ? parseFloat(this.FIN_INFO_FRM.fields.netAssets.value) : this.FIN_INFO_FRM.fields.netAssets.value,
+    });
   }
 
   @action
