@@ -1,5 +1,5 @@
 import { observable, action, computed } from 'mobx';
-import { isEmpty, find, get } from 'lodash';
+import { isEmpty, find, get, map } from 'lodash';
 import graphql from 'mobx-apollo';
 import moment from 'moment';
 import {
@@ -267,7 +267,8 @@ class EntityAccountStore {
         },
       },
     };
-    if (!isEmpty(bankAccountStore.plaidAccDetails)) {
+    if (!isEmpty(bankAccountStore.plaidAccDetails) &&
+        !bankAccountStore.manualLinkBankSubmitted) {
       const plaidBankDetails = {};
       const {
         account_id,
@@ -386,7 +387,8 @@ class EntityAccountStore {
         bankAccountStore.isValidLinkBank;
       if (isValidCurrentStep && isValidAddFunds) {
         uiStore.setProgress();
-        if (bankAccountStore.plaidAccDetails && !isEmpty(bankAccountStore.plaidAccDetails)) {
+        if (!isEmpty(bankAccountStore.plaidAccDetails) &&
+          !bankAccountStore.manualLinkBankSubmitted) {
           const plaidBankDetails = {};
           plaidBankDetails.plaidPublicToken = bankAccountStore.plaidAccDetails.public_token;
           plaidBankDetails.plaidAccountId = bankAccountStore.plaidAccDetails.account_id;
@@ -446,6 +448,10 @@ class EntityAccountStore {
             userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
+            FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
+            // if (bankAccountStore.ManualLinkBankSubmitted) {
+            //   FormValidator.resetFormData(bankAccountStore.formAddFunds);
+            // }
           }
           if (currentStep.name === 'Personal info' || currentStep.name === 'Formation doc') {
             if (removeUploadedData) {
@@ -456,17 +462,14 @@ class EntityAccountStore {
               }
             } else {
               FormValidator.setIsDirty(this[currentStep.form], false);
-              this.setStepToBeRendered(currentStep.stepToBeRendered);
             }
-          } else {
-            if (currentStep.name !== 'Link bank') {
-              FormValidator.setIsDirty(this[currentStep.form], false);
-            }
-            this.setStepToBeRendered(currentStep.stepToBeRendered);
+          } else if (currentStep.name !== 'Link bank') {
+            FormValidator.setIsDirty(this[currentStep.form], false);
           }
-
+          this.setStepToBeRendered(currentStep.stepToBeRendered);
           Helper.toast(`${currentStep.name} ${actionPerformed} successfully.`, 'success');
           uiStore.setErrors(null);
+          uiStore.setProgress(false);
           resolve(result);
         }))
         .catch((err) => {
@@ -474,11 +477,12 @@ class EntityAccountStore {
             bankAccountStore.resetShowAddFunds();
           }
           uiStore.setErrors(DataFormatter.getSimpleErr(err));
-          reject(err);
-        })
-        .finally(() => {
           uiStore.setProgress(false);
+          reject(err);
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 
@@ -556,8 +560,7 @@ class EntityAccountStore {
         if (account.details && account.details.legalDocs) {
           this.setEntityAttributes('Formation doc');
         }
-        if (account.details.linkedBank &&
-          account.details.linkedBank.plaidItemId) {
+        if (account.details.linkedBank && !bankAccountStore.manualLinkBankSubmitted) {
           bankAccountStore.setPlaidAccDetails(account.details.linkedBank);
           bankAccountStore.formAddFunds.fields.value.value = account.details.initialDepositAmount;
         } else {
@@ -593,8 +596,10 @@ class EntityAccountStore {
       this.setStepToBeRendered(getEntityStep.PERSONAL_INFO_FRM);
     } else if (!this.FORM_DOCS_FRM.meta.isValid) {
       this.setStepToBeRendered(getEntityStep.FORM_DOCS_FRM);
-    } else if (!bankAccountStore.formLinkBankManually.meta.isValid &&
-      isEmpty(bankAccountStore.plaidAccDetails)) {
+    } else if (bankAccountStore.manualLinkBankSubmitted ||
+      (isEmpty(bankAccountStore.plaidAccDetails) &&
+      !bankAccountStore.formLinkBankManually.meta.isValid &&
+      !bankAccountStore.formAddFunds.meta.isValid)) {
       this.setStepToBeRendered(getEntityStep.formLinkBankManually);
     } else {
       this.setStepToBeRendered(getEntityStep.summary);
@@ -619,8 +624,9 @@ class EntityAccountStore {
       uiStore.setProgress();
       fileUpload.putUploadedFileOnS3({ preSignedUrl, fileData: file })
         .then(() => {
+          const isPersonalForm = form === 'PERSONAL_INFO_FRM';
           if (this[form].meta.isValid) {
-            const currentStep = form === 'PERSONAL_INFO_FRM' ?
+            const currentStep = isPersonalForm ?
               {
                 name: 'Personal info',
                 form: 'PERSONAL_INFO_FRM',
@@ -633,9 +639,12 @@ class EntityAccountStore {
                 stepToBeRendered: 5,
                 validate: validationActions.validateEntityFormationDoc,
               };
-            this.createAccount(currentStep, false);
+            if (isPersonalForm || this.formationDocUploadCount() >= 3) {
+              this.createAccount(currentStep, false);
+            }
           }
-          uiStore.setProgress(false);
+          // eslint-disable-next-line no-undef
+          uiStore.setProgress(isPersonalForm);
         })
         .catch((err) => {
           uiStore.setProgress(false);
@@ -643,6 +652,8 @@ class EntityAccountStore {
         });
     }));
   }
+
+  formationDocUploadCount = () => map(this.entityData.legalDocs, k => (k.fileId)).length;
 
   @action
   removeUploadedData = (form, field, step) => {
@@ -655,7 +666,10 @@ class EntityAccountStore {
       );
       this[form].fields[field].fileId = '';
       this[form].fields[field].preSignedUrl = '';
-      this.createAccount(currentStep, true, field);
+      if (form === 'PERSONAL_INFO_FRM' ||
+        this.formationDocUploadCount() >= 3) {
+        this.createAccount(currentStep, true, field);
+      }
     }))
       .catch(() => { });
   }
