@@ -108,7 +108,7 @@ class KeyTermsDetails extends Component {
               </Table.Cell>
             </Table.Row>
             }
-            {get(KeyTerms, 'revShareSummary') &&
+            {get(KeyTerms, 'revSharePercentage') &&
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
               <Table.Cell>
