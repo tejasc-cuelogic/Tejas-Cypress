@@ -96,7 +96,9 @@ export default class OfferingOverview extends Component {
             />
           ))
         }
-        <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
+        {!isReadonly &&
+          <Button type="button" size="small" color="blue" className="link-button" onClick={e => this.addNewBullet(e)}>+ Add new bullet</Button>
+        }
         <Divider section />
         <Header as="h4">Social Media
           <Header.Subheader>

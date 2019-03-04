@@ -93,7 +93,7 @@ export default class OfferingCompany extends Component {
             OFFERING_COMPANY_FRM.fields.history.map((history, index) => (
               <Aux>
                 <Header as="h6">{`Milestone ${index + 1}`}
-                  {OFFERING_COMPANY_FRM.fields.history.length > 1 &&
+                  {!isReadonly && OFFERING_COMPANY_FRM.fields.history.length > 1 &&
                     <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'history')} >
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
