@@ -50,7 +50,10 @@ export default class AccountCreation extends React.Component {
       createAccount,
       isValidEntityForm,
     } = this.props.entityAccountStore;
-    const { formAddFunds, plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      formAddFunds, plaidAccDetails, formLinkBankManually,
+      showAddFunds,
+    } = this.props.bankAccountStore;
     const steps =
     [
       {
@@ -102,8 +105,10 @@ export default class AccountCreation extends React.Component {
         name: 'Link bank',
         component: <Plaid />,
         isValid: (formAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : (stepToBeRendered === 5 || stepToBeRendered > 5) ? 'error' : '',
-        isDirty: !isEmpty(plaidAccDetails) ||
-        formLinkBankManually.meta.isDirty,
+        isDirty: (!isEmpty(plaidAccDetails) &&
+        formLinkBankManually.meta.isDirty &&
+        formAddFunds.meta.isDirty) ||
+        showAddFunds,
         validate: validationActions.validateLinkBankForm,
         stepToBeRendered: 6,
       },

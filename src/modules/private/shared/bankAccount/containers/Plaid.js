@@ -15,6 +15,9 @@ import NSImage from '../../../../shared/NSImage';
 export default class Plaid extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
+    // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+    const { manualLinkBankSubmitted } = this.props.bankAccountStore;
+    this.props.bankAccountStore.setShowAddFunds(manualLinkBankSubmitted);
     this.props.uiStore.clearErrors();
   }
   handleBankSelect = (referenceLink) => {
