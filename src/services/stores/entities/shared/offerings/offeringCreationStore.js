@@ -1384,7 +1384,7 @@ export class OfferingCreationStore {
       }
     }
     variables.offeringBacDetails = { ...variables.offeringBacDetails, ...payLoadDataOld };
-    uiStore.setProgress();
+    uiStore.setProgress(approvedObj && approvedObj.status ? approvedObj.status : 'save');
     client
       .mutate({
         mutation,

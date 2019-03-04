@@ -147,6 +147,7 @@ export default class ProfileData extends Component {
                     options={US_STATES_FOR_INVESTOR}
                     search
                     selection
+                    defaultValue=""
                     placeholder="NY"
                     onChange={profileInfoChange}
                   />
