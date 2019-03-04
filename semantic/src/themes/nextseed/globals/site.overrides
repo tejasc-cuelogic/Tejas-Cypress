@@ -1578,7 +1578,7 @@ div.login-form {
 }
 .search-filters{
 	padding:@14px @40px;
-	max-height:200px;
+	max-height:250px;
 	overflow:visible;
 	transition:all 0.5s ease-in-out;
 	@media only screen and (max-width : @largestSmallMonitor){
