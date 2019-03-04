@@ -66,6 +66,22 @@ export default class OfferingCompany extends Component {
             form="OFFERING_COMPANY_FRM"
             content={OFFERING_COMPANY_FRM.fields.theCompany.value}
           />
+          {
+            ['businessModel', 'locationAnalysis'].map(field => (
+              <Aux>
+                <Divider section />
+                <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
+                <HtmlEditor
+                  imageUploadPath={`offerings/${currentOfferingId}`}
+                  readOnly={isReadonly}
+                  changed={rtEditorChange}
+                  name={field}
+                  form="OFFERING_COMPANY_FRM"
+                  content={OFFERING_COMPANY_FRM.fields[field].value}
+                />
+              </Aux>
+            ))
+          }
           <Divider section />
           <Header as="h4">
             History
@@ -98,22 +114,6 @@ export default class OfferingCompany extends Component {
                     containerclassname="secondary"
                   />
                 </div>
-              </Aux>
-            ))
-          }
-          {
-            ['businessModel', 'locationAnalysis'].map(field => (
-              <Aux>
-                <Divider section />
-                <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
-                <HtmlEditor
-                  imageUploadPath={`offerings/${currentOfferingId}`}
-                  readOnly={isReadonly}
-                  changed={rtEditorChange}
-                  name={field}
-                  form="OFFERING_COMPANY_FRM"
-                  content={OFFERING_COMPANY_FRM.fields[field].value}
-                />
               </Aux>
             ))
           }

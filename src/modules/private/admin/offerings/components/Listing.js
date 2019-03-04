@@ -19,6 +19,7 @@ const actions = {
 @withRouter
 @observer
 export default class Listing extends Component {
+  state = { isPublic: false };
   componentWillMount() {
     this.props.offeringsStore.resetInitLoad();
   }
@@ -28,6 +29,7 @@ export default class Listing extends Component {
     } else if (action === 'Edit') {
       this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
     } else if (action === 'Publish') {
+      this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
     }
   }
@@ -139,7 +141,7 @@ export default class Listing extends Component {
         }
         <Confirm
           header="Confirm"
-          content={confirmBox.entity === 'Publish' ? 'Are you sure you want to make this offering public?' : 'Are you sure you want to delete this offering?'}
+          content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
           open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
           onCancel={this.handleDeleteCancel}
           onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteOffering}
