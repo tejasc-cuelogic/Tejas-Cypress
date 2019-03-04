@@ -122,9 +122,9 @@ class offerDetails extends Component {
     });
     return newNavData;
   }
-  modifyInvestmentDetailsSubNav = (navList, campaign) => {
+  modifyInvestmentDetailsSubNav = (navList) => {
     const newNavList = [];
-    const offeringSecurityType = campaign.offerStructure;
+    const offeringSecurityType = this.props.campaignStore.offerStructure;
     navList.forEach((item) => {
       const tempItem = item;
       if (has(item, 'subNavigations') && item.title === 'Investment Details') {
@@ -185,7 +185,7 @@ class offerDetails extends Component {
       navItems = this.addRemoveUpdatesSubnav(navItems, get(campaign, 'updates'));
     }
     navItems =
-      this.modifyInvestmentDetailsSubNav(navItems, campaign);
+      this.modifyInvestmentDetailsSubNav(navItems);
     if (details && details.data &&
       details.data.getOfferingDetailsBySlug && !details.data.getOfferingDetailsBySlug[0]) {
       return <NotFound />;

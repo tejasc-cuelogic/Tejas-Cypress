@@ -6,7 +6,7 @@ import { Modal, Header, Button, Grid, Form, Message } from 'semantic-ui-react';
 import { FormCheckbox } from '../../../../../../../theme/form';
 import Helper from '../../../../../../../helper/utility';
 
-@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore')
+@inject('investmentStore', 'uiStore', 'portfolioStore', 'campaignStore', 'accreditationStore')
 @withRouter
 @observer
 export default class Agreement extends React.Component {
@@ -29,6 +29,7 @@ export default class Agreement extends React.Component {
   }
   handleCloseModal = (e) => {
     this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     if (this.state.showDocuSign) {
       this.docuSignHandeler(e, false);
     } else if (this.props.changeInvestment) {
@@ -51,6 +52,7 @@ export default class Agreement extends React.Component {
   }
   handleCancelAgreement = (e) => {
     e.preventDefault();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.setState({ open: true });
   }
   handleCancel = () => {
@@ -61,6 +63,8 @@ export default class Agreement extends React.Component {
     const { agreementDetails } = this.props.investmentStore;
     const { cancelAgreement } = this.props.portfolioStore;
     cancelAgreement(agreementDetails.agreementId);
+    this.props.investmentStore.resetData();
+    this.props.accreditationStore.resetUserAccreditatedStatus();
     this.props.history.push(`${this.props.refLink}/invest-now`);
     this.setState({ open: false });
   }

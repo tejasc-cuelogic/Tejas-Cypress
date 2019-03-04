@@ -72,6 +72,9 @@ class EntityAccountStore {
   @action
   trustInfoChange = (e, result) => {
     this.formChange(e, result, 'TRUST_INFO_FRM');
+    if (!result.fielddata.value) {
+      this.TRUST_INFO_FRM.fields.trustDate.error = false;
+    }
   }
 
   @action
@@ -438,6 +441,7 @@ class EntityAccountStore {
         .then(action((result) => {
           this.entityAccountId = result.data.upsertInvestorAccount.accountId;
           if (result.data.upsertInvestorAccount && currentStep.name === 'Link bank') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
             const { linkedBank } = result.data.upsertInvestorAccount;
             bankAccountStore.setPlaidAccDetails(linkedBank);
           }

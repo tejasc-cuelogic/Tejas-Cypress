@@ -612,7 +612,7 @@ export class IdentityStore {
       mailingAddress: {
         street: fields.street.value,
         city: fields.city.value,
-        state: selectedState ? selectedState.key : null,
+        state: selectedState ? selectedState.key : '',
         zipCode: fields.zipCode.value,
       },
       avatar: {

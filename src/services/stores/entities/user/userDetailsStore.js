@@ -3,6 +3,7 @@ import { toJS, observable, computed, action } from 'mobx';
 import graphql from 'mobx-apollo';
 import mapValues from 'lodash/mapValues';
 import map from 'lodash/map';
+import cookie from 'react-cookies';
 import { concat, isEmpty, difference, find, findKey, filter, isNull, lowerCase } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator } from '../../../../helper';
@@ -16,8 +17,9 @@ import {
   entityAccountStore,
   investorProfileStore,
   authStore,
+  campaignStore,
 } from '../../index';
-import { userDetailsQuery, toggleUserAccount, skipAddressValidation } from '../../queries/users';
+import { userDetailsQuery, toggleUserAccount, skipAddressValidation, frozenEmailToAdmin } from '../../queries/users';
 import { INVESTMENT_ACCOUNT_TYPES, INV_PROFILE } from '../../../../constants/account';
 import Helper from '../../../../helper/utility';
 
@@ -32,6 +34,7 @@ export class UserDetailsStore {
   @observable USER_BASIC = Validator.prepareFormObject(USER_PROFILE_FOR_ADMIN);
   @observable USER_INVESTOR_PROFILE = Validator.prepareFormObject(INV_PROFILE);
   @observable accountForWhichCipExpired = '';
+  @observable partialInvestNowSessionURL = '';
 
   @action
   setFieldValue = (field, value) => {
@@ -137,17 +140,20 @@ export class UserDetailsStore {
       query: userDetailsQuery,
       fetchPolicy: 'network-only',
       variables: { userId },
-      onFetch: () => {
+      onFetch: (result) => {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
-        res();
+        if (result) {
+          res();
+        }
         const user = { ...this.currentUser };
         this.currentUser.data &&
-        this.currentUser.data.user &&
-        this.currentUser.data.user.roles && this.currentUser.data.user.roles.map((role, index) => {
-          this.currentUser.data.user.roles[index].name = lowerCase(role.name);
-          return this.currentUser;
-        });
+          this.currentUser.data.user &&
+          this.currentUser.data.user.roles &&
+          this.currentUser.data.user.roles.map((role, index) => {
+            this.currentUser.data.user.roles[index].name = lowerCase(role.name);
+            return this.currentUser;
+          });
         if (user && user.data && user.data.user && user.data.user.capabilities) {
           authStore.setCurrentUserCapabilites(user.data.user.capabilities);
         }
@@ -222,23 +228,25 @@ export class UserDetailsStore {
       details.inActiveAccounts = difference(validAccTypes, accTypes);
       details.partialAccounts = map(filter(details.roles, a => a.status === 'PARTIAL'), 'name');
       details.activeAccounts = map(filter(details.roles, a => a.status === 'FULL'), 'name');
+      details.frozenAccounts = map(filter(details.roles, a => a.status === 'FROZEN'), 'name');
       details.processingAccounts = map(filter(details.roles, a => (a.status ? a.status.endsWith('PROCESSING') : null)), 'name');
+      details.inprogressAccounts = map(filter(details.roles, a => a.name !== 'investor' && a.status !== 'FULL'), 'name');
       details.phoneVerification = (this.userDetails.phone &&
         this.userDetails.phone.number &&
         !isNull(this.userDetails.phone.verified)) ? 'DONE' : 'FAIL';
       details.isMigratedUser =
-      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
+        (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION'));
       details.isMigratedFullAccount =
-      (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
-      this.userDetails.status === 'MIGRATION_FULL');
+        (this.userDetails.status && this.userDetails.status.startsWith('MIGRATION') &&
+          this.userDetails.status === 'MIGRATION_FULL');
       details.investorProfileCompleted =
-      this.userDetails.investorProfileData === null ?
-        false : this.userDetails.investorProfileData ?
-          !this.userDetails.investorProfileData.isPartialProfile : false;
+        this.userDetails.investorProfileData === null ?
+          false : this.userDetails.investorProfileData ?
+            !this.userDetails.investorProfileData.isPartialProfile : false;
       details.isCipDoneForMigratedUser =
-      this.userDetails.cip && this.userDetails.cip.requestId !== null;
+        this.userDetails.cip && this.userDetails.cip.requestId !== null;
       details.isEmailConfirmed = this.userDetails.email && this.userDetails.email.verified
-      && this.userDetails.email.verified !== null;
+        && this.userDetails.email.verified !== null;
       details.finalStatus = (details.activeAccounts.length > 2 &&
         this.validAccStatus.includes(details.idVerification) &&
         details.phoneVerification === 'DONE');
@@ -317,13 +325,13 @@ export class UserDetailsStore {
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.partialAccounts.length > 0) {
       const accValue =
-      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.inActiveAccounts.length > 0) {
       const accValue =
-      findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
       accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
     } else {
@@ -359,7 +367,7 @@ export class UserDetailsStore {
       if (details.investorProfileData && details.investorProfileData.annualIncome) {
         ['annualIncomeCurrentYear'].map((item, index) => {
           this.USER_INVESTOR_PROFILE.fields[item].value =
-          details.investorProfileData.annualIncome[index].income;
+            details.investorProfileData.annualIncome[index].income;
           return true;
         });
       }
@@ -409,8 +417,8 @@ export class UserDetailsStore {
 
   @computed get isBasicVerDoneForMigratedFullUser() {
     if (this.signupStatus.phoneVerification === 'DONE' &&
-    this.signupStatus.isEmailConfirmed &&
-    this.signupStatus.isCipDoneForMigratedUser) {
+      this.signupStatus.isEmailConfirmed &&
+      this.signupStatus.isCipDoneForMigratedUser) {
       return true;
     }
     return false;
@@ -423,6 +431,46 @@ export class UserDetailsStore {
       authStore.SIGNUP_FRM.fields.role.value = 'investor';
       authStore.SIGNUP_FRM.fields.familyName.value = userDetails.info.lastName;
     }
+  }
+
+  @action setPartialInvestmenSession = (redirectURL = '') => {
+    this.partialInvestNowSessionURL = redirectURL;
+  }
+  @action sendAdminEmailOfFrozenAccount = (activity) => {
+    const selectedAccount = this.currentActiveAccountDetails;
+    const forzenAccountId =
+      selectedAccount && selectedAccount.details && selectedAccount.details.accountId ? selectedAccount.details.accountId : '537fd0c0-1fc3-11e9-9cfb-1b268dcc26c4';
+    const payLoad = { userId: this.currentUserId, accountId: forzenAccountId, activity };
+    client
+      .mutate({
+        mutation: frozenEmailToAdmin,
+        variables: payLoad,
+      })
+      .then((res) => {
+        if (res.data.notifyAdminFrozenAccountActivity) {
+          const offeringId = campaignStore.campaign && campaignStore.campaign.id;
+          const offeringDetailObj = { offeringId, isEmailSent: true };
+          cookie.save('ADMIN_FROZEN_EMAIL', offeringDetailObj, { maxAge: 3600 });
+        }
+      });
+  }
+  @computed
+  get pendingStepForPartialAndProcessingAccount() {
+    let routingUrl = '/app/summary';
+    if (this.signupStatus.partialAccounts.length > 0) {
+      const accValue =
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      accountStore.setAccTypeChange(accValue);
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
+    } else if (this.signupStatus.inActiveAccounts.length > 0) {
+      const accValue =
+        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      accountStore.setAccTypeChange(accValue);
+      routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
+    } else {
+      routingUrl = '/app/summary';
+    }
+    return routingUrl;
   }
 }
 

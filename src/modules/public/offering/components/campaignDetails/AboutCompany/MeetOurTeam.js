@@ -47,9 +47,10 @@ class MeetOurTeam extends Component {
                           <Item.Extra>
                             <div>
                               {data && data.social && Object.keys(data.social).map(key => (
-                                <a href={`https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
-                                  <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
-                                </a>
+                                data.social[key] &&
+                                  <a href={data.social[key].includes('http') ? data.social[key] : `https://${data.social[key]}`} target="_blank" rel="noopener noreferrer" className="icon-link">
+                                    <Icon color="green" name={key === 'website' ? 'globe in' : `${key} in`} />
+                                  </a>
                               ))}
                             </div>
                           </Item.Extra>

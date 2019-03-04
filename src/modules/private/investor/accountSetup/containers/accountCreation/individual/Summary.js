@@ -4,7 +4,7 @@ import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { withRouter } from 'react-router-dom';
 import { Header, Button, Message, Table } from 'semantic-ui-react';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import { ListErrors, IframeModal } from '../../../../../../../theme/shared';
 import Helper from '../../../../../../../helper/utility';
 @inject('bankAccountStore', 'individualAccountStore', 'uiStore', 'userDetailsStore', 'agreementsStore', 'userStore')
@@ -27,7 +27,12 @@ export default class Summary extends React.Component {
     this.props.uiStore.setProgress(isEmpty(plaidAccDetails));
   }
   handleCreateAccount = () => {
-    const { isCipExpired, signupStatus } = this.props.userDetailsStore;
+    const {
+      isCipExpired,
+      signupStatus,
+      partialInvestNowSessionURL,
+      setPartialInvestmenSession,
+    } = this.props.userDetailsStore;
     if (isCipExpired && signupStatus.activeAccounts && signupStatus.activeAccounts.length === 0) {
       this.props.history.push('/app/summary/identity-verification/0');
       Helper.toast('CIP verification is expired now, You need to verify it again!', 'error');
@@ -38,10 +43,14 @@ export default class Summary extends React.Component {
       this.props.userDetailsStore.setAccountForWhichCipExpired('individual');
     } else {
       this.props.individualAccountStore.submitAccount().then(() => {
-        this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
-        this.props.history.push('app/summary');
-      })
-        .catch(() => {});
+        if (partialInvestNowSessionURL) {
+          this.props.history.push(partialInvestNowSessionURL);
+          setPartialInvestmenSession();
+        } else {
+          this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
+          this.props.history.replace('app/summary');
+        }
+      }).catch(() => { });
     }
   }
   openModal = (type) => {
@@ -77,34 +86,34 @@ export default class Summary extends React.Component {
               <Table.Body>
                 <Table.Row>
                   <Table.Cell>Investor: </Table.Cell>
-                  <Table.Cell>{`${userDetails.info.firstName} ${userDetails.info.lastName}`}</Table.Cell>
+                  <Table.Cell>{`${get(userDetails, 'info.firstName')} ${get(userDetails, 'info.lastName')}`}</Table.Cell>
                 </Table.Row>
                 {(!isEmpty(plaidAccDetails) && plaidAccDetails.bankName) &&
-                <Table.Row>
-                  <Table.Cell>Bank: </Table.Cell>
-                  <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
-                </Table.Row>
+                  <Table.Row>
+                    <Table.Cell>Bank: </Table.Cell>
+                    <Table.Cell>{isEmpty(plaidAccDetails) || !plaidAccDetails.institution ? plaidAccDetails.bankName ? plaidAccDetails.bankName : '' : plaidAccDetails.institution.name}</Table.Cell>
+                  </Table.Row>
                 }
                 <Table.Row>
                   <Table.Cell>Bank Account Number: </Table.Cell>
                   <Table.Cell>{bankAccountNumber || ''}</Table.Cell>
                 </Table.Row>
                 {(formLinkBankManually.fields.routingNumber.value &&
-                !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
-                <Table.Row>
-                  <Table.Cell>Routing Number</Table.Cell>
-                  <Table.Cell>
-                    {formLinkBankManually.fields.routingNumber.value}
-                  </Table.Cell>
-                </Table.Row>
+                  !isEncrypted(formLinkBankManually.fields.routingNumber.value, 'routingNo')) &&
+                  <Table.Row>
+                    <Table.Cell>Routing Number</Table.Cell>
+                    <Table.Cell>
+                      {formLinkBankManually.fields.routingNumber.value}
+                    </Table.Cell>
+                  </Table.Row>
                 }
                 <Table.Row>
                   <Table.Cell>Your Initial Deposit</Table.Cell>
                   <Table.Cell>
                     {!depositMoneyNow ?
-                    Helper.CurrencyFormat(0) :
-                    formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
-                    Helper.CurrencyFormat(0)}
+                      Helper.CurrencyFormat(0) :
+                      formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                        Helper.CurrencyFormat(0)}
                   </Table.Cell>
                 </Table.Row>
               </Table.Body>

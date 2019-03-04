@@ -60,7 +60,6 @@ export default class IdentityVerification extends Component {
                 this.props.uiStore.setErrors(null);
                 this.props.identityStore.verifyUserIdentity()
                   .then(() => {
-                    this.props.uiStore.setProgress(false);
                     const {
                       key,
                       alertMsg,
@@ -95,6 +94,7 @@ export default class IdentityVerification extends Component {
                       }
                       this.props.history.push(route);
                     }
+                    this.props.uiStore.setProgress(false);
                   });
               })
               .catch(() => { });

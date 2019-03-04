@@ -7,6 +7,7 @@ import { GqlClient as client } from '../../../../api/gqlApi';
 import { submitinvestorAccount, upsertInvestorAccount } from '../../queries/account';
 import { DataFormatter } from '../../../../helper';
 import Helper from '../../../../helper/utility';
+import userStore from '../userStore';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
@@ -14,19 +15,9 @@ class IndividualAccountStore {
   @observable isManualLinkBankSubmitted = false;
   @observable individualAccId = null;
 
-
   @action
   setIsManualLinkBankSubmitted = (status) => {
     this.isManualLinkBankSubmitted = status;
-  }
-
-  initialSteptobeRendered = () => {
-    const { userDetails } = userDetailsStore;
-    const account = find(userDetails.roles, { name: 'individual' });
-    if (!isEmpty(account)) {
-      this.setStepToBeRendered(this.stepToBeRendered === 0 ? 2
-        : this.stepToBeRendered);
-    }
   }
 
   @action
@@ -97,6 +88,7 @@ class IndividualAccountStore {
               variables,
             })
             .then(action((result) => {
+              userDetailsStore.getUser(userStore.currentUser.sub);
               if (result.data.upsertInvestorAccount) {
                 this.individualAccId = result.data.upsertInvestorAccount.accountId;
                 const { linkedBank } = result.data.upsertInvestorAccount;

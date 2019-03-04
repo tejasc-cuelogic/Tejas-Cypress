@@ -214,14 +214,7 @@ export class CampaignStore {
   }
 
   @computed get offerStructure() {
-    const { selectedOffer, keyTerms } = this.campaign;
-    let offerStructure = '';
-    if (selectedOffer && selectedOffer.structure !== '') {
-      offerStructure = selectedOffer.structure;
-    } else {
-      offerStructure = get(keyTerms, 'securities') || '';
-    }
-    return offerStructure;
+    return get(this.campaign, 'keyTerms.securities') || '';
   }
 
   @action
@@ -237,10 +230,12 @@ export class CampaignStore {
     const { totalPayment, schedule } = Calculator.calculate(data);
     this.totalPayment = money.floatToAmount(totalPayment, 2);
     const payChart = [];
+    let totalPaid = 0;
     schedule.forEach((item, index) => {
+      totalPaid = totalPaid + item.interest + item.principal;
       payChart.push({
         month: index + 1,
-        'Projected total payment': money.floatToAmount(totalPayment - item.remainingBalance, 2),
+        'Projected total payment': money.floatToAmount(totalPaid, 2),
       });
     });
     this.totalPaymentChart = payChart;

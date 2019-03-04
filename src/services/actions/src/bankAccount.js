@@ -12,6 +12,7 @@ const ACC_LINK_BANK_MAPPING = {
   1: { store: iraAccountStore, location: 3 },
   2: { store: entityAccountStore, location: 5 },
 };
+
 export class BankAccount {
   bankSearch = (e) => {
     if (e.charCode === 13) {
@@ -68,8 +69,10 @@ export class BankAccount {
       onLoad: () => {
         // The Link module finished loading.
         const accountValue = accountStore.INVESTMENT_ACC_TYPES.fields.accType.value;
-        ACC_LINK_BANK_MAPPING[accountValue].store
-          .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
+        if (ACC_LINK_BANK_MAPPING[accountValue].store !== individualAccountStore) {
+          ACC_LINK_BANK_MAPPING[accountValue].store
+            .setStepToBeRendered(ACC_LINK_BANK_MAPPING[accountValue].location);
+        }
       },
       onSuccess: (publicToken, metadata) => {
         bankAccountStore.setPlaidAccDetails(metadata);

@@ -126,6 +126,7 @@ export default class BusinessDetails extends Component {
                         currency
                         type="text"
                         name="amount"
+                        asterisk="true"
                         fielddata={debt.amount}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
@@ -135,6 +136,7 @@ export default class BusinessDetails extends Component {
                         percentage
                         type="text"
                         name="interestExpenses"
+                        asterisk="true"
                         fielddata={debt.interestExpenses}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
@@ -147,6 +149,7 @@ export default class BusinessDetails extends Component {
                         currency
                         type="text"
                         name="remainingPrincipal"
+                        asterisk="true"
                         fielddata={debt.remainingPrincipal}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
@@ -156,6 +159,7 @@ export default class BusinessDetails extends Component {
                         number
                         type="text"
                         name="term"
+                        asterisk="true"
                         fielddata={debt.term}
                         changed={(values, field) => businessDetailsMaskingChange(field, values, 'debts', index)}
                       />
