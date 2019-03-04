@@ -62,7 +62,7 @@ class KeyTermsDetails extends Component {
           <Table.Body>
             {keytermsMeta.map(type => (
               <Aux>
-                {get(KeyTerms, type.key) &&
+                {get(KeyTerms, type.key) ?
                   <Table.Row verticalAlign="top">
                     <Table.Cell width={5} className="neutral-text"><b>{type.label}{' '}</b>
                       {type.popupContent &&
@@ -81,7 +81,7 @@ class KeyTermsDetails extends Component {
                           'NA'}
                       </p>
                     </Table.Cell>
-                  </Table.Row>
+                  </Table.Row> : ''
                 }
               </Aux>
             ))
@@ -108,13 +108,18 @@ class KeyTermsDetails extends Component {
               </Table.Cell>
             </Table.Row>
             }
-            {get(KeyTerms, 'revShareSummary') &&
+            {get(KeyTerms, 'revSharePercentage') &&
             <Table.Row verticalAlign="top">
               <Table.Cell width={5} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
               <Table.Cell>
-                <p> {get(KeyTerms, 'revSharePercentage') ?
-                    KeyTerms.revSharePercentage
-                      : 'NA'}
+                <p>
+                  {get(KeyTerms, 'revSharePercentage') || ''}
+                </p>
+                <p>
+                  {Parser(get(KeyTerms, 'revSharePercentageDescription') ?
+                    get(KeyTerms, 'revSharePercentageDescription')
+                    :
+                    '')}
                 </p>
               </Table.Cell>
             </Table.Row>

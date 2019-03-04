@@ -299,6 +299,9 @@ a{
 i.icon.right {
 	margin-left: 0.25rem;
 }
+.no-pointer-events {
+	pointer-events: none !important;
+}
 //	Helper Classes Ends
 
 // Footer Styles
@@ -2416,6 +2419,9 @@ p.check-extra-info{
 			}
 		}
 	}
+}
+.fr-popup{
+	z-index:1009 !important;
 }
 //	Froala Editor Styles override - ENDS
 //	Public responsive start
