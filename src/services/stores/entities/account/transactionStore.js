@@ -96,7 +96,7 @@ export class TransactionStore {
   }
 
   @computed get loading() {
-    return this.data.loading;
+    return this.data.loading || this.investmentsByOffering.loading;
   }
 
   @computed get error() {

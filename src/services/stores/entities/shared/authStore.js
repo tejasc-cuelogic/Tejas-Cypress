@@ -336,12 +336,14 @@ export class AuthStore {
         email,
       },
       onFetch: (data) => {
-        if (data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
-          this.SIGNUP_FRM.meta.isValid = false;
-          rej();
-        } else {
-          res();
+        if (data) {
+          if (data.checkEmailExistsPresignup) {
+            this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
+            this.SIGNUP_FRM.meta.isValid = false;
+            rej();
+          } else {
+            res();
+          }
         }
       },
       fetchPolicy: 'network-only',

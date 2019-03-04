@@ -34,7 +34,7 @@ class AboutCompany extends Component {
     window.removeEventListener('scroll', this.handleOnScroll);
   }
   handleOnScroll = () => {
-    ['company-description', 'business-model', 'location-analysis', 'history', 'team'].forEach((item) => {
+    ['company-description', 'business-model', 'location-analysis', 'team', 'history'].forEach((item) => {
       if (item === 'business-model' || item === 'company-description') {
         console.log(item, document.getElementById(item).getBoundingClientRect().top);
       }

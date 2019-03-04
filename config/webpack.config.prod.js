@@ -13,7 +13,8 @@ const { BugsnagSourceMapUploaderPlugin } = require('webpack-bugsnag-plugins');
 const paths = require('./paths');
 const getClientEnvironment = require('./env');
 const getCustomConfig = require('./custom-react-scripts/config');
-// const SriPlugin = require('webpack-subresource-integrity');
+const SriPlugin = require('webpack-subresource-integrity');
+const CopyPlugin = require('copy-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // It requires a trailing slash, or the file assets will get an incorrect path.
@@ -56,6 +57,7 @@ module.exports = {
     // There will be one main bundle, and one file per asynchronous chunk.
     // We don't currently advertise code splitting but Webpack supports it.
     filename: 'static/js/[name].[chunkhash:8].js',
+    crossOriginLoading: 'anonymous',
     chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
     // We inferred the "public path" (such as / or /my-project) from homepage.
     publicPath,
@@ -263,6 +265,24 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new CopyPlugin([
+      {
+        from: 'src/assets/js/r.js',
+        to: 'assets/js/r.js',
+      },
+      {
+        from: 'src/assets/js/a.js',
+        to: 'assets/js/a.js',
+        transform: function (content, transformPath) {
+          return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].SEGMENT_WRITE_KEY));
+        },
+      },
+    ]),
+    // Enable SRI on the NS App
+    new SriPlugin({
+      hashFuncNames: ['sha256'],
+      enabled: true,
+    }),
 
   ],
   // Some libraries import Node modules but don't use them in the browser.

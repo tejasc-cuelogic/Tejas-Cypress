@@ -41,9 +41,14 @@ export default class Transactions extends Component {
   setSearchParam = (e, { value }) => this.props.transactionStore.setInvestment(value);
 
   render() {
-    const { paymentHistoryData, investmentOptions } = this.props.transactionStore;
+    const { paymentHistoryData, investmentOptions, loading } = this.props.transactionStore;
     const { offerStructure } = this.props.campaignStore;
     const finalResult = offerStructure === 'TERM_NOTE' ? termNote : revShare;
+    if (loading) {
+      return (
+        <InlineLoader />
+      );
+    }
     if (isArray(investmentOptions) && investmentOptions.length === 0) {
       return (
         <InlineLoader text="No Data Found." />

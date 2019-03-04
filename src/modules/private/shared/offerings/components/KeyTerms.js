@@ -150,22 +150,22 @@ export default class KeyTerms extends Component {
               options={MODIFIED_REGULATION_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
-            {['investmentMultiple', 'revSharePercentage'].map(field => (
-              <FormInput
+            <FormInput
+              displayMode={isReadonly}
+              key="investmentMultiple"
+              name="investmentMultiple"
+              fielddata={KEY_TERMS_FRM.fields.investmentMultiple}
+              changed={(e, result) => formArrayChange(e, result, formName)}
+            />
+            {['revSharePercentage', 'interestRate'].map(field => (
+              <MaskedInput
                 displayMode={isReadonly}
-                key={field}
                 name={field}
                 fielddata={KEY_TERMS_FRM.fields[field]}
-                changed={(e, result) => formArrayChange(e, result, formName)}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                percentage
               />
             ))}
-            <MaskedInput
-              displayMode={isReadonly}
-              name="interestRate"
-              fielddata={KEY_TERMS_FRM.fields.interestRate}
-              changed={(values, name) => maskArrayChange(values, formName, name)}
-              percentage
-            />
             <MaskedInput
               displayMode={isReadonly}
               name="minInvestAmt"
