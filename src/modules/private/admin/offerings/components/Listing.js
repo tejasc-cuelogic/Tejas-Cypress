@@ -100,8 +100,8 @@ export default class Listing extends Component {
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
-                      offering.offering.launch.terminationDate ?
-                      `${DataFormatter.diffDays(offering.offering.launch.terminationDate)} days` : 'N/A'
+                      offering.offering.launch.targetDate ?
+                      `${DataFormatter.diffDays(offering.offering.launch.targetDate)} days` : 'N/A'
                       }
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>

@@ -24,6 +24,7 @@ window.jQuery = $;
 @inject('uiStore')
 @observer
 export default class HtmlEditor extends React.Component {
+  state = { inProgress: false };
   getConfig = (keyStart, overrides) => {
     const config = {
       placeholderText: 'Enter here..',
@@ -38,6 +39,7 @@ export default class HtmlEditor extends React.Component {
       events: {
         'froalaEditor.image.beforeUpload': (e, editor, images) => {
           this.props.uiStore.setFieldvalue('htmlEditorImageLoading', true);
+          this.setState({ inProgress: true });
           if (images.length) {
             const fileName = get(images, '[0].name');
             const file = get(images, '[0]');
@@ -53,14 +55,17 @@ export default class HtmlEditor extends React.Component {
                 editor.image.get().attr('src', imgUrl);
                 editor.image.insert(imgUrl, null, null, editor.image.get());
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+                this.setState({ inProgress: false });
               } else {
                 console.log('else block');
                 this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+                this.setState({ inProgress: false });
               }
               return false;
             }).catch((err) => {
               console.log('catch image', err);
               this.props.uiStore.setFieldvalue('htmlEditorImageLoading', false);
+              this.setState({ inProgress: false });
               return false;
             });
           }
@@ -81,7 +86,7 @@ export default class HtmlEditor extends React.Component {
       return <div>{Parser(this.props.content || '')}</div>;
     }
     return (
-      <div className={this.props.uiStore.htmlEditorImageLoading ? 'no-pointer-events' : ''}>
+      <div className={this.state.inProgress ? 'no-pointer-events' : ''}>
         <FroalaEditor
           tag="textarea"
           model={this.props.content}

@@ -93,6 +93,7 @@ export class OfferingCreationStore {
   };
   @observable removeFileIdsList = [];
   @observable removeFileNamesList = [];
+  @observable isUploadingFile = false;
 
   @action
   resetBonusRewardForm = () => {
@@ -529,6 +530,7 @@ export class OfferingCreationStore {
       if (typeof files !== 'undefined' && files.length) {
         forEach(files, (file) => {
           const fileData = Helper.getFormattedFileData(file);
+          this.isUploadingFile = true;
           this.setFormFileArray(form, arrayName, field, 'showLoader', true, index);
           fileUpload.setFileUploadData('', fileData, stepName, 'ADMIN', '', this.currentOfferingId).then((result) => {
             const { fileId, preSignedUrl } = result.data.createUploadEntry;
@@ -540,13 +542,16 @@ export class OfferingCreationStore {
               this.setFormFileArray(form, arrayName, field, 'error', undefined, index);
               this.checkFormValid(form, multiForm);
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
+              this.isUploadingFile = true;
             }).catch((error) => {
               Helper.toast('Something went wrong, please try again later.', 'error');
               uiStore.setErrors(error.message);
+              this.isUploadingFile = true;
               this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             });
           }).catch((error) => {
             Helper.toast('Something went wrong, please try again later.', 'error');
+            this.isUploadingFile = true;
             this.setFormFileArray(form, arrayName, field, 'showLoader', false, index);
             uiStore.setErrors(error.message);
           });
