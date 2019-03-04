@@ -42,7 +42,7 @@ class KeyTermsDetails extends Component {
     const keytermsMeta = [
       { key: 'minOfferingAmount', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
       { key: 'maxOfferingAmount', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimumgoal, the issuer will receive the funds.' },
-      { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor' },
+      { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount to participate in this offering.' },
     ];
     return (
       <Aux>

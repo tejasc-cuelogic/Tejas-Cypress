@@ -452,7 +452,7 @@ export const PUBLIC_NAV = [
     subNavigations: [
       {
         defaultOpen: true,
-        title: 'Overview',
+        title: 'Summary',
         to: 'overview',
         component: 'Overview',
         subPanel: 1,
@@ -480,7 +480,7 @@ export const PUBLIC_NAV = [
         clickable: true,
         subNavigations: [
           {
-            title: 'Company Description', to: '#company-description', useRefLink: true, defaultActive: true,
+            title: 'Overview', to: '#company-description', useRefLink: true, defaultActive: true,
           },
           {
             title: 'Business Model', to: '#business-model', useRefLink: true,
