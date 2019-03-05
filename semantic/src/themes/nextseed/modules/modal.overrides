@@ -11,7 +11,9 @@
             position: relative;
         }
         &.dimmer-visible {
-            height: 100%;
+            @media only screen and (max-width:@largeMonitorBreakpoint){
+                height: 100%;
+            }
         }
     }
 }

@@ -91,7 +91,9 @@ export default class MultiStep extends React.Component {
   }
 
   handleKeyDown(evt) {
-    if (evt.which === 13 && (evt.target.name !== 'bankName' && evt.target.name !== 'investmentAmount')) {
+    if ((evt.which === 13 && (evt.target.name !== 'bankName' &&
+      evt.target.name !== 'investmentAmount') &&
+      (!this.props.steps[this.state.compState].disableNextButton))) {
       this.next();
     }
   }
@@ -160,7 +162,8 @@ export default class MultiStep extends React.Component {
   }
 
   render() {
-    if (this.props.isEnterPressed) {
+    if (this.props.isEnterPressed &&
+      !this.props.steps[this.state.compState].disableNextButton) {
       this.props.resetEnterPressed();
       this.next();
     }
@@ -168,7 +171,9 @@ export default class MultiStep extends React.Component {
       this.props.closeOnDimmerClick ? this.props.closeOnDimmerClick : false;
     return (
       /* eslint-disable jsx-a11y/no-static-element-interactions */
-      <div onKeyDown={this.handleKeyDown} >
+      <div onKeyDown={!this.props.steps[this.state.compState].disableNextButton ?
+        this.handleKeyDown : false}
+      >
         <Modal
           onKeyPress={event => this.props.setIsEnterPressed(event)}
           basic
