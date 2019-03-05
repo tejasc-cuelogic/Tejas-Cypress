@@ -2,7 +2,7 @@
 import fetch from 'isomorphic-fetch';
 import { ApolloClient, HttpLink, InMemoryCache, IntrospectionFragmentMatcher } from 'apollo-client-preset';
 import { setContext } from 'apollo-link-context';
-import { commonStore } from '../services/stores';
+import { commonStore, authStore } from '../services/stores';
 import { API_ROOT, REACT_APP_DEPLOY_ENV } from '../constants/common';
 import { GRAPHQL } from '../constants/business';
 import introspectionQueryResultData from '../constants/graphQLFragmentTypes.json';
@@ -35,6 +35,8 @@ const fragmentMatcher = new IntrospectionFragmentMatcher({
 //     errorPolicy: 'all',
 //   },
 // };
+
+authStore.resetIdelTimer();
 
 export const GqlClient = new ApolloClient({
   link: authLink.concat(new HttpLink({ uri })),
