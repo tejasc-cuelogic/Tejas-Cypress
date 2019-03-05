@@ -26,6 +26,7 @@ class BonusRewards extends Component {
     const earlyBird = get(campaign, 'earlyBird') || null;
     const bonusRewards = get(campaign, 'bonusRewards') || [];
     rewardsTiers = rewardsTiers.filter(r => bonusRewards.filter(b => b.tiers.includes(r)).length);
+    const isEarlyBirdRewards = bonusRewards.filter(b => b.earlyBirdQuantity > 0).length;
     const earlyBirdsCount = get(campaign, 'earlyBirdsCount') || 0;
     const offeringMISC = campaign && campaign.offering && campaign.offering.misc &&
       campaign.offering.misc.additionalBonusRewardsContent ?
@@ -41,22 +42,22 @@ class BonusRewards extends Component {
             {((rewardsTiers && rewardsTiers.length) || (earlyBird && earlyBird.quantity > 0)) &&
             bonusRewards ?
               <Grid stackable doubling columns={isTablet ? 1 : isTabletLand ? 2 : 2}>
-                {earlyBird && earlyBird.quantity &&
-                <Grid.Column>
-                  <Segment padded className="reward-block">
-                    <Aux>
-                      <Header textAlign="left" as="h6" className="text-uppercase mb-40">Early Bird Reward
-                        <Label size="small" color="green" className="text-uppercase pull-right">{earlyBirdsCount} remaining</Label>
-                      </Header>
-                      <Header as="h5" className="intro-text">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
-                    </Aux>
-                    <BonusRewardsList
-                      earlyBird
-                      bonusRewards={bonusRewards}
-                      tier={earlyBird.amount}
-                    />
-                  </Segment>
-                </Grid.Column>
+                {(earlyBird && earlyBird.quantity && isEarlyBirdRewards) ?
+                  <Grid.Column>
+                    <Segment padded className="reward-block">
+                      <Aux>
+                        <Header textAlign="left" as="h6" className="text-uppercase mb-40">Early Bird Reward
+                          <Label size="small" color="green" className="text-uppercase pull-right">{earlyBirdsCount} remaining</Label>
+                        </Header>
+                        <Header as="h5" className="intro-text">First {earlyBird.quantity} {earlyBird.amount > 0 ? `investors who invest ${Helper.CurrencyFormat(earlyBird.amount, 0)} or more` : ''} will receive:</Header>
+                      </Aux>
+                      <BonusRewardsList
+                        earlyBird
+                        bonusRewards={bonusRewards}
+                        tier={earlyBird.amount}
+                      />
+                    </Segment>
+                  </Grid.Column> : ''
                 }
                 {rewardsTiers.map(tier => (
                   <Grid.Column>
