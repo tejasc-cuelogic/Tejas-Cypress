@@ -797,7 +797,7 @@ export class IdentityStore {
         })
         .then((result) => {
           this.setRequestOtpResponse(result.data.requestOTPWrapper);
-          Helper.toast('Verification code sent to user.', 'success');
+          Helper.toast(`Verification code sent to ${email.value}.`, 'success');
           resolve();
         })
         .catch((err) => {
@@ -878,6 +878,10 @@ export class IdentityStore {
           uiStore.setProgress(false);
         });
     });
+  }
+  @action
+  validateForm = (form) => {
+    FormValidator.validateForm(this[form], false, true);
   }
 }
 

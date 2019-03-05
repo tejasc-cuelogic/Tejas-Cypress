@@ -1,6 +1,7 @@
 import { camelCase, upperFirst, reduce, assign } from 'lodash';
 import moment from 'moment';
 import Handlebars from 'handlebars';
+import money from 'money-math';
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -80,6 +81,13 @@ class DataFormatter {
   fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
   getDateFromNow = afterDays =>
     new Date((new Date()).getTime() - (afterDays * 86400000)).toISOString();
+  isAmountNegative = (amount) => {
+    let amountTocheck = amount;
+    if (typeof amount === 'number') {
+      amountTocheck = amount.toString();
+    }
+    return money.isNegative(amountTocheck);
+  }
 }
 
 export default new DataFormatter();
