@@ -2,6 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
+import { includes } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { allTransactions, paymentHistory, investmentsByOfferingId, requestOptForTransaction, addFundMutation, withdrawFundMutation } from '../../queries/transaction';
@@ -162,8 +163,11 @@ export class TransactionStore {
           resolve();
         })
         .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
-          uiStore.setErrors(error.message);
+          if (includes(error.message, 'at least $1')) {
+            uiStore.setErrors(error.message);
+          } else {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          }
           this.setInitialLinkValue(false);
           reject();
         })
@@ -318,7 +322,11 @@ export class TransactionStore {
           resolve();
         })
         .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
+          if (includes(error.message, 'at least $0.01')) {
+            uiStore.setErrors(error.message);
+          } else {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          }
           uiStore.setErrors(error.message);
           this.setInitialLinkValue(false);
           reject();
