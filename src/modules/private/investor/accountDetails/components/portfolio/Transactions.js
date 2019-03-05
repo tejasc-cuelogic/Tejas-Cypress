@@ -51,7 +51,7 @@ export default class Transactions extends Component {
     }
     if (isArray(investmentOptions) && investmentOptions.length === 0) {
       return (
-        <InlineLoader text="No Data Found." />
+        <InlineLoader text="No Payments." />
       );
     }
     return (
@@ -73,7 +73,7 @@ export default class Transactions extends Component {
           (!paymentHistoryData.data.getPaymentHistory ||
            !paymentHistoryData.data.getPaymentHistory.length))
           || !paymentHistoryData.data) ?
-            <InlineLoader text="No Data Found." />
+            <InlineLoader text="No Payments." />
           :
             <Table unstackable singleLine className="investment-details" textAlign="right">
               <THeader columns={finalResult.columns} />
