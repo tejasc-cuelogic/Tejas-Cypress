@@ -329,7 +329,7 @@ export class TransactionStore {
     });
   }
   @action
-  getInvestorAvailableCash = () => {
+  getInvestorAvailableCash = (includeInFlight = true) => {
     const account = userDetailsStore.currentActiveAccountDetails;
     const { userDetails } = userDetailsStore;
     return new Promise((resolve, reject) => {
@@ -339,7 +339,7 @@ export class TransactionStore {
         variables: {
           userId: userDetails.id,
           accountId: account.details.accountId,
-          includeInFlight: true,
+          includeInFlight,
         },
         onFetch: (data) => {
           if (data) {
