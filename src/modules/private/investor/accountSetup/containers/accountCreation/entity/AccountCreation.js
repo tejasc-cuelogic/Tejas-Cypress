@@ -25,10 +25,12 @@ export default class AccountCreation extends React.Component {
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetLinkBank();
+    this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
   handleStepChange = (step) => {
     this.props.entityAccountStore.setStepToBeRendered(step);
+    this.props.uiStore.clearErrors();
   }
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
@@ -52,7 +54,7 @@ export default class AccountCreation extends React.Component {
     } = this.props.entityAccountStore;
     const {
       formAddFunds, plaidAccDetails, formLinkBankManually,
-      showAddFunds,
+      showAddFunds, disableNextBtnPlaid,
     } = this.props.bankAccountStore;
     const steps =
     [
@@ -110,6 +112,7 @@ export default class AccountCreation extends React.Component {
         formAddFunds.meta.isDirty) ||
         showAddFunds,
         validate: validationActions.validateLinkBankForm,
+        disableNextButton: disableNextBtnPlaid,
         stepToBeRendered: 6,
       },
       {

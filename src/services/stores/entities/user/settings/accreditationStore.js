@@ -599,10 +599,13 @@ export class AccreditationStore {
     const { userDetails } = this;
     const entityAccreditation = userDetails && userDetails.roles &&
       userDetails.roles.find(role => role.name === 'entity');
-    this.accreditationData.individual = userDetails && userDetails.accreditation;
-    this.accreditationData.ira = userDetails && userDetails.accreditation;
-    this.accreditationData.entity = entityAccreditation && entityAccreditation.details &&
-      entityAccreditation.details.accreditation;
+    const accData = {
+      individual: userDetails && userDetails.accreditation,
+      ira: userDetails && userDetails.accreditation,
+      entity: entityAccreditation && entityAccreditation.details &&
+        entityAccreditation.details.accreditation,
+    };
+    this.accreditationData = accData;
   }
 
   @computed get isUserAccreditated() {
