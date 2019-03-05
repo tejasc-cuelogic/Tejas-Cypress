@@ -322,7 +322,11 @@ export class TransactionStore {
           resolve();
         })
         .catch((error) => {
-          Helper.toast('Something went wrong, please try again later.', 'error');
+          if (includes(error.message, 'at least $0.01')) {
+            uiStore.setErrors(error.message);
+          } else {
+            Helper.toast('Something went wrong, please try again later.', 'error');
+          }
           uiStore.setErrors(error.message);
           this.setInitialLinkValue(false);
           reject();
