@@ -17,6 +17,7 @@ export default class AccountCreation extends React.Component {
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetLinkBank();
+    this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
   handleStepChange = (step) => {
@@ -25,6 +26,7 @@ export default class AccountCreation extends React.Component {
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
   }
+
   render() {
     const {
       inProgress,
@@ -40,6 +42,8 @@ export default class AccountCreation extends React.Component {
       plaidAccDetails,
       formLinkBankManually,
       depositMoneyNow,
+      showAddFunds,
+      disableNextBtnPlaid,
     } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
@@ -51,8 +55,7 @@ export default class AccountCreation extends React.Component {
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         stepToBeRendered: 1,
-        onlyDisableNextButton: isEmpty(plaidAccDetails) &&
-        !formLinkBankManually.meta.isValid,
+        disableNextButton: disableNextBtnPlaid,
       },
       {
         name: 'Add funds',
@@ -62,8 +65,11 @@ export default class AccountCreation extends React.Component {
         // isValid: formAddFunds.meta.isValid || !depositMoneyNow ? ''
         // : stepToBeRendered > 1 ? 'error' : '',
         validate: validateAddFunds,
-        isDirty: !isEmpty(plaidAccDetails) ||
-        formLinkBankManually.meta.isDirty,
+        isDirty: (!isEmpty(plaidAccDetails) &&
+        formLinkBankManually.meta.isDirty &&
+        formAddFunds.meta.isDirty) ||
+        showAddFunds,
+        disableNextButton: disableNextBtnPlaid,
         stepToBeRendered: 2,
       },
       {
