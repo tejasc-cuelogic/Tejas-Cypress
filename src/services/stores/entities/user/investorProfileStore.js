@@ -268,9 +268,6 @@ class InvestorProfileStore {
           Helper.toast('Investor profile updated successfully.', 'success');
           FormValidator.setIsDirty(this[currentStep.form], false);
           this.setStepToBeRendered(currentStep.stepToBeRendered);
-          if (this.isValidInvestorProfileForm) {
-            userDetailsStore.getUser(userStore.currentUser.sub);
-          }
           resolve();
         }))
         .catch((err) => {
@@ -413,7 +410,6 @@ class InvestorProfileStore {
       }
       return this[form].fields[f];
     });
-    FormValidator.onChange(this[form], '', '');
   }
 
   @action

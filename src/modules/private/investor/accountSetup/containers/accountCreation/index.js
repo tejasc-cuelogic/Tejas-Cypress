@@ -12,7 +12,6 @@ import EntityAccCreation from './entity/AccountCreation';
 export default class AccountCreation extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setBankLinkInterface('list');
-    this.props.bankAccountStore.resetShowAddFunds();
   }
   handleCloseModal = () => {
     this.props.history.push('/app/summary');

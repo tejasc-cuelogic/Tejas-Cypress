@@ -14,13 +14,17 @@ const getModule = component => Loadable({
   },
 });
 
-@inject('userStore', 'offeringsStore')
+@inject('userStore', 'offeringsStore', 'offeringCreationStore')
 @withRouter
 export default class Legal extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/general`);
     }
+  }
+
+  shouldComponentUpdate() {
+    return !this.props.offeringCreationStore.isUploadingFile;
   }
 
   module = name => DataFormatter.upperCamelCase(name);

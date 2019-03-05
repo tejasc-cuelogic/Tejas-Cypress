@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { withRouter } from 'react-router-dom';
 import { get } from 'lodash';
+import { withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Card, Table, Button, Icon, Confirm } from 'semantic-ui-react';
 import { DataFormatter } from '../../../../../helper';
@@ -19,6 +19,7 @@ const actions = {
 @withRouter
 @observer
 export default class Listing extends Component {
+  state = { isPublic: false };
   componentWillMount() {
     this.props.offeringsStore.resetInitLoad();
   }
@@ -28,6 +29,7 @@ export default class Listing extends Component {
     } else if (action === 'Edit') {
       this.props.history.push(`${this.props.match.url}/edit/${offeringId}`);
     } else if (action === 'Publish') {
+      this.setState({ isPublic: isPublished });
       this.props.uiStore.setConfirmBox(action, offeringId, isPublished);
     }
   }
@@ -98,8 +100,8 @@ export default class Listing extends Component {
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}><DateTimeFormat datetime={offering.created.date} /></Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
-                      offering.offering.launch.terminationDate ?
-                      `${DataFormatter.diffDays(offering.offering.launch.terminationDate)} days` : 'N/A'
+                      offering.offering.launch.targetDate ?
+                      `${DataFormatter.diffDays(offering.offering.launch.targetDate)} days` : 'N/A'
                       }
                     </Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
@@ -111,9 +113,9 @@ export default class Listing extends Component {
                               {offering.issuerDetails && offering.issuerDetails.info ? `${offering.issuerDetails.info.firstName} ${offering.issuerDetails.info.lastName}` : ''}
                             </b>
                             <br />
-                            {get(offering, 'offering.issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
+                            {get(offering, 'issuerDetails.email.address') ? offering.issuerDetails.email.address : ''}
                             <br />
-                            {get(offering, 'offering.issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'offering.issuerDetails.phone.number')) : ''}
+                            {get(offering, 'issuerDetails.phone.number') ? Helper.maskPhoneNumber(get(offering, 'issuerDetails.phone.number')) : ''}
                           </Aux> :
                           <b>N/A</b>
                         }
@@ -139,7 +141,7 @@ export default class Listing extends Component {
         }
         <Confirm
           header="Confirm"
-          content={confirmBox.entity === 'Publish' ? 'Are you sure you want to make this offering public?' : 'Are you sure you want to delete this offering?'}
+          content={confirmBox.entity === 'Publish' ? `Are you sure you want to make this offering ${this.state.isPublic ? 'Public' : 'Non-Public'}?` : 'Are you sure you want to delete this offering?'}
           open={confirmBox.entity === 'Delete' || confirmBox.entity === 'Publish'}
           onCancel={this.handleDeleteCancel}
           onConfirm={confirmBox.entity === 'Publish' ? this.handlePublishOffering : this.handleDeleteOffering}

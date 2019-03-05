@@ -10,9 +10,9 @@ import { validationActions } from '../../../../../services/actions';
 @inject('bankAccountStore', 'individualAccountStore', 'entityAccountStore', 'accountStore', 'iraAccountStore', 'uiStore')
 @observer
 export default class AddFunds extends Component {
-  // componentDidMount() {
-  //   this.props.individualAccountStore.setStepToBeRendered(1);
-  // }
+  componentDidMount() {
+    this.props.bankAccountStore.validateForm('formAddFunds');
+  }
   componentWillUnmount() {
     this.props.bankAccountStore.resetShowAddFunds();
   }
@@ -37,8 +37,10 @@ export default class AddFunds extends Component {
         name: 'Add funds',
         stepToBeRendered: 2,
       };
-      this.props.individualAccountStore.createAccount(currentStep);
-      this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
+      this.props.individualAccountStore.createAccount(currentStep).then(() => {
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.individualAccountStore.setStepToBeRendered(individualSteps.summary);
+      });
     }
     if (this.props.accountStore.investmentAccType === 'entity') {
       const currentStep = {
@@ -46,8 +48,10 @@ export default class AddFunds extends Component {
         stepToBeRendered: 6,
         validate: validationActions.validateLinkBankForm,
       };
-      this.props.entityAccountStore.createAccount(currentStep);
-      this.props.entityAccountStore.setStepToBeRendered(AccCreationHelper.entitySteps().summary);
+      this.props.entityAccountStore.createAccount(currentStep).then(() => {
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.entityAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
+      });
     }
     if (this.props.accountStore.investmentAccType === 'ira') {
       const currentStep = {
@@ -55,8 +59,10 @@ export default class AddFunds extends Component {
         validate: validationActions.validateLinkBankForm,
         stepToBeRendered: 4,
       };
-      this.props.iraAccountStore.createAccount(currentStep);
-      this.props.iraAccountStore.setStepToBeRendered(AccCreationHelper.iraSteps().summary);
+      this.props.iraAccountStore.createAccount(currentStep).then(() => {
+        this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+        this.props.iraAccountStore.setStepToBeRendered(currentStep.stepToBeRendered);
+      });
     }
   }
 
@@ -87,7 +93,7 @@ export default class AddFunds extends Component {
               <ListErrors errors={[errors.message]} />
             </Message>
           }
-          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formAddFunds.meta.isValid} />
+          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formAddFunds.meta.isValid || !formAddFunds.fields.value.value} />
         </Form>
         <Button color="green" className="link-button mt-30" content="I don’t want to deposit any money now" onClick={() => this.doNotDepositMoneyNow()} />
       </div>

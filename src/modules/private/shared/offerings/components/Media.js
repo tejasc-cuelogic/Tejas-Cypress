@@ -222,6 +222,7 @@ export default class Media extends Component {
                   </div>
                 </List.Item>
               ))}
+            {!isReadonly &&
             <List.Item>
               <ImageCropper
                 disabled={isReadonly}
@@ -238,6 +239,7 @@ export default class Media extends Component {
                 aspect="none"
               />
             </List.Item>
+            }
           </List>
         </Form>
         <Divider section />

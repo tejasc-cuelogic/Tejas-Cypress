@@ -36,7 +36,7 @@ export default class FormPasswordStrength extends Component {
       >
         {!props.ishidelabel && label !== '' &&
           <label>
-            {props.label || label}
+            {props.label || label}{props.asterisk && props.asterisk === 'true' ? '*' : ''}
             {tooltip &&
               <Popup
                 hoverable={props.hoverable}

@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import moment from 'moment';
-import { get } from 'lodash';
+// import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import { Header, Button, Confirm } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { InlineLoader } from '../../../../../../theme/shared';
 
-@inject('offeringCreationStore', 'uiStore', 'offeringsStore')
+@inject('offeringCreationStore', 'uiStore')
 @observer
 export default class BonusRewardsList extends Component {
   handleDelCancel = () => {
@@ -26,9 +26,9 @@ export default class BonusRewardsList extends Component {
   render() {
     const { tier, refLink, isReadOnly } = this.props;
     const { confirmBox } = this.props.uiStore;
-    const { offer, offerLoading } = this.props.offeringsStore;
-    const bonusRewards = get(offer, 'bonusRewards') || [];
-    if (offerLoading) {
+    const { allBonusRewards, allBonusRewardsLoading } = this.props.offeringCreationStore;
+    const bonusRewards = allBonusRewards || [];
+    if (allBonusRewardsLoading) {
       return <InlineLoader text="Loading Bonus Rewards List..." />;
     }
     return (

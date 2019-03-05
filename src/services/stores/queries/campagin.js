@@ -90,6 +90,7 @@ export const campaignDetailsQuery = gql`
       securitiesOwnershipPercentage
       investmentMultiple
       revSharePercentage
+      revSharePercentageDescription
       interestRate
       minOfferingAmount
       maxOfferingAmount
