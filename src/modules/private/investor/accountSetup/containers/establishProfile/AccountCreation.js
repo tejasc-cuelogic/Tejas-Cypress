@@ -26,6 +26,7 @@ export default class AccountCreation extends React.Component {
   }
   handleStepChange = (step) => {
     this.props.investorProfileStore.setStepToBeRendered(step);
+    this.props.uiStore.clearErrors();
   }
   render() {
     const {

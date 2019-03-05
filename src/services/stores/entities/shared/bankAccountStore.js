@@ -80,11 +80,19 @@ export class BankAccountStore {
 
   @action
   linkBankManuallyChange = (values, field) => {
+    this.setIsManualLinkBankSubmitted();
     this.formLinkBankManually = Validator.onChange(
       this.formLinkBankManually,
       { name: field, value: values.value },
     );
   };
+
+  @computed
+  get disableNextBtnPlaid() {
+    return this.showAddFunds || this.manualLinkBankSubmitted ||
+          this.formLinkBankManually.meta.isValid ||
+          this.formAddFunds.meta.isValid;
+  }
 
   @action
   linkBankFormChange = () => {
@@ -261,6 +269,11 @@ export class BankAccountStore {
         errors && errors[key][0],
       );
     });
+  }
+
+  @action
+  validateForm = (form) => {
+    Validator.validateForm(this[form], false);
   }
 
   @computed get count() {
