@@ -21,7 +21,7 @@ export default class Auth extends React.Component {
         <section className="modalbg-banner" />}
         <Switch>
           <Route path="/auth/login" component={Login} />
-          <Route path="/auth/register" component={SignupInitial} />
+          <Route path="/auth/register/:type?" component={SignupInitial} />
           <Route path="/auth/register-investor" component={InvestorSignup} />
           <Route path="/auth/confirm-email" component={ConfirmEmailAddress} />
           <Route path="/auth/change-password" component={ChangePassword} />

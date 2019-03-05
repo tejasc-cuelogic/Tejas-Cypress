@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import Helper from '../../helper/utility';
 import { DateTimeFormat } from '../shared';
+import { DataFormatter } from '../../helper';
 
 
 export const THeader = ({ columns }) => (
@@ -48,7 +49,7 @@ export const FillTable = ({
                     {
                       result.columns.map(col => (
                         <Table.Cell key={col.field} textAlign={col.textAlign}>
-                          {['amount'].includes(col.field) ? Helper.CurrencyFormat(row[col.field]) : (
+                          {['amount'].includes(col.field) ? DataFormatter.isAmountNegative(row[col.field]) ? `(${Helper.CurrencyFormat(row[col.field])})` : Helper.CurrencyFormat(row[col.field]) : (
                               ['createdAt', 'date'].includes(col.field) ?
                                 <DateTimeFormat datetime={row[col.field]} /> : (
                                   (col.field === 'file') ? <Actions download={download} actions={{ fileId: row.fileId }} /> : (

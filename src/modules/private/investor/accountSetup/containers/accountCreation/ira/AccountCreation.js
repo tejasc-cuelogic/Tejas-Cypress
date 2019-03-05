@@ -23,10 +23,12 @@ export default class AccountCreation extends React.Component {
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetLinkBank();
+    this.props.uiStore.setProgress(false);
     this.props.uiStore.setErrors(null);
   }
   handleStepChange = (step) => {
     this.props.iraAccountStore.setStepToBeRendered(step);
+    this.props.uiStore.clearErrors();
   }
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
@@ -49,7 +51,7 @@ export default class AccountCreation extends React.Component {
       createAccount,
       isValidIraForm,
     } = this.props.iraAccountStore;
-    const { showAddFunds } = this.props.bankAccountStore;
+    const { showAddFunds, disableNextBtnPlaid } = this.props.bankAccountStore;
     const { formAddFunds, plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps =
@@ -87,6 +89,7 @@ export default class AccountCreation extends React.Component {
           formLinkBankManually.meta.isDirty &&
           formAddFunds.meta.isDirty) ||
           showAddFunds,
+          disableNextButton: disableNextBtnPlaid,
           validate: validationActions.validateLinkBankForm,
           stepToBeRendered: 4,
         },

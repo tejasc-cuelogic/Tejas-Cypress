@@ -701,9 +701,13 @@ export class BusinessAppStore {
             data.personalGuaranteeForm.value,
             this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm,
           ) : [],
-        blanketLien: this.BUSINESS_DOC_FRM.fields.blanketLien.value === '' ? '' : this.BUSINESS_DOC_FRM.fields.blanketLien.value,
-        providePersonalGuarantee: this.BUSINESS_DOC_FRM.fields.personalGuarantee.value === '' ? '' : this.BUSINESS_DOC_FRM.fields.personalGuarantee.value,
       };
+      if (this.BUSINESS_DOC_FRM.fields.blanketLien.value !== '' && this.BUSINESS_DOC_FRM.fields.blanketLien.value !== null) {
+        inputData.blanketLien = this.BUSINESS_DOC_FRM.fields.blanketLien.value;
+      }
+      if (this.BUSINESS_DOC_FRM.fields.personalGuarantee.value !== '' && this.BUSINESS_DOC_FRM.fields.personalGuarantee.value !== null) {
+        inputData.providePersonalGuarantee = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value;
+      }
     } else {
       inputData = {
         dueDiligence: this.getFilesArray(

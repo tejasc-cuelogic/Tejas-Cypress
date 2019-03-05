@@ -5,9 +5,9 @@ import { bankAccountStore, uiStore, userDetailsStore } from '../../index';
 // accountSetup/containers/accountCreation/helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { submitinvestorAccount, upsertInvestorAccount } from '../../queries/account';
-import { DataFormatter } from '../../../../helper';
+import { DataFormatter, FormValidator } from '../../../../helper';
 import Helper from '../../../../helper/utility';
-import userStore from '../userStore';
+// import userStore from '../userStore';
 
 class IndividualAccountStore {
   @observable stepToBeRendered = 0;
@@ -54,9 +54,10 @@ class IndividualAccountStore {
 
   investmentLimitsAttributes = () => {
     const data = {};
+    const userdetails = userDetailsStore.userDetails;
     data.limits = {
       income:
-        userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+      userdetails.investorProfileData.annualIncome[0].income,
       netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
       otherContributions: 0,
     };
@@ -88,14 +89,14 @@ class IndividualAccountStore {
               variables,
             })
             .then(action((result) => {
-              userDetailsStore.getUser(userStore.currentUser.sub);
+              // userDetailsStore.getUser(userStore.currentUser.sub);
               if (result.data.upsertInvestorAccount) {
                 this.individualAccId = result.data.upsertInvestorAccount.accountId;
                 const { linkedBank } = result.data.upsertInvestorAccount;
                 bankAccountStore.setPlaidAccDetails(linkedBank);
               }
               if (currentStep) {
-                this.setStepToBeRendered(currentStep.stepToBeRendered);
+                FormValidator.setIsDirty(bankAccountStore.formAddFunds, false);
                 if (!bankAccountStore.depositMoneyNow) {
                   Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
                 } else {
@@ -104,6 +105,7 @@ class IndividualAccountStore {
               } else {
                 Helper.toast(`Link Bank ${actionPerformed} successfully.`, 'success');
               }
+              this.setStepToBeRendered(currentStep.stepToBeRendered);
               uiStore.setErrors(null);
               uiStore.setProgress(false);
               resolve(result);
