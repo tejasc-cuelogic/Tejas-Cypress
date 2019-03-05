@@ -230,7 +230,7 @@ export class TransactionsStore {
       ClientDb.filterData('direction', direction);
     }
 
-    if (dateFilterStart && dateFilterStop) {
+    if (dateFilterStart || dateFilterStop) {
       ClientDb.filterByDate(dateFilterStart, dateFilterStop, 'startDate');
     }
 
