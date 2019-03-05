@@ -214,14 +214,7 @@ export class CampaignStore {
   }
 
   @computed get offerStructure() {
-    const { selectedOffer, keyTerms } = this.campaign;
-    let offerStructure = '';
-    if (selectedOffer && selectedOffer.structure !== '') {
-      offerStructure = selectedOffer.structure;
-    } else {
-      offerStructure = get(keyTerms, 'securities') || '';
-    }
-    return offerStructure;
+    return get(this.campaign, 'keyTerms.securities') || '';
   }
 
   @action

@@ -758,6 +758,9 @@ export class BusinessAppReviewStore {
         }
       }
       this.calculateExpAnnualRevCount();
+      if (store === 'appReviewStore') {
+        this.showSingleOfferForSigned(get(appData, 'offers.offer'));
+      }
     }
     return false;
   }
@@ -782,6 +785,15 @@ export class BusinessAppReviewStore {
     money.floatToAmount(money.mul(amortizationAmount, money.floatToAmount(maturity)));
     this.OFFERS_FRM.fields.offer[index].totalCapital.value = returnedAmount;
     this.OFFERS_FRM.fields.offer[index].amortizationAmount.value = amortizationAmount;
+  }
+  @action
+  showSingleOfferForSigned = (data) => {
+    let offersToShow = null;
+    if (this.fetchBusinessApplicationOffers.applicationStatus === 'APPLICATION_SUCCESSFUL') {
+      offersToShow =
+      data.find(obj => obj.isAccepted === true);
+      this.OFFERS_FRM = Validator.setFormData(this.OFFERS_FRM, { offer: [offersToShow] });
+    }
   }
 }
 export default new BusinessAppReviewStore();

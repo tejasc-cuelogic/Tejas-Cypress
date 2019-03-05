@@ -126,7 +126,7 @@ export default class Leader extends Component {
         <Form className={isIssuer && !match.url.includes('offering-creation') ? 'ui card fluid form-card' : ''}>
           <Header as="h4">
             {`Leader ${index + 1}`}
-            {leaderCount > 1 &&
+            {!isReadonly && leaderCount > 1 &&
               <Button.Group size="mini" floated="right">
                 <Button inverted color="red" content="Delete Leader" onClick={e => this.toggleConfirmModal(e, index, formName)} />
               </Button.Group>
@@ -266,7 +266,9 @@ export default class Leader extends Component {
                   <label>Headshot image</label>
                   {LEADERSHIP_FRM.fields.leadership[index].headshot.value ? (
                     <div className="file-uploader attached">
-                      <Button onClick={() => this.handleDelDoc('headshot')} circular icon={{ className: 'ns-close-light' }} />
+                      {!isReadonly &&
+                        <Button onClick={() => this.handleDelDoc('headshot')} circular icon={{ className: 'ns-close-light' }} />
+                      }
                       <Image64
                         srcUrl={LEADERSHIP_FRM.fields.leadership[index].headshot.preSignedUrl}
                       />
@@ -296,7 +298,9 @@ export default class Leader extends Component {
                   <label>Hero image</label>
                   {LEADERSHIP_FRM.fields.leadership[index].heroImage.value ? (
                     <div className="file-uploader attached">
+                      {!isReadonly &&
                       <Button onClick={() => this.handleDelDoc('heroImage')} circular icon={{ className: 'ns-close-light' }} />
+                      }
                       <Image64
                         srcUrl={LEADERSHIP_FRM.fields.leadership[index].heroImage.preSignedUrl}
                       />

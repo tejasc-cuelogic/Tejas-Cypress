@@ -4,11 +4,10 @@ import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { Header, Table, Divider, Grid, Popup, Icon, Statistic } from 'semantic-ui-react';
-import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
+import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_REGULATION, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
-import KeytermsSecurityDetails from './KeytermsSecurityDetails';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -33,6 +32,8 @@ class KeyTermsDetails extends Component {
     const {
       totalPayment, principalAmt, totalPaymentChart, campaign, offerStructure,
     } = this.props.campaignStore;
+    const investmentMultiple = KeyTerms && KeyTerms.investmentMultiple ? KeyTerms.investmentMultiple : 'XXX';
+    const portal = campaign && campaign.regulation ? (campaign.regulation.includes('BD') ? '2%' : '1%') : '';
     const maturityMonth = KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : '[XX] Months';
     const edgarLink = get(campaign, 'offering.launch.edgarLink');
     const revenueShareSummary =
@@ -41,7 +42,7 @@ class KeyTermsDetails extends Component {
     const keytermsMeta = [
       { key: 'minOfferingAmount', label: 'Offering Min', popupContent: 'If the minimum goal is not met by the end of the offering period, any funds you invest will be automatically returned to your NextSeed account.' },
       { key: 'maxOfferingAmount', label: 'Offering Max', popupContent: 'The offering will remain open until the issuer raises the maximum goal or the offering period ends. As long as the raise exceeds the minimumgoal, the issuer will receive the funds.' },
-      { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor' },
+      { key: 'minInvestAmt', label: 'Min Individual Investment', popupContent: 'This is the minimum individual investment amount to participate in this offering.' },
     ];
     return (
       <Aux>
@@ -61,9 +62,7 @@ class KeyTermsDetails extends Component {
           <Table.Body>
             {keytermsMeta.map(type => (
               <Aux>
-                {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
-                get(KeyTerms, type.key)) ||
-                (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
+                {get(KeyTerms, type.key) ?
                   <Table.Row verticalAlign="top">
                     <Table.Cell width={5} className="neutral-text"><b>{type.label}{' '}</b>
                       {type.popupContent &&
@@ -82,71 +81,174 @@ class KeyTermsDetails extends Component {
                           'NA'}
                       </p>
                     </Table.Cell>
-                  </Table.Row>
+                  </Table.Row> : ''
                 }
               </Aux>
             ))
             }
-            {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
-              get(KeyTerms, 'maturity')) ||
-              (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
-              <Table.Row verticalAlign="top">
-                <Table.Cell width={5} className="neutral-text"><b>Maturity{' '}</b>
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
-                    position="top center"
-                  />
-                </Table.Cell>
-                <Table.Cell>
-                  {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : 'NA'}
-                  {
-                      KeyTerms && KeyTerms.startupPeriod &&
-                      ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
-                    }
-                </Table.Cell>
-              </Table.Row>
-            }
-            {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
-              get(KeyTerms, 'frequencyOfPayments')) ||
-              (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
-              <Table.Row verticalAlign="top" >
-                <Table.Cell width={5} className="neutral-text"><b>Payments{' '}</b>
-                  <Popup
-                    trigger={<Icon name="help circle" color="green" />}
-                    content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
-                    position="top center"
-                  />
-                </Table.Cell>
-                <Table.Cell>
-                  <p>
-                    {KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
-                        : 'NA'}
-                  </p>
-                </Table.Cell>
-              </Table.Row>
-            }
-            <KeytermsSecurityDetails {...this.props} />
-            {((offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C &&
-              get(KeyTerms, 'securitiesOwnershipPercentage')) ||
-              (offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C)) &&
-              <Table.Row verticalAlign="top">
-                <Table.Cell width={5} className="neutral-text">
-                  <b>Ownership % Represented by Securities</b>
-                </Table.Cell>
-                <Table.Cell>
-                  {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
-                    <p>
-                      <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
-                      Investors will not receive any equity interests in the Issuer or
-                      any voting or management rights with respect to the Issuer as a result of
-                      an investment in Securities.
-                    </p>
+            {get(KeyTerms, 'investmentMultiple') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Investment Multiple{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={`For every $100 you invest, you are paid a portion of this company's gross revenue every month until you are paid $${investmentMultiple === 'XXX' ? investmentMultiple : investmentMultiple * 100} within ${maturityMonth === '[XX] Months' ? 'YY' : maturityMonth} months. ${portal ? `A ${portal} service fee is deducted from each payment.` : ''}`}
+                  position="top center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
+                </p>
+                <p>
+                  {Parser(get(KeyTerms, 'investmentMultipleSummary') ?
+                    get(KeyTerms, 'investmentMultipleSummary')
                     :
-                    'NA'
+                    '')}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'revSharePercentage') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Revenue Sharing Percentage</b></Table.Cell>
+              <Table.Cell>
+                <p>
+                  {get(KeyTerms, 'revSharePercentage') || ''}
+                </p>
+                <p>
+                  {Parser(get(KeyTerms, 'revSharePercentageDescription') ?
+                    get(KeyTerms, 'revSharePercentageDescription')
+                    :
+                    '')}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'maturity') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Maturity{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={`If the investors have not been paid in full within ${maturityMonth}, the Issuer is required to promptly pay the entire outstanding balance to the investors.`}
+                  position="top center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {KeyTerms && KeyTerms.maturity ? `${KeyTerms.maturity} Months` : 'NA'}
+                {
+                    KeyTerms && KeyTerms.startupPeriod &&
+                    ` including a ${KeyTerms.startupPeriod} month startup period for ramp up`
                   }
-                </Table.Cell>
-              </Table.Row>
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'frequencyOfPayments') &&
+            <Table.Row verticalAlign="top" >
+              <Table.Cell width={5} className="neutral-text"><b>Payments{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="The Issuer will make monthly payments based on the relevant revenue sharing percentage."
+                  position="top center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {KeyTerms && KeyTerms.frequencyOfPayments ? KeyTerms.frequencyOfPayments
+                      : 'NA'}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'securityInterest') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Security Interest{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content="The Issuer will grant a security interest in all of its assets in favor of NextSeed for the benefit of the investors to secure the Issuer’s obligations under the Securities. For more details, please see the disclosure statement."
+                  position="top center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {KeyTerms && KeyTerms.securityInterest ? KeyTerms.securityInterest : ' NA'}
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'securitiesOwnershipPercentage') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text">
+                <b>Ownership % Represented by Securities</b>
+              </Table.Cell>
+              <Table.Cell>
+                {KeyTerms && KeyTerms.securitiesOwnershipPercentage ?
+                  <p>
+                    <b>{KeyTerms.securitiesOwnershipPercentage}%</b>{' '}
+                    Investors will not receive any equity interests in the Issuer or
+                    any voting or management rights with respect to the Issuer as a result of
+                    an investment in Securities.
+                  </p>
+                  :
+                  'NA'
+                }
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'interestRate') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Interest Rate{' '}</b>
+                <Popup
+                  trigger={<Icon name="help circle" color="green" />}
+                  content={`Interest payment is calculated at a gross annualized interest rate of ${get(KeyTerms, 'interestRate') || ' - '}% each month on the remaining balance of your investment from the prior month.`}
+                  position="top center"
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {KeyTerms && KeyTerms.interestRate ? `${KeyTerms.interestRate}%` : 'NA'}
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'roundType') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Round Type{' '}</b>
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {ROUND_TYPES_ENUM[KeyTerms.roundType]}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'unitPrice') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Share Price{' '}</b>
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {Helper.CurrencyFormat(KeyTerms.unitPrice)}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'premoneyValuation') &&
+            <Table.Row verticalAlign="top">
+              <Table.Cell width={5} className="neutral-text"><b>Pre-Money valuation{' '}</b>
+              </Table.Cell>
+              <Table.Cell>
+                <p>
+                  {Helper.CurrencyFormat(KeyTerms.premoneyValuation)}
+                </p>
+              </Table.Cell>
+            </Table.Row>
+            }
+            {get(KeyTerms, 'additionalKeyterms') && get(KeyTerms, 'additionalKeyterms').length !== 0 &&
+              KeyTerms.additionalKeyterms.map(item => (
+                <Table.Row verticalAlign="top">
+                  <Table.Cell width={5} className="neutral-text"><b>{item.label}{' '}</b>
+                  </Table.Cell>
+                  <Table.Cell>
+                    {Parser(item.description || '')}
+                  </Table.Cell>
+                </Table.Row>
+              ))
             }
             {edgarLink &&
             <Table.Row verticalAlign="top">

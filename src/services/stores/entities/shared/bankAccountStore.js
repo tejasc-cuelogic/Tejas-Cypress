@@ -28,6 +28,7 @@ export class BankAccountStore {
   @observable isPlaidBankVerified = false;
   @observable newPlaidAccDetails = {};
   @observable isLinkedBankCancelRequest = false;
+  @observable manualLinkBankSubmitted = false;
   @observable activeBankPladLogo = null;
   @observable pendingBankPladLogo = null;
   @observable db;
@@ -53,6 +54,11 @@ export class BankAccountStore {
   @action
   setBankListing = (bankData) => {
     this.bankListing = bankData;
+  }
+
+  @action
+  setIsManualLinkBankSubmitted = (submitted = true) => {
+    this.manualLinkBankSubmitted = submitted;
   }
 
   @action
@@ -159,8 +165,8 @@ export class BankAccountStore {
   }
 
   @action
-  setShowAddFunds = () => {
-    this.showAddFunds = true;
+  setShowAddFunds = (funds = true) => {
+    this.showAddFunds = funds;
   }
 
   @action

@@ -50,7 +50,7 @@ class Overview extends Component {
         <Divider hidden section />
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
-        {get(campaign, 'updates').length !== 0 &&
+        {get(campaign, 'updates') && get(campaign, 'updates').length !== 0 &&
         <LatestUpdates
           updates={campaign && campaign.updates}
           refLink={this.props.refLink}
