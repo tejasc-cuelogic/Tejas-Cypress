@@ -54,9 +54,10 @@ class IndividualAccountStore {
 
   investmentLimitsAttributes = () => {
     const data = {};
+    const userdetails = userDetailsStore.userDetails;
     data.limits = {
       income:
-        userDetailsStore.userDetails.investorProfileData.annualIncome[0].income,
+      userdetails.investorProfileData.annualIncome[0].income,
       netWorth: userDetailsStore.userDetails.investorProfileData.netWorth,
       otherContributions: 0,
     };
