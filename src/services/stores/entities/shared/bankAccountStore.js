@@ -271,6 +271,11 @@ export class BankAccountStore {
     });
   }
 
+  @action
+  validateForm = (form) => {
+    Validator.validateForm(this[form], false);
+  }
+
   @computed get count() {
     return (this.changeRequests && this.changeRequests.length) || 0;
   }

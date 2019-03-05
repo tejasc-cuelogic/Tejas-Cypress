@@ -28,6 +28,7 @@ export default class AccountCreation extends React.Component {
   }
   handleStepChange = (step) => {
     this.props.iraAccountStore.setStepToBeRendered(step);
+    this.props.uiStore.clearErrors();
   }
   updateUser = () => {
     this.props.userDetailsStore.getUser(this.props.userStore.currentUser.sub);
