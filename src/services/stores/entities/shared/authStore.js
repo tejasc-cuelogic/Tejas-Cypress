@@ -34,10 +34,18 @@ export class AuthStore {
   @observable confirmProgress = false;
   @observable pwdInputType = 'password';
   @observable currentScore = 0;
+  @observable idleTimer = null;
 
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  resetIdelTimer = () => {
+    if (this.idleTimer) {
+      this.idleTimer.reset();
+    }
   }
 
   @action

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';
+import IdleTimer from 'react-idle-timer';
 import './assets/semantic/semantic.min.css';
 import DevPassProtected from './modules/auth/containers/DevPassProtected';
 import { DevBanner, Spinner } from './theme/shared';
@@ -87,8 +88,15 @@ class App extends Component {
       this.props.navStore.setNavStatus(calculations, 'main');
     }
   }
-  playDevBanner = () => this.props.uiStore.toggleDevBanner();
+  onIdle = () => {
+    if (this.props.authStore.isUserLoggedIn) {
+      authActions.logout().then(() => {
+        this.props.history.push('/auth/login');
+      });
+    }
+  }
   checkPathRestictedForScrollTop = (paths, pathname) => paths.some(val => pathname.includes(val));
+  playDevBanner = () => this.props.uiStore.toggleDevBanner();
   render() {
     const { location } = this.props;
     if (matchPath(location.pathname, { path: '/secure-gateway' })) {
@@ -103,6 +111,16 @@ class App extends Component {
     }
     return (
       <div className={(!matchPath(location.pathname, { path: '/app' })) ? 'public-pages' : ''}>
+        {this.props.authStore.isUserLoggedIn &&
+        <IdleTimer
+          ref={(ref) => { this.props.authStore.idleTimer = ref; }}
+          element={document}
+          onIdle={this.onIdle}
+          debounce={250}
+          timeout={1000 * 60 * 15}
+          stopOnIdle
+        />
+        }
         <MetaTagGenerator metaTagsData={metaTagsData} />
         {this.props.authStore.devPasswdProtection ?
           <Route exact path="/password-protected" component={DevPassProtected} /> : (
