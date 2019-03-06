@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import { withRouter, Link } from 'react-router-dom';
-import { Header, Button, Image, Grid, Form, Loader, Input, Dimmer, Message } from 'semantic-ui-react';
+import { Header, Button, Image, Grid, Form, Input, Message } from 'semantic-ui-react';
 import { bankAccountActions } from '../../../../../services/actions';
 import ManualForm from './ManualForm';
 import { IND_BANK_LIST } from '../../../../../constants/account';
@@ -9,12 +9,18 @@ import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
 import NSImage from '../../../../shared/NSImage';
 
-@inject('bankAccountStore', 'uiStore', 'transactionStore')
+@inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
 @withRouter
 @observer
 export default class Plaid extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
+    // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+    const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    if (INVESTMENT_ACC_TYPES.fields.accType.value !== 0) {
+      const { manualLinkBankSubmitted } = this.props.bankAccountStore;
+      this.props.bankAccountStore.setShowAddFunds(manualLinkBankSubmitted);
+    }
     this.props.uiStore.clearErrors();
   }
   handleBankSelect = (referenceLink) => {
@@ -33,7 +39,7 @@ export default class Plaid extends Component {
       showAddFunds,
       isPlaidBankVerified,
     } = this.props.bankAccountStore;
-    const { inProgress, errors } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     const { action, refLink } = this.props;
     const headerText = action && action === 'change' ? 'Link bank account' : 'Link bank account';
     const subHeaderText = action && action === 'change' ?
@@ -69,9 +75,9 @@ export default class Plaid extends Component {
           />
         </Form>
         <div className="bank-list">
-          <Dimmer active={inProgress}>
+          {/* <Dimmer active={inProgress}>
             <Loader active={inProgress} />
-          </Dimmer>
+          </Dimmer> */}
           {typeof bankListing !== 'undefined' && bankListing.length === 0 &&
             <Grid column={1} textAlign="center">
               <Grid.Column>No results found.</Grid.Column>

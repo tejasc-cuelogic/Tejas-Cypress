@@ -1,10 +1,11 @@
 /* eslint-disable jsx-a11y/label-has-for */
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { Container, Header, Grid, Item, Responsive, Button, Segment, Form } from 'semantic-ui-react';
+import { Container, Header, Grid, Item, Message, Responsive, Button, Segment, Form, Divider } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
-import { Logo, NsCarousel } from '../../../theme/shared';
+import { FormInput, FormPasswordStrength } from '../../../theme/form';
+import { ListErrors, Logo, NsCarousel } from '../../../theme/shared';
 import NSImage from '../../shared/NSImage';
 
 const highlights = [
@@ -53,16 +54,49 @@ const businesses = [
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
 
-@inject('authStore')
+@inject('authStore', 'uiStore', 'identityStore')
 @observer
-export default class News extends Component {
+class News extends Component {
+  componentWillMount() {
+    this.props.authStore.setDefaultPwdType();
+    this.props.authStore.setUserRole('investor');
+  }
+  componentWillUnmount() {
+    this.props.uiStore.clearErrors();
+  }
+  handleIsEmailExist = (email) => {
+    this.props.authStore.checkEmailExistsPresignup(email);
+  }
+  handleSubmitForm = (e) => {
+    e.preventDefault();
+    if (this.props.authStore.newPasswordRequired) {
+      this.props.history.push('/auth/change-password');
+    } else {
+      const { email, password } = this.props.authStore.SIGNUP_FRM.fields;
+      this.props.authStore.checkEmailExistsPresignup(email.value).then(() => {
+        this.props.authStore.setCredentials({ email: email.value, password: password.value });
+        if (this.props.authStore.SIGNUP_FRM.meta.isValid) {
+          this.props.identityStore.requestOtpWrapper().then(() => {
+            this.props.history.push('/auth/confirm-email');
+          });
+        }
+      });
+    }
+  };
   render() {
-    // const { authStore } = this.props;
+    const {
+      SIGNUP_FRM, signupChange, pwdInputType, currentScore,
+    } = this.props.authStore;
+    const { errors, inProgress } = this.props.uiStore;
+    const customError = errors && errors.code === 'UsernameExistsException'
+      ? 'An account with the given email already exists, Please login if already registered.' : errors && errors.message;
     return (
       <Aux>
         <Container>
           <section className="center-align">
-            <Logo centered dataSrc="LogoBlack" />
+            <Link to="/">
+              <Logo centered dataSrc="LogoBlack" />
+            </Link>
           </section>
           <Header as="h2" className="center-align mt-0">Small business investing, <span className="highlight-text">made easy.</span></Header>
           <section>
@@ -88,28 +122,59 @@ export default class News extends Component {
                 <Grid.Column width={6}>
                   <Segment padded>
                     <Header as="h4" className={`${isMobile && 'center-align'} mb-20`}>Start investing in local businesses you know and trust.</Header>
-                    <Form>
-                      <Form.Field>
-                        <label>First Name*</label>
-                        <input placeholder="" />
-                      </Form.Field>
-                      <Form.Field>
-                        <label>Last Name*</label>
-                        <input placeholder="" />
-                      </Form.Field>
-                      <Form.Field>
-                        <label>Email*</label>
-                        <input placeholder="" />
-                      </Form.Field>
-                      <Form.Field>
-                        <label>Password*</label>
-                        <input placeholder="" />
-                      </Form.Field>
-                      <Form.Field>
-                        <label>Verify Password*</label>
-                        <input placeholder="" />
-                      </Form.Field>
-                      <Button type="submit" primary fluid>Sign Up Free</Button>
+                    <Form error onSubmit={this.handleSubmitForm}>
+                      {
+                        ['givenName', 'familyName'].map(field => (
+                          <FormInput
+                            asterisk="true"
+                            key={field}
+                            type="text"
+                            autoFocus={field === 'givenName'}
+                            name={field}
+                            fielddata={SIGNUP_FRM.fields[field]}
+                            changed={signupChange}
+                          />
+                        ))
+                      }
+                      <FormInput
+                        asterisk="true"
+                        type="email"
+                        name="email"
+                        fielddata={SIGNUP_FRM.fields.email}
+                        changed={signupChange}
+                        onblur={this.handleIsEmailExist}
+                      />
+                      <FormPasswordStrength
+                        asterisk="true"
+                        key="password"
+                        name="password"
+                        type="password"
+                        minLength={8}
+                        minScore={4}
+                        iconDisplay
+                        tooShortWord="Weak"
+                        scoreWords={['Weak', 'Okay', 'Good', 'Strong', 'Stronger']}
+                        inputProps={{
+                          name: 'password', autoComplete: 'off', placeholder: 'Password',
+                        }}
+                        changed={signupChange}
+                        fielddata={SIGNUP_FRM.fields.password}
+                        showRequiredError
+                      />
+                      <FormInput
+                        asterisk="true"
+                        key="verify"
+                        name="verify"
+                        type={pwdInputType}
+                        fielddata={SIGNUP_FRM.fields.verify}
+                        changed={signupChange}
+                      />
+                      {errors &&
+                        <Message error textAlign="left" className="mt-30">
+                          <ListErrors errors={[customError]} />
+                        </Message>
+                      }
+                      <Button fluid primary size="large" className="very relaxed" content="Register" loading={inProgress} disabled={!SIGNUP_FRM.meta.isValid || !currentScore} />
                     </Form>
                   </Segment>
                 </Grid.Column>
@@ -117,7 +182,8 @@ export default class News extends Component {
             </Grid>
           </section>
         </Container>
-        <section className="bg-offwhite">
+        <Divider fitted as={Container} />
+        <section>
           <Container className="mt-30">
             <Header as="h2" className={isMobile ? 'mb-30' : 'mb-80'} textAlign="center">Investing, simplified.</Header>
             <div className="how-it-works-steps mb-30">
@@ -142,7 +208,7 @@ export default class News extends Component {
             </div>
           </Container>
         </section>
-        <section>
+        <section className="bg-offwhite">
           <Container textAlign={isMobile ? 'left' : 'center'} className="mt-30">
             <Header as="h2" className="mb-30">
             Build an investment portfolio{' '}
@@ -187,7 +253,7 @@ export default class News extends Component {
             </Aux>
         }
         </section>
-        <section className="bg-offwhite">
+        <section>
           <Container>
             <Grid relaxed={!isTablet && 'very'} stackable centered className={!isMobile && 'mt-40 mb-40'}>
               <Grid.Row>
@@ -205,3 +271,5 @@ export default class News extends Component {
     );
   }
 }
+
+export default News;

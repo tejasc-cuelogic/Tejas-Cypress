@@ -12,13 +12,15 @@ import AddFunds from './AddFunds';
 @observer
 export default class ManualForm extends Component {
   componentWillMount() {
+    // this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     this.props.uiStore.clearErrors();
   }
   handleSubmitForm = (e) => {
     e.preventDefault();
+    this.props.bankAccountStore.setIsManualLinkBankSubmitted();
     const { investmentAccType } = this.props.accountStore;
     const accTypeStore = investmentAccType === 'individual' ? 'individualAccountStore' : investmentAccType === 'entity' ? 'entityAccountStore' : investmentAccType === 'ira' ? 'iraAccountStore' : 'individualAccountStore';
-    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : undefined;
+    const currentStep = investmentAccType === 'entity' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 5 } : investmentAccType === 'ira' ? { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 3 } : { name: 'Link bank', validate: validationActions.validateLinkBankForm, stepToBeRendered: 1 };
     if (this.props.action === 'change') {
       this.props.transactionStore.requestOtpForManageTransactions().then(() => {
         const confirmUrl = `${this.props.refLink}/confirm`;
@@ -28,8 +30,9 @@ export default class ManualForm extends Component {
       this.props[accTypeStore].createAccount(currentStep).then(() => {
         if (investmentAccType === 'individual') {
           this.props[accTypeStore].setStepToBeRendered(1);
-          this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
+          // this.props[accTypeStore].setIsManualLinkBankSubmitted(true);
         } else {
+          this.props[accTypeStore].setStepToBeRendered(currentStep.stepToBeRendered);
           this.props.bankAccountStore.setShowAddFunds();
         }
       })

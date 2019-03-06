@@ -34,10 +34,18 @@ export class AuthStore {
   @observable confirmProgress = false;
   @observable pwdInputType = 'password';
   @observable currentScore = 0;
+  @observable idleTimer = null;
 
   @action
   setFieldvalue = (field, value) => {
     this[field] = value;
+  }
+
+  @action
+  resetIdelTimer = () => {
+    if (this.idleTimer) {
+      this.idleTimer.reset();
+    }
   }
 
   @action
@@ -336,12 +344,14 @@ export class AuthStore {
         email,
       },
       onFetch: (data) => {
-        if (data.checkEmailExistsPresignup) {
-          this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
-          this.SIGNUP_FRM.meta.isValid = false;
-          rej();
-        } else {
-          res();
+        if (data) {
+          if (data.checkEmailExistsPresignup) {
+            this.SIGNUP_FRM.fields.email.error = 'E-mail Address already exist!';
+            this.SIGNUP_FRM.meta.isValid = false;
+            rej();
+          } else {
+            res();
+          }
         }
       },
       fetchPolicy: 'network-only',

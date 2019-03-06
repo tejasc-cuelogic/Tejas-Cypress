@@ -11,7 +11,9 @@ import ButtonGroup from '../ButtonGroup';
 @observer
 export default class OfferingCompany extends Component {
   componentWillMount() {
-    this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+    if (!this.props.offeringCreationStore.initLoad.includes('OFFERING_COMPANY_FRM')) {
+      this.props.offeringCreationStore.setFormData('OFFERING_COMPANY_FRM', 'offering.about');
+    }
     this.props.offeringCreationStore.setFormData('COMPANY_LAUNCH_FRM', 'offering.launch');
     this.props.offeringCreationStore.setFormData('OFFERING_OVERVIEW_FRM', 'offering.overview');
   }
@@ -64,6 +66,22 @@ export default class OfferingCompany extends Component {
             form="OFFERING_COMPANY_FRM"
             content={OFFERING_COMPANY_FRM.fields.theCompany.value}
           />
+          {
+            ['businessModel', 'locationAnalysis'].map(field => (
+              <Aux>
+                <Divider section />
+                <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
+                <HtmlEditor
+                  imageUploadPath={`offerings/${currentOfferingId}`}
+                  readOnly={isReadonly}
+                  changed={rtEditorChange}
+                  name={field}
+                  form="OFFERING_COMPANY_FRM"
+                  content={OFFERING_COMPANY_FRM.fields[field].value}
+                />
+              </Aux>
+            ))
+          }
           <Divider section />
           <Header as="h4">
             History
@@ -75,7 +93,7 @@ export default class OfferingCompany extends Component {
             OFFERING_COMPANY_FRM.fields.history.map((history, index) => (
               <Aux>
                 <Header as="h6">{`Milestone ${index + 1}`}
-                  {OFFERING_COMPANY_FRM.fields.history.length > 1 &&
+                  {!isReadonly && OFFERING_COMPANY_FRM.fields.history.length > 1 &&
                     <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'history')} >
                       <Icon className="ns-close-circle" color="grey" />
                     </Link>
@@ -96,22 +114,6 @@ export default class OfferingCompany extends Component {
                     containerclassname="secondary"
                   />
                 </div>
-              </Aux>
-            ))
-          }
-          {
-            ['businessModel', 'locationAnalysis'].map(field => (
-              <Aux>
-                <Divider section />
-                <Header as="h6">{OFFERING_COMPANY_FRM.fields[field].label}</Header>
-                <HtmlEditor
-                  imageUploadPath={`offerings/${currentOfferingId}`}
-                  readOnly={isReadonly}
-                  changed={rtEditorChange}
-                  name={field}
-                  form="OFFERING_COMPANY_FRM"
-                  content={OFFERING_COMPANY_FRM.fields[field].value}
-                />
               </Aux>
             ))
           }

@@ -17,6 +17,7 @@ class Overview extends Component {
     const { keyTerms, offering } = campaign;
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities &&
       campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
+    const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
     return (
       <Aux>
         <div className="inner-content-spacer bg-offwhite">
@@ -25,9 +26,11 @@ class Overview extends Component {
               <AccTypeTitle moreText="investment" />
             </Header>
           </span>
-          <span className="pull-right">
-            <Link target="_blank" to={`/offerings/${campaign.offeringSlug}/overview`} className="pull-right">View offering page</Link>
-          </span>
+          {isPreviewLinkShow &&
+            <span className="pull-right">
+              <Link target="_blank" to={`/offerings/${campaign.offeringSlug}/overview`} className="pull-right">View offering page</Link>
+            </span>
+          }
         </div>
         <div className="inner-content-spacer">
           <Grid>
@@ -102,7 +105,7 @@ class Overview extends Component {
                       <Table.Cell>Ownership % Represented by Securities</Table.Cell>
                       <Table.Cell>
                         {keyTerms && keyTerms.securitiesOwnershipPercentage ?
-                          `${keyTerms.securitiesOwnershipPercentage}% 
+                          `${keyTerms.securitiesOwnershipPercentage}%
                           Investors will not receive any equity interests in
                           the Issuer or any voting or management rights with respect
                           to the Issuer as a result of an investment in Securities.`
@@ -124,8 +127,8 @@ class Overview extends Component {
                           {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'NA'}{' '}
                           <p>
                             {
-                               Parser(keyTerms && keyTerms.investmentMultipleSummary ?
-                               keyTerms.investmentMultipleSummary : '')
+                              Parser(keyTerms && keyTerms.investmentMultipleSummary ?
+                                keyTerms.investmentMultipleSummary : '')
                             }
                           </p>
                         </Table.Cell>
@@ -133,7 +136,7 @@ class Overview extends Component {
                         <Table.Cell>
                           {keyTerms && keyTerms.interestRate ?
                             `${keyTerms.interestRate}%` : 'NA'
-                            }
+                          }
                         </Table.Cell>
                       }
                     </Table.Row>

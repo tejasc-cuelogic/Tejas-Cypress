@@ -14,7 +14,7 @@ export default class TransferFunds extends Component {
     const { setFieldValue } = this.props.userDetailsStore;
     const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
     setFieldValue('currentActiveAccount', accountType);
-    this.props.transactionStore.getInvestorAvailableCash();
+    this.props.transactionStore.getInvestorAvailableCash(false);
     this.props.uiStore.clearErrors();
   }
   render() {
