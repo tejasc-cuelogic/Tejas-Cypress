@@ -2014,6 +2014,9 @@ ol.progtrckr{
 	.ui.embed{
 		margin-bottom:@28px;
 	}
+	img {
+		max-width: 100% !important;
+	}
 }
 .ui.grid.investment-scale{
 	margin-bottom:@40px;
