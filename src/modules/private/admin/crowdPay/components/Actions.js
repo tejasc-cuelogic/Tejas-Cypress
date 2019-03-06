@@ -31,22 +31,22 @@ export default class Actions extends Component {
           {!declined ?
             <Aux>
               {!approved && type === 'review' &&
-              <Button loading={inProgress === `${accountId}_APPROVE`} onClick={e => this.ctaHandler(e, userId, accountId, 'APPROVE', 'Crowdpay account is approved successfully.')} as={Link} to={`${urlPara}/APPROVE`} color="green">Approve</Button>
+              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'APPROVE', 'Crowdpay account is approved successfully.')} as={Link} to={`${urlPara}/APPROVE`} color="green">Approve</Button>
               }
               {type === 'cip' &&
-              <Button loading={inProgress === `${accountId}_EMAIL`} onClick={e => this.ctaHandler(e, userId, accountId, 'EMAIL', 'Email notification send successfully.')} as={Link} to={`${urlPara}/EMAIL`} color="green">Email Request</Button>
+              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'EMAIL', 'Email notification send successfully.')} as={Link} to={`${urlPara}/EMAIL`} color="green">Email Request</Button>
               }
               {type !== 'review' && !isGsProcess &&
-              <Button loading={inProgress === `${accountId}_GSPROCESS`} onClick={e => this.ctaHandler(e, userId, accountId, 'GSPROCESS', 'Crowdpay account successfully processed for gold star.')} disabled={isGsProcess} as={Link} to={`${urlPara}/GSPROCESS`} color={isGsProcess ? 'gray' : 'green'}>{isGsProcess ? 'Processing' : 'GS Process'}</Button>
+              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'GSPROCESS', 'Crowdpay account successfully processed for gold star.')} disabled={isGsProcess} as={Link} to={`${urlPara}/GSPROCESS`} color={isGsProcess ? 'gray' : 'green'}>{isGsProcess ? 'Processing' : 'GS Process'}</Button>
               }
-              <Button loading={inProgress === `${accountId}_DECLINE`} onClick={e => this.ctaHandler(e, userId, accountId, 'DECLINE', 'Crowdpay account is declined successfully.')} as={Link} to={`${urlPara}/DECLINE`} color="red">Decline</Button>
+              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'DECLINE', 'Crowdpay account is declined successfully.')} as={Link} to={`${urlPara}/DECLINE`} color="red">Decline</Button>
               {type !== 'review' && isGsProcess &&
-                <Button loading={inProgress === `${accountId}_VALIDATE`} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
+                <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'VALIDATE', 'Crowdpay account is validated successfully.')} as={Link} to={`${urlPara}/VALIDATE`} className="inverted" color="blue">Validate</Button>
               }
             </Aux> :
             <Aux>
-              <Button loading={inProgress === `${accountId}_RESTORE`} onClick={e => this.ctaHandler(e, userId, accountId, 'RESTORE', 'Crowdpay account is restored successfully.')} as={Link} to={`${urlPara}/RESTORE`} color="blue">Restore</Button>
-              <Button loading={inProgress === `${accountId}_DELETE`} onClick={e => this.ctaHandler(e, userId, accountId, 'DELETE', 'Crowdpay account is deleted successfully.')} as={Link} to={`${urlPara}/DELETE`} color="red">Delete</Button>
+              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'RESTORE', 'Crowdpay account is restored successfully.')} as={Link} to={`${urlPara}/RESTORE`} color="blue">Restore</Button>
+              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'DELETE', 'Crowdpay account is deleted successfully.')} as={Link} to={`${urlPara}/DELETE`} color="red">Delete</Button>
             </Aux>
           }
         </Button.Group>

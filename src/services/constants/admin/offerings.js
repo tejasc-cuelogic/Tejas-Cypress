@@ -1466,7 +1466,7 @@ export const GENERAL = {
       value: '',
       error: undefined,
       rule: 'date',
-      placeHolder: 'Select date',
+      placeHolder: 'mm/dd/yyyy',
       customErrors: {
         date: 'Maturity Date is not a valid date format.',
       },
