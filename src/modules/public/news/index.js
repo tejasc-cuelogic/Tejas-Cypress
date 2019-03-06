@@ -102,7 +102,7 @@ class News extends Component {
           <section>
             <Grid stackable doubling centered relaxed="very" className="mb-30">
               <Grid.Row>
-                <Grid.Column width={7}>
+                <Grid.Column mobile={16} tablet={8} computer={7}>
                   <Item.Group relaxed="very" className={isMobile && 'horizontal-items'}>
                     {
                     highlights.map(h => (
@@ -119,7 +119,7 @@ class News extends Component {
                   }
                   </Item.Group>
                 </Grid.Column>
-                <Grid.Column width={6}>
+                <Grid.Column mobile={16} tablet={8} computer={7}>
                   <Segment padded>
                     <Header as="h4" className={`${isMobile && 'center-align'} mb-20`}>Start investing in local businesses you know and trust.</Header>
                     <Form error onSubmit={this.handleSubmitForm}>
@@ -133,6 +133,7 @@ class News extends Component {
                             name={field}
                             fielddata={SIGNUP_FRM.fields[field]}
                             changed={signupChange}
+                            containerclassname="secondary"
                           />
                         ))
                       }
@@ -143,6 +144,7 @@ class News extends Component {
                         fielddata={SIGNUP_FRM.fields.email}
                         changed={signupChange}
                         onblur={this.handleIsEmailExist}
+                        containerclassname="secondary"
                       />
                       <FormPasswordStrength
                         asterisk="true"
@@ -160,6 +162,7 @@ class News extends Component {
                         changed={signupChange}
                         fielddata={SIGNUP_FRM.fields.password}
                         showRequiredError
+                        containerclassname="secondary"
                       />
                       <FormInput
                         asterisk="true"
@@ -168,6 +171,7 @@ class News extends Component {
                         type={pwdInputType}
                         fielddata={SIGNUP_FRM.fields.verify}
                         changed={signupChange}
+                        containerclassname="secondary"
                       />
                       {errors &&
                         <Message error textAlign="left" className="mt-30">
@@ -225,7 +229,7 @@ class News extends Component {
             <Container className="mb-30">
               <Grid centered stackable className="vertical-gutter">
                 {businesses.map(b => (
-                  <Grid.Column textAlign="center" width={4}>
+                  <Grid.Column textAlign="center" width={5}>
                     <NSImage path={b.image} centered />
                     <Header as="h5">{b.title}</Header>
                     <p>{b.description}</p>

@@ -10,11 +10,6 @@
         @media only screen and (max-width:@largestSmallMonitor){
             position: relative;
         }
-        &.dimmer-visible {
-            @media only screen and (max-width:@largeMonitorBreakpoint){
-                height: 100%;
-            }
-        }
     }
 }
 //  Public pages Starts
@@ -744,4 +739,8 @@
     .ui.card .update-list{
         border-bottom-left-radius:@6px;
     }
+}
+
+.ui.modal.scrolling.dimmer-visible {
+    height: 100%;
 }
