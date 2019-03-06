@@ -40,8 +40,8 @@ export default class General extends Component {
     const { offer } = this.props.offeringsStore;
     const formName = 'GENERAL_FRM';
     const shorthandBusinessName = get(offer, 'keyTerms.shorthandBusinessName') || '';
-    const minOfferingAmount = get(offer, 'keyTerms.minOfferingAmount') || '';
-    const maxOfferingAmount = get(offer, 'keyTerms.maxOfferingAmount') || '';
+    const minOfferingAmount = get(offer, 'keyTerms.minOfferingAmountCF') || '';
+    const maxOfferingAmount = get(offer, 'keyTerms.maxOfferingAmountCF') || '';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
