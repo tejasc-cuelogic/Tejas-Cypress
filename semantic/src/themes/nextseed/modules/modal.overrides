@@ -11,9 +11,10 @@
             position: relative;
         }
         &.dimmer-visible {
-            @media only screen and (max-width:@largeMonitorBreakpoint){
-                height: 100%;
-            }
+            height: 100%;
+            display: flex !important;
+            flex-direction: column;
+            justify-content: center;
         }
     }
 }
