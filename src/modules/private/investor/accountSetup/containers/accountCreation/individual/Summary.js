@@ -138,7 +138,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !formAddFunds.meta.isValid || !formLinkBankManually.meta.isValid || !bankAccountNumber} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !bankAccountNumber} />
         </div>
       </Aux>
     );
