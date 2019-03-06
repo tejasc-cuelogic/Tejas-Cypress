@@ -25,10 +25,8 @@ export default class CampaignSideBar extends Component {
     const { className, campaignStore } = this.props;
     const { campaign, navCountData } = campaignStore;
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const minOffering = campaign && campaign.keyTerms &&
-      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percent = (collected / maxOffering) * 100;

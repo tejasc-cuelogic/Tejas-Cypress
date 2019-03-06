@@ -104,7 +104,7 @@ export default class KeyTerms extends Component {
               options={SECURITIES_VALUES}
               onChange={(e, result) => formArrayChange(e, result, formName)}
             />
-            {['minOfferingAmount', 'maxOfferingAmount'].map(field => (
+            {['minOfferingAmountCF', 'maxOfferingAmountCF', 'minOfferingAmount506C', 'maxOfferingAmount506C'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
                 name={field}
