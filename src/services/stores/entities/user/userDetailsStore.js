@@ -171,7 +171,13 @@ export class UserDetailsStore {
 
   @action
   updateUserStatus = (status) => {
-    this.detailsOfUser.data.user.locked.lock = status;
+    if (this.detailsOfUser.data.user.locked) {
+      this.detailsOfUser.data.user.locked.lock = status;
+    } else {
+      this.detailsOfUser.data.user.locked = {
+        lock: status,
+      };
+    }
   }
 
   @computed get isEntityTrust() {
@@ -190,6 +196,7 @@ export class UserDetailsStore {
       })
       .then(() => {
         this.updateUserStatus(params.accountStatus);
+        Helper.toast('User Account status updated successfully.', 'success');
       })
       .catch(() => Helper.toast('Error while updating user', 'warn'));
   }
