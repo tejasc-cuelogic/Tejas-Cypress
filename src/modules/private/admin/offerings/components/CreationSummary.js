@@ -32,8 +32,8 @@ const summary = offer => [
     type: 0,
   },
   {
-    title: 'Days Till Launch',
-    content: (offer.offering && offer.offering.launch) ? `${DataFormatter.diffDays(offer.offering.launch.targetDate)} days` : 'N/A',
+    title: `${(offer.offering && offer.offering.launch) ? DataFormatter.diffInDaysHoursMin(offer.offering.launch.targetDate).diffType : 'Days'} Till Launch`,
+    content: (offer.offering && offer.offering.launch) ? DataFormatter.diffInDaysHoursMin(offer.offering.launch.targetDate).diffText : 'N/A',
     type: 0,
   },
 ];

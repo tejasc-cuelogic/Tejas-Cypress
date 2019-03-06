@@ -29,11 +29,6 @@
     }
 }
 // .offer-details
-.campaign-details-banner .ui.progress {
+.campaign-banner .ui.progress {
     margin-bottom: @15px;
-    ~ p{
-        color: @white;
-        font-size: @15px;
-        line-height: 18px;
-    }
 }

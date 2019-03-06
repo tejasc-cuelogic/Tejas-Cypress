@@ -51,7 +51,7 @@ export default class Listing extends Component {
 
   render() {
     const {
-      uiStore, offeringsStore,
+      uiStore, offeringsStore, stage,
     } = this.props;
     const {
       offerings,
@@ -73,7 +73,10 @@ export default class Listing extends Component {
                 <Table.HeaderCell>Name</Table.HeaderCell>
                 <Table.HeaderCell>Status</Table.HeaderCell>
                 <Table.HeaderCell>Created Date</Table.HeaderCell>
-                <Table.HeaderCell>Days till launch</Table.HeaderCell>
+                <Table.HeaderCell>{stage === 'creation' ? 'Days till launch' : 'Launch Date'}</Table.HeaderCell>
+                {stage === 'live' &&
+                  <Table.HeaderCell>Days till close</Table.HeaderCell>
+                }
                 <Table.HeaderCell>Lead</Table.HeaderCell>
                 <Table.HeaderCell>POC</Table.HeaderCell>
                 <Table.HeaderCell textAlign="center" />
@@ -101,9 +104,17 @@ export default class Listing extends Component {
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       {offering.offering && offering.offering.launch &&
                       offering.offering.launch.targetDate ?
-                      `${DataFormatter.diffDays(offering.offering.launch.targetDate)} days` : 'N/A'
+                      DataFormatter.diffDays(get(offering, 'offering.launch.targetDate'), false, true) < 0 ? get(offering, 'offering.launch.targetDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.targetDate')).diffText : 'N/A'
                       }
                     </Table.Cell>
+                    {stage === 'live' &&
+                      <Table.HeaderCell>
+                        {offering.offering && offering.offering.launch &&
+                        offering.offering.launch.terminationDate ?
+                        DataFormatter.diffDays(get(offering, 'offering.launch.terminationDate'), false, true) < 0 ? get(offering, 'offering.launch.terminationDate') : DataFormatter.diffInDaysHoursMin(get(offering, 'offering.launch.terminationDate')).diffText : 'N/A'
+                        }
+                      </Table.HeaderCell>
+                    }
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>{offering.leadDetails && offering.leadDetails.info ? `${offering.leadDetails.info.firstName} ${offering.leadDetails.info.lastName}` : 'N/A'}</Table.Cell>
                     <Table.Cell onClick={() => this.handleAction('Edit', offering.id)}>
                       <p>

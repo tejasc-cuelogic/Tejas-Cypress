@@ -197,7 +197,7 @@ h6{
 	color:@neutral-middark !important;
 	font-size: @12px;
 }
-.primary-two-text {
+.primary-two-text{
 	color: @primary-two !important;
 }
 .neutral-text {
@@ -2013,6 +2013,9 @@ ol.progtrckr{
 .update-details{
 	.ui.embed{
 		margin-bottom:@28px;
+	}
+	img {
+		max-width: 100% !important;
 	}
 }
 .ui.grid.investment-scale{
