@@ -90,6 +90,7 @@ export const campaignDetailsQuery = gql`
       securitiesOwnershipPercentage
       investmentMultiple
       revSharePercentage
+      revSharePercentageDescription
       interestRate
       minOfferingAmount
       maxOfferingAmount
@@ -455,6 +456,8 @@ query getOfferingById($id: ID) {
   getOfferingDetailsById (id: $id) {
     id
     offeringSlug
+    isAvailablePublicly
+    offeringStatus
     closureSummary {
       totalInvestmentAmount
     }

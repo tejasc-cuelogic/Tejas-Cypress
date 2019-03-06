@@ -11,7 +11,6 @@ import { USER_PROFILE_FOR_ADMIN } from '../../../constants/user';
 import {
   identityStore,
   accountStore,
-  bankAccountStore,
   individualAccountStore,
   iraAccountStore,
   entityAccountStore,
@@ -103,7 +102,7 @@ export class UserDetailsStore {
   @action
   setUserAccDetails = (investmentAccType) => {
     if (!isEmpty(this.userDetails)) {
-      bankAccountStore.resetLinkBank();
+      // bankAccountStore.resetLinkBank();
       if (investmentAccType === 'ira') {
         iraAccountStore.populateData(this.userDetails);
       } else if (investmentAccType === 'individual') {
@@ -324,15 +323,15 @@ export class UserDetailsStore {
       routingUrl = '/app/summary/account-creation';
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.partialAccounts.length > 0) {
-      const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
-      accountStore.setAccTypeChange(accValue);
+      // const accValue =
+      //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      // accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.partialAccounts[0]}`;
     } else if (!this.signupStatus.activeAccounts.length &&
       this.signupStatus.inActiveAccounts.length > 0) {
-      const accValue =
-        findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
-      accountStore.setAccTypeChange(accValue);
+      // const accValue =
+      //   findKey(INVESTMENT_ACCOUNT_TYPES, val => val === this.signupStatus.partialAccounts[0]);
+      // accountStore.setAccTypeChange(accValue);
       routingUrl = `/app/summary/account-creation/${this.signupStatus.inActiveAccounts[0]}`;
     } else {
       routingUrl = '/app/summary';

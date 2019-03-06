@@ -13,14 +13,17 @@ const getModule = component => Loadable({
   },
 });
 
+@inject('userStore', 'uiStore')
 @withRouter
-@inject('offeringCreationStore', 'userStore')
 @observer
 export default class Offering extends Component {
   componentWillMount() {
     if (this.props.match.isExact) {
       this.props.history.push(`${this.props.match.url}/overview`);
     }
+  }
+  shouldComponentUpdate() {
+    return !this.props.uiStore.htmlEditorImageLoading;
   }
   render() {
     const { isIssuer } = this.props.userStore;

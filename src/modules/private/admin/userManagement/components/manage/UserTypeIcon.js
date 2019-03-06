@@ -14,10 +14,8 @@ const UserTypeIcon = (props) => {
   const classes = ['account-type', 'small'];
   if (props.accreditation === 'yes') {
     classes.push('accredited');
-    console.log('props', props);
   }
   const byRoles = props.role.map((r) => {
-    console.log(r);
     if (r.name === 'investor') {
       if (props.role.find(obj => toLower(obj.name) === 'individual')) {
         return null;

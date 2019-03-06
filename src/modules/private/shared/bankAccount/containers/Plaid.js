@@ -9,12 +9,18 @@ import { ListErrors } from '../../../../../theme/shared';
 import AddFunds from './AddFunds';
 import NSImage from '../../../../shared/NSImage';
 
-@inject('bankAccountStore', 'uiStore', 'transactionStore')
+@inject('bankAccountStore', 'uiStore', 'transactionStore', 'accountStore')
 @withRouter
 @observer
 export default class Plaid extends Component {
   componentWillMount() {
     this.props.bankAccountStore.setPlaidBankVerificationStatus(false);
+    // this.props.bankAccountStore.setIsManualLinkBankSubmitted(false);
+    const { INVESTMENT_ACC_TYPES } = this.props.accountStore;
+    if (INVESTMENT_ACC_TYPES.fields.accType.value !== 0) {
+      const { manualLinkBankSubmitted } = this.props.bankAccountStore;
+      this.props.bankAccountStore.setShowAddFunds(manualLinkBankSubmitted);
+    }
     this.props.uiStore.clearErrors();
   }
   handleBankSelect = (referenceLink) => {

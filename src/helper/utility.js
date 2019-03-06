@@ -4,6 +4,7 @@
 import { toast } from 'react-toastify';
 import _ from 'lodash';
 import moment from 'moment';
+import money from 'money-math';
 import apiService from '../api/restApi';
 
 export class Utility {
@@ -43,8 +44,9 @@ export class Utility {
   }
 
   getTotal = (from, key) => {
-    const total = 0;
-    return from.map(r => total + parseInt(r[key], 0)).reduce((sum, n) => sum + n);
+    const total = '0.00';
+    return from.map(r => money.add(total, r[key]))
+      .reduce((sum, n) => money.add(sum, n));
   }
 
   gAddressClean = (place) => {

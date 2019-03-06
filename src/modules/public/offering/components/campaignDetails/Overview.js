@@ -34,7 +34,7 @@ class Overview extends Component {
   }
   handleOnScroll = () => {
     const { campaign } = this.props.campaignStore;
-    const arr = get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery'] : ['top-things-to-know', 'investment-highlights', 'gallery'];
+    const arr = get(campaign, 'updates') ? get(campaign, 'updates').length !== 0 ? ['top-things-to-know', 'investment-highlights', 'updates', 'gallery'] : ['top-things-to-know', 'investment-highlights', 'gallery'] : [];
     arr.forEach((item) => {
       if (document.getElementById(item).getBoundingClientRect().top < 200 &&
       document.getElementById(item).getBoundingClientRect().top > -1) {
@@ -50,7 +50,7 @@ class Overview extends Component {
         <Divider hidden section />
         <KeyTerms refLink={this.props.refLink} campaign={campaign} />
         <Divider hidden section />
-        {get(campaign, 'updates').length !== 0 &&
+        {get(campaign, 'updates') && get(campaign, 'updates').length !== 0 &&
         <LatestUpdates
           updates={campaign && campaign.updates}
           refLink={this.props.refLink}

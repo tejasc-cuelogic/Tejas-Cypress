@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
+import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Form, Header, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
@@ -38,11 +39,9 @@ export default class General extends Component {
     } = this.props.offeringCreationStore;
     const { offer } = this.props.offeringsStore;
     const formName = 'GENERAL_FRM';
-    const {
-      shorthandBusinessName,
-      minOfferingAmount,
-      maxOfferingAmount,
-    } = offer.keyTerms;
+    const shorthandBusinessName = get(offer, 'keyTerms.shorthandBusinessName') || '';
+    const minOfferingAmount = get(offer, 'keyTerms.minOfferingAmount') || '';
+    const maxOfferingAmount = get(offer, 'keyTerms.maxOfferingAmount') || '';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -196,7 +195,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.security.map((security, index) => (
             <Aux>
               <Header as="h6">{`Security ${index + 1}`}
-                {GENERAL_FRM.fields.security.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.security.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'security')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
@@ -236,7 +235,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.exemptOfferings.map((offering, index) => (
             <Aux>
               <Header as="h6">{`Other Exempt Offering ${index + 1}`}
-                {GENERAL_FRM.fields.exemptOfferings.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.exemptOfferings.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'exemptOfferings')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
@@ -284,7 +283,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.materialIndebtedness.map((terms, index) => (
             <Aux>
               <Header as="h6">{`Term ${index + 1}`}
-                {GENERAL_FRM.fields.materialIndebtedness.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.materialIndebtedness.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'materialIndebtedness')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
@@ -343,7 +342,7 @@ export default class General extends Component {
           {GENERAL_FRM.fields.affiliatedTransactions.map((transaction, index) => (
             <Aux>
               <Header as="h6">{`Transaction ${index + 1}`}
-                {GENERAL_FRM.fields.affiliatedTransactions.length > 1 &&
+                {!isReadonly && GENERAL_FRM.fields.affiliatedTransactions.length > 1 &&
                 <Link to={this.props.match.url} className="link" onClick={e => this.toggleConfirmModal(e, index, 'affiliatedTransactions')} >
                   <Icon className="ns-close-circle" color="grey" />
                 </Link>
