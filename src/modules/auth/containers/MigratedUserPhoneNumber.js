@@ -8,6 +8,10 @@ import { MaskedInput } from '../../../theme/form';
 @withRouter
 @observer
 export default class MigratedUserPhoneNumber extends Component {
+  componentWillMount() {
+    const { validateForm } = this.props.identityStore;
+    validateForm('ID_VERIFICATION_FRM');
+  }
   handlePhoneNumberConfirmation = () => {
     const { ID_VERIFICATION_FRM } = this.props.identityStore;
     this.props.identityStore.setConfirmMigratedUserPhoneNumber(true);
@@ -18,7 +22,7 @@ export default class MigratedUserPhoneNumber extends Component {
   handleCloseModal = () => {
     this.props.history.push('/app/summary');
     this.props.uiStore.clearErrors();
-    this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
+    this.props.identityStore.resetFormData('ID_VERIFICATION_FRM');
   }
   render() {
     const { ID_VERIFICATION_FRM, personalInfoMaskedChange } = this.props.identityStore;
@@ -45,6 +49,7 @@ export default class MigratedUserPhoneNumber extends Component {
               changed={personalInfoMaskedChange}
               className="display-only"
               phoneNumberDisplayMode
+              showerror
             />
             <Divider hidden />
             <Button disabled={!(ID_VERIFICATION_FRM.fields.phoneNumber.value !== '' && ID_VERIFICATION_FRM.fields.phoneNumber.error === undefined)} primary size="large" className="very relaxed" content="Confirm" loading={this.props.uiStore.inProgress} />

@@ -879,6 +879,10 @@ export class IdentityStore {
         });
     });
   }
+  @action
+  validateForm = (form) => {
+    FormValidator.validateForm(this[form], false, true);
+  }
 }
 
 export default new IdentityStore();
