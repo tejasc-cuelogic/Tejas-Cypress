@@ -17,6 +17,7 @@ import Helper from '../../../../../../helper/utility';
 export default class AddWithdrawFund extends Component {
   componentWillMount() {
     const { setInitialLinkValue, setInitialFundValue } = this.props.transactionStore;
+    this.props.transactionStore.getInvestorAvailableCash(false);
     setInitialLinkValue(false);
     setInitialFundValue();
   }
