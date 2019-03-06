@@ -21,8 +21,7 @@ export default class CampaignSecondaryMenu extends Component {
     && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const maxOffering = campaign && campaign.keyTerms &&
-    campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.maxOfferingAmount : 0;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const { navStatus, subNavStatus } = this.props.navStore;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const isClosed = campaign.stage !== 'LIVE';
