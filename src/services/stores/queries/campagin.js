@@ -92,8 +92,8 @@ export const campaignDetailsQuery = gql`
       revSharePercentage
       revSharePercentageDescription
       interestRate
-      minOfferingAmount
-      maxOfferingAmount
+      minOfferingAmountCF
+      maxOfferingAmountCF
       industry
       minInvestAmt
       appendixATitle
@@ -457,7 +457,7 @@ query getOfferingById($id: ID) {
     id
     offeringSlug
     isAvailablePublicly
-    offeringStatus
+    stage
     closureSummary {
       totalInvestmentAmount
     }
@@ -475,8 +475,8 @@ query getOfferingById($id: ID) {
       investmentMultiple
       revSharePercentage
       interestRate
-      minOfferingAmount
-      maxOfferingAmount
+      minOfferingAmountCF
+      maxOfferingAmountCF
       industry
       minInvestAmt
       revShareSummary

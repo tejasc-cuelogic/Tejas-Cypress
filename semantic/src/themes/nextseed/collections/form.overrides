@@ -88,6 +88,14 @@
                 border-radius:@4px;
                 border:@neutral-offdark 1px solid;
             }
+            input {
+                padding:@11px @14px;
+                border-radius:@4px;
+                border:@neutral-offdark 1px solid;
+            }
+            .ui.input.ReactPasswordStrength~i.icon.ns-view {
+                right: @7px;
+            }
         }
         &.display-only{
             >label{

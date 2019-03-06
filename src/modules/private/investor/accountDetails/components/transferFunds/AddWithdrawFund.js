@@ -15,8 +15,10 @@ import Helper from '../../../../../../helper/utility';
 @withRouter
 @observer
 export default class AddWithdrawFund extends Component {
+  state = { isActivebutton: true };
   componentWillMount() {
     const { setInitialLinkValue, setInitialFundValue } = this.props.transactionStore;
+    this.props.transactionStore.getInvestorAvailableCash(false);
     setInitialLinkValue(false);
     setInitialFundValue();
   }
@@ -26,6 +28,7 @@ export default class AddWithdrawFund extends Component {
     const { showConfirmPreview, setInitialLinkValue } = this.props.transactionStore;
     const actionValue = this.props.match.params.action;
     if (showConfirmPreview) {
+      this.setState({ isActivebutton: false });
       const transferAmount = this.props.transactionStore.TRANSFER_FRM.fields.amount.value;
       const transferDescription = actionValue === 'add' ? 'Add fund' : 'Withdraw fund';
       const toasterMessage = 'Transaction successful!';
@@ -44,12 +47,14 @@ export default class AddWithdrawFund extends Component {
   }
   transactionAddFund = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.addFunds(transferAmount, transferDescription).then(() => {
+      this.setState({ isActivebutton: true });
       Helper.toast(toasterMessage, 'success');
       this.props.history.replace(this.props.refLink);
     });
   }
   transactionWithdrawFunds = (transferAmount, transferDescription, toasterMessage) => {
     this.props.transactionStore.withdrawFunds(transferAmount, transferDescription).then(() => {
+      this.setState({ isActivebutton: true });
       Helper.toast(toasterMessage, 'success');
       this.props.history.replace(this.props.refLink);
     });
@@ -162,7 +167,7 @@ export default class AddWithdrawFund extends Component {
                   {showConfirmPreview ?
                     <Button onClick={this.cancelTransfer} content="Cancel" /> : null
                   }
-                  <Button primary disabled={!TRANSFER_FRM.meta.isValid} content="Confirm" />
+                  <Button primary disabled={!TRANSFER_FRM.meta.isValid || !this.state.isActivebutton} content="Confirm" />
                 </Button.Group>
               </div>
             </Form>

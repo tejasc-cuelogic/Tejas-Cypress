@@ -55,7 +55,7 @@ export default class Experience extends Component {
           Confirm your experience and understanding of the investment risks on NextSeed.
           Select the box that best describes your investment experience to date:
         </p>
-        <Form error onSubmit={this.handleSubmitInvestmentExperience}>
+        <Form error={!isInvestmentExperienceValid} onSubmit={this.handleSubmitInvestmentExperience}>
           <FormRadioGroup
             fielddata={INVESTMENT_EXP_FORM.fields.experienceLevel}
             name="experienceLevel"

@@ -143,16 +143,30 @@ export const KEY_TERMS = {
     rule: 'string',
     placeHolder: 'Enter here',
   },
-  minOfferingAmount: {
+  minOfferingAmountCF: {
     value: null,
-    label: 'Minimum Offering Amount',
+    label: 'Minimum Offering Amount CF',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
   },
-  maxOfferingAmount: {
+  maxOfferingAmountCF: {
     value: null,
-    label: 'Maximum Offering Amount',
+    label: 'Maximum Offering Amount CF',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  minOfferingAmount506C: {
+    value: null,
+    label: 'Minimum Offering Amount Reg D',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  maxOfferingAmount506C: {
+    value: null,
+    label: 'Maximum Offering Amount Reg D',
     error: undefined,
     rule: 'numeric',
     placeHolder: 'Enter here',
@@ -1452,7 +1466,7 @@ export const GENERAL = {
       value: '',
       error: undefined,
       rule: 'date',
-      placeHolder: 'Select date',
+      placeHolder: 'mm/dd/yyyy',
       customErrors: {
         date: 'Maturity Date is not a valid date format.',
       },

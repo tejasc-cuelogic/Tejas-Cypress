@@ -268,7 +268,10 @@ export class IdentityStore {
           if (data.data.verifyCIPIdentity.passId ||
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
-            this.updateUserInfo().then(() => resolve());
+            this.updateUserInfo().then(() => {
+              uiStore.setProgress(false);
+              resolve();
+            });
           } else {
             uiStore.setErrors(data.data.verifyCIPIdentity.message);
           }
@@ -276,17 +279,21 @@ export class IdentityStore {
         .catch((err) => {
           if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.setProgress(false);
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('FAIL');
-            this.updateUserInfo().then(() => resolve());
-            // reject(err);
+            this.updateUserInfo().then(() => {
+              uiStore.setProgress(false);
+              resolve();
+            });
+          // reject(err);
           }
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 
@@ -357,6 +364,9 @@ export class IdentityStore {
   }
 
   startPhoneVerification = (type, address = undefined) => {
+    const { user } = userDetailsStore.currentUser.data;
+    const phoneNumber = user.phone.number;
+    const emailAddress = user.email.address;
     const { mfaMethod } = this.ID_VERIFICATION_FRM.fields;
     uiStore.clearErrors();
     uiStore.setProgress();
@@ -371,13 +381,14 @@ export class IdentityStore {
           },
         })
         .then((result) => {
+          const requestMode = type === 'EMAIL' ? `code sent to ${emailAddress}` : (type === 'CALL' ? `call to ${phoneNumber}` : `code texted to ${phoneNumber}`);
           if (type === 'EMAIL') {
             this.setSendOtpToMigratedUser('EMAIL');
           } else {
             this.setSendOtpToMigratedUser('PHONE');
           }
           this.setRequestOtpResponse(result.data.requestOtp);
-          Helper.toast('Verification code sent to user.', 'success');
+          Helper.toast(`Verification ${requestMode}.`, 'success');
           resolve();
         })
         .catch((err) => {
