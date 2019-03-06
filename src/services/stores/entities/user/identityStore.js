@@ -268,7 +268,10 @@ export class IdentityStore {
           if (data.data.verifyCIPIdentity.passId ||
             data.data.verifyCIPIdentity.softFailId ||
             data.data.verifyCIPIdentity.hardFailId) {
-            this.updateUserInfo().then(() => resolve());
+            this.updateUserInfo().then(() => {
+              uiStore.setProgress(false);
+              resolve();
+            });
           } else {
             uiStore.setErrors(data.data.verifyCIPIdentity.message);
           }
@@ -276,17 +279,21 @@ export class IdentityStore {
         .catch((err) => {
           if (err.response) {
             uiStore.setErrors(DataFormatter.getSimpleErr(err));
+            uiStore.setProgress(false);
             reject(err);
           } else {
             // uiStore.setErrors(JSON.stringify('Something went wrong'));
             this.setCipStatus('FAIL');
-            this.updateUserInfo().then(() => resolve());
-            // reject(err);
+            this.updateUserInfo().then(() => {
+              uiStore.setProgress(false);
+              resolve();
+            });
+          // reject(err);
           }
-        })
-        .finally(() => {
-          uiStore.setProgress(false);
         });
+      // .finally(() => {
+      //   uiStore.setProgress(false);
+      // });
     });
   }
 

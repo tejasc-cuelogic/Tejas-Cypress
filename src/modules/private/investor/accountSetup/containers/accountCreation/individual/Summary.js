@@ -68,7 +68,6 @@ export default class Summary extends React.Component {
     const {
       formAddFunds,
       plaidAccDetails,
-      isValidLinkBank,
       formLinkBankManually,
       depositMoneyNow,
       isEncrypted,
@@ -112,7 +111,7 @@ export default class Summary extends React.Component {
                   <Table.Cell>
                     {!depositMoneyNow ?
                       Helper.CurrencyFormat(0) :
-                      formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value)}` :
+                      formAddFunds.fields.value.value !== '' ? `${Helper.CurrencyFormat(formAddFunds.fields.value.value || 0)}` :
                         Helper.CurrencyFormat(0)}
                   </Table.Cell>
                 </Table.Row>
@@ -139,7 +138,7 @@ export default class Summary extends React.Component {
           />
         </p>
         <div className="center-align mt-30">
-          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={!formLinkBankManually.meta.isValid && !isValidLinkBank} />
+          <Button primary size="large" className="relaxed" content="Create your account" onClick={() => this.handleCreateAccount()} disabled={errors || !formAddFunds.meta.isValid || !formLinkBankManually.meta.isValid || !bankAccountNumber} />
         </div>
       </Aux>
     );

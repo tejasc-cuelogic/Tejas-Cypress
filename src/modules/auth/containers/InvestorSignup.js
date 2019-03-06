@@ -14,9 +14,7 @@ class InvestorSignup extends Component {
   componentWillMount() {
     this.props.authStore.setDefaultPwdType();
     const userRoleData = cookie.load('ROLE_VALUE');
-    if (userRoleData) {
-      this.props.authStore.setUserRole(userRoleData);
-    }
+    this.props.authStore.setUserRole(userRoleData || 'investor');
   }
   componentWillUnmount() {
     this.props.uiStore.clearErrors();
