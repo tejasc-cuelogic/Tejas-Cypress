@@ -265,7 +265,7 @@ class InvestorProfileStore {
           variables: formPayload,
         })
         .then(action(() => {
-          Helper.toast('Investor profile updated successfully.', 'success');
+          // Helper.toast('Investor profile updated successfully.', 'success');
           if (currentStep.name === 'Financial Information') {
             userDetailsStore.getUser(userStore.currentUser.sub);
           }
@@ -291,7 +291,7 @@ class InvestorProfileStore {
         variables: formPayload,
       })
       .then(action(() => {
-        Helper.toast('Investor profile updated successfully.', 'success');
+        // Helper.toast('Investor profile updated successfully.', 'success');
         userDetailsStore.getUser(userStore.currentUser.sub);
         resolve();
       }))

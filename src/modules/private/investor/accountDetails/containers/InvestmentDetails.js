@@ -8,7 +8,7 @@ import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { CAMPAIGN_OFFERING_STATUS } from '../../../../../constants/offering';
+import { CAMPAIGN_OFFERING_STAGE } from '../../../../../constants/offering';
 import NotFound from '../../../../shared/NotFound';
 
 const getModule = component => Loadable({
@@ -58,7 +58,7 @@ class InvestmentDetails extends Component {
           title: 'Total invested amount', content: getInvestor && getInvestor.totalRaisedAmount, type: 1, info: 'Your Total invested amount as of today',
         },
         {
-          title: 'Status', content: campaign && campaign.offeringStatus ? CAMPAIGN_OFFERING_STATUS[campaign.offeringStatus] : 'N/A', info: 'Your Status as of today',
+          title: 'Status', content: campaign && campaign.stage ? CAMPAIGN_OFFERING_STAGE[campaign.stage] : 'N/A', info: 'Your Status as of today',
         },
         {
           title: 'Date', content: getInvestor && moment(getInvestor.fundedDate).format('ll'), info: 'Date of investment started',

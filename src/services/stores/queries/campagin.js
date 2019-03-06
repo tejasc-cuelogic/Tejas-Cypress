@@ -457,7 +457,7 @@ query getOfferingById($id: ID) {
     id
     offeringSlug
     isAvailablePublicly
-    offeringStatus
+    stage
     closureSummary {
       totalInvestmentAmount
     }
