@@ -79,7 +79,7 @@ export default class MultiStep extends React.Component {
       });
     } else if (currentStep === 0) {
       this.setState({
-        showPreviousBtn: true,
+        showPreviousBtn: !this.props.disablePrevBtn,
         showNextBtn: true,
       });
     } else {
