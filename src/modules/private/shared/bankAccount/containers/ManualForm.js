@@ -46,7 +46,7 @@ export default class ManualForm extends Component {
   }
 
   render() {
-    const { errors, inProgress } = this.props.uiStore;
+    const { errors } = this.props.uiStore;
     const {
       showAddFunds,
       isEncrypted,
@@ -86,7 +86,7 @@ export default class ManualForm extends Component {
               <ListErrors errors={[errors.message]} />
             </Message>
           }
-          <Button primary size="large" loading={inProgress} className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
+          <Button primary size="large" className="relaxed" content="Confirm" disabled={!formLinkBankManually.meta.isValid} />
         </Form>
         <Button color="green" className="link-button mt-30" content="Or link account directly" onClick={this.linkAccountDirectly} />
       </div>

@@ -14,6 +14,7 @@ export default class AccountCreation extends React.Component {
     this.props.accountStore.setAccTypeChange(0);
   }
   handleMultiStepModalclose = () => {
+    this.updateUser();
     this.props.history.push('/app/summary');
     this.props.bankAccountStore.setBankLinkInterface('list');
     this.props.bankAccountStore.resetLinkBank();
@@ -44,7 +45,6 @@ export default class AccountCreation extends React.Component {
       formLinkBankManually,
       depositMoneyNow,
       showAddFunds,
-      disableNextBtnPlaid,
     } = this.props.bankAccountStore;
     const { stepToBeRendered, createAccount } = this.props.individualAccountStore;
     const steps =
@@ -56,7 +56,7 @@ export default class AccountCreation extends React.Component {
         isDirty: !isEmpty(plaidAccDetails) ||
         formLinkBankManually.meta.isDirty,
         stepToBeRendered: 1,
-        disableNextButton: disableNextBtnPlaid,
+        disableNextButton: true,
       },
       {
         name: 'Add funds',
@@ -67,10 +67,9 @@ export default class AccountCreation extends React.Component {
         // : stepToBeRendered > 1 ? 'error' : '',
         validate: validateAddFunds,
         isDirty: (!isEmpty(plaidAccDetails) &&
-        formLinkBankManually.meta.isDirty &&
         formAddFunds.meta.isDirty) ||
         showAddFunds,
-        disableNextButton: disableNextBtnPlaid,
+        disableNextButton: true,
         stepToBeRendered: 2,
       },
       {
@@ -81,7 +80,7 @@ export default class AccountCreation extends React.Component {
     ];
     return (
       <div className="step-progress" >
-        <MultiStep page setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep page disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} formTitle="Individual account creation" steps={steps} createAccount={createAccount} handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

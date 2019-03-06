@@ -383,11 +383,19 @@ ul.ui.list li{
 
 .ui.celled.list.partners-list>.item {
     padding: @30px 0 !important;
+    @media only screen and (max-width : @largestMobileScreen){
+        &:not(:first-child){
+            border-top-color: transparent;
+        }
+        &:last-child {
+            border-bottom: none;
+        }
+    }
     >.content {
         line-height: 24px;
         max-width: 80%;
         @media only screen and (max-width : @largestMobileScreen){
-            max-width: 70%;
+            max-width: 100%;
         }
     }
 }

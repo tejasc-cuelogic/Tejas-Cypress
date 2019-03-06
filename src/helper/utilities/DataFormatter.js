@@ -1,7 +1,6 @@
 import { camelCase, upperFirst, reduce, assign } from 'lodash';
 import moment from 'moment';
 import Handlebars from 'handlebars';
-import money from 'money-math';
 
 class DataFormatter {
   unMaskInput = maskedInput => (
@@ -42,6 +41,25 @@ class DataFormatter {
     }
     return diff;
   }
+
+  diffInDaysHoursMin = (timeStamp2) => {
+    const d1 = moment().format('MM/DD/YYYY');
+    const d2 = timeStamp2 ? moment(timeStamp2, 'MM/DD/YYYY').format('MM/DD/YYYY 23:59:59') : null;
+    const diff = d2 ? moment(d2, 'MM/DD/YYYY').diff(moment(d1, 'MM/DD/YYYY'), 'days') : null;
+    if (diff === 0) {
+      const date = new Date();
+      const convertedtimeStamp2 = new Date(d2);
+      const difference = convertedtimeStamp2.getTime() - date.getTime();
+      const hourDiff = Math.floor(difference / 1000 / 60 / 60);
+      if (hourDiff === 0) {
+        const minDiff = Math.floor(difference / 1000 / 60);
+        return { diff: minDiff, diffType: 'Minutes', diffText: `${minDiff} Minutes` };
+      }
+      return { diff: hourDiff, diffType: 'Hours', diffText: `${hourDiff} Hours` };
+    }
+    return { diff: diff < 0 ? 0 : diff, diffType: 'Days', diffText: `${diff < 0 ? 0 : diff} Days` };
+  }
+
   getDate = (date, iso = true, dayType = null, isUnix = false) => {
     let formatedDate = moment(this.formatedDate(date)).utc();
     formatedDate = dayType === 'startDate' ? moment(formatedDate).add(1, 'day').startOf('day') : dayType === 'endDate' ? moment(formatedDate).add(1, 'day').endOf('day') : formatedDate;
@@ -81,13 +99,6 @@ class DataFormatter {
   fetchLastDigitsOfAccountNumber = accountNumber => accountNumber.substr(accountNumber.length - 4);
   getDateFromNow = afterDays =>
     new Date((new Date()).getTime() - (afterDays * 86400000)).toISOString();
-  isAmountNegative = (amount) => {
-    let amountTocheck = amount;
-    if (typeof amount === 'number') {
-      amountTocheck = amount.toString();
-    }
-    return money.isNegative(amountTocheck);
-  }
 }
 
 export default new DataFormatter();

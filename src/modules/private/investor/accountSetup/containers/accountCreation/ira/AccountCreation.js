@@ -51,8 +51,10 @@ export default class AccountCreation extends React.Component {
       createAccount,
       isValidIraForm,
     } = this.props.iraAccountStore;
-    const { showAddFunds, disableNextBtnPlaid } = this.props.bankAccountStore;
-    const { formAddFunds, plaidAccDetails, formLinkBankManually } = this.props.bankAccountStore;
+    const {
+      formAddFunds, plaidAccDetails,
+      formLinkBankManually, isPlaidDirty,
+    } = this.props.bankAccountStore;
     if (FUNDING_FRM.fields.fundingType.value === 0) {
       steps =
       [
@@ -85,11 +87,8 @@ export default class AccountCreation extends React.Component {
           name: 'Link bank',
           component: <Plaid />,
           isValid: (formAddFunds.meta.isValid || !isEmpty(plaidAccDetails) || formLinkBankManually.meta.isValid) ? '' : stepToBeRendered > 3 ? 'error' : '',
-          isDirty: (!isEmpty(plaidAccDetails) &&
-          formLinkBankManually.meta.isDirty &&
-          formAddFunds.meta.isDirty) ||
-          showAddFunds,
-          disableNextButton: disableNextBtnPlaid,
+          isDirty: isPlaidDirty,
+          disableNextButton: true,
           validate: validationActions.validateLinkBankForm,
           stepToBeRendered: 4,
         },
@@ -155,7 +154,7 @@ export default class AccountCreation extends React.Component {
 
     return (
       <div className="step-progress">
-        <MultiStep setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
+        <MultiStep disablePrevBtn setIsEnterPressed={setIsEnterPressed} isEnterPressed={isEnterPressed} resetEnterPressed={resetIsEnterPressed} inProgress={inProgress} setStepTobeRendered={this.handleStepChange} stepToBeRendered={stepToBeRendered} createAccount={createAccount} steps={steps} formTitle="IRA account creation" handleMultiStepModalclose={this.handleMultiStepModalclose} />
       </div>
     );
   }

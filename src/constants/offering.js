@@ -83,3 +83,16 @@ export const OFFERING_ACCRDITATION_STATUS_MESSAGE = {
   EXPIRED: { header: 'Accrditation Expired - Renewal Required', subHeader: 'Your accreditation status has expired.  Please confirm the following to renew.' },
   ELGIBLE: { header: 'ELGIBLE', subHeader: '' },
 };
+
+export const CAMPAIGN_OFFERING_STAGE = {
+  CREATION: 'Creation',
+  LIVE: 'Live',
+  LOCK: 'Lock',
+  PROCESSING: 'Processing',
+  FAILED: 'Failed',
+  TERMINATED: 'Terminated',
+  STARTUP_PERIOD: 'Startup Period',
+  IN_REPAYMENT: 'Re Payment',
+  COMPLETE: 'Completed',
+  DEFAULT: 'Default',
+};
