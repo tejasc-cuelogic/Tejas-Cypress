@@ -39,7 +39,7 @@ export default class ConfirmPhoneNumber extends Component {
     this.props.identityStore.setReSendVerificationCode(false);
     if (this.props.refLink) {
       this.props.identityStore.verifyAndUpdatePhoneNumber().then(() => {
-        Helper.toast('Phone number is confirmed.', 'success');
+        Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.history.replace('/app/profile-settings/profile-data');
         this.props.uiStore.clearErrors();
         this.props.identityStore.resetFormData('ID_PHONE_VERIFICATION');
@@ -47,7 +47,7 @@ export default class ConfirmPhoneNumber extends Component {
         .catch(() => { });
     } else {
       this.props.identityStore.confirmPhoneNumber().then(() => {
-        Helper.toast('Phone number is confirmed.', 'success');
+        Helper.toast('Thank you for confirming your phone number', 'success');
         this.props.identityStore.setIsOptConfirmed(true);
       })
         .catch(() => { });
