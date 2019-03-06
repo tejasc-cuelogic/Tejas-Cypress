@@ -80,7 +80,7 @@ export class CrowdpayStore {
     this.data = graphql({
       client,
       query: listCrowdPayUsers,
-      variables: { limit: 500 },
+      variables: { limit: 1000 },
       fetchPolicy: 'network-only',
       onFetch: () => {
         this.requestState.page = 1;

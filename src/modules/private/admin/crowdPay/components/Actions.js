@@ -37,7 +37,7 @@ export default class Actions extends Component {
               <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'EMAIL', 'Email notification send successfully.')} as={Link} to={`${urlPara}/EMAIL`} color="green">Email Request</Button>
               }
               {type !== 'review' && !isGsProcess &&
-              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'GSPROCESS', 'Crowdpay account successfully processed for gold star.')} disabled={isGsProcess} as={Link} to={`${urlPara}/GSPROCESS`} color={isGsProcess ? 'gray' : 'green'}>{isGsProcess ? 'Processing' : 'GS Process'}</Button>
+              <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'GSPROCESS', 'Crowdpay account successfully processed for gold star.')} as={Link} to={`${urlPara}/GSPROCESS`} color={isGsProcess ? 'gray' : 'green'}>{isGsProcess ? 'Processing' : 'GS Process'}</Button>
               }
               <Button disabled={inProgress === accountId} onClick={e => this.ctaHandler(e, userId, accountId, 'DECLINE', 'Crowdpay account is declined successfully.')} as={Link} to={`${urlPara}/DECLINE`} color="red">Decline</Button>
               {type !== 'review' && isGsProcess &&
