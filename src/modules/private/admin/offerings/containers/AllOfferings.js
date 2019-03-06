@@ -62,7 +62,7 @@ export default class Offerings extends Component {
             </Grid.Row>
           </Grid>
         </Form>
-        <Listing />
+        <Listing stage={stage} />
       </div>
     );
   }
