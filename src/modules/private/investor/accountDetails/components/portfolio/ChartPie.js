@@ -8,12 +8,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Label, Legend, Sector } from 
 */
 const renderActiveShape = (props) => {
   const {
-    cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, percent,
+    cx, cy, innerRadius, outerRadius, startAngle, endAngle, fill, value,
   } = props;
 
   return (
     <g>
-      <text x={cx} y={cy + 20} dy={13} textAnchor="middle" className="datavalue">{(percent * 100).toFixed(2)}%</text>
+      <text x={cx} y={cy + 20} dy={13} textAnchor="middle" className="datavalue">{value}</text>
       <Sector
         cx={cx}
         cy={cy}
