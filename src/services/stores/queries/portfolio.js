@@ -48,6 +48,11 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             city
             state
           }
+          offering {
+            launch {
+              terminationDate
+            }
+          }
           closureSummary {
             disbursement {
               date
@@ -67,6 +72,11 @@ query getInvestorAccountPortfolio($userId: String!, $accountId: String!, $InFlig
             industry
             city
             state
+          }
+          offering {
+            launch {
+              terminationDate
+            }
           }
           closureSummary {
             disbursement {

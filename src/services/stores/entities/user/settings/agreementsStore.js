@@ -105,7 +105,7 @@ export class AgreementsStore {
     });
   })
 
-  getLegalDocsFileIds = () => new Promise((resolve) => {
+  getLegalDocsFileIds = () => new Promise((resolve, reject) => {
     this.setField('docIdsLoading', true);
     graphql({
       client,
@@ -115,12 +115,14 @@ export class AgreementsStore {
           this.setNavItemsIds(data.getLegalDocsFileIds);
           this.setField('alreadySet', true);
           this.setField('docIdsLoading', false);
+          uiStore.setProgress(false);
           resolve(data);
         }
       },
       onError: () => {
         uiStore.setProgress(false);
         Helper.toast('Something went wrong, please try again later.', 'error');
+        reject();
       },
     });
   });
