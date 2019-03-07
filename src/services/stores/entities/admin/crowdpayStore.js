@@ -119,6 +119,9 @@ export class CrowdpayStore {
     if (accountStatus2) {
       ClientDb.filterData('accountStatus', accountStatus2, 'like');
     }
+    if (!accountStatus) {
+      delete this.requestState.search.accountStatus;
+    }
     if (keyword) {
       ClientDb.filterFromNestedObjs(['firstName', 'lastName', 'email'], keyword);
     }

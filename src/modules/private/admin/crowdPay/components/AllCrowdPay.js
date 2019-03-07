@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import moment from 'moment';
 import { kebabCase, lowerCase } from 'lodash';
 import { withRouter, Route } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
@@ -108,7 +109,7 @@ export default class AllCrowdPay extends Component {
                     }
                     {type === 'cip' &&
                     <Table.Cell>
-                      {account.processing && account.processing.gs && account.processing.gs.date ? account.processing.gs.date : <p className="intro-text">N/A</p>}
+                      {account.processing && account.processing.gs && account.processing.gs.date ? moment(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     }
                     {type === 'ira' ?
