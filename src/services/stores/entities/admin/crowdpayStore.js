@@ -116,7 +116,12 @@ export class CrowdpayStore {
       keyword, startDate, endDate, accountStatus,
     } = this.requestState.search;
     const accountStatus2 = this.requestState.type === 'review' && !accountStatus ? ['FULL'] : accountStatus;
-    ClientDb.filterData('accountStatus', accountStatus2, 'like');
+    if (accountStatus2) {
+      ClientDb.filterData('accountStatus', accountStatus2, 'like');
+    }
+    if (!accountStatus) {
+      delete this.requestState.search.accountStatus;
+    }
     if (keyword) {
       ClientDb.filterFromNestedObjs(['firstName', 'lastName', 'email'], keyword);
     }
@@ -176,12 +181,17 @@ export class CrowdpayStore {
           variables,
           refetchQueries: [{
             query: listCrowdPayUsers,
-            variables: { limit: 500 },
+            variables: { limit: 1000 },
           }],
         })
-        .then(action(() => {
-          this.requestState.oldType = this.requestState.type;
-          Helper.toast(sMsg, 'success'); resolve();
+        .then(action((data) => {
+          if (data.data.crowdPayAccountValidate) {
+            this.requestState.oldType = this.requestState.type;
+            Helper.toast(sMsg, 'success'); resolve();
+          } else {
+            Helper.toast('CIP is not satisfied.', 'error');
+            uiStore.setProgress(false);
+          }
         }))
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
