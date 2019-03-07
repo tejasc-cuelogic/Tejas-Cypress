@@ -1,8 +1,8 @@
 import { observable, action, computed, toJS } from 'mobx';
-import { capitalize, orderBy, min, max, floor, mapValues } from 'lodash';
+import { capitalize, orderBy, min, max, floor, mapValues, startsWith, findLast } from 'lodash';
 import graphql from 'mobx-apollo';
 import money from 'money-math';
-import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO } from '../../../constants/investment';
+import { INVESTMENT_LIMITS, INVESTMENT_INFO, INVEST_ACCOUNT_TYPES, TRANSFER_REQ_INFO, AGREEMENT_DETAILS_INFO, SECURITY_CHECKBOX_LABLE, SERVICE_CHECKBOX_LABLE } from '../../../constants/investment';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import Helper from '../../../../helper/utility';
@@ -577,6 +577,14 @@ export class InvestmentStore {
       this.setFieldValue('disableNextbtn', true);
     } else {
       this.setFieldValue('disableNextbtn', false);
+    }
+  }
+  @action
+  updateAgreementDetailFormAsPerRegulation = (offeringType) => {
+    const agreementLabel = findLast(this.AGREEMENT_DETAILS_FORM.fields.checkboxesRight.values);
+    if (agreementLabel.value.includes('6')) {
+      const labelForCheckBox = startsWith(offeringType, 'BD_') ? SECURITY_CHECKBOX_LABLE.label : SERVICE_CHECKBOX_LABLE.label;
+      this.AGREEMENT_DETAILS_FORM.fields.checkboxesRight.values[1].label = labelForCheckBox;
     }
   }
 }

@@ -20,6 +20,7 @@ class Updates extends Component {
       updates.map((dataItem, index) => {
         const dateObj = {};
         dateObj.id = index;
+        dateObj.title = dataItem.title;
         dateObj.date = updates[index].updated.date ?
           moment(updates[index].updated.date).format('ll') : null;
         return summary.push(dateObj);
