@@ -87,13 +87,6 @@ export class BankAccountStore {
     );
   };
 
-  @computed
-  get disableNextBtnPlaid() {
-    return this.showAddFunds || this.manualLinkBankSubmitted ||
-          this.formLinkBankManually.meta.isValid ||
-          this.formAddFunds.meta.isValid;
-  }
-
   @action
   linkBankFormChange = () => {
     this.formLinkBankManually = Validator.onChange(this.formLinkBankManually);
@@ -170,6 +163,14 @@ export class BankAccountStore {
   @computed
   get isValidLinkBank() {
     return !isEmpty(this.plaidAccDetails);
+  }
+
+  @computed
+  get isPlaidDirty() {
+    return (!isEmpty(this.plaidAccDetails) &&
+    this.formLinkBankManually.meta.isDirty &&
+    this.formAddFunds.meta.isDirty) ||
+    this.showAddFunds;
   }
 
   @action

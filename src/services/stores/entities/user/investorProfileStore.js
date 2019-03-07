@@ -265,7 +265,10 @@ class InvestorProfileStore {
           variables: formPayload,
         })
         .then(action(() => {
-          Helper.toast('Investor profile updated successfully.', 'success');
+          // Helper.toast('Investor profile updated successfully.', 'success');
+          if (currentStep.name === 'Financial Information') {
+            userDetailsStore.getUser(userStore.currentUser.sub);
+          }
           FormValidator.setIsDirty(this[currentStep.form], false);
           this.setStepToBeRendered(currentStep.stepToBeRendered);
           resolve();
@@ -288,7 +291,7 @@ class InvestorProfileStore {
         variables: formPayload,
       })
       .then(action(() => {
-        Helper.toast('Investor profile updated successfully.', 'success');
+        // Helper.toast('Investor profile updated successfully.', 'success');
         userDetailsStore.getUser(userStore.currentUser.sub);
         resolve();
       }))
