@@ -28,6 +28,7 @@ export default class ProfileData extends Component {
     if (selectedState) {
       setStateValue(selectedState.value);
     }
+    this.props.uiStore.setProgress(false);
   }
   navigateToNewPhoneNumber = () => {
     this.props.history.replace(`${this.props.match.url}/new-phone-number`);
