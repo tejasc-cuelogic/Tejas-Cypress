@@ -80,7 +80,7 @@ export class CrowdpayStore {
     this.data = graphql({
       client,
       query: listCrowdPayUsers,
-      variables: { limit: 500 },
+      variables: { limit: 1000 },
       fetchPolicy: 'network-only',
       onFetch: () => {
         this.requestState.page = 1;
@@ -158,7 +158,7 @@ export class CrowdpayStore {
     if (!mutation) {
       return false;
     }
-    uiStore.setProgress(`${accountId}_${ctaAction}`);
+    uiStore.setProgress(accountId);
     let variables = {
       userId,
       accountId,
@@ -186,9 +186,9 @@ export class CrowdpayStore {
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
           uiStore.setErrors(error.message);
+          uiStore.setProgress(false);
           reject();
-        })
-        .finally(() => uiStore.setProgress(false));
+        });
     });
   }
 

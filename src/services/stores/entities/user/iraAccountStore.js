@@ -45,14 +45,18 @@ class IraAccountStore {
 
   @action
   finInfoChange = (values, field) => {
-    this.FIN_INFO_FRM.fields.investmentLimit.value =
-    investmentLimitStore.getInvestmentLimit({
-      annualIncome: this.FIN_INFO_FRM.fields.income.value,
-      netWorth: this.FIN_INFO_FRM.fields.netWorth.value,
-    });
     this.FIN_INFO_FRM = FormValidator.onChange(
       this.FIN_INFO_FRM,
       { name: field, value: values.floatValue },
+    );
+    const investmentLimit =
+    investmentLimitStore.getInvestmentLimit({
+      annualIncome: typeof this.FIN_INFO_FRM.fields.income.value === 'string' ? parseFloat(this.FIN_INFO_FRM.fields.income.value) : this.FIN_INFO_FRM.fields.income.value,
+      netWorth: typeof this.FIN_INFO_FRM.fields.netWorth.value === 'string' ? parseFloat(this.FIN_INFO_FRM.fields.netWorth.value) : this.FIN_INFO_FRM.fields.netWorth.value,
+    });
+    this.FIN_INFO_FRM = FormValidator.onChange(
+      this.FIN_INFO_FRM,
+      { name: 'investmentLimit', value: investmentLimit },
     );
   }
 

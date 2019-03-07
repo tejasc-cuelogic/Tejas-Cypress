@@ -40,8 +40,8 @@ export default class General extends Component {
     const { offer } = this.props.offeringsStore;
     const formName = 'GENERAL_FRM';
     const shorthandBusinessName = get(offer, 'keyTerms.shorthandBusinessName') || '';
-    const minOfferingAmount = get(offer, 'keyTerms.minOfferingAmount') || '';
-    const maxOfferingAmount = get(offer, 'keyTerms.maxOfferingAmount') || '';
+    const minOfferingAmount = get(offer, 'keyTerms.minOfferingAmountCF') || '';
+    const maxOfferingAmount = get(offer, 'keyTerms.maxOfferingAmountCF') || '';
     const { isIssuer } = this.props.userStore;
     const { match } = this.props;
     const access = this.props.userStore.myAccessForModule('OFFERINGS');
@@ -130,7 +130,7 @@ export default class General extends Component {
             fielddata={GENERAL_FRM.fields.businessCapitalization}
             changed={(e, result) => formArrayChange(e, result, formName)}
             containerclassname="secondary"
-            defaultValue={`Because ${shorthandBusinessName} was formed recently, the Issuer’s operations are limited and there are no historical results of operation to report.  The Issuer anticipates that the total cost of the project will be approximately $[X]. ${shorthandBusinessName} is seeking to crowdfund an amount between the minimum of $${minOfferingAmount} and maximum of $${maxOfferingAmount} through the Offering. ${shorthandBusinessName} has also raised $[x] through sale of equity interests. If ${shorthandBusinessName} is able to complete a successful Offering, the members of the Issuer have committed to provide or arrange for sufficient financing for the Issuer to cover the remaining balance of the project cost. Please also see Section V – “Financial Statements” and Appendix A for more information.`}
+            defaultValue={`Because ${shorthandBusinessName} was formed recently, the Issuer’s operations are limited and there are no historical results of operation to report.  The Issuer anticipates that the total cost of the project will be approximately $[X]. ${shorthandBusinessName} is seeking to crowdfund an amount between the minimum of ${minOfferingAmount ? `$${minOfferingAmount}` : ''} and maximum of ${maxOfferingAmount ? `$${maxOfferingAmount}` : ''} through the Offering. ${shorthandBusinessName} has also raised $[x] through sale of equity interests. If ${shorthandBusinessName} is able to complete a successful Offering, the members of the Issuer have committed to provide or arrange for sufficient financing for the Issuer to cover the remaining balance of the project cost. Please also see Section V – “Financial Statements” and Appendix A for more information.`}
             hidelabel
           />
           <Divider section />

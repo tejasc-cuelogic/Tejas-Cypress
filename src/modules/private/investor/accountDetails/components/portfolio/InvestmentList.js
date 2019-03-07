@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Icon, Table, Accordion, Button } from 'semantic-ui-react';
+import { get } from 'lodash';
 import Helper from '../../../../../../helper/utility';
 import { DataFormatter } from '../../../../../../helper';
 import { STAGES } from '../../../../../../services/constants/admin/offerings';
@@ -58,24 +59,30 @@ const InvestmentList = (props) => {
                       <Table.Cell collapsing>
                         {props.listOf === 'pending' ? `${DataFormatter.diffDays(data && data.offering && data.offering.offering &&
                           data.offering.offering.launch &&
-                           data.offering.offering.launch.terminationDate ?
-                           data.offering.offering.launch.terminationDate : null)} days`
+                          data.offering.offering.launch.terminationDate ?
+                          data.offering.offering.launch.terminationDate : null)} days`
                           :
-                        <DateTimeFormat format="MM/DD/YYYY" datetime={data.closeDate} />}
+                        <DateTimeFormat format="MM/DD/YYYY" datetime={get(data, 'offering.offering.launch.terminationDate')} />}
                       </Table.Cell>
                       <Table.Cell collapsing>
                         {props.listOf !== 'pending' ?
-                          <Button as={Link} to={`${match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
-                          :
-                          <Button.Group size="mini" compact>
-                            <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
-                            {DataFormatter.diffDays(data && data.offering &&
+                          DataFormatter.diffDays(data && data.offering &&
                             data.offering.offering && data.offering.offering.launch &&
                             data.offering.offering.launch.terminationDate ?
-                            data.offering.offering.launch.terminationDate : null) > 2 &&
-                              <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
-                            }
-                          </Button.Group>
+                            data.offering.offering.launch.terminationDate : null) <= 0 ?
+                              <Button as={Link} to={`${match.url}/investment-details/${data.offering.id}`} primary compact size="mini" content="View Details" />
+                            :
+                            null
+                          :
+                            <Button.Group size="mini" compact>
+                              <Button as={Link} to={`${match.url}/${data.offering.id}/invest-now`} primary content="Change" />
+                              {DataFormatter.diffDays(data && data.offering &&
+                                data.offering.offering && data.offering.offering.launch &&
+                                data.offering.offering.launch.terminationDate ?
+                                data.offering.offering.launch.terminationDate : null) > 2 &&
+                                <Button as={Link} to={`${match.url}/cancel-investment/${data.agreementId}`} color="red" content="Cancel" />
+                              }
+                            </Button.Group>
                         }
                       </Table.Cell>
                     </Table.Row>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
+import { includes } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
@@ -12,8 +13,13 @@ import PayOffChart from './PayOffChart';
 @inject('portfolioStore', 'campaignStore')
 @observer
 class Overview extends Component {
+  componentWillMount() {
+    const accountType = includes(this.props.location.pathname, 'individual') ? 'individual' : includes(this.props.location.pathname, 'ira') ? 'ira' : 'entity';
+    this.props.portfolioStore.getPayOffData(accountType);
+  }
   render() {
     const { campaign } = this.props.campaignStore;
+    const chartData = this.props.portfolioStore.getChartData();
     const { keyTerms, offering } = campaign;
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities &&
       campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
@@ -208,11 +214,15 @@ class Overview extends Component {
             </Grid.Column>
           </Grid>
         </div>
-        <Divider />
-        <div className="inner-content-spacer payoff-chart">
-          <Header as="h4">Pay Off Chart</Header>
-          <PayOffChart />
-        </div>
+        {chartData.length > 0 &&
+          <Aux>
+            <Divider />
+            <div className="inner-content-spacer payoff-chart">
+              <Header as="h4">Pay Off Chart</Header>
+              <PayOffChart />
+            </div>
+          </Aux>
+        }
       </Aux>
     );
   }

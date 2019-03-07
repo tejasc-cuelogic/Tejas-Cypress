@@ -20,9 +20,8 @@ export default class CampaignHeader extends Component {
     && campaign.offering.launch.terminationDate;
     const diff = DataFormatter.diffDays(terminationDate);
     const collected = get(campaign, 'closureSummary.totalInvestmentAmount') || 0;
-    const minOffering = campaign && campaign.keyTerms &&
-      campaign.keyTerms.minOfferingAmount ? campaign.keyTerms.minOfferingAmount : 0;
-    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmount') || 0;
+    const minOffering = get(campaign, 'keyTerms.minOfferingAmountCF') || 0;
+    const maxOffering = get(campaign, 'keyTerms.maxOfferingAmountCF') || 0;
     const minFlagStatus = collected >= minOffering;
     const maxFlagStatus = (collected && maxOffering) && collected >= maxOffering;
     const percent = (collected / maxOffering) * 100;
@@ -108,7 +107,7 @@ export default class CampaignHeader extends Component {
                       </Statistic.Label>
                     }
                   </Statistic>
-                  <Progress inverted percent={percent} size="tiny" color="green" />
+                  <Progress percent={percent} size="tiny" color="green" />
                   <p>{Helper.CurrencyFormat(minFlagStatus ? maxOffering : minOffering)} {minFlagStatus ? 'max target' : 'min target'} {' '}
                     <Popup
                       trigger={<Icon name="help circle" color="green" />}
@@ -117,7 +116,7 @@ export default class CampaignHeader extends Component {
                     />
                   </p>
                   {CAMPAIGN_KEYTERMS_SECURITIES[offerStructure] &&
-                    <p className="raise-type mt-30">
+                    <p className="raise-type mb-0">
                       <b>{CAMPAIGN_KEYTERMS_SECURITIES[offerStructure]}</b>{' '}
                       <Popup
                         hoverable
@@ -129,32 +128,30 @@ export default class CampaignHeader extends Component {
                       />
                     </p>
                   }
-                  <p className="mb-half">
-                    {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
-                      <p>
-                      Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.TERM_NOTE &&
+                    <p className="mb-0">
+                    Interest Rate : { get(campaign, 'keyTerms.interestRate') ? (get(campaign, 'keyTerms.interestRate').includes('%') ? get(campaign, 'keyTerms.interestRate') : `${get(campaign, 'keyTerms.interestRate')}%`) : '-' }
+                    </p>
+                  }
+                  {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
+                    <p className="mb-0">
+                      Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? `${get(campaign, 'keyTerms.investmentMultiple')}` : '-'}
+                    </p>
+                  }
+                  {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
+                    <p className="mb-0">
+                      Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
+                    </p> :
+                    <Aux>
+                      <p className="mb-0">
+                      Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
                       </p>
-                    }
-                    {offerStructure === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE &&
-                      <p>
-                        Investment Multiple: { get(campaign, 'keyTerms.investmentMultiple') ? `${get(campaign, 'keyTerms.investmentMultiple')}` : '-'}
+                      <p className="mb-0">
+                      Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
                       </p>
-                    }
-                    {offerStructure !== CAMPAIGN_KEYTERMS_SECURITIES_ENUM.PREFERRED_EQUITY_506C ?
-                      <p>
-                        Maturity: {get(campaign, 'keyTerms.maturity') || '-'} Months
-                      </p> :
-                      <Aux>
-                        <p>
-                        Pre-Money Valuation: {get(campaign, 'keyTerms.premoneyValuation') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
-                        </p>
-                        <p>
-                        Share Price: {get(campaign, 'keyTerms.unitPrice') ? Helper.CurrencyFormat(get(campaign, 'keyTerms.premoneyValuation')) : '-'}
-                        </p>
-                      </Aux>
-                    }
-                  </p>
-                  <div className="center-align">
+                    </Aux>
+                  }
+                  <div className="center-align mt-20">
                     {!isClosed &&
                       <Button fluid secondary content={`${maxFlagStatus ? 'Fully Reserved' : 'Invest Now'}`} disabled={maxFlagStatus} as={Link} to={`${this.props.match.url}/invest-now`} />
                     }
