@@ -176,7 +176,7 @@ export class CrowdpayStore {
           variables,
           refetchQueries: [{
             query: listCrowdPayUsers,
-            variables: { limit: 500 },
+            variables: { limit: 1000 },
           }],
         })
         .then(action(() => {
