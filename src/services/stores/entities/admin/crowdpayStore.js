@@ -116,7 +116,9 @@ export class CrowdpayStore {
       keyword, startDate, endDate, accountStatus,
     } = this.requestState.search;
     const accountStatus2 = this.requestState.type === 'review' && !accountStatus ? ['FULL'] : accountStatus;
-    ClientDb.filterData('accountStatus', accountStatus2, 'like');
+    if (accountStatus2) {
+      ClientDb.filterData('accountStatus', accountStatus2, 'like');
+    }
     if (keyword) {
       ClientDb.filterFromNestedObjs(['firstName', 'lastName', 'email'], keyword);
     }
