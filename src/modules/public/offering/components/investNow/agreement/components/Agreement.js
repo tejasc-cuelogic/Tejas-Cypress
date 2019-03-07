@@ -120,7 +120,10 @@ export default class Agreement extends React.Component {
                 {` ${this.props.changeInvestment ? (getInvestorAccountById && getInvestorAccountById.offering.keyTerms &&
                   getInvestorAccountById.offering.keyTerms.shorthandBusinessName) : (campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName)}`}.
               </Header>
-              <Form error>
+              <Form
+                error={this.state.showError &&
+                  !this.props.investmentStore.AGREEMENT_DETAILS_FORM.meta.isValid}
+              >
                 <Grid stackable>
                   <Grid.Row>
                     {['checkboxesLeft', 'checkboxesRight'].map(field => (
