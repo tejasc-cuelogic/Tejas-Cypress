@@ -142,7 +142,7 @@ export default class BusinessDocumentation extends Component {
                 hideFields={hideFields}
                 disabled={formReadOnlyMode}
                 multiple
-                name="personalGuaranteeForm"
+                name="personalGuaranteeForm *"
                 fielddata={fields.personalGuaranteeForm}
                 ondrop={(files, fieldName) => businessAppUploadFiles(files, fieldName, 'BUSINESS_DOC_FRM')}
                 onremove={(fieldName, index) => businessAppRemoveFiles(fieldName, 'BUSINESS_DOC_FRM', index)}
