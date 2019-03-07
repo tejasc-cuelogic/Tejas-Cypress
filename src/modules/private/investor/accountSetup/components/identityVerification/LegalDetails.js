@@ -13,7 +13,7 @@ const LegalDetails = observer(({
 }) => (
   <Modal size="mini" open closeIcon onClose={close} closeOnEscape={false} closeOnDimmerClick={false}>
     <Modal.Header className="center-align signup-header">
-      <Header as="h3" title={name}>Welcome {name}</Header>
+      <Header as="h3" title={name} className="greeting">Welcome {name}</Header>
       <p>Let’s create your NextSeed investment account.</p>
       <Divider section />
       <p>
@@ -22,7 +22,7 @@ const LegalDetails = observer(({
       </p>
     </Modal.Header>
     <Modal.Content className="signup-content">
-      <Dimmer page active={inProgress}>
+      <Dimmer className="fullscreen" active={inProgress}>
         <Loader active={inProgress} />
       </Dimmer>
       <Form error onSubmit={onSubmit}>

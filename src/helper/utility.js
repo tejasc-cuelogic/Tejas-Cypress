@@ -71,7 +71,7 @@ export class Utility {
   }
 
   MoneyMathDisplayCurrency = amount => `$${amount}`;
-  CurrencyFormat = (amount, fraction = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: fraction }).format(amount)
+  CurrencyFormat = (amount, fraction = 0) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maxFractionDigits: fraction }).format(amount)
 
   formattedSSNNumber = (ssnNumber) => {
     if (!ssnNumber) return null;

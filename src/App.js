@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import Aux from 'react-aux';
 import { withRouter, Switch, Route, matchPath } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { ToastContainer } from 'react-toastify';

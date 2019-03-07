@@ -3,12 +3,11 @@ import { Route, Switch } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Card } from 'semantic-ui-react';
 import moment from 'moment';
-import { includes } from 'lodash';
+import { includes, get } from 'lodash';
 import Loadable from 'react-loadable';
 import SummaryHeader from '../components/portfolio/SummaryHeader';
 import { InlineLoader } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
-import { CAMPAIGN_OFFERING_STAGE } from '../../../../../constants/offering';
 import NotFound from '../../../../shared/NotFound';
 
 const getModule = component => Loadable({
@@ -55,19 +54,19 @@ class InvestmentDetails extends Component {
       businessName: campaign && campaign.keyTerms && campaign.keyTerms.shorthandBusinessName,
       summary: [
         {
-          title: 'Total invested amount', content: getInvestor && getInvestor.totalRaisedAmount, type: 1, info: 'Your Total invested amount as of today',
+          title: 'Total Raised Amount', content: get(getInvestor, 'totalRaisedAmount') ? get(getInvestor, 'totalRaisedAmount') : 'NA', type: 1,
         },
         {
-          title: 'Status', content: campaign && campaign.stage ? CAMPAIGN_OFFERING_STAGE[campaign.stage] : 'N/A', info: 'Your Status as of today',
+          title: 'Funded Date', content: get(getInvestor, 'fundedDate') ? moment(get(getInvestor, 'fundedDate')).format('ll') : 'NA', info: 'Date of investment started',
         },
         {
-          title: 'Date', content: getInvestor && moment(getInvestor.fundedDate).format('ll'), info: 'Date of investment started',
+          title: 'My Investment', content: get(getInvestor, 'myInvestment') ? get(getInvestor, 'myInvestment') : 'NA', type: 1,
         },
         {
-          title: 'Net Payments Received', content: getInvestor && getInvestor.netPaymentsReceived, type: 1, info: 'Your Net Payments Received till date',
+          title: 'Net Payments Received', content: get(getInvestor, 'netPaymentsReceived') ? get(getInvestor, 'netPaymentsReceived') : 'NA', type: 1, info: 'Your Net Payments Received till date',
         },
         {
-          title: 'Net Annualied Returns', content: getInvestor && getInvestor.netAnnualizedReturn, info: 'Your Net Annualied Returns till date',
+          title: 'Net Annualied Returns', content: get(getInvestor, 'netAnnualizedReturn') ? `${get(getInvestor, 'netAnnualizedReturn')}%` : 'NA', info: 'Your Net Annualied Returns till date',
         },
       ],
     };

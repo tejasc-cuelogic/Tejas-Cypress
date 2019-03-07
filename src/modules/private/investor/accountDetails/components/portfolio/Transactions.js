@@ -105,7 +105,7 @@ export default class Transactions extends Component {
                             <Table.Cell>{Helper.CurrencyFormat(row.feeTotalAmount)}</Table.Cell>
                             <Table.Cell>{Helper.CurrencyFormat(row.netTotalAmount)}</Table.Cell>
                             <Table.Cell>
-                              {Helper.CurrencyFormat(row.remainingAmountDue)}
+                              {`$${row.remainingAmountDue}`}
                             </Table.Cell>
                           </Aux>
                       }

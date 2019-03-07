@@ -8,7 +8,7 @@ import Aux from 'react-aux';
 export default class PreferredEquity extends Component {
   render() {
     const { isUserLoggedIn } = this.props.authStore;
-    const link = '/auth/register';
+    const link = '/auth/register/applynow';
     return (
       <Aux>
         <Header as="h3">Preferred Equity</Header>

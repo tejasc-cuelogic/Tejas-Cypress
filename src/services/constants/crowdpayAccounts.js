@@ -18,7 +18,6 @@ export const FILTER_META = {
     value: ['CIP_PROCESSING'],
     values: [
       { label: 'CIP Processing', value: 'CIP_PROCESSING' },
-      { label: 'GS Processing', value: 'GS_PROCESSING' },
       { label: 'Declined', value: 'DECLINED' },
     ],
     error: undefined,

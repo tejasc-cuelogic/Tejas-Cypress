@@ -29,7 +29,11 @@ export class ReferralStore {
       query: getJwtReferralEmbeddedWidget,
       variables: payLoad,
       fetchPolicy: 'network-only',
-      onFetch: data => resolve(data),
+      onFetch: (data) => {
+        if (data) {
+          resolve(data);
+        }
+      },
       onError: () => { Helper.toast('Something went wrong, please try again later.', 'error'); reject(); },
     });
   });
