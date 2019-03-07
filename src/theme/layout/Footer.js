@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { Link, matchPath } from 'react-router-dom';
 import { Container, Menu, Grid } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import Parser from 'html-react-parser';
 import { SocialLinks } from '../shared';
 import NSImage from '../../modules/shared/NSImage';
+import HtmlEditor from '../../modules/shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 const isTablet = document.documentElement.clientWidth < 992;
@@ -43,7 +43,7 @@ class Footer extends Component {
           {(OfferFooter.find(item => matchPath(path, { path: item }))) && offeirngDisclaimer &&
             <p className="mb-40 copyright-info">
               <b>{`${shorthandBusinessName} Disclaimer: `}</b>
-              {Parser(offeirngDisclaimer)}
+              <HtmlEditor readOnly content={(offeirngDisclaimer)} />
             </p>
           }
           <Grid stackable>

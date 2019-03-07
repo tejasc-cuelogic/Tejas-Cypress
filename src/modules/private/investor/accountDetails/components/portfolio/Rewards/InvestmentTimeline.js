@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
-import Parser from 'html-react-parser';
 import { findLastIndex, toInteger, get } from 'lodash';
 import { Grid, Popup, Header } from 'semantic-ui-react';
 import Helper from '../../../../../../../helper/utility';
 import { InlineLoader } from '../../../../../../../theme/shared';
+import HtmlEditor from '../../../../../../shared/HtmlEditor';
 
 const calcSmartProgress = (milestones, amount) => {
   const pIndex = findLastIndex(milestones, m => toInteger(m) < toInteger(amount)) > 0 ?
@@ -66,7 +66,10 @@ class InvestmentTimeline extends Component {
                             {reward.title}
                           </Header>
                           <p className="detail-section">
-                            {Parser(reward.description || '')}
+                            <HtmlEditor
+                              readOnly
+                              content={(reward.description || '')}
+                            />
                           </p>
                         </Popup.Content>
                       ))

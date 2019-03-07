@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
-import Parser from 'html-react-parser';
 import { Header, Card, Form, Input } from 'semantic-ui-react';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 @inject('educationStore')
 @observer
@@ -35,7 +35,7 @@ export default class Details extends Component {
         }
         <Header as="h3">{selected.title}</Header>
         <pre className="migrated-content">
-          {Parser(selected.content || '')}
+          <HtmlEditor readOnly content={(selected.content || '')} />
         </pre>
       </Aux>
     ) : <div>Nothing to display !</div>);

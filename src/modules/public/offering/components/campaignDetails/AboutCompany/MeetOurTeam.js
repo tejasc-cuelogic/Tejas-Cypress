@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
 import { Header, Item, Icon } from 'semantic-ui-react';
-import Parser from 'html-react-parser';
 import { filter } from 'lodash';
 import { InlineLoader, Image64 } from '../../../../../../theme/shared';
 import NSImage from '../../../../../shared/NSImage';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 991;
 
@@ -58,7 +58,7 @@ class MeetOurTeam extends Component {
                       </div>
                       {data.bio &&
                         <Item.Description className="avatar-description mt-30">
-                          {Parser(data.bio)}
+                          <HtmlEditor readOnly content={data.bio} />
                         </Item.Description>
                       }
                     </Item.Content>
