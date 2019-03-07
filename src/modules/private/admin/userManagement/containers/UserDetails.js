@@ -5,7 +5,6 @@ import { Route, Switch } from 'react-router-dom';
 import { Item, Header, Button, Icon, Modal, Card } from 'semantic-ui-react';
 import { intersection, isEmpty } from 'lodash';
 import Loadable from 'react-loadable';
-import Helper from '../../../../../helper/utility';
 import { InlineLoader, UserAvatar } from '../../../../../theme/shared';
 import SecondaryMenu from '../../../../../theme/layout/SecondaryMenu';
 import UserTypeIcon from '../components/manage/UserTypeIcon';
@@ -47,7 +46,6 @@ export default class AccountDetails extends Component {
   }
   toggleState = (id, accountStatus) => {
     this.props.userDetailsStore.toggleState(id, accountStatus);
-    Helper.toast('User Account status updated successfully.', 'success');
   }
   handleCloseModal = () => this.props.history.goBack();
 

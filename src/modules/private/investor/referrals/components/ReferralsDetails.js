@@ -18,7 +18,7 @@ export default class ReferralsDetails extends Component {
     }
     this.props.referralsStore.getUserRewardBalance()
       .then(data => this.setState({
-        availableCredit: data.getUserRewardBalance,
+        availableCredit: get(data, 'getUserRewardBalance') || 0,
       }));
   }
   componentDidMount() {

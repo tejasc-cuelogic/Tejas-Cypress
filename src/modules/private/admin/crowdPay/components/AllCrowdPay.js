@@ -75,7 +75,7 @@ export default class AllCrowdPay extends Component {
                 </Table.Row>
                 ) :
                 accounts.map(account => (
-                  <Table.Row key={account.id}>
+                  <Table.Row key={account.accountId} className={account.accountId === inProgress ? 'disabled' : ''}>
                     <Table.Cell>
                       <p>
                         <b>{account.firstName} {account.lastName}</b><br />

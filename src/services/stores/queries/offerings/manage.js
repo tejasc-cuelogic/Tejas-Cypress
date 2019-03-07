@@ -151,8 +151,10 @@ export const getOfferingDetails = gql`
         investmentMultiple
         revSharePercentage
         interestRate
-        minOfferingAmount
-        maxOfferingAmount
+        minOfferingAmountCF
+        minOfferingAmount506C
+        maxOfferingAmountCF
+        maxOfferingAmount506C
         legalBusinessType
         nsMinFees
         nsMaxFees
