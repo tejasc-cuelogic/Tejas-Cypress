@@ -110,7 +110,7 @@ export class PortfolioStore {
     if (rawData) {
       rawData.map((k) => {
         formattedData.push({
-          name: moment(k.yearMonth).format('MMM YYYY'), Payment: k.payment, 'Paid to date': k.paidToDate,
+          name: moment(k.yearMonth).format('MMM YYYY'), Payment: Helper.CurrencyFormat(k.payment || 0), 'Paid to date': Helper.CurrencyFormat(k.paidToDate || 0),
         });
         return null;
       });
