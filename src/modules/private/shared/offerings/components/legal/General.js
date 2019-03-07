@@ -5,7 +5,6 @@ import { get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { Form, Header, Icon, Confirm, Divider } from 'semantic-ui-react';
 import { FormInput, MaskedInput, FormTextarea } from '../../../../../../theme/form';
-import HtmlEditor from '../../../../../shared/HtmlEditor';
 import ButtonGroup from '../ButtonGroup';
 @inject('offeringCreationStore', 'userStore', 'offeringsStore')
 @observer
@@ -29,11 +28,9 @@ export default class General extends Component {
     const { GENERAL_FRM, updateOffering, currentOfferingId } = this.props.offeringCreationStore;
     updateOffering(currentOfferingId, GENERAL_FRM.fields, 'legal', 'general', true, undefined, isApproved);
   }
-  editorChange =
-  (field, value, form) => this.props.offeringCreationStore.rtEditorChange(field, value, form);
   render() {
     const {
-      GENERAL_FRM, currentOfferingId,
+      GENERAL_FRM,
       formArrayChange,
       maskArrayChange,
       removeData,
@@ -153,21 +150,13 @@ export default class General extends Component {
                 currency
                 prefix="$"
               /> */}
-              <HtmlEditor
-                imageUploadPath={`offerings/${currentOfferingId}`}
-                readOnly={isReadonly}
-                changed={this.editorChange}
-                name="minOfferingExpenseAmountDescription"
-                form="GENERAL_FRM"
-                content={GENERAL_FRM.fields.minOfferingExpenseAmountDescription.value}
-              />
-              {/* <FormTextarea
+              <FormTextarea
                 readOnly={isReadonly}
                 name="minOfferingExpenseAmountDescription"
                 fielddata={GENERAL_FRM.fields.minOfferingExpenseAmountDescription}
                 changed={(e, result) => formArrayChange(e, result, formName)}
                 containerclassname="secondary"
-              /> */}
+              />
               {/* <MaskedInput
                 displayMode={isReadonly}
                 name="maxOfferingExpenseAmount"
@@ -176,13 +165,13 @@ export default class General extends Component {
                 currency
                 prefix="$"
               /> */}
-              {/* <FormTextarea
+              <FormTextarea
                 readOnly={isReadonly}
                 name="maxOfferingExpenseAmountDescription"
                 fielddata={GENERAL_FRM.fields.maxOfferingExpenseAmountDescription}
                 changed={(e, result) => formArrayChange(e, result, formName)}
                 containerclassname="secondary"
-              /> */}
+              />
             </Aux>
           }
           <Divider section />
