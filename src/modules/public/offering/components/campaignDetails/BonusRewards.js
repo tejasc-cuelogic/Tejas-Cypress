@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
 import { get } from 'lodash';
-import Parser from 'html-react-parser';
 import { Header, Grid, Segment, Label } from 'semantic-ui-react';
 import { InlineLoader } from '../../../../../theme/shared';
 import BonusRewardsList from './BonusRewardsList';
 import Helper from '../../../../../helper/utility';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const isTablet = document.documentElement.clientWidth >= 768
   && document.documentElement.clientWidth < 992;
@@ -74,7 +74,7 @@ class BonusRewards extends Component {
             }
             {offeringMISC &&
               <Segment padded className="reward-block">
-                {Parser(offeringMISC)}
+                <HtmlEditor readOnly content={offeringMISC} />
               </Segment>
             }
           </Aux>

@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import Parser from 'html-react-parser';
 import { Header, Item } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import { UserAvatar, InlineLoader } from '../../../../../theme/shared';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 @inject('campaignStore')
 @observer
@@ -70,10 +70,11 @@ class Updates extends Component {
                     <div
                       style={readMoreStatus[index] ? { display: 'block' } : { display: 'none' }}
                     >
-                      <p>
-                        {Parser(dataItem.content.length <= 805 ?
-                          dataItem.content : dataItem.content.substring(1, 805))}
-                      </p>
+                      <HtmlEditor
+                        readOnly
+                        content={dataItem.content.length <= 805 ?
+                          dataItem.content : dataItem.content.substring(1, 805)}
+                      />
                       {dataItem.content.length > 805 ?
                         <a
                           href
@@ -89,9 +90,7 @@ class Updates extends Component {
                     <div
                       style={!readLessStatus[index] ? { display: 'block' } : { display: 'none' }}
                     >
-                      <p>
-                        {Parser(dataItem.content || '')}
-                      </p>
+                      <HtmlEditor readOnly content={dataItem.content || ''} />
                       <a
                         href
                         onClick={

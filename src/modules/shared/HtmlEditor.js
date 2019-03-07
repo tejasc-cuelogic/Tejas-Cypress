@@ -3,7 +3,7 @@ import React from 'react';
 import $ from 'jquery';
 import { inject, observer } from 'mobx-react';
 import { get } from 'lodash';
-import Parser from 'html-react-parser';
+// import Parser from 'html-react-parser';
 import 'froala-editor/js/froala_editor.pkgd.min';
 
 // Require Editor CSS files.
@@ -14,6 +14,7 @@ import 'froala-editor/css/froala_editor.pkgd.min.css';
 import 'font-awesome/css/font-awesome.css';
 
 import FroalaEditor from 'react-froala-wysiwyg';
+import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
 import { fileUpload } from '../../services/actions';
 import { FROALA_EDITOR_LICENSE } from '../../constants/common';
 import { UPLOADS_CONFIG } from '../../constants/aws';
@@ -82,8 +83,11 @@ export default class HtmlEditor extends React.Component {
   }
   render() {
     const { keyStart, readOnly } = this.props;
+    // if (readOnly) {
+    //   return <div>{Parser(this.props.content || '')}</div>;
+    // }
     if (readOnly) {
-      return <div>{Parser(this.props.content || '')}</div>;
+      return <div className="parsed-data"><FroalaEditorView model={this.props.content} /></div>;
     }
     return (
       <div className={this.state.inProgress ? 'no-pointer-events' : ''}>
