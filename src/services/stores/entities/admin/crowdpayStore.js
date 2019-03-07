@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray } from 'lodash';
+import { isArray, get } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
@@ -185,14 +185,14 @@ export class CrowdpayStore {
           }],
         })
         .then(action((data) => {
-          if (data.data.crowdPayAccountValidate) {
+          if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
+            Helper.toast('CIP is not satisfied.', 'error');
+          } else {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(sMsg, 'success');
             resolve();
-          } else {
-            Helper.toast('CIP is not satisfied.', 'success');
-            uiStore.setProgress(false);
           }
+          uiStore.setProgress(false);
         }))
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
