@@ -489,6 +489,7 @@ query getOfferingById($id: ID) {
     offering {
       launch {
         targetDate
+        edgarLink
       }
     }
     selectedOffer {

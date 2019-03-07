@@ -255,7 +255,7 @@ export const PRIVATE_NAV = [
   {
     icon: 'list layout',
     title: 'Categories',
-    capability: 'INSIGHTS_ANY',
+    capability: 'Category',
     to: 'categories',
     path: 'admin/categories',
     accessibleTo: ['admin', 'manager', 'support'],
@@ -491,10 +491,10 @@ export const PUBLIC_NAV = [
             title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
           },
           {
-            title: 'Team', to: '#team', useRefLink: true,
+            title: 'History', to: '#history', useRefLink: true,
           },
           {
-            title: 'History', to: '#history', useRefLink: true,
+            title: 'Team', to: '#team', useRefLink: true,
           },
         ],
       },

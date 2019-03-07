@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import { Modal, Header, Divider, Grid, Card, Form, List, Icon, Confirm, Button } from 'semantic-ui-react';
-import Parser from 'html-react-parser';
 import { FormInput, FormRadioGroup } from '../../../../../../theme/form';
 import HtmlEditor from '../../../../../shared/HtmlEditor';
 import { InlineLoader } from '../../../../../../theme/shared';
@@ -126,9 +125,7 @@ export default class NewUpdate extends Component {
                         }
                       >
                         <Modal.Content>
-                          <p>
-                            {Parser(PBUILDER_FRM.fields.content.value || '')}
-                          </p>
+                          <HtmlEditor readOnly content={(PBUILDER_FRM.fields.content.value || '')} />
                         </Modal.Content>
                       </Modal>
                     </List.Item>
