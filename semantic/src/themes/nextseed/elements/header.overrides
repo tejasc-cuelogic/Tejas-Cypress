@@ -115,7 +115,7 @@ h6.ui.header{
 .campaign-details-banner .ui.header .sub.header{
     margin-top:@7px;
 }
-.signup-header h3.ui.header {
+.signup-header h3.ui.header.greeting {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

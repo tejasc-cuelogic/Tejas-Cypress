@@ -302,6 +302,9 @@ i.icon.right {
 .no-pointer-events {
 	pointer-events: none !important;
 }
+.parsed-data img { // for migrated/parsed images
+	max-width: 100%;
+}
 //	Helper Classes Ends
 
 // Footer Styles

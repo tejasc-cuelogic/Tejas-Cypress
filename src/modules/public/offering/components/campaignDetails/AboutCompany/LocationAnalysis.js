@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Header } from 'semantic-ui-react';
 import Aux from 'react-aux';
-import Parser from 'html-react-parser';
 import { inject, observer } from 'mobx-react';
 import { InlineLoader } from '../../../../../../theme/shared';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 @inject('campaignStore')
 @observer
@@ -19,7 +19,7 @@ class LocationAnalysis extends Component {
         {campaign && campaign.offering
           && campaign.offering.about
           && campaign.offering.about.locationAnalysis ?
-            <p>{Parser(campaign.offering.about.locationAnalysis)}</p> :
+            <HtmlEditor readOnly content={campaign.offering.about.locationAnalysis} /> :
             <InlineLoader text="No data found" className="bg-offwhite" />
         }
       </Aux>
