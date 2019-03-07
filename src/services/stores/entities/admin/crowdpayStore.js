@@ -187,9 +187,10 @@ export class CrowdpayStore {
         .then(action((data) => {
           if (data.data.crowdPayAccountValidate) {
             this.requestState.oldType = this.requestState.type;
-            Helper.toast(sMsg, 'success'); resolve();
+            Helper.toast(sMsg, 'success');
+            resolve();
           } else {
-            Helper.toast('CIP is not satisfied.', 'error');
+            Helper.toast('CIP is not satisfied.', 'success');
             uiStore.setProgress(false);
           }
         }))
