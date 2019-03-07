@@ -2,6 +2,7 @@
 import { observable, computed, action, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
 import isArray from 'lodash/isArray';
+import money from 'money-math';
 import { includes } from 'lodash';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, DataFormatter } from '../../../../helper';
@@ -35,6 +36,7 @@ export class TransactionStore {
   @observable investmentsByOffering = [];
   @observable investmentOptions = [];
   @observable selectedInvestment = '';
+  @observable validWithdrawAmt = false;
 
   @action
   initRequest = (props) => {
@@ -104,6 +106,10 @@ export class TransactionStore {
     return (this.data && this.data.error && this.data.error.message) || null;
   }
 
+  @computed get getValidWithdrawAmt() {
+    return this.validWithdrawAmt;
+  }
+
   @action
   transact = (amount, operation) => {
     this.cash = operation ? (this.cash + parseFloat(operation === 'add' ? amount : -amount)) :
@@ -130,11 +136,14 @@ export class TransactionStore {
   }
 
   @action
-  TransferChange = (values, field, formName = 'TRANSFER_FRM') => {
+  TransferChange = (values, field, formName = 'TRANSFER_FRM', checkWithdrawAmt = false) => {
     this[formName] = Validator.onChange(
       this[formName],
       { name: field, value: values.floatValue },
     );
+    if (checkWithdrawAmt && values.floatValue !== undefined) {
+      this.validWithdrawAmt = money.cmp(this.cash, money.format('USD', money.floatToAmount(values.floatValue))) <= 0 && values.floatValue > 0;
+    }
   };
 
   @action

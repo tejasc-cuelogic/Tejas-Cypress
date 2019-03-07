@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import Aux from 'react-aux';
-import { includes } from 'lodash';
+import { includes, get } from 'lodash';
 import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
-import Parser from 'html-react-parser';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 @inject('portfolioStore', 'campaignStore')
 @observer
@@ -24,6 +24,7 @@ class Overview extends Component {
     const overviewToDisplay = campaign && campaign.keyTerms && campaign.keyTerms.securities &&
       campaign.keyTerms.securities === CAMPAIGN_KEYTERMS_SECURITIES_ENUM.REVENUE_SHARING_NOTE ? 'REVENUE' : 'TERM';
     const isPreviewLinkShow = campaign && campaign.isAvailablePublicly;
+    const edgarLink = get(campaign, 'offering.launch.edgarLink');
     return (
       <Aux>
         <div className="inner-content-spacer bg-offwhite">
@@ -56,65 +57,31 @@ class Overview extends Component {
                       </Table.Cell>
                     </Table.Row>
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>Entity Type</Table.Cell>
+                      <Table.Cell>Securities</Table.Cell>
                       <Table.Cell>
-                        {keyTerms && keyTerms.legalBusinessType ?
-                          keyTerms.legalBusinessType
+                        {keyTerms && keyTerms.securities ?
+                          CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
                           :
                           'NA'
                         }
                       </Table.Cell>
                     </Table.Row>
+                    {/* <Table.Row verticalAlign="top">
+                      <Table.Cell>Entity Type</Table.Cell>
+                      <Table.Cell>
+                        {keyTerms && keyTerms.legalBusinessType ?
+                          BUSINESS_TYPE_ENUM[keyTerms.legalBusinessType]
+                          :
+                          'NA'
+                        }
+                      </Table.Cell>
+                    </Table.Row> */}
                     <Table.Row verticalAlign="top">
                       <Table.Cell>{overviewToDisplay && overviewToDisplay === 'REVENUE' ? 'Anticipated Opening' : 'Original Anticipated Opening Date'}</Table.Cell>
                       <Table.Cell>
                         {offering && offering.launch &&
                           offering.launch.targetDate ?
                           moment(offering.launch.targetDate).format('ll')
-                          :
-                          'NA'
-                        }
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell>Maturity</Table.Cell>
-                      <Table.Cell>
-                        {keyTerms && keyTerms.maturity ?
-                          `${keyTerms.maturity} Months to Offering Summary`
-                          :
-                          'NA'
-                        }
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell>Principal Office</Table.Cell>
-                      <Table.Cell>4102 Avenue H #A, Austin, TX 78751</Table.Cell>
-                    </Table.Row>
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell>Security Interest</Table.Cell>
-                      <Table.Cell>
-                        {keyTerms && keyTerms.securityInterest ?
-                          keyTerms.securityInterest
-                          :
-                          'NA'
-                        }
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell>Payments</Table.Cell>
-                      <Table.Cell>
-                        {keyTerms && keyTerms.frequencyOfPayments ?
-                          keyTerms.frequencyOfPayments : 'NA'}
-                      </Table.Cell>
-                    </Table.Row>
-                    <Table.Row verticalAlign="top">
-                      <Table.Cell>Ownership % Represented by Securities</Table.Cell>
-                      <Table.Cell>
-                        {keyTerms && keyTerms.securitiesOwnershipPercentage ?
-                          `${keyTerms.securitiesOwnershipPercentage}%
-                          Investors will not receive any equity interests in
-                          the Issuer or any voting or management rights with respect
-                          to the Issuer as a result of an investment in Securities.`
                           :
                           'NA'
                         }
@@ -131,12 +98,11 @@ class Overview extends Component {
                       {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                         <Table.Cell>
                           {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'NA'}{' '}
-                          <p>
-                            {
-                              Parser(keyTerms && keyTerms.investmentMultipleSummary ?
-                                keyTerms.investmentMultipleSummary : '')
-                            }
-                          </p>
+                          <HtmlEditor
+                            readOnly
+                            content={(keyTerms && keyTerms.investmentMultipleSummary ?
+                              keyTerms.investmentMultipleSummary : '')}
+                          />
                         </Table.Cell>
                         :
                         <Table.Cell>
@@ -146,6 +112,13 @@ class Overview extends Component {
                         </Table.Cell>
                       }
                     </Table.Row>
+                    <Table.Row verticalAlign="top">
+                      <Table.Cell>Payments</Table.Cell>
+                      <Table.Cell>
+                        {keyTerms && keyTerms.frequencyOfPayments ?
+                          keyTerms.frequencyOfPayments : 'NA'}
+                      </Table.Cell>
+                    </Table.Row>
                     {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                       <Table.Row verticalAlign="top">
                         <Table.Cell>Revenue Sharing Percentage</Table.Cell>
@@ -154,34 +127,56 @@ class Overview extends Component {
                             keyTerms.revSharePercentage
                             :
                             'NA'}
-                          <p>
-                            {
-                              Parser(keyTerms && keyTerms.revShareSummary ?
-                                keyTerms.revShareSummary
-                                :
-                                '')
-                            }
-                          </p>
+                          <HtmlEditor
+                            readOnly
+                            content={(keyTerms && keyTerms.revShareSummary ?
+                              keyTerms.revShareSummary : '')}
+                          />
                         </Table.Cell>
                       </Table.Row>
                       :
                       null
                     }
                     <Table.Row verticalAlign="top">
-                      <Table.Cell>Securities</Table.Cell>
+                      <Table.Cell>Maturity</Table.Cell>
                       <Table.Cell>
-                        {keyTerms && keyTerms.securities ?
-                          CAMPAIGN_KEYTERMS_SECURITIES[keyTerms.securities]
+                        {keyTerms && keyTerms.maturity ?
+                          `${keyTerms.maturity} Months to Offering Summary`
                           :
                           'NA'
                         }
                       </Table.Cell>
                     </Table.Row>
-                    <Table.Row>
-                      <Table.Cell colSpan="2">
-                        <Button primary content="Fill SEC Form C" />
+                    <Table.Row verticalAlign="top">
+                      <Table.Cell>Security Interest</Table.Cell>
+                      <Table.Cell>
+                        {keyTerms && keyTerms.securityInterest ?
+                          keyTerms.securityInterest
+                          :
+                          'NA'
+                        }
                       </Table.Cell>
                     </Table.Row>
+                    <Table.Row verticalAlign="top">
+                      <Table.Cell>Ownership % Represented by Securities</Table.Cell>
+                      <Table.Cell>
+                        {keyTerms && keyTerms.securitiesOwnershipPercentage ?
+                          `${keyTerms.securitiesOwnershipPercentage}%
+                          Investors will not receive any equity interests in
+                          the Issuer or any voting or management rights with respect
+                          to the Issuer as a result of an investment in Securities.`
+                          :
+                          'NA'
+                        }
+                      </Table.Cell>
+                    </Table.Row>
+                    {edgarLink &&
+                    <Table.Row>
+                      <Table.Cell colSpan="2">
+                        <Button onClick={() => window.open(edgarLink.includes('http') ? edgarLink : `http://${edgarLink}`, '_blank')} primary content="View Form C Filing" />
+                      </Table.Cell>
+                    </Table.Row>
+                    }
                   </Table.Body>
                 </Table>
               </div>

@@ -82,16 +82,16 @@ export const AGREEMENT_DETAILS_INFO = {
             </p>
             <List relaxed bulleted>
               <List.Item>
-              If either your annual income or net worth is less than $107,000, you can invest
-              5% of the lower figure. But anyone can invest at least $2,200.
+                If either your annual income or net worth is less than $107,000, you can invest
+                5% of the lower figure. But anyone can invest at least $2,200.
               </List.Item>
               <List.Item>
-              If both your annual income and net worth are greater than $107,000, you can
-              invest 10% of the lower figure. But no one can invest more than $107,000.
+                If both your annual income and net worth are greater than $107,000, you can
+                invest 10% of the lower figure. But no one can invest more than $107,000.
               </List.Item>
               <List.Item>
-              If you invest through an entity, the same rules apply based on the entity’s
-              revenue and net assets (as of its most recent fiscal year end).
+                If you invest through an entity, the same rules apply based on the entity’s
+                revenue and net assets (as of its most recent fiscal year end).
               </List.Item>
             </List>
           </Popup.Content>
@@ -157,4 +157,30 @@ export const INVESTMENT_LIMITS = {
     error: undefined,
     rule: 'numeric|required',
   },
+};
+
+export const SECURITY_CHECKBOX_LABLE = {
+  label: (
+    <Aux>
+      I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+      the entire amount of my investment may be lost, and confirm that I am in a
+      financial condition to bear the loss. I have read and agree to the terms of
+      the <a href="/">CrowdPay Custodial Account Agreement</a>,
+      the <a href="/">Substitute IRS Form W-9 Certification</a>,
+      and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>.
+    </Aux>
+  ),
+};
+
+export const SERVICE_CHECKBOX_LABLE = {
+  label: (
+    <Aux>
+      I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
+      the entire amount of my investment may be lost, and confirm that I am in a
+      financial condition to bear the loss. I have read and agree to the terms of
+      the <a href="/">CrowdPay Custodial Account Agreement</a>,
+      the <a href="/">Substitute IRS Form W-9 Certification</a>,
+      and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>.
+    </Aux>
+  ),
 };

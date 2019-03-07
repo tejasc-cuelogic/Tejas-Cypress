@@ -13,7 +13,13 @@ export const ROUND_TYPES_ENUM = {
   SERIES_A: 'Series A',
   SERIES_B: 'Series B',
 };
-
+export const BUSINESS_TYPE_ENUM = {
+  SOLE_PROPRIETOR: 'Sole Proprietor',
+  CORPORATION: 'Corporation',
+  LLC: 'Limited Liability Company',
+  LIMITED_PARTNERSHIP: 'Limited Partnership',
+  OTHER: 'Other',
+};
 export const INDUSTRY_TYPES = {
   FASHION_AND_MERCHANDISING: 'Fashion and Merchandising',
   BEAUTY_AND_SPA: 'Beauty and Spa',
@@ -39,7 +45,7 @@ export const INDUSTRY_TYPES_ICONS = {
   HOSPITALITY: 'ns-first-aid',
   TECHNOLOGY: 'ns-technology',
   RESTAURANT_AND_BAR: 'ns-food-light',
-  BREWERY_AND_BREWPUB: 'Brewery and Brewpub',
+  BREWERY_AND_BREWPUB: 'ns-bar',
   HEALTH_AND_WELLNESS: 'ns-beauty-spa',
   FITNESS: 'ns-dumbbells',
   FASHION_AND_APPAREL: 'ns-store',

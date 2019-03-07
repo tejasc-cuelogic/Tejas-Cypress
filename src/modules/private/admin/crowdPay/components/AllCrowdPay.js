@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
+import moment from 'moment';
 import { kebabCase, lowerCase } from 'lodash';
 import { withRouter, Route } from 'react-router-dom';
 import { Card, Table, Icon } from 'semantic-ui-react';
@@ -28,6 +29,7 @@ export default class AllCrowdPay extends Component {
     const type = this.props.history.location.pathname === '/app/crowdpay' ? 'review' : this.props.history.location.pathname.includes('cip') ? 'cip' : this.props.history.location.pathname.includes('ira') ? 'ira' : this.props.history.location.pathname.includes('review') ? 'review' : 'entity';
     this.props.crowdpayStore.setAccountTypes(type);
     this.props.crowdpayStore.reset();
+    this.props.uiStore.setProgress(false);
   }
   paginate = params => this.props.crowdpayStore.pageRequest(params);
   render() {
@@ -107,7 +109,7 @@ export default class AllCrowdPay extends Component {
                     }
                     {type === 'cip' &&
                     <Table.Cell>
-                      {account.processing && account.processing.gs && account.processing.gs.date ? account.processing.gs.date : <p className="intro-text">N/A</p>}
+                      {account.processing && account.processing.gs && account.processing.gs.date ? moment.unix(account.processing.gs.date).format('MM-DD-YYYY') : <p className="intro-text">N/A</p>}
                     </Table.Cell>
                     }
                     {type === 'ira' ?
@@ -126,6 +128,7 @@ export default class AllCrowdPay extends Component {
                         <Table.Cell>
                           {account.legalDetails && account.legalDetails.verificationDocs
                           && account.legalDetails.verificationDocs.addressProof &&
+                          account.legalDetails.verificationDocs.addressProof.fileHandle &&
                           account.legalDetails.verificationDocs.addressProof.fileHandle.boxFileId ?
                             <Aux>
                               <a href={`${NEXTSEED_BOX_URL}file/${account.legalDetails.verificationDocs.idProof.fileHandle.boxFileId}`} className="link filename-link" rel="noopener noreferrer" target="_blank" >

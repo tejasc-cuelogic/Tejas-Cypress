@@ -60,14 +60,9 @@ export default class AddWithdrawFund extends Component {
     });
   }
   render() {
+    const { match, transactionStore } = this.props;
     const {
-      match, transactionStore,
-    } = this.props;
-    const {
-      TRANSFER_FRM,
-      TransferChange,
-      showConfirmPreview,
-      cash,
+      TRANSFER_FRM, TransferChange, showConfirmPreview, cash, getValidWithdrawAmt,
     } = transactionStore;
     const { currentActiveAccountDetails } = this.props.userDetailsStore;
     const linkBankDetials = currentActiveAccountDetails && currentActiveAccountDetails.details &&
@@ -113,7 +108,7 @@ export default class AddWithdrawFund extends Component {
                   containerclassname="fund-amount"
                   currency
                   fielddata={TRANSFER_FRM.fields.amount}
-                  changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM')}
+                  changed={(values, field) => TransferChange(values, field, 'TRANSFER_FRM', match.params.action === 'withdraw')}
                 />
               }
               {showConfirmPreview ?
@@ -167,7 +162,7 @@ export default class AddWithdrawFund extends Component {
                   {showConfirmPreview ?
                     <Button onClick={this.cancelTransfer} content="Cancel" /> : null
                   }
-                  <Button primary disabled={!TRANSFER_FRM.meta.isValid || !this.state.isActivebutton} content="Confirm" />
+                  <Button primary disabled={!((getValidWithdrawAmt && TRANSFER_FRM.meta.isValid) || (match.params.action !== 'withdraw' && TRANSFER_FRM.fields.amount.value > 0 && TRANSFER_FRM.meta.isValid)) || !this.state.isActivebutton} content="Confirm" />
                 </Button.Group>
               </div>
             </Form>

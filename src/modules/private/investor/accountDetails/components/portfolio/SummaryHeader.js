@@ -12,9 +12,13 @@ import Helper from '../../../../../../helper/utility';
   2: date representation
 */
 
-const showValue = props => ((props.type === 1) ?
-  (Helper.MoneyMathDisplayCurrency(props.content)) :
-  ((props.type === 2) ? `date ${props.content}` : props.content));
+// const showValue = props => ((props.type === 1) ?
+//   (Helper.MoneyMathDisplayCurrency(props.content)) :
+//   ((props.type === 2) ? `date ${props.content}` : props.content));
+
+const showValue = props => ((props.type === 1) && (props.title !== 'TNAR') ?
+  (Helper.MoneyMathDisplayCurrency(props.content)) : (props.type === 1) && (props.title === 'TNAR') ? `${props.content} %` :
+    (((props.type === 2) ? `date ${props.content}` : props.content)));
 
 const SummaryTitle = props => ((props.details.businessName) ? (
   <Header as="h3">

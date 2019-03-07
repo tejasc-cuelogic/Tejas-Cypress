@@ -141,6 +141,7 @@ export default class BusinessDocumentation extends Component {
               <DropZone
                 hideFields={hideFields}
                 disabled={formReadOnlyMode}
+                asterisk="true"
                 multiple
                 name="personalGuaranteeForm"
                 fielddata={fields.personalGuaranteeForm}
