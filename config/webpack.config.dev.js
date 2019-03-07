@@ -11,6 +11,7 @@ const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
 const getCustomConfig = require('./custom-react-scripts/config');
+const CopyPlugin = require('copy-webpack-plugin');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -221,6 +222,19 @@ module.exports = {
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
     new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new CopyPlugin([
+      {
+        from: 'src/assets/js/r.js',
+        to: 'assets/js/r.js',
+      },
+      {
+        from: 'src/assets/js/a.js',
+        to: 'assets/js/a.js',
+        transform: function (content, transformPath) {
+          return Promise.resolve(content.toString().replace('__SEGMENT_WRITE_KEY__', env.stringified['process.env'].SEGMENT_WRITE_KEY));
+        },
+      },
+    ]),
     ...customConfig.webpackPlugins,
   ],
   // Some libraries import Node modules but don't use them in the browser.

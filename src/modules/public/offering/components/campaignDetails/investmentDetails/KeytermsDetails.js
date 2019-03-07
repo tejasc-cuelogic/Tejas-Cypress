@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Parser from 'html-react-parser';
 import { get } from 'lodash';
 import { inject, observer } from 'mobx-react';
 import Aux from 'react-aux';
@@ -8,6 +7,7 @@ import { CAMPAIGN_KEYTERMS_SECURITIES, ROUND_TYPES_ENUM, CAMPAIGN_KEYTERMS_REGUL
 import { InlineLoader } from '../../../../../../theme/shared';
 import Helper from '../../../../../../helper/utility';
 import PaymentCalculator from './PaymentCalculator';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 const isMobile = document.documentElement.clientWidth < 768;
 
@@ -99,12 +99,13 @@ class KeyTermsDetails extends Component {
                 <p>
                   {get(KeyTerms, 'investmentMultiple') ? get(KeyTerms, 'investmentMultiple') : 'NA'}
                 </p>
-                <p>
-                  {Parser(get(KeyTerms, 'investmentMultipleSummary') ?
-                    get(KeyTerms, 'investmentMultipleSummary')
-                    :
-                    '')}
-                </p>
+                <HtmlEditor
+                  readOnly
+                  content={get(KeyTerms, 'investmentMultipleSummary') ?
+                  get(KeyTerms, 'investmentMultipleSummary')
+                  :
+                  ''}
+                />
               </Table.Cell>
             </Table.Row>
             }
@@ -115,12 +116,13 @@ class KeyTermsDetails extends Component {
                 <p>
                   {`${get(KeyTerms, 'revSharePercentage')}%` || ''}
                 </p>
-                <p>
-                  {Parser(get(KeyTerms, 'revSharePercentageDescription') ?
-                    get(KeyTerms, 'revSharePercentageDescription')
-                    :
-                    '')}
-                </p>
+                <HtmlEditor
+                  readOnly
+                  content={get(KeyTerms, 'revSharePercentageDescription') ?
+                  get(KeyTerms, 'revSharePercentageDescription')
+                  :
+                  ''}
+                />
               </Table.Cell>
             </Table.Row>
             }
@@ -245,7 +247,10 @@ class KeyTermsDetails extends Component {
                   <Table.Cell width={5} className="neutral-text"><b>{item.label}{' '}</b>
                   </Table.Cell>
                   <Table.Cell>
-                    {Parser(item.description || '')}
+                    <HtmlEditor
+                      readOnly
+                      content={item.description || ''}
+                    />
                   </Table.Cell>
                 </Table.Row>
               ))
@@ -337,7 +342,7 @@ class KeyTermsDetails extends Component {
               <p>
                 {revenueShareSummary ?
                   <p className="detail-section">
-                    {Parser(revenueShareSummary)}
+                    <HtmlEditor readOnly content={revenueShareSummary} />
                   </p>
                   :
                   <InlineLoader text="No data available" className="bg-offwhite" />

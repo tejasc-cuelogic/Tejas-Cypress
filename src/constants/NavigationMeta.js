@@ -491,10 +491,10 @@ export const PUBLIC_NAV = [
             title: 'Location Analysis', to: '#location-analysis', useRefLink: true,
           },
           {
-            title: 'Team', to: '#team', useRefLink: true,
+            title: 'History', to: '#history', useRefLink: true,
           },
           {
-            title: 'History', to: '#history', useRefLink: true,
+            title: 'Team', to: '#team', useRefLink: true,
           },
         ],
       },

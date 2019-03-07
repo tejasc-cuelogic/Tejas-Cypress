@@ -5,10 +5,10 @@ import { Link } from 'react-router-dom';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import { Header, Table, Grid, Statistic, Button, Divider } from 'semantic-ui-react';
-import Parser from 'html-react-parser';
 import { AccTypeTitle } from '../../../../../../theme/shared';
 import { CAMPAIGN_KEYTERMS_SECURITIES, CAMPAIGN_KEYTERMS_SECURITIES_ENUM } from '../../../../../../constants/offering';
 import PayOffChart from './PayOffChart';
+import HtmlEditor from '../../../../../shared/HtmlEditor';
 
 @inject('portfolioStore', 'campaignStore')
 @observer
@@ -98,12 +98,11 @@ class Overview extends Component {
                       {overviewToDisplay && overviewToDisplay === 'REVENUE' ?
                         <Table.Cell>
                           {keyTerms && keyTerms.investmentMultiple ? keyTerms.investmentMultiple : 'NA'}{' '}
-                          <p>
-                            {
-                              Parser(keyTerms && keyTerms.investmentMultipleSummary ?
-                                keyTerms.investmentMultipleSummary : '')
-                            }
-                          </p>
+                          <HtmlEditor
+                            readOnly
+                            content={(keyTerms && keyTerms.investmentMultipleSummary ?
+                              keyTerms.investmentMultipleSummary : '')}
+                          />
                         </Table.Cell>
                         :
                         <Table.Cell>
@@ -128,14 +127,11 @@ class Overview extends Component {
                             keyTerms.revSharePercentage
                             :
                             'NA'}
-                          <p>
-                            {
-                              Parser(keyTerms && keyTerms.revShareSummary ?
-                                keyTerms.revShareSummary
-                                :
-                                '')
-                            }
-                          </p>
+                          <HtmlEditor
+                            readOnly
+                            content={(keyTerms && keyTerms.revShareSummary ?
+                              keyTerms.revShareSummary : '')}
+                          />
                         </Table.Cell>
                       </Table.Row>
                       :

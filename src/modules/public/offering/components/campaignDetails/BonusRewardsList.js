@@ -1,6 +1,6 @@
 import React from 'react';
 import { List } from 'semantic-ui-react';
-import Parser from 'html-react-parser';
+import HtmlEditor from '../../../../shared/HtmlEditor';
 
 const BonusRewardsList = ({ bonusRewards, tier, earlyBird }) => (
   <List as="ul" className="rewards">
@@ -11,7 +11,7 @@ const BonusRewardsList = ({ bonusRewards, tier, earlyBird }) => (
           <List.Header>{reward.title}</List.Header>
           <List.Description>
             <p className="detail-section">
-              {Parser(reward.description || '')}
+              <HtmlEditor readOnly content={reward.description || ''} />
             </p>
           </List.Description>
         </List.Item>
