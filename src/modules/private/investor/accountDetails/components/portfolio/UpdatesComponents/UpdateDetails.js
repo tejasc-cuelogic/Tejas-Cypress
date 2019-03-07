@@ -3,8 +3,8 @@ import { Header } from 'semantic-ui-react';
 import { inject, observer } from 'mobx-react';
 import moment from 'moment';
 import Aux from 'react-aux';
-import Parser from 'html-react-parser';
 import { InlineLoader } from '../../../../../../../theme/shared';
+import HtmlEditor from '../../../../../../shared/HtmlEditor';
 
 @inject('updateStore')
 @observer
@@ -22,9 +22,7 @@ class UpdateDetails extends Component {
             {update.title}
             <Header.Subheader className="mt-half">{calculatedDate}</Header.Subheader>
           </Header>
-          <p>
-            {Parser(update.content || '')}
-          </p>
+          <HtmlEditor readOnly content={(update.content || '')} />
         </Aux>
         :
         <InlineLoader text="No data found." />
