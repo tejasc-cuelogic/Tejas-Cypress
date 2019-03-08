@@ -164,6 +164,7 @@ export const userDetailsQuery = gql`
               plaidAccessToken
               dateLinked
               pendingUpdate
+              accountType
               changeRequest {
                 accountNumber
                 bankName
