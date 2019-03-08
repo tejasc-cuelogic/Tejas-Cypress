@@ -122,9 +122,9 @@ export class StatementStore {
   }
 
   @computed get taxForms() {
-    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatements && taxStatements.length &&
-      taxStatements.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
+    const { taxStatement } = userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatement && taxStatement.length &&
+      taxStatement.slice(this.requestState.skip, this.requestState.displayTillIndex)) || [];
   }
 
   @computed get loading() {
@@ -136,13 +136,13 @@ export class StatementStore {
   }
 
   taxFormCount = () => {
-    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatements && taxStatements.length) || 0;
+    const { taxStatement } = userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatement && taxStatement.length) || 0;
   }
 
   taxFormCount = () => {
-    const { taxStatements } = userDetailsStore.currentActiveAccountDetails.details;
-    return (taxStatements && taxStatements.length) || 0;
+    const { taxStatement } = userDetailsStore.currentActiveAccountDetails.details;
+    return (taxStatement && taxStatement.length) || 0;
   }
 }
 
