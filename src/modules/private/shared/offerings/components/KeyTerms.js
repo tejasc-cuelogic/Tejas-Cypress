@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Aux from 'react-aux';
 import { inject, observer } from 'mobx-react';
 import { startsWith } from 'lodash';
-import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, ROUND_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES } from '../../../../../services/constants/admin/offerings';
+import { BUSINESS_INDUSTRIES, SECURITIES_VALUES, BUSINESS_TYPE_VALUES, ROUND_TYPE_VALUES, REGULATION_VALUES, BD_REGULATION_VALUES, FP_REGULATION_VALUES, NS_FEE_PERCENTAGE } from '../../../../../services/constants/admin/offerings';
 import { FormInput, MaskedInput, FormDropDown, FormTextarea, FormRadioGroup, DropZoneConfirm as DropZone } from '../../../../../theme/form';
 import ButtonGroupType2 from './ButtonGroupType2';
 import HtmlEditor from '../../../../shared/HtmlEditor';
@@ -279,6 +279,12 @@ export default class KeyTerms extends Component {
                 changed={(e, result) => formArrayChange(e, result, formName)}
               />
             ))}
+            <FormInput
+              displayMode={isReadonly}
+              name="stockType"
+              fielddata={KEY_TERMS_FRM.fields.stockType}
+              changed={(e, result) => formArrayChange(e, result, formName)}
+            />
             {['nsMinFees', 'nsMaxFees'].map(field => (
               <MaskedInput
                 displayMode={isReadonly}
@@ -289,11 +295,27 @@ export default class KeyTerms extends Component {
                 prefix="$"
               />
             ))}
-            <FormInput
-              displayMode={isReadonly}
-              name="stockType"
-              fielddata={KEY_TERMS_FRM.fields.stockType}
-              changed={(e, result) => formArrayChange(e, result, formName)}
+            {['totalProjectCost', 'raisedThroughSaleOfEquity'].map(field => (
+              <MaskedInput
+                displayMode={isReadonly}
+                name={field}
+                fielddata={KEY_TERMS_FRM.fields[field]}
+                changed={(values, name) => maskArrayChange(values, formName, name)}
+                currency
+                prefix="$"
+              />
+            ))}
+            <FormDropDown
+              containerclassname={isReadonly ? 'display-only' : ''}
+              className={isReadonly ? 'display-only' : ''}
+              disabled={isReadonly}
+              fielddata={KEY_TERMS_FRM.fields.nsFeePercentage}
+              selection
+              value={KEY_TERMS_FRM.fields.nsFeePercentage.value}
+              name="nsFeePercentage"
+              placeholder={isReadonly ? 'N/A' : 'Choose here'}
+              options={NS_FEE_PERCENTAGE}
+              onChange={(e, result) => formArrayChange(e, result, formName)}
             />
           </Form.Group>
           <Form.Group widths={2}>

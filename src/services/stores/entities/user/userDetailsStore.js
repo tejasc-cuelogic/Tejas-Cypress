@@ -84,7 +84,7 @@ export class UserDetailsStore {
 
   @computed get getUserMfaMode() {
     const mfaMode = (this.currentUser.data && this.currentUser.data.user &&
-      toJS(this.currentUser.data.user.mfaMode)) || null;
+      toJS(this.currentUser.data.user.mfaMode)) || 'EMAIL';
     return mfaMode;
   }
 
@@ -142,8 +142,8 @@ export class UserDetailsStore {
       onFetch: (result) => {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
-        if (result) {
-          res();
+        if (!this.currentUser.loading) {
+          res(result);
         }
         const user = { ...this.currentUser };
         this.currentUser.data &&

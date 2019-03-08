@@ -1,6 +1,6 @@
 import { observable, action, computed, toJS } from 'mobx';
 import graphql from 'mobx-apollo';
-import { isArray } from 'lodash';
+import { isArray, get } from 'lodash';
 import moment from 'moment';
 import { GqlClient as client } from '../../../../api/gqlApi';
 import { FormValidator as Validator, ClientDb, DataFormatter } from '../../../../helper';
@@ -68,6 +68,7 @@ export class CrowdpayStore {
     const filter = defaultFilter ? CROWDPAY_FILTERS[this.requestState.type].initialFilters :
       CROWDPAY_FILTERS[this.requestState.type].initialStatus;
     this.db = ClientDb.filterData('accountStatus', filter, 'like');
+    uiStore.setProgress(false);
   }
 
   @action
@@ -185,13 +186,13 @@ export class CrowdpayStore {
           }],
         })
         .then(action((data) => {
-          if (data.data.crowdPayAccountValidate) {
+          if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
+            Helper.toast('CIP is not satisfied.', 'error');
+            uiStore.setProgress(false);
+          } else {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(sMsg, 'success');
             resolve();
-          } else {
-            Helper.toast('CIP is not satisfied.', 'success');
-            uiStore.setProgress(false);
           }
         }))
         .catch((error) => {

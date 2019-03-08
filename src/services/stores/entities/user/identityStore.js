@@ -533,8 +533,11 @@ export class IdentityStore {
         },
       })
       .then((data) => {
-        userDetailsStore.getUser(userStore.currentUser.sub);
-        resolve(data);
+        userDetailsStore.getUser(userStore.currentUser.sub).then((d) => {
+          if (d) {
+            resolve(data);
+          }
+        });
       })
       .catch((err) => {
         uiStore.setErrors(DataFormatter.getSimpleErr(err));
