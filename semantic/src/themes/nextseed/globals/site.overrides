@@ -282,6 +282,7 @@ a{
 }
 .public-pages{
 	a:not(.item), a:not(.ui.button) {
+		cursor: pointer !important;
 		&:hover, &:active, &:focus {
 			text-decoration: none !important;
 		}
