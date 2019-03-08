@@ -142,8 +142,8 @@ export class UserDetailsStore {
       onFetch: (result) => {
         identityStore.setProfileInfo(this.userDetails);
         accountStore.setInvestmentAccTypeValues(this.validAccTypes);
-        if (result) {
-          res();
+        if (!this.currentUser.loading) {
+          res(result);
         }
         const user = { ...this.currentUser };
         this.currentUser.data &&
