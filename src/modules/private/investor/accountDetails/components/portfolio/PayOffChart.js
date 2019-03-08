@@ -59,9 +59,9 @@ export default class PayOffChart extends Component {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis axisLine={false} dataKey="name" interval={4} />
           <YAxis tickFormatter={this.formatY} axisLine={false} orientation="right" />
-          <Tooltip
+          {/* <Tooltip
             content={<CustomTooltip data={this.props.data[this.state.activeIndex]} />}
-          />
+          /> */}
           <defs>
             <linearGradient id="gradient" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="#84BCFC" stopOpacity={0.8} />
