@@ -276,6 +276,9 @@ a{
 	&.green-hover:hover{
 		color: @primary-one !important;
 	}
+	&:hover, &:active, &:focus {
+		text-decoration: none !important;
+	}
 }
 .green-hover.ui.button.link-button.grey:hover {
 	color: @primary-one !important;
