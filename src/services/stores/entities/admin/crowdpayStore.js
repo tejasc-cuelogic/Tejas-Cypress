@@ -68,6 +68,7 @@ export class CrowdpayStore {
     const filter = defaultFilter ? CROWDPAY_FILTERS[this.requestState.type].initialFilters :
       CROWDPAY_FILTERS[this.requestState.type].initialStatus;
     this.db = ClientDb.filterData('accountStatus', filter, 'like');
+    uiStore.setProgress(false);
   }
 
   @action
@@ -187,12 +188,12 @@ export class CrowdpayStore {
         .then(action((data) => {
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
             Helper.toast('CIP is not satisfied.', 'error');
+            uiStore.setProgress(false);
           } else {
             this.requestState.oldType = this.requestState.type;
             Helper.toast(sMsg, 'success');
             resolve();
           }
-          uiStore.setProgress(false);
         }))
         .catch((error) => {
           Helper.toast('Something went wrong, please try again later.', 'error');
