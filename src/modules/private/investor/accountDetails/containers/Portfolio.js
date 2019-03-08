@@ -50,7 +50,9 @@ export default class Portfolio extends Component {
     return (
       <Aux>
         <SummaryHeader details={summaryDetails} />
-        <PortfolioAllocations pieChart={getPieChartData} />
+        {(getPieChartData.investmentType.length || getPieChartData.industry.length) &&
+          <PortfolioAllocations pieChart={getPieChartData} />
+        }
         <Header as="h4">My Investments</Header>
         {getInvestorAccounts && getInvestorAccounts.investments.pending.length ?
           <InvestmentList investments={getInvestorAccounts.investments.pending} listOf="pending" listOfCount={getInvestorAccounts.investments.pending.length} match={match} /> : null
