@@ -1011,7 +1011,9 @@ export class BusinessAppStore {
     } else if (this.applicationStep === 'documentation') {
       stepName = 'DOCUMENTATION';
       this.BUSINESS_DOC_FRM = Validator.validateForm(this.BUSINESS_DOC_FRM);
-      isPartialDataFlag = !this.BUSINESS_DOC_FRM.meta.isValid;
+      isPartialDataFlag = this.BUSINESS_DOC_FRM.fields.personalGuarantee.value ?
+        !(this.BUSINESS_DOC_FRM.fields.personalGuaranteeForm.value.length &&
+          this.BUSINESS_DOC_FRM.meta.isValid) : !this.BUSINESS_DOC_FRM.meta.isValid;
       key = 3;
     }
     stepStatus = isPartialDataFlag ? 'IN_PROGRESS' : 'COMPLETE';
