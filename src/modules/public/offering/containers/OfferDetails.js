@@ -22,6 +22,7 @@ import NotFound from '../../../shared/NotFound';
 import Footer from './../../../../theme/layout/Footer';
 import OfferingMetaTags from '../components/OfferingMetaTags';
 import AboutPhotoGallery from './../components/campaignDetails/AboutPhotoGallery';
+import ChangeInvestmentLimit from '../components/investNow/ChangeInvestmentLimit';
 
 const getModule = component => Loadable({
   loader: () => import(`../components/campaignDetails/${component}`),
@@ -236,6 +237,7 @@ class offerDetails extends Component {
                     <Route path={`${match.url}/confirm-invest-login`} render={props => <ConfirmLoginModal refLink={this.props.match.url} {...props} />} />
                     <Route path={`${match.url}/confirm-comment-login`} render={props => <ConfirmLoginModal refLink={`${this.props.match.url}/comments`} {...props} />} />
                     <Route exact path={`${match.url}/agreement`} render={() => <Agreement refLink={this.props.match.url} />} />
+                    <Route path={`${match.url}/agreement/change-investment-limit`} render={props => <ChangeInvestmentLimit refLink={`${match.url}/agreement`} {...props} />} />
                     <Route exact path={`${match.url}/congratulation`} component={Congratulation} />
                     <Route path={`${this.props.match.url}/photogallery`} component={AboutPhotoGallery} />
                     <Route component={NotFound} />
