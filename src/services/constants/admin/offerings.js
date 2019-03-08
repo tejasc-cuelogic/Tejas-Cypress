@@ -445,8 +445,8 @@ export const FP_REGULATION_VALUES = [
   { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
 ];
 export const NS_FEE_PERCENTAGE = [
-  { key: '1%', value: '1', text: '1%' },
-  { key: '2%', value: '2', text: '2%' },
+  { key: '1', value: '1.00', text: '1%' },
+  { key: '2', value: '2.00', text: '2%' },
 ];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {
