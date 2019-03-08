@@ -30,6 +30,12 @@ body{
 	// 	background-color: @white;
 	// 	z-index: -1;
 	// }
+	a:not(.item), a:not(.ui.button) {
+		cursor: pointer !important;
+		&:hover, &:active, &:focus {
+			text-decoration: none !important;
+		}
+	}
 }
 .clearfix::after{
 	content: "";
@@ -370,6 +376,9 @@ footer{
 		a {
 			color: @neutral-middark;
 			text-decoration: underline;
+			&:hover, &:focus{
+				text-decoration: underline !important;
+			}
 		}
 	}
 	&.offering-footer .footer-social p{
