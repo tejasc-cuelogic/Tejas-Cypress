@@ -247,8 +247,8 @@ export class BankAccountStore {
     const { keyword } = this.requestState.search;
     let resultArray = [];
     if (keyword) {
-      resultArray = ClientDb.filterData('firstName', keyword, 'likenocase');
-      resultArray = [...resultArray, ...ClientDb.filterData('lastName', keyword, 'likenocase')];
+      ClientDb.filterFromNestedObjs(['firstName', 'lastName'], keyword);
+      resultArray = ClientDb.getDatabase();
       this.setDb(uniqWith(resultArray, isEqual));
       this.requestState.page = 1;
       this.requestState.skip = 0;
