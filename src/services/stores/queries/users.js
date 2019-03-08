@@ -95,7 +95,7 @@ export const userDetailsQuery = gql`
               otherContributions
               limit
             }
-            taxStatements {
+            taxStatement {
               fileId
               fileName
               year

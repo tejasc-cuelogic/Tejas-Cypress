@@ -98,10 +98,11 @@ export const AGREEMENT_DETAILS_INFO = {
         ),
         label: (
           <Aux>
-            I confirm that I am complying with my <b>annual investment limit</b> (<Link to="/offerings/newlaunch/invest-now/change-investment-limit">update</Link>)
+            I confirm that I am complying with my <b>annual investment limit</b> (<Link to="/offerings/live-test-new-vp/agreement/change-investment-limit">update</Link>)
           </Aux>
         ),
         value: '4',
+        customUpdateLimitLabel: true,
       },
     ],
     error: undefined,
@@ -127,10 +128,11 @@ export const AGREEMENT_DETAILS_INFO = {
             financial condition to bear the loss. I have read and agree to the terms of
             the <a href="/">CrowdPay Custodial Account Agreement</a>,
             the <a href="/">Substitute IRS Form W-9 Certification</a>,
-            and <a href="/">NextSeed Securities LLC Investor Agreement</a>.
+            and <a href="/">NextSeed Securities LLC Investor Agreement</a>
           </Aux>
         ),
         value: '6',
+        conditionalCustomLabel: true,
       },
     ],
     error: undefined,
@@ -157,30 +159,4 @@ export const INVESTMENT_LIMITS = {
     error: undefined,
     rule: 'numeric|required',
   },
-};
-
-export const SECURITY_CHECKBOX_LABLE = {
-  label: (
-    <Aux>
-      I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
-      the entire amount of my investment may be lost, and confirm that I am in a
-      financial condition to bear the loss. I have read and agree to the terms of
-      the <a href="/">CrowdPay Custodial Account Agreement</a>,
-      the <a href="/">Substitute IRS Form W-9 Certification</a>,
-      and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed Securities LLC Investor Agreement</Link>.
-    </Aux>
-  ),
-};
-
-export const SERVICE_CHECKBOX_LABLE = {
-  label: (
-    <Aux>
-      I have reviewed NextSeed’s <Link target="_blank" to="/app/resources/welcome-packet">educational materials</Link>, understand that
-      the entire amount of my investment may be lost, and confirm that I am in a
-      financial condition to bear the loss. I have read and agree to the terms of
-      the <a href="/">CrowdPay Custodial Account Agreement</a>,
-      the <a href="/">Substitute IRS Form W-9 Certification</a>,
-      and <Link onClick={e => this.agreementPDFLoader(e, true, 'fPAgreemnt', 'SERVICES')} to="/">NextSeed US LLC Membership Agreement</Link>.
-    </Aux>
-  ),
 };
