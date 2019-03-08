@@ -187,7 +187,7 @@ export class CrowdpayStore {
         })
         .then(action((data) => {
           if (!get(data, 'data.crowdPayAccountValidate') && ctaAction === 'VALIDATE') {
-            Helper.toast('CIP is not satisfied.', 'error');
+            Helper.toast('CIP is not satisfied.', 'success');
             uiStore.setProgress(false);
           } else {
             this.requestState.oldType = this.requestState.type;
