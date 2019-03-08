@@ -369,6 +369,27 @@ export const KEY_TERMS = {
       placeHolder: 'Type your text here...',
     },
   }],
+  totalProjectCost: {
+    value: null,
+    label: 'Total project cost',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Enter here',
+  },
+  raisedThroughSaleOfEquity: {
+    value: null,
+    label: 'Raised through sale of Equity',
+    error: undefined,
+    rule: 'numeric',
+    placeHolder: 'Up to $',
+  },
+  nsFeePercentage: {
+    value: '',
+    label: 'NS Fee %',
+    error: undefined,
+    rule: 'optional',
+    placeHolder: 'Please select a value',
+  },
 };
 
 export const BUSINESS_INDUSTRIES = [
@@ -422,6 +443,10 @@ export const BD_REGULATION_VALUES = [
 export const FP_REGULATION_VALUES = [
   { key: 'Rule 147, TX', value: 'FP_TX', text: 'Rule 147, TX' },
   { key: 'Reg CF - US', value: 'FP_CF', text: 'Reg CF - US' },
+];
+export const NS_FEE_PERCENTAGE = [
+  { key: '1%', value: '1', text: '1%' },
+  { key: '2%', value: '2', text: '2%' },
 ];
 export const OFFERING_OVERVIEW = {
   elevatorPitch: {

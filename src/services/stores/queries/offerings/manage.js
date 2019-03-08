@@ -172,6 +172,9 @@ export const getOfferingDetails = gql`
         isHealthcare
         isFood
         isAlcohol
+        totalProjectCost
+        raisedThroughSaleOfEquity
+        nsFeePercentage
         uploadProformas {
           fileId
           fileName
