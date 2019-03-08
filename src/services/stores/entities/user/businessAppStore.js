@@ -132,9 +132,11 @@ export class BusinessAppStore {
       },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        this.setBusinessApplicationData(isPartialApp);
-        uiStore.setAppLoader(false);
-        resolve();
+        if(!this.businessApplicationsDataById.loading) {
+          this.setBusinessApplicationData(isPartialApp);
+          uiStore.setAppLoader(false);
+          resolve();
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');

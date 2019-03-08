@@ -76,8 +76,7 @@ export class TransactionStore {
       },
       fetchPolicy: 'network-only',
       onFetch: (data) => {
-        if (props && props.statement) {
-          console.log(data);
+        if (props && props.statement && !this.data.loading) {
           this.setFirstTransaction(data);
         }
       },
@@ -359,7 +358,7 @@ export class TransactionStore {
           includeInFlight,
         },
         onFetch: (data) => {
-          if (data) {
+          if (data && !this.cashAvailable.loading) {
             this.transact(data.getInvestorAvailableCash, null);
             resolve(data);
           }
@@ -383,7 +382,7 @@ export class TransactionStore {
         offeringId: offeringCreationStore.currentOfferingId,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.paymentHistoryData.loading) {
           resolve();
         }
       },
@@ -404,7 +403,7 @@ export class TransactionStore {
         offeringId: offeringCreationStore.currentOfferingId,
       },
       onFetch: (data) => {
-        if (data) {
+        if (data && !this.investmentsByOffering.loading) {
           this.setInvestmentOptions(data.getInvestmentsByOfferingId);
           if (data.getInvestmentsByOfferingId[0]) {
             this.setInvestment(data.getInvestmentsByOfferingId[0].investmentId);
