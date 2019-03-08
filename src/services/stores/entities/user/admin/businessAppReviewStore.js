@@ -517,8 +517,10 @@ export class BusinessAppReviewStore {
       },
       fetchPolicy: 'network-only',
       onFetch: () => {
-        uiStore.setAppLoader(false);
-        resolve();
+        if (!this.businessApplicationOffers.loading) {
+          uiStore.setAppLoader(false);
+          resolve();
+        }
       },
       onError: () => {
         Helper.toast('Something went wrong, please try again later.', 'error');
