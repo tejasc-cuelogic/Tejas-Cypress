@@ -23,6 +23,7 @@
                 &:hover, &.active{
                     color:@primary-one;
                     background-color:transparent;
+                    text-decoration: none !important;
                 }
                 &.active > span{
                     padding-bottom:@2px;
@@ -144,6 +145,7 @@
                 border-color:@primary-one;
                 background-color:transparent;
                 color: @neutral;
+                text-decoration: none !important;
             }
             &.header{
                 border-color:transparent;

@@ -280,6 +280,13 @@ a{
 		text-decoration: none !important;
 	}
 }
+.public-pages{
+	a:not(.item), a:not(.ui.button) {
+		&:hover, &:active, &:focus {
+			text-decoration: none !important;
+		}
+	}
+}
 .green-hover.ui.button.link-button.grey:hover {
 	color: @primary-one !important;
 }
