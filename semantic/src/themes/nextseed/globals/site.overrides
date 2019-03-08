@@ -30,6 +30,12 @@ body{
 	// 	background-color: @white;
 	// 	z-index: -1;
 	// }
+	a:not(.item), a:not(.ui.button) {
+		cursor: pointer !important;
+		&:hover, &:active, &:focus {
+			text-decoration: none !important;
+		}
+	}
 }
 .clearfix::after{
 	content: "";
@@ -276,17 +282,6 @@ a{
 	&.green-hover:hover{
 		color: @primary-one !important;
 	}
-	&:hover, &:active, &:focus {
-		text-decoration: none !important;
-	}
-}
-.public-pages{
-	a:not(.item), a:not(.ui.button) {
-		cursor: pointer !important;
-		&:hover, &:active, &:focus {
-			text-decoration: none !important;
-		}
-	}
 }
 .green-hover.ui.button.link-button.grey:hover {
 	color: @primary-one !important;
@@ -380,6 +375,9 @@ footer{
 		a {
 			color: @neutral-middark;
 			text-decoration: underline;
+			&:hover, &:focus{
+				text-decoration: underline !important;
+			}
 		}
 	}
 	&.offering-footer .footer-social p{

@@ -51,6 +51,9 @@
         }
         a {
             color: @neutral;
+            &:hover, &:focus {
+                text-decoration: underline!important;
+            }
         }
         .icon {
             margin-left: @5px !important;
