@@ -27,6 +27,7 @@ export class TransactionStore {
   @observable TRANSFER_FRM = Validator.prepareFormObject(TRANSFER_FUND);
   @observable OTP_VERIFY_META = Validator.prepareFormObject(VERIFY_OTP);
   @observable cash = null;
+  @observable cashAvailable = {};
   @observable showConfirmPreview = false;
   @observable reSendVerificationCode = null;
   @observable transactionOtpRequestId = null;
